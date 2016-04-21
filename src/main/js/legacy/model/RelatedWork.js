@@ -1,10 +1,11 @@
-var Ext = require('extjs');
-var DomUtils = require('../util/Dom');
-var Globals = require('../util/Globals');
-var {getURL} = Globals;
-var ModelBase = require('./Base');
-var MixinsAuditLog = require('../mixins/AuditLog');
-var MixinsAuditLog = require('../mixins/AuditLog');
+const Ext = require('extjs');
+const DomUtils = require('../util/Dom');
+const Globals = require('../util/Globals');
+const {getURL} = Globals;
+
+require('./Base');
+require('../mixins/AuditLog');
+require('../mixins/AuditLog');
 
 
 module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
@@ -89,7 +90,8 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		{name: 'Target-NTIID', type: 'string'},
 		{name: 'target-NTIID', type: 'string'},
 		{name: 'targetMimeType', type: 'string'},
-		{name: 'byline', type: 'string'}
+		{name: 'byline', type: 'string'},
+		{name: 'ContentFile', type: 'SingleItem'}
 	],
 
 	asDomData: function (root) {
@@ -111,6 +113,13 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		data.domSpec = DomUtils.asDomSpec.call(data);
 
 		return data;
+	},
+
+
+	getHref () {
+		let contentFile = this.get('ContentFile');
+
+		return (contentFile && contentFile.getSrc ()) || this.get('href');
 	},
 
 	/**

@@ -1,14 +1,15 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../../../../util/Analytics');
-var DomUtils = require('../../../../../util/Dom');
-var Globals = require('../../../../../util/Globals');
-var {getURL} = Globals;
-var ParseUtils = require('../../../../../util/Parsing');
-var CardsCard = require('../../../../../common/components/cards/Card');
-var ModelNote = require('../../../../../model/Note');
-var ModelRelatedWork = require('../../../../../model/RelatedWork');
-var ContentviewerActions = require('../../../../contentviewer/Actions');
-var UtilParsing = require('../../../../../util/Parsing');
+const Ext = require('extjs');
+const AnalyticsUtil = require('../../../../../util/Analytics');
+const DomUtils = require('../../../../../util/Dom');
+const Globals = require('../../../../../util/Globals');
+const {getURL} = Globals;
+const ParseUtils = require('../../../../../util/Parsing');
+
+require('../../../../../common/components/cards/Card');
+require('../../../../../model/Note');
+require('../../../../../model/RelatedWork');
+require('../../../../contentviewer/Actions');
+require('../../../../../util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
@@ -34,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	constructor: function (config) {
 		var n = config.node || {getAttribute: function (a) { return config[a];} },
 			i = config.locationInfo,
-			href = n.getAttribute('href'),
+			href = config.record && config.record.getHref ? config.record.getHref() : n.getAttribute('href'),
 			icon = n.getAttribute('icon'),
 			ntiid = n.getAttribute('ntiid'),
 			root = i && i.root;

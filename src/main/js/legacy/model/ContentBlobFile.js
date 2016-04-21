@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.ContentBlobFile', {
@@ -12,5 +14,13 @@ module.exports = exports = Ext.define('NextThought.model.ContentBlobFile', {
 		{name: 'filename', type: 'string'},
 		{name: 'size', type: 'number'},
 		{name: 'url', type: 'string'}
-	]
+	],
+
+
+	getSrc () {
+		let url = this.get('url');
+		let download = this.get('download_url');
+
+		return Globals.shouldOpenInApp(this.get('NTIID'), url, '', this.get('FileMimeType')) ? url : download;
+	}
 });
