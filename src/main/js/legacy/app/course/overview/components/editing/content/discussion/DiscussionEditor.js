@@ -8,7 +8,7 @@ var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-discussion-editor',
-	cls: 'content-editor content-link',
+	cls: 'content-editor discussion-link',
 
 	getFormSchema: function () {
 		var schema = [
@@ -18,8 +18,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					{
 						name: 'icon',
 						type: 'image',
-						height: 125,
-						width: 100,
+						height: 115,
+						width: 210,
 						placeholder: NextThought.model.DiscussionRef.defaultIcon
 					},
 					{
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						inputs: [
 							{
 								name: 'title',
-								type: 'text',
+								type: 'textarea',
 								placeholder: 'Title',
 								required: true,
 								keep: true,
