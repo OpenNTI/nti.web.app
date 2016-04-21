@@ -631,6 +631,11 @@ canvas.x-component-course-assessment {
 	}
 
 	&.menu-open {
+		&.editable:not(.disabled) .assignment-status .status-item::after {
+			transform: rotate(180deg);
+			margin-top: -6px;
+		}
+
 		.menu-container {
 			max-height: 500px;
 		}
