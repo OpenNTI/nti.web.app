@@ -1,0 +1,25 @@
+.tool.invite {
+    position: absolute;
+    right: 105px;
+    top: 15px;
+    left: auto;
+    font: normal 600 14px/35px "Open Sans", sans-serif;
+    padding: 0 15px 0 15px;
+    text-transform: capitalize;
+
+	&::before{
+	    content: '';
+	    margin: 0.5em;
+	    color: #b8b8b8;
+	    background-image: url(../images/sprite.png);
+	    background-position: -491px -505px;
+	    width: 14px;
+	    height: 20px;
+	    position: absolute;
+	    left: -8px;
+	}
+}
+
+.x-container.grouping > .header .tools .invite.tool::before {
+	content: '';
+}

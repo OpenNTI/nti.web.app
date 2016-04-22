@@ -32,6 +32,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				itemId: 'filtermenu',
 				autoEl: { tag: 'div', cls: 'tool link arrow title-filter'}
 			},{
+				itemId: 'invite',
+				autoEl: { tag: 'div', cls: 'tool link invite', html: 'Invite'}
+			},{
 				itemId: 'email',
 				autoEl: {tag: 'div', cls: 'tool link email', html: 'Email'}
 			}],
@@ -110,7 +113,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	],
 
 	renderSelectors: {
-		emailEl: '.tools .email'
+		emailEl: '.tools .email',
+		inviteEl: '.tools .invite'
 	},
 
 	initComponent: function () {
