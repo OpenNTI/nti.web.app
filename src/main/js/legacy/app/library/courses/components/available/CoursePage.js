@@ -3,6 +3,7 @@ const {wait} = require('legacy/util/Promise');
 const {isFeature} = require('legacy/util/Globals');
 
 require('../Page');
+require('legacy/app/redeem/Redeem');
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 	extend: 'NextThought.app.library.courses.components.Page',
@@ -86,12 +87,22 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming)});
 		}
 
+		if (this.rendered) {
+			this.add({xtype: 'library-redemption', redeemLink: 'link', onFormSubmit: this.onFormSubmit });
+			this.addTab({label: 'Redeem', category: 'redeem', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming) && Ext.isEmpty(archived)});
+		}
+
 		this.onceRendered
 			.then(this.setTops.bind(this));
 
 		this.query('course-catalog-collection').forEach(function (cmp) {
 			me.relayEvents(cmp, ['show-course-detail']);
 		});
+	},
+
+
+	onFormSubmit () {
+		debugger;
 	},
 
 
@@ -133,6 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		let upcoming = this.down('[category=upcoming]');
 		let	current = this.down('[category=current]');
 		let	archived = this.down('[category=archived]');
+		let redeem = this.down('[category=redeem]');
 		let	first = this.down('[category]');
 		let	defaultTop = 0;
 
@@ -140,6 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			upcoming && upcoming.onceRendered,
 			current && current.onceRendered,
 			archived && archived.onceRendered,
+			redeem && redeem.onceRendered,
 			first && first.onceRendered
 		]).then(() => {
 			//Since the components are Ext.views, wait an event pump for the items
@@ -160,6 +173,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			}
 			if (archived) {
 				this.scrollTops['archived'] = archived.el.getTop() - defaultTop;
+			}
+			if(redeem) {
+				this.scrollTops['redeem'] = redeem.el.getTop() - defaultTop;
 			}
 
 			this.setPageHeight();
