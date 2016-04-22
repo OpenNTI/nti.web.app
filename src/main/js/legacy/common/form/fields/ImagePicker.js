@@ -9,10 +9,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	extend: 'NextThought.common.form.fields.FilePicker',
 	alias: 'widget.image-picker-field',
 
+	defaultToolTip: 'Add Cover Image',
+
+	inputTpl: new Ext.XTemplate(Ext.DomHelper.markup({tag: 'input', type: 'file', 'data-qtip': '{qtip}', accept: 'image/*', tabindex: '1'})),
+
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'image-picker {fileCls}', style: {width: '{width}', height: '{height}'}, cn: [
 			{cls: 'preview'},
-			{tag: 'input', type: 'file', 'data-qtip': 'Add Cover Image', accept: 'image/*', tabindex: '1'},
+			{tag: 'span', cls: 'input-wrapper'},
 			{cls: 'clear has-file', html: 'Clear Image'}
 		]
 	}),
@@ -23,6 +27,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		fileContainer: '.image-picker',
 		inputContainer: '.image-picker',
 		previewEl: '.preview',
+		inputWrapper: '.input-wrapper',
 		inputEl: 'input[type=file]',
 		clearEl: '.clear'
 	},
@@ -155,11 +160,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	},
 
 	updateTooltip: function (hasImage) {
+		let inputEl = this.getInput();
+
 		if (hasImage) {
-			this.inputEl.set({'data-qtip': 'Cover Image'});
+			inputEl.setAttribute('data-qtip', 'Cover Image');
 		}
 		else {
-			this.inputEl.set({'data-qtip': 'Add Cover Image'});
+			inputEl.setAttribute('data-qtip', 'Add Cover Image');
 		}
 	},
 

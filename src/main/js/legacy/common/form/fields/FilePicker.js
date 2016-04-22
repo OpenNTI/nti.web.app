@@ -56,6 +56,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 	//50 mb
 
+
+	inputTpl: new Ext.XTemplate(Ext.DomHelper.markup({tag: 'input', type: 'file', tabindex: '1'})),
+
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'file-picker {fileCls}',
 		cn: [
@@ -73,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 					{cls: 'change', html: 'Change'}
 				]},
 				{tag: 'tpl', 'if': '!readonly', cn: [
-					{tag: 'input', type: 'file', tabindex: '1'}
+					{tag: 'span', cls: 'input-wrapper'}
 				]}
 			]}
 		]
@@ -85,8 +88,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		sizeEl: '.preview .size',
 		previewLink: '.preview .preview-link',
 		inputContainer: '.input-container',
+		inputWrapper: '.input-wrapper',
 		inputEl: 'input[type=file]'
 	},
+
 
 	beforeRender: function () {
 		this.callParent(arguments);
@@ -105,8 +110,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.on('destroy', this.cleanUpObjectURL.bind(this));
 	},
 
+
 	afterRender: function () {
 		this.callParent(arguments);
+
+		this.createInput();
 
 		this.attachInputListeners();
 
@@ -115,22 +123,28 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
+
 	focus: function () {
 		if (!this.rendered) {
 			this.focusOnRender = true;
 			return;
 		}
 
-		return this.inputEl && this.inputEl.dom.focus();
+		let inputEl = this.getInput();
+
+		return inputEl && inputEl.focus();
 	},
 
+
 	getInput: function () {
-		return this.inputEl && this.inputEl.dom;
+		return this.inputDom;
 	},
+
 
 	isEmpty: function () {
 		return !this.hasFile();
 	},
+
 
 	isValid: function () {
 		var input = this.getInput();
@@ -138,17 +152,21 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		return input && input.checkValidity() ? input.checkValidity() : true;
 	},
 
+
 	showError: function () {
 		this.fileContainer.addCls('error');
 	},
+
 
 	removeError: function () {
 		this.fileContainer.removeCls('error');
 	},
 
+
 	hasFile: function () {
 		return !!this.currentFile;
 	},
+
 
 	getErrors: function () {
 		var input = this.getInput();
@@ -158,15 +176,18 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		};
 	},
 
+
 	getValue: function () {
 		return this.currentFile || this.defaultValue;
 	},
+
 
 	getValueName: function () {
 		var value = this.getValue();
 
 		return value ? value.name : '';
 	},
+
 
 	appendToFormData: function (data) {
 		var value = this.getValue(),
@@ -181,8 +202,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
+
 	attachInputListeners: function () {
-		var input = this.inputEl && this.inputEl.dom;
+		var input = this.getInput();
 
 		if (input) {
 			input.addEventListener('change', this.onFileInputChange.bind(this));
@@ -193,6 +215,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 			input.addEventListener('blur', this.onInputBlur.bind(this));
 		}
 	},
+
 
 	maybeWarnForSize: function (file) {
 		var size = this.schema.warningSize || this.WARNING_SIZE;
@@ -206,13 +229,16 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
+
 	onInputFocus: function () {
 		this.fileContainer.addCls('focused');
 	},
 
+
 	onInputBlur: function () {
 		this.fileContainer.removeCls('focused');
 	},
+
 
 	onFileInputChange: function (e) {
 		var input = this.getInput(),
@@ -222,12 +248,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		//keep track of the file locally, cancel
 		//default to prevent the input from getting the value
 		this.currentFile = file;
+		this.createInput();
 		e.preventDefault();
 
 		if (file && (!this.accepts || file.type.match(this.accepts))) {
 			this.onFileChange(file);
 		}
 	},
+
 
 	onFileChange: function (file) {
 		this.maybeWarnForSize(file);
@@ -246,13 +274,16 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.fileContainer.addCls('has-file');
 	},
 
+
 	onDragEnter: function () {
 		this.inputContainer.addCls('file-over');
 	},
 
+
 	onDragLeave: function () {
 		this.inputContainer.removeCls('file-over');
 	},
+
 
 	setPreviewFromValue: function (value) {
 		if (!ParseUtils.isNTIID(value)) { return; }
@@ -262,6 +293,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 			.then(this.setPreviewFromBlob.bind(this))
 			.catch(this.onFailToLoadPreview.bind(this));
 	},
+
 
 	setPreviewFromBlob: function (blob) {
 		if (!this.rendered) {
@@ -277,10 +309,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.previewLink.dom.setAttribute('href', blob.get('url'));
 	},
 
+
 	onFailToLoadPreview: function (reason) {
 		//TODO: Show some error state
 		console.error('Failed to load file preview: ', reason);
 	},
+
 
 	setPreviewFromInput: function (file) {
 		if (!this.rendered) {
@@ -297,6 +331,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.previewLink.dom.setAttribute('href', href);
 	},
 
+
 	createObjectURL: function (file) {
 		var url = Globals.getURLObject();
 
@@ -309,6 +344,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		return this.objectURL;
 	},
 
+
 	cleanUpObjectURL: function () {
 		var url = Globals.getURLObject();
 
@@ -317,6 +353,18 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 			delete this.objectURL;
 		}
 	},
+
+
+	createInput () {
+		if (!this.rendered) { return; }
+
+		let tip = (this.inputDom && this.inputDom.getAttribute('data-qtip')) || this.defaultToolTip;
+
+		this.inputWrapper.dom.innerHTML = '';
+		this.inputDom = this.inputTpl.append(this.inputWrapper, {qtip: tip});
+		this.attachInputListeners();
+	},
+
 
 	clearInput: function () {
 		delete this.currentFile;
