@@ -30,8 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Controls', {
 			this.disableRedeem();
 		}
 
-		this.mon(this.redeemEl, 'keypress', this.handleKeyPress.bind(this));
-		this.mon(this.el, 'click', this.handleClick.bind(this));
+		this.mon(this.redeemEl, 'click', this.handleClick.bind(this));
 	},
 
 
@@ -66,15 +65,6 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Controls', {
 		this.redeemEl.update(text || '');
 	},
 
-	handleKeyPress: function (e) {
-		if (e.getTarget('.disabled')) { return; }
-
-		if (e.charCode === e.ENTER && e.getTarget('.redeem')) {
-			this.onRedeem();
-		}
-	},
-
-
 	handleClick: function (e) {
 		if (e.getTarget('.disabled')) { return; }
 
@@ -87,6 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Controls', {
 
 
 	onRedeem: function () {
+		debugger;
 		if (this.doRedeem) {
 			this.doRedeem();
 		}

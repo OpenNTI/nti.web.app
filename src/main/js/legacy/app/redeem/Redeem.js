@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 
 		this.label = this.add({
 			xtype: 'label',
-			forId: 'redeemLabel',
+			cls: 'redeemLabel',
 			text: 'Redeem'
 		});
 
@@ -35,5 +35,14 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 			redeemText: 'Redeem',
 			doRedeem: this.doRedeem
 		});
+	},
+
+	afterRender () {
+		this.callParent(arguments);
+		this.mon(this.form.el, 'keypress', this.handleKeyPress.bind(this));
+	},
+
+	handleKeyPress () {
+		this.redeemBtn.enableRedeem();
 	}
 });
