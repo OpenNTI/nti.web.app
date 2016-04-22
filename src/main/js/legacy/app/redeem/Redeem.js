@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const Form = require('legacy/common/form/Form');
-const Controls = require('./Controls');
+var {getURL} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 	extend: 'Ext.container.Container',
@@ -10,13 +10,15 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 	layout: 'none',
 	items: [],
 	schema: [
-		{type: 'text', cls: 'code', name: 'code', placeholder: 'Enter your redemption code'}
+		{type: 'text', required: true, cls: 'code', name: 'invitation_codes', placeholder: 'Enter your redemption code'},
+		{type: 'submit', cls: 'reedem', text: 'Redeem'}
 	],
 
 	initComponent () {
 		this.callParent(arguments);
 
-		let {redeemLink, onFormSubmit} = this;
+		const collection = Service.getCollection('Invitations', 'Invitations');
+		const invite = collection && Service.getLinkFrom(collection.Links, 'accept-course-invitations');
 
 		this.label = this.add({
 			xtype: 'label',
@@ -27,22 +29,18 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 		this.form = this.add({
 			xtype: 'common-form',
 			schema: this.schema,
-			onFormSubmit: onFormSubmit
-		});
-
-		this.redeemBtn = this.add({
-			xtype: 'redeem-controls',
-			redeemText: 'Redeem',
-			doRedeem: this.doRedeem
+			action: invite,
+			onSuccess: this.onSuccess,
+			onError: this.onError
 		});
 	},
 
-	afterRender () {
-		this.callParent(arguments);
-		this.mon(this.form.el, 'keypress', this.handleKeyPress.bind(this));
+	onSuccess () {
+		console.log('success');
 	},
 
-	handleKeyPress () {
-		this.redeemBtn.enableRedeem();
+	onError (error) {
+		console.error(error);
 	}
+
 });

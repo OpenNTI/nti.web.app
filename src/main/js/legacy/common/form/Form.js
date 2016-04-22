@@ -197,6 +197,10 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		hidden: new Ext.XTemplate(Ext.DomHelper.markup([
 			{tag: 'input', type: 'hidden', 'name': '{name}', value: '{value}'}
+		])),
+
+		submit: new Ext.XTemplate(Ext.DomHelper.markup([
+			{tag: 'input', type: 'submit', value: '{text}', cls: '{cls}'}
 		]))
 	},
 
@@ -258,6 +262,25 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			cmp.destroy();
 		});
 	},
+
+
+	enableSubmission () {
+		let submit = this.el && this.el.dom && this.el.dom.querySelector('input[type=submit]');
+
+		if (submit) {
+			submit.removeAttribute('disabled');
+		}
+	},
+
+
+	disableSubmission () {
+		let submit = this.el && this.el.dom && this.el.dom.querySelector('input[type=submit]');
+
+		if (submit) {
+			submit.setAttribute('disabled', 'disabeled');
+		}
+	},
+
 
 	focusField: function (name) {
 		var field = name ? {name: name} : this.getFirstField(),
@@ -406,6 +429,12 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		if (this.onChange && (key !== Ext.EventObject.ENTER)) {
 			this.onChange(vals);
+		}
+
+		if (this.isValid()) {
+			this.enableSubmission();
+		} else {
+			this.disableSubmission();
 		}
 	},
 
@@ -721,6 +750,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 						});
 				}
 
+				if(me.onSuccess) { me.onSuccess(); }
+
 				me.el.unmask();
 				return results;
 			})
@@ -731,6 +762,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				} else {
 					me.el.unmask();
 				}
+
+				if(me.onError) { me.onError(); }
 
 				return Promise.reject(reason);
 			});
@@ -840,6 +873,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		if (this.onSubmit) {
 			this.onSubmit();
+		} else {
+			this.doSubmit();
 		}
 	}
 });
