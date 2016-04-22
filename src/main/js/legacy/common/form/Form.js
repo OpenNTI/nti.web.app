@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 						type: '{type}',
 						name: '{name}',
 						placeholder: '{placeholder}',
-						value: '{value}',
+						value: '{value:htmlEncode}',
 						tabindex: '1'
 					};
 
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 						type: '{type}',
 						name: '{name}',
 						placeholder: '{placeholder}',
-						value: '{value}',
+						value: '{value:htmlEncode}',
 						html: '{value}',
 						tabindex: '1'
 					};
