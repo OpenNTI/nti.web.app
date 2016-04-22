@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var UxFilterMenu = require('../../../../common/ux/FilterMenu');
 var ChartPie = require('../../../../common/chart/Pie');
+var PromptActions = require('../../../prompt/Actions');
 var CoursewareRoster = require('../../../../proxy/courseware/Roster');
 var MenusReports = require('../../../../common/menus/Reports');
 var CoursesCourseInstanceEnrollment = require('../../../../model/courses/CourseInstanceEnrollment');
@@ -130,6 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.on('activate', this.onActivate.bind(this));
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.PromptActions = NextThought.app.prompt.Actions.create();
 	},
 
 	afterRender: function () {
@@ -149,6 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		me.on('destroy', function () {
 			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
 		});
+		// this.mon(this.inviteEl, 'click', this.openInvite.bind(this));
 	},
 
 	onActivate: function () {
@@ -406,5 +409,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				record: emailRecord
 			});
 		}
+	},
+
+	openInvite () {
+		this.PromptActions.prompt('invite');
 	}
 });
