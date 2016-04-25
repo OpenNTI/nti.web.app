@@ -148,13 +148,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				},
 				{
 					xtype: 'enrollment-set',
-					label: getString('NextThought.view.courseware.enrollment.Admission.DoB'),
-					inputs: [
-						{type: 'date', name: 'date_of_birth', size: 'third', required: true}
-					]
-				},
-				{
-					xtype: 'enrollment-set',
 					label: getString('NextThought.view.courseware.enrollment.Admission.Gender'),
 					inputs: [
 						{type: 'radio-group', name: 'gender', required: true, omitIfBlank: true, options: [
@@ -278,23 +271,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 							{text: getString('NextThought.view.courseware.enrollment.Admission.No', {value: ''})}
 						]}
 					]
-				},
-				{
-					xtype: 'enrollment-grouped-set',
-					label: getString('NextThought.view.courseware.enrollment.Admission.AskCollege'),
-					name: 'attended_other_institution',
-					required: true,
-					options: [
-						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
-							{type: 'checkbox', text: getString('NextThought.view.courseware.enrollment.Admission.CurrentStudent'), name: 'still_attending', useChar: true, defaultAnswer: 'N'},
-							{type: 'checkbox', text: getString('NextThought.view.courseware.enrollment.Admission.BachPlus'), name: 'bachelors_or_higher', useChar: true, defaultAnswer: 'N'},
-							{type: 'radio-group', label: getString('NextThought.view.courseware.enrollment.Admission.GoodAcademic'), name: 'good_academic_standing', defaultAnswer: 'N', required: true, options: [
-								{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
-								{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
-							]}
-						]},
-						{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
-					]
 				}
 			]
 		},
@@ -360,6 +336,40 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			reveals: ['general', 'signature'],
 			items: [
 				{
+					xtype: 'enrollment-set',
+					label: getString('NextThought.view.courseware.enrollment.Admission.DoB'),
+					inputs: [
+						{
+							type: 'date',
+							name: 'date_of_birth',
+							size: 'third',
+							required: true,
+							reveals: {
+								name: ['attending-highschool', 'attending', 'attended_other_institution']
+							},
+							hides: 'too-young',
+							isValueCorrect: (value) => {
+								if (!value) { return false; }
+
+								let valYear = value.getFullYear();
+								let nowYear = (new Date()).getFullYear();
+
+								return (nowYear - valYear) > 13;
+							}
+						}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					name: 'too-young',
+					inputs: [
+						{
+							type: 'description',
+							text: 'Students must be at least 13 years of age to participate in Janux courses.'
+						}
+					]
+				},
+				{
 					xtype: 'enrollment-grouped-set',
 					label: 'Are you currently attending high school?',
 					name: 'attending-highschool',
@@ -399,6 +409,42 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 							{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
 							{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 						]}
+					]
+				},
+				{
+					xtype: 'enrollment-grouped-set',
+					label: getString('NextThought.view.courseware.enrollment.Admission.AskCollege'),
+					name: 'attended_other_institution',
+					required: true,
+					options: [
+						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
+							{type: 'checkbox', text: getString('NextThought.view.courseware.enrollment.Admission.CurrentStudent'), name: 'still_attending', useChar: true, defaultAnswer: 'N'},
+							{type: 'checkbox', text: getString('NextThought.view.courseware.enrollment.Admission.BachPlus'), name: 'bachelors_or_higher', useChar: true, defaultAnswer: 'N'},
+							{
+								type: 'radio-group',
+								label: getString('NextThought.view.courseware.enrollment.Admission.GoodAcademic'),
+								name: 'good_academic_standing',
+								defaultAnswer: 'N',
+								hides: 'good-standing',
+								correct: 'Y',
+								required: true,
+								options: [
+									{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
+									{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
+								]
+							}
+						]},
+						{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					name: 'good-standing',
+					inputs: [
+						{
+							type: 'description',
+							text: 'The class you are attempting to enroll in is a For-Credit Janux course. Only students who are currently in good academic standing may enroll in for credit Janux courses.'
+						}
 					]
 				}
 			]
