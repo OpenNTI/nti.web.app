@@ -140,7 +140,6 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 					{ tag: 'span right', cls: 'size', html: '{size}'}
 				]},
 				{ cls: 'controls', cn: [
-					{ tag: 'span', cls: 'view', html: 'Preview'},
 					{ tag: 'span', cls: 'download', cn: [
 						{tag: 'a', href: '{download_url}', html: 'Download', target:'_self'}
 					]}

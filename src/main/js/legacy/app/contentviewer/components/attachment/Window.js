@@ -44,7 +44,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.preview = this.add({
 			xtype: 'attachment-preview-panel',
 			record: this.record,
-			parentRecord: this.parentRecord
+			parentRecord: this.parentRecord,
+			setSaveText: this.setSaveText.bind(this)
 		});
 	},
 
@@ -60,8 +61,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.setHeaderTitle(title);
 	},
 
+
 	setHeaderTitle: function (title) {
 		return this.Prompt.Header.setTitle(title);
+	},
+
+
+	setSaveText: function (text) {
+		return this.Prompt.Footer.setSaveText(text);
 	}
 
 }, function () {

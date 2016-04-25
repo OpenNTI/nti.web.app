@@ -7,7 +7,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
-			{ cls: 'preview'}
 		]}
 	]),
 
@@ -23,7 +22,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		])),
 
 		document: new Ext.XTemplate(Ext.DomHelper.markup([
-			{tag: '{tag}', src:'{url}', data: '{url}', type: '{type}', border: 0, frameBorder: 0}
+			{cls: 'iframe-container', cn: [
+				{tag: '{tag}', src:'{url}', data: '{url}', type: '{type}', border: 0, frameBorder: 0}
+			]}
 		]))
 	},
 
@@ -39,6 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		if (this.record) {
 			this.addAttachmentRenderer();
 		}
+		this.setSaveText('');
 	},
 
 	addAttachmentRenderer: function () {
@@ -53,6 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			data.type = type;
 
 			tpl.append(this.previewEl, data);
+			this.previewEl.addCls('has-iframe');
 		}
 		else {
 			tpl = this.TEMPLATES.image;

@@ -51,6 +51,8 @@
 		overflow-y: auto;
 		overflow-x: hidden;
 
+		@include attachment();
+
 		&.full-screen {
 			max-height: 100vh;
 			max-width: 100vw;
