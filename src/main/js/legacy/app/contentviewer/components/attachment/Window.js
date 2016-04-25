@@ -1,8 +1,5 @@
 const Ext = require('extjs');
-const ParseUtils = require('legacy/util/Parsing');
 require('legacy/app/prompt/StateStore');
-require('legacy/app/prompt/Actions');
-require('legacy/common/components/cards/CardTarget');
 require('./Panel');
 
 
@@ -12,22 +9,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	cls: 'content-editor',
 	layout: 'none',
 	title: 'Attachment Preview',
-
-	statics: {
-		showAttachmentInPreviewMode: function (contentFile, parentRecord) {
-			var rec = ParseUtils.parseItems(contentFile)[0];
-
-			if (!this.PromptActions) {
-				this.PromptActions = NextThought.app.prompt.Actions.create();
-			}
-
-			this.PromptActions.prompt('attachment-preview-mode', {
-				record: rec,
-				parent: parentRecord
-			});
-		}
-	},
-
 
 	initComponent: function () {
 		this.callParent(arguments);

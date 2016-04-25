@@ -12,7 +12,7 @@ require('legacy/common/menus/BlogTogglePublish');
 require('legacy/common/ux/SearchHits');
 require('legacy/layout/component/Natural');
 require('legacy/common/menus/Reports');
-require('legacy/app/contentviewer/components/attachment/Window');
+require('legacy/app/contentviewer/Actions');
 require('./Pager');
 
 
@@ -426,10 +426,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			part = this.getAttachmentPart(el);
 
 		if (part) {
-			let PreviewWin = NextThought.app.contentviewer.components.attachment.Window;
+			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
 
-			if (PreviewWin) {
-				PreviewWin.showAttachmentInPreviewMode(part, this.record);
+			if (ContentViewerActions) {
+				ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
 			}
 		}
 	},

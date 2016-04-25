@@ -1,10 +1,12 @@
 var Ext = require('extjs');
 var ContentUtils = require('../../util/Content');
-var CommonActions = require('../../common/Actions');
-var ModelPageInfo = require('../../model/PageInfo');
-var ModelRelatedWork = require('../../model/RelatedWork');
-var UtilContent = require('../../util/Content');
-
+const ParseUtils = require('legacy/util/Parsing');
+require('legacy/app/prompt/Actions');
+require('../../common/Actions');
+require('../../model/PageInfo');
+require('../../model/RelatedWork');
+require('../../util/Content');
+require('./components/attachment/Window');
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -62,5 +64,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 				return pageInfo;
 			});
+	},
+
+
+	showAttachmentInPreviewMode: function (contentFile, parentRecord) {
+		var rec = ParseUtils.parseItems(contentFile)[0];
+
+		if (!this.PromptActions) {
+			this.PromptActions = NextThought.app.prompt.Actions.create();
+		}
+
+		this.PromptActions.prompt('attachment-preview-mode', {
+			record: rec,
+			parent: parentRecord
+		});
 	}
 });
