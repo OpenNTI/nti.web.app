@@ -88,6 +88,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 			return;
 		}
 
+		this.el.dom.innerHTML = '';
+
 		links.forEach((link) => {
 			let rel = link.rel;
 			let label = labels[rel];
