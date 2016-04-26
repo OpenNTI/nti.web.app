@@ -70,7 +70,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 	isCorrect: function () {
-		return !this.rendered || (this.isEmpty() || !!this.getValue()[this.name]);
+		if (!this.rendered) {
+			return true;
+		}
+
+		if (this.isValueCorrect) {
+			return this.isValueCorrect(this.dateInput.getValue());
+		}
+
+		return !!this.getValue()[this.name];
 	},
 
 	//value looks like YYYYMMDD

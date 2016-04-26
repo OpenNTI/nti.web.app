@@ -60,6 +60,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
+	isEmpty: function () {
+		var values = this.getValue();
+
+		//Treat them as empty if the top level question doesn't have an answer
+		return !values[this.name];
+	},
+
+
 	getValue: function () {
 		var me = this,
 			answers = {};
@@ -136,6 +144,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		var values = this.getValue(),
 			inputs = this.inputs || [], i,
 			correct = true, empty = true;
+
+
+		if (this.isValueCorrect) {
+			return this.isValueCorrect(values);
+		}
 
 
 		for (i = 0; i < inputs.length; i++) {
