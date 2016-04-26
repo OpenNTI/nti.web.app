@@ -459,6 +459,26 @@
 			color: $primary-blue;
 			text-decoration: none;
 		}}
+
+		@include attachment();
+
+		.attachment-part {
+			margin: 7px 0;
+			.meta {
+				margin-left: 0;
+				line-height: 1.2em;
+				padding: 0 10px;
+
+				.text {
+					.title {
+						margin-left: 0;
+					}
+				}
+				.controls {
+					margin: 5px 0 0 5px;
+				}
+			}
+		}
 	}
 
 	.comment-box {
@@ -1429,7 +1449,7 @@
 				}
 
 				.header{
-					@include icon($editor-attach, $top:19px, $left: 28px);
+					@include icon($editor-add, $top:19px, $left: 28px);
 				}
 
 				.outline-row {
@@ -1575,12 +1595,12 @@
 				font: normal 500 0.9em/50px $font;
 				height: 50px;
 				padding-left: 40px;
-				@include icon($editor-attach_hover, $top: 19px, $left: 22px);
+				@include icon($editor-add_hover, $top: 10px, $left: 10px);
 
 				&:hover{
 					color: $primary-blue;
 
-					@include icon($editor-attach_blue, $top: 19px, $left: 22px);
+					@include icon($editor-add, $top: 10px, $left: 10px);
 				}
 			}
 		}

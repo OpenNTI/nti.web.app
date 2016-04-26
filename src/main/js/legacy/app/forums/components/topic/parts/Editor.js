@@ -1,6 +1,6 @@
-var Ext = require('extjs');
-var EditorEditor = require('../../../../../editor/Editor');
-var ForumsActions = require('../../../Actions');
+const Ext = require('extjs');
+require('legacy/editor/Editor');
+require('../../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
@@ -11,6 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	enableTags: true,
 	enableTitle: true,
 	enableVideo: true,
+	enableFileUpload: true,
 	headerTplOrder: '{title}{toolbar}',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -154,29 +155,28 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		Ext.defer(this.updateLayout, 700, this, []);
 	},
 
-	onSave: function (e) {
-		e.stopEvent();
+
+	getMimeType: function () {
+		return this.record ? this.record.get('MimeType') :  NextThought.model.forums.Post.mimeType;
+	},
+
+
+	isValid: function () {
 		var me = this,
-			v = me.getValue(),
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
-			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
+			v = this.getValue(),
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad forum post');
 			me.markError(me.contentEl, getString('NextThought.view.forums.topic.parts.Editor.emptycontent'));
-			return;
-		}
-
-		l = v.body.length;
-		if (l > 0 && v.body[l - 1].replace) {
-			v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
+			return false;
 		}
 
 		if (Ext.isEmpty(v.title)) {
 			console.error('You need a title');
 			me.markError(me.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.emptytitle'));
 			me.titleWrapEl.addCls('error-on-bottom');
-			return;
+			return false;
 		}
 
 		/*if (/^[^a-z0-9]+$/i.test(v.title)) {
@@ -190,13 +190,57 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			console.error('Title cant start with @');
 			me.markError(me.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.attitle'));
 			me.titleWrapEl.addCls('error-on-bottom');
-			return;
+			return false;
 		}
+	},
+
+	getAttachmentPart: function (el) {
+		var name = el && el.getAttribute && el.getAttribute('name'), part;
+
+		if (this.record) {
+			let headline = this.record.get('headline'),
+				body = headline && headline.get('body') || [];
+
+			body.forEach(function (p) {
+				if (p.name === name) {
+					part = p;
+					return false;
+				}
+			});
+		}
+
+		if (!part) {
+			part = {
+				MimeType: 'application/vnd.nextthought.contentfile',
+				filename: el && el.getAttribute && el.getAttribute('data-fileName'),
+				name: name,
+				file: this.AttachmentMap[name]
+			};
+		}
+		return part;
+	},
+
+
+	onSave: function (e) {
+		e.stopEvent();
+
+		let me = this,
+			v = me.getValue(),
+			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
 		function unmask () {
 			if (me.el) {
 				me.el.unmask();
 			}
+		}
+
+		if (this.isValid() === false) {
+			return;
+		}
+
+		l = v.body.length;
+		if (l > 0 && v.body[l - 1].replace) {
+			v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
 		}
 
 		if (me.el) {
@@ -211,10 +255,37 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			})
 			.catch(function (reason) {
 				unmask();
-				console.error('Failed to save the discussion: ', reason);
-				alert('There was trouble saving the discussion');
+				me.onHandleSaveFailure(reason);
 			});
 	},
+
+
+	onHandleSaveFailure: function (reason) {
+		var error = reason && JSON.parse(reason && reason.responseText) || {},
+			msg;
+
+		console.error('Failed to save the discussion: ', reason);
+		if (error.code === 'MaxFileSizeUploadLimitError') {
+			let current = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.provided_bytes),
+				expected = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.max_bytes);
+
+			msg = current && expected ? 'Maximum Size Allowed: ' + expected + ', Your uploaded file size: ' + current : '';
+			msg = (error.message || '') + ' ' + msg;
+			alert({title: 'Attention', msg: msg,  icon: 'warning-red'});
+		}
+		else if (error.code === 'MaxAttachmentsExceeded') {
+			msg = (error.message || '') + ' ' + 'Maximum Files Allowed: ' + error.constraint;
+			alert({title: 'Attention', msg: msg,  icon: 'warning-red'});
+		}
+		else if (error.code === 'TooLong') {
+			msg = getString('NextThought.view.forums.topic.parts.Editor.longtitle');
+			alert({title: getString('NextThought.view.forums.topic.parts.Editor.error'), msg: msg, icon: 'warning-red'});
+		}
+		else {
+			alert('There was trouble saving the discussion');
+		}
+	},
+
 
 	onSaveSuccess: function (record, isEdit) {
 		this.savedSuccess = true;
@@ -223,16 +294,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 	onSaveFailure: function (proxy, response, operation) {
-		var msg = 'An unknown error occurred saving your Discussion.', error;
-
-		if (response && response.responseText) {
-			error = Ext.JSON.decode(response.responseText, true) || {};
-			if (error.code === 'TooLong') {
-				msg = getString('NextThought.view.forums.topic.parts.Editor.longtitle');
-			}
-		}
-		alert({title: getString('NextThought.view.forums.topic.parts.Editor.error'), msg: msg, icon: 'warning-red'});
-		console.debug(arguments);
+		this.onHandleSaveFailure(response);
 	},
 
 	onCancel: function (e) {

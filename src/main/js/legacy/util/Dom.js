@@ -162,11 +162,17 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		Ext.each(Ext.fly(dom).query('a[href]') || [], function (link) {
 			var href = Ext.fly(link).getAttribute('href') || '',
 				base = baseUrl.split('#')[0],
-				changeTarget = href.indexOf(base) !== 0;
-
+				changeTarget = href.indexOf(base) !== 0,
+				isNTIDownloadLink = (/\/@@download$/i).test(href);
 
 			if (changeTarget) {
 				Ext.fly(link).set({target: '_blank'});
+
+				// NOTE: Add an exception for NTI Download links.
+				// TODO: Figure out a better way to check this.
+				if (isNTIDownloadLink) {
+					Ext.fly(link).set({target: '_self'});
+				}
 			}
 		});
 

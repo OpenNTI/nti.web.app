@@ -937,6 +937,109 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		return TimeUtils.timeDifference(Ext.Date.now(), this.get('CreatedTime'));
 	},
 
+
+	/**
+	 * options: {
+	 * 	url: '',
+	 *  method: '',
+	 *  onProgress: fn,
+	 * }
+	 */
+	saveData: function (options) {
+		var data = this.getFormData && this.getFormData(),
+			isEdit = Boolean(this.getLink('edit') || this.getLink('href')),
+			me = this,
+			save;
+
+		if (data) {
+			save = this.saveAsFormData(data, options);
+		} else {
+			data = this.getJSONData();
+			save  = this.saveAsJSON(data, options);
+		}
+
+		return save
+			.then(function (response) {
+				if (isEdit) {
+					me.syncWithResponse(response);
+				}
+				return response;
+			});
+	},
+
+
+	saveAsFormData: function (formData, options) {
+		let me = this,
+			url = (options || {}).url,
+			method = (options || {}).method,
+			editLink = this.getLink('edit') || this.getLink('href');
+
+		if (!method) {
+			method = editLink ? 'PUT' : 'POST';
+		}
+
+		if (!url) {
+			url = editLink;
+		}
+
+		return new Promise(function (fulfill, reject) {
+			var xhr = me.__buildXHR(url, method, fulfill, reject);
+			xhr.send(formData);
+		});
+	},
+
+
+	saveAsJSON: function (values, options) {
+		let me = this,
+			url = (options || {}).url,
+			method = (options || {}).method,
+			editLink = this.getLink('edit') || this.getLink('href');
+
+		if (!method) {
+			method = editLink ? 'PUT' : 'POST';
+		}
+
+		if (!url) {
+			url = editLink;
+		}
+
+		return new Promise(function (fulfill, reject) {
+			var xhr = me.__buildXHR(url, method, fulfill, reject);
+
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.send(JSON.stringify(values));
+		});
+	},
+
+	getJSONData: function () {
+		return this.asJSON();
+	},
+
+
+	__buildXHR: function (url, method, success, failure) {
+		var xhr = new XMLHttpRequest();
+
+		xhr.open(method || 'POST', url, true);
+
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4) {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					success(xhr.responseText);
+				} else {
+					failure({
+						status: xhr.status,
+						responseText: xhr.responseText
+					});
+				}
+			}
+		};
+
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+		return xhr;
+	},
+
+
 	/**
 	 * @private
 	 * property {Boolean} destroyDoesNotClearListeners

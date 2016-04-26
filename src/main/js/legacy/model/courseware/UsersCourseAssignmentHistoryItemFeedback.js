@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var ModelBase = require('../Base');
+const Ext = require('extjs');
+const ParseUtils = require('../../util/Parsing');
+require('../Base');
+require('legacy/mixins/ModelWithBodyContent');
 
 
 module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback', {
@@ -19,6 +20,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{ name: 'assignmentContainer', type: 'string', persist: false },
 		{ name: 'assignmentDueDate', type: 'date', persist: false}
 	],
+
+	mixins: {
+		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
+	},
 
 
 	getFeedbackContainerURL: function () {

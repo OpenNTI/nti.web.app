@@ -1539,7 +1539,7 @@ div.contact-buttons {
 							}
 						}
 						&.create, &.suggest {
-							@include icon($editor-attach, $top: 14px, $left: 10px);
+							@include icon($editor-add, $top: 14px, $left: 10px);
 						}
 
 						&.search{

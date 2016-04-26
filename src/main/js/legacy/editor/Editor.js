@@ -4,12 +4,11 @@ var DomUtils = require('../util/Dom');
 var ParseUtils = require('../util/Parsing');
 var RangeUtils = require('../util/Ranges');
 var SharingUtils = require('../util/Sharing');
-var UtilRanges = require('../util/Ranges');
-var FieldsTagField = require('../common/form/fields/TagField');
-var ComponentsUserTokenField = require('../app/sharing/components/UserTokenField');
-var UtilSharing = require('../util/Sharing');
-var EmbedvideoWindow = require('./embedvideo/Window');
 var {guidGenerator} = require('legacy/util/Globals');
+const Globals = require('legacy/util/Globals');
+require('legacy/common/form/fields/FilePicker');
+require('legacy/model/RelatedWork');
+
 
 Ext.define('NextThought.editor.AbstractEditor', {
 	extend: 'Ext.Component',
@@ -64,52 +63,59 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	renderTpl: Ext.DomHelper.markup(
 		[
 			'{header}',
-			{
-				cls: 'main',
-				cn: [
-					'{extra}',
-					{
-						cls: 'content show-placeholder scrollable',
-						'data-placeholder': '{placeholderText}',
-						contentEditable: true,
-						unselectable: 'off',
-						tabIndex: -1,
-						cn: [
-							{ //inner div for IE
-								//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
-								html: '\u2060'
-							}
-						]
-					}
-				]
-			}
+			{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', 'novalidate': true, name: '{name}', cn: [
+				{
+					cls: 'main',
+					cn: [
+						'{extra}',
+						{
+							cls: 'content show-placeholder scrollable',
+							'data-placeholder': '{placeholderText}',
+							contentEditable: true,
+							unselectable: 'off',
+							tabIndex: -1,
+							cn: [
+								{ //inner div for IE
+									//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
+									html: '\u2060'
+								}
+							]
+						},
+						{cls: 'dropzone', cn: [
+							{tag: 'input', type: 'file'}
+						]}
+					]
+				}
+			]}
 			, {
 				cls: 'footer',
-				cn: [
-				{
+				cn: [{
 					cls: 'left',
 					cn: [
-						{ tag: 'tpl', 'if': 'enableTextControls', cn:
-						{
+						{ tag: 'tpl', 'if': 'enableTextControls', cn: {
 							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
 								cls: 'popctr', cn: {
-								cls: 'popover', cn: [
-									{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
-									{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
-									{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
-								]
-							}
+									cls: 'popover', cn: [
+										{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
+										{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
+										{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
+									]
+								}
 							}
 						}},
-						{ tag: 'tpl', 'if': 'enableObjectControls', cn:
-						{
+						{ tag: 'tpl', 'if': 'enableObjectControls', cn: {
 							cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
 								cls: 'popctr', cn: {
-								cls: 'popover', cn: [
-									{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
-									{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } }
-								]
-							}
+									cls: 'popover', cn: [
+										{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
+										{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } },
+										{ tag: 'tpl', 'if': 'enableFileUpload', cn: [
+											{cls: 'control upload', 'data-qtip': 'Add an Attachment', cn: [
+												{ tag: 'input', type: 'file'}
+											]}
+										]}
+									]
+								}
 							}
 						}}
 					]
@@ -207,10 +213,33 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	partRenderer: {
 		'application/vnd.nextthought.canvas': 'addWhiteboard',
-		'application/vnd.nextthought.embeddedvideo': 'addVideo'
+		'application/vnd.nextthought.embeddedvideo': 'addVideo',
+		'application/vnd.nextthought.contentfile': 'setAttachmentPreviewFromModel'
 	},
 
 	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
+
+	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ cls: 'space', html: '{placeholder}'},
+		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
+			{ cls: 'thumbnail', cn: [
+				{ cls: 'preview {type}', style: 'background-image: url(\'{url}\');'}
+			]},
+			{ cls: 'meta', cn: [
+				{ cls: 'text', cn: [
+					{ tag: 'span', cls: 'title', html: '{filename}'},
+					{ tag: 'span right', cls: 'size', html: '{size}'}
+				]},
+				{ cls: 'controls', cn: [
+					{ tag: 'span', cls: 'delete', 'data-action': 'delete', html: 'Delete'}
+				]}
+			]}
+		]},
+		{ cls: 'space', html: '{placeholder}'}
+	])),
+
+	AttachmentMap: {},
+	ObjectURLMap: {},
 
 	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
@@ -256,7 +285,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			enableTitle: Boolean(this.enableTitle),
 			enableWhiteboards: Boolean(this.enableWhiteboards),
 			enableVideo: Boolean(this.enableVideo),
-			placeholderText: this.placeholderText
+			enableFileUpload: Boolean(this.enableFileUpload),
+			placeholderText: this.placeholderText,
+			enctype: this.enctype || 'multipart/form-data',
+			autocomplete: this.autocomplete || 'off',
+			name: this.formName || 'form'
 		});
 
 		if (this.enableShareControls || this.enablePublishControls) {
@@ -265,7 +298,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	afterRender: function () {
-		var aux, objectsControl;
+		var aux;
 
 		this.callParent(arguments);
 		this.setupEditor();
@@ -291,6 +324,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (!this.enableSaveControls) {
 			this.saveControlsEl.hide();
+		}
+		if (this.enableFileUpload) {
+			this.on('destroy', this.clearAttachmentFilesParts.bind(this));
 		}
 	},
 
@@ -476,6 +512,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 
 		me.typingAttributes = [];
+
+		if (this.enableFileUpload) {
+			this.setupFileUploadField();
+		}
 	},
 
 	moveCursorToEnd: function (el) {
@@ -557,6 +597,217 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			});
 		}
 	},
+
+
+	setupFileUploadField: function() {
+		if (!this.enableFileUpload) { return; }
+
+		let dom = this.el.dom,
+			input = dom && dom.querySelector('.control.upload input'),
+			dragInput = dom && dom.querySelector('.main'),
+			dropzone = dom && dom.querySelector('.dropzone input');
+
+		if (input) {
+			input.addEventListener('change', this.onFileInputChange.bind(this));
+		}
+		if (dragInput) {
+			dragInput.addEventListener('dragenter', this.onDragEnter.bind(this));
+			dragInput.addEventListener('dragend', this.onDragLeave.bind(this));
+		}
+		if (dropzone) {
+			dropzone.addEventListener('change', this.onFileInputChange.bind(this));
+		}
+	},
+
+
+	onFileInputChange: function (e) {
+		var input = e.target,
+			file = input && input.files && input.files[0],
+			parentEl = Ext.fly(input).up('.dropzone');
+
+		if (parentEl) {
+			parentEl.removeCls('active');
+		}
+
+		e.preventDefault();
+		if (file && (!this.accepts || file.type.match(this.accepts))) {
+			this.onFileChange(file);
+		}
+	},
+
+
+	onFileChange: function (file) {
+		var guid = guidGenerator();
+
+		// Add the file to the attachment map
+		this.AttachmentMap[guid] = file;
+
+		// TODO: Check and warn about the size
+		this.setAttachmentPreviewFromInput(file, guid);
+	},
+
+
+	setAttachmentPreviewFromInput: function (file, name) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setAttachmentPreviewFromInput.bind(this, file));
+			return;
+		}
+
+		let content = this.el.down('.content'),
+			tpl = this.attachmentPreviewTpl,
+			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(file.size), 1),
+			href = this.getFileIconURLFromFile(file, name),
+			type = file.type.split('/').last() || '',
+			data = {size: size, url: href, filename: file.name, name: name, type: type, placeholder: this.defaultValue},
+			focusNode, isSelectionInContent;
+
+		//Need to see if we have a selection and it is in our content element
+		if (document && document.getSelection) {
+			focusNode = document.getSelection().focusNode;
+			focusNode = focusNode ? Ext.fly(focusNode) : null;
+			isSelectionInContent = focusNode && (focusNode.is('.content') || focusNode.parent('.content', true));
+		}
+
+		if (focusNode && isSelectionInContent) {
+			this.insertPartAtSelection(tpl.apply(data));
+		} else {
+			tpl.append(content, data);
+		}
+
+		this.maybeEnableSave();
+	},
+
+
+	isImage: function (type) {
+		return (/[\/\.](gif|jpg|jpeg|tiff|png)$/i).test(type);
+	},
+
+
+	getFileIconURLFromFile: function (file, name) {
+		let type = file && file.type,
+			isImage = this.isImage(type),
+			href;
+
+		if (isImage) {
+			href = this.createObjectURL(file, name);
+		}
+		else {
+			href = NextThought.model.RelatedWork.getIconForMimeType(type);
+		}
+
+		return href;
+	},
+
+
+	getFileIconURLFromValue: function (model) {
+		let data = model && model.isModel ? model.getData() : model,
+			type = data.contentType || data.FileMimeType,
+			isImage = this.isImage(type), href;
+
+		if (isImage) {
+			href = data.url;
+		} else {
+			href = NextThought.model.RelatedWork.getIconForMimeType(type);
+		}
+
+		return href;
+	},
+
+
+	setAttachmentPreviewFromModel: function (model) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setAttachmentPreviewFromModel.bind(this, model));
+			return;
+		}
+
+		let data = model && model.isModel ? model.getData() : model,
+			content = this.el.down('.content'),
+			tpl = this.attachmentPreviewTpl,
+			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(data.size), 1),
+			url = this.getFileIconURLFromValue(data),
+			type = data.contentType || data.FileMimeType || '';
+
+		data = Ext.clone(data);
+		data.url = url;
+		data.type = type.split('/').last() || '';
+		data.placeholder = this.defaultValue;
+
+		if (size) {
+			data.size = size;
+		}
+
+		tpl.append(content, data);
+	},
+
+
+	createObjectURL: function (file, name) {
+		var url = Globals.getURLObject();
+
+		this.cleanUpObjectURL(name);
+
+		if (!url) { return null; }
+
+		this.ObjectURLMap[name] = url.createObjectURL(file);
+
+		return this.ObjectURLMap[name];
+	},
+
+
+	cleanUpObjectURL: function (name) {
+		var url = Globals.getURLObject(),
+			objectURL;
+
+		if (name) {
+			objectURL = this.ObjectURLMap[name];
+			if (objectURL && url) {
+				url.revokeObjectURL(objectURL);
+				delete this.ObjectURLMap[name];
+			}
+		}
+		else {
+			for (let key in this.ObjectURLMap) {
+				if (this.ObjectURLMap.hasOwnProperty(key)) {
+					objectURL = this.ObjectURLMap[key];
+					if (objectURL && url) {
+						url.revokeObjectURL(objectURL);
+					}
+					delete this.ObjectURLMap[key];
+				}
+			}
+		}
+	},
+
+
+	onDragEnter: function (e) {
+		let dom = this.el && this.el.dom,
+			dragInput = dom && dom.querySelector('.dropzone');
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		if (dragInput) {
+			Ext.fly(dragInput).addCls('active');
+		}
+	},
+
+
+	onDragLeave: function (e) {
+		let dom = this.el && this.el.dom,
+			dragInput = dom && dom.querySelector('.dropzone');
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		if (dragInput) {
+			Ext.fly(dragInput).removeCls('active');
+		}
+	},
+
+
+	onDrop: function (e) {
+		e.preventDefault();
+	},
+
 
 	activate: function () {
 		this.maybeEnableSave();
@@ -1013,12 +1264,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	handleClick: function (e) {
 		var guid, p, fnName, mime,
 			content = e.getTarget('.content'),
-			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper');
+			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper') || e.getTarget('.attachment-part');
 
 		//make sure the content el gets focus when you click it, if its not already active
 		//fixs issue where it would take two clicks to focus content from the usertokenfield
 		if (content && content !== document.activeElement) {
 			this.focus(true);
+		}
+
+		if (t && t.classList.contains('attachment-part')) {
+			this.handleAttachmentPartAction(t, e);
+			return;
 		}
 
 		if (t) {
@@ -1030,9 +1286,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			p = this.trackedParts[guid];
 			if (p) {
 				if (!p.isDestroyed && p.show) {
-		  			if (Ext.is.iOS) {
-			content.blur();
-		  }
+					if (Ext.is.iOS) {
+						content.blur();
+					}
 					p.show();
 				}
 				return;
@@ -1054,6 +1310,29 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			this.detectTypingAttributes(e);
 		}
 	},
+
+
+	handleAttachmentPartAction: function (parent, event) {
+		var e = event.getTarget(),
+			action = e && e.getAttribute && e.getAttribute('data-action'),
+			name = parent && parent.getAttribute && parent.getAttribute('name'),
+			dom = this.el && this.el.dom,
+			input = dom && dom.querySelector('.control.upload input');
+
+		event.stopEvent();
+
+		if (action === 'delete' && name) {
+			delete this.AttachmentMap[name];
+			parent.remove();
+			this.cleanUpObjectURL(name);
+			if (input) {
+				input.value = null;
+			}
+
+			this.maybeEnableSave();
+		}
+	},
+
 
 	checkTrackedParts: function () {
 		var me = this;
@@ -1228,18 +1507,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	insertPartAtSelection: function (html) {
-		var sel,
-			range,
-			beforeRange,
-			afterRange,
-			beforeContent,
-			afterContent,
-			el,
-			frag,
-			node,
-			lastNode,
+		var content = this.el.down('.content', true),
+			sel, range, el,
 			i, length,
-			content = this.el.down('.content', true), sameNode;
+			part;
 
 		if (window.getSelection) {
 			// IE9 and non-IE
@@ -1439,7 +1710,22 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				w.destroy();
 			}
 		});
+
+		this.clearAttachmentFilesParts();
 	},
+
+
+	clearAttachmentFilesParts: function () {
+		// Empty the map.
+		// this.AttachmentMap = {};
+		for (let k in this.AttachmentMap) {
+			if (this.AttachmentMap.hasOwnProperty(k)) {
+				delete this.AttachmentMap[k];
+			}
+		}
+		this.cleanUpObjectURL();
+	},
+
 
 	whiteboardPart: function (wp) {
 		var me = this,
@@ -1509,6 +1795,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				if (p) {
 					r.push(p);
 				}
+			}
+
+			// if it's an attachment, handle it appropriately
+			if (part instanceof Object && part.MimeType) {
+				p = part;
+				r.push(p);
 			}
 
 			if (!p) {
@@ -1681,7 +1973,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out = [],
 			sel = this.el.select('.content > *'),
-			reInitialChar = this.REGEX_INITIAL_CHAR;
+			reInitialChar = this.REGEX_INITIAL_CHAR, me = this;
 
 		sel.each(function (div) {
 			var html, parsed, tmp, dom;
@@ -1690,6 +1982,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				dom = Ext.getDom(div).cloneNode(true);
 				div = Ext.fly(dom, '__editer-flyweight');
 				html = div.getHTML() || '';
+
+				if (div.is('.attachment-part')) {
+					html = me.getAttachmentPart(div);
+					out.push(html);
+					return true;
+				}
 
 				if (div.is('.object-part')) {
 					html = '';
@@ -1723,6 +2021,39 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return out;
 	},
 
+
+	getAttachmentPart: function (el) {
+		var name = el && el.getAttribute && el.getAttribute('name'), part;
+
+		if (this.record) {
+			let body = this.record.get('body') || [];
+
+			body.forEach(function (p) {
+				if (p.name === name) {
+					part = p;
+					return false;
+				}
+			});
+		}
+
+		if (!part) {
+			part = {
+				MimeType: 'application/vnd.nextthought.contentfile',
+				filename: el && el.getAttribute && el.getAttribute('data-fileName'),
+				name: name,
+				file: this.AttachmentMap[name]
+			};
+		}
+		return part;
+	},
+
+
+	/**
+	 * Returns the value of the editor.
+	 * If it has file attached to it, it will return a FormData
+	 * Otherwise, it will return the regular json object.
+	 *
+	 */
 	getValue: function () {
 		return {
 			body: this.getBody(this.getBodyValue()),
@@ -1732,6 +2063,16 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			tags: this.tags ? this.tags.getValue() : undefined
 		};
 	},
+
+
+	// TO BE overriden but subclasses
+	getMimeType: function () {},
+
+
+	hasFiles: function () {
+		return Object.keys(this.AttachmentMap).length > 0;
+	},
+
 
 	setTitle: function (title) {
 		var t = this.titleEl;

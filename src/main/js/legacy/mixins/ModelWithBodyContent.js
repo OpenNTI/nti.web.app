@@ -1,8 +1,9 @@
 var Ext = require('extjs');
 var Globals = require('../util/Globals');
 var {guidGenerator} = Globals;
-var VideoVideo = require('../app/video/Video');
 
+require('../app/video/Video');
+require('legacy/model/RelatedWork');
 
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	statics: {
@@ -28,6 +29,10 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			}
 
 			return text.join('');
+		},
+
+		isImageFile: function (type) {
+			return (/[\.\/](gif|jpg|jpeg|tiff|png)$/i).test(type);
 		}
 	},
 
@@ -38,7 +43,8 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 	rendererForPart: {
 		'application/vnd.nextthought.canvas': 'whiteboardRenderer',
-		'application/vnd.nextthought.embeddedvideo': 'embeddedVideoRenderer'
+		'application/vnd.nextthought.embeddedvideo': 'embeddedVideoRenderer',
+		'application/vnd.nextthought.contentfile': 'attachmentRenderer'
 	},
 
 	componentRendererForPart: {
@@ -122,6 +128,27 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		]
 	}),
 
+
+	CONTENT_FILE_TPL: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
+			{ cls: 'thumbnail', cn: [
+				{ cls: 'preview {type}', style: 'background-image: url(\'{url}\');'}
+			]},
+			{ cls: 'meta', cn: [
+				{ cls: 'text', cn: [
+					{ tag: 'span', cls: 'title', html: '{filename}'},
+					{ tag: 'span right', cls: 'size', html: '{size}'}
+				]},
+				{ cls: 'controls', cn: [
+					{ tag: 'span', cls: 'download', cn: [
+						{tag: 'a', href: '{download_url}', html: 'Download', target:'_self'}
+					]}
+				]}
+			]}
+		]}
+	])),
+
+
 	whiteboardRenderer: function (o, clickHandlerMaker, size, callback, scope) {
 		var id = guidGenerator(),
 			me = this,
@@ -140,13 +167,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 	__embeddedVideoNoPlaceholder: function (o, clickHandlerMaker, size, callback, scope) {
 		var width = (size || 360), height = width / (4.0 / 3.0),
 			cfg = {
-					cls: 'data-component-placeholder',
-					'data-mimetype': o.MimeType,
-					'data-type': o.type,
-					'data-url': o.embedURL,
-					'data-height': height,
-					'data-width': width
-				};
+				cls: 'data-component-placeholder',
+				'data-mimetype': o.MimeType,
+				'data-type': o.type,
+				'data-url': o.embedURL,
+				'data-height': height,
+				'data-width': width
+			};
 
 
 		Ext.callback(callback, scope, [Ext.DomHelper.markup(cfg)]);
@@ -165,11 +192,11 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			})
 			.then(function (poster) {
 				var tpl = me.VIDEO_THUMBNAIL_TPL.apply([
-						id,
-						poster,
-						clickHandlerMaker(id, o, 'video') || '',
-						size || ''
-					]);
+					id,
+					poster,
+					clickHandlerMaker(id, o, 'video') || '',
+					size || ''
+				]);
 
 				Ext.callback(callback, scope, [tpl]);
 			});
@@ -183,9 +210,39 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		return this.__embeddedVideoNoPlaceholder(o, clickHandlerMaker, size, callback, scope);
 	},
 
+
+	attachmentRenderer: function (o, clickHandlerMaker, size, callback, scope, config) {
+		var type = (o && o.contentType || o.FileMimeType) || '',
+			p;
+
+		if (!isNaN(parseFloat(o.size))) {
+			o.size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(o.size), 1);
+		}
+
+		o = Ext.clone(o);
+		o.type = type.split('/').last() || '';
+		o.url = this.getIconForAttachment(o);
+		p = this.CONTENT_FILE_TPL.apply(o);
+		Ext.callback(callback, scope, [p]);
+	},
+
+
+	getIconForAttachment: function (data) {
+		let type = data.contentType || data.FileMimeType,
+			isImage = NextThought.mixins.ModelWithBodyContent.isImageFile(type), url;
+
+		if (isImage) {
+			url = data.url || data.href || data.value;
+		}
+		else {
+			url = NextThought.model.RelatedWork.getIconForMimeType(type);
+		}
+
+		return url;
+	},
+
+
 	renderVideoComponent: function (node, owner, config) {
-
-
 		var p, width = node.getAttribute('data-width'),
 			url = node.getAttribute('data-url'),
 			type = node.getAttribute('data-type');
@@ -214,6 +271,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			var o = body[i], fn;
 
 			if (i < 0) {
+				// TODO: We should change this to allow component to render themselves rather than only treating text/templates
 				Ext.callback(result, scope, [text.join(''), function (node, cmp) {
 					var cmpPlaceholders = node.query('.data-component-placeholder'), added = [], cmpAdded;
 					Ext.each(cmpPlaceholders, function (ph) {
@@ -271,5 +329,58 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		}
 
 		return found;
+	},
+
+
+	getFormData: function () {
+		if (this.hasFiles()) {
+			return this.buildFormData();
+		}
+
+		return false;
+	},
+
+
+	hasFiles: function () {
+		var body = this.get('body') || [],
+			hasFiles = false, part;
+
+		for(let i = 0; i < body.length && !hasFiles; i++) {
+			part = body[i];
+			if (part && part.file) {
+				hasFiles = true;
+			}
+		}
+
+		return hasFiles;
+	},
+
+
+	/**
+	 * @private
+	 * Builds and retuns a FormData object
+	 */
+	buildFormData: function () {
+		var body = this.get('body') || [],
+			formData = new FormData();
+
+		// Loop through the body and append all the file to the formData
+		body.forEach(function (part) {
+			if (part && part.file) {
+				formData.append(part.name, part.file, (part.file || {}).name);
+
+				// NOTE: We need to clean up the File part, since we don't want to be part of the __json__ key
+				// Note that we only needed to use it above where we append it to the formData object.
+				delete part.file;
+			}
+		});
+
+		let data = this.asJSON() || {};
+
+		// NOTE: To support submitting a multi-part form,
+		// the regular content of a note will be set in a json field.
+		formData.append('__json__', JSON.stringify(data));
+
+		return formData;
 	}
 });

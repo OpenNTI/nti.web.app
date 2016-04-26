@@ -1,16 +1,18 @@
 var Ext = require('extjs');
 var TemplatesForNotes = require('../../../../annotations/note/Templates');
 var UserRepository = require('../../../../../cache/UserRepository');
-var User = require('../../../../../model/User');
+require('../../../../../model/User');
 var DomUtils = require('../../../../../util/Dom');
-var MixinsSearchable = require('../../../../../mixins/Searchable');
-var MixinsProfileLinks = require('../../../../../mixins/ProfileLinks');
-var ForumsComments = require('../../../../../store/forums/Comments');
-var UtilUserDataThreader = require('../../../../../util/UserDataThreader');
-var WhiteboardWindow = require('../../../../whiteboard/Window');
-var ForumsActions = require('../../../Actions');
-var WindowWindow = require('../../../../video/window/Window');
+require('../../../../../mixins/Searchable');
+require('../../../../../mixins/ProfileLinks');
+require('../../../../../store/forums/Comments');
+require('../../../../../util/UserDataThreader');
+require('../../../../whiteboard/Window');
+require('../../../Actions');
+require('../../../../video/window/Window');
+require('legacy/app/contentviewer/Actions');
 var {isMe} = require('legacy/util/Globals');
+const {wait} = require('legacy/util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
@@ -168,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			scrollEl.el.mask();
 		}
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, enableVideo: true});
+		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, enableVideo: true, enableFileUpload: true});
 		me.relayEvents(me.editor, ['activated-editor', 'deactivated-editor']);
 		me.editor.addCls('threaded-forum-editor');
 		me.el.selectable();
@@ -417,6 +419,34 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 	},
 
+
+	attachmentContainerClick: function (record, container, e) {
+		let name = container && container.getAttribute && container.getAttribute('name');
+
+		if (!name || !record) {
+			return null;
+		}
+
+		let body = record.get('body') || [],
+			part;
+
+		body.forEach(function (p) {
+			if (p.name === name) {
+				part = p;
+				return false;
+			}
+		});
+
+		if (part) {
+			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+
+			if (ContentViewerActions) {
+				ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
+			}
+		}
+	},
+
+
 	videoPlaceholderClick: function (record, container, e, el) {
 		var me = this,
 			guid = container && container.up('.body-divider').getAttribute('id'),
@@ -443,11 +473,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 	handleItemClick: function (record, item, index, e) {
-		var load, me = this, width,
+		var me = this, width,
 			whiteboard = e.getTarget('.whiteboard-container', null, true),
 			video = e.getTarget('.video-placeholder', null, true),
-			el = Ext.get(item),
-			box;
+			 attachment = e.getTarget('.attachment-part'),
+			el = Ext.get(item);
 
 		if (me.editor.isActive()) {
 			me.refocusEditor();
@@ -461,6 +491,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		if (video) {
 			this.videoPlaceholderClick(record, video, e, el);
+			return;
+		}
+
+		if (attachment) {
+			this.attachmentContainerClick(record, attachment, e, el);
 			return;
 		}
 
