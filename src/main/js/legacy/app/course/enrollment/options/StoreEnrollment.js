@@ -356,8 +356,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			defaultPurchasable = this.__getPurchasable(option),
 			loadDetails;
 
-		option = null;
-
 		//if there is an option, and its either enrolled or available
 		if (!option || (!option.IsEnrolled && !option.IsAvailable) || course.get('isAdmin')) {
 			return {
@@ -402,8 +400,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			option = course.getEnrollmentOption(this.NAME),
 			giftPurchasable = this.__getGiftPurchasable(option),
 			loadDetails;
-
-		giftPurchasable = null;
 
 
 		if (!giftPurchasable || !(giftPurchasable.isGiftable() || giftPurchasable.isRedeemable())) {

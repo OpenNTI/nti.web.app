@@ -127,8 +127,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			loadDetails,
 			option = course.getEnrollmentOption && course.getEnrollmentOption(me.NAME);
 
-		// option = null;
-
 		if (course.get('isAdmin')) {
 			return this.__getAdmin(details);
 		}
