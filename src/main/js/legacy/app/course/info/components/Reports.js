@@ -1,5 +1,21 @@
-var Ext = require('extjs');
-var MixinsFillScreen = require('../../../../mixins/FillScreen');
+const Ext = require('extjs');
+const {wait} = require('legacy/util/Promise');
+const {getString} = require('legacy/util/Localization');
+
+
+//TODO: move this in to the strings file once we get that figured out
+const labels = {
+	'report-CourseSummaryReport.pdf': {
+		title: getString('NextThought.view.courseware.reports.View.coursetitle'),
+		description: getString('NextThought.view.courseware.reports.View.coursereport')
+	},
+	'report-SelfAssessmentSummaryReport.pdf': {
+		title: 'Self-Assessment Summary Report',
+		description: 'Summarizes the students interactions with SelfAssessments throughout the course, including per-student information?'
+	}
+};
+
+require('../../../../mixins/FillScreen');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Reports', {
@@ -12,82 +28,81 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 
 	cls: 'course-reports',
 
-	renderTpl: Ext.DomHelper.markup({cls: 'report-card overview-section', cn: [
-		{cls: 'description', cn: [
-			{cls: 'title', html: '{title}'},
-			{cls: 'about', html: '{about}'}
-		]},
-		{cls: 'content-card link target', cn: [
-			{cls: 'thumbnail'},
-			{cls: 'meta', cn: [
-				{cls: 'sub-heading', html: '{courseNumber}'},
-				{cls: 'heading', html: '{courseName}'}
+	cardTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		cls: 'report-card overview-section',
+		cn: [
+			{cls: 'description', cn: [
+				{cls: 'title', html: '{title}'},
+				{cls: 'about', html: '{about}'}
+			]},
+			{cls: 'content-card link target', 'data-link': '{link}', cn: [
+				{cls: 'thumbnail'},
+				{cls: 'meta', cn: [
+					{cls: 'sub-heading', html: '{courseNumber}'},
+					{cls: 'heading', html: '{courseName}'}
+				]}
 			]}
-		]}
-	]}),
+		]
+	})),
 
 
-	renderSelectors: {
-		courseNumberEl: '.meta .sub-heading',
-		courseNameEl: '.meta .heading'
-	},
-
-
-	beforeRender: function () {
+	afterRender () {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply((this.renderData || {}), {
-			title: getString('NextThought.view.courseware.reports.View.coursetitle'),
-			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				{html: getString('NextThought.view.courseware.reports.View.coursereport')}
-			]}),
-			courseNumber: this.courseNumber,
-			courseName: this.courseName
-		});
-	},
+
+		if (this.bundle) {
+			this.setContent(this.bundle);
+		}
 
 
-	afterRender: function () {
-		this.callParent(arguments);
+		this.mon(this.el, 'click', function (e) {
+			let target = e.getTarget('.target');
+			let link = target && target.getAttribute('data-link');
 
-		var me = this;
-
-		wait()
-			.then(me.fillScreen.bind(me, me.el.dom));
-
-		me.mon(me.el, 'click', function (e) {
-			var win;
-
-			if (e.getTarget('.target') && me.reportLink) {
-				win = Ext.widget('iframe-window', {
+			if (link) {
+				Ext.widget('iframe-window', {
 					width: 'max',
+					link: link,
 					saveText: getString('NextThought.view.menus.Reports.savetext'),
-					link: me.reportLink,
 					loadingText: getString('NextThought.view.menus.Reports.loadingtext')
-				});
-
-				win.show();
+				}).show();
 			}
 		});
 
-		me.on('activate', me.fillScreen.bind(me, me.el.dom));
+		wait()
+			.then(this.fillScreen.bind(this, this.el.dom));
+
+		this.on('activate', this.fillScreen.bind(this, this.el.dom));
 	},
 
 
-	setContent: function (bundle) {
-		if (!bundle) { return; }
+	setContent (bundle) {
+		this.bundle = bundle;
 
-		var catalog = bundle.getCourseCatalogEntry(),
-			reportLinks = bundle && bundle.getReportLinks && bundle.getReportLinks();
+		let links = bundle && bundle.getReportLinks();
+		let catalog = bundle && bundle.getCourseCatalogEntry();
+		let courseNumber = catalog && catalog.get('ProviderUniqueID');
+		let courseName = catalog && catalog.get('title');
 
-		this.courseNumber = catalog.get('ProviderUniqueID');
-		this.courseName = catalog.get('title');
-
-		this.reportLink = reportLinks && reportLinks[0] && reportLinks[0].href;
-
-		if (this.rendered) {
-			this.courseNumberEl.update(this.courseNumber);
-			this.courseNameEl.update(this.courseName);
+		if (!this.rendered || !links) {
+			return;
 		}
+
+		this.el.dom.innerHTML = '';
+
+		links.forEach((link) => {
+			let rel = link.rel;
+			let label = labels[rel];
+			let title = label && label.title;
+			let description = label && label.description;
+
+			this.cardTpl.append(this.el, {
+				title: title || '',
+				about: description || '',
+				link: link.href,
+				courseName: courseName,
+				courseNumber: courseNumber
+			});
+		});
 	}
 });
