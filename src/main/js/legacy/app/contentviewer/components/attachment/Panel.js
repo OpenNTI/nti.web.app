@@ -6,13 +6,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	alias: 'widget.attachment-preview-panel',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
+		{ cls: 'attachment-part preview-mode', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 		]}
 	]),
 
 
 	renderSelectors: {
-		previewEl: '.preview'
+		previewEl: '.preview-mode'
 	},
 
 

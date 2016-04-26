@@ -5,6 +5,7 @@ var ParseUtils = require('../util/Parsing');
 var RangeUtils = require('../util/Ranges');
 var SharingUtils = require('../util/Sharing');
 var {guidGenerator} = require('legacy/util/Globals');
+var {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
 require('legacy/common/form/fields/FilePicker');
 require('legacy/model/RelatedWork');
@@ -273,6 +274,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.callParent(arguments);
 
 		this.enableVideo = this.enableVideo && Service.canEmbedVideo();
+		this.enableFileUpload = isFeature('file-upload') && this.enableFileUpload;
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			cancelLabel: this.cancelButtonLabel,

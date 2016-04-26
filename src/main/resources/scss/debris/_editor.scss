@@ -16,6 +16,12 @@ span.tab{
 		width: 300px;
 		text-align: center;
 
+		&.preview-mode {
+			min-width: 300px;
+			width: auto;
+			max-width: calc(100vw - 40px);
+		}
+
 		&.has-iframe {
 			width: auto;
 			height: calc(100vh - 60px - 45px - 40px);
