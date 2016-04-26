@@ -88,13 +88,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				},
 				{
 					xtype: 'enrollment-set',
-					label: getString('NextThought.view.courseware.enrollment.Admission.DoB'),
-					inputs: [
-						{type: 'date', name: 'contact_date_of_birth', required: true, size: 'third'}
-					]
-				},
-				{
-					xtype: 'enrollment-set',
 					label: getString('NextThought.view.courseware.enrollment.Admission.AddressOpt'),
 					inputs: [
 						{type: 'text', name: 'contact_street_line1', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
@@ -333,7 +326,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		form.unshift({
 			name: 'preliminary',
 			label: getString('NextThought.view.courseware.enrollment.Admission.PrelimQuest'),
-			reveals: ['general', 'signature'],
 			items: [
 				{
 					xtype: 'enrollment-set',
@@ -345,10 +337,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 							size: 'third',
 							required: true,
 							reveals: {
-								name: ['attending-highschool', 'attending', 'attended_other_institution']
+								name: 'attending'
 							},
 							hides: 'too-young',
-							isValueCorrect: (value) => {
+							isValueCorrect (value) {
 								if (!value) { return false; }
 
 								let valYear = value.getFullYear();
@@ -370,45 +362,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					]
 				},
 				{
-					xtype: 'enrollment-grouped-set',
-					label: 'Are you currently attending high school?',
-					name: 'attending-highschool',
-					required: true,
-					wrongIfEmpty: true,
-					noIncorrect: true,
-					options: [
-						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
-							{
-								type: 'radio-group',
-								label: 'Are you an Oklahoma resident?',
-								name: 'ok-highschool-student',
-								correct: 'N',
-								noIncorrect: true,
-								hides: 'concurrent-contact',
-								defaultAnswer: 'N',
-								sets: {
-									input: 'years_of_oklahoma_residency',
-									//This input's answer to mapped to what to set on the other input
-									N: '0'
-								},
-								options: [
-									{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
-									{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
-								]
-							}
-						]},
-						{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
-					]
-				},
-				{
 					xtype: 'enrollment-set',
 					label: getString('NextThought.view.courseware.enrollment.Admission.OUStudent'),
 					name: 'attending',
 					inputs: [
-						{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
-							{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
-							{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
-						]}
+						{
+							type: 'radio-group',
+							name: 'is_currently_attending_ou',
+							correct: 'N',
+							reveals: {
+								name: 'attended_other_institution'
+							},
+							options: [
+								{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
+								{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
+							]}
 					]
 				},
 				{
@@ -416,6 +384,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					label: getString('NextThought.view.courseware.enrollment.Admission.AskCollege'),
 					name: 'attended_other_institution',
 					required: true,
+					reveals: 'attending-highschool',
+					hides: 'good-standing',
+					isValueCorrect (value) {
+						let attending = value['attended_other_institution'];
+
+						return attending === 'N' || (attending === 'Y' && value['good_academic_standing'] !== 'N');
+					},
 					options: [
 						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
 							{type: 'checkbox', text: getString('NextThought.view.courseware.enrollment.Admission.CurrentStudent'), name: 'still_attending', useChar: true, defaultAnswer: 'N'},
@@ -425,7 +400,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 								label: getString('NextThought.view.courseware.enrollment.Admission.GoodAcademic'),
 								name: 'good_academic_standing',
 								defaultAnswer: 'N',
-								hides: 'good-standing',
 								correct: 'Y',
 								required: true,
 								options: [
@@ -445,6 +419,43 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 							type: 'description',
 							text: 'The class you are attempting to enroll in is a For-Credit Janux course. Only students who are currently in good academic standing may enroll in for credit Janux courses.'
 						}
+					]
+				},
+				{
+					xtype: 'enrollment-grouped-set',
+					label: 'Are you currently attending high school?',
+					name: 'attending-highschool',
+					required: true,
+					wrongIfEmpty: true,
+					noIncorrect: true,
+					reveals:  ['general', 'signature'],
+					hides: 'concurrent-contact',
+					isValueCorrect (value) {
+						var attending = value['attending-highschool'];
+
+						return attending === 'N' || (attending === 'Y' && value['ok-highschool-student'] !== 'Y');
+					},
+					options: [
+						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
+							{
+								type: 'radio-group',
+								label: 'Are you an Oklahoma resident?',
+								name: 'ok-highschool-student',
+								correct: 'N',
+								noIncorrect: true,
+								defaultAnswer: 'N',
+								sets: {
+									input: 'years_of_oklahoma_residency',
+									//This input's answer to mapped to what to set on the other input
+									N: '0'
+								},
+								options: [
+									{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
+									{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
+								]
+							}
+						]},
+						{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 					]
 				}
 			]
@@ -872,7 +883,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				state: value.contact_state,
 				zip: value.contact_zip,
 				country: value.contact_country,
-				date_of_birth: value.contact_date_of_birth
+				date_of_birth: value.date_of_birth
 			};
 		}
 

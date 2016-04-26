@@ -20,6 +20,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			storeOption = course.getEnrollmentOption(NextThought.app.course.enrollment.options.StoreEnrollment.NAME),
 			steps = [];
 
+		enrollmentOption = {
+			OU_Price: 500
+		};
+
 		enrollmentOption.display = this.display;
 		enrollmentOption.displayKey = this.displayKey;
 		enrollmentOption.hasCredit = true;
@@ -149,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			dropText = dropDate && ' by ' + dropDate + ' for a full refund.';
 
 		//if the course is archived
-		if (details.EndDate < now) {
+		if (details.EndDate < now && false) {
 			//if we are enrolled
 			if (details.Enrolled) {
 				state = this.getWording('archivedEnrolled');
@@ -178,6 +182,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			state = this.getWording('notEnrolled', {
 				date: Ext.Date.format(details.EnrollCutOff, this.DateFormat)
 			});
+
+			state.cls = 'checkbox';
 
 			state.buttonText = 'Enroll for College Credit';
 
@@ -259,6 +265,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			name = me.NAME,
 			loadDetails,
 			option = course.getEnrollmentOption(name);
+
+		option = {
+			IsAvailable: true,
+			OU_Price: 500,
+			Links: []
+		};
 
 		if (!option || (!option.IsEnrolled && !option.IsAvailable) || course.get('isAdmin')) {
 			return {
