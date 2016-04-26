@@ -10,6 +10,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	layout: 'none',
 	title: 'Attachment Preview',
 
+	statics: {
+		canShowFile: function (fileType) {
+			return this.isImage(fileType) ||
+					fileType === 'application/pdf';
+		},
+
+		isImage: function (type) {
+			return (/[\/\.](gif|jpg|jpeg|tiff|png)$/i).test(type);
+		}
+	},
+
 	initComponent: function () {
 		this.callParent(arguments);
 

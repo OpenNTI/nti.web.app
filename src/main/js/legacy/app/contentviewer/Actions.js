@@ -68,7 +68,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 
 	showAttachmentInPreviewMode: function (contentFile, parentRecord) {
-		var rec = ParseUtils.parseItems(contentFile)[0];
+		var rec = ParseUtils.parseItems(contentFile)[0],
+			type = contentFile && (contentFile.fileMimeType || contentFile.contentType),
+			AttachmentWindow = NextThought.app.contentviewer.components.attachment.Window;
+
+		if (!AttachmentWindow.canShowFile(type)) {
+			return;
+		}
 
 		if (!this.PromptActions) {
 			this.PromptActions = NextThought.app.prompt.Actions.create();
