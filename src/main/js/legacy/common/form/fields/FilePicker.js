@@ -217,6 +217,20 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 	},
 
 
+	removeInputListeners: function() {
+		var input = this.getInput();
+
+		if (input) {
+			input.removeEventListener('change', this.onFileInputChange.bind(this));
+			input.removeEventListener('dragenter', this.onDragEnter.bind(this));
+			input.removeEventListener('dragleave', this.onDragLeave.bind(this));
+			input.removeEventListener('drop', this.onDragLeave.bind(this));
+			input.removeEventListener('focus', this.onInputFocus.bind(this));
+			input.removeEventListener('blur', this.onInputBlur.bind(this));
+		}
+	},
+
+
 	maybeWarnForSize: function (file) {
 		var size = this.schema.warningSize || this.WARNING_SIZE;
 
@@ -243,6 +257,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 	onFileInputChange: function (e) {
 		var input = this.getInput(),
 			file = input && input.files && input.files[0];
+
+		if (e.target !== input) {
+			return;
+		}
 
 		//Since you can't null out a file input
 		//keep track of the file locally, cancel
@@ -359,6 +377,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		if (!this.rendered) { return; }
 
 		let tip = (this.inputDom && this.inputDom.getAttribute('data-qtip')) || this.defaultToolTip;
+
+		this.removeInputListeners();
 
 		this.inputWrapper.dom.innerHTML = '';
 		this.inputDom = this.inputTpl.append(this.inputWrapper, {qtip: tip});
