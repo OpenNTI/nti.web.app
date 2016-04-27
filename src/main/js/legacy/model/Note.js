@@ -197,6 +197,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		reply.set('ContainerId', note.get('ContainerId'));
 		reply.set('inReplyTo', parent);
 		reply.set('references', refs);
+		reply.set('style', 'suppressed');
 
 		return reply;
 	},
