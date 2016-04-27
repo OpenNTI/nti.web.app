@@ -10,10 +10,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 		cls: 'url-field', cn: [
 			{tag: 'input', type: 'text', placeholder: '{placeholder}', value: '{value}', tabindex: '1'},
 			{tag: 'tpl', 'if': 'required', cn: [
-				{tag: 'input', type: 'url', name: '{name}', value: '{value}', required: true}
+				{tag: 'input', type: 'url', value: '{value}', required: true}
 			]},
 			{tag: 'tpl', 'if': '!required', cn: [
-				{tag: 'input', type: 'url', name: '{name}', value: '{value}'}
+				{tag: 'input', type: 'url', value: '{value}'}
 			]},
 			{tag: 'a', href: '', target: '_blank', html: 'Preview'}
 		]
@@ -71,6 +71,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 
 	getValidator: function () {
 		return this.validationInput && this.validationInput.dom;
+	},
+
+
+	appendToFormData (data) {
+		data.append(this.schema.name, this.getValue());
 	},
 
 
