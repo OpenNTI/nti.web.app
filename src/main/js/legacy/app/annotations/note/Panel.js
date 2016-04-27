@@ -1142,7 +1142,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		let el = e.getTarget('.attachment-part'),
 			part = this.getAttachmentPart(el);
 
-		if (part) {
+		if (part && !e.getTarget('.download')) {
 			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
 
 			if (ContentViewerActions) {

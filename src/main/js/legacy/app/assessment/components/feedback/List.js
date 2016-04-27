@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 		}
 
 		UserRepository.getUser(pluck(pluck(records, 'data'), 'Creator'))
-				.done(fill);
+			.then(fill);
 
 	},
 

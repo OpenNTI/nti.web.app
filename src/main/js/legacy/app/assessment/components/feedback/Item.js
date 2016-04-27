@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 require('legacy/mixins/ProfileLinks');
-
+require('legacy/app/contentviewer/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.assessment.components.feedback.Item', {
 	extend: 'Ext.Component',
@@ -151,5 +151,42 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 				this.doDelete(this.record);
 			}
 		}
+		else if (e.getTarget('.attachment-part') && !e.getTarget('.download')) {
+			this.handleAttachmentClick(e);
+		}
+	},
+
+
+	handleAttachmentClick: function (e) {
+		let el = e.getTarget('.attachment-part'),
+			part = this.getAttachmentPart(el);
+
+		if (part) {
+			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+
+			if (ContentViewerActions) {
+				ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
+			}
+		}
+	},
+
+
+	getAttachmentPart: function (el) {
+		let name = el && el.getAttribute && el.getAttribute('name');
+
+		if (!name || !this.record) {
+			return null;
+		}
+
+		let body = this.record.get('body') || [], part;
+
+		body.forEach(function (p) {
+			if (p.name === name) {
+				part = p;
+				return false;
+			}
+		});
+
+		return part;
 	}
 });
