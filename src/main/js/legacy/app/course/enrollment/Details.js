@@ -48,16 +48,16 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					{cls: 'info', html: '{drop}'}
 				]}
 			]}
+		]},
+		{cls: 'gift-card {gifts.giftClass}', cn: [
+			{cls: 'give {gifts.giveClass}', cn: [
+				{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.CourseGift}}}'},
+				{cls: 'sub', html: '{gifts.giveTitle}'}
+			]},
+			{cls: 'redeem {gifts.redeemClass}', cn: [
+				{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.RedeemGift}}}'}
+			]}
 		]}
-		// {cls: 'gift-card {gifts.giftClass}', cn: [
-		// 	{cls: 'give {gifts.giveClass}', cn: [
-		// 		{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.CourseGift}}}'},
-		// 		{cls: 'sub', html: '{gifts.giveTitle}'}
-		// 	]},
-		// 	{cls: 'redeem {gifts.redeemClass}', cn: [
-		// 		{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.RedeemGift}}}'}
-		// 	]}
-		// ]}
 	])),
 
 	enrollmentConfirmationTpl: new Ext.XTemplate(Ext.DomHelper.markup([
