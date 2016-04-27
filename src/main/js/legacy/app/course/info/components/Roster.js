@@ -4,6 +4,7 @@ var ChartPie = require('../../../../common/chart/Pie');
 var PromptActions = require('../../../prompt/Actions');
 var CoursewareRoster = require('../../../../proxy/courseware/Roster');
 var MenusReports = require('../../../../common/menus/Reports');
+var InvitePrompt = require('legacy/app/invite/Prompt');
 var CoursesCourseInstanceEnrollment = require('../../../../model/courses/CourseInstanceEnrollment');
 var {isFeature} = require('legacy/util/Globals');
 
@@ -227,6 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 		this.currentBundle = instance;
 		this.setupEmail();
+		this.setupInvite();
 
 		if (Ext.isEmpty(roster) || !roster) {
 			if (this.store) {this.store.destroyStore();}
@@ -275,6 +277,18 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			});
 	},
 
+	setupInvite () {
+		var me = this;
+		this.onceRendered
+			.then(() => {
+				me.inviteEl = me.inviteEl || me.el.down('.tools .invite');
+				if (!me.inviteListenerSet && me.inviteEl /* && me.shouldAllowInvite */) {
+					me.inviteListenerSet = true;
+					me.mon(me.inviteEl, 'click', 'showInvitePrompt');
+				}
+			});
+	},
+
 	shouldAllowInstructorEmail: function () {
 		// Right now, we will only
 		return isFeature('instructor-email') && this.currentBundle && this.currentBundle.getLink('Mail');
@@ -309,6 +323,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			record: emailRecord
 		});
 	},
+
+
+	showInvitePrompt () {
+		this.PromptActions.prompt('invite', {record: this.currentBundle});
+	},
+
 
 	doSearch: function (str) {
 		this.down('grid').getSelectionModel().deselectAll(true);

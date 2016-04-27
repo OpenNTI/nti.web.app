@@ -11,18 +11,14 @@ module.exports = exports = Ext.define('NextThought.app.invite.Prompt', {
 
 	initComponent: function () {
 		this.callParent(arguments);
-
-		this.addInviteForm();
 	},
 
 	afterRender: function () {
 		this.callParent(arguments);
 
 		this.Prompt.Footer.setSaveText('Send');
-	},
-
-	addInviteForm: function () {
 	}
+
 }, function () {
 	NextThought.app.prompt.StateStore.register('invite', this);
 });
