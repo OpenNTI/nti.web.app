@@ -44,11 +44,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 	addAttachmentRenderer: function () {
-		let type = this.record.get('fileMimeType') || this.record.get('contentType'),
+		let type = this.record.get('FileMimeType') || this.record.get('contentType'),
 			data = this.record.getData(),
 			tpl;
 
-		if (type === 'application/pdf') {
+		if ((/^(application|text)\/*/).test(type)) {
 			let tag = Ext.isIE10m ? 'object' : 'iframe';
 			tpl = this.TEMPLATES.document;
 			data.tag = tag;

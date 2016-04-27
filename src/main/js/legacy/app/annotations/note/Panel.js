@@ -22,6 +22,7 @@ require('../../context/components/cards/Question');
 require('../../context/components/cards/RelatedWork');
 require('../../context/components/cards/Slide');
 require('../../context/components/cards/Video');
+require('legacy/app/contentviewer/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', {
@@ -744,7 +745,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			},
 			this);
 
+		let attachments = this.text.select('.attachment-part');
+		if (attachments) {
+			attachments.on('click', this.click.bind(this));
+		}
 	},
+
 
 	setContext: function (contextCmp) {
 		var t, me = this;
@@ -1094,12 +1100,18 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 	},
 
 	click: function (e) {
-		var t = e.getTarget('.whiteboard-container', null, true), guid;
-		if (!t) {
-			return;
+		if (e.getTarget('.whiteboard-container', null, true)) {
+			this.handleWhiteboardClick(e);
 		}
+		else if (e.getTarget('.attachment-part', null, true)) {
+			this.handleAttachmentClick(e);
+		}
+	},
 
-		guid = t.up('.body-divider').getAttribute('id');
+
+	handleWhiteboardClick: function (e) {
+		let t = e.getTarget('.attachment-part', null, true),
+			guid = t && t.up('.body-divider').getAttribute('id');
 		if (t && this.wbData[guid]) {
 			t = e.getTarget('.reply:not(.profile-activity-reply-item)', null, true);
 			if (t) {
@@ -1124,6 +1136,41 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			}
 		}
 	},
+
+
+	handleAttachmentClick: function (e) {
+		let el = e.getTarget('.attachment-part'),
+			part = this.getAttachmentPart(el);
+
+		if (part) {
+			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+
+			if (ContentViewerActions) {
+				ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
+			}
+		}
+	},
+
+
+	getAttachmentPart: function (el) {
+		let name = el && el.getAttribute && el.getAttribute('name');
+
+		if (!name || !this.record) {
+			return null;
+		}
+
+		let body = this.record.get('body') || [], part;
+
+		body.forEach(function (p) {
+			if (p.name === name) {
+				part = p;
+				return false;
+			}
+		});
+
+		return part;
+	},
+
 
 	onReply: function (e) {
 		if (e && e.stopEvent) {e.stopEvent();}
