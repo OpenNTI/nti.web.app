@@ -365,14 +365,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					xtype: 'enrollment-set',
 					label: getString('NextThought.view.courseware.enrollment.Admission.OUStudent'),
 					name: 'attending',
+					reveals: 'attended_other_institution',
 					inputs: [
 						{
 							type: 'radio-group',
 							name: 'is_currently_attending_ou',
 							correct: 'N',
-							reveals: {
-								name: 'attended_other_institution'
-							},
 							options: [
 								{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
 								{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
