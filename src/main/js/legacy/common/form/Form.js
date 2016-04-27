@@ -245,7 +245,6 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			}
 		});
 
-		me.formEl.on('submit', me.formSubmit.bind(me));
 		me.onFormChange();
 
 		wait()
