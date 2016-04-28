@@ -19,6 +19,8 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 
 		const collection = Service.getCollection('Invitations', 'Invitations');
 		const invite = collection && Service.getLinkFrom(collection.Links, 'accept-course-invitations');
+		
+		let values = { "invitation_codes": this.code };
 
 		this.label = this.add({
 			xtype: 'label',
@@ -29,6 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 		this.form = this.add({
 			xtype: 'common-form',
 			schema: this.schema,
+			defaultValues: values,
 			action: invite,
 			onSuccess: this.onSuccess,
 			onError: this.onError

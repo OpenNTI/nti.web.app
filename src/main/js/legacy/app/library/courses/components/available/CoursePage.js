@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 
 		if (this.rendered) {
-			this.add({xtype: 'library-redemption', redeemLink: 'link', onFormSubmit: this.onFormSubmit });
+			this.add({xtype: 'library-redemption', redeemLink: 'link', code: this.code, onFormSubmit: this.onFormSubmit });
 			this.addTab({label: 'Redeem', category: 'redeem', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming) && Ext.isEmpty(archived)});
 		}
 
