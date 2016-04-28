@@ -8,15 +8,16 @@
     text-transform: capitalize;
 
 	&::before{
-	    content: '';
-	    margin: 0.5em;
-	    color: #b8b8b8;
-	    background-image: url(../images/sprite.png);
-	    background-position: -491px -505px;
-	    width: 14px;
-	    height: 20px;
-	    position: absolute;
-	    left: -8px;
+        content: '';
+        margin: 0.5em;
+        color: #b8b8b8;
+        background-image: url("/app/resources/images/icons/invite.png");
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        background-repeat: no-repeat;
+        left: -8px;
+        top: 3px;
 	}
 }
 
