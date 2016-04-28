@@ -1,7 +1,7 @@
 var Ext = require('extjs');
-var WindowWindow = require('../../common/window/Window');
-var AccountHeader = require('../../app/account/Header');
-var EmbedvideoMain = require('./Main');
+require('../../common/window/Window');
+require('../../app/account/Header');
+require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {

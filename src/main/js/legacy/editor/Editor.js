@@ -9,6 +9,7 @@ var {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
 require('legacy/common/form/fields/FilePicker');
 require('legacy/model/RelatedWork');
+require('legacy/editor/embedvideo/Window');
 
 
 Ext.define('NextThought.editor.AbstractEditor', {
