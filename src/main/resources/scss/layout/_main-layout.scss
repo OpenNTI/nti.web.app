@@ -1,6 +1,6 @@
-html.x-viewport { 
-	height: auto !important; 
-	overflow-y: auto !important; 
+html.x-viewport {
+	height: auto !important;
+	overflow-y: auto !important;
 	padding-top: $header-height;
 
 	&.window-open {
@@ -25,18 +25,18 @@ html.x-viewport {
 		body {
 			min-height: calc(100vh - #{$header-height-withbar});
 		}
-		
+
 		.main-navigation {
 			top: $msg-bar-height;
 		}
 
 		.window-container {
-			top: $header-height-withbar; 
+			top: $header-height-withbar;
 		}
 
 		.main-message-bar {
 			display: block;
-		}	
+		}
 	}
 }
 
@@ -154,6 +154,14 @@ body.x-body {
 	display: none;
 }
 
+body.media-viewer-open .window-container {
+	top: 0;
+
+	.window-content {
+		margin-top: $header-height + 20;
+	}
+}
+
 
 .window-container {
 	position: fixed;
@@ -174,7 +182,7 @@ body.x-body {
 			.title {
 				span{
 					color: #3fb3f6;
-					
+
 					&:after {
 					    content: ' / ';
 					    color: #b8b8b8;
