@@ -398,7 +398,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			if (me.isDestroyed) {
 				return;
 			}
-			me.editor.unmask();
 			if (success) {
 				me.deactivateReplyEditor();
 				if (me.recordUpdated) {
@@ -406,6 +405,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 				}
 				AnnotationUtils.updateHistory(record);
 			}
+			me.editor.unmask();
 		}
 
 		function save () {
@@ -430,7 +430,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 				try {
 					me.UserDataActions.saveNewReply(r, v.body, [])
 						.then(callback.bind(this, true))
-						.fail(callback.bind(this, false));
+						.catch(callback.bind(this, false));
 				}
 				catch (e) {
 					console.error(Globals.getError(e));
