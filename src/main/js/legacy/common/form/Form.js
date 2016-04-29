@@ -749,7 +749,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 						});
 				}
 
-				if(me.onSuccess) { me.onSuccess(); }
+				if(me.onSuccess) { me.onSuccess(results); }
 
 				me.el.unmask();
 				return results;

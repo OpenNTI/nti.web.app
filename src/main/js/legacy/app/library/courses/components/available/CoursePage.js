@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const {wait} = require('legacy/util/Promise');
 const {isFeature} = require('legacy/util/Globals');
+var ParseUtils = require('legacy/util/Parsing');
 
 require('../Page');
 require('legacy/app/redeem/Redeem');
@@ -88,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 
 		if (this.rendered) {
-			this.add({xtype: 'library-redemption', redeemLink: 'link', code: this.code, onFormSubmit: this.onFormSubmit });
+			this.add({xtype: 'library-redemption', redeemLink: 'link', code: this.code, onSuccess: this.onRedeemSuccess.bind(this) });
 			this.addTab({label: 'Redeem', category: 'redeem', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming) && Ext.isEmpty(archived)});
 		}
 
@@ -101,8 +102,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 
-	onFormSubmit () {
-		debugger;
+	onRedeemSuccess (results) {
+		let course = ParseUtils.parseItems(results)[0];
+
+		this.updateCourses();
+		this.showCourse(course);
 	},
 
 
