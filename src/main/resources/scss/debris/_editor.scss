@@ -20,6 +20,7 @@ span.tab{
 			min-width: 300px;
 			width: auto;
 			max-width: calc(100vw - 40px);
+			background: #fff;
 		}
 
 		&.has-iframe {
@@ -90,6 +91,7 @@ span.tab{
 					margin-left: 0;
 					text-transform: capitalize;
 					padding: 0;
+					text-align: left;
 				}
 				.size {
 					display: block;

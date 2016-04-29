@@ -12,8 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	statics: {
 		canShowFile: function (fileType) {
-			return this.isImage(fileType) ||
-					fileType === 'application/pdf';
+			return this.isImage(fileType) || (/^(application|text)\//).test(fileType);
 		},
 
 		isImage: function (type) {
