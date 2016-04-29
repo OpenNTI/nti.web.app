@@ -1,10 +1,13 @@
-var Ext = require('extjs');
-var MixinsSearchable = require('../../mixins/Searchable');
-var ContentviewerActions = require('./Actions');
-var PanelsReader = require('./panels/Reader');
-var AssignmentAdmin = require('./panels/assignment/Admin');
-var AssignmentStudent = require('./panels/assignment/Student');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {isMe} = require('legacy/util/Globals');
+const {wait} = require('legacy/util/Promise');
+
+
+require('../../mixins/Searchable');
+require('./Actions');
+require('./panels/Reader');
+require('./panels/assignment/Admin');
+require('./panels/assignment/Student');
 
 
 /**
@@ -92,6 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		this.callParent(arguments);
 	},
 
+
 	initComponent: function () {
 		this.callParent(arguments);
 
@@ -124,6 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		});
 	},
 
+
 	__fixConfigForPageInfo: function (config, pageInfo) {
 		var assignment = pageInfo.getAssignment();
 
@@ -138,12 +143,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		return config;
 	},
 
+
 	onActivate: function () {
 		this.initSearch();
+
 		if (this.reader) {
 			this.reader.fireEvent('activate');
 		}
 	},
+
 
 	onDeactivate: function () {
 		if (this.reader) {
@@ -151,9 +159,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		}
 	},
 
+
 	getContainerIdForSearch: function () {
 		return this.pageInfo && this.pageInfo.getId();
 	},
+
 
 	onceReadyForSearch: function () {
 		var me = this;
@@ -162,12 +172,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			return me.reader.onceReadyForSearch();
 		}
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise(function (fulfill) {
 			me.on('reader-set', fulfill);
 		}).then(function () {
 			return me.reader.onceReadyForSearch();
 		});
 	},
+
 
 	showSearchHit: function (hit, fragment) {
 		this.clearSearchHit();
@@ -176,13 +187,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			.then(this.reader.showSearchHit.bind(this.reader, hit, fragment));
 	},
 
+
 	goToFragment: function (fragment) {
 		this.reader.goToFragment(fragment);
 	},
 
+
 	goToNote: function (note) {
 		this.reader.goToNote(note);
 	},
+
 
 	resolvePageInfo: function () {
 		var p;
@@ -200,17 +214,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		return p;
 	},
 
+
 	allowNavigation: function () {
 		return this.reader ? this.reader.allowNavigation() : true;
 	},
+
 
 	beforeRouteChange: function () {
 		return this.reader && this.reader.beforeRouteChange();
 	},
 
+
 	getLocation: function () {
 		return this.reader.getLocation();
 	},
+
 
 	updateHistory: function (h) {
 		var reader = this.reader;
