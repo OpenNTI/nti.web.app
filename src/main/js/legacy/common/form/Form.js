@@ -466,9 +466,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				error = cmp.getErrors();
 			}
 		} else if (field) {
-			error = {
-				missing: field.validity && field.validity.valueMissing
-			};
+			error = this.__getErrorForField(field);
 		}
 
 		(Object.keys(error || {}) || []).forEach(function (key) {
@@ -482,6 +480,21 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		return hasErrors && error;
 	},
+
+
+	__getErrorForField (field) {
+		let value = field.value;
+		let error = {};
+
+		if (field.required && !(value.trim().length)) {
+			error.missing = true;
+		}
+
+		error.missing = error.missing || field.validity && field.validity.valueMissing;
+
+		return error;
+	},
+
 
 	__componentsEmpty: function () {
 		var components = this.componentMap,

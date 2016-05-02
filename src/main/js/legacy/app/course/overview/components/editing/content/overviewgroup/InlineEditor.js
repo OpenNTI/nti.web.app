@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var values = this.getValue(),
 			errors = {};
 
-		if (!values.title) {
+		if (!values.title || !values.title.trim().length) {
 			errors.title = {
 				missing: true
 			};
