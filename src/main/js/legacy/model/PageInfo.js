@@ -32,7 +32,8 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 		{ name: 'dataFilterPreference', type: 'auto' },
 		//Placeholder for client-side generated page content :} *facepalm*
 		{ name: 'content', type: 'string', persist: false },
-		{ name: 'Title', type: 'string'}
+		{ name: 'Title', type: 'string'},
+		{ name: 'DoNotLoadAnnotations', persist: false}
 	],
 
 	isPageInfo: true,

@@ -206,12 +206,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		} else if (this.relatedWork) {
 			p = this.ContentViewerActions.getRelatedWorkPageInfo(this.relatedWork, this.bundle);
 		} else if (this.assignment) {
-			p = Service.getPageInfo(this.assignment.getId(), null, null, null, this.bundle);
+			p = this.resolveAssignmentPageInfo(this.assignment, this.bundle);
+			// p = Service.getPageInfo(this.assignment.getId(), null, null, null, this.bundle);
 		} else if (this.contentId) {
 			p = Service.getPageInfo(this.contentId, null, null, null, this.bundle);
 		}
 
 		return p;
+	},
+
+
+	resolveAssignmentPageInfo (assignment, bundle) {
+		return Service.getPageInfo(assignment.getId(), null, null, null, this.bundle)
+			.catch(() => {
+				return this.ContentViewerActions.getAssignmentPageInfo(assignment, bundle);
+			});
 	},
 
 

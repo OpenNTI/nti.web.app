@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		me.fireEvent('set-content', reader, doc, assessmentItems, pageInfo);
 
 		//Do not attempt to load annotations from these locations
-		if (!pageInfo.isPartOfCourseNav()) {
+		if (!pageInfo.isPartOfCourseNav() && !pageInfo.get('DoNotLoadAnnotations')) {
 			me.fireEvent('load-annotations', ntiid, me.resolveContainers());
 		} else {
 			me.fireEvent('load-annotations-skipped');

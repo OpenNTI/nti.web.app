@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../util/Content');
+const Ext = require('extjs');
+const ContentUtils = require('../../util/Content');
 const ParseUtils = require('legacy/util/Parsing');
+
 require('legacy/app/prompt/Actions');
 require('../../common/Actions');
 require('../../model/PageInfo');
@@ -64,6 +65,78 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 				return pageInfo;
 			});
+	},
+
+
+	getContentsForAssignment (assignment) {
+		let parts = assignment && assignment.get('parts');
+		let part = parts && parts[0];
+		let questionSet = part && part.get('question_set');
+		let questions = questionSet && questionSet.get('questions');
+		let title = assignment && assignment.get('title');
+		let description = assignment && assignment.get('content');
+		let contents = [];
+
+		if (title) {
+			contents.push({cls: 'chapter title', html: title});
+		}
+
+		if (description) {
+			contents.push({cls: 'sidebar', html: description});
+		}
+
+		return (questions || []).reduce((acc, question) => {
+			let ntiid = question.get('NTIID');
+
+			acc.push({
+				tag: 'object',
+				data: ntiid,
+				'data-canindividual': true,
+				'data-ntiid': ntiid,
+				type: question.get('MimeType'),
+				cn: [
+					{tag: 'param', name: 'canindividual', value: true},
+					{tag: 'param', name: 'ntiid', value: ntiid}
+				]
+			});
+
+
+			return acc;
+		}, contents);
+	},
+
+
+	getAssignmentPageInfo (assignment, bundle) {
+		let parts = assignment && assignment.get('parts');
+		let part = parts && parts[0];
+
+		if (!part) {
+			return Promise.reject('Unable to build pageinfo for assignment: ', assignment, bundle);
+		}
+
+		let ntiid = assignment.getId();
+
+		let contents = this.getContentsForAssignment(assignment);
+		let assessmentItems = [assignment];
+
+
+		return NextThought.model.PageInfo.create({
+			ID: ntiid,
+			NTIID: ntiid,
+			AssessmentItems: assessmentItems,
+			DoNotLoadAnnotations: true,
+			content: Ext.DomHelper.markup([
+				{tag: 'head', cn: [
+					{tag: 'title', html: assignment.get('title')}
+				]},
+				{tag: 'body', cn: [{
+					cls: 'page-contents',
+					cn: [
+						{'data-ntiid': ntiid, ntiid: ntiid, cn: contents}
+					]
+				}]}
+			])
+		});
 	},
 
 
