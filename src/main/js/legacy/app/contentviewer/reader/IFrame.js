@@ -551,6 +551,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	checkFrame: function () {
 		if (this.reader.isDestroyed) {clearInterval(this.syncInterval); return;}
 		var doc = this.getDocumentElement(), html;
+
 		if (doc) {
 			try {
 				html = doc.getElementsByTagName('html');
@@ -593,8 +594,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 		if (Ext.isIE) { //This still seems wonky in IE10.  Make it just check IE so we can scroll the content
 			contentHeight = 150;
-			for (ii = 0; ii < content.childNodes.length; ii++) {
-				contentHeight += content.childNodes[ii].offsetHeight;
+
+			content = content.getElementsByTagName('body')[0];
+
+			if (content) {
+				for (ii = 0; ii < content.childNodes.length; ii++) {
+					contentHeight += content.childNodes[ii].offsetHeight;
+				}
 			}
 		}
 		else {
