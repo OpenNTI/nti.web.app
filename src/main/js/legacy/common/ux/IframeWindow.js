@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var WindowWindow = require('../window/Window');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {getURL} = require('legacy/util/Globals');
+const {wait} = require('legacy/util/Promise');
+
+require('../window/Window');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
@@ -89,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 		iframe.on({
 			afterRender: function (cmp) {
 				var parent = cmp.el.parent(),
-					iframe = cmp.el.dom,
+					iframeCmp = cmp.el.dom,
 					loaded = false,
 					masked = false,
 					p = wait(100).then(function () {
@@ -100,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 					});
 
 				if (me.iframeHeight) {
-					iframe.style.height = me.iframeHeight + 'px';
+					iframeCmp.style.height = me.iframeHeight + 'px';
 				}
 
 				cmp.el.on('load', function () {
@@ -117,22 +119,37 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 
 		if (Ext.is.iOS) {
 			this.on('afterrender', function () {
-				var iframe = this.el.down('iframe');
-				iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
-				iframe.parent().el.setStyle('overflow', 'auto');
+				var iframeCmp = this.el.down('iframe');
+				iframeCmp.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
+				iframeCmp.parent().el.setStyle('overflow', 'auto');
 			},this);
 		}
 
 		if (this.width === 'max') {
 			this.fillScreen();
 		}
+
+		function onResize () {
+			let iframeCmp = me.el.dom.querySelector('iframe');
+
+			me.fillScreen();
+
+			if (iframeCmp) {
+				iframeCmp.style.height = me.iframeHeight + 'px';
+			}
+		}
+
+		Ext.EventManager.onWindowResize(onResize);
+
+		this.on('destroy', () => {
+			Ext.EventManager.removeResizeListener(onResize);
+		});
 	},
 
 
 	fillScreen: function () {
 		var aspect = this.desiredWidth / this.desiredHeight, //width / height
 			height, width,
-			iframe = this.down('box[itemId=iframe]'),
 			MAX_WIDTH = (Ext.Element.getViewWidth() - 50), //window width - padding
 			MAX_HEIGHT = (Ext.Element.getViewHeight() - 20 - 55); //window height - padding - bottom bar
 
