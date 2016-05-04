@@ -746,7 +746,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			this);
 
 		let attachments = this.text.select('.attachment-part');
-		if (attachments) {
+		if (attachments && attachments.elements.length > 0) {
 			attachments.on('click', this.click.bind(this));
 		}
 	},
