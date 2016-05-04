@@ -48,8 +48,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.callParent(arguments);
 
 		var commentBox;
+
 		this.feedbackList = this.down('assignment-feedback-list');
 		this.feedbackList.syncElementHeight = this.syncElementHeight.bind(this);
+		this.feedbackList.openReply = this.showEditor.bind(this);
+
 		this.comment = this.down('box[name=comment]');
 
 		commentBox = this.comment.feedbackBox;
@@ -158,6 +161,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.editor.activate();
 		Ext.defer(this.editor.focus, 350, this.editor);
 		this.updateLayout();
+
+		return this.editor;
 	},
 
 	updateFeedback: function (store) {

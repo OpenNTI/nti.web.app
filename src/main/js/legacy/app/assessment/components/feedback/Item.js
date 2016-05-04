@@ -1,4 +1,6 @@
 const Ext = require('extjs');
+
+require('legacy/app/whiteboard/Window');
 require('legacy/mixins/ProfileLinks');
 require('legacy/app/contentviewer/Actions');
 
@@ -65,8 +67,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 		}
 
 		let r = this.record;
-		return new Promise(function (fulfill) {
-			r.compileBodyContent(fulfill);
+
+		this.wbData = {};
+
+		return new Promise((fulfill) => {
+			r.compileBodyContent(fulfill, this, (id, data, type) => {
+				if (type === 'video') {
+					console.error('Videos are not supported in feedback');
+				} else {
+					this.wbData[id] = data;
+				}
+			});
 		});
 	},
 
@@ -92,8 +103,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 
 		this.mon(this.editor, {
 			'save': 'onSave',
-			'no-body-content': function (editor, el) {
-				me.editor.markError(el, getString('NextThought.view.assessment.AssignmentFeedback.empty-editor'));
+			'no-body-content': function (editor, node) {
+				me.editor.markError(node, getString('NextThought.view.assessment.AssignmentFeedback.empty-editor'));
 				return false;
 			},
 			'activated-editor': function () {
@@ -140,9 +151,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 
 
 	onFeedbackClick: function (e) {
-		var c = this.record.get('Creator');
+		let c = this.record.get('Creator');
+		let whiteboard = e.getTarget('.whiteboard-container');
 
-		if ((e.getTarget('.avatar') || e.getTarget('.name')) && c && c.getProfileUrl) {
+		if (whiteboard) {
+			this.whiteboardContainerClick(e, whiteboard);
+		} else if ((e.getTarget('.avatar') || e.getTarget('.name')) && c && c.getProfileUrl) {
 			this.navigateToProfile(c);
 		} else if (e.getTarget('.link.edit')) {
 			this.openEditorFor(this.record, this.el);
@@ -153,6 +167,22 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 		}
 		else if (e.getTarget('.attachment-part') && !e.getTarget('.download')) {
 			this.handleAttachmentClick(e);
+		}
+	},
+
+
+	whiteboardContainerClick (e, container) {
+		let bodyDivider = e.getTarget('.body-divider');
+		let guid = bodyDivider && bodyDivider.id;
+		let data = guid && this.wbData[guid];
+
+		if (!data) {
+			console.error('No data for whitebard:', container);
+		} else if (e.getTarget('.reply')) {
+			let editor = this.openReply();
+			editor.addWhiteboard(Ext.clone(data), guid + '-reply');
+		} else {
+			Ext.widget('wb-window', {width: 802, value: data, readonly: true}).show();
 		}
 	},
 
