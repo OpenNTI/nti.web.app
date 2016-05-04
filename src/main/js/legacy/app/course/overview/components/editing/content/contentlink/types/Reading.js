@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../../../../../../util/Content');
-var TypesBase = require('./Base');
-var ContentActions = require('../../../../../../../content/Actions');
-var ContentlinkReadingSelection = require('../ReadingSelection');
-var ContentlinkReadingEditor = require('../ReadingEditor');
+const Ext = require('extjs');
+const ContentUtils = require('../../../../../../../../util/Content');
+
+require('./Base');
+require('../../../../../../../content/Actions');
+require('../ReadingSelection');
+require('../ReadingEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Reading', {
@@ -115,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		// Simplify this and only return the list of items.
 		// However, in other cases,
 		// we need to pass the title and items for each content package.
-		if (readings.length == 1) {
+		if (readings.length === 1) {
 			readings = readings[0] && readings[0].items;
 		}
 
@@ -202,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	doValidation: function () {
-		return Promise.resolve();
+		return this.readingEditorCmp ? this.readingEditorCmp.doValidation() : Promise.resolve();
 	},
 
 	onSave: function () {
