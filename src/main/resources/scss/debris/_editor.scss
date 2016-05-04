@@ -48,19 +48,19 @@ span.tab{
 
 			.preview {
 				position: absolute;
-				top: 0;
+				top: 12px;
+				bottom: 12px;
 				left: 0;
 				right: 0;
-				bottom: 0;
 				z-index: 0;
-				background-size: cover;
+				background-size: contain;
 				background-position: center;
 				background-repeat: no-repeat;
 
-				&.pdf, &.docx, &.x-pdf, &.zip {
-					top: 12px;
-					bottom: 12px;
-					background-size: contain;
+				&.jpeg, &.jpg, &.gif, &.png {
+					top: 0;
+					bottom: 0;
+					background-size: cover;
 				}
 			}
 		}
@@ -92,6 +92,8 @@ span.tab{
 					text-transform: capitalize;
 					padding: 0;
 					text-align: left;
+					overflow: hidden;
+    				text-overflow: ellipsis;
 				}
 				.size {
 					display: block;
