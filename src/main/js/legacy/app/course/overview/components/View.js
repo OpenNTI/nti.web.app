@@ -94,6 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	openEditing: function () {
 		var me = this,
+			bundle = me.currentBundle,
 			node = me.activeNode,
 			outline = me.activeOutline,
 			id = node && node.getId();
@@ -122,12 +123,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}).then(function () {
 			id = ParseUtils.encodeForURI(id);
 
+			me.editingMap[bundle.getId()] = true;
+
 			if (id) {
 				me.pushRoute('Editing', id + '/edit');
-				me.editingMap[id] = true;
 			} else {
 				me.pushRoute('Editing', 'edit');
-				me.editingMap[node && node.getId()] = true;
 			}
 		});
 	},
@@ -177,10 +178,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					id = node && node.getId();
 				}
 
+				delete me.editingMap[bundle.getId()];
+
 				if (id) {
 					id = ParseUtils.encodeForURI(id);
 					me.pushRoute('', id);
-					delete me.editingMap[id];
 				} else {
 					me.pushRoute('', '');
 				}
@@ -328,12 +330,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	showOutlineNode: function (route, subRoute) {
 		var me = this,
+			bundle = this.currentBundle,
 			node = route.params && route.params.node,
 			id = node && ParseUtils.decodeFromURI(node),
 			changedEditing = me.isEditing,
 			record = route.precache.outlineNode;
 
-		if (this.editingMap && this.editingMap[node]) {
+
+		if (this.editingMap && this.editingMap[bundle.getId()]) {
 			this.replaceRoute('Editing', '/edit');
 			return Promise.resolve();
 		}
@@ -369,6 +373,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	showEditOutlineNode: function (route, subRoute) {
 		var me = this,
+			bundle = me.currentBundle,
 			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
 			changedEditing = !me.isEditing,
 			record = route.precache.outlineNode;
@@ -378,6 +383,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.body.showEditing();
 
 		me.isEditing = true;
+
+		me.editingMap[bundle.getId()] = true;
 
 		return me.__getRecord(id, record, true, changedEditing)
 			.then(function (record) {
