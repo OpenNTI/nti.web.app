@@ -198,9 +198,20 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 				if (checkbox) {
 					this.updateSelectedEnrollment(checkbox);
+					delete this.__stateToRestore;
 				}
 
-				delete this.__stateToRestore;
+			}
+		} else if (type === 'purchase') {
+			option = this.enrollmentOptions.StoreEnrollment;
+
+			if (option) {
+				checkbox = this.el.down('.addon.checkbox[data-name=StoreEnrollment]');
+
+				if (checkbox) {
+					this.updateSelectedEnrollment(checkbox);
+					delete this.__stateToRestore;
+				}
 			}
 		}
 	},

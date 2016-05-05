@@ -170,6 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.addRoute('/', this.showCourses.bind(this));
 		this.addRoute('/:id', this.showCourseDetail.bind(this));
 		this.addRoute('/:id/forcredit', this.showForCredit.bind(this));
+		this.addRoute('/:id/purchase', this.showPurchase.bind(this));
 		this.addRoute('/:id/redeem/:token', this.showRedeemToken.bind(this));
 		this.addRoute('/:id/paymentcomplete', this.showPaymenComplete.bind(this));
 
@@ -650,6 +651,19 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				}
 			});
 	},
+
+	showPurchase: function (route, subRoute) {
+		var me = this;
+
+		me.showCourseDetail(route, subRoute)
+			.then(function () {
+				if (me.courseDetail) {
+					me.courseDetail.restoreEnrollmentOption('purchase');
+				}
+			});
+	},
+
+
 
 	addMask: function () {
 		if (this.rendered) {
