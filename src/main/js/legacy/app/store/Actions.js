@@ -132,7 +132,6 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 				});
 			} else {
 				Stripe.setPublishableKey(pKey);
-				Stripe.setApiVersion('2012-11-07');
 				Stripe.createToken(cardinfo, tokenResponseHandler);
 			}
 		} catch (e) {
