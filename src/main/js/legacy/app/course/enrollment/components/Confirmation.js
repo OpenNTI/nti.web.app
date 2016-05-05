@@ -28,7 +28,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		]},
 		{cls: 'support', cn: [
 				{cls: 'support-text', html: '{{{NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport}}}'},
-			{cls: 'help-link phone', html: '{phone}'},
+			{tag: 'tpl', 'if': 'phone', cn: [
+				{cls: 'help-link phone', html: '{phone}'}
+			]},
 			{tag: 'tpl', 'for': 'helplinks', cn: [
 				{tag: 'a', href: '{href}', html: '{text}', target: '_blank'}
 			]}
@@ -62,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			prompt = getFormattedString('NextThought.view.courseware.enrollment.Confirmation.ClassStartInfo', {
 				date: Ext.Date.format(start, 'F j, Y'),
 				course: c.get('Title')
-			}); 
+			});
 		}
 
 		for (i = 1; i <= 3; i++) {
@@ -82,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
 				{href: 'profile', text: getString('NextThought.view.courseware.enrollment.Confirmation.CompleteProfile')}
 			],
-			phone: getString('course-info.course-supoprt.phone'),
+			phone: getString('course-info.course-supoprt.phone', null, true),
 			helplinks: helplinks
 		});
 
