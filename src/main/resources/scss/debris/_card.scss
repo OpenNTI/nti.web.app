@@ -1,0 +1,74 @@
+
+%icon-fallback-link {background-image: url(/app/resources/images/file-icons/icon-www.png) !important;}
+%icon-fallback-unknow {background-image: url(/app/resources/images/file-icons/generic.png) !important;}
+%icon-fallback-download {background-image: url(/app/resources/images/file-icons/blank-download.png) !important;}
+
+@mixin file-custom-icon() {
+	.icon {
+		$grey: $tertiary-grey;
+		$blue: #15a2e0;
+		$green: #4aaf37;
+		$orange: #f65b24;
+		$yellow: #ffaf44;
+		$red: #da251c;
+		$gap: 0.625rem;
+		$icon-width: 125px;
+		color: $grey;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: $icon-width;
+		height: auto;
+		margin: 0 auto;
+		background-size: cover;
+		background-position: center center;
+
+		&.fallback {
+			@extend %icon-fallback-download;
+			&.www {
+				@extend %icon-fallback-link;
+				label {display: none;}
+			}
+			&.unknown {
+				@extend %icon-fallback-unknow;
+				label {display: none;}
+			}
+
+			label {
+				position: absolute;
+				bottom: 15px;
+				left: 0;
+				right: 0;
+				text-transform: uppercase;
+				text-align: center;
+				font-weight: bold;
+				font-size: 1.3125rem;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				color: inherit;
+			}
+
+			//Blue=Docs
+			&.doc, &.docx, &.pages, &.txt, &.xml, &.plain {
+				color: $blue;
+			}
+			//Orange=Presentations
+			&.ppt, &.pptx, &.key {
+				color: $orange;
+			}
+			//Green=Sheets
+			&.xls, &.xlsx, &.numbers {
+				color: $green;
+			}
+			//Red=PDF
+			&.pdf, &.html {
+				color: $red;
+			}
+			//Yellow=Archive
+			&.zip, &.gz, &.tar, &.z, &.\7z, &.rar, &.jpeg {
+				color: $yellow;
+			}
+		}
+	}
+}

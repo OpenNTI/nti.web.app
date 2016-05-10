@@ -57,6 +57,8 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 			'unknown': 'generic.png'
 		},
 
+		FILE_FALLBACK_BLANK_IMAGE: 'blank-download.png',
+
 
 		URL_ICON: 'icon-www.png',
 
@@ -66,6 +68,16 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 				icon = this.MIMETYPE_TO_ICON[mimeType] || this.MIMETYPE_TO_ICON['unknown'];
 
 			return base + icon;
+		},
+
+
+		getFallbackIcon: function () {
+			return this.FILE_ICON_BASE + this.FILE_FALLBACK_BLANK_IMAGE;
+		},
+
+
+		hasIconForMimeType: function (mimeType) {
+			return !!this.MIMETYPE_TO_ICON[mimeType];
 		},
 
 

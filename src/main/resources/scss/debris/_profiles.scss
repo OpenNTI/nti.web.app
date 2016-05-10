@@ -1328,6 +1328,7 @@
 			font: normal 400 16px $font;
 			color: $primary-grey;
 			@include text-pre-wrap;
+			@include attachment();
 		}
 
 
@@ -1415,6 +1416,8 @@
 			img {
 				max-width: 95%;
 			}
+
+			@include attachment();
 		}
 
 		&.deleted-reply{

@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var Globals = require('../util/Globals');
 var {guidGenerator} = Globals;
+const mime = require('mime-types');
 
 require('../app/video/Video');
 require('legacy/model/RelatedWork');
@@ -130,9 +131,11 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 
 	CONTENT_FILE_TPL: new Ext.XTemplate(Ext.DomHelper.markup([
-		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
-			{ cls: 'thumbnail', cn: [
-				{ cls: 'preview {type}', style: 'background-image: url(\'{url}\');'}
+		{ cls: 'attachment-part', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
+			{ cls: 'icon-wrapper', cn: [
+				{ cls: 'icon {type} {iconCls}', style: 'background-image: url(\'{url}\');', cn: [
+					{tag: 'label', html: '{iconLabel}'}
+				]}
 			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'text', cn: [
@@ -221,24 +224,34 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 		o = Ext.clone(o);
 		o.type = type.split('/').last() || '';
-		o.url = this.getIconForAttachment(o);
+		o = Ext.apply(o, this.getIconDataForAttachment(o));
 		p = this.CONTENT_FILE_TPL.apply(o);
 		Ext.callback(callback, scope, [p]);
 	},
 
 
-	getIconForAttachment: function (data) {
+	getIconDataForAttachment: function (data) {
 		let type = data.contentType || data.FileMimeType,
-			isImage = NextThought.mixins.ModelWithBodyContent.isImageFile(type), url;
+			isImage = NextThought.mixins.ModelWithBodyContent.isImageFile(type),
+			extension = mime.extension(type),
+			iconLabel = extension && !/^(www|bin)$/i.test(extension) ? extension : null,
+			obj = {iconCls: ''};
 
 		if (isImage) {
-			url = data.url || data.href || data.value;
+			obj.url = data.url || data.href || data.value;
 		}
 		else {
-			url = NextThought.model.RelatedWork.getIconForMimeType(type);
+			if (NextThought.model.RelatedWork.hasIconForMimeType(type)) {
+				obj.url = NextThought.model.RelatedWork.getIconForMimeType(type);
+			}
+			else {
+				obj.url = NextThought.model.RelatedWork.getFallbackIcon();
+				obj.iconLabel = iconLabel;
+				obj.iconCls = 'fallback';
+			}
 		}
 
-		return url;
+		return obj;
 	},
 
 

@@ -7,6 +7,7 @@ var SharingUtils = require('../util/Sharing');
 var {guidGenerator} = require('legacy/util/Globals');
 var {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
+const Mime = require('mime-types');
 require('legacy/common/form/fields/FilePicker');
 require('legacy/model/RelatedWork');
 require('legacy/editor/embedvideo/Window');
@@ -223,9 +224,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'space', html: '{placeholder}'},
-		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
-			{ cls: 'thumbnail', cn: [
-				{ cls: 'preview {type}', style: 'background-image: url(\'{url}\');'}
+		{ cls: 'attachment-part', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
+			{ cls: 'icon-wrapper', cn: [
+				{ cls: 'icon {type} {iconCls}', style: 'background-image: url(\'{url}\');', cn: [
+					{tag: 'label', html: '{iconLabel}'}
+				]}
 			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'text', cn: [
@@ -659,10 +662,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		let content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(file.size), 1),
-			href = this.getFileIconURLFromFile(file, name),
-			type = file.type.split('/').last() || '',
-			data = {size: size, url: href, filename: file.name, name: name, type: type, placeholder: this.defaultValue},
+			iconData = this.getFileIconDataFromFile(file, name),
+			type = Mime.extension(file.type),
+			data = {size: size, filename: file.name, name: name, type: type, placeholder: this.defaultValue},
 			focusNode, isSelectionInContent;
+
+		// Apply icon data
+		data = Ext.apply(data, iconData);
 
 		//Need to see if we have a selection and it is in our content element
 		if (document && document.getSelection) {
@@ -681,42 +687,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	isImage: function (type) {
-		return (/[\/\.](gif|jpg|jpeg|tiff|png)$/i).test(type);
-	},
-
-
-	getFileIconURLFromFile: function (file, name) {
-		let type = file && file.type,
-			isImage = this.isImage(type),
-			href;
-
-		if (isImage) {
-			href = this.createObjectURL(file, name);
-		}
-		else {
-			href = NextThought.model.RelatedWork.getIconForMimeType(type);
-		}
-
-		return href;
-	},
-
-
-	getFileIconURLFromValue: function (model) {
-		let data = model && model.isModel ? model.getData() : model,
-			type = data.contentType || data.FileMimeType,
-			isImage = this.isImage(type), href;
-
-		if (isImage) {
-			href = data.url;
-		} else {
-			href = NextThought.model.RelatedWork.getIconForMimeType(type);
-		}
-
-		return href;
-	},
-
-
 	setAttachmentPreviewFromModel: function (model) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setAttachmentPreviewFromModel.bind(this, model));
@@ -727,12 +697,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(data.size), 1),
-			url = this.getFileIconURLFromValue(data),
+			iconData = this.getFileIconDataFromValue(data),
 			type = data.contentType || data.FileMimeType || '';
 
+		// Apply icon data
+		data = Ext.apply(data, iconData);
+
 		data = Ext.clone(data);
-		data.url = url;
-		data.type = type.split('/').last() || '';
+		data.type = Mime.extension(type);
 		data.placeholder = this.defaultValue;
 
 		if (size) {
@@ -740,6 +712,60 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		tpl.append(content, data);
+	},
+
+
+	isImage: function (type) {
+		return (/[\/\.](gif|jpg|jpeg|tiff|png)$/i).test(type);
+	},
+
+
+	getFileIconDataFromFile: function (file, name) {
+		let type = file && file.type,
+			isImage = this.isImage(type),
+			obj = {};
+
+		if (isImage) {
+			obj.url = this.createObjectURL(file, name);
+		}
+		else {
+			obj = this.getFallbackIconData(type);
+		}
+
+		return obj;
+	},
+
+
+	getFileIconDataFromValue: function (model) {
+		let data = model && model.isModel ? model.getData() : model,
+			type = data.contentType || data.FileMimeType,
+			isImage = this.isImage(type), obj = {};
+
+		if (isImage) {
+			obj.url = data.url;
+		} else {
+			obj = this.getFallbackIconData(type);
+		}
+
+		return obj;
+	},
+
+
+	getFallbackIconData: function (type) {
+		let extension = Mime.extension(type),
+			iconLabel = extension && !/^(www|bin)$/i.test(extension) ? extension : null,
+			obj = {iconCls: ''};
+
+		if (NextThought.model.RelatedWork.hasIconForMimeType(type)) {
+			obj.url = NextThought.model.RelatedWork.getIconForMimeType(type);
+		}
+		else {
+			obj.url = NextThought.model.RelatedWork.getFallbackIcon();
+			obj.iconLabel = iconLabel;
+			obj.iconCls = 'fallback';
+		}
+
+		return obj;
 	},
 
 
