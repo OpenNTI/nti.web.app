@@ -1,8 +1,8 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../cache/UserRepository');
 var DomUtils = require('../../../util/Dom');
-var EditorEditor = require('../../../editor/Editor');
-var BlogActions = require('../Actions');
+require('../../../editor/Editor');
+require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
@@ -12,6 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 	enableTitle: true,
 	enableVideo: true,
 	enableShareControls: true,
+	enableFileUpload: true,
 	keyboardUp: false,
 	amountScrolled: 0,
 	cls: 'blog-editor scrollable',
