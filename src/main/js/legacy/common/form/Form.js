@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const DatePicker = require('legacy/common/form/fields/DatePicker');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
 const ImagePicker = require('legacy/common/form/fields/ImagePicker');
+const EmailTokenField = require('legacy/common/form/fields/EmailTokenField');
 const Progress = require('legacy/common/form/fields/Progress');
 const URL = require('legacy/common/form/fields/URL');
 const ErrorMessages = require('legacy/common/form/ErrorMessages');
@@ -201,7 +202,15 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		submit: new Ext.XTemplate(Ext.DomHelper.markup([
 			{tag: 'input', type: 'submit', value: '{text}', cls: '{cls}'}
-		]))
+		])),
+
+		emailtoken: new Ext.XTemplate(Ext.DomHelper.markup({
+			cls: 'field {name}', cn: [
+				{tag: 'tpl', 'if': 'displayName', cn: [
+					{tag: 'label', 'for': '{name}', html: '{displayName}'}
+				]}
+			]
+		}))
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -323,6 +332,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			this.buildUrlInput(schema, inputEl);
 		} else if (type === 'saveprogress') {
 			this.buildSaveProgress(schema, inputEl);
+		} else if (type === 'emailtoken') {
+			this.buildTagInput(schema, inputEl);
 		} else {
 			this.addFieldListeners(schema, inputEl);
 		}
@@ -364,6 +375,10 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 	buildUrlInput: function (schema, inputEl) {
 		this.__buildComponent(URL, schema, inputEl);
+	},
+
+	buildTagInput (schema, inputEl) {
+		this.__buildComponent(EmailTokenField, schema, inputEl);
 	},
 
 	buildSaveProgress: function (schema, inputEl) {
