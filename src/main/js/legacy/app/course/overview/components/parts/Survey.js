@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ModelSurveyRef = require('../../../../../model/SurveyRef');
-var AssessmentSurvey = require('../../../../../model/assessment/Survey');
-var ModelPageInfo = require('../../../../../model/PageInfo');
+const Ext = require('extjs');
+
+require('../../../../../model/SurveyRef');
+require('../../../../../model/assessment/Survey');
+require('../../../../../model/PageInfo');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Survey', {
@@ -85,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showReport: function (e) {
+	showReport: function () {
 		var win = Ext.widget('iframe-window', {
 			width: 'max',
 			saveText: getString('NextThought.view.menus.Reports.savetext'),
