@@ -224,19 +224,19 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'space', html: '{placeholder}'},
-		{ cls: 'attachment-part', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
+		{ cls: 'attachment-part', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 			{ cls: 'icon-wrapper', cn: [
 				{ cls: 'icon {type} {iconCls}', style: 'background-image: url(\'{url}\');', cn: [
-					{tag: 'label', html: '{iconLabel}'}
+					{tag: 'label', html: '{iconLabel}', contentEditable: false, unselectable: 'on'}
 				]}
 			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'text', cn: [
-					{ tag: 'span', cls: 'title', html: '{filename}'},
-					{ tag: 'span right', cls: 'size', html: '{size}'}
+					{ tag: 'span', cls: 'title', contentEditable: false, unselectable: 'on', html: '{filename}'},
+					{ tag: 'span right', cls: 'size', contentEditable: false, html: '{size}'}
 				]},
 				{ cls: 'controls', cn: [
-					{ tag: 'span', cls: 'delete', 'data-action': 'delete', html: 'Delete'}
+					{ tag: 'span', cls: 'delete', 'data-action': 'delete', contentEditable: false, html: 'Delete'}
 				]}
 			]}
 		]},
