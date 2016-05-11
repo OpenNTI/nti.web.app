@@ -37,6 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		config.data = {
 			title: n.getAttribute('label'),
 			ntiid: ntiid,
+			targetNTIID: n.getAttribute('Target-NTIID'),
 			questionCount: n.getAttribute('question-count'),
 			submissions: n.getAttribute('submissions'),
 			reportLink: Service.getLinkFrom(links, 'InquiryReport'),
@@ -77,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onStart: function (e) {
-		var ntiid = this.data.ntiid;
+		var ntiid = this.data.targetNTIID || this.data.ntiid;
 
 		if (!e.getTarget('.closed')) {
 			this.navigate(NextThought.model.PageInfo.fromOutlineNode({
