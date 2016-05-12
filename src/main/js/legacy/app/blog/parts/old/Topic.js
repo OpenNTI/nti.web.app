@@ -1,19 +1,18 @@
 var Ext = require('extjs');
-var IdCache = require('../../../../cache/IdCache');
-var UserRepository = require('../../../../cache/UserRepository');
-var DomUtils = require('../../../../util/Dom');
-var Globals = require('../../../../util/Globals');
-var TextRangeFinderUtils = require('../../../../util/TextRangeFinder');
-var SearchUtils = require('../../../../util/Search');
-var MixinsFlagActions = require('../../../../mixins/FlagActions');
-var MixinsLikeFavoriteActions = require('../../../../mixins/LikeFavoriteActions');
-var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
-var EditorEditor = require('../../../../editor/Editor');
-var OldComment = require('./Comment');
-var UxSearchHits = require('../../../../common/ux/SearchHits');
-var ComponentNatural = require('../../../../layout/component/Natural');
-var {isMe} = require('legacy/util/Globals');
-
+var IdCache = require('legacy/cache/IdCache');
+var UserRepository = require('legacy/cache/UserRepository');
+var DomUtils = require('legacy/util/Dom');
+var Globals = require('legacy/util/Globals');
+var TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
+var SearchUtils = require('legacy/util/Search');
+require('legacy/mixins/FlagActions');
+require('legacy/mixins/LikeFavoriteActions');
+require('legacy/mixins/ProfileLinks');
+require('legacy/editor/Editor');
+require('./Comment');
+require('legacy/common/ux/SearchHits');
+require('legacy/layout/component/Natural');
+require('legacy/app/contentviewer/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 	extend: 'Ext.container.Container',
@@ -414,7 +413,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 
 	updateContent: function () {
 		var h = this.record.get('headline');
-		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, {'application/vnd.nextthought.embeddedvideo': 640});
+		h.compileBodyContent(this.setContent, this, this.onBodyClick, {'application/vnd.nextthought.embeddedvideo': 640});
 	},
 
 	closeView: function () {
@@ -543,6 +542,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 			});
 		});
 
+		this.mon(this.bodyEl, 'click', this.onBodyClick.bind(this));
+
 		if (Ext.isFunction(cb)) {
 			cmps = cb(this.bodyEl, this);
 			Ext.each(cmps, function (c) {
@@ -550,6 +551,42 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 			});
 		}
 	},
+
+
+	onBodyClick: function (e) {
+		let el = e.getTarget('.attachment-part'),
+			part = this.getAttachmentPart(el);
+
+		if (part) {
+			if (!this.ContentViewerActions) {
+				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+			}
+
+			this.ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
+		}
+	},
+
+
+	getAttachmentPart: function (el) {
+		let name = el && el.getAttribute && el.getAttribute('name');
+
+		if (!name || !this.record) {
+			return null;
+		}
+
+		let h = this.record.get('headline'),
+			body = h && h.get('body') || [], part;
+
+		body.forEach(function (p) {
+			if (p.name === name) {
+				part = p;
+				return false;
+			}
+		});
+
+		return part;
+	},
+
 
 	fetchNextPage: function () {
 		var s = this.store, max, me = this;
