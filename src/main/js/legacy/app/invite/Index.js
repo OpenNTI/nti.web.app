@@ -42,6 +42,27 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		this.callParent(arguments);
 
 		this.setupFileUploadField();
+		this.setupBulkListener();
+	},
+
+	setupBulkListener () {
+		let dom = this.el.dom,
+			tagInput = dom && dom.querySelector('.tag-input');
+
+		if(tagInput) {
+			tagInput.addEventListener('keydown', this.maybeShowBulk.bind(this));
+		}
+	},
+
+	maybeShowBulk () {
+		let dom = this.el.dom,
+			token = dom && dom.querySelector('.token');
+
+		if(token) {
+			this.button.hide();
+		} else {
+			this.button.show();
+		}
 	},
 
 	onError (error) {
@@ -89,20 +110,12 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			.catch( error => {
 				console.log(error);
 			});
-		// TODO: Send a response to the server
-		// wait for response with Loading
-		// load names into the token field
 	},
 
 	__buildXHR (url, method, success, failure) {
 		var xhr = new XMLHttpRequest();
-		//	progress = this.onSubmitProgress.bind(this);
 
 		xhr.open(method || 'POST', url, true);
-
-		// xhr.upload.addEventListener('progress', progress);
-		// xhr.upload.addEventListener('load', progress);
-
 		xhr.onreadystatechange = function () {
 			if (xhr.readyState === 4) {
 				if (xhr.status >= 200 && xhr.status < 300) {
