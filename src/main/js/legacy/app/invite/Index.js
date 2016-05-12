@@ -11,8 +11,8 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	layout: 'none',
 	items: [],
 	schema: [
-		{type: 'emailtoken', required: true, name:'emailtoken', placeholder: 'Add an email address'},
-		{type: 'textarea', cls: 'message-area', required: false, placeholder: 'Type a message...'}
+		{type: 'emailtoken', required: true, name:'emails', placeholder: 'Add an email address'},
+		{type: 'textarea', cls: 'message-area', name:'message', required: false, placeholder: 'Type a message...'}
 	],
 
 	initComponent () {
@@ -38,11 +38,35 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		});
 	},
 
+
 	afterRender () {
 		this.callParent(arguments);
+		let dom = this.el.dom,
+			emailTokenField = dom && dom.querySelector('.email-token-field');
 
 		this.setupFileUploadField();
 		this.setupBulkListener();
+		this.setupTokenFocus();
+
+		this.emailToken = emailTokenField;
+	},
+
+	setupTokenFocus () {
+		let dom = this.el.dom,
+			tagInput = dom && dom.querySelector('.tag-input'),
+			message = dom && dom.querySelector('.message textarea');
+
+		tagInput.addEventListener('focus', this.tagInputOnFocus.bind(this));
+		message.addEventListener('focus', this.messageOnFocus.bind(this));
+	},
+
+	tagInputOnFocus () {
+		this.emailToken.classList.add('focused');
+	},
+
+	messageOnFocus () {
+		this.emailToken.classList.remove('focused');
+		this.emailToken.scrollTop = 0;
 	},
 
 	setupBulkListener () {
@@ -87,6 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		let input = e.target,
 			file = input && input.files && input.files[0];
 
+		input.value = null;
 		e.preventDefault();
 
 		if (file && (!this.accepts || file.type.match(this.accepts))) {
@@ -104,8 +129,8 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			.then( results => {
 				const courseInvitations = ParseUtils.parseItems(results)[0];
 				const emails = courseInvitations && courseInvitations.get('Items').map(item => item.email);
-
-				me.form.setValue('emailtoken', emails);
+				me.button.hide();
+				me.form.setValue('emails', emails);
 			})
 			.catch( error => {
 				console.log(error);

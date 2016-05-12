@@ -232,17 +232,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 	handleFocus () {
-		this.addCls('focused');
 	},
 
-	handleBlur: function (e) {
+	handleBlur: function () {
 		this.updateTags();
-		console.log(e.target);
-		if(!(e.target.classList.contains('tag-input','email-token-field'))) {
-			this.removeCls('focused');
-			this.el.setScrollTop(0);
-		}
-
 		return true;
 	},
 

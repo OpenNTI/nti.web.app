@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 			}
 
 			me.fireEvent('new-tag', val);
-			this.numOfTags += 1;
+			this.updateNumberTags(1);
 			if(this.numOfTags === 1) {
 				this.setPlaceholderText('Add more...');
 			}
@@ -42,23 +42,22 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 		return t;
 	},
 
-	onFocusChange (e) {
-		if(e.type === 'focus') {
-			this.addCls('focused');
-		} else if (e.type === 'blur') {
-			this.removeCls('focused');
-			this.el.setScrollTop(0);
-		}
-	},
-
 	removeToken (p) {
 		if (p && p.remove) {
 			p.remove();
-			this.numOfTags -= 1;
+			this.updateNumberTags(-1);
 		}
 	},
 
 	appendToFormData (data) {
 		data.append(this.schema.name, this.getValue());
+	},
+
+	updateNumberTags (num) {
+		this.numOfTags = this.numOfTags + num;
+	},
+
+	getNumberTags () {
+		return this.numOfTags;
 	}
 });
