@@ -10,7 +10,7 @@
 		$green: #4aaf37;
 		$orange: #f65b24;
 		$yellow: #ffaf44;
-		$red: #da251c;
+		$red: #f35252;
 		$gap: 0.625rem;
 		$icon-width: 125px;
 		color: $grey;
@@ -36,13 +36,14 @@
 
 			label {
 				position: absolute;
-				bottom: 15px;
+				bottom: 10px;
 				left: 0;
 				right: 0;
 				text-transform: uppercase;
 				text-align: center;
 				font-weight: bold;
-				font-size: 1.3125rem;
+				font-family: $condensed-font;
+				font-size: 1.1625rem;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
@@ -50,7 +51,7 @@
 			}
 
 			//Blue=Docs
-			&.doc, &.docx, &.pages, &.txt, &.xml, &.plain {
+			&.doc, &.docx, &.pages, &.txt, &.plain {
 				color: $blue;
 			}
 			//Orange=Presentations
@@ -58,7 +59,7 @@
 				color: $orange;
 			}
 			//Green=Sheets
-			&.xls, &.xlsx, &.numbers {
+			&.xls, &.xlsx, &.numbers,&.csv {
 				color: $green;
 			}
 			//Red=PDF

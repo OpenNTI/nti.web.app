@@ -226,8 +226,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		{ cls: 'space', html: '{placeholder}'},
 		{ cls: 'attachment-part', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 			{ cls: 'icon-wrapper', cn: [
-				{ cls: 'icon {type} {iconCls}', style: 'background-image: url(\'{url}\');', cn: [
-					{tag: 'label', html: '{iconLabel}', contentEditable: false, unselectable: 'on'}
+				{ cls: 'icon {extension} {iconCls}', style: 'background-image: url(\'{url}\');', cn: [
+					{tag: 'label', html: '{extension}', contentEditable: false, unselectable: 'on'}
 				]}
 			]},
 			{ cls: 'meta', cn: [
@@ -752,20 +752,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	getFallbackIconData: function (type) {
-		let extension = Mime.extension(type),
-			iconLabel = extension && !/^(www|bin)$/i.test(extension) ? extension : null,
-			obj = {iconCls: ''};
-
-		if (NextThought.model.RelatedWork.hasIconForMimeType(type)) {
-			obj.url = NextThought.model.RelatedWork.getIconForMimeType(type);
-		}
-		else {
-			obj.url = NextThought.model.RelatedWork.getFallbackIcon();
-			obj.iconLabel = iconLabel;
-			obj.iconCls = 'fallback';
-		}
-
-		return obj;
+		return NextThought.model.RelatedWork.getIconForMimeType(type);
 	},
 
 

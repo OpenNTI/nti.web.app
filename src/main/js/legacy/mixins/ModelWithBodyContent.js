@@ -1,7 +1,7 @@
 var Ext = require('extjs');
 var Globals = require('../util/Globals');
 var {guidGenerator} = Globals;
-const mime = require('mime-types');
+const Mime = require('mime-types');
 
 require('../app/video/Video');
 require('legacy/model/RelatedWork');
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		{ cls: 'attachment-part', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 			{ cls: 'icon-wrapper', cn: [
 				{ cls: 'icon {type} {iconCls}', style: 'background-image: url(\'{url}\');', cn: [
-					{tag: 'label', html: '{iconLabel}'}
+					{tag: 'label', html: '{extension}'}
 				]}
 			]},
 			{ cls: 'meta', cn: [
@@ -233,22 +233,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 	getIconDataForAttachment: function (data) {
 		let type = data.contentType || data.FileMimeType,
 			isImage = NextThought.mixins.ModelWithBodyContent.isImageFile(type),
-			extension = mime.extension(type),
-			iconLabel = extension && !/^(www|bin)$/i.test(extension) ? extension : null,
 			obj = {iconCls: ''};
 
 		if (isImage) {
 			obj.url = data.url || data.href || data.value;
 		}
 		else {
-			if (NextThought.model.RelatedWork.hasIconForMimeType(type)) {
-				obj.url = NextThought.model.RelatedWork.getIconForMimeType(type);
-			}
-			else {
-				obj.url = NextThought.model.RelatedWork.getFallbackIcon();
-				obj.iconLabel = iconLabel;
-				obj.iconCls = 'fallback';
-			}
+			obj = NextThought.model.RelatedWork.getIconForMimeType(type);
 		}
 
 		return obj;

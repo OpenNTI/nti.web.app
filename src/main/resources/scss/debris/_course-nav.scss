@@ -689,6 +689,13 @@
 		.thumbnail{
 			width: 100px;
 			height: 125px;
+
+			@include file-custom-icon();
+			.icon {
+				position: relative;
+				height: 100%;
+				width: auto;
+			}
 		}
 		.meta {
 			padding-top: 16px;
@@ -722,7 +729,7 @@
 			border-radius: 20px;
 		}
 
-		.thumbnail{
+		.thumbnail {
 			position: relative;
 
 			&::before {

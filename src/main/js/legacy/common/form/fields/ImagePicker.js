@@ -21,6 +21,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		]
 	}),
 
+	iconTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ cls: 'icon {extension} {iconCls}', style: 'background-image: url(\'{url}\');', cn: [
+			{tag: 'label', cls: 'extension', html: '{extension}'}
+		]}
+	])),
+
 	accepts: 'image/*',
 
 	renderSelectors: {
@@ -121,11 +127,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		this.placeholder = value;
 
 		if (!this.hasFile() && !this.defaultValue) {
-			if (value) {
-				this.previewEl.setStyle({backgroundImage: 'url(' + value + ')'});
-			} else {
-				this.previewEl.setStyle({backgroundImage: ''});
-			}
+			this.previewEl.setHTML('');
+			this.iconTpl.append(this.previewEl, value || {});
 		}
 		else {
 			this.updateTooltip(true);

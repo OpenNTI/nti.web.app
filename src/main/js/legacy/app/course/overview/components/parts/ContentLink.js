@@ -24,7 +24,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	// requires: ['NextThought.view.contentviewer.View'],
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+		// { cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+		{ cls: 'thumbnail', cn: [
+			{ cls: 'icon {extension} {iconCls}', style: 'background-image: url(\'{thumbnail}\');', cn: [
+				{tag: 'label', cls: 'extension', html: '{extension}'}
+			]}
+		]},
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
@@ -49,16 +54,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (config.record && config.record.getIcon) {
 			icon = config.record.getIcon(root || '');
 		} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
-			icon = getURL(icon);
+			icon = {url: getURL(icon)};
 		} else {
-			icon = getURL((root || '') + icon);
+			icon = {url: getURL((root || '') + icon)};
 		}
 
 		config.data = {
 			'attribute-data-href': href, href: href,
 			creator: n.getAttribute('byline') || n.getAttribute('creator'),
 			description: Ext.String.ellipsis(n.getAttribute('desc') || n.getAttribute('description'), 200, true),
-			thumbnail: icon,
+			thumbnail: icon.url,
+			extension: icon.extension,
+			iconCls: icon.iconCls,
 			ntiid: ntiid,
 			title: n.getAttribute('label'),
 			targetMimeType: n.getAttribute('targetMimeType'),

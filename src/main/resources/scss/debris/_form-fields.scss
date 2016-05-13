@@ -620,6 +620,13 @@ form.common-form {
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
+
+		@include file-custom-icon();
+		.icon {
+			position: relative;
+			height: 100%;
+			width: auto;
+		}
 	}
 
 	input[type=file] {
