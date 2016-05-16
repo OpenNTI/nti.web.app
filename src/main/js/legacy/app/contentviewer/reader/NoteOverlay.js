@@ -4,10 +4,11 @@ var Globals = require('../../../util/Globals');
 var {isFeature} = Globals;
 var LineUtils = require('../../../util/Line');
 var SharingUtils = require('../../../util/Sharing');
-var UtilLine = require('../../../util/Line');
+require('../../../util/Line');
 var WBUtils = require('../../whiteboard/Utils');
-var EditorEditor = require('../../../editor/Editor');
-var UserdataActions = require('../../userdata/Actions');
+require('../../../editor/Editor');
+require('../../userdata/Actions');
+const {wait} = require('legacy/util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
@@ -353,8 +354,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		).then(function () {
 			editor.unmask();
 			editor.deactivate();
-		}).catch(function () {
+		}).catch(function (e) {
+			console.error(Globals.getError(e));
+			let msg = e && e.message;
+			editor.markError(me.editor.el.down('.content'), msg || 'Could not save note');
 			editor.unmask();
+			wait().then(editor.maybeResizeContentBox.bind(editor));
 		});
 
 		return false;

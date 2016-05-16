@@ -735,6 +735,14 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 					})
 					.catch(function (err) {
 						console.error('Something went terribly wrong...', err.stack || err.message);
+						if (err && err.responseText) {
+							err = JSON.parse(err.responseText);
+						}
+
+						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes);
+						if (err.code === 'MaxFileSizeUploadLimitError') {
+							err.message += ' Max File Size: ' + maxSize;
+						}
 						return Promise.reject(err);
 					});
 
@@ -832,6 +840,14 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				})
 				.catch(function (err) {
 					console.error('Something went terribly wrong...', err.stack || err.message);
+					if (err && err.responseText) {
+						err = JSON.parse(err.responseText);
+					}
+
+					let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes);
+					if (err.code === 'MaxFileSizeUploadLimitError') {
+						err.message += ' Max File Size: ' + maxSize;
+					}
 					return Promise.reject(err);
 				});
 	},

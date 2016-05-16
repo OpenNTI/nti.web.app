@@ -114,7 +114,7 @@
 
 .error-tip {
 	position: relative;
-	overflow: visible !important;
+	overflow: auto !important;
 
 	&[data-error-tip]{
 		&::before {

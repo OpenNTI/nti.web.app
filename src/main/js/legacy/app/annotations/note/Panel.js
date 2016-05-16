@@ -422,20 +422,24 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 						})
 						.catch(function (e) {
 							console.error(Globals.getError(e));
+							let msg = e && e.message;
+
+							me.editor.markError(me.editorEl.down('.content'), msg || 'Could not save reply');
 							me.editorEl.unmask();
 						});
 				return p;
 			}
 			else {
-				try {
-					me.UserDataActions.saveNewReply(r, v.body, [])
-						.then(callback.bind(this, true))
-						.catch(callback.bind(this, false));
-				}
-				catch (e) {
-					console.error(Globals.getError(e));
-					me.editorEl.unmask();
-				}
+				me.UserDataActions.saveNewReply(r, v.body, [])
+					.then(callback.bind(this, true))
+					.catch(function (e) {
+						console.error(Globals.getError(e));
+						let msg = e && e.message;
+
+						me.editor.markError(me.editorEl.down('.content'), msg || 'Could not save reply');
+						me.editorEl.unmask();
+						wait().then(me.editor.maybeResizeContentBox.bind(me.editor));
+					});
 			}
 		}
 
