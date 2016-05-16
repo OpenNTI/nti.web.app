@@ -664,7 +664,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(file.size), 1),
 			iconData = this.getFileIconDataFromFile(file, name),
 			type = Mime.extension(file.type),
-			data = {size: size, filename: file.name, name: name, type: type, placeholder: this.defaultValue},
+			data = {size: size, filename: file.name, name: name, extension: type, placeholder: this.defaultValue},
 			focusNode, isSelectionInContent;
 
 		// Apply icon data
@@ -705,6 +705,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		data = Ext.clone(data);
 		data.type = Mime.extension(type);
+		data.extension = data.type;
 		data.placeholder = this.defaultValue;
 
 		if (size) {

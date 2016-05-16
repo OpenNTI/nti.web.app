@@ -65,8 +65,12 @@ span.tab{
 					top: 0;
 					bottom: 0;
 					background-size: cover;
-					background-position: inherit;
+					background-position: center center;
 					width: 100%;
+
+					label {
+						display: none;
+					}
 				}
 			}
 		}
