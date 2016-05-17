@@ -102,7 +102,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 
 	onClick: function (e) {
 		e.stopEvent();
-		console.log("Click: " + e.target);
 		var t = e.getTarget('.x', null, true),
 			p = t ? t.up('.token') : null;
 		if (t && p) {
@@ -231,8 +230,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 		}
 	},
 
-	handleFocus () {
-	},
 
 	handleBlur: function () {
 		this.updateTags();
