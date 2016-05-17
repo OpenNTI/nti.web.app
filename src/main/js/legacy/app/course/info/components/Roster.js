@@ -1,8 +1,10 @@
 var Ext = require('extjs');
 var UxFilterMenu = require('../../../../common/ux/FilterMenu');
 var ChartPie = require('../../../../common/chart/Pie');
+var PromptActions = require('../../../prompt/Actions');
 var CoursewareRoster = require('../../../../proxy/courseware/Roster');
 var MenusReports = require('../../../../common/menus/Reports');
+var InvitePrompt = require('legacy/app/invite/Prompt');
 var CoursesCourseInstanceEnrollment = require('../../../../model/courses/CourseInstanceEnrollment');
 var {isFeature} = require('legacy/util/Globals');
 
@@ -31,6 +33,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			tools: [{
 				itemId: 'filtermenu',
 				autoEl: { tag: 'div', cls: 'tool link arrow title-filter'}
+			},{
+				itemId: 'invite',
+				autoEl: { tag: 'div', cls: 'tool link invite', html: 'Invite'}
 			},{
 				itemId: 'email',
 				autoEl: {tag: 'div', cls: 'tool link email', html: 'Email'}
@@ -110,7 +115,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	],
 
 	renderSelectors: {
-		emailEl: '.tools .email'
+		emailEl: '.tools .email',
+		inviteEl: '.tools .invite'
 	},
 
 	initComponent: function () {
@@ -126,6 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.on('activate', this.onActivate.bind(this));
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.PromptActions = NextThought.app.prompt.Actions.create();
 	},
 
 	afterRender: function () {
@@ -145,6 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		me.on('destroy', function () {
 			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
 		});
+		// this.mon(this.inviteEl, 'click', this.openInvite.bind(this));
 	},
 
 	onActivate: function () {
@@ -220,6 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 		this.currentBundle = instance;
 		this.setupEmail();
+		this.setupInvite();
 
 		if (Ext.isEmpty(roster) || !roster) {
 			if (this.store) {this.store.destroyStore();}
@@ -268,9 +277,32 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			});
 	},
 
+	setupInvite () {
+		var me = this;
+		this.onceRendered
+			.then(() => {
+				me.inviteEl = me.inviteEl || me.el.down('.tools .invite');
+				if (!me.inviteListenerSet && me.inviteEl /* && me.shouldAllowInvite */) {
+					me.inviteListenerSet = true;
+					me.mon(me.inviteEl, 'click', 'showInvitePrompt');
+				}
+				me.maybeShowInviteButton();
+			});
+	},
+
 	shouldAllowInstructorEmail: function () {
 		// Right now, we will only
 		return isFeature('instructor-email') && this.currentBundle && this.currentBundle.getLink('Mail');
+	},
+
+	maybeShowInviteButton () {
+		let inviteLink = this.currentBundle && this.currentBundle.getLink('SendCourseInvitations');
+
+		if (inviteLink) {
+			this.inviteEl.show();
+		} else {
+			this.inviteEl.hide();
+		}
 	},
 
 	maybeShowEmailButton: function () {
@@ -302,6 +334,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			record: emailRecord
 		});
 	},
+
+
+	showInvitePrompt () {
+		this.PromptActions.prompt('invite', {record: this.currentBundle});
+	},
+
 
 	doSearch: function (str) {
 		this.down('grid').getSelectionModel().deselectAll(true);
@@ -402,5 +440,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				record: emailRecord
 			});
 		}
+	},
+
+	openInvite () {
+		this.PromptActions.prompt('invite');
 	}
 });

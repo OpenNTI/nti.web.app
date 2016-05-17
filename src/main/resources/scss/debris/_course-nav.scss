@@ -376,13 +376,12 @@
 		}
 
 		.assignment-box {
-			position: relative;
-			min-height: 76px;
 			padding: 15px 90px 0 25px;
 
 			.title {
 				display: inline-block;
 				vertical-align: middle;
+				color: $primary-grey;
 				font-size: 1.125em;
 				max-width: 515px;
 				margin-bottom: 1em;
@@ -391,7 +390,7 @@
 
 		.assignment-status-container {
 			background-color: #fcfcfc;
-			margin-top: -30px;
+			margin-top: -10px;
 
 			.status-container {
 				margin-left: 90px; //25 + 40 + 25
@@ -432,7 +431,7 @@
 			}
 
 			.assignment-box {
-				@include icon($assignment_due, $side:'before');
+				@include icon($assignment_due, $position: static, $side:'before');
 
 				&::before {
 					position: relative;
@@ -690,6 +689,13 @@
 		.thumbnail{
 			width: 100px;
 			height: 125px;
+
+			@include file-custom-icon();
+			.icon {
+				position: relative;
+				height: 100%;
+				width: auto;
+			}
 		}
 		.meta {
 			padding-top: 16px;
@@ -723,7 +729,7 @@
 			border-radius: 20px;
 		}
 
-		.thumbnail{
+		.thumbnail {
 			position: relative;
 
 			&::before {

@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../../util/Globals');
+const Ext = require('extjs');
+const Globals = require('../../../../../../util/Globals');
+const {wait} = require('legacy/util/Promise');
+
+require('legacy/common/form/Form');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.NewItem', {
@@ -28,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		});
 
-		items.push(this.editor.create({isEditor: true, parentRecord: this.parentRecord}));
+		items.push(this.editor.create({isEditor: true, parentRecord: this.parentRecord, onChange: this.onChange.bind(this)}));
 
 		if (this.hasOtherItems) {
 			items.push({
@@ -65,9 +68,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.editorCmp = this.down('[isEditor]');
 	},
 
+
 	renderSelectors: {
 		errorEl: '.error-msg'
 	},
+
 
 	onBackClick: function () {
 		if (this.onBack) {
@@ -86,6 +91,113 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	getErrors () {
+		let errors = this.editorCmp && this.editorCmp.getErrors();
+		let fields = errors && Object.keys(errors);
+		let msgs = [], required;
+
+		(fields || []).forEach(function (field) {
+			var error = errors[field];
+
+			if (error.missing) {
+				if (required) {
+					required.fields.push(field);
+				} else {
+					required = {
+						msg: NextThought.common.form.Form.getMessageForError(error),
+						error: error,
+						fields: [field]
+					};
+
+					msgs.push(required);
+				}
+			} else {
+				msgs.push({
+					msg: NextThought.common.form.Form.getMessageForError(error),
+					error: error,
+					key: field,
+					fields: [field]
+				});
+			}
+		});
+
+		return msgs;
+	},
+
+
+	maybeClearErrors () {
+		let editorCmp = this.editorCmp;
+
+		this.errorEl.setHTML('');
+
+		this.activeErrors = (this.activeErrors || []).reduce((acc, error) => {
+			error.fields = error.fields.reduce((ac, field) => {
+				if (!editorCmp.getErrorsFor(field)) {
+					editorCmp.removeErrorOn(field);
+				} else {
+					ac.push(field);
+				}
+
+				return ac;
+			}, []);
+
+			if (error.fields.length > 0) {
+				acc.push(error);
+			}
+
+			return acc;
+		}, []);
+	},
+
+
+	clearErrors () {
+		let editorCmp = this.editorCmp;
+
+		this.errorEl.setHTML('');
+
+		this.activeErrors = (this.activeErrors || []).reduce((acc, error) => {
+			error.fields = error.fields.reduce((ac, field) => {
+				editorCmp.removeErrorOn(field);
+
+				return ac;
+			}, []);
+
+			return acc;
+		}, []);
+	},
+
+
+	doValidation () {
+		let editorCmp = this.editorCmp;
+		let errors = this.getErrors();
+
+		if (errors.length > 1) {
+			console.warn('More errors than we know how to show');
+		}
+
+		this.activeErrors = errors.reduce((acc, error) => {
+			error.fields.forEach((field) => {
+				editorCmp.showErrorOn(field);
+			});
+
+			acc.push(error);
+
+			return acc;
+		}, this.activeErrors || []);
+
+		if (this.activeErrors[0]) {
+			this.errorEl.setHTML(this.activeErrors[0].msg);
+		}
+
+		return this.activeErrors.length ? Promise.reject() : Promise.resolve();
+	},
+
+
+	onChange () {
+		this.maybeClearErrors();
+	},
+
+
 	onSave: function () {
 		var value = this.editorCmp.getValue(),
 			minWait = Globals.WAIT_TIMES.SHORT,
@@ -94,30 +206,35 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (!this.parentRecord || !this.parentRecord.appendContent) { return; }
 
-		this.addMask();
+		this.clearErrors();
 
-		this.parentRecord.appendContent(value)
-			.then(function (result) {
-				var end = new Date(),
-					duration = end - start;
+		this.doValidation()
+			.then(() => {
+				this.addMask();
 
-				if (duration < wait) {
-					return wait(wait - duration)
-						.then(function () {
-							return result;
-						});
-				}
+				return this.parentRecord.appendContent(value)
+					.then(function (result) {
+						var end = new Date(),
+							duration = end - start;
 
-				return result;
-			})
-			.then(this.addNewItem.bind(this))
-			.then(this.unMask.bind(this))
-			.catch(function (error) {
-				me.unMask();
-				me.errorEl.setHTML('Unable to create section');
-				if (error) {
-					console.error('Unable to create section because: ' + error);
-				}
+						if (duration < minWait) {
+							return wait(minWait - duration)
+								.then(function () {
+									return result;
+								});
+						}
+
+						return result;
+					})
+					.then(this.addNewItem.bind(this))
+					.then(this.unMask.bind(this))
+					.catch(function (error) {
+						me.unMask();
+						me.errorEl.setHTML('Unable to create section');
+						if (error) {
+							console.error('Unable to create section because: ' + error);
+						}
+					});
 			});
 	},
 

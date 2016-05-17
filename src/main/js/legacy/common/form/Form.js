@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const DatePicker = require('legacy/common/form/fields/DatePicker');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
 const ImagePicker = require('legacy/common/form/fields/ImagePicker');
+const EmailTokenField = require('legacy/common/form/fields/EmailTokenField');
 const Progress = require('legacy/common/form/fields/Progress');
 const URL = require('legacy/common/form/fields/URL');
 const ErrorMessages = require('legacy/common/form/ErrorMessages');
@@ -197,7 +198,19 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		hidden: new Ext.XTemplate(Ext.DomHelper.markup([
 			{tag: 'input', type: 'hidden', 'name': '{name}', value: '{value}'}
-		]))
+		])),
+
+		submit: new Ext.XTemplate(Ext.DomHelper.markup([
+			{tag: 'input', type: 'submit', value: '{text}', cls: '{cls}'}
+		])),
+
+		emailtoken: new Ext.XTemplate(Ext.DomHelper.markup({
+			cls: 'field {name}', cn: [
+				{tag: 'tpl', 'if': 'displayName', cn: [
+					{tag: 'label', 'for': '{name}', html: '{displayName}'}
+				]}
+			]
+		}))
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -241,7 +254,6 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			}
 		});
 
-		me.formEl.on('submit', me.formSubmit.bind(me));
 		me.onFormChange();
 
 		wait()
@@ -258,6 +270,25 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			cmp.destroy();
 		});
 	},
+
+
+	enableSubmission () {
+		let submit = this.el && this.el.dom && this.el.dom.querySelector('input[type=submit]');
+
+		if (submit) {
+			submit.removeAttribute('disabled');
+		}
+	},
+
+
+	disableSubmission () {
+		let submit = this.el && this.el.dom && this.el.dom.querySelector('input[type=submit]');
+
+		if (submit) {
+			submit.setAttribute('disabled', 'disabeled');
+		}
+	},
+
 
 	focusField: function (name) {
 		var field = name ? {name: name} : this.getFirstField(),
@@ -301,6 +332,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			this.buildUrlInput(schema, inputEl);
 		} else if (type === 'saveprogress') {
 			this.buildSaveProgress(schema, inputEl);
+		} else if (type === 'emailtoken') {
+			this.buildTagInput(schema, inputEl);
 		} else {
 			this.addFieldListeners(schema, inputEl);
 		}
@@ -342,6 +375,10 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 	buildUrlInput: function (schema, inputEl) {
 		this.__buildComponent(URL, schema, inputEl);
+	},
+
+	buildTagInput (schema, inputEl) {
+		this.__buildComponent(EmailTokenField, schema, inputEl);
 	},
 
 	buildSaveProgress: function (schema, inputEl) {
@@ -407,6 +444,12 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		if (this.onChange && (key !== Ext.EventObject.ENTER)) {
 			this.onChange(vals);
 		}
+
+		if (this.isValid()) {
+			this.enableSubmission();
+		} else {
+			this.disableSubmission();
+		}
 	},
 
 	checkMaxLength: function (/*schema, field*/) {
@@ -466,9 +509,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				error = cmp.getErrors();
 			}
 		} else if (field) {
-			error = {
-				missing: field.validity && field.validity.valueMissing
-			};
+			error = this.__getErrorForField(field);
 		}
 
 		(Object.keys(error || {}) || []).forEach(function (key) {
@@ -482,6 +523,21 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		return hasErrors && error;
 	},
+
+
+	__getErrorForField (field) {
+		let value = field.value;
+		let error = {};
+
+		if (field.required && !(value.trim().length)) {
+			error.missing = true;
+		}
+
+		error.missing = error.missing || field.validity && field.validity.valueMissing;
+
+		return error;
+	},
+
 
 	__componentsEmpty: function () {
 		var components = this.componentMap,
@@ -721,6 +777,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 						});
 				}
 
+				if(me.onSuccess) { me.onSuccess(results); }
+
 				me.el.unmask();
 				return results;
 			})
@@ -731,6 +789,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				} else {
 					me.el.unmask();
 				}
+
+				if(me.onError) { me.onError(); }
 
 				return Promise.reject(reason);
 			});
@@ -840,6 +900,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		if (this.onSubmit) {
 			this.onSubmit();
+		} else {
+			this.doSubmit();
 		}
 	}
 });

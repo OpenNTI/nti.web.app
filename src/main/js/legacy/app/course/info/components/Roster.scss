@@ -1,0 +1,26 @@
+.tool.invite {
+    position: absolute;
+    right: 105px;
+    top: 15px;
+    left: auto;
+    font: normal 600 14px/35px "Open Sans", sans-serif;
+    padding: 0 15px 0 15px;
+    text-transform: capitalize;
+
+	&::before{
+        content: '';
+        margin: 0.5em;
+        color: #b8b8b8;
+        background-image: url("/app/resources/images/icons/invite.png");
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        background-repeat: no-repeat;
+        left: -8px;
+        top: 3px;
+	}
+}
+
+.x-container.grouping > .header .tools .invite.tool::before {
+	content: '';
+}

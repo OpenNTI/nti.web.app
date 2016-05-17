@@ -1,11 +1,12 @@
 var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var DomUtils = require('../../../../util/Dom');
-var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
-var MixinsLikeFavoriteActions = require('../../../../mixins/LikeFavoriteActions');
-var MixinsFlagActions = require('../../../../mixins/FlagActions');
-var EditorEditor = require('../../../../editor/Editor');
+var UserRepository = require('legacy/cache/UserRepository');
+var DomUtils = require('legacy/util/Dom');
+require('legacy/mixins/ProfileLinks');
+require('legacy/mixins/LikeFavoriteActions');
+require('legacy/mixins/FlagActions');
+require('legacy/editor/Editor');
 var {isMe} = require('legacy/util/Globals');
+require('legacy/app/contentviewer/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', {
@@ -198,6 +199,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 			el.replace(el.up('.body-divider'));
 		});
 
+		this.mon(this.bodyEl, 'click', this.onBodyClick.bind(this));
+
 		el.select('img').each(function (img) {
 			img.on('load', function () {
 				me.up('[record]').fireEvent('sync-height');
@@ -246,6 +249,41 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		}
 		this.addCls('deleted');
 	},
+
+
+	onBodyClick: function (e) {
+		let el = e.getTarget('.attachment-part'),
+			part = this.getAttachmentPart(el);
+
+		if (part) {
+			if (!this.ContentViewerActions) {
+				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+			}
+
+			this.ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
+		}
+	},
+
+
+	getAttachmentPart: function (el) {
+		let name = el && el.getAttribute && el.getAttribute('name');
+
+		if (!name || !this.record) {
+			return null;
+		}
+
+		let body = this.record.get('body') || [], part;
+
+		body.forEach(function (p) {
+			if (p.name === name) {
+				part = p;
+				return false;
+			}
+		});
+
+		return part;
+	},
+
 
 	onDeletePost: function (e) {
 		e.stopEvent();

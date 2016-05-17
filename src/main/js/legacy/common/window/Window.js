@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 			this.on({
 				'show': function () {
 					me._windowStoreNotified = true;
-					windowStore.addOpenCls();  
+					windowStore.addOpenCls();
 				},
 				'close': function () {
 					closeCalled = true;
@@ -140,12 +140,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		if (!me.dialog) {
 			me.fixScroll();
 		}
-		me.mon(me.el, {
-			contextmenu: function (e) {
-				e.stopEvent();
-				return false;
-			}
-		});
+
 
 		if (!me.syncedSize) {
 			Ext.defer(me.syncHeight, 1, me);

@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var ContentEditor = require('../Editor');
-var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
-var DiscussionItemSelection = require('./ItemSelection');
-var DiscussionDiscussionEditor = require('./DiscussionEditor');
+const Ext = require('extjs');
+
+require('../Editor');
+require('../../../../../../../model/DiscussionRef');
+require('./ItemSelection');
+require('./DiscussionEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.Editor', {
@@ -32,7 +33,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	SWITCHED: 'switched-items',
+
+
 	addFormCmp: function () {},
+
 
 	showEditor: function () {
 		if (this.record) {
@@ -42,6 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	onBack: function () {
 		if (this.discussionEditorCmp) {
 			this.showDiscussionList();
@@ -50,11 +55,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	maybeEnableBack: function (text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
+
 
 	showDiscussionEditor: function () {
 		if (this.discussionEditorCmp) {
@@ -78,6 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.maybeEnableBack('Discussions');
 	},
+
 
 	showDiscussionList: function (selectedItems) {
 		var me = this;
@@ -109,9 +117,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
+
 	__sortDiscussions: function (discussions) {
 		return discussions;
 	},
+
 
 	onDiscussionSelectionChange: function (selection) {
 		var length = selection.length;
@@ -123,6 +133,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.enableSave();
 		}
 	},
+
+
+	doValidation () {
+		return this.discussionEditorCmp ? this.discussionEditorCmp.doValidation() : Promise.resolve();
+	},
+
 
 	onSave: function () {
 		var me = this;
@@ -138,6 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return Promise.reject(reason);
 			});
 	},
+
 
 	onSaveFailure: function (reason) {
 		if (reason === this.SWITCHED) { return; }

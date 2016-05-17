@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ModelSurveyRef = require('../../../../../model/SurveyRef');
-var AssessmentSurvey = require('../../../../../model/assessment/Survey');
-var ModelPageInfo = require('../../../../../model/PageInfo');
+const Ext = require('extjs');
+
+require('../../../../../model/SurveyRef');
+require('../../../../../model/assessment/Survey');
+require('../../../../../model/PageInfo');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Survey', {
@@ -36,6 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		config.data = {
 			title: n.getAttribute('label'),
 			ntiid: ntiid,
+			targetNTIID: n.getAttribute('Target-NTIID'),
 			questionCount: n.getAttribute('question-count'),
 			submissions: n.getAttribute('submissions'),
 			reportLink: Service.getLinkFrom(links, 'InquiryReport'),
@@ -76,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onStart: function (e) {
-		var ntiid = this.data.ntiid;
+		var ntiid = this.data.targetNTIID || this.data.ntiid;
 
 		if (!e.getTarget('.closed')) {
 			this.navigate(NextThought.model.PageInfo.fromOutlineNode({
@@ -85,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showReport: function (e) {
+	showReport: function () {
 		var win = Ext.widget('iframe-window', {
 			width: 'max',
 			saveText: getString('NextThought.view.menus.Reports.savetext'),

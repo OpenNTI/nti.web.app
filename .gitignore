@@ -5,7 +5,5 @@ src/main/resources/scss/utils/_icons.scss
 
 #ignore minification byproducts
 stage
-dist
-reports
-node_modules
 npm-debug.log
+node_modules/

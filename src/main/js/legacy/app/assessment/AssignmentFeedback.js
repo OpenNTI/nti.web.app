@@ -3,6 +3,7 @@ const {isMe} = require('legacy/util/Globals');
 require('../contentviewer/overlay/Panel');
 require('../../editor/Editor');
 require('./components/feedback/List');
+require('legacy/common/form/fields/FilePicker');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeedback', {
@@ -48,8 +49,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.callParent(arguments);
 
 		var commentBox;
+
 		this.feedbackList = this.down('assignment-feedback-list');
 		this.feedbackList.syncElementHeight = this.syncElementHeight.bind(this);
+		this.feedbackList.openReply = this.showEditor.bind(this);
+
 		this.comment = this.down('box[name=comment]');
 
 		commentBox = this.comment.feedbackBox;
@@ -102,8 +106,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 				store.load();
 				me.removeMask();
 			})
-			.catch(function (reason) {
-				console.error('faild to save feedback', reason);
+			.catch(function (err) {
+				console.error('faild to save feedback', err);
+				if (err && err.responseText) {
+					err = JSON.parse(err.responseText);
+				}
+
+				if (err.code === 'MaxFileSizeUploadLimitError') {
+					let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+				}
+
+				let msg = err && err.message || 'Could not save feedback';
+				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+				me.removeMask();
 			});
 	},
 
@@ -158,6 +175,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.editor.activate();
 		Ext.defer(this.editor.focus, 350, this.editor);
 		this.updateLayout();
+
+		return this.editor;
 	},
 
 	updateFeedback: function (store) {

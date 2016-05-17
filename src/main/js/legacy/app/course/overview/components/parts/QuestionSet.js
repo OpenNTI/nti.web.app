@@ -44,13 +44,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this,
 			n = config.node || {getAttribute: function (a) { return config[a];} },
 			ntiid = n.getAttribute('target-ntiid') || 'no-value',
-			req;
+			rec = config && config.record;
 
 		config = Ext.apply(config, {
 			quetionSetContainerTitle: n.getAttribute('label'),
 			ntiid: ntiid,
 			questionSetId: ntiid,
-			total: n.getAttribute('question-count') || 0
+			total: n.getAttribute('question-count') || (rec && rec.get('question-count'))
 		});
 
 		delete config.title;
@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			tally.setMessage(this.getQuetionSetContainerTitle());
 		}
 
-		if (score) {
+		if (score && !isNaN(correct)) {
 			score.setValue(Math.floor(100 * correct / this.getTotal()) || 0);
 		}
 		this.updateLayout();

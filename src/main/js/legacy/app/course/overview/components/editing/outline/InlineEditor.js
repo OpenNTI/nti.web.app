@@ -109,12 +109,36 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return false;
 		}
 
-		if (!value.title) {
+		if (!value.title || !value.title.trim().length) {
 			return false;
 		}
 
 		return true;
 	},
+
+
+	getErrors () {
+		if (!this.isValid()) {
+			return {
+				title: {
+					missing: true
+				}
+			};
+		}
+
+		return {};
+	},
+
+
+	showErrorOn () {
+		this.showError();
+	},
+
+
+	removeErrorOn () {
+		this.clearError();
+	},
+
 
 	showError: function () {
 		this.inputEl.addCls('error');

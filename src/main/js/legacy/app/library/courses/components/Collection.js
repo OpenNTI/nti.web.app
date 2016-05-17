@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ComponentsCollection = require('../../components/Collection');
-var SettingsCourseWindow = require('./settings/CourseWindow');
+const Ext = require('extjs');
+
+require('../../components/Collection');
+require('./settings/CourseWindow');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.Collection', {
@@ -32,7 +33,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		var i = Ext.Object.chain(this.callParent(arguments)),
 			courseRecord = record.get('CourseInstance'),
 			course = courseRecord.asUIData(),
-			label = course.label,
 			badge;
 
 		if (course.upcoming) {
@@ -80,7 +80,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				renderTo: node
 			});
 
-			win.showBy(Ext.get(node), 'tl-tl', win.offsets);
+			this.on('destroy', () => {
+				if (win.destroy && !win.isDestroyed) {
+					win.destroy();
+				}
+			});
 
 			e.stopPropagation();
 			return false;

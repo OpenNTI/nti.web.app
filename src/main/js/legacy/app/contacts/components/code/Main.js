@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
+const Ext = require('extjs');
+
+require('../../../../common/form/fields/SimpleTextField');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.code.Main', {
@@ -25,10 +26,10 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 				name: 'cancel',
 				text: getString('NextThought.view.account.code.Main.cancel'),
 				handler: function (b) {
-								b.up('window').close();
-							}
+					b.up('window').close();
+				}
 			},
-						{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: getString('NextThought.view.account.code.Main.submit'), disabled: true}
+			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: getString('NextThought.view.account.code.Main.submit'), disabled: true}
 		]}
 	],
 
@@ -92,6 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 
 		this.clearError();
 		btn.addCls('disabled');
+
 		this.GroupActions.joinGroupWithCode(v.code, btn)
 			.then(function () {
 				w.close();

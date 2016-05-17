@@ -49,7 +49,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 				xtype: 'assignment-feedback-item',
 				doDelete: me.deleteRecord.bind(me),
 				record: record,
-				syncElementHeight: me.syncElementHeight
+				syncElementHeight: me.syncElementHeight,
+				openReply: me.openReply
 			});
 		});
 

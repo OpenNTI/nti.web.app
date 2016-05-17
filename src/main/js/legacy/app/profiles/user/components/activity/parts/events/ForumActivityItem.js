@@ -304,7 +304,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		if (this.replyEl && box) {
 			this.mon(this.replyEl, 'click', this.showEditor, this);
-			this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.replyBoxEl});
+			this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.replyBoxEl, enableFileUpload: true});
 			box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 			this.mon(this.editor, {

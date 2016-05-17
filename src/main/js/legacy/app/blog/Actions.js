@@ -60,33 +60,24 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 			record.set({'title': title});
 		}
 
-		return new Promise(function (fulfill, reject) {
-			post.getProxy().on('exception', reject, null, {single: true});
-			post.save({
-				url: isEdit ? undefined : blog && blog.getLink('add'),
-				scope: me,
-				success: function (p, operation) {
-					//the first argument is the record...problem is, it was a post, and the response from the server is
-					// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
-					// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
-					// one off re-parse of the responseText is necissary to get at what we want.
-					// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
+		return post.saveData({url: isEdit ? undefined : blog && blog.getLink('add')})
+			.then (function (response) {
+				var entry = isEdit ? record : ParseUtils.parseItems(response)[0];
 
-					fulfill(isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0]);
-				},
-				failure: function () {
-					console.debug('Failed to save blog: ', arguments);
-					reject();
-				}
+				//the first argument is the record...problem is, it was a post, and the response from the server is
+				// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
+				// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
+				// one off re-parse of the responseText is necissary to get at what we want.
+				// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
+				return entry;
+			})
+			.then(function (blogEntry) {
+				return me.handleShareAndPublishState(blogEntry, sharingInfo);
+			})
+			.catch(function (reason) {
+				console.error('Failed to save blog: ', reason);
+				return Promise.reject(reason);
 			});
-		})
-		.then(function (blogEntry) {
-			return me.handleShareAndPublishState(blogEntry, sharingInfo);
-		})
-		.catch(function (reason) {
-			console.error('Failed to save blog: ', reason);
-			return Promise.reject(reason);
-		});
 	},
 
 	/**
@@ -164,23 +155,18 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 		commentPost.set({body: valueObject.body});
 
-		return new Promise(function (fulfill, reject) {
-			commentPost.save({
-				url: isEdit ? undefined : blogPost && blogPost.getLink('add'),//only use the blog post record if its a new post.
-				success: function (rec) {
+		return commentPost.saveData({url: isEdit ? undefined : blogPost && blogPost.getLink('add')})
+				.then(function (response) {
+					var rec = isEdit ? commentPost : ParseUtils.parseItems(response)[0];
 					if (!isEdit) {
 						blogPost.set('PostCount', blogPost.get('PostCount') + 1);
 					}
 
-					fulfill(rec);
-				},
-				failure: function () {
+					return rec;
+				})
+				.catch(function () {
 					console.error('Failed to create blog comment: ', arguments);
-
-					reject();
-				}
-			});
-		});
+				});
 	},
 
 	deleteBlogPost: function (record) {

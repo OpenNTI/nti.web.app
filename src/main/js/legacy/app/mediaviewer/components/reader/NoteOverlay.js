@@ -72,6 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			renderTo: Ext.getBody(),
 			enableShareControls: true,
 			enableTitle: true,
+			enableFileUpload: true,
 			width: 325,//match the content note window's width...a bit hackish, but this will get it from growing wider for now.
 			listeners: {
 				'deactivated-editor': function () {

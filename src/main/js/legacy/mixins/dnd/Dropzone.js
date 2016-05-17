@@ -28,6 +28,11 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 				onDragStart: this.onDragStart && this.onDragStart.bind(this),
 				onDragEnd: this.onDragEnd && this.onDragEnd.bind(this)
 			});
+
+			this.on('destroy', () => {
+				this.Dropzone.destroy();
+				delete this.Dropzone;
+			});
 		}
 	},
 

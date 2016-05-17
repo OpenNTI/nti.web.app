@@ -23,6 +23,7 @@ const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDe
 const ContextStateStore = require('legacy/app/context/StateStore');
 
 require('legacy/app/contentviewer/components/definition/Window');
+require('legacy/common/form/fields/FilePicker');
 
 const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 
@@ -735,6 +736,15 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 					})
 					.catch(function (err) {
 						console.error('Something went terribly wrong...', err.stack || err.message);
+						if (err && err.responseText) {
+							err = JSON.parse(err.responseText);
+						}
+
+						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+						if (err.code === 'MaxFileSizeUploadLimitError') {
+							err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+						}
 						return Promise.reject(err);
 					});
 
@@ -753,6 +763,10 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				url = c.obj.getLink('Pages');
 				break;
 			}
+		}
+
+		if (!url) {
+			url = (Service.getCollection('Pages') || {}).href;
 		}
 
 		return url;
@@ -828,6 +842,15 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				})
 				.catch(function (err) {
 					console.error('Something went terribly wrong...', err.stack || err.message);
+					if (err && err.responseText) {
+						err = JSON.parse(err.responseText);
+					}
+
+					if (err.code === 'MaxFileSizeUploadLimitError') {
+						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+					}
 					return Promise.reject(err);
 				});
 	},

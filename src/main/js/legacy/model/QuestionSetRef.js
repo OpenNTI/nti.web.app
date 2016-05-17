@@ -1,7 +1,11 @@
 var Ext = require('extjs');
-var ModelRelatedWork = require('./RelatedWork');
+require('./RelatedWork');
 
 
 module.exports = exports = Ext.define('NextThought.model.QuestionSetRef', {
-	extend: 'NextThought.model.RelatedWork'
+	extend: 'NextThought.model.RelatedWork',
+
+	fields: [
+		{name: 'question-count', type: 'string'}
+	]
 });

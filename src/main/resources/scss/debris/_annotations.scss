@@ -270,6 +270,25 @@
 			p {
 				margin: 0;
 			}
+
+			@include attachment();
+
+			.attachment-part {
+				margin: 3px;
+				width: auto;
+
+				.icon-wrapper {
+					display: none;
+				}
+
+				&:hover {
+					.meta {
+						.controls {
+							display: none;
+						}
+					}
+				}
+			}
 		}
 		.footer {
 			font: normal 400 10px/15px $font;

@@ -347,6 +347,24 @@
 					.body {
 						max-height: 3.6em;
 						overflow: hidden;
+
+						@include attachment();
+						.attachment-part {
+							margin: 3px;
+							width: auto;
+
+							.icon-wrapper {
+								display: none;
+							}
+
+							&:hover {
+								.meta {
+									.controls {
+										display: none;
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -394,6 +412,24 @@
 					line-height: 1.2em;
 					max-height: 3.6em;
 					overflow: hidden;
+
+					@include attachment();
+					.attachment-part {
+						margin: 3px;
+						width: auto;
+
+						.icon-wrapper {
+							display: none;
+						}
+
+						&:hover {
+							.meta {
+								.controls {
+									display: none;
+								}
+							}
+						}
+					}
 				}
 
 				.actions {

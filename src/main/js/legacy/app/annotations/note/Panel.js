@@ -420,22 +420,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 							r.fireEvent('updated', rec);
 							callback(true, rec);
 						})
-						.catch(function (e) {
-							console.error(Globals.getError(e));
-							me.editorEl.unmask();
-						});
+						.catch(me.onReplySaveFailure.bind(me));
 				return p;
 			}
 			else {
-				try {
-					me.UserDataActions.saveNewReply(r, v.body, [])
-						.then(callback.bind(this, true))
-						.catch(callback.bind(this, false));
-				}
-				catch (e) {
-					console.error(Globals.getError(e));
-					me.editorEl.unmask();
-				}
+				me.UserDataActions.saveNewReply(r, v.body, [])
+					.then(callback.bind(this, true))
+					.catch(me.onReplySaveFailure.bind(me));
 			}
 		}
 
@@ -446,6 +437,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		me.editorEl.mask('Saving...');
 		me.updateLayout();
 		return wait().then(save);
+	},
+
+	onReplySaveFailure: function (e) {
+		console.error(Globals.getError(e));
+		this.editor.unmask();
+		let msg = e && e.message || 'Could not save reply';
+		alert({title: 'Attention', msg: msg, icon: 'warning-red'});
 	},
 
 	updateToolState: function () {
@@ -746,7 +744,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			this);
 
 		let attachments = this.text.select('.attachment-part');
-		if (attachments) {
+		if (attachments && attachments.elements.length > 0) {
 			attachments.on('click', this.click.bind(this));
 		}
 	},

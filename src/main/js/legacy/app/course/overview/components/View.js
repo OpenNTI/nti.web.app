@@ -42,6 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.addChildRouter(this.body);
 
+		this.editingMap = {};
+
 		this.addRoute('/edit', this.showEditOutlineNode.bind(this));
 		this.addRoute('/:node', this.showOutlineNode.bind(this));
 		this.addRoute('/:node/edit', this.showEditOutlineNode.bind(this));
@@ -92,6 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	openEditing: function () {
 		var me = this,
+			bundle = me.currentBundle,
 			node = me.activeNode,
 			outline = me.activeOutline,
 			id = node && node.getId();
@@ -120,6 +123,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}).then(function () {
 			id = ParseUtils.encodeForURI(id);
 
+			me.editingMap[bundle.getId()] = true;
+
 			if (id) {
 				me.pushRoute('Editing', id + '/edit');
 			} else {
@@ -144,41 +149,43 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			})
 			.then(function (outlineNode) {
 				var node,
-						next = outlineNode && outlineNode.nextSibling,
-						previous = outlineNode && outlineNode.previousSibling,
-						id;
+					next = outlineNode && outlineNode.nextSibling,
+					previous = outlineNode && outlineNode.previousSibling,
+					id;
 
 				if (outlineNode && outlineNode.getFirstContentNode) {
-						node = outlineNode.getFirstContentNode();
-					}
+					node = outlineNode.getFirstContentNode();
+				}
 
 				while ((next || previous) && !node) {
-						if (next && next.getFirstContentNode()) {
-							node = next.getFirstContentNode();
-							break;
-						} else {
-							next = next && next.nextSibling;
-						}
-
-						if (previous && previous.getFirstContentNode()) {
-							node = previous.getFirstContentNode();
-							break;
-						} else {
-							previous = previous && previous.previousSibling;
-						}
+					if (next && next.getFirstContentNode()) {
+						node = next.getFirstContentNode();
+						break;
+					} else {
+						next = next && next.nextSibling;
 					}
+
+					if (previous && previous.getFirstContentNode()) {
+						node = previous.getFirstContentNode();
+						break;
+					} else {
+						previous = previous && previous.previousSibling;
+					}
+				}
 
 					// node be firstContent, next sibling, previous sibling,
 				if (node) {
-						id = node && node.getId();
-					}
+					id = node && node.getId();
+				}
+
+				delete me.editingMap[bundle.getId()];
 
 				if (id) {
-						id = ParseUtils.encodeForURI(id);
-						me.pushRoute('', id);
-					} else {
-						me.pushRoute('', '');
-					}
+					id = ParseUtils.encodeForURI(id);
+					me.pushRoute('', id);
+				} else {
+					me.pushRoute('', '');
+				}
 			})
 			.catch(function (reason) {
 				console.error('Unable to stop editing because: ' + reason);
@@ -323,9 +330,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	showOutlineNode: function (route, subRoute) {
 		var me = this,
-			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
+			bundle = this.currentBundle,
+			node = route.params && route.params.node,
+			id = node && ParseUtils.decodeFromURI(node),
 			changedEditing = me.isEditing,
 			record = route.precache.outlineNode;
+
+
+		if (this.editingMap && this.editingMap[bundle.getId()]) {
+			this.replaceRoute('Editing', '/edit');
+			return Promise.resolve();
+		}
 
 		me.alignNavigation();
 		me.navigation.stopEditing();
@@ -358,6 +373,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	showEditOutlineNode: function (route, subRoute) {
 		var me = this,
+			bundle = me.currentBundle,
 			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
 			changedEditing = !me.isEditing,
 			record = route.precache.outlineNode;
@@ -367,6 +383,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.body.showEditing();
 
 		me.isEditing = true;
+
+		me.editingMap[bundle.getId()] = true;
 
 		return me.__getRecord(id, record, true, changedEditing)
 			.then(function (record) {

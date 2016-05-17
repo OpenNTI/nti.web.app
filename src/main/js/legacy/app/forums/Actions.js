@@ -5,6 +5,7 @@ const ForumStore = require('./StateStore');
 require('../../common/Actions');
 require('../userdata/Actions');
 require('../userdata/StateStore');
+require('legacy/common/form/fields/FilePicker');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
@@ -48,9 +49,22 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 
 					return rec;
 				})
-				.catch(function (reason) {
+				.catch(function (err) {
 					console.error('Failed to save topic comment:', arguments);
-					return Promise.reject(reason);
+					if (err && err.responseText) {
+						err = JSON.parse(err.responseText);
+					}
+
+					if (err.code === 'MaxFileSizeUploadLimitError') {
+						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+					}
+
+					let msg = err && err.message || 'Failed to save topic comment';
+					alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+
+					return Promise.reject(err);
 				});
 	},
 

@@ -1,3 +1,5 @@
+@import "./card";
+
 span.tab{
 	white-space: nowrap;
 	display: inline-block;
@@ -39,28 +41,36 @@ span.tab{
 			}
 		}
 
-		.thumbnail {
-			padding: 0px;
+		.icon-wrapper {
+			padding: 0;
 			margin: 0 auto;
 			height: 160px;
 			position: relative;
 			background-color: #ececec;
 
-			.preview {
+			@include file-custom-icon();
+
+			.icon {
 				position: absolute;
-				top: 0;
+				top: 12px;
+				bottom: 12px;
 				left: 0;
 				right: 0;
-				bottom: 0;
 				z-index: 0;
-				background-size: cover;
+				background-size: contain;
 				background-position: center;
 				background-repeat: no-repeat;
 
-				&.pdf, &.docx, &.x-pdf, &.zip {
-					top: 12px;
-					bottom: 12px;
-					background-size: contain;
+				&.jpeg, &.jpg, &.gif, &.png {
+					top: 0;
+					bottom: 0;
+					background-size: cover;
+					background-position: center center;
+					width: 100%;
+
+					label {
+						display: none;
+					}
 				}
 			}
 		}
@@ -72,6 +82,7 @@ span.tab{
 			margin-left: 0;
 			margin-top: 0;
 			display: block;
+			width: 100%;
 
 			.text {
 				position: relative;
@@ -92,6 +103,8 @@ span.tab{
 					text-transform: capitalize;
 					padding: 0;
 					text-align: left;
+					overflow: hidden;
+    				text-overflow: ellipsis;
 				}
 				.size {
 					display: block;
@@ -318,6 +331,7 @@ span.tab{
 
 				.attachment-part {
 					margin: 3px;
+					cursor: initial;
 				}
 			}
 
@@ -477,7 +491,7 @@ span.tab{
 							}
 
 							&.upload {
-								@include icon($editor-upload-file, $top:10px);
+								@include icon($editor-upload-file, $top:8px);
 								&:hover::after{
 									@include sprite($editor-upload-file-hover);
 								}

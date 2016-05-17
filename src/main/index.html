@@ -7,7 +7,7 @@
 	</noscript>
 	<script>
 		if (/android|blackberry|iphone|ipod|mobile|webos/i.test(navigator.userAgent) ){
-			location.replace('/mobile/' + (location.hash ? ('?q='+location.hash.replace(/^#!/,'')) : ''));
+			location.replace('/mobile/' + ('?p=' + location.pathname) + (location.hash ? ('&q='+location.hash.replace(/^#!/,'')) : ''));
 		}
 	</script>
 	<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>

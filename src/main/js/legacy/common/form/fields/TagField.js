@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'span', cls: 'token-input-wrap', cn: [
-			{tag: 'input', type: 'text', tabIndex: '{tabIndex}', placeholder: '{placeholder}'},
+			{tag: 'input', type: 'text', cls:'tag-input', tabIndex: '{tabIndex}', placeholder: '{placeholder}'},
 			{tag: 'span', cls: 'token-input-sizer', html: '{placeholder}##'}
 		]}
 	]),
@@ -273,7 +273,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 		this.inputEl[readOnly ? 'hide' : 'show']();
 	},
 
-  //This MUST be reimplemented if the subclass redfines the value format
+ //This MUST be reimplemented if the subclass redfines the value format
 	setValue: function (value) {
 		if (value && !Ext.isArray(value)) {
 			value = [value];

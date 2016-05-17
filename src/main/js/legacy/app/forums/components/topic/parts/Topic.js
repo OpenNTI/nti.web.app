@@ -426,11 +426,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			part = this.getAttachmentPart(el);
 
 		if (part) {
-			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
-
-			if (ContentViewerActions) {
-				ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
+			if (!this.ContentViewerActions) {
+				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
 			}
+
+			this.ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
 		}
 	},
 

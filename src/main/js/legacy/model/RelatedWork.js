@@ -2,7 +2,7 @@ const Ext = require('extjs');
 const DomUtils = require('../util/Dom');
 const Globals = require('../util/Globals');
 const {getURL} = Globals;
-
+const Mime = require('mime-types');
 require('./Base');
 require('../mixins/AuditLog');
 require('../mixins/AuditLog');
@@ -54,8 +54,11 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'icon-xlsx.png',
 			'application/zip': 'icon-zip.png',
 			'application/vnd.nextthought.externallink': 'icon-www.png',
+			'application/vnd.nextthought.content': 'generic.png',
 			'unknown': 'generic.png'
 		},
+
+		FILE_FALLBACK_BLANK_IMAGE: 'blank-download.png',
 
 
 		URL_ICON: 'icon-www.png',
@@ -63,9 +66,35 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 
 		getIconForMimeType: function (mimeType) {
 			var base = this.FILE_ICON_BASE,
-				icon = this.MIMETYPE_TO_ICON[mimeType] || this.MIMETYPE_TO_ICON['unknown'];
+				icon = this.MIMETYPE_TO_ICON[mimeType],
+				data = {};
 
-			return base + icon;
+			if (icon) {
+				data.url = base + icon;
+			}
+			else {
+				let extension = Mime.extension(mimeType);
+				extension = extension && !/^(www|bin)$/i.test(extension) ? extension : null;
+
+				if (!extension) {
+					extension = (mimeType || '').split('/').last();
+				}
+				data.url = this.getFallbackIcon();
+				data.extension = extension;
+				data.iconCls = 'fallback';
+			}
+
+			return data;
+		},
+
+
+		getFallbackIcon: function () {
+			return this.FILE_ICON_BASE + this.FILE_FALLBACK_BLANK_IMAGE;
+		},
+
+
+		hasIconForMimeType: function (mimeType) {
+			return !!this.MIMETYPE_TO_ICON[mimeType];
 		},
 
 
@@ -178,19 +207,31 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return !this.isContent() && !this.isExternalLink();
 	},
 
+
+	/**
+	 *
+	 * Get or generate the icon data for a related work.
+	 * @param {String} root - the base root.
+ 	 * @return {Object}	- The icon data object will have the following fields:
+	 * - url: The url for the icon. This field is required.
+	 * - extension: the extension of a file. Required for the case where we have to generate the icon.
+	 * - iconCls: extra cls that we may add to an icon.
+	 */
 	getIcon: function (root) {
 		var icon = this.get('icon'),
-			targetMimeType = this.get('targetMimeType');
+			targetMimeType = this.get('targetMimeType'),
+			data = {};
 
 		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
-			icon = getURL(icon);
+			data.url = getURL(icon);
 		} else if (icon) {
-			icon = getURL(icon, root || '');
-		} else if (this.self.getIconForMimeType) {
-			icon = this.self.getIconForMimeType(targetMimeType);
+			data.url = getURL(icon, root || '');
 		}
 
-		return icon;
+		if (!data.url) {
+			data = this.self.getIconForMimeType(targetMimeType);
+		}
+		return data;
 	},
 
 	getTitle: function () {

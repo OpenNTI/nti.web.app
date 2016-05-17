@@ -480,8 +480,11 @@ canvas.x-component-course-assessment {
 		&.closed {
 			&, &:hover, &.selected {
 				cursor: default !important;
+				background: none !important;
+			}
+
+			.name, &::after {
 				opacity: 0.5;
-				background: none;
 			}
 		}
 
