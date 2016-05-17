@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		var ifo = this.getInfo(),
 			data = ((ifo && ifo.get('Instructors')) || []).slice(),
 			photo = '{0}instructor-photos/{1}.png',
-			root = ifo.getAssetRoot() || '/no-root/';
+			root = (ifo.getAssetRoot && ifo.getAssetRoot()) || '/no-root/';
 
 		data.forEach(function (o, i) {
 			var url = Ext.String.format(photo, root, Ext.String.leftPad(i + 1, 2, '0'));

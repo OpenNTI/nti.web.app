@@ -787,7 +787,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 					progress.showError();
 					me.removeCls('saving');
 				} else {
-					me.el.unmask();
+					if(me.el && me.el.unmask) {  me.el.unmask(); }
 				}
 
 				if(me.onError) { me.onError(); }

@@ -1,6 +1,9 @@
 const Ext = require('extjs');
 const {wait} = require('legacy/util/Promise');
 const {isFeature} = require('legacy/util/Globals');
+const LibraryActions = require('legacy/app/library/Actions');
+const CourseActions = require('legacy/app/library/courses/Actions');
+
 var ParseUtils = require('legacy/util/Parsing');
 
 require('../Page');
@@ -65,6 +68,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				me.showWelcomeMessage();
 			});
 		}
+
+		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.CourseActions = NextThought.app.library.courses.Actions.create();
 	},
 
 
@@ -103,10 +109,15 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 
 	onRedeemSuccess (results) {
-		let course = ParseUtils.parseItems(results)[0];
+		let newCourse = ParseUtils.parseItems(results)[0];
 
-		this.updateCourses();
-		this.showCourse(course);
+		this.LibraryActions.reload()
+			.then( () => {
+				return this.CourseActions.findCourseInstance(newCourse.get('NTIID'));
+			})
+			.then( course => {
+				this.showCourse(course.getCourseCatalogEntry());
+			});
 	},
 
 
