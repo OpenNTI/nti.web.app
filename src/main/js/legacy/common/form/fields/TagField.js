@@ -90,7 +90,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 		this.mon(this.inputEl, {
 			scope: this,
 			keydown: this.onKeyDown,
-			focus: this.handleFocus,
 			blur: this.handleBlur,
 			paste: this.onPaste
 		});
