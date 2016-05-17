@@ -54,6 +54,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'icon-xlsx.png',
 			'application/zip': 'icon-zip.png',
 			'application/vnd.nextthought.externallink': 'icon-www.png',
+			'application/vnd.nextthought.content': 'generic.png',
 			'unknown': 'generic.png'
 		},
 
