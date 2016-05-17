@@ -39,7 +39,8 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 	textDescriptionForPartType: {
 		'application/vnd.nextthought.canvas': '[image]',
-		'application/vnd.nextthought.embeddedvideo': '[video]'
+		'application/vnd.nextthought.embeddedvideo': '[video]',
+		'application/vnd.nextthought.contentfile': '[attachment]'
 	},
 
 	rendererForPart: {
