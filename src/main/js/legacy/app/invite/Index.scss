@@ -1,0 +1,124 @@
+.invite-form {
+	width: 500px;
+
+	textarea {
+	    font: italic 100 22px 'Open Sans';
+	    color: #b8b8b8;
+	    margin: 1px 0 -5px 0;
+	    padding: 20px;
+	    resize: none;
+	    width: 100%;
+	    height: 217px;
+	    box-shadow: 0 0 0 1px #d8d8d8;
+	}
+
+	.control.upload {
+	    width: 63px;
+	    height: 24px;
+	    position: absolute;
+
+	    top: 15px;
+		right: 15px;
+	    padding-top: 6px;
+		padding-left: 18px;
+	    cursor: pointer;
+		color: #e1e1e1;
+	    background-color: #757474;
+	    border-radius: 3px;
+
+	    font-size: 10px;
+	    text-align: center;
+
+		input[type="file"] {
+		    opacity: 0;
+		    width: 64px;
+		    height: 26px;
+		    cursor: pointer;
+		    position: absolute;
+		    left: 0;
+		    top: 0;
+		}
+	}
+
+	.control.upload:before {
+	    content: '';
+	    background-image: url("/app/resources/images/icons/email.png");
+	    background-repeat: no-repeat;
+	    height: 14px;
+	    width: 15px;
+	    left: 7px;
+	    position: absolute;
+	    top: 6px;
+	}
+
+	.email-token-field.x-component-tokens {
+		padding: 10px;
+		background-color: #fbfbfb;
+		max-height: 50px;
+
+		&.focused{
+			max-height: 182px;
+		    overflow-y: auto;
+
+			.token {
+				background: #757474;
+			    font-family: 'Open Sans';
+			    color: #ffffff;
+			    font-size: 14px;
+			    border-radius: 4px;
+			    padding: 5px;
+			    text-transform: none;
+			    border: none;
+			    margin-right: 3px;
+
+				&:hover {
+				    position: relative;
+				    z-index: 2;
+				}
+
+				.x {
+					display: inline-block;
+				}
+			}
+		}
+
+	 	.token-input-wrap {
+			 input[type="text"] {
+	 			background-color: #fbfbfb;
+	 		}
+		 }
+	}
+
+	.email-token-field.x-component-tokens:not(.focused) {
+		.token {
+			border: none;
+			background: none;
+			text-transform: none;
+		    padding: 0px;
+    		font-size: 12px;
+
+			&:after {
+				content: ',';
+			}
+
+			&:hover {
+				color: #757474;
+			    border: none;
+			    background: none;
+			    padding: 0;
+			    margin-right: 3px;
+			    position: relative;
+			    z-index: 2;
+			    cursor: text;
+			}
+
+			.x {
+				display: none;
+			}
+		}
+	}
+}
+
+.invite-form-prompt {
+	background-color: #f7f7f7;
+}

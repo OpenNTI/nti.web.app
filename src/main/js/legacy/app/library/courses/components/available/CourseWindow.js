@@ -173,6 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.addRoute('/:id/purchase', this.showPurchase.bind(this));
 		this.addRoute('/:id/redeem/:token', this.showRedeemToken.bind(this));
 		this.addRoute('/:id/paymentcomplete', this.showPaymenComplete.bind(this));
+		this.addRoute('/invitations/accept/:code', this.showRedeemInvite.bind(this));
 
 		this.addDefaultRoute('/');
 		// this.on('beforeclose', this.onBeforeClose, this);
@@ -425,7 +426,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		me.updateAvailableCourses(current, upcoming, archived);
 	},
 
-	showTabpanel: function () {
+	showTabpanel: function (code) {
 		var me = this;
 
 		if (!me.tabpanel) {
@@ -434,6 +435,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				upcoming: me.upcoming,
 				current: me.current,
 				archived: me.archived,
+				code: code || '',
+				updateCourses: me.updateCourses.bind(me),
+				showCourse: me.showCourse.bind(me),
 				ownerCt: me
 			});
 
@@ -463,11 +467,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	showCourses: function (route, subRoute) {
+		let code = route.params.code;
+
 		this.mun(this.CourseStore, 'all-courses-set');
 		this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
 		this.addMask();
 		this.CourseActions.loadAllCourses();
-		this.showTabpanel();
+		this.showTabpanel(code);
 	},
 
 	showCourseDetail: function (route, subRoute, notFoundMsg) {
@@ -640,6 +646,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				}
 			});
 	},
+
+
+	showRedeemInvite (route, subRoute) {
+		return this.showCourses(route, subRoute);
+	},
+
 
 	showForCredit: function (route, subRoute) {
 		var me = this;
