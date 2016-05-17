@@ -648,6 +648,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		// Add the file to the attachment map
 		this.AttachmentMap[guid] = file;
 
+		let content = this.el.down('.content');
+		if (content) {
+			content.mask('uploading...');
+		}
+
 		// TODO: Check and warn about the size
 		this.setAttachmentPreviewFromInput(file, guid);
 	},
@@ -682,6 +687,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		} else {
 			tpl.append(content, data);
 		}
+
+		content.unmask();
 
 		this.maybeEnableSave();
 	},

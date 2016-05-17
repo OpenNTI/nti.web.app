@@ -356,10 +356,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			editor.deactivate();
 		}).catch(function (e) {
 			console.error(Globals.getError(e));
-			let msg = e && e.message;
-			editor.markError(me.editor.el.down('.content'), msg || 'Could not save note');
 			editor.unmask();
-			wait().then(editor.maybeResizeContentBox.bind(editor));
+
+			let msg = e && e.message || 'Could not save note';
+			if (msg) {
+				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+			}
 		});
 
 		return false;

@@ -1,8 +1,10 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../cache/UserRepository');
 var DomUtils = require('../../../util/Dom');
+const {wait} = require('legacy/util/Promise');
 require('../../../editor/Editor');
 require('../Actions');
+require('legacy/common/form/fields/FilePicker');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
@@ -198,20 +200,26 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 				}
 
 				me.fireEvent('after-save', rec);
-			});
+			})
+			.catch(me.onSaveFailure.bind(me));
 	},
 
 	onSaveSuccess: function () {
 		this.destroy();
 	},
 
-	onSaveFailure: function (proxy, response, operation) {
+	onSaveFailure: function (response) {
 		var msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown'), error;
 
 		if (response && response.responseText) {
 			error = Ext.decode(response.responseText, true) || {};
 			if (error.code === 'TooLong') {
 				msg = getString('NextThought.view.profiles.parts.BlogEditor.longtitle');
+			}
+			else if (error.code === 'MaxFileSizeUploadLimitError') {
+				let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.max_bytes),
+					currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.provided_bytes);
+				msg = error.message + ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 			}
 		}
 		alert({title: getString('NextThought.view.profiles.parts.BlogEditor.error'), msg: msg, icon: 'warning-red'});
