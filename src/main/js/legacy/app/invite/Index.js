@@ -11,9 +11,16 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	layout: 'none',
 	items: [],
 	schema: [
+		{name: 'MimeType', type: 'hidden'},
 		{type: 'emailtoken', required: true, name:'emails', placeholder: 'Add an email address'},
 		{type: 'textarea', cls: 'message-area', name:'message', required: false, placeholder: 'Type a message...'}
 	],
+
+	getDefaultValues: function () {
+		return {
+			MimeType: NextThought.model.courses.UserCourseInvitations.mimeType
+		};
+	},
 
 	initComponent () {
 		this.callParent(arguments);
@@ -24,6 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			xtype: 'common-form',
 			schema: this.schema,
 			action: this.inviteUrl,
+			defaultValues: this.getDefaultValues(),
 			onSuccess: this.onSuccess,
 			onError: this.onError
 		});
@@ -129,8 +137,11 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			.then( results => {
 				const courseInvitations = ParseUtils.parseItems(results)[0];
 				const emails = courseInvitations && courseInvitations.get('Items').map(item => item.email);
+				let dom = this.el.dom, tagInput = dom && dom.querySelector('.tag-input');
+
 				me.button.hide();
 				me.form.setValue('emails', emails);
+				if ( tagInput ) { tagInput.focus(); }
 			})
 			.catch( error => {
 				console.log(error);
@@ -169,6 +180,18 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		});
 	},
 
+
+	__submitJSON: function (values, url, method) {
+		var me = this;
+
+		return new Promise(function (fulfill, reject) {
+			var xhr = me.__buildXHR(url, method, fulfill, reject);
+
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.send(JSON.stringify(values));
+		});
+	},
+
 	getFormData (file) {
 		let formData = new FormData();
 
@@ -184,6 +207,13 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	},
 
 	onSave () {
-		return this.form.submitTo(this.inviteUrl);
+		let changedValues = this.form.getChangedValues();
+		let values = {};
+
+		values.message = changedValues.message;
+		values.MimeType = changedValues.MimeType;
+		values.Items = changedValues.emails.map( email => ({ 'email': email }) );
+
+		return this.__submitJSON(values, this.inviteUrl, 'POST');
 	}
 });

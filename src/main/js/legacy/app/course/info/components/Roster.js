@@ -286,12 +286,23 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 					me.inviteListenerSet = true;
 					me.mon(me.inviteEl, 'click', 'showInvitePrompt');
 				}
+				me.maybeShowInviteButton();
 			});
 	},
 
 	shouldAllowInstructorEmail: function () {
 		// Right now, we will only
 		return isFeature('instructor-email') && this.currentBundle && this.currentBundle.getLink('Mail');
+	},
+
+	maybeShowInviteButton () {
+		let inviteLink = this.currentBundle && this.currentBundle.getLink('SendCourseInvitations');
+
+		if (inviteLink) {
+			this.inviteEl.show();
+		} else {
+			this.inviteEl.hide();
+		}
 	},
 
 	maybeShowEmailButton: function () {
