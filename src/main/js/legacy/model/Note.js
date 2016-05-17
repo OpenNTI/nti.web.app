@@ -271,7 +271,9 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			}
 			this.compileBodyContent(function (html) {
 				//TODO: Create a white list of classnames we allow, instead of just allowing all of them
-				html = html.replace(/\s*(style)=".*?"\s*/ig, ' ');
+				if (!onlyObject) {
+					html = html.replace(/\s*(style)=".*?"\s*/ig, ' ');
+				}
 				snip = onlyObject ? html : ContentUtils.getHTMLSnippet(html, max);
 				Ext.callback(cb, null, [snip || html, t]);
 			}, null, null, null);
