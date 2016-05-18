@@ -14,6 +14,10 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 		{type: 'submit', cls: 'reedem', text: 'Redeem'}
 	],
 
+	renderSelectors: {
+		errorLabel: '.error-label'
+	},
+
 	initComponent () {
 		this.callParent(arguments);
 
@@ -32,8 +36,18 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 			schema: this.schema,
 			action: invite,
 			onSuccess: this.onSuccess,
-			onError: this.onError
+			onError: this.onError.bind(this),
+			onFormChange: this.onFormChange.bind(this)
 		});
+
+		this.errorContainer = this.add({
+			xtype: 'box',
+			autoEl: {cls: 'error-container', cn: [
+				{tag: 'label', cls: 'error-label', html: ''}
+			]}
+		});
+
+		this.errorContainer.hide();
 	},
 
 
@@ -46,12 +60,24 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 		}
 	},
 
-	onSuccess () {
-		console.log('success');
-	},
+	onSuccess () {},
 
 	onError (error) {
-		console.error(error);
+		let response = error && JSON.parse(error.responseText),
+			errorMessage = response.message || 'Error with the code.';
+
+		this.errorLabel.setHTML(errorMessage);
+		this.errorContainer.show();
+		this.form.addCls('error');
+	},
+
+	onFormChange (e) {
+		if(!e) { return; }
+		
+		if(e.type === 'keyup' || e.type === 'keydown') {
+			this.errorContainer.hide();
+			this.form.removeCls('error');
+		}
 	}
 
 });

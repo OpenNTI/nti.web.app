@@ -17,9 +17,16 @@
 		display: flex;
 	}
 
+
+	.error-label {
+	    color: #F35252;
+	    font: 200 14px 'Open Sans';
+	}
+
 	.form-container {
 	    width: 100%;
-
+		height: 40px;
+		
 		.invitation_codes {
 		   width: 22%;
 		}
@@ -54,6 +61,17 @@
 		.redeem[disabled="disabled"]{
 			background-color: #b8b8b8;
 		    cursor: inherit;
+		}
+
+		&.error {
+			.reedem {
+		    	background-color: grey;
+		    	opacity: 0.65;
+		    	pointer-events: none;
+			}
+			input[name="invitation_codes"] {
+			    box-shadow: 0 0 0 1px #F35252;
+			}
 		}
 	}
 

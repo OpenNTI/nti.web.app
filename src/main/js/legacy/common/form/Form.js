@@ -790,7 +790,9 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 					if(me.el && me.el.unmask) {  me.el.unmask(); }
 				}
 
-				if(me.onError) { me.onError(); }
+				if(me.onError) { 
+					me.onError(reason);
+				}
 
 				return Promise.reject(reason);
 			});
