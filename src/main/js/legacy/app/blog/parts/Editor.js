@@ -221,6 +221,9 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 					currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.provided_bytes);
 				msg = error.message + ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 			}
+			else if (error.code === 'MaxAttachmentsExceeded') {
+				msg = error.message + ' Max Number of files: ' + error.constraint;
+			}
 		}
 		alert({title: getString('NextThought.view.profiles.parts.BlogEditor.error'), msg: msg, icon: 'warning-red'});
 		console.debug(arguments);

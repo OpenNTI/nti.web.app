@@ -274,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			alert({title: 'Attention', msg: msg,  icon: 'warning-red'});
 		}
 		else if (error.code === 'MaxAttachmentsExceeded') {
-			msg = (error.message || '') + ' ' + 'Maximum Files Allowed: ' + error.constraint;
+			msg = (error.message || '') + ' ' + 'Max Number of Files: ' + error.constraint;
 			alert({title: 'Attention', msg: msg,  icon: 'warning-red'});
 		}
 		else if (error.code === 'TooLong') {

@@ -745,6 +745,9 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 						if (err.code === 'MaxFileSizeUploadLimitError') {
 							err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 						}
+						if (err.code === 'MaxAttachmentsExceeded') {
+							err.message += ' Max Number of files: ' + err.constraint;
+						}
 						return Promise.reject(err);
 					});
 
@@ -850,6 +853,9 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
 							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
 						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+					}
+					if (err.code === 'MaxAttachmentsExceeded') {
+						err.message += ' Max Number of files: ' + err.constraint;
 					}
 					return Promise.reject(err);
 				});

@@ -60,6 +60,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
 						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 					}
+					if (err.code === 'MaxAttachmentsExceeded') {
+						err.message += ' Max Number of files: ' + err.constraint;
+					}
 
 					let msg = err && err.message || 'Failed to save topic comment';
 					alert({title: 'Attention', msg: msg, icon: 'warning-red'});

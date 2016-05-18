@@ -117,6 +117,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
 					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 				}
+				if (err.code === 'MaxAttachmentsExceeded') {
+					err.message += ' Max Number of files: ' + err.constraint;
+				}
 
 				let msg = err && err.message || 'Could not save feedback';
 				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
