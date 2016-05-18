@@ -9,6 +9,6 @@ module.exports = exports = Ext.define('NextThought.model.courses.UserCourseInvit
 
 	fields: [
 		{ name: 'Items', type: 'auto' },
-		{ name: 'Warnings', type: 'auto'}
+		{ name: 'InvalidEmails', type: 'auto'}
 	]
 });

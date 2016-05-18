@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	]),
 
 
-	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'token {type}', cn: [
+	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'token {type} {cls}', cn: [
 		{tag: 'span', cls: 'value', html: '{text}', 'data-value': '{value}'},
 		{tag: 'span', cls: 'x'}
 	]}),

@@ -137,11 +137,27 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			.then( results => {
 				const courseInvitations = ParseUtils.parseItems(results)[0];
 				const emails = courseInvitations && courseInvitations.get('Items').map(item => item.email);
-				let dom = this.el.dom, tagInput = dom && dom.querySelector('.tag-input');
+				let warnings = courseInvitations.get('Warnings') || '',
+					dom = me.el.dom,
+					tagInput = dom && dom.querySelector('.tag-input');
 
 				me.button.hide();
 				me.form.setValue('emails', emails);
-				if ( tagInput ) { tagInput.focus(); }
+				if (tagInput) { tagInput.focus(); }
+				me.form.removeErrorOn('emails');
+
+				if(courseInvitations.get('InvalidEmails')) {
+					let invalidEmails = courseInvitations.get('InvalidEmails').Items;
+
+					if(invalidEmails[0].slice(0, -1).toLowerCase() === 'email') {
+						invalidEmails.shift();
+					}
+
+					me.form.showErrorOn('emails', `The following emails are invalid: ${invalidEmails.join(', ')}. ${warnings}`);
+				} else if (warnings !== '') {
+					me.form.showErrorOn('emails', warnings);
+				}
+
 			})
 			.catch( error => {
 				console.log(error);
