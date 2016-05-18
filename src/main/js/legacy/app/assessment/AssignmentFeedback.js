@@ -97,9 +97,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			feedback = this.history.get('Feedback'),
 			store = this.store;
 
+		editor.el.mask('Saving...');
 		item.saveData({url: feedback.get('href')})
 			.then(function (response) {
 				console.log('Saved feedback:', response);
+				editor.el.unmask();
 				editor.deactivate();
 				editor.setValue('');
 				me.addMask();
@@ -107,6 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 				me.removeMask();
 			})
 			.catch(function (err) {
+				editor.el.unmask();
 				console.error('faild to save feedback', err);
 				if (err && err.responseText) {
 					err = JSON.parse(err.responseText);
