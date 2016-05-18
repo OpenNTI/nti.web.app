@@ -87,6 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 			editorBox = this.el.down('.wrap');
 
 		if (this.editor) {
+			this.editor.editBody(this.record.get('body'));
 			this.editor.activate();
 			Ext.defer(this.editor.focus, 350, this.editor);
 			this.updateLayout();
