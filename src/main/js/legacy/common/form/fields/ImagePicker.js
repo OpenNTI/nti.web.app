@@ -123,6 +123,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 			});
 	},
 
+	setPreviewURL: function (url) {
+		this.previewEl.setHTML('');
+		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
+	},
+
 	setPlaceholder: function (value) {
 		this.placeholder = value;
 
@@ -145,21 +150,21 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 			return;
 		}
 
-		this.previewEl.setStyle({backgroundImage: 'url(' + value + ')'});
+		this.setPreviewURL(value);
 		this.updateTooltip(true);
 	},
 
 	setPreviewFromInput: function (file) {
 		var url = this.createObjectURL(file);
 
-		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
+		this.setPreviewURL(url);
 		this.updateTooltip(true);
 	},
 
 	setPreviewFromCrop: function (crop) {
 		var url = crop.getURL();
 
-		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
+		this.setPreviewURL(url);
 		this.updateTooltip(true);
 
 		this.fileContainer.removeCls('no-file');
@@ -180,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	showPreviewFromSchema: function () {
 		var url = this.placeholder || this.schema.placeholder || '';
 
-		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
+		this.setPreviewURL(url);
 	},
 
 	onClearImage: function () {
