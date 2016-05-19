@@ -37,7 +37,8 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 			action: invite,
 			onSuccess: this.onSuccess,
 			onError: this.onError.bind(this),
-			onFormChange: this.onFormChange.bind(this)
+			onFormChange: this.onFormChange.bind(this),
+			noFocus: true
 		});
 
 		this.errorContainer = this.add({

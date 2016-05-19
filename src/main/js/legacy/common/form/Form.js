@@ -256,8 +256,10 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		me.onFormChange();
 
-		wait()
-			.then(me.focusField.bind(me));
+		if(!me.noFocus) {
+			wait()
+				.then(me.focusField.bind(me));
+		}
 	},
 
 	onDestroy: function () {

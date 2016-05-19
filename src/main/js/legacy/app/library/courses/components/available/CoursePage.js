@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		let upcoming = this.down('[category=upcoming]');
 		let	current = this.down('[category=current]');
 		let	archived = this.down('[category=archived]');
-		let redeem = this.down('[category=redeem]');
+		let redeem = this.down('library-redemption');
 		let	first = this.down('[category]');
 		let	defaultTop = 0;
 
@@ -181,43 +181,55 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			}
 
 			if (upcoming) {
-				this.scrollTops['upcoming'] = upcoming.el.getTop() - defaultTop;
+				this.scrollTops['upcoming'] = upcoming.el.dom;
 			}
 			if (current) {
-				this.scrollTops['current'] = current.el.getTop() - defaultTop;
+				this.scrollTops['current'] = current.el.dom;
 			}
 			if (archived) {
-				this.scrollTops['archived'] = archived.el.getTop() - defaultTop;
+				this.scrollTops['archived'] = archived.el.dom;
 			}
 			if(redeem) {
-				this.scrollTops['redeem'] = redeem.el.getTop() - defaultTop;
+				this.scrollTops['redeem'] = redeem.el.dom;
 			}
 
 			this.setPageHeight();
+			this.getTargetEl().scrollTo('top', 0, true);
 		});
 	},
 
 
 	onScroll: function (/*e*/) {
 		var target = this.getTargetEl().dom,
+			targetTop = target.getBoundingClientRect().top,
 			scrollTop = target && target.scrollTop,
 			activeTabEl = this.tabsEl.down('.active'),
-			key,
+			select = false,
+			last,
 			selectTab;
 
 		if (!this.scrollTops) {
 			this.scrollTops = {};
 		}
 
-		for (key in this.scrollTops) {
-			if (this.scrollTops.hasOwnProperty(key)) {
-				if (!selectTab) {
-					selectTab = key;
-				}
-				if (this.scrollTops[key] <= scrollTop) {
-					selectTab = key;
-				}
+		for (let element in this.scrollTops) {
+			let clientRect = this.scrollTops[element].getBoundingClientRect(),
+				bottom = clientRect && clientRect.bottom;
+
+			if(!selectTab || select) {
+				selectTab = element;
+				select = false;
 			}
+
+			if(bottom <= targetTop) {
+				select = true;
+			}
+
+			last = element;
+		}
+
+		if(target.clientHeight + target.scrollTop === target.scrollHeight) {
+			selectTab = last;
 		}
 
 		if (selectTab) {
@@ -235,14 +247,19 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		var target = Ext.get(e.getTarget()),
 			isTab = target && target.hasCls('tab'),
 			category = target && target.getAttribute('data-category'),
-			activeTab = this.tabsEl.down('.active'), me = this;
+			activeTab = this.tabsEl.down('.active'), me = this,
+			container = this.getTargetEl(),
+			containerTop = container && container.dom.getBoundingClientRect().top;
 
 		if (!isTab || target.hasCls('active')) {
 			return;
 		}
 
-		if (this.scrollTops[category] >= 0) {
-			this.getTargetEl().scrollTo('top', this.scrollTops[category], true);
+		if (this.scrollTops[category]) {
+			let tabTop = this.scrollTops[category].getBoundingClientRect().top,
+				scrollValue = (tabTop - containerTop) + container.dom.scrollTop;
+
+			this.getTargetEl().scrollTo('top', scrollValue, true);
 		}
 
 		wait()
