@@ -1,8 +1,8 @@
 var Ext = require('extjs');
 var Globals = require('../../../../../../../util/Globals');
 var {getURL} = Globals;
-var ContentEditor = require('../Editor');
-var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
+require('../Editor');
+require('legacy/model/DiscussionRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor', {
@@ -59,6 +59,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return {
 			MimeType: NextThought.model.DiscussionRef.mimeType
 		};
+	},
+
+	afterRender: function () {
+		this.callParent(arguments);
+
+		let form = this.getForm(),
+			url = this.getThumbnailURL();
+		if (Ext.isEmpty(url) && form && form.setPlaceholder) {
+			form.setPlaceholder('icon', NextThought.model.DiscussionRef.defaultIcon);
+		}
 	},
 
 	isDiscussionRef: function (record) {

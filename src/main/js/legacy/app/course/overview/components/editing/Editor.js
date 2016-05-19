@@ -264,6 +264,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getDefaultValues: function () {},
 
 
+	getForm: function () {
+		return this.formCmp;
+	},
+
+
 	getFormAction: function () {
 		if (this.record) {
 			return this.record.getLink('edit');

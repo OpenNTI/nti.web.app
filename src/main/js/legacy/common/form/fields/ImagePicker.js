@@ -126,6 +126,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	setPlaceholder: function (value) {
 		this.placeholder = value;
 
+		if (typeof value === 'string') {
+			value = {'url': value};
+		}
+
 		if (!this.hasFile() && !this.defaultValue) {
 			this.previewEl.setHTML('');
 			this.iconTpl.append(this.previewEl, value || {});
