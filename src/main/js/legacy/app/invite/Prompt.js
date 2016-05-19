@@ -46,7 +46,6 @@ module.exports = exports = Ext.define('NextThought.app.invite.Prompt', {
 	},
 
 	onSaveFailure () {
-
 	}
 }, function () {
 	NextThought.app.prompt.StateStore.register('invite', this);

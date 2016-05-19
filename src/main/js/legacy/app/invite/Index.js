@@ -138,7 +138,8 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			.then( results => {
 				const courseInvitations = ParseUtils.parseItems(results)[0];
 				const emails = courseInvitations && courseInvitations.get('Items').map(item => item.email);
-				let warnings = courseInvitations.get('Warnings') || '',
+				let warnings = courseInvitations.get('Warnings'),
+					invalidEmails = courseInvitations.get('InvalidEmails') && courseInvitations.get('InvalidEmails').Items,
 					dom = me.el.dom,
 					tagInput = dom && dom.querySelector('.tag-input');
 
@@ -146,18 +147,9 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 				me.form.setValue('emails', emails);
 				if (tagInput) { tagInput.focus(); }
 
-				if(courseInvitations.get('InvalidEmails')) {
-					let invalidEmails = courseInvitations.get('InvalidEmails').Items;
-
-					if(invalidEmails[0].slice(0, -1).toLowerCase() === 'email') {
-						invalidEmails.shift();
-					}
-
-					me.form.showErrorOn('emails', `The following emails are invalid: ${invalidEmails.join(', ')}. ${warnings}`);
-				} else if (warnings !== '') {
-					me.form.showErrorOn('emails', warnings);
+				if(invalidEmails || warnings) {
+					me.showErrors(invalidEmails || [], warnings || '');
 				}
-
 			})
 			.catch( error => {
 				console.log(error);
@@ -230,6 +222,30 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		values.MimeType = changedValues.MimeType;
 		values.Items = changedValues.emails.map( email => ({ 'email': email }) );
 
-		return this.__submitJSON(values, this.inviteUrl, 'POST');
+		return this.__submitJSON(values, this.inviteUrl, 'POST')
+			.catch( error => {
+				const inviteErrors = JSON.parse(error.responseText);
+
+				let warnings = inviteErrors && inviteErrors.warnings,
+					invalidEmails = inviteErrors.InvalidEmails,
+					emails = invalidEmails && invalidEmails.Items;
+
+				if(emails || warnings) {
+					this.showErrors(emails || [], warnings || '');
+				}
+				return Promise.reject('Unable to save');
+			});
+	},
+
+	showErrors (invalidEmails, warnings = '') {
+		if(invalidEmails) {
+			if(invalidEmails[0].slice(0, -1).toLowerCase() === 'email') {
+				invalidEmails.shift();
+			}
+
+			this.form.showErrorOn('emails', `The following emails are invalid: ${invalidEmails.join(', ')}. ${warnings}`);
+		} else if (warnings !== '') {
+			this.form.showErrorOn('emails', warnings);
+		}
 	}
 });
