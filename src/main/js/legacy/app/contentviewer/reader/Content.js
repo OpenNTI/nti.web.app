@@ -364,7 +364,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 			target = hash[1],
 			whref = window.location.href.split('#')[0],
 			doc = this.reader.getDocumentElement(),
-			element = doc.getElementById(target) || doc.getElementsByName(target)[0] || null;
+			element = doc.getElementById(target) || doc.getElementsByName(target)[0] || null,
+			isExternalUri = ContentUtils.isExternalUri(r);
 
 		if (p && p === 'popup') {
 			Ext.widget('iframe-lightbox', { src: m.basePath.concatPath(el.getAttribute('data-source-wrapped')) }).show();
@@ -380,13 +381,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 			return false;
 		}
 
-		if (/^slide/i.test(target)) {
+		if (/^slide/i.test(target) && !isExternalUri) {
 			this.pauseAllVideos();
 			SlideDeck.openFromDom(el, this.reader);
 			return false;
 		}
 
-		if (/^zoom$/i.test(target)) {
+		if (/^zoom$/i.test(target) && !isExternalUri) {
 			Ext.defer(function () {
 				m.reader.getIframe().get().win.blur();
 				window.focus();
@@ -395,7 +396,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 			return false;
 		}
 
-		if (/^mark$/i.test(target)) {
+		if (/^mark$/i.test(target) && !isExternalUri) {
 			m.fireEvent('markupenabled-action', el, target);
 			return false;
 		}
@@ -411,7 +412,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		}
 		else {
 			// if we have hash/fragment and it's an internal link, scroll to the fragment.
-			if (target && !ContentUtils.isExternalUri(r)) {
+			if (target && !isExternalUri) {
 				this.reader.goToFragment(target);
 			}
 		}
