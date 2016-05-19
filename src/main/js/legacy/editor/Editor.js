@@ -226,7 +226,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		{ cls: 'space', html: '{placeholder}'},
 		{ cls: 'attachment-part', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 			{ cls: 'icon-wrapper', cn: [
-				{ cls: 'icon {extension} {iconCls}', style: 'background-image: url(\'{url}\');', cn: [
+				{ cls: 'icon {extension} {iconCls}', style: 'background-image: url(\'{url}\');', contentEditable: false, unselectable: 'on', cn: [
 					{tag: 'label', html: '{extension}', contentEditable: false, unselectable: 'on'}
 				]}
 			]},
