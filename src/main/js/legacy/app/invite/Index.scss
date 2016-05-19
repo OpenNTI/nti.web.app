@@ -13,13 +13,17 @@
 
 	.msg-container {
 		color: white;
-		margin: 5px -10px -10px -15px;
+
 		.msg {
 			line-height: normal;
     		padding: 8px 0px 8px 15px;
+			font: 100 14px 'Open Sans';
 			&.error {
 				background-color: #F35252;
 			}
+		}
+		&.hidden {
+			display: none;
 		}
 	}
 
@@ -59,28 +63,34 @@
 		}
 	}
 
+	.field.emails {
+		overflow: hidden;
+	    background-color: #fbfbfb;
+	}
+
 	.email-token-field.x-component-tokens {
-		padding: 10px;
-		padding-left: 15px;
-		background-color: #fbfbfb;
+    	margin: 7px 10px 6px 15px;
 		max-height: 50px;
 
 		&.focused {
 			max-height: 182px;
-			min-height: 50px;
+			min-height: 30px;
 			overflow-y: auto;
+			display: flex;
+			flex-wrap: wrap;
 
 			.token {
-				background: white;
-				font-family: 'Open Sans';
-				color: #757474;
-				font-size: 14px;
-				border: 1px solid #E2E2E2;
-				border-radius: 4px;
-
-				padding: 3px 5px 7px 10px;
-				text-transform: none;
-				margin-right: 3px;
+			    background: white;
+			    font-family: 'Open Sans';
+			    color: #757474;
+			    font-size: 14px;
+			    border: 1px solid #E2E2E2;
+			    border-radius: 4px;
+			    padding: 3px 5px 7px 10px;
+			    text-transform: none;
+			    margin-right: 3px;
+			    flex: 0 0 auto;
+			    max-width: 100%;
 
 				&:hover {
 					position: relative;
@@ -118,12 +128,18 @@
 				}
 			}
 
+			.token-input-wrap {
+				margin: 3px 0px 3px 0px;
+			}
 			.email-count {
 				display: none;
 			}
 		}
 
 		&:not(.focused) {
+			height: 30px;
+			margin: 9px 10px 11px 15px;
+
 			.token {
 				border: none;
 				background: none;
@@ -168,11 +184,17 @@
 		}
 
 		.token-input-wrap {
-			width: 30%;
+			word-break: break-all;
+			flex: 1 1 auto;
+
 			input[type="text"] {
 				background-color: #fbfbfb;
 				text-transform: none;
 				font: normal 300 14px "Open Sans", sans-serif !important;
+			}
+
+			&.initial {
+			    min-width: 134px;
 			}
 		}
 	}

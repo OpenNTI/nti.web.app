@@ -9,8 +9,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 	placeholder: 'Add a recipient',
 
 	renderSelectors: {
-		msgEl: '.msg-container',
-		emailCountEl: '.email-count'
+		emailCountEl: '.email-count',
+		inputWrapEl: '.token-input-wrap'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -18,12 +18,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 			{tag: 'input', type: 'text', cls:'tag-input', tabIndex: '{tabIndex}', placeholder: '{placeholder}'},
 			{tag: 'span', cls: 'token-input-sizer', html: '{placeholder}##'}
 		]},
-		{tag: 'span', cls: 'email-count', html: ''},
-		{cls: 'msg-container'}
+		{tag: 'span', cls: 'email-count', html: ''}
 	]),
 
-	msgTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'msg {cls}', html: '{msg}'
+	msgTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'msg-container', cn: [
+		{cls: 'msg {cls}', html: '{msg}'}
+	]
 	})),
 
 	initComponent () {
@@ -33,13 +33,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 		this.renderData = Ext.apply(this.renderData || {},{
 			placeholder: (this.schema && this.schema.placeholder) || this.placeholder
 		});
-
-		// this.msgEl.hide();
-		// this.emailCountEl.hide();
 	},
 
 	afterRender () {
-		this.callParent();
+		this.callParent(arguments);
+		this.inputWrapEl.addCls('initial');
 	},
 
 	addTag (val, type, extraData) {
@@ -62,6 +60,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 			this.updateNumberTags(1);
 			if(this.numOfTags === 1) {
 				this.setPlaceholderText('Add more...');
+				this.inputWrapEl.removeCls('inital');
 			}
 		}
 
@@ -90,10 +89,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 
 	showError (name, reason) {
 		let config = {
-			msg: reason,
-			cls: 'error'
-		};
+				msg: reason,
+				cls: 'error'
+			}, dom = this.container && this.container.dom,
+			oldError = dom.querySelector('.msg-container');
 
-		this.msgTpl.overwrite(this.msgEl, config);
+		if(oldError) { oldError.remove(); }
+		this.msgTpl.insertAfter(this.el, config);
 	}
 });

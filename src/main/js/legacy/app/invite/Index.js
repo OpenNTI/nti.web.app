@@ -88,9 +88,10 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 	maybeShowBulk () {
 		let dom = this.el.dom,
+			tagInput = dom && dom.querySelector('.tag-input'),
 			token = dom && dom.querySelector('.token');
 
-		if(token) {
+		if(token || (tagInput.value !== '' && !token)) {
 			this.button.hide();
 		} else {
 			this.button.show();
