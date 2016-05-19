@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	cls: 'item empty empty-activity-stream',
 	
 	title: 'You don\'t have any activity yet...',
-	subtitle:  'Your discussions, bookmarks, and other activity will be collected here',
+	subtitle:  'Group discussions and other activity will be collected here',
 	
 	filterTitle: 'No Results',
 	filterSubtitle: 'Try expanding your filters to view more items.',
