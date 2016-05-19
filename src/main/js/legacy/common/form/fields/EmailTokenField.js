@@ -94,6 +94,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 			cls: 'error'
 		};
 
-		// this.msgTpl.append(this.msgEl, config);
+		this.msgTpl.overwrite(this.msgEl, config);
 	}
 });

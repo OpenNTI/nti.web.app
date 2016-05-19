@@ -144,7 +144,6 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 				me.button.hide();
 				me.form.setValue('emails', emails);
 				if (tagInput) { tagInput.focus(); }
-				me.form.removeErrorOn('emails');
 
 				if(courseInvitations.get('InvalidEmails')) {
 					let invalidEmails = courseInvitations.get('InvalidEmails').Items;
