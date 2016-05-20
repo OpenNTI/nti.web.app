@@ -325,6 +325,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		this.mon(Ext.getBody(), 'click', 'hidePopovers');
+		this.mon(Ext.getBody(), 'mscontrolselect', evt => evt.preventDefault());
 
 		this.maybeEnableSave();
 
