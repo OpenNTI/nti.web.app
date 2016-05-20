@@ -413,7 +413,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 
 	updateContent: function () {
 		var h = this.record.get('headline');
-		h.compileBodyContent(this.setContent, this, this.onBodyClick, {'application/vnd.nextthought.embeddedvideo': 640});
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, {'application/vnd.nextthought.embeddedvideo': 640});
 	},
 
 	closeView: function () {
