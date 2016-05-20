@@ -1,7 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../../util/Parsing');
-var PartsMembership = require('./Membership');
-const { encodeForURI } = require('nti-lib-ntiids');
+const Ext = require('extjs');
+const {encodeForURI, isNTIID} = require('nti-lib-ntiids');
+require('./Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.Groups', {
@@ -12,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	title: 'Groups',
 
 	limit: 4,
-	
+
 	profileRouteRoot: '/group',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -23,33 +22,32 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	})),
 
 
-	setUser: function (user, isMe) {
-		var me = this;
-
-		me.removeAll();
+	setUser (user, isMe) {
+		this.removeAll();
 
 		user.getGroupMembership()
-			.then(function (groups) {
+			.then(groups => {
 				if (groups.length) {
-					if(groups.length <= me.limit) {
-						me.seeAllEl.hide();
+					if(groups.length <= this.limit) {
+						this.seeAllEl.hide();
 					}
-					groups.slice(0, me.limit)
-						.map(function (group) {
-							return {
+					groups.slice(0, this.limit)
+						.map(group => {
+							const id = group.getId();
+							this.addEntry({
 								group: group,
 								name: group.getName(),
-								route: encodeForURI(group.getId())
-							};
-						})
-						.forEach(me.addEntry.bind(me));
+								route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
+							});
+						});
+
 				//if there are no groups hide this cmp
 				} else {
-					me.hide();
+					this.hide();
 				}
 			});
 	},
 
 
-	getValues: function () {}
+	getValues () {}
 });

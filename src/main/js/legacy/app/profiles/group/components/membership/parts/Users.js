@@ -1,8 +1,7 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../cache/UserRepository');
-var ParseUtils = require('../../../../../../util/Parsing');
-var PartsMembership = require('../../../../user/components/membership/parts/Membership');
-const { encodeForURI } = require('nti-lib-ntiids');
+const Ext = require('extjs');
+const UserRepository = require('legacy/cache/UserRepository');
+require('legacy/app/profiles/user/components/membership/parts/Membership');
+const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
@@ -20,33 +19,29 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	})),
 
 
-	setUser: function (user, isMe) {
-		var me = this,
-				friends = user.get('friends');
+	setUser (user, isMe) {
+		var friends = user.get('friends');
 		return this.setFriends(friends);
 	},
-			
-	setFriends: function (friends) {
-		var me = this;
-		me.removeAll();
+
+	setFriends (friends) {
+		this.removeAll();
 		return UserRepository.getUser(friends)
-			.then(function (members) {
+			.then(members => {
 				if (members.length) {
-					members.map(function (member) {
-						return me.configForUser(member);		
-					})
-					.forEach(me.addEntry.bind(me));
-				 } else {
-					me.showEmptyText('This group has no members');
-				 }
-		});
+					members.map(member => this.addEntry(this.configForUser(member)));
+				} else {
+					this.showEmptyText('This group has no members');
+				}
+			});
 	},
 
-	configForUser: function (member) {
+	configForUser (member) {
+		const id = member.getId();
 		return {
 			member: member,
 			name: member.getName(),
-			route: encodeForURI(member.getId())
+			route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
 		};
 	}
 });

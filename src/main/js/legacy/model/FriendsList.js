@@ -8,7 +8,7 @@ var MixinsAvatar = require('../mixins/Avatar');
 var UtilObject = require('../util/Object');
 var ForumsDFLBoard = require('./forums/DFLBoard');
 var ForumsDFLForum = require('./forums/DFLForum');
-const { encodeForURI } = require('nti-lib-ntiids');
+const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.model.FriendsList', {
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		var id = this.get('Username');
 
 		if (id && this.getLink('Activity')) {
-			return '/group/' + encodeForURI(id);
+			return '/group/' + isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id);
 		}
 
 		return null;

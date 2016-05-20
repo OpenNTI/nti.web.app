@@ -1,7 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../../util/Parsing');
-var PartsMembership = require('./Membership');
-const { encodeForURI } = require('nti-lib-ntiids');
+const Ext = require('extjs');
+const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+require('./Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.Communities', {
@@ -10,9 +9,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	cls: 'memberships preview communities',
 	title: 'Communities',
-	
+
 	profileRouteRoot: '/community',
-	
+
 	limit: 4,
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -23,33 +22,32 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	})),
 
 
-	setUser: function (user, isMe) {
-		var me = this;
-
-		me.removeAll();
+	setUser (user, isMe) {
+		this.removeAll();
 
 		user.getCommunityMembership()
-			.then(function (communities) {
-				if (communities.length <= me.limit) {
-					me.seeAllEl.hide();
+			.then(communities => {
+				if (communities.length <= this.limit) {
+					this.seeAllEl.hide();
 				}
 				if (communities.length) {
-					communities.slice(0, me.limit)
-						.map(function (community) {
-							return {
+					communities.slice(0, this.limit)
+						.map(community => {
+							const id = community.getId();
+							this.addEntry({
 								community: community,
 								name: community.getName(),
-								route: encodeForURI(community.getId())
-							};
-						})
-						.forEach(me.addEntry.bind(me));
+								route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
+							});
+						});
+
 				//if there are no communities hide this cmp
 				} else {
-					me.hide();
+					this.hide();
 				}
 			});
 	},
 
 
-	getValues: function () {}
+	getValues () {}
 });

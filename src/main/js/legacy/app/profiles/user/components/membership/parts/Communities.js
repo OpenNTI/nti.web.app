@@ -1,7 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../../util/Parsing');
-var PartsMembership = require('./Membership');
-const { encodeForURI } = require('nti-lib-ntiids');
+const Ext = require('extjs');
+const {encodeForURI, isNTIID} = require('nti-lib-ntiids');
+require('./Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.parts.Communities', {
@@ -20,27 +19,26 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	})),
 
 
-	setUser: function (user, isMe) {
-		var me = this;
-
-		me.removeAll();
+	setUser (user, isMe) {
+		this.removeAll();
 
 		user.getCommunityMembership()
-			.then(function (communities) {
+			.then(communities => {
 				if (communities.length) {
-					communities.map(function (community) {
+					communities.map(community => {
+						const id = community.getId();
 						return {
 							community: community,
 							name: community.getName(),
-							route: encodeForURI(community.getId())
+							route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
 						};
 					})
-					.forEach(me.addEntry.bind(me));
+					.forEach(c => this.addEntry(c));
 				} else if (isMe) {
 					//TODO: change this text
-					me.showEmptyText('You have no public communities');
+					this.showEmptyText('You have no public communities');
 				} else {
-					me.showEmptyText('This user has no public communities');
+					this.showEmptyText('This user has no public communities');
 				}
 			});
 	}

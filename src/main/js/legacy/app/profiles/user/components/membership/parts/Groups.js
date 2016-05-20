@@ -1,7 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../../util/Parsing');
-var PartsMembership = require('./Membership');
-const { encodeForURI } = require('nti-lib-ntiids');
+const Ext = require('extjs');
+const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+require('./Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.parts.Groups', {
@@ -20,27 +19,26 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	})),
 
 
-	setUser: function (user, isMe) {
-		var me = this;
-
-		me.removeAll();
+	setUser (user, isMe) {
+		this.removeAll();
 
 		user.getGroupMembership()
-			.then(function (groups) {
+			.then(groups => {
 				if (groups.length) {
-					groups.map(function (group) {
+					groups.map(group => {
+						const id = group.getId();
 						return {
 							group: group,
 							name: group.getName(),
-							route: encodeForURI(group.getId())
+							route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
 						};
 					})
-					.forEach(me.addEntry.bind(me));
+					.forEach(c => this.addEntry(c));
 				} else if (isMe) {
 					//TODO: change this text
-					me.showEmptyText('You have no public groups.');
+					this.showEmptyText('You have no public groups.');
 				} else {
-					me.showEmptyText('This user has no public groups.');
+					this.showEmptyText('This user has no public groups.');
 				}
 			});
 	}

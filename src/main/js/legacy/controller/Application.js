@@ -15,7 +15,7 @@ var NotificationActions = require('../app/notifications/Actions');
 var StateActions = require('../common/state/Actions');
 var NavigationActions = require('../app/navigation/Actions');
 var Globals = require('../util/Globals');
-const { encodeForURI } = require('nti-lib-ntiids');
+const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 
 var Index = require('../app/Index');
 
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		if (id) {
 			id = id.split('#');
 			hash = id[1];
-			id[0] = encodeForURI(id[0]);
+			id[0] = isNTIID(id[0]) ? encodeForURI(id[0]) : encodeURIComponent(id[0]);
 			path += id[0];
 		}
 

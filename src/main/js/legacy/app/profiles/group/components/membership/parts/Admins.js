@@ -1,8 +1,7 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../cache/UserRepository');
-var ParseUtils = require('../../../../../../util/Parsing');
-var PartsUsers = require('./Users');
-const { encodeForURI } = require('nti-lib-ntiids');
+const Ext = require('extjs');
+const UserRepository = require('legacy/cache/UserRepository');
+require('./Users');
+const {encodeForURI, isNTIID} = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.parts.Admins', {
 	extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
@@ -12,23 +11,22 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	title: 'Administrators',
 
 
-	setUser: function (user, isMe) {
-		var me = this;
-		me.removeAll();
+	setUser (user, isMe) {
+		this.removeAll();
 		return UserRepository.getUser(user.get('Creator'))
-			.then(function (creator) {
-			var creatoryConfig;
-			if (creator) {
-				creatorConfig = {
-					member: creator,
-					name: creator.getName(),
-					route: encodeForURI(creator.getId())
-				};
-				me.addEntry(creatorConfig);
-			 } else {
-				me.showEmptyText('This group has no administrators.');
-			 }
-		});
+			.then(creator => {
+
+				if (creator) {
+					let id = creator.getId();
+					this.addEntry({
+						member: creator,
+						name: creator.getName(),
+						route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
+					});
+				} else {
+					this.showEmptyText('This group has no administrators.');
+				}
+
+			});
 	}
 });
-	
