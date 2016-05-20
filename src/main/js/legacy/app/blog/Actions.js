@@ -74,9 +74,25 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 			.then(function (blogEntry) {
 				return me.handleShareAndPublishState(blogEntry, sharingInfo);
 			})
-			.catch(function (reason) {
-				console.error('Failed to save blog: ', reason);
-				return Promise.reject(reason);
+			.catch(function (err) {
+				console.error('Failed to save blog: ', err);
+				if (err && err.responseText) {
+					err = JSON.parse(err.responseText);
+				}
+
+				if (err.code === 'MaxFileSizeUploadLimitError') {
+					let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+				}
+				if (err.code === 'MaxAttachmentsExceeded') {
+					err.message += ' Max Number of files: ' + err.constraint;
+				}
+
+				let msg = err && err.message || 'Failed to save blog';
+				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+
+				return Promise.reject(err);
 			});
 	},
 
@@ -164,8 +180,25 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 					return rec;
 				})
-				.catch(function () {
-					console.error('Failed to create blog comment: ', arguments);
+				.catch(function (err) {
+					console.error('Failed to create blog comment: ', err);
+					if (err && err.responseText) {
+						err = JSON.parse(err.responseText);
+					}
+
+					if (err.code === 'MaxFileSizeUploadLimitError') {
+						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+					}
+					if (err.code === 'MaxAttachmentsExceeded') {
+						err.message += ' Max Number of files: ' + err.constraint;
+					}
+
+					let msg = err && err.message || 'Failed to save blog';
+					alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+
+					return Promise.reject(err);
 				});
 	},
 

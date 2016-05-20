@@ -3,11 +3,11 @@ var Globals = require('../../../util/Globals');
 var {isMe} = Globals;
 var ParseUtils = require('../../../util/Parsing');
 var SharingUtils = require('../../../util/Sharing');
-var OldTopic = require('./old/Topic');
-var MixinsSearchable = require('../../../mixins/Searchable');
-var PartsComment = require('./Comment');
-var StoreBlog = require('../../../store/Blog');
-var BlogActions = require('../Actions');
+require('./old/Topic');
+require('../../../mixins/Searchable');
+require('./Comment');
+require('../../../store/Blog');
+require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
