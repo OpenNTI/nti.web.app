@@ -74,9 +74,10 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 			}
 			else {
 				let extension = Mime.extension(mimeType);
-				extension = extension && !/^(www|bin)$/i.test(extension) ? extension : null;
+				extension = extension && !/^(www|bin|application\/octet-stream)$/i.test(extension) ? extension : '';
 
-				if (!extension) {
+				// Only if we got  a false from the extension function, should we try to use the last part of the extension.
+				if (extension === false) {
 					extension = (mimeType || '').split('/').last();
 				}
 				data.url = this.getFallbackIcon();
