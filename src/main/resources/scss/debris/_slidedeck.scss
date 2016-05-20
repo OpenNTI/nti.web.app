@@ -1781,6 +1781,10 @@ body.media-viewer-open{
 		z-index: 300;
 	}
 
+	#prompt {
+		z-index: 301;
+	}
+
 	.media-toolbar .x-component.identity{
 		display: block;
 		top: 2px !important;
