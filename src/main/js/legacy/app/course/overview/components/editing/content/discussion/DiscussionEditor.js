@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						name: 'icon',
 						type: 'image',
 						height: 115,
-						width: 210,
+						width: 230,
 						placeholder: NextThought.model.DiscussionRef.defaultIcon
 					},
 					{
