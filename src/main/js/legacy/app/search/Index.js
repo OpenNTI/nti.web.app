@@ -7,7 +7,7 @@ var NavigationActions = require('../navigation/Actions');
 var SearchStateStore = require('./StateStore');
 var ComponentsAdvancedOptions = require('./components/AdvancedOptions');
 var ComponentsResults = require('./components/Results');
-
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	extend: 'Ext.container.Container',
@@ -87,11 +87,11 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		}
 
 		if (page) {
-			query.p = ParseUtils.encodeForURI(page);
+			query.p = encodeForURI(page);
 		}
 
 		if (bundle) {
-			query.s = ParseUtils.encodeForURI(bundle);
+			query.s = encodeForURI(bundle);
 		}
 
 		query = Ext.Object.toQueryString(query);
@@ -115,8 +115,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.setTitle('Search');
 
 		term = term && decodeURIComponent(term);
-		bundle = bundle && ParseUtils.decodeFromURI(bundle);
-		page = page && ParseUtils.decodeFromURI(page);
+		bundle = bundle && decodeFromURI(bundle);
+		page = page && decodeFromURI(page);
 		filter = filter && decodeURIComponent(filter);
 
 		if (term) {

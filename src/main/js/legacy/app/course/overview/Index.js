@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const Globals = require('../../../util/Globals');
 const ParseUtils = require('../../../util/Parsing');
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 require('../../../mixins/Router');
 require('../../../mixins/FillScreen');
@@ -141,9 +142,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 
 
-		lessonId = ParseUtils.decodeFromURI(lessonId);
-		rootId = ParseUtils.decodeFromURI(rootId);
-		pageId = pageId && ParseUtils.decodeFromURI(pageId);
+		lessonId = decodeFromURI(lessonId);
+		rootId = decodeFromURI(rootId);
+		pageId = pageId && decodeFromURI(pageId);
 
 		//If we have a reader and its root is the same as the root we are trying to set
 		//and either if:
@@ -158,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 					}
 
 					if (route.object.id) {
-						return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
+						return Service.getObject(decodeFromURI(route.object.id))
 									.then(me.reader.showNote.bind(me.reader));
 					}
 
@@ -175,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		return me.store.onceBuilt()
 			.then(function () {
 				if (route.object.id) {
-					return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
+					return Service.getObject(decodeFromURI(route.object.id))
 						.catch(function (reason) {
 							console.log('Failed to resolve note: ', reason);
 						});
@@ -198,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				//		id = item.getId();
 
 				//		c.push({
-				//			route: ParseUtils.encodeForURI(id),
+				//			route: encodeForURI(id),
 				//			precache: {
 				//				lesson: item
 				//			},
@@ -216,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				route.precache.parent = {
 					label: lesson.get('label'),
 					title: lesson.get('label'),
-					route: ParseUtils.encodeForURI(lesson.getId()),
+					route: encodeForURI(lesson.getId()),
 					ntiid: lesson.getId(),
 					precache: {
 						lesson: lesson
@@ -271,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 	showMediaViewer: function (route, subRoute) {
 		var me = this,
-			lessonId = ParseUtils.decodeFromURI(route.params.lesson);
+			lessonId = decodeFromURI(route.params.lesson);
 
 		if (!me.activeMediaWindow) {
 			me.activeMediaWindow = me.add({
@@ -314,8 +315,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			return Promise.reject();
 		}
 
-		lessonId = ParseUtils.encodeForURI(lessonId);
-		pageInfo = ParseUtils.encodeForURI(pageInfo);
+		lessonId = encodeForURI(lessonId);
+		pageInfo = encodeForURI(pageInfo);
 
 		return {
 			route: lessonId + '/content/' + pageInfo,
@@ -336,8 +337,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			return Promise.reject();
 		}
 
-		lessonId = ParseUtils.encodeForURI(lessonId);
-		relatedWork = ParseUtils.encodeForURI(relatedWork);
+		lessonId = encodeForURI(lessonId);
+		relatedWork = encodeForURI(relatedWork);
 
 		return {
 			route: lessonId + '/content/' + relatedWork,
@@ -354,8 +355,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			lessonId = lesson && lesson.getId(),
 			videoId = obj.get && obj.getId();
 
-		lessonId = ParseUtils.encodeForURI(lessonId);
-		videoId = ParseUtils.encodeForURI(videoId);
+		lessonId = encodeForURI(lessonId);
+		videoId = encodeForURI(videoId);
 
 		return {
 			route: lessonId + '/video/' + videoId,
@@ -373,8 +374,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			lessonId = lesson && lesson.getId(),
 			sid = obj.get && obj.getId();
 
-		lessonId = ParseUtils.encodeForURI(lessonId);
-		sid = ParseUtils.encodeForURI(sid);
+		lessonId = encodeForURI(lessonId);
+		sid = encodeForURI(sid);
 
 		return {
 			route: lessonId + '/slidedeck/' + sid,
@@ -401,7 +402,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			route,
 			lessonId = lesson && lesson.getId();
 
-		lessonId = ParseUtils.encodeForURI(lessonId);
+		lessonId = encodeForURI(lessonId);
 
 		if (root instanceof NextThought.model.QuestionSetRef) {
 			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
@@ -442,8 +443,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			relatedWorkId = relatedWork && relatedWork.getId();
 		}
 
-		pageId = pageId && ParseUtils.encodeForURI(pageId);
-		relatedWorkId = relatedWorkId && ParseUtils.encodeForURI(relatedWorkId);
+		pageId = pageId && encodeForURI(pageId);
+		relatedWorkId = relatedWorkId && encodeForURI(relatedWorkId);
 
 		if (relatedWorkId) {
 			urlPath = relatedWorkId;
@@ -463,7 +464,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		var page = path[0],
 			pageId = page && page.getId();
 
-		pageId = pageId && ParseUtils.encodeForURI(pageId);
+		pageId = pageId && encodeForURI(pageId);
 
 		return {
 			path: pageId,
@@ -474,7 +475,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	getRouteForSurveyPath: function (survey/*, path, lesson*/) {
 		var surveyId = survey.get('Target-NTIID');
 
-		surveyId = surveyId && ParseUtils.encodeForURI(surveyId);
+		surveyId = surveyId && encodeForURI(surveyId);
 
 		return {
 			path: surveyId,
@@ -485,7 +486,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	getRouteForPageInfoPath: function (pageInfo/*, path*/) {
 		var pageId = pageInfo && pageInfo.getId();
 
-		pageId = pageId && ParseUtils.encodeForURI(pageId);
+		pageId = pageId && encodeForURI(pageId);
 
 		return {
 			path: pageId || '',
@@ -496,7 +497,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	getRouteForVideoPath: function (video/*, path*/) {
 		var videoId = video && video.getId();
 
-		videoId = video && ParseUtils.encodeForURI(videoId);
+		videoId = video && encodeForURI(videoId);
 
 		return {
 			path: 'video/' + videoId,
@@ -507,7 +508,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	getRouteForSlidedeckPath: function (slidedeck/*, path*/) {
 		var slidedeckId = slidedeck && slidedeck.getId();
 
-		slidedeckId = ParseUtils.encodeForURI(slidedeckId);
+		slidedeckId = encodeForURI(slidedeckId);
 
 		return {
 			path: 'slidedeck/' + slidedeckId,

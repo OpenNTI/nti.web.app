@@ -12,6 +12,7 @@ var ComponentsProcess = require('../../../../course/enrollment/components/Proces
 var StoreActions = require('../../../../store/Actions');
 var {isFeature} = require('legacy/util/Globals');
 var CoursePage = require('./CoursePage');
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CourseWindow', {
@@ -321,7 +322,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			course = current.course;
 			if (course) {
 				delete this.courseEnrollment;
-				this.pushRoute(course.get('Title'), ParseUtils.encodeForURI(course.getId()), {course: course});
+				this.pushRoute(course.get('Title'), encodeForURI(course.getId()), {course: course});
 			}
 		}
 	},
@@ -442,7 +443,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			});
 
 			me.mon(me.tabpanel, 'show-course-detail', function (course) {
-				me.pushRoute(course.get('Title'), ParseUtils.encodeForURI(course.getId()), {course: course});
+				me.pushRoute(course.get('Title'), encodeForURI(course.getId()), {course: course});
 			});
 
 		}
@@ -477,7 +478,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	showCourseDetail: function (route, subRoute, notFoundMsg) {
-		var ntiid = ParseUtils.decodeFromURI(route.params.id),
+		var ntiid = decodeFromURI(route.params.id),
 			course = route.precache.course,
 			q = route.queryParams,
 			me = this, isEnrollmentConfirmation = false;

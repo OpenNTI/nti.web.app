@@ -5,7 +5,7 @@ var ComponentCustomTemplate = require('../../../../../../layout/component/Custom
 var UxFilterMenu = require('../../../../../../common/ux/FilterMenu');
 var AdminListHeader = require('../ListHeader');
 var AdminPagedGrid = require('../PagedGrid');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assignment', {
 	extend: 'Ext.container.Container',
@@ -730,7 +730,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var prev = this.pageSource.getPrevious(),
 			title = this.pageSource.getNextTitle();
 
-		prev = ParseUtils.encodeForURI(prev);
+		prev = encodeForURI(prev);
 
 		this.pushRoute(title, prev + '/students');
 	},
@@ -744,7 +744,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var next = this.pageSource.getNext(),
 			title = this.pageSource.getNextTitle();
 
-		next = ParseUtils.encodeForURI(next);
+		next = encodeForURI(next);
 
 		this.pushRoute(title, next + '/students');
 	},
@@ -776,7 +776,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var title = this.assignment.get('title'),
 			id = this.assignment.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		this.pushRoute(title, id, {assignment: this.assignment});
 	}

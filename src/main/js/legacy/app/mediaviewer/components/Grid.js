@@ -1,7 +1,7 @@
 var Ext = require('extjs');
 var ContentUtils = require('../../../util/Content');
 var ParseUtils = require('../../../util/Parsing');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	extend: 'Ext.view.View',
@@ -349,11 +349,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 			me = this, isVideo = true;
 
 		if (!Ext.isEmpty(slidedeckId)) {
-			route = section && ParseUtils.encodeForURI(section) + '/slidedeck/' + ParseUtils.encodeForURI(slidedeckId);
+			route = section && encodeForURI(section) + '/slidedeck/' + encodeForURI(slidedeckId);
 			isVideo = false;
 		}
 		else {
-			route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(rec.getId());
+			route = section && encodeForURI(section) + '/video/' + encodeForURI(rec.getId());
 		}
 
 		if (this.ownerCt && this.ownerCt.handleNavigation && !Ext.isEmpty(route)) {

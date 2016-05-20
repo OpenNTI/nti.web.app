@@ -16,6 +16,7 @@ var ContentIndex = require('../content/content/Index');
 var TimelineWindow = require('../content/timeline/Window');
 var ContentviewerIndex = require('../contentviewer/Index');
 var ContentviewerActions = require('../contentviewer/Actions');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.Index', {
@@ -393,7 +394,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	getPageInfoRoute: function (obj) {
 		var id = obj.getId ? obj.getId() : obj.NTIID;
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		return {
 			route: '/content/' + id,
@@ -407,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	getRelatedWorkRoute: function (obj) {
 		var id = obj.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		return {
 			route: '/content/' + id,
@@ -423,7 +424,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		var id = obj.getId ? obj.getId() : obj.NTIID,
 			route;
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		route = '/assignments/' + id;
 
@@ -440,7 +441,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		var id = obj.getId ? obj.getId() : obj.NTIID,
 			route;
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		route = '/lessons/' + id;
 

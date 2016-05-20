@@ -1,8 +1,8 @@
 var Ext = require('extjs');
 var ParseUtils = require('../../util/Parsing');
 var CommonActions = require('../../common/Actions');
-var UtilParsing = require('../../util/Parsing');
 var CourseStateStore = require('./StateStore');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.Actions', {
@@ -29,6 +29,6 @@ module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 	},
 
 	getRootRouteForId: function (id) {
-		return '/course/' + ParseUtils.encodeForURI(id);
+		return '/course/' + encodeForURI(id);
 	}
 });

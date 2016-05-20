@@ -2,7 +2,7 @@ var Ext = require('extjs');
 var Globals = require('../../util/Globals');
 var ParseUtils = require('../../util/Parsing');
 var CommonStateStore = require('../../common/StateStore');
-
+const { decodeFromURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 	extend: 'NextThought.common.StateStore',
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 
 	__parseTwoObjectParts: function (parts) {
 		return {
-			id: ParseUtils.decodeFromURI(parts.last()),
+			id: decodeFromURI(parts.last()),
 			rawId: parts.last()
 		};
 	},
@@ -115,11 +115,11 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 			parts = {};
 
 		if (ParseUtils.isEncodedNTIID(first)) {
-			parts.id = ParseUtils.decodeFromURI(first);
+			parts.id = decodeFromURI(first);
 			parts.rawId = first;
 			parts.state = decodeURIComponent(last);
 		} else if (ParseUtils.isEncodedNTIID(last)) {
-			parts.id = ParseUtils.decodeFromURI(last);
+			parts.id = decodeFromURI(last);
 			parts.rawId = last;
 			parts.mimeType = decodeURIComponent(first);
 		}

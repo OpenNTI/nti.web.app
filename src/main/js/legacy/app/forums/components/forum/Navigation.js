@@ -3,7 +3,7 @@ var ParseUtils = require('../../../../util/Parsing');
 var MenusReports = require('../../../../common/menus/Reports');
 var ModelUIViewHeader = require('../../../../model/UIViewHeader');
 var {isFeature} = require('legacy/util/Globals');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Navigation', {
 	extend: 'Ext.view.View',
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	selectForum: function (cmp, record) {
 		var id = record.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 
 		this.pushRoute(record.get('title'), id, {

@@ -2,7 +2,7 @@ var Ext = require('extjs');
 var UserRepository = require('../../../../../../cache/UserRepository');
 var ParseUtils = require('../../../../../../util/Parsing');
 var PartsMembership = require('../../../../user/components/membership/parts/Membership');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
@@ -41,12 +41,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 				 }
 		});
 	},
-	
+
 	configForUser: function (member) {
 		return {
 			member: member,
 			name: member.getName(),
-			route: ParseUtils.encodeForURI(member.getId())
+			route: encodeForURI(member.getId())
 		};
 	}
 });

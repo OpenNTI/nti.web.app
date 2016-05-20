@@ -6,6 +6,7 @@ var ActivityIndex = require('./components/activity/Index');
 var MembershipIndex = require('./components/membership/Index');
 var SidebarIndex = require('./components/sidebar/Index');
 var ComponentsHeader = require('./components/Header');
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.Index', {
@@ -167,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			entity = me.activeCommunity,
 			id = route.params.id, forum = route.precache.forum || cmp.getActiveForum();
 
-		id = ParseUtils.decodeFromURI(id);
+		id = decodeFromURI(id);
 
 		if (forum && forum.getId() === id) {
 			cmp.setSourceURL(forum.getLink('contents'));
@@ -248,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 		var id = forum.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		this.pushRoute('', '/topic/' + id, {
 			forum: forum
@@ -345,7 +346,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			forumId = forum.getId(),
 			path = '/';
 
-		forumId = ParseUtils.encodeForURI(forumId);
+		forumId = encodeForURI(forumId);
 
 		if (!community.isDefaultForum(forum)) {
 			path = '/topic/' + forumId;

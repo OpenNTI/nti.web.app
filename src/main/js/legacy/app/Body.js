@@ -23,7 +23,7 @@ var WindowsStateStore = require('./windows/StateStore');
 var WindowsActions = require('./windows/Actions');
 var ContextStateStore = require('./context/StateStore');
 var ContactsIndex = require('./contacts/Index');
-
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.Body', {
 	extend: 'Ext.container.Container',
@@ -188,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 				return;
 			}
 
-			id = ParseUtils.encodeForURI(id);
+			id = encodeForURI(id);
 
 			if (mimeType) {
 				mimeType = encodeURIComponent(mimeType);
@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			ntiid = route.params.id,
 			course = route.precache.course;
 
-		ntiid = ParseUtils.decodeFromURI(ntiid);
+		ntiid = decodeFromURI(ntiid);
 
 		return courseView.setActiveCourse(ntiid, course)
 			.then(courseView.handleRoute.bind(courseView, subRoute, route.precache))
@@ -256,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			ntiid = route.params.id,
 			bundle = route.precache.bundle;
 
-		ntiid = ParseUtils.decodeFromURI(ntiid);
+		ntiid = decodeFromURI(ntiid);
 
 		return bundleView.setActiveBundle(ntiid, bundle)
 			.then(bundleView.handleRoute.bind(bundleView, subRoute, route.precache))
@@ -271,7 +271,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			id = route.params.id,
 			user = route.precache.user;
 
-		id = ParseUtils.decodeFromURI(id);
+		id = decodeFromURI(id);
 
 		return userView.setActiveEntity(id, user)
 			.then(userView.handleRoute.bind(userView, subRoute, route.precache))
@@ -339,7 +339,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 				objId = obj.getId(),
 				hasWindow = me.Router.WindowActions.hasWindow(obj);
 
-			objId = ParseUtils.encodeForURI(objId);
+			objId = encodeForURI(objId);
 
 			if (hasWindow) {
 				path = Globals.trimRoute(path) + '/object/' + objId;
@@ -358,7 +358,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 				path = '/library',
 				hasWindow = obj && me.Router.WindowActions.hasWindow(obj);
 
-			objId = obj && ParseUtils.encodeForURI(objId);
+			objId = obj && encodeForURI(objId);
 
 			if (hasWindow) {
 				path = path + '/object/' + objId;
@@ -370,7 +370,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		me.el.mask('Loading...');
 
-		id = id && ParseUtils.decodeFromURI(id);
+		id = id && decodeFromURI(id);
 
 		if (!id) {
 			me.el.unmask();
@@ -464,7 +464,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		var me = this,
 			id = obj.getId && obj.getId();
 
-		id = id && ParseUtils.encodeForURI(id);
+		id = id && encodeForURI(id);
 
 		return me.PathActions.getPathToObject(obj)
 			.then(function (path) {
@@ -524,7 +524,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			route = cmp.getRouteForPath && cmp.getRouteForPath(path, course),
 			id = course.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		route.path = Globals.trimRoute(route.path);
 
@@ -567,7 +567,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		var cmp = this.getCmp('profile-group'),
 			route, id = group.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		if (path.length) {
 			route = cmp.getRouteForPath && cmp.getRouteForPath(path, group);
@@ -588,7 +588,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		var cmp = this.getCmp('bundle-view-container'),
 			route, id = bundle.get('NTIID');
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		if (path.length) {
 			route = cmp.getRouteForPath && cmp.getRouteForPath(path, bundle);

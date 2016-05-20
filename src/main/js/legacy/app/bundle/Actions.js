@@ -1,16 +1,15 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var UtilParsing = require('../../util/Parsing');
-var BundleStateStore = require('./StateStore');
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
+const CommonActions = require('legacy/common/Actions');
+const BundleStateStore = require('./StateStore');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	constructor: function () {
-		this.StateStore = NextThought.app.bundle.StateStore.getInstance();
+		this.StateStore = BundleStateStore.getInstance();
 
 		this.callParent(arguments);
 	},
@@ -34,6 +33,6 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
 	},
 
 	getRootRouteForId: function (id) {
-		return '/bundle/' + ParseUtils.encodeForURI(id);
+		return '/bundle/' + encodeForURI(id);
 	}
 });

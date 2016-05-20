@@ -4,7 +4,7 @@ var ParseUtils = require('../../../../../util/Parsing');
 var StudentActivity = require('../student/Activity');
 var CoursewareCourseActivity = require('../../../../../model/courseware/CourseActivity');
 var {isMe} = require('legacy/util/Globals');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
 	extend: 'NextThought.app.course.assessment.components.student.Activity',
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(function (userObj) {
 				userId = userObj.getURLPart();
 
-				assignmentId = ParseUtils.encodeForURI(assignmentId);
+				assignmentId = encodeForURI(assignmentId);
 
 				if (isMe(user)) {
 					//don't know what to do here. We need a reply-to?

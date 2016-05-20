@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var ParseUtils = require('../../../../../../util/Parsing');
 var PartsMembership = require('./Membership');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.parts.Communities', {
@@ -31,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 						return {
 							community: community,
 							name: community.getName(),
-							route: ParseUtils.encodeForURI(community.getId())
+							route: encodeForURI(community.getId())
 						};
 					})
 					.forEach(me.addEntry.bind(me));

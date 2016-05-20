@@ -6,7 +6,7 @@ var ReaderView = require('../reader/View');
 var VideoVideo = require('../../../video/Video');
 var VideoNavigation = require('../../../video/navigation/Video');
 var {isFeature} = require('legacy/util/Globals');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
 	extend: 'Ext.container.Container',
@@ -301,7 +301,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 
 		var ntiid = video && video.get('NTIID'),
 			section = video && video.get('section'),
-			route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(ntiid);
+			route = section && encodeForURI(section) + '/video/' + encodeForURI(ntiid);
 
 		if (!video.raw || !ntiid) {
 			console.log('Dont know how to handle the navigation');

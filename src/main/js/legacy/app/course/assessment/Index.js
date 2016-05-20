@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const UserRepository = require('../../../cache/UserRepository');
 const ParseUtils = require('../../../util/Parsing');
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 require('../../../mixins/Router');
 require('./components/View');
@@ -148,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			now = new Date(),
 			view = this.getView();
 
-		id = ParseUtils.decodeFromURI(id);
+		id = decodeFromURI(id);
 
 		assignment = assignment || view.assignmentCollection.fetchAssignment(id);
 
@@ -196,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				path.push({
 					label: assignment.get('title'),
 					title: assignment.get('title'),
-					route: '/' + ParseUtils.encodeForURI(assignment.getId()) + '/students'
+					route: '/' + encodeForURI(assignment.getId()) + '/students'
 				});
 
 				path.push({
@@ -218,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				currentIndex: index,
 				total: assignments.length,
 				getRoute: function (id) {
-					return id && ParseUtils.encodeForURI(id);
+					return id && encodeForURI(id);
 				}
 			});
 
@@ -332,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			view.maybeMask();
 		}
 
-		assignmentId = ParseUtils.decodeFromURI(assignmentId);
+		assignmentId = decodeFromURI(assignmentId);
 		studentId = NextThought.model.User.getIdFromURIPart(studentId);
 
 		assignment = assignment && assignment.getId() === assignmentId ? assignment : view.assignmentCollection.getItem(assignmentId);
@@ -401,7 +402,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						var user = rec.get('User'),
 							id = user.getURLPart();
 
-						return ParseUtils.encodeForURI(assignmentId) + '/students/' + id;
+						return encodeForURI(assignmentId) + '/students/' + id;
 					},
 					fillInRecord: function (item) {
 						var user = item.get('User');
@@ -428,7 +429,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				path.push({
 					label: assignment.get('title'),
 					title: assignment.get('title'),
-					route: '/' + ParseUtils.encodeForURI(assignment.getId()) + '/students',
+					route: '/' + encodeForURI(assignment.getId()) + '/students',
 					precache: {
 						student: student
 					}
@@ -470,7 +471,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			view.maybeMask();
 		}
 
-		assignmentId = ParseUtils.decodeFromURI(assignmentId);
+		assignmentId = decodeFromURI(assignmentId);
 		studentId = NextThought.model.User.getIdFromURIPart(studentId);
 
 		assignment = assignment && assignment.getId() === assignmentId ? assignment : view.assignmentCollection.getItem(assignmentId);
@@ -518,7 +519,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 						var id = rec.get('AssignmentId');
 
-						id = ParseUtils.encodeForURI(id);
+						id = encodeForURI(id);
 
 						return 'performance/' + studentId + '/' + id;
 					}
@@ -573,7 +574,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 	getAssignmentRoute: function (obj) {
 		var id = obj.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		return {
 			route: id,
@@ -597,7 +598,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			root = path[0],
 			route;
 
-		assignmentId = ParseUtils.encodeForURI(assignmentId);
+		assignmentId = encodeForURI(assignmentId);
 
 		route = '/' + assignmentId;
 

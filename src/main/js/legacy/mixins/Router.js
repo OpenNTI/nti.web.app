@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var Globals = require('../util/Globals');
 var ParseUtils = require('../util/Parsing');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 require('./routing/Path');
 require('./routing/Object');
@@ -164,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			hasWindow = objId && this.Router.WindowActions.hasWindow(obj),
 			windowRoute = hasWindow && this.Router.WindowActions.getRouteForObject(obj);
 
-		objId = objId && ParseUtils.encodeForURI(objId);
+		objId = objId && encodeForURI(objId);
 
 		if (hasWindow) {
 			path = Globals.trimRoute(path) + '/' + Globals.trimRoute(windowRoute);

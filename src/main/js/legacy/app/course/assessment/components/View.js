@@ -13,7 +13,7 @@ var PerformanceView = require('./admin/performance/View');
 var AssignmentsView = require('./student/assignments/View');
 var StudentActivity = require('./student/Activity');
 var StudentPerformance = require('./student/Performance');
-
+const { decodeFromURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.View', {
 	extend: 'NextThought.common.components.NavPanel',
@@ -398,7 +398,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var me = this,
 			student = route.precache.student,
 			assignment = route.precache.assignment,
-			id = ParseUtils.decodeFromURI(route.params.assignment);
+			id = decodeFromURI(route.params.assignment);
 
 		if (!assignment || assignment.getId() !== id) {
 			assignment = me.assignmentCollection.getItem(id);

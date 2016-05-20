@@ -10,6 +10,7 @@ var AuditlogPrompt = require('./editing/auditlog/Prompt');
 var WindowsActions = require('../../../windows/Actions');
 var PromptActions = require('../../../prompt/Actions');
 var MixinsAuditLog = require('../../../../mixins/AuditLog');
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.View', {
@@ -121,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				}
 			});
 		}).then(function () {
-			id = ParseUtils.encodeForURI(id);
+			id = encodeForURI(id);
 
 			me.editingMap[bundle.getId()] = true;
 
@@ -181,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				delete me.editingMap[bundle.getId()];
 
 				if (id) {
-					id = ParseUtils.encodeForURI(id);
+					id = encodeForURI(id);
 					me.pushRoute('', id);
 				} else {
 					me.pushRoute('', '');
@@ -199,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	selectOutlineNode: function (record) {
-		var id = ParseUtils.encodeForURI(record.getId()),
+		var id = encodeForURI(record.getId()),
 			route = id;
 
 		if (this.isEditing) {
@@ -332,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this,
 			bundle = this.currentBundle,
 			node = route.params && route.params.node,
-			id = node && ParseUtils.decodeFromURI(node),
+			id = node && decodeFromURI(node),
 			changedEditing = me.isEditing,
 			record = route.precache.outlineNode;
 
@@ -374,7 +375,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	showEditOutlineNode: function (route, subRoute) {
 		var me = this,
 			bundle = me.currentBundle,
-			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
+			id = route.params && route.params.node && decodeFromURI(route.params.node),
 			changedEditing = !me.isEditing,
 			record = route.precache.outlineNode;
 

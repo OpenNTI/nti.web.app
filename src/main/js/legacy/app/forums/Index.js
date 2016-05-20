@@ -27,6 +27,7 @@ var ForumsPersonalBlogEntry = require('../../model/forums/PersonalBlogEntry');
 var ForumsPersonalBlogEntryPost = require('../../model/forums/PersonalBlogEntryPost');
 var ForumsPost = require('../../model/forums/Post');
 var ForumsTopic = require('../../model/forums/Topic');
+const { decodeFromURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.Index', {
@@ -102,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 			.then(function (forumList) {
 				var id = route.params.forum;
 
-				id = id && ParseUtils.decodeFromURI(id);
+				id = id && decodeFromURI(id);
 
 				me.forumView.setForumList(forumList);
 				me.forumView.setForum(id);

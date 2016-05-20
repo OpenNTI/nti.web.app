@@ -4,7 +4,7 @@ var ComponentsNavigation = require('./components/Navigation');
 var NavigationActions = require('../navigation/Actions');
 var WindowsStateStore = require('../windows/StateStore');
 var ModelVideo = require('../../model/Video');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	extend: 'Ext.container.Container',
@@ -188,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	getRouteForPageInfo: function (pageInfo, path) {
 		var id = pageInfo.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		return {
 			path: '/content/' + id,
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 			this.WindowStateStore.cacheObject(comment.getId(), topic);
 		}
 
-		forumId = ParseUtils.encodeForURI(forumId);
+		forumId = encodeForURI(forumId);
 
 		return {
 			path: '/discussions/' + forumId,

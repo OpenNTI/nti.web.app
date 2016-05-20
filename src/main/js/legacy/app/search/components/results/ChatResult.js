@@ -5,6 +5,7 @@ var ParseUtils = require('../../../../util/Parsing');
 var ResultsBase = require('./Base');
 var ChatActions = require('../../../chat/Actions');
 var {isMe} = require('legacy/util/Globals');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.ChatResult', {
@@ -75,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		var me = this,
 			hitId = this.hit.get('NTIID');
 
-		hitId = ParseUtils.encodeForURI(hitId);
+		hitId = encodeForURI(hitId);
 
 		me.onLoadTranscript
 			.then(function (transcript) {

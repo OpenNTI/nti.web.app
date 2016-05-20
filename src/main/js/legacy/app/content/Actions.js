@@ -6,7 +6,7 @@ var UtilContent = require('../../util/Content');
 var UtilPageSource = require('../../util/PageSource');
 var ModelTopicNode = require('../../model/TopicNode');
 var PathActions = require('../navigation/path/Actions');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	levelLabels: {
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return PathActions.getBreadCrumb(ntiid)
 			.then(function (path) {
 				return path.map(function (part) {
-					var route = part.ntiid ? ParseUtils.encodeForURI(part.ntiid) : '';
+					var route = part.ntiid ? encodeForURI(part.ntiid) : '';
 
 					part.route = Globals.trimRoute(rootRoute) + '/' + route;
 
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				part.ntiid = l.NTIID;
 
 				if (rootPageId && rootPageId !== l.NTIID) {
-					route = ParseUtils.encodeForURI(l.NTIID);
+					route = encodeForURI(l.NTIID);
 				} else {
 					route = '';
 				}
@@ -342,7 +342,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 							return {
 								label: text,
 								title: text,
-								route: Globals.trimRoute(rootRoute) + '/' + ParseUtils.encodeForURI(node.getAttribute('ntiid')),
+								route: Globals.trimRoute(rootRoute) + '/' + encodeForURI(node.getAttribute('ntiid')),
 								ntiid: node.getAttribute('ntiid'),
 								cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
 							};

@@ -4,7 +4,7 @@ var MixinsRouter = require('../../../mixins/Router');
 var ContentActions = require('../Actions');
 var ContentviewerStateStore = require('../../contentviewer/StateStore');
 var ComponentsResourceNotFound = require('../../../common/components/ResourceNotFound');
-
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	extend: 'Ext.container.Container',
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		pageSource.then(function (ps) {
 			ps.getRoute = function (ntiid) {
-				return rootRoute + ParseUtils.encodeForURI(ntiid);
+				return rootRoute + encodeForURI(ntiid);
 			};
 		});
 
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			ntiid = route.params.id,
 			obj = route.precache.pageInfo || route.precache.relatedWork;
 
-		ntiid = ParseUtils.decodeFromURI(ntiid);
+		ntiid = decodeFromURI(ntiid);
 
 		return this.__loadContent(ntiid, obj)
 			.then(function (page) {
@@ -214,11 +214,11 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			precache = route.precache,
 			vid, video;
 
-		root = ParseUtils.decodeFromURI(root);
+		root = decodeFromURI(root);
 
 		if (page === 'video') {
 			vid = subRoute.split('/')[1];
-			vid = ParseUtils.decodeFromURI(vid);
+			vid = decodeFromURI(vid);
 			video = precache.video || precache.precache && precache.precache.video;
 
 			return this.__loadContent(root, obj)
@@ -239,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				});
 		}
 
-		page = ParseUtils.decodeFromURI(page);
+		page = decodeFromURI(page);
 
 		if (!this.root) {
 			this.root = root;
@@ -276,8 +276,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			pageId = page && page.isModel ? page.getId() : page,
 			videoId = obj.get && obj.getId();
 
-		pageId = ParseUtils.encodeForURI(pageId);
-		videoId = ParseUtils.encodeForURI(videoId);
+		pageId = encodeForURI(pageId);
+		videoId = encodeForURI(videoId);
 
 		return {
 			route: pageId + '/video/' + videoId,

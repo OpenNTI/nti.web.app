@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var ParseUtils = require('../../util/Parsing');
 var SearchActions = require('./Actions');
 var ComponentsAdvancedOptions = require('./components/AdvancedOptions');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
@@ -142,11 +143,11 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		params.q = encodeURIComponent(this.getValue());
 
 		if (bundle) {
-			params.s = ParseUtils.encodeForURI(bundle);
+			params.s = encodeForURI(bundle);
 		}
 
 		if (page) {
-			params.p = ParseUtils.encodeForURI(page);
+			params.p = encodeForURI(page);
 		}
 
 		route += Ext.Object.toQueryString(params);

@@ -4,7 +4,7 @@ var MixinsRouter = require('../../../../../../mixins/Router');
 var UtilPageSource = require('../../../../../../util/PageSource');
 var AssignmentsRoot = require('./Root');
 var AssignmentsAssignment = require('./Assignment');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.View', {
 	extend: 'Ext.container.Container',
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	showStudentsForAssignment: function (rec) {
 		var id = rec.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		this.pushRoute(rec.get('title'), id + '/students', {
 			assignment: rec
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			studentTitle = student.getName(),
 			studentId = student.getURLPart();
 
-		assignmentId = ParseUtils.encodeForURI(assignmentId);
+		assignmentId = encodeForURI(assignmentId);
 
 		this.pushRoute(studentTitle + ' | ' + assignmentTitle, assignmentId + '/students/' + studentId, {
 			student: student,

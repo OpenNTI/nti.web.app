@@ -2,7 +2,7 @@ var Ext = require('extjs');
 var UserRepository = require('../../../../../../cache/UserRepository');
 var ParseUtils = require('../../../../../../util/Parsing');
 var PartsUsers = require('./Users');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.parts.Admins', {
 	extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 				creatorConfig = {
 					member: creator,
 					name: creator.getName(),
-					route: ParseUtils.encodeForURI(creator.getId())
+					route: encodeForURI(creator.getId())
 				};
 				me.addEntry(creatorConfig);
 			 } else {

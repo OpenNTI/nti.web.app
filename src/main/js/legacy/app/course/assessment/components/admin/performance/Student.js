@@ -3,7 +3,7 @@ var ParseUtils = require('../../../../../../util/Parsing');
 var MixinsState = require('../../../../../../mixins/State');
 var PerformanceHeader = require('./Header');
 var AdminGrid = require('../Grid');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
 	extend: 'Ext.container.Container',
@@ -211,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var userId = this.student.getURLPart(),
 			assignmentId = record.get('AssignmentId');
 
-		assignmentId = ParseUtils.encodeForURI(assignmentId);
+		assignmentId = encodeForURI(assignmentId);
 
 		this.pushRoute('', '/performance/' + userId + '/' + assignmentId);
 	},

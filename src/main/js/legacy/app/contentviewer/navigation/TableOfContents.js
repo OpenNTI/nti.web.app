@@ -3,7 +3,7 @@ var CSSUtils = require('../../../util/CSS');
 var ParseUtils = require('../../../util/Parsing');
 var MixinsMenuShowHideBehavior = require('../../../mixins/MenuShowHideBehavior');
 var ModelTopicNode = require('../../../model/TopicNode');
-
+const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.TableOfContents', {
 	extend: 'Ext.view.View',
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			href = node.getAttribute('href'),
 			id = pageNode && pageNode.getAttribute('ntiid');
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		if (node !== pageNode && this.HASH_REGEX.test(href)) {
 			id += '#' + href.split('#')[1];

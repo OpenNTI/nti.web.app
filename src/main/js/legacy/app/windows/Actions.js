@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var ParseUtils = require('../../util/Parsing');
 var CommonActions = require('../../common/Actions');
 var WindowsStateStore = require('./StateStore');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
@@ -33,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		var id = obj.getId(),
 			mimeType = obj.mimeType;
 
-		id = ParseUtils.encodeForURI(id);
+		id = encodeForURI(id);
 
 		if (obj.addMimeTypeToRoute) {
 			return '/object/' + encodeURIComponent(mimeType) + '/' + id;

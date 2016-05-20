@@ -6,6 +6,7 @@ var PathActions = require('../navigation/path/Actions');
 var PartsTranscript = require('./components/reader/parts/Transcript');
 var MediaviewerActions = require('./Actions');
 var ComponentsView = require('./components/View');
+const { decodeFromURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
@@ -38,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			options = route.precache.options || {},
 			me = this, id;
 
-		id = ParseUtils.decodeFromURI(route.params.id);
+		id = decodeFromURI(route.params.id);
 
 		if (Ext.isEmpty(basePath)) {
 			basePath = this.currentBundle.getContentRoots()[0];
