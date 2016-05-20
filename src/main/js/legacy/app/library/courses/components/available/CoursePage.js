@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		var me = this;
 		if (upcoming && upcoming.length) {
 			this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming'});
-			this.addTab({label: 'Upcoming', category: 'upcoming', active: true});
+			this.addTab({label: 'Upcoming', category: 'upcoming', active: true && !this.code});
 		}
 
 		if (current && current.length) {
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		if (this.rendered) {
 			this.add({xtype: 'library-redemption', redeemLink: 'link', code: this.code, onSuccess: this.onRedeemSuccess.bind(this) });
-			this.addTab({label: 'Redeem', category: 'redeem', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming) && Ext.isEmpty(archived)});
+			this.addTab({label: 'Redeem', category: 'redeem', active: (Ext.isEmpty(current) && Ext.isEmpty(upcoming) && Ext.isEmpty(archived) || !!this.code)});
 		}
 
 		this.onceRendered
@@ -194,7 +194,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			}
 
 			this.setPageHeight();
-			this.getTargetEl().scrollTo('top', 0, true);
 		});
 	},
 
@@ -202,7 +201,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	onScroll: function (/*e*/) {
 		var target = this.getTargetEl().dom,
 			targetTop = target.getBoundingClientRect().top,
-			scrollTop = target && target.scrollTop,
 			activeTabEl = this.tabsEl.down('.active'),
 			select = false,
 			last,
@@ -212,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			this.scrollTops = {};
 		}
 
-		for (let element in this.scrollTops) {
+		for (let element of Object.keys(this.scrollTops)) {
 			let clientRect = this.scrollTops[element].getBoundingClientRect(),
 				bottom = clientRect && clientRect.bottom;
 

@@ -58,6 +58,8 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 		if(this.code) {
 			this.form.setValue('invitation_codes', this.code);
 			this.form.enableSubmission();
+			wait()
+				.then(() => this.form.focusField('invitation_codes'));
 		}
 	},
 
