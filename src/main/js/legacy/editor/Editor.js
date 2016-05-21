@@ -223,24 +223,71 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
 
 	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{ cls: 'space', html: '{placeholder}'},
-		{ cls: 'attachment-part', 'data-fileName': '{filename}', 'name': '{name}', cn: [
-			{ cls: 'icon-wrapper', cn: [
-				{ cls: 'icon {extension} {iconCls}', style: 'background-image: url(\'{url}\');', contentEditable: false, unselectable: 'on', cn: [
-					{tag: 'label', html: '{extension}', contentEditable: false, unselectable: 'on'}
-				]}
-			]},
-			{ cls: 'meta', cn: [
-				{ cls: 'text', cn: [
-					{ tag: 'span', cls: 'title', contentEditable: false, unselectable: 'on', html: '{filename}'},
-					{ tag: 'span right', cls: 'size', contentEditable: false, html: '{size}'}
-				]},
-				{ cls: 'controls', cn: [
-					{ tag: 'span', cls: 'delete', 'data-action': 'delete', contentEditable: false, html: 'Delete'}
-				]}
-			]}
-		]},
-		{ cls: 'space', html: '{placeholder}'}
+		{html: '{placeholder}'}, //XXX: Yuck! This template should have been inserted using the existing insertObjectThumbnail function! It would have handled inserting these!! >.<
+		{
+			cls: 'attachment-part',
+			'data-fileName': '{filename}',
+			name: '{name}',
+			contentEditable: false,
+			unselectable: 'on',
+			cn: [
+				{
+					cls: 'icon-wrapper',
+					unselectable: 'on',
+					cn: [
+						{
+							cls: 'icon {extension} {iconCls}',
+							style: 'background-image: url(\'{url}\');',
+							unselectable: 'on',
+							cn: [
+								{
+									tag: 'label',
+									html: '{extension}',
+									unselectable: 'on'
+								}
+							]
+						}
+					]
+				},
+				{
+					cls: 'meta',
+					contentEditable: false,
+					unselectable: 'on',
+					cn: [
+						{
+							cls: 'text',
+							unselectable: 'on',
+							cn: [
+								{
+									tag: 'span',
+									cls: 'title',
+									unselectable: 'on',
+									html: '{filename}'
+								},{
+									tag: 'span right',
+									cls: 'size',
+									unselectable: 'on',
+									html: '{size}'
+								}
+							]
+						},{
+							cls: 'controls',
+							unselectable: 'on',
+							cn: [
+								{
+									tag: 'span',
+									cls: 'delete',
+									'data-action': 'delete',
+									unselectable: 'on',
+									html: 'Delete'
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{html: '{placeholder}'} //XXX: Yuck! This template should have been inserted using the existing insertObjectThumbnail function! It would have handled inserting these!! >.<
 	])),
 
 	AttachmentMap: {},
@@ -325,7 +372,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		this.mon(Ext.getBody(), 'click', 'hidePopovers');
-		this.mon(Ext.getBody(), 'mscontrolselect', evt => evt.preventDefault());
+		this.mon(Ext.getBody(), 'mscontrolselect', evt => (evt.preventDefault(), false));
 
 		this.maybeEnableSave();
 
