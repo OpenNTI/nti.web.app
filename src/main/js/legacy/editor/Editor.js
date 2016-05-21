@@ -553,7 +553,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	setupSharedListEl: function (cmp, tabTracker, scrollParentEl) {
-		var me = this, userTokenField, tokens, inputArea, tokenInputWrap, tokenInput;
+		var me = this;
 		me.sharedListEl = me.el.down('.recipients');
 		if (me.sharedListEl) {
 			if (Service.canShare()) {
@@ -606,7 +606,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	setupFileUploadField: function() {
+	setupFileUploadField: function () {
 		if (!this.enableFileUpload) { return; }
 
 		let dom = this.el.dom,
@@ -1226,7 +1226,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (el && !e.getTarget('.control')) {
 			el[action]('selected');
 			el.set({'data-qtip': tip});
-	  //			Ext.QuickTipManager.getQuickTip().hide();
 			oldScroll = content.getScroll();
 			content.focus();
 			content.scrollTo('top', oldScroll.top);
@@ -1282,7 +1281,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.setTypingAttributes(attrs);
 	},
 
-	detectTypingAttributes: function (e) {
+	detectTypingAttributes: function () {
 		var actions = this.supportedTypingAttributes, attrs = [];
 		Ext.each(actions, function (action) {
 			if (document.queryCommandState(action)) {
@@ -1423,8 +1422,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	addVideo: function (data, guid, append, e) {
-		data = data || (function () {
-		}()); //force the falsy value of data to always be undefinded.
+		data = data || void 0; //force the falsy value of data to always be undefinded.
 
 		var me = this;
 
@@ -1435,9 +1433,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (!data || e) {
 			Ext.widget('embedvideo-window', {
 				url: (data || {}).embedURL,
-				onEmbed: function (data) {
-					var part = me.createVideoPart(data.embedURL, data.type);
-					me.insertObjectThumbnail(me.el.down('.content'), guid, part, data, append/*, true*/);
+				onEmbed: function (eData) {
+					var part = me.createVideoPart(eData.embedURL, eData.type);
+					me.insertObjectThumbnail(me.el.down('.content'), guid, part, eData, append/*, true*/);
 
 				}
 			}).show();
@@ -1685,7 +1683,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
-		callback = Ext.Function.createBuffered(function callback (node) {
+		callback = Ext.Function.createBuffered(function (node) {
 			me.fireEvent('size-changed');
 
 			//Make sure save is enabled
@@ -1873,18 +1871,18 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
-		r = r.filter(function (i) {
+		r = r.filter(function (o) {
 			var tmp;
 
-			if (!Ext.isString(i)) {
+			if (!Ext.isString(o)) {
 				return true;
 			}
 
-			if (Ext.isEmpty(i)) {
+			if (Ext.isEmpty(o)) {
 				return false;
 			}
 			//if we are just whitespace and html whitespace
-			tmp = i.replace(/<br\/?>/ig, '');
+			tmp = o.replace(/<br\/?>/ig, '');
 			return !Ext.isEmpty(tmp.trim());
 		});
 
@@ -1925,6 +1923,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	maybeEnableSave: function (silent) {
+
+		var me = this, body,
+			r = isNoteBodyEmpty(),
+			cls = 'disabled',
+			forceSubmissionCheck = false;
+
 		function isNoteBodyEmpty () {
 			var d = Ext.getDom(me.el.down('.content')),
 				html = d && d.innerHTML,
@@ -1936,10 +1940,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			};
 		}
 
-		var me = this, body,
-			r = isNoteBodyEmpty(),
-			cls = 'disabled',
-			forceSubmissionCheck = false;
 
 		if (r.enableSave && this.saveButtonEl.hasCls(cls)) {
 			this.saveButtonEl.removeCls(cls);
@@ -2098,10 +2098,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	/**
-	 * Returns the value of the editor.
-	 * If it has file attached to it, it will return a FormData
-	 * Otherwise, it will return the regular json object.
-	 *
+	 * @returns {object} Returns the value of the editor.
 	 */
 	getValue: function () {
 		return {
@@ -2158,7 +2155,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	/** @private */
+	/* @private */
 	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
 		if (focus || putCursorAtEnd) {
@@ -2166,7 +2163,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	/** @private */
+	/* @private */
 	setHTML: function (html) {
 		//if we are given a blank value, or the value doesn't begin with a div, wrap it.
 		if (!html || !/^<div/im.test(html)) {
