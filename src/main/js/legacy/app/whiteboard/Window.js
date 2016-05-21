@@ -127,8 +127,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 	},
 
 	close: function () {
-		this.close = function () {
-		};
 		this.cancel();
 		return this.callParent(arguments);
 	},
