@@ -1263,17 +1263,18 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (e) {
 			e.stopPropagation();
 		}
-		var state = el && el.hasCls('selected'),
-			action = state ? 'removeCls' : 'addCls',
-			tip = state ? el.getAttribute('data-tiptext') : undefined,
-			content = this.el.down('.content'),
-			oldScroll;
 
+		const isTextControl = c => (c && !!Ext.fly(c).parent('.text-controls'));
 
-		if (el && !e.getTarget('.control')) {
+		if (el && !isTextControl(e.getTarget('.control'))) {
+			const state = el && el.hasCls('selected');
+			const action = state ? 'removeCls' : 'addCls';
+			const tip = state ? el.getAttribute('data-tiptext') : undefined;
+			const content = this.el.down('.content');
+
 			el[action]('selected');
 			el.set({'data-qtip': tip});
-			oldScroll = content.getScroll();
+			const oldScroll = content.getScroll();
 			content.focus();
 			content.scrollTo('top', oldScroll.top);
 			this.editorFocus();
