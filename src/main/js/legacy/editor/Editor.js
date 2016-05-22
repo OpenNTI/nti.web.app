@@ -372,7 +372,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		this.mon(Ext.getBody(), 'click', 'hidePopovers');
-		this.mon(Ext.getBody(), 'mscontrolselect', evt => (evt.preventDefault(), false));
+		document.execCommand( 'enableObjectResizing', false, false );
 
 		this.maybeEnableSave();
 
