@@ -2248,6 +2248,7 @@
 	.groupset {
 		font-size: 0.875em;
 		color: $primary-grey;
+		word-wrap: break-word;
 
 		.entry-container {
 			position: relative;
