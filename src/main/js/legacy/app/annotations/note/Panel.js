@@ -1121,7 +1121,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 
 
 	handleWhiteboardClick: function (e) {
-		let t = e.getTarget('.attachment-part', null, true),
+		let t = e.getTarget('.whiteboard-container', null, true),
 			guid = t && t.up('.body-divider').getAttribute('id');
 		if (t && this.wbData[guid]) {
 			t = e.getTarget('.reply:not(.profile-activity-reply-item)', null, true);
