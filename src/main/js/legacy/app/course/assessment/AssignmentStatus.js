@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 				}
 
 				if (now >= data.due) {
-					d.cls = 'late';
+					d.cls = `${d.cls || ''} late`.trim();
 				}
 			}
 
