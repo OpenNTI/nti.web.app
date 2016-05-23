@@ -35,6 +35,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 				catalog.set('EnrollmentOptions', precached.get('EnrollmentOptions'));
 				catalog.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);
 			}
+
+			if (precached) {
+				precached.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);
+			}
 		});
 	},
 
