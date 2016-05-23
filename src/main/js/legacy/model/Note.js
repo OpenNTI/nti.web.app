@@ -303,7 +303,9 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 		Ext.each(body, function (c) {
 			if (Ext.isString(c)) {
-				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/g, ' '));
+				let d = document.createElement('div');
+				d.innerHTML = c;
+				text.push(d.textContent);
 			}else {
 				text.push(c);
 			}
