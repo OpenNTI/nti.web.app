@@ -506,6 +506,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			});
 
 			me.add(form);
+			me.form = form;
 			me.updateFromStorage();
 			me.fillInNations();
 			me.fillInStates();

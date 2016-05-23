@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 			items = [];
 
 		for (i = 0; i < form.length; i++) {
-			if (form[i].group === name) {
+			if (form[i].group === name || !form[i].group) {
 				items.push(form[i]);
 			}
 		}
