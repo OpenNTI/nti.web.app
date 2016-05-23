@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		var id = this.get('Username');
 
 		if (id && this.getLink('Activity')) {
-			return '/group/' + isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id);
+			return '/group/' + (isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id));
 		}
 
 		return null;
