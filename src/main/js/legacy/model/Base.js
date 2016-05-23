@@ -1026,9 +1026,22 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 				if (xhr.status >= 200 && xhr.status < 300) {
 					success(xhr.responseText);
 				} else {
+					//This should inspect Content-Type of the response... if its JSON, decode the text.
+					const shouldBeJSON = /json/i.test(xhr.getResponseHeader('Content-Type'));
+					const response = shouldBeJSON ? Ext.decode(xhr.response) : void 0;
+
+					const {status, statusText, responseText} = xhr;
+
 					failure({
-						status: xhr.status,
-						responseText: xhr.responseText
+						status,
+						statusText,
+						response,
+						get responseText () {
+							if (shouldBeJSON) {
+								console.error('Just read .response, it will already be an object');
+							}
+							return responseText;
+						}
 					});
 				}
 			}

@@ -187,7 +187,9 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 				me.editor.deactivate();
 				me.editor.setValue('');
 				me.editor.reset();
-			}).always(function () {
+			})
+			.catch(er => me.onSaveFailure(er))
+			.always(function () {
 				if (me.editor.el) {
 					me.editor.el.unmask();
 				}
@@ -220,9 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 
 		this.BlogActions.deleteBlogPost(this.record)
 			.then(this.fireEvent.bind(this, 'record-deleted'))
-			.catch(() => {
-				this.el.unmask();
-			});
+			.catch(() => this.el.unmask());
 	},
 
 	destroyWarningMessage: function () {

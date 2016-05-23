@@ -201,33 +201,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 
 				me.fireEvent('after-save', rec);
 			})
-			.catch(me.onSaveFailure.bind(me));
+			.always(() => me.el && me.el.unmask());
 	},
 
 	onSaveSuccess: function () {
 		this.destroy();
 	},
 
-	onSaveFailure: function (response) {
-		var msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown'), error;
-
-		if (response && response.responseText) {
-			error = Ext.decode(response.responseText, true) || {};
-			if (error.code === 'TooLong') {
-				msg = getString('NextThought.view.profiles.parts.BlogEditor.longtitle');
-			}
-			else if (error.code === 'MaxFileSizeUploadLimitError') {
-				let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.max_bytes),
-					currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.provided_bytes);
-				msg = error.message + ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
-			}
-			else if (error.code === 'MaxAttachmentsExceeded') {
-				msg = error.message + ' Max Number of files: ' + error.constraint;
-			}
-		}
-		alert({title: getString('NextThought.view.profiles.parts.BlogEditor.error'), msg: msg, icon: 'warning-red'});
-		console.debug(arguments);
-	},
 
 	onCancel: function (e) {
 		e.stopEvent();

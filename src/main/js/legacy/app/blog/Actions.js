@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		}
 
 		return post.saveData({url: isEdit ? undefined : blog && blog.getLink('add')})
-			.then (function (response) {
+			.then (response => {
 				var entry = isEdit ? record : ParseUtils.parseItems(response)[0];
 
 				//the first argument is the record...problem is, it was a post, and the response from the server is
@@ -71,29 +71,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 				// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
 				return entry;
 			})
-			.then(function (blogEntry) {
-				return me.handleShareAndPublishState(blogEntry, sharingInfo);
-			})
-			.catch(function (err) {
-				console.error('Failed to save blog: ', err);
-				if (err && err.responseText) {
-					err = JSON.parse(err.responseText);
-				}
-
-				if (err.code === 'MaxFileSizeUploadLimitError') {
-					let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
-					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
-				}
-				if (err.code === 'MaxAttachmentsExceeded') {
-					err.message += ' Max Number of files: ' + err.constraint;
-				}
-
-				let msg = err && err.message || 'Failed to save blog';
-				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
-
-				return Promise.reject(err);
-			});
+			.then(blogEntry => me.handleShareAndPublishState(blogEntry, sharingInfo))
+			.catch(reason => (this.onSaveFailure(reason), Promise.reject(reason)));
 	},
 
 	/**
@@ -180,27 +159,31 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 					return rec;
 				})
-				.catch(function (err) {
-					console.error('Failed to create blog comment: ', err);
-					if (err && err.responseText) {
-						err = JSON.parse(err.responseText);
-					}
-
-					if (err.code === 'MaxFileSizeUploadLimitError') {
-						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
-						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
-					}
-					if (err.code === 'MaxAttachmentsExceeded') {
-						err.message += ' Max Number of files: ' + err.constraint;
-					}
-
-					let msg = err && err.message || 'Failed to save blog';
-					alert({title: 'Attention', msg: msg, icon: 'warning-red'});
-
-					return Promise.reject(err);
-				});
+				.catch(reason => (this.onSaveFailure(reason), Promise.reject(reason)));
 	},
+
+
+	onSaveFailure (response) {
+		let msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown');
+
+		if (response && response.responseText) {
+			const error = Ext.decode(response.responseText, true) || {};
+			if (error.code === 'TooLong') {
+				msg = getString('NextThought.view.profiles.parts.BlogEditor.longtitle');
+			}
+			else if (error.code === 'MaxFileSizeUploadLimitError') {
+				let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.max_bytes),
+					currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.provided_bytes);
+				msg = error.message + ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+			}
+			else if (error.code === 'MaxAttachmentsExceeded') {
+				msg = error.message + ' Max Number of files: ' + error.constraint;
+			}
+		}
+
+		alert({title: getString('NextThought.view.profiles.parts.BlogEditor.error'), msg: msg, icon: 'warning-red'});
+	},
+
 
 	deleteBlogPost: function (record) {
 		var idToDestroy, me = this;
