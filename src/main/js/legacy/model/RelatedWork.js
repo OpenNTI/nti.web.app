@@ -18,7 +18,10 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	},
 
 	statics: {
-		mimeType: 'application/vnd.nextthought.relatedworkref',
+		mimeType: 'application/vnd.nextthought.relatedworkref'
+	},
+
+	inheritableStatics: {
 
 		fromOutlineNode: function (data) {
 			return this.create({
