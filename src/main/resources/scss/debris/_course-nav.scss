@@ -420,7 +420,7 @@
 		.x-btn.review-btn {
 			position: absolute;
 			right: 15px;
-			top: 50%;
+			top: 38px; // 50%; //NTI-874 - without the expected coordinate root, 50% is not always desired... Make this px
 			margin-top: -18px;//37 / 2
 			z-index: 1;
 		}
@@ -432,6 +432,7 @@
 
 			.assignment-box {
 				@include icon($assignment_due, $position: static, $side:'before');
+				//@include icon($assignment_due, $side:'before'); // <-- NTI-874 - position doesn't seem to be needed... but the least invasive change is above. (changing the start buttons top from % to px);
 
 				&::before {
 					position: relative;
