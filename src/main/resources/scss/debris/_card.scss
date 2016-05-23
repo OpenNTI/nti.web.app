@@ -51,7 +51,7 @@
 			}
 
 			//Blue=Docs
-			&.doc, &.docx, &.pages, &.txt, &.plain {
+			&.doc, &.docx, &.pages {
 				color: $blue;
 			}
 			//Orange=Presentations
@@ -59,15 +59,15 @@
 				color: $orange;
 			}
 			//Green=Sheets
-			&.xls, &.xlsx, &.numbers,&.csv {
+			&.xls, &.xlsx, &.numbers, &.csv {
 				color: $green;
 			}
 			//Red=PDF
-			&.pdf, &.html {
+			&.pdf {
 				color: $red;
 			}
 			//Yellow=Archive
-			&.zip, &.gz, &.tar, &.z, &.\7z, &.rar, &.jpeg {
+			&.zip, &.gz, &.tar, &.z, &.\7z, &.rar {
 				color: $yellow;
 			}
 		}
