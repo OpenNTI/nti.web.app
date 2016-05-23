@@ -299,13 +299,12 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	},
 
 	simplifyBody: function (body) {
-		var text = [];
+		const text = [];
+		const d = document.createElement('div');
 
 		Ext.each(body, function (c) {
 			if (Ext.isString(c)) {
-				let d = document.createElement('div');
-				d.innerHTML = c;
-				text.push(d.textContent);
+				text.push((d.innerHTML = c, d.textContent));
 			}else {
 				text.push(c);
 			}
