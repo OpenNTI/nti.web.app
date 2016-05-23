@@ -23,7 +23,7 @@ var WindowsStateStore = require('./windows/StateStore');
 var WindowsActions = require('./windows/Actions');
 var ContextStateStore = require('./context/StateStore');
 var ContactsIndex = require('./contacts/Index');
-const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+const { isNTIID, encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.Body', {
 	extend: 'Ext.container.Container',
@@ -188,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 				return;
 			}
 
-			id = encodeForURI(id);
+			id = isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id);
 
 			if (mimeType) {
 				mimeType = encodeURIComponent(mimeType);
