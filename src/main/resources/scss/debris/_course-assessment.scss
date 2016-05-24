@@ -625,7 +625,7 @@ canvas.x-component-course-assessment {
 						}
 					}
 
-					&::after {
+					&:not(.nosubmit)::after {
 					    border-top-color: $primary-red;
 					}
 				}
