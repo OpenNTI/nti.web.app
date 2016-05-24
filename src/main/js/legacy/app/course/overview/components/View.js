@@ -122,12 +122,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				}
 			});
 		}).then(function () {
-			id = encodeForURI(id);
-
 			me.editingMap[bundle.getId()] = true;
 
 			if (id) {
-				me.pushRoute('Editing', id + '/edit');
+				me.pushRoute('Editing', encodeForURI(id) + '/edit');
 			} else {
 				me.pushRoute('Editing', 'edit');
 			}
