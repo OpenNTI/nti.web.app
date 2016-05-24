@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
+const BatchExecution = require('legacy/util/BatchExecution');
 
+const schedular = new BatchExecution({batchSize: 10});
 
 module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 	alias: 'resolvers.videoservices.vimeo',
@@ -22,22 +24,24 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 			url = Ext.String.format(this.URL, id);
 
-			promise = Service.request({url: url, withCredentials: false})
-				.then(Ext.decode)
-				.then(function (o) { return o[0] || o;})
-				.then(function (json) {
-					json.poster = json.thumbnail_large || json.thumbnail_url;
-					json.thumbnail = json.thumbnail_medium || json.thumbnail_url;
+			promise = schedular.schedule(() =>
+				Service.request({url: url, withCredentials: false})
+					.then(Ext.decode)
+					.then(function (o) { return o[0] || o;})
+					.then(function (json) {
+						json.poster = json.thumbnail_large || json.thumbnail_url;
+						json.thumbnail = json.thumbnail_medium || json.thumbnail_url;
 
-					return json;
-				})
-				.catch(function (reason) {
-					console.log('Unable to resolve vimeo poster: ', reason);
-					return {
-						poster: Globals.CANVAS_BROKEN_IMAGE.src,
-						thumbnail: Globals.CANVAS_BROKEN_IMAGE.src
-					};
-				});
+						return json;
+					})
+					.catch(function (reason) {
+						console.log('Unable to resolve vimeo poster: ', reason);
+						return {
+							poster: Globals.CANVAS_BROKEN_IMAGE.src,
+							thumbnail: Globals.CANVAS_BROKEN_IMAGE.src
+						};
+					})
+				);
 
 			cache[id] = promise;
 
