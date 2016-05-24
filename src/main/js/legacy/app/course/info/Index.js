@@ -55,12 +55,15 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 			catalogEntry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
 		function update (info, status, showRoster) {
+			let showInviteCode = me.bundle.hasLink('SendCourseInvitations'),
+				inviteCodeLink = showInviteCode && me.bundle.getLink('CourseAccessTokens');
+
 			me.hasInfo = !!info;
 
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
 
 			me.body.setContent(info, status, showRoster, bundle);
-			me.navigation.setContent(info, status, showRoster, me.infoOnly);
+			me.navigation.setContent(info, status, showRoster, me.infoOnly, inviteCodeLink);
 		}
 
 
@@ -72,6 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 			return bundle.getWrapper()
 				.then(function (e) {
 					var showRoster = !!e.isAdministrative && !(e.isContentEditor && e.isContentEditor());
+
 					update(catalogEntry, e.get('Status'), showRoster, me.infoOnly);
 				})
 				.catch(function () {

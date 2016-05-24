@@ -86,6 +86,26 @@
 
 	&.nav-outline {
 		overflow: hidden;
+		background: none;
+
+		.static-invitation-code {
+		    background: #fff;
+		    border-top: 1px solid #F1F1F1;
+			margin-top: -.5em;
+
+			.invitation-wrapper {
+    			padding: 8px 5px 8px 19px;
+
+				.invite-header {
+					color: $secondary-grey;
+					font: normal 400 14px $font;
+				}
+
+				.code {
+					user-select: text;
+				}
+			}
+		}
 	}
 
 	:not(.outline-row) > .label {

@@ -16,7 +16,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		{ cls: 'header', cn: [
 			'{{{NextThought.view.courseware.info.outline.Menu.header}}}'
 		]},
-		{ cls: 'outline-menu'}
+		{ cls: 'outline-menu'},
+		{ cls: 'static-invitation-code'}
 	]),
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -25,8 +26,17 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		]
 	})),
 
+
+	inviteTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		cls: 'invitation-wrapper', cn: [
+			{cls: 'invite-header', html: 'Course Invitation Code'},
+			{cls: 'label code', html: '{code}'}
+		]
+	})),
+
 	renderSelectors: {
-		menuEl: '.outline-menu'
+		menuEl: '.outline-menu',
+		inviteEl: '.static-invitation-code'
 	},
 
 	getTargetEl: function () {
@@ -35,7 +45,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 	afterRender: function () {
 		this.callParent(arguments);
+
 		this.addMenuItems();
+
+		if (this.inviteCodeLink) {
+			this.addStaticInviteCode();
+		}
 
 		this.mon(this.menuEl, 'click', this.onClick.bind(this));
 	},
@@ -80,6 +95,21 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		}
 	},
 
+	addStaticInviteCode () {
+		let me = this;
+
+		Service.request(me.inviteCodeLink)
+			.then( code => {
+				let courseInvitations = JSON.parse(code),
+					codes = courseInvitations.Items && courseInvitations.Items.map( invite => invite.Code).join(',');
+
+				me.inviteTpl.append(me.inviteEl, {
+					code: codes
+				});
+				me.inviteEl.selectable();
+			});
+	},
+
 	setActiveItem: function (route) {
 		var activeItem = this.el && this.el.down('.x-item-selected'),
 			activeItemRoute = activeItem && activeItem.getAttribute('data-route');
@@ -103,4 +133,3 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 	}
 });
-

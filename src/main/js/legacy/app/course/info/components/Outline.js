@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		this.callParent(arguments);
 	},
 
-	setContent: function (info, status, showRoster, courseMode) {
+	setContent: function (info, status, showRoster, courseMode, inviteCodeLink) {
 		var startDate = Ext.util.Format.date(info.get('StartDate'), 'F j, Y');
 
 		this.removeAll(true);
@@ -38,7 +38,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		this.menu = this.add({
 			xtype: 'course-info-outline-menu',
 			info: info,
-			showRoster: showRoster
+			showRoster: showRoster,
+			inviteCodeLink: inviteCodeLink
 		});
 
 		this.mon(this.menu, 'select-route', this.changeRoute.bind(this));
