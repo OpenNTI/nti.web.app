@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
+const Ext = require('extjs');
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceAdministrativeRole', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.courseware.courseinstanceadministrativerole',
 
 	isAdministrative: true,
 	idProperty: 'href',
@@ -15,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceA
 
 
 	__precacheEntry: function () {
-		var instance = this.get('CourseInstance');
+		const instance = this.get('CourseInstance');
 
 		instance.setEnrollment(this);
 
@@ -36,13 +37,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceA
 	/**
 	 * A content editor has less access compared to an admin (i.e. course instructor)
 	 * Right now, since we don't have any clear way of telling whether or not we have a content editor
-	 * We will use the check for the GradeBook variable to determine that, 
+	 * We will use the check for the GradeBook variable to determine that,
 	 * given that content editors shouldn't have access to the GradeBook.
-	 * 
+	 *
 	 * @return {Boolean} whether or not this is a content editor
 	 */
 	isContentEditor: function () {
-		var instance = this.get('CourseInstance');
+		const instance = this.get('CourseInstance');
 		return !(instance && instance.get('GradeBook'));
 	}
 });
