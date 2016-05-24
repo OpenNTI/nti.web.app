@@ -896,6 +896,25 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	},
 
 
+	onNoteSaveFailure: function (err, defaultMessage) {
+		if (err && err.responseText) {
+			err = JSON.parse(err.responseText);
+		}
+
+		if (err.code === 'MaxFileSizeUploadLimitError') {
+			let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+				currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+			err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+		}
+		if (err.code === 'MaxAttachmentsExceeded') {
+			err.message += ' Max Number of files: ' + err.constraint;
+		}
+
+		let msg = err && err.message || defaultMessage;
+		alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+	},
+
+
 	savePhantomAnnotation: function (record, applySharing/*, successFn, failureFn*/) {
 		var p,
 			me = this;

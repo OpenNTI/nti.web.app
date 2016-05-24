@@ -409,30 +409,25 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 
 		function save () {
+			let p;
 			if (me.editMode) {
-				const original = {
-					body: r.get('body'),
-					title: r.get('title')
-				};
-				r.set('body', v.body);
-				r.set('title', v.title);
-
-				return r.saveData()
+				p = me.UserDataActions.saveUpdatedNote(r, v.body || [], v.title)
 						.then(function (response) {
 							let rec = ParseUtils.parseItems(response)[0];
 							r.fireEvent('updated', rec);
 							callback(true, rec);
 						})
 						.catch(reason => {
-							r.set(original);
-							me.onReplySaveFailure(reason)
+							me.onReplySaveFailure(reason);
 						});
 			}
 			else {
-				me.UserDataActions.saveNewReply(r, v.body, [])
+				p = me.UserDataActions.saveNewReply(r, v.body, [])
 					.then(callback.bind(this, true))
 					.catch(me.onReplySaveFailure.bind(me));
 			}
+
+			return p;
 		}
 
 		if (DomUtils.isEmpty(v.body)) {
