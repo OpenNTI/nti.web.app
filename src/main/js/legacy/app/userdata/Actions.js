@@ -849,25 +849,52 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				})
 				.catch(function (err) {
 					console.error('Something went terribly wrong...', err.stack || err.message);
-					if (err && err.responseText) {
-						err = JSON.parse(err.responseText);
-					}
 
-					if (err.code === 'MaxFileSizeUploadLimitError') {
-						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
-						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
-					}
-					if (err.code === 'MaxAttachmentsExceeded') {
-						err.message += ' Max Number of files: ' + err.constraint;
-					}
-
-					let msg = err && err.message || 'Could not save reply';
-					alert({title: 'Attention', msg: msg, icon: 'warning-red'});
-
+					let def = 'Could not save reply';
+					me.onNoteSaveFailure(err, def);
 					return Promise.reject(err);
 				});
 	},
+
+
+	/**
+	 * @param record - Note Record to edit
+	 * @param body - update body
+	 * @param - updated title
+	 * @return
+	 *
+	 * TODO: Combine this together with the saveNewNote Code.
+	 */
+	saveUpdatedNote: function (record, body, title) {
+		if (!record) {
+			return Promise.reject('cannot save changes without a note record...');
+		}
+
+		let r = record, me = this;
+		const original = {
+			body: r.get('body'),
+			title: r.get('title')
+		};
+
+		r.set('body', body);
+		r.set('title', title);
+
+		return r.saveData()
+					.then(function (response) {
+						let rec = ParseUtils.parseItems(response)[0];
+						r.fireEvent('updated', rec);
+						return rec;
+					})
+					.catch(function (err) {
+						console.error('Something went terribly wrong...', err.stack || err.message);
+						let def = 'Could not save note';
+
+						r.set(original);
+						me.onNoteSaveFailure(err, def);
+						return Promise.reject(err);
+					});
+	},
+
 
 	savePhantomAnnotation: function (record, applySharing/*, successFn, failureFn*/) {
 		var p,
