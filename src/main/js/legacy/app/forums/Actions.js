@@ -30,7 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 
 		comment = comment || NextThought.model.forums.Post.create();
 
-		comment.set({body: values.body});
+		const originalBody = comment.get('body');
+		comment.set('body', values.body);
 
 		isEdit = isEdit && !Ext.isEmpty(comment.get('href'));
 
@@ -50,6 +51,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 					return rec;
 				})
 				.catch(function (err) {
+					comment.set('body', originalBody);
+
 					console.error('Failed to save topic comment:', arguments);
 					if (err && err.responseText) {
 						err = JSON.parse(err.responseText);
@@ -80,6 +83,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		//NOTE: Forums entries are PUBLIC only.
 		autoPublish = true;
 
+		const original = {
+			tags: post.get('tags'),
+			title: post.get('title'),
+			body: post.get('body')
+		};
+
 		post.set({
 			'title': title,
 			'body': body,
@@ -91,6 +100,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		}
 
 		return post.saveData({url: isEdit ? undefined : forum && forum.getLink('add')})
+			.catch(resason => {
+				post.set(original);
+				return Promise.reject(resason);
+			})
 			.then (function (response) {
 				var entry = isEdit ? record : ParseUtils.parseItems(response)[0];
 

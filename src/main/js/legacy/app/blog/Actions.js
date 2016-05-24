@@ -47,6 +47,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 		//TODO save old values so we can revert them on error?
 		//See also beginEdit cancelEdit
+		const original = {
+			title: post.get('title'),
+			body: post.get('body'),
+			tags: post.get('tags')
+		};
 
 		post.set({
 			'title': title,
@@ -72,7 +77,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 				return entry;
 			})
 			.then(blogEntry => me.handleShareAndPublishState(blogEntry, sharingInfo))
-			.catch(reason => (this.onSaveFailure(reason), Promise.reject(reason)));
+			.catch(reason => {
+				post.set(original);
+				this.onSaveFailure(reason)
+				return Promise.reject(reason)
+			});
 	},
 
 	/**
@@ -148,7 +157,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		var isEdit = Boolean(record && !record.phantom),
 			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
 
-		commentPost.set({body: valueObject.body});
+		const originalBody = commentPost.get('body');
+		commentPost.set('body', valueObject.body);
 
 		return commentPost.saveData({url: isEdit ? undefined : blogPost && blogPost.getLink('add')})
 				.then(function (response) {
@@ -159,7 +169,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 					return rec;
 				})
-				.catch(reason => (this.onSaveFailure(reason), Promise.reject(reason)));
+				.catch(reason => {
+					commentPost.set('body', originalBody);
+					this.onSaveFailure(reason);
+					return Promise.reject(reason);
+				});
 	},
 
 

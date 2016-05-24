@@ -724,7 +724,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			focusNode, isSelectionInContent;
 
 		// Apply icon data
-		data = Ext.apply(data, iconData);
+		data = Object.assign({}, data, iconData);
 
 		//Need to see if we have a selection and it is in our content element
 		if (document && document.getSelection) {
@@ -761,12 +761,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			type = data.contentType || data.FileMimeType || '';
 
 		// Apply icon data
-		data = Ext.apply(data, iconData);
-
-		data = Ext.clone(data);
-		data.type = Mime.extension(type);
-		data.extension = data.type;
-		data.placeholder = this.defaultValue;
+		data = Object.assign({
+			type: Mime.extension(type),
+			extension: data.type,
+			placeholder: this.defaultValue
+		}, data, iconData);
 
 		if (size) {
 			data.size = size;
@@ -1799,11 +1798,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	clearAttachmentFilesParts: function () {
 		// Empty the map.
-		// this.AttachmentMap = {};
-		for (let k in this.AttachmentMap) {
-			if (this.AttachmentMap.hasOwnProperty(k)) {
-				delete this.AttachmentMap[k];
-			}
+		for (let k of Object.keys(this.AttachmentMap)) {
+			delete this.AttachmentMap[k];
 		}
 		this.cleanUpObjectURL();
 	},

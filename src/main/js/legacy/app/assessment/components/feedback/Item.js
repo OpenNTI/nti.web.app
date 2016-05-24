@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 			console.error('No record!');
 			return;
 		}
-
+		var originalBody = record.get('body');
 		record.set('body', value.body);
 		record.saveData()
 				.then(function () {
@@ -141,6 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 					me.update();
 				})
 				.catch(function (reason) {
+					record.set('body', originalBody);
 					editor.unmask();
 					alert({
 						title: getString('NextThought.view.assessment.AssignmentFeedback.error-title'),
