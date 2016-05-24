@@ -1,16 +1,18 @@
-var Ext = require('extjs');
-var Globals = require('../../../../util/Globals');
-var ParseUtils = require('../../../../util/Parsing');
-var ComponentsNavPanel = require('../../../../common/components/NavPanel');
-var MixinsRouter = require('../../../../mixins/Router');
-var MixinsAuditLog = require('../../../../mixins/AuditLog');
-var ComponentsOutline = require('./Outline');
-var ComponentsBody = require('./Body');
-var AuditlogPrompt = require('./editing/auditlog/Prompt');
-var WindowsActions = require('../../../windows/Actions');
-var PromptActions = require('../../../prompt/Actions');
-var MixinsAuditLog = require('../../../../mixins/AuditLog');
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
+const {wait} = require('legacy/util/Promise');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+const PromptActions = require('legacy/app/prompt/Actions');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+
+require('legacy/common/components/NavPanel');
+require('legacy/mixins/Router');
+require('legacy/mixins/AuditLog');
+
+require('./Outline');
+require('./Body');
+require('./editing/auditlog/Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.View', {
@@ -29,8 +31,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.PromptActions = NextThought.app.prompt.Actions.create();
+		this.WindowActions = WindowsActions.create();
+		this.PromptActions = PromptActions.create();
 
 		this.initRouter();
 
@@ -138,8 +140,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			outlineInterface = bundle && bundle.getOutlineInterface(true);
 
 		outlineInterface.onceBuilt()
-			.then(function (outlineInterface) {
-				var outline = outlineInterface && outlineInterface.getOutline(),
+			.then(function (builtOutlineInterface) {
+				var outline = builtOutlineInterface && builtOutlineInterface.getOutline(),
 					nodeId = me.activeNode && me.activeNode.getId();
 
 				outline.fillInItems();
@@ -232,8 +234,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			outlineInterface = editing ? bundle.getAdminOutlineInterface(doNotCache) : bundle.getOutlineInterface(doNotCache);
 
 		outlineInterface.onceBuilt()
-			.then(function (outlineInterface) {
-				var outline = outlineInterface.getOutline();
+			.then(function (builtOutlineInterface) {
+				var outline = builtOutlineInterface.getOutline();
 
 				if (outline.getLink('edit')) {
 					me.showEditControls();
@@ -298,16 +300,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	__getRecord: function (id, record, editing, doNotCache) {
-		var me = this, rIndex,
-			outline = this.updateOutline(editing, doNotCache);
+		var outline = this.updateOutline(editing, doNotCache);
 
 		return outline.onceBuilt()
-			.then(function (outline) {
+			.then(builtOutline => {
 				if (id && (!record || record.getId() !== id)) {
-					record = outline.getNode(id);
+					record = builtOutline.getNode(id);
 				} else if (record) {
 					//get the record that is in the outline in case it has updated
-					record = outline.getNode(record.getId());
+					record = builtOutline.getNode(record.getId());
 				}
 
 				//With editing the record may or may not be a content node
@@ -318,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				// In case, we have no record, get the first available record.
 				// TODO: should we check if it's not in edit mode?
 				if (!record) {
-					record = outline.findNodeBy(function (rec) {
+					record = builtOutline.findNodeBy(function (rec) {
 						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
 					});
 				}
@@ -327,81 +328,71 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	showOutlineNode: function (route, subRoute) {
-		var me = this,
-			bundle = this.currentBundle,
-			node = route.params && route.params.node,
-			id = node && decodeFromURI(node),
-			changedEditing = me.isEditing,
-			record = route.precache.outlineNode;
-
-
+	showOutlineNode: function (route/*, subRoute*/) {
+		const bundle = this.currentBundle;
 		if (this.editingMap && this.editingMap[bundle.getId()]) {
 			this.replaceRoute('Editing', '/edit');
 			return Promise.resolve();
 		}
 
-		me.alignNavigation();
-		me.navigation.stopEditing();
-		me.body.showNotEditing();
+		this.alignNavigation();
+		this.navigation.stopEditing();
+		this.body.showNotEditing();
 
-		delete me.isEditing;
+		delete this.isEditing;
 
-		return me.__getRecord(id, record, false, changedEditing)
-			.then(function (record) {
-				me.unmask();
+		const node = route.params && route.params.node;
+		const id = node && decodeFromURI(node);
+		const changedEditing = this.isEditing;
+
+		return this.__getRecord(id, route.precache.outlineNode, false, changedEditing)
+			.then(record => {
+				this.unmask();
 
 				if (!record) {
 					console.error('No valid lesson to show');
-					me.body.showEmptyState();
+					this.body.showEmptyState();
 					return;
 				}
 
-				record = me.navigation.selectRecord(record, true);
+				const selectedRecord = this.navigation.selectRecord(record, true);
 
-				me.setTitle(record.get('label'));
-				me.activeNode = record;
+				this.setTitle(selectedRecord.get('label'));
+				this.activeNode = selectedRecord;
 
-				return me.body.showOutlineNode(record, changedEditing)
-					.then(me.alignNavigation.bind(me))
-					.then(function () {
-						return record;
-					});
+				return this.body.showOutlineNode(selectedRecord, changedEditing)
+					.then(() => this.alignNavigation())
+					.then(() => selectedRecord);
 			});
 	},
 
-	showEditOutlineNode: function (route, subRoute) {
-		var me = this,
-			bundle = me.currentBundle,
-			id = route.params && route.params.node && decodeFromURI(route.params.node),
-			changedEditing = !me.isEditing,
-			record = route.precache.outlineNode;
+	showEditOutlineNode: function (route/*, subRoute*/) {
+		this.alignNavigation();
+		this.navigation.startEditing();
+		this.body.showEditing();
 
-		me.alignNavigation();
-		me.navigation.startEditing();
-		me.body.showEditing();
+		this.isEditing = true;
 
-		me.isEditing = true;
+		this.editingMap[this.currentBundle.getId()] = true;
 
-		me.editingMap[bundle.getId()] = true;
+		const id = route.params && route.params.node && decodeFromURI(route.params.node);
+		const changedEditing = !this.isEditing;
 
-		return me.__getRecord(id, record, true, changedEditing)
-			.then(function (record) {
+		return this.__getRecord(id, route.precache.outlineNode, true, changedEditing)
+			.then(record => {
 				if (!record) {
 					console.error('No valid outline node to edit');
 					return;
 				}
 
-				record = me.navigation.selectRecord(record, true);
-				me.unmask();
-				me.setTitle('Editing | ' + record.get('label'));
-				me.activeNode = record;
+				const theRecord = this.navigation.selectRecord(record, true);
+				this.unmask();
+				this.setTitle('Editing | ' + theRecord.get('label'));
+				this.activeNode = theRecord;
 
-				return me.body.editOutlineNode(record, changedEditing)
-					.then(me.alignNavigation.bind(me))
-					.then(function () {
-						return record;
-					});
+				return this.body.editOutlineNode(theRecord, changedEditing)
+					.then(() => this.alignNavigation())
+					.then(() => theRecord);
 			});
 	}
 });
