@@ -4,7 +4,7 @@ var DomUtils = require('../util/Dom');
 var ParseUtils = require('../util/Parsing');
 var RangeUtils = require('../util/Ranges');
 var SharingUtils = require('../util/Sharing');
-var {guidGenerator: guid} = require('legacy/util/Globals');
+var {guidGenerator: guidFn} = require('legacy/util/Globals');
 var {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
 const Mime = require('mime-types');
@@ -12,7 +12,7 @@ require('legacy/common/form/fields/FilePicker');
 require('legacy/model/RelatedWork');
 require('legacy/editor/embedvideo/Window');
 
-const guidGenerator = () => `guid-${guid()}`; //CSS id selectors cannot start with numbers.
+const guidGenerator = () => `guid-${guidFn()}`; //CSS id selectors cannot start with numbers.
 
 Ext.define('NextThought.editor.AbstractEditor', {
 	extend: 'Ext.Component',
