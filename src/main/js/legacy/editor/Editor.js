@@ -229,6 +229,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			cls: 'attachment-part',
 			'data-fileName': '{filename}',
 			name: '{name}',
+			id: '{name}',
 			contentEditable: false,
 			unselectable: 'on',
 			cn: [
@@ -707,6 +708,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
+	//FIXME: D.R.Y.
 	setAttachmentPreviewFromInput: function (file, name) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setAttachmentPreviewFromInput.bind(this, file));
@@ -737,12 +739,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			tpl.append(content, data);
 		}
 
+		Ext.get(name).unselectable();
+
 		content.unmask();
 
 		this.maybeEnableSave();
 	},
 
-
+	//FIXME: D.R.Y.
 	setAttachmentPreviewFromModel: function (model) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setAttachmentPreviewFromModel.bind(this, model));
@@ -768,7 +772,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			data.size = size;
 		}
 
+		if (!data.name) {
+			data.name = guidGenerator();
+		}
+
 		tpl.append(content, data);
+
+		Ext.get(data.name).unselectable();
 	},
 
 
@@ -777,6 +787,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
+	//FIXME: D.R.Y.
 	getFileIconDataFromFile: function (file, name) {
 		let type = file && file.type,
 			isImage = this.isImage(type),
@@ -792,7 +803,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return obj;
 	},
 
-
+	//FIXME: D.R.Y.
 	getFileIconDataFromValue: function (model) {
 		let data = model && model.isModel ? model.getData() : model,
 			type = data.contentType || data.FileMimeType,
@@ -2106,7 +2117,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 				let cleaned = html.replace(this.REGEX_INITIAL_CHAR, '');
 				//if the html was only the no width space(s) don't add it to the parts
-				if (!(html.length === 1 && cleaned.length === 0)) {
+				if (!(html.length > 0 && cleaned.length === 0)) {
 					out.push(html);
 				}
 			}
