@@ -1140,13 +1140,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 			}
 			else if (e.getKey() === e.DELETE || e.getKey() === e.BACKSPACE) {
-				let selection = window.getSelection && window.getSelection() || {},
-					target = selection.focusNode || selection.anchorNode;
-				if (target && Ext.fly(target).up('.attachment-part')) {
-					this.deleteAttachmentOnDeleteKey(e);
-					return false;
-				}
-
 				if (Ext.isIE && a === n && a.childNodes[ao] === undefined && a.childNodes[ao - 1]) {
 					s.removeAllRanges();
 					r = document.createRange();
@@ -1420,24 +1413,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 
 			this.maybeEnableSave();
-		}
-	},
-
-	deleteAttachmentOnDeleteKey: function (e) {
-		let selection = window.getSelection && window.getSelection() || {},
-			target = selection.focusNode || selection.anchorNode,
-			parent = target && Ext.fly(target).up('.attachment-part'),
-			dom = this.el && this.el.dom,
-			input = dom && dom.querySelector('.control.upload input');
-
-		e.stopEvent();
-		delete this.AttachmentMap[name];
-		if (parent) {
-			parent.remove();
-			this.cleanUpObjectURL(name);
-			if (input) {
-				input.value = null;
-			}
 		}
 	},
 
