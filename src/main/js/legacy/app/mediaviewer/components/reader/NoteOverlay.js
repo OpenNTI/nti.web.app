@@ -241,7 +241,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 					.then(function () {
 						editor.unmask();
 						me.deactivateEditor();
-					}).catch(function () {
+					}).catch(function (e) {
+						console.error(Globals.getError(e));
 						editor.unmask();
 					});
 			}
@@ -250,7 +251,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 					.then(function () {
 						editor.unmask();
 						me.deactivateEditor();
-					}).catch(function () {
+					}).catch(function (e) {
+						console.error(Globals.getError(e));
 						editor.unmask();
 					});
 			}
