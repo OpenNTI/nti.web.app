@@ -571,7 +571,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 				avatarEl.show();
 			};
 
-			this.editor = Ext.widget('nti-editor', { record: this.record, renderTo: this.respondEl, ownerCt: this });
+			this.editor = Ext.widget('nti-editor', { record: this.record, renderTo: this.respondEl, ownerCt: this, enableFileUpload: true});
 			this.mon(this.editor, {
 				'activated-editor' : hide,
 				'deactivated-editor' : show,

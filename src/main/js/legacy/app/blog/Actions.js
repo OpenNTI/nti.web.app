@@ -79,8 +79,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 			.then(blogEntry => me.handleShareAndPublishState(blogEntry, sharingInfo))
 			.catch(reason => {
 				post.set(original);
-				this.onSaveFailure(reason)
-				return Promise.reject(reason)
+				this.onSaveFailure(reason);
+				return Promise.reject(reason);
 			});
 	},
 

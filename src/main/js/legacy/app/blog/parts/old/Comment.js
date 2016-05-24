@@ -67,6 +67,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		this.addEvents(['delete-post']);
 		this.enableBubble(['delete-post']);
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
+
+		this.BlogActions = NextThought.app.blog.Actions.create();
 	},
 
 	beforeRender: function () {
@@ -157,11 +159,12 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 			footEl.show();
 		};
 
-		this.editor = Ext.widget('nti-editor', {record: this.record, ownerCt: this, renderTo: this.editorBoxEl});
+		this.editor = Ext.widget('nti-editor', {record: this.record, ownerCt: this, renderTo: this.editorBoxEl, enableFileUpload: true});
 		this.mon(this.editor, {
 			scope: this,
 			'activated-editor': hide,
 			'deactivated-editor': show,
+			'save': this.onEditorSaved.bind(this),
 			'no-body-content': function (editor, el) {
 				editor.markError(el, 'You need to type something');
 				return false;
@@ -317,5 +320,32 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		}
 		this.editor.editBody(this.record.get('body'));
 		this.editor.activate();
+	},
+
+
+	onEditorSaved: function (editor, record, valueObject) {
+		var me = this,
+			comment = this.record;
+
+		if (editor.el) {
+			editor.el.mask('Saving...');
+			editor.el.repaint();
+		}
+
+		this.BlogActions.saveBlogComment(comment, record, valueObject)
+			.then(function (rec) {
+				if (!me.isDestroyed) {
+					rec.compileBodyContent(me.setBody, me);
+					editor.deactivate();
+					editor.setValue('');
+					editor.reset();
+					return rec;
+				}
+			})
+			.always(function () {
+				if (editor.el) {
+					editor.el.unmask();
+				}
+			});
 	}
 });
