@@ -2069,20 +2069,18 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	getBodyValue: function () {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
-		var out = [],
-			sel = this.el.select('.content > *'),
-			reInitialChar = this.REGEX_INITIAL_CHAR, me = this;
+		const out = [];
+		const sel = this.el.select('.content > *');
 
-		sel.each(function (div) {
-			var html, parsed, tmp, dom;
+		sel.each(div => {
 			try {
 				//don't let manipulations here effect the dom
-				dom = Ext.getDom(div).cloneNode(true);
+				let dom = Ext.getDom(div).cloneNode(true);
 				div = Ext.fly(dom, '__editer-flyweight');
-				html = div.getHTML() || '';
+				let html = div.getHTML() || '';
 
 				if (div.is('.attachment-part')) {
-					html = me.getAttachmentPart(div);
+					html = this.getAttachmentPart(div);
 					out.push(html);
 					return true;
 				}
@@ -2100,14 +2098,15 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 
 				if (!html && Ext.fly(dom).hasCls('object-part')) {
-					tmp = document.createElement('div');
+					let tmp = document.createElement('div');
 					tmp.appendChild(dom);
 					html = tmp.innerHTML || '';
 				}
-				parsed = html.replace(reInitialChar, '');
 
-				//if the html was only the no width space don't add it to the parts
-				if (!(html.length === 1 && parsed.length === 0)) {
+
+				let cleaned = html.replace(this.REGEX_INITIAL_CHAR, '');
+				//if the html was only the no width space(s) don't add it to the parts
+				if (!(html.length === 1 && cleaned.length === 0)) {
 					out.push(html);
 				}
 			}
