@@ -2,7 +2,7 @@ const Ext = require('extjs');
 const Globals = require('legacy/util/Globals');
 const BatchExecution = require('legacy/util/BatchExecution');
 
-const schedular = new BatchExecution({batchSize: 10});
+const schedular = new BatchExecution({batchSize: 5});
 
 module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 	alias: 'resolvers.videoservices.vimeo',
