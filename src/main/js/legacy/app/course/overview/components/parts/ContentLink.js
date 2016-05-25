@@ -5,6 +5,7 @@ const Globals = require('legacy/util/Globals');
 const {getURL} = Globals;
 const ParseUtils = require('legacy/util/Parsing');
 
+require('legacy/mixins/EllipsisText');
 require('legacy/common/components/cards/Card');
 require('legacy/model/Note');
 require('legacy/model/RelatedWork');
@@ -20,6 +21,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		'widget.course-overview-relatedworkref',
 		'widget.course-overview-externallink'
 	],
+
+	mixins: {
+		EllipsisText: 'NextThought.mixins.EllipsisText'
+	},
 
 	// requires: ['NextThought.view.contentviewer.View'],
 
@@ -62,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		config.data = {
 			'attribute-data-href': href, href: href,
 			creator: n.getAttribute('byline') || n.getAttribute('creator'),
-			description: Ext.String.ellipsis(n.getAttribute('desc') || n.getAttribute('description'), 200, true),
+			description: n.getAttribute('desc') || n.getAttribute('description'),
 			thumbnail: icon.url,
 			extension: icon.extension,
 			iconCls: icon.iconCls,
@@ -89,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	afterRender: function () {
 		this.callParent(arguments);
-	//		console.log('Loading:',ntiid);
+		this.truncateText(Ext.getDom(this.el.down('.description')));
 	},
 
 	loadContainer: function () {
