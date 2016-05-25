@@ -51,6 +51,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 			click: this.choiceClicked,
 			keydown: this.keyDown
 		});
+
+		const images = Array.from(this.el.dom.querySelectorAll('img'));
+		if (images.length > 0) {
+			Promise.all(images.map(img => new Promise(next => img.onerror = img.onload = next)))
+				.then(() => this.updateLayout())
+				.catch(e => console.error('error:', e));
+		}
 	},
 	keyDown: function (e) {
 		if (e.getKey() === e.ENTER) { this.choiceClicked(e); }
