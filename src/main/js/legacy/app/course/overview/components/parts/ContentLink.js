@@ -1,15 +1,15 @@
 const Ext = require('extjs');
-const AnalyticsUtil = require('../../../../../util/Analytics');
-const DomUtils = require('../../../../../util/Dom');
-const Globals = require('../../../../../util/Globals');
+const AnalyticsUtil = require('legacy/util/Analytics');
+const DomUtils = require('legacy/util/Dom');
+const Globals = require('legacy/util/Globals');
 const {getURL} = Globals;
-const ParseUtils = require('../../../../../util/Parsing');
+const ParseUtils = require('legacy/util/Parsing');
 
-require('../../../../../common/components/cards/Card');
-require('../../../../../model/Note');
-require('../../../../../model/RelatedWork');
-require('../../../../contentviewer/Actions');
-require('../../../../../util/Parsing');
+require('legacy/common/components/cards/Card');
+require('legacy/model/Note');
+require('legacy/model/RelatedWork');
+require('legacy/app/contentviewer/Actions');
+require('legacy/util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
