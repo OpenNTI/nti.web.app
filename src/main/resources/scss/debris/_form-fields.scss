@@ -332,7 +332,6 @@ span.nti-radiobutton {
 		overflow: auto;
 		color: $primary-grey;
 		backface-visibility: hidden;
-		transform: translate3d(0,0,0);
 
 		ul {
 			margin: 0;
@@ -355,6 +354,7 @@ span.nti-radiobutton {
 
 		&.hidden {
 			display: none;
+			opacity: 0;
 		}
 	}
 
