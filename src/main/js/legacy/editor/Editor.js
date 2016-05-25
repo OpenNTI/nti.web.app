@@ -765,15 +765,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			type: Mime.extension(type),
 			extension: data.type,
 			placeholder: this.defaultValue
-		}, data, iconData);
+		}, data, iconData, {
+			name: guidGenerator(),
+			size: size ? size : data.size
+		});
 
-		if (size) {
-			data.size = size;
-		}
-
-		if (!data.name) {
-			data.name = guidGenerator();
-		}
 
 		this.trackedParts[data.name] = data;
 
@@ -2109,7 +2105,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		let part = this.trackedParts[name];
 
-		if (!part) {
+		if (part) {
+			part = Object.assign({}, part);
+			delete part.name; //do not persist name.
+		} else {
 			part = {
 				MimeType: 'application/vnd.nextthought.contentfile',
 				filename: el && el.getAttribute && el.getAttribute('data-fileName'),
@@ -2117,6 +2116,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				file: this.AttachmentMap[name]
 			};
 		}
+
 		return part;
 	},
 
