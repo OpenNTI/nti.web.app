@@ -20,7 +20,7 @@
     "start": "make styles && web-service --config ./src/server/config/env.json.example",
     "prepublish": "not-in-install && make || in-install",
     "bump": "npm version",
-    "postbump": "git push --tags && npm publish"
+    "postbump": "git push && git push --tags && npm publish"
   },
   "main": "./dist/server/index.js",
   "publishConfig": {
