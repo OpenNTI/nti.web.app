@@ -57,6 +57,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 
 	viewerIdMap: {},
 
+	items: [
+		{xtype: 'box'},
+		{xtype: 'media-grid-view'}
+	],
+
 	getStorageManager: function () {
 		return TemporaryStorage;
 	},
@@ -164,9 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			floatParent: this
 		});
 
-		this.gridView = this.add({
-			xtype: 'media-grid-view'
-		});
+		this.gridView = this.down('media-grid-view');
 
 		this.chatCmp = GutterTab.create({
 			renderTo: this.toolbar.getEl()

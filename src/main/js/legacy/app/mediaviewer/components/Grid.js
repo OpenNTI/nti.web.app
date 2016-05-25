@@ -126,6 +126,19 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 
 	setContent: function (source, bundle) {
 		var me = this;
+		if (!this.rendered) {
+			this.setContent.lastArgs = [...arguments];
+
+			if (!this.setContent.hooked) {
+				this.setContent.hooked = true;
+				this.on({
+					single: true,
+					afterrender: ()=> this.setContent(...this.setContent.lastArgs)
+				});
+			}
+
+			return;
+		}
 
 		me.source = source;
 		if (me.currentBundle !== bundle) {
