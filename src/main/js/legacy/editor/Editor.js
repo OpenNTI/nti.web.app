@@ -775,6 +775,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			data.name = guidGenerator();
 		}
 
+		this.trackedParts[data.name] = data;
+
 		tpl.append(content, data);
 
 		Ext.get(data.name).unselectable();
@@ -1912,7 +1914,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 
 			let tmp = (dom.innerHTML = o, dom.textContent); //remove all html, and just get text.
-			
+
 			//Filter out empty body parts that parse to either no text, or whitespace only text.
 			return !Ext.isEmpty(tmp.trim());
 		});
@@ -2100,18 +2102,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	getAttachmentPart: function (el) {
-		var name = el && el.getAttribute && el.getAttribute('name'), part;
+		const name = el && el.getAttribute && el.getAttribute('name');
 
-		if (this.record) {
-			let body = this.record.get('body') || [];
-
-			body.forEach(function (p) {
-				if (p.name === name) {
-					part = p;
-					return false;
-				}
-			});
-		}
+		let part = this.trackedParts[name];
 
 		if (!part) {
 			part = {
