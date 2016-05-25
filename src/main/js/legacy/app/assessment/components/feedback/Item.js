@@ -193,12 +193,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 		let el = e.getTarget('.attachment-part'),
 			part = this.getAttachmentPart(el);
 
-		if (part) {
-			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+		if (part  && !e.getTarget('.download')) {
+			e.stopEvent(e);
 
-			if (ContentViewerActions) {
-				ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
+			if (!this.ContentViewerActions) {
+				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
 			}
+			this.ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
 		}
 	},
 

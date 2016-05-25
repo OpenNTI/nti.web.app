@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 				]},
 				{ cls: 'controls', cn: [
 					{ tag: 'span', cls: 'download', cn: [
-						{tag: 'a', href: '{download_url}', html: 'Download', target:'_self'}
+						{tag: 'a', href: '{download_url}', html: 'Download', target:'_self', download:'true'}
 					]}
 				]}
 			]}

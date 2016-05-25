@@ -557,7 +557,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 		let el = e.getTarget('.attachment-part'),
 			part = this.getAttachmentPart(el);
 
-		if (part) {
+		if (part && !e.getTarget('.download')) {
+			e.stopEvent();
 			if (!this.ContentViewerActions) {
 				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
 			}

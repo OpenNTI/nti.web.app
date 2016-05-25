@@ -427,6 +427,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			return null;
 		}
 
+		if (e && e.getTarget && e.getTarget('.download')) {
+			return;
+		}
+
+		e.stopEvent();
+
 		let body = record.get('body') || [],
 			part;
 
