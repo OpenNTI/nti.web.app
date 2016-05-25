@@ -74,14 +74,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		var ref = this.getReaderRef();
 
 		try {
-			this.syncHight();
+			this.syncHeight();
 
 			if (ref) {
 				ref.notepadRef = this;
 
 				this.mon(ref, {
 					scroll: 'syncScroll',
-					'sync-height': 'syncHight',
+					'sync-height': 'syncHeight',
 					'set-content': 'clearItems'
 				});
 			}
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 
 
 	//<editor-fold desc="Synchronizing Handlers">
-	syncHight: function () {
+	syncHeight: function () {
 		var reader = this.getReaderRef(),
 			iFrame = reader && reader.getIframe().get();
 

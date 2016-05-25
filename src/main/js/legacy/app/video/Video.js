@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 	playerWidth: 640,
 
 	playerHeight: function () {
-		return Math.round(this.playerWidth * this.ASPECT_RATIO) + this.getControlHight();
+		return Math.round(this.playerWidth * this.ASPECT_RATIO) + this.getControlHeight();
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -629,7 +629,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-	getControlHight: function () {
+	getControlHeight: function () {
 		var l = this.players,
 			k = this.activeVideoService;
 
