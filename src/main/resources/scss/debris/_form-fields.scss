@@ -331,6 +331,8 @@ span.nti-radiobutton {
 		z-index: 3;
 		overflow: auto;
 		color: $primary-grey;
+		backface-visibility: hidden;
+		transform: translate3d(0,0,0);
 
 		ul {
 			margin: 0;
