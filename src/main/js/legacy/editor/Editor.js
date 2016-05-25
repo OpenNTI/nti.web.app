@@ -1899,6 +1899,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
+		const dom = document.createElement('div'); //leave outside the loop.
+
 		return r.filter(function (o) {
 
 			if (!Ext.isString(o)) {
@@ -1909,8 +1911,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				return false;
 			}
 
-			//if we are just whitespace and html whitespace
-			let tmp = o.replace(/<br\/?>/ig, '');
+			let tmp = (dom.innerHTML = o, dom.textContent); //remove all html, and just get text.
+			
+			//Filter out empty body parts that parse to either no text, or whitespace only text.
 			return !Ext.isEmpty(tmp.trim());
 		});
 	},
