@@ -766,7 +766,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			extension: data.type,
 			placeholder: this.defaultValue
 		}, data, iconData, {
-			name: guidGenerator(),
+			name: data.name || guidGenerator(),
 			size: size ? size : data.size
 		});
 
@@ -2105,10 +2105,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		let part = this.trackedParts[name];
 
-		if (part) {
-			part = Object.assign({}, part);
-			delete part.name; //do not persist name.
-		} else {
+		if (!part) {
 			part = {
 				MimeType: 'application/vnd.nextthought.contentfile',
 				filename: el && el.getAttribute && el.getAttribute('data-fileName'),
