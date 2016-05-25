@@ -1913,10 +1913,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				return false;
 			}
 
-			let tmp = (dom.innerHTML = o, dom.textContent); //remove all html, and just get text.
+			const tmp = (dom.innerHTML = o, dom.textContent); //remove all html, and just get text.
+
+			const tags = ['img']; //add queries to this array.
+			const hasPictorialElements = dom.querySelectorAll(tags.join(',')).length > 0;
 
 			//Filter out empty body parts that parse to either no text, or whitespace only text.
-			return !Ext.isEmpty(tmp.trim());
+			return hasPictorialElements || !Ext.isEmpty(tmp.trim());
 		});
 	},
 
