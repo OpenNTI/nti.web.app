@@ -800,8 +800,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 					}
 				}
 			})
-			.catch(function () {
-				editor.markError(editor.getEl(), 'Could not save comment');
+			.catch(function (reason) {
+				console.error('Error saving comment:' + reason);
 				unmask();
 			});
 	},
