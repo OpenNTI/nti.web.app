@@ -139,7 +139,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		if (!el || !p) {
 			return;
 		}
-		top = el.getY() + p.scrollTop;
+		// top = el.getY() + p.scrollTop;
+		top = Ext.getDom(el).getBoundingClientRect().top + p.scrollTop;
 
 		if (!this.footerEl.getHeight() && (!this.syncHeightRetries || this.syncHeightRetries < 10)) {
 			this.syncHeightRetries = (this.syncHeightRetries || 0) + 1;
