@@ -1849,20 +1849,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	getBody: function (parts) {
-		var r = [], me = this,
-			objectPartRegex = /class=".*object-part.*"/i,
-			i, p, part;
-
-
-		function stripTrailingBreak (text) {
-			return text.replace(/<br\/?>$/i, '').replace(me.REGEX_INITIAL_CHAR, '');
-		}
+		const objectPartRegex = /class=".*object-part.*"/i;
+		const stripTrailingBreak = (text) =>
+			text.replace(/<br\/?>$/i, '').replace(this.REGEX_INITIAL_CHAR, '');
 
 		parts = parts || [];
 
-		for (i = 0; i < parts.length; i++) {
-			p = null;//reset after each iteration.
-			part = parts[i];
+		const r = [];
+
+		for (let i = 0; i < parts.length; i++) {
+			let p = null;//reset after each iteration.
+			let part = parts[i];
 			//if its a whiteboard do our thing
 			if (objectPartRegex.test(part)) {
 				p = this.getPart(part);
@@ -1896,14 +1893,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		//Now make a pass over r joining any multiple text parts by <br>
-		for (i = 0; i < r.length; i++) {
+		for (let i = 0; i < r.length; i++) {
 			if (Ext.isArray(r[i])) {
 				r[i] = r[i].join('<br/>');
 			}
 		}
 
-		r = r.filter(function (o) {
-			var tmp;
+		return r.filter(function (o) {
 
 			if (!Ext.isString(o)) {
 				return true;
@@ -1912,12 +1908,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			if (Ext.isEmpty(o)) {
 				return false;
 			}
+
 			//if we are just whitespace and html whitespace
-			tmp = o.replace(/<br\/?>/ig, '');
+			let tmp = o.replace(/<br\/?>/ig, '');
 			return !Ext.isEmpty(tmp.trim());
 		});
-
-		return r;
 	},
 
 	collapseToEnd: function () {
