@@ -323,7 +323,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	bodyClickHandler: function (event) {
-		event.stopEvent();
 		var me = this,
 			a = event.getTarget('a');
 
@@ -332,6 +331,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			if (me.fireEvent('navigate-to-href', me, a.href)) {
 				return false;
 			}
+		} else {
+			event.stopEvent();
+			this.navigateToObject(this.record);
 		}
 	},
 
@@ -413,10 +415,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.navigateToObject(this.record, {
 			afterClose: this.updateRecord.bind(this)
 		});
-	},
-
-	bodyClickHandler: function () {
-		this.navigateToObject(this.record);
 	},
 
 	updateRecord: function (rec) {
@@ -672,7 +670,6 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	},
 
 	bodyClickHandler: function (event) {
-		event.stopEvent();
 		var me = this,
 			a = event.getTarget('a');
 
@@ -681,6 +678,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			if (me.fireEvent('navigate-to-href', me, a.href)) {
 				return false;
 			}
+		} else {
+			event.stopEvent();
 		}
 	},
 
