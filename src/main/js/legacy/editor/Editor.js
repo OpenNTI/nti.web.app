@@ -8,6 +8,7 @@ var {guidGenerator: guidFn} = require('legacy/util/Globals');
 var {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
 const Mime = require('mime-types');
+const {wait} = require('legacy/util/Promise');
 require('legacy/common/form/fields/FilePicker');
 require('legacy/model/RelatedWork');
 require('legacy/editor/embedvideo/Window');
@@ -404,7 +405,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	clearError: function (el) {
 		if (!el) {
-			el = this.el.down('.content');
+			el = this.el && this.el.down('.content');
 		}
 		if (!el) {
 			return;
@@ -743,6 +744,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		content.unmask();
 
+		wait().then(this.maybeResizeContentBox.bind(this));
+
 		this.maybeEnableSave();
 	},
 
@@ -776,6 +779,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		tpl.append(content, data);
 
 		Ext.get(data.name).unselectable();
+
+		wait().then(this.maybeResizeContentBox.bind(this));
 	},
 
 
