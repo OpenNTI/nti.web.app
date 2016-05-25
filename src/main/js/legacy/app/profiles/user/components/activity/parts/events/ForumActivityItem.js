@@ -341,7 +341,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.editor.focus(true);
 	},
 
-	saveComment: function (editor, record, valueObject, successCallback) {
+	saveComment: function (editor, record, valueObject/*, successCallback*/) {
 		var me = this,
 			topic = this.record;
 
@@ -588,7 +588,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		}
 	},
 
-	saveComment: function (editor, record, valueObject, successCallback) {
+	saveComment: function (editor, record, valueObject/*, successCallback*/) {
 		var me = this,
 			topic = this.record;
 
@@ -693,8 +693,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		var el = this.messageBodyEl, me = this;
 		el.update(html);
 		DomUtils.adjustLinks(el, window.location.href);
-		el.select('img.whiteboard-thumbnail').each(function (el) {
-			el.replace(el.up('.body-divider'));
+		el.select('img.whiteboard-thumbnail').each(thumb => {
+			thumb.replace(thumb.up('.body-divider'));
 		});
 
 		el.select('img').each(function (img) {
