@@ -1,21 +1,21 @@
 const Ext = require('extjs');
-const UserRepository = require('../../../../../../../cache/UserRepository');
-const DomUtils = require('../../../../../../../util/Dom');
+const UserRepository = require('legacy/cache/UserRepository');
+const DomUtils = require('legacy/util/Dom');
 const {isMe} = require('legacy/util/Globals');
 const ForumStore = require('legacy/app/forums/StateStore');
 
-require('../../../../../../../mixins/FlagActions');
-require('../../../../../../../mixins/LikeFavoriteActions');
-require('../../../../../../../mixins/ProfileLinks');
-require('../../../../../../../mixins/ProfileLinks');
-require('../../../../../../../mixins/LikeFavoriteActions');
-require('../../../../../../../mixins/FlagActions');
-require('../../../../../../../editor/Editor');
-require('../../../../../../../layout/component/Natural');
-require('../../../../../../navigation/path/Actions');
-require('../../../../../../forums/Actions');
-require('../../../../../../windows/Actions');
-require('../../../../../../forums/Actions');
+require('legacy/mixins/FlagActions');
+require('legacy/mixins/LikeFavoriteActions');
+require('legacy/mixins/ProfileLinks');
+require('legacy/mixins/ProfileLinks');
+require('legacy/mixins/LikeFavoriteActions');
+require('legacy/mixins/FlagActions');
+require('legacy/editor/Editor');
+require('legacy/layout/component/Natural');
+require('legacy/app/navigation/path/Actions');
+require('legacy/app/forums/Actions');
+require('legacy/app/windows/Actions');
+require('legacy/app/forums/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem', {

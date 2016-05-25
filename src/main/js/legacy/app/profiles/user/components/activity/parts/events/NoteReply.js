@@ -1,7 +1,7 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../../cache/UserRepository');
-var ParseUtils = require('../../../../../../../util/Parsing');
-var EventsActivityItem = require('./ActivityItem');
+const Ext = require('extjs');
+const UserRepository = require('legacy/cache/UserRepository');
+const ParseUtils = require('legacy/util/Parsing');
+require('./ActivityItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.NoteReply', {
