@@ -947,8 +947,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 */
 	saveData: function (options) {
 		var data = this.getFormData && this.getFormData(),
-			isEdit = Boolean(this.getLink('edit') || this.getLink('href')),
-			me = this,
+			// isEdit = Boolean(this.getLink('edit') || this.getLink('href')),
 			save;
 
 		if (data) {
@@ -959,10 +958,10 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		}
 
 		return save
-			.then(function (response) {
-				if (isEdit) {
-					me.syncWithResponse(response);
-				}
+			.then(response => {
+				// if (isEdit) {
+				this.syncWithResponse(response);
+				// }
 				return response;
 			});
 	},
