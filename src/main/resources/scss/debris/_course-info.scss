@@ -113,6 +113,10 @@
 		text-transform: uppercase;
 		font: { size: 0.7em; weight: 600; }
 		padding-right: 1em;
+
+		&.code {
+			text-transform: none;
+		}
 	}
 
 	.outline-menu {
