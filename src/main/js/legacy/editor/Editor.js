@@ -744,7 +744,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		content.unmask();
 
-		wait().then(this.maybeResizeContentBox.bind(this));
+		wait().then(this.maybeResizeContentBox.bind(this, true));
 
 		this.maybeEnableSave();
 	},
@@ -780,7 +780,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		Ext.get(data.name).unselectable();
 
-		wait().then(this.maybeResizeContentBox.bind(this));
+		wait().then(this.maybeResizeContentBox.bind(this, true));
 	},
 
 
@@ -1178,7 +1178,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.detectTypingAttributes(e);
 	},
 
-	maybeResizeContentBox: function () {
+	maybeResizeContentBox: function (force) {
 		if (!this.rendered || this.isDestroyed || !this.el) {
 			return;
 		}
@@ -1189,7 +1189,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		// NOTE: we check if the previousEditorHeight is greater than zero to avoid trying
 		// to update layout while in the middle of updating initial layout
-		if (h !== p && p > 0) {
+		if (h !== p && (p > 0 || force === true)) {
 			this.updateLayout();
 			this.fireEvent(h < p ? 'shrank' : 'grew');
 			// TODO: In Safari 6, the editor resize but it doesn't paint properly upon
