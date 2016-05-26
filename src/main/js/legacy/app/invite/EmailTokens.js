@@ -34,8 +34,9 @@ module.exports = exports = Ext.define('NextThought.app.invite.EmailTokens', {
 		let numberTags = tags.length;
 
 		for(let tag of tags) {
-			let insertedTag = this.insertTag(tag);
-			if (Math.ceil(insertedTag.dom.getBoundingClientRect().left) >= Math.floor(this.emailCountEl.dom.getBoundingClientRect().left) - 20) { break; }
+			let insertedTag = this.insertTag(tag),
+				boundingRect = insertedTag.dom.getBoundingClientRect();
+			if ((Math.ceil(boundingRect.left) >= Math.floor(this.emailCountEl.dom.getBoundingClientRect().left) - 20) || boundingRect.width === 0) { break; }
 			numberTags = numberTags - 1;
 		}
 
