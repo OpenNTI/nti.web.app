@@ -68,9 +68,68 @@
 	    background-color: #fbfbfb;
 	}
 
+	.unstyled-tokens {
+    	height: 50px;
+	    background: #FBFBFB;
+	    overflow: hidden;
+		visibility: visible;
+		display: flex;
+		align-items: stretch;
+
+		.token-wrap {
+		    max-height: 29px;
+		    overflow: hidden;
+		    margin: 12px 0px 11px 18px;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		    color: #757474;
+    		flex: 1 1 auto;
+			.token {
+				border: none;
+				background: none;
+				text-transform: none;
+				padding: 0;
+				padding-right: 1px;
+				font-size: 12px;
+
+				&:not(:last-child):after {
+					content: ',';
+				}
+			}
+			.emptyState {
+				border: none;
+			    padding: 0;
+			    font-size: 12px;
+			    color: #757474;
+			}
+		}
+
+		.email-count {
+		    font-size: 14px;
+		    font-weight: 100;
+		    color: #3fb3f6;
+		    display: block;
+		    min-width: 10px;
+		    height: 50px;
+		    line-height: 50px;
+		    padding-left: 10px;
+		    padding-right: 10px;
+		    flex: 0 0 auto;
+		}
+
+		&.hidden {
+			visibility: hidden;
+			position: absolute;
+			width: 100%;
+		}
+	}
+
 	.email-token-field.x-component-tokens {
     	margin: 7px 10px 6px 15px;
-		max-height: 50px;
+
+		&.hidden {
+			display: none;
+		}
 
 		&.focused {
 			max-height: 182px;
@@ -131,56 +190,10 @@
 			.token-input-wrap {
 				margin: 3px 0px 3px 0px;
 			}
-			.email-count {
-				display: none;
-			}
 		}
 
 		&:not(.focused) {
-			height: 30px;
-			margin: 9px 10px 11px 15px;
-
-			.token {
-				border: none;
-				background: none;
-				text-transform: none;
-				padding: 0;
-				font-size: 12px;
-
-				&:not(:last-child):after {
-					content: ',';
-				}
-
-				&:hover {
-					color: #757474;
-					border: none;
-					background: none;
-					padding: 0;
-					margin-right: 3px;
-					position: relative;
-					z-index: 2;
-					cursor: text;
-				}
-				.x {
-					display: none;
-				}
-			}
-			.token-input-wrap {
-				width: 15%;
-				input[type="text"] {
-					font-size: 12px !important;
-					padding-top: 1px;
-				}
-			}
-			.email-count {
-				position: absolute;
-				top: 10px;
-				right: 10px;
-				font-size: 14px;
-				font-weight: 100;
-				color: #3fb3f6;
-				display: block;
-			}
+			min-height: 37px;
 		}
 
 		.token-input-wrap {
@@ -198,4 +211,6 @@
 			}
 		}
 	}
+
+
 }

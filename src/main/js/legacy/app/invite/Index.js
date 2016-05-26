@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const Form = require('legacy/common/form/Form');
 const UserCourseInvitations = require('legacy/model/courses/UserCourseInvitations');
 const ParseUtils = require('legacy/util/Parsing');
+const EmailTokens = require('legacy/app/invite/EmailTokens');
 
 module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	extend: 'Ext.container.Container',
@@ -33,6 +34,11 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 		this.inviteUrl = this.record.getLink('SendCourseInvitations');
 
+		this.unfocusedTokens = this.add({
+			xtype: 'email-tokens',
+			tokens: []
+		});
+
 		this.form = this.add({
 			xtype: 'common-form',
 			schema: this.schema,
@@ -45,13 +51,12 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		this.button = this.add({
 			xtype: 'box',
 			autoEl: {cls: 'button', cn: [
-				{cls: 'control upload', 'data-qtip': 'Upload Contacts in CSV or Excel Format', html: 'BULK', cn: [
+				{cls: 'control upload', 'data-qtip': 'Upload Contacts in CSV Format', html: 'BULK', cn: [
 					{ tag: 'input', accept:'.csv', type: 'file'}
 				]}
 			]}
 		});
 	},
-
 
 	afterRender () {
 		this.callParent(arguments);
@@ -60,12 +65,13 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 		this.setupFileUploadField();
 		this.setupBulkListener();
-		this.setupTokenFocus();
+		this.setupTokenListener();
+		this.setupUnfocusedTokens();
 
 		this.emailToken = emailTokenField;
 	},
 
-	setupTokenFocus () {
+	setupTokenListener () {
 		let dom = this.el.dom,
 			tagInput = dom && dom.querySelector('.tag-input'),
 			message = dom && dom.querySelector('.message textarea');
@@ -76,11 +82,18 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 	tagInputOnFocus () {
 		this.emailToken.classList.add('focused');
+		this.emailToken.classList.remove('hidden');
+		this.unfocusedTokens.addCls('hidden');
 	},
 
 	messageOnFocus () {
+		const tags = this.form.getValueOf('emails');
+		if(Array.isArray(tags) && tags.length > 0) {
+			this.emailToken.classList.add('hidden');
+			this.unfocusedTokens.addTags(tags);
+			this.unfocusedTokens.removeCls('hidden');
+		}
 		this.emailToken.classList.remove('focused');
-		this.emailToken.scrollTop = 0;
 	},
 
 	setupBulkListener () {
@@ -92,10 +105,24 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		}
 	},
 
+	setupUnfocusedTokens () {
+		this.unfocusedTokens.addCls('hidden');
+		this.mon(this.unfocusedTokens.el, {
+			click: this.unfocusedTokensClick.bind(this)
+		});
+	},
+
+	unfocusedTokensClick () {
+		this.unfocusedTokens.addCls('hidden');
+
+		this.emailToken.classList.remove('hidden');
+		this.emailToken.classList.add('focused');
+	},
+
 	maybeShowBulk () {
 		let dom = this.el.dom,
-			tagInput = dom && dom.querySelector('.tag-input'),
-			token = dom && dom.querySelector('.token');
+			tagInput = dom && dom.querySelector('.email-token-field .tag-input'),
+			token = dom && dom.querySelector('.email-token-field .token');
 
 		if(token || (tagInput.value !== '' && !token)) {
 			this.button.hide();
@@ -108,9 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		console.log(error);
 	},
 
-	onSuccess (success) {
-		console.log(success);
-	},
+	onSuccess () {},
 
 	setupFileUploadField () {
 		let dom = this.el.dom,
@@ -120,7 +145,6 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			input.addEventListener('change', this.onFileInputChange.bind(this));
 		}
 	},
-
 
 	onFileInputChange (e) {
 		let input = e.target,
@@ -137,7 +161,6 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		}
 	},
 
-
 	onFileChange (file) {
 		const me  = this;
 		let url = me.record.getLink('CheckCourseInvitationsCSV'),
@@ -145,22 +168,24 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 		submit
 			.then( results => {
-				const courseInvitations = ParseUtils.parseItems(results)[0];
-				const emails = courseInvitations && courseInvitations.get('Items').map(item => item.email);
-				let warnings = courseInvitations.get('Warnings'),
-					invalidEmails = courseInvitations.get('InvalidEmails') && courseInvitations.get('InvalidEmails').Items,
+				const courseInvitations = ParseUtils.parseItems(results)[0],
+					emails = courseInvitations && courseInvitations.get('Items').map(item => item.email),
 					dom = me.el.dom,
 					tagInput = dom && dom.querySelector('.tag-input');
 
+				let warnings = courseInvitations.get('Warnings'),
+					invalidEmails = courseInvitations.get('InvalidEmails') && courseInvitations.get('InvalidEmails').Items;
+
 				me.button.hide();
 				me.form.setValue('emails', emails);
+
 				if (tagInput) { tagInput.focus(); }
 
 				if(invalidEmails || warnings) {
 					me.showErrors(invalidEmails || [], warnings || '');
 				}
 			})
-			.catch( error => {;
+			.catch( error => {
 				console.log(error);
 			});
 	},
@@ -197,7 +222,6 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		});
 	},
 
-
 	__submitJSON: function (values, url, method) {
 		var me = this;
 
@@ -217,10 +241,6 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		}
 
 		return formData;
-	},
-
-	hideBulkUpload () {
-		this.button.hide();
 	},
 
 	onSave () {
@@ -250,6 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		if(Array.isArray(invalidEmails) && invalidEmails.length !== 0) {
 			if(invalidEmails[0].slice(0, -1).toLowerCase() === 'email') {
 				invalidEmails.shift();
+				if(invalidEmails.length === 0) { return; }
 			}
 
 			this.form.showErrorOn('emails', `The following emails are invalid: ${invalidEmails.join(', ')}. ${warnings}`);

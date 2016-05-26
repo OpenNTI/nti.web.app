@@ -9,16 +9,15 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 	placeholder: 'Add a recipient',
 
 	renderSelectors: {
-		emailCountEl: '.email-count',
-		inputWrapEl: '.token-input-wrap'
+		inputWrapEl: '.token-input-wrap',
+		inputEl: '.tag-input'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'span', cls: 'token-input-wrap', cn: [
 			{tag: 'input', type: 'text', cls:'tag-input', tabIndex: '{tabIndex}', placeholder: '{placeholder}'},
 			{tag: 'span', cls: 'token-input-sizer', html: '{placeholder}##'}
-		]},
-		{tag: 'span', cls: 'email-count', html: ''}
+		]}
 	]),
 
 	msgTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'msg-container', cn: [
@@ -29,7 +28,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 	initComponent () {
 		this.callParent(arguments);
 
-		this.numOfTags = 0;
 		this.renderData = Ext.apply(this.renderData || {},{
 			placeholder: (this.schema && this.schema.placeholder) || this.placeholder
 		});
@@ -37,11 +35,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 
 	afterRender () {
 		this.callParent(arguments);
+
 		this.inputWrapEl.addCls('initial');
 	},
 
 	addTag (val, type, extraData) {
-		const me = this, el = me.inputEl;
+		const me = this,
+			el = me.inputEl;
 		let snip, t, cls = '';
 
 		el.dom.value = '';
@@ -49,42 +49,33 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 			snip = me.getSnippet(val);
 
 			// Check to see if email is valid or not
-			if (!validate(snip)) { cls = 'invalid'; }
+			if (!validate(snip)) {
+				cls = 'invalid';
+			}
 
-			t = me.tokenTpl.insertBefore(me.getInsertionPoint(), Ext.apply({text: snip, type: type, value: val, cls: cls},extraData), true);
+			t = me.tokenTpl.insertBefore(me.getInsertionPoint(), Ext.apply({
+				text: snip,
+				type: type,
+				value: val,
+				cls: cls
+			}, extraData), true);
 			if (val !== snip) {
-				t.set({'data-qtip': val});
+				t.set({
+					'data-qtip': val
+				});
 			}
 
 			me.fireEvent('new-tag', val);
-			this.updateNumberTags(1);
-			if(this.numOfTags === 1) {
+
+			if (this.getValue().length === 1 && this.inputEl.dom.placeholder === 'Add an email address') {
 				this.setPlaceholderText('Add more...');
-				this.inputWrapEl.removeCls('inital');
 			}
 		}
 
 		return t;
 	},
-
-	removeToken (p) {
-		if (p && p.remove) {
-			p.remove();
-			this.updateNumberTags(-1);
-		}
-	},
-
 	appendToFormData (data) {
 		data.append(this.schema.name, this.getValue());
-	},
-
-	updateNumberTags (num) {
-		this.numOfTags = this.numOfTags + num;
-		// this.emailCountEl.setHTML(`+${this.numOfTags}`);
-	},
-
-	getNumberTags () {
-		return this.numOfTags;
 	},
 
 	showError (name, reason) {
@@ -97,10 +88,35 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 		this.msgTpl.insertAfter(this.el, config);
 	},
 
+	removeToken: function (p) {
+		if (p && p.remove) {
+			p.remove();
+		}
+
+		if(this.getValue().length === 0 && this.inputEl.dom.placeholder === 'Add more...') {
+			this.setPlaceholderText('Add an email address');
+		}
+	},
+
 	removeError (name) {
 		let dom = this.container && this.container.dom,
 			oldError = dom.querySelector('.msg-container');
 
 		if(oldError) { oldError.remove(); }
+	},
+
+	onKeyDown (e) {
+		let el = this.inputEl,
+			key = e.getKey(),
+			val = el && el.getValue();
+
+		if(key === e.BACKSPACE && !val) {
+			let token = this.el.query('.token').last();
+			this.removeToken(token);
+			e.stopEvent();
+			e.preventDefault();
+		} else {
+			this.callParent(arguments);
+		}
 	}
 });

@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	renderSelectors: {
 		wrapEl: '.token-input-wrap',
 		sizerEl: '.token-input-sizer',
-		inputEl: 'input[type="text"]'
+		inputEl: '.tag-input'
 	},
 
 
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	onKeyDown: function (e) {
 		var el = this.inputEl,
 			key = e.getKey(),
-			val = el.getValue(),
+			val = el && el.getValue(),
 			t;
 
 		if (key === e.ENTER || key === e.TAB || this.isDelimiter(key)) {
