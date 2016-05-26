@@ -141,13 +141,32 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 					me.update();
 				})
 				.catch(function (reason) {
+					console.error('Failled to update feedback: ', reason);
 					record.set('body', originalBody);
 					editor.unmask();
+
+					//TODO: Unify these into one place.
+					const {response: err} = reason;
+					const maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+
+					if (err.code === 'MaxFileSizeUploadLimitError') {
+						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+					}
+					if (err.code === 'MaxAttachmentsExceeded') {
+						err.message += ' Max Number of files: ' + err.constraint;
+					}
+
+					let msg = err && err.message || 'Could not save reply';
+					alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+				})
+				//This catch will only fire if the above catch throws something
+				.catch(function (reason) {
+					console.error('Failed:', reason);
 					alert({
 						title: getString('NextThought.view.assessment.AssignmentFeedback.error-title'),
 						msg: getString('NextThought.view.assessment.AssignmentFeedback.error-msg')
 					});
-					console.error('Failled to update feedback: ' + reason);
 				});
 	},
 
