@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const moment = require('moment');
+const {DateTime} = require('nti-web-commons');
 
 global.TimeUtils =
 module.exports = exports = Ext.define('NextThought.util.Time', {
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 			return Ext.Date.format(time, ' l');
 		}
 
-		return moment(time).fromNow();
+		return DateTime.fromNow(time);
 	},
 
 	//yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
