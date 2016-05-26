@@ -3,6 +3,7 @@ const Form = require('legacy/common/form/Form');
 const UserCourseInvitations = require('legacy/model/courses/UserCourseInvitations');
 const ParseUtils = require('legacy/util/Parsing');
 const EmailTokens = require('legacy/app/invite/EmailTokens');
+const { extname } = require('path');
 
 module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	extend: 'Ext.container.Container',
@@ -18,9 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	],
 
 	accepts: [
-		'text/csv',
-		'text/comma-separated-values',
-		'application/csv'
+		'.csv'
 	],
 
 	getDefaultValues: function () {
@@ -60,25 +59,27 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 	afterRender () {
 		this.callParent(arguments);
-		let dom = this.el.dom,
-			emailTokenField = dom && dom.querySelector('.email-token-field');
+		const el = this.el,
+			emailTokenField = el.down('.email-token-field'),
+			tagInput = el.down('.tag-input'),
+			message = el.down('.message textarea'),
+			fileUpload = el.down('.control.upload input');
 
-		this.setupFileUploadField();
-		this.setupBulkListener();
-		this.setupTokenListener();
-		this.setupUnfocusedTokens();
+		this.emailToken = Ext.getDom(emailTokenField.dom);
+		this.tagInput = Ext.getDom(tagInput);
+		this.message = Ext.getDom(message);
 
-		this.emailToken = emailTokenField;
+		this.unfocusedTokens.addCls('hidden');
+		this.mon(tagInput, {
+			'keydown': () => this.maybeShowBulk(),
+			'focus': () => this.tagInputOnFocus()
+		});
+		this.mon(message, 'focus', () => this.messageOnFocus());
+		this.mon(emailTokenField, 'mouseup', () => setTimeout(()=> this.maybeShowBulk(),1));
+		this.mon(this.unfocusedTokens.el, 'click', () => this.unfocusedTokensClick());
+		this.mon(fileUpload, 'change', (e) => this.onFileInputChange(e));
 	},
 
-	setupTokenListener () {
-		let dom = this.el.dom,
-			tagInput = dom && dom.querySelector('.tag-input'),
-			message = dom && dom.querySelector('.message textarea');
-
-		tagInput.addEventListener('focus', this.tagInputOnFocus.bind(this));
-		message.addEventListener('focus', this.messageOnFocus.bind(this));
-	},
 
 	tagInputOnFocus () {
 		this.emailToken.classList.add('focused');
@@ -96,35 +97,18 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		this.emailToken.classList.remove('focused');
 	},
 
-	setupBulkListener () {
-		let dom = this.el.dom,
-			tagInput = dom && dom.querySelector('.tag-input');
-
-		if(tagInput) {
-			tagInput.addEventListener('keydown', this.maybeShowBulk.bind(this));
-		}
-	},
-
-	setupUnfocusedTokens () {
-		this.unfocusedTokens.addCls('hidden');
-		this.mon(this.unfocusedTokens.el, {
-			click: this.unfocusedTokensClick.bind(this)
-		});
-	},
 
 	unfocusedTokensClick () {
 		this.unfocusedTokens.addCls('hidden');
-
 		this.emailToken.classList.remove('hidden');
 		this.emailToken.classList.add('focused');
 	},
 
 	maybeShowBulk () {
 		let dom = this.el.dom,
-			tagInput = dom && dom.querySelector('.email-token-field .tag-input'),
 			token = dom && dom.querySelector('.email-token-field .token');
 
-		if(token || (tagInput.value !== '' && !token)) {
+		if(token || (this.tagInput.value !== '' && !token)) {
 			this.button.hide();
 		} else {
 			this.button.show();
@@ -137,23 +121,14 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 	onSuccess () {},
 
-	setupFileUploadField () {
-		let dom = this.el.dom,
-			input = dom && dom.querySelector('.control.upload input');
-
-		if (input) {
-			input.addEventListener('change', this.onFileInputChange.bind(this));
-		}
-	},
-
 	onFileInputChange (e) {
-		let input = e.target,
+		let input = e.getTarget(),
 			file = input && input.files && input.files[0];
 
 		input.value = null;
-		e.preventDefault();
+		e.stopEvent();
 
-		if (file && this.accepts.includes(file.type)) {
+		if (file && this.accepts.includes(extname(file.name))) {
 			this.onFileChange(file);
 			this.form.removeErrorOn('emails');
 		} else {
@@ -170,23 +145,24 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			.then( results => {
 				const courseInvitations = ParseUtils.parseItems(results)[0],
 					emails = courseInvitations && courseInvitations.get('Items').map(item => item.email),
-					dom = me.el.dom,
-					tagInput = dom && dom.querySelector('.tag-input');
-
-				let warnings = courseInvitations.get('Warnings'),
+					warnings = courseInvitations.get('Warnings'),
 					invalidEmails = courseInvitations.get('InvalidEmails') && courseInvitations.get('InvalidEmails').Items;
 
 				me.button.hide();
 				me.form.setValue('emails', emails);
 
-				if (tagInput) { tagInput.focus(); }
+				if (this.tagInput) { this.tagInput.focus(); }
 
 				if(invalidEmails || warnings) {
 					me.showErrors(invalidEmails || [], warnings || '');
 				}
 			})
 			.catch( error => {
-				console.log(error);
+				const bulkUploadError = JSON.parse(error.responseText).message;
+				me.showErrors(void 0, bulkUploadError);
+			})
+			.catch(() => {
+				me.showErrors(void 0, 'Server Error.');
 			});
 	},
 
