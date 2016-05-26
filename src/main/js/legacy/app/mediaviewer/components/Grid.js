@@ -132,7 +132,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 			if (!this.setContent.hooked) {
 				this.setContent.hooked = true;
 				this.on({
-					single: true,
 					afterrender: ()=> this.setContent(...this.setContent.lastArgs)
 				});
 			}
