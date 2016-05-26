@@ -89,12 +89,18 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.EmailToken
 
 	showError (name, reason) {
 		let config = {
-				msg: reason,
-				cls: 'error'
-			}, dom = this.container && this.container.dom,
+			msg: reason,
+			cls: 'error'
+		};
+
+		this.removeError();
+		this.msgTpl.insertAfter(this.el, config);
+	},
+
+	removeError (name) {
+		let dom = this.container && this.container.dom,
 			oldError = dom.querySelector('.msg-container');
 
 		if(oldError) { oldError.remove(); }
-		this.msgTpl.insertAfter(this.el, config);
 	}
 });

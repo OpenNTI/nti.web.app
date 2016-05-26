@@ -16,6 +16,12 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		{type: 'textarea', cls: 'message-area', name:'message', required: false, placeholder: 'Type a message...'}
 	],
 
+	accepts: [
+		'text/csv',
+		'text/comma-separated-values',
+		'application/csv'
+	],
+
 	getDefaultValues: function () {
 		return {
 			MimeType: NextThought.model.courses.UserCourseInvitations.mimeType
@@ -40,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			xtype: 'box',
 			autoEl: {cls: 'button', cn: [
 				{cls: 'control upload', 'data-qtip': 'Upload Contacts in CSV or Excel Format', html: 'BULK', cn: [
-					{ tag: 'input', type: 'file'}
+					{ tag: 'input', accept:'.csv', type: 'file'}
 				]}
 			]}
 		});
@@ -123,8 +129,11 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		input.value = null;
 		e.preventDefault();
 
-		if (file && (!this.accepts || file.type.match(this.accepts))) {
+		if (file && this.accepts.includes(file.type)) {
 			this.onFileChange(file);
+			this.form.removeErrorOn('emails');
+		} else {
+			this.showErrors(void 0, 'Please upload a .csv file.');
 		}
 	},
 
@@ -151,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 					me.showErrors(invalidEmails || [], warnings || '');
 				}
 			})
-			.catch( error => {
+			.catch( error => {;
 				console.log(error);
 			});
 	},
@@ -238,7 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	},
 
 	showErrors (invalidEmails, warnings = '') {
-		if(invalidEmails) {
+		if(Array.isArray(invalidEmails) && invalidEmails.length !== 0) {
 			if(invalidEmails[0].slice(0, -1).toLowerCase() === 'email') {
 				invalidEmails.shift();
 			}
