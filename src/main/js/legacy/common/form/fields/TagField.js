@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	renderSelectors: {
 		wrapEl: '.token-input-wrap',
 		sizerEl: '.token-input-sizer',
-		inputEl: '.tag-input'
+		inputEl: '.token-input-wrap > input[type="text"]'
 	},
 
 
