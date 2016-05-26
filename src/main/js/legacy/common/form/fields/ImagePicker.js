@@ -1,8 +1,8 @@
 const Ext = require('extjs');
 
 require('./FilePicker');
-require('../../../app/prompt/Actions');
-require('../../../app/image/cropping/Prompt');
+require('legacy/app/prompt/Actions');
+require('legacy/app/image/cropping/Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicker', {
@@ -124,6 +124,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	},
 
 	setPreviewURL: function (url) {
+		if (typeof url !== 'string') {
+			url = url.url;
+		}
 		this.previewEl.setHTML('');
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
 	},
