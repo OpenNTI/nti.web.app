@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		if (typeof x === 'string') {
 			console.error('Need to fill this path out');
 			load = Promise.reject();
-		} else if (x.getTocs) {
+		} else if (x && x.getTocs) {
 			load = x.getTocs();
 		} else {
 			load = Promise.resolve([x]);
