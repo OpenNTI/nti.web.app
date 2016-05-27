@@ -35,6 +35,8 @@ ga('send', 'pageview');
 
 	for line in lines:
 		line = line.replace( 'main.css', 'main.css?dc=%s' % BUILDTIME )
+		line = line.replace( 'legacy.css', 'legacy.css?dc=%s' % BUILDTIME )
+		line = line.replace( 'site.css', 'site.css?dc=%s' % BUILDTIME )
 		line = line.replace( 'react-with-addons.js', 'react-with-addons.min.js' )
 		line = line.replace( 'react-dom.js', 'react-dom.min.js' )
 		if 'index.js' in line:
