@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		return Ext.Array.every((rec.children || []), rec.hasRepliesBeenLoaded, this);
 	},
 
-	isWhiteboardOnly: function (body) {
+	isOnlyNonTextBodyParts: function (body) {
 		if (Ext.isEmpty(body)) { return false;}
 		return Ext.Array.every(body, function (i) {
 			return typeof i !== 'string';
@@ -241,7 +241,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			snip = Ext.String.ellipsis(t, max, false);
 		}else {
 
-			if (this.isWhiteboardOnly(body)) {
+			if (this.isOnlyNonTextBodyParts(body)) {
 				snip = '[Image]';
 			}else {
 				snip = Ext.String.ellipsis(this.simplifyTitle(body)[0], max, true);
@@ -264,16 +264,12 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			snip = Ext.String.ellipsis(t, max, false);
 		}
 		else if (!Ext.isEmpty(body)) {
-			onlyObject = this.isWhiteboardOnly(body);
+			onlyObject = this.isOnlyNonTextBodyParts(body);
 
 			if (onlyObject) {
 				t = 'Whiteboard';
 			}
 			this.compileBodyContent(function (html) {
-				//TODO: Create a white list of classnames we allow, instead of just allowing all of them
-				if (!onlyObject) {
-					html = html.replace(/\s*(style)=".*?"\s*/ig, ' ');
-				}
 				snip = onlyObject ? html : ContentUtils.getHTMLSnippet(html, max);
 				Ext.callback(cb, null, [snip || html, t]);
 			}, null, null, null);
