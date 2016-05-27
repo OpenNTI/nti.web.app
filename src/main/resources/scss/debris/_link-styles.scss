@@ -132,7 +132,7 @@ a[href] {
 	}
 }
 
-.component-overlay {
+.component-overlay, .content-editor {
 
 	.content-card-target-container {
 		margin: 0 5px 0 0;
@@ -180,6 +180,17 @@ a[href] {
 				content: '';
 
 				@include sprite($profile_back_arrow);
+			}
+		}
+	}
+
+	&.content-editor {
+		.content-card-target-container {
+			background-color: #fff;
+
+			.no-support {
+				background-color: #fff;
+				height: 100%;
 			}
 		}
 	}
