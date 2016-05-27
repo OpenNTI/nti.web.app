@@ -58,8 +58,8 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 	 */
 	setContent: function () {
 		var root = this.course && this.course.getContentRoots && this.course.getContentRoots()[0],
-			url = this.content.getIcon(root);
-
+			icon = this.content.getIcon(root),
+			url = (icon && typeof icon !== 'string') ? icon.url : icon;
 
 		if (this.iconEl && url) {
 			this.iconEl.setStyle({'backgroundImage': 'url(' + url + ')'});

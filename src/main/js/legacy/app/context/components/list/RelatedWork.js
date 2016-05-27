@@ -38,6 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.R
 		var root = this.getContentRootFor(path),
 			iconUrl = this.content.getIcon(root);
 
+		iconUrl = typeof iconUrl === 'string' ? iconUrl : iconUrl.url;
 		if (!this.iconEl) {
 			return;
 		}

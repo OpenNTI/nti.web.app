@@ -78,7 +78,8 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 			iconUrl = path[i].getIcon && path[i].getIcon();
 			//RelatedWork models implemented a getIcon method... and OF COURSE it does not adhere to the spec!
 			//Ignore RelatedWork getIcon results... since it returns an object, not a string.
-			if (iconUrl && typeof iconUrl === 'string') {
+			if (iconUrl) {
+				iconUrl = typeof iconUrl === 'string' ? iconUrl : iconUrl.url;
 				iconUrl = Promise.resolve(iconUrl);
 				break;
 			}
