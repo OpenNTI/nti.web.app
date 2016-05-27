@@ -76,8 +76,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.add({
 			xtype: 'box',
 			cls: 'content-card-target-container',
-			width: 560,
-			height: 640,
+			width: 720,
+			height: 680,
 			renderTpl: Ext.DomHelper.markup({
 				cls: 'no-support', cn: [
 					{cls: 'message', html: 'Your browser does not currently support viewing PDF files.'},
