@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const {wait} = require('legacy/util/Promise');
 
 require('../AssignmentStatus');
 require('./editing/DueDate');
@@ -45,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.mon(this.assignment, 'update', this.updateStatus.bind(this));
 
-		if (this.assignment.getLink('edit')) {
+		if (this.assignment.getDateEditingLink()) {
 			this.addCls(['editable']);
 
 			this.mon(this.statusEl, 'click', this.toggleDueDateEditor.bind(this));
@@ -91,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			status = me.status || NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
 				due: assignment.getDueDate(),
 				start: assignment.get('availableBeginning'),
-				completed: !assignment.getLink('edit') && completed,
+				completed: !assignment.getDateEditingLink() && completed,
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
 				duration: assignment.isTimed && assignment.getDuration(),
 				isExcused: grade && grade.get('IsExcused'),

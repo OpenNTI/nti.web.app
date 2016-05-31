@@ -84,6 +84,10 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		return this.get('availableEnding');
 	},
 
+	getDateEditingLink: function () {
+		return this.getLink('edit');
+	},
+
 	tallyParts: function () {
 		function sum (agg, r) {
 			return agg + (r.tallyParts ? r.tallyParts() : 1);

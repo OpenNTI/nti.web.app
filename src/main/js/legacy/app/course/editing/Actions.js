@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 
 	updateAssignmentDates: function (assignment, available, due) {
 		var me = this,
-			link = assignment.getLink('edit'),
+			link = assignment.getDateEditingLink(),
 			data = {
 				available_for_submission_beginning: available,
 				available_for_submission_ending: due
