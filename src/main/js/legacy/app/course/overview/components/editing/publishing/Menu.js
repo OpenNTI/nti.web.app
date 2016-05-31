@@ -306,15 +306,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getDefaultDate: function () {
-		var defaultValue = new Date();
-
-		// Set it to tomorrow at mid night.
-		defaultValue.setDate(defaultValue.getDate() + 1);
-		defaultValue.setHours(23);
-		defaultValue.setMinutes(59);
-		defaultValue.setSeconds(0);
-
-		return defaultValue;
+		return new Date();
 	},
 
 	dateChanged: function () {

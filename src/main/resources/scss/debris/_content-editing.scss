@@ -1216,6 +1216,10 @@ input[type=number]{
 					margin: 4px 3px;
 					width: 26px;
 					font-family: $font;
+
+					&:hover {
+						color: $primary-blue;
+					}
 				}
 
 				&:first-of-type {
@@ -1233,31 +1237,36 @@ input[type=number]{
 				}
 
 				&.x-datepicker-disabled {
+					background: none;
+					border: none;
 					.x-datepicker-date {
 						opacity: 0.25;
 					}
 				}
 
-				&.x-datepicker-selected {
+				&.x-datepicker-selected:not(.x-datepicker-disabled) {
 					background: none;
 					border: none;
-
-					.x-datepicker-date {
-						background-color: $tertiary-grey;
-						color: #ffffff;
-						border-radius: 90px;
-					}
-				}
-
-				&.x-datepicker-clicked {
 					.x-datepicker-date {
 						background-color: $primary-blue;
+						color: #ffffff;
+						border-radius: 90px;
 					}
 				}
 
 				&.x-datepicker-today {
 					border:none;
 					background: none;
+
+					.x-datepicker-date {
+						background-color: $tertiary-grey;
+						color: #494949;
+						border-radius: 90px;
+					}
+				}
+
+				.x-datepicker-date::hover {
+					color: $primary-blue;
 				}
 			}
 		}
