@@ -846,6 +846,7 @@ NTIStrings['NextThought.view.library.available.CourseWindow.Finished'] = 'Finish
 NTIStrings['NextThought.view.library.available.CourseWindow.Continue'] = 'Continue';
 NTIStrings['NextThought.view.library.available.CourseWindow.Welcome'] = 'Welcome';
 NTIStrings['NextThought.view.library.available.CourseWindow.AddCourses'] = 'Add Courses';
+NTIStrings['NextThought.view.library.available.CourseWindow.InvitationAcceptance'] = 'You have been enrolled in {courseTitle}.';
 NTIStrings['NextThought.view.courseware.coursecatalog.TabPanel.Setup'] = 'Thanks for joining, let\'s get you setup';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.Redeem'] = 'Redeem';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.Cancel'] = 'Cancel';

@@ -116,7 +116,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				return this.CourseActions.findCourseInstance(newCourse.get('NTIID'));
 			})
 			.then( course => {
-				this.showCourse(course.getCourseCatalogEntry());
+				this.fireEvent('show-course-detail', course.getCourseCatalogEntry());
+				this.showMessage(getFormattedString('NextThought.view.library.available.CourseWindow.InvitationAcceptance', {courseTitle: course.getTitle()}), false);
 			});
 	},
 

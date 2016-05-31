@@ -438,7 +438,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				archived: me.archived,
 				code: code || '',
 				updateCourses: me.updateCourses.bind(me),
-				showCourse: me.showCourse.bind(me),
+				showMessage: me.showMsg.bind(me),
 				ownerCt: me
 			});
 
