@@ -94,8 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					var root = path[0],
 						roots, pages,
 						page = path.last(),
-						iconUrl, i,
-						label;
+						iconUrl, i;
 
 					roots = books[root.get('NTIID')] = books[root.get('NTIID')] || {};
 					pages = roots[page.get('NTIID')] = roots[page.get('NTIID')] || [];
@@ -114,6 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 						iconUrl = path[i].getIcon && path[i].getIcon();
 
 						if (iconUrl) {
+							iconUrl = iconUrl.url || iconUrl;
 							break;
 						}
 					}
