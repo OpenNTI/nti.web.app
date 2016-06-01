@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 
 	showMediaView: function (route, subRoute) {
 		var basePath = route.precache.basePath,
-			rec = route.precache.rec,
+			rec = route.precache.rec || (route.object.id && decodeFromURI(route.object.id)) || null,
 			options = route.precache.options || {},
 			me = this, id;
 
@@ -101,27 +101,49 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	__presentVideo: function (videoId, basePath, options) {
-		var me = this;
-		me.resolveVideo(videoId)
-			.then(function (videoRec) {
-				me.video = videoRec;
-				me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
-				me.activeMediaView.setContent(me.video, me.transcript, options);
-			});
+		var me = this, prec = Promise.resolve();
+
+		if(options.rec) {
+			prec = options.rec.isModel ? Promise.resolve(options.rec) : Service.getObject(options.rec);
+		}
+
+		Promise.all([
+			me.resolveVideo(videoId),
+			prec
+		])
+		.then(([videoRec, record]) => {
+			if(record) {
+				options.rec = record;
+			}
+			me.video = videoRec;
+			me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
+			me.activeMediaView.setContent(me.video, me.transcript, options);
+		});
 	},
 
 	__presentSlidedeck: function (slidedeckId, slidedeck, options) {
 		var me = this,
-			p = slidedeck && slidedeck.isModel ? Promise.resolve(slidedeck) : Service.getObject(slidedeckId);
+			p = slidedeck && slidedeck.isModel ? Promise.resolve(slidedeck) : Service.getObject(slidedeckId),
+			prec = Promise.resolve();
 
-		p.then(function (deck) {
+		if(options.rec) {
+			prec = options.rec.isModel ? Promise.resolve(options.rec) : Service.getObject(options.rec);
+		}
+
+		Promise.all([
+			p,
+			prec
+		])
+		.then(([deck, record]) => {
+			if(record) { options.rec = record; }
+
 			me.slidedeck = deck;
 			me.slidedeckId = slidedeckId;
 			delete me.video;
 			delete me.videoId;
 
 			me.MediaActions.buildSlidedeckPlaylist(deck)
-				.then(function (obj) {
+				.then((obj) => {
 					me.activeMediaView.setSlidedeckContent(deck, obj.videos, obj.items, options);
 				});
 		});

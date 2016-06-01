@@ -146,8 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 
 	configureVideoPlayer: function () {
 		var width = this.self.getTargetVideoWidth(this.getEl(), this.transcriptRatio),
-			startTimeSeconds = (this.startAtMillis || 0) / 1000,
-			range, pointer;
+			startTimeSeconds = (this.startAtMillis || 0) / 1000;
 
 		this.videoplayer = Ext.widget('content-video-navigation', {
 			playlist: [this.video],
@@ -172,16 +171,35 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		});
 
 		if (this.record) {
-			range = this.record.get('applicableRange') || {};
-			pointer = range.start || {};
-
-			startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
+			startTimeSeconds = this.getStartTime();
 		}
 		if (startTimeSeconds > 0) {
-			this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
+			this.startAtSpecificTime(startTimeSeconds, true);
 		}
 
 		this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
+	},
+
+
+	getStartTime () {
+		const range = this.record.get('applicableRange') || {};
+		let startTimeSeconds;
+
+		if(range && range.start) {
+			let pointer = range.start || {};
+			startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
+		} else if (this.resourceList && !this.transcript) {
+			let slides = this.resourceList.filter( resource => resource.xtype === 'slide-component' ).map( slidesCmp => slidesCmp.slide);
+
+			for (let slide of slides) {
+				if(slide.getId() === this.record.get('ContainerId')) {
+					startTimeSeconds =  slide.get('video-start');
+					break;
+				}
+			}
+		}
+
+		return startTimeSeconds;
 	},
 
 	adjustOnResize: function (availableHeight, availableWidth) {

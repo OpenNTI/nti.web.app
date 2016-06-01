@@ -233,7 +233,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			xtype: this.viewerXtypeMap[playerType],
 			transcript: this.transcript,
 			resourceList: this.resourceList,
-			record: this.record,
+			record: this.record || this.options.rec,
 			accountForScrollbars: false,
 			scrollToId: this.scrollToId,
 			video: this.video,
