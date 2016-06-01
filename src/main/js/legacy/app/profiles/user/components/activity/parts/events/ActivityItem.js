@@ -328,8 +328,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					me.locationEl.update(label);
 				});
 
+			let icon = meta.getIcon(),
+				url = icon && (icon.url || icon);
 			this.locationIcon.setStyle({
-				backgroundImage: Ext.String.format('url({0})', meta.getIcon())
+				backgroundImage: Ext.String.format('url({0})', url)
 			});
 
 			this.locationEl.hover(
