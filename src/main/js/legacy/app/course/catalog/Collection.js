@@ -44,6 +44,11 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.Collection
 		]
 	}),
 
+	afterRender () {
+		this.callParent(arguments);
+		this.el.dom.setAttribute('data-category', this.category);
+	},
+
 
 	prepareData: function (data, index, record) {
 

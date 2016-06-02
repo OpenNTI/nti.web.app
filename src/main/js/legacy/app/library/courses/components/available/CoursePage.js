@@ -156,39 +156,58 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 
-	setTops: function () {
-		let upcoming = this.down('[category=upcoming]');
-		let	current = this.down('[category=current]');
-		let	archived = this.down('[category=archived]');
-		let redeem = this.down('library-redemption');
-		let	first = this.down('[category]');
-		let	defaultTop = 0;
+	setTops () {
+		const redeem = this.down('library-redemption');
+		const upcomingTab = this.down('[category=upcoming]');
+		const currentTab = this.down('[category=current]');
+		const archivedTab = this.down('[category=archived]');
 
 		Promise.all([
-			upcoming && upcoming.onceRendered,
-			current && current.onceRendered,
-			archived && archived.onceRendered,
-			redeem && redeem.onceRendered,
-			first && first.onceRendered
-		]).then(() => {
+			upcomingTab && upcomingTab.onceRendered,
+			currentTab && currentTab.onceRendered,
+			archivedTab && archivedTab.onceRendered,
+			redeem && redeem.onceRendered
+		])
+		.then(() => {
 			//Since the components are Ext.views, wait an event pump for the items
 			//to get rendered
 			return wait();
-		}).then(() => {
+		})
+		.then(() => {
+			const get = (category) => Array.from(this.el.dom.querySelectorAll(`.available-catalog[data-category="${category}"]`));
+			let upcoming = get('upcoming');
+			let current = get('current');
+			let archived = get('archived');
+
+			const copy = (x, ...props) => props.reduce((o, prop) => (o[prop] = x[prop], o), {});
+
+			const wrap = list => ({
+				getBoundingClientRect () {
+					const els = [
+						list[0], //first element in list
+						list[list.length - 1] //last element in list
+					]
+						//filter out undefined
+						.filter(x => x)
+						//swap elements with their bounding rects.
+						.map(x => copy(x.getBoundingClientRect(), 'top', 'bottom'));
+
+					return els.length === 0
+						? null
+						: els.reduce((acc, rect) => (acc.bottom = rect.bottom, acc)); //merge rects into one.
+				}
+			});
+
 			this.scrollTops = {};
 
-			if (this.bodyContainerEl) {
-				defaultTop = this.bodyContainerEl.dom.getBoundingClientRect().top;
-			}
-
 			if (upcoming) {
-				this.scrollTops['upcoming'] = upcoming.el.dom;
+				this.scrollTops['upcoming'] = wrap(upcoming);
 			}
 			if (current) {
-				this.scrollTops['current'] = current.el.dom;
+				this.scrollTops['current'] = wrap(current);
 			}
 			if (archived) {
-				this.scrollTops['archived'] = archived.el.dom;
+				this.scrollTops['archived'] = wrap(archived);
 			}
 			if(redeem) {
 				this.scrollTops['redeem'] = redeem.el.dom;
