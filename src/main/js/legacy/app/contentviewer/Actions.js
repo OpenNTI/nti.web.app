@@ -96,7 +96,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 				type: question.get('MimeType'),
 				cn: [
 					{tag: 'param', name: 'canindividual', value: true},
-					{tag: 'param', name: 'ntiid', value: ntiid}
+					{tag: 'param', name: 'ntiid', value: ntiid},
+					{html: '&nbsp;'}
 				]
 			});
 
