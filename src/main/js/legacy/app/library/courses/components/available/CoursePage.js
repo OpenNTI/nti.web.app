@@ -200,13 +200,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 			this.scrollTops = {};
 
-			if (upcoming) {
+			if (upcomingTab) {
 				this.scrollTops['upcoming'] = wrap(upcoming);
 			}
-			if (current) {
+			if (currentTab) {
 				this.scrollTops['current'] = wrap(current);
 			}
-			if (archived) {
+			if (archivedTab) {
 				this.scrollTops['archived'] = wrap(archived);
 			}
 			if(redeem) {
