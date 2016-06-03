@@ -22,10 +22,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		'widget.course-overview-externallink'
 	],
 
-	mixins: {
-		EllipsisText: 'NextThought.mixins.EllipsisText'
-	},
-
 	// requires: ['NextThought.view.contentviewer.View'],
 
 	renderTpl: Ext.DomHelper.markup([
@@ -91,11 +87,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{ html: '{count:plural("Comment")}'}
 		]
 	})),
-
-	afterRender: function () {
-		this.callParent(arguments);
-		this.truncateText(Ext.getDom(this.el.down('.description')));
-	},
 
 	loadContainer: function () {
 		var ntiid = this.data.href,

@@ -48,7 +48,7 @@
 
 		.title {
 			font: normal 600 15px/20px $font;
-			max-height: 40px;
+			max-height: 40px; //line-height is 20px, max-height is 40px for two line limit.
 			overflow: hidden;
 			margin-bottom: 5px;
 			color: $primary-grey;
@@ -59,9 +59,20 @@
 			color: $primary-blue;
 		}
 		.description {
-			margin-top: 5px;
-			font: normal normal 12px/1rem $font;
 			color: $primary-grey;
+			font: normal normal 12px/1rem $font;
+			margin-top: 5px;
+			max-height: 2rem; //line-height is 1rem, 2rem max-height limits this to two lines.
+		}
+
+		.title, .description {
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+			//Magic non-standard CSS:
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
 		}
 	}
 }

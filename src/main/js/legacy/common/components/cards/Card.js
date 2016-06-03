@@ -1,18 +1,18 @@
 var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var ParseUtils = require('../../../util/Parsing');
-var MixinsEllipsisText = require('../../../mixins/EllipsisText');
+var Globals = require('legacy/util/Globals');
+var ParseUtils = require('legacy/util/Parsing');
+require('legacy/mixins/EllipsisText');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.cards.Card', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-card',
 
-	mixins: {
-		'EllipsisText': 'NextThought.mixins.EllipsisText'
-	//		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
-	//		profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
-	},
+	// mixins: {
+	// 	EllipsisText: 'NextThought.mixins.EllipsisText'
+	// 	// likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+	// 	// profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
+	// },
 
 	ui: 'content-card',
 	cls: 'content-card',
@@ -84,11 +84,6 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 		}
 		catch (er) {
 			console.error(er.message);
-		}
-
-
-		if (this.titleEl) {
-			this.truncateText(this.titleEl.dom, null, true);
 		}
 	},
 
