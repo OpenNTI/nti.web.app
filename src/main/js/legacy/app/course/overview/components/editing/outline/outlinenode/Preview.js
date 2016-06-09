@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var ControlsEdit = require('../../controls/Edit');
 var ControlsPublish = require('../../controls/Publish');
 var ControlsCalendar = require('../../controls/Calendar');
+var SyncLock = require('../../../parts/SyncLock');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Preview', {
@@ -28,6 +29,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	enablePublishControls: false,
 	enableEditControls: true,
 
+	enableSyncLock: true,
+	isSyncLockInPreview: true,
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'outline-node', cn: [
 			'{toolbar}',
@@ -35,6 +39,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{cls: 'footer', cn: [
 				{tag: 'tpl', 'if': 'enableEditControls', cn: [
 					{cls: 'edit-container'}
+				]},
+				{tag: 'tpl', 'if': 'enableSyncLock', cn: [
+					{cls: 'synclock-container'}
 				]}
 			]}
 		]}
@@ -65,7 +72,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			title: this.record.getTitle(),
 			enableCalendarControls: Boolean(this.enableCalendarControls),
 			enablePublishControls: Boolean(this.enablePublishControls),
-			enableEditControls: Boolean(this.enableEditControls)
+			enableEditControls: Boolean(this.enableEditControls),
+			enableSyncLock: Boolean(this.enableSyncLock),
+			isSyncLockInPreview: Boolean(this.isSyncLockInPreview)
 		});
 	},
 
@@ -80,6 +89,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 		if (this.enableCalendarControls) {
 			this.addCalendarControls();
+		}
+		if (this.enableSyncLock) {
+			this.addSyncLock();
 		}
 	},
 
@@ -128,6 +140,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 
 			this.on('destroy', this.dateCmp.destroy.bind(this.dateCmp));
+		}
+	},
+
+	addSyncLock: function () {
+		var container = this.el.down('.synclock-container');
+
+		if (container) {
+			this.syncCmp = Ext.widget('course-overview-synclock', {
+				record: this.record,
+				contents: this.contents,
+				renderTo: container,
+				search: this.isSyncLockInPreview
+			});
+
+			this.on('destroy', this.syncCmp.destroy.bind(this.syncComp));
 		}
 	},
 
