@@ -2,7 +2,7 @@ const Ext = require('extjs');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const unwrap = x => x.default ? x.default : x;
+const unwrap = x => (x && x.default) ? x.default : x;
 
 module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	extend: 'Ext.Component',
@@ -16,13 +16,18 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	 * @cfg {...} ...  Any additional config properties will be pased as props to the component.
 	 */
 
+	getProps () {
+		const {initialConfig: config} = this;
+		return {...config, component: void 0};
+	},
+
 
 	afterRender () {
 		const {initialConfig: config} = this;
 		const component = unwrap(config.component);
 
 
-		const props = Object.assign({}, config, {component: void 0});
+		const props = this.getProps();
 
 		this.componentInstance = ReactDOM.render(
 			React.createElement(component, props),
