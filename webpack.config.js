@@ -53,7 +53,8 @@ exports = module.exports =
 		{
 			'extjs': 'Ext',
 			'react' : 'React',
-			'react-dom': 'ReactDOM'
+			'react-dom': 'ReactDOM',
+			'react/lib/ReactCSSTransitionGroup': 'React.addons.CSSTransitionGroup'
 		}
 	],
 
