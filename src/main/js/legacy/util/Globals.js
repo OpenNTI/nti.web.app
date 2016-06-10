@@ -266,44 +266,35 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 
 	validateConfig: function () {
-		var HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i,
-			HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1,
-			HOST_PATTERN_DOMAIN_MATCH_GROUP = 3,
-			HOST_PATTERN_PORT_MATCH_GROUP = 5;
+		const HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i;
+		// const HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1;
+		// const HOST_PATTERN_DOMAIN_MATCH_GROUP = 3;
+		// const HOST_PATTERN_PORT_MATCH_GROUP = 5;
 
-		if (window.$AppConfig === undefined || $AppConfig.server === undefined) {
+		if (window.$AppConfig === undefined || $AppConfig['server-path'] === undefined) {
 			alert('Bad or no configuation.');
 			return false;
 		}
 
-		if ($AppConfig.server.login === undefined) {
+		if ($AppConfig.login === undefined) {
 			alert('Bad or no login configuation.');
 			return false;
 		}
 
-		if (!HOST_PATTERN.test($AppConfig.server.host)) {
-			if ($AppConfig.server.host) {
-				console.warn('Bad host config', $AppConfig.server.host, 'using domain', document.domain);
+		if (!HOST_PATTERN.test($AppConfig['server-host'])) {
+			if ($AppConfig['server-host']) {
+				console.warn(`Bad host config', ${$AppConfig['server-host']} using domain`, document.domain);
 			}
-			$AppConfig.server.host = location.protocol + '//' + location.host;
+			$AppConfig['server-host'] = location.protocol + '//' + location.host;
 		}
 
-		if (!/^\/.+\/$/.test($AppConfig.server.data)) {
+		if (!/^\/.+\/$/.test($AppConfig['server-path'])) {
 			alert('Bad Server Config, your data path does not validate the pattern: /.+/');
 			return false;
 		}
-	/*
-		var hostInfo = HOST_PATTERN.exec($AppConfig.server.host);
 
-		Ext.apply($AppConfig.server,{
-			protocol: hostInfo[HOST_PATTERN_PROTOCOL_MATCH_GROUP],
-			domain: hostInfo[HOST_PATTERN_DOMAIN_MATCH_GROUP],
-			port: parseInt(hostInfo[HOST_PATTERN_PORT_MATCH_GROUP],10)
-		});
-	*/
-
-		if ($AppConfig.server.jsonp === undefined) {
-			$AppConfig.server.jsonp = Ext.isIE && !Ext.isIE10p;
+		if ($AppConfig.jsonp === undefined) {
+			$AppConfig.jsonp = Ext.isIE && !Ext.isIE10p;
 		}
 
 		return true;
@@ -777,7 +768,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			return this.getURLRooted(this.trimRoute(root) + '/' + url + '/');
 		}
 
-		var host = $AppConfig.server.host.replace(/\/$/, '');
+		var host = $AppConfig['server-host'].replace(/\/$/, '');
 
 		url = host + '/' + url;
 
@@ -796,7 +787,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 				u = root + u;
 				return getU(u);
 			}
-			return $AppConfig.server.host + u;
+			return $AppConfig['server-host'] + u;
 		}
 		return u;
 	},

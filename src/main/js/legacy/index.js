@@ -91,7 +91,7 @@ Ext.application({
 
 		if (reasons.length > 0) {
 			console.error(reasons.join('\n'));
-			location.replace($AppConfig.server.unsupported);
+			location.replace($AppConfig.unsupported);
 			return;//we're leaving... so lets just stop here.
 		}
 

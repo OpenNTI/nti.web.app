@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 	__onLoginFailure: function (reason) {
 		var o = {},
-			url = $AppConfig.server.login;
+			url = $AppConfig.login;
 
 		if (location.pathname !== '/' || location.hash || location.search) {
 			o['return'] = location.href;
@@ -166,8 +166,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 	__attemptLogin: function () {
 		var me = this,
-			server = $AppConfig.server,
-			dataserver = server.data,
+			dataserver = $AppConfig['server-path'],
 			ping = 'logon.ping';
 
 		return me.ServiceInterface.request({
@@ -264,11 +263,10 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 	resolveService: function () {
 		var me = this,
-			unauthed = {401: true, 403: true},
-			server = $AppConfig.server;
+			unauthed = {401: true, 403: true};
 
 		return me.ServiceInterface.request({
-			url: Globals.getURL(server.data),
+			url: Globals.getURL($AppConfig['server-path']),
 			timeout: 20000,
 			headers: {
 				'Accept': 'application/vnd.nextthought.workspace+json'
