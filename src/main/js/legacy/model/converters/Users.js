@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 		sortType: 'asUCString',
 		convert: function convert (v, rec) {
 			var re = convert.re = (convert.re || /https/i), url,
-				needsSecure = re.test(location.protocol) || $AppConfig.server.forceSSL;
+				needsSecure = re.test(location.protocol) || $AppConfig.forceSSL;
 
 			function secure (v, i, a) {
 				if (!v) {
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 			}
 
 			if (v && v === '@@avatar') {
-				url = Globals.trimRoute($AppConfig.server.data).split('/');
+				url = Globals.trimRoute($AppConfig['server-path']).split('/');
 
 				url.push('users', rec.get('Username'), '@@avatar');
 				return url.join('/');
