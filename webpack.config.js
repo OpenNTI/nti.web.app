@@ -80,7 +80,7 @@ exports = module.exports =
 		],
 		loaders: [
 			{ test: /\.async\.jsx$/i, loader: 'react-proxy!exports?exports.default' },
-			{ test: /\.js(x?)$/i, loader: 'babel', exclude: /node_modules/ },
+			{ test: /\.js(x?)$/i, loader: 'babel', include: root },
 
 			{ test: /\.json$/, loader: 'json' },
 			{ test: /\.(ico|gif|png|jpg|svg)$/, loader: 'url?limit=10000&name=resources/images/[name].[ext]&mimeType=image/[ext]' },
