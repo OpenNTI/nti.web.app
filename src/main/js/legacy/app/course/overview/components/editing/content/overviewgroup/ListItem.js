@@ -181,6 +181,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			items: [
 				{xtype: 'overview-editing-overviewgroup-preview', group: collection},
 				{
+					xtype: 'overview-editing-controls-synclock',
+					color: 'white',
+					record: collection,
+					parentRecord: this.lessonOverview,
+					root: this.lessonOverview,
+					bundle: this.bundle
+				},
+				{
 					xtype: 'overview-editing-controls-edit',
 					color: 'white',
 					record: collection,

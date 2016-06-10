@@ -16,8 +16,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		console.log(this);
-
 		let rootNode = this.contents;
 		let locked;
 

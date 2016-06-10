@@ -2,7 +2,6 @@ var Ext = require('extjs');
 var ControlsEdit = require('../../controls/Edit');
 var ControlsPublish = require('../../controls/Publish');
 var ControlsCalendar = require('../../controls/Calendar');
-var SyncLock = require('../../../parts/SyncLock');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Preview', {
@@ -29,9 +28,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	enablePublishControls: false,
 	enableEditControls: true,
 
-	enableSyncLock: true,
-	isSyncLockInPreview: true,
-
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'outline-node', cn: [
 			'{toolbar}',
@@ -40,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{tag: 'tpl', 'if': 'enableEditControls', cn: [
 					{cls: 'edit-container'}
 				]},
-				{tag: 'tpl', 'if': 'enableSyncLock', cn: [
+				{tag: 'tpl', 'if': 'enableEditControls', cn: [
 					{cls: 'synclock-container'}
 				]}
 			]}
@@ -72,9 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			title: this.record.getTitle(),
 			enableCalendarControls: Boolean(this.enableCalendarControls),
 			enablePublishControls: Boolean(this.enablePublishControls),
-			enableEditControls: Boolean(this.enableEditControls),
-			enableSyncLock: Boolean(this.enableSyncLock),
-			isSyncLockInPreview: Boolean(this.isSyncLockInPreview)
+			enableEditControls: Boolean(this.enableEditControls)
 		});
 	},
 
@@ -83,15 +77,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (this.enableEditControls) {
 			this.addEditControls();
+			this.addSynclockControls();
 		}
 		if (this.enablePublishControls) {
 			this.addPublishControls();
 		}
 		if (this.enableCalendarControls) {
 			this.addCalendarControls();
-		}
-		if (this.enableSyncLock) {
-			this.addSyncLock();
 		}
 	},
 
@@ -143,18 +135,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	addSyncLock: function () {
+	addSynclockControls: function () {
 		var container = this.el.down('.synclock-container');
 
 		if (container) {
-			this.syncCmp = Ext.widget('course-overview-synclock', {
+			this.syncCmp = Ext.widget('overview-editing-controls-synclock', {
 				record: this.record,
 				contents: this.contents,
 				renderTo: container,
-				search: this.isSyncLockInPreview
+				search: true
 			});
 
-			this.on('destroy', this.syncCmp.destroy.bind(this.syncComp));
+			this.on('destroy', this.syncCmp.destroy.bind(this.syncCmp));
 		}
 	},
 
