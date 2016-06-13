@@ -39,8 +39,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		href: 'link',
 		items: 'item',
 		byline: 'author',
-		availablebeginning: 'Avaiable Date',
-		availableending: 'Avaiable End Date',
+		availablebeginning: 'Available Date',
+		availableending: 'Available End Date',
 		visability: 'visability',
 		accentcolor: 'section color',
 		targetmimetype: 'type'
