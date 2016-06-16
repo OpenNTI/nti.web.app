@@ -19,9 +19,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	initComponent () {
 		this.callParent(arguments);
 
-		//TODO: figure out how not to have to do this here
-		$AppConfig.server = $AppConfig['server-host'] + $AppConfig['server-path'];
-
 		this.EditorCmp = this.add(new ReactHarness({
 			component: Editor,
 			NTIID: this.assignmentId
