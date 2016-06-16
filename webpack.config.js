@@ -62,6 +62,10 @@ exports = module.exports =
 		extensions: ['', '.jsx', '.js', '.json', '.css', '.scss', '.html']
 	},
 
+	resolveLoader: {
+		root: [modules]
+	},
+
 	module: {
 		preLoaders: [
 			// {
