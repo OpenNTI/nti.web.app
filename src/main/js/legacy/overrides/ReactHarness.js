@@ -22,10 +22,22 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 
+	setProps (props) {
+		this.initialConfig = {...this.initialConfig, ...props};
+		if (this.isRendered) {
+			this.doRender();
+		}
+	},
+
+
 	afterRender () {
+		this.doRender();
+	},
+
+
+	doRender () {
 		const {initialConfig: config} = this;
 		const component = unwrap(config.component);
-
 
 		const props = this.getProps();
 
