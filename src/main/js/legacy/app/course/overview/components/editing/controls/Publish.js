@@ -51,50 +51,43 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onSave (value) {
-		let action = this.PUBLISH_ACTIONS[value];
-		if (action) {
-			return action();
+		const action = this.PUBLISH_ACTIONS[value];
+		let work = action
+					? action()
+					: (value instanceof Date)
+						? this.saveSchedule(value)
+						: null;
+
+		if (work) {
+			work = work
+				.then(() => {
+					this.componentInstance.setProps({value: this.resolveValue()});
+				})
+				.catch(reason => {
+					//Cleanup reason to not be an ExtJS object...
+					return Promise.reject(reason);
+				});
 		}
 
-		if(value instanceof Date) {
-			return this.saveSchedule(value);
-		}
-
-		console.warn('Error unexpected value saving publish controls');
+		return work;
 	},
 
 	savePublish () {
 		const me = this;
 
-		Promise.all([
+		return Promise.all([
 			me.EditingActions.publish(me.record),
 			me.EditingActions.publish(me.contents)
-		])
-		.then(() => {
-			if (me.saveSuccess) {
-				me.saveSuccess();
-			}
-		})
-		.catch(() => {
-			me.saveError();
-		});
+		]);
 	},
 
 	saveDraft () {
 		const me = this;
 
-		Promise.all([
+		return Promise.all([
 			me.EditingActions.unpublish(me.record),
 			me.EditingActions.unpublish(me.contents)
-		])
-		.then(() => {
-			if (me.saveSuccess) {
-				me.saveSuccess();
-			}
-		})
-		.catch(() => {
-			me.saveError();
-		});
+		]);
 	},
 
 	saveSchedule (value) {
@@ -102,27 +95,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (!value) { return; }
 
-		Promise.all([
+		return Promise.all([
 			me.EditingActions.publish(me.record),
 			me.EditingActions.publishOnDate(me.contents, value)
-		])
-		.then(() => {
-			if (me.saveSuccess) {
-				me.saveSuccess();
-			}
-		})
-		.catch(() => {
-			me.saveError();
-		});
-	},
-
-	saveSuccess () {
-		this.componentInstance.closeMenu();
-		this.setState({ value: this.resolveValue(), changed: false });
-	},
-
-
-	saveError () {
-		this.setState({ value: this.resolveValue(), changed: false });
+		]);
 	}
 });
