@@ -21,7 +21,8 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'parts', type: 'arrayItem' },
 		{ name: 'title', type: 'string' },
 		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeAssignmentSubmittedCount'},
-		{ name: 'no_submit', type: 'boolean'}
+		{ name: 'no_submit', type: 'boolean'},
+		{ name: 'version', type: 'string'}
 	],
 
 	isAvailable: function () {

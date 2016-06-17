@@ -129,7 +129,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 	submitAssignment: function (questionSet, submissionData, containerId, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
-			assignmentId = questionSet.associatedAssignment.getId(),
+			assignment = questionSet && questionSet.associatedAssignment,
+			assignmentId = assignment.getId(),
 			qsetSubmission, assignmentSubmission;
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
@@ -138,9 +139,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
 			assignmentId: assignmentId,
 			parts: [qsetSubmission],
-			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration
+			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration,
+			version: assignment.get('version')
 		});
 
+		let me = this;
 
 		return new Promise(function (fulfill, reject) {
 			assignmentSubmission.save({
@@ -158,9 +161,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 						assignmentId: assignmentId
 					});
 				},
-				failure: function () {
+				failure: function (rec, resp) {
 					console.error('FAIL', arguments);
-					alert('There was a problem submitting your assignment.');
+					let err = resp && resp.error;
+					if (err && err.status === 409) {
+						me.handleConflictError(assignment);
+					}
+					else {
+						alert('There was a problem submitting your assignment.');
+					}
 					reject();
 				}
 			});
@@ -185,7 +194,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
 			assignmentId: assignment.getId(),
 			parts: [qsetSubmission],
-			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration
+			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration,
+			version: assignment.get('version')
 		});
 
 		return new Promise(function (fulfill, reject) {
