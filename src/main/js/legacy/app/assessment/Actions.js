@@ -171,7 +171,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),
 			qsetSubmission, assignmentSubmission,
 			assignment = questionSet.associatedAssignment,
-			url = assignment && assignment.getLink('Savepoint');
+			url = assignment && assignment.getLink('Savepoint'),
+			me = this;
 
 		if (!url) {
 			console.error('No url to save assignemnt progress to');
@@ -195,14 +196,42 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 					fulfill(result);
 				},
-				failure: function () {
+				failure: function (rec, resp) {
 					console.error('Failed to save assignment progress');
-
+					var err = resp && resp.error;
+					if (err && err.status === 409) {
+						me.handleConflictError(assignment);
+					}
 					fulfill(null);
 				}
 			});
 		});
 	},
+
+
+	handleConflictError: function (assignemnt) {
+		Ext.MessageBox.alert({
+			title: 'This assignemnt has changed',
+			msg: 'Clicking OK will reload the assignemnt',
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: 'OK'
+				}
+			},
+			fn: function (button) {
+				if (button === 'yes' && assignemnt) {
+					assignemnt.updateFromServer()
+						.then(function () {
+							assignemnt.fireEvent('refresh');
+						});
+				}
+			}
+		});
+	},
+
 
 	checkAnswer: function (question, answerValues, startTime, canSubmitIndividually) {
 		var endTimestamp = (new Date()).getTime(),

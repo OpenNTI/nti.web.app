@@ -78,6 +78,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		} else {
 			this.showAssignment();
 		}
+
+		this.assignment.on('refresh', this.showAssignment.bind(this));
 	},
 
 	//Override this so the reader doesn't set the page info twice
