@@ -35,6 +35,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{cls: 'footer', cn: [
 				{tag: 'tpl', 'if': 'enableEditControls', cn: [
 					{cls: 'edit-container'}
+				]},
+				{tag: 'tpl', 'if': 'enableEditControls', cn: [
+					{cls: 'synclock-container'}
 				]}
 			]}
 		]}
@@ -74,6 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (this.enableEditControls) {
 			this.addEditControls();
+			this.addSynclockControls();
 		}
 		if (this.enablePublishControls) {
 			this.addPublishControls();
@@ -128,6 +132,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 
 			this.on('destroy', this.dateCmp.destroy.bind(this.dateCmp));
+		}
+	},
+
+	addSynclockControls: function () {
+		var container = this.el.down('.synclock-container');
+
+		if (container) {
+			this.syncCmp = Ext.widget('overview-editing-controls-synclock', {
+				record: this.record,
+				contents: this.contents,
+				renderTo: container,
+				search: true
+			});
+
+			this.on('destroy', this.syncCmp.destroy.bind(this.syncCmp));
 		}
 	},
 

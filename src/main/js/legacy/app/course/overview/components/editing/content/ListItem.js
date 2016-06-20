@@ -3,6 +3,7 @@ const Ext = require('extjs');
 require('../../../../../../mixins/dnd/OrderingItem');
 require('../../../../../../mixins/Transition');
 require('../controls/Edit');
+require('../controls/Synclock');
 require('../Controls');
 require('./Prompt');
 
@@ -109,6 +110,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var controls = [];
 
 		if (NextThought.app.course.overview.components.editing.content.Prompt.canEdit(record)) {
+			controls.push({
+				xtype: 'overview-editing-controls-synclock',
+				record: record,
+				parentRecord: this.parentRecord,
+				root: this.lessonOverview,
+				bundle: bundle
+			});
 			controls.push({
 				xtype: 'overview-editing-controls-edit',
 				record: record,
