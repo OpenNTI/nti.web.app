@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 	setProps (props) {
 		this.initialConfig = {...this.initialConfig, ...props};
-		if (this.isRendered) {
+		if (this.rendered) {
 			this.doRender();
 		}
 	},

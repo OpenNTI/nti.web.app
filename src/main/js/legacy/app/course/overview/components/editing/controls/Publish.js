@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (work) {
 			work = work
 				.then(() => {
-					this.componentInstance.setProps({value: this.resolveValue()});
+					this.setProps({value: this.resolveValue()});
 				})
 				.catch(reason => {
 					//Cleanup reason to not be an ExtJS object...
