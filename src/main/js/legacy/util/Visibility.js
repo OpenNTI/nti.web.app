@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const Toaster = require('legacy/common/toast/Manager');
 const {isFeature} = require('legacy/util/Globals');
 const {wait} = require('legacy/util/Promise');
+const logger = require('nti-util-logger').get('util:visibility');
 
 
 module.exports = exports = Ext.define('NextThought.util.Visibility', {
@@ -140,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 
 			this.__onVisibile();
 
-			console.log('VISIBILITY: focus');
+			logger.debug('VISIBILITY: focus');
 
 			if (oldOnFocus) {
 				oldOnFocus.call(null);
@@ -155,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 
 			this.__onHide();
 
-			console.log('VISIBILITY: blur');
+			logger.debug('VISIBILITY: blur');
 
 			if (oldOnBlur) {
 				oldOnBlur.call(null);
@@ -182,19 +183,19 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 	},
 
 	__setInactive: function () {
-		console.log('VISIBILITY: inactive');
+		logger.debug('VISIBILITY: inactive');
 
 		this['is_inactive'] = true;
 
 		if (this['locked_active']) {
-			console.log('VISIBILITY: locked active');
+			logger.debug('VISIBILITY: locked active');
 		} else {
 			this.fireEvent('inactive');
 		}
 	},
 
 	__setActive: function () {
-		console.log('VISIBILITY: active');
+		logger.debug('VISIBILITY: active');
 		this['is_inactive'] = false;
 
 		if (this.inactiveToast) {

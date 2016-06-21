@@ -61,6 +61,7 @@
     "nti-lib-dom": "^1.2.3",
     "nti-lib-ntiids": "^1.0.2",
     "nti-util-git-rev": "^1.0.0",
+    "nti-util-logger": "^1.0.0",
     "nti-web-commons": ">=0.0.14",
     "nti-web-video": "^1.0.0",
     "null-loader": "^0.1.0",
