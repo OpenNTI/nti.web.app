@@ -1,6 +1,6 @@
 require('legacy/mixins/Router');
 
-fdescribe('Router mixin tests', function () {
+describe('Router mixin tests', function () {
 	describe('Path Router Tests', function () {
 		var router;
 

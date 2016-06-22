@@ -104,15 +104,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
+	getObjectURL: function (id) {
+		return Service.getObjectURL(id);
+	},
+
+
 	submitSurvey: function (survey, submissionData, containerId, startTime) {
 		var data = this.__getDataForSurveySubmission(survey, submissionData, containerId, startTime),
-			surveySubmission;
+			surveySubmission, me = this;
 
 		surveySubmission = NextThought.model.assessment.SurveySubmission.create(data);
 
 		return new Promise(function (fulfill, reject) {
 			surveySubmission.save({
-				url: Service.getObjectURL(survey.getId()),
+				url: me.getObjectURL(survey.getId()),
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
@@ -143,17 +148,23 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			version: assignment.get('version')
 		});
 
-		let me = this;
+		return this.doSubmitAssignment(assignmentSubmission, assignment);
+	},
+
+
+	doSubmitAssignment: function (assignmentSubmission, assignment) {
+		const assignmentId = assignment.getId();
+		const me = this;
 
 		return new Promise(function (fulfill, reject) {
 			assignmentSubmission.save({
-				url: Service.getObjectURL(assignmentId),
+				url: me.getObjectURL(assignmentId),
 				success: function (self, op) {
-					var pendingAssessment = op.getResultSet().records.first(),
-						result = pendingAssessment.get('parts').first(),
+					var pendingAssessment = op.getResultSet().records[0],
+						result = pendingAssessment.get('parts')[0],
 						itemLink = pendingAssessment.getLink('AssignmentHistoryItem');
 
-					questionSet.associatedAssignment.setHistoryLink(itemLink);
+					assignment.setHistoryLink(itemLink);
 
 					fulfill({
 						result: result,
@@ -170,23 +181,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					else {
 						alert('There was a problem submitting your assignment.');
 					}
-					reject();
+					reject(err);
 				}
 			});
 		});
 	},
 
+
 	saveProgress: function (questionSet, submissionData, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),
 			qsetSubmission, assignmentSubmission,
-			assignment = questionSet.associatedAssignment,
-			url = assignment && assignment.getLink('Savepoint'),
-			me = this;
-
-		if (!url) {
-			console.error('No url to save assignemnt progress to');
-			return Promise.reject();
-		}
+			assignment = questionSet.associatedAssignment;
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
 
@@ -198,26 +203,37 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			version: assignment.get('version')
 		});
 
-		return new Promise(function (fulfill, reject) {
+		return this.doSaveProgress(assignmentSubmission, assignment);
+	},
+
+
+	doSaveProgress: function (assignmentSubmission, assignment) {
+		const url = assignment && assignment.getLink('Savepoint');
+		const me = this;
+
+		if (!url) {
+			console.error('No url to save assignemnt progress to');
+			return Promise.reject();
+		}
+
+		return new Promise(function (fulfill) {
 			assignmentSubmission.save({
 				url: url,
 				success: function (self, op) {
-					var result = op.getResultSet().records.first();
-
+					let result = op.getResultSet().records[0];
 					fulfill(result);
 				},
 				failure: function (rec, resp) {
 					console.error('Failed to save assignment progress');
-					var err = resp && resp.error;
+					let err = resp && resp.error;
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
 					}
-					fulfill(null);
+					fulfill(err);
 				}
 			});
 		});
 	},
-
 
 	handleConflictError: function (assignemnt) {
 		Ext.MessageBox.alert({
