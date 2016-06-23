@@ -142,7 +142,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		this.assignmentEditor = this.add({
 			xtype: 'assignment-editor',
-			assignmentId: config.assignmentId
+			assignmentId: config.assignmentId,
+			pageSource: config.pageSource
 		});
 
 		this.addChildRouter(this.assignmentEditor);
@@ -277,11 +278,59 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 	editAssignment (route, subRoute) {
 		//TODO: pass more info about paging and bread crumbs and what not
-		this.showEditor({
-			assignmentId: decodeFromURI(route.params.assignment)
-		});
+		const id = decodeFromURI(route.params.assignment);
+		const view = this.getView();
 
-		return Promise.resolve();
+		return view.getAssignmentList()
+			.then((assignments) => {
+				let index = 0;
+				let prev = 0;
+				let next = 0;
+
+				for (index; index < assignments.length; index++) {
+					let item = assignments[index];
+
+					if (item.getId() === id) {
+						break;
+					}
+				}
+
+				prev = index - 1;
+				next = index + 1;
+
+				if (prev >= 0) {
+					prev = assignments[prev];
+				} else {
+					prev = null;
+				}
+
+				if (next < assignments.length) {
+					next = assignments[next];
+				} else {
+					next = null;
+				}
+
+				let pageSource = {
+					next: next && next.getId(),
+					nextTitle: next && next.get('title'),
+					previous: prev && prev.getId(),
+					previousTitle: prev && prev.get('title'),
+					currentIndex: index,
+					total: assignments.length
+				};
+
+				return {
+					assignmentId: id,
+					pageSource
+				};
+			})
+			.then(cfg => this.showEditor(cfg));
+
+		// this.showEditor({
+		// 	assignmentId: decodeFromURI(route.params.assignment)
+		// });
+
+		// return Promise.resolve();
 	},
 
 

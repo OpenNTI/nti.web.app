@@ -30,5 +30,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.callParent(arguments);
 
 		this.el.dom.style.paddingTop = '20px';
+	},
+
+
+	onBack () {
+
+	},
+
+
+	gotoAssignment (/*ntiid, title*/) {
+
 	}
 });
