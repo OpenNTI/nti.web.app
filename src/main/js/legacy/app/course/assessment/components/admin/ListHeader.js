@@ -30,7 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{cls: 'assignment', cn: [
 				{cls: 'title', html: '{assignmentTitle}'},
 				{cls: 'extras meta', cn: [
-					{tag: 'span', cls: 'link raw', html: '{{{NextThought.view.courseware.assessment.admin.ListHeader.rawAssignment}}}'}
+					{tag: 'span', cls: 'link raw', html: '{{{NextThought.view.courseware.assessment.admin.ListHeader.rawAssignment}}}'},
+					{tag: 'span', cls: 'link edit', html: 'Edit Assignment'}
 				]},
 				{cls: 'meta', cn: [
 					{tag: 'span', cls: 'due link', html: ''},
@@ -73,8 +74,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		startIndexEl: '.page .viewing .startIndex',
 		endIndexEl: '.page .viewing .endIndex',
 		totalEl: '.page .viewing .total',
-		viewAssignmentEl: '.assignment .raw'
+		viewAssignmentEl: '.assignment .raw',
+		editAssignmentEl: '.assignment .edit'
 	},
+
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -91,6 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
 		this.mon(this.assignmentDueEl, 'click', this.toggleDateEditor.bind(this));
 		this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
 		if (this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail')) {
 			this.mon(this.emailEl, 'click', 'showEmailEditor');
 		}
@@ -98,18 +102,29 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.emailEl.hide();
 		}
 
+		this.editAssignmentEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		if (this.assignment.getLink('edit')) {
+			this.mon(this.editAssignmentEl, 'click', () => this.editAssignment());
+		} else {
+			this.editAssignmentEl.hide();
+		}
+
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 		wait(10).then(this.onStudentFilterChange.bind(this));
 	},
 
+
 	setDisabled: function () {
 		this.addCls('disabled');
 	},
 
+
 	setEnabled: function () {
 		this.removeCls('disabled');
 	},
+
 
 	buildPageMenu: function () {
 		if (!this.store || !this.rendered) { return; }
@@ -167,6 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
+
 	buildSettingsMenu: function () {
 		if (!this.store) { return; }
 
@@ -223,6 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.settingsMenu.show().hide();
 	},
 
+
 	onStudentFilterChange: function (filter) {
 		var q;
 
@@ -246,6 +263,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
+
 	maybeShowEmailButton: function (filter) {
 		var isAllowed = this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail');
 		if (isAllowed && this.emailEl) {
@@ -253,9 +271,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
+
 	shouldAllowInstructorEmail: function () {
 		return isFeature('instructor-email');
 	},
+
 
 	showEmailEditor: function (e) {
 		var me = this,
@@ -273,7 +293,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.WindowActions.showWindow('new-email', null, e.getTarget(), {afterSave: this.onCourseEmailSent.bind(this)});
 	},
 
+
 	onCourseEmailSent: function () {},
+
 
 	showSettingsMenu: function () {
 		if (!this.settingsMenu) { return; }
@@ -281,11 +303,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.settingsMenu.showBy(this.settingsEl, 'tr-br');
 	},
 
+
 	showPageMenu: function (e) {
 		if (!this.pageMenu || e.getTarget('.empty')) { return; }
 
 		this.pageMenu.showBy(this.viewingEl, 'tr-br');
 	},
+
 
 	changePage: function (item, status) {
 		if (!status || !this.store) { return; }
@@ -296,6 +320,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.loadPage(page);
 	},
 
+
 	changePageSize: function (item, status) {
 		if (!status || !this.store) { return; }
 
@@ -304,15 +329,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.setPageSize(size);
 	},
 
+
 	setPageSize: function (size) {
 		this.pageSize = size;
 
 		this.fireEvent('set-page-size', this.pageSize);
 	},
 
+
 	toggleAvatars: function (item, status) {
 		this.fireEvent('toggle-avatars', !status);
 	},
+
 
 	bindStore: function (store) {
 		this.store = store;
@@ -322,12 +350,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.buildSettingsMenu();
 	},
 
+
 	onStoreLoad: function () {
 		if (!this.store || !this.rendered) { return; }
 
 		this.buildPageMenu();
 		this.buildSettingsMenu();
 	},
+
 
 	setExportURL: function (url, tip) {
 		this.exportURL = url;
@@ -346,6 +376,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
+
 	setAvatarToggle: function (show) {
 		this.showAvatars = show;
 
@@ -353,6 +384,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.toggleAvatars(null, !show);
 	},
+
 
 	setAssignment: function (assignment) {
 		if (!this.rendered) {
@@ -400,6 +432,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.on('destroy', this.assignmentStatusCmp.destroy.bind(this.assignmentStatusCmp));
 	},
 
+
 	toggleDateEditor: function () {
 		if (this.assignmentStatusCmp && this.assignmentStatusCmp.dueDateEditorVisible()) {
 			this.assignmentStatusCmp.closeDueDateEditor();
@@ -407,6 +440,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.assignmentStatusCmp.showDueDateEditor();
 		}
 	},
+
 
 	updateFilterCount: function (filter) {
 		if (!this.rendered) {
@@ -421,9 +455,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
+
 	loadPage: function (page) {
 		this.currentPage = page;
 
 		this.fireEvent('load-page', this.currentPage);
+	},
+
+
+	editAssignment () {
+		this.fireEvent('editAssignment');
 	}
 });
