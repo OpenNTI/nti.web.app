@@ -17,16 +17,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		{ cls: 'third search', cn: [
 			{ tag: 'input', type: 'text', placeholder: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.searchplaceholder}}}', required: 'required' },
 			{ cls: 'clear' }
-		] }
+		] },
+		{ cls: 'create-assignment', html: 'Create Assignment'}
 	]),
 
 	renderSelectors: {
 		groupEl: '.groupBy',
 		searchEl: '.search input',
-		clearEl: '.search .clear'
+		clearEl: '.search .clear',
+		createEl: '.create-assignment'
 	},
 
-	bubbleEvents: ['filters-changed', 'search-changed'],
+	bubbleEvents: ['filters-changed', 'search-changed', 'create-assignment'],
 
 
 	afterRender: function () {
@@ -39,6 +41,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(this.groupEl, 'click', 'showGroupByMenu');
 		this.mon(this.searchEl, 'keyup', 'searchKeyPressed');
 		this.mon(this.clearEl, 'click', 'clearSearch');
+		this.mon(this.createEl, 'click', this.createAssignment.bind(this));
+
+		this.createEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		if (!this.showCreateButton) {
+			this.createEl.hide();
+		}
 	},
 
 
@@ -55,6 +64,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		//update without refreshing
 		this.fireEvent('search-changed', this.searchKey);
+	},
+
+
+	showCreateButton () {
+		this.showCreateButton = true;
+
+		if (this.createEl) {
+			this.createEl.show();
+		}
 	},
 
 
@@ -168,5 +186,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	setSearch: function (value) {
 		this.searchEl.dom.value = value;
 		this.searchkey = value;
+	},
+
+
+	createAssignment () {
+		this.fireEvent('create-assignment');
 	}
 });

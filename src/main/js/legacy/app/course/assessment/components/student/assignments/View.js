@@ -1,8 +1,10 @@
 var Ext = require('extjs');
+const { encodeForURI } = require('nti-lib-ntiids');
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
 require('legacy/common/ux/Grouping');
 require('legacy/app/navigation/path/Actions');
+require('legacy/app/course/assessment/Actions');
 require('./FilterBar');
 require('./List');
 
@@ -269,9 +271,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.enableBubble(['show-assignment', 'update-assignment-view', 'close-reader']);
 
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.AssessmentActions = NextThought.app.course.assessment.Actions.create();
 
 		this.on('filters-changed', this.updateFilters.bind(this));
 		this.on('search-changed', this.updateFilters.bind(this));
+		this.on('create-assignment', this.createAssignment.bind(this));
 
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),
@@ -429,6 +433,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			outlineInterface = me.data.outlineInterface,
 			assignments = me.data.assignments;
 
+		let filterBar = this.getFilterBar();
+
 		function findOutlineNodes (id) {
 			var outlineNodes = assignments.getOutlineNodesContaining(id) || [];
 
@@ -507,6 +513,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}));
 		}
 
+		if (bundle && bundle.getLink('CourseEvaluations')) {
+			filterBar.showCreateButton();
+		}
+
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
@@ -570,6 +580,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			console.error('No Assignment to navigate to');
 		}
 	},
+
+
+	createAssignment () {
+		this.AssessmentActions.createAssignmentIn(this.data.instance)
+			.then((assignment) => {
+				const title = assignment.get('title');
+				let id = assignment.getId();
+
+				id = encodeForURI(id);
+
+				this.pushRoute(title, id + '/edit/', {assignment: this});
+			});
+	},
+
 
 	getStateKey: function () {
 		var bundle = this.data.instance;
