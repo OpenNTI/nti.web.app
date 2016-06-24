@@ -6,6 +6,7 @@ var VideoEditor = require('../video/Editor');
 var DiscussionEditor = require('../discussion/Editor');
 var QuestionsetEditor = require('../questionset/Editor');
 var TimelineEditor = require('../timeline/Editor');
+var SurveyEditor = require('../survey/Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation', {
@@ -30,7 +31,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				base.video.Editor,
 				base.discussion.Editor,
 				base.questionset.Editor,
-				base.timeline.Editor
+				base.timeline.Editor,
+				base.survey.Editor
 			];
 		}
 	},
