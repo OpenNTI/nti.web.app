@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.editAssignmentEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		if (this.assignment.getLink('edit')) {
+		if (this.assignment && this.assignment.getLink('edit')) {
 			this.mon(this.editAssignmentEl, 'click', () => this.editAssignment());
 		} else {
 			this.editAssignmentEl.hide();
