@@ -800,6 +800,26 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return p;
 	},
 
+	getAllSurveys: function () {
+		const link = this.getLink('Inquiries') + '?accept=application/vnd.nextthought.nasurvey';
+
+		//TODO: Add a model for a survey collection. Casper Shepard.
+
+		if (link) {
+			return Service.request(link)
+				.then(function (response) {
+					let json = JSON.parse(response);
+					let surveys = [];
+					json.Items.forEach(function (item) {
+						surveys.push(ParseUtils.parseItems(item)[0]);
+					});
+					return surveys;
+				});
+		}
+
+		return Promise.reject('Survey request failed.');
+	},
+
 	getAllAssignments: function () {
 		return this.getAssignments()
 				.then(function (assignments) {
