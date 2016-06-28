@@ -48,7 +48,7 @@ body.x-body {
 	// Now that we scroll the window, this needs to force overflow visible. (positioned things that drop
 	// below the frame need to extend the scroll area) If something breaks because of this, don't revert
 	// this, reflow the styles with the thing that breaks.
-	overflow: visible; !important;
+	overflow: visible !important;
 	background: white;
 	background: #343434;
 	background-size: cover;
