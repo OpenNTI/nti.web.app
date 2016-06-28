@@ -11,7 +11,7 @@ const labels = {
 	},
 	'report-SelfAssessmentSummaryReport.pdf': {
 		title: 'Self-Assessment Summary Report',
-		description: 'Summarizes the students interactions with SelfAssessments throughout the course, including per-student information?'
+		description: 'Viewable summary of self-assessment activity by assessment and by student.'
 	}
 };
 
