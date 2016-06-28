@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../../../util/Globals');
+var PartContent = require('../PartContent');
 var PartsMultiChoice = require('./parts/MultiChoice');
 var PartsMultiAnswer = require('./parts/MultiAnswer');
 var PartsMatching = require('./parts/Matching');
@@ -98,15 +99,31 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 			questionParts = me.poll.get('parts');
 
 		resultParts.forEach(function (part, idx) {
-			me.addPart(part, questionParts[idx]);
+			me.addPart(part, questionParts[idx], idx);
 		});
 	},
 
-	addPart: function (resultPart, questionPart) {
+	addPart: function (resultPart, questionPart, ordinal) {
 		var cmp = this.getCmpForMimeType(resultPart.MimeType);
+		var container = this.resultContainer;
 
 		if (cmp) {
-			this.resultContainer.add(new cmp({
+			if (questionPart.get('content')) {
+				container = this.resultContainer.add({
+					xtype: 'container',
+					layout: 'none',
+					cls: 'poll-results-container',
+					items: [
+						new PartContent({
+							part: questionPart,
+							reader: this.up('[reader]').reader,
+							ordinal: ordinal
+						})
+					]
+				});
+			}
+
+			container.add(new cmp({
 				resultPart: resultPart,
 				questionPart: questionPart,
 				resize: this.resize.bind(this)
