@@ -85,8 +85,8 @@
 	}
 }
 
-.content-editor.questionset {
-	.assignment-preview, .self-assessment-preview {
+.content-editor.questionset, .content-editor.survey {
+	.assignment-preview, .self-assessment-preview, .survey-preview {
 		background: white;
 		margin-bottom: 10px;
 		padding: 10px;

@@ -417,9 +417,9 @@
 }
 
 
-.assignment-item-selection, .assessment-item-selection {
+.assignment-item-selection, .assessment-item-selection, .survey-item-selection {
 	.selected {
-		.assignment-item, .self-assessment-item {
+		.assignment-item, .self-assessment-item, .survey-item {
 			background-color: $primary-blue;
 			color: white;
 
@@ -433,7 +433,7 @@
 		display: none;
 	}
 
-	.assignment-item, .self-assessment-item {
+	.assignment-item, .self-assessment-item, .survey-item {
 		cursor: pointer;
 		background: white;
 		margin-bottom: 10px;

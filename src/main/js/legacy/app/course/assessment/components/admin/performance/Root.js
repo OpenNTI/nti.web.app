@@ -391,6 +391,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (!status) { return; }
 
 		this.studentFilter = item.type;
+		this.currentPage = 1;
 
 		this.maybeSwitch(noEmpty);
 		this.updateFilter();

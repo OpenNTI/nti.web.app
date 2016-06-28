@@ -47,6 +47,10 @@
 					@include icon($assignment-content, $side: after, $top: 0, $left: 0);
 				}
 
+				&.survey {
+					@include icon($assignment-content, $side: after, $top: 0, $left: 0);
+				}
+
 				&.timeline {
 					@include icon($timeline-content, $side: after, $top: 0, $left: 0);
 				}
