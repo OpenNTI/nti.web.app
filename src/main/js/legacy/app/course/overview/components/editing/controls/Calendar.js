@@ -13,14 +13,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	getProps () {
-		const {record} = this;
+		const {record, disableText} = this;
 		const availableBeginning = record.get('AvailableBeginning');
 		const availableEnding = record.get('AvailableEnding');
 
 		return {
 			onChange: (...args) => this.onSave(...args),
 			availableBeginning,
-			availableEnding
+			availableEnding,
+			disableText
 		};
 	},
 
