@@ -367,8 +367,22 @@ body.dragging * {
 				@extend .assessment-content;
 				vertical-align: initial;
 				margin: 17px 40px 15px 40px;
+				min-height: 28px;
 
 				&:empty {display: none;}
+			}
+			.question-number-container {
+				top: 21px;
+				left: 13px;
+				min-width: 20px;
+				position: absolute;
+			}
+			.question-number {
+				color: rgb(190, 190, 190);
+				font-size: 14px;
+				font-style: normal;
+				font-weight: normal;
+				float: right;
 			}
 			background: #ffffff;
 			color: $primary-grey;

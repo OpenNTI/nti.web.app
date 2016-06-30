@@ -20,6 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	ui: 'assessment',
 
 	items: [
+		{xtype: 'box', questionNumberContainer: true},
 		{xtype: 'box', questionContainer: true}
 	],
 
@@ -33,6 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 		var parts = this.question.get('parts'),
 			multiPart = (parts.length > 1);
 
+		this.questionNumberContainer = this.down('[questionNumberContainer]');
 		this.questionContainer = this.down('[questionContainer]');
 
 		this.down('question-parts').setQuestionAndPart(
@@ -60,7 +62,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 			'disable-submission': this.determineSubmissionState
 		});
 
+		this.maybeAddQuestionNumber();
 		this.setQuestionContent(multiPart ? null : parts.first());
+
 		this.startTimestamp = new Date().getTime();
 
 		this.AssessmentActions = NextThought.app.assessment.Actions.create();
@@ -352,5 +356,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 			.always(function () {
 				me.unmask();
 			});
+	},
+
+	maybeAddQuestionNumber: function () {
+		if (this.questionIndex !== undefined) {
+
+			let questionNumberMarkup = Ext.DomHelper.markup(
+				{cls: 'question-number-container', cn: [
+					{cls: 'question-number', 'html': this.questionIndex + 1 + '.'}
+				]}
+			);
+
+			this.questionNumberContainer.update(questionNumberMarkup);
+		}
 	}
 });

@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-	makeAssessmentQuestion: function (q, set) {
+	makeAssessmentQuestion: function (q, set, questionIndex) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', q.getId()),
 			o = this.reader.getComponentOverlay();
 
@@ -65,7 +65,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			renderTo: o.componentOverlayEl,
 			questionSet: set || null,
 			tabIndexTracker: o.tabIndexer,
-			contentElement: contentElement
+			contentElement: contentElement,
+			questionIndex: questionIndex
 		}));
 
 		if (contentElement) {
@@ -149,7 +150,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 		set.isAssignment = !!this.injectedAssignment;
 
-		Ext.each(questions, function (q) {me.makeAssessmentQuestion(q, set);});
+		let ids = me.getPendingQuestionIds(pendingAssessment);
+		me.makeNumberedAssessmentQuestions(questions, set, ids);
 
 		this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 			reader: r, renderTo: c, questionSet: set,
@@ -173,6 +175,34 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			this.submission.disableView();
 			set.fireEvent('instructor-show-solutions');
 		}
+	},
+
+	makeNumberedAssessmentQuestions: function (questions, set, questionIds) {
+		let questionIndex = 0;
+		let me = this;
+		Ext.each(questions, function (q) {
+			if (!questionIds || q.internalId && questionIds['' + q.internalId]) {
+				me.makeAssessmentQuestion(q, set, questionIndex);
+				++questionIndex;
+			} else {
+				me.makeAssessmentQuestion(q, set);
+			}
+		});
+	},
+
+	getPendingQuestionIds: function (pendingAssessment) {
+		let pendingQuestionIds = {};
+		let pendingQuestions = pendingAssessment && pendingAssessment.data && pendingAssessment.data.questions;
+
+		if (pendingQuestions) {
+			pendingQuestions.forEach(function (question) {
+				if (question.internalId) {
+					pendingQuestionIds['' + question.internalId] = true;
+				}
+			});
+			return pendingQuestionIds;
+		}
+		return undefined;
 	},
 
 	updateAssessmentHistory: function (history) {
