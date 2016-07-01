@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 		var parts = this.resultPart.Results,
 			part = parts[index],
-			text = part && this.getBodyText(true, part);
+			text = part && this.getBodyText(true, part, true);
 
 		if (text) {
 			this.contentEl.removeCls('error');

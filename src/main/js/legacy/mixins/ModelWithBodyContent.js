@@ -53,12 +53,14 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		'application/vnd.nextthought.embeddedvideo': 'renderVideoComponent'
 	},
 
-	getBodyText: function (hasNoPlaceholderForImage, bodyOverride) {
+	getBodyText: function (hasNoPlaceholderForImage, bodyOverride, keepBIU) {
 
 		var o = bodyOverride || this.get('body'), text = [];
 
 		Ext.each(o, function (c) {
-			if (typeof c === 'string') {
+			if (typeof c === 'string' && keepBIU) {
+				text.push(c.replace(/<\/?([^biu>/][^>]*|[biu][^>]+)>/g, ' ').replace(/\s+/g, ' '));
+			} else if (typeof c === 'string') {
 				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/g, ' '));
 			} else {
 				if (!hasNoPlaceholderForImage) {
