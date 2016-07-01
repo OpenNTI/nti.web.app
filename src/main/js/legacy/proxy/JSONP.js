@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 		}
 
 		//JSONP CORS workaround not needed. (or not enabled)
-		if (host === location.host || $AppConfig.server.jsonp !== true) {
+		if (host === location.host || $AppConfig.jsonp !== true) {
 			return Service.request(options);
 		}
 

@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			form = new Ext.form.Basic(this.ownerCt, {}),
 			fieldCacheKey = '_fields',
 			fields,
-			url = getURL($AppConfig.server.data + '@@image_to_dataurl_extjs');
+			url = getURL($AppConfig['server-path'] + '@@image_to_dataurl_extjs');
 
 		if (file.size > this.ONE_MEGABYTE) {
 			alert({

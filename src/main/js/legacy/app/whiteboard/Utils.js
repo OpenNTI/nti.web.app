@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 			console.error('A data url was attempted to be proxied.');
 			throw 'A data url was attempted to be proxied.';
 		}
-		return getURL($AppConfig.server.data + '@@echo_image_url?image_url=' + encodeURIComponent(imageUrl));
+		return getURL($AppConfig['server-path'] + '@@echo_image_url?image_url=' + encodeURIComponent(imageUrl));
 	},
 
 	imgToDataUrl: function (img) {
