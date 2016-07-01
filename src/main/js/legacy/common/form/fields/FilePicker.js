@@ -272,7 +272,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		const bundle = StateStore.getInstance().getRootBundle();
 		const sourceID = bundle.getId();
 
-		ContentResources.selectFrom(sourceID)
+		const accept = x => !x.isFolder && (!this.acceptsContentFileFilter || this.acceptsContentFileFilter(x));
+		const filter = x => !this.contentFileFilter || this.contentFileFilter(x);
+
+		ContentResources.selectFrom(sourceID, accept, filter)
 			.then(file => {
 				this.currentFile = file.getID();
 				this.onFileChange(file);
