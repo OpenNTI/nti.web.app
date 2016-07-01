@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 
 	isEmpty: function () {
-		return !this.hasFile();
+		return !!this.currentFile;
 	},
 
 
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 
 	hasFile: function () {
-		return !!this.currentFile;
+		return this.currentFile && typeof this.currentFile !== 'string';
 	},
 
 
