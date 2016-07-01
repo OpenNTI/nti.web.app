@@ -1,4 +1,8 @@
 const Ext = require('extjs');
+const Globals = require('../../../util/Globals');
+const {AssetIcon} = require('nti-web-commons');
+require('legacy/app/MessageBox');
+
 require('legacy/common/form/fields/FilePicker');
 require('./Base');
 
@@ -25,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 				]},
 				{cls: 'preview-wrapper', cn: [
 					{cls: 'preview', cn: [
-						{cls: 'thumbnail', html: 'image thumbnail'},
+						{cls: 'thumbnail'},
 						{cls: 'meta', cn: [
 							{cls: 'text', cn: [
 								{tag:'span', cls: 'name', html: 'Name'},
@@ -36,7 +40,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 									{tag: 'a', href: '', target: '_blank', html: 'Preview'}
 								]},
 								{tag: 'span', cls: 'link change-link', html: 'Change'}
-							]}
+							]},
+							{cls: 'clear'}
 						]}
 					]},
 					{cls: 'progress', cn: [
@@ -61,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		submitBtn: '.submit.button',
 		inputField: 'input[type=file]',
 		labelBoxEl: '.label',
-		deleteEl: '.delete',
+		deleteEl: '.preview .meta .clear',
 		progressEl: '.preview-wrapper .progress',
 		previewNameEl: '.preview .meta .name',
 		previewSizeEl: '.preview .meta .size',
@@ -130,6 +135,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		if (this.deleteEl) {
 			this.mon(this.deleteEl, 'click', 'deleteFile');
 		}
+
+		this.on('destroy', this.cleanUpObjectURL.bind(this));
 	},
 
 	unsupported: function () {
@@ -137,13 +144,26 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 	attachInputListeners () {
-		var input = this.inputField && this.inputField.dom;
+		const input = this.inputField && this.inputField.dom;
 
 		if (input) {
 			input.addEventListener('change', this.onFileInputChange.bind(this));
 			input.addEventListener('dragenter', this.onDragEnter.bind(this));
 			input.addEventListener('dragleave', this.onDragLeave.bind(this));
 			input.addEventListener('drop', this.onDragLeave.bind(this));
+		}
+	},
+
+	removeInputListeners: function () {
+		const input = this.inputField && this.inputField.dom;
+
+		if (input) {
+			input.removeEventListener('change', this.onFileInputChange.bind(this));
+			input.removeEventListener('dragenter', this.onDragEnter.bind(this));
+			input.removeEventListener('dragleave', this.onDragLeave.bind(this));
+			input.removeEventListener('drop', this.onDragLeave.bind(this));
+			input.removeEventListener('focus', this.onInputFocus.bind(this));
+			input.removeEventListener('blur', this.onInputBlur.bind(this));
 		}
 	},
 
@@ -164,34 +184,65 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 				filename: file.name
 			};
 
-			this.setLabel(file.name);
+			this.setPreviewFromInput(file);
 			this.filereader.readAsDataURL(file);
 		}
 	},
 
 
 	updateProgress: function (evt) {
-		const progress = this.progressEl && this.progressEl.dom;
-		if (evt.lengthComputable) {
-			let percentLoaded = Math.round((evt.loaded / evt.total) * 100);
-			// Increase the progress bar length.
-			if (percentLoaded < 100) {
-				progress.style.width = percentLoaded + '%';
-				progress.textContent = percentLoaded + '%';
-				console.log('File upload Progress: ' + percentLoaded + '%');
-			}
-		}
+		// TODO: we will use the componet from the Asset Manager to show progress.
+		console.log('TODO: show File upload Progress');
 	},
 
 
-	onLoadStart: function (e) {
+	onLoadStart: function () {
 		const progress = this.progressEl && this.progressEl.dom;
 		this.inputContainer.removeCls('no-file');
 		this.inputContainer.removeCls('file-over');
 		this.inputContainer.addCls('has-file');
+	},
 
-		progress.style.width = '0%';
-		progress.textContent = '0%';
+
+	setPreviewFromInput: function (file) {
+		const FileUtils = NextThought.common.form.fields.FilePicker;
+		const size = FileUtils.getHumanReadableFileSize(file.size, 1);
+		// const href = this.createObjectURL(file);
+
+		this.previewNameEl.update(file.name);
+		this.previewSizeEl.update('(' + size + ')');
+
+		// ReactDOM.render(<AssetIcon MimeType={file.type} />, this.previewImageEl);
+		let iconCmp = Ext.widget({
+			xtype: 'react',
+			component: AssetIcon,
+			mimeType: file.type,
+			svg: true,
+			renderTo: this.previewImageEl
+		});
+	},
+
+
+	createObjectURL: function (file) {
+		var url = Globals.getURLObject();
+
+		this.cleanUpObjectURL();
+
+		if (!url) { return null; }
+
+		this.objectURL = url.createObjectURL(file);
+
+		return this.objectURL;
+	},
+
+
+	cleanUpObjectURL: function () {
+		var url = Globals.getURLObject();
+
+		if (this.objectURL && url) {
+			url.revokeObjectURL(this.objectURL);
+			delete this.objectURL;
+		}
 	},
 
 
@@ -205,6 +256,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	onDragLeave: function () {
 		this.inputContainer.removeCls('file-over');
 		this.inputContainer.addCls('no-file');
+	},
+
+
+	clearView: function () {
+		this.inputContainer.addCls('no-file');
+		this.inputContainer.removeCls('has-file');
+		this.inputContainer.removeCls('file-over');
 	},
 
 
@@ -225,7 +283,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			fn: function (str) {
 				if (str === 'ok') {
 					delete me.value;
-					me.el.mask('Deleting...');
+					me.clearView();
 					me.saveProgress();
 					me.disableSubmission();
 				}
@@ -275,15 +333,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	setUploadedNotSubmitted: function (v) {
 		v = v || {};
 
-		var q = this.questionSet,
-			assignment = q && q.associatedAssignment;
-
-		this.value = v;
-
-		if (v.filename) {
-			this.setLabel(v.filename);
-			this.setSubText(true);
-		}
+		const q = this.questionSet;
+		const assignment = q && q.associatedAssignment;
 
 		this.addCls('not-submitted');
 
