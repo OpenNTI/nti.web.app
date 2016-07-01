@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	},
 
 	getDateEditingLink: function () {
-		return this.getLink('edit');
+		return this.getLink('date-edit');
 	},
 
 	tallyParts: function () {
