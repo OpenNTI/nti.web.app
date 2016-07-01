@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 	maybeWarnForSize: function (file) {
 		var size = this.schema.warningSize || this.WARNING_SIZE;
 
-		if (file && file.size > size) {
+		if (file && !file.NTIID && file.size > size) {
 			console.warn('Large File attached.');
 
 			if (this.schema.showWarning) {
@@ -272,7 +272,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		const bundle = StateStore.getInstance().getRootBundle();
 		const sourceID = bundle.getId();
 
-		ContentResources.selectFrom(sourceID);
+		ContentResources.selectFrom(sourceID)
+			.then(file => {
+				this.currentFile = file.getID();
+				this.onFileChange(file);
+			});
 	},
 
 
@@ -313,7 +317,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.setPreviewFromInput(file);
 
 		if (this.schema.onFileAdded) {
-			this.schema.onFileAdded(file.type);
+			this.schema.onFileAdded(file.getFileMimeType ? file.getFileMimeType() : file.type);
 		}
 
 		if (this.onChange) {
@@ -370,6 +374,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		if (!this.rendered) {
 			this.on('afterrender', this.setPreviewFromInput.bind(this, file));
 			return;
+		}
+
+		if (file.NTIID) {
+			return this.setPreviewFromValue(file.NTIID);
 		}
 
 		var size = this.self.getHumanReadableFileSize(file.size, 1),

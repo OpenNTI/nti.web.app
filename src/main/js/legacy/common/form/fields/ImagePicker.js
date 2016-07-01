@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 
 	onFileChange: function (file) {
 		var me = this,
-			url = me.createObjectURL(file);
+			url = file.url || me.createObjectURL(file);
 
 		me.PromptActions.prompt('image-cropping', {
 			src: url,
@@ -119,7 +119,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 				me.onClearImage();
 			})
 			.always(function () {
-				me.cleanUpObjectURL(url);
+				if (!file.url) {
+					me.cleanUpObjectURL(url);
+				}
 			});
 	},
 
