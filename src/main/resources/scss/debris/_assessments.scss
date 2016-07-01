@@ -1284,21 +1284,201 @@ body.dragging * {
 	.file-submission-part {
 		position: relative;
 		background: #fbfbfb;
-		border-bottom: 1px solid #f2f2f2;
-		padding: 20px 5px 20px 90px;
-		min-height: 85px;
+		box-shadow: inset 0 1px 0 0 #e2e2e2;
+		border-radius: 2px;
+		padding: 0;
+		height: 226px;
+		text-align: center;
 
-		@include icon($assignment_due, $top: 20px, $left: 30px);
+		// @include icon($assignment_due, $top: 20px, $left: 30px);
 
-		.label-container {
-			float: left;
-			width: 395px;
+		.input-container {
+			position: relative;
+			height: 226px;
+			background-color: #fbfbfb;
+			box-shadow: inset 0 1px 0 0 #e2e2e2;
+			border-radius: 2px;
+
+			.drop {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+
+				.label-container {
+					width: 210px;
+					margin: 0 auto;
+					padding-top: 45px;
+					font-size: 16px;
+					font-weight: 600;
+					color: #b8b8b8;
+				}
+
+				.button-container {
+					width: 155px;
+					margin: 0 auto;
+					margin-top: 20px;
+				}
+			}
+
+			.preview-wrapper {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+
+				.preview {
+					display: flex;
+					margin: 20px 20px 10px 20px;
+					box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.1), 0 0 1px 1px rgba(0, 0, 0, 0.05);
+    				border-radius: 2px;
+
+					.thumbnail {
+						width: 100px;
+						height: 125px;
+						flex: 0 0 auto;
+					}
+
+					.meta {
+						flex: 1 1 auto;
+						background-color: #fafdff;
+						text-align: left;
+						padding: 0 20px;
+
+						.text {
+							font-size: 14px;
+							font-weight: 600;
+							overflow: hidden;
+							@include ellipse();
+
+							.name {
+								color: $primary-grey;
+								padding-right: 15px;
+							}
+
+							.size {
+								color: $secondary-grey;
+								padding-right: 15px;
+							}
+						}
+
+						.controls {
+							font-size: 14px;
+
+							.link {
+								font-weight: 600;
+								color: $primary-blue;
+								text-decoration: underline;
+								padding-right: 15px;
+
+								a {
+									color: $primary-blue;
+									text-decoration: none;
+									&:hover, &:visited {
+										color: $primary-blue;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				.progress {
+					height: 50px;
+					background: #fff;
+					margin: 10px 20px 20px 20px;
+					box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.1), 0 0 1px 1px rgba(0, 0, 0, 0.05);
+					border-radius: 2px;
+				}
+			}
+
+			.drop-zone {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				border-radius: 2px;
+				background-color: rgba(63, 179, 246, 0.1);
+				box-shadow: inset 0 1px 0 0 #e2e2e2;
+				border: solid 4px #3fb3f6;
+
+				.button-container {
+					position: relative;
+					height: 100%;
+
+					.button {
+						border-radius: 2px;
+						background-color: #3fb3f6;
+						box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.1);
+						width: 250px;
+						padding: 10px 20px;
+						float: none;
+						margin: 0px auto;
+						font-size: 13px;
+						font-weight: 600;
+						position: absolute;
+						bottom: 15px;
+						left: 0;
+						right: 0;
+					}
+				}
+			}
+
+			.input-wrapper {
+    			input {
+					position: absolute;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					top: 0;
+					border: none;
+					width: 100%;
+					height: 100%;
+					opacity: 0;
+				}
+			}
+
+			&.file-over {
+				.drop-zone {
+					display: block;
+					z-index: 10;
+				}
+				.drop,.preview-wrapper {
+					display: none;
+					z-index: 0;
+				}
+			}
+
+			&.has-file {
+				.preview-wrapper {
+					display: block;
+					z-index: 10;
+				}
+
+				.drop, .drop-zone {
+					display: none;
+					z-index: 0;
+				}
+			}
+
+			&.no-file {
+				.drop {
+					display: block;
+					z-index: 10;
+				}
+
+				.preview-wrapper, .drop-zone {
+					display: none;
+					z-index: 0;
+				}
+			}
+
 		}
 
-		.button-container {
-			float: left;
-			width: 155px;
-		}
+
 
 		&.has-file {
 			.no-file {

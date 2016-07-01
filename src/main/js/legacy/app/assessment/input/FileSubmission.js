@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var InputBase = require('./Base');
+const Ext = require('extjs');
+require('legacy/common/form/fields/FilePicker');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubmission', {
@@ -12,30 +13,59 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 	inputTpl: Ext.DomHelper.markup({
 		cn: [
-			{cls: 'label-container', cn: [
-				{cls: 'label', html: '{label}'},
-				{cls: 'meta', cn: [
-					{tag: 'span', cls: 'due', html: ''},
-					{tag: 'span', cls: 'has-file not-submitted delete', html: 'Delete'}
-				]}
-			]},
-			{cls: 'button-container', cn: [
-				{cls: 'submit button no-file not-submitted', cn: [
-					'{{{NextThought.view.assessment.input.FileSubmission.upload}}}',
-					{tag: 'tpl', 'if': 'enable', cn: {tag: 'input', type: 'file', cls: 'file'}}
+			{cls: 'input-container no-file', cn: [
+				{cls: 'drop', cn: [
+					{cls: 'label-container', cn: [
+						{html: 'Upload your file here.'},
+						{html: 'Maximum file size is {maxSize}'}
+					]},
+					{cls: 'button-container', cn: [
+						{cls: 'button', html: 'Upload a File'}
+					]}
 				]},
-				{tag: 'a', cls: 'download button has-file', html: '{{{NextThought.view.assessment.input.FileSubmission.download}}}', target: '_blank'}
+				{cls: 'preview-wrapper', cn: [
+					{cls: 'preview', cn: [
+						{cls: 'thumbnail', html: 'image thumbnail'},
+						{cls: 'meta', cn: [
+							{cls: 'text', cn: [
+								{tag:'span', cls: 'name', html: 'Name'},
+								{tag: 'span', cls: 'size', html: 'Size'}
+							]},
+							{cls: 'controls', cn: [
+								{tag: 'span', cls: 'link preview-link', cn: [
+									{tag: 'a', href: '', target: '_blank', html: 'Preview'}
+								]},
+								{tag: 'span', cls: 'link change-link', html: 'Change'}
+							]}
+						]}
+					]},
+					{cls: 'progress', cn: [
+						{tag: 'span', html: 'progress goes here'}
+					]}
+				]},
+				{cls: 'drop-zone', cn: [
+					{cls: 'button-container', cn: [
+						{cls: 'button', html: 'Drop Files Here to Upload Them.'}
+					]}
+				]},
+				{tag: 'span', cls: 'input-wrapper', cn: [
+					{tag: 'input', type: 'file', title: 'Upload File', tabindex: '1'}
+				]}
 			]}
 		]
 	}),
 
 	renderSelectors: {
+		inputContainer: '.input-container',
 		downloadBtn: 'a.button',
 		submitBtn: '.submit.button',
 		inputField: 'input[type=file]',
-		dueEl: '.due',
 		labelBoxEl: '.label',
-		deleteEl: '.delete'
+		deleteEl: '.delete',
+		progressEl: '.preview-wrapper .progress',
+		previewNameEl: '.preview .meta .name',
+		previewSizeEl: '.preview .meta .size',
+		previewImageEl: '.preview .thumbnail'
 	},
 
 
@@ -46,7 +76,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		try {
 			this.filereader = new FileReader();
-			this.filereader.onload = Ext.bind(this.onFileLoaded, this);
+			this.filereader.onload = this.onFileLoaded.bind(this);
+			this.filereader.onprogress = this.updateProgress.bind(this);
+			this.filereader.onloadstart = this.onLoadStart.bind(this);
 		} catch (e) {
 			this.filereader = false;
 		}
@@ -85,59 +117,94 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	afterRender: function () {
-		this.dueString = this.dueEl.getHTML();
-
 		this.callParent(arguments);
 
-		if (this.inputField) {
-			this.monitor();
-		} else {
+		this.attachInputListeners();
+
+		if (this.submitBtn) {
 			this.mon(this.submitBtn, 'click', 'unsupported');
 		}
 
 		this.setNotUploaded();
 
-		this.mon(this.deleteEl, 'click', 'deleteFile');
+		if (this.deleteEl) {
+			this.mon(this.deleteEl, 'click', 'deleteFile');
+		}
 	},
-
-
-	monitor: function () {
-		var reader = this.filereader,
-			me = this;
-
-		this.mon(this.inputField, {
-			scope: this,
-			change: function (e) {
-				var p = this.part,
-					t = e.getTarget(),
-					file = t.files[0],
-					allowed = p.isFileAcceptable(file);
-
-				this[allowed ? 'reset' : 'markBad']();
-
-				if (allowed) {
-					me.el.mask('Uploading...');
-
-					me.value = {
-						MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
-						filename: file.name
-					};
-
-					me.setLabel(file.name);
-					reader.readAsDataURL(file);
-				}
-				//reset it to be clickable again
-				t = Ext.DomHelper.insertAfter(me.inputField, { tag: 'input', type: 'file', cls: 'file' }, true);
-				me.inputField.remove();
-				me.inputField = t;
-				me.monitor();
-			}
-		});
-	},
-
 
 	unsupported: function () {
 		alert(getString('NextThought.view.assessment.input.FileSubmission.unsupported-feature'));
+	},
+
+	attachInputListeners () {
+		var input = this.inputField && this.inputField.dom;
+
+		if (input) {
+			input.addEventListener('change', this.onFileInputChange.bind(this));
+			input.addEventListener('dragenter', this.onDragEnter.bind(this));
+			input.addEventListener('dragleave', this.onDragLeave.bind(this));
+			input.addEventListener('drop', this.onDragLeave.bind(this));
+		}
+	},
+
+
+	onFileInputChange: function (e) {
+		console.debug('New file was uploaded...', e);
+
+		const p = this.part;
+		const file = e.target.files[0];
+		const allowed = p.isFileAcceptable(file);
+		this[allowed ? 'reset' : 'markBad']();
+
+		if (allowed) {
+			this.el.mask('Uploading...');
+
+			this.value = {
+				MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
+				filename: file.name
+			};
+
+			this.setLabel(file.name);
+			this.filereader.readAsDataURL(file);
+		}
+	},
+
+
+	updateProgress: function (evt) {
+		const progress = this.progressEl && this.progressEl.dom;
+		if (evt.lengthComputable) {
+			let percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+			// Increase the progress bar length.
+			if (percentLoaded < 100) {
+				progress.style.width = percentLoaded + '%';
+				progress.textContent = percentLoaded + '%';
+				console.log('File upload Progress: ' + percentLoaded + '%');
+			}
+		}
+	},
+
+
+	onLoadStart: function (e) {
+		const progress = this.progressEl && this.progressEl.dom;
+		this.inputContainer.removeCls('no-file');
+		this.inputContainer.removeCls('file-over');
+		this.inputContainer.addCls('has-file');
+
+		progress.style.width = '0%';
+		progress.textContent = '0%';
+	},
+
+
+	onDragEnter: function () {
+		this.inputContainer.removeCls('no-file');
+		this.inputContainer.removeCls('has-file');
+		this.inputContainer.addCls('file-over');
+	},
+
+
+	onDragLeave: function () {
+		this.inputContainer.removeCls('file-over');
+		this.inputContainer.addCls('no-file');
 	},
 
 
@@ -200,7 +267,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		this.setLabel(this.renderData.label);
 		this.setDownloadButton();
-		this.dueEl.update(this.dueString);
 		this.addCls('not-submitted');
 		this.removeCls(['late', 'good']);
 	},
@@ -222,7 +288,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.addCls('not-submitted');
 
 
-		this.setDownloadButton(v.download_url || v.url);
+		// this.setDownloadButton(v.download_url || v.url);
 	},
 
 
@@ -247,38 +313,39 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	setLabel: function (label) {
-		this.labelBoxEl.update(label);
+		console.debug('File Submission: Label => ' + label);
+		// this.labelBoxEl.update(label);
 
-		if (label && label !== this.renderData.label) {
-			this.labelBoxEl.set({
-				'data-qtip': label
-			});
-		}
+		// if (label && label !== this.renderData.label) {
+		// 	this.labelBoxEl.set({
+		// 		'data-qtip': label
+		// 	});
+		// }
 	},
 
 
 	setSubText: function (uploadedNotSubmitted) {
-		if (uploadedNotSubmitted) {
-			this.dueEl.update('Ready for Submission');
-		} else {
-			this.dueEl.update('');
-		}
+		// if (uploadedNotSubmitted) {
+		// 	this.dueEl.update('Ready for Submission');
+		// } else {
+		// 	this.dueEl.update('');
+		// }
 	},
 
 
 	setDownloadButton: function (url) {
-		if (url) {
-			this.addCls('has-file');
-			this.removeCls('no-file');
-			this.downloadBtn.addCls('active');
-			this.downloadBtn.set({
-				href: url
-			});
-		} else {
-			this.removeCls('has-file');
-			this.addCls('no-file');
-			this.downloadBtn.removeCls('active');
-		}
+		// if (url) {
+		// 	this.addCls('has-file');
+		// 	this.removeCls('no-file');
+		// 	this.downloadBtn.addCls('active');
+		// 	this.downloadBtn.set({
+		// 		href: url
+		// 	});
+		// } else {
+		// 	this.removeCls('has-file');
+		// 	this.addCls('no-file');
+		// 	this.downloadBtn.removeCls('active');
+		// }
 	},
 
 
@@ -294,18 +361,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			this.addCls('disabled');
 		}
 
-		if (!assignment || assignment.getDueDate() > date) {
-			this.addCls('good');
-			this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.on-time'));
-		} else {
-			this.addCls('late');
-			this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.late'));
-		}
+		// if (!assignment || assignment.getDueDate() > date) {
+		// 	this.addCls('good');
+		// 	this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.on-time'));
+		// } else {
+		// 	this.addCls('late');
+		// 	this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.late'));
+		// }
 	},
 
 
 	markBad: function () {
-		this.labelBoxEl.update(getString('NextThought.view.assessment.input.FileSubmission.unsupported-type'));
+		console.error(getString('NextThought.view.assessment.input.FileSubmission.unsupported-type'));
+		// this.labelBoxEl.update(getString('NextThought.view.assessment.input.FileSubmission.unsupported-type'));
 	},
 
 	reset: function () {
@@ -316,7 +384,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		this.removeCls('has-file');
 
-		this.downloadBtn.removeCls('active');
 		dontSetBack = true;
 
 		this.callParent(arguments);
