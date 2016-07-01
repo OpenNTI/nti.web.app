@@ -1,6 +1,6 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../../../../cache/UserRepository');
-const moment = require('moment');
+const {DateTime} = require('nti-web-commons');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 	extend: 'Ext.Component',
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		let fields = attributes.map(function (attr) {
 			if(externalValues[attr]) {
 				if (attr.substr(0,9) === 'Available') {
-					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${moment(externalValues[attr]).format('MMMM D LT') }"`;
+					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${DateTime.format(externalValues[attr], 'MMMM D LT')}"`;
 				} else {
 					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${externalValues[attr]}"`;
 				}
