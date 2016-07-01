@@ -3,3 +3,8 @@
 @import "~nti-assignment-editor/lib/index.css";
 @import "~nti-web-commons/lib/index.css";
 @import "~nti-modeled-content/lib/index.css";
+
+//Workarond ExtJS legacy z-index-happy bull$#!+ >.<
+body > .modal .modal-mask {
+	z-index: 1000;
+}

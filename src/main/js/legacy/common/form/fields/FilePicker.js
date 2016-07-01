@@ -2,6 +2,9 @@ const Ext = require('extjs');
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
 const {default: autobind} = require('nti-commons/lib/autobind');
+const StateStore = require('legacy/app/context/StateStore');
+
+const {ContentResources} = require('nti-web-commons');
 
 require('legacy/model/ContentBlobFile');
 require('legacy/model/courseware/ContentFile');
@@ -98,6 +101,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.callParent(arguments);
 
 		autobind(this,
+			'selectCourseResource',
 			'onFileInputChange',
 			'onDragEnter',
 			'onDragLeave',
@@ -222,6 +226,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		var input = this.getInput();
 
 		if (input) {
+			input.addEventListener('click', this.selectCourseResource);
 			input.addEventListener('change', this.onFileInputChange);
 			input.addEventListener('dragenter', this.onDragEnter);
 			input.addEventListener('dragleave', this.onDragLeave);
@@ -236,6 +241,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		var input = this.getInput();
 
 		if (input) {
+			input.removeEventListener('click', this.selectCourseResource);
 			input.removeEventListener('change', this.onFileInputChange);
 			input.removeEventListener('dragenter', this.onDragEnter);
 			input.removeEventListener('dragleave', this.onDragLeave);
@@ -256,6 +262,17 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 				this.schema.showWarning();
 			}
 		}
+	},
+
+
+	selectCourseResource (e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		const bundle = StateStore.getInstance().getRootBundle();
+		const sourceID = bundle.getId();
+
+		ContentResources.selectFrom(sourceID);
 	},
 
 
