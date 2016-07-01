@@ -64,7 +64,7 @@
     "nti-style-common": "^1.0.11",
     "nti-util-git-rev": "^1.0.0",
     "nti-util-logger": "^1.0.0",
-    "nti-web-commons": ">=0.0.14",
+    "nti-web-commons": ">=0.0.44",
     "nti-web-video": "^1.0.0",
     "null-loader": "^0.1.0",
     "postcss-cli": "^2.5.1",
