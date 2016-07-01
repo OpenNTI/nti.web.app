@@ -1,9 +1,10 @@
 const Ext = require('extjs');
-const Globals = require('../../../util/Globals');
-const ParseUtils = require('../../../util/Parsing');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const {default: autobind} = require('nti-commons/lib/autobind');
 
-require('../../../model/ContentBlobFile');
-require('../../../model/courseware/ContentFile');
+require('legacy/model/ContentBlobFile');
+require('legacy/model/courseware/ContentFile');
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker', {
 	extend: 'Ext.Component',
@@ -90,6 +91,20 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		inputContainer: '.input-container',
 		inputWrapper: '.input-wrapper',
 		inputEl: 'input[type=file]'
+	},
+
+
+	initComponent () {
+		this.callParent(arguments);
+
+		autobind(this,
+			'onFileInputChange',
+			'onDragEnter',
+			'onDragLeave',
+			'onDragLeave',
+			'onInputFocus',
+			'onInputBlur'
+		);
 	},
 
 
@@ -207,26 +222,26 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		var input = this.getInput();
 
 		if (input) {
-			input.addEventListener('change', this.onFileInputChange.bind(this));
-			input.addEventListener('dragenter', this.onDragEnter.bind(this));
-			input.addEventListener('dragleave', this.onDragLeave.bind(this));
-			input.addEventListener('drop', this.onDragLeave.bind(this));
-			input.addEventListener('focus', this.onInputFocus.bind(this));
-			input.addEventListener('blur', this.onInputBlur.bind(this));
+			input.addEventListener('change', this.onFileInputChange);
+			input.addEventListener('dragenter', this.onDragEnter);
+			input.addEventListener('dragleave', this.onDragLeave);
+			input.addEventListener('drop', this.onDragLeave);
+			input.addEventListener('focus', this.onInputFocus);
+			input.addEventListener('blur', this.onInputBlur);
 		}
 	},
 
 
-	removeInputListeners: function() {
+	removeInputListeners: function () {
 		var input = this.getInput();
 
 		if (input) {
-			input.removeEventListener('change', this.onFileInputChange.bind(this));
-			input.removeEventListener('dragenter', this.onDragEnter.bind(this));
-			input.removeEventListener('dragleave', this.onDragLeave.bind(this));
-			input.removeEventListener('drop', this.onDragLeave.bind(this));
-			input.removeEventListener('focus', this.onInputFocus.bind(this));
-			input.removeEventListener('blur', this.onInputBlur.bind(this));
+			input.removeEventListener('change', this.onFileInputChange);
+			input.removeEventListener('dragenter', this.onDragEnter);
+			input.removeEventListener('dragleave', this.onDragLeave);
+			input.removeEventListener('drop', this.onDragLeave);
+			input.removeEventListener('focus', this.onInputFocus);
+			input.removeEventListener('blur', this.onInputBlur);
 		}
 	},
 
