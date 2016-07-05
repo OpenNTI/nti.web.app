@@ -51,7 +51,7 @@
 			}
 
 			//Blue=Docs
-			&.doc, &.docx, &.pages, &.txt {
+			&.doc, &.docx, &.pages, &.txt, &.plain {
 				color: $blue;
 			}
 			//Orange=Presentations
