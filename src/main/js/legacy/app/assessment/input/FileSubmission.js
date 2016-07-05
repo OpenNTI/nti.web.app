@@ -20,8 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			{cls: 'input-container no-file', cn: [
 				{cls: 'drop', cn: [
 					{cls: 'label-container', cn: [
-						{html: 'Upload your file here.'},
-						{html: 'Maximum file size is {maxSize}'}
+						{html: '{label}'},
+						{html: '{maxSize}'}
 					]},
 					{cls: 'button-container', cn: [
 						{cls: 'button', html: 'Upload a File'}
@@ -108,11 +108,65 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			label: this.part.get('content') || assignment.get('title'),
+			label: this.getDefaultTitle(),
+			maxSize: this.getMaxSizeLabel(),
 			enable: !!this.filereader
 		});
 
 		this.callParent(arguments);
+	},
+
+
+	getDefaultTitle: function () {
+		const extensionList = this.getExtensionDisplayList();
+		let text = '';
+
+		if (extensionList !== '') {
+			text = 'Upload your ' + extensionList + ' here';
+		}
+		else {
+			text = 'Upload your file here';
+		}
+
+		return text;
+	},
+
+
+	getExtensionDisplayList: function () {
+		let extensions = Ext.clone(this.part.get('AllowedExtentions') || []);
+		if (extensions.length > 1) {
+			let p2 = extensions.splice(-1);
+			extensions = extensions.join(', ') + ' or ' + p2[0];
+		}
+		else if (extensions.length === 1) {
+			extensions = extensions[0];
+			if (extensions[0] === '*/*') {
+				extensions = '';
+			}
+		}
+		else {
+			extensions = '';
+		}
+
+		return extensions;
+	},
+
+
+	getMaxSizeLabel: function () {
+		const m = this.getDisplayMaxSize();
+		let maxSize = '';
+		if (m) {
+			maxSize = 'Maximum file size is ' + m;
+		}
+		return maxSize;
+	},
+
+
+	getDisplayMaxSize: function () {
+		let maxSize = this.part.get('MaxFileSize');
+		const FileUtils = NextThought.common.form.fields.FilePicker;
+		maxSize = FileUtils.getHumanReadableFileSize(maxSize, 1);
+		return maxSize;
 	},
 
 
@@ -443,8 +497,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	markBad: function () {
-		console.error(getString('NextThought.view.assessment.input.FileSubmission.unsupported-type'));
-		// this.labelBoxEl.update(getString('NextThought.view.assessment.input.FileSubmission.unsupported-type'));
+		const allowedList = this.getExtensionDisplayList();
+		const accepts = allowedList !== '' ? 'You can only upload ' + allowedList + '. ' : '';
+		const msg = 'The file selected is not acceptable. ' + accepts;
+
+		alert({title: 'Attention', msg: msg, icon: 'warning-red'});
 	},
 
 	reset: function () {
