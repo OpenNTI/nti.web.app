@@ -39,7 +39,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 								{tag: 'span', cls: 'link preview-link', cn: [
 									{tag: 'a', href: '', target: '_blank', html: 'Preview'}
 								]},
-								{tag: 'span', cls: 'link change-link', html: 'Change'}
+								{tag: 'span', cls: 'link change-link', html: 'Change', cn: [
+									{tag: 'input', type: 'file', cls: 'hidden', title: 'Change File', tabindex: '1'}
+								]}
 							]},
 							{cls: 'clear'}
 						]}
@@ -54,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 					]}
 				]},
 				{tag: 'span', cls: 'input-wrapper', cn: [
-					{tag: 'input', type: 'file', title: 'Upload File', tabindex: '1'}
+					{tag: 'input', type: 'file', cls: 'hidden', title: 'Upload File', tabindex: '1'}
 				]}
 			]}
 		]
@@ -64,13 +66,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		inputContainer: '.input-container',
 		downloadBtn: 'a.button',
 		submitBtn: '.submit.button',
-		inputField: 'input[type=file]',
+		inputField: '.input-wrapper input[type=file]',
+		changeInputField: '.change-link input[type=file]',
 		labelBoxEl: '.label',
+		previewEl: '.preview',
 		deleteEl: '.preview .meta .clear',
 		progressEl: '.preview-wrapper .progress',
 		previewNameEl: '.preview .meta .name',
 		previewSizeEl: '.preview .meta .size',
-		previewImageEl: '.preview .thumbnail'
+		previewImageEl: '.preview .thumbnail',
+		changeInputEl: '.change-link input[type=file]'
 	},
 
 
@@ -89,16 +94,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 
 		this.callParent(arguments);
-	},
-
-
-	onFileLoaded: function (event) {
-		this.value.value = event.target.result;
-
-		this.saveProgress();
-
-		this.setUploadedNotSubmitted(this.value);
-		this.markCorrect();
 	},
 
 
@@ -145,6 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 	attachInputListeners () {
 		const input = this.inputField && this.inputField.dom;
+		const changeInput = this.changeInputField && this.changeInputField.dom;
 
 		if (input) {
 			input.addEventListener('change', this.onFileInputChange.bind(this));
@@ -152,10 +148,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			input.addEventListener('dragleave', this.onDragLeave.bind(this));
 			input.addEventListener('drop', this.onDragLeave.bind(this));
 		}
+		if (changeInput) {
+			changeInput.addEventListener('change', this.onFileInputChange.bind(this));
+		}
 	},
 
 	removeInputListeners: function () {
 		const input = this.inputField && this.inputField.dom;
+		const changeInput = this.changeInputField && this.changeInputField.dom;
 
 		if (input) {
 			input.removeEventListener('change', this.onFileInputChange.bind(this));
@@ -164,6 +164,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			input.removeEventListener('drop', this.onDragLeave.bind(this));
 			input.removeEventListener('focus', this.onInputFocus.bind(this));
 			input.removeEventListener('blur', this.onInputBlur.bind(this));
+		}
+		if (changeInput) {
+			changeInput.removeEventListener('change', this.onFileInputChange.bind(this));
 		}
 	},
 
@@ -176,15 +179,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		const allowed = p.isFileAcceptable(file);
 		this[allowed ? 'reset' : 'markBad']();
 
-		if (allowed) {
-			this.el.mask('Uploading...');
-
+		if (allowed && file) {
+			// this.el.mask('Uploading...');
 			this.value = {
 				MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
 				filename: file.name
 			};
 
-			this.setPreviewFromInput(file);
+			this.setUploadedNotSubmitted(file);
 			this.filereader.readAsDataURL(file);
 		}
 	},
@@ -197,10 +199,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	onLoadStart: function () {
-		const progress = this.progressEl && this.progressEl.dom;
-		this.inputContainer.removeCls('no-file');
-		this.inputContainer.removeCls('file-over');
-		this.inputContainer.addCls('has-file');
+		this.showPreview();
+		this.previewEl.addCls('uploading');
+	},
+
+
+	onFileLoaded: function (event) {
+		this.value.value = event.target.result;
+
+		this.saveProgress();
+		this.previewEl.removeCls('uploading');
+		this.markCorrect();
 	},
 
 
@@ -212,14 +221,24 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.previewNameEl.update(file.name);
 		this.previewSizeEl.update('(' + size + ')');
 
+		// Remove current content.
+		this.previewImageEl.setHTML('');
+
 		// ReactDOM.render(<AssetIcon MimeType={file.type} />, this.previewImageEl);
 		let iconCmp = Ext.widget({
 			xtype: 'react',
 			component: AssetIcon,
-			mimeType: file.type,
+			mimeType: file.type || file.contentType,
 			svg: true,
 			renderTo: this.previewImageEl
 		});
+	},
+
+
+	showPreview: function () {
+		this.inputContainer.removeCls('no-file');
+		this.inputContainer.removeCls('file-over');
+		this.inputContainer.addCls('has-file');
 	},
 
 
@@ -302,6 +321,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		if (v) {
 			this.setUploadedNotSubmitted(v);
+			this.value = v;
 		} else {
 			this.setNotUploaded();
 		}
@@ -337,9 +357,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		const assignment = q && q.associatedAssignment;
 
 		this.addCls('not-submitted');
-
-
-		// this.setDownloadButton(v.download_url || v.url);
+		console.debug('Uploaded but not submitted. Value: ', v);
+		this.showPreview();
+		this.setPreviewFromInput(v);
 	},
 
 
