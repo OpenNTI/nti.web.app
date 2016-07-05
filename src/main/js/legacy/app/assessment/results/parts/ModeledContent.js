@@ -38,8 +38,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	beforeRender: function () {
 		this.callParent(arguments);
 
+		let total = this.resultPart.Results && this.resultPart.Results.length;
+
 		this.renderData = Ext.apply(this.renderData || {}, {
-			total: this.resultPart.Total
+			total: total ? total : 1
 		});
 	},
 
