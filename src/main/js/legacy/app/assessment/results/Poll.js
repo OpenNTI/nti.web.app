@@ -6,7 +6,7 @@ var PartsMultiAnswer = require('./parts/MultiAnswer');
 var PartsMatching = require('./parts/Matching');
 var PartsOrdering = require('./parts/Ordering');
 var PartsModeledContent = require('./parts/ModeledContent');
-var PartsFreeResponse = require('./Parts/FreeResponse');
+var PartsFreeResponse = require('./parts/FreeResponse');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll', {
