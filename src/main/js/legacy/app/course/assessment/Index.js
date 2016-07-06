@@ -143,7 +143,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		this.assignmentEditor = this.add({
 			xtype: 'assignment-editor',
 			assignmentId: config.assignmentId,
-			pageSource: config.pageSource
+			pageSource: config.pageSource,
+			gotoAssignments: () => {
+				this.pushRoute('Assignments', '/');
+			}
 		});
 
 		this.addChildRouter(this.assignmentEditor);

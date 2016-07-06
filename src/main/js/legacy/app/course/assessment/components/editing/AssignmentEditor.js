@@ -21,7 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.EditorCmp = this.add(new ReactHarness({
 			component: Editor,
-			NTIID: this.assignmentId
+			NTIID: this.assignmentId,
+			onDeleted: () => this.onDeleted()
 		}));
 	},
 
@@ -40,5 +41,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	gotoAssignment (/*ntiid, title*/) {
 
+	},
+
+
+	onDeleted () {
+		if (this.gotoAssignments) {
+			this.gotoAssignments();
+		}
 	}
 });
