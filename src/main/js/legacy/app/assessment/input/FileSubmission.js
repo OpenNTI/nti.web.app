@@ -75,7 +75,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		previewNameEl: '.preview .meta .name',
 		previewSizeEl: '.preview .meta .size',
 		previewImageEl: '.preview .thumbnail',
-		changeInputEl: '.change-link input[type=file]'
+		changeInputEl: '.change-link input[type=file]',
+		dropZoneEl:'.drop-zone'
 	},
 
 
@@ -98,9 +99,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	beforeRender: function () {
-		var q = this.questionSet,
-			assignment = q && q.associatedAssignment;
-
 		if (this.question.tallyParts() === 1) {
 			this.up('assessment-question')
 					.removeCls('question')
@@ -199,6 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		if (input) {
 			input.addEventListener('change', this.onFileInputChange.bind(this));
 			input.addEventListener('dragenter', this.onDragEnter.bind(this));
+			input.addEventListener('dragover', this.onDragEnter.bind(this));
 			input.addEventListener('dragleave', this.onDragLeave.bind(this));
 			input.addEventListener('drop', this.onDragLeave.bind(this));
 		}
@@ -216,8 +215,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			input.removeEventListener('dragenter', this.onDragEnter.bind(this));
 			input.removeEventListener('dragleave', this.onDragLeave.bind(this));
 			input.removeEventListener('drop', this.onDragLeave.bind(this));
-			input.removeEventListener('focus', this.onInputFocus.bind(this));
-			input.removeEventListener('blur', this.onInputBlur.bind(this));
 		}
 		if (changeInput) {
 			changeInput.removeEventListener('change', this.onFileInputChange.bind(this));
@@ -233,6 +230,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		const allowed = p.isFileAcceptable(file);
 		this[allowed ? 'reset' : 'markBad']();
 
+		e.preventDefault();
+		e.stopPropagation();
+
 		if (allowed && file) {
 			// this.el.mask('Uploading...');
 			this.value = {
@@ -246,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	updateProgress: function (evt) {
+	updateProgress: function () {
 		// TODO: we will use the componet from the Asset Manager to show progress.
 		console.log('TODO: show File upload Progress');
 	},
@@ -278,8 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		// Remove current content.
 		this.previewImageEl.setHTML('');
 
-		// ReactDOM.render(<AssetIcon MimeType={file.type} />, this.previewImageEl);
-		let iconCmp = Ext.widget({
+		Ext.widget({
 			xtype: 'react',
 			component: AssetIcon,
 			mimeType: file.type || file.contentType,
@@ -321,14 +320,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 	onDragEnter: function () {
 		this.inputContainer.removeCls('no-file');
-		this.inputContainer.removeCls('has-file');
 		this.inputContainer.addCls('file-over');
+		this.dragging = true;
 	},
 
 
 	onDragLeave: function () {
-		this.inputContainer.removeCls('file-over');
 		this.inputContainer.addCls('no-file');
+		this.inputContainer.removeCls('file-over');
 	},
 
 
@@ -406,10 +405,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 	setUploadedNotSubmitted: function (v) {
 		v = v || {};
-
-		const q = this.questionSet;
-		const assignment = q && q.associatedAssignment;
-
 		this.addCls('not-submitted');
 		console.debug('Uploaded but not submitted. Value: ', v);
 		this.showPreview();
@@ -419,9 +414,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 	setFileSubmitted: function (v) {
 		v = v || {};
-
-		var q = this.questionSet,
-			assignment = q && q.associatedAssignment;
 
 		this.value = v;
 
@@ -505,8 +497,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 	reset: function () {
-		var dontSetBack,
-			q = this.questionSet;
+		var dontSetBack;
 
 		this.setNotUploaded();
 

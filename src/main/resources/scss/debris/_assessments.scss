@@ -1479,6 +1479,11 @@ body.dragging * {
 					display: none;
 					z-index: 0;
 				}
+				.input-wrapper {
+					input[type=file] {
+						z-index: 11;
+					}
+				}
 			}
 
 			&.has-file {
