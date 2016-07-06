@@ -416,16 +416,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		v = v || {};
 
 		this.value = v;
-
-		if (v.filename) {
-			this.setLabel(v.filename);
-			this.setSubText();
-		}
+		this.showPreview();
+		this.setPreviewFromInput(v);
 
 		this.removeCls('not-submitted');
-
-
-		this.setDownloadButton(v.download_url || v.url);
+		// this.setDownloadButton(v.download_url || v.url);
 	},
 
 
