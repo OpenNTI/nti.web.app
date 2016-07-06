@@ -2208,7 +2208,7 @@ input.preview[readonly] {
 	}
 }
 
-.modeled-content-results {
+.modeled-content-results, .free-response-results {
 	.header {
 		text-align: right;
 		margin-bottom: 20px;
@@ -2257,6 +2257,15 @@ input.preview[readonly] {
 		font: normal 400 0.875rem/1 $font;
 		min-height: 200px;
 		color: $secondary-grey;
+	}
+}
+
+.free-response-results {
+	padding: 30px 60px 30px 60px;
+
+	.content {
+		padding: 11px 5px;
+		min-height: 40px;
 	}
 }
 
