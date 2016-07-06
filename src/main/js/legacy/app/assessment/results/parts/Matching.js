@@ -16,6 +16,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 	initComponent: function () {
 		this.callParent(arguments);
+		
+		if (!this.resultPart.Total) {
+			this.add({
+				xtype: 'box',
+				autoEl: {cls: 'message', html: 'This question was not answered.'}
+			});
+
+			return;
+		}
 
 		this.tabBar = this.add({
 			xtype: 'container',

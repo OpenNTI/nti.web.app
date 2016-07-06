@@ -2028,6 +2028,11 @@ input.preview[readonly] {
 		min-height: 20px;
 	}
 
+	.message {
+		font-size: 0.875rem;
+		color: $primary-red;
+	}
+
 	.error {
 		border: 0px solid #e2e2e2;
 		border-top-width: 1px !important;
