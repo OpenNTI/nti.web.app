@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const Globals = require('../../../util/Globals');
-const {AssetIcon} = require('nti-web-commons');
+const {AssetIcon, ProgressBar} = require('nti-web-commons');
 require('legacy/app/MessageBox');
 
 require('legacy/common/form/fields/FilePicker');
@@ -46,9 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 							{cls: 'clear'}
 						]}
 					]},
-					{cls: 'progress', cn: [
-						{tag: 'span', html: 'progress goes here'}
-					]}
+					{cls: 'progress'}
 				]},
 				{cls: 'drop-zone', cn: [
 					{cls: 'button-container', cn: [
@@ -61,6 +59,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			]}
 		]
 	}),
+
+
+	uploadedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'completed', cn: [
+			{cls: 'title', html: '{title}'}
+		]}
+	])),
+
 
 	renderSelectors: {
 		inputContainer: '.input-container',
@@ -76,7 +82,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		previewSizeEl: '.preview .meta .size',
 		previewImageEl: '.preview .thumbnail',
 		changeInputEl: '.change-link input[type=file]',
-		dropZoneEl:'.drop-zone'
+		dropZoneEl:'.drop-zone',
+		previewLinkEl: '.preview .controls .preview-link a'
 	},
 
 
@@ -246,15 +253,33 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	updateProgress: function () {
-		// TODO: we will use the componet from the Asset Manager to show progress.
-		console.log('TODO: show File upload Progress');
+	updateProgress: function (e) {
+		console.log('Loaded: ' + e.loaded);
+		console.log('Total: ' + e.total);
+
+		if (this.progressBar) {
+			this.progressBar.setState({value: e.loaded});
+		}
 	},
 
 
-	onLoadStart: function () {
+	onLoadStart: function (e) {
+		console.log('Loaded: ' + e.loaded);
+		console.log('Total: ' + e.total);
+
 		this.showPreview();
+		this.uploading = true;
 		this.previewEl.addCls('uploading');
+
+		const name = this.value && (this.value.filename || this.value.name);
+		this.progressBar = Ext.widget({
+			xtype: 'react',
+			component: ProgressBar,
+			max: e.total,
+			value: e.loaded,
+			text: name,
+			renderTo: this.progressEl
+		});
 	},
 
 
@@ -263,6 +288,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		this.saveProgress();
 		this.previewEl.removeCls('uploading');
+		this.uploading = false;
 		this.markCorrect();
 	},
 
@@ -321,7 +347,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	onDragEnter: function () {
 		this.inputContainer.removeCls('no-file');
 		this.inputContainer.addCls('file-over');
-		this.dragging = true;
 	},
 
 
@@ -396,7 +421,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	setNotUploaded: function () {
 		this.value = null;
 
-		this.setLabel(this.renderData.label);
 		this.setDownloadButton();
 		this.addCls('not-submitted');
 		this.removeCls(['late', 'good']);
@@ -404,11 +428,27 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	setUploadedNotSubmitted: function (v) {
+		console.debug('Uploaded but not submitted. Value: ', v);
+
 		v = v || {};
 		this.addCls('not-submitted');
-		console.debug('Uploaded but not submitted. Value: ', v);
 		this.showPreview();
 		this.setPreviewFromInput(v);
+		this.setDownloadButton(v.download_url || v.url);
+
+		if (!this.uploading) {
+			if (this.progressBar) {
+				this.progressBar.destroy();
+			}
+			this.showUploadCompletionBar(v.filename || v.name);
+		}
+	},
+
+
+	showUploadCompletionBar: function (name) {
+		if (!this.uploadComplete) {
+			this.uploadComplete = this.uploadedTpl.append(this.progressEl, {title: name});
+		}
 	},
 
 
@@ -420,44 +460,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.setPreviewFromInput(v);
 
 		this.removeCls('not-submitted');
-		// this.setDownloadButton(v.download_url || v.url);
-	},
-
-
-	setLabel: function (label) {
-		console.debug('File Submission: Label => ' + label);
-		// this.labelBoxEl.update(label);
-
-		// if (label && label !== this.renderData.label) {
-		// 	this.labelBoxEl.set({
-		// 		'data-qtip': label
-		// 	});
-		// }
-	},
-
-
-	setSubText: function (uploadedNotSubmitted) {
-		// if (uploadedNotSubmitted) {
-		// 	this.dueEl.update('Ready for Submission');
-		// } else {
-		// 	this.dueEl.update('');
-		// }
+		this.setDownloadButton(v.download_url || v.url);
 	},
 
 
 	setDownloadButton: function (url) {
-		// if (url) {
-		// 	this.addCls('has-file');
-		// 	this.removeCls('no-file');
-		// 	this.downloadBtn.addCls('active');
-		// 	this.downloadBtn.set({
-		// 		href: url
-		// 	});
-		// } else {
-		// 	this.removeCls('has-file');
-		// 	this.addCls('no-file');
-		// 	this.downloadBtn.removeCls('active');
-		// }
+		if (url) {
+			this.previewLinkEl.set({
+				href: url
+			});
+		}
 	},
 
 
