@@ -54,13 +54,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	searchKeyPressed: function (e) {
 		var key = e.keyCode;
 
-		this.searchKey = this.searchEl.getValue();
-
 		if (key === e.ENTER) {
 			//refresh the list
 			this.fireEvent('filters-changed');
 			return;
 		}
+
+		if (this.searchKey === this.searchEl.getValue()) {
+			// prevent search duplicates.
+			return;
+		}
+
+		this.searchKey = this.searchEl.getValue();
 
 		//update without refreshing
 		this.fireEvent('search-changed', this.searchKey);
