@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		this.startTimestamp = new Date().getTime();
 
 		if (this.questionSet.associatedAssignment) {
-			this.questionSet.addSaveProgressHandler(this.saveProgress.bind(this), this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this));
+			this.questionSet.addSaveProgressHandler(this.saveProgress.bind(this), this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this), this.isInstructor);
 		}
 
 		this.questionSet.setStartTime(this.startTimestamp);
@@ -547,7 +547,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 				me.unmask();
 				me.setGradingResult(result);
 
-				me.reader.fireEvent('assignment-submitted', obj.assignmentId, obj.itemLink);
+				// Don't update history for practice submission
+				if (!me.isInstructor) {
+					me.reader.fireEvent('assignment-submitted', obj.assignmentId, obj.itemLink);
+				}
 			}, function () {
 				me.onFailure();
 				me.maybeDoReset(true);

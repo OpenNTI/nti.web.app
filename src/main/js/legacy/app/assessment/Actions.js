@@ -89,6 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 		return new Promise(function (fulfill, reject) {
 			qsetSubmission.save({
+				url: questionSet.getLink('PracticeSubmission'),
 				callback: function () {},
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();
@@ -127,24 +128,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	submitAssignment: function (questionSet, submissionData, containerId, startTime) {
-		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
-			assignmentId = questionSet.associatedAssignment.getId(),
-			qsetSubmission, assignmentSubmission;
-
-		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
-
-		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data);
-		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
-			assignmentId: assignmentId,
-			parts: [qsetSubmission],
-			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration
-		});
+	doPracticeSubmission (link, questionSet, assignmentId, submission) {
+		return this.doSubmission(link, questionSet, assignmentId, submission);
+	},
 
 
+	doSubmission (link, questionSet, assignmentId, submission) {
 		return new Promise(function (fulfill, reject) {
-			assignmentSubmission.save({
-				url: Service.getObjectURL(assignmentId),
+			submission.save({
+				url: link,
 				success: function (self, op) {
 					var pendingAssessment = op.getResultSet().records.first(),
 						result = pendingAssessment.get('parts').first(),
@@ -165,6 +157,32 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				}
 			});
 		});
+	},
+
+	submitAssignment: function (questionSet, submissionData, containerId, startTime) {
+		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
+			assignmentId = questionSet.associatedAssignment.getId(),
+			qsetSubmission, assignmentSubmission;
+
+		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
+
+		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data);
+		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
+			assignmentId: assignmentId,
+			parts: [qsetSubmission],
+			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration
+		});
+
+		let assignment = questionSet.associatedAssignment;
+		let doSubmit;
+
+		if (assignment && assignment.getLink('PracticeSubmission')) {
+			doSubmit = this.doPracticeSubmission(assignment.getLink('PracticeSubmission'), questionSet, assignmentId, assignmentSubmission);
+		} else {
+			doSubmit = this.doSubmission(Service.getObjectURL(assignmentId), questionSet, assignmentId, assignmentSubmission);
+		}
+
+		return doSubmit;
 	},
 
 	saveProgress: function (questionSet, submissionData, startTime) {
