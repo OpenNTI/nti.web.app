@@ -25,22 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			xtype: 'react',
 			component: Editor,
 			NTIID: this.assignmentId,
-			pageSource: {
-				getPagesAround : () => {
-					return {
-						next: pageSource.next && {
-							title: pageSource.nextTitle,
-							ref: '#nextPage'
-						},
-						prev: pageSource.previous && {
-							title: pageSource.previousTitle,
-							ref: '#prevPage'
-						},
-						index: pageSource.currentIndex,
-						total: pageSource.total
-					};
-				}
-			},
+			pageSource: new FakePageSource(pageSource),
 			onDeleted: () => this.gotoRoot(),
 			gotoRoot: () => this.gotoRoot()
 		});
@@ -97,3 +82,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	}
 });
+
+
+function FakePageSource (pageSource) {
+	Object.assign(this, pageSource);
+
+	this.getPagesAround = () => ({
+		next: this.next && {
+			title: this.nextTitle,
+			ref: '#nextPage'
+		},
+		prev: this.previous && {
+			title: this.previousTitle,
+			ref: '#prevPage'
+		},
+		index: this.currentIndex,
+		total: this.total
+	});
+}

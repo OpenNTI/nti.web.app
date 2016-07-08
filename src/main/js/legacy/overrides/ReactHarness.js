@@ -12,11 +12,17 @@ const Bridge = React.createClass({
 	},
 
 	childContextTypes: {
+		defaultEnvironment: React.PropTypes.object,
+		routerLinkComponent: React.PropTypes.func,
 		router: React.PropTypes.object
 	},
 
 	getChildContext () {
 		return {
+			defaultEnvironment: {
+				getPath: () => ''
+			},
+			routerLinkComponent: () => {},
 			router: {
 				makeHref: (x) => x
 			}
