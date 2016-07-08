@@ -108,7 +108,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	beforeRender: function () {
 		if (this.question.tallyParts() === 1) {
 			this.up('assessment-question')
-					.removeCls('question')
 					.addCls('file-submission');
 		}
 
@@ -303,14 +302,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		// Remove current content.
 		this.previewImageEl.setHTML('');
-
-		Ext.widget({
-			xtype: 'react',
-			component: AssetIcon,
-			mimeType: file.type || file.contentType,
-			svg: true,
-			renderTo: this.previewImageEl
-		});
+		const type = file && (file.type || file.contentType);
+		if (type) {
+			Ext.widget({
+				xtype: 'react',
+				component: AssetIcon,
+				mimeType: file.type || file.contentType,
+				svg: true,
+				renderTo: this.previewImageEl
+			});
+		}
 	},
 
 
