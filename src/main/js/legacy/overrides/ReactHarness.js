@@ -56,6 +56,10 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 	afterRender () {
+		this.callSuper(arguments);
+		// The bastard that is ExtJS prevents our DraftJS editiors from functioning correctly...
+		// this should prevent Ext's handlers from receiving said evnet(s)
+		this.el.addEventListener('selectstart', this.preventEventFromPropagatingToExt);
 		this.doRender();
 	},
 
@@ -77,6 +81,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 	beforeDestroy () {
+		this.el.removeEventListener('selectstart', this.preventEventFromPropagatingToExt);
 		delete this.componentInstance;
 		this.onceRendered = Promise.reject('Destroyed');
 		ReactDOM.unmountComponentAtNode(Ext.getDom(this.el));
@@ -102,5 +107,10 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	replaceState (state) {
 		this.onceRendered.then(() =>
 			this.componentInstance.replaceState(state));
+	},
+
+
+	preventEventFromPropagatingToExt (e) {
+		e.stopPropagation();
 	}
 });
