@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const path = require('path');
 const UserRepository = require('../../../cache/UserRepository');
 const ParseUtils = require('../../../util/Parsing');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
@@ -146,6 +147,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			pageSource: config.pageSource,
 			gotoAssignments: () => {
 				this.pushRoute('Assignments', '/');
+			},
+			gotoAssignment: (NTIID, title) => {
+				this.pushRoute(title, path.join(encodeForURI(NTIID), 'edit'));
 			}
 		});
 

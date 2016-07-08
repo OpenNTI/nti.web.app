@@ -4,6 +4,31 @@ const ReactDOM = require('react-dom');
 
 const unwrap = x => (x && x.default) ? x.default : x;
 
+
+const Bridge = React.createClass({
+
+	propTypes: {
+		children: React.PropTypes.any
+	},
+
+	childContextTypes: {
+		router: React.PropTypes.object
+	},
+
+	getChildContext () {
+		return {
+			router: {
+				makeHref: (x) => x
+			}
+		};
+	},
+
+	render () {
+		return React.Children.only(this.props.children);
+	}
+
+});
+
 module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	extend: 'Ext.Component',
 	alias: 'widget.react',
@@ -41,8 +66,11 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 		const props = this.getProps();
 
-		this.componentInstance = ReactDOM.render(
-			React.createElement(component, props),
+
+		ReactDOM.render(
+			React.createElement(Bridge, {},
+				React.createElement(component, {...props, ref: x => this.componentInstance = x})
+			),
 			Ext.getDom(this.el)
 		);
 	},

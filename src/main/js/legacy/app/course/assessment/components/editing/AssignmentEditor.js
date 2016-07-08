@@ -19,10 +19,29 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	initComponent () {
 		this.callParent(arguments);
 
+		const {pageSource} = this;
+
 		this.EditorCmp = this.add(new ReactHarness({
 			component: Editor,
 			NTIID: this.assignmentId,
-			onDeleted: () => this.onDeleted()
+			pageSource: {
+				getPagesAround : () => {
+					return {
+						next: pageSource.next && {
+							title: pageSource.nextTitle,
+							ref: '#nextPage'
+						},
+						prev: pageSource.previous && {
+							title: pageSource.previousTitle,
+							ref: '#prevPage'
+						},
+						index: pageSource.currentIndex,
+						total: pageSource.total
+					};
+				}
+			},
+			onDeleted: () => this.gotoRoot(),
+			gotoRoot: () => this.gotoRoot()
 		}));
 	},
 
@@ -31,20 +50,47 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.callParent(arguments);
 
 		this.el.dom.style.paddingTop = '20px';
+
+		this.mon(this.el, 'click', (e) => this.onClick(e));
 	},
 
 
-	onBack () {
+	onClick (e) {
+		const {target} = e;
+		const {hash} = target || {};
 
+		if (hash && hash.indexOf('nextPage') >= 0) {
+			e.stopPropagation();
+			e.preventDefault();
+			this.gotoNextAssignment();
+		} else if (hash && hash.indexOf('prevPage') >= 0) {
+			e.stopPropagation();
+			e.preventDefault();
+			this.gotoPrevAssignment();
+		}
 	},
 
 
-	gotoAssignment (/*ntiid, title*/) {
+	gotoPrevAssignment () {
+		const {previous, previousTitle} = this.pageSource;
 
+		if (this.gotoAssignment) {
+			this.gotoAssignment(previous, previousTitle);
+		}
 	},
 
 
-	onDeleted () {
+	gotoNextAssignment () {
+		const {next, nextTitle} = this.pageSource;
+
+		if (this.gotoAssignment) {
+			this.gotoAssignment(next, nextTitle);
+		}
+	},
+
+
+
+	gotoRoot () {
 		if (this.gotoAssignments) {
 			this.gotoAssignments();
 		}
