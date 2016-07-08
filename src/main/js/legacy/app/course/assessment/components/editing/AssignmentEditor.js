@@ -5,14 +5,14 @@ require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.editing.AssignmentEditor', {
-	extend: 'Ext.container.Container',
+	extend: 'Ext.container.Container',//should prob extend the harness like Publish & Calendar did.
 	alias: 'widget.assignment-editor',
 
 	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	layout: 'none',
+	layout: 'none', //if you extended the react harness these two configs wouldn't be necessary.
 	items: [],
 
 
