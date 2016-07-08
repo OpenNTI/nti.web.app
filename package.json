@@ -20,7 +20,7 @@
     "start": "make styles && web-service --config ./src/server/config/env.json.example",
     "prepublish": "not-in-install && make || in-install",
     "bump": "npm version",
-    "postbump": "git push && git push --tags && npm publish"
+    "postversion": "git push && git push --tags && npm publish"
   },
   "main": "./dist/server/index.js",
   "publishConfig": {
@@ -61,7 +61,7 @@
     "nti-assignment-editor": "^0.3.2",
     "nti-lib-dom": "^1.2.3",
     "nti-lib-ntiids": "^1.0.2",
-    "nti-style-common": "^1.0.11",
+    "nti-style-common": "^1.1.6",
     "nti-util-git-rev": "^1.0.0",
     "nti-util-logger": "^1.0.0",
     "nti-web-commons": ">=0.0.45",
