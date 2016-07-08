@@ -20,7 +20,8 @@ const Bridge = React.createClass({
 	getChildContext () {
 		return {
 			defaultEnvironment: {
-				getPath: () => ''
+				getPath: () => '',
+				setPath: () => {}
 			},
 			routerLinkComponent: () => {},
 			router: {
