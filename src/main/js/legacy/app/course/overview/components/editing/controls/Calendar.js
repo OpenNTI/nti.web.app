@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const {DayTimeToggle} = require('nti-web-commons');
-const ParseUtils = require('../../../../../../util/Parsing');
+require('legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar', {
 	extend: 'NextThought.ReactHarness',

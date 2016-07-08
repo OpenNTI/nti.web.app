@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	constructor (config) {
 		this.callParent([{...config, component: Publish}]);
-		this.EditingActions = new NextThought.app.course.overview.components.editing.Actions();
+		this.EditingActions = new Actions();
 
 		this.PUBLISH_ACTIONS = {
 			'PUBLISH': () => this.savePublish(),

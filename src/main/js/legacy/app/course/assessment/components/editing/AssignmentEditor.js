@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const {Editor} = require('nti-assignment-editor');
-const ReactHarness = require('legacy/overrides/ReactHarness');
+require('legacy/overrides/ReactHarness');
 
 require('legacy/mixins/Router');
 
@@ -21,7 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		const {pageSource} = this;
 
-		this.EditorCmp = this.add(new ReactHarness({
+		this.EditorCmp = this.add({
+			xtype: 'react',
 			component: Editor,
 			NTIID: this.assignmentId,
 			pageSource: {
@@ -42,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			},
 			onDeleted: () => this.gotoRoot(),
 			gotoRoot: () => this.gotoRoot()
-		}));
+		});
 	},
 
 
