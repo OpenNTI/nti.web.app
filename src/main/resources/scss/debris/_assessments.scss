@@ -1239,13 +1239,18 @@ body.dragging * {
 		width: auto;
 		left: 0 !important;
 		right: 0 !important;
-		margin: 0 -60px 0 -30px;
-		padding: 30px;
+		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 
-		border: {
-			color: #f1f1f1;
-			style: solid;
-			width: 1px 0;
+		.x-panel-assessment, .parts {
+			.x-panel-body-assessment {
+				padding: 0;
+
+				.question-content {
+					line-height: 32px;
+					margin: 0 40px;
+					min-height: 0;
+				}
+			}
 		}
 
 		.indexed-content {
@@ -1256,8 +1261,6 @@ body.dragging * {
 		& > .header {
 			display: none;
 		}
-
-		& > .parts { border-top-width: 0 !important; }
 	}
 
 	.modeled-body-part {
@@ -1284,11 +1287,7 @@ body.dragging * {
 	.file-submission-part {
 		position: relative;
 		background: #fbfbfb;
-		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25);
-		border-radius: 2px;
-		padding: 2px;
 		text-align: center;
-		margin-bottom: 5px;
 
 		.input-container {
 			position: relative;
@@ -1434,13 +1433,13 @@ body.dragging * {
 
 			.drop-zone {
 				position: relative;
-				top: -8px;
-				margin: -4px;
+				top: 0;
+				margin: 0;
 				border-radius: 2px;
 				background-color: rgba(63, 179, 246, 0.1);
 				box-shadow: inset 0 1px 0 0 #e2e2e2;
 				border: solid 4px #3fb3f6;
-				height: 226px;
+				height: 209px;
 
 				.button-container {
 					position: relative;
