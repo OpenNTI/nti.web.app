@@ -30,6 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	bubbleEvents: ['filters-changed', 'search-changed', 'create-assignment'],
 
+	keyPresses: [],
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -60,15 +61,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return;
 		}
 
-		if (this.searchKey === this.searchEl.getValue()) {
-			// prevent search duplicates.
-			return;
-		}
-
 		this.searchKey = this.searchEl.getValue();
 
 		//update without refreshing
-		this.fireEvent('search-changed', this.searchKey);
+		clearTimeout(this.doSearchTimeout);
+
+		this.doSearchTimeout = setTimeout(() => {
+			this.fireEvent('search-changed', this.searchKey);
+		}, 125);
 	},
 
 
