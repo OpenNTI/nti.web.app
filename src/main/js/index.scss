@@ -8,3 +8,9 @@
 body > .modal .modal-mask {
 	z-index: 1000;
 }
+
+body > .fly-wrapper > .flyout {
+	//If the trigger has an effective z-index, it will set the flyout's z-index to
+	//it's effective z plus one... this is for default (no-effective z) of flyouts in ExtJS land.
+	z-index: 151; //main-navigation's z-index is 150.
+}
