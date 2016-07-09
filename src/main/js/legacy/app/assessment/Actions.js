@@ -212,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		const me = this;
 
 		if (!url) {
-			console.error('No url to save assignemnt progress to');
+			console.error('No url to save assignment progress to');
 			return Promise.reject();
 		}
 
@@ -235,10 +235,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	handleConflictError: function (assignemnt) {
+	handleConflictError: function (assignment) {
 		Ext.MessageBox.alert({
-			title: 'This assignemnt has changed',
-			msg: 'Clicking OK will reload the assignemnt',
+			title: 'This assignment has changed',
+			msg: 'Clicking OK will reload the assignment',
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
@@ -248,10 +248,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				}
 			},
 			fn: function (button) {
-				if (button === 'yes' && assignemnt) {
-					assignemnt.updateFromServer()
+				if (button === 'yes' && assignment) {
+					assignment.updateFromServer()
 						.then(function () {
-							assignemnt.fireEvent('refresh');
+							assignment.fireEvent('refresh');
 						});
 				}
 			}
