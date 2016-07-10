@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		}
 
 		if (this.assignmentEditor) {
-			this.assigmentEditor.destroy();
+			this.assignmentEditor.destroy();
 		}
 
 		config.bundle = this.currentBundle;
