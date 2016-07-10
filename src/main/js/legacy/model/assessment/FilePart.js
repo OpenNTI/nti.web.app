@@ -58,11 +58,6 @@ module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 		var me = this,
 			allowedNames = this.get('AllowedExtentions') || ['*.*'];
 
-		// Accepts all if none is specified.
-		if (allowedNames && allowedNames.length === 0) {
-			return true;
-		}
-
 		return allowedNames.some(function (o) {
 			return me.__getRegExp(o, '{0}$').test(name);
 		});
