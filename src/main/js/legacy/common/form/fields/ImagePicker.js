@@ -82,6 +82,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		}
 	},
 
+
+	hasFile () {
+		return !!this.croppedImage || this.callParent(arguments);
+	},
+
+
 	getValue: function () {
 		if (this.croppedImage) {
 			return this.croppedImage.getBlob();
