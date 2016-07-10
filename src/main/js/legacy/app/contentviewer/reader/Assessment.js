@@ -372,11 +372,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			return true;
 		}
 
-		var assignment = this.injectedAssignment,
-			hasAnswers = this.submission.hasAnyAnswers(),
-			missingAnswers = this.submission.hasAnyMissing(),
-			isSubmitted = this.submission.isSubmitted(),
-			progressSaved = this.submission.hasProgressSaved();
+		let assignment = this.injectedAssignment;
+		let hasAnswers = this.submission.hasAnyAnswers();
+		let missingAnswers = this.submission.hasAnyMissing();
+		let isSubmitted = this.submission.isSubmitted();
+		let progressSaved = this.submission.hasProgressSaved();
+		let progressAttempted = this.submission.hasAttemptedProgress();
 
 		if (isSubmitted || this.isInstructorProspective) {
 			return Promise.resolve();
@@ -386,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			return this.notSubmittedTimed();
 		}
 
-		if (hasAnswers && !progressSaved) {
+		if (hasAnswers && progressAttempted && !progressSaved) {
 			return this.progressLostAlert();
 		}
 

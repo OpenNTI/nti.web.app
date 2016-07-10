@@ -231,6 +231,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		return !this.noParts && !this.allQuestionsAnswered;
 	},
 
+
+	hasAttemptedProgress: function () {
+		return this.progressSaveAttempted;
+	},
+
+
 	hasProgressSaved: function () {
 		return this.progressSaved;
 	},
@@ -443,6 +449,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 	beforeSaveProgress: function () {
 		var assessmentReader = this.reader.getAssessment();
+
+		this.progressSaveAttempted = true;
 
 		if (this.isInstructor) { return; }
 		assessmentReader.showSavingProgress();
