@@ -338,10 +338,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 	},
 
 	progressLostAlert: function () {
-		var assignment = this.injectedAssignment,
-			title = (assignment && assignment.get('title')),
-			progress = ' Your progress will be lost.',
-			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
+		let assignment = this.injectedAssignment;
+		let title = (assignment && assignment.get('title'));
+		let progress = ' Your progress will be lost.';
+		let dueDate = assignment && assignment.getDueDate();
+		let due = dueDate ? 'It is due on ' + Ext.Date.format(dueDate, 'l, F j') + '.' : '';
 
 		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
