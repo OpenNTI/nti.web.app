@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 	afterRender () {
-		this.callSuper(arguments);
+		this.callParent(arguments);
 		//See Element_style.js in ExtJS source... they have a selectstart listener that stomps on us.
 		//This class tells that handler to piss off...
 		this.el.addCls(Ext.Element.selectableCls);
