@@ -425,7 +425,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			url
 			value
 		*/
-		this.setFileSubmitted(v);
+		if (v) {
+			this.setFileSubmitted(v);
+		}
+		else {
+			this.clearView();
+			this.up('assessment-question')
+					.addCls('no-data');
+		}
 	},
 
 
@@ -476,9 +483,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.value = v;
 		this.showPreview();
 		this.setPreviewFromInput(v);
-
 		this.removeCls('not-submitted');
-		this.setDownloadButton(v.download_url || v.url);
+
+		const url = v.download_url || v.url;
+		this.setDownloadButton(url);
+		if (!url) {
+			this.previewLinkEl.hide();
+		}
 	},
 
 
@@ -526,7 +537,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		this.setNotUploaded();
 
-		this.removeCls('has-file');
+		this.clearView();
 
 		dontSetBack = true;
 
