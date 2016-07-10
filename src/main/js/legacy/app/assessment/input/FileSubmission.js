@@ -208,7 +208,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			input.addEventListener('drop', this.onDragLeave.bind(this));
 		}
 		if (changeInput) {
-			changeInput.addEventListener('change', this.onFileInputChange.bind(this));
+			changeInput.addEventListener('change', this.onChangeFileInputChange.bind(this));
 		}
 	},
 
@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			input.removeEventListener('drop', this.onDragLeave.bind(this));
 		}
 		if (changeInput) {
-			changeInput.removeEventListener('change', this.onFileInputChange.bind(this));
+			changeInput.removeEventListener('change', this.onChangeFileInputChange.bind(this));
 		}
 	},
 
@@ -249,6 +249,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			this.setUploadedNotSubmitted(file);
 			this.filereader.readAsDataURL(file);
 		}
+	},
+
+
+	onChangeFileInputChange: function (e) {
+		this.onFileInputChange(e);
+
+		// Clear the main input field.
+		this.inputField.dom.value = null;
 	},
 
 
@@ -358,6 +366,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	clearView: function () {
+		this.inputField.dom.value = null;
+		this.changeInputField.dom.vlaue = null;
 		this.inputContainer.addCls('no-file');
 		this.inputContainer.removeCls('has-file');
 		this.inputContainer.removeCls('file-over');
@@ -437,10 +447,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.setPreviewFromInput(v);
 		this.setDownloadButton(v.download_url || v.url);
 
+		if (this.uploadComplete) {
+			this.uploadComplete.remove();
+			delete this.uploadComplete;
+		}
+
 		if (!this.uploading) {
 			if (this.progressBar) {
 				this.progressBar.destroy();
+				delete this.progressBar;
 			}
+
 			this.showUploadCompletionBar(v.filename || v.name);
 		}
 	},
