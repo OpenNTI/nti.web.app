@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	showCreateButton () {
-		this.showCreateButton = true;
+		this.showCreateButton = ()=>{};
 
 		if (this.createEl) {
 			this.createEl.show();
