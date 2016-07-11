@@ -129,14 +129,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	getExtensionDisplayList: function () {
-		let extensions = Ext.clone(this.part.get('AllowedExtentions') || []);
+		let extensions = (this.part.get('AllowedExtentions') || []).slice();
 		if (extensions.length > 1) {
 			let p2 = extensions.splice(-1);
 			extensions = extensions.join(', ') + ' or ' + p2[0];
 		}
 		else if (extensions.length === 1) {
 			extensions = extensions[0];
-			if (extensions[0] === '*/*') {
+			if (extensions[0] === '*' || extensions[0] === '*.*') {
 				extensions = '';
 			}
 		}
