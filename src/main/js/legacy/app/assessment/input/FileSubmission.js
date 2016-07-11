@@ -525,6 +525,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	markBad: function () {
+		//FIXME: There are other reasons the file could be "bad". Extensions is only a small part.
+		//Client side: It could be bad if its too big. or not in the allowed list. There is a "reasons" array on the model. Use those.
 		const allowedList = this.getExtensionDisplayList();
 		const accepts = allowedList !== '' ? 'You can only upload ' + allowedList + '. ' : '';
 		const msg = 'The file selected is not acceptable. ' + accepts;
