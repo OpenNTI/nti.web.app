@@ -60,6 +60,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		]
 	}),
 
+	emptySubmissionTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ cls: 'empty-submission', cn: [
+			{cls: 'icon'},
+			{cls: 'title', html: 'Submitted Assignment Without Adding a File'}
+		]}
+	])),
+
 	renderSelectors: {
 		inputContainer: '.input-container',
 		downloadBtn: 'a.button',
@@ -437,7 +444,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 			this.setFileSubmitted(v);
 		}
 		else {
-			this.clearView();
+			this.showEmptySubmission();
+		}
+	},
+
+
+	showEmptySubmission: function () {
+		var q = this.questionSet,
+			assignment = q && q.associatedAssignment,
+			submitted = assignment && assignment.get('SubmittedCount');
+
+		this.clearView();
+		if (submitted > 0) {
+			this.emptySubmissionTpl.append(this.el);
+		}
+		else {
 			this.up('assessment-question')
 					.addCls('no-data');
 		}

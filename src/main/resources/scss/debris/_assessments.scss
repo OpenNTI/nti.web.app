@@ -1501,17 +1501,28 @@ body.dragging * {
 
 		}
 
+		.empty-submission {
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			right: 0;
+			background-color: #fbfbfb;
 
-
-		&.has-file {
-			.no-file {
-				display: none;
+			.icon {
+				position: relative;
+				top: 30px;
+				margin: 0 auto;
+				@include sprite($none_large);
 			}
-		}
 
-		&.no-file {
-			.has-file {
-				display: none;
+			.title {
+				position: relative;
+			    top: 40px;
+			    width: 150px;
+			    margin: 0 auto;
+			    color: $tertiary-grey;
+			    font-size: 14px;
 			}
 		}
 
