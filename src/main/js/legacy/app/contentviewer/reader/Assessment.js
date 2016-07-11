@@ -170,11 +170,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		} else if (this.injectedSavePoint) {
 			this.submission.setFromSavePoint(this.injectedSavePoint);
 		}
-
-		if (!h && isInstructor) {
-			this.submission.disableView();
-			set.fireEvent('instructor-show-solutions');
-		}
 	},
 
 	makeNumberedAssessmentQuestions: function (questions, set, questionIds) {

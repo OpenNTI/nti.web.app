@@ -89,6 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 		return new Promise(function (fulfill, reject) {
 			qsetSubmission.save({
+				url: questionSet.getLink('PracticeSubmission'),
 				callback: function () {},
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();
@@ -148,17 +149,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			version: assignment.get('version')
 		});
 
-		return this.doSubmitAssignment(assignmentSubmission, assignment);
+		if (assignment && assignment.getLink('PracticeSubmission')) {
+			return this.doSubmitAssignment(assignmentSubmission, assignment, true);
+		} else {
+			return this.doSubmitAssignment(assignmentSubmission, assignment);
+		}
 	},
 
-
-	doSubmitAssignment: function (assignmentSubmission, assignment) {
+	doSubmitAssignment: function (assignmentSubmission, assignment, isPracticeSubmission) {
 		const assignmentId = assignment.getId();
 		const me = this;
+		const link = isPracticeSubmission ? assignment.getLink('PracticeSubmission') : me.getObjectURL(assignmentId);
 
 		return new Promise(function (fulfill, reject) {
 			assignmentSubmission.save({
-				url: me.getObjectURL(assignmentId),
+				url: link,
 				success: function (self, op) {
 					var pendingAssessment = op.getResultSet().records[0],
 						result = pendingAssessment.get('parts')[0],
@@ -186,7 +191,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			});
 		});
 	},
-
 
 	saveProgress: function (questionSet, submissionData, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),

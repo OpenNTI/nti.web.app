@@ -6,6 +6,7 @@ require('legacy/model/assessment/AssignmentPart');
 require('legacy/model/assessment/UsersCourseAssignmentSavepointItem');
 require('legacy/model/assessment/AssignmentSubmission');
 
+var { guidGenerator } = require('legacy/util/Globals');
 
 describe('Assessment Actions tests', function () {
 	describe('Assignment version tests', function () {

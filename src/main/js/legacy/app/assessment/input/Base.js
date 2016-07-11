@@ -474,6 +474,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		return s;
 	},
 
+	updateWithValue: function (value) {
+		if (this.setProgress) {
+			this.setProgress(value);
+		} else {
+			this.setValue(value);
+		}
+
+		if (value !== null) {
+			this.enableSubmission(true);
+		}
+	},
+
 	//set the inputs values with out marking it correct or incorrect
 	updateWithProgress: function (questionSubmission) {
 		var parts = (questionSubmission && questionSubmission.get('parts')) || {},
