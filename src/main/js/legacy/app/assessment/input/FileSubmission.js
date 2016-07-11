@@ -534,6 +534,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		alert({title: 'Attention', msg: msg, icon: 'warning-red'});
 	},
 
+
+	instructorReset: function () {
+		this.reset();
+		this.up('assessment-question')
+				.addCls('no-data');
+	},
+
+
 	reset: function () {
 		var dontSetBack;
 
