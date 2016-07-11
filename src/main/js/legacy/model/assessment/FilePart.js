@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 	isFileAcceptable: function (file) {
 		var size = this.__checkSize(file.size),
 			fileSet = new FileSet(
-				this.get('AllowedExtentions') || ['*.*'],
+				this.get('AllowedExtentions') || ['*'],
 				this.get('AllowedMimeTypes') || ['*/*']
 			),
 			type = fileSet.matches(file),
