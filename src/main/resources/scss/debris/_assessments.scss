@@ -1407,26 +1407,10 @@ body.dragging * {
 				.progress {
 					position: relative;
 					margin-bottom: 20px;
+					text-align: left;
 
 					.progress-bar-component {
-						max-width: 39.0rem;
-					}
-					.completed {
-						width: 630px;
-						height: 40px;
-						border-radius: 2px;
-						background-color: #ebf7ed;
-						box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.1), 0 0 1px 1px rgba(0, 0, 0, 0.05);
-						margin: 0 auto;
-
-						.title {
-							font-family: OpenSans;
-							font-size: 15px;
-							font-weight: 600;
-							color: #3fb34f;
-							padding: 11px 20px 11px 40px;
-							text-align: left;
-						}
+						max-width: 39.67rem;
 					}
 				}
 			}

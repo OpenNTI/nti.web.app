@@ -60,14 +60,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		]
 	}),
 
-
-	uploadedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cls: 'completed', cn: [
-			{cls: 'title', html: '{title}'}
-		]}
-	])),
-
-
 	renderSelectors: {
 		inputContainer: '.input-container',
 		downloadBtn: 'a.button',
@@ -265,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		console.log('Total: ' + e.total);
 
 		if (this.progressBar) {
-			this.progressBar.setState({value: e.loaded});
+			this.progressBar.setProps({value: e.loaded});
 		}
 	},
 
@@ -279,14 +271,31 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.previewEl.addCls('uploading');
 
 		const name = this.value && (this.value.filename || this.value.name);
-		this.progressBar = Ext.widget({
-			xtype: 'react',
-			component: ProgressBar,
-			max: e.total,
-			value: e.loaded,
-			text: name,
-			renderTo: this.progressEl
-		});
+		if (!this.progressBar) {
+			let me = this;
+			this.progressBar = Ext.widget({
+				xtype: 'react',
+				component: ProgressBar,
+				max: e.total,
+				value: e.loaded,
+				text: name,
+				renderTo: this.progressEl,
+				onDismiss: function () {
+					me.progressBar.destroy();
+					delete me.progressBar;
+					me.updateLayout();
+				}
+			});
+
+			this.updateLayout();
+		}
+		else {
+			this.progressBar.setProps({
+				max: e.total,
+				value: e.loaded,
+				text: name
+			});
+		}
 	},
 
 
@@ -296,7 +305,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.saveProgress();
 		this.previewEl.removeCls('uploading');
 		this.uploading = false;
-		this.markCorrect();
 	},
 
 
@@ -367,7 +375,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 	clearView: function () {
 		this.inputField.dom.value = null;
-		this.changeInputField.dom.vlaue = null;
+		this.changeInputField.dom.value = null;
 		this.inputContainer.addCls('no-file');
 		this.inputContainer.removeCls('has-file');
 		this.inputContainer.removeCls('file-over');
@@ -453,27 +461,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.showPreview();
 		this.setPreviewFromInput(v);
 		this.setDownloadButton(v.download_url || v.url);
-
-		if (this.uploadComplete) {
-			this.uploadComplete.remove();
-			delete this.uploadComplete;
-		}
-
-		if (!this.uploading) {
-			if (this.progressBar) {
-				this.progressBar.destroy();
-				delete this.progressBar;
-			}
-
-			this.showUploadCompletionBar(v.filename || v.name);
-		}
-	},
-
-
-	showUploadCompletionBar: function (name) {
-		if (!this.uploadComplete) {
-			this.uploadComplete = this.uploadedTpl.append(this.progressEl, {title: name});
-		}
 	},
 
 
