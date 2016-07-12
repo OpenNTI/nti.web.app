@@ -228,16 +228,24 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
+	editAssignment: function (assignment) {
+		const title = assignment.get('title');
+		let id = assignment.getId();
+		id = encodeForURI(id);
+		this.pushRoute(title, id + '/edit/', {assignment: assignment});
+	},
+
 	navigateToItem: function (assignment) {
 		var openDate = assignment.get('availableBeginning'),
 			date = Ext.Date.format(openDate, 'l F j \\a\\t g:i A');
 
-		if (!assignment.isOpen()) {
+		if (!assignment.isOpen() && !assignment.hasLink('edit')) {
 			alert(getFormattedString('NextThought.view.courseware.assessment.assignments.View.available', { date: date}));
-			return;
+		} else if (!assignment.isOpen() && assignment.hasLink('edit')) {
+			this.editAssignment(assignment);
+		} else {
+			this.showAssignment(assignment);
 		}
-
-		this.showAssignment(assignment);
 	},
 
 	getFields: function () {
