@@ -74,7 +74,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 		this.ContentActions = NextThought.app.contentviewer.Actions.create();
 
-		this.getActiveCourse = Promise.reject();
+								//Get a "handled" rejected promise.
+		this.getActiveCourse = ((x) => (x = Promise.reject(), x.catch(()=>{}), x)());
 
 		this.addRoute('/activity', this.showDashboard.bind(this));
 		this.addRoute('/lessons', this.showOverview.bind(this));
