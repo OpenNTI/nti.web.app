@@ -83,6 +83,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	},
 
 
+	acceptsContentFileFilter (file) {
+		return /image\//i.test(file.FileMimeType);
+	},
+
+
 	hasFile () {
 		return !!this.croppedImage || this.callParent(arguments);
 	},
