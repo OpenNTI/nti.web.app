@@ -320,7 +320,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		const size = FileUtils.getHumanReadableFileSize(file.size, 1);
 		// const href = this.createObjectURL(file);
 
-		this.previewNameEl.update(file.name);
+		this.previewNameEl.update(file.filename || file.name);
 		this.previewSizeEl.update('(' + size + ')');
 
 		// Remove current content.
