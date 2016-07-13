@@ -71,6 +71,23 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 	},
 
 
+	onRouteActivate () {
+		const active = this.getLayout().getActiveItem();
+
+		if (active && active.onRouteActivate) {
+			active.onRouteActivate();
+		}
+	},
+
+
+	onRouteDeactivate () {
+		const active = this.getLayout().getActiveItem();
+
+		if (active && active.onRouteDeactivate) {
+			active.onRouteDeactivate();
+		}
+	},
+
 	onActivate: function () {
 		this.setTitle(this.title);
 	},

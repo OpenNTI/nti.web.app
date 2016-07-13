@@ -72,6 +72,8 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 	doRender () {
+		if (!this.el || this.componentInstance) {return;}
+
 		const {initialConfig: config} = this;
 		const component = unwrap(config.component);
 
@@ -87,10 +89,28 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 
+	onRouteActivate () {
+		this.doRender();
+	},
+
+
+	onRouteDeactivate () {
+		this.unmount();
+	},
+
+
+	unmount () {
+		console.debug('Unmounting React Component');
+		ReactDOM.unmountComponentAtNode(Ext.getDom(this.el));
+		delete this.componentInstance;
+	},
+
+
 	beforeDestroy () {
 		delete this.componentInstance;
+		//????why
 		this.onceRendered = Promise.reject('Destroyed');
-		ReactDOM.unmountComponentAtNode(Ext.getDom(this.el));
+		this.unmount();
 	},
 
 

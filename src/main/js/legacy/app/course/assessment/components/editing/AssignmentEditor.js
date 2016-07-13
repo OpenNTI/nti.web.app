@@ -41,6 +41,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
+	onRouteActivate () {
+		if (this.EditorCmp) {
+			this.EditorCmp.onRouteActivate();
+		}
+	},
+
+
+	onRouteDeactivate () {
+		if (this.EditorCmp) {
+			this.EditorCmp.onRouteDeactivate();
+		}
+	},
+
+
 	onClick (e) {
 		const {target} = e;
 		const {hash} = target || {};
