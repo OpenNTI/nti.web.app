@@ -18,6 +18,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	layout: 'card',
 
 	setAssignmentsData: function (assignments) {
+		this.clearAssignmentsData();
+
 		var root = this.add({
 				xtype: 'course-assessment-admin-assignments-root',
 				pushState: this.pushState,

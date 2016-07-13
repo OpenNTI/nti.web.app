@@ -411,7 +411,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		function finish (results) {
 			var outlineInterface = results[1];
-
+			me.data.assignments = results[0];
 			me.data.outline = outlineInterface.getOutline();
 			//Becasue this view has special derived fields, we must just listen for changes on the
 			// assignments collection itself and trigger a refresh. This cannot simply be a store
@@ -420,15 +420,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		return Promise.all([
-			assignments.updateAssignments(),
+			assignments.updateAssignments(!silent),
 			outlineInterface.onceBuilt()
 		]).then(finish)
-			.catch(function (reason) {
-				console.error('Failed to get course outline!', reason);
-			});
-
-		return	outlineInterface.onceBuilt()
-			.then(finish)
 			.catch(function (reason) {
 				console.error('Failed to get course outline!', reason);
 			});

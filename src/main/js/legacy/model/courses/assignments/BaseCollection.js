@@ -158,12 +158,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return this;
 	},
 
-	updateAssignments: function () {
+	updateAssignments: function (force) {
 		var me = this,
 			key = me.assignmentUpdateKey,
 			load, link = me.get('AssignmentsLink');
 
-		load = me.getFromCache(key);
+		load = !force && me.getFromCache(key);
 
 		if (!load) {
 			load = Service.request(link)
