@@ -175,6 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 	makeNumberedAssessmentQuestions: function (questions, set, questionIds) {
 		let questionIndex = 0;
 		let me = this;
+
 		Ext.each(questions, function (q) {
 			if (!questionIds || q.internalId && questionIds['' + q.internalId]) {
 				me.makeAssessmentQuestion(q, set, questionIndex);
@@ -191,8 +192,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 		if (pendingQuestions) {
 			pendingQuestions.forEach(function (question) {
-				if (question.internalId) {
-					pendingQuestionIds['' + question.internalId] = true;
+				const id = question.get('questionId') || question.internalId;
+				if (id) {
+					pendingQuestionIds['' + id] = true;
 				}
 			});
 			return pendingQuestionIds;

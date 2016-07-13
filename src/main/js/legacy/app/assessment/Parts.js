@@ -1,19 +1,19 @@
-var Ext = require('extjs');
-var AssessmentPartContent = require('./PartContent');
-var AssessmentMultiPartSubmission = require('./MultiPartSubmission');
-var InputBase = require('./input/Base');
-var InputFileSubmission = require('./input/FileSubmission');
-var InputFreeResponse = require('./input/FreeResponse');
-var InputMatching = require('./input/Matching');
-var InputModeledContent = require('./input/ModeledContent');
-var InputMultipleChoice = require('./input/MultipleChoice');
-var InputNumericMath = require('./input/NumericMath');
-var InputOrdering = require('./input/Ordering');
-var InputShort = require('./input/Short');
-var InputSingleChoice = require('./input/SingleChoice');
-var InputSymbolicMath = require('./input/SymbolicMath');
-var InputUnsupported = require('./input/Unsupported');
-var InputWordBank = require('./input/WordBank');
+const Ext = require('extjs');
+require('./PartContent');
+require('./MultiPartSubmission');
+require('./input/Base');
+require('./input/FileSubmission');
+require('./input/FreeResponse');
+require('./input/Matching');
+require('./input/ModeledContent');
+require('./input/MultipleChoice');
+require('./input/NumericMath');
+require('./input/Ordering');
+require('./input/Short');
+require('./input/SingleChoice');
+require('./input/SymbolicMath');
+require('./input/Unsupported');
+require('./input/WordBank');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {

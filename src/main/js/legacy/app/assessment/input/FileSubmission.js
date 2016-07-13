@@ -456,7 +456,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		this.clearView();
 		if (submitted > 0) {
-			this.emptySubmissionTpl.append(this.el);
+			this.emptySubmissionEl = this.emptySubmissionTpl.append(this.el);
 		}
 		else {
 			this.up('assessment-question')
@@ -555,6 +555,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 		this.setNotUploaded();
 
+		if (this.emptySubmissionEl) {
+			this.emptySubmissionEl.remove();
+		}
 		this.clearView();
 
 		dontSetBack = true;

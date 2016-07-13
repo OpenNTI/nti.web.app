@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 		this.questionContainer.update(
 			Ext.DomHelper.markup({
 				 cls: 'question-content',
-				 html: this.buildContent(ContentUtils.fixReferences(c + p, root))
+				 html: this.buildContent(ContentUtils.fixReferences(c + p, root) || '<p></p>')
 			 }));
 
 		function santatize () {
