@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 			{cls: 'thumbnail'},
 			{cls: 'meta', cn: [
 				{cls: 'title', html: '{title}'},
-				{cls: 'byline', html: 'by {author}'},
+				{cls: 'byline hidden', html: 'by {author}'},
 				{cls: 'description', html: '{description}'}
 			]}
 		]},
@@ -21,7 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 
 	renderSelectors: {
 		iconEl: '.thumbnail',
-		seeMoreEl: '.see-more'
+		seeMoreEl: '.see-more',
+		bylineEl: '.byline'
 	},
 
 	initComponent: function () {
@@ -50,6 +51,10 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		if (this.doNavigate && !this.isInContext()) {
 			this.seeMoreEl.removeCls('hidden');
 			this.mon(this.seeMoreEl, 'click', this.doNavigate.bind(this, this.record));
+		}
+
+		if (this.content && this.content.get('byline')) {
+			this.bylineEl.removeCls('hidden');
 		}
 	},
 
