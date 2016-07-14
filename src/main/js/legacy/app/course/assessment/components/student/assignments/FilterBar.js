@@ -83,6 +83,24 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
+	showPublishOption () {
+		this.shouldShowPublishOption = true;
+
+		if (this.rendered) {
+			this.createGroupByMenu();
+		}
+	},
+
+
+	hidePublishOption () {
+		delete this.shouldShowPublishOption;
+
+		if (this.rendered) {
+			this.createGroupByMenu();
+		}
+	},
+
+
 	clearSearch: function () {
 		this.searchEl.dom.value = '';
 		this.searchKey = '';
@@ -102,11 +120,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	createGroupByMenu: function () {
+		if (this.groupByMenu) {
+			this.groupByMenu.destroy();
+		}
+
 		var type = this.currentGrouping, items = [
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.alllessons'), groupBy: 'lesson', checked: type === 'lesson'},
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.due'), groupBy: 'due', checked: type === 'due'},
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.completion'), groupBy: 'completion', checked: type === 'completion'}
 			];
+
+		if (this.shouldShowPublishOption) {
+			items.push({ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.publicationstatus'), groupBy: 'publication', checked: type === 'publication'});
+		}
 
 		this.groupByMenu = Ext.widget('menu', {
 			cls: 'group-by-menu',

@@ -10,6 +10,9 @@ require('./List');
 
 const {wait} = require('legacy/util/Promise');
 
+const PUBLISHED = getString('NextThought.view.courseware.assessment.assignments.View.published');
+const SCHEDULED = getString('NextThought.view.courseware.assessment.assignments.View.scheduled');
+const DRAFT = getString('NextThought.view.courseware.assessment.assignments.View.draft');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.View', {
 	extend: 'Ext.container.Container',
@@ -82,6 +85,43 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					return 'Today';
 				}
 				return Ext.Date.format(val.get('due'), 'F j, Y');
+			}
+		},
+		'publication': {
+			'property': 'PublicationState',
+			'sorterFn': function sorterFn (a, b) {
+				var groupA = this.getGroupString(a);
+				var groupB = this.getGroupString(b);
+				var pubA = a.getData().item.raw.publishLastModified;
+				var pubB = b.getData().item.raw.publishLastModified;
+
+				// if a and b are in the same group sort on publishLastModified
+				if (groupA === groupB) {
+					return pubB - pubA;
+				}
+				// Published comes first, then scheduled, then draft.
+				if (groupA === PUBLISHED) {
+					return -1;
+				}
+				if (groupB === PUBLISHED) {
+					return 1;
+				}
+				if(groupA === SCHEDULED) {
+					return -1;
+				}
+				return 1;
+			},
+			'getGroupString': function (val) {
+				const raw = val.getData().item.raw;
+				const state = raw.PublicationState;
+				const available = raw.available_for_submission_beginning;
+				if (state !== 'DefaultPublished') {
+					return DRAFT;
+				}
+				if (!available || new Date(available) < new Date()) {
+					return PUBLISHED;
+				}
+				return SCHEDULED;
 			}
 		}
 	},
@@ -517,6 +557,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (bundle && bundle.getLink('CourseEvaluations')) {
 			filterBar.showCreateButton();
+			filterBar.showPublishOption();
+		} else {
+			filterBar.hidePublishOption();
 		}
 
 		assignments.each(collect);

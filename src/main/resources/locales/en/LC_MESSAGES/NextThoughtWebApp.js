@@ -456,9 +456,13 @@ NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.allassi
 NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.alllessons'] = 'By Lesson';
 NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.due'] = 'By Due Date';
 NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.completion'] = 'By Completion';
+NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.publicationstatus'] = 'By Publication Status';
 NTIStrings['NextThought.view.courseware.assessment.assignments.List.due'] = 'Due {date}';
 NTIStrings['NextThought.view.courseware.assessment.assignments.List.available'] = 'Available on {date}';
 NTIStrings['NextThought.view.courseware.assessment.assignments.List.today'] = 'Due Today {date}';
+NTIStrings['NextThought.view.courseware.assessment.assignments.View.published'] = 'Published';
+NTIStrings['NextThought.view.courseware.assessment.assignments.View.draft'] = 'Draft';
+NTIStrings['NextThought.view.courseware.assessment.assignments.View.scheduled'] = 'Scheduled';
 NTIStrings['NextThought.view.courseware.assessment.assignments.View.complete'] = 'Completed';
 NTIStrings['NextThought.view.courseware.assessment.assignments.View.incomplete'] = 'Incomplete';
 NTIStrings['NextThought.view.courseware.assessment.assignments.View.available'] = 'This assignment will be available on {date}';
