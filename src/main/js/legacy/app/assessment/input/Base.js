@@ -591,7 +591,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 	},
 
 	saveProgress: function () {
-		if (this.questionSet) {
+		const assignment = this.questionSet && this.questionSet.associatedAssignment;
+		const hasSavepointLink = Boolean(assignment && assignment.getLink('Savepoint'));
+
+		if ( this.questionSet && hasSavepointLink) {
 			this.questionSet.saveProgress(this.question, this);
 		}
 	},
