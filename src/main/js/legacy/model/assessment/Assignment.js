@@ -2,12 +2,18 @@ const Ext = require('extjs');
 const ParseUtils = require('legacy/util/Parsing');
 const {getURL} = require('legacy/util/Globals');
 
+require('legacy/mixins/ModelWithPublish');
+
 require('legacy/model/Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Assignment', {
 	extend: 'NextThought.model.Base',
 	isAssignment: true,
+
+	mixins: {
+		ModelWithPublish: NextThought.mixins.ModelWithPublish
+	},
 
 	fields: [
 		{ name: 'category_name', type: 'string'},

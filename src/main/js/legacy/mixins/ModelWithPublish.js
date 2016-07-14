@@ -20,6 +20,9 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 				this.get('PublicationState') === 'DefaultPublished';
 	},
 
+	isDraft: function () {
+		return this.raw.PublicationState !== 'DefaultPublished';
+	},
 
 	publish: function (widget, cb, scope) {
 		var me = this,

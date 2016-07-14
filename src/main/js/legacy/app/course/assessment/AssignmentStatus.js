@@ -63,32 +63,32 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 
 		__getDueStatus: function (data) {
 			var now = new Date(),
-				d = {};
-
-			//Its due today if its the same day and its not past due
+				d = {},
+				draftPrefix = data.isDraft ? 'Draft -&nbsp;' : '';
+			//It's due today if it's the same day and its not past due
 			if (TimeUtils.isSameDay(now, data.due) && data.due > now) {
-				d.html = 'Due Today at ' + Ext.Date.format(data.due, 'g:i a T') + '!';
+				d.html = draftPrefix + 'Due Today at ' + Ext.Date.format(data.due, 'g:i a T') + '!';
 				d.cls = 'today';
 				d.qtipFn = 'getTimeUntilDue';
 			} else {
 				if (data.isNoSubmitAssignment) {
 					d.cls = 'nosubmit';
 					if (!data.due) {
-						d.html = '';
+						d.html = draftPrefix;
 					} else {
-						d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
+						d.html = draftPrefix + 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
 					}
 				}
 				else {
 					if (data.due) {
-						d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
+						d.html = draftPrefix + 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
 					}
 					else {
 						if (data.start) {
-							d.html = 'Available ' + Ext.Date.format(data.start, 'l, F j g:i A T');
+							d.html = draftPrefix + 'Available ' + Ext.Date.format(data.start, 'l, F j g:i A T');
 						}
 						else {
-							d.html = 'Available Now' + '&nbsp;';
+							d.html = draftPrefix + 'Available Now' + '&nbsp;';
 						}
 					}
 				}
