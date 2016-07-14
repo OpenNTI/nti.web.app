@@ -8,17 +8,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	cls: 'assignment-filterbar',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'third dropmenu disabled', cn: [
+		{ cls: 'dropmenu disabled cell', cn: [
 			{ cls: 'label', html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.allassignments}}}' }
 		] },
-		{ cls: 'third dropmenu groupBy', cn: [
+		{ cls: 'dropmenu groupBy cell', cn: [
 			{ cls: 'label', html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.alllessons}}}' }
 		] },
-		{ cls: 'third search', cn: [
+		{ cls: 'search cell', cn: [
 			{ tag: 'input', type: 'text', placeholder: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.searchplaceholder}}}', required: 'required' },
 			{ cls: 'clear' }
 		] },
-		{ cls: 'create-assignment', html: 'Create Assignment'}
+		{ cls: 'create-assignment cell', html: 'Create'}
 	]),
 
 	renderSelectors: {
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.createEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		if (!this.showCreateButton) {
+		if (!this.shouldShowCreateButton) {
 			this.createEl.hide();
 		}
 	},
@@ -75,10 +75,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	showCreateButton () {
-		this.showCreateButton = ()=>{};
+		this.shouldShowCreateButton = true;
 
 		if (this.createEl) {
 			this.createEl.show();
+		}
+	},
+
+
+	hideCreateButton () {
+		delete this.shouldShowCreateButton;
+
+		if (this.createEl) {
+			this.createEl.hide();
 		}
 	},
 
@@ -112,8 +121,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var menu = this.groupByMenu, item = menu.down('[checked]');
 		if (!this.groupEl.hasCls('disabled')) {
 			if (item) {
-					menu.insert(0, item);
-				}
+				menu.insert(0, item);
+			}
 			menu.showBy(this.groupEl, 'tl-tl');
 		}
 	},

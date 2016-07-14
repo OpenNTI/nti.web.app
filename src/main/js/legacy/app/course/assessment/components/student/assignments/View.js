@@ -559,6 +559,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			filterBar.showCreateButton();
 			filterBar.showPublishOption();
 		} else {
+			filterBar.hideCreateButton();
 			filterBar.hidePublishOption();
 		}
 

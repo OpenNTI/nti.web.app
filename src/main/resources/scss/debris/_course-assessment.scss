@@ -1204,11 +1204,34 @@ canvas.x-component-course-assessment {
 	color: $secondary-grey;
 	z-index: 2;
 	position: relative;
-	font: normal 500 0.9em/3.5em $font;
+	font: normal 500 0.875em/3.5em $font;
+	display: flex;
 
 	&.disabled, .disabled & {
 		opacity: 0.6;
 		pointer-events: none;
+	}
+
+	.cell {
+		position: relative;
+		flex: 1 1 213px;
+		padding: 0 2em;
+		box-shadow: inset -1px 0 0 0 #f1f1f1;
+
+		&:last-of-type {
+			box-shadow: none;
+		}
+	}
+
+
+	.create-assignment {
+		flex: 0 0 125px;
+		background-color: $primary-blue;
+		color: white;
+		cursor: pointer;
+		padding-left: 50px;
+
+		@include icon($notepad_active_white, $side: 'before', $top: 15px, $left: 26px);
 	}
 
 	input {
