@@ -4,7 +4,9 @@ const ReactDOM = require('react-dom');
 
 const unwrap = x => (x && x.default) ? x.default : x;
 
-
+/*
+ * Bridge React Component so we can pass environment contexts down to components in React.
+ */
 const Bridge = React.createClass({
 
 	propTypes: {
@@ -36,6 +38,25 @@ const Bridge = React.createClass({
 
 });
 
+/*
+ * ReactHarness. Mount React Components in ExtJS.
+ *
+ * To use, simply:
+ *
+ *	 let ref = Ext.widget({renderTo: this.el, xtype: 'react', component: MyReactComponent, ...props});
+ *
+ * or in a container:
+ *
+ *	items: [
+ *		{xtype: 'react', component: MyReactComponent, ...props},
+ *	],
+ *
+ * or:
+ *
+ *	this.ref = this.add({xtype: 'react', component: MyReactComponent, ...props});
+ *
+ * You can also extend the ReactHarness and hard-code the Component config property.
+ */
 module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	extend: 'Ext.Component',
 	alias: 'widget.react',
@@ -54,8 +75,19 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 
+	/**
+	 * The primary way to update a component's props. DO NOT externally call setState() unless you
+	 * KNOW what you are doing!
+	 * @param {object} props - The props for the given component.
+	 * @return {void}
+	 */
 	setProps (props) {
 		this.initialConfig = {...this.initialConfig, ...props};
+
+		// There is no need to register an 'afterrender' handler nor
+		// onceRendered.then(). Its okay to drop the doRender on the floor.
+		// We've merged the props into the config. When the Ext component
+		// does render, it will be up to date.
 		if (this.rendered) {
 			this.doRender();
 		}
@@ -71,6 +103,12 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	},
 
 
+	/**
+	 * @private
+	 *
+	 * Executes ReactDOM.render with the current props. If the component is already mounted, it will reuse and update.
+	 * @return {void}
+	 */
 	doRender () {
 		//Only check to see if Ext has rendered the component's <div> React will control everything under it.
 		if (!this.el) {return;}
@@ -121,22 +159,30 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 	/**
+	 * @private This is NOT the primary way to communicate with the React component. Use setProps()
+	 * This is here primarily as an example of ways to interact with the component. nothing more.
+	 *
 	 * Merges the imput state with the current state.
 	 * @param {Object} state new state values
 	 * @returns {void}
 	 */
 	setState (state) {
+		console.warn('Use setProps(), not setState().  The state-manipulations are internal to the react component. Props are external.');
 		this.onceRendered.then(() =>
 			this.componentInstance.setState(state));
 	},
 
 
 	/**
+	 * @private This is NOT the primary way to communicate with the React component. use setProps()
+	 * This is here primarily as an example of ways to interact with the component. nothing more.
+	 *
 	 * Replaces the entire state object.
 	 * @param {Object} state new state values
 	 * @returns {void}
 	 */
 	replaceState (state) {
+		console.warn('Use setProps(), not setState().  The state-manipulations are internal to the react component. Props are external.');
 		this.onceRendered.then(() =>
 			this.componentInstance.replaceState(state));
 	}
