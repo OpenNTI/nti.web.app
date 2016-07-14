@@ -72,7 +72,8 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 	doRender () {
-		if (!this.el || this.componentInstance) {return;}
+		//Only check to see if Ext has rendered the component's <div> React will control everything under it.
+		if (!this.el) {return;}
 
 		const {initialConfig: config} = this;
 		const component = unwrap(config.component);
@@ -82,6 +83,9 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 		ReactDOM.render(
 			React.createElement(Bridge, {},
+				//The ref will be called on mount with the instance of the component.
+				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
+				//mounted. Calling doRender is the primary way to update the component with new props.
 				React.createElement(component, {...props, ref: x => this.componentInstance = x})
 			),
 			Ext.getDom(this.el)
@@ -102,14 +106,16 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	unmount () {
 		console.debug('Unmounting React Component');
 		ReactDOM.unmountComponentAtNode(Ext.getDom(this.el));
-		delete this.componentInstance;
 	},
 
 
 	beforeDestroy () {
-		delete this.componentInstance;
-		//????why
+		//why change this?
 		this.onceRendered = Promise.reject('Destroyed');
+
+		//fake out Chrome. Stop it form warning about "unhandled rejection" without swallowing the rejection.
+		this.onceRendered.catch(()=>{});
+
 		this.unmount();
 	},
 
