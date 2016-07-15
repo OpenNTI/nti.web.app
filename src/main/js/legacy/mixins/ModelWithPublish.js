@@ -10,8 +10,23 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 	},
 
 
+	canPublish () {
+		return this.hasLink('publish');
+	},
+
+
+	canUnpublish () {
+		return this.hasLink('unpublish');
+	},
+
+
 	isExplicit: function () {
 		return this.hasLink('publish') && !Ext.isEmpty(this.get('sharedWith'));
+	},
+
+
+	isPublishedByState () {
+		return this.get('PublicationState') === 'DefaultPublished';
 	},
 
 

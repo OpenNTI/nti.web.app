@@ -95,14 +95,18 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 	initComponent: function () {
 		this.callParent(arguments);
 
-		var upperBound,
-			lowerBound;
+		var upperBound = this.upperBound,
+			lowerBound = this.lowerBound;
 
-		lowerBound = new Date();
-		lowerBound.setFullYear(lowerBound.getFullYear() - this.YEARS_IN_PAST, 0, 1);
+		if (!this.lowerBound) {
+			lowerBound = new Date();
+			lowerBound.setFullYear(lowerBound.getFullYear() - this.YEARS_IN_PAST, 0, 1);
+		}
 
-		upperBound = new Date();
-		upperBound.setFullYear(upperBound.getFullYear() + this.YEARS_IN_FUTURE, 0, 1);
+		if (!this.upperBound) {
+			upperBound = new Date();
+			upperBound.setFullYear(upperBound.getFullYear() + this.YEARS_IN_FUTURE, 0, 1);
+		}
 
 		this.currentDate = this.currentDate;
 		this.lowerBound = this.lowerBound || lowerBound;
