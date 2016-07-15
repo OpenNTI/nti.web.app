@@ -473,11 +473,40 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	beforeRouteChange: function () {
-		var submission = {};
+		const submission = {};
+
+		//NTI-1615 - Don't blindly saveProgress. Only save progress on interaction.
+		function hasProgress (questionMap) {
+			const eachKeyMatchesValue = x => Object.entries(x).every(([a, b]) => String(a) === String(b));
+
+			for (let questionParts of Object.values(questionMap)) {
+				// Checking for nulls doesn't quite work...by itself.
+				const potentialProgress = questionParts && questionParts.filter(x => x != null);
+				//Ordering always return objects, interacted or not...
+				if (potentialProgress && potentialProgress.length > 0) {
+					let justTheObjects = potentialProgress.filter(x => typeof x === 'object');
+					//We def have progress...
+					if(justTheObjects.length !== potentialProgress.length) {
+						return true;
+					}
+
+					//If we have a value that is an object and all its key/value pairs are equal (1:1, 2:2, etc)...
+					//We will assume no progress has been made. So we will check to see if there is any object where
+					//the keys do not match their values...
+					if (justTheObjects.some(x => !eachKeyMatchesValue(x))) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
 
 		this.questionSet.fireEvent('beforesubmit', this.questionSet, submission);
 
-		this.saveProgress(submission);
+		if (hasProgress(submission)) {
+			this.saveProgress(submission);
+		}
 	},
 
 	shouldAllowSubmit: function (onChangeHandler) {
