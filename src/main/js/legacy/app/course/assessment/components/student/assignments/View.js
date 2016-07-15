@@ -268,12 +268,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
+
 	editAssignment: function (assignment) {
 		const title = assignment.get('title');
 		let id = assignment.getId();
+
 		id = encodeForURI(id);
 		this.pushRoute(title, id + '/edit/', {assignment: assignment});
 	},
+
 
 	navigateToItem: function (assignment) {
 		var openDate = assignment.get('availableBeginning'),
@@ -293,6 +296,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{name: 'lesson', type: 'string'},
 			{name: 'outlineNode', type: 'auto'},
 			{name: 'isDuplicate', type: 'bool'},
+			{name: 'canEdit', type: 'bool'},
 			{name: 'actualId', type: 'string'},
 			{name: 'id', type: 'string'},
 			{name: 'containerId', type: 'string'},
@@ -496,6 +500,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		function buildConfig (id, assignment, history, grade, node, actualId) {
 			return {
 				id: id,
+				canEdit: assignment.canEdit(),
 				containerId: assignment.get('containerId'),
 				lesson: node ? node.getId() : 'Other Assignments',
 				isDuplicate: !!actualId,
@@ -588,7 +593,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return {
 			xtype: 'course-assessment-assignment-list',
 			store: grouper.store,
-			navigateToItem: this.navigateToItem.bind(this)
+			navigateToItem: this.navigateToItem.bind(this),
+			editAssignment: this.editAssignment.bind(this)
 		};
 	},
 

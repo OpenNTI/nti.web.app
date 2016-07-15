@@ -48,6 +48,12 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		return items.length > 0;
 	},
 
+
+	canEdit () {
+		return !!this.getLink('edit');
+	},
+
+
 	canSaveProgress: function () {
 		return !!this.getLink('Savepoint');
 	},

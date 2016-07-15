@@ -511,6 +511,12 @@ canvas.x-component-course-assessment {
 			z-index: 1;
 		}
 
+		&.editable {
+			.name {
+				margin-right: 10rem
+			}
+		}
+
 		.name {
 			font: normal 500 0.9em/2 $font;
 			color: $primary-grey;
@@ -539,9 +545,17 @@ canvas.x-component-course-assessment {
 			float: left;
 		}
 
+		.edit-assignment {
+			float: right;
+			font: normal 300 0.875rem/3 $font;
+			color: $primary-blue;
+			padding-right: 1rem;
+			cursor: pointer;
+		}
+
 		.score {
 			white-space: nowrap;
-			font: normal 400 0.8em/3 $font;
+			font: normal 400 0.875em/3 $font;
 			color: $tertiary-grey;
 			width: 8em;
 			float: right;

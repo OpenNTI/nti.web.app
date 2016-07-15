@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var AssignmentsListItem = require('../../student/assignments/ListItem');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {isFeature} = require('legacy/util/Globals');
+
+require('../../student/assignments/ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.ListItem', {
@@ -11,6 +12,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		{ cls: 'score', cn: [
 			{ tag: 'span', cls: 'completed c{submittedCount}', html: '{submittedCount}'},
 			' / {enrolledCount}'
+		]},
+		{ tag: 'tpl', 'if': 'canEdit', cn: [
+			{cls: 'edit-assignment', html: 'Edit'}
 		]},
 		{ tag: 'tpl', 'if': 'hasReports', cn: [
 			{ cls: 'report'}
@@ -26,7 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.renderData = Ext.apply(this.renderData || {}, {
 			submittedCount: this.item.get('submittedCount'),
 			enrolledCount: this.item.get('enrolledCount'),
-			hasReports: this.item.get('reportLinks') && this.item.get('reportLinks').length && isFeature('analytic-reports')
+			hasReports: this.item.get('reportLinks') && this.item.get('reportLinks').length && isFeature('analytic-reports'),
+			canEdit: this.item.get('canEdit')
 		});
 	},
 
@@ -45,6 +50,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			cls.push('nosubmit');
 		} else if (due && due < now) {
 			cls.push('late');
+		}
+
+		if (this.assignment.canEdit()) {
+			cls.push('editable');
 		}
 
 		this.addCls(cls);
