@@ -180,6 +180,17 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return load;
 	},
 
+
+	appendAssignment (assignment) {
+		const assignments = this.get('Assignments');
+
+		if (assignments) {
+			assignments.push(assignment);
+			this.set('Assignments', assignments);
+		}
+	},
+
+
 	isAssignment: function (id) {
 		//Its an assignment unless its listed in the "NotItems"
 		return (!!this.getItem(id)) || (!this.getItem(id, 'NonAssignments'));

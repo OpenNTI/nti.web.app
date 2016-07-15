@@ -436,7 +436,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			outlineInterface = instance.getOutlineInterface();
 
 
-		if (me.data && me.data.instance === instance && silent) {
+		if (me.data && me.data.instance === instance && me.store.getCount() === assignments.getCount() && silent) {
 			return Promise.resolve();
 		}
 
@@ -641,9 +641,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				let id = assignment.getId();
 
 				id = encodeForURI(id);
-
+				this.appendAssignment(assignment);
 				this.pushRoute(title, id + '/edit/', {assignment: this});
 			});
+	},
+
+
+	appendAssignment (assignment) {
+		const {data} = this;
+		const {assignments} = data || {};
+
+		if (assignments) {
+			assignments.appendAssignment(assignment);
+		}
 	},
 
 
