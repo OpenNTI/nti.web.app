@@ -274,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		let id = assignment.getId();
 
 		id = encodeForURI(id);
-		this.pushRoute(title, id + '/edit/', {assignment: assignment});
+		this.pushRoute(title, id + '/edit/', {assignment: assignment, assignmentsCollection: this.data.assignments});
 	},
 
 
@@ -464,7 +464,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		return Promise.all([
-			assignments.updateAssignments(!silent),
+			assignments.updateAssignments(),
 			outlineInterface.onceBuilt()
 		]).then(finish)
 			.catch(function (reason) {

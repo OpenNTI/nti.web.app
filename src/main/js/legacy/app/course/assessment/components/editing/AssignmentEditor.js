@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			component: Editor,
 			NTIID: this.assignmentId,
 			pageSource: new FakePageSource(pageSource),
-			onDeleted: () => this.gotoRoot(),
+			onDeleted: () => this.deletedAssignment(),
 			gotoRoot: () => this.gotoRoot()
 		});
 	},
@@ -94,6 +94,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (this.gotoAssignments) {
 			this.gotoAssignments();
 		}
+	},
+
+	deletedAssignment () {
+		const assignments = this.assignments;
+		const assignment = assignments || assignments.findItem(this.assignmentId);
+
+		if (assignment) {
+			assignment.isDeleted = true;
+		}
+		this.gotoRoot();
 	}
 });
 

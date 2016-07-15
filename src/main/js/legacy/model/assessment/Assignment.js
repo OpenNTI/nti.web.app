@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	},
 
 	doNotShow: function () {
-		return this.isNoSubmit() && this.get('title') === 'Final Grade';
+		return this.isDeleted ||  this.isNoSubmit() && this.get('title') === 'Final Grade';
 	},
 
 	findMyCourse: function () {
