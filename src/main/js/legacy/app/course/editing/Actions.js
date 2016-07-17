@@ -1,8 +1,12 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-var CommonActions = require('../../../common/Actions');
-var ConflictDestructiveChallenge = require('../../../model/conflict/DestructiveChallenge');
-var ConflictActions = require('../../conflict/Actions');
+const Ext = require('extjs');
+const ParseUtils = require('../../../util/Parsing');
+
+require('../../../common/Actions');
+require('../../../model/conflict/DestructiveChallenge');
+require('../../conflict/Actions');
+
+const BEGINNING = 'available_for_submission_beginning';
+const ENDING = 'available_for_submission_ending';
 
 
 module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', {
@@ -14,35 +18,84 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 		this.ConflictActions = NextThought.app.conflict.Actions.create();
 	},
 
+
 	__resolveConflict: function (conflict, data) {
 		return this.ConflictActions.resolveConflict(conflict, data);
 	},
 
+
+	updateAssignmentPublish (assignment, publish) {
+		const isPublished = assignment.isPublishedByState();
+		let action;
+
+		if (isPublished && !publish) {
+			action = assignment.doUnpublish();
+		} else if (!isPublished && publish) {
+			action = assignment.doPublish();
+		} else {
+			action = Promise.resolve();
+		}
+
+		return action;
+	},
+
+
+	updateAssignment (assignment, {published, available}, {due}) {
+		const now = new Date();
+		const currentAvailable = assignment.get('availableBeginning');
+
+		//If we published and nulled out available (i.e publish now), and the assignment is currently available
+		//don't unset the available date. This means the assignment was in the schedule state, the schedule date passed,
+		//so it moved to published, then the user clicked save without changing it. (I think).
+		if (published && !available && currentAvailable < now) {
+			available = currentAvailable;
+		}
+
+		return this.updateAssignmentDates(assignment, available, due)
+			.then(() => {
+				this.updateAssignmentPublish(assignment, published);
+			});
+	},
+
+
 	updateAssignmentDates: function (assignment, available, due) {
-		var me = this,
-			link = assignment.getDateEditingLink(),
-			data = {
-				available_for_submission_beginning: available,
-				available_for_submission_ending: due
-			};
+		const link = assignment.getDateEditingLink();
 
 		if (!link) {
 			return Promise.reject('No edit link');
 		}
 
+		const currentAvailable = assignment.get('availableBeginning');
+		const currentDue = assignment.get('availableEnding');
+
+
+		let data = {};
+
+		if (available !== currentAvailable) {
+			data[BEGINNING] = available;
+		}
+
+		if (due !== currentDue) {
+			data[ENDING] = due;
+		}
+
+		if (!data[BEGINNING] && !data[ENDING]) {
+			return Promise.resolve();
+		}
+
 		return Service.put(link, data)
-			.then(function (response) {
+			.then((response) => {
 				assignment.syncWithResponse(response);
 
 				return assignment;
-			}).catch(function (response) {
+			}).catch((response) => {
 				var conflict = response && response.status === 409 && response.responseText && ParseUtils.parseItems(response.responseText)[0];
 
 				if (conflict) {
-					return me.__resolveConflict(conflict, data)
-						.then(function (response) {
-							if (response) {
-								assignment.syncWithResponse(response);
+					return this.__resolveConflict(conflict, data)
+						.then((conflictResponse) => {
+							if (conflictResponse) {
+								assignment.syncWithResponse(conflictResponse);
 							}
 
 							return assignment;

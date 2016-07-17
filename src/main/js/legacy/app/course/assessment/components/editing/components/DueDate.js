@@ -104,9 +104,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 	},
 
 
-	getValue () {
+	getValues () {
 		const editor = this.getEditor();
 
-		return this.checkbox.checked && editor.getSelectedDate();
+		return {
+			due: this.checkbox.checked ? editor.getSelectedDate() : null
+		};
 	}
 });

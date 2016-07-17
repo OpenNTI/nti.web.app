@@ -236,6 +236,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (available) {
 			editor.selectDate(available);
 		}
+
+		this.updateScheduleLabel();
 	},
 
 
@@ -327,11 +329,39 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	validate () {
+		const scheduleChecked = this.scheduleRadio.checked;
+		const editor = this.getScheduleEditor();
+		const date = editor.getSelectedDate();
+		let valid = true;
 
+		if (scheduleChecked && !date) {
+			editor.showDateError('Please enter a date.');
+			valid = false;
+		}
+
+		return valid;
 	},
 
 
-	getValue () {
+	getValues () {
+		const publishChecked = this.publishRadio.checked;
+		const scheduleChecked = this.scheduleRadio.checked;
 
+		const editor = this.getScheduleEditor();
+		const date = editor.getSelectedDate();
+
+		let values = {
+			published: false,
+			available: null
+		};
+
+		if (publishChecked) {
+			values.published = true;
+		} else if (scheduleChecked) {
+			values.published = true;
+			values.available = date;
+		}
+
+		return values;
 	}
 });

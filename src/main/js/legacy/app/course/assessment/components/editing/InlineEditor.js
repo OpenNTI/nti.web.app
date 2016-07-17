@@ -75,17 +75,28 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	doCancel () {
-		const {assignment} = this;
+	setAssignment (assignment) {
+		this.assignment = assignment;
+
 		const publishEditor = this.getPublishEditor();
 		const dueDateEditor = this.getDueDateEditor();
 
 		publishEditor.setAssignment(assignment);
 		dueDateEditor.setAssignment(assignment);
+	},
+
+
+	doCancel () {
+		const {assignment} = this;
+		const publishEditor = this.getPublishEditor();
+		const dueDateEditor = this.getDueDateEditor();
 
 		if (this.onCancel) {
 			this.onCancel();
 		}
+
+		publishEditor.setAssignment(assignment);
+		dueDateEditor.setAssignment(assignment);
 	},
 
 	showError: function (msg) {
@@ -119,13 +130,33 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	doSave: function () {
 		const publishEditor = this.getPublishEditor();
 		const dueDateEditor = this.getDueDateEditor();
+		const publishValid = publishEditor.validate();
+		const dueDateValid = dueDateEditor.validate();
 
-		if (!publishEditor.validate() || !dueDateEditor.valide()) {
+		if (!publishValid || !dueDateValid) {
 			return;
 		}
 
 		const publishValues = publishEditor.getValues();
 		const dueDateValues = dueDateEditor.getValues();
+
+		this.addSavingMask();
+
+		this.EditingActions.updateAssignment(this.assignment, publishValues, dueDateValues)
+			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
+			.then(() => {
+				this.setAssignment(this.assignment);
+
+				if (this.onSave) {
+					this.onSave();
+				}
+			})
+			.catch((reason) => {
+				var error = Globals.parseError(reason);
+
+				this.showError(error && error.message);
+			})
+			.always(() => this.removeSavingMask());
 
 	// 	var me = this,
 	// 		available = me.getAvailableEditor(),

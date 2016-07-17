@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 	},
 
 	isDraft: function () {
-		return this.raw.PublicationState !== 'DefaultPublished';
+		return this.get('PublicationState') !== 'DefaultPublished';
 	},
 
 	publish: function (widget, cb, scope) {
@@ -76,5 +76,33 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 		}
 
 		return sharingInfo;
+	},
+
+
+	doPublish (data) {
+		if (!this.canPublish()) {
+			return Promise.reject('Unable to publish');
+		}
+
+		const link = this.getLink('publish');
+
+		return Service.post(link, data)
+			.then((response) => {
+				this.syncWithResponse(response);
+			});
+	},
+
+
+	doUnpublish (data) {
+		if (!this.canUnpublish()) {
+			return Promise.reject('Unable to unpublish');
+		}
+
+		const link = this.getLink('unpublish');
+
+		return Service.post(link, data)
+			.then((response) => {
+				this.syncWithResponse(response);
+			});
 	}
 });
