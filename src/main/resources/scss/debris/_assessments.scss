@@ -1271,6 +1271,10 @@ body.dragging * {
 				height: 25em;
 			}
 
+			[contenteditable=false] {
+				opacity: .5;
+			}
+
 			& > div.footer {
 				overflow: visible;
 				position: absolute;
