@@ -29,8 +29,8 @@ styles: clean-styles
 
 
 build: compile deploy
-	@npm la 2>/dev/null > $(DIST)client/versions.txt
-	@npm ls 2>/dev/null | grep nti- | sed -e 's/^[\│\├\─\┬\└\ ]\{1,\}/z /g' | sort | sed -e 's/^z/-/g' > $(DIST)client/nti-versions.txt
+	@npm la 2>/dev/null > $(DIST)client/js/versions.txt
+	@npm ls 2>/dev/null | grep nti- | sed -e 's/^[\│\├\─\┬\└\ ]\{1,\}/z /g' | sort | sed -e 's/^z/-/g' > $(DIST)client/js/nti-versions.txt
 	@rm -rf $(STAGE)
 
 
