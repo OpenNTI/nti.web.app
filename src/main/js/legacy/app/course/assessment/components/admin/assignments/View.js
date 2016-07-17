@@ -102,13 +102,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 		}
 
-		if (student) {
-			return view.restoreStudent(this.getRouteState(), student);
-		}
-
 		this.getLayout().setActiveItem(view);
 
-		return view.restoreState(this.getRouteState());
+		return view.restoreState(this.getRouteState(), student);
 	},
 
 	showStudentsForAssignment: function (rec) {
