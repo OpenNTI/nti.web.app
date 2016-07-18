@@ -457,6 +457,7 @@ NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.allless
 NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.due'] = 'по сроку сдачи';
 NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.completion'] = 'по степени завершенности';
 NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.publicationstatus'] = 'By Publication Status';
+NTIStrings['NextThought.view.courseware.assessment.assignments.FilterBar.creationdate'] = 'By Creation Date';
 NTIStrings['NextThought.view.courseware.assessment.assignments.List.due'] = 'Сдать {date}';
 NTIStrings['NextThought.view.courseware.assessment.assignments.List.available'] = 'Доступно {date}';
 NTIStrings['NextThought.view.courseware.assessment.assignments.List.today'] = 'Сегодня {date}';

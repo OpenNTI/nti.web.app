@@ -141,6 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (this.shouldShowPublishOption) {
 			items.push({ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.publicationstatus'), groupBy: 'publication', checked: type === 'publication'});
+			items.push({ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.creationdate'), groupBy: 'creation', checked: type === 'creation'});
 		}
 
 		this.groupByMenu = Ext.widget('menu', {

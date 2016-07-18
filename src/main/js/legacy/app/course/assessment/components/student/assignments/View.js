@@ -87,6 +87,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				return Ext.Date.format(val.get('due'), 'F j, Y');
 			}
 		},
+		'creation': {
+			'property': 'CreatedTime',
+			'direction': 'DESC',
+			'sorterFn': function sorterFn (a, b) {
+				const A = a.getData().item.raw.CreatedTime;
+				const B = b.getData().item.raw.CreatedTime;
+				return A - B;
+			},
+			'getGroupString': function getGroupString (val) {
+				const created = val.getData().item.raw.CreatedTime;
+				return Ext.Date.format(new Date(created * 1000), 'F j, Y');
+			}
+
+		},
 		'publication': {
 			'property': 'PublicationState',
 			'sorterFn': function sorterFn (a, b) {
