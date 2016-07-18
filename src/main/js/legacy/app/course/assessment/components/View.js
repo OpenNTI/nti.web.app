@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const Globals = require('legacy/util/Globals');
-const {encodeForURI } = require('nti-lib-ntiids');
+const {encodeForURI, decodeFromURI} = require('nti-lib-ntiids');
 const UserRepository = require('../../../../cache/UserRepository');
 const ParseUtils = require('../../../../util/Parsing');
 
