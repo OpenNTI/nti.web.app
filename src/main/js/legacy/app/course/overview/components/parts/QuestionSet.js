@@ -237,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			status.setHistory(history);
 		}
 
-		if (button) {
+		if (button && !isNoSubmit) {
 			button.setText('Review');
 		}
 
@@ -273,11 +273,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	setAsNotStarted: function () {
-		var b = this.down('button');
+		const isNoSubmit = this.assignment && this.assignment.isNoSubmit();
+		const b = this.down('button');
 
 		if (b) {
 			b.setUI('primary');
 			b.setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.start'));
+
+			if (isNoSubmit) {
+				b.setText('View');
+			}
 		}
 
 		this.addCls('not-started');
