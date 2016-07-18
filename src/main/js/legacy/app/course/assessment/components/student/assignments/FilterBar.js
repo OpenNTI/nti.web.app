@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.groupByMenu = Ext.widget('menu', {
 			cls: 'group-by-menu',
-			width: 257,
+			width: 213,
 			ownerCmp: this,
 			offset: [0, 0],
 			defaults: {
