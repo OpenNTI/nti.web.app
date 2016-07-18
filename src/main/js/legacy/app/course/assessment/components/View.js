@@ -1,19 +1,23 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var User = require('../../../../model/User');
-var ParseUtils = require('../../../../util/Parsing');
-var ComponentsNavPanel = require('../../../../common/components/NavPanel');
-var MixinsRouter = require('../../../../mixins/Router');
-var ComponentsNavigation = require('./Navigation');
-var ComponentsBody = require('./Body');
-var AdminActivit = require('./admin/Activity');
-var AssignmentsView = require('./admin/assignments/View');
-var EmailWindow = require('./admin/email/Window');
-var PerformanceView = require('./admin/performance/View');
-var AssignmentsView = require('./student/assignments/View');
-var StudentActivity = require('./student/Activity');
-var StudentPerformance = require('./student/Performance');
-const { decodeFromURI } = require('nti-lib-ntiids');
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
+const {encodeForURI } = require('nti-lib-ntiids');
+const UserRepository = require('../../../../cache/UserRepository');
+const ParseUtils = require('../../../../util/Parsing');
+
+require('legacy/app/course/assessment/Actions');
+require('../../../../model/User');
+require('../../../../common/components/NavPanel');
+require('../../../../mixins/Router');
+require('./Navigation');
+require('./Body');
+require('./admin/Activity');
+require('./admin/assignments/View');
+require('./admin/email/Window');
+require('./admin/performance/View');
+require('./student/assignments/View');
+require('./student/Activity');
+require('./student/Performance');
+require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.View', {
 	extend: 'NextThought.common.components.NavPanel',
@@ -29,6 +33,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.AssessmentActions = NextThought.app.course.assessment.Actions.create();
 
 		this.initRouter();
 
@@ -50,17 +56,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			me.maybeUnmask();
 
 			if (!noAssignments) {
-				me.body.add({
-					xtype: 'box',
-					autoEl: {
-						cn: {
-							cls: 'empty-state no-assignments',
-							cn: [
-								{cls: 'header', html: getString('NextThought.view.courseware.assessment.View.empty')}
-							]
-						}
-					}
-				});
+				me.body.add(me.createEmptyConfig(me.currentBundle));
+
 				me.alignNavigation();
 			}
 		}
@@ -131,6 +128,42 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
+
+	createEmptyConfig (bundle) {
+		let cn = [
+			{cls: 'header', html: getString('NextThought.view.courseware.assessment.View.empty')}
+		];
+
+		if (bundle && bundle.canAddAssignment) {
+			cn.push({
+				cls: 'header sub link create',
+				html: 'Create an Assignment'
+			});
+		}
+
+
+		return {
+			xtype: 'box',
+			autoEl: {
+				cn: {
+					cls: 'empty-state no-assignments',
+					cn: cn
+				}
+			},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: (e) => {
+						if (e.getTarget('.create')) {
+							this.createAssignment();
+						}
+					}
+				}
+			}
+		};
+	},
+
+
 	onActivate: function () {
 		if (!this.rendered) { return; }
 
@@ -139,6 +172,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	getAssignmentList: function () {
 		var me = this;
+
+		if (!me.assignmentsView) {
+			return Promise.resolve(me.assignmentCollection.get('assignments'));
+		}
 
 		//apply the assignments data and let it restore state so we can get that order
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
@@ -265,7 +302,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			xtype: 'course-assessment-admin-assignments',
 			title: getString('NextThought.view.courseware.assessment.View.assignments'),
 			route: '/',
-			alignNavigation: this.alignNavigation.bind(this)
+			alignNavigation: this.alignNavigation.bind(this),
+			createAssignment: this.createAssignment.bind(this)
 		});
 
 		this.performanceView = this.body.add({
@@ -311,7 +349,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			xtype: 'course-assessment-assignments',
 			title: getString('NextThought.view.courseware.assessment.View.assignments'),
 			route: '/',
-			alignNavigation: this.alignNavigation.bind(this)
+			alignNavigation: this.alignNavigation.bind(this),
+			createAssignment: this.createAssignment.bind(this)
 		});
 
 		this.performanceView = this.body.add({
@@ -439,5 +478,33 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.maybeUnmask.bind(me))
 			.then(function () { return wait(); })
 			.then(me.alignNavigation.bind(me));
+	},
+
+
+	createAssignment () {
+		this.el.mask('Loading...');
+
+		this.AssessmentActions.createAssignmentIn(this.currentBundle)
+			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
+			.then((assignment) => {
+				const title = assignment.get('title');
+				let id = assignment.getId();
+
+				id = encodeForURI(id);
+				this.appendAssignment(assignment);
+				this.pushRoute(title, id + '/edit/', {assignment: this});
+			})
+			.always(() => {
+				this.el.unmask();
+			});
+	},
+
+
+	appendAssignment (assignment) {
+		const {assignmentCollection} = this;
+
+		if (assignmentCollection) {
+			assignmentCollection.appendAssignment(assignment);
+		}
 	}
 });

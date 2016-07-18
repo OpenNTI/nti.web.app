@@ -25,7 +25,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				pushState: this.pushState,
 				replaceState: this.replaceState,
 				alignNavigation: this.alignNavigation.bind(this),
-				showStudentsForAssignment: this.showStudentsForAssignment.bind(this)
+				showStudentsForAssignment: this.showStudentsForAssignment.bind(this),
+				createAssignment: this.createAssignment && this.createAssignment.bind(this)
 			}),
 			p = root.setAssignmentsData.apply(root, arguments);
 

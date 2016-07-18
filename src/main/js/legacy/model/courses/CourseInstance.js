@@ -437,6 +437,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		});
 	},
 
+
+	canAddAssignment () {
+		return !!this.getLink('CourseEvaluations');
+	},
+
+
 	/**
 	 * Check is this instance is in the same family as another
 	 * @param  {CourseInstance} instance the instance to compare against

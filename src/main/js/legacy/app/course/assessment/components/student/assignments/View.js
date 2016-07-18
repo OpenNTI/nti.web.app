@@ -323,11 +323,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.enableBubble(['show-assignment', 'update-assignment-view', 'close-reader']);
 
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
-		this.AssessmentActions = NextThought.app.course.assessment.Actions.create();
 
 		this.on('filters-changed', this.updateFilters.bind(this));
 		this.on('search-changed', this.updateFilters.bind(this));
-		this.on('create-assignment', this.createAssignment.bind(this));
+
+		if (this.createAssignment) {
+			this.on('create-assignment', () => {
+				this.createAssignment();
+			});
+		}
 
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),
@@ -560,7 +564,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}));
 		}
 
-		if (bundle && bundle.getLink('CourseEvaluations')) {
+		if (bundle && bundle.canAddAssignment()) {
 			filterBar.showCreateButton();
 			filterBar.showPublishOption();
 		} else {
@@ -632,20 +636,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			console.error('No Assignment to navigate to');
 		}
 	},
-
-
-	createAssignment () {
-		this.AssessmentActions.createAssignmentIn(this.data.instance)
-			.then((assignment) => {
-				const title = assignment.get('title');
-				let id = assignment.getId();
-
-				id = encodeForURI(id);
-				this.appendAssignment(assignment);
-				this.pushRoute(title, id + '/edit/', {assignment: this});
-			});
-	},
-
 
 	appendAssignment (assignment) {
 		const {data} = this;
