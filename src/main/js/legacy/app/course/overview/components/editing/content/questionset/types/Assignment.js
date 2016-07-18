@@ -2,7 +2,10 @@ var Ext = require('extjs');
 var ContentEditor = require('../../Editor');
 var ModelAssignmentRef = require('../../../../../../../../model/AssignmentRef');
 var QuestionsetAssignmentSelection = require('../AssignmentSelection');
-
+const AssessmentActions = require('legacy/app/course/assessment/Actions');
+const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
+const {encodeForURI} = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.Assignment', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -43,6 +46,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	afterRender: function () {
 		this.callParent(arguments);
+		this.AssessmentActions = new AssessmentActions();
+		this.EditingActions = new EditingActions();
 
 		if (this.loading) {
 			this.el.mask('Loading...');
@@ -91,6 +96,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.removeAll(true);
 		me.maybeEnableBack(me.backText);
 
+		me.createAssignmentBtn = me.add({
+			xtype: 'box',
+			autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: 'Create Assignment'},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: me.createAssignment.bind(me)
+				}
+			}
+		});
+
 		me.itemSelectionCmp = me.add({
 			xtype: this.LIST_XTYPE,
 			onSelectionChanged: this.onItemListSelectionChange.bind(this),
@@ -103,6 +119,31 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				me.itemSelectionCmp.setSelectionItems(items);
 			});
 	},
+
+
+	createAssignment () {
+		if (this.AssessmentActions) {
+			this.AssessmentActions.createAssignmentIn(this.bundle)
+				.then((assignment) => {
+					const {rootRecord, parentRecord} = this;
+					const values =  {
+						MimeType: NextThought.model.AssignmentRef.mimeType,
+						label: assignment.get('title'),
+						title: assignment.get('title'),
+						'Target-NTIID': assignment.get('NTIID')
+					};
+
+					// Make the ref from the assignment to the group
+					this.EditingActions.saveValues(values, null, null, {parent: parentRecord, position: parentRecord.getItemsCount()}, rootRecord);
+					this.doClose(); // Close the editor prompt
+
+					//Navigate to the created assignment
+					const route = `/course/${encodeForURI(this.bundle.getId())}/assignments/${encodeForURI(assignment.getId())}/edit/`;
+					NextThought.app.navigation.Actions.pushRootRoute(null, route);
+				});
+		}
+	},
+
 
 	getSelectionFromRecord: function (record) {
 		return this.bundle.getAssignments()
