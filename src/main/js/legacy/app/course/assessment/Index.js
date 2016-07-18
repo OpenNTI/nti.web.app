@@ -168,7 +168,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			},
 			gotoAssignment: (NTIID, title) => {
 				this.pushRoute(title, path.join(encodeForURI(NTIID), 'edit'));
+			},
+			findAssignment: (NTIID) => {
+				const view = this.getView();
+				const assignments = view && view.assignmentCollection;
+
+				if (assignments) {
+					return assignments.findItem(NTIID);
+				}
+
+				return null;
 			}
+
 		});
 
 		this.addChildRouter(this.assignmentEditor);
@@ -346,7 +357,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 				return {
 					assignmentId: id,
-					assignments: (route.precache || {}).assignmentsCollection,
 					pageSource
 				};
 			})

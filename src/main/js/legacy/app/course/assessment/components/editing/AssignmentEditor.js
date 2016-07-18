@@ -52,6 +52,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (this.EditorCmp) {
 			this.EditorCmp.onRouteDeactivate();
 		}
+
+		const assignment = this.findAssignment && this.findAssignment(this.assignmentId);
+		if (assignment && !assignment.isDeleted) {
+			assignment.updateFromServer();
+		}
 	},
 
 
@@ -97,8 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	deletedAssignment () {
-		const assignments = this.assignments;
-		const assignment = assignments || assignments.findItem(this.assignmentId);
+		const assignment = this.findAssignment && this.findAssignment(this.assignmentId);
 
 		if (assignment) {
 			assignment.isDeleted = true;
