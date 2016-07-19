@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 
 		//if we are an assignment that doesn't allow resetting hide
-		if ((isAssignment && !allowReset) || isSurvey) {
+		if ((isAssignment && !allowReset && !this.isInstructor) || isSurvey) {
 			this.shouldShow = false;
 			delete this.allowResettingAssignment;
 			this.hide();
@@ -219,6 +219,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		console.log('New status is ready');
 		delete this.state;
 		delete this.submitted;
+		if (this.isInstructor) {
+			this.moveToActive();
+		}
 	},
 
 	//just use us being in the active state to determine if
