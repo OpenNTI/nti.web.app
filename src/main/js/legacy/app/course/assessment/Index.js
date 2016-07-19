@@ -163,6 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			assignmentId: config.assignmentId,
 			assignments: config.assignments,
 			pageSource: config.pageSource,
+			assignment: config.assignment,
 			gotoAssignments: () => {
 				this.pushRoute('Assignments', '/');
 			},
@@ -357,6 +358,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 				return {
 					assignmentId: id,
+					assignment: (route.precache || {}).assignment,
 					pageSource
 				};
 			})

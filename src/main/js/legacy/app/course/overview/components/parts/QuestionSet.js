@@ -169,7 +169,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-
 		this.setQuetionSetContainerTitle(assignment.get('title'));
 
 		var status = this.down('course-assignment-status'),
@@ -178,7 +177,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			now = new Date(),
 			opens = assignment.get('availableBeginning'),
 			dueDate = assignment.get('availableEnding'),
-			button = this.down('button');
+			button = this.down('button'),
+			titleEl = this.el.down('.assignment-box .title');
 
 		this.addCls('assignment');
 		this.setAsNotStarted();
@@ -187,6 +187,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			status.enableEditing();
 		} else {
 			status.disableEditing();
+		}
+
+		if (titleEl) {
+			titleEl.update(assignment.get('title'));
 		}
 
 		assignment.getHistory()

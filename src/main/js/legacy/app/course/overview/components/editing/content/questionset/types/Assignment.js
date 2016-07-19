@@ -134,13 +134,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						'Target-NTIID': assignment.get('NTIID')
 					};
 
+					this.bundle.getAssignments()
+						.then((assignmentCollection) => {
+							if (assignmentCollection) {
+								assignmentCollection.appendAssignment(assignment);
+							}
+						});
+
 					// Make the ref from the assignment to the group
 					this.EditingActions.saveValues(values, null, null, {parent: parentRecord, position: parentRecord.getItemsCount()}, rootRecord);
 					this.doClose(); // Close the editor prompt
 
 					//Navigate to the created assignment
 					const route = `/course/${encodeForURI(this.bundle.getId())}/assignments/${encodeForURI(assignment.getId())}/edit/`;
-					NextThought.app.navigation.Actions.pushRootRoute(null, route);
+					NextThought.app.navigation.Actions.pushRootRoute(null, route, {assignment});
 				});
 		}
 	},

@@ -53,9 +53,26 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.EditorCmp.onRouteDeactivate();
 		}
 
-		const assignment = this.findAssignment && this.findAssignment(this.assignmentId);
-		if (assignment && !assignment.isDeleted) {
+		this.updateAssignment();
+	},
+
+	/**
+	 * Updates the assignment that was passed to the Editor
+	 *
+	 * If we are passed a record, go ahead and update it.
+	 * Also make sure you keep the background record (one belonging to the assignmentCollection)
+	 * is updated. They could differ but they are both the same assignment
+	 * and we need to make sure they are always in sync.
+	 * @return {Null} No Return
+	 */
+	updateAssignment () {
+		const assignment = this.assignment;
+		const assignmentRecord = this.findAssignment && this.findAssignment(this.assignmentId);
+		if (assignment && assignment.isModel && !assignment.isDeleted) {
 			assignment.updateFromServer();
+		}
+		if (assignmentRecord && !assignmentRecord.isDeleted) {
+			assignmentRecord.updateFromServer();
 		}
 	},
 
@@ -102,11 +119,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	deletedAssignment () {
-		const assignment = this.findAssignment && this.findAssignment(this.assignmentId);
+		const assignment = this.assignment;
+		const assignmentRecord = this.findAssignment && this.findAssignment(this.assignmentId);
 
-		if (assignment) {
+		if (assignment && assignment.isModel && assignment.getId() === this.assignmentId) {
 			assignment.isDeleted = true;
 		}
+
+		if (assignmentRecord) {
+			assignmentRecord.isDeleted = true;
+		}
+
 		this.gotoRoot();
 	}
 });
