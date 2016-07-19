@@ -87,8 +87,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 						if (data.start) {
 							d.html = draftPrefix + 'Available ' + Ext.Date.format(data.start, 'l, F j g:i A T');
 						}
-						else {
+						else if (!data.isDraft) {
 							d.html = draftPrefix + 'Available Now' + '&nbsp;';
+						} else if (data.isDraft) {
+							d.html = 'Draft&nbsp';
 						}
 					}
 				}
