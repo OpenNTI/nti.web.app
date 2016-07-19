@@ -70,6 +70,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	onRouteDeactivate: function () {
 		delete this.isActive;
 		this.removeScrollListener();
+
+		this.body.onRouteDeactivate();
 	},
 
 	alignNavigation: function () {
