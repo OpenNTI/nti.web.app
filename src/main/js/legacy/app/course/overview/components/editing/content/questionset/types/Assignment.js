@@ -107,6 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		});
 
+
 		me.itemSelectionCmp = me.add({
 			xtype: this.LIST_XTYPE,
 			onSelectionChanged: this.onItemListSelectionChange.bind(this),
@@ -171,6 +172,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.itemEditorCmp) {
 			this.itemEditorCmp.destroy();
 			delete this.itemEditorCmp;
+		}
+
+		if(this.createAssignmentBtn) {
+			this.createAssignmentBtn.destroy();
+			delete this.createAssignmentBtn;
 		}
 
 		var me = this;
