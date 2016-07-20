@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		},
 		'creation': {
 			'property': 'CreatedTime',
-			'direction': 'DESC',
+			'direction': 'ASC',
 			'sorterFn': function sorterFn (a, b) {
 				const A = a.getData().item.raw.CreatedTime;
 				const B = b.getData().item.raw.CreatedTime;
