@@ -28,10 +28,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			submittedCount: this.item.get('submittedCount'),
+			submittedCount: this.assignment.get('SubmittedCount') || 0,
 			enrolledCount: this.item.get('enrolledCount'),
 			hasReports: this.item.get('reportLinks') && this.item.get('reportLinks').length && isFeature('analytic-reports'),
-			canEdit: this.item.get('canEdit')
+			canEdit: this.item.get('canEdit'),
+			name: this.assignment.get('title')
 		});
 	},
 
