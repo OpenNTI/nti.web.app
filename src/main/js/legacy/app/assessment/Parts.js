@@ -126,6 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 	},
 
 	reset: function (keepAnswers) {
+		//debugger;
 		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
 		Ext.each(inputs, function (input) {
 			var val, dontUseTheOldAnswer;
@@ -145,9 +146,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 	},
 
 	instructorReset: function () {
+		//debugger;
 		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
 
 		Ext.each(inputs, function (input) {
+			//debugger;
 			input.instructorReset();
 		});
 	},
