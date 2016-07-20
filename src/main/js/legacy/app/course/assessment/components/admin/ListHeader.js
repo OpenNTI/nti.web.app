@@ -92,7 +92,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(this.viewingEl, 'click', 'showPageMenu');
 		this.mon(this.filterEl, 'click', this.fireEvent.bind(this, 'showFilters', this.filterEl));
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
-		this.mon(this.assignmentDueEl, 'click', this.toggleDateEditor.bind(this));
+		if(this.assignment && this.assignment.hasLink('edit')) {
+			this.mon(this.assignmentDueEl, 'click', this.toggleDateEditor.bind(this));
+		}
 		this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		if (this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail')) {
