@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 	},
 
 	onSaveProgress: function (question, input, result) {
-		if (!result) {
+		if (!result || result.status === 409) {
 			this.afterSaveProgress.call(null, false);
 			return;
 		}
