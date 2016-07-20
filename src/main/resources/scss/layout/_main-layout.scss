@@ -3,9 +3,11 @@ html.x-viewport {
 	overflow-y: auto !important;
 	padding-top: $header-height;
 
-	&.window-open {
+	&.window-open, &.scroll-lock {
 		overflow: hidden !important;
+	}
 
+	&.window-open {
 		.window-container {
 			display: block;
 		}
@@ -202,3 +204,14 @@ body.media-viewer-open .window-container {
 		}
 	}
 }
+
+.inline-dialog {
+	.wrapper {
+		z-index: 151;
+	}
+}
+
+.nti-control-bar {
+	z-index: 151;
+}
+

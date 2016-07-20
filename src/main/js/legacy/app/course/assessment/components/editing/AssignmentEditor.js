@@ -12,6 +12,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		Router: 'NextThought.mixins.Router'
 	},
 
+	cls: 'full-assignment-editor',
+
 	layout: 'none', //if you extended the react harness these two configs wouldn't be necessary.
 	items: [],
 
@@ -34,8 +36,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	afterRender () {
 		this.callParent(arguments);
-
-		this.el.dom.style.paddingTop = '20px';
 
 		this.mon(this.el, 'click', (e) => this.onClick(e));
 	},
