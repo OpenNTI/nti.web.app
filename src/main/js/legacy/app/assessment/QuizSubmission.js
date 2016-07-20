@@ -1,7 +1,7 @@
 var Ext = require('extjs');
-var OverlayPanel = require('../contentviewer/overlay/Panel');
-var AssessmentActions = require('./Actions');
-var AssessmentSurvey = require('../../model/assessment/Survey');
+require('../contentviewer/overlay/Panel');
+require('./Actions');
+require('../../model/assessment/Survey');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission', {
