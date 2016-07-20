@@ -181,6 +181,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		return this.questionSet instanceof NextThought.model.assessment.Survey;
 	},
 
+	shouldAllowInstructorSubmit () {
+		return !this.history && this.isInstructor;
+	},
+
 	moveToSubmitted: function () {
 		var isAssignment = !!this.questionSet.associatedAssignment,
 			isSurvey = this.isSurvey(),
@@ -193,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 
 		//if we are an assignment that doesn't allow resetting hide
-		if ((isAssignment && !allowReset && !this.isInstructor) || isSurvey) {
+		if ((isAssignment && !allowReset && !this.shouldAllowInstructorSubmit()) || isSurvey) {
 			this.shouldShow = false;
 			delete this.allowResettingAssignment;
 			this.hide();
@@ -219,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		console.log('New status is ready');
 		delete this.state;
 		delete this.submitted;
-		if (this.isInstructor) {
+		if (this.shouldAllowInstructorSubmit()) {
 			this.moveToActive();
 		}
 	},

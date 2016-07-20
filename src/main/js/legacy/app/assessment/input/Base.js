@@ -585,7 +585,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 	},
 
 	instructorReset: function () {
-		this.reset();
+		if (this.initialCls === 'modeled-body-part field') {
+			this.instructorReset();
+		} else {
+			this.reset();
+		}
 
 		this.setSubmitted();
 	},
