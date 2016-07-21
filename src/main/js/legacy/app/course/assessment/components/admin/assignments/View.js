@@ -18,19 +18,22 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	layout: 'card',
 
 	setAssignmentsData: function (assignments) {
-		this.clearAssignmentsData();
 
-		var root = this.add({
+		var root = this.down('course-assessment-admin-assignments-root');
+
+		if (!root) {
+			root = this.add({
 				xtype: 'course-assessment-admin-assignments-root',
 				pushState: this.pushState,
 				replaceState: this.replaceState,
 				alignNavigation: this.alignNavigation.bind(this),
 				showStudentsForAssignment: this.showStudentsForAssignment.bind(this),
 				createAssignment: this.createAssignment && this.createAssignment.bind(this)
-			}),
-			p = root.setAssignmentsData.apply(root, arguments);
+			});
+			this.addChildRouter(root);
+		}
 
-		this.addChildRouter(root);
+		var p = root.setAssignmentsData.apply(root, arguments);
 
 		this.assignments = assignments;
 		this.store = root.store;
