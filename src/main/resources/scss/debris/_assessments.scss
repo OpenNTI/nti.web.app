@@ -1146,6 +1146,38 @@ body.dragging * {
 		}
 	}
 
+	&.parts.submitted {
+		.field {
+			.response-container {
+				background: $panel-background;
+				border: 1px solid #e2e2e2;
+
+				.inputbox {
+					background: $panel-background;
+
+					input.answer-field {
+						background: $panel-background;
+						opacity: 1;
+					}
+				}
+			}
+		}
+		.modeled-body-part {
+			.response-container {
+				.main {
+					background: $panel-background;
+					opacity: 1;
+					.content {
+						color: #494949;
+					}
+					:hover {
+						cursor: default;
+					}
+				}
+			}
+		}
+	}
+
 	.x-panel-body-assessment {
 		.wordbank-input .footer,
 		.shortanswer-input .footer,
@@ -1271,7 +1303,7 @@ body.dragging * {
 				height: 25em;
 			}
 
-			[contenteditable=false] {
+			[table=false] {
 				opacity: .5;
 			}
 
