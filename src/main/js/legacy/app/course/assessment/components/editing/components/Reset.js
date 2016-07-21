@@ -17,16 +17,22 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 		this.maybeShow();
 
+		let items = [
+			{tag: 'span', cls: 'publish-reset-label', html: 'Students have started your assignment.'},
+			{tag: 'span', cls: 'publish-reset-text', html: 'Resetting or deleting this assignment will result in erasing students work and submissions. You cannot undo this action.'},
+		];
+
+		// User can reset the assignment
+		if(this.assignment.hasLink('Reset')) {
+			items.push({tag: 'div', cls: 'publish-reset', html: 'Reset Assignment'});
+		}
+
 		this.add({
 			xtype: 'box',
 			autoEl: {
 				cls: 'reset',
 				cn: [
-					{cls: 'nti-checkbox', cn: [
-						{tag: 'span', cls: 'publish-reset-label', html: 'Students have started your assignment.'},
-						{tag: 'span', cls: 'publish-reset-text', html: 'Resetting or deleting this assignment will result in erasing students work and submissions. You cannot undo this action.'},
-						{tag: 'div', cls: 'publish-reset', html: 'Reset Assignment'}
-					]}
+					{cls: 'nti-checkbox', cn: items}
 				]
 			}
 		});
@@ -35,7 +41,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 	afterRender () {
 		this.callParent(arguments);
-		this.reset.on('click', this.onClick, this);
+
+		if(this.reset){
+			this.reset.on('click', this.onClick, this);
+		}
 	},
 
 
@@ -53,10 +62,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 	maybeShow () {
 		if(this.assignment.hasLink('Reset') || !this.assignment.hasLink('publish')) {
 			this.show();
-
-			if(!this.assignment.hasLink('Reset')) {
-				this.reset.hide();
-			}
 		} else {
 			this.hide();
 		}
