@@ -95,17 +95,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.removeAll(true);
 		me.maybeEnableBack(me.backText);
-
-		me.createAssignmentBtn = me.add({
-			xtype: 'box',
-			autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: 'Create Assignment'},
-			listeners: {
-				click: {
-					element: 'el',
-					fn: me.createAssignment.bind(me)
+		
+		if(!this.isSelfAssessment) {
+			me.createAssignmentBtn = me.add({
+				xtype: 'box',
+				autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: 'Create Assignment'},
+				listeners: {
+					click: {
+						element: 'el',
+						fn: me.createAssignment.bind(me)
+					}
 				}
-			}
-		});
+			});
+		}
 
 
 		me.itemSelectionCmp = me.add({

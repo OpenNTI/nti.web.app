@@ -42,6 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	backToList: 'Self Assessments',
 	SWITCHED: 'switched',
 	cls: 'content-editor questionset self-assessment',
+	isSelfAssessment: true,
 
 	afterRender: function () {
 		this.callParent(arguments);
