@@ -2,12 +2,18 @@ const Ext = require('extjs');
 const ParseUtils = require('legacy/util/Parsing');
 const {getURL} = require('legacy/util/Globals');
 
+require('legacy/mixins/ModelWithPublish');
+
 require('legacy/model/Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Assignment', {
 	extend: 'NextThought.model.Base',
 	isAssignment: true,
+
+	mixins: {
+		ModelWithPublish: NextThought.mixins.ModelWithPublish
+	},
 
 	fields: [
 		{ name: 'category_name', type: 'string'},
@@ -18,10 +24,12 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'content', type: 'string' },
 		{ name: 'availableBeginning', type: 'ISODate', mapping: 'available_for_submission_beginning' },
 		{ name: 'availableEnding', type: 'ISODate', mapping: 'available_for_submission_ending' },
+		{ name: 'PublicationState', type: 'string'},
 		{ name: 'parts', type: 'arrayItem' },
 		{ name: 'title', type: 'string' },
 		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeAssignmentSubmittedCount'},
-		{ name: 'no_submit', type: 'boolean'}
+		{ name: 'no_submit', type: 'boolean'},
+		{ name: 'version', type: 'string'}
 	],
 
 	isAvailable: function () {
@@ -40,6 +48,12 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 		return items.length > 0;
 	},
+
+
+	canEdit () {
+		return !!this.getLink('edit');
+	},
+
 
 	canSaveProgress: function () {
 		return !!this.getLink('Savepoint');
@@ -85,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	},
 
 	getDateEditingLink: function () {
-		return this.getLink('edit');
+		return this.getLink('date-edit') || this.getLink('edit');
 	},
 
 	tallyParts: function () {
@@ -114,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	},
 
 	doNotShow: function () {
-		return this.isNoSubmit() && this.get('title') === 'Final Grade';
+		return this.isDeleted ||  this.isNoSubmit() && this.get('title') === 'Final Grade';
 	},
 
 	findMyCourse: function () {

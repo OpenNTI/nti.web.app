@@ -75,6 +75,7 @@
 		display: inline-flex;
 		flex-wrap: nowrap;
 		font: normal 500 1em/59px $font;
+		max-width: 500px;
 
 		&, * {
 			color: $primary-blue;
@@ -91,8 +92,9 @@
 		.part {
 			flex: 0 1 auto;
 			cursor: pointer;
+			max-width: 60%;
 
-			&:last-of-type { flex: 1 1 auto; }
+			&:last-of-type { flex: 2 0 auto; }
 
 			&:hover,
 			&:last-of-type:not(.no-children) {

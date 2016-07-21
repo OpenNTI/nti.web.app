@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const path = require('path');
 const UserRepository = require('../../../cache/UserRepository');
 const ParseUtils = require('../../../util/Parsing');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
@@ -6,6 +7,7 @@ const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 require('../../../mixins/Router');
 require('./components/View');
 require('./components/Assignment');
+require('./components/editing/AssignmentEditor');
 require('../../../util/PageSource');
 require('../../../util/PagedPageSource');
 
@@ -27,6 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		}
 	},
 
+
 	initComponent: function () {
 		this.callParent(arguments);
 
@@ -37,6 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		this.addRoute('/performance', this.showPerformance.bind(this));
 
 		this.addRoute('/:assignment', this.showAssignment.bind(this));
+		this.addRoute('/:assignment/edit', this.editAssignment.bind(this));
 		this.addRoute('/:assignment/students', this.showStudentsForAssignment.bind(this));
 		this.addRoute('/performance/:student', this.showAssignmentsForStudent.bind(this));
 		this.addRoute('/performance/:student/:assignment', this.showAssignmentForStudent.bind(this));
@@ -59,15 +63,35 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		this.on('deactivate', this.closeAssignment.bind(this));
 	},
 
+
 	getRouteStateKey: function () {
 		if (this.currentBundle) {
 			return this.currentBundle.getId() + '-assessment';
 		}
 	},
 
+
+	onRouteActivate () {
+		const active = this.getLayout().getActiveItem();
+
+		if (active && active.onRouteActivate) {
+			active.onRouteActivate();
+		}
+	},
+
+
+	onRouteDeactivate () {
+		const active = this.getLayout().getActiveItem();
+
+		if (active && active.onRouteDeactivate) {
+			active.onRouteDeactivate();
+		}
+	},
+
 	onActivate: function () {
 		this.setTitle(this.title);
 	},
+
 
 	closeAssignment: function () {
 		var view = this.getView();
@@ -79,13 +103,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		}
 	},
 
+
 	getRouteTitle: function () {
 		return this.title;
 	},
 
+
 	getView: function () {
 		return this.down('course-assessment');
 	},
+
 
 	bundleChanged: function (bundle) {
 		var view = this.getView();
@@ -95,6 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		return view.bundleChanged(bundle);
 	},
 
+
 	showReader: function (config) {
 		if (this.assignment) {
 			if (this.assignment.reader && this.assignment.reader.el) {
@@ -102,6 +130,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			}
 
 			this.assignment.destroy();
+		}
+
+		if (this.assignmentEditor) {
+			this.assignmentEditor.destroy();
 		}
 
 		config.bundle = this.currentBundle;
@@ -118,6 +150,44 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		this.getLayout().setActiveItem(this.assignment);
 	},
+
+
+	showEditor (config) {
+		if (this.assignment) {
+			this.assignment.destroy();
+			delete this.assigmment;
+		}
+
+		this.assignmentEditor = this.add({
+			xtype: 'assignment-editor',
+			assignmentId: config.assignmentId,
+			assignments: config.assignments,
+			pageSource: config.pageSource,
+			assignment: config.assignment,
+			gotoAssignments: () => {
+				this.pushRoute('Assignments', '/');
+			},
+			gotoAssignment: (NTIID, title) => {
+				this.pushRoute(title, path.join(encodeForURI(NTIID), 'edit'));
+			},
+			findAssignment: (NTIID) => {
+				const view = this.getView();
+				const assignments = view && view.assignmentCollection;
+
+				if (assignments) {
+					return assignments.findItem(NTIID);
+				}
+
+				return null;
+			}
+
+		});
+
+		this.addChildRouter(this.assignmentEditor);
+
+		this.getLayout().setActiveItem(this.assignmentEditor);
+	},
+
 
 	onAssignmentSubmission: function (assignmentId, historyItemLink) {
 		var me = this,
@@ -141,6 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			.then(assignmentCollection.updateHistoryItem.bind(assignmentCollection, assignmentId))
 			.always(this.bundleChanged.bind(this, this.currentBundle));
 	},
+
 
 	showAssignment: function (route, subRoute) {
 		var me = this,
@@ -241,6 +312,66 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		});
 	},
 
+
+	editAssignment (route, subRoute) {
+		//TODO: pass more info about paging and bread crumbs and what not
+		const id = decodeFromURI(route.params.assignment);
+		const view = this.getView();
+
+		return view.getAssignmentList()
+			.then((assignments) => {
+				let index = 0;
+				let prev = 0;
+				let next = 0;
+
+				for (index; index < assignments.length; index++) {
+					let item = assignments[index];
+
+					if (item.getId() === id) {
+						break;
+					}
+				}
+
+				prev = index - 1;
+				next = index + 1;
+
+				if (prev >= 0) {
+					prev = assignments[prev];
+				} else {
+					prev = null;
+				}
+
+				if (next < assignments.length) {
+					next = assignments[next];
+				} else {
+					next = null;
+				}
+
+				let pageSource = {
+					next: next && next.getId(),
+					nextTitle: next && next.get('title'),
+					previous: prev && prev.getId(),
+					previousTitle: prev && prev.get('title'),
+					currentIndex: index,
+					total: assignments.length
+				};
+
+				return {
+					assignmentId: id,
+					assignment: (route.precache || {}).assignment,
+					pageSource
+				};
+			})
+			.then(cfg => this.showEditor(cfg));
+
+		// this.showEditor({
+		// 	assignmentId: decodeFromURI(route.params.assignment)
+		// });
+
+		// return Promise.resolve();
+	},
+
+
 	showAssignments: function (route, subRoute) {
 		var view = this.getView();
 
@@ -250,6 +381,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		return view.showAssignments(route, subRoute);
 	},
+
 
 	showNotifications: function (route, subRoute) {
 		var view = this.getView();
@@ -261,6 +393,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		return view.showNotifications(route, subRoute);
 	},
 
+
 	showPerformance: function (route, subRoute) {
 		var view = this.getView();
 
@@ -270,6 +403,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		return view.showPerformance(route, subRoute);
 	},
+
 
 	showStudentsForAssignment: function (route, subRoute) {
 		var view = this.getView();
@@ -281,6 +415,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		return view.showStudentsForAssignment(route, subRoute);
 	},
 
+
 	showAssignmentsForStudent: function (route, subRoute) {
 		var view = this.getView();
 
@@ -290,6 +425,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		return view.showAssignmentsForStudent(route, subRoute);
 	},
+
 
 	__getHistoryItem: function (historyItem) {
 		var link = historyItem && historyItem.getLink('UsersCourseAssignmentHistoryItem'),
@@ -317,6 +453,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		return load;
 	},
+
 
 	showStudentForAssignment: function (route, subRoute) {
 		var me = this,
@@ -457,6 +594,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			});
 	},
 
+
 	showAssignmentForStudent: function (route, subRoute) {
 		var me = this,
 			view = this.getView(),
@@ -563,6 +701,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			});
 	},
 
+
 	onRoute: function (route, subRoute) {
 		var view = this.getView();
 
@@ -570,6 +709,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		return view.handleRoute(route.path, route.precache);
 	},
+
 
 	getAssignmentRoute: function (obj) {
 		var id = obj.getId();
@@ -585,13 +725,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		};
 	},
 
+
 	changeRoute: function (title, route, precache) {
 		this.pushRoute(title, route || '/', precache);
 	},
 
+
 	handleNavigation: function (title, route, precache) {
 		this.pushRoute(title, route, precache);
 	},
+
 
 	getRouteForPath: function (path, assignment) {
 		var assignmentId = assignment.getId(),

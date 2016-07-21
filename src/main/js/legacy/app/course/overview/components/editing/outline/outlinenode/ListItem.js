@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				record: this.record,
 				contents: this.contents,
 				renderTo: container,
-				enableText: false,
+				disableText: true,
 				beforeShowMenu: this.beforeShowMenuControl
 			});
 

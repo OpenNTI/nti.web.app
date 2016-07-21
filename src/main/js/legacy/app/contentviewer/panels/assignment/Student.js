@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var PanelsReader = require('../Reader');
-var AssignmentStudent = require('../../navigation/assignment/Student');
-var AssignmentTimedPlaceholder = require('../../components/assignment/TimedPlaceholder');
-var AssignmentNotStartedPlaceholder = require('../../components/assignment/NotStartedPlaceholder');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {isMe} = require('legacy/util/Globals');
+
+require('../Reader');
+require('../../navigation/assignment/Student');
+require('../../components/assignment/TimedPlaceholder');
+require('../../components/assignment/NotStartedPlaceholder');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
@@ -52,6 +53,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		if (this.pageInfo) {
 			this.pageInfo.replaceAssignment(assignment);
 		}
+
+		if (this.pageInfo.regenerate) {
+			this.pageInfo = this.pageInfo.regenerate();
+		}
+
 		this.assignment = assignment;
 		this.showReader();
 
@@ -78,6 +84,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		} else {
 			this.showAssignment();
 		}
+
+		this.assignment.on('refresh', () => {
+			if (this.pageInfo && this.pageInfo.regenerate) {
+				this.pageInfo = this.pageInfo.regenerate();
+			}
+
+			this.showAssignment();
+		});
 	},
 
 	//Override this so the reader doesn't set the page info twice
@@ -130,7 +144,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 			if (savepoint) {
 				savepoint.then(function (point) {
-					readerAssessment.injectAssignmentSavePoint(point);
+					/**
+					 * NOTE: Only apply a savepoint if it's version is the same as the assignment version.
+					 * Otherwise, just don't apply it. In the future, we might come up with a smarter way to apply
+					 * the savepoint if it affects areas that haven't changed.
+					 */
+					let submission = point && point.get('Submission'),
+						savePointVersion = submission && submission.get('version');
+
+					if (savePointVersion === assignment.get('version')) {
+						readerAssessment.injectAssignmentSavePoint(point);
+					}
 				});
 			}
 
@@ -157,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		var bundle = this.ContextStore.getRootBundle(),
 			data = {
 				type: 'assignment-viewed',
-				resource_id: this.assignment.getId(),
+				'resource_id': this.assignment.getId(),
 				ContentId: this.pageInfo.getId(),
 				course: bundle && bundle.getId()
 			};

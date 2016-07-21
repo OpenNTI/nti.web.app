@@ -1,75 +1,51 @@
 const Ext = require('extjs');
-
-require('../publishing/Menu');
+const {Publish} = require('nti-web-commons');
+const Actions = require('../Actions');
+require('legacy/overrides/ReactHarness');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Publish', {
-	extend: 'Ext.Component',
+	extend: 'NextThought.ReactHarness',
 	alias: 'widget.overview-editing-controls-publish',
 
-	cls: 'button publish pub',
+	localeContext: 'lesson',
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'label', html: 'Publish'},
-		{cls: 'menu-container'}
-	]),
+	constructor (config) {
+		this.callParent([{...config, component: Publish}]);
+		this.EditingActions = new Actions();
 
+		this.PUBLISH_ACTIONS = {
+			'PUBLISH': () => this.savePublish(),
+			'DRAFT': () => this.saveDraft()
+		};
+	},
 
-	renderSelectors: {
-		labelEl: '.label',
-		menuContainerEl: '.menu-container'
+	getProps () {
+		return {
+			onChange: (...args) => this.onSave(...args),
+			localeContext: this.localeContext,
+			value: this.resolveValue()
+		};
 	},
 
 
-	afterRender: function () {
-		this.callParent(arguments);
+	resolveValue () {
+		const {record: node, contents: lesson} = this;
 
-		this.mon(this.el, 'click', this.togglePublishMenu.bind(this));
-
-		this.el.addCls('closed');
-		this.initPublishMenu();
-		this.setPublishState();
-	},
-
-
-	initPublishMenu: function () {
-		if (!this.publishMenu) {
-			this.publishMenu = NextThought.app.course.overview.components.editing.publishing.Menu.create({
-				record: this.record,
-				contents: this.contents,
-				renderTo: this.menuContainerEl,
-				setPublished: this.setPublishState.bind(this),
-				setWillPublishOn: this.setPublishState.bind(this),
-				setNotPublished: this.setPublishState.bind(this)
-			});
-
-			this.on('destroy', this.publishMenu.destroy.bind(this.publishMenu));
-		}
-	},
-
-
-	/*
-	 * Set the initial publication state of the lesson control.
-	 * Since publishing affects both the outline node and the lesson overview,
-	 * we will take into account both to make sure they follow the intended business logic.
-	 */
-	setPublishState: function () {
-		var node = this.record,
-			isNodePublished = node && node.isPublished && node.isPublished(),
-			lesson = this.contents,
-			isLessonPublished = lesson && lesson.isPublished && lesson.isPublished(),
-			lessonPublishDate = lesson && lesson.get('publishBeginning'),
-			hasPublishDatePassed = lesson && lesson.hasPublishDatePassed && lesson.hasPublishDatePassed();
+		const isNodePublished = node && node.isPublished && node.isPublished();
+		const isLessonPublished = lesson && lesson.isPublished && lesson.isPublished();
+		const lessonPublishDate = lesson && lesson.get('publishBeginning');
+		const hasPublishDatePassed = lesson && lesson.hasPublishDatePassed && lesson.hasPublishDatePassed();
 
 
 		if (isNodePublished && ((isLessonPublished && !lessonPublishDate) || hasPublishDatePassed))	 {
-			this.setPublished();
+			return Publish.States.PUBLISH;
 		}
 		else if (!isNodePublished && !isLessonPublished) {
-			this.setNotPublished();
+			return Publish.States.DRAFT;
 		}
 		else if (isNodePublished && lessonPublishDate) {
-			this.setWillPublishOn();
+			return new Date(lessonPublishDate);
 		}
 		else {
 			console.warn('Not expected. The node should be published if its lesson is published. ', node, lesson);
@@ -77,119 +53,54 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	setPublished: function () {
-		if (!this.rendered) { return; }
+	onSave (value) {
+		const action = this.PUBLISH_ACTIONS[value];
+		let work = action
+					? action()
+					: (value instanceof Date)
+						? this.saveSchedule(value)
+						: null;
 
-		var label = this.labelEl,
-			el = this.el;
-
-		el.removeCls('publish');
-		el.addCls('published');
-		if (label) {
-			label.update('Published');
+		if (work) {
+			work = work
+				.then(() => {
+					this.setProps({value: this.resolveValue()});
+				})
+				.catch(reason => {
+					//Cleanup reason to not be an ExtJS object...
+					return Promise.reject(reason);
+				});
 		}
 
-		this.hideMenu();
+		return work;
 	},
 
+	savePublish () {
+		const me = this;
 
-	setWillPublishOn: function () {
-		if (!this.rendered) { return; }
-
-		var label = this.labelEl,
-			rec = this.contents,
-			value = rec && rec.get('publishBeginning'),
-			date = new Date(value),
-			el = this.el;
-
-		if (value) {
-			// Format i.e. Dec 12
-			date = Ext.Date.format(date, 'M j');
-
-			el.removeCls('publish');
-			el.addCls('published');
-
-			if (label) {
-				label.update('Scheduled for ' + date);
-			}
-		}
-
-		this.hideMenu();
+		return Promise.all([
+			me.EditingActions.publish(me.record),
+			me.EditingActions.publish(me.contents)
+		]);
 	},
 
+	saveDraft () {
+		const me = this;
 
-	setNotPublished: function () {
-		if (!this.rendered) { return; }
-
-		var label = this.labelEl,
-			el = this.el;
-
-		el.removeCls('published');
-		el.addCls('publish');
-		if (label) {
-			label.update('Publish Lesson');
-		}
-
-		this.hideMenu();
+		return Promise.all([
+			me.EditingActions.unpublish(me.record),
+			me.EditingActions.unpublish(me.contents)
+		]);
 	},
 
+	saveSchedule (value) {
+		const me = this;
 
-	alignPublishingMenu: function () {
-		if (!this.rendered) { return; }
+		if (!value) { return; }
 
-		this.publishMenu.alignTo(this.el.dom);
-	},
-
-
-	togglePublishMenu: function () {
-		var el = this.el;
-
-		if (el.hasCls('closed')) {
-			if (this.beforeShowMenu) {
-				this.beforeShowMenu(this, this.publishMenu, 'publish');
-			}
-
-			this.showMenu();
-			this.alignPublishingMenu();
-		}
-		else {
-			this.hideMenu();
-		}
-	},
-
-
-	hideMenu: function () {
-		if (this.el.hasCls('closed')) {
-			return;
-		}
-
-		this.el.addCls('closed');
-		this.setPublishState();
-		this.publishMenu.reset();
-		Ext.destroy(this.bodyListeners);
-		this.publishMenu.close();
-	},
-
-
-	showMenu: function () {
-		this.initPublishMenu();
-
-		this.el.removeCls('closed');
-
-		this.bodyListeners = this.mon(Ext.getBody(), {
-			destroyable: true,
-			click: this.onBodyClick.bind(this)
-		});
-
-		this.publishMenu.open();
-	},
-
-	onBodyClick: function (e) {
-		if (e.getTarget('.pub')) { return; }
-		if (!this.el.hasCls('closed')) {
-			this.hideMenu();
-		}
+		return Promise.all([
+			me.EditingActions.publish(me.record),
+			me.EditingActions.publishOnDate(me.contents, value)
+		]);
 	}
-
-
 });

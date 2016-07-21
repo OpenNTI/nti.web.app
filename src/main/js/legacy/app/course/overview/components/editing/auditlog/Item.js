@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../../../../cache/UserRepository');
-
+const {DateTime} = require('nti-web-commons');
+const {default:parseDate} = require('nti-commons/lib/parse-date');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 	extend: 'Ext.Component',
@@ -57,15 +58,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			recordable = record.get('Recordable'),
 			title = recordable && recordable.Title || '',
 			isChild = recordable.NTIID !== this.parentRecord.getId(),
-			externalValues = record && record.get('ExternalValue') || {},
-			message;
+			externalValues = record && record.get('ExternalValue') || {};
 
-		var fields = attributes.map(function (attr) {
-			var f = me.FIELDS[attr.toLowerCase()] || attr;
-			if (externalValues[attr]) {
-				f += ' to "' + externalValues[attr] + '"';
+		let fields = attributes.map(function (attr) {
+			if(externalValues[attr]) {
+				if (attr.substr(0,9) === 'Available') {
+					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${DateTime.format(parseDate(externalValues[attr]), 'MMMM D LT')}"`;
+				} else {
+					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${externalValues[attr]}"`;
+				}
 			}
-			return f;
+
+			return me.FIELDS[attr.toLowerCase()] || attr;
 		});
 
 		// Message will be: {user} created {title of item}.
@@ -78,22 +82,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			type = 'added an';
 		}
 
-		if(isChild) {
-			var ifOn;
-
-			if(type === 'created') { ifOn = ''; }
-			else if(type === 'moved') { ifOn = title; }
-			else if(type === 'added an') { ifOn = ' in ' + title; }
-			else{ ifOn = ' for ' + title; }
-
-			message = type + ' ' + fields.join(', ') + ifOn + '.';
-		} else {
-			message = type + ' ' + fields.join(', ') + '.';
-		}
-
 		me.renderData = Ext.apply(me.renderData || {}, {
 			date: Ext.Date.format(record.get('CreatedTime'), 'F j, Y \\a\\t g:i A') || '',
-			msg: message || ''
+			msg: isChild ? `${type} ${fields.join(', ')} ${getMsgContext(type, title)}.` : `${type} ${fields.join(', ')}.`
 		});
 
 
@@ -128,3 +119,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	}
 });
+
+function getMsgContext (type, title) {
+	let result = '';
+
+	if (type === 'moved') {
+		result = title;
+	} else if (type === 'added an') {
+		result = 'in ' + title;
+	} else {
+		result = 'for ' + title;
+	}
+
+	return result;
+}

@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		getParams: function () {
 			//Better way? (we basically want callparent but we are replacing instead of
 			//overriding
-			//JSG: callSuper()??
+			//JSG: callParent()??
 			var p = this.self.prototype.getParams.apply(this, arguments);
 
 			Ext.Object.each(p, function (k, v, o) {

@@ -111,6 +111,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 		this.callParent(arguments);
 	},
 
+	instructorReset: function () {
+		this.editor.reset(true);
+		this.superclass.reset.call(this, arguments);
+	},
 
 	reset: function () {
 		this.editor.reset();

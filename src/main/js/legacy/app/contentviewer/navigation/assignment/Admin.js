@@ -210,11 +210,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			completed = submission && submission.get('CreatedTime'),
 			maxTime = this.assignment.isTimed && this.assignment.getMaxTime(),
 			duration = this.assignment.isTimed && this.assignmentHistory.getDuration(),
+			start = this.assignment.get('availableBeginning'),
 			status = NextThought.app.course.assessment.AssignmentStatus.getRenderData({
-				due: due,
-				completed: completed,
-				maxTime: maxTime,
-				duration: duration
+				start,
+				due,
+				completed,
+				maxTime,
+				duration
 			});
 
 		this.letterEl.setStyle({display: 'none'});
@@ -255,7 +257,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.markGradeAsExcused(grade);
 		} else {
 			this.completedEl.removeCls(['late', 'ontime']);
-			this.completedEl.dom.setAttribute('data-qtip', status.due.qtip);
+			if (status.due.qtip) {
+				this.completedEl.dom.setAttribute('data-qtip', status.due.qtip);
+			}
 			this.completedEl.update(status.due.html);
 
 			if (status.maxTime) {

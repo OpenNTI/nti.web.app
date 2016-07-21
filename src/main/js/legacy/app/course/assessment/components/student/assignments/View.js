@@ -1,13 +1,18 @@
 var Ext = require('extjs');
+const { encodeForURI } = require('nti-lib-ntiids');
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
 require('legacy/common/ux/Grouping');
 require('legacy/app/navigation/path/Actions');
+require('legacy/app/course/assessment/Actions');
 require('./FilterBar');
 require('./List');
 
 const {wait} = require('legacy/util/Promise');
 
+const PUBLISHED = getString('NextThought.view.courseware.assessment.assignments.View.published');
+const SCHEDULED = getString('NextThought.view.courseware.assessment.assignments.View.scheduled');
+const DRAFT = getString('NextThought.view.courseware.assessment.assignments.View.draft');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.View', {
 	extend: 'Ext.container.Container',
@@ -80,6 +85,57 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					return 'Today';
 				}
 				return Ext.Date.format(val.get('due'), 'F j, Y');
+			}
+		},
+		'creation': {
+			'property': 'CreatedTime',
+			'direction': 'ASC',
+			'sorterFn': function sorterFn (a, b) {
+				const A = a.getData().item.raw.CreatedTime;
+				const B = b.getData().item.raw.CreatedTime;
+				return A - B;
+			},
+			'getGroupString': function getGroupString (val) {
+				const created = val.getData().item.raw.CreatedTime;
+				return Ext.Date.format(new Date(created * 1000), 'F j, Y');
+			}
+
+		},
+		'publication': {
+			'property': 'PublicationState',
+			'sorterFn': function sorterFn (a, b) {
+				var groupA = this.getGroupString(a);
+				var groupB = this.getGroupString(b);
+				var pubA = a.getData().item.raw.publishLastModified;
+				var pubB = b.getData().item.raw.publishLastModified;
+
+				// if a and b are in the same group sort on publishLastModified
+				if (groupA === groupB) {
+					return pubB - pubA;
+				}
+				// Published comes first, then scheduled, then draft.
+				if (groupA === PUBLISHED) {
+					return -1;
+				}
+				if (groupB === PUBLISHED) {
+					return 1;
+				}
+				if(groupA === SCHEDULED) {
+					return -1;
+				}
+				return 1;
+			},
+			'getGroupString': function (val) {
+				const raw = val.getData().item.raw;
+				const state = raw.PublicationState;
+				const available = raw.available_for_submission_beginning;
+				if (state !== 'DefaultPublished') {
+					return DRAFT;
+				}
+				if (!available || new Date(available) < new Date()) {
+					return PUBLISHED;
+				}
+				return SCHEDULED;
 			}
 		}
 	},
@@ -226,16 +282,27 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
+
+	editAssignment: function (assignment) {
+		const title = assignment.get('title');
+		let id = assignment.getId();
+
+		id = encodeForURI(id);
+		this.pushRoute(title, id + '/edit/', {assignment: assignment, assignmentsCollection: this.data.assignments});
+	},
+
+
 	navigateToItem: function (assignment) {
 		var openDate = assignment.get('availableBeginning'),
 			date = Ext.Date.format(openDate, 'l F j \\a\\t g:i A');
 
-		if (!assignment.isOpen()) {
+		if (!assignment.isOpen() && !assignment.hasLink('edit')) {
 			alert(getFormattedString('NextThought.view.courseware.assessment.assignments.View.available', { date: date}));
-			return;
+		} else if (!assignment.isOpen() && assignment.hasLink('edit')) {
+			this.editAssignment(assignment);
+		} else {
+			this.showAssignment(assignment);
 		}
-
-		this.showAssignment(assignment);
 	},
 
 	getFields: function () {
@@ -243,6 +310,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{name: 'lesson', type: 'string'},
 			{name: 'outlineNode', type: 'auto'},
 			{name: 'isDuplicate', type: 'bool'},
+			{name: 'canEdit', type: 'bool'},
 			{name: 'actualId', type: 'string'},
 			{name: 'id', type: 'string'},
 			{name: 'containerId', type: 'string'},
@@ -272,6 +340,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.on('filters-changed', this.updateFilters.bind(this));
 		this.on('search-changed', this.updateFilters.bind(this));
+
+		if (this.createAssignment) {
+			this.on('create-assignment', () => {
+				this.createAssignment();
+			});
+		}
 
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),
@@ -380,7 +454,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			outlineInterface = instance.getOutlineInterface();
 
 
-		if (me.data && me.data.instance === instance && silent) {
+		if (me.data && me.data.instance === instance && me.store.getCount() === assignments.getCount() && silent) {
 			return Promise.resolve();
 		}
 
@@ -399,7 +473,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		function finish (results) {
 			var outlineInterface = results[1];
-
+			me.data.assignments = results[0];
 			me.data.outline = outlineInterface.getOutline();
 			//Becasue this view has special derived fields, we must just listen for changes on the
 			// assignments collection itself and trigger a refresh. This cannot simply be a store
@@ -414,12 +488,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.catch(function (reason) {
 				console.error('Failed to get course outline!', reason);
 			});
-
-		return	outlineInterface.onceBuilt()
-			.then(finish)
-			.catch(function (reason) {
-				console.error('Failed to get course outline!', reason);
-			});
 	},
 
 	applyAssignmentsData: function (silent) {
@@ -428,6 +496,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			bundle = me.data.instance,
 			outlineInterface = me.data.outlineInterface,
 			assignments = me.data.assignments;
+
+		let filterBar = this.getFilterBar();
 
 		function findOutlineNodes (id) {
 			var outlineNodes = assignments.getOutlineNodesContaining(id) || [];
@@ -448,6 +518,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		function buildConfig (id, assignment, history, grade, node, actualId) {
 			return {
 				id: id,
+				canEdit: assignment.canEdit(),
 				containerId: assignment.get('containerId'),
 				lesson: node ? node.getId() : 'Other Assignments',
 				isDuplicate: !!actualId,
@@ -507,6 +578,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}));
 		}
 
+		if (bundle && bundle.canAddAssignment && bundle.canAddAssignment()) {
+			filterBar.showCreateButton();
+			filterBar.showPublishOption();
+		} else {
+			filterBar.hideCreateButton();
+			filterBar.hidePublishOption();
+		}
+
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
@@ -532,7 +611,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return {
 			xtype: 'course-assessment-assignment-list',
 			store: grouper.store,
-			navigateToItem: this.navigateToItem.bind(this)
+			navigateToItem: this.navigateToItem.bind(this),
+			editAssignment: this.editAssignment.bind(this)
 		};
 	},
 
@@ -570,6 +650,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			console.error('No Assignment to navigate to');
 		}
 	},
+
+	appendAssignment (assignment) {
+		const {data} = this;
+		const {assignments} = data || {};
+
+		if (assignments) {
+			assignments.appendAssignment(assignment);
+		}
+	},
+
 
 	getStateKey: function () {
 		var bundle = this.data.instance;

@@ -71,9 +71,15 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 	color: $tertiary-grey;
 	margin-top: 2em;
 
+	.link {
+		cursor: pointer;
+		color: $primary-blue;
+	}
+
 	.sub{
 		font-size: 0.5em;
 	}
+
 	&.no-assignments{
 	  margin-bottom: 2em;
 	}

@@ -30,7 +30,7 @@ Object.assign(Promise, {
 					.then(() => result);
 			}
 
-			return Promise.resolve(Promise.wait);
+			return Promise.resolve(result);
 		};
 	}
 });

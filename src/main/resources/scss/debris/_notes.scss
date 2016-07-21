@@ -552,6 +552,12 @@
 				}
 			}
 
+			.byline {
+				&.hidden {
+					display: none;
+				}
+			}
+
 			&.slide {
 				max-height: 42em;
 			}

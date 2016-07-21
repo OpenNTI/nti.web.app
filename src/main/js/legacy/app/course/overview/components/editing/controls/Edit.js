@@ -38,7 +38,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (e.getTarget('.disabled')) { return; }
 
 		if (Service.canDoAdvancedEditing() && e.shiftKey && e.altKey) {
-			console.log('EDIT:\n%s\nORDERED CONTENTS:\n%s', this.record.getLink('edit'), this.record.getLink('ordered-contents'));
+			if (this.record) {
+				console.log('EDIT:\n%s\nORDERED CONTENTS:\n%s', this.record.getLink('edit'), this.record.getLink('ordered-contents'));
+			} else {
+				console.log('Record is undefined.');
+			}
 			return;
 		}
 

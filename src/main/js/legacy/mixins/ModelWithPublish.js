@@ -10,8 +10,23 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 	},
 
 
+	canPublish () {
+		return this.hasLink('publish');
+	},
+
+
+	canUnpublish () {
+		return this.hasLink('unpublish');
+	},
+
+
 	isExplicit: function () {
 		return this.hasLink('publish') && !Ext.isEmpty(this.get('sharedWith'));
+	},
+
+
+	isPublishedByState () {
+		return this.get('PublicationState') === 'DefaultPublished';
 	},
 
 
@@ -20,6 +35,9 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 				this.get('PublicationState') === 'DefaultPublished';
 	},
 
+	isDraft: function () {
+		return this.get('PublicationState') !== 'DefaultPublished';
+	},
 
 	publish: function (widget, cb, scope) {
 		var me = this,
@@ -58,5 +76,33 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 		}
 
 		return sharingInfo;
+	},
+
+
+	doPublish (data) {
+		if (!this.canPublish()) {
+			return Promise.reject('Unable to publish');
+		}
+
+		const link = this.getLink('publish');
+
+		return Service.post(link, data)
+			.then((response) => {
+				this.syncWithResponse(response);
+			});
+	},
+
+
+	doUnpublish (data) {
+		if (!this.canUnpublish()) {
+			return Promise.reject('Unable to unpublish');
+		}
+
+		const link = this.getLink('unpublish');
+
+		return Service.post(link, data)
+			.then((response) => {
+				this.syncWithResponse(response);
+			});
 	}
 });

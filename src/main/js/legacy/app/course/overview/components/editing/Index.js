@@ -55,6 +55,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.el.unmask();
 	},
 
+	onRouteDeactivate () {
+		const cmp = this.down('overview-editing-outline');
+
+		if (cmp && cmp.onRouteDeactivate) {
+			cmp.onRouteDeactivate();
+		}
+	},
+
 	setActiveBundle: function (bundle) {
 		this.bundle = bundle;
 	},

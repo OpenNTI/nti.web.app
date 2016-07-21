@@ -154,5 +154,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.afterDelete) {
 			this.afterDelete();
 		}
+	},
+
+	onRouteDeactivate () {
+		if(this.publishCmp) {
+			this.publishCmp.onRouteDeactivate();
+		}
+
+		if(this.dateCmp) {
+			this.dateCmp.onRouteDeactivate();
+		}
 	}
 });

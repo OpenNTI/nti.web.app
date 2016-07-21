@@ -53,7 +53,8 @@ exports = module.exports =
 		{
 			'extjs': 'Ext',
 			'react' : 'React',
-			'react-dom': 'ReactDOM'
+			'react-dom': 'ReactDOM',
+			'react/lib/ReactCSSTransitionGroup': 'React.addons.CSSTransitionGroup'
 		}
 	],
 
@@ -70,30 +71,65 @@ exports = module.exports =
 		preLoaders: [
 			// {
 			// 	test: /src.main.js.+jsx?$/,
-			// 	loader: 'eslint',
+			// 	loader: 'eslint-loader',
 			// 	exclude: /node_modules/
 			// },
 			{
 				test: /src.main.js.+jsx?$/,
-				loader: 'baggage?[file].scss'
+				loader: 'baggage-loader',
+				query: {
+					'[file].scss': true
+				}
 			},
 			{
 				test: /\.js(x?)$/,
-				loader: 'source-map'
+				loader: 'source-map-loader'
 			}
 		],
 		loaders: [
-			{ test: /\.async\.jsx$/i, loader: 'react-proxy!exports?exports.default' },
-			{ test: /\.js(x?)$/i, loader: 'babel', exclude: /node_modules/ },
+			{
+				test: /\.async\.jsx$/i,
+				//unclear how to write this piped loader config in object notation in stead of stirng.
+				loader: 'react-proxy-loader!exports-loader?exports.default'
+			},
 
-			{ test: /\.json$/, loader: 'json' },
-			{ test: /\.(ico|gif|png|jpg|svg)$/, loader: 'url?limit=10000&name=resources/images/[name].[ext]&mimeType=image/[ext]' },
+			{
+				test: /\.js(x?)$/i,
+				loader: 'babel-loader',
+				include: root
+			},
 
-			{ test: /\.(eot|ttf|woff)$/, loader: 'file?name=resources/fonts/[name].[ext]' },
+			{
+				test: /\.json$/,
+				loader: 'json-loader'
+			},
+
+			{
+				test: /\.(ico|gif|png|jpg|svg)$/,
+				loader: 'url-loader',
+				query: {
+					limit: 10000,
+					name: 'resources/images/[name].[ext]',
+					mimeType: 'image/[ext]'
+				}
+			},
+
+			{
+				test: /\.(eot|ttf|woff)$/,
+				loader: 'file-loader',
+				query: {
+					name: 'resources/fonts/[name].[ext]'
+				}
+			},
 
 			{ test: /\.(s?)css$/, loader: ExtractTextPlugin.extract(
 				'style-loader',
-				'css?sourceMap&-minimize!postcss!resolve-url!sass?sourceMap'
+				[
+					'css-loader?sourceMap&-minimize',
+					'postcss-loader',
+					'resolve-url-loader',
+					'sass-loader?sourceMap'
+				].join('!')
 				)
 			}
 		]

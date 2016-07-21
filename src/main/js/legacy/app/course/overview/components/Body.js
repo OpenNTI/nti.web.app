@@ -47,6 +47,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.editingControlsCmp.hide();
 	},
 
+	onRouteDeactivate () {
+		const lesson = this.getLesson();
+		const editor = this.getEditor();
+
+		if (lesson && lesson.onRouteDeactivate) {
+			lesson.onRouteDeactivate();
+		}
+
+		if (editor && editor.onRouteDeactivate) {
+			editor.onRouteDeactivate();
+		}
+	},
+
 	showEditControls: function () {
 		if (this.hasEditingControls) { return; }
 

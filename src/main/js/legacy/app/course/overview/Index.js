@@ -69,6 +69,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 	onRouteDeactivate: function () {
+		const active = this.getLayout().getActiveItem();
+
+		if (active && active.onRouteDeactivate) {
+			active.onRouteDeactivate();
+		}
+
 		if (this.activeMediaWindow) {
 			Ext.destroy(this.activeMediaWindow);
 			delete this.activeMediaWindow;

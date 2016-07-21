@@ -3,9 +3,11 @@ html.x-viewport {
 	overflow-y: auto !important;
 	padding-top: $header-height;
 
-	&.window-open {
+	&.window-open, &.scroll-lock {
 		overflow: hidden !important;
+	}
 
+	&.window-open {
 		.window-container {
 			display: block;
 		}
@@ -45,7 +47,10 @@ html.x-viewport {
 body.x-body {
 	min-height: calc(100vh - #{$header-height});
 	height: auto !important;
-	overflow: hidden !important;
+	// Now that we scroll the window, this needs to force overflow visible. (positioned things that drop
+	// below the frame need to extend the scroll area) If something breaks because of this, don't revert
+	// this, reflow the styles with the thing that breaks.
+	overflow: visible !important;
 	background: white;
 	background: #343434;
 	background-size: cover;
@@ -199,3 +204,14 @@ body.media-viewer-open .window-container {
 		}
 	}
 }
+
+.inline-dialog {
+	.wrapper {
+		z-index: 151;
+	}
+}
+
+.nti-control-bar {
+	z-index: 151;
+}
+

@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {isFeature} = require('legacy/util/Globals');
+const {isFeature, swallow} = require('legacy/util/Globals');
 require('legacy/model/Base');
 
 module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet', {
@@ -79,6 +79,16 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 			this.setProgress(question, input);
 		}
 
+		if (this.doNotSaveProgress) {
+			if (input && input.reapplyProgress && input.updateWithValue) {
+				const updatedQ = this.progress[question.getId()];
+				if (updatedQ) {
+					input.updateWithValue(updatedQ[input.getOrdinal()]);
+				}
+			}
+			return;
+		}
+
 		if (!this.saveProgressHandler) {
 			console.error('No cmp to fire save progress on...');
 			return;
@@ -95,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 	},
 
 	onSaveProgress: function (question, input, result) {
-		if (!result) {
+		if (!result || result.status === 409) {
 			this.afterSaveProgress.call(null, false);
 			return;
 		}
@@ -127,11 +137,13 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 	 * @param {Function} save	saves the progress and returns a promise
 	 * @param {Function} before called before progress is saved
 	 * @param {Function} after	called after progress is saved
+	 * @param {Boolean} doNotSave if true do not actually save the progress
 	 * @returns {void}
 	 */
-	addSaveProgressHandler: function (save, before, after) {
+	addSaveProgressHandler: function (save, before, after, doNotSave) {
 		this.saveProgressHandler = save;
 		this.beforeSaveProgress = before;
 		this.afterSaveProgress = after;
+		this.doNotSaveProgress = doNotSave;
 	}
 });

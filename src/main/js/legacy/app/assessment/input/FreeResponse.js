@@ -8,6 +8,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 
 	SaveProgressBuffer: 5000,
 
+	cls: 'free-response-part field',
+
 	inputTpl: Ext.DomHelper.markup({
 		tag: 'input',
 		type: 'text',

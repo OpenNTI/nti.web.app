@@ -23,6 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var items = this.store ? this.store.getRange() : [],
 			itemType = this.itemType,
 			navigateToItem = this.navigateToItem,
+			editAssignment = this.editAssignment,
 			container = this.getItemsContainer();
 
 		this.fireEvent((items.length > 0) ? 'show-parent' : 'hide-parent');
@@ -33,7 +34,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				assignment: item.get('item'),
 				history: item.get('history'),
 				item: item,
-				navigateToItem: navigateToItem
+				navigateToItem: navigateToItem,
+				editAssignment: editAssignment
 			};
 		}));
 	},

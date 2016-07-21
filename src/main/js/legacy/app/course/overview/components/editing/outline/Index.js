@@ -1,5 +1,5 @@
 var Ext = require('extjs');
-var MixinsRouter = require('../../../../../../mixins/Router');
+var MixinsRouter = require('legacy/mixins/Router');
 var OutlinenodeIndex = require('./outlinenode/Index');
 var CalendarnodeIndex = require('./calendarnode/Index');
 var ContentnodeIndex = require('./contentnode/Index');
@@ -67,7 +67,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			bundle: this.bundle,
 			afterDelete: this.onDelete.bind(this),
 			navigateToOutlineNode: this.navigateToOutlineNode,
-			afterDelete: this.onDelete.bind(this),
 			navigate: this.navigate
 		}));
 	},
@@ -84,7 +83,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.afterDelete) {
 			this.afterDelete();
 		}
-	}
+	},
+
+	onRouteDeactivate () {
+		if(this.activeComponent) {
+			this.activeComponent.onRouteDeactivate();
+		}
+	},
 }, function () {
 	this.initRegistry();
 });

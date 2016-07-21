@@ -18,16 +18,22 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	layout: 'card',
 
 	setAssignmentsData: function (assignments) {
-		var root = this.add({
+
+		var root = this.down('course-assessment-admin-assignments-root');
+
+		if (!root) {
+			root = this.add({
 				xtype: 'course-assessment-admin-assignments-root',
 				pushState: this.pushState,
 				replaceState: this.replaceState,
 				alignNavigation: this.alignNavigation.bind(this),
-				showStudentsForAssignment: this.showStudentsForAssignment.bind(this)
-			}),
-			p = root.setAssignmentsData.apply(root, arguments);
+				showStudentsForAssignment: this.showStudentsForAssignment.bind(this),
+				createAssignment: this.createAssignment && this.createAssignment.bind(this)
+			});
+			this.addChildRouter(root);
+		}
 
-		this.addChildRouter(root);
+		var p = root.setAssignmentsData.apply(root, arguments);
 
 		this.assignments = assignments;
 		this.store = root.store;
@@ -100,13 +106,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 		}
 
-		if (student) {
-			return view.restoreStudent(this.getRouteState(), student);
-		}
-
 		this.getLayout().setActiveItem(view);
 
-		return view.restoreState(this.getRouteState());
+		return view.restoreState(this.getRouteState(), student);
 	},
 
 	showStudentsForAssignment: function (rec) {

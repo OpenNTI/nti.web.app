@@ -143,7 +143,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			selectedItems: this.videoSelectionCmp && this.videoSelectionCmp.getSelection(),
 			onAddVideos: this.showVideoList.bind(this),
 			doClose: this.doClose,
-			showError: this.showError
+			showError: this.showError,
+			bundle: this.bundle
 		});
 
 		if (this.videoSelectionCmp) {

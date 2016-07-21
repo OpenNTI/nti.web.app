@@ -6,6 +6,7 @@ var PartsMultiAnswer = require('./parts/MultiAnswer');
 var PartsMatching = require('./parts/Matching');
 var PartsOrdering = require('./parts/Ordering');
 var PartsModeledContent = require('./parts/ModeledContent');
+var PartsFreeResponse = require('./parts/FreeResponse');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll', {
@@ -29,7 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 			parts.Matching,
 			parts.Ordering,
 			parts.ModeledContent,
-			parts.MultiAnswer
+			parts.MultiAnswer,
+			parts.FreeResponse
 		]);
 
 		this.resultContainer = this.down('[isResultContainer]');

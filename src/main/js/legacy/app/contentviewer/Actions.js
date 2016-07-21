@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	},
 
 
-	getContentsForAssignment (assignment) {
+	getContentsForAssignment (assignment/*, bundle*/) {
 		let parts = assignment && assignment.get('parts');
 		let part = parts && parts[0];
 		let questionSet = part && part.get('question_set');
@@ -108,24 +108,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 
 	getAssignmentPageInfo (assignment, bundle) {
-		let parts = assignment && assignment.get('parts');
-		let part = parts && parts[0];
-
-		if (!part) {
-			return Promise.reject('Unable to build pageinfo for assignment: ', assignment, bundle);
-		}
-
-		let ntiid = assignment.getId();
-
-		let contents = this.getContentsForAssignment(assignment);
-		let assessmentItems = [assignment];
-
-
-		return NextThought.model.PageInfo.create({
+		const ntiid = assignment.getId();
+		const contents = this.getContentsForAssignment(assignment, bundle);
+		const assessmentItems = [assignment];
+		const pageInfo = NextThought.model.PageInfo.create({
 			ID: ntiid,
 			NTIID: ntiid,
 			AssessmentItems: assessmentItems,
 			DoNotLoadAnnotations: true,
+			isFakePageInfo: true,
 			content: Ext.DomHelper.markup([
 				{tag: 'head', cn: [
 					{tag: 'title', html: assignment.get('title')}
@@ -138,6 +129,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 				}]}
 			])
 		});
+
+
+		pageInfo.regenerate = () => this.getAssignmentPageInfo(assignment, bundle);
+
+		return pageInfo;
 	},
 
 

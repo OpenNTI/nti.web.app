@@ -474,6 +474,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		return s;
 	},
 
+	updateWithValue: function (value) {
+		if (this.setProgress) {
+			this.setProgress(value);
+		} else {
+			this.setValue(value);
+		}
+
+		if (value !== null) {
+			this.enableSubmission(true);
+		}
+	},
+
 	//set the inputs values with out marking it correct or incorrect
 	updateWithProgress: function (questionSubmission) {
 		var parts = (questionSubmission && questionSubmission.get('parts')) || {},
@@ -573,13 +585,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 	},
 
 	instructorReset: function () {
-		this.reset();
+		if (this.initialCls === 'modeled-body-part field') {
+			this.instructorReset();
+		} else {
+			this.reset();
+		}
 
 		this.setSubmitted();
 	},
 
 	saveProgress: function () {
-		if (this.questionSet) {
+		const assignment = this.questionSet && this.questionSet.associatedAssignment;
+		const hasSavepointLink = Boolean(assignment && assignment.getLink('Savepoint'));
+
+		if ( this.questionSet && hasSavepointLink) {
 			this.questionSet.saveProgress(this.question, this);
 		}
 	},

@@ -2,7 +2,7 @@ const Ext = require('extjs');
 const {wait} = require('legacy/util/Promise');
 
 require('../AssignmentStatus');
-require('./editing/DueDate');
+require('./editing/InlineEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
@@ -96,7 +96,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
 				duration: assignment.isTimed && assignment.getDuration(),
 				isExcused: grade && grade.get('IsExcused'),
-				isNoSubmitAssignment: assignment.isNoSubmit()
+				isNoSubmitAssignment: assignment.isNoSubmit(),
+				isDraft: assignment.isDraft()
 			});
 
 		me.statusEl.dom.innerHTML = status;
@@ -108,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	addDueDateEditor: function () {
-		this.dueDateEditor = new NextThought.app.course.assessment.components.editing.DueDate({
+		this.dueDateEditor = new NextThought.app.course.assessment.components.editing.InlineEditor({
 			assignment: this.assignment,
 			onSave: this.closeDueDateEditor.bind(this),
 			onCancel: this.closeDueDateEditor.bind(this),

@@ -1,7 +1,7 @@
 var Ext = require('extjs');
-var OverlayPanel = require('../contentviewer/overlay/Panel');
-var AssessmentActions = require('./Actions');
-var AssessmentSurvey = require('../../model/assessment/Survey');
+require('../contentviewer/overlay/Panel');
+require('./Actions');
+require('../../model/assessment/Survey');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission', {
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		this.startTimestamp = new Date().getTime();
 
 		if (this.questionSet.associatedAssignment) {
-			this.questionSet.addSaveProgressHandler(this.saveProgress.bind(this), this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this));
+			this.questionSet.addSaveProgressHandler(this.saveProgress.bind(this), this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this), this.isInstructor);
 		}
 
 		this.questionSet.setStartTime(this.startTimestamp);
@@ -181,6 +181,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		return this.questionSet instanceof NextThought.model.assessment.Survey;
 	},
 
+	shouldAllowInstructorSubmit () {
+		return !this.history && this.isInstructor;
+	},
+
 	moveToSubmitted: function () {
 		var isAssignment = !!this.questionSet.associatedAssignment,
 			isSurvey = this.isSurvey(),
@@ -193,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 
 		//if we are an assignment that doesn't allow resetting hide
-		if ((isAssignment && !allowReset) || isSurvey) {
+		if ((isAssignment && !allowReset && !this.shouldAllowInstructorSubmit()) || isSurvey) {
 			this.shouldShow = false;
 			delete this.allowResettingAssignment;
 			this.hide();
@@ -219,6 +223,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		console.log('New status is ready');
 		delete this.state;
 		delete this.submitted;
+		if (this.shouldAllowInstructorSubmit()) {
+			this.moveToActive();
+		}
 	},
 
 	//just use us being in the active state to determine if
@@ -230,6 +237,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	hasAnyMissing: function () {
 		return !this.noParts && !this.allQuestionsAnswered;
 	},
+
+
+	hasAttemptedProgress: function () {
+		return this.progressSaveAttempted;
+	},
+
 
 	hasProgressSaved: function () {
 		return this.progressSaved;
@@ -444,6 +457,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	beforeSaveProgress: function () {
 		var assessmentReader = this.reader.getAssessment();
 
+		this.progressSaveAttempted = true;
+
 		if (this.isInstructor) { return; }
 		assessmentReader.showSavingProgress();
 	},
@@ -465,11 +480,40 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	beforeRouteChange: function () {
-		var submission = {};
+		const submission = {};
+
+		//NTI-1615 - Don't blindly saveProgress. Only save progress on interaction.
+		function hasProgress (questionMap) {
+			const eachKeyMatchesValue = x => Object.entries(x).every(([a, b]) => String(a) === String(b));
+
+			for (let questionParts of Object.values(questionMap)) {
+				// Checking for nulls doesn't quite work...by itself.
+				const potentialProgress = questionParts && questionParts.filter(x => x != null);
+				//Ordering always return objects, interacted or not...
+				if (potentialProgress && potentialProgress.length > 0) {
+					let justTheObjects = potentialProgress.filter(x => typeof x === 'object');
+					//We def have progress...
+					if(justTheObjects.length !== potentialProgress.length) {
+						return true;
+					}
+
+					//If we have a value that is an object and all its key/value pairs are equal (1:1, 2:2, etc)...
+					//We will assume no progress has been made. So we will check to see if there is any object where
+					//the keys do not match their values...
+					if (justTheObjects.some(x => !eachKeyMatchesValue(x))) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
 
 		this.questionSet.fireEvent('beforesubmit', this.questionSet, submission);
 
-		this.saveProgress(submission);
+		if (hasProgress(submission)) {
+			this.saveProgress(submission);
+		}
 	},
 
 	shouldAllowSubmit: function (onChangeHandler) {
@@ -547,7 +591,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 				me.unmask();
 				me.setGradingResult(result);
 
-				me.reader.fireEvent('assignment-submitted', obj.assignmentId, obj.itemLink);
+				// Don't update history for practice submission
+				if (!me.isInstructor) {
+					me.reader.fireEvent('assignment-submitted', obj.assignmentId, obj.itemLink);
+				}
 			}, function () {
 				me.onFailure();
 				me.maybeDoReset(true);

@@ -330,7 +330,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			rec = rec.get('CourseInstance');
 
 			//if the id is my id or oid
-			var match = rec.getId() === id || rec.get('OID') === id;
+			let match = rec.getId() === id || rec.get('OID') === id;
+			let courseCatalog = rec.getCourseCatalogEntry();
+
+			match = match || (courseCatalog && courseCatalog.getId() === id);
 
 			match = match || rec.get('CourseEntryNTIID') === id;
 

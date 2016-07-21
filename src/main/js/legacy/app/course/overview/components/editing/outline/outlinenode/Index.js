@@ -145,5 +145,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.afterDelete) {
 			this.afterDelete();
 		}
+	},
+
+
+	onRouteDeactivate () {
+		const preview = this.down('overview-editing-outline-outlinenode-preview');
+
+		if (preview) {
+			preview.onRouteDeactivate();
+		}
 	}
 });

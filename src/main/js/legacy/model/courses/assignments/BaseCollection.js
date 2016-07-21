@@ -158,12 +158,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return this;
 	},
 
-	updateAssignments: function () {
+	updateAssignments: function (force) {
 		var me = this,
 			key = me.assignmentUpdateKey,
 			load, link = me.get('AssignmentsLink');
 
-		load = me.getFromCache(key);
+		load = !force && me.getFromCache(key);
 
 		if (!load) {
 			load = Service.request(link)
@@ -179,6 +179,17 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 
 		return load;
 	},
+
+
+	appendAssignment (assignment) {
+		const assignments = this.get('Assignments');
+
+		if (assignments) {
+			assignments.push(assignment);
+			this.set('Assignments', assignments);
+		}
+	},
+
 
 	isAssignment: function (id) {
 		//Its an assignment unless its listed in the "NotItems"

@@ -1,6 +1,8 @@
 var Ext = require('extjs');
-var AssessmentPart = require('./Part');
+require('./Part');
+const {default: FileSet} = require('nti-commons/lib/FileSetDescriptor');
 
+const FilePicker = require('legacy/common/form/fields/FilePicker');
 
 module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 	extend: 'NextThought.model.assessment.Part',
@@ -12,59 +14,54 @@ module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 
 
 	isFileAcceptable: function (file) {
-		var name = this.__checkExt(file.name),
-			type = this.__checkMime(file.type),
-			size = this.__checkSize(file.size),
+		var size = this.__checkSize(file.size),
+			fileSet = new FileSet(
+				this.get('AllowedExtentions') || ['*'],
+				this.get('AllowedMimeTypes') || ['*/*']
+			),
+			type = fileSet.matches(file),
 			r = this.reasons = [];
 
-		if (!name) {
-			r.push('Name does not have an acceptible extention: ' + this.get('AllowedExtentions').join(', '));
-		}
-
 		if (!type) {
-			r.push('The file is of a type we do not allow.');
+			const allowedList = this.getExtensionDisplayList();
+			const accepts = allowedList !== '' ? 'You can only upload ' + allowedList + '. ' : '';
+			const message = 'The file selected is not acceptable. ' + accepts;
+			r.push({message, code: 'FileTypeError'});
 		}
 
 		if (!size) {
-			r.push('The file is too large.');
+			const currentSize = FilePicker.getHumanReadableFileSize(file.size);
+			const maxSize = FilePicker.getHumanReadableFileSize(this.get('MaxFileSize'));
+			const message = 'Your file exceeds the maximum file size. Max File Size: ' + maxSize + '. Uploaded File Size: ' + currentSize;
+			r.push({message, code: 'MaxFileSizeUploadLimitError'});
 		}
 
-		return name && type && size;
-	},
-
-
-	__getRegExp: function (pattern, regExpFormat) {
-		var o = RegExp.escape(pattern)
-				.replace(/\\\*/g, '[^/]+');
-		return new RegExp(Ext.String.format(regExpFormat || '^{0}$', o));
-	},
-
-
-	__checkMime: function (mime) {
-		var me = this,
-			allowedMimes = this.get('AllowedMimeTypes') || ['*/*'];
-
-		if (Ext.isEmpty(mime)) {
-			mime = '-/-';
-		}
-
-		return allowedMimes.some(function (o) {
-			return me.__getRegExp(o).test(mime);
-		});
-	},
-
-
-	__checkExt: function (name) {
-		var me = this,
-			allowedNames = this.get('AllowedExtentions') || ['*.*'];
-		return allowedNames.some(function (o) {
-			return me.__getRegExp(o, '{0}$').test(name);
-		});
+		return size && type;
 	},
 
 
 	__checkSize: function (size) {
 		var max = this.get('MaxFileSize') || Infinity;
 		return size < max && size > 0;
+	},
+
+
+	getExtensionDisplayList () {
+		let extensions = (this.get('AllowedExtentions') || []).slice();
+		if (extensions.length > 1) {
+			let p2 = extensions.splice(-1);
+			extensions = extensions.join(', ') + ' or ' + p2[0];
+		}
+		else if (extensions.length === 1) {
+			extensions = extensions[0];
+			if (extensions[0] === '*' || extensions[0] === '*.*') {
+				extensions = '';
+			}
+		}
+		else {
+			extensions = '';
+		}
+
+		return extensions;
 	}
 });

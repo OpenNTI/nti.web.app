@@ -85,6 +85,20 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 			aspectLocked = !!this.aspectLocked,
 			aspectRatio = this.aspectLocked || (imageInfo.width / imageInfo.height);
 
+		if (imageInfo.width < minWidth && imageInfo.height < minHeight) {
+			return {
+				x: 0,
+				y: 0,
+				width: imageInfo.width,
+				height: imageInfo.height,
+				minSize: {
+					width: imageInfo.width,
+					height: imageInfo.height
+				},
+				locked: true
+			}
+		}
+
 		function getHeight (width) {
 			return Math.ceil(width / aspectRatio);
 		}
@@ -331,13 +345,15 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		ctx.drawImage(imageInfo.image, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
 		ctx.restore();
 
-		//draw border
-		ctx.strokeStyle = '#fff';
-		ctx.strokeRect.apply(ctx, this.getMask(0, 0.5, imageInfo, selection));
-		ctx.strokeStyle = '#000';
-		ctx.strokeRect.apply(ctx, this.getMask(1, 0.5, imageInfo, selection));
+		if (!selection.locked) {
+			//draw border
+			ctx.strokeStyle = '#fff';
+			ctx.strokeRect.apply(ctx, this.getMask(0, 0.5, imageInfo, selection));
+			ctx.strokeStyle = '#000';
+			ctx.strokeRect.apply(ctx, this.getMask(1, 0.5, imageInfo, selection));
 
-		drawCorners.apply(this, this.getMask(6, 0, imageInfo, selection));
+			drawCorners.apply(this, this.getMask(6, 0, imageInfo, selection));
+		}
 	},
 
 	__getOperationAt: function (x, y) {
@@ -351,6 +367,10 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 			origin = {x: rect.left, y: rect.top},
 			operation, cornerSize = this.CORNER_SIZE,
 			nearTop, nearRight, nearBottom, nearLeft;
+
+		if (selection.locked) {
+			return this.OPERATIONS.NOOP;
+		}
 
 		//Get position relative to canvas
 		x -= origin.x;

@@ -9,6 +9,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	cls: 'item',
 
 	renderTpl: Ext.DomHelper.markup([
+		{ tag: 'tpl', 'if': 'canEdit', cn: [
+			{cls: 'edit-assignment', html: 'Edit'}
+		]},
 		{ cls: 'name', html: '{name:htmlEncode}'},
 		{ cls: 'status-container'}
 	]),
@@ -23,7 +26,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.addClasses();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			name: this.assignment.get('title')
+			name: this.assignment.get('title'),
+			canEdit: this.assignment.canEdit()
 		});
 	},
 
@@ -38,6 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (completed && completed > new Date(0)) {
 			cls.push('completed');
 		}
+
+		if (this.assignment.canEdit()) {
+			cls.push('editable');
+		}
+
 
 		this.addCls(cls);
 	},
@@ -73,7 +82,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	onItemClick: function (e) {
-		if (this.navigateToItem && this.assignment && !e.getTarget('.status-container')) {
+		if (this.editAssignment && this.assignment && e.getTarget('.edit-assignment')) {
+			this.editAssignment(this.assignment);
+		} else if (this.navigateToItem && this.assignment && !e.getTarget('.status-container')) {
 			this.navigateToItem(this.assignment);
 		}
 	}

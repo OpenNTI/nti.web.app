@@ -33,7 +33,8 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 		//Placeholder for client-side generated page content :} *facepalm*
 		{ name: 'content', type: 'string', persist: false },
 		{ name: 'Title', type: 'string'},
-		{ name: 'DoNotLoadAnnotations', persist: false}
+		{ name: 'DoNotLoadAnnotations', persist: false},
+		{ name: 'isFakePlaceholder', type: 'bool', persist: false}
 	],
 
 	isPageInfo: true,

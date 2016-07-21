@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var AssignmentsListItem = require('../../student/assignments/ListItem');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {isFeature} = require('legacy/util/Globals');
+
+require('../../student/assignments/ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.ListItem', {
@@ -12,6 +13,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{ tag: 'span', cls: 'completed c{submittedCount}', html: '{submittedCount}'},
 			' / {enrolledCount}'
 		]},
+		{ tag: 'tpl', 'if': 'canEdit', cn: [
+			{cls: 'edit-assignment', html: 'Edit'}
+		]},
 		{ tag: 'tpl', 'if': 'hasReports', cn: [
 			{ cls: 'report'}
 		]},
@@ -20,13 +24,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	]),
 
 
+	scoreTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ tag: 'span', cls: 'completed c{submittedCount}', html: '{submittedCount}'},
+		' / {enrolledCount}'
+	])),
+
+
 	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			submittedCount: this.item.get('submittedCount'),
+			submittedCount: this.assignment.get('SubmittedCount') || 0,
 			enrolledCount: this.item.get('enrolledCount'),
-			hasReports: this.item.get('reportLinks') && this.item.get('reportLinks').length && isFeature('analytic-reports')
+			hasReports: this.item.get('reportLinks') && this.item.get('reportLinks').length && isFeature('analytic-reports'),
+			canEdit: this.item.get('canEdit'),
+			name: this.assignment.get('title')
 		});
 	},
 
@@ -47,7 +59,36 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			cls.push('late');
 		}
 
+		if (this.assignment.canEdit()) {
+			cls.push('editable');
+		}
+
 		this.addCls(cls);
+	},
+
+
+	afterRender () {
+		this.callParent(arguments);
+		this.assignment.on('update', () => this.updateItem());
+	},
+
+
+	updateItem () {
+		const submittedCount = this.assignment.get('SubmittedCount') || 0;
+		const enrolledCount = this.item.get('enrolledCount');
+		const scoreEl = this.el.down('.score');
+		const nameEl = this.el.down('.name');
+
+		if (scoreEl) {
+			scoreEl.setHTML('');
+			this.scoreTpl.append(scoreEl, {submittedCount, enrolledCount});
+		}
+		if (nameEl) {
+			nameEl.update(this.assignment.get('title'));
+		}
+
+		this.removeCls(['closed', 'completed', 'nosubmit', 'late', 'editable']);
+		this.addClasses();
 	},
 
 

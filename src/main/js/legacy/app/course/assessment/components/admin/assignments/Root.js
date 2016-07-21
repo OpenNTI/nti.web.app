@@ -13,7 +13,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return {
 			xtype: 'course-assessment-assignment-admin-list',
 			store: grouper.store,
-			navigateToItem: this.navigateToItem.bind(this)
+			navigateToItem: this.navigateToItem.bind(this),
+			editAssignment: this.editAssignment.bind(this)
 		};
 	},
 

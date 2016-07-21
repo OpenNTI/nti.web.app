@@ -1,9 +1,13 @@
 const Ext = require('extjs');
-const Globals = require('../../../util/Globals');
-const ParseUtils = require('../../../util/Parsing');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const {default: autobind} = require('nti-commons/lib/autobind');
+const StateStore = require('legacy/app/context/StateStore');
 
-require('../../../model/ContentBlobFile');
-require('../../../model/courseware/ContentFile');
+const {ContentResources} = require('nti-web-commons');
+
+require('legacy/model/ContentBlobFile');
+require('legacy/model/courseware/ContentFile');
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker', {
 	extend: 'Ext.Component',
@@ -93,6 +97,21 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 	},
 
 
+	initComponent () {
+		this.callParent(arguments);
+
+		autobind(this,
+			'selectCourseResource',
+			'onFileInputChange',
+			'onDragEnter',
+			'onDragLeave',
+			'onDragLeave',
+			'onInputFocus',
+			'onInputBlur'
+		);
+	},
+
+
 	beforeRender: function () {
 		this.callParent(arguments);
 
@@ -142,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 
 	isEmpty: function () {
-		return !this.hasFile();
+		return !!this.currentFile;
 	},
 
 
@@ -164,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 
 	hasFile: function () {
-		return !!this.currentFile;
+		return this.currentFile && typeof this.currentFile !== 'string';
 	},
 
 
@@ -195,7 +214,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 		if (value) {
 			if (value !== this.defaultValue) {
-				data.append(this.schema.name, value, name);
+				if (typeof value === 'string') {
+					data.append(this.schema.name, value);
+				}
+				else {
+					data.append(this.schema.name, value, name);
+				}
 			}
 		} else {
 			data.append(this.schema.name, '');
@@ -207,26 +231,28 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		var input = this.getInput();
 
 		if (input) {
-			input.addEventListener('change', this.onFileInputChange.bind(this));
-			input.addEventListener('dragenter', this.onDragEnter.bind(this));
-			input.addEventListener('dragleave', this.onDragLeave.bind(this));
-			input.addEventListener('drop', this.onDragLeave.bind(this));
-			input.addEventListener('focus', this.onInputFocus.bind(this));
-			input.addEventListener('blur', this.onInputBlur.bind(this));
+			input.addEventListener('click', this.selectCourseResource);
+			input.addEventListener('change', this.onFileInputChange);
+			input.addEventListener('dragenter', this.onDragEnter);
+			input.addEventListener('dragleave', this.onDragLeave);
+			input.addEventListener('drop', this.onDragLeave);
+			input.addEventListener('focus', this.onInputFocus);
+			input.addEventListener('blur', this.onInputBlur);
 		}
 	},
 
 
-	removeInputListeners: function() {
+	removeInputListeners: function () {
 		var input = this.getInput();
 
 		if (input) {
-			input.removeEventListener('change', this.onFileInputChange.bind(this));
-			input.removeEventListener('dragenter', this.onDragEnter.bind(this));
-			input.removeEventListener('dragleave', this.onDragLeave.bind(this));
-			input.removeEventListener('drop', this.onDragLeave.bind(this));
-			input.removeEventListener('focus', this.onInputFocus.bind(this));
-			input.removeEventListener('blur', this.onInputBlur.bind(this));
+			input.removeEventListener('click', this.selectCourseResource);
+			input.removeEventListener('change', this.onFileInputChange);
+			input.removeEventListener('dragenter', this.onDragEnter);
+			input.removeEventListener('dragleave', this.onDragLeave);
+			input.removeEventListener('drop', this.onDragLeave);
+			input.removeEventListener('focus', this.onInputFocus);
+			input.removeEventListener('blur', this.onInputBlur);
 		}
 	},
 
@@ -234,13 +260,31 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 	maybeWarnForSize: function (file) {
 		var size = this.schema.warningSize || this.WARNING_SIZE;
 
-		if (file && file.size > size) {
+		if (file && !file.NTIID && file.size > size) {
 			console.warn('Large File attached.');
 
 			if (this.schema.showWarning) {
 				this.schema.showWarning();
 			}
 		}
+	},
+
+
+	selectCourseResource (e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		const bundle = StateStore.getInstance().getRootBundle();
+		const sourceID = bundle.getId();
+
+		const accept = x => !x.isFolder && (!this.acceptsContentFileFilter || this.acceptsContentFileFilter(x));
+		const filter = x => !this.contentFileFilter || this.contentFileFilter(x);
+
+		ContentResources.selectFrom(sourceID, accept, filter)
+			.then(file => {
+				this.currentFile = file.getID();
+				this.onFileChange(file);
+			});
 	},
 
 
@@ -281,7 +325,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.setPreviewFromInput(file);
 
 		if (this.schema.onFileAdded) {
-			this.schema.onFileAdded(file.type);
+			this.schema.onFileAdded(file.getFileMimeType ? file.getFileMimeType() : file.type);
 		}
 
 		if (this.onChange) {
@@ -338,6 +382,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		if (!this.rendered) {
 			this.on('afterrender', this.setPreviewFromInput.bind(this, file));
 			return;
+		}
+
+		if (file.NTIID) {
+			return this.setPreviewFromValue(file.NTIID);
 		}
 
 		var size = this.self.getHumanReadableFileSize(file.size, 1),

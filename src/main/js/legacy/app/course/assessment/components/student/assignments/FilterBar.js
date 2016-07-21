@@ -8,26 +8,27 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	cls: 'assignment-filterbar',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'third dropmenu disabled', cn: [
+		{ cls: 'dropmenu disabled cell', cn: [
 			{ cls: 'label', html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.allassignments}}}' }
 		] },
-		{ cls: 'third dropmenu groupBy', cn: [
+		{ cls: 'dropmenu groupBy cell', cn: [
 			{ cls: 'label', html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.alllessons}}}' }
 		] },
-		{ cls: 'third search', cn: [
+		{ cls: 'search cell', cn: [
 			{ tag: 'input', type: 'text', placeholder: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.searchplaceholder}}}', required: 'required' },
 			{ cls: 'clear' }
-		] }
+		] },
+		{ cls: 'create-assignment cell', html: 'Create'}
 	]),
 
 	renderSelectors: {
 		groupEl: '.groupBy',
 		searchEl: '.search input',
-		clearEl: '.search .clear'
+		clearEl: '.search .clear',
+		createEl: '.create-assignment'
 	},
 
-	bubbleEvents: ['filters-changed', 'search-changed'],
-
+	bubbleEvents: ['filters-changed', 'search-changed', 'create-assignment'],
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -39,13 +40,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(this.groupEl, 'click', 'showGroupByMenu');
 		this.mon(this.searchEl, 'keyup', 'searchKeyPressed');
 		this.mon(this.clearEl, 'click', 'clearSearch');
+		this.mon(this.createEl, 'click', this.createAssignment.bind(this));
+
+		this.createEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		if (!this.shouldShowCreateButton) {
+			this.createEl.hide();
+		}
 	},
 
 
 	searchKeyPressed: function (e) {
 		var key = e.keyCode;
-
-		this.searchKey = this.searchEl.getValue();
 
 		if (key === e.ENTER) {
 			//refresh the list
@@ -53,8 +59,54 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return;
 		}
 
+		if (this.searchKey === this.searchEl.getValue()) {
+			return;
+		} else {
+			this.searchKey = this.searchEl.getValue();
+		}
+
 		//update without refreshing
-		this.fireEvent('search-changed', this.searchKey);
+		clearTimeout(this.doSearchTimeout);
+
+		this.doSearchTimeout = setTimeout(() => {
+			this.fireEvent('search-changed', this.searchKey);
+		}, 250);
+	},
+
+
+	showCreateButton () {
+		this.shouldShowCreateButton = true;
+
+		if (this.createEl) {
+			this.createEl.show();
+		}
+	},
+
+
+	hideCreateButton () {
+		delete this.shouldShowCreateButton;
+
+		if (this.createEl) {
+			this.createEl.hide();
+		}
+	},
+
+
+	showPublishOption () {
+		this.shouldShowPublishOption = true;
+
+		if (this.rendered) {
+			this.createGroupByMenu();
+		}
+	},
+
+
+	hidePublishOption () {
+		delete this.shouldShowPublishOption;
+
+		if (this.rendered) {
+			this.createGroupByMenu();
+		}
 	},
 
 
@@ -69,23 +121,32 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var menu = this.groupByMenu, item = menu.down('[checked]');
 		if (!this.groupEl.hasCls('disabled')) {
 			if (item) {
-					menu.insert(0, item);
-				}
+				menu.insert(0, item);
+			}
 			menu.showBy(this.groupEl, 'tl-tl');
 		}
 	},
 
 
 	createGroupByMenu: function () {
+		if (this.groupByMenu) {
+			this.groupByMenu.destroy();
+		}
+
 		var type = this.currentGrouping, items = [
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.alllessons'), groupBy: 'lesson', checked: type === 'lesson'},
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.due'), groupBy: 'due', checked: type === 'due'},
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.completion'), groupBy: 'completion', checked: type === 'completion'}
 			];
 
+		if (this.shouldShowPublishOption) {
+			items.push({ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.publicationstatus'), groupBy: 'publication', checked: type === 'publication'});
+			items.push({ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.creationdate'), groupBy: 'creation', checked: type === 'creation'});
+		}
+
 		this.groupByMenu = Ext.widget('menu', {
 			cls: 'group-by-menu',
-			width: 257,
+			width: 213,
 			ownerCmp: this,
 			offset: [0, 0],
 			defaults: {
@@ -168,5 +229,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	setSearch: function (value) {
 		this.searchEl.dom.value = value;
 		this.searchkey = value;
+	},
+
+
+	createAssignment () {
+		this.fireEvent('create-assignment');
 	}
 });

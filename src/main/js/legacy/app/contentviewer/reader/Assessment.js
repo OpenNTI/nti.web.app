@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-	makeAssessmentQuestion: function (q, set) {
+	makeAssessmentQuestion: function (q, set, questionIndex) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', q.getId()),
 			o = this.reader.getComponentOverlay();
 
@@ -65,7 +65,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			renderTo: o.componentOverlayEl,
 			questionSet: set || null,
 			tabIndexTracker: o.tabIndexer,
-			contentElement: contentElement
+			contentElement: contentElement,
+			questionIndex: questionIndex
 		}));
 
 		if (contentElement) {
@@ -149,7 +150,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 		set.isAssignment = !!this.injectedAssignment;
 
-		Ext.each(questions, function (q) {me.makeAssessmentQuestion(q, set);});
+		let ids = me.getPendingQuestionIds(pendingAssessment);
+		me.makeNumberedAssessmentQuestions(questions, set, ids);
 
 		this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 			reader: r, renderTo: c, questionSet: set,
@@ -168,11 +170,36 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		} else if (this.injectedSavePoint) {
 			this.submission.setFromSavePoint(this.injectedSavePoint);
 		}
+	},
 
-		if (!h && isInstructor) {
-			this.submission.disableView();
-			set.fireEvent('instructor-show-solutions');
+	makeNumberedAssessmentQuestions: function (questions, set, questionIds) {
+		let questionIndex = 0;
+		let me = this;
+
+		Ext.each(questions, function (q) {
+			if (!questionIds || q.internalId && questionIds['' + q.internalId]) {
+				me.makeAssessmentQuestion(q, set, questionIndex);
+				++questionIndex;
+			} else {
+				me.makeAssessmentQuestion(q, set);
+			}
+		});
+	},
+
+	getPendingQuestionIds: function (pendingAssessment) {
+		let pendingQuestionIds = {};
+		let pendingQuestions = pendingAssessment && pendingAssessment.data && pendingAssessment.data.questions;
+
+		if (pendingQuestions) {
+			pendingQuestions.forEach(function (question) {
+				const id = question.get('questionId') || question.internalId;
+				if (id) {
+					pendingQuestionIds['' + id] = true;
+				}
+			});
+			return pendingQuestionIds;
 		}
+		return undefined;
 	},
 
 	updateAssessmentHistory: function (history) {
@@ -308,10 +335,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 	},
 
 	progressLostAlert: function () {
-		var assignment = this.injectedAssignment,
-			title = (assignment && assignment.get('title')),
-			progress = ' Your progress will be lost.',
-			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
+		let assignment = this.injectedAssignment;
+		let title = (assignment && assignment.get('title'));
+		let progress = ' Your progress will be lost.';
+		let dueDate = assignment && assignment.getDueDate();
+		let due = dueDate ? 'It is due on ' + Ext.Date.format(dueDate, 'l, F j') + '.' : '';
 
 		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
@@ -342,11 +370,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			return true;
 		}
 
-		var assignment = this.injectedAssignment,
-			hasAnswers = this.submission.hasAnyAnswers(),
-			missingAnswers = this.submission.hasAnyMissing(),
-			isSubmitted = this.submission.isSubmitted(),
-			progressSaved = this.submission.hasProgressSaved();
+		let assignment = this.injectedAssignment;
+		let hasAnswers = this.submission.hasAnyAnswers();
+		let missingAnswers = this.submission.hasAnyMissing();
+		let isSubmitted = this.submission.isSubmitted();
+		let progressSaved = this.submission.hasProgressSaved();
+		let progressAttempted = this.submission.hasAttemptedProgress();
 
 		if (isSubmitted || this.isInstructorProspective) {
 			return Promise.resolve();
@@ -356,7 +385,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			return this.notSubmittedTimed();
 		}
 
-		if (hasAnswers && !progressSaved) {
+		if (hasAnswers && progressAttempted && !progressSaved) {
 			return this.progressLostAlert();
 		}
 

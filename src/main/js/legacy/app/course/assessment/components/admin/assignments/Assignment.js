@@ -35,6 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				] },
 				//path (bread crumb)
 				{
+					cls: 'assignment-breadcrumb-path',
 					cn: [
 						{ tag: 'span', cls: 'path part root', html: '{pathRoot}'},
 						' / ',
@@ -271,7 +272,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.mon(this.pageHeader, {
 			'showFilters': this.onFiltersClicked.bind(this),
-			'goToRawAssignment': this.goToRawAssignment.bind(this)
+			'goToRawAssignment': this.goToRawAssignment.bind(this),
+			'editAssignment': this.editAssignment.bind(this)
 		});
 
 		if (!this.stateRestored) {
@@ -779,5 +781,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		id = encodeForURI(id);
 
 		this.pushRoute(title, id, {assignment: this.assignment});
+	},
+
+
+	editAssignment () {
+		const title = this.assignment.get('title');
+		let id = this.assignment.getId();
+
+		id = encodeForURI(id);
+
+		this.pushRoute(title, id + '/edit/', {assignment: this.assignment});
 	}
 });

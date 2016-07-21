@@ -39,6 +39,8 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		this.callParent();
 		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
+
+		window['nti-sticky-top-offset'] = 70;
 	},
 
 	constructor: function () {

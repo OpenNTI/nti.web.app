@@ -89,6 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 		return new Promise(function (fulfill, reject) {
 			qsetSubmission.save({
+				url: questionSet.getLink('PracticeSubmission'),
 				callback: function () {},
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();
@@ -104,15 +105,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
+	getObjectURL: function (id) {
+		return Service.getObjectURL(id);
+	},
+
+
 	submitSurvey: function (survey, submissionData, containerId, startTime) {
 		var data = this.__getDataForSurveySubmission(survey, submissionData, containerId, startTime),
-			surveySubmission;
+			surveySubmission, me = this;
 
 		surveySubmission = NextThought.model.assessment.SurveySubmission.create(data);
 
 		return new Promise(function (fulfill, reject) {
 			surveySubmission.save({
-				url: Service.getObjectURL(survey.getId()),
+				url: me.getObjectURL(survey.getId()),
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
@@ -129,7 +135,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 	submitAssignment: function (questionSet, submissionData, containerId, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
-			assignmentId = questionSet.associatedAssignment.getId(),
+			assignment = questionSet && questionSet.associatedAssignment,
+			assignmentId = assignment.getId(),
 			qsetSubmission, assignmentSubmission;
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
@@ -138,19 +145,31 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
 			assignmentId: assignmentId,
 			parts: [qsetSubmission],
-			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration
+			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration,
+			version: assignment.get('version')
 		});
 
+		if (assignment && assignment.getLink('PracticeSubmission')) {
+			return this.doSubmitAssignment(assignmentSubmission, assignment, true);
+		} else {
+			return this.doSubmitAssignment(assignmentSubmission, assignment);
+		}
+	},
+
+	doSubmitAssignment: function (assignmentSubmission, assignment, isPracticeSubmission) {
+		const assignmentId = assignment.getId();
+		const me = this;
+		const link = isPracticeSubmission ? assignment.getLink('PracticeSubmission') : me.getObjectURL(assignmentId);
 
 		return new Promise(function (fulfill, reject) {
 			assignmentSubmission.save({
-				url: Service.getObjectURL(assignmentId),
+				url: link,
 				success: function (self, op) {
-					var pendingAssessment = op.getResultSet().records.first(),
-						result = pendingAssessment.get('parts').first(),
+					var pendingAssessment = op.getResultSet().records[0],
+						result = pendingAssessment.get('parts')[0],
 						itemLink = pendingAssessment.getLink('AssignmentHistoryItem');
 
-					questionSet.associatedAssignment.setHistoryLink(itemLink);
+					assignment.setHistoryLink(itemLink);
 
 					fulfill({
 						result: result,
@@ -158,10 +177,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 						assignmentId: assignmentId
 					});
 				},
-				failure: function () {
+				failure: function (rec, resp) {
 					console.error('FAIL', arguments);
-					alert('There was a problem submitting your assignment.');
-					reject();
+					let err = resp && resp.error;
+					if (err && err.status === 409) {
+						me.handleConflictError(assignment);
+					}
+					else {
+						alert('There was a problem submitting your assignment.');
+					}
+					reject(err);
 				}
 			});
 		});
@@ -170,13 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 	saveProgress: function (questionSet, submissionData, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),
 			qsetSubmission, assignmentSubmission,
-			assignment = questionSet.associatedAssignment,
-			url = assignment && assignment.getLink('Savepoint');
-
-		if (!url) {
-			console.error('No url to save assignemnt progress to');
-			return Promise.reject();
-		}
+			assignment = questionSet.associatedAssignment;
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
 
@@ -184,25 +203,65 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
 			assignmentId: assignment.getId(),
 			parts: [qsetSubmission],
-			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration
+			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration,
+			version: assignment.get('version')
 		});
 
-		return new Promise(function (fulfill, reject) {
+		return this.doSaveProgress(assignmentSubmission, assignment);
+	},
+
+
+	doSaveProgress: function (assignmentSubmission, assignment) {
+		const url = assignment && assignment.getLink('Savepoint');
+		const me = this;
+
+		if (!url) {
+			console.error('No url to save assignment progress to');
+			return Promise.reject();
+		}
+
+		return new Promise(function (fulfill) {
 			assignmentSubmission.save({
 				url: url,
 				success: function (self, op) {
-					var result = op.getResultSet().records.first();
-
+					let result = op.getResultSet().records[0];
 					fulfill(result);
 				},
-				failure: function () {
+				failure: function (rec, resp) {
 					console.error('Failed to save assignment progress');
-
-					fulfill(null);
+					let err = resp && resp.error;
+					if (err && err.status === 409) {
+						me.handleConflictError(assignment);
+					}
+					fulfill(err);
 				}
 			});
 		});
 	},
+
+	handleConflictError: function (assignment) {
+		Ext.MessageBox.alert({
+			title: 'This assignment has changed',
+			msg: 'Clicking OK will reload the assignment',
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: 'OK'
+				}
+			},
+			fn: function (button) {
+				if (button === 'yes' && assignment) {
+					assignment.updateFromServer()
+						.then(function () {
+							assignment.fireEvent('refresh');
+						});
+				}
+			}
+		});
+	},
+
 
 	checkAnswer: function (question, answerValues, startTime, canSubmitIndividually) {
 		var endTimestamp = (new Date()).getTime(),

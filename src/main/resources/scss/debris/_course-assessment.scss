@@ -168,7 +168,7 @@ canvas.x-component-course-assessment {
 }
 
 .assignment-due-date-editor {
-	& .contents > .label {
+	.inline-publish-editor > .label, .inline-due-date-editor > .label {
 		font-size: 0.875em;
 		line-height: 14px;
 		color: $primary-grey;
@@ -194,11 +194,12 @@ canvas.x-component-course-assessment {
 			padding-left: 25px;
 			font-weight: 600;
 		}
+
+		&.disabled {
+			opacity: .3;
+		}
 	}
 
-	.date-time-field {
-		margin-bottom: 1.5em;
-	}
 
 	.contents > .error {
 		font-size: 0.875em;
@@ -228,6 +229,59 @@ canvas.x-component-course-assessment {
 
 	.x-mask-msg {
 		z-index: 1;
+	}
+
+
+	.inline-publish-editor {
+		margin-bottom: 1.5rem;
+
+		.container {
+			&.hidden {
+				display: none;
+			}
+
+			.publish-label, .schedule-label, .draft-label {
+				font-size: 0.875rem;
+				font-weight: 300;
+			}
+		}
+	}
+
+	.inline-due-date-editor {
+		margin-bottom: 1.5rem;
+	}
+}
+
+
+.inline-reset-menu {
+	.publish-reset-label {
+		display: block;
+		font-size: 0.875rem;
+		color: #494949;
+		font-family: $font;
+		margin: 0 1.25rem 0.25rem 0;
+	}
+	.publish-reset-text {
+		display: block;
+		font-size: 0.75rem;
+		line-height: 1.3;
+		color: #757474;
+		margin: 0 1.25rem 1.25rem 0;
+	}
+	.publish-reset {
+		display: block;
+		height: 2rem;
+		border-radius: 0.25rem;
+		color: white;
+		text-align: center;
+		vertical-align: middle;
+		line-height: 2rem;
+		font-weight: 100;
+		font-size: 0.875rem;
+		font-family: $font;
+		background-color: #F35252;
+		width: 140px;
+		cursor: pointer;
 	}
 }
 
@@ -511,6 +565,12 @@ canvas.x-component-course-assessment {
 			z-index: 1;
 		}
 
+		&.editable {
+			.name {
+				margin-right: 10rem
+			}
+		}
+
 		.name {
 			font: normal 500 0.9em/2 $font;
 			color: $primary-grey;
@@ -539,9 +599,17 @@ canvas.x-component-course-assessment {
 			float: left;
 		}
 
+		.edit-assignment {
+			float: right;
+			font: normal 300 0.875rem/3 $font;
+			color: $primary-blue;
+			padding-right: 1rem;
+			cursor: pointer;
+		}
+
 		.score {
 			white-space: nowrap;
-			font: normal 400 0.8em/3 $font;
+			font: normal 400 0.875em/3 $font;
 			color: $tertiary-grey;
 			width: 8em;
 			float: right;
@@ -1204,11 +1272,34 @@ canvas.x-component-course-assessment {
 	color: $secondary-grey;
 	z-index: 2;
 	position: relative;
-	font: normal 500 0.9em/3.5em $font;
+	font: normal 500 0.875em/3.5em $font;
+	display: flex;
 
 	&.disabled, .disabled & {
 		opacity: 0.6;
 		pointer-events: none;
+	}
+
+	.cell {
+		position: relative;
+		flex: 1 1 213px;
+		padding: 0 2em;
+		box-shadow: inset -1px 0 0 0 #f1f1f1;
+
+		&:last-of-type {
+			box-shadow: none;
+		}
+	}
+
+
+	.create-assignment {
+		flex: 0 0 125px;
+		background-color: $primary-blue;
+		color: white;
+		cursor: pointer;
+		padding-left: 50px;
+
+		@include icon($notepad_active_white, $side: 'before', $top: 15px, $left: 26px);
 	}
 
 	input {
@@ -2249,4 +2340,9 @@ canvas.x-component-course-assessment {
 			}
 		}
 	}
+}
+
+
+.full-assignment-editor {
+	padding-top: 20px;
 }

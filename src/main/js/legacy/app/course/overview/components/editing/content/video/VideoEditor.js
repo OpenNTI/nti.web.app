@@ -37,6 +37,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			currentPosition = parentSelection && parentSelection.getCurrentPosition(),
 			values = this.videoItems && this.videoItems.getItems();
 
-		return this.VideoEditingActions.saveVideo(values, this.record, originalPosition, currentPosition, this.rootRecord);
+		return this.VideoEditingActions.saveVideo(values, this.record, originalPosition, currentPosition, this.rootRecord)
+			.then((video) => {
+				this.bundle.reloadVideoIndex();
+
+				return video;
+			});
 	}
 });

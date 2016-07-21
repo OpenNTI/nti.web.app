@@ -437,6 +437,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		});
 	},
 
+
+	canAddAssignment () {
+		return !!this.getLink('CourseEvaluations');
+	},
+
+
 	/**
 	 * Check is this instance is in the same family as another
 	 * @param  {CourseInstance} instance the instance to compare against
@@ -693,11 +699,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 * @param  {String} link rel of the link to get
 	 * @return {Promise}	  the request for the link
 	 */
-	__getList: function (link) {
+	__getList: function (link, force) {
 		var promiseName = '__get' + link + 'Promise',
 			link;
 
-		if (this[promiseName]) {
+		if (this[promiseName] && !force) {
 			return this[promiseName];
 		}
 
@@ -922,16 +928,24 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.get('Bundle').getVideosByContentPackage();
 	},
 
-	getMediaByOutline: function () {
-		return this.__getList('MediaByOutlineNode');
+	getMediaByOutline: function (force) {
+		return this.__getList('MediaByOutlineNode', force);
 	},
 
-	getVideoIndex: function () {
+
+	reloadVideoIndex () {
+		delete this.videoIndexPromise;
+
+		return this.getVideoIndex(true);
+	},
+
+
+	getVideoIndex: function (force) {
 		if (this.videoIndexPromise) {
 			return this.videoIndexPromise;
 		}
 
-		this.videoIndexPromise = this.getMediaByOutline()
+		this.videoIndexPromise = this.getMediaByOutline(force)
 									.then(function (outline) {
 										var items = outline.Items;
 
