@@ -170,6 +170,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			gotoAssignment: (NTIID, title) => {
 				this.pushRoute(title, path.join(encodeForURI(NTIID), 'edit'));
 			},
+			previewAssignment: (NTIID, title) => {
+				this.pushRoute(title, path.join(encodeForURI(NTIID)));
+			},
 			findAssignment: (NTIID) => {
 				const view = this.getView();
 				const assignments = view && view.assignmentCollection;
@@ -323,11 +326,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				let index = 0;
 				let prev = 0;
 				let next = 0;
+				let assignment;
 
 				for (index; index < assignments.length; index++) {
 					let item = assignments[index];
 
 					if (item.getId() === id) {
+						assignment = item;
 						break;
 					}
 				}
@@ -358,7 +363,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 				return {
 					assignmentId: id,
-					assignment: (route.precache || {}).assignment,
+					assignment: assignment || (route.precache || {}).assignment,
 					pageSource
 				};
 			})
