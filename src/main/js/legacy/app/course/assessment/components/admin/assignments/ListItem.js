@@ -24,6 +24,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	]),
 
 
+	scoreTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ tag: 'span', cls: 'completed c{submittedCount}', html: '{submittedCount}'},
+		' / {enrolledCount}'
+	])),
+
+
 	beforeRender: function () {
 		this.callParent(arguments);
 
@@ -58,6 +64,28 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		this.addCls(cls);
+	},
+
+
+	afterRender () {
+		this.callParent(arguments);
+		this.assignment.on('update', () => this.updateItem());
+	},
+
+
+	updateItem () {
+		const submittedCount = this.assignment.get('SubmittedCount') || 0;
+		const enrolledCount = this.item.get('enrolledCount');
+		const scoreEl = this.el.down('.score');
+		const nameEl = this.el.down('.name');
+
+		if (scoreEl) {
+			scoreEl.setHTML('');
+			this.scoreTpl.append(scoreEl, {submittedCount, enrolledCount});
+		}
+		if (nameEl) {
+			nameEl.update(this.assignment.get('title'));
+		}
 	},
 
 

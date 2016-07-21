@@ -50,7 +50,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 	onClick () {
 		const resetLink = this.assignment.getLink('Reset');
-		Service.post(resetLink);
+
+		if (!resetLink) { return; }
+
+		Service.post(resetLink)
+			.then((response) => {
+				this.assignment.syncWithResponse(response);
+			});
 	},
 
 
