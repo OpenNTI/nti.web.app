@@ -41,6 +41,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
+	allowNavigation () {
+		if (this.el) {
+			this.el.mask('Saving...');
+		}
+
+		return wait(1000)
+			.then(() => {
+				if (this.el) {
+					this.el.unmask();
+				}
+			});
+	},
+
+
 	onRouteActivate () {
 		if (this.EditorCmp) {
 			this.EditorCmp.onRouteActivate();
