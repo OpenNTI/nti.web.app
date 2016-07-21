@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{cls: 'header', html: getString('NextThought.view.courseware.assessment.View.empty')}
 		];
 
-		if (bundle && bundle.canAddAssignment) {
+		if (bundle && bundle.canAddAssignment && bundle.canAddAssignment()) {
 			cn.push({
 				cls: 'header sub link create',
 				html: 'Create an Assignment'

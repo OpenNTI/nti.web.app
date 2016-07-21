@@ -578,7 +578,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}));
 		}
 
-		if (bundle && bundle.canAddAssignment()) {
+		if (bundle && bundle.canAddAssignment && bundle.canAddAssignment()) {
 			filterBar.showCreateButton();
 			filterBar.showPublishOption();
 		} else {
