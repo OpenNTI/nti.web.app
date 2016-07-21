@@ -1,0 +1,11 @@
+.course-assessment-header {
+	.toolbar {
+		.assignment-breadcrumb-path {
+			display: inline-block;
+			max-width: 60%;
+			max-width: calc(100% - 200px);
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+}
