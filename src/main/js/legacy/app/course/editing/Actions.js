@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 
 	updateAssignment (assignment, {published, available}, {due}) {
 		const now = new Date();
-		const currentAvailable = assignment.get('availableBeginning');
+		const currentAvailable = assignment.get('availableBeginning') || null;
 
 		//If we published and nulled out available (i.e publish now), and the assignment is currently available
 		//don't unset the available date. This means the assignment was in the schedule state, the schedule date passed,
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 
 		return this.updateAssignmentDates(assignment, available, due)
 			.then(() => {
-				this.updateAssignmentPublish(assignment, published);
+				return this.updateAssignmentPublish(assignment, published);
 			});
 	},
 
@@ -70,16 +70,19 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 
 
 		let data = {};
+		let doSave = false;
 
 		if (available !== currentAvailable) {
 			data[BEGINNING] = available;
+			doSave = true;
 		}
 
 		if (due !== currentDue) {
 			data[ENDING] = due;
+			doSave = true;
 		}
 
-		if (!data[BEGINNING] && !data[ENDING]) {
+		if (!doSave) {
 			return Promise.resolve();
 		}
 

@@ -1,6 +1,8 @@
 const Ext = require('extjs');
-
+const {Publish, Constants} = require('nti-web-commons');
 require('legacy/common/form/fields/DateTimeField');
+const {PUBLISH_STATES} = Constants;
+const getPublishState = value => PUBLISH_STATES[value] || (value instanceof Date ? PUBLISH_STATES.SCHEDULE : null);
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.editing.PublishState', {
 	extend: 'Ext.container.Container',
@@ -168,22 +170,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return this.down('[isAvailableEditor]');
 	},
 
-
-	enableRadioLabel (label) {
-		label.classList.remove('disabled');
-		label.removeAttribute('data-qtip');
-	},
-
-
-	disableRadioLabel (label, reason) {
-		label.classList.add('disabled');
-
-		if (reason) {
-			label.addAttribute('data-qtip', reason);
-		}
-	},
-
-
 	showContainer (show) {
 		const containers = [
 			this.publishContainer,
@@ -218,53 +204,72 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.onDraftCheckChanged();
 	},
 
+	hasPublishingLinks () {
+		return this.assignment.hasLink('publish') || this.assignment.hasLink('unpublish');
+	},
+
 
 	setAssignment (assignment) {
 		this.assignment = assignment;
 
 		if (!this.rendered) { return; }
 
-		const editor = this.getScheduleEditor();
-		const available = assignment.get('availableBeginning');
-
-		if (assignment.isPublishedByState()) {
-			this.setPublishedAssignment(assignment);
+		// Determine weather or not to show the publish controls
+		const isPublishable = assignment && (assignment.hasLink('publish') || assignment.hasLink('unpublish'));
+		if(isPublishable) {
+			this.show();
 		} else {
-			this.setUnpublishedAssignment(assignment);
+			this.hide();
 		}
+		const available = assignment.get('availableBeginning');
+		const value = Publish.evaluatePublishStateFor({
+			isPublished: () => assignment && (!!assignment.get('PublicationState') && !available || available < Date.now()),
+			getPublishDate: () => assignment && available
+		});
 
-		if (available) {
-			editor.selectDate(available);
+		const state = getPublishState(value);
+
+		// Determine the publish state
+		if (state === PUBLISH_STATES.PUBLISH) {
+			this.setPublishAssignment(assignment);
+		} else if (state === PUBLISH_STATES.SCHEDULE) {
+			this.setScheduleAssignment(assignment);
+		} else if (state === PUBLISH_STATES.DRAFT) {
+			this.setDraftAssignment(assignment);
 		}
 
 		this.updateScheduleLabel();
 	},
 
 
-	setPublishedAssignment (assignment) {
+	setPublishAssignment (assignment) {
 		const editor = this.getScheduleEditor();
-		const available = assignment.get('availableBeginning');
-		const now = new Date();
 
 		if (assignment.canUnpublish()) {
 			this.enableRadioLabel(this.draftRadioLabel);
+			this.enableRadio(this.draftRadio);
 		} else {
 			this.disableRadioLabel(this.draftRadioLabel);
+			this.disableRadio(this.draftRadio);
 		}
 
 		this.enableRadioLabel(this.publishRadioLabel);
 		this.enableRadioLabel(this.scheduleRadioLabel);
 
-		if (!available || now >= available) {
-			editor.selectDate(null);
-			this.checkOption(this.publishRadio);
-		} else {
-			this.checkOption(this.scheduleRadio);
-		}
+		editor.selectDate(null);
+		this.checkOption(this.publishRadio);
 	},
 
 
-	setUnpublishedAssignment (assignment) {
+
+	setScheduleAssignment (assignment) {
+		const editor = this.getScheduleEditor();
+		editor.selectDate(assignment.get('availableBeginning'));
+		this.checkOption(this.scheduleRadio);
+	},
+
+
+	setDraftAssignment (assignment) {
 		if (assignment.canPublish) {
 			this.enableRadioLabel(this.publishRadioLabel);
 			this.enableRadioLabel(this.scheduleRadioLabel);
@@ -274,7 +279,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		this.enableRadioLabel(this.draftRadioLabel);
-
 		this.checkOption(this.draftRadio);
 	},
 
@@ -292,7 +296,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			label.innerText = 'Assignment will be available to students on ' + Ext.Date.format(date, 'F j \\a\\t g:i A\\.');
 		}
 	},
-
 
 
 	onPublishCheckChanged () {
@@ -363,5 +366,32 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		return values;
+	},
+
+
+	enableRadioLabel (label) {
+		label.classList.remove('disabled');
+		label.removeAttribute('data-qtip');
+	},
+
+
+	disableRadioLabel (label, reason) {
+		label.classList.add('disabled');
+
+		if (reason) {
+			label.addAttribute('data-qtip', reason);
+		}
+	},
+
+
+	disableRadio (radio) {
+		radio.disabled = true;
+		radio.classList.add('disabled');
+	},
+
+
+	enableRadio (radio) {
+		radio.disabled = false;
+		radio.classList.remove('disabled');
 	}
 });
