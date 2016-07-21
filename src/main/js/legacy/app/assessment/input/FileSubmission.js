@@ -136,22 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	getExtensionDisplayList: function () {
-		let extensions = (this.part.get('AllowedExtentions') || []).slice();
-		if (extensions.length > 1) {
-			let p2 = extensions.splice(-1);
-			extensions = extensions.join(', ') + ' or ' + p2[0];
-		}
-		else if (extensions.length === 1) {
-			extensions = extensions[0];
-			if (extensions[0] === '*' || extensions[0] === '*.*') {
-				extensions = '';
-			}
-		}
-		else {
-			extensions = '';
-		}
-
-		return extensions;
+		return this.part && this.part.getExtensionDisplayList();
 	},
 
 
@@ -228,12 +213,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	onFileInputChange: function (e) {
-		console.debug('New file was uploaded...', e);
-
 		const p = this.part;
 		const file = e.target.files[0];
 		const allowed = p.isFileAcceptable(file);
-		this[allowed ? 'reset' : 'markBad']();
+		this[allowed ? 'reset' : 'markBad'](p.reasons);
 
 		e.preventDefault();
 		e.stopPropagation();
@@ -260,9 +243,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	updateProgress: function (e) {
-		console.log('Loaded: ' + e.loaded);
-		console.log('Total: ' + e.total);
-
 		if (this.progressBar) {
 			this.progressBar.setProps({value: e.loaded});
 		}
@@ -270,9 +250,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	onLoadStart: function (e) {
-		console.log('Loaded: ' + e.loaded);
-		console.log('Total: ' + e.total);
-
 		this.showPreview();
 		this.uploading = true;
 		this.previewEl.addCls('uploading');
@@ -532,14 +509,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	markBad: function () {
-		//FIXME: There are other reasons the file could be "bad". Extensions is only a small part.
-		//Client side: It could be bad if its too big. or not in the allowed list. There is a "reasons" array on the model. Use those.
-		const allowedList = this.getExtensionDisplayList();
-		const accepts = allowedList !== '' ? 'You can only upload ' + allowedList + '. ' : '';
-		const msg = 'The file selected is not acceptable. ' + accepts;
+	markBad: function (reasons) {
+		let msg = 'There was an error uploading your file';
+		if (reasons && reasons.length > 0) {
+			msg = reasons[0].message;
+		}
 
-		alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+		alert({title: 'Attention', msg, icon: 'warning-red'});
 	},
 
 
