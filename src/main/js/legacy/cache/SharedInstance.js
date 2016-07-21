@@ -154,7 +154,12 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 		//If the record has been modified after the cached copy, update the cache
 		if (lastMod > cachedLastMod || forceUpdate) {
-			this.__updateRecord(key, record);
+			if (cachedRecord) {
+				cachedRecord.syncWith(record);
+			}
+			else {
+				this.__updateRecord(key, record);
+			}
 		}
 
 		return cachedRecord;
