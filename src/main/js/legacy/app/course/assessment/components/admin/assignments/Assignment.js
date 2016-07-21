@@ -35,6 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				] },
 				//path (bread crumb)
 				{
+					cls: 'assignment-breadcrumb-path',
 					cn: [
 						{ tag: 'span', cls: 'path part root', html: '{pathRoot}'},
 						' / ',
