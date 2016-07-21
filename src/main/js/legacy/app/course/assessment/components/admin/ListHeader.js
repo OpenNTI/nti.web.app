@@ -417,7 +417,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			due: assignment.getDueDate(),
 			maxTime: assignment.isTimed && assignment.getMaxTime(),
 			duration: assignment.isTimed && assignment.getDuration(),
-			isNoSubmitAssignment: assignment.isNoSubmit()
+			isNoSubmitAssignment: assignment.isNoSubmit(),
+			start: assignment.get('availableBeginning')
 		}));
 
 		if (assignment.getLink('edit')) {
