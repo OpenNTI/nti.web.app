@@ -1147,11 +1147,10 @@ body.dragging * {
 	}
 
 	&.parts.submitted {
-		.field {
+		.free-response-part {
 			.response-container {
 				background: $panel-background;
 				border: 1px solid #e2e2e2;
-
 				.inputbox {
 					background: $panel-background;
 
@@ -1164,6 +1163,8 @@ body.dragging * {
 		}
 		.modeled-body-part {
 			.response-container {
+				background: $panel-background;
+				border: 1px solid #e2e2e2;
 				.main {
 					background: $panel-background;
 					opacity: 1;
