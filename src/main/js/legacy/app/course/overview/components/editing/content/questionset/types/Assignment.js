@@ -134,20 +134,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						'Target-NTIID': assignment.get('NTIID')
 					};
 
-					this.bundle.getAssignments()
+					// Make the ref from the assignment to the group
+					this.EditingActions.saveValues(values, null, null, {parent: parentRecord, position: parentRecord.getItemsCount()}, rootRecord)
+						.then(() => {
+							return this.bundle.getAssignments();
+						})
 						.then((assignmentCollection) => {
 							if (assignmentCollection) {
-								assignmentCollection.appendAssignment(assignment);
+								assignmentCollection.updateAssignments(true);
+								// assignmentCollection.appendAssignment(assignment);
+								// const map = assignmentCollection.get('AssignmentToOutlineNodes');
+								// let list = map[assignment.getId()] = (map[assignment.getId()] || []);
+								// list.push(rootRecord.getId());
 							}
+						})
+						.then(() => {
+							//Navigate to the created assignment
+							const route = `/course/${encodeForURI(this.bundle.getId())}/assignments/${encodeForURI(assignment.getId())}/edit/`;
+							NextThought.app.navigation.Actions.pushRootRoute(null, route, {assignment});
+							this.doClose(); // Close the editor prompt
 						});
 
-					// Make the ref from the assignment to the group
-					this.EditingActions.saveValues(values, null, null, {parent: parentRecord, position: parentRecord.getItemsCount()}, rootRecord);
-					this.doClose(); // Close the editor prompt
-
-					//Navigate to the created assignment
-					const route = `/course/${encodeForURI(this.bundle.getId())}/assignments/${encodeForURI(assignment.getId())}/edit/`;
-					NextThought.app.navigation.Actions.pushRootRoute(null, route, {assignment});
 				});
 		}
 	},

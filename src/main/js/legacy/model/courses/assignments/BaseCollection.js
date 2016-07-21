@@ -50,6 +50,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 
 
 		parseData: function (assignments, nonAssignments) {
+			var collection = assignments;
 
 			assignments = assignments.Items || assignments;
 			nonAssignments = nonAssignments && (nonAssignments.Items || nonAssignments);
@@ -86,7 +87,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 				HitMap: hitmap,
 				NodeMap: nodemap,
 				Assignments: build(assignments),
-				NonAssignments: build(nonAssignments)
+				NonAssignments: build(nonAssignments),
+				AssignmentToOutlineNodes: this.parseOutline(collection)
 			};
 		},
 
