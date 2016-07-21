@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const Globals = require('../../../../../util/Globals');
 const PublishState = require('./components/PublishState');
 const DueDate = require('./components/DueDate');
+const ResetMenu = require('./components/Reset');
 
 require('../../../../../common/form/fields/DateTimeField');
 require('../../../editing/Actions');
@@ -25,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.add([
 			{xtype: 'container', isContents: true, layout: 'none', cls: 'contents', items: [
 				new PublishState({assignment, clearError, isPublishEditor: true}),
+				new ResetMenu({assignment, isResetMenu: true}),
 				new DueDate({assignment, clearError, isDueDateEditor: true}),
 				{
 					xtype: 'box',
@@ -75,12 +77,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
+	getResetMenu () {
+		return this.down('[isResetMenu]');
+	},
+
+
 	setAssignment (assignment) {
 		this.assignment = assignment;
 
 		const publishEditor = this.getPublishEditor();
 		const dueDateEditor = this.getDueDateEditor();
+		const resetMenu = this.getResetMenu();
 
+		resetMenu.setAssignment(assignment);
 		publishEditor.setAssignment(assignment);
 		dueDateEditor.setAssignment(assignment);
 	},
