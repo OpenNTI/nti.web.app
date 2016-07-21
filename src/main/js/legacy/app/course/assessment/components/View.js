@@ -144,6 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		return {
 			xtype: 'box',
+			isEmpty: true,
 			autoEl: {
 				cn: {
 					cls: 'empty-state no-assignments',
@@ -174,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var me = this;
 
 		if (!me.assignmentsView) {
-			return Promise.resolve(me.assignmentCollection.get('assignments'));
+			return Promise.resolve(me.assignmentCollection ? me.assignmentCollection.get('Assignments') : []);
 		}
 
 		//apply the assignments data and let it restore state so we can get that order
@@ -257,7 +258,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	shouldPushViews: function () {
-		return !this.body.items.getCount();
+		const count = this.body.items.getCount();
+		const emptyCmp = this.body.down('[isEmpty]');
+
+		//If there is only one item and its the empty component, or
+		//there aren't any items
+		return count === 1 ? !!emptyCmp : !count;
 	},
 
 	setActiveItem: function (item, route) {
@@ -482,10 +488,22 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	createAssignment () {
+		const bundle = this.currentBundle;
+
 		this.el.mask('Loading...');
 
 		this.AssessmentActions.createAssignmentIn(this.currentBundle)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
+			.then((assignment) => {
+				if (this.shouldPushViews()) {
+					delete this.currentBundle;
+
+					return this.bundleChanged(bundle)
+						.then(() => assignment);
+				}
+
+				return assignment;
+			})
 			.then((assignment) => {
 				const title = assignment.get('title');
 				let id = assignment.getId();
