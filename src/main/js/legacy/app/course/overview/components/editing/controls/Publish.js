@@ -8,6 +8,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.ReactHarness',
 	alias: 'widget.overview-editing-controls-publish',
 
+	localeContext: 'lesson',
+
 	constructor (config) {
 		this.callParent([{...config, component: Publish}]);
 		this.EditingActions = new Actions();
@@ -21,6 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getProps () {
 		return {
 			onChange: (...args) => this.onSave(...args),
+			localeContext: this.localeContext,
 			value: this.resolveValue()
 		};
 	},
