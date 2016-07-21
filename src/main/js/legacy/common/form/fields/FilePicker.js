@@ -214,7 +214,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 		if (value) {
 			if (value !== this.defaultValue) {
-				data.append(this.schema.name, value, name);
+				if (typeof value === 'string') {
+					data.append(this.schema.name, value);
+				}
+				else {
+					data.append(this.schema.name, value, name);
+				}
 			}
 		} else {
 			data.append(this.schema.name, '');
