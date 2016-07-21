@@ -86,6 +86,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (nameEl) {
 			nameEl.update(this.assignment.get('title'));
 		}
+
+		this.removeCls(['closed', 'completed', 'nosubmit', 'late', 'editable']);
+		this.addClasses();
 	},
 
 
