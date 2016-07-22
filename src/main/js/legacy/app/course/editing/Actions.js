@@ -51,9 +51,9 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 			available = currentAvailable;
 		}
 
-		return this.updateAssignmentDates(assignment, available, due)
+		return this.updateAssignmentPublish(assignment, published)
 			.then(() => {
-				return this.updateAssignmentPublish(assignment, published);
+				return this.updateAssignmentDates(assignment, available, due);
 			});
 	},
 

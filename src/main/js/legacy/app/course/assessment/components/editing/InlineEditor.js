@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.add([
 			{xtype: 'container', isContents: true, layout: 'none', cls: 'contents', items: [
 				new PublishState({assignment, clearError, isPublishEditor: true}),
-				new ResetMenu({assignment, isResetMenu: true}),
+				new ResetMenu({assignment, isResetMenu: true, onReset: () => this.onReset(), beforeReset: () => this.beforeReset()}),
 				new DueDate({assignment, clearError, isDueDateEditor: true}),
 				{
 					xtype: 'box',
@@ -92,6 +92,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		resetMenu.setAssignment(assignment);
 		publishEditor.setAssignment(assignment);
 		dueDateEditor.setAssignment(assignment);
+	},
+
+
+	beforeReset () {
+		this.addSavingMask();
+	},
+
+
+	onReset () {
+		this.setAssignment(this.assignment);
+		this.removeSavingMask();
 	},
 
 
@@ -163,64 +174,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.catch((reason) => {
 				var error = Globals.parseError(reason);
 
+				this.setAssignment(this.assignment);
 				this.showError(error && error.message);
 			})
 			.always(() => this.removeSavingMask());
-
-	// 	var me = this,
-	// 		available = me.getAvailableEditor(),
-	// 		due = me.getDueEditor(),
-	// 		availableValid = available.validate(),
-	// 		dueValid = due.validate(),
-	// 		availableDate = null, dueDate = null,
-	// 		isValid = true;
-
-	// 	if (!availableValid || !dueValid) {
-	// 		return;
-	// 	}
-
-	// 	if (this.startOnRadio.checked) {
-	// 		availableDate = available.getSelectedDate();
-
-	// 		if (!availableDate) {
-	// 			available.showDateError('Please enter a date.');
-	// 			isValid = false;
-	// 		}
-	// 	}
-
-	// 	if (this.endCheckbox.checked) {
-	// 		dueDate = due.getSelectedDate();
-
-	// 		if (!dueDate) {
-	// 			due.showDateError('Please enter a date.');
-	// 			isValid = false;
-	// 		}
-	// 	}
-
-	// 	if (!isValid) { return; }
-
-	// 	me.addSavingMask();
-
-	// 	me.EditingActions.updateAssignmentDates(me.assignment, availableDate, dueDate)
-	// 		.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
-	// 		.then(function (response) {
-	// 			// Keep everythign in sync.
-	// 			availableDate = me.assignment.get('availableBeginning'),
-	// 			dueDate = me.assignment.get('availableEnding');
-	// 			me.selectAvailableDate(availableDate);
-	// 			me.selectDueDate(dueDate);
-
-	// 			if (response && me.onSave) {
-	// 				me.onSave();
-	// 			}
-	// 		})
-	// 		.catch(function (response) {
-	// 			//Show an error
-	// 			var error = Globals.parseError(response);
-
-	// 			me.showError(error && error.message);
-
-	// 		})
-	// 		.always(me.removeSavingMask.bind(me));
 	}
 });

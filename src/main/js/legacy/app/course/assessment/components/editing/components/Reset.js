@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 	afterRender () {
 		this.callParent(arguments);
 
-		if(this.reset){
+		if (this.reset) {
 			this.reset.on('click', this.onClick, this);
 		}
 	},
@@ -53,9 +53,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 		if (!resetLink) { return; }
 
+		if (this.beforeReset) {
+			this.beforeReset();
+		}
+
 		Service.post(resetLink)
 			.then((response) => {
 				this.assignment.syncWithResponse(response);
+
+				if (this.onReset) {
+					this.onReset();
+				}
 			});
 	},
 
