@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		this.addObjectHandler([
 			NextThought.model.assessment.Assignment.mimeType,
-			NextThought.model.assessment.TimedAssignment.mimeType
+			NextThought.model.assessment.Assignment.TimedAssignmentMimeType,
 		], this.getAssignmentRoute.bind(this));
 		this.addObjectHandler('application/vnd.nextthought.courses.courseoutlinecontentnode', this.getLessonRoute.bind(this));
 

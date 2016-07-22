@@ -12,6 +12,15 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	extend: 'NextThought.model.Base',
 	isAssignment: true,
 
+	statics: {
+		TimedAssignmentMimeType: 'application/vnd.nextthought.assessment.timedassignment'
+	},
+
+	mimeType: [
+		'application/vnd.nextthought.assessment.assignment',
+		'application/vnd.nextthought.assessment.timedassignment'
+	],
+
 	mixins: {
 		ModelWithPublish: NextThought.mixins.ModelWithPublish
 	},

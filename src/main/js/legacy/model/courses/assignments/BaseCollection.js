@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 
 	inheritableStatics: {
 		ASSIGNMENT: 'application/vnd.nextthought.assessment.assignment',
-		TIMEDASSIGNMENT: 'application/vnd.nextthought.assessment.timedassignment',
+		TIMEDASSIGNMENT: 'application/vnd.nextthought.assessment.assignment',
 
 
 		__parseHistoryURL: function (url) {
