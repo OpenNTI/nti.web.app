@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 			return;
 		}
 
-		var submission = result.getQuestionSetSubmission(),
+		var submission = result && result.getQuestionSetSubmission(),
 			qId = question && question.getId(),
 			questions = (submission && submission.get('questions')) || [];
 

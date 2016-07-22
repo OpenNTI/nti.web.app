@@ -79,19 +79,22 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	afterRender: function () {
 		this.callParent(arguments);
 
+		this.maybeShowAllowedTime();
+		this.assignment.on('refresh', () => {
+			if (this.pageInfo && this.pageInfo.regenerate) {
+				this.pageInfo = this.pageInfo.regenerate();
+			}
+			this.showReader();
+			this.maybeShowAllowedTime();
+		});
+	},
+
+	maybeShowAllowedTime () {
 		if (this.hasTimedPlaceholder) {
 			this.showAllowedTime();
 		} else {
 			this.showAssignment();
 		}
-
-		this.assignment.on('refresh', () => {
-			if (this.pageInfo && this.pageInfo.regenerate) {
-				this.pageInfo = this.pageInfo.regenerate();
-			}
-
-			this.showAssignment();
-		});
 	},
 
 	//Override this so the reader doesn't set the page info twice

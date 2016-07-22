@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const ParseUtils = require('legacy/util/Parsing');
 const {getURL} = require('legacy/util/Globals');
+const TimeUtils = require('../../util/Time');
 
 require('legacy/mixins/ModelWithPublish');
 
@@ -29,8 +30,23 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'title', type: 'string' },
 		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeAssignmentSubmittedCount'},
 		{ name: 'no_submit', type: 'boolean'},
-		{ name: 'version', type: 'string'}
+		{ name: 'version', type: 'string'},
+		// Timed assignment variables
+		{ name: 'IsTimedAssignment', type: 'bool'},
+		{ name: 'MaximumTimeAllowed', type: 'int'}, //this is in seconds
+		{ name: 'Metadata', type: 'auto'},
+		//ui fields
+		{ name: 'isStarted', type: 'bool', persist: false, convert: function (v, rec) {
+			return v || !!rec.getLink('StartTime');
+		}}
 	],
+
+	constructor () {
+		this.callParent(arguments);
+		Object.defineProperty(this, 'isTimed', {
+			get: () => this.get('IsTimedAssignment')
+		});
+	},
 
 	isAvailable: function () {
 		var now = new Date(),
@@ -154,5 +170,88 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 			part = parts && parts[0];
 
 		return part && part.tallyParts();
+	},
+
+	//Timed Assignment Methods
+	isStarted: function () {
+		return this.get('isStarted');
+	},
+
+
+	start: function () {
+		var me = this,
+			link = this.getLink('Commence');
+
+		if (!link) {
+			console.error('No commence link');
+			return Promise.reject();
+		}
+
+		return Service.post(link)
+			.then(function (response) {
+				var newAssignment = ParseUtils.parseItems(response)[0];
+
+				me.set(newAssignment.getData());
+				return me;
+			});
+	},
+
+
+	updateMetaData: function (metaData) {
+		var current = this.get('Metadata');
+
+		if (!current) {
+			this.set('Metadata', metaData);
+		}
+	},
+
+
+	getMaxTime: function () {
+		var maxTime = this.get('MaximumTimeAllowed');
+
+		return maxTime * 1000;
+	},
+
+
+	getMaxTimeString: function () {
+		var maxTime = this.get('MaximumTimeAllowed');
+
+		return TimeUtils.getNaturalDuration(maxTime, 2);
+	},
+
+
+	getStartTime: function () {
+		var metaData = this.get('Metadata');
+
+		return (metaData && (metaData.StartTime * 1000));
+	},
+
+
+	getTimeRemaining: function () {
+		var link = this.getLink('TimeRemaining');
+
+		function fail () {
+			console.error('Unable get time remaining.. Returning Zero');
+			return Promise.resolve(0);
+		}
+
+		if (!link) {
+			return fail();
+		}
+
+		return Service.request(link)
+		.then(function (response) {
+			var json = JSON.parse(response);
+
+			return json.TimeRemaining * 1000;
+		})
+		.catch(fail);
+	},
+
+
+	getDuration: function () {
+		var metaData = this.get('Metadata');
+
+		return metaData && (metaData.Duration * 1000);
 	}
 });
