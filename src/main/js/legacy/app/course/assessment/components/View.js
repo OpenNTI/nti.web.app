@@ -332,13 +332,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	addContentEditorViews: function () {
-		var me = this;
-
 		this.addStudentViews();
 
 		this.navigation.onceRendered
-			.then(function () {
-				me.navigation.disabledItem(me.performanceView.xtype);
+			.then(() => {
+				if (this.performanceView) {
+					this.navigation.disabledItem(this.performanceView.xtype);
+				}
 			});
 	},
 
@@ -495,6 +495,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.AssessmentActions.createAssignmentIn(this.currentBundle)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then((assignment) => {
+				this.appendAssignment(assignment);
+
 				if (this.shouldPushViews()) {
 					delete this.currentBundle;
 
@@ -509,7 +511,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				let id = assignment.getId();
 
 				id = encodeForURI(id);
-				this.appendAssignment(assignment);
 				this.pushRoute(title, id + '/edit/', {assignment: this});
 			})
 			.always(() => {
