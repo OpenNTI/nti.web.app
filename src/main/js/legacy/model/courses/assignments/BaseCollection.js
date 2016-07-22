@@ -199,7 +199,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 	},
 
 	isEmpty: function () {
-		return this.get('Assignments').length === 0;
+		const assignments = this.get('Assignments');
+		const filtered = (assignments || []).filter(x => !x.isDeleted);
+		return filtered.length === 0;
 	},
 
 	each: function () {

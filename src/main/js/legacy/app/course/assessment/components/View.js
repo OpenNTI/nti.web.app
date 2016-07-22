@@ -82,7 +82,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return bundle.getWrapper()
 			.then(function (enrollment) {
 				//if we are reloading for the instance we already have set, don't push views
-				if (isSync) { return bundle.getAssignments(); }
+				if (isSync) {
+					// Check if we need to present empty state.
+					if (me.assignmentCollection && me.assignmentCollection.isEmpty()) {
+						const emptyCmp = me.body.down('[isEmpty]');
+						if (!emptyCmp) {
+							resetView();
+						}
+					}
+
+					return bundle.getAssignments();
+				}
 
 				//if we get here and we already have views, don't push more
 				if (me.shouldPushViews()) {
