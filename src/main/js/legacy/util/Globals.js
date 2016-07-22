@@ -272,12 +272,12 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		// const HOST_PATTERN_PORT_MATCH_GROUP = 5;
 
 		if (window.$AppConfig === undefined || $AppConfig['server-path'] === undefined) {
-			alert('Bad or no configuation.');
+			alert('Bad or no configuration.');
 			return false;
 		}
 
 		if ($AppConfig.login === undefined) {
-			alert('Bad or no login configuation.');
+			alert('Bad or no login configuration.');
 			return false;
 		}
 
