@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		}
 	},
-
+	isAssignment: true,
 	LIST_XTYPE: 'overview-editing-assignment-selection',
 	EDITOR_XTYPE: 'overview-editing-assignment-editor',
 	backToList: 'Assignments',
@@ -95,8 +95,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.removeAll(true);
 		me.maybeEnableBack(me.backText);
-		
-		if(!this.isSelfAssessment) {
+
+		if(this.isAssignment) {
 			me.createAssignmentBtn = me.add({
 				xtype: 'box',
 				autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: 'Create Assignment'},

@@ -6,7 +6,7 @@ var ModelSurveyRef = require('../../../../../../../model/SurveyRef');
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.survey.SurveyEditor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.questionset.AssignmentEditor',
 	alias: 'widget.overview-editing-survey-editor',
-
+	isAssignment: false,
 	addPreview: function (item) {
 		var me = this,
 			questions = item.get('questions'),
