@@ -39,6 +39,7 @@ ga('send', 'pageview');
 		line = line.replace( 'site.css', 'site.css?dc=%s' % BUILDTIME )
 		line = line.replace( 'react-with-addons.js', 'react-with-addons.min.js' )
 		line = line.replace( 'react-dom.js', 'react-dom.min.js' )
+		line = line.replace( 'config.js', 'config.js?dc=%s' % BUILDTIME )
 		if 'index.js' in line:
 			line = line.replace( 'index.js', 'index.js?dc=%s' % BUILDTIME )
 		if '<!-- analytics -->' in line and analytics_key is not '':
