@@ -8,6 +8,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment',
 	alias: 'widget.overview-editing-survey',
 
+	isAssignment: false,
+
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
