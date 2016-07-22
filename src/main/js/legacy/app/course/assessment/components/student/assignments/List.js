@@ -28,16 +28,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.fireEvent((items.length > 0) ? 'show-parent' : 'hide-parent');
 
-		container.add(items.map(function (item) {
-			return {
-				xtype: itemType,
-				assignment: item.get('item'),
-				history: item.get('history'),
-				item: item,
-				navigateToItem: navigateToItem,
-				editAssignment: editAssignment
-			};
-		}));
+		if(container) {
+			container.add(items.map(function (item) {
+				return {
+					xtype: itemType,
+					assignment: item.get('item'),
+					history: item.get('history'),
+					item: item,
+					navigateToItem: navigateToItem,
+					editAssignment: editAssignment
+				};
+			}));
+		}
 	},
 
 	getItemsContainer: function () {
