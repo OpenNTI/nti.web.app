@@ -215,7 +215,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (!this.rendered) { return; }
 
 		// Determine weather or not to show the publish controls
-		const isPublishable = assignment && (assignment.hasLink('publish') || assignment.hasLink('unpublish'));
+		const isPublishable = !this.assignment.hasLink('Reset') && (((assignment.hasLink('publish') && assignment.hasLink('unpublish')) || assignment.hasLink('date-edit')));
+
 		if(isPublishable) {
 			this.show();
 		} else {
@@ -236,6 +237,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.setScheduleAssignment(assignment);
 		} else if (state === PUBLISH_STATES.DRAFT) {
 			this.setDraftAssignment(assignment);
+		}
+
+		if(this.assignment.hasLink('date-edit') && (!this.assignment.hasLink('publish') || !this.assignment.hasLink('unpublish'))) {
+			this.disableRadio(this.draftRadio);
+			this.disableRadioLabel(this.draftRadioLabel);
 		}
 
 		this.updateScheduleLabel();

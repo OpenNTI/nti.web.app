@@ -74,6 +74,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	updateItem () {
+		if(!this.rendered) {
+			return;
+		}
+
 		const submittedCount = this.assignment.get('SubmittedCount') || 0;
 		const enrolledCount = this.item.get('enrolledCount');
 		const scoreEl = this.el.down('.score');

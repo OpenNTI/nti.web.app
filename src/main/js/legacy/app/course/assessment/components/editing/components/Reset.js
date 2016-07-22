@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 	},
 
 	maybeShow () {
-		if(this.assignment.hasLink('Reset') || !this.assignment.hasLink('publish')) {
+		if(this.assignment.hasLink('Reset')) {
 			this.show();
 		} else {
 			this.hide();
