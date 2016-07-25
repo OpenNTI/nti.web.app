@@ -13,7 +13,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Ass
 	addHandlers: function (handlers) {
 		handlers['application/vnd.nextthought.grade'] = this.getPathToGrade.bind(this);
 		handlers[NextThought.model.courseware.Grade.mimeType] = this.getPathToGrade.bind(this);
-		handlers[NextThought.model.assessment.Assignment.mimeType] = this.getPathToAssignment.bind(this);
+		for (let mimeType of NextThought.model.assessment.Assignment.mimeType) {
+			handlers[mimeType] = this.getPathToAssignment.bind(this);
+		}
 		handlers[NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback.mimeType] = this.getPathToFeedback.bind(this);
 		handlers['application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback'] = this.getPathToFeedback.bind(this);
 

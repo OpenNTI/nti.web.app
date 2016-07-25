@@ -49,7 +49,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		this.addDefaultRoute('/');
 
 		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
-		this.addObjectHandler(NextThought.model.assessment.TimedAssignment.mimeType, this.getAssignmentRoute.bind(this));
 
 		this.add({
 			xtype: 'course-assessment',

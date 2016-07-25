@@ -958,7 +958,6 @@ xdescribe('All Classes Exist', function () {
 		'NextThought.model.assessment.SymbolicMathSolution': [],
 		'NextThought.model.assessment.TextHint': [],
 		'NextThought.model.assessment.TextResponse': [],
-		'NextThought.model.assessment.TimedAssignment': [],
 		'NextThought.model.assessment.UsersCourseAssignmentSavepoint': [],
 		'NextThought.model.assessment.UsersCourseAssignmentSavepointItem': [],
 		'NextThought.model.assessment.UsersCourseInquiryItem': [],

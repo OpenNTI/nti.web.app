@@ -55,7 +55,6 @@ var AssessmentSymbolicMathPart = require('../model/assessment/SymbolicMathPart')
 var AssessmentSymbolicMathSolution = require('../model/assessment/SymbolicMathSolution');
 var AssessmentTextHint = require('../model/assessment/TextHint');
 var AssessmentTextResponse = require('../model/assessment/TextResponse');
-var AssessmentTimedAssignment = require('../model/assessment/TimedAssignment');
 var AssessmentUsersCourseAssignmentSavepoint = require('../model/assessment/UsersCourseAssignmentSavepoint');
 var AssessmentUsersCourseAssignmentSavepointItem = require('../model/assessment/UsersCourseAssignmentSavepointItem');
 var AssessmentUsersCourseInquiryItem = require('../model/assessment/UsersCourseInquiryItem');
