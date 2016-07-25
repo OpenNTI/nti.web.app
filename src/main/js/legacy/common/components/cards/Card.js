@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var Globals = require('legacy/util/Globals');
-var ParseUtils = require('legacy/util/Parsing');
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const {AssetIcon} = require('nti-web-commons');
 require('legacy/mixins/EllipsisText');
 
 
@@ -35,7 +36,8 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 		meta: '.meta',
 		titleEl: '.meta .title',
 		liked: '.controls .like',
-		favorites: '.controls .favorite'
+		favorites: '.controls .favorite',
+		thumbnailEl: '.thumbnail'
 	},
 
 
@@ -84,6 +86,17 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 		}
 		catch (er) {
 			console.error(er.message);
+		}
+
+		const type = this.data && this.data.targetMimeType;
+		if (type) {
+			Ext.widget({
+				xtype: 'react',
+				component: AssetIcon,
+				mimeType: type,
+				svg: true,
+				renderTo: this.thumbnailEl
+			});
 		}
 	},
 
