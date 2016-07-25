@@ -80,16 +80,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 					}
 				}
 				else {
-					if(data.start > now && data.due > now){
+					if(data.start > now && data.due > now) {
 						d.html = draftPrefix + 'Available ' + Ext.Date.format(data.start, 'l, F j g:i A T');
 					} else if (data.due) {
 						d.html = draftPrefix + 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
 					}
 					else {
-						if (data.start) {
-							d.html = draftPrefix + 'Available ' + Ext.Date.format(data.start, 'l, F j g:i A T');
-						} else if (!data.isDraft) {
+						if (data.start < now) {
 							d.html = draftPrefix + 'Available Now' + '&nbsp;';
+						} else if (!data.isDraft) {
+							d.html = draftPrefix + 'Available ' + Ext.Date.format(data.start, 'l, F j g:i A T');
 						} else if (data.isDraft) {
 							d.html = 'Draft&nbsp';
 						}
