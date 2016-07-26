@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (!this.rendered) { return; }
 
 		// Determine weather or not to show the publish controls
-		const isPublishable = !this.assignment.hasLink('Reset') && (((assignment.hasLink('publish') && assignment.hasLink('unpublish')) || assignment.hasLink('date-edit')));
+		const isPublishable = !this.assignment.hasLink('Reset') && (assignment.hasLink('publish') && assignment.hasLink('unpublish') && assignment.hasLink('date-edit'));
 
 		if(isPublishable) {
 			this.show();

@@ -16,10 +16,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 		this.callParent(arguments);
 
 		this.maybeShow();
+		let resetLabel = 'Students have started your assignment.';
+		let resetText = 'Resetting or deleting this assignment will result in erasing students work and submissions. You cannot undo this action.';
+
+		if(!this.assignment.hasLink('Reset') && !this.hasPublishingLinks()) {
+			resetLabel = 'Students have started this assignment';
+			resetText = 'The instructor must reset this assignment before a publish change can occur.';
+		}
 
 		let items = [
-			{tag: 'span', cls: 'publish-reset-label', html: 'Students have started your assignment.'},
-			{tag: 'span', cls: 'publish-reset-text', html: 'Resetting or deleting this assignment will result in erasing students work and submissions. You cannot undo this action.'},
+			{tag: 'span', cls: 'publish-reset-label', html: resetLabel},
+			{tag: 'span', cls: 'publish-reset-text', html: resetText},
 		];
 
 		// User can reset the assignment
@@ -74,10 +81,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 	},
 
 	maybeShow () {
-		if(this.assignment.hasLink('Reset')) {
+		if(this.assignment.hasLink('Reset') || !this.hasPublishingLinks()) {
 			this.show();
 		} else {
 			this.hide();
 		}
+	},
+
+
+	hasPublishingLinks () {
+		return this.assignment.hasLink('publish') && this.assignment.hasLink('unpublish');
 	}
 });
