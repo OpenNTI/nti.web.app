@@ -1157,7 +1157,12 @@ body.dragging * {
 					input.answer-field {
 						background: $panel-background;
 						opacity: 1;
+						color: #494949;
 					}
+				}
+
+				.solution {
+					background: #FFFFFF;
 				}
 			}
 		}
