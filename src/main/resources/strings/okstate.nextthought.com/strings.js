@@ -32,7 +32,7 @@ NTIStrings.EnrollmentText = {
 		archivedEnrolled: {
 			title: 'You Took the Open Course!',
 			cls: 'enrolled',
-			information: 'Thanks for your participation!' +
+			information: 'Thanks for your participation! ' +
 							'The content of this course will remain available for you to review at any time.'
 		},
 		archivedNotEnrolled: {
@@ -65,7 +65,7 @@ NTIStrings.EnrollmentText = {
 		},
 		archivedEnrolled: {
 			title: 'Enrolled for College Credit!',
-			information: 'Thanks for your participation!' +
+			information: 'Thanks for your participation! ' +
 							'The content of this course will remain available for you to review at any time.'
 		},
 		admissionPending: {
@@ -108,7 +108,7 @@ NTIStrings.EnrollmentText = {
 		},
 		archivedEnrolled: {
 			title: 'You took the Lifelong Learner',
-			information: 'Thanks for your participation!' +
+			information: 'Thanks for your participation! ' +
 							'The content of this course will remain available for you to review at any time.'
 		},
 		archivedNotEnrolled: {
