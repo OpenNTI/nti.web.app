@@ -296,7 +296,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			}
 			else if (typeof o === 'string') {
 				text.push(
-					o.replace(/\s*(style|class)=".*?"\s*/ig, ' ')
+					o.replace(/\s*(class)=".*?"\s*/ig, ' ')
 						.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;'));
 
 				render(i - 1);
