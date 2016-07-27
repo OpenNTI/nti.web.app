@@ -65,7 +65,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		this.startTimestamp = new Date().getTime();
 
 		if (this.questionSet.associatedAssignment) {
-			this.questionSet.addSaveProgressHandler(this.saveProgress.bind(this), this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this), this.isInstructor);
+			this.questionSet.addSaveProgressHandler(
+				this.saveProgress.bind(this),
+				this.beforeSaveProgress.bind(this),
+				this.afterSaveProgress.bind(this),
+				this.shouldAllowInstructorSubmit()
+			);
 		}
 
 		this.questionSet.setStartTime(this.startTimestamp);
@@ -182,7 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	shouldAllowInstructorSubmit () {
-		return !this.history && this.isInstructor;
+		return !this.history && this.questionSet && this.questionSet.hasLink('PracticeSubmission');
 	},
 
 	moveToSubmitted: function () {
