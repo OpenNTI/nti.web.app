@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				startAssignment: this.startTimed.bind(this),
 				flex: 1
 			};
-		} else if (!assignment.isAvailable() && !this.instructorProspective) {
+		} else if (!assignment.isAvailable() && !assignment.hasLink('PracticeSubmission')) {
 			return {
 				xtype: 'assignment-notstarted-placeholder',
 				assignment: assignment,

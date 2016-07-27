@@ -296,10 +296,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var openDate = assignment.get('availableBeginning'),
 			date = Ext.Date.format(openDate, 'l F j \\a\\t g:i A');
 
-		if (!assignment.isOpen() && !assignment.hasLink('edit')) {
+		if (!assignment.isOpen() && !assignment.hasLink('PracticeSubmission')) {
 			alert(getFormattedString('NextThought.view.courseware.assessment.assignments.View.available', { date: date}));
-		} else if (!assignment.isOpen() && assignment.hasLink('edit')) {
-			this.editAssignment(assignment);
 		} else {
 			this.showAssignment(assignment);
 		}
