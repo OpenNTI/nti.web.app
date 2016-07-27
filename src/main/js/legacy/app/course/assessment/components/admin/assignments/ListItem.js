@@ -69,30 +69,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	afterRender () {
 		this.callParent(arguments);
-		this.assignment.on('update', () => this.updateItem());
-	},
-
-
-	updateItem () {
-		if(!this.rendered) {
-			return;
-		}
-
-		const submittedCount = this.assignment.get('SubmittedCount') || 0;
-		const enrolledCount = this.item.get('enrolledCount');
-		const scoreEl = this.el.down('.score');
-		const nameEl = this.el.down('.name');
-
-		if (scoreEl) {
-			scoreEl.setHTML('');
-			this.scoreTpl.append(scoreEl, {submittedCount, enrolledCount});
-		}
-		if (nameEl) {
-			nameEl.update(this.assignment.get('title'));
-		}
-
-		this.removeCls(['closed', 'completed', 'nosubmit', 'late', 'editable']);
-		this.addClasses();
 	},
 
 
