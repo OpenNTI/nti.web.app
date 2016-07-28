@@ -253,6 +253,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 								contents.outlineNode = me;
 
 								return contents;
+							})
+							.catch(error => {
+								console.error('Unable to get contents because: %o', error.stack || error.message || error);
+								return null;
 							});
 			}
 
