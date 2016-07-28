@@ -36,7 +36,11 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'availableEnding', type: 'ISODate', mapping: 'available_for_submission_ending' },
 		{ name: 'PublicationState', type: 'string'},
 		{ name: 'parts', type: 'arrayItem' },
-		{ name: 'title', type: 'string' },
+		{ name: 'title', type: 'string',
+			convert (v) {
+				return v || '(No Title)';
+			}
+		},
 		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeAssignmentSubmittedCount'},
 		{ name: 'no_submit', type: 'boolean'},
 		{ name: 'version', type: 'string'},
