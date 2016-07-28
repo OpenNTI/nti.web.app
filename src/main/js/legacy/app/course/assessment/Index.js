@@ -491,6 +491,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				return view.getStudentListForAssignment(assignment, student.get('Username'));
 			})
 			.then(function (students) {
+				const params = students.proxy.extraParams || {};
 				var record, pageSource, path = [],
 					historyItem, link, load,
 					current = students.findBy(function (rec) {
@@ -500,16 +501,38 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 					});
 
 				if (current < 0) {
-					console.error('Unable to get record for student');
-					me.replaceRoute('Assignments', '/');
-					return Promise.reject();
+					// NOTE: When we can't find a student record,
+					// it's possible they are on the next/previous page.
+					// Use the batchContainingUsernameFilterByScope to load
+					// the page with that record.
+					if (!params.batchContainingUsernameFilterByScope) {
+						params.batchContainingUsernameFilterByScope = studentId;
+
+						students.on({
+							load: () => me.showStudentForAssignment(route, subRoute),
+							single: true
+						});
+
+						students.load();
+						return Promise.reject();
+					}
+					else {
+						console.error('Unable to get record for student');
+						delete params.batchContainingUsernameFilterByScope;
+
+						// Go back to the assignments list.
+						me.replaceRoute('Assignments', '/');
+						return Promise.reject();
+					}
 				}
 
+				// Cleanup
+				delete params.batchContainingUsernameFilterByScope;
 				record = students.getAt(current);
 
 				historyItem = record && record.get('HistoryItemSummary');
 
-				link = historyItem.getLink('UsersCourseAssignmentHistoryItem');
+				link = historyItem && historyItem.getLink('UsersCourseAssignmentHistoryItem');
 
 				if (link && historyItem.isSummary) {
 					load = Service.request(link)

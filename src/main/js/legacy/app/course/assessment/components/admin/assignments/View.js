@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		var current = this.store.indexOf(assignment),
 			oldView = this.down('course-assessment-admin-assignments-item'),
-			next, previous, view;
+			next, previous, view, same = false;
 
 		next = this.store.getAt(current + 1);
 		previous = this.store.getAt(current - 1);
@@ -81,6 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		//if we already have a view for this assignment no need to create a new one
 		if (oldView && oldView.assignment === assignment) {
 			view = oldView;
+			same = true;
 		} else {
 			Ext.destroy(oldView);
 			view = this.add({
@@ -107,6 +108,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		this.getLayout().setActiveItem(view);
+
+		if (oldView && same) {
+			oldView.refresh();
+		}
 
 		return view.restoreState(this.getRouteState(), student);
 	},
