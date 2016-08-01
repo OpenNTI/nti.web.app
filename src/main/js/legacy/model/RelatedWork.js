@@ -66,6 +66,12 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 
 		URL_ICON: 'icon-www.png',
 
+		isImageFile: function (mimeType) {
+			const extension = mimeType && mimeType.split('/').last();
+			const isImage = extension && /^(png|jpg|jpeg|gif|tiff|bmp)$/i.test(extension);
+			return !!isImage;
+		},
+
 
 		getIconForMimeType: function (mimeType) {
 			var base = this.FILE_ICON_BASE,
@@ -142,6 +148,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		};
 
 		data['attribute-data-href'] = Globals.getURLRooted(data.href, root);
+		data.icon = data.icon && data.icon.url;
 		data.noTarget = !Globals.shouldOpenInApp(data.ntiid, data.href, null, data.targetMimeType);
 		data.domSpec = DomUtils.asDomSpec.call(data);
 
@@ -230,6 +237,9 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 			data.url = getURL(icon);
 		} else if (icon) {
 			data.url = getURL(icon, root || '');
+		}
+		else if (!icon && this.self.isImageFile(targetMimeType)) {
+			data.url = getURL(this.get('href'));
 		}
 
 		if (!data.url) {

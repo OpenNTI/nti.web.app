@@ -718,6 +718,14 @@
 		@include sprite($extern-link_hover);
 	}
 
+	.thumbnail {
+		.file-type {
+			&.icon {
+				background-size: cover;
+			}
+		}
+	}
+
 	&.viewed {
 		@include icon($circle-check-white-large, $top: 50%, $left: 50px);
 

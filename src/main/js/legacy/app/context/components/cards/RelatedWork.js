@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var ContextStateStore = require('../../StateStore');
+const Ext = require('extjs');
+const {AssetIcon} = require('nti-web-commons');
+const RelatedWork = require('legacy/model/RelatedWork');
+require('../../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.cards.RelatedWork', {
@@ -66,7 +68,19 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 			icon = this.content.getIcon(root),
 			url = (icon && typeof icon !== 'string') ? icon.url : icon;
 
-		if (this.iconEl && url) {
+		const type = this.content.get('targetMimeType');
+		if (type) {
+			url = url && url.indexOf(RelatedWork.FILE_FALLBACK_BLANK_IMAGE) > -1 ? null : url;
+			Ext.widget({
+				xtype: 'react',
+				src: url,
+				component: AssetIcon,
+				mimeType: type,
+				svg: url ? false : true,
+				renderTo: this.iconEl
+			});
+		}
+		else {
 			this.iconEl.setStyle({'backgroundImage': 'url(' + url + ')'});
 		}
 	}

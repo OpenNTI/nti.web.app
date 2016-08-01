@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
 const {AssetIcon} = require('nti-web-commons');
+const RelatedWork = require('legacy/model/RelatedWork');
 require('legacy/mixins/EllipsisText');
 
 
@@ -19,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 	cls: 'content-card',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+		{ cls: 'thumbnail'},
 	//		{ cls: 'controls', cn: [
 	//			{ cls: 'favorite' },
 	//			{ cls: 'like' }
@@ -90,11 +91,14 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 
 		const type = this.data && this.data.targetMimeType;
 		if (type) {
+			let icon = this.data && (this.data.thumbnail || this.data.icon);
+			icon = icon && icon.indexOf(RelatedWork.FILE_FALLBACK_BLANK_IMAGE) > -1 ? null : icon;
 			Ext.widget({
 				xtype: 'react',
+				src: icon,
 				component: AssetIcon,
 				mimeType: type,
-				svg: true,
+				svg: icon ? false : true,
 				renderTo: this.thumbnailEl
 			});
 		}
