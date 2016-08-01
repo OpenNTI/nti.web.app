@@ -13,7 +13,11 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	isAssignment: true,
 
 	statics: {
-		TimedAssignmentMimeType: 'application/vnd.nextthought.assessment.timedassignment'
+		TimedAssignmentMimeType: 'application/vnd.nextthought.assessment.timedassignment',
+		mimeType: [
+			'application/vnd.nextthought.assessment.assignment',
+			'application/vnd.nextthought.assessment.timedassignment'
+		]
 	},
 
 	mimeType: [

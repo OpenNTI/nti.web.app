@@ -129,6 +129,21 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		return this.PathStore.setInCache(id, cache);
 	},
 
+
+	__getHandlerForObj (obj) {
+		let mimeTypes = obj.mimeType || obj;
+
+		if (!Array.isArray(mimeTypes)) {
+			mimeTypes = [mimeTypes];
+		}
+
+		for (let mimeType of mimeTypes) {
+			if (this.mimeToHandlers[mimeType]) {
+				return this.mimeToHandlers[mimeType];
+			}
+		}
+	},
+
 	/**
 	 * Given an object (ntiid), return an array of objects that make up the path
 	 * to it.
@@ -141,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 */
 	getPathToObject: function (obj) {
 		var link = obj.getLink && obj.getLink('LibraryPath'),
-			handler = this.mimeToHandlers[obj.mimeType],
+			handler = this.__getHandlerForObj(obj),
 			request;
 
 		if (typeof obj === 'string') {
