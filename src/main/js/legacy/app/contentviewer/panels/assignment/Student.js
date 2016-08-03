@@ -45,6 +45,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				flex: 1
 			};
 		} else {
+			if (!assignment.isTimed) {
+				this.hasTimedPlaceholder = false;
+			}
 			return this.callParent(arguments);
 		}
 	},
