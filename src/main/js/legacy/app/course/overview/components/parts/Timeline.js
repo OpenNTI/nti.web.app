@@ -8,6 +8,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.common.components.cards.Card',
 	alias: 'widget.course-overview-ntitimeline',
 
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})' }},
+		{ cls: 'meta', cn: [
+			{ cls: 'title', html: '{title}' },
+			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
+			{ cls: 'description', html: '{description}' }
+		]}
+	]),
+
 	initComponent: function () {
 		this.callParent(arguments);
 
