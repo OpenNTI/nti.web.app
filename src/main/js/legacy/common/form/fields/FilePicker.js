@@ -350,8 +350,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 	setPreviewFromValue: function (value) {
 		if (!ParseUtils.isNTIID(value)) { return; }
 
-
 		Service.getObject(value)
+			.then((m) => (m.get('ContentFile') || m))
 			.then(this.setPreviewFromBlob.bind(this))
 			.catch(this.onFailToLoadPreview.bind(this));
 	},
