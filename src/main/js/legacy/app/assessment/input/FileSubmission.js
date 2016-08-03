@@ -218,6 +218,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		const allowed = p.isFileAcceptable(file);
 		this[allowed ? 'reset' : 'markBad'](p.reasons);
 
+		if (!allowed) {
+			this.inputField.dom.value = null;
+		}
 		e.preventDefault();
 		e.stopPropagation();
 
