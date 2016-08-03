@@ -182,23 +182,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	getAssignmentList: function () {
-		var me = this;
-
-		if (!me.assignmentsView) {
-			return Promise.resolve(me.assignmentCollection ? me.assignmentCollection.get('Assignments') : []);
+		if (!this.assignmentsView) {
+			return Promise.resolve(this.assignmentCollection ? this.assignmentCollection.get('Assignments') : []);
 		}
 
 		//apply the assignments data and let it restore state so we can get that order
-		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
-			.then(function () {
-				var items = me.assignmentsView.store.getRange() || [];
-
-
-				items = items.map(function (item) {
-					return item.get('item');
-				});
-
-				return items;
+		return this.assignmentsView.setAssignmentsData(this.assignmentCollection, this.currentBundle, true)
+			.then(() => {
+				const items = this.assignmentsView.store.getRange() || [];
+				return items.map(item => item.get('item'));
 			});
 	},
 
@@ -521,7 +513,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				let id = assignment.getId();
 
 				id = encodeForURI(id);
-				this.pushRoute(title, id + '/edit/', {assignment: this});
+				this.pushRoute(title, id + '/edit/', {assignment});
 			})
 			.always(() => {
 				this.el.unmask();
