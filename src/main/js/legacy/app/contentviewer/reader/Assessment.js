@@ -161,7 +161,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 		completed = h && h.get('Completed');
 
-		if (this.injectedAssignment && this.injectedAssignment.isTimed && !isInstructor && !completed) {
+		const isPracticeSubmission = this.injectedAssignment && this.injectedAssignment.hasLink('PracticeSubmission');
+
+		if (this.injectedAssignment && this.injectedAssignment.isTimed && !isPracticeSubmission && !completed) {
 			this.showAssignmentTimer(this.submission.shouldAllowSubmit && this.submission.shouldAllowSubmit.bind(this.submission));
 		}
 
@@ -377,7 +379,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		let progressSaved = this.submission.hasProgressSaved();
 		let progressAttempted = this.submission.hasAttemptedProgress();
 
-		if (isSubmitted || this.isInstructorProspective) {
+		const isPracticeSubmission = assignment && assignment.hasLink('PracticeSubmission');
+
+		if (isSubmitted || this.isInstructorProspective || isPracticeSubmission) {
 			return Promise.resolve();
 		}
 

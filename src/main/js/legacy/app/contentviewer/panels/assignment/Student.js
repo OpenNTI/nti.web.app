@@ -29,7 +29,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	getReaderConfig: function () {
 		var assignment = this.assignment;
 
-		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !this.instructorProspective) {
+		const isPracticeSubmission = assignment && assignment.hasLink('PracticeSubmission');
+
+		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !isPracticeSubmission) {
 			this.hasTimedPlaceholder = true;
 
 			return {
@@ -132,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 		readerAssessment.isInstructorProspective = me.instructorProspective;
 
-		if (assignment.isTimed && this.instructorProspective) {
+		if (assignment.isTimed && this.assignment && this.assignment.hasLink('PracticeSubmission')) {
 			me.showAllowedTime();
 		}
 
