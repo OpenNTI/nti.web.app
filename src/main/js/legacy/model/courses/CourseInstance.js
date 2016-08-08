@@ -828,8 +828,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	getAllAssignments: function () {
 		return this.getAssignments()
-				.then(function (assignments) {
-					return assignments.get('Assignments');
+				.then(function (assignmentsCollection) {
+					const assignments = assignmentsCollection.get('Assignments');
+					const filtered = (assignments || []).filter(x => !x.isDeleted);
+					return filtered;
 				});
 	},
 
