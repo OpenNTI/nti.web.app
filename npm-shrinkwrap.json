@@ -2557,9 +2557,9 @@
       "resolved": "https://npm.nextthought.com/npmlog/-/npmlog-3.1.2.tgz"
     },
     "nti-assignment-editor": {
-      "version": "1.0.9",
+      "version": "1.0.10",
       "from": "nti-assignment-editor@>=1.0.0 <2.0.0",
-      "resolved": "https://npm.nextthought.com/nti-assignment-editor/-/nti-assignment-editor-1.0.9.tgz"
+      "resolved": "https://npm.nextthought.com/nti-assignment-editor/-/nti-assignment-editor-1.0.10.tgz"
     },
     "nti-commons": {
       "version": "1.0.24",
