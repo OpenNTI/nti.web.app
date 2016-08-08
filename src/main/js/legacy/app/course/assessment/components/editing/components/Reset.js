@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 	},
 
 	maybeShow () {
-		if(this.assignment.hasLink('Reset')) {
+		if(this.assignment.hasLink('Reset') || (!this.hasPublishingLinks() && !this.assignment.hasLink('date-edit-start'))) {
 			this.show();
 		} else {
 			this.hide();
@@ -90,6 +90,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 
 	hasPublishingLinks () {
-		return this.assignment.hasLink('publish') && this.assignment.hasLink('unpublish');
+		return this.assignment.hasLink('publish') || this.assignment.hasLink('unpublish');
 	}
 });
