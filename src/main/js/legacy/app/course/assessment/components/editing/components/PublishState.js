@@ -236,8 +236,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (!this.rendered) { return; }
 
-		// Determine weather or not to show the publish controls
-		const isPublishable = !this.assignment.hasLink('Reset') && assignment.getDateEditingLink();
+		// Determine weather or not to show the publish controls:
+		// Reset (present when submissions, hidden for content backed & no submissions & non-instructors),
+		// Publishing (present when no submissions, hidden for content backed & submissions),
+		// Date Edit Start (present when no submissions, hidden when there are submissions)
+		const isPublishable = (!this.assignment.hasLink('Reset') && this.hasPublishingLinks()) || (this.assignment.hasLink('date-edit-start') && !this.assignment.hasLink('Reset'));
 
 		if(isPublishable) {
 			this.show();
@@ -262,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.setDraftAssignment(assignment);
 		}
 
-		if(this.assignment.hasLink('date-edit') && (!this.assignment.hasLink('publish') || !this.assignment.hasLink('unpublish'))) {
+		if(this.assignment.hasLink('date-edit-start') && (!this.hasPublishingLinks())) {
 			this.disableRadio(this.draftRadio);
 			this.disableRadioLabel(this.draftRadioLabel);
 		}
