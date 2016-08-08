@@ -209,19 +209,42 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
+	maybeDisableDraft (assignment) {
+		if (assignment.canUnpublish()) {
+			this.enableRadioLabel(this.draftRadioLabel);
+			this.enableRadio(this.draftRadio);
+		} else {
+			this.disableRadioLabel(this.draftRadioLabel);
+			this.disableRadio(this.draftRadio);
+		}
+	},
+
+
+	maybeDisablePublish (assignment) {
+		if (assignment.canPublish()) {
+			this.enableRadioLabel(this.publishRadioLabel);
+			this.enableRadioLabel(this.scheduleRadioLabel);
+		} else {
+			this.disableRadioLabel(this.publishRadioLabel);
+			this.disableRadioLabel(this.scheduleRadioLabel);
+		}
+	},
+
+
 	setAssignment (assignment) {
 		this.assignment = assignment;
 
 		if (!this.rendered) { return; }
 
 		// Determine weather or not to show the publish controls
-		const isPublishable = !this.assignment.hasLink('Reset') && (assignment.hasLink('publish') && assignment.hasLink('unpublish') && assignment.hasLink('date-edit'));
+		const isPublishable = !this.assignment.hasLink('Reset') && assignment.getDateEditingLink();
 
 		if(isPublishable) {
 			this.show();
 		} else {
 			this.hide();
 		}
+
 		const available = assignment.get('availableBeginning');
 		const value = Publish.evaluatePublishStateFor({
 			isPublished: () => assignment && (!!assignment.get('PublicationState') && !available || available < Date.now()),
@@ -251,13 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	setPublishAssignment (assignment) {
 		const editor = this.getScheduleEditor();
 
-		if (assignment.canUnpublish()) {
-			this.enableRadioLabel(this.draftRadioLabel);
-			this.enableRadio(this.draftRadio);
-		} else {
-			this.disableRadioLabel(this.draftRadioLabel);
-			this.disableRadio(this.draftRadio);
-		}
+		this.maybeDisableDraft(assignment);
 
 		this.enableRadioLabel(this.publishRadioLabel);
 		this.enableRadioLabel(this.scheduleRadioLabel);
@@ -270,19 +287,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	setScheduleAssignment (assignment) {
 		const editor = this.getScheduleEditor();
+
+		this.maybeDisableDraft(assignment);
+
 		editor.selectDate(assignment.get('availableBeginning'));
+
 		this.checkOption(this.scheduleRadio);
 	},
 
 
 	setDraftAssignment (assignment) {
-		if (assignment.canPublish) {
-			this.enableRadioLabel(this.publishRadioLabel);
-			this.enableRadioLabel(this.scheduleRadioLabel);
-		} else {
-			this.disableRadioLabel(this.publishRadioLabel);
-			this.disableRadioLabel(this.scheduleRadioLabel);
-		}
+		this.maybeDisablePublish(assignment);
 
 		this.enableRadioLabel(this.draftRadioLabel);
 		this.checkOption(this.draftRadio);
