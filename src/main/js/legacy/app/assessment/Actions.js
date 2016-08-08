@@ -182,6 +182,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					let err = resp && resp.error;
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
+					} else if (err && err.status === 404) {
+						me.handleDeletionError(assignment);
 					}
 					else {
 						alert('There was a problem submitting your assignment.');
@@ -232,6 +234,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					let err = resp && resp.error;
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
+					} else if (err && err.status === 404) {
+						me.handleDeletionError(assignment);
 					}
 					fulfill(err);
 				}
@@ -262,6 +266,25 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
+	handleDeletionError: function (assignment) {
+		Ext.MessageBox.alert({
+			title: 'This assignment no longer exists',
+			msg: 'Clicking OK will exit the assignment',
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: 'OK'
+				}
+			},
+			fn: function (button) {
+				if (button === 'yes' && assignment) {
+					assignment.fireEvent('deleted');
+				}
+			}
+		});
+	},
 
 	checkAnswer: function (question, answerValues, startTime, canSubmitIndividually) {
 		var endTimestamp = (new Date()).getTime(),

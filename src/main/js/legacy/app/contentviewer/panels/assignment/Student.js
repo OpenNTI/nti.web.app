@@ -83,6 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 	afterRender: function () {
 		this.callParent(arguments);
+		const me = this;
 
 		this.maybeShowAllowedTime();
 		this.assignment.on('refresh', () => {
@@ -91,6 +92,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			}
 			this.showReader();
 			this.maybeShowAllowedTime();
+		});
+		this.assignment.on('deleted', () => {
+			me.showReader();
+			me.bundle.getAssignments()
+				.then((assignments) => {
+					assignments.updateAssignments(true);
+					this.handleNavigation('Assignments', '/', undefined, true);
+				});
 		});
 	},
 
