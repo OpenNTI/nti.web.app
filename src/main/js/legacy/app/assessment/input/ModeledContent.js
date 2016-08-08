@@ -103,6 +103,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 	markCorrect: Ext.emptyFn,
 	markIncorrect: Ext.emptyFn,
 
+	setSubmitted () {
+		this.callParent(arguments);
+		if (!this.getValue()) {
+			this.markSubmitted();
+		}
+	},
+
 	markSubmitted: function () {
 		this.editor.lock();
 		if (this.isAssignment) {
