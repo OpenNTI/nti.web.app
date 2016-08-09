@@ -160,6 +160,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		const assignmentId = assignment.getId();
 		const me = this;
 		const link = isPracticeSubmission ? assignment.getLink('PracticeSubmission') : me.getObjectURL(assignmentId);
+		let responseJSON;
+
+		assignmentSubmission.getProxy().on('exception', (proxy, response) => {
+			responseJSON = Ext.JSON.decode(response.responseText);
+		}, this);
 
 		return new Promise(function (fulfill, reject) {
 			assignmentSubmission.save({
@@ -184,8 +189,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 						me.handleConflictError(assignment);
 					} else if (err && err.status === 404) {
 						me.handleDeletionError(assignment);
-					}
-					else {
+					} else if (err && err.status === 422 && responseJSON && responseJSON.field === 'filename') {
+						me.handleFileUploadError(assignment);
+					} else {
 						alert('There was a problem submitting your assignment.');
 					}
 					reject(err);
@@ -281,6 +287,29 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			fn: function (button) {
 				if (button === 'yes' && assignment) {
 					assignment.fireEvent('deleted');
+				}
+			}
+		});
+	},
+
+	handleFileUploadError: function (assignment) {
+		Ext.MessageBox.alert({
+			title: 'A file upload question has changed',
+			msg: 'Clicking OK will reload the assignment',
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: 'OK'
+				}
+			},
+			fn: function (button) {
+				if (button === 'yes' && assignment) {
+					assignment.updateFromServer()
+						.then(function () {
+							assignment.fireEvent('refresh');
+						});
 				}
 			}
 		});
