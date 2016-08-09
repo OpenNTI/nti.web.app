@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 			this.contentEl.dom.innerHTML = text;
 		} else {
 			this.contentEl.addCls('error');
-			this.contentEl.dom.innerHTML = 'Error showing response.';
+			this.contentEl.dom.innerHTML = 'No response.';
 		}
 
 		this.currentEl.update(index + 1);
