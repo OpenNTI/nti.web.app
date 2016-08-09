@@ -102,6 +102,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	bundleChanged: function (bundle) {
 		var item = this.getLayout().getActiveItem(),
 			lessons = this.getLessons();
+		if (bundle && this.currentBundle !== bundle) {
+			bundle.getAssignments()
+				.then((collection) => {
+					if (collection && collection.updateAssignments) {
+						collection.updateAssignments(true);
+					}
+				});
+		}
 
 		this.currentBundle = bundle;
 		this.store = bundle.getAdminOutlineInterface();
