@@ -2325,6 +2325,8 @@ input.preview[readonly] {
 		border: 1px solid $tertiary-grey;
 		font: normal 400 0.875rem/1 $font;
 		min-height: 200px;
+		max-height: 350px;
+		overflow: scroll;
 		color: $secondary-grey;
 	}
 }
