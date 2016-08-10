@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 
 	onClick () {
-		const resetLink = this.assignment.getLink('Reset');
+		const resetLink = this.assignment.getLink('Reset') || !this.assignment.getDateEditingLink();
 
 		if (!resetLink) { return; }
 
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 	},
 
 	maybeShow () {
-		if(this.assignment.hasLink('Reset') || !this.hasPublishingLinks()) {
+		if(this.assignment.hasLink('Reset') || (!this.hasPublishingLinks() && !this.assignment.hasLink('date-edit-start'))) {
 			this.show();
 		} else {
 			this.hide();
@@ -90,6 +90,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 
 	hasPublishingLinks () {
-		return this.assignment.hasLink('publish') && this.assignment.hasLink('unpublish');
+		return this.assignment.hasLink('publish') || this.assignment.hasLink('unpublish');
 	}
 });
