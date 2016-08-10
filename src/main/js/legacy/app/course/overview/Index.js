@@ -11,6 +11,7 @@ require('../../mediaviewer/Index');
 require('../../../model/RelatedWork');
 require('../../../model/QuestionSetRef');
 require('../../../model/SurveyRef');
+require('../../../model/courses/overview/Lesson');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
@@ -434,6 +435,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			route = this.getRouteForVideoPath(root, subPath);
 		} else if (root instanceof NextThought.model.Slidedeck) {
 			route = this.getRouteForSlidedeckPath(root, subPath);
+		} else if (root instanceof NextThought.model.courses.overview.Lesson) {
+			route = {
+				path: '',
+				isFull: true
+			};
 		} else {
 			route = {
 				path: '',
