@@ -16,9 +16,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.addItems();
 
-		// if (this.record) {
-		// 	this.addDeleteButton();
-		// }
+		if (this.record) {
+			this.addDeleteButton();
+		}
 	},
 
 	addItems: function () {
