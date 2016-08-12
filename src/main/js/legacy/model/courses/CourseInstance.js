@@ -699,9 +699,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 * @param  {String} link rel of the link to get
 	 * @return {Promise}	  the request for the link
 	 */
-	__getList: function (link, force) {
-		var promiseName = '__get' + link + 'Promise',
-			link;
+	__getList: function (link, force, timeout) {
+		var promiseName = '__get' + link + 'Promise';
 
 		if (this[promiseName] && !force) {
 			return this[promiseName];
@@ -711,7 +710,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		if (!link) { return Promise.reject('No link'); }
 
-		this[promiseName] = Service.request(link)
+		let config = link;
+
+		if (timeout) {
+			config = {url: link, timeout};
+		}
+
+		this[promiseName] = Service.request(config)
 								.then(function (response) {
 									return Ext.decode(response, true);
 								});
@@ -720,7 +725,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	__getAssignmentsByOutline: function () {
-		return this.__getList('AssignmentsByOutlineNode');
+		return this.__getList('AssignmentsByOutlineNode', false, 60000);//up the timeout of the request
 	},
 
 	__getNonAssignmentsByOutline: function () {
