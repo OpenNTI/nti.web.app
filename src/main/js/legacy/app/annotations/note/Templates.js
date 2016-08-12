@@ -3,7 +3,7 @@ var Ext = require('extjs');
 var {isMe} = require('legacy/util/Globals');
 
 
-module.exports = exports = Ext.define('NextThought.app.annotations.note.Templates', {
+const TemplatesForNotes = Ext.define('NextThought.app.annotations.note.Templates', {
 
 	//Merge these functions into note.Panel
 
@@ -237,3 +237,5 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 
 
 }).create();
+
+module.exports = exports = TemplatesForNotes;
