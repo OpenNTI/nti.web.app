@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				});
 		}
 
-		return bundle.getWrapper()
+		this.bundleLoaded = bundle.getWrapper()
 			.then(function (enrollment) {
 				//if we are reloading for the instance we already have set, don't push views
 				if (isSync) {
@@ -180,6 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.alignNavigation();
 	},
+
 
 	getAssignmentList: function () {
 		if (!this.assignmentsView) {
@@ -381,111 +382,123 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	showNotifications: function (route, subRoute) {
-		if (!this.notificationsView) { return; }
+		this.maybeMask();
 
-		var me = this;
+		const loaded = this.bundleLoaded || Promise.reject();
 
-		me.maybeMask();
+		loaded
+			.then(() => {
+				if (this.notificationsView) {
+					this.setActiveItem(this.notificationsView);
 
-		me.setActiveItem(me.notificationsView);
+					return this.notificationsView.setAssignmentsData(this.assignmentCollection, this.currentBundle);
+				}
 
-		return me.notificationsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
-			.then(me.maybeUnmask.bind(me))
-			.then(me.setTitle.bind(me, me.notificationsView.title))
-			.then(me.alignNavigation.bind(me));
+			})
+			.then(this.maybeUnmask.bind(this))
+			.then(this.setTitle.bind(this, this.notificationsView.title))
+			.then(this.alignNavigation.bind(this));
+
 	},
 
 	showPerformance: function (route, subRoute) {
-		if (!this.performanceView) { return; }
+		debugger;
+		const isActiveItem = this.performanceView && this.body.getLayout().getActiveItem() === this.performanceView;
+		const student = route.precache.student;
 
-		var me = this,
-			student = route.precache.student,
-			isActiveItem = this.body.getLayout().getActiveItem() === this.performanceView;
+		this.maybeMask(this.performanceView, isActiveItem, 'root');
 
-		me.maybeMask(this.performanceView, isActiveItem, 'root');
+		const loaded = this.bundleLoaded || Promise.reject();
 
-		student = student && student.getId();
+		loaded
+			.then(() => {
+				if (this.performanceView) {
+					this.setActiveItem(this.performanceView, route.path);
 
-		me.setActiveItem(me.performanceView, route.path);
-
-		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
-			.then(function () {
-				if (me.performanceView.showRoot) {
-					me.performanceView.showRoot();
+					return this.performanceView.setAssignmentsData(this.assignmentCollection, this.currentBundle, (student && student.getId()));
 				}
 			})
-			.then(me.maybeUnmask.bind(me, me.performanceView, isActiveItem, 'root'))
-			.then(me.setTitle.bind(me, me.performanceView.title))
-			.then(me.alignNavigation.bind(me));
+			.then(() => {
+				if (this.performanceView) {
+					this.performanceView.showRoot();
+				}
+			})
+			.then(this.maybeUnmask.bind(this, this.performanceView, isActiveItem, 'root'))
+			.then(this.setTitle.bind(this, this.performanceView.title))
+			.then(this.alignNavigation.bind(this));
 	},
 
 	showAssignments: function (route, subRoute) {
-		if (!this.assignmentsView) { return; }
+		this.maybeMask();
 
-		var me = this;
+		const loaded = this.bundleLoaded || Promise.reject();
 
-		me.maybeMask();
+		loaded
+			.then(() => {
+				if (this.assignmentsView) {
+					this.setActiveItem(this.assignmentsView, route.path);
 
-		me.setActiveItem(me.assignmentsView, route.path);
-
-		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
-			.then(function () {
-				if (me.assignmentsView.showRoot) {
-					me.assignmentsView.showRoot();
+					return this.assignmentsView.setAssignmentsData(this.assignmentCollection, this.currentBundle);
 				}
 			})
-			.then(me.maybeUnmask.bind(me))
-			.then(me.setTitle.bind(me, me.assignmentsView.title))
-			.then(me.alignNavigation.bind(me));
+			.then(this.maybeUnmask.bind(this))
+			.then(this.setTitle.bind(this, this.assignmentsView.title))
+			.then(this.alignNavigation.bind(this));
 	},
 
 	showStudentsForAssignment: function (route, subRoute) {
-		if (!this.assignmentsView) { return; }
+		this.maybeMask();
 
-		var me = this,
-			student = route.precache.student,
-			assignment = route.precache.assignment,
-			id = decodeFromURI(route.params.assignment);
+		const loaded = this.bundleLoaded || Promise.reject();
+		const student = route.precache.student;
+		const id = decodeFromURI(route.params.assignment);
+		let assignment = route.precache.assignment;
 
-		if (!assignment || assignment.getId() !== id) {
-			assignment = me.assignmentCollection.getItem(id);
-		}
+		loaded
+			.then(() => {
+				if (!assignment || assignment.getId() !== id) {
+					assignment = this.assignmentCollection.getItem(id);
+				}
 
-		student = student && student.getId();
+				if (this.assignmentsView) {
+					this.setActiveItem(this.assignmentsView, route.path);
 
-		me.maybeMask();
-
-		me.setActiveItem(me.assignmentsView, route.path);
-
-		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
-			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment, student))
-			.then(me.setTitle.bind(me, assignment.get('title')))
-			.then(me.maybeUnmask.bind(me))
-			.then(me.alignNavigation.bind(me));
+					return this.assignmentsView.setAssignmentsData(this.assignmentCollection, this.currentBundle, true);
+				}
+			})
+			.then(() => {
+				this.assignmentsView.showAssignment(assignment, student);
+			})
+			.then(() => { this.setTitle(assignment.get('title')) })
+			.then(this.maybeUnmask.bind(this))
+			.then(this.alignNavigation.bind(this));
 	},
 
 	showAssignmentsForStudent: function (route, subRoute) {
-		if (!this.performanceView) { return; }
+		this.maybeMask();
 
-		var me = this,
-			student = route.params.student;
-
-		student = NextThought.model.User.getIdFromURIPart(student);
-
-		me.maybeMask();
-
-		me.setActiveItem(me.performanceView, route.path);
+		const loaded = this.bundleLoaded || Promise.reject();
+		const student = route.params.student && NextThought.model.User.getIdFromURIPart(route.params.student);
 
 		UserRepository.getUser(student)
-			.then(function (user) {
-				me.setTitle(user.getName());
+			.then((user) => {
+				this.setTitle(user.getName());
 			});
 
-		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
-			.then(me.performanceView.showStudent.bind(me.performanceView, student, route.precache))
-			.then(me.maybeUnmask.bind(me))
+		loaded
+			.then(() => {
+				if (this.performanceView) {
+					this.setActiveItem(this.performanceView, route.path);
+
+					return this.performanceView.setAssignmentsData(this.assignmentCollection, this.currentBundle, student);
+				}
+			})
+			.then(() => {
+				this.performanceView.showStudent(student, route.precache);
+			})
+			.then(this.maybeUnmask.bind(this))
 			.then(function () { return wait(); })
-			.then(me.alignNavigation.bind(me));
+			.then(this.alignNavigation.bind(this));
 	},
 
 
