@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 			return false;
 		}
 
-		if (!target || target.classList.contains('allow-scroll-bleed')) {
+		if (!target || target.classList.contains('allow-scroll-bleed') || (e.target === target && target.tagName === 'HTML')) {
 			return true;
 		}
 
