@@ -1,25 +1,25 @@
-var Ext = require('extjs');
-var UtilAnimationFrame = require('./AnimationFrame');
+const Ext = require('extjs');
+const AnimationFrame = require('./AnimationFrame');
 
 
 module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 	statics: {
-		getPageScrollingEl: function () {
+		getPageScrollingEl () {
 			return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 		},
 
 
-		getPageScrollingHeight: function () {
+		getPageScrollingHeight () {
 			return this.getPageScrollingEl().scrollHeight;
 		},
 
 
-		getPageHeight: function () {
+		getPageHeight () {
 			return document.documentElement.clientHeight;
 		},
 
 
-		getPageScrolling: function () {
+		getPageScrolling () {
 			if (!this.pageScrolling) {
 				this.pageScrolling = this.create({
 					el: this.getPageScrollingEl(),
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		}
 	},
 
-	constructor: function (config) {
+	constructor (config) {
 		this.targetEl = config.el;
 
 		this.heightOverride = config.heightOverride;
@@ -48,19 +48,19 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		};
 	},
 
-	__getTop: function () {
-		var rect = this.targetEl && this.targetEl.getBoundingClientRect();
+	__getTop () {
+		const rect = this.targetEl && this.targetEl.getBoundingClientRect();
 
 		return this.topOverride !== undefined ? this.topOverride : (rect && rect.top);
 	},
 
-	__getHeight: function () {
-		var rect = this.targetEl && this.targetEl.getBoundingClientRect();
+	__getHeight () {
+		const rect = this.targetEl && this.targetEl.getBoundingClientRect();
 
 		return this.heightOverride !== undefined ? this.heightOverride : (rect && rect.height);
 	},
 
-	scrollWhenDragNearEdges: function () {
+	scrollWhenDragNearEdges () {
 		if (this.targetEl && this.targetEl.addEventListener) {
 			this.targetEl.addEventListener('dragover', this.handlers.dragover, true);
 			this.targetEl.addEventListener('dragleave', this.handlers.dragleave, true);
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		}
 	},
 
-	unscrollWhenDragNearEdges: function () {
+	unscrollWhenDragNearEdges () {
 		if (this.targetEl && this.targetEl.removeEventListener) {
 			this.targetEl.removeEventListener('dragover', this.handlers.dragover, true);
 			this.targetEl.removeEventListener('dragleave', this.handlers.dragleave, true);
@@ -78,25 +78,23 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		this.endDragOverScroll();
 	},
 
-	__onDragOver: function (e) {
+	__onDragOver (e) {
 		this.scrollIfNearEdge(e.clientX, e.clientY);
 	},
 
-	__onDragLeave: function () {
+	__onDragLeave () {
 		this.endDragOverScroll();
 	},
 
-	getScrollAnimationFn: function (direction) {
-		var velocity = this.scrollingVelocity,
-			targetEl = this.targetEl,
-			getTop = this.__getTop.bind(this),
-			getHeight = this.__getHeight.bind(this),
-			lastScroll = targetEl.scrollTop;
+	getScrollAnimationFn (direction) {
+		const velocity = this.scrollingVelocity;
+		const targetEl = this.targetEl;
+		// let lastScroll = targetEl.scrollTop;
 
-		return function (next, diff) {
-			var scrollTop = targetEl.scrollTop,
-				top = getTop(),
-				height = getHeight(), distance;
+		return (next, diff) => {
+			const scrollTop = targetEl.scrollTop;
+			// const top = this.__getTop();
+			const height = this.__getHeight();
 
 			//If something else has scrolled us
 			// if (lastScroll !== scrollTop) { return; }
@@ -107,16 +105,16 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 			//If we are moving down and already at the bottom
 			if (direction > 0 && (height + scrollTop) >= targetEl.scrollHeight) { return; }
 
-			distance = Math.ceil(diff * velocity);
+			const distance = Math.ceil(diff * velocity);
 
 			targetEl.scrollTop = scrollTop + (direction * distance);
-			lastScroll = targetEl.scrollTop;
+			// lastScroll = targetEl.scrollTop;
 
 			next();
 		};
 	},
 
-	endDragOverScroll: function () {
+	endDragOverScroll () {
 		if (this.scrollingAnimation) {
 			this.scrollingAnimation.stop();
 		}
@@ -126,26 +124,23 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		}
 	},
 
-	scrollIfNearEdge: function (x, y) {
-		var me = this,
-			top = me.__getTop(),
-			height = me.__getHeight(),
-			tol = me.edgeScrollTolerance,
-			oldScrollDirection = me.dragScrollDirection,
-			newScrollDirection, animation;
+	scrollIfNearEdge (x, y) {
+		const top = this.__getTop();
+		const height = this.__getHeight();
+		const tol = this.edgeScrollTolerance;
+		const oldScrollDirection = this.dragScrollDirection;
 
-		function getNewScrollAnimation (direction) {
-			var animation;
-
+		const getNewScrollAnimation = (direction) => {
 			//If we have changed direction create a new animation frame
 			if (oldScrollDirection !== direction) {
-				animation = new NextThought.util.AnimationFrame(me.getScrollAnimationFn(direction));
+				return new AnimationFrame(this.getScrollAnimationFn(direction));
 			}
+		};
 
-			return animation;
-		}
+		this.lastScroll = this.targetEl.scrollTop;
 
-		me.lastScroll = me.targetEl.scrollTop;
+		let animation;
+		let scrollDirection = 0;
 
 		if (y < top + tol) {
 			animation = getNewScrollAnimation(-1);
@@ -153,19 +148,17 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		} else if (y > (top + height) - tol) {
 			animation = getNewScrollAnimation(1);
 			scrollDirection = 1;
-		} else {
-			scrollDirection = 0;
 		}
 
-		if (scrollDirection !== me.dragScrollDirection) {
-			me.endDragOverScroll();
+		if (scrollDirection !== this.dragScrollDirection) {
+			this.endDragOverScroll();
 
 			if (animation) {
-				me.dragScrollStartTimeout = setTimeout(animation.start.bind(animation), 500);
-				me.scrollingAnimation = animation;
+				this.dragScrollStartTimeout = setTimeout(animation.start.bind(animation), 500);
+				this.scrollingAnimation = animation;
 			}
 
-			me.dragScrollDirection = scrollDirection;
+			this.dragScrollDirection = scrollDirection;
 		}
 
 	}

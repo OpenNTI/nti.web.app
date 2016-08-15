@@ -1,37 +1,42 @@
-var Ext = require('extjs');
-var UtilScrolling = require('../util/Scrolling');
+const Ext = require('extjs');
+const Scrolling = require('../util/Scrolling');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
-	initScrolling: function () {
+	initScrolling () {
 		if (!this.Scrolling) {
 			this.Scrolling = {
-				scrollingEl: NextThought.util.Scrolling.getPageScrollingEl()
+				scrollingEl: Scrolling.getPageScrollingEl()
 			};
 		}
 	},
 
-	getPageScrollingEl: function () {
-		return NextThought.util.Scrolling.getPageScrollingEl();
+	getPageScrollingEl () {
+		return Scrolling.getPageScrollingEl();
 	},
 
-	getPageScrollHeight: function () {
-		return NextThought.util.Scrolling.getPageScrollingHeight();
+	getPageScrollHeight () {
+		return Scrolling.getPageScrollingHeight();
 	},
 
-	getPageHeight: function () {
-		return NextThought.util.Scrolling.getPageHeight();
+	getPageHeight () {
+		return Scrolling.getPageHeight();
 	},
 
-	findScrollableParent: function (node) {
+	findScrollableParent (node) {
 		this.initScrolling();
 
-		function isScrollable (node) {
-			var computed = node && getComputedStyle(node);
+		const isScrollable = (el) => {
+			const computed = el && getComputedStyle(el);
 
 			//if the node is scrollable and the overflow allows it to scroll
-			return node && node.scrollHeight > node.clientHeight && (computed['overflow-y'] === 'auto' || computed['overflow-y'] === 'scroll');
-		}
+			return el
+				&& el.scrollHeight > el.clientHeight
+				&& (
+					computed['overflow-y'] === 'auto'
+					|| computed['overflow-y'] === 'scroll'
+				);
+		};
 
 		while (node && node !== this.Scrolling.scrollingEl && node !== document && !isScrollable(node)) {
 			node = node.parentNode;
@@ -40,13 +45,13 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		return node !== this.Scrolling.scrollingEl && node !== document && node;
 	},
 
-	maybeStopScrollBleed: function (e) {
-		var target = this.findScrollableParent(e.target),
-			scrollTop = target && target.scrollTop,
-			scrollHeight = target && target.scrollHeight,
-			height = target && target.clientHeight,
-			delta = e.wheelDelta,
-			up = delta > 0;
+	maybeStopScrollBleed (e) {
+		const target = this.findScrollableParent(e.target);
+		const scrollTop = target && target.scrollTop;
+		const scrollHeight = target && target.scrollHeight;
+		const height = target && target.clientHeight;
+		const delta = e.wheelDelta;
+		const up = delta > 0;
 
 		function prevent () {
 			e.stopPropagation();
@@ -72,10 +77,10 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		}
 	},
 
-	scrollPageTo: function (position) {
+	scrollPageTo (position) {
 		this.initScrolling();
 
-		var page = this.getPageScrollingEl();
+		const page = this.getPageScrollingEl();
 
 		if (position < 0) {
 			position = 0;
@@ -86,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		page.scrollTop = position;
 	},
 
-	scrollPageToTop: function () {
+	scrollPageToTop () {
 		this.scrollPageTo(0);
 	}
 });

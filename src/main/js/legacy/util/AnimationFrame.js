@@ -4,7 +4,7 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 
 	statics: {
-		getRequestAnimationFrame: function () {
+		getRequestAnimationFrame () {
 			var names = [
 					'requestAnimationFrame',
 					'webkitRequestAnimationFrame',
@@ -13,14 +13,10 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 				],
 				request;
 
-			request = names.reduce(function (acc, name) {
-				return acc || window[name];
-			}, null);
+			request = names.reduce((acc, name) => acc || window[name], null);
 
 			if (!request) {
-				request = function (callback) {
-					return setTimeout(callback, 1000 / 60);
-				};
+				request = (callback) => setTimeout(callback, 1000 / 60);
 			}
 
 			return request;
@@ -31,9 +27,9 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 	MAX_RUN_TIME: 60000,//For now set it to a minute
 
 
-	constructor: function (fn) {
+	constructor (fn) {
 		if (!fn) {
-			throw 'No function passed to animation frame';
+			throw new Error('No function passed to animation frame');
 		}
 
 		this.frameFn = fn;
@@ -41,28 +37,26 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 
 
 
-	start: function () {
+	start () {
 		if (this.running) {
 			return;
 		}
 
-		var me = this,
-			startTime = new Date();
 
-		me.stopAnimation = null;
+		const startTime = new Date();
 
-		function onFrame () {
-			var now = new Date(),
-				diff = now - startTime;
+		this.stopAnimation = null;
 
-			function next () {
-				requestAnimationFrame(onFrame);
+		const onFrame = () => {
+			const now = new Date();
+			const diff = now - startTime;
+
+			const next = () => requestAnimationFrame(onFrame);
+
+			if (diff < this.MAX_RUN_TIME && !this.stopAnimation) {
+				this.frameFn(next, diff);
 			}
-
-			if (diff < me.MAX_RUN_TIME && !me.stopAnimation) {
-				me.frameFn(next, diff);
-			}
-		}
+		};
 
 		onFrame();
 		this.running = true;
@@ -70,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 
 
 
-	stop: function () {
+	stop () {
 		this.stopAnimation = true;
 	}
 });
