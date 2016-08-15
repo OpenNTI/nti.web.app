@@ -8,6 +8,8 @@ require('legacy/app/course/assessment/Actions');
 require('./FilterBar');
 require('./List');
 
+const {guidGenerator} = require('legacy/util/Globals');
+
 const {wait} = require('legacy/util/Promise');
 
 const PUBLISHED = getString('NextThought.view.courseware.assessment.assignments.View.published');
@@ -152,6 +154,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 * @param {Object} state
 	 */
 	getGrouper: function (state) {
+		// prevents past goupers with stale grouperIDs from adding elements.
+		this.activeID = guidGenerator();
+
 		var me = this,
 			bar = me.getFilterBar(),
 			search = bar && bar.getSearch(),
@@ -160,6 +165,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return function (cmp, store) {
 			var count, groups,
 				groupPromise;
+
+			const grouperID = me.activeID;
 
 			store.clearGrouping();
 			store.removeFilter('dueFilter');
@@ -262,8 +269,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				groupPromise = groups.reduce(function (p, v) {
 					return p.then(function () {
 						return wait(1).then(function () {
-							cmp.add(v);
-							me.alignNavigation();
+							if (me.activeID === grouperID) {
+								cmp.add(v);
+								me.alignNavigation();
+							}
 						});
 					});
 				}, wait(1));
