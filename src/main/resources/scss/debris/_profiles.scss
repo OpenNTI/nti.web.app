@@ -307,15 +307,15 @@
 
 		.education::before {
 			//TODO: figure out how to name these
-			content: "\E60A";
+			content: $education-icon-char-code;
 		}
 
 		.location::before {
-			content: "\E60B";
+			content: $location-icon-char-code;
 		}
 
 		.position::before {
-			content: "\E60C";
+			content: $position-icon-char-code;
 		}
 
 
