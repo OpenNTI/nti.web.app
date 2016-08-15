@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			return html;
 		}
 
-		return html.replace(/<\/?(html|head|meta|title|link|body|a|p)((( |\t)[^>]*)?)>/ig, '')
+		return html.replace(/<\/?(html|head|meta|title|link|body|p)((( |\t)[^>]*)?)>/ig, '')
 				.replace(/^\s+/, '')
 				.replace(/\s+$/, '')
 				.replace(/(src)="(.*?)"/igm, fixRef);
@@ -357,6 +357,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			sol = removeObjects(sol);
 			a.update(sol);
 			e.update(this.filterHTML(p.get('explanation')));
+			a.el.select('a[href]').set({target: '_blank'});
+			e.el.select('a[href]').set({target: '_blank'});
 		}
 		else {
 			a.update('');
