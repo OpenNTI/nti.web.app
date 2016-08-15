@@ -307,15 +307,15 @@
 
 		.education::before {
 			//TODO: figure out how to name these
-			content: $education-icon-char-code;
+			content: $icon-education;
 		}
 
 		.location::before {
-			content: $location-icon-char-code;
+			content: $icon-location;
 		}
 
 		.position::before {
-			content: $position-icon-char-code;
+			content: $icon-briefcase;
 		}
 
 

@@ -48,9 +48,9 @@ $highlight-colors: (
 $hide-chat-break-point: "only screen and (max-width: 1200px)";
 $show-chat-break-point: "only screen and (min-width: 1200px)";
 
-// icon char codes
-$education-icon-char-code: "\E60A";
-$location-icon-char-code: "\E60B";
-$position-icon-char-code: "\E60C";
+// Repeating variables from nti-style-common/fonts/iconmoon
+$icon-education: "\e60a";
+$icon-location: "\e60b";
+$icon-briefcase: "\e60c";
 
 @import "common-mixins";
