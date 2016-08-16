@@ -402,7 +402,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	showPerformance: function (route, subRoute) {
-		debugger;
 		const isActiveItem = this.performanceView && this.body.getLayout().getActiveItem() === this.performanceView;
 		const student = route.precache.student;
 
