@@ -418,7 +418,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 			})
 			.then(() => {
-				if (this.performanceView) {
+				if (this.performanceView && this.performanceView.showRoot) {
 					this.performanceView.showRoot();
 				}
 			})
