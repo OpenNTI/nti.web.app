@@ -51,9 +51,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return this.record.isModel && this.record.getData();
 		}
 
-		return {
+		const copy = this.copyValues;
+		const data = {
 			MimeType: NextThought.model.RelatedWork.mimeType
 		};
+
+		if (copy) {
+			data.label = copy.label;
+			data.icon = copy.icon;
+			data.byline = copy.byline;
+			data.description = copy.description;
+		}
+
+
+		return data;
 	},
 
 	showEditor: function () {

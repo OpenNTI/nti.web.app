@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 		this.activeEditor = this.add(type.editor.create({
-			copyRecord: this.copyRecord,
+			copyValues: this.copyValues,
 			parentRecord: this.parentRecord,
 			rootRecord: this.rootRecord,
 			bundle: this.bundle,

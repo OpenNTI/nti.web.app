@@ -170,14 +170,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getConfig: function (record, parentRecord, rootRecord, bundle, group) {
+	getConfig: function (record, parentRecord, rootRecord, bundle, group, values) {
 		return {
 			record: record,
 			parentRecord: parentRecord,
 			rootRecord: rootRecord,
 			bundle: bundle,
-			switchRecordType: (g) => this.switchRecordType(g, record, parentRecord, rootRecord, bundle),
+			switchRecordType: (g, v) => this.switchRecordType(g, v, record, parentRecord, rootRecord, bundle),
 			group: group,
+			copyValues: values,
 			setSaveText: this.setSaveText.bind(this),
 			enableSave: this.enableSave.bind(this),
 			disableSave: this.disableSave.bind(this),
@@ -217,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.activeEditor = this.add(cmp.create(this.getConfig(null, parentRecord, rootRecord, bundle)));
 	},
 
-	switchRecordType: function (group, record, parentRecord, rootRecord, bundle) {
+	switchRecordType: function (group, values, record, parentRecord, rootRecord, bundle) {
 		var typeSwitcher = this.self.getTypeSwitcher(record.mimeType);
 
 		if (!typeSwitcher) {
@@ -229,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.activeEditor.destroy();
 		}
 
-		this.activeEditor = this.add(typeSwitcher.create(this.getConfig(record, parentRecord, rootRecord, bundle, group)));
+		this.activeEditor = this.add(typeSwitcher.create(this.getConfig(record, parentRecord, rootRecord, bundle, group, values)));
 	},
 
 	setSaveText: function (text) {

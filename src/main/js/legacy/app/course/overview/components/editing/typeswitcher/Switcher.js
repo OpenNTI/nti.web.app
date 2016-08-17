@@ -8,12 +8,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	title: 'Pick New Type',
 
-	initComponent () {
-		this.callParent(arguments);
-
-		this.copyRecord = this.record;
-	},
-
 
 	getTypes () {
 		const types = this.group ? this.group.getTypes() : [];
