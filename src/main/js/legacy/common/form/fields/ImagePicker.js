@@ -166,7 +166,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 			return;
 		}
 
-		this.setPreviewURL(value);
+		if (typeof value === 'string') {
+			this.setPreviewURL(value);
+		} else {
+			this.setPreviewFromInput(value);
+		}
+
 		this.updateTooltip(true);
 	},
 
