@@ -15,6 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			selectionItems: items,
 			selectedItem: parentRecord !== rootRecord ? parentRecord : null,
 			parentRecord: parentRecord,
+			lockedPosition: this.lockedPosition,
 			rootRecord: rootRecord,
 			editingRecord: record,
 			scrollingParent: this.scrollingParent,

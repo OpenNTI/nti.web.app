@@ -1,4 +1,17 @@
 .overview-editing-parentselection {
+	&.locked {
+		& > .selection, & > .position {
+			.active {
+				opacity: 0.8;
+				cursor: default;
+
+				&::after {
+					display: none;
+				}
+			}
+		}
+	}
+
 	 & > .label {
 		color: $tertiary-grey;
 		font: normal 600 0.625em/1 $font;

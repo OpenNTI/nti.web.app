@@ -8,6 +8,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	title: 'Pick New Type',
 
+	initComponent () {
+		this.callParent(arguments);
+
+		const index = this.parentRecord && this.parentRecord.indexOfId(this.record.getId());
+
+		this.lockedPosition = {
+			parentRecord: this.parentRecord,
+			index: index
+		};
+	},
+
 
 	getTypes () {
 		const types = this.group ? this.group.getTypes() : [];

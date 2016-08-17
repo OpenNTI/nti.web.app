@@ -69,8 +69,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.positionMenu = this.buildPositionMenu();
 		this.hidePositionMenu();
 
-		//If there is no original selection (ie we aren't editing a record), just pick the first one
-		this.selectRecord(this.originalSelection || this.selectionItems[0]);
+		if (this.lockedPosition) {
+			this.selectLockedPosition(this.lockedPosition);
+		} else {
+			//If there is no original selection (ie we aren't editing a record), just pick the first one
+			this.selectRecord(this.originalSelection || this.selectionItems[0]);
+		}
 
 		this.mon(this.activeEl, 'click', this.toggleSelectionMenu.bind(this));
 		this.mon(this.activePositionEl, 'click', this.togglePositionMenu.bind(this));
@@ -133,6 +137,25 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return menu;
 	},
+
+
+	selectLockedPosition: function (position) {
+		const record = position.parentRecord;
+		const index = position.index;
+
+		if (!record) {
+			return this.selectRecord();
+		}
+
+		this.itemTpl.append(this.activeEl, this.parseItemData(record));
+		this.selectionMenu.selectRecord(record);
+
+		this.positionMenu.setTotalPositions(record.getItemsCount(), index);
+		this.selectPosition(index);
+
+		this.addCls('locked');
+	},
+
 
 	selectRecord: function (record) {
 		if (!this.rendered) {
