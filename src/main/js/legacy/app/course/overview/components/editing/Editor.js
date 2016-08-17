@@ -135,10 +135,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.switchTypeBtn = this.maybeAddSwitchTypeButton();
 		}
 
-		if (this.allowTypeSwitch) {
-			this.switchButton = this.addTypeSwitchButton();
-		}
-
 		if (this.record && this.record.hasAuditLog && this.record.hasAuditLog() && Service.canDoAdvancedEditing()) {
 			this.addAuditLog();
 		}

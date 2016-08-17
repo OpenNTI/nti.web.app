@@ -6,13 +6,25 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
 	alias: 'widget.outline-editing-type-switcher',
 
+	title: 'Pick New Type',
+
+	initComponent () {
+		this.callParent(arguments);
+
+		this.copyRecord = this.record;
+	},
+
 
 	getTypes () {
-		if (this.group) {
-			return this.group.getTypes();
-		}
+		const types = this.group ? this.group.getTypes() : [];
+		const {record} = this;
 
-		return [];
+		//Filter out the editor for the current type
+		return types.filter((type) => {
+			const {editor} = type;
+
+			return editor && !editor.getEditorForRecord(record);
+		});
 	},
 
 	onSave () {}
