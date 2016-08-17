@@ -158,6 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					record: me.record,
 					parentRecord: me.parentRecord,
 					rootRecord: me.rootRecord,
+					editorGroup: me.editorGroup,
 					selectedItem: selection,
 					doClose: me.doClose,
 					onChangeReading: me.showReadingList.bind(me, [selection]),

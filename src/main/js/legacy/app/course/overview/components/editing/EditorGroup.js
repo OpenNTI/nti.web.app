@@ -13,6 +13,26 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getSubEditors: function () {},
 
 
+		getEditors: function () {
+			const editors = this.getSubEditors() || [];
+
+			for (let editor of editors) {
+				if (editor.attachToGroup) {
+					editor.attachToGroup(this);
+				}
+			}
+
+			return editors;
+		},
+
+
+		getEditorCount: function () {
+			const editors = this.getSubEditors() || [];
+
+			return editors.length;
+		},
+
+
 		/**
 		 * Return a combined list of the mimetypes handled by the
 		 * editors in the group
@@ -20,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * @return {[String]} the mimeTypes
 		 */
 		getHandledMimeTypes: function () {
-			var editors = this.getSubEditors() || [],
+			var editors = this.getEditors() || [],
 				seen;
 
 			seen = editors.reduce(function (acc, editor) {
@@ -45,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * @return {[Objects]} combined types
 		 */
 		getTypes: function () {
-			var editors = this.getSubEditors() || [];
+			var editors = this.getEditors() || [];
 
 			return editors.reduce(function (acc, editor) {
 				var types = editor.getTypes ? editor.getTypes() : [];
@@ -68,10 +88,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		/**
 		 * Return the editor in this group that can handle a record
+		 * @param {Object} record the record to find the editor for
 		 * @return {Editor} the Class to instantiate to edit the record
 		 */
 		getEditorForRecord: function (record) {
-			var editors = this.getSubEditors() || [],
+			var editors = this.getEditors() || [],
 				canHandle;
 
 			canHandle = editors.reduce(function (acc, editor) {

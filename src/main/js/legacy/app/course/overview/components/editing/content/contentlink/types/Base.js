@@ -21,6 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	cls: 'content-editor content-link',
 
+	allowTypeSwitch: true,
+
 	getFormSchema: function () {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},

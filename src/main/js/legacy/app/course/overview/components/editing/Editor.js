@@ -4,6 +4,7 @@ require('../../../../../common/form/Form');
 require('../../../../prompt/Actions');
 require('./Actions');
 require('./controls/Delete');
+require('./controls/SwitchType');
 require('./auditlog/Index');
 
 
@@ -60,6 +61,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			if (this.handlesMimeType(record.mimeType)) {
 				return this;
 			}
+		},
+
+		/**
+		 * Attach the editor to a particular group.
+		 * So we know what types we can switch between
+		 *
+		 * @param  {Object} group the editor group
+		 * @return {void}
+		 */
+		attachToGroup: function (group) {
+			this.editorGroup = group;
 		}
 	},
 
@@ -97,6 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
+		this.editorGroup = this.self.editorGroup || this.editorGroup;
 
 		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
 
@@ -119,6 +132,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (this.record) {
 			this.deleteBtn = this.addDeleteButton();
+			this.switchTypeBtn = this.maybeAddSwitchTypeButton();
+		}
+
+		if (this.allowTypeSwitch) {
+			this.switchButton = this.addTypeSwitchButton();
 		}
 
 		if (this.record && this.record.hasAuditLog && this.record.hasAuditLog() && Service.canDoAdvancedEditing()) {
@@ -231,6 +249,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 		}
 	},
+
+
+	maybeAddSwitchTypeButton: function () {
+		if (this.allowTypeSwitch && this.editorGroup && this.editorGroup.getEditorCount() > 0) {
+			return this.add({
+				xtype: 'overview-editing-controls-switch-type',
+				record: this.record,
+				parentRecord: this.parentRecord,
+				onSwitch: this.doSwitchType
+			});
+		}
+	},
+
+
+	doSwitchType: function () {},
 
 
 	addAuditLog: function () {
