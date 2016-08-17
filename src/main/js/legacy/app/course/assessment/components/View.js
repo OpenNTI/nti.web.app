@@ -187,15 +187,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return Promise.resolve(this.assignmentCollection ? this.assignmentCollection.get('Assignments') : []);
 		}
 
-		const me = this;
-
-		return Promise.resolve(me.assignmentCollection ? me.assignmentCollection
-			: me.currentBundle.getAssignments())
-			.then((collection) => {
-				return me.assignmentsView.setAssignmentsData(collection, me.currentBundle, true);
-			})
+		return Promise.resolve(this.assignmentCollection ? this.assignmentCollection
+			: this.currentBundle.getAssignments())
+			.then(collection => this.assignmentsView.setAssignmentsData(collection, this.currentBundle, true))
 			.then(() => {
-				const items = me.assignmentsView.store.getRange() || [];
+				const items = this.assignmentsView.store.getRange() || [];
 				return items.map(item => item.get('item'));
 			});
 	},
