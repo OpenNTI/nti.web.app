@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		var types = this.self.getTypes();
+		var types = this.getTypes();
 
 		this.types = types;
 
@@ -56,6 +56,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.showTypeList(types);
 		}
 	},
+
+
+	getTypes: function () {
+		return this.self.getTypes();
+	},
+
 
 	setUpTypeList: function () {
 		if (this.disableBack) {
@@ -127,6 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 		this.activeEditor = this.add(type.editor.create({
+			copyRecord: this.copyRecord,
 			parentRecord: this.parentRecord,
 			rootRecord: this.rootRecord,
 			bundle: this.bundle,

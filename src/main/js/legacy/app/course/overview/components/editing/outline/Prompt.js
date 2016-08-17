@@ -1,11 +1,12 @@
 var Ext = require('extjs');
-var OutlinenodeEditor = require('./outlinenode/Editor');
-var CalendarnodeEditor = require('./calendarnode/Editor');
-var ContentnodeEditor = require('./contentnode/Editor');
-var CreationTypeList = require('../creation/TypeList');
-var CoursesCourseOutline = require('../../../../../../model/courses/CourseOutline');
-var OutlinenodeInlineEditor = require('./outlinenode/InlineEditor');
-var ContentnodeInlineEditor = require('./contentnode/InlineEditor');
+
+require('./outlinenode/Editor');
+require('./calendarnode/Editor');
+require('./contentnode/Editor');
+require('../creation/TypeList');
+require('../../../../../../model/courses/CourseOutline');
+require('./outlinenode/InlineEditor');
+require('./contentnode/InlineEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', {
@@ -48,6 +49,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
+		getTypeSwitcher: function (mimeType) {
+			return this.TYPE_SWITCHERS[mimeType];
+		},
+
+
 		getTypeEditors: function () {
 			var base = NextThought.app.course.overview.components.editing.outline;
 
@@ -71,6 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.setUpChildCreators();
 			this.setUpEditors();
 			this.setUpInlineEditors();
+			this.setUpTypeSwitchers();
 		},
 
 
@@ -125,6 +132,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return acc;
 			}, {});
+		},
+
+
+		setUpTypeSwitchers: function () {
+			const editors = this.getTypeEditors() || [];
+
+			this.TYPE_SWITCHERS = editors.reduce((acc, item) => {
+				const handled = item.getHandledMimeTypes ? item.getHandledMimeTypes() : [];
+				const typeSwitcher = item.getTypeSwitcher && item.getTypeSwitcher();
+
+				if (!typeSwitcher) { return acc; }
+
+				for (let handle of handled) {
+					if (acc[handle]) {
+						console.warn('Overriding type switcher for mimetype: ', handle);
+					}
+
+					acc[handle] = typeSwitcher;
+				}
+
+				return acc;
+			}, {});
 		}
 	},
 
@@ -141,12 +170,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getConfig: function (record, parentRecord, rootRecord, bundle) {
+	getConfig: function (record, parentRecord, rootRecord, bundle, group) {
 		return {
 			record: record,
 			parentRecord: parentRecord,
 			rootRecord: rootRecord,
 			bundle: bundle,
+			switchRecordType: (g) => this.switchRecordType(g, record, parentRecord, rootRecord, bundle),
+			group: group,
 			setSaveText: this.setSaveText.bind(this),
 			enableSave: this.enableSave.bind(this),
 			disableSave: this.disableSave.bind(this),
@@ -184,6 +215,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		this.activeEditor = this.add(cmp.create(this.getConfig(null, parentRecord, rootRecord, bundle)));
+	},
+
+	switchRecordType: function (group, record, parentRecord, rootRecord, bundle) {
+		var typeSwitcher = this.self.getTypeSwitcher(record.mimeType);
+
+		if (!typeSwitcher) {
+			console.error('No type switcher for: ', record.mimeType);
+			return;
+		}
+
+		if (this.activeEditor) {
+			this.activeEditor.destroy();
+		}
+
+		this.activeEditor = this.add(typeSwitcher.create(this.getConfig(record, parentRecord, rootRecord, bundle, group)));
 	},
 
 	setSaveText: function (text) {

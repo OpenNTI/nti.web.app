@@ -1,4 +1,6 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const TypeSwitcher = require('./TypeSwitcher');
+
 var EditingEditorGroup = require('../../EditorGroup');
 var TypesDoc = require('./types/Doc');
 var TypesReading = require('./types/Reading');
@@ -19,6 +21,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				base.Reading,
 				base.URL
 			];
+		},
+
+
+		getTypeSwitcher: function () {
+			return TypeSwitcher;
 		}
 	}
 });

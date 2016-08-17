@@ -257,13 +257,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				xtype: 'overview-editing-controls-switch-type',
 				record: this.record,
 				parentRecord: this.parentRecord,
-				onSwitch: this.doSwitchType
+				onSwitch: this.doSwitchType.bind(this)
 			});
 		}
 	},
 
 
-	doSwitchType: function () {},
+	doSwitchType: function () {
+		if (this.switchRecordType) {
+			this.switchRecordType(this.editorGroup);
+		}
+	},
 
 
 	addAuditLog: function () {

@@ -112,6 +112,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 
 			return canHandle[0] || null;
-		}
+		},
+
+		/**
+		 * Return the type switcher to handle switching between the items in the group
+		 * @return {Object} component to handle switching types
+		 */
+		getTypeSwitcher: function () {}
 	}
 });
