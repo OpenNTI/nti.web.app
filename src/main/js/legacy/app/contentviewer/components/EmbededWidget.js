@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'splash', style: {backgroundImage: 'url({splash})'}},
-		{ tag: 'iframe', scrolling: 'no', frameborder: 'no', src: '{src}', width: '100%', height: '{height}' }
+		{ tag: 'iframe', scrolling: 'no', frameborder: 'no', src: '{src}', width: '100%', height: '{height}', allowfullscreen: 'allowFullscreen' }
 	]),
 
 
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		rd.height = data.height || 0;
 
 		this.frameDeferred = defer;
-		this.sourceName = data.uid || parse(data.source)[this.getIdKey()] || NO_SOURCE_ID;
+		this.sourceName = data.uid || parse(data.source)[this.getIdKey()] || this.NO_SOURCE_ID;
 		if (Ext.isEmpty(query[this.getIdKey()])) {
 			data.source += (data.source.indexOf('?') === -1 ? '?' : '&') + this.getIdKey() + '=' + encodeURIComponent(this.sourceName);
 		}
