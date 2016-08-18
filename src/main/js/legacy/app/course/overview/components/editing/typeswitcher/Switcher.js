@@ -32,5 +32,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	onSave () {}
+
+	onSave () {
+		const doSave = this.callParent(arguments);
+
+		return doSave
+			.then((result) => {
+				return this.removeOldRecord()
+					.then(() => result, () => result);
+			});
+	},
+
+
+	removeOldRecord () {
+		if (this.parentRecord) {
+			return this.parentRecord.removeRecord(this.record);
+		}
+
+		return Promise.resolve();
+	}
 });
