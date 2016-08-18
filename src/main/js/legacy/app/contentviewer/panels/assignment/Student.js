@@ -28,22 +28,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 	getReaderConfig: function () {
 		var assignment = this.assignment;
-
 		const isPracticeSubmission = assignment && assignment.hasLink('PracticeSubmission');
 
-		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !isPracticeSubmission) {
+		//If the assignment hasn't started yet, and you can't do a practice submission
+		if (!assignment.isAvailable() && !isPracticeSubmission) {
+			return {
+				xtype: 'assignment-notstarted-placeholder',
+				assignment: assignment,
+				flex: 1
+			};
+		//If the assignment is timed and hasn't starte yet, and you aren't an instructor
+		} else if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !isPracticeSubmission) {
 			this.hasTimedPlaceholder = true;
 
 			return {
 				xtype: 'assignment-timedplaceholder',
 				assignment: assignment,
 				startAssignment: this.startTimed.bind(this),
-				flex: 1
-			};
-		} else if (!assignment.isAvailable() && !assignment.hasLink('PracticeSubmission')) {
-			return {
-				xtype: 'assignment-notstarted-placeholder',
-				assignment: assignment,
 				flex: 1
 			};
 		} else {
