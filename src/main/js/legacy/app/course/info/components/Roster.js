@@ -213,6 +213,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	setContent: function (instance) {
+		if (instance === this.currentBundle) {
+			return;
+		}
 		var roster = instance && instance.getLink('CourseEnrollmentRoster'),
 			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
 					roster,
