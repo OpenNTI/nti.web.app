@@ -176,6 +176,20 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		});
 	},
 
+	/**
+	 * Given a path return the root bundle in it
+	 *
+	 * @param {Array} path the path to get the bundle out of
+	 * @return {Object} the root bundle in the path
+	 */
+	getRootBundleFromPath (path) {
+		for (let part of path) {
+			if (part.isBundle) {
+				return part;
+			}
+		}
+	},
+
 	__resolveForbiddenBreadCrumb: function (resp) {
 		var json = Globals.parseJSON(resp, true),
 			items = json && json.Items,

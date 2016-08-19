@@ -16,10 +16,9 @@ module.exports = exports = Ext.define('NextThought.model.NTICard', {
 		} },
 		{ name: 'label', type: 'string', convert(v, r) {
 			return v || r.raw.title;
+		} },
+		{ name: 'icon', type: 'string', convert(v, r) {
+			return v || r.raw.image;
 		} }
-	],
-
-	getIcon (root = '') {
-		return root + this.raw.image;
-	}
+	]
 });
