@@ -302,7 +302,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		var input = this.getInput(),
 			file = input && input.files && input.files[0];
 
-		if (e.target !== input) {
+		//For now in an attempt to prevent directories from being added, if the tile type is empty
+		//don't do anything
+		if (e.target !== input || !file || file.type === '') {
 			return;
 		}
 
