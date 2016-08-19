@@ -11,6 +11,7 @@ require('../../mediaviewer/Index');
 require('../../../model/RelatedWork');
 require('../../../model/QuestionSetRef');
 require('../../../model/SurveyRef');
+require('../../../model/NTICard');
 require('../../../model/courses/overview/Lesson');
 
 

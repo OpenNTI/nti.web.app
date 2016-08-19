@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork
 		type: 'relatedwork',
 
 		canHandle: function (obj) {
-			return obj && obj.get && obj.get('Class') === 'RelatedWork';
+			return obj && obj.get && (obj.get('Class') === 'RelatedWork' || obj.get('Class') === 'NTICard');
 		}
 	},
 
