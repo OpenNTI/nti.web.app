@@ -37,6 +37,13 @@ module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork
 				course: this.course,
 				record: this.contextRecord
 			});
+		} else if (obj && obj.get && obj.get('Class') === 'NTICard') {
+			cmp = Ext.widget('context-relatedwork-card', {
+				type: this.self.type,
+				content: obj,
+				course: this.course,
+				record: this.contextRecord
+			});
 		} else {
 			cmp = Ext.widget('context-relatedwork-card', {
 				type: this.self.type,
