@@ -171,6 +171,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 
 		this.selection = selection;
+
+		//NTI-1288: Set the min height due to the height changing after searching
+		this.setMinHeight(this.getHeight());
 	},
 
 	getSelection: function () {
@@ -242,6 +245,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (me.onSelectionChanged) {
 			me.onSelectionChanged(this.selection);
+		}
+	},
+
+	setMinHeight (height) {
+		if(this.el && this.el.dom) {
+			this.el.dom.style.minHeight = `${height}px`;
 		}
 	},
 
