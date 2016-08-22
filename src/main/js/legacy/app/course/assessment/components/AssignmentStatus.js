@@ -3,7 +3,6 @@ const {wait} = require('legacy/util/Promise');
 
 require('../AssignmentStatus');
 require('./editing/InlineEditor');
-require('legacy/app/context/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
@@ -39,17 +38,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		statusEl: '.status-container',
 		menuContainer: '.menu-container'
 	},
-
-
-	initComponent () {
-		this.callParent(arguments);
-
-		//TODO: Pass this down as a param instead of getting it form the context store
-		const contextStore = NextThought.app.context.StateStore.getInstance();
-
-		this.bundle = contextStore.getRootBundle();
-	},
-
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -125,8 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			assignment: this.assignment,
 			onSave: this.closeDueDateEditor.bind(this),
 			onCancel: this.closeDueDateEditor.bind(this),
-			renderTo: this.menuContainer,
-			bundle: this.bundle
+			renderTo: this.menuContainer
 		});
 
 		this.on('destroy', this.dueDateEditor.destroy.bind(this.dueDateEditor));

@@ -84,10 +84,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 	},
 
 
-	put: function (url, data, params) {
+	put: function (url, data) {
 		return this.request({
 			url: url,
-			params,
 			method: 'PUT',
 			jsonData: data
 		});
