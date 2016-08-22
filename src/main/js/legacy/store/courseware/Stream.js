@@ -52,6 +52,13 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 
 		me.params.MostRecent = me.latestBinDate / 1000; //the server is expecting seconds
 
+		//If we ever get in a case where we are requesting a batch with no time range.
+		if (me.params.MostRecent <= me.params.Oldest) {
+			me.__binItems([]);
+
+			return Promise.resolve([]);
+		}
+
 		me.loadingPromise = StoreUtils.loadRawItems(me.url, me.params)
 				.then(function (response) {
 					me.loading = false;
