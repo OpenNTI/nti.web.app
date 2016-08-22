@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.addSavingMask();
 
-		this.EditingActions.updateAssignment(this.assignment, publishValues, dueDateValues)
+		this.EditingActions.updateAssignment(this.assignment, publishValues, dueDateValues, this.bundle)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then(() => {
 				this.setAssignment(this.assignment);

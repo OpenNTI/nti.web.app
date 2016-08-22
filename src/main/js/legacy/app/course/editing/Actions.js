@@ -24,14 +24,14 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 	},
 
 
-	updateAssignmentPublish (assignment, publish) {
+	updateAssignmentPublish (assignment, publish, context) {
 		const isPublished = assignment.isPublishedByState();
 		let action;
 
 		if (isPublished && !publish) {
-			action = assignment.doUnpublish();
+			action = assignment.doUnpublish(null, context);
 		} else if (!isPublished && publish) {
-			action = assignment.doPublish();
+			action = assignment.doPublish(null, context);
 		} else {
 			action = Promise.resolve();
 		}
@@ -40,7 +40,8 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 	},
 
 
-	updateAssignment (assignment, {published, available}, {due}) {
+	updateAssignment (assignment, {published, available}, {due}, course) {
+		const context = course && course.getId();
 		const now = new Date();
 		const currentAvailable = assignment.get('availableBeginning') || null;
 
@@ -51,14 +52,14 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 			available = currentAvailable;
 		}
 
-		return this.updateAssignmentPublish(assignment, published)
+		return this.updateAssignmentPublish(assignment, published, context)
 			.then(() => {
-				return this.updateAssignmentDates(assignment, available, due);
+				return this.updateAssignmentDates(assignment, available, due, context);
 			});
 	},
 
 
-	updateAssignmentDates: function (assignment, available, due) {
+	updateAssignmentDates: function (assignment, available, due, course) {
 		const link = assignment.getDateEditingLink();
 
 		if (!link) {
@@ -86,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 			return Promise.resolve();
 		}
 
-		return Service.put(link, data)
+		return Service.put(link, data || {}, {course})
 			.then((response) => {
 				assignment.syncWithResponse(response);
 

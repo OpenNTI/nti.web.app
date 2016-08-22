@@ -2,6 +2,10 @@ var Ext = require('extjs');
 var ParseUtils = require('../util/Parsing');
 var SharingUtils = require('../util/Sharing');
 
+function getConfigForPost (url, course) {
+	return course ? {url, params: {course}} : url;
+}
+
 
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 
@@ -79,28 +83,28 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 	},
 
 
-	doPublish (data) {
+	doPublish (data, context) {
 		if (!this.canPublish()) {
 			return Promise.reject('Unable to publish');
 		}
 
 		const link = this.getLink('publish');
 
-		return Service.post(link, data)
+		return Service.post(getConfigForPost(link, context), data || {})
 			.then((response) => {
 				this.syncWithResponse(response);
 			});
 	},
 
 
-	doUnpublish (data) {
+	doUnpublish (data, context) {
 		if (!this.canUnpublish()) {
 			return Promise.reject('Unable to unpublish');
 		}
 
 		const link = this.getLink('unpublish');
 
-		return Service.post(link, data)
+		return Service.post(getConfigForPost(link, context), data || {})
 			.then((response) => {
 				this.syncWithResponse(response);
 			});
