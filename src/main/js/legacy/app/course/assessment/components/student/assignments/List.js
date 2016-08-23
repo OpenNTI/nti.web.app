@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	addItems: function (store) {
-		var items = this.store ? this.store.getRange() : [],
+		var items = this.getItemsFrom(store),
 			itemType = this.itemType,
 			navigateToItem = this.navigateToItem,
 			editAssignment = this.editAssignment,
@@ -40,6 +40,23 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				};
 			}));
 		}
+	},
+
+	getItemsFrom: function (store) {
+		const items = store.getRange();
+		let seen = {};
+
+		return items.filter((item) => {
+			const id = item.get('actualId') || item.get('id');
+
+			if (!id) { return true; }
+
+			const hasBeenSeen = seen[id];
+
+			seen[id] = true;
+
+			return !hasBeenSeen;
+		});
 	},
 
 	getItemsContainer: function () {
