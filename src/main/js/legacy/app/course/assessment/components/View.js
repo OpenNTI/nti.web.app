@@ -442,7 +442,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 			})
 			.then(this.maybeUnmask.bind(this))
-			.then(this.setTitle.bind(this, this.assignmentsView.title))
+			.then(this.setTitle.bind(this, this.assignmentsView && this.assignmentsView.title))
 			.then(this.alignNavigation.bind(this));
 	},
 
