@@ -255,29 +255,26 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		var me = this,
 			mediaId = this.videoId || this.slidedeckId;
 
-		this.goToParentLesson()
+		me.PathActions.getPathToObject(mediaId)
+			.then(function (path) {
+				var i,
+					parentPath = [];
+
+				for (i = 0; i < path.length; i++) {
+					if (path[i].get('NTIID') === mediaId) {
+						break;
+					}
+
+					parentPath.push(path[i]);
+				}
+
+				me.Router.root.attemptToNavigateToPath(parentPath);
+			})
 			.catch(function () {
-				me.PathActions.getPathToObject(mediaId)
-					.then(function (path) {
-						var i,
-							parentPath = [];
-
-						for (i = 0; i < path.length; i++) {
-							if (path[i].get('NTIID') === mediaId) {
-								break;
-							}
-
-							parentPath.push(path[i]);
-						}
-
-						me.Router.root.attemptToNavigateToPath(parentPath);
-					})
-					.catch(function () {
-						return Ext.isEmpty(me.parentLesson) ? Promise.reject() : me.__navigateToParent(me.parentLesson);
-					})
-					.catch(function () {
-						me.pushRootRoute('Library', '/library');
-					});
+				return Ext.isEmpty(me.parentLesson) ? Promise.reject() : me.__navigateToParent(me.parentLesson);
+			})
+			.catch(function () {
+				me.pushRootRoute('Library', '/library');
 			});
 	},
 
@@ -297,22 +294,5 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 				})
 				.catch(reject);
 		});
-	},
-
-	/**
-	 * This function provides a way to go to the parent lesson.
-	 * Now, it's mainly used by the Slidedeck, since its libraryPath is not correct
-	 * For videos, we will resolve the parent lesson based on their library path.
-	 * @return {[type]} [description]
-	 */
-	goToParentLesson: function () {
-		var me = this;
-
-		// video object know how to get the parent path.
-		if (!this.parentLesson || this.videoId) {
-			return Promise.reject();
-		}
-
-		return this.__navigateToParent(me.parentLesson);
 	}
 });
