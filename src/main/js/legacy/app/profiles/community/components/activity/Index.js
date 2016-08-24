@@ -1,15 +1,14 @@
-var Ext = require('extjs');
-var User = require('../../../../../model/User');
-var AnalyticsUtil = require('../../../../../util/Analytics');
-var StoreUtils = require('../../../../../util/Store');
-var MixinsRouter = require('../../../../../mixins/Router');
-var TilesNote = require('../../../../course/dashboard/components/tiles/Note');
-var TilesTopic = require('../../../../course/dashboard/components/tiles/Topic');
-var TilesBlog = require('../../../../course/dashboard/components/tiles/Blog');
-var PartsNewPost = require('./parts/NewPost');
-var WindowsActions = require('../../../../windows/Actions');
-var UtilStore = require('../../../../../util/Store');
-
+const Ext = require('extjs');
+const AnalyticsUtil = require('../../../../../util/Analytics');
+const StoreUtils = require('legacy/util/Store');
+require('legacy/model/User');
+require('legacy/mixins/Router');
+require('legacy/app/course/dashboard/components/tiles/Note');
+require('legacy/app/course/dashboard/components/tiles/Topic');
+require('legacy/app/course/dashboard/components/tiles/Blog');
+require('./parts/NewPost');
+require('legacy/app/windows/Actions');
+const {wait} = require('legacy/util/Promise');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	extend: 'Ext.container.Container',
@@ -123,9 +122,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		return Promise.resolve();
 	},
 
-	setSourceURL: function (url) {
+	setSourceURL: function (url, force) {
 		//if we are loading the same feed don't bother doing any work
-		if (this.feedUrl === url) { return; }
+		if (this.feedUrl === url && !force) { return; }
 
 		this.removeFeedItems();
 
@@ -322,22 +321,33 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	onBatchError: function (error) {
 		console.error('Failed to load community activity: ', error);
 
-		this.loadingCmp.removeCls('hidden');
+		this.loadingCmp.addCls('hidden');
+
 		this.isLoading = false;
 
 		this.currentPage = -1;
 
+		const status = (error || {}).status;
+		const msg = status === 403 ? 'You don\'t have access to this community.' : 'Error loading activity.';
+
 		this.errorCmp = this.add({
 			xtype: 'box',
 			cls: 'error',
-			autoEl: {html: 'Error loading activity.'}
+			autoEl: {html: msg}
 		});
+
+		if (status === 403 && this.newPostCmp) {
+			wait()
+				.then(() => this.newPostCmp.hide());
+		}
+
 	},
 
 	onBatchLoad: function (batch, feedUrl) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.isLoading = false;
+		this.newPostCmp.show();
 
 		//if we have items
 		if (batch.ItemCount) {
@@ -353,6 +363,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		//if the number we got back is smaller than the number we requests, assume that was the last page
 		if (batch.ItemCount < this.PAGE_SIZE) {
 			this.currentPage = -1;
+		}
+
+		if (batch && batch.Items && batch.Items.length > 0) {
+			this.clearEmpty();
 		}
 
 		this.nextBatchLink = nextLink;

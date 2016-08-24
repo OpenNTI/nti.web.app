@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			url = Service.getResolveUserURL(id);
 
 		if (me.activeCommunity && me.activeCommunity.getId() === id) {
-			return Promise.resolve(me.acitveCommunity);
+			return Promise.resolve(me.activeCommunity);
 		}
 
 		return Service.request(url)
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		var cmp = this.setActiveItem('profile-community-activity'),
 			link = this.activeCommunity.getLink('Activity');
 
-		cmp.setSourceURL(link);
+		cmp.setSourceURL(link, true);
 
 		this.activeCommunity.getDefaultForum()
 			.then(cmp.setPostContainer.bind(cmp));
@@ -233,6 +233,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 	updateCommunity: function () {
 		this.setState(this.activeState);
+		if (this.activeCommunity) {
+			this.headerCmp.updateEntity(this.activeCommunity);
+		}
 
 		//TODO: reload what ever is active on the body
 	},
@@ -270,6 +273,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			.then(function (response) {
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
+				me.replaceRoute('Activity', '/');
 			})
 			.catch(function (reason) {
 				console.error('Error joining community: ', reason);
@@ -292,6 +296,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			.then(function (response) {
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
+				me.replaceRoute('Activity', '/');
 			})
 			.catch(function (reason) {
 				console.error('Error leaving community: ', reason);
