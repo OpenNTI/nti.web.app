@@ -1,4 +1,6 @@
 const Ext = require('extjs');
+const {default:urlJoin} = require('nti-commons/lib/urljoin');
+
 const ContentUtils = require('../../util/Content');
 const ObjectUtils = require('../../util/Object');
 const ParseUtils = require('../../util/Parsing');
@@ -747,6 +749,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			.then(function (json) { return ParseUtils.parseItems(json)[0]; });
 
 		return this.__getGradeBookPromise;
+	},
+
+
+	getAssignmentURL (ntiid) {
+		const baseLink = this.getLink('Assessments');
+
+		return urlJoin(baseLink, ntiid);
 	},
 
 	/**

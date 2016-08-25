@@ -1,7 +1,10 @@
 const Ext = require('extjs');
 const React = require('react');
 const ReactDOM = require('react-dom');
+const {getService} = require('nti-web-client');
+const ContextStore = require('legacy/app/context/StateStore');
 
+const context = ContextStore.getInstance();
 const unwrap = x => (x && x.default) ? x.default : x;
 
 /*
@@ -10,16 +13,20 @@ const unwrap = x => (x && x.default) ? x.default : x;
 const Bridge = React.createClass({
 
 	propTypes: {
+		bundle: React.PropTypes.object,
 		children: React.PropTypes.any
 	},
 
 	childContextTypes: {
 		defaultEnvironment: React.PropTypes.object,
 		routerLinkComponent: React.PropTypes.func,
-		router: React.PropTypes.object
+		router: React.PropTypes.object,
+		course: React.PropTypes.object
 	},
 
 	getChildContext () {
+		const bundle = this.props.bundle || context.getRootBundle();
+
 		return {
 			defaultEnvironment: {
 				getPath: () => '',
@@ -28,6 +35,21 @@ const Bridge = React.createClass({
 			routerLinkComponent: () => {},
 			router: {
 				makeHref: (x) => x
+			},
+			course: bundle && {
+				getAssignment (ntiid) {
+					return getService()
+						.then((reactService) => {
+							const link = bundle.getAssignmentURL(ntiid);
+
+							return Service.request(link)
+								.then((resp) => {
+									const json = JSON.parse(resp);
+
+									return reactService.getObject(json);
+								});
+						});
+				}
 			}
 		};
 	},
@@ -120,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 		ReactDOM.render(
-			React.createElement(Bridge, {},
+			React.createElement(Bridge, {bundle: this.bundle},
 				//The ref will be called on mount with the instance of the component.
 				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
 				//mounted. Calling doRender is the primary way to update the component with new props.
