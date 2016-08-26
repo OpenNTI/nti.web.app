@@ -259,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		var correct = NaN,
+		var correct = NaN, total = NaN,
 			json = Ext.decode(r.responseText, true) || {};
 
 		json = (json.Items || [])[0];
@@ -271,9 +271,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		else {
 			json = ParseUtils.parseItems(json)[0];
 			correct = json.getCorrectCount();
+			total = json.getTotalCount();
 		}
 
-		this.updateWithScore(correct);
+		this.updateWithScore(correct, total);
 	},
 
 	setAsNotStarted: function () {
@@ -292,17 +293,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.addCls('not-started');
 	},
 
-	updateWithScore: function (correct) {
+	updateWithScore: function (correct, total) {
 		var tally = this.down('assessment-tally'),
 			score = this.down('chart-score');
 
 		if (tally) {
-			tally.setTally(correct || 0, this.getTotal(), isNaN(correct));
+			tally.setTally(correct || 0, total || this.getTotal(), isNaN(correct));
 			tally.setMessage(this.getQuetionSetContainerTitle());
 		}
 
 		if (score && !isNaN(correct)) {
-			score.setValue(Math.floor(100 * correct / this.getTotal()) || 0);
+			score.setValue(Math.floor(100 * correct / (total || this.getTotal())) || 0);
 		}
 		this.updateLayout();
 	},
