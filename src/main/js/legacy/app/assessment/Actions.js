@@ -110,6 +110,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 	},
 
 
+	getSubmissonURL (id, bundle) {
+		return bundle ? bundle.getAssignmentURL(id) : this.getObjectURL(id);
+	},
+
+
 	submitSurvey: function (survey, submissionData, containerId, startTime) {
 		var data = this.__getDataForSurveySubmission(survey, submissionData, containerId, startTime),
 			surveySubmission, me = this;
@@ -133,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	submitAssignment: function (questionSet, submissionData, containerId, startTime) {
+	submitAssignment: function (questionSet, submissionData, containerId, startTime, bundle) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
 			assignment = questionSet && questionSet.associatedAssignment,
 			assignmentId = assignment.getId(),
@@ -152,14 +157,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		if (assignment && assignment.getLink('PracticeSubmission')) {
 			return this.doSubmitAssignment(assignmentSubmission, assignment, true);
 		} else {
-			return this.doSubmitAssignment(assignmentSubmission, assignment);
+			return this.doSubmitAssignment(assignmentSubmission, assignment, false, bundle);
 		}
 	},
 
-	doSubmitAssignment: function (assignmentSubmission, assignment, isPracticeSubmission) {
+	doSubmitAssignment: function (assignmentSubmission, assignment, isPracticeSubmission, bundle) {
 		const assignmentId = assignment.getId();
 		const me = this;
-		const link = isPracticeSubmission ? assignment.getLink('PracticeSubmission') : me.getObjectURL(assignmentId);
+		const link = isPracticeSubmission ? assignment.getLink('PracticeSubmission') : me.getSubmissonURL(assignmentId, bundle);
 		let responseJSON;
 
 		assignmentSubmission.getProxy().on('exception', (proxy, response) => {

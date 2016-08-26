@@ -584,12 +584,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	submitAssignment: function (questionSet, submission) {
-		var me = this,
-			container = me.reader.getLocation().NTIID;
+		const me = this;
+		const location = me.reader.getLocation();
+		const container = location.NTIID;
+		const bundle = location.currentBundle;
 
 		me.mask();
 
-		me.AssessmentActions.submitAssignment(questionSet, submission, container, me.startTimestamp)
+		me.AssessmentActions.submitAssignment(questionSet, submission, container, me.startTimestamp, bundle)
 			.then(function (obj) {
 				var result = obj.result;
 
