@@ -441,6 +441,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					return this.assignmentsView.setAssignmentsData(this.assignmentCollection, this.currentBundle);
 				}
 			})
+			.then(() => {
+				this.assignmentsView.showRoot();
+			})
 			.then(this.maybeUnmask.bind(this))
 			.then(this.setTitle.bind(this, this.assignmentsView && this.assignmentsView.title))
 			.then(this.alignNavigation.bind(this));
