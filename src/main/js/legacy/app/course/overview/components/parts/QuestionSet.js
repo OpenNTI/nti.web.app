@@ -303,7 +303,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (score && !isNaN(correct)) {
-			score.setValue(Math.floor(100 * correct / this.getTotal()) || 0);
+			score.setValue(Math.floor(100 * correct / (total || this.getTotal())) || 0);
 		}
 		this.updateLayout();
 	},
