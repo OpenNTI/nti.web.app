@@ -442,7 +442,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 			})
 			.then(() => {
-				this.assignmentsView.showRoot();
+				if (this.assignmentsView && this.assignmentsView.showRoot) {
+					this.assignmentsView.showRoot();
+				}
 			})
 			.then(this.maybeUnmask.bind(this))
 			.then(this.setTitle.bind(this, this.assignmentsView && this.assignmentsView.title))
