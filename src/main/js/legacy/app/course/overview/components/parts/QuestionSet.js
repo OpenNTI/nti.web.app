@@ -123,6 +123,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	buildForAssignment: function () {
+		const totalPoints = this.assignment.getTotalPointsLabel();
+
 		this.add([
 			{
 				xtype: 'container',
@@ -130,7 +132,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				layout: 'none',
 				cls: 'assignment-box',
 				items: [
-					{xtype: 'box', autoEl: {cls: 'title', html: this.assignment.get('title')}},
+					{xtype: 'box', autoEl: {cls: 'title', cn: [
+						{cls: 'points', tag: 'strong', html: totalPoints},
+						{cls: 'label', tag: 'span', html: this.assignment.get('title')}
+					]}},
 					this.getButton()
 				]
 			},
@@ -178,7 +183,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			opens = assignment.get('availableBeginning'),
 			dueDate = assignment.get('availableEnding'),
 			button = this.down('button'),
-			titleEl = this.el.down('.assignment-box .title');
+			titleEl = this.el.down('.assignment-box .title .label'),
+			pointEl = this.el.down('.assignment-box .title .points');
 
 		this.addCls('assignment');
 		this.setAsNotStarted();
@@ -191,6 +197,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (titleEl) {
 			titleEl.update(assignment.get('title'));
+		}
+
+		if (pointEl) {
+			pointEl.update(assignment.getTotalPointsLabel());
 		}
 
 		assignment.getHistory()
@@ -217,6 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.down('button').setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
 		}
 	},
+
 
 	setHistory: function (history) {
 		if (!history) {
