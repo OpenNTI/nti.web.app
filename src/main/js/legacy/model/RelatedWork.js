@@ -239,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 			data.url = getURL(icon, root || '');
 		}
 		else if (!icon && this.self.isImageFile(targetMimeType)) {
-			data.url = getURL(this.get('href'));
+			data.url = getURL(this.get('thumbnail'));
 		}
 
 		if (!data.url) {
