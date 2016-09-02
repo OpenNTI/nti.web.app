@@ -172,8 +172,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			jsonpUrl = transcript.get('jsonpUrl'),
 			url = transcript.get('url');
 
-		jsonpUrl = Globals.getURLRooted(jsonpUrl, base);
-		url = Globals.getURLRooted(url, base);
+		function fixURL (href, basePath) {
+			if (Globals.ROOT_URL_PATTERN.test(href)) {
+				href = Globals.getURL(href);
+			} else if (!Globals.HOST_PREFIX_PATTERN.test(href)) {
+				href = Globals.getURLRooted(href, basePath);
+			}
+
+			return href;
+		}
+
+		jsonpUrl = fixURL(jsonpUrl, base);
+		url = fixURL(url, base);
 
 		if (!transcript) {
 			return Promise.reject();
