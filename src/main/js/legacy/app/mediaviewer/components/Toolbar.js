@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 
 	showVideoPlayerPicker: function () {
 		console.log('clicked on show the video player picker..');
-		
+
 		// No menu, if we don't have a transcript.
 		if (this.noTranscript) { return; }
 
@@ -194,6 +194,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 			},
 			items: items
 		});
+	},
+
+
+	updateType (type) {
+		this.updateCurrentType(type, this.clsToName(type));
 	},
 
 

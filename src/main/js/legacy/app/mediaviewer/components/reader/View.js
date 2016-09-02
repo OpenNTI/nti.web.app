@@ -97,7 +97,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 				video: this.videoPlaylist[0]
 			}, {
 				xtype: 'video-transcript',
-				transcript: this.transcript
+				transcript: this.transcript,
+				switchToFull: this.switchToFull
 			}];
 		}
 		else {

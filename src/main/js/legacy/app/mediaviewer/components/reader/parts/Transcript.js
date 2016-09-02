@@ -159,6 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	__setContent: function () {
 		var me = this;
+
 		this.MediaViewerActions.loadTranscript(this.transcript)
 			.then(function (cueList) {
 				cueList = me.groupByTimeInterval(cueList, 30);
@@ -172,6 +173,15 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 				wait()
 					.then(me.notifyReady.bind(me));
+			})
+			.catch(() => {
+				if (this.switchToFull) {
+					this.switchToFull();
+				} else {
+					console.log('No Method to switch to full video after transcript failed to load...');
+				}
+
+				this.notifyReady();
 			});
 	},
 

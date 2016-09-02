@@ -240,7 +240,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			nextVideo: this.nextVideo,
 			prevVideo: this.prevVideo,
 			viewerContainer: this,
-			currentBundle: this.currentBundle
+			currentBundle: this.currentBundle,
+			switchToFull: () => this.switchToFull()
 		});
 
 		this.viewerIdMap[viewerType] = this.viewer.getId();
@@ -356,6 +357,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		}
 	},
 
+
+	switchToFull () {
+		this.switchVideoViewer('full-video');
+		this.toolbar.updateType('full-video');
+	},
+
+
 	switchVideoViewer: function (type/*, item*/) {
 		if (!type || type === (this.viewer && this.viewer.viewerType)) { return Promise.reject(); }
 
@@ -398,7 +406,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 						scrollToId: me.scrollToId,
 						video: me.video,
 						viewerContainer: me,
-						currentBundle: me.currentBundle
+						currentBundle: me.currentBundle,
+						switchToFull: me.switchToFull
 					});
 
 					me.viewerIdMap[viewerXType] = me.viewer.getId();

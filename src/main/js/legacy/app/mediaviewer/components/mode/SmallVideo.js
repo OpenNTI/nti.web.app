@@ -80,6 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			scrollToId: this.scrollToId,
 			videoPlaylist: [this.video],
 			currentBundle: this.currentBundle,
+			switchToFull: () => this.switchToFull(),
 			xhooks: {
 				getScrollTarget: function () { return this.ownerCt.getTargetEl().dom; }
 			}
@@ -116,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 	},
 
 	allowNavigation: function () {
-		if (this.videoplayer.isPlaying()) {
+		if (this.videoPlayer && this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
 		}
