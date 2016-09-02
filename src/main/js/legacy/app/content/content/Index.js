@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		//Try getting the object first, since it would return a related work or page info
 		return Service.getObject(id, null, null, null, null, this.currentBundle)
-			.then(function (obj) {
+			.then((obj) => {
 				//if we don't get a page (pageinfo or related work) request a page info
 				if (!obj.isPage) {
 					return Service.getPageInfo(id, null, null, null, this.currentBundle);
