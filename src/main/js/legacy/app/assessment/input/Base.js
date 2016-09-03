@@ -522,7 +522,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			});
 		}
 
-		this.setValue(part && part.get ? part.get('submittedResponse') : part, assessedQuestion.isPlaceholder);
+		this.setValue(part && part.get ? part.get('submittedResponse') : part, assessedQuestion && assessedQuestion.isPlaceholder);
 
 		this.setSubmitted();
 
