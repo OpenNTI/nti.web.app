@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			}
 
 			if (isInstructor) {
-				temp = temp || NextThought.model.assessment.AssessedQuestionSet.from(set);
+				temp = temp || NextThought.model.assessment.AssessedQuestionSet.from(set, h.isPlaceholder);
 			}
 
 			return temp;

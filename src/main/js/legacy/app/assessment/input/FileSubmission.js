@@ -174,6 +174,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 
 		this.on('destroy', this.cleanUpObjectURL.bind(this));
+
+		if (this.inputIsDisabled) {
+			this.disableInput();
+		}
 	},
 
 	unsupported: function () {
@@ -395,6 +399,26 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
+	enableInput () {
+		delete this.inputIsDisabled;
+
+		if (this.rendered && this.inputField && this.inputField.dom) {
+			this.inputField.dom.removeAttribute('disabled');
+			this.removeCls('disabled');
+		}
+	},
+
+
+	disableInput () {
+		this.inputIsDisabled = true;
+
+		if (this.rendered && this.inputField && this.inputField.dom) {
+			this.inputField.dom.setAttribute('disabled', 'disabled');
+			this.addCls('disabled');
+		}
+	},
+
+
 	getValue: function () {
 		return this.value;
 	},
@@ -411,7 +435,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 	},
 
-	setValue: function (v) {
+	setValue: function (v, placeholder) {
 		/*
 		We're expecting a RAW object here. Not a model. So the times will be the raw timestamps.
 			CreatedTime
@@ -422,8 +446,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		*/
 		if (v) {
 			this.setFileSubmitted(v);
-		}
-		else {
+		} else if (placeholder) {
+			this.disableInput();
+		} else {
 			this.showEmptySubmission();
 		}
 	},

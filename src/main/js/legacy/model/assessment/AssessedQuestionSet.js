@@ -28,18 +28,19 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQues
 
 	statics: {
 
-		from: function (set) {
+		from: function (set, placeholder) {
 			var out, raw = {
 					questionSetId: set.getId(),
 					questions: []
 				};
 
 			set.get('questions').forEach(function (q) {
-				raw.questions.push(NextThought.model.assessment.AssessedQuestion.from(q));
+				raw.questions.push(NextThought.model.assessment.AssessedQuestion.from(q, placeholder));
 			});
 
 			out = this.create(raw);
 			out.noMark = true;
+			out.isPlaceholder = placeholder;
 
 			return out;
 		}

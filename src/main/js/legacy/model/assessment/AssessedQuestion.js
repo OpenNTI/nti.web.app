@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQues
 
 	statics: {
 
-		from: function (q) {
+		from: function (q, placeholder) {
 			var raw = {
 				questionId: q.getId(),
 				parts: []
@@ -38,7 +38,11 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQues
 				raw.parts.push(new NextThought.model.assessment.AssessedPart());
 			});
 
-			return this.create(raw);
+			let out = this.create(raw);
+
+			out.isPlaceholder = placeholder;
+
+			return out;
 		}
 	}
 });

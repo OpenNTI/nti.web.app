@@ -1331,6 +1331,11 @@ body.dragging * {
 		background: #fbfbfb;
 		text-align: center;
 
+		&.disabled {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+
 		.input-container {
 			position: relative;
 			background-color: #fbfbfb;
