@@ -2201,7 +2201,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	reset: function () {
 		var buttonsName = ['bold', 'italic', 'underline'], me = this, selection;
-		this.el.down('.content').innerHTML = '<div>' + this.defaultValue + '</div>';
+		this.contentEl.innerHTML = '<div>' + this.defaultValue + '</div>';
+		this.contentEl.addCls('show-placeholder');
+		
 		this.cleanTrackedParts();
 		if (this.sharedList) {
 			this.sharedList.reset();
