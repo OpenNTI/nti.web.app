@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const moment = require('moment');
 const ContentUtils = require('legacy/util/Content');
+const $clamp = require('clamp-js');
 
 require('./Item');
 
@@ -17,6 +18,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 		this.getHistory()
 			.catch(this.callWhenRendered.bind(this, 'setLate'));
+
+		const title = this.el.down('.title') && this.el.down('.title').dom;
+		if (title) {
+			$clamp(title, {clamp: 3});
+		}
 	},
 
 
@@ -28,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	getPath: function () {
 		return ContentUtils.getLineageLabels(this.record.get('ContainerId'), false, this.course)
 			.then(function (paths) {
-				var path = paths[0];
+				var path = paths[0] || [];
 
 				Ext.clone(path);
 
