@@ -123,19 +123,21 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			model: 'NextThought.model.courseware.CourseInstanceEnrollment',
 			data: data,
 			sorters: [{
-				sorterFn: function (a, b) {
-					var aVal = a.get('CourseInstance'),
-						bVal = b.get('CourseInstance');
-
-					aVal = aVal && aVal.getCourseCatalogEntry();
-					bVal = bVal && bVal.getCourseCatalogEntry();
-
-					aVal = aVal && aVal.get('ProviderUniqueId');
-					bVal = bVal && bVal.get('ProviderUniqueId');
-
-					return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
-				}
+				sorterFn: this.sorterFn
 			}]
 		});
+	},
+
+	sorterFn (a, b) {
+		var aVal = a.get('CourseInstance'),
+			bVal = b.get('CourseInstance');
+
+		aVal = aVal && aVal.getCourseCatalogEntry();
+		bVal = bVal && bVal.getCourseCatalogEntry();
+
+		aVal = aVal && aVal.get('ProviderUniqueID');
+		bVal = bVal && bVal.get('ProviderUniqueID');
+
+		return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
 	}
 });
