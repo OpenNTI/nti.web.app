@@ -289,4 +289,4 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 	}
 });
 
-module.exports = exports = TextRangeFinder;
+module.exports = exports = new TextRangeFinder();
