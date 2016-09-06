@@ -3,7 +3,7 @@ var SearchUtils = require('./Search');
 var UtilSearch = require('./Search');
 
 
-module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
+const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 	rangeIsInsideRedaction: function (r) {
 	  	if (r.dom && r.hasCls('redacted')) {return r;}
 	  	else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
@@ -288,3 +288,5 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 		return ranges;
 	}
 });
+
+module.exports = exports = TextRangeFinder;
