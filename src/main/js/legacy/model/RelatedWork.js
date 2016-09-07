@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	asDomData: function (root) {
 		var data = {
 			ntiid: this.get('NTIID'),
-			href: this.get('href'),
+			href: this.getHref(),
 			icon: this.getIcon(root),
 			label: this.get('label'),
 			title: this.get('label'),
