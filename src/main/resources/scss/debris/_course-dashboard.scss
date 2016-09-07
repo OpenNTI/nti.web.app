@@ -126,8 +126,17 @@
 			.title {
 				font: italic 300 1.5em/1.4em $font;
 				height: 4.2em;
+				max-height: 4.2em;
 				color: #f8f8f8;
 				margin-bottom: 0.2em;
+
+				overflow: hidden;
+				text-overflow: ellipsis;
+
+				//Magic non-standard CSS:
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3;
 			}
 
 			.bullets {
