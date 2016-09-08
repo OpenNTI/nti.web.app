@@ -66,10 +66,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 		this.assignment = assignment;
 		this.showReader();
+		delete this.hasTimedPlaceholder;
 
-		if (!this.rendered) {
-			delete this.hasTimedPlaceholder;
-		} else {
+		if (this.rendered) {
 			this.showAssignment();
 		}
 	},
