@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('legacy/common/form/fields/DateTimeField');
+require('legacy/common/form/fields/DateTimeComponent');
 
 module.exports = exports = Ext.define('NextThought.app.assessment.components.editing.components.DueDate', {
 	extend: 'Ext.container.Container',
@@ -31,9 +31,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 				}
 			},
 			{
-				xtype: 'date-time-field',
+				xtype: 'date-time-component',
 				isDueEditor: true,
-				onChange: () => this.clearError()
+				currentDate: true,
+				onChange: (value) => {
+					this.updateDueSelect(value);
+					this.clearError();
+				}
 			}
 		]);
 	},
@@ -69,11 +73,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 		if (!this.rendered) { return; }
 
 		const editor = this.getEditor();
-		const due = assignment.get('availableEnding');
+		this.selectedDate = assignment.get('availableEnding');
 
-		editor.selectDate(due);
+		editor.selectDate(this.selectedDate);
 
-		this.checkbox.checked = !!due;
+		this.checkbox.checked = !!this.selectedDate;
 
 		this.onCheckChanged();
 	},
@@ -81,7 +85,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 	onCheckChanged () {
 		var editor = this.getEditor();
-
 		if (this.checkbox.checked) {
 			editor.enable();
 		} else {
@@ -92,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 	validate () {
 		const editor = this.getEditor();
-		const date = editor.getSelectedDate();
+		const date = this.getSelectedDate();
 		let valid = true;
 
 		if (this.checkbox.checked && !date) {
@@ -105,10 +108,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.edi
 
 
 	getValues () {
-		const editor = this.getEditor();
-
 		return {
-			due: this.checkbox.checked ? editor.getSelectedDate() : null
+			due: this.checkbox.checked ? this.getSelectedDate() : null
 		};
-	}
+	},
+
+
+	getSelectedDate () {
+		return this.selectedDate;
+	},
+
+	updateDueSelect (date) {
+		if (!this.selectedDate) { this.selectedDate = new Date(); this.selectedDate.setDate(1); }
+		this.selectedDate = date;
+		const editor = this.getEditor();
+		editor.selectDate(this.selectedDate);
+	},
 });

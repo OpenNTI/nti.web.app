@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const {Publish, Constants} = require('nti-web-commons');
-require('legacy/common/form/fields/DateTimeField');
+require('legacy/common/form/fields/DateTimeComponent');
 const {PUBLISH_STATES} = Constants;
 const getPublishState = value => PUBLISH_STATES[value] || (value instanceof Date ? PUBLISH_STATES.SCHEDULE : null);
 
@@ -79,11 +79,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				items: [
 					{xtype: 'box', autoEl: {cls: 'schedule-label', html: ''}},
 					{
-						xtype: 'date-time-field',
+						xtype: 'date-time-component',
 						isAvailableEditor: true,
-						lowerBound: now,
-						currentDate: null,
-						onChange: () => {
+						currentDate: true,
+						value: null,
+						onChange: (value) => {
+							this.updateScheduleSelect(value);
 							this.updateScheduleLabel();
 							this.clearError();
 						}
@@ -163,6 +164,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 
 		this.setAssignment(this.assignment);
+	},
+
+
+	updateScheduleSelect (date) {
+		if (!this.selectedDate) { this.selectedDate = new Date(); this.selectedDate.setDate(1); }
+		this.selectedDate = date;
+		const editor = this.getScheduleEditor();
+		editor.selectDate(this.selectedDate);
 	},
 
 
@@ -292,7 +301,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		const editor = this.getScheduleEditor();
 
 		this.maybeDisableDraft(assignment);
-
+		this.selectedDate = assignment.get('availableBeginning');
 		editor.selectDate(assignment.get('availableBeginning'));
 
 		this.checkOption(this.scheduleRadio);
@@ -309,8 +318,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	updateScheduleLabel () {
 		const label = this.scheduleLabel;
-		const editor = this.getScheduleEditor();
-		const date = editor.getSelectedDate();
+		const date = this.getSelectedDate();
 
 		if (!label) { return; }
 
@@ -358,7 +366,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	validate () {
 		const scheduleChecked = this.scheduleRadio.checked;
 		const editor = this.getScheduleEditor();
-		const date = editor.getSelectedDate();
+		const date = this.getSelectedDate();
 		let valid = true;
 
 		if (scheduleChecked && !date) {
@@ -373,9 +381,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	getValues () {
 		const publishChecked = this.publishRadio.checked;
 		const scheduleChecked = this.scheduleRadio.checked;
-
-		const editor = this.getScheduleEditor();
-		const date = editor.getSelectedDate();
+		const date = this.getSelectedDate();
 
 		let values = {
 			published: false,
@@ -390,6 +396,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		return values;
+	},
+
+
+	getSelectedDate () {
+		return this.selectedDate;
 	},
 
 
