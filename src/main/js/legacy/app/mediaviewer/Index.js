@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		var me = this,
 			mediaId = this.videoId || this.slidedeckId;
 
-		me.PathActions.getPathToObject(mediaId)
+		me.PathActions.getPathToObject(mediaId, this.currentBundle)
 			.then(function (path) {
 				var i,
 					parentPath = [];

@@ -41,14 +41,14 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		this.mimeToHandlers = handlers;
 	},
 
-	__doNTIIDRequest: function (ntiid) {
+	__doNTIIDRequest: function (ntiid, bundle) {
 		var link = Service.getPathToObjectLink(ntiid);
 
 		if (!link) {
 			return Promise.reject('Failed to build path link');
 		}
 
-		return this.__doRequestForLink(link);
+		return this.__doRequestForLink(link, bundle);
 	},
 
 	/**
@@ -86,10 +86,16 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * so lets not chance the browser not caching it.
 	 *
 	 * @param  {String} link
+	 * @param  {Object} bundle (optional) -- needed in multipackage content
 	 * @return {Promise}	  fulfills with the path
 	 */
-	__doRequestForLink: function (link) {
-		var cache = this.PathStore.getFromCache(link);
+	__doRequestForLink: function (link, bundle) {
+		// To make it easy to handle content from a multipackage course,
+		// when we cache, we will combine the link and bundle id.
+		// This will help to avoid resolving to the wrong path.
+		// Or getting a cached object from a different "sibling" bundle.
+		const customLink = bundle ? link + bundle.getId() : link;
+		let cache = this.PathStore.getFromCache(customLink);
 
 		if (cache) {
 			return cache;
@@ -99,13 +105,20 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 			.then(function (response) {
 				var json = JSON.parse(response);
 
-				//For now just return the first path in the list
-				return ParseUtils.parseItems(json[0]);
+				if (bundle && bundle.isBundle){
+					const path = json.find((item) => {
+						return item[0] && item[0].NTIID === bundle.getId();
+					});
+					return ParseUtils.parseItems(path || json[0]);
+				}
+				else {
+					return ParseUtils.parseItems(json[0]);
+				}
 			});
 
-		cache.catch(this.PathStore.removeFromCache.bind(this.PathStore, link));
+		cache.catch(this.PathStore.removeFromCache.bind(this.PathStore, customLink));
 
-		return this.PathStore.setInCache(link, cache);
+		return this.PathStore.setInCache(customLink, cache);
 	},
 
 	__doHandledRequest: function (obj, handler) {
@@ -154,17 +167,17 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * @param  {Object|String} obj the object to get the path to
 	 * @return {Promise}	fulfills with the path to the object
 	 */
-	getPathToObject: function (obj) {
+	getPathToObject: function (obj, bundle) {
 		var link = obj.getLink && obj.getLink('LibraryPath'),
 			handler = this.__getHandlerForObj(obj),
 			request;
 
 		if (typeof obj === 'string') {
-			request = this.__doNTIIDRequest(obj);
+			request = this.__doNTIIDRequest(obj, bundle);
 		} else if (handler) {
 			request = this.__doHandledRequest(obj, handler);
 		} else if (link) {
-			request = this.__doRequestForLink(link);
+			request = this.__doRequestForLink(link, bundle);
 		} else {
 			request = this.__doRequestForNoLink(obj);
 		}
@@ -213,19 +226,19 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 			title;
 
 		//Get the path for the record
-		return me.getPathToObject(record)
+		return me.getPathToObject(record, rootObject)
 			.then(function (path) {
 				var i, titles = [], item;
 
 				//if the first path item is the root bundle, take it off
-				if ((path && rootObject) && path[0].getId() == rootObject.getId()) {
+				if ((path && rootObject) && path[0].getId() === rootObject.getId()) {
 					path.shift();
 				}
 
 				for (i = 0; i < path.length; i++) {
 					item = path[i];
 
-					if (item.getTitle && item.getTitle() != '') {
+					if (item.getTitle && item.getTitle() !== '') {
 						titles.push({
 							label: item.getTitle(),
 							ntiid: item.getId()
