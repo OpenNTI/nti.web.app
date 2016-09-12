@@ -95,6 +95,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
+	getCleanText: (text) => {
+		// Currently all the fields are expecting plain text. Remove all other characters.
+		text = (text || '').replace(/[^a-z0-9]+/gi, ' ');
+		return text.trim();
+	},
+
+
 	entryToValues: function (entry) {
 		var school = entry.querySelector('[data-field=school]'),
 			degree = entry.querySelector('[data-field=degree]'),
@@ -102,11 +109,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			endYear = entry.querySelector('[data-field=endYear]'),
 			description = entry.querySelector('[data-field=description]');
 
-		school = school && (school.innerText || school.textContent);
-		degree = degree && (degree.innerText || degree.textContent);
-		startYear = startYear && (startYear.innerText || startYear.textContent);
-		endYear = endYear && (endYear.innerText || endYear.textContent);
-		description = description && (description.innerText || description.textContent);
+		school = school && this.getCleanText(school.innerText || school.textContent);
+		degree = degree && this.getCleanText(degree.innerText || degree.textContent);
+		startYear = startYear && this.getCleanText(startYear.innerText || startYear.textContent);
+		endYear = endYear && this.getCleanText(endYear.innerText || endYear.textContent);
+		description = description && this.getCleanText(description.innerText || description.textContent);
 
 		function normalizeYear (year) {
 			return year ? parseInt(year, 10) : null;
