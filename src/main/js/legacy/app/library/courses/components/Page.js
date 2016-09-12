@@ -1,4 +1,5 @@
 var Ext = require('extjs');
+const naturalSort = require('node-natural-sort');
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.Page', {
 	extend: 'Ext.container.Container',
@@ -138,6 +139,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		aVal = aVal && aVal.get('ProviderUniqueID');
 		bVal = bVal && bVal.get('ProviderUniqueID');
 
-		return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
+		const strComp = naturalSort({caseSensitive: false});
+
+		return strComp(aVal, bVal);
 	}
 });
