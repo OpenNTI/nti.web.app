@@ -126,6 +126,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	createAssignment () {
 		if (this.AssessmentActions) {
+			if (this.el) {
+				this.el.mask('Loading...');
+			}
+
 			this.AssessmentActions.createAssignmentIn(this.bundle)
 				.then((assignment) => {
 					const {rootRecord, parentRecord} = this;
@@ -153,7 +157,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						.then(() => {
 							//Navigate to the created assignment
 							const route = `/course/${encodeForURI(this.bundle.getId())}/assignments/${encodeForURI(assignment.getId())}/edit/`;
+
 							NextThought.app.navigation.Actions.pushRootRoute(null, route, {assignment});
+
+							if (this.el) {
+								this.el.unmask();
+							}
+
 							this.doClose(); // Close the editor prompt
 						});
 
