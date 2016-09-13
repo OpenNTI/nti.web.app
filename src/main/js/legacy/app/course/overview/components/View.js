@@ -231,6 +231,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	updateOutline: function (editing, doNotCache) {
+		if (!this.rendered) {
+			this.on('afterrender', () => this.updateOutline(editing, doNotCache), this, {single: true});
+			return;
+		}
+
 		var me = this,
 			bundle = me.currentBundle,
 			outlineInterface = editing ? bundle.getAdminOutlineInterface(doNotCache) : bundle.getOutlineInterface(doNotCache);

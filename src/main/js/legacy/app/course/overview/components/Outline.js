@@ -89,10 +89,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	setOutline: function (bundle, outline) {
+		if (!this.rendered) {
+			this.on('afterrender', () => this.setOutline(bundle, outline), this, {single: true});
+			return;
+		}
+
 		this.disableOrderingContainer();
 
 		var catalog = bundle.getCourseCatalogEntry(),
-			bodyListEl = this.el && this.el.down('.outline-list'),
 			body = this.getBodyContainer();
 
 		this.activeBundle = bundle;
@@ -123,7 +127,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	createAddUnitNode: function () {
 		var me = this,
-			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
 			allowedTypes = me.outline && me.outline.getAllowedTypes(),
 			button;
 
