@@ -96,17 +96,23 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	},
 
 	addStaticInviteCode () {
-		let me = this;
+		const me = this;
+		if (!me.rendered) {
+			me.onceRendered.then(me.addStaticInviteCode.bind(me));
+			return;
+		}
 
 		Service.request(me.inviteCodeLink)
 			.then( code => {
 				let courseInvitations = JSON.parse(code),
 					codes = courseInvitations.Items && courseInvitations.Items.map( invite => invite.Code).join(',');
 
-				me.inviteTpl.append(me.inviteEl, {
-					code: codes
-				});
-				me.inviteEl.selectable();
+				if (me.inviteEl) {
+					me.inviteTpl.append(me.inviteEl, {
+						code: codes
+					});
+					me.inviteEl.selectable();
+				}
 			});
 	},
 
