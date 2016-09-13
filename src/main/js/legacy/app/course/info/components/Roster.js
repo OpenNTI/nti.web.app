@@ -1,12 +1,12 @@
-var Ext = require('extjs');
-var UxFilterMenu = require('../../../../common/ux/FilterMenu');
-var ChartPie = require('../../../../common/chart/Pie');
-var PromptActions = require('../../../prompt/Actions');
-var CoursewareRoster = require('../../../../proxy/courseware/Roster');
-var MenusReports = require('../../../../common/menus/Reports');
-var InvitePrompt = require('legacy/app/invite/Prompt');
-var CoursesCourseInstanceEnrollment = require('../../../../model/courses/CourseInstanceEnrollment');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+require('legacy/common/ux/FilterMenu');
+require('legacy/common/chart/Pie');
+require('legacy/app/prompt/Actions');
+require('legacy/proxy/courseware/Roster');
+require('legacy/common/menus/Reports');
+require('legacy/app/invite/Prompt');
+require('legacy/model/courses/CourseInstanceEnrollment');
+const {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Roster', {
@@ -156,10 +156,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	onActivate: function () {
-		var grid = this.down('grid');
+		const grid = this.down('grid');
 		if (grid && grid.store) {
-			grid.getView().refresh();
-			wait().then(this.adjustHeight.bind(this));
+			let view = grid.getView();
+			if (view.getViewRange()) {
+				view.refresh();
+			}
+
+			setTimeout(() => this.adjustHeight(), 1);
 		}
 	},
 
@@ -175,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 		// Bind store after load.
 		this.down('grid').bindStore(this.store);
-		wait().then(this.adjustHeight.bind(this));
+		setTimeout(() => this.adjustHeight(), 1);
 	},
 
 	__getGridMaxHeight: function () {
@@ -320,9 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	showEmailEditor: function (e) {
-		var me = this,
-			editor,
-			emailRecord = new NextThought.model.Email(),
+		var emailRecord = new NextThought.model.Email(),
 			scope = this.currentFilter || 'All';
 
 		if (scope === '*') {
@@ -415,7 +417,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	openIndividualEmail: function (e) {
 		var target = e && e.getTarget('.email'),
 			user = target && target.getAttribute('data-user'),
-			index, rec, mailLink, emailRecord, r, creator;
+			rec, mailLink, emailRecord, r, creator;
 
 		if (!user) { return; }
 
