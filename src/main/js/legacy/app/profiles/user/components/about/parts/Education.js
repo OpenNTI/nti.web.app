@@ -96,8 +96,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	getCleanText: (text) => {
-		// Currently all the fields are expecting plain text. Remove all other characters.
-		text = (text || '').replace(/[^a-z0-9]+/gi, ' ');
+		// Currently all the fields are expecting plain text.
+		// Remove all extra spacing, newlines, and tabs.
+		text = (text || '').replace(/\r?\n|\r|\s\s+/g, ' ');
 		return text.trim();
 	},
 
