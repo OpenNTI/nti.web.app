@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 					title: getString('NextThought.view.courseware.info.Roster.breakdown'),
 					series: [
 						{
-							label: 'Loading', 
+							label: 'Loading',
 							value: 100
 						}
 					]
@@ -165,6 +165,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	onActivate: function () {
+		this.refreshRosterGrid();
+	},
+
+	refreshRosterGrid () {
 		const grid = this.down('grid');
 		if (grid && grid.store) {
 			let view = grid.getView();
@@ -188,6 +192,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 		// Bind store after load.
 		this.down('grid').bindStore(this.store);
+		this.refreshRosterGrid();
+
 		setTimeout(() => this.adjustHeight(), 1);
 	},
 
