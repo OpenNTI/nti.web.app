@@ -23,7 +23,16 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			xtype: 'container',
 			layout: 'auto',
 			items: [
-				{ xtype: 'pie-chart', cls: 'roster', title: getString('NextThought.view.courseware.info.Roster.breakdown'), series: [{label: 'Loading', value: 100}] }
+				{
+					xtype: 'pie-chart', cls: 'roster',
+					title: getString('NextThought.view.courseware.info.Roster.breakdown'),
+					series: [
+						{
+							label: 'Loading', 
+							value: 100
+						}
+					]
+				}
 			]
 		}, {
 			xtype: 'grouping',

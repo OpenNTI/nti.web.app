@@ -27,9 +27,9 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 		colors: ['#40b450', /*'#b8b8b8',*/ '#3fb3f6', '#F35252'],
 		pixelDensity: 2,
 		series: [
-			{value: 12, label: 'foo'},
-			{value: 30, label: 'bar'},
-			{value: 23, label: 'baz'}
+			// {value: 12, label: 'foo'},
+			// {value: 30, label: 'bar'},
+			// {value: 23, label: 'baz'}
 		]
 	},
 
