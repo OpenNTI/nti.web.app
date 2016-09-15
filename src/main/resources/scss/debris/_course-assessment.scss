@@ -571,6 +571,11 @@ canvas.x-component-course-assessment {
 			}
 		}
 
+		.points {
+			font-weight: 700;
+			margin-right: 0.3rem;
+		}
+
 		.name {
 			font: normal 500 0.9em/2 $font;
 			color: $primary-grey;

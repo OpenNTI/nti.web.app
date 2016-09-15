@@ -12,7 +12,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		{ tag: 'tpl', 'if': 'canEdit', cn: [
 			{cls: 'edit-assignment', html: 'Edit'}
 		]},
-		{ cls: 'name', html: '{name:htmlEncode}'},
+		{ cls: 'name-container', cn: [
+			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}'},
+			{ tag: 'strong', cls: 'points', html: '{points}'}
+		]},
 		{ cls: 'status-container'}
 	]),
 
@@ -27,7 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.assignment.get('title'),
-			canEdit: this.assignment.canEdit()
+			canEdit: this.assignment.canEdit(),
+			points: this.assignment.getTotalPointsLabel()
 		});
 	},
 
@@ -69,8 +73,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		const nameEl = this.el.down('.name');
+		const pointsEl = this.el.down('.name-container .points');
+
 		if (nameEl) {
 			nameEl.update(this.assignment.get('title'));
+		}
+
+		if (pointsEl) {
+			pointsEl.update(this.assignment.getTotalPointsLabel());
 		}
 
 		this.removeCls(['closed', 'completed', 'nosubmit', 'late', 'editable']);

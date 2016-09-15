@@ -19,7 +19,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		{ tag: 'tpl', 'if': 'hasReports', cn: [
 			{ cls: 'report'}
 		]},
-		{ cls: 'name', html: '{name:htmlEncode}'},
+		{ cls: 'name-container', cn: [
+			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}'},
+			{ tag: 'strong', cls: 'points', html: '{points}'}
+		]},
 		{ cls: 'status-container'}
 	]),
 
@@ -38,7 +41,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			enrolledCount: this.item.get('enrolledCount'),
 			hasReports: this.item.get('reportLinks') && this.item.get('reportLinks').length && isFeature('analytic-reports'),
 			canEdit: this.item.get('canEdit'),
-			name: this.assignment.get('title')
+			name: this.assignment.get('title'),
+			points: this.assignment.getTotalPointsLabel()
 		});
 	},
 
@@ -81,13 +85,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		const enrolledCount = this.item.get('enrolledCount');
 		const scoreEl = this.el.down('.score');
 		const nameEl = this.el.down('.name');
+		const pointsEl = this.el.down('.name-container .points');
 
 		if (scoreEl) {
 			scoreEl.setHTML('');
 			this.scoreTpl.append(scoreEl, {submittedCount, enrolledCount});
 		}
+
 		if (nameEl) {
 			nameEl.update(this.assignment.get('title'));
+		}
+
+		if (pointsEl) {
+			pointsEl.update(this.assignment.getTotalPointsLabel());
 		}
 
 		this.removeCls(['closed', 'completed', 'nosubmit', 'late', 'editable']);

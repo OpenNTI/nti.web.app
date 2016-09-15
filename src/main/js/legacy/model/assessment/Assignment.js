@@ -48,6 +48,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeAssignmentSubmittedCount'},
 		{ name: 'no_submit', type: 'boolean'},
 		{ name: 'version', type: 'string'},
+		{ name: 'total_points', type: 'string'},
 		// Timed assignment variables
 		{ name: 'IsTimedAssignment', type: 'bool'},
 		{ name: 'MaximumTimeAllowed', type: 'int'}, //this is in seconds
@@ -134,6 +135,14 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	getDateEditingLink: function () {
 		return this.getLink('date-edit') || this.getLink('edit');
 	},
+
+
+	getTotalPointsLabel () {
+		const points = this.get('total_points') || '0';
+
+		return `${points.trim()} pts.`;
+	},
+
 
 	tallyParts: function () {
 		function sum (agg, r) {
