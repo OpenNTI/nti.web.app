@@ -361,8 +361,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 	switchToFull () {
 		this.switchVideoViewer('full-video');
 		this.toolbar.updateType('full-video');
+		this.toolbar.transcriptFailedToLoad();
 	},
-
 
 	switchVideoViewer: function (type/*, item*/) {
 		if (!type || type === (this.viewer && this.viewer.viewerType)) { return Promise.reject(); }
@@ -407,7 +407,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 						video: me.video,
 						viewerContainer: me,
 						currentBundle: me.currentBundle,
-						switchToFull: me.switchToFull
+						switchToFull: () => me.switchToFull()
 					});
 
 					me.viewerIdMap[viewerXType] = me.viewer.getId();

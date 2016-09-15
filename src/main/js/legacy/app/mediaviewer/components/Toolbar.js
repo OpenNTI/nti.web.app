@@ -202,6 +202,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 	},
 
 
+	transcriptFailedToLoad () {
+		this.pickerEl.removeCls('hasTranscript');
+		this.noTranscript = true;
+		this.videoPicker && this.videoPicker.hide();
+	},
+
+
 	handleClick: function (item, menu) {
 		var previousType = this.currentType, me = this;
 
