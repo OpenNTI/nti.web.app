@@ -23,6 +23,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		const group = 'publish-state-' + this.id;
 		const now = new Date();
 
+
+		// Used to set the default time for the DateTimeComponent
+		const defaultTime = new Date();
+		defaultTime.setHours(0,0,0,0);
+
 		this.add([
 			{
 				xtype: 'box',
@@ -87,7 +92,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							this.updateScheduleSelect(value);
 							this.updateScheduleLabel();
 							this.clearError();
-						}
+						},
+						defaultTime
 					}
 				]
 			},
