@@ -182,19 +182,20 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 	updateFilterCount: function () {
 		if (!this.rendered) {
-			this.on('afterrender', 'updateFilterCount', this);
+			this.on('afterrender', 'updateFilterCount', this, {once: true});
 			return;
 		}
 
-		var el = this.filterLink.el;
+		const {el} = this.filterLink;
 		el.update(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
 		el.repaint();
 
-		// Bind store after load.
-		this.down('grid').bindStore(this.store);
-		this.refreshRosterGrid();
+		if (this.grid.store !== this.store) {
+			// Bind store after load.
+			this.grid.bindStore(this.store);
+		}
 
-		setTimeout(() => this.adjustHeight(), 1);
+		this.refreshRosterGrid();
 	},
 
 	__getGridMaxHeight: function () {
@@ -284,7 +285,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		//TODO: only load if we're visible!
 		this.store.load();
 		Ext.destroy(this.storeMonitors);
-		this.storeMonitors = this.mon(this.store, {destroyable: true, load: 'updateFilterCount'});
+		this.storeMonitors = this.mon(this.store, {
+			destroyable: true,
+			load: () => this.updateFilterCount()
+		});
 	},
 
 	setupEmail: function () {
