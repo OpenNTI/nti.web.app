@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	refreshRosterGrid () {
-		const grid = this.down('grid');
+		const {grid} = this;
 		if (grid && grid.store) {
 			let view = grid.getView();
 			if (view.getViewRange()) {
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	adjustHeight: function () {
-		var grid = this.down('grid'),
+		var grid = this.grid,
 			scrollTarget = grid && grid.getScrollTarget(),
 			currentHeight = scrollTarget && scrollTarget.getHeight(),
 			maxHeight = this.__getGridMaxHeight();
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	onWindowResize: function () {
-		var grid = this.down('grid'),
+		var grid = this.grid,
 			scrollTarget = grid && grid.getScrollTarget(),
 			scrollHeight = scrollTarget && scrollTarget.el && scrollTarget.el.dom.scrollHeight,
 			maxHeight = this.__getGridMaxHeight();
@@ -235,6 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		if (instance === this.currentBundle) {
 			return;
 		}
+
 		var roster = instance && instance.getLink('CourseEnrollmentRoster'),
 			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
 					roster,
@@ -244,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 						filter: 'LegacyEnrollmentStatusForCredit'
 					}));
 
-		this.down('grid').bindStore(Ext.getStore('ext-empty-store'));
+		this.grid.bindStore(Ext.getStore('ext-empty-store'));
 
 		this.filterMenu.setState('*');
 
@@ -362,14 +363,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 
 	doSearch: function (str) {
-		this.down('grid').getSelectionModel().deselectAll(true);
+		this.grid.getSelectionModel().deselectAll(true);
 		this.store.filter([{id: 'search', property: 'usernameSearchTerm', value: str}]);
 	},
 
 	doFilter: function (filter) {
 		try {
 			this.currentFilter = filter;
-			this.down('grid').getSelectionModel().deselectAll(true);
+			this.grid.getSelectionModel().deselectAll(true);
 			this.store.filter([
 				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}
 			]);
