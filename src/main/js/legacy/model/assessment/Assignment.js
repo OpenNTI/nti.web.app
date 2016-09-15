@@ -138,7 +138,11 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 
 	getTotalPointsLabel () {
-		const points = this.get('total_points') || '0';
+		const points = this.get('total_points');
+
+		if (isNaN(points) || points < 1) {
+			return '';
+		}
 
 		return `${points.trim()} pts.`;
 	},
