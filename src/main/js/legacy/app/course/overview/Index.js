@@ -420,6 +420,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		lessonId = encodeForURI(lessonId);
 
+		route = this.getRouteForRoot(root, subPath, lesson);
+
+		route.path = lessonId + '/' + Globals.trimRoute(route.path);
+
+		return route;
+	},
+
+
+	getRouteForRoot: function (root, subPath, lesson) {
+		let route;
 		if (root instanceof NextThought.model.QuestionSetRef) {
 			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
@@ -448,8 +458,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			};
 		}
 
-		route.path = lessonId + '/' + Globals.trimRoute(route.path);
-
 		return route;
 	},
 
@@ -457,7 +465,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		var page = path[0],
 			pageId = page && page instanceof NextThought.model.PageInfo ? page.getId() : null,
 			relatedWorkId = relatedWork && relatedWork.get('target'),
-			urlPath = '';
+			urlPath = '',
+			subPath = path.slice(1), subRoute;
+
+		if (subPath.length > 0) {
+			subRoute = this.getRouteForRoot(subPath, subPath.slice(1));
+		}
 
 		if (pageId === lesson.getId() || pageId === lesson.get('ContentNTIID') || !pageId) {
 			pageId = null;
@@ -470,9 +483,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		if (relatedWorkId) {
 			urlPath = relatedWorkId;
 
-			if (pageId) {
+			if (pageId && page !== relatedWorkId) {
 				urlPath += '/' + pageId;
 			}
+		}
+
+		if (subRoute && subRoute.path) {
+			urlPath += '/' + subRoute.path;
 		}
 
 		return {
