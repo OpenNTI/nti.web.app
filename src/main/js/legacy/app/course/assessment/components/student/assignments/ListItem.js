@@ -13,8 +13,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{cls: 'edit-assignment', html: 'Edit'}
 		]},
 		{ cls: 'name-container', cn: [
-			{ tag: 'strong', cls: 'points', html: '{points}'},
-			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}'}
+			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}'},
+			{ tag: 'strong', cls: 'points', html: '{points}'}
 		]},
 		{ cls: 'status-container'}
 	]),
