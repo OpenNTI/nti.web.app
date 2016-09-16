@@ -44,6 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addRoute('/:lesson/content/:id', this.showContent.bind(this));
 		this.addRoute('/:lesson/content/:id/:page', this.showContent.bind(this));
+		this.addRoute('/:lesson/content/:id/video/:video', this.showMediaViewer.bind(this));
 		this.addRoute('/:lesson/video/', this.showMediaViewer.bind(this));
 		this.addRoute('/:lesson/slidedeck/', this.showMediaViewer.bind(this));
 
@@ -469,7 +470,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			subPath = path.slice(1), subRoute;
 
 		if (subPath.length > 0) {
-			subRoute = this.getRouteForRoot(subPath, subPath.slice(1));
+			subRoute = this.getRouteForRoot(subPath[0], subPath.slice(1));
 		}
 
 		if (pageId === lesson.getId() || pageId === lesson.get('ContentNTIID') || !pageId) {
@@ -483,7 +484,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		if (relatedWorkId) {
 			urlPath = relatedWorkId;
 
-			if (pageId && page !== relatedWorkId) {
+			if (pageId && pageId !== relatedWorkId) {
 				urlPath += '/' + pageId;
 			}
 		}
