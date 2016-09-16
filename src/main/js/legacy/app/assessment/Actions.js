@@ -110,12 +110,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 	},
 
 
-	getSubmissonURL (id, bundle) {
-		return bundle ? bundle.getAssignmentURL(id) : this.getObjectURL(id);
+	getAssessmentSubmissionURL (id, bundle) {
+		return (bundle && bundle.getAssignmentURL(id)) || this.getObjectURL(id);
+	},
+
+	getInquirySubmissionURL (id, bundle) {
+		return (bundle && bundle.getInquiriesURL(id)) || this.getObjectURL(id);
 	},
 
 
-	submitSurvey: function (survey, submissionData, containerId, startTime) {
+	submitSurvey: function (survey, submissionData, containerId, startTime, bundle) {
 		var data = this.__getDataForSurveySubmission(survey, submissionData, containerId, startTime),
 			surveySubmission, me = this;
 
@@ -123,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 		return new Promise(function (fulfill, reject) {
 			surveySubmission.save({
-				url: me.getObjectURL(survey.getId()),
+				url: me.getInquirySubmissionURL(survey.getId(), bundle),
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
@@ -164,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 	doSubmitAssignment: function (assignmentSubmission, assignment, isPracticeSubmission, bundle) {
 		const assignmentId = assignment.getId();
 		const me = this;
-		const link = isPracticeSubmission ? assignment.getLink('PracticeSubmission') : me.getSubmissonURL(assignmentId, bundle);
+		const link = isPracticeSubmission ? assignment.getLink('PracticeSubmission') : me.getAssessmentSubmissionURL(assignmentId, bundle);
 		let responseJSON;
 
 		assignmentSubmission.getProxy().on('exception', (proxy, response) => {
@@ -351,7 +355,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	submitPoll: function (poll, answerValues, startTime, canSubmitIndividually) {
+	submitPoll: function (poll, answerValues, startTime, canSubmitIndividually, bundle) {
 		var endTimeStamp = (new Date()).getTime(),
 			// in seconds
 			// TODO We may have to reset startTimestamp, depending on flow.
@@ -367,9 +371,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				CreatorRecordedEffortDuration: duration
 			});
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise((fulfill, reject) => {
 			submission.save({
-				url: Service.getObjectURL(poll.getId()),
+				url: this.getInquirySubmissionURL(poll.getId(), bundle),
 				failure: function () {
 					console.error('Failed to save poll: ', arguments);
 					reject();

@@ -628,22 +628,23 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	submitSurvey: function (questionSet, submission) {
-		var me = this,
-			container = me.reader.getLocation().NTIID;
+		const location = this.reader.getLocation();
+		const bundle = location.currentBundle;
+		const container = this.reader.getLocation().NTIID;
 
-		me.mask();
+		this.mask();
 
-		me.AssessmentActions.submitSurvey(questionSet, submission, container, me.startTimeStamp)
-			.then(function (result) {
-				me.setGradingResult(result.get('Submission').get('Submission'));
+		this.AssessmentActions.submitSurvey(questionSet, submission, container, this.startTimeStamp, bundle)
+			.then(result => {
+				this.setGradingResult(result.get('Submission').get('Submission'));
 
-				me.unmask();
+				this.unmask();
 
-				me.reader.fireEvent('survey-submitted', result);
-			}, function () {
-				me.onFailure();
-				me.maybeDoReset(true);
-				me.unmask();
+				this.reader.fireEvent('survey-submitted', result);
+			}, () => {
+				this.onFailure();
+				this.maybeDoReset(true);
+				this.unmask();
 			});
 	},
 

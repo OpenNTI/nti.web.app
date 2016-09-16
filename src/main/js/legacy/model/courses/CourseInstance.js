@@ -752,10 +752,16 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 
-	getAssignmentURL (ntiid) {
+	getAssessmentURL (ntiid) {
 		const baseLink = this.getLink('Assessments');
 
-		return urlJoin(baseLink, ntiid);
+		return baseLink && urlJoin(baseLink, ntiid);
+	},
+
+	getInquiriesURL (ntiid) {
+		const baseLink = this.getLink('CourseInquiries');
+
+		return baseLink && urlJoin(baseLink, ntiid);
 	},
 
 	/**

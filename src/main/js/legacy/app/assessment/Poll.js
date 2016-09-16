@@ -1,9 +1,9 @@
 var Ext = require('extjs');
 var ParseUtils = require('../../util/Parsing');
-var AssessmentQuestion = require('./Question');
-var AssessmentUsersCourseInquiryItem = require('../../model/assessment/UsersCourseInquiryItem');
-var AssessmentUsersCourseInquiryItemResponse = require('../../model/assessment/UsersCourseInquiryItemResponse');
-var ResultsPoll = require('./results/Poll');
+require('./Question');
+require('../../model/assessment/UsersCourseInquiryItem');
+require('../../model/assessment/UsersCourseInquiryItemResponse');
+require('./results/Poll');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
@@ -84,7 +84,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 
 		me.mask('Submitting');
 
-		me.AssessmentActions.submitPoll(me.poll, col[me.poll.getId()], me.startTimeStamp, me.canSubmitIndividually())
+		const location = this.reader.getLocation();
+		const bundle = location.currentBundle;
+
+		me.AssessmentActions.submitPoll(me.poll, col[me.poll.getId()], me.startTimeStamp, me.canSubmitIndividually(), bundle)
 			.then(function (result) {
 				me.poll.setResults(result.get('Aggregated'));
 				me.updateWithResults(result.get('Submission').get('Submission'));
