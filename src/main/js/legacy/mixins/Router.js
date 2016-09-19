@@ -128,7 +128,12 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			WindowStore.cacheObject(obj.getId(), obj, null, monitors);
 		}
 
-		me.Router.PathActions.getPathToObject(obj)
+		const precache = obj && obj[Symbol.for('path')];
+		const resolve = precache
+			? Promise.resolve(precache)
+			: me.Router.PathActions.getPathToObject(obj);
+
+		resolve
 			.then(function (path) {
 				if (!me.Router.WindowActions.hasWindow(obj)) {
 					path.push(obj);

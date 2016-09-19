@@ -3,6 +3,8 @@ const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
 const ContextStateStore = require('legacy/app/context/StateStore');
 const PathStateStore = require('./StateStore');
+const {default: minWait} = require('nti-commons/lib/wait-min');
+const {default: waitFor} = require('nti-commons/lib/waitfor');
 require('legacy/common/Actions');
 require('./parts/Assignment');
 require('./parts/Content');
@@ -80,27 +82,18 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	/**
 	 * Given a link return the path it returns
 	 *
-	 * We are caching on the link, because this call will sometimes
-	 * come from a user click and we need it to be as fast as possible
-	 * so lets not chance the browser not caching it.
-	 *
 	 * @param  {String} link - url
 	 * @param  {Object} bundle (optional) -- needed in multipackage content
 	 * @return {Promise}	  fulfills with the path
 	 */
 	__doRequestForLink: function (link, bundle) {
-		// To make it easy to handle content from a multipackage course,
-		// when we cache, we will combine the link and bundle id.
-		// This will help to avoid resolving to the wrong path.
-		// Or getting a cached object from a different "sibling" bundle.
-		const customLink = bundle ? link + bundle.getId() : link;
-		let cache = this.PathStore.getFromCache(customLink);
+		const inflight = this.PathStore.getFromCache(link);
 
-		if (cache) {
-			return cache;
+		if (inflight) {
+			return inflight;
 		}
 
-		cache = Service.request(link)
+		const cache = Service.request(link)
 			.then(function (response) {
 				var json = JSON.parse(response);
 
@@ -115,9 +108,16 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 				}
 			});
 
-		cache.catch(this.PathStore.removeFromCache.bind(this.PathStore, customLink));
+		waitFor(cache)
+			.then(minWait(100))//delay for a 10th-second to catch calls from a few event pumps
+			.then(() => {
 
-		return this.PathStore.setInCache(customLink, cache);
+				//only cache while in flight.
+				this.PathStore.removeFromCache(link);
+
+			});
+
+		return this.PathStore.setInCache(link, cache);
 	},
 
 	__doHandledRequest: function (obj, handler) {
