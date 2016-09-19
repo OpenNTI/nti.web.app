@@ -1,5 +1,5 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../../common/StateStore');
+const Ext = require('extjs');
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.StateStore', {
@@ -7,24 +7,24 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.StateStor
 
 	CONTAINER_PATH: {},
 
-	getFromCache: function (ntiid) {
+	getFromCache (ntiid) {
 		return this.CONTAINER_PATH[ntiid];
 	},
 
 
-	setInCache: function (ntiid, pathPromise) {
+	setInCache (ntiid, pathPromise) {
 		this.CONTAINER_PATH[ntiid] = pathPromise;
 
 		return pathPromise;
 	},
 
 
-	removeFromCache: function (ntiid) {
+	removeFromCache (ntiid) {
 		delete this.CONTAINER_PATH[ntiid];
 	},
 
 
-	clearCache: function () {
+	clearCache () {
 		this.CONTAINER_PATH = {};
 	}
 

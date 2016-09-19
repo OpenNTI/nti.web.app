@@ -1,13 +1,13 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var ParseUtils = require('../../../util/Parsing');
-var CommonActions = require('../../../common/Actions');
-var PathStateStore = require('./StateStore');
-var PartsAssignment = require('./parts/Assignment');
-var PartsContent = require('./parts/Content');
-var ContextStateStore = require('../../context/StateStore');
-var PartsForums = require('./parts/Forums');
-var PartsProfiles = require('./parts/Profiles');
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const ContextStateStore = require('legacy/app/context/StateStore');
+const PathStateStore = require('./StateStore');
+require('legacy/common/Actions');
+require('./parts/Assignment');
+require('./parts/Content');
+require('./parts/Forums');
+require('./parts/Profiles');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions', {
@@ -16,8 +16,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.PathStore = NextThought.app.navigation.path.StateStore.getInstance();
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.PathStore = PathStateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 
 		this.buildHandlerMap();
 	},
@@ -58,11 +58,10 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * @return {Promise}	fulfills with the path
 	 */
 	__doRequestForNoLink: function (obj) {
-		var url = Service.getPathToObjectLink(),
-			//try the container id since its more liable to be cached
-			containerId = obj && obj.get && obj.get('ContainerId'),
-			id = containerId || obj && obj.get && obj.get('NTIID'),
-			link = Service.getPathToObjectLink(id);
+		//try the container id since its more liable to be cached
+		const containerId = obj && obj.get && obj.get('ContainerId');
+		const id = containerId || obj && obj.get && obj.get('NTIID');
+		const link = Service.getPathToObjectLink(id);
 
 		if (!link) {
 			return Promise.reject('Failed to build path link');
@@ -85,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * come from a user click and we need it to be as fast as possible
 	 * so lets not chance the browser not caching it.
 	 *
-	 * @param  {String} link
+	 * @param  {String} link - url
 	 * @param  {Object} bundle (optional) -- needed in multipackage content
 	 * @return {Promise}	  fulfills with the path
 	 */
@@ -105,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 			.then(function (response) {
 				var json = JSON.parse(response);
 
-				if (bundle && bundle.isBundle){
+				if (bundle && bundle.isBundle) {
 					const path = json.find((item) => {
 						return item[0] && item[0].NTIID === bundle.getId();
 					});
@@ -165,6 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * attempt to build a link using the Service doc
 	 *
 	 * @param  {Object|String} obj the object to get the path to
+	 * @param {Object} bundle - course
 	 * @return {Promise}	fulfills with the path to the object
 	 */
 	getPathToObject: function (obj, bundle) {
@@ -220,10 +220,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	},
 
 	getBreadCrumb: function (record) {
-		var me = this,
-			rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile(),
-			path,
-			title;
+		const me = this;
+		const rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile();
 
 		//Get the path for the record
 		return me.getPathToObject(record, rootObject)
@@ -252,7 +250,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 
 				return titles;
 			})
-			.catch(function (error) {
+			.catch(function () {
 				//if we fail to get the path to the item, try to get the container
 				//and show its title
 				var containerId = record && record.get('ContainerId');
