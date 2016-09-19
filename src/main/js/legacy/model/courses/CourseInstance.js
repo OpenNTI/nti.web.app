@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {default:urlJoin} = require('nti-commons/lib/urljoin');
+const {default:urlJoin} = require('nti-commons/lib/url-join');
 
 const ContentUtils = require('../../util/Content');
 const ObjectUtils = require('../../util/Object');
