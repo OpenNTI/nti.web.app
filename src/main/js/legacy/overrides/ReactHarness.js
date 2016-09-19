@@ -40,7 +40,7 @@ const Bridge = React.createClass({
 				getAssignment (ntiid) {
 					return getService()
 						.then((reactService) => {
-							const link = bundle.getAssignmentURL(ntiid);
+							const link = bundle.getAssessmentURL(ntiid);
 
 							return Service.request(link)
 								.then((resp) => {

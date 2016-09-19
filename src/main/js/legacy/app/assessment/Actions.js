@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 
 	getAssessmentSubmissionURL (id, bundle) {
-		return (bundle && bundle.getAssignmentURL(id)) || this.getObjectURL(id);
+		return (bundle && bundle.getAssessmentURL(id)) || this.getObjectURL(id);
 	},
 
 	getInquirySubmissionURL (id, bundle) {
