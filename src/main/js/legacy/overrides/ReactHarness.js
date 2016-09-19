@@ -4,7 +4,6 @@ const ReactDOM = require('react-dom');
 const {getService} = require('nti-web-client');
 const ContextStore = require('legacy/app/context/StateStore');
 
-const context = ContextStore.getInstance();
 const unwrap = x => (x && x.default) ? x.default : x;
 
 /*
@@ -25,7 +24,7 @@ const Bridge = React.createClass({
 	},
 
 	getChildContext () {
-		const bundle = this.props.bundle || context.getRootBundle();
+		const bundle = this.props.bundle || ContextStore.getInstance().getRootBundle();
 
 		return {
 			defaultEnvironment: {
