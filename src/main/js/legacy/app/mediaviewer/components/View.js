@@ -359,12 +359,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 
 
 	switchToFull () {
-		this.switchVideoViewer('full-video');
+		this.switchVideoViewer('full-video', true);
 		this.toolbar.updateType('full-video');
 		this.toolbar.transcriptFailedToLoad();
 	},
 
-	switchVideoViewer: function (type/*, item*/) {
+	switchVideoViewer: function (type, doNotPersist) {
 		if (!type || type === (this.viewer && this.viewer.viewerType)) { return Promise.reject(); }
 
 		var me = this,
@@ -382,7 +382,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		return allow
 			.then(function () {
 				//store the current type so we can retrieve it later
-				me.getStorageManager().set('media-viewer-player-type', playerType);
+				if (doNotPersist !== true) {
+					me.getStorageManager().set('media-viewer-player-type', playerType);
+				}
 
 				//if we already have a video viewer for this video on this size, just make it active
 				if (targetViewer && targetViewer.video.getId() === me.video.getId()) {
