@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addRoute('/:lesson/content/:id', this.showContent.bind(this));
 		this.addRoute('/:lesson/content/:id/:page', this.showContent.bind(this));
-		this.addRoute('/:lesson/content/:id/video/:video', this.showMediaViewer.bind(this));
+		this.addRoute('/:lesson/content/:id/video/', this.showMediaViewer.bind(this));
 		this.addRoute('/:lesson/video/', this.showMediaViewer.bind(this));
 		this.addRoute('/:lesson/slidedeck/', this.showMediaViewer.bind(this));
 
