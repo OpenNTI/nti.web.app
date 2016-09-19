@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	resolveVideo: function (id) {
-		var me = this, video, basePath;
+		var me = this, video;
 
 		if (!id || !this.currentBundle) {
 			return Promise.reject();
@@ -196,7 +196,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 
 		return me.currentBundle.getVideoForId(id)
 			.then(function (o) {
-				if (!o) { return reject(); }
+				if (!o) {
+					return Service.getObject(id);
+				}
 
 				video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 				return video;
