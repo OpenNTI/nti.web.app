@@ -567,13 +567,14 @@ canvas.x-component-course-assessment {
 
 		&.editable {
 			.name {
-				margin-right: 10rem
+				// margin-right: 10rem;
 			}
 		}
 
 		.points {
 			color: $primary-grey;
 			font: normal 600 0.9em/2 $font;
+			display: inline-block;
 		}
 
 		.name {
