@@ -386,9 +386,20 @@
 				max-width: 515px;
 				margin-bottom: 1em;
 
-				.points {
-					font-weight: 700;
+				.label {
+					display: inline-block;
+					max-width: 100%;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					vertical-align: bottom;
 					margin-right: 0.3rem;
+				}
+
+				.points {
+					font-weight: 600;
+					display: inline-block;
+					vertical-align: bottom;
 				}
 			}
 		}

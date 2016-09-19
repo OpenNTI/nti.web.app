@@ -133,8 +133,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				cls: 'assignment-box',
 				items: [
 					{xtype: 'box', autoEl: {cls: 'title', cn: [
-						{cls: 'points', tag: 'strong', html: totalPoints},
-						{cls: 'label', tag: 'span', html: this.assignment.get('title')}
+						{cls: 'label', tag: 'span', html: this.assignment.get('title')},
+						{cls: 'points', tag: 'strong', html: totalPoints}
 					]}},
 					this.getButton()
 				]
