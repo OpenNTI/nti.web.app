@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var button = e.getTarget('.button'),
 			action = button.getAttribute('data-action');
 
-		if (action && this[action]) {
+		if (action && this[action] && !button.classList.contains('busy')) {
 			this[action](this);
 		}
 	},
@@ -89,6 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	doEdit: function () {
 		if (this.openEditing) {
+			this.buttonsEl.down('.edit').addCls('busy');
 			this.openEditing();
 		}
 	},
@@ -96,6 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	stopEdit: function () {
 		if (this.closeEditing) {
+			this.buttonsEl.down('.edit').addCls('busy');
 			this.closeEditing();
 		}
 	},
