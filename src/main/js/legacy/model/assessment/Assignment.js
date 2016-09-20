@@ -46,6 +46,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 			}
 		},
 		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeAssignmentSubmittedCount'},
+		{ name: 'SubmittedCountTotalPossible', type: 'int', mapping: 'GradeSubmittedStudentPopulationCount'},
 		{ name: 'no_submit', type: 'boolean'},
 		{ name: 'version', type: 'string'},
 		{ name: 'total_points', type: 'string'},
