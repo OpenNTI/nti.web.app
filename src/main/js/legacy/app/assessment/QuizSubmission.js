@@ -411,7 +411,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 				.catch(function (reason) {
 					delete me.resetting;
 
-					 alert('We are unable to reset your assignment at this time.');
+					alert('We are unable to reset your assignment at this time.');
 
 					return Promise.reject(reason);
 				});

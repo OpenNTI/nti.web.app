@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 
 
 	hideResults: function (button) {
-		 button = button || this.el.dom.querySelector('.survey-results');
+		button = button || this.el.dom.querySelector('.survey-results');
 
 		if (button) {
 			button.textContent = 'View Results';
