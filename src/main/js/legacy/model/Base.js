@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		var json = JSON.parse(response),
 			newRecord;
 
-		json = Ext.applyIf(json, this.getRaw());
+		json = {...this.getRaw(), ...json};
 
 		newRecord = ParseUtils.parseItems([json])[0];
 
