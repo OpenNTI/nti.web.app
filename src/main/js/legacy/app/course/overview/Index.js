@@ -469,7 +469,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			urlPath = '',
 			subPath = path.slice(1), subRoute;
 
-		if (subPath.length > 0) {
+		if (subPath[0] instanceof NextThought.model.Video) {
 			subRoute = this.getRouteForRoot(subPath[0], subPath.slice(1));
 		}
 

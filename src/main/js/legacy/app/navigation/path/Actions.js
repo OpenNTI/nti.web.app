@@ -71,7 +71,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 
 		return this.__doRequestForLink(link)
 			.then(function (path) {
-				if (containerId) {
+				const lastItem = path && path.last();
+				const lastItemId = lastItem && lastItem.get && lastItem.get('NTIID');
+				// NOTE: Only add the obj to the path if it's not there already.
+				// This avoid adding pageInfo after pageInfo object.
+				if (containerId && lastItemId !== id) {
 					path.push(obj);
 				}
 
