@@ -33,21 +33,23 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	])),
 
 
-	beforeRender: function () {
+	beforeRender () {
 		this.callParent(arguments);
 
+		const {assignment, item} = this;
+
 		this.renderData = Ext.apply(this.renderData || {}, {
-			submittedCount: this.assignment.get('SubmittedCount') || 0,
-			enrolledCount: this.item.get('enrolledCount'),
-			hasReports: this.item.get('reportLinks') && this.item.get('reportLinks').length && isFeature('analytic-reports'),
-			canEdit: this.item.get('canEdit'),
-			name: this.assignment.get('title'),
-			points: this.assignment.getTotalPointsLabel()
+			submittedCount: assignment.get('SubmittedCount') || 0,
+			enrolledCount: item.get('enrolledCount'),
+			hasReports: item.get('reportLinks') && item.get('reportLinks').length && isFeature('analytic-reports'),
+			canEdit: item.get('canEdit'),
+			name: assignment.get('title'),
+			points: assignment.getTotalPointsLabel()
 		});
 	},
 
 
-	addClasses: function () {
+	addClasses () {
 		var now = new Date(),
 			due = this.assignment.getDueDate() || new Date(),
 			isNoSubmit = this.assignment.isNoSubmit(),
@@ -105,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	onItemClick: function (e) {
+	onItemClick (e) {
 		var link = e.getTarget('.report');
 
 		if (link) {
