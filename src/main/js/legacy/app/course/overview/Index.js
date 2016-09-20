@@ -175,6 +175,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 						me.activeMediaWindow.destroy();
 					}
 
+					// Triggers showing search hits
+					me.reader.fireEvent('activate');
+					
 					if (route.object.id) {
 						return Service.getObject(decodeFromURI(route.object.id))
 									.then(me.reader.showNote.bind(me.reader));
