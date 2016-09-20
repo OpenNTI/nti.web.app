@@ -51,6 +51,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			'save-progress': 'saveProgress'
 		});
 
+		if (this.isSurvey()) {
+			this.mon(this.questionSet, {
+				scope: this,
+				'show-results': 'disableView',
+				'hide-results': () => {
+					if (!this.isSubmitted()) {
+						this.show();
+					}
+				}
+			});
+		}
+
 		Ext.each(this.questionSet.get('questions'), function (q) {
 			var questionMap = {};
 
