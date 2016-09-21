@@ -278,16 +278,20 @@ input[type=number]{
 		}
 
 		&.file-only {
+			overflow: hidden;
+
 			.overview-editing-parentselection {
 				top: -10px;
 				opacity: 0;
 				height: 0;
+				pointer-events: none;
 			}
 
 			.group.card {
 				top: 10px;
 				opacity: 0;
 				height: 0;
+				overflow: hidden;
 			}
 
 			form {
