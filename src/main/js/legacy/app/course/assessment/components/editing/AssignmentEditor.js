@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 const {Editor} = require('nti-assignment-editor');
+const {default: wait} = require('nti-commons/lib/wait');
+const {default: waitFor} = require('nti-commons/lib/waitfor');
 require('legacy/overrides/ReactHarness');
-
 require('legacy/mixins/Router');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.editing.AssignmentEditor', {
@@ -83,12 +84,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 */
 	updateAssignment () {
 		const assignment = this.assignment;
-		const assignmentRecord = this.findAssignment && this.findAssignment(this.assignmentId);
+
 		if (assignment && assignment.isModel && !assignment.isDeleted) {
 			assignment.updateFromServer();
 		}
-		if (assignmentRecord && !assignmentRecord.isDeleted) {
-			assignmentRecord.updateFromServer();
+
+		if (this.findAssignment) {
+			this.findAssignment(this.assignmentId)
+				.then(assignmentRecord =>
+					!assignmentRecord.isDeleted && assignmentRecord.updateFromServer());
 		}
 	},
 
@@ -143,17 +147,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	deletedAssignment () {
 		const assignment = this.assignment;
-		const assignmentRecord = this.findAssignment && this.findAssignment(this.assignmentId);
 
 		if (assignment && assignment.isModel && assignment.getId() === this.assignmentId) {
 			assignment.isDeleted = true;
 		}
 
-		if (assignmentRecord) {
-			assignmentRecord.isDeleted = true;
-		}
+		const pending = this.findAssignment
+			? this.findAssignment(this.assignmentId)
+				.then(a => a.isDeleted = true)
+			: Promise.resolve();
 
-		this.gotoRoot();
+		waitFor(pending).then(() => this.gotoRoot());
 	}
 });
 

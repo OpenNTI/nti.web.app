@@ -173,9 +173,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			previewAssignment: (NTIID, title) => {
 				this.pushRoute(title, path.join(encodeForURI(NTIID)));
 			},
-			findAssignment: (NTIID) => {
-				return config.assignment || null;
-			}
+			findAssignment: (id) =>
+				config.bundle.getAssignments()
+					.then(collection => collection.getItem(id) || Promise.reject('Not Found'))
 
 		});
 
