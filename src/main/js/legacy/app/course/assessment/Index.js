@@ -445,22 +445,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		if (link && historyItem.isSummary) {
 			load = Service.request(link)
-				.then(function (json) {
-					var o = ParseUtils.parseItems(json)[0];
-
-					historyItem.set({
-						Feedback: o.get('Feedback'),
-						Submission: o.get('Submission'),
-						pendingAssessment: o.get('pendingAssessment'),
-						Grade: o.get('Grade')
-					});
-
-					delete historyItem.isSummary;
-
-					return historyItem;
-				});
+				.then(resp => historyItem.syncWithResponse(resp));
 		} else {
-			load = Promise.resolve(historyItem);
+			load = historyItem.updateFromServer();
 		}
 
 		return load;
@@ -504,7 +491,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 					.then(function (students) {
 						const params = students.proxy.extraParams || {};
 						var record, pageSource, path = [],
-							historyItem, link, load,
+							historyItem, load,
 							current = students.findBy(function (rec) {
 								var user = rec.get('User');
 
@@ -543,27 +530,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 						historyItem = record && record.get('HistoryItemSummary');
 
-						link = historyItem && historyItem.getLink('UsersCourseAssignmentHistoryItem');
-
-						if (link && historyItem.isSummary) {
-							load = Service.request(link)
-								.then(function (json) {
-									var o = ParseUtils.parseItems(json)[0];
-
-									historyItem.set({
-										Feedback: o.get('Feedback'),
-										Submission: o.get('Submission'),
-										pendingAssessment: o.get('pendingAssessment'),
-										Grade: o.get('Grade')
-									});
-
-									delete historyItem.isSummary;
-
-									return historyItem;
-								});
-						} else {
-							load = Promise.resolve(historyItem);
-						}
+						load = me.__getHistoryItem(historyItem);
 
 						pageSource = NextThought.util.PagedPageSource.create({
 							store: students,

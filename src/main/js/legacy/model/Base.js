@@ -232,6 +232,8 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		if (!silent) {
 			this.fireEvent('update', this);
 		}
+
+		return this;
 	},
 
 	/**
@@ -249,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		newRecord = ParseUtils.parseItems([json])[0];
 
-		this.syncWith(newRecord, silent);
+		return this.syncWith(newRecord, silent);
 	},
 
 	/**
