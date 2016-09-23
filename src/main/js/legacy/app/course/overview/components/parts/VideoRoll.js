@@ -53,7 +53,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.createVideoList();
 		var firstVideo = this.videoRoll.getItems()[0];
-		this.selectVideo(firstVideo);
+
+		if (firstVideo) {
+			this.selectVideo(firstVideo);
+		}
 	},
 
 	createVideoList: function () {
@@ -83,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if(this.progress) {
 			this.setProgress(this.progress);
 		}
-		
+
 		this.setVideo(video);
 	},
 
