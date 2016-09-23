@@ -64,6 +64,14 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		{name: 'IsExcused', type: 'auto', persist: false}
 	],
 
+
+	equalsGrade (grade) {
+		const values = grade.getValues();
+
+		return this.valueEquals(values.value, values.letter);
+	},
+
+
 	/**
 	 * looks at the values set and compares them to the ones passed
 	 * treat a letter grade value of '-' the same as no letter grade

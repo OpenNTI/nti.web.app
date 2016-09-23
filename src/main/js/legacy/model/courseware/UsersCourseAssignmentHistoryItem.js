@@ -357,31 +357,13 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		return grade.shouldSave(value, letter);
 	},
 
-	/**
-	 * Given a value and letter for a grade, either create one or update an existing one
-	 * @param  {String} value  value of the grade
-	 * @param  {Char} letter letter of the grade
-	 * @return {Promise}	 fulfills when the grade has been saved
-	 */
-	saveGrade: function (value, letter) {
-		var me = this,
-			grade = me.get('Grade'),
-			batcher = me.self.getBatchExecution();
 
-		//if the grade is a placeholder and we aren't trying to save any values
-		if (grade.isPlaceholder && NextThought.model.courseware.Grade.isEmpty(value, letter)) {
-			return Promise.resolve();
-		}
+	__createNewGrade (grade, value, letter) {
+		const batcher = this.self.getBatchExecution();
 
-		//if we are a placeholder create a new grade
-		if (this.isPlaceholder) {
-			return batcher.schedule(function () {
-				return grade.createNewGrade(value, letter);
-			})
-			.then(function (response) {
-				return Ext.decode(response);
-			})
-			.then(function (historyItem) {
+		return batcher.schedule(() => grade.createNewGrade(value, letter))
+			.then(response => Ext.decode(response))
+			.then(historyItem => {
 				//update the grade with the new values;
 				grade.set(historyItem.Grade);
 				grade.isPlaceholder = false;
@@ -389,25 +371,79 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				historyItem.Grade = grade;
 
 				//update with the new history item values
-				me.raw = Ext.apply(me.raw || {}, historyItem);
-				me.set(historyItem);
-				me.isPlaceholder = false;
+				this.raw = Ext.apply(this.raw || {}, historyItem);
+				this.set(historyItem);
+				this.isPlaceholder = false;
 
 				//if we get here the submission has been forced from setting the grade
 				//so fire an event to update the ui appropriately
-				me.fireEvent('force-submission');
+				this.fireEvent('force-submission');
 			});
-		//if we aren't a placeholder and the grade has different values save the new ones
-		} else if (!grade.valueEquals(value, letter)) {
-			return batcher.schedule(function () {
-				return grade.saveValue(value, letter);
-			})
-			.then(function (newGrade) {
-				grade.set(newGrade.asJSON());
-			});
-		}
+	},
 
-		//otherwise the grade doesn't need to be updated so just resolve
-		return Promise.resolve();
+
+	__updateGrade (grade, value, letter) {
+		const batcher = this.self.getBatchExecution();
+
+		return batcher.schedule(() => grade.saveValue(value, letter))
+			.then(newGrade => grade.set(newGrade.asJSON()))
+			.then(() => {});
+	},
+
+
+	__maybeUpdateFromServer () {
+		const batcher = this.self.getBatchExecution();
+		const grade = this.get('Grade');
+
+		return !grade || grade.isPlaceholder ?
+					batcher.schedule(() => this.updateFromServer()) :
+					Promise.resolve();
+	},
+
+
+	/**
+	 * Given a value and letter for a grade, either create one or update an existing one
+	 * @param  {String} value  value of the grade
+	 * @param  {Char} letter letter of the grade
+	 * @return {Promise}	 fulfills when the grade has been saved
+	 */
+	saveGrade: function (value, letter) {
+		const oldGrade = this.get('Grade');
+
+		return this.__maybeUpdateFromServer()
+			.then(updated => {
+				const newGrade = updated && updated.get('Grade');
+
+				if (newGrade) {
+					oldGrade.syncWith(newGrade);
+
+					//Keep the same cached instance of the grade
+					updated.set('Grade', oldGrade);
+				}
+
+				return oldGrade;
+			})
+			.then(grade => {
+				let update;
+
+				//if the grade is a placeholder and we aren't trying to save any values
+				if (grade.isPlaceholder && NextThought.model.courseware.Grade.isEmpty(value, letter)) {
+					update = Promise.resolve();
+
+				//If we are a placeholder create new grade
+				} else if (this.isPlaceholder) {
+					update = this.__createNewGrade(grade, value, letter);
+
+				//If we aren't a placeholder and the grade has different values save the new ones
+				} else if (!grade.valueEquals(value, letter)) {
+					update = this.__updateGrade(grade, value, letter);
+
+				//otherwise the grade doesn't need to be updated so just resolve
+				} else {
+					update = Promise.resolve();
+				}
+
+				return update;
+			});
 	}
 });
