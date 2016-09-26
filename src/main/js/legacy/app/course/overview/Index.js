@@ -1,18 +1,18 @@
 const Ext = require('extjs');
-const Globals = require('../../../util/Globals');
-const ParseUtils = require('../../../util/Parsing');
+const Globals = require('legacy/util/Globals');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
-require('../../../mixins/Router');
-require('../../../mixins/FillScreen');
+require('legacy/util/Parsing');
+require('legacy/mixins/Router');
+require('legacy/mixins/FillScreen');
 require('./components/View');
 require('../../content/content/Index');
 require('../../mediaviewer/Index');
-require('../../../model/RelatedWork');
-require('../../../model/QuestionSetRef');
-require('../../../model/SurveyRef');
-require('../../../model/NTICard');
-require('../../../model/courses/overview/Lesson');
+require('legacy/model/RelatedWork');
+require('legacy/model/QuestionSetRef');
+require('legacy/model/SurveyRef');
+require('legacy/model/NTICard');
+require('legacy/model/courses/overview/Lesson');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 					// Triggers showing search hits
 					me.reader.fireEvent('activate');
-					
+
 					if (route.object.id) {
 						return Service.getObject(decodeFromURI(route.object.id))
 									.then(me.reader.showNote.bind(me.reader));
