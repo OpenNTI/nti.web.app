@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		this.set(newData);
 
 		if (this.onSync) {
-			this.onSync();
+			this.onSync(record);
 		}
 
 		if (!silent) {

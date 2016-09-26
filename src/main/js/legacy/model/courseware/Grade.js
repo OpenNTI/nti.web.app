@@ -65,6 +65,11 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	],
 
 
+	onSync (record) {
+		this.isPlaceholder = record.isPlaceholder;
+	},
+
+
 	equalsGrade (grade) {
 		const values = grade.getValues();
 

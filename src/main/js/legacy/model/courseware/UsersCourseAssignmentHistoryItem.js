@@ -105,8 +105,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		}
 	},
 
-	onSync: function () {
+	onSync: function (record) {
 		var cls = this.get('Class');
+
+		this.isPlaceholder = record.isPlaceholder;
 
 		if (cls === 'UsersCourseAssignmentHistoryItemSummary') {
 			this.isSummary = true;
