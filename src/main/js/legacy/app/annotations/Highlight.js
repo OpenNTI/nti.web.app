@@ -209,6 +209,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 				return -1;
 			}
 
+			me.rendered[0].setAttribute('name', me.record.get('NTIID'));
+
 			//don't create counter when suppressed:
 			// Disabled counters on iPad because 1) their span added width which threw off all the content and could
 			//	break its presentation, and 2) they didn't seem to be doing anything functional anywhere.
