@@ -86,7 +86,9 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 
 	canEdit () {
-		return !!this.getLink('edit');
+		//There are a lot more links that drive editing different fields on an assignment
+		//for now we'll stick to these two until we have a case where we need to check more
+		return this.hasLink('edit') || this.hasLink('date-edit');
 	},
 
 
