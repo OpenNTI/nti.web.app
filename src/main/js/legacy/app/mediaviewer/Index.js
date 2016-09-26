@@ -257,13 +257,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		var me = this,
 			mediaId = this.videoId || this.slidedeckId;
 
+
+		//TODO: This should take the current route, and go to the route without the "{slidedeck|video|'noun'}/<id>" sub-route.
+		//Stop doing more work before routing. Routing SHOULD NOT be this hard! Resolving the LibraryPath to traverse up
+		//the route (pop) is insane. If the desired behavior is to not return the user to where they were before opening
+		//this god-forsaken view, then thats awefull.
 		me.PathActions.getPathToObject(mediaId, this.currentBundle)
 			.then(function (path) {
 				var i,
 					parentPath = [];
 
 				for (i = 0; i < path.length; i++) {
-					if (path[i].get('NTIID') === mediaId) {
+					let part = path[i];
+					//The library path appars to have the video referenced not the slidedeck.
+					if (part.get('NTIID') === mediaId || /video|slide/i.test(part.get('Class'))) {
 						break;
 					}
 
