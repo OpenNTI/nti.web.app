@@ -1,11 +1,12 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var MixinsRouter = require('../../mixins/Router');
-var MixinsState = require('../../mixins/State');
-var PathActions = require('../navigation/path/Actions');
-var PartsTranscript = require('./components/reader/parts/Transcript');
-var MediaviewerActions = require('./Actions');
-var ComponentsView = require('./components/View');
+const Ext = require('extjs');
+require('../../util/Parsing');
+require('../../mixins/Router');
+require('../../mixins/State');
+require('../navigation/path/Actions');
+require('./components/reader/parts/Transcript');
+require('./Actions');
+require('./components/View');
+const {resolve} = require('path');
 const { decodeFromURI } = require('nti-lib-ntiids');
 
 
@@ -253,54 +254,28 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	exitViewer: function () {
-		var me = this,
-			mediaId = this.videoId || this.slidedeckId;
+		const route = this.Router.root.ContextStore.getCurrentRoute();
 
+		const parentPath = resolve(route, '../../');
 
-		//TODO: This should take the current route, and go to the route without the "{slidedeck|video|'noun'}/<id>" sub-route.
-		//Stop doing more work before routing. Routing SHOULD NOT be this hard! Resolving the LibraryPath to traverse up
-		//the route (pop) is insane. If the desired behavior is to not return the user to where they were before opening
-		//this god-forsaken view, then thats awefull.
-		me.PathActions.getPathToObject(mediaId, this.currentBundle)
-			.then(function (path) {
-				var i,
-					parentPath = [];
-
-				for (i = 0; i < path.length; i++) {
-					let part = path[i];
-					//The library path appars to have the video referenced not the slidedeck.
-					if (part.get('NTIID') === mediaId || /video|slide/i.test(part.get('Class'))) {
-						break;
-					}
-
-					parentPath.push(path[i]);
-				}
-
-				me.Router.root.attemptToNavigateToPath(parentPath);
-			})
-			.catch(function () {
-				return Ext.isEmpty(me.parentLesson) ? Promise.reject() : me.__navigateToParent(me.parentLesson);
-			})
-			.catch(function () {
-				me.pushRootRoute('Library', '/library');
-			});
+		try {
+			this.Router.root.pushRootRoute(null, parentPath);
+		}
+		catch (e) {
+			(Ext.isEmpty(this.parentLesson)
+				? Promise.reject()
+				: this.__navigateToParent(this.parentLesson))
+			.catch(() => this.pushRootRoute('Library', '/library'));
+		}
 	},
 
 	__navigateToParent: function (lesson) {
-		var me = this;
-
-		return new Promise(function (fulfill, reject) {
-			me.PathActions.getPathToObject(lesson)
-				.then(function (path) {
-					if (path) {
-						// Get rid of the pageInfo part,
-						// since we want to navigate to the CourseOutlineNode.
-						path.pop();
-						me.Router.root.attemptToNavigateToPath(path);
-						fulfill();
-					}
-				})
-				.catch(reject);
-		});
+		return this.PathActions.getPathToObject(lesson)
+				.then(path => {
+					// Get rid of the pageInfo part,
+					// since we want to navigate to the CourseOutlineNode.
+					path.pop();
+					this.Router.root.attemptToNavigateToPath(path);
+				});
 	}
 });
