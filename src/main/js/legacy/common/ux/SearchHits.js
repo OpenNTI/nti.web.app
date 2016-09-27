@@ -111,11 +111,17 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 						width: b.width
 					}];
 				};
+				sel.getBoundingClientRect = null;
 				sel.noOverlay = true;
 			}
 
 			if (!sel.getClientRects) {sel.getClientRects = () => [];}
-			const rects = RectUtils.merge(sel.getClientRects(), null);
+
+			const rects = sel.getBoundingClientRect
+			//Safari's version of WebKit has a bad ClientRect that is offset from the reset of the rects...so prefer
+			//getBoundingClientRect. So, only fall back to getClientRects if there isn't a getBoundingClientRect.
+				? sel.getBoundingClientRect()
+				: RectUtils.merge(sel.getClientRects(), null);
 
 			Ext.each(rects, range => {
 				//Instead of appending one element at a time build them into a list and
