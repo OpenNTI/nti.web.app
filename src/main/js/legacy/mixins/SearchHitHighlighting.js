@@ -46,7 +46,6 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
 	rangesForSearchHits: function (hit) {
 		var phrase = hit.get('PhraseSearch'),
-			fragments = hit.get('Fragments'),
 			regex, ranges,
 			searchIn = this.el.dom,
 			index = this.buildSearchIndex(),
