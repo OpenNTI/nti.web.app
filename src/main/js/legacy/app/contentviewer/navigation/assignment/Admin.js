@@ -8,6 +8,10 @@ var AssessmentAssignmentStatus = require('../../../course/assessment/AssignmentS
 var ChatStateStore = require('../../../chat/StateStore');
 var {isFeature} = require('legacy/util/Globals');
 
+const {ControlBar} = require('nti-assignment-editor');
+const ReactHarness = require('legacy/overrides/ReactHarness');
+const { encodeForURI } = require('nti-lib-ntiids');
+
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 	extend: 'NextThought.app.contentviewer.navigation.Base',
@@ -49,7 +53,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 					{ tag: 'span', cls: 'chat link', html: '{{{NextThought.view.courseware.assessment.admin.Header.chat}}}'}
 				]}
 			]}
-		]}
+		]},
+		{cls: 'control-bar-container'}
 	]),
 
 	renderSelectors: {
@@ -66,7 +71,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		predictedContainerEl: '.header .predicted',
 		predictedEl: '.header .predicted .value',
 		actionsEl: '.header .assignment-actions',
-		excusedEl: '.header .status .excused'
+		excusedEl: '.header .status .excused',
+		controlBarEl: '.control-bar-container'
 	},
 
 	initComponent: function () {
@@ -158,6 +164,37 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		if (!this.showingUsername) {
 			this.usernameEl.hide();
 		}
+
+		this.maybeMountControlBar();
+	},
+
+
+	getControlBarConfig () {
+		const routePart = encodeForURI(this.assignment.getId());
+
+		return {
+			component: ControlBar,
+			assignment: this.assignment,
+			student: {
+				displayName: this.student.getName()
+			},
+			doEdit: () => {
+				this.doNavigation('', `${routePart}/edit`, {assignment: this.assignment});
+			},
+			renderTo: this.controlBarEl
+		};
+	},
+
+
+	maybeMountControlBar () {
+		if (!this.rendered) { return; }
+
+		if (this.assignment.canEdit()) {
+			this.ControlBar = new ReactHarness(this.getControlBarConfig());
+
+			this.on('destroy', () => this.ControlBar.destroy());
+		}
+
 	},
 
 	setupEmail: function () {

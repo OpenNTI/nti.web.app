@@ -4,6 +4,9 @@ var NavigationBase = require('../Base');
 var UtilTime = require('../../../../util/Time');
 var AssessmentAssignmentStatus = require('../../../course/assessment/AssignmentStatus');
 var AccountActions = require('../../../account/Actions');
+const {ControlBar} = require('nti-assignment-editor');
+const ReactHarness = require('legacy/overrides/ReactHarness');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
@@ -29,7 +32,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 				{cls: 'submit', cn: [
 					{cls: 'unanswered'},
 					{cls: 'submit-btn', html: 'I\'m Finished!'}
-				]}
+				]},
+				{cls: 'control-bar-container'}
 			]
 		}
 	]),
@@ -58,7 +62,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		helpEl: '.time-remaining .help',
 		submitEl: '.time-remaining .submit',
 		unansweredEl: '.time-remaining .submit .unanswered',
-		submitBtnEl: '.time-remaining .submit .submit-btn'
+		submitBtnEl: '.time-remaining .submit .submit-btn',
+		controlBarEl: '.control-bar-container'
 	},
 
 	beforeRender: function () {
@@ -108,7 +113,36 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		me.mon(me.submitBtnEl, 'click', 'submitAssignmentClicked');
 		me.mon(me.helpEl, 'click', 'helpClicked');
+
+		this.maybeMountControlBar();
 	},
+
+
+	getControlBarConfig () {
+		const routePart = encodeForURI(this.assignment.getId());
+
+		return {
+			component: ControlBar,
+			assignment: this.assignment,
+			doEdit: () => {
+				this.doNavigation('', `${routePart}/edit`, {assignment: this.assignment});
+			},
+			renderTo: this.controlBarEl
+		};
+	},
+
+
+	maybeMountControlBar () {
+		if (!this.rendered) { return; }
+
+		if (this.assignment.canEdit()) {
+			this.ControlBar = new ReactHarness(this.getControlBarConfig());
+
+			this.on('destroy', () => this.ControlBar.destroy());
+		}
+
+	},
+
 
 	alignTimer: function () {
 		if (!this.rendered) {
