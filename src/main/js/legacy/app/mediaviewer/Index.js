@@ -135,6 +135,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			prec
 		])
 		.then(([deck, record]) => {
+			if (!(deck instanceof NextThought.model.Slidedeck)) {
+				return Promise.reject('Not a Slidedeck');
+			}
+
 			if(record) { options.rec = record; }
 
 			me.slidedeck = deck;
@@ -155,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	__addKeyMapListeners: function () {
-		keyMap = new Ext.util.KeyMap({
+		const keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{
 				key: Ext.EventObject.ESC,
@@ -184,25 +188,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	resolveVideo: function (id) {
-		var me = this, video;
-
 		if (!id || !this.currentBundle) {
 			return Promise.reject();
 		}
 
-		if (me.video && me.video.isModel && me.video.getId() === id) {
-			return Promise.resolve(me.video);
+		if (this.video && this.video.isModel && this.video.getId() === id) {
+			return Promise.resolve(this.video);
 		}
 
-		return me.currentBundle.getVideoForId(id)
-			.then(function (o) {
-				if (!o) {
-					return Service.getObject(id);
-				}
-
-				video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
-				return video;
-			});
+		return this.currentBundle.getVideoForId(id)
+			.catch(e => e ? Promise.reject(e) : null)
+			.then(o => o || Service.getObject(id))
+			.then(o =>
+				NextThought.model.PlaylistItem.create({ NTIID: o.ntiid || o.NTIID, ...(o.raw || o)})
+			);
 	},
 
 	getContext: function () {
