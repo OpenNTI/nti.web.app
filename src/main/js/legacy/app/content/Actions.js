@@ -5,7 +5,9 @@ var ParseUtils = require('../../util/Parsing');
 var UtilContent = require('../../util/Content');
 var UtilPageSource = require('../../util/PageSource');
 var ModelTopicNode = require('../../model/TopicNode');
-var PathActions = require('../navigation/path/Actions');
+
+require('../navigation/path/Actions');
+
 const { encodeForURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.content.Actions', {
@@ -33,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	__getContentPathFromLineage: function (ntiid, bundle, parent, rootPageId, rootRoute) {
 		var PathActions = NextThought.app.navigation.path.Actions.create();
 
-		return PathActions.getBreadCrumb(ntiid)
+		return PathActions.getBreadCrumb(ntiid, bundle)
 			.then(function (path) {
 				return path.map(function (part) {
 					var route = part.ntiid ? encodeForURI(part.ntiid) : '';

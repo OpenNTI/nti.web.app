@@ -223,9 +223,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		return Promise.reject();
 	},
 
-	getBreadCrumb: function (record) {
+	getBreadCrumb: function (record, scope) {
 		const me = this;
-		const rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile();
+		const rootObject = scope || me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile();
 
 		//Get the path for the record
 		return me.getPathToObject(record, rootObject)
