@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			this.addCls('removing-nav');
 			this.addCls('no-nav');
 			this.removeCls('has-nav');
-			
+
 			this.__removeNavCmp();
 
 			wait(300)
@@ -163,20 +163,27 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	},
 
 	__setVendorIcon: function (url) {
-		var img = new Image(),
-			brandingEl = this.brandingEl;
+		const img = new Image();
+		const {brandingEl} = this;
 
-		return new Promise(function (fulfill, reject) {
+		const work = url && new Promise(function (fulfill, reject) {
 			img.onload = fulfill;
 			img.onerror = reject;
 			img.src = url;
-		}).then(function (i) {
-			var aspect = img.width / img.height,
-				width = aspect * 70;
-
-			brandingEl.addCls('custom-vendor');
-			brandingEl.setStyle({backgroundImage: 'url(' + url + ')', width: width + 'px'});
 		});
+
+		return (work || Promise.reject())
+			.then(() => {
+				const aspect = img.width / img.height,
+					width = aspect * 70;
+
+				brandingEl.addCls('custom-vendor');
+				brandingEl.setStyle({backgroundImage: 'url(' + url + ')', width: width + 'px'});
+			})
+			.catch(() => {
+				brandingEl.removeCls('custom-vendor');
+				brandingEl.setStyle({backgroundImage: null, width: null});
+			});
 	},
 
 	setActiveContent: function (bundle) {
