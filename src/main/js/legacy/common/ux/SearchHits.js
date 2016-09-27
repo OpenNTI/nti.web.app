@@ -1,49 +1,48 @@
-var Ext = require('extjs');
-var RectUtils = require('../../util/Rects');
-var TextRangeFinderUtils = require('../../util/TextRangeFinder');
-var UtilSearch = require('../../util/Search');
+const Ext = require('extjs');
+const RectUtils = require('legacy/util/Rects');
+const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
+require('legacy/util/Search');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 	alias: 'widget.search-hits',
 	mixins: {observable: 'Ext.util.Observable'},
 
-	constructor: function (config) {
-		var me = this;
-		me.mixins.observable.constructor.call(me);
-		Ext.apply(me, {
+	constructor (config) {
+		this.mixins.observable.constructor.call(this);
+		Ext.apply(this, {
 			hit: config.hit,
 			phraseSearch: (config.ps || false),
 			ownerCmp: config.owner,
 			container: config.owner && config.owner.getInsertionPoint('innerCt').dom
 		});
 
-		this.mon(me.ownerCmp, {
-			scope: me,
+		this.mon(this.ownerCmp, {
+			scope: this,
 			'navigateComplete': 'cleanup',
 			'sync-height' : 'reLayout'
 		});
 
-		me.insertSearchHitsOverlay();
+		this.insertSearchHitsOverlay();
 	},
 
-	insertSearchHitsOverlay: function () {
-		var container = Ext.DomHelper.append(this.ownerCmp.getInsertionPoint('innerCt'), { cls: 'searchHit-overlay' }, true);
+	insertSearchHitsOverlay () {
+		const container = Ext.DomHelper.append(this.ownerCmp.getInsertionPoint('innerCt'), { cls: 'searchHit-overlay' }, true);
 		if (Ext.isIE) {
-			container.on('click', function (e) {
-				var el = Ext.fly(e.target);
+			container.on('click', e => {
+				const el = Ext.fly(e.target);
 
 				if (el.dom.className === 'searchHit-entry') {
 					el.remove();
 				}
 			});
 		}
-		this.on('destroy' , function () { container.remove(); });
+		this.on('destroy', () => container.remove());
 		this.searchHitsOverlay = container;
 		this.showAllHits();
 	},
 
-	removeOverlay: function () {
+	removeOverlay () {
 		try {
 			Ext.fly(this.searchHitsOverlay).remove();
 		}
@@ -60,11 +59,11 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 	//across varying scroll positions.	Really what we are trying to cache here
 	//are the ranges because they take some cycles to calculate. We could move the caching
 	//of ranges into ownerCmp but I'm not sure that makes sense.  Need to ponder some options
-	getRanges: function () {
+	getRanges () {
 		function anyRangesCollapsed (ranges) {
-			var collapsed = false;
-			Ext.each(ranges, function (range) {
-				Ext.each(range.ranges, function (actualRange) {
+			let collapsed = false;
+			Ext.each(ranges, range => {
+				Ext.each(range.ranges, actualRange => {
 					if (actualRange.collapsed) {
 						collapsed = true;
 						return false;
@@ -86,41 +85,39 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		return this.ranges;
 	},
 
-	showAllHits: function () {
+	showAllHits () {
 		this.renderRanges(this.getRanges());
 	},
 
-	entriesToAppend: function (rangeInfo, toAppend) {
-		var rangesToRender = rangeInfo.ranges,
-			adjustments = this.ownerCmp.getRangePositionAdjustments(rangeInfo.key) || {},
-			redactionAction, rects;
+	entriesToAppend (rangeInfo, toAppend) {
+		const rangesToRender = rangeInfo.ranges;
+		const adjustments = this.ownerCmp.getRangePositionAdjustments(rangeInfo.key) || {};
 
 		if (!rangesToRender) {
 			return toAppend;
 		}
-		Ext.each(rangesToRender, function (sel) {
-	  		redactionAction = TextRangeFinderUtils.getRedactionActionSpan(sel);
-	  		if (redactionAction) {
-		redactionAction.addCls('searchHitInside');
-		sel.getClientRects = function () {
-		  	var b = redactionAction.getBox();
-		  	return [{
-			bottom: b.bottom,
-			top: b.y + adjustments.top || 0,
-			left: b.x + adjustments.left || 0,
-			right: b.right,
-			height: b.height,
-			width: b.width
-		  }];
-		};
-		sel.noOverlay = true;
-	  }
+		Ext.each(rangesToRender, sel => {
+			const redactionAction = TextRangeFinderUtils.getRedactionActionSpan(sel);
+			if (redactionAction) {
+				redactionAction.addCls('searchHitInside');
+				sel.getClientRects = () => {
+					const b = redactionAction.getBox();
+					return [{
+						bottom: b.bottom,
+						top: b.y + adjustments.top || 0,
+						left: b.x + adjustments.left || 0,
+						right: b.right,
+						height: b.height,
+						width: b.width
+					}];
+				};
+				sel.noOverlay = true;
+			}
 
-	  		if (!sel.getClientRects) {sel.getClientRects = function () {return [];};}
-			rects = RectUtils.merge(sel.getClientRects(), null);
+			if (!sel.getClientRects) {sel.getClientRects = () => [];}
+			const rects = RectUtils.merge(sel.getClientRects(), null);
 
-			Ext.each(rects, function (range) {
-
+			Ext.each(rects, range => {
 				//Instead of appending one element at a time build them into a list and
 				//append the whole thing.  This is a HUGE improvement for the intial rendering performance
 				if (!sel.noOverlay) {
@@ -141,28 +138,28 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 			//is best
 			return toAppend.length <= 100;
 
-		}, this);
+		});
 
 		return toAppend;
 	},
 
-	renderRanges: function (rangesToRender) {
-		var toAppend = [], redactionAction, rects;
+	renderRanges (rangesToRender) {
+		const toAppend = [];
 
-		Ext.each(rangesToRender, function (rangeInfo) {
+		Ext.each(rangesToRender, rangeInfo => {
 			this.entriesToAppend(rangeInfo, toAppend);
-		}, this);
+		});
 
 		Ext.DomHelper.append(this.searchHitsOverlay, toAppend, true);
 	},
 
-	reLayout: function () {
+	reLayout () {
 		console.log('Relaying out search hit overlays');
 		this.removeOverlay();
 		this.insertSearchHitsOverlay();
 	},
 
-	cleanup: function () {
+	cleanup () {
 		this.removeOverlay();
 		delete this.hit;
 		delete this.regex;
