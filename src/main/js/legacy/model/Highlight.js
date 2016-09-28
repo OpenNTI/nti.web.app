@@ -21,6 +21,8 @@ module.exports = exports = Ext.define('NextThought.model.Highlight', {
 		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'}
 	],
 
+	useIdAsFragment: true,
+
 	getActivityItemConfig: function (type, cid) {
 		var t = this.getModelName().toLowerCase();
 

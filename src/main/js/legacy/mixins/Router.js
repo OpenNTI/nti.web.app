@@ -1,11 +1,24 @@
 var Ext = require('extjs');
 var Globals = require('../util/Globals');
+const url = require('url');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 
 require('./routing/Path');
 require('./routing/Object');
 require('../app/navigation/path/Actions');
 require('../app/windows/Actions');
+
+
+function setObjHash (route, obj) {
+	const id = encodeForURI(obj.get('NTIID'));
+	const parts = url.parse(route.path);
+
+	parts.hash = id;
+
+	route.path = url.format(parts);
+
+	return route;
+}
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Router', {
@@ -143,6 +156,10 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			}, monitors.onFailedToGetFullPath.bind(null, obj))
 			.then(me.getRouteForPath.bind(me))
 			.then(function (route) {
+				if (obj.useIdAsFragment) {
+					route = setObjHash(route, obj);
+				}
+
 				if (route.isFull && route.isAccessible !== false) {
 					monitors.doNavigateToFullPath(obj, route);
 				} else {
