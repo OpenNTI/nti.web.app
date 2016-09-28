@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 				path: parts.join('/'),
 				parts: parts,
 				query: urlParts.query,
-				hash: urlParts.hash,
+				hash: urlParts.hash ? urlParts.hash.replace(/^#/, '') : undefined,
 				params: {}
 			},
 			object: object
