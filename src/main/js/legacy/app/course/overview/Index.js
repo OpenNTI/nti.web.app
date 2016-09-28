@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const Globals = require('legacy/util/Globals');
-const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+const { encodeForURI, decodeFromURI, isNTIID } = require('nti-lib-ntiids');
 
 require('legacy/util/Parsing');
 require('legacy/mixins/Router');
@@ -158,8 +158,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			lesson = route.precache.lesson,
 			readerRoute;
 
-
-
 		lessonId = decodeFromURI(lessonId);
 		rootId = decodeFromURI(rootId);
 		pageId = pageId && decodeFromURI(pageId);
@@ -196,8 +194,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		return me.store.onceBuilt()
 			.then(function () {
-				if (route.object.id) {
-					return Service.getObject(decodeFromURI(route.object.id))
+				const hash = route.hash && decodeFromURI(route.hash);
+				const object = route.object.id ? decodeFromURI(route.object.id) : hash;
+
+
+				if (object && isNTIID(object)) {
+					return Service.getObject(decodeFromURI(object))
 						.catch(function (reason) {
 							console.log('Failed to resolve note: ', reason);
 						});

@@ -223,9 +223,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 			containerId = note.get('ContainerId'),
 			doc = this.reader.getIframe().getDocumentElement(),
 			cleanContent = this.reader.getCleanContent(),
-			range = Anchors.toDomRange(applicableRange, doc, cleanContent, containerId);
+			range = applicableRange && Anchors.toDomRange(applicableRange, doc, cleanContent, containerId);
 
-		this.toNode(range.startContainer);
+		if (range) {
+			this.toNode(range.startContainer);
+		}
 	},
 
 	toSearchHit: function (hit, fragment) {
