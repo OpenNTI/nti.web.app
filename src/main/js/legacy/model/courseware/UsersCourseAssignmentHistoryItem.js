@@ -26,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{name: 'Feedback', type: 'singleItem', persist: false},
 		{name: 'Grade', type: 'singleItem', persist: false},
 		{name: 'Submission', type: 'singleItem', persist: false},
+		{name: 'SubmissionCreatedTime', type: 'date', dateFormat: 'timestamp', persist: false},
 		{name: 'pendingAssessment', type: 'singleItem', persist: false},
 		{name: 'Metadata', type: 'auto', persit: false},
 
@@ -83,9 +84,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		},
 
 
-		{name: 'submission', type: 'string', persist: false, affectedBy: 'Submission', convert: function (v, r) {
+		{name: 'submission', type: 'string', persist: false, affectedBy: ['SubmissionCreatedTime', 'Submission'], convert: function (v, r) {
 			r = r.raw || {};
-			return (r.hasOwnProperty('SubmissionCreatedTime') || r.hasOwnProperty('Submission')) ? 'true' : '';
+			return (r.hasOwnProperty('SubmissionCreatedTime') || r.hasOwnProperty('Submission') || v) ? 'true' : '';
 		}},
 
 
