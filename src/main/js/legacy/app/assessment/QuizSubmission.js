@@ -497,6 +497,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	beforeRouteChange: function () {
+		//Don't save progress if we are submitted
+		if (this.submitted) { return; }
+
 		const submission = {};
 
 		//NTI-1615 - Don't blindly saveProgress. Only save progress on interaction.
