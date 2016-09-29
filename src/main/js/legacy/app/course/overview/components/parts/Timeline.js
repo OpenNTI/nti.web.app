@@ -2,6 +2,8 @@ var Ext = require('extjs');
 var CardsCard = require('../../../../../common/components/cards/Card');
 var ModelTimeline = require('../../../../../model/Timeline');
 var WindowsActions = require('../../../../windows/Actions');
+const Globals = require('legacy/util/Globals');
+const {getURL} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
@@ -24,8 +26,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			root = this.locationInfo && this.locationInfo.root || basePath,
 			width = this['suggested-width'],
 			height = this['suggested-height'],
-			thumbURL = root && this.icon && this.icon.indexOf(root) === -1 ? root + this.icon : this.icon,
-			jsonURL = root && this.href && this.href.indexOf(root) === -1 ? root + this.href : this.href;
+			thumbURL = this.icon,
+			jsonURL = this.href;
+
+		if (Globals.ROOT_URL_PATTERN.test(jsonURL)) {
+			jsonURL = getURL(jsonURL);
+		} else {
+			jsonURL = getURL((root || '') + thumbURL);
+		}
+
+		if (Globals.ROOT_URL_PATTERN.test(thumbURL)) {
+			thumbURL = getURL(thumbURL);
+		} else {
+			thumbURL = getURL((root || '') + thumbURL);
+		}
 
 		height = height ? parseInt(height, 10) : -1;
 		width = width ? parseInt(width, 10) : -1;
