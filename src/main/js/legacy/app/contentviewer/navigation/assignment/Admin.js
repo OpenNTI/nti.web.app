@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	maybeMountControlBar () {
 		if (!this.rendered) { return; }
 
-		if (this.assignment.canEdit()) {
+		if (this.assignment && this.assignment.canEdit()) {
 			this.ControlBar = new ReactHarness(this.getControlBarConfig());
 
 			this.on('destroy', () => this.ControlBar.destroy());
