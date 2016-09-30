@@ -8,6 +8,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
 	extend: 'NextThought.model.Base',
 
+	SYNC_BLACKLIST: ['item'],
+
 	statics: {
 		getBatchExecution: function () {
 			this.batchExecution = this.batchExecution || NextThought.util.BatchExecution.create();
