@@ -317,27 +317,33 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return outline.onceBuilt()
 			.then(builtOutline => {
+				let rec;
 				if (id && (!record || record.getId() !== id)) {
-					record = builtOutline.getNode(id);
+					rec = builtOutline.getNode(id);
 				} else if (record) {
 					//get the record that is in the outline in case it has updated
-					record = builtOutline.getNode(record.getId());
+					rec = builtOutline.getNode(record.getId());
+				}
+
+				// Record from outline might cached, sync it with the newest one.
+				if (editing && rec && record) {
+					rec.syncWith(record);
 				}
 
 				//With editing the record may or may not be a content node
-				if (!editing && record) {
-					record = record.getFirstContentNode();
+				if (!editing && rec) {
+					rec = rec.getFirstContentNode();
 				}
 
 				// In case, we have no record, get the first available record.
 				// TODO: should we check if it's not in edit mode?
-				if (!record) {
-					record = builtOutline.findNodeBy(function (rec) {
+				if (!rec) {
+					rec = builtOutline.findNodeBy(function (rec) {
 						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
 					});
 				}
 
-				return record;
+				return rec;
 			});
 	},
 
