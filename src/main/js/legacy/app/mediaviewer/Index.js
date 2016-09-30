@@ -201,7 +201,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			.catch(e => e ? Promise.reject(e) : null)
 			.then(o => o || Service.getObject(id))
 			.then(o =>
-				NextThought.model.PlaylistItem.create({ NTIID: o.ntiid || o.NTIID, ...(o.raw || o)})
+				o instanceof NextThought.model.Slidedeck ? Promise.reject() : NextThought.model.PlaylistItem.create({ NTIID: o.ntiid || o.NTIID, ...(o.raw || o)})
 			);
 	},
 
