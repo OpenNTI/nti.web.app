@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	addParts: function (o) {
-		var me = this, 
+		var me = this,
 			controls = o[1] || [];
 
 		if (!(controls instanceof Array)) {
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(function () {
 				var start = me.record && me.record.get('AvailableBeginning'),
 					config;
-				
+
 				// Set dates
 				me.getStartDate()
 					.then(me.setDayAndMonth.bind(me));
@@ -76,10 +76,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				me.titleEl.update(me.record.getTitle());
 
 				// Add the controls
+				let cmp;
 				for (var i = 0; i < controls.length; i++) {
 					config = controls[i];
 					config.renderTo = me.controlsEl;
-					Ext.widget(config);
+					cmp = Ext.widget(config);
+					if (config.xtype === 'overview-editing-controls-publish') {
+						me.publishCmp = cmp;
+					}
 				}
 			});
 	},
@@ -126,10 +130,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var parts, m;
 		if (this.dateCmp && this.dateCmp.setDayAndMonth) {
 			this.dateCmp.setDayAndMonth(date);
-		}	
+		}
 	},
 
 	handleClick: function (e) {
+		if (this.publishCmp) {
+			this.publishCmp.onRouteDeactivate();
+		}
 		if (this.navigateToOutlineNode) {
 			this.navigateToOutlineNode(this.record);
 		}
