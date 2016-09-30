@@ -731,7 +731,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	__getNonAssignmentsByOutline: function () {
-		return this.__getList('NonAssignmentAssessmentItemsByOutlineNode');
+		return this.__getList('NonAssignmentAssessmentSummaryItemsByOutlineNode');
 	},
 
 	__getGradeBook: function () {

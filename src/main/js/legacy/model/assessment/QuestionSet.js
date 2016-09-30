@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 	},
 
 	containsId: function (id) {
-		var items = this.get('questions').filter(function (p) {
+		var items = (this.get('questions') || []).filter(function (p) {
 			return p && p.getId() === id;
 		});
 
