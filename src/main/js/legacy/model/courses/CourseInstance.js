@@ -727,7 +727,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	__getAssignmentsByOutline: function () {
-		return this.__getList('AssignmentsByOutlineNode', false, 60000);//up the timeout of the request
+		return this.__getList('AssignmentSummaryByOutlineNode', false, 60000);//up the timeout of the request
 	},
 
 	__getNonAssignmentsByOutline: function () {
