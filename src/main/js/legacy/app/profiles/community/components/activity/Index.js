@@ -187,6 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		if (!record) { return; }
 
 		var left = this.firstColumn, me = this;
+		this.feedItems = (this.feedItems || []).concat([record]);
 
 		this.__loadItem(record)
 			.then(function (cmp) {
@@ -204,8 +205,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 
 		this.feedItems = this.feedItems || [];
-
-		this.feedItems.concat(items);
+		items = items.filter(x => !this.feedItems.find( i => i.getId() === x.getId() ));
+		this.feedItems = this.feedItems.concat(items);
 
 		return this.__renderItems(items, feedUrl);
 	},
