@@ -65,18 +65,23 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 	fillInUser: function () {
 		var me = this;
-
 		UserRepository.getUser(me.record.get('Creator'))
 			.then(function (user) {
 				me.avatarEl.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
 
 				me.mon(user, {
 					single: true,
-					'avatarChanged': me.fillInUser.bind(me, user)
+					'avatarChanged': me.setAvatar.bind(me, user)
 				});
 
 				me.nameEl.update(user.getName());
 			});
+	},
+
+	setAvatar: function (record) {
+		if (this.rendered) {
+			this.avatarEl.update(Ext.util.Format.avatar(record));
+		}
 	},
 
 	fillInCreated: function () {
