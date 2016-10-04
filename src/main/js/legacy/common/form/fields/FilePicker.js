@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
-const {default: autobind} = require('nti-commons/lib/autobind');
+const {autobind} = require('nti-commons');
 const StateStore = require('legacy/app/context/StateStore');
 
 const {ContentResources} = require('nti-web-commons');

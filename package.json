@@ -60,6 +60,7 @@
     "node-natural-sort": "^0.8.6",
     "node-sass": "^3.2.0",
     "nti-assignment-editor": "^1.0.0",
+    "nti-commons": "^2.0.0",
     "nti-lib-dom": "^1.2.3",
     "nti-lib-locale": "^1.0.5",
     "nti-lib-ntiids": "^1.0.2",

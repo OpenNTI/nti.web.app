@@ -3,8 +3,7 @@ const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
 const ContextStateStore = require('legacy/app/context/StateStore');
 const PathStateStore = require('./StateStore');
-const {default: minWait} = require('nti-commons/lib/wait-min');
-const {default: waitFor} = require('nti-commons/lib/waitfor');
+const {wait} = require('nti-commons');
 require('legacy/common/Actions');
 require('./parts/Assignment');
 require('./parts/Content');
@@ -112,8 +111,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 				}
 			});
 
-		waitFor(cache)
-			.then(minWait(100))//delay for a 10th-second to catch calls from a few event pumps
+		wait.on(cache)
+			.then(wait.min(100))//delay for a 10th-second to catch calls from a few event pumps
 			.then(() => {
 
 				//only cache while in flight.

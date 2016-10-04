@@ -1,7 +1,6 @@
 const Ext = require('extjs');
 const {Editor} = require('nti-assignment-editor');
-const {default: wait} = require('nti-commons/lib/wait');
-const {default: waitFor} = require('nti-commons/lib/waitfor');
+const {wait} = require('nti-commons');
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 
@@ -159,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				.then(a => a.isDeleted = true)
 			: Promise.resolve();
 
-		waitFor(pending).then(() => this.gotoRoot());
+		wait.on(pending).then(() => this.gotoRoot());
 	}
 });
 
