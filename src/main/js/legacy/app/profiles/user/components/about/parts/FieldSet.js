@@ -88,12 +88,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	clearAllErrors: function () {
+		const errorContainers = this.el.dom.querySelectorAll('.field-container .error-msg');
 		var errors = this.el.dom.querySelectorAll('.error');
-
 		errors = Array.prototype.slice.call(errors);
 
 		errors.forEach(function (err) {
 			err.classList.remove('error');
+		});
+
+		errorContainers.forEach((err) => {
+			err.innerHTML = '';
 		});
 
 		this.fireEvent('clear-errors', this.name);
