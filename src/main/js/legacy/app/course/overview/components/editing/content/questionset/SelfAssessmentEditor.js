@@ -9,8 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	addPreview: function (item) {
 		var me = this,
-			questions = item.get('questions'),
-			questionCount = questions.length,
+			questionCount = item.getQuestionCount(),
 			parts = [
 				{cls: 'title', html: item.get('title')},
 				{cls: 'question-count', html: Ext.util.Format.plural(questionCount, 'Question')}

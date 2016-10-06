@@ -15,7 +15,8 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 
 	fields: [
 		{ name: 'questions', type: 'arrayItem' },
-		{name: 'title', type: 'String'}
+		{name: 'title', type: 'String'},
+		{name: 'question-count', type: 'int'}
 	],
 
 	tallyParts: function () {
@@ -31,6 +32,10 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 		});
 
 		return items.length > 0 || this.getId() === id;
+	},
+
+	getQuestionCount () {
+		return this.get('question-count');
 	},
 
 	getStartTime: function () {
