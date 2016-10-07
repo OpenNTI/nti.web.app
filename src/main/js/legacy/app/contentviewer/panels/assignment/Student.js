@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 
 		if (this.pageInfo.regenerate) {
-			this.pageInfo = this.pageInfo.regenerate();
+			this.pageInfo = this.pageInfo.regenerate(assignment);
 		}
 
 		this.assignment = assignment;

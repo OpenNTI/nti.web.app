@@ -222,10 +222,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 		return Service.post(link)
 			.then(function (response) {
-				var newAssignment = ParseUtils.parseItems(response)[0];
-
-				me.set(newAssignment.getData());
-				return me;
+				return me.syncWithResponse(response);
 			});
 	},
 
