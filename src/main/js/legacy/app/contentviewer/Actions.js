@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		});
 
 
-		pageInfo.regenerate = () => this.getAssignmentPageInfo(assignment, bundle);
+		pageInfo.regenerate = (newAssignment) => this.getAssignmentPageInfo(newAssignment || assignment, bundle);
 
 		return pageInfo;
 	},
