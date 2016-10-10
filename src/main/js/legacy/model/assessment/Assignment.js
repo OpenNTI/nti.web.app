@@ -77,8 +77,10 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	containsId: function (id) {
 		var parts = this.get('parts') || [],
 			items = parts.filter(function (p) {
-				p = p.get('question_set');
-				return p && p.getId() === id;
+				const qSet = p.get('question_set');
+				const questionSetID = p.get('QuestionSetId') || (qSet && qSet.getId());
+
+				return questionSetID === id;
 			});
 
 		return items.length > 0;
