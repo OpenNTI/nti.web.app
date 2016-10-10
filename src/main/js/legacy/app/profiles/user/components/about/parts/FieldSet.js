@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	limitToLine: function (e) {
 		var charCode = e.key || e.charCode;
-		if (charCode == Ext.EventObject.ENTER) {
+		if (charCode === Ext.EventObject.ENTER) {
 			e.preventDefault();
 		}
 	},
@@ -88,19 +88,31 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	clearAllErrors: function () {
-		let errorContainers = this.el.dom.querySelectorAll('.field-container .error-msg');
-		let errors = this.el.dom.querySelectorAll('.error');
+		const getNodes = query => this.el.dom.querySelectorAll(query) || [];
 
-		errorContainers = Array.prototype.slice.call(errorContainers);
-		errors = Array.prototype.slice.call(errors);
+		const errorContainers = getNodes('.field-container .error-msg');
+		const errors = getNodes('.error');
 
-		errors.forEach(function (err) {
+		/*
+		 * Many better ways to "array-ify" a NodeList than calling "Array.prototype.slice.call(nodeList)"
+		 *
+		 * option a:
+		 * 		[...nodeList].forEach(work);
+		 *
+		 * option b:
+		 *  	Array.from(nodeList).forEach(work);
+		 *
+		 * option c:
+		 * 		for (let node of nodeList) { work(node); }
+		 */
+
+		for (let err of errors) {
 			err.classList.remove('error');
-		});
+		}
 
-		errorContainers.forEach((err) => {
+		for(let err of errorContainers) {
 			err.innerHTML = '';
-		});
+		}
 
 		this.fireEvent('clear-errors', this.name);
 	},
