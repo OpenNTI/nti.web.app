@@ -83,6 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					cmp = Ext.widget(config);
 					if (config.xtype === 'overview-editing-controls-publish') {
 						me.publishCmp = cmp;
+						me.on('destroy', me.publishCmp.destroy.bind(me.publishCmp));
 					}
 				}
 			});
