@@ -34,12 +34,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						{cls: 'label', html: 'To'},
 						{cls: 'field'},
 						{cls: 'action', cn: [
-							{cls: 'reply-option', cn: [
+							{cls: 'reply-option option', cn: [
 								{tag: 'span', cls:'toggle', cn: [
 									{tag: 'input', type: 'checkbox', id: 'reply-check-toggle', cls: 'reply-check'},
 									{tag: 'label', 'for': 'reply-check-toggle', html: 'Allow Replies'}
 								]},
 								{tag: 'span', cls: 'reply-scope link arrow', html: ''}
+							]},
+							{cls: 'cc-instructors option', cn: [
+								{tag: 'span', cls: 'toggle', cn : [
+									{tag: 'input', type: 'checkbox', id: 'cc-instructors-toggle', cls: 'cc-instructors-check'},
+									{tag: 'label', 'for': 'cc-instructors-toggle', html: 'Copy All Instructors'}
+								]}
 							]}
 						]}
 					]
@@ -64,12 +70,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		receiverEl: '.row.receiver .field',
 		replyOptionEl: '.reply-option',
 		replyScopeEl: '.reply-option .reply-scope',
-		replyCheckBoxEl: '.reply-option .reply-check'
+		replyCheckBoxEl: '.reply-option .reply-check',
+		ccInstructorsEl: '.cc-instructors .cc-instructors-check'
 	},
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.isIndividualEmail = !!(this.record && this.record.get('Receiver'));	
+		this.isIndividualEmail = !!(this.record && this.record.get('Receiver'));
 	},
 
 	afterRender: function () {
@@ -93,6 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.saveButtonEl.setHTML(' Send Email');
 		this.mon(this.replyScopeEl, 'click', this.replyPickerClicked.bind(this));
 		this.mon(this.replyCheckBoxEl, 'click', this.replyCheckboxClicked.bind(this));
+		this.mon(this.ccInstructorsEl, 'click', this.copyInstructorsClicked.bind(this));
 	},
 
 	setupTitleField: function () {
@@ -120,7 +128,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	emailCopyClicked: function (e) {
 		var i = e.target;
 		if (this.record) {
-			this.record.set('Copy', i.checked); 
+			this.record.set('Copy', i.checked);
+		}
+	},
+
+	copyInstructorsClicked (e) {
+		const i = e.target;
+		if (this.record) {
+			this.record.set('includeInstructors', i.checked);
 		}
 	},
 
@@ -145,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	createReceiverScopePicker: function () {
 		var me = this,
-			menu = 
+			menu =
 				Ext.widget('menu', {
 					defaults: {
 						ui: 'nt-menuitem',
@@ -245,7 +260,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	setReplyToField: function () {
 		var scope;
-		
+
 		this.noReplyPicker = this.createNoReplyMenu();
 
 		if (this.isIndividualEmail) {
@@ -292,16 +307,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	replyCheckboxClicked: function (e) {
-		var i = e.target, 
+		var i = e.target,
 			action = i.checked ? 'removeCls' : 'addCls';
 		if (this.record) {
-			this.record.set('NoReply', !i.checked); 
+			this.record.set('NoReply', !i.checked);
 		}
 
 		if (i.checked) {
 			this.updateReplyScope();
 		}
-		
+
 		this.replyScopeEl[action]('disabled');
 	},
 
@@ -314,7 +329,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return;
 		}
 
-		menu = 
+		menu =
 			Ext.widget('menu', {
 				defaults: {
 					ui: 'nt-menuitem',
@@ -368,7 +383,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			}
 
 			this.replyOptionEl.addCls('picker');
-			this.replyScopeEl.show();	
+			this.replyScopeEl.show();
 		}
 		else {
 			this.replyOptionEl.removeCls('picker');
@@ -383,10 +398,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	/**
 	 * Handle the reply-picker selection.
 	 *
-	 * Note: If a user chooses to allow reply, make sure we set both the reply option 
-	 * as well as the intended scope (Open, ForCredit...). 
+	 * Note: If a user chooses to allow reply, make sure we set both the reply option
+	 * as well as the intended scope (Open, ForCredit...).
 	 * When the no-reply is set to true, it will override everyhing else.
-	 * 
+	 *
 	 * @param  {Ext.MenuItem} item [description]
 	 * @param  {Ext.Menu} menu [description]
 	 */
@@ -447,7 +462,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.record.set({
 				'Body': v.body,
 				'Subject': v.title,
-				'NoReply': !Boolean(isAllowReply) 
+				'NoReply': !Boolean(isAllowReply)
 			});
 
 			this.EmailActions.sendEmail(this.record)
@@ -467,7 +482,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					});
 				});
 		}
-		
+
 	},
 
 	allowNavigation: function () {

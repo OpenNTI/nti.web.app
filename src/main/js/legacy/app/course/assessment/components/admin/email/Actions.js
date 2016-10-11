@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	extend: 'NextThought.common.Actions',
 
 	sendEmail: function (record, postURL, scope) {
-		var me = this, 
+		var me = this,
 			data = record && record.asJSON(),
 			params = {};
 
@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		if (!scope) {
-			scope = record.get('scope'); 
+			scope = record.get('scope');
 		}
 
 		if (scope === 'All') {
@@ -39,8 +39,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			params['scope'] = scope;
 		}
 
+		params['include-instructors'] = Boolean(record && record.get('includeInstructors'));
+
 		// NOTE: The reply to scope is only applicable for when the user selects All as the target scope.
-		// The may choose to only allow reply from a subset of the All group (open, enrolled...). 
+		// The may choose to only allow reply from a subset of the All group (open, enrolled...).
 		// That's why we set it here.
 		if (!record.get('NoReply') && record.get('scope') === 'All') {
 			params['replyToScope'] = record.get('replyScope');
