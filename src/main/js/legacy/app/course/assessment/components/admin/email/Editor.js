@@ -40,12 +40,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 									{tag: 'label', 'for': 'reply-check-toggle', html: 'Allow Replies'}
 								]},
 								{tag: 'span', cls: 'reply-scope link arrow', html: ''}
-							]},
-							{cls: 'cc-instructors option', cn: [
-								{tag: 'span', cls: 'toggle', cn : [
-									{tag: 'input', type: 'checkbox', id: 'cc-instructors-toggle', cls: 'cc-instructors-check'},
-									{tag: 'label', 'for': 'cc-instructors-toggle', html: 'Copy All Instructors'}
-								]}
 							]}
 						]}
 					]
@@ -53,12 +47,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				]}
 		]),
 
-	footerControlsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
-		{tag: 'div', cls:'toggle', cn: [
+	footerControlsTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'span', cls:'toggle', cn: [
 			{tag: 'input', type: 'checkbox', id: 'email-copy-toggle', cls: 'email-copy'},
 			{tag: 'label', 'for': 'email-copy-toggle', html: 'Send me a copy of the email'}
+		]},
+		{tag: 'span', cls: 'toggle', cn : [
+			{tag: 'input', type: 'checkbox', id: 'cc-instructors-toggle', cls: 'cc-instructors-check'},
+			{tag: 'label', 'for': 'cc-instructors-toggle', html: 'Copy All Instructors'}
 		]}
-	)),
+	])),
 
 	headerTplOrder: '{toolbar}{title}',
 	cls: 'email-editor scrollable',
@@ -70,8 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		receiverEl: '.row.receiver .field',
 		replyOptionEl: '.reply-option',
 		replyScopeEl: '.reply-option .reply-scope',
-		replyCheckBoxEl: '.reply-option .reply-check',
-		ccInstructorsEl: '.cc-instructors .cc-instructors-check'
+		replyCheckBoxEl: '.reply-option .reply-check'
 	},
 
 	initComponent: function () {
@@ -100,7 +97,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.saveButtonEl.setHTML(' Send Email');
 		this.mon(this.replyScopeEl, 'click', this.replyPickerClicked.bind(this));
 		this.mon(this.replyCheckBoxEl, 'click', this.replyCheckboxClicked.bind(this));
-		this.mon(this.ccInstructorsEl, 'click', this.copyInstructorsClicked.bind(this));
 	},
 
 	setupTitleField: function () {
@@ -110,10 +106,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	setupFooterControls: function () {
-		var left = this.footerEl.down('.left'), copyCheckboxEl;
+		var left = this.footerEl.down('.left');
 		if (left) {
 			this.footerControlsTpl.append(left);
-			copyCheckboxEl = this.footerEl.down('.email-copy');
+
+			const copyCheckboxEl = this.footerEl.down('.email-copy');
+			const copyInstructorsEl = this.footerEl.down('.cc-instructors-check');
+
 			if (copyCheckboxEl) {
 				// On by default for Group emails.
 				copyCheckboxEl.dom.checked = !this.isIndividualEmail;
@@ -121,6 +120,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				if (this.record) {
 					this.record.set('Copy', !this.isIndividualEmail);
 				}
+			}
+			if (copyInstructorsEl) {
+				this.mon(copyInstructorsEl, 'click', this.copyInstructorsClicked.bind(this));
 			}
 		}
 	},
