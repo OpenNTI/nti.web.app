@@ -31,12 +31,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		comment = comment || NextThought.model.forums.Post.create();
 
 		const originalBody = comment.get('body');
+		let depth;
 		comment.set('body', values.body);
 
 		isEdit = isEdit && !Ext.isEmpty(comment.get('href'));
 
 		if (isEdit) {
 			postLink = undefined;
+			depth = comment.get('depth');
 		}
 
 		return comment.saveData({url: postLink})
@@ -46,6 +48,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 					//TODO: increment PostCount in topic the same way we increment reply count in notes.
 					if (!isEdit) {
 						topic.set('PostCount', topic.get('PostCount') + 1);
+					}
+					else {
+						// Note: reset the depth, since editing shouldn't affect it
+						// and it's non-persistent field.
+						rec.set('depth', depth);
 					}
 
 					return rec;
