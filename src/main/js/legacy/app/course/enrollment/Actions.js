@@ -22,8 +22,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 	 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
 	 */
 	dropCourse: function (course, callback) {
-		var me = this;
-		enrollment = me.CourseStore.findEnrollmentForCourse(course.getId()),
+		var me = this,
+			enrollment = me.CourseStore.findEnrollmentForCourse(course.getId()),
 			courseHref = course.get('href');
 
 
@@ -52,6 +52,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 				]).then(function (results) {
 					var success = results[1];
 
+					if (success) {
+						const loadedCourse = me.CourseStore.findCourseForNtiid(course.getId());
+						if (loadedCourse && course && loadedCourse !== course) {
+							loadedCourse.setEnrolled(false);
+							course = loadedCourse;
+						}
+					}
+					
 					callback.call(null, success, true);
 				}).catch(function (reason) {
 					console.error('Failed to enroll in course: ', reason);

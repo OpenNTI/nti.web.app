@@ -528,7 +528,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	onDrop: function () {
-		this.pushRoute('', '/');
+		// this.pushRoute('', '/');
 	},
 
 	showCourse: function (course) {
