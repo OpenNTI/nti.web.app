@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					let err = resp && resp.error;
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
-					} else if (err && err.status === 404) {
+					} else if (err && (err.status === 404 || err.status === 403)) {
 						me.handleDeletionError(assignment);
 					} else if (err && err.status === 422 && responseJSON && responseJSON.field === 'filename') {
 						me.handleFileUploadError(assignment);
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					let err = resp && resp.error;
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
-					} else if (err && err.status === 404) {
+					} else if (err && (err.status === 404 || err.status === 403)) {
 						me.handleDeletionError(assignment);
 					}
 					fulfill(err);
