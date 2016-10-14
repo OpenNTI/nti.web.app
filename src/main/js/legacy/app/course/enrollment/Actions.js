@@ -1,9 +1,10 @@
 var Ext = require('extjs');
 var ParseUtils = require('../../../util/Parsing');
-var CommonActions = require('../../../common/Actions');
-var CoursesStateStore = require('../../library/courses/StateStore');
-var CoursesActions = require('../../library/courses/Actions');
-var PathActions = require('../../navigation/path/Actions');
+require('../../../common/Actions');
+require('../../library/courses/StateStore');
+require('../../library/courses/Actions');
+require('../../navigation/path/Actions');
+const {wait} = require('legacy/util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions', {
@@ -37,6 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 				var updateCatalog, updateEnrolled;
 
 				course.setEnrolled(false);
+				wait(500).then(() =>  course.fireEvent('dropped'));
 				updateCatalog = me.CourseActions.loadAllCourses();
 
 				updateEnrolled = new Promise(function (fulfill, reject) {
@@ -59,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 							course = loadedCourse;
 						}
 					}
-					
+
 					callback.call(null, success, true);
 				}).catch(function (reason) {
 					console.error('Failed to enroll in course: ', reason);
