@@ -140,6 +140,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
+	setFooterForCollection: function (collection) {
+		// NOTE: Only, create a new footer if we don't the old one.
+		if (!this.currentFooter) {
+			const footer = this.buildFooter && this.buildFooter(collection);
+			this.currentFooter = this.insert(2, footer);
+		}
+	},
+
 	buildFooter: function (collection) {
 		var me = this,
 			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
@@ -159,7 +167,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					title: inlineEditor.creationText,
 					InlineEditor: inlineEditor,
 					parentRecord: collection,
-					doSelectNode: me.doSelectNode
+					doSelectNode: me.doSelectNode,
+					afterSave: function () {
+						if (me.selectedRecord && me.selectWithoutNavigation) {
+							me.selectWithoutNavigation(me.selectedRecord);
+						}
+					}
 				};
 
 

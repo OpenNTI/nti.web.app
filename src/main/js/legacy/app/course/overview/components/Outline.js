@@ -177,7 +177,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				outline: this.outline,
 				shouldShowDates: this.shouldShowDates,
 				doSelectNode: this.doSelectNode.bind(this),
-				isEditing: this.isEditing
+				isEditing: this.isEditing,
+				selectWithoutNavigation: this.selectRecord.bind(this)
 			});
 		}
 

@@ -57,7 +57,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {Event} e Browser Event
 	 */
 	onClick: function (e) {
-		var me = this;
+		const me = this;
+		const bodyListEl = this.el && this.el.up('.outline-list');
 
 		if (!this.inlineEditorEl.isVisible()) {
 			this.showEditor();
@@ -67,6 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					if (me.afterSave) {
 						me.afterSave(rec);
 					}
+					me.el.scrollIntoView(bodyListEl);
 				});
 		}
 	},
