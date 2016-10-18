@@ -200,7 +200,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (pointEl) {
-			pointEl.update(assignment.getTotalPointsLabel());
+			if (assignment.getTotalPointsLabel()) {
+				pointEl.update(assignment.getTotalPointsLabel());
+			}
+			else {
+				pointEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+			}
 		}
 
 		assignment.getHistory()
