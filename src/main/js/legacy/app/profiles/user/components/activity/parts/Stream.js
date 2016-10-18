@@ -45,6 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	loadBatch: function (batch) {
+		this.currentBatch = batch;
 		if (batch.Items.length) {
 			this.removeEmpty();
 			this.fillInItems(batch.Items);
@@ -55,6 +56,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		if (batch.isLast) {
 			this.onDone(this.StreamSource);
 			this.isOnLastBatch = true;
+		}
+	},
+
+
+	fillInItems () {
+		this.callParent(arguments);
+
+		const listContainer = this.PAGES[0];
+		if (listContainer && listContainer.items.getCount() === 0) {
+			this.onEmpty(this.currentBatch);
 		}
 	},
 
