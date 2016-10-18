@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../../../../util/Dom');
-var EditorEditor = require('../../../../../../editor/Editor');
-var ModelEmail = require('../../../../../../model/Email');
-var EmailActions = require('./Actions');
-var EmailEmailTokenField = require('./EmailTokenField');
+const Ext = require('extjs');
+const DomUtils = require('legacy/util/Dom');
+const Globals = require('legacy/util/Globals');
+require('legacy/editor/Editor');
+require('legacy/model/Email');
+require('./Actions');
+require('./EmailTokenField');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
@@ -473,7 +474,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					me.presentSuccessMessage();
 					me.fireEvent('after-save');
 				})
-				.catch(function (e) {
+				.catch(function (err) {
+					console.error(Globals.getError(err));
 					if (me.el) {
 						me.el.unmask();
 					}
@@ -482,6 +484,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						title: 'Error',
 						msg: 'There was an error sending your email. Please try again later.'
 					});
+
+					Ext.Error.raise('Error Sending Email: ' + Globals.getError(err));
 				});
 		}
 
