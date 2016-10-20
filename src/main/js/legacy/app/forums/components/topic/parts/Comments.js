@@ -300,9 +300,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		if (typeof record.get('Creator') === 'string') {
 			loadUser = UserRepository.getUser(record.get('Creator'))
 				.then(function (user) {
+					if (!me.store) {return;}
+
+					me.store.suspendEvents();
+
 					record.set({
 						'Creator': user
 					});
+
+					me.store.resumeEvents();
 
 					me.mon(user, {
 						single: true,
