@@ -26,7 +26,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.EditorCmp = this.add({
 			xtype: 'react',
 			component: Editor,
-			NTIID: this.assignmentId,
+			assignmentId: this.assignmentId,
+			courseId: this.bundle.getId(),
 			bundle: this.bundle,
 			pageSource: new FakePageSource(pageSource),
 			onDeleted: () => this.deletedAssignment(),
