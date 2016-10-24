@@ -171,9 +171,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	refreshRosterGrid () {
 		const {grid} = this;
 		if (grid && grid.store) {
-			let view = grid.getView();
-			if (view.getViewRange()) {
+			const view = grid.getView();
+			if (view && view.getViewRange().length > 0 && this.initialLoad) {
 				view.refresh();
+				this.initialLoad = false;
 			}
 
 			setTimeout(() => this.adjustHeight(), 1);
@@ -253,6 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.currentBundle = instance;
 		this.setupEmail();
 		this.setupInvite();
+		this.initialLoad = true;
 
 		if (Ext.isEmpty(roster) || !roster) {
 			if (this.store) {this.store.destroyStore();}
