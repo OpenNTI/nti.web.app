@@ -698,6 +698,10 @@
 			visibility: hidden;
 		}
 
+		.commentAvatar .profile {
+			z-index: 0;
+		}
+
 		&:hover{
 			.like{
 				visibility: visible !important;
