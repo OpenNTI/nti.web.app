@@ -129,6 +129,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				dataIndex: 'Grade', allowTab: true, name: 'grade', width: 120,/*90*/
 				tdCls: 'text score',
 				renderer: function (v, col, rec) {
+					const item = rec.get('item');
+					const totalPoints = item && item.get('total_points');
+
 					var grade = rec.get('Grade'),
 						scoreTpl = Ext.DomHelper.markup({tag: 'input', type: 'text', value: rec.get('grade')}),
 						isExcused = grade && grade.get('IsExcused'),
@@ -143,7 +146,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						});
 
 						return scoreTpl + excusedTpl;
+					} else if (totalPoints) {
+						col.tdCls += ' total_points';
+
+						const pointTpl = Ext.DomHelper.markup({
+							tag: 'span',
+							cls: 'total-points',
+							html: `/ ${totalPoints}`
+						});
+
+						return scoreTpl + pointTpl;
 					}
+
 					return scoreTpl;
 
 				},

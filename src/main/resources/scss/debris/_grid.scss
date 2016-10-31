@@ -281,6 +281,18 @@
 				overflow: visible;
 			}
 
+			&.score {
+				input {
+					text-align: right;
+				}
+
+				.total-points {
+					padding-left: 0.3rem;
+					color: $primary-grey;
+					font-weight: 400;
+				}
+			}
+
 			input {
 				font: normal normal 1em/1 'Open Sans';
 				width: 45%;

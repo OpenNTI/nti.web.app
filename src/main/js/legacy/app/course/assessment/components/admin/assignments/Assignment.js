@@ -87,6 +87,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 									tag: 'span', cls: 'grade-excused',
 									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
 								}
+							]},
+							{ tag: 'tpl', 'if': 'this.hasTotalPoints(values) && !this.isGradeExcused(values)', cn: [
+								{
+									tag: 'span', cls: 'total-points',
+									html: '/ {[this.getTotalPoints(values)]}'
+								}
 							]}
 						]}
 					]), {
@@ -103,6 +109,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 									grade = historyItem && historyItem.get('Grade');
 
 								return grade && grade.get('IsExcused');
+							},
+
+							hasTotalPoints: (values) => {
+								const {HistoryItemSummary:historyItem} = values;
+								const item = historyItem.get('item');
+
+								return item && !!item.get('total_points');
+							},
+
+							getTotalPoints: (values) => {
+								const {HistoryItemSummary:historyItem} = values;
+								const item = historyItem.get('item');
+
+								return item && item.get('total_points');
 							}
 						}
 					)
