@@ -88,7 +88,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		this.maybeShowAllowedTime();
 		this.assignment.on('refresh', () => {
 			if (this.pageInfo && this.pageInfo.regenerate) {
-				this.pageInfo = this.pageInfo.regenerate();
+				// Pass the updated assignment
+				this.pageInfo = this.pageInfo.regenerate(this.assignment);
 			}
 			this.showReader();
 			this.maybeShowAllowedTime();
