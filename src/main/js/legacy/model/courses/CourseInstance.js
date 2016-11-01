@@ -349,6 +349,17 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	//get a count of how many things the user has done in the course
 	getCompletionStatus: function () {},
 
+
+	getTocFor (contentPackageID) {
+		const bundle = this.get('Bundle');
+
+		return this.getWrapper()
+			.then((enrollment) => {
+				return bundle.getTocFor(contentPackageID, enrollment.get('Status'));
+			});
+	},
+
+
 	getTocs: function () {
 		var bundle = this.get('Bundle');
 
@@ -357,6 +368,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				return bundle.getTocs(enrollment.get('Status'));
 			});
 	},
+
+
+	getContentPackage (id) {
+		const bundle = this.get('Bundle');
+
+		return bundle.getContentPackage(id);
+	},
+
 
 	getContentPackages: function () {
 		var bundle = this.get('Bundle');

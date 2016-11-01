@@ -136,6 +136,12 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return this.getAsset('thumb');
 	},
 
+	getTocFor (contentPackageID, status) {
+		const p = this.getContentPackage(contentPackageID);
+
+		return Promise.resolve(p.getToc(status));
+	},
+
 	getTocs: function (status) {
 		var packages = this.get('ContentPackages');
 
@@ -152,6 +158,16 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 	getIcon: function () {
 		return this.get('icon');
+	},
+
+	getContentPackage (id) {
+		const packages = this.get('ContentPackages');
+
+		for (let p of packages) {
+			if (p.get('NTIID') === id) {
+				return p;
+			}
+		}
 	},
 
 	getContentPackages: function () {
