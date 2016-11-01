@@ -75,9 +75,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
+			const contextId = this.activeUser && this.activeUser.get('NTIID');
 			AnalyticsUtil.getResourceTimer(id, {
 				type: 'profile-activity-viewed',
-				ProfileEntity: id
+				ProfileEntity: id,
+				RootContextId: contextId
 			});
 
 			this.hasCurrentTimer = true;
