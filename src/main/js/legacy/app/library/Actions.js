@@ -159,8 +159,11 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			.catch(this.ContentActions.findContentByPriority.bind(this.ContentActions, fn));
 	},
 
-	getVideoIndex: function (bundle) {
-		console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
+
+	getVideoIndex: function (bundle, contentPackageID) {
+		//For now at least it looks like we need this for raw videos in content. Need to
+		//look closer at it, but for now remove the depreciation message.
+		// console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
 		var cache = this.LibraryStore.videoIndex = this.LibraryStore.videoIndex || {},
 			index = bundle.getId(), toc, root;
 
@@ -176,70 +179,77 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 
 		if (cache[index]) { return cache[index]; }
 
-		cache[index] = bundle.getTocs()
-			.then(function (tocs) {
-				toc = tocs[0];
+		const getToc = contentPackageID ? bundle.getTocFor(contentPackageID) : bundle.getTocs().then(tocs => tocs[0]);
+		const contentPackage = contentPackageID ? bundle.getContentPackage(contentPackageID) : bundle.getContentPackages[0];
 
-				var content = bundle.getContentPackages()[0],
-					ref = toc && toc.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
+		cache[index] = Promise.all([
+			getToc,
+			contentPackage
+		])
+		.then((results) => {
+			const content = results[1];
 
-				root = content && content.get('root');
+			//TODO: don't rely on closure to set these
+			toc = results[0];
+			root = content && content.get('root');
 
-				if (!ref || !toc) {
-					return Promise.reject('No video index defined, or no toc yet for ' + bundle);
-				}
+			const ref = toc && toc.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
 
-				return ContentProxy.request({
-					url: getURL(ref.getAttribute('href'), root),
-					ntiid: content.get('NTIID'),
-					contentType: 'text/json',
-					expectContentType: 'application/json'
+			if (!ref || !toc) {
+				return Promise.reject('No video index, defined, or no toc yet for ' + bundle);
+			}
+
+			return ContentProxy.request({
+				url: getURL(ref.getAttribute('href'), root),
+				ntiid: content.get('NTIID'),
+				contentType: 'text/json',
+				expectContentType: 'application/json'
+			});
+		})
+		.then(function (json) {
+			var vi, n, keys, keyOrder = [],
+				containers;
+
+			if (Ext.isString(json)) {
+				json = Ext.JSON.decode(json);
+			}
+
+			containers = (json && json.Containers) || {};
+			keys = Ext.Object.getKeys(containers);
+
+			try {
+				keys.sort(function (a, b) {
+					var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
+						d = toc.querySelector(query('topic', b)),
+						p = d && c.compareDocumentPosition(d);
+
+					/*jshint bitwise:false*/
+					return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
 				});
-			})
-			.then(function (json) {
-				var vi, n, keys, keyOrder = [],
-					containers;
+			} catch (e) {
+				console.warn('Potentially unsorted:', e.stack || e.message || e);
+			}
 
-				if (Ext.isString(json)) {
-					json = Ext.JSON.decode(json);
-				}
+			keys.forEach(function (k) {
+				keyOrder.push.apply(keyOrder, containers[k]);
+			});
 
-				containers = (json && json.Containers) || {};
-				keys = Ext.Object.getKeys(containers);
+			vi = (json && json.Items) || json;
 
-				try {
-					keys.sort(function (a, b) {
-						var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
-							d = toc.querySelector(query('topic', b)),
-							p = d && c.compareDocumentPosition(d);
-
-						/*jshing bitwise:false*/
-						return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
-					});
-				} catch (e) {
-					console.warn('Potentially unsorted:', e.stack || e.message || e);
-				}
-
-				keys.forEach(function (k) {
-					keyOrder.push.apply(keyOrder, containers[k]);
-				});
-
-				vi = (json && json.Items) || json;
-
-				for (n in vi) {
-					if (vi.hasOwnProperty(n)) {
-						n = vi[n];
-						if (n && !Ext.isEmpty(n.transcripts)) {
-							n.transcripts = n.transcripts.map(makeAbsolute);
-						}
+			for (n in vi) {
+				if (vi.hasOwnProperty(n)) {
+					n = vi[n];
+					if (n && !Ext.isEmpty(n.transcripts)) {
+						n.transcripts = n.transcripts.map(makeAbsolute);
 					}
 				}
+			}
 
-				vi._order = keyOrder;
-				vi.containers = containers;
+			vi._order = keyOrder;
+			vi.containers = containers;
 
-				return vi;
-			});
+			return vi;
+		});
 
 		cache[index].catch(function (reason) {
 			console.error('Failed to load video index', reason);

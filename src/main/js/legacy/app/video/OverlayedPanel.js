@@ -43,7 +43,9 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			reader = config.reader,
 			data = DomUtils.parseDomObject(dom),
 			description = el.down('span.description'),
-			bundle = reader.getLocation().currentBundle,
+			location = reader.getLocation(),
+			bundle = location.currentBundle,
+			content = location.ContentNTIID,
 			playlist = [],
 			size = this.getSize(dom, 640);
 
@@ -103,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.callParent([config]);
 
-		this.LibraryActions.getVideoIndex(bundle)
+		this.LibraryActions.getVideoIndex(bundle, content)
 			.then(this.fillVideo.bind(this));
 	},
 
