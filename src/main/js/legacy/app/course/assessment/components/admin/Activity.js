@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var rec = this.callParent(arguments),
 			path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
 
-		if (rec && isMe(rec.get('user'))) {
+		if (rec) {
 			Service.request(path).then(function (submission) {
 				submission = ParseUtils.parseItems(submission)[0];
 				var user = submission.get('Creator');
@@ -107,9 +107,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				return UserRepository.getUser(submission.get('Creator'));
 
 			}).then(function (u) {
-
-				rec.set('suffix', ' for ' + u);
-
+				rec.set({
+					'user': u,
+					'suffix': ' for ' + u
+				});
 			}).catch(function (r) {
 				console.error(
 					'Failed associate instructor feedback activity to a students assignment.',
