@@ -53,7 +53,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	getItemList: function () {
 		return this.bundle.getAllSurveys();
+	},
+
+
+	getSelectionFromRecord (record) {
+		return this.bundle.getAllSurveys()
+			.then(function (surveys) {
+				const target = record.get('Target-NTIID');
+
+				for (let survey of surveys) {
+					if (survey.getId() === target) {
+						return survey;
+					}
+				}
+			});
 	}
 });
