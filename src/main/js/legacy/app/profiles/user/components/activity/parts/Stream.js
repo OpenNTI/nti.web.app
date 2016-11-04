@@ -15,11 +15,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		var joined;
 
 		this.user = user;
+
 		if (this.hasInitialWidget() && this.rendered) {
 			joined = this.down('joined-event');
+
 			if (joined && joined.setUser) {
 				joined.setUser(this.user);
 			}
+		}
+
+		if (this.emptyCmp) {
+			this.emptyCmp.setUser(this.user);
 		}
 	},
 
@@ -90,7 +96,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		if (!this.emptyCmp) {
 			this.emptyCmp = cmp.add({
 				xtype: 'profile-activity-part-empty',
-				hasFilters: hasFilters
+				hasFilters: hasFilters,
+				user: this.user
 			});
 		}
 	},
