@@ -179,7 +179,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 					if (route.object.id) {
 						return Service.getObject(decodeFromURI(route.object.id))
-									.then(me.reader.showNote.bind(me.reader));
+									.then(me.reader.showNote.bind(me.reader))
+									.catch(function (reason) {
+										console.log('Failed to resolve note: ', reason);
+									});
 					}
 
 					return Promise.resolve();
