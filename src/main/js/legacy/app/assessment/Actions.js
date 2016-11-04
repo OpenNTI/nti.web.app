@@ -249,7 +249,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					let err = resp && resp.error;
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
-					} else if (err && (err.status === 404 || err.status === 403)) {
+					} else if (err && err.status === 403) {
+						me.handleUnavailableError(assignment);
+					} else if (err && err.status === 404) {
 						me.handleDeletionError(assignment);
 					}
 					fulfill(err);
@@ -280,6 +282,28 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			}
 		});
 	},
+
+
+	handleUnavailableError (assignment) {
+		Ext.MessageBox.alert({
+			title: 'This assignment is no longer available.',
+			msg: 'Clicking OK will exit the assignment',
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: 'OK'
+				}
+			},
+			fn: function (button) {
+				if (button === 'yes' && assignment) {
+					assignment.fireEvent('deleted');
+				}
+			}
+		});
+	},
+
 
 	handleDeletionError: function (assignment) {
 		Ext.MessageBox.alert({
