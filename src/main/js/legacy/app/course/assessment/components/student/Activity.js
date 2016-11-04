@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var UserRepository = require('../../../../../cache/UserRepository');
 var MixinsRouter = require('../../../../../mixins/Router');
 var {isMe} = require('legacy/util/Globals');
+const {getFormattedString} = require('legacy/util/Localization');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.Activity', {
@@ -269,11 +270,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	addFeedback: function (f) {
-		var c = f.get('Creator'),
-			label = isMe(c) ?
-				getFormattedString('NextThought.view.courseware.assessment.Activity.youfeedback', {name: 'You'}) :
-				getFormattedString('NextThought.view.courseware.assessment.Activity.theyfeedback', {name: '--'}),
-			r = this.addEvent(this.getEventConfig(label, f.get('AssignmentId'), f.get('CreatedTime')));
+		const c = f.get('Creator');
+		const r = this.createFeedbackEvent(f);
 
 		if (r) {
 			if (!isMe(c)) {
@@ -289,6 +287,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		return r;
+	},
+
+	createFeedbackEvent (f) {
+		var c = f.get('Creator'),
+			label = isMe(c) ?
+				getFormattedString('NextThought.view.courseware.assessment.Activity.youfeedback', {name: 'You'}) :
+				getFormattedString('NextThought.view.courseware.assessment.Activity.theyfeedback', {name: '--'});
+
+		return this.addEvent(this.getEventConfig(label, f.get('AssignmentId'), f.get('CreatedTime')));
 	},
 
 	setTitle: function (title) {

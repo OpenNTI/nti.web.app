@@ -5,6 +5,8 @@ var StudentActivity = require('../student/Activity');
 var CoursewareCourseActivity = require('../../../../../model/courseware/CourseActivity');
 var {isMe} = require('legacy/util/Globals');
 const { encodeForURI } = require('nti-lib-ntiids');
+const {getFormattedString} = require('legacy/util/Localization');
+
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
 	extend: 'NextThought.app.course.assessment.components.student.Activity',
@@ -95,28 +97,40 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	deriveEvents: Ext.emptyFn,
 
 	addFeedback: function (f) {
-		var rec = this.callParent(arguments),
-			path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
+		const rec = this.createFeedbackEvent(f);
+		const path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
 
 		if (rec) {
-			Service.request(path).then(function (submission) {
+			const creator = UserRepository.getUser(f.get('Creator'));
+			const student = Service.request(path).then(function (submission) {
 				submission = ParseUtils.parseItems(submission)[0];
 				var user = submission.get('Creator');
 				rec.set('user', user);
 
 				return UserRepository.getUser(submission.get('Creator'));
 
-			}).then(function (u) {
-				rec.set({
-					'user': u,
-					'suffix': ' for ' + u
-				});
-			}).catch(function (r) {
-				console.error(
-					'Failed associate instructor feedback activity to a students assignment.',
-					' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one, because:\n',
-						r, '\n', f.get('href'));
 			});
+			Promise.all([creator, student])
+				.then(function (users) {
+					const i = users[0];
+					const u = users[1];
+
+					rec.set({
+						'user': u,
+						'suffix': ' for ' + u
+					});
+
+					if (!isMe(i)) {
+						rec.set({
+							label: getFormattedString('NextThought.view.courseware.assessment.Activity.theyfeedback', {name: i})
+						});
+					}
+				}).catch(function (r) {
+					console.error(
+						'Failed associate instructor feedback activity to a students assignment.',
+						' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one, because:\n',
+							r, '\n', f.get('href'));
+				});
 		}
 
 		return rec;
