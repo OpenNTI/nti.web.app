@@ -87,6 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 			this.addChildRouter(cmp);
 			cmp.courseContainer = this;
 			cmp.setShadowRoot = this.setShadowRoot.bind(this, xtype);
+			cmp.clearRouteState = this.clearRouteStateFor.bind(this, xtype);
 		}
 
 		return cmp;
@@ -132,6 +133,31 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		//reapply the state so the nav can get the new root
 		this.applyState(this.activeState);
 	},
+
+
+	setCmpRouteState (xtype, state) {
+		this.ROUTE_STATES = this.ROUTE_STATES || {};
+
+		this.ROUTE_STATES[xtype] = state;
+	},
+
+
+	getCmpRouteState (xtype) {
+		return  (this.ROUTE_STATES || {})[xtype];
+	},
+
+
+	clearRouteStates () {
+		this.ROUTE_STATES = {};
+	},
+
+
+	clearRouteStateFor (xtype) {
+		if (this.ROUTE_STATES) {
+			delete this.ROUTE_STATES[xtype];
+		}
+	},
+
 
 	getRoot: function (xtype) {
 		var shadow = this.SHADOW_ROOTS && this.SHADOW_ROOTS[xtype];
