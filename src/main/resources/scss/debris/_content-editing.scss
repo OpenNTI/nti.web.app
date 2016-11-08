@@ -586,8 +586,10 @@ input[type=number]{
 
 		.outline-node-listitem {
 			border-bottom: 1px solid $tertiary-grey-alt;
-			max-height: 70px;
+			height: 3.75em;
 			transition: max-height 0.5s;
+			position: relative;
+			overflow: hidden;
 
 			&.dragging {
 				border-bottom: none;
@@ -608,6 +610,7 @@ input[type=number]{
 				width: 75px;
 				text-align: center;
 				position: relative;
+				padding-top: 13px;
 
 				.date-calendar {
 					margin-left: 15px;
@@ -642,17 +645,22 @@ input[type=number]{
 
 			.controls {
 				width: 230px;
+				position: absolute;
+				right: 10px;
+				top: 0px;
 			}
 
 			.title {
+				position: absolute;
+				left: 75px;
+				top: 50%;
+				transform: translateY(-50%);
 				width: 415px;
 				color: $primary-grey;
 				font-size: 14px;
 				font-weight: 600;
-				vertical-align: middle;
-				padding: 5px 0;
 				cursor: pointer;
-				max-height: 60px;
+				@include limit-lines($lines: 3, $line-height: 1.40);
 			}
 		}
 	}

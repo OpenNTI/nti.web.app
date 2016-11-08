@@ -1,16 +1,14 @@
 var Ext = require('extjs');
-var DndOrderingItem = require('../../../../../../../mixins/dnd/OrderingItem');
-var AppMoveInfo = require('../../../../../../../model/app/MoveInfo');
-var ControlsPublish = require('../../controls/Publish');
-const {wait} = require('legacy/util/Promise');
+require('legacy/mixins/dnd/OrderingItem');
+require('legacy/model/app/MoveInfo');
+require('../../controls/Publish');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ListItem', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-outlinenode-listitem',
 
 	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem',
-		'EllipsisText': 'NextThought.mixins.EllipsisText',
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
 	},
 
 	cls: 'outline-node-listitem',
@@ -75,7 +73,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				// Set title
 				me.titleEl.update(me.record.getTitle());
-				me.truncateText(me.titleEl.dom, null, true);
 
 				// Add the controls
 				let cmp;
