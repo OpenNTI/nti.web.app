@@ -100,6 +100,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		if (this.assignment) {
 			this.assignment.destroy();
 		}
+
+		if (this.assignmentEditor) {
+			this.assignmentEditor.destroy();
+			delete this.assignmentEditor;
+		}
 	},
 
 
@@ -164,6 +169,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			pageSource: config.pageSource,
 			assignment: config.assignment,
 			bundle: config.bundle,
+			clearRouteState: () => {
+				if (this.clearRouteState) {
+					this.clearRouteState();
+				}
+			},
 			gotoAssignments: () => {
 				this.pushRoute('Assignments', '/');
 			},
