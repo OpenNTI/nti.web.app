@@ -85,16 +85,24 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	updateAssignment () {
 		const assignment = this.assignment;
 
-		if (assignment && assignment.isModel && !assignment.isDeleted) {
-			assignment.updateFromServer();
+		// NOTE: since we want to make sure that the outline that a particular assignment belongs to
+		// is updated when we exit the assignment editor, go ahead and refresh the assignments collection.
+		// this allows us to place assignments correctly in lessons they belong to.
+		if (this.updateAssignments) {
+			this.updateAssignments();
 		}
+		else {
+			if (assignment && assignment.isModel && !assignment.isDeleted) {
+				assignment.updateFromServer();
+			}
 
-		if (this.findAssignment) {
-			this.findAssignment(this.assignmentId)
-				.then(a =>
-					!a.isDeleted
-					&& a !== assignment
-					&& a.updateFromServer());
+			if (this.findAssignment) {
+				this.findAssignment(this.assignmentId)
+					.then(a =>
+						!a.isDeleted
+						&& a !== assignment
+						&& a.updateFromServer());
+			}
 		}
 	},
 
