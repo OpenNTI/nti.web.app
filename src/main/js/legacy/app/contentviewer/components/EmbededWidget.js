@@ -1,4 +1,7 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const Path = require('path');
+const Url = require('url');
+const QueryString = require('query-string');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
@@ -33,33 +36,35 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 	beforeRender: function () {
-		function parse (src) {
-			var out = {};
-			var query = src.split('?')[1] || '';
-
-			query.split('&').forEach(function (param) {
-				var p = param.split('=');
-				out[p[0]] = decodeURIComponent(p[1]);
-			});
-
-			return out;
-		}
-
 		this.callParent(arguments);
 
-		var rd = this.renderData = this.renderData || {};
-		var data = this.data;
-		var defer = /^false$/i.test(data.defer) ? false : (Boolean(data.splash) || /^true$/i.test(data.defer));
-		var query = Ext.Object.fromQueryString(data.source.split('?')[1] || '');
+		const {data} = this;
+		const rd = this.renderData = this.renderData || {};
+		const defer = /^false$/i.test(data.defer) ? false : (Boolean(data.splash) || /^true$/i.test(data.defer));
+
+		let src = Url.parse(data.source);
+
+		if (!Path.isAbsolute(src.pathname)) {
+			const pkg = Url.parse(this.basePath);
+			pkg.pathname = Path.join(pkg.pathname, src.pathname);
+			pkg.search = src.search;
+			src = pkg;
+		}
+
+		const query = QueryString.parse(src.search);
 
 		rd.splash = data.splash ? this.resolveSplashURL(data.splash) : 'data:,';
 		rd.height = data.height || 0;
 
 		this.frameDeferred = defer;
-		this.sourceName = data.uid || parse(data.source)[this.getIdKey()] || this.NO_SOURCE_ID;
-		if (Ext.isEmpty(query[this.getIdKey()])) {
-			data.source += (data.source.indexOf('?') === -1 ? '?' : '&') + this.getIdKey() + '=' + encodeURIComponent(this.sourceName);
+		this.sourceName = data.uid || query[this.getIdKey()] || this.NO_SOURCE_ID;
+
+		if (query[this.getIdKey()] !== this.sourceName) {
+			query[this.getIdKey()] = encodeURIComponent(this.sourceName);
+			src.search = QueryString.stringify(query);
 		}
+
+		data.source = src.format();
 
 		rd.src = defer ? '' : data.source;
 	},
