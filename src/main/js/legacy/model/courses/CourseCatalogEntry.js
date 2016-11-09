@@ -34,6 +34,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		{ name: 'CourseEntryNTIID', type: 'string', persist: false},
 		{ name: 'Credit', type: 'arrayItem', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
+		{ name: 'RichDescription', type: 'string', persist: false },
 		{ name: 'Duration', type: 'string', persist: false },
 		{ name: 'Instructors', type: 'arrayItem', persist: false },
 		{ name: 'Prerequisites', type: 'auto', persist: false },

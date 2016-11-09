@@ -10,7 +10,13 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	cls: 'description-fields',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'body', html: '{description:htmlEncode}' },
+		{tag: 'tpl', 'if': 'richDescription', cn: [
+			{ cls: 'body', html: '{richDescription:htmlDecode}'}
+		]},
+
+		{tag: 'tpl', 'if': '!richDescription', cn: [
+			{ cls: 'body', html: '{description:htmlEncode}' }
+		]},
 
 		{ cls: 'fields', cn: [
 			{ cls: 'row', cn: [
@@ -101,6 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			description: i.get('Description'),
+			richDescription: i.get('RichDescription'),
 			prerequisites: p,
 			courseId: i.get('ProviderUniqueID'),
 			title: i.get('Title'),
