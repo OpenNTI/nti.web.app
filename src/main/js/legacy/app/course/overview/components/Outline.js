@@ -92,6 +92,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	onCollectionUpdate: function (outline) {
 		console.debug('collection update triggered: ', outline);
+		if (this.activeBundle && this.outline && outline.getId() === this.outline.getId()) {
+			this.activeBundle.set('Outline', outline);
+		}
 		this.setOutline(this.activeBundle, outline);
 	},
 

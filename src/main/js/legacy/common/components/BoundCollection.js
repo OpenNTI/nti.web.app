@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 
 		if (this.autoUpdate) {
-			this.addCollectionMonitors();
+			this.addCollectionMonitors(collection);
 		}
 
 		if (this.__activeState && this.transitionStates) {
