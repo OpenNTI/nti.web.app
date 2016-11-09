@@ -149,11 +149,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 
 		if (this.autoUpdate) {
-			this.updateMonitor = this.mon(collection, {
-				single: true,
-				destroyable: true,
-				'update': this.onCollectionUpdate.bind(this, collection)
-			});
+			this.addCollectionMonitors();
 		}
 
 		if (this.__activeState && this.transitionStates) {
@@ -163,6 +159,14 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 
 		this.afterSetCollection(collection);
+	},
+
+	addCollectionMonitors (collection) {
+		this.updateMonitor = this.mon(collection, {
+			single: true,
+			destroyable: true,
+			'update': this.onCollectionUpdate.bind(this, collection)
+		});
 	},
 
 	mergeItems: function (oldItems, newItems) {
@@ -275,7 +279,9 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 			state.cmps.push(me.getEmptyState());
 		}
 
+		body.suspendEvents();
 		body.add(state.cmps);
+		body.resumeEvents();
 
 		return state;
 	},

@@ -99,6 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return Promise.resolve(record);
 		}
 
+		console.debug('About to move record:', record);
 		return newParent.moveToFromContainer(record, newPosition.index, originalPosition.index, originalParent, root)
 			.catch(function (reason) {
 				return Promise.reject({
