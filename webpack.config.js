@@ -9,7 +9,7 @@ const webpack = require('webpack');
 
 const AppCachePlugin = require('appcache-webpack-plugin');
 const StatsPlugin = require('stats-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
+// const CompressionPlugin = require('compression-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const path = require('path');
@@ -187,7 +187,7 @@ exports = module.exports =
 		PROD && new webpack.optimize.UglifyJsPlugin({
 			test: /\.js(x?)($|\?)/i,
 			compress: { warnings: false }
-		}),
-		PROD && new CompressionPlugin({ algorithm: 'gzip' })
+		})//,
+		// PROD && new CompressionPlugin({ algorithm: 'gzip' })
 	].filter(x => x)
 };
