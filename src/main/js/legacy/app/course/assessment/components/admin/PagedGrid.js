@@ -163,6 +163,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					});
 				}
 
+				//If the submission was created from an instructor adding a grade
+				if (item.isSyntheticSubmission()) {
+					return Ext.DomHelper.markup({
+						cls: 'ontime',
+						cn: [
+							{tag: 'span', html: 'Graded '},
+							{tag: 'span', html: Ext.Date.format(submitted, dateFormat)}
+						]
+					});
+				}
+
 				//if submission is before the due date
 				if (due > submitted) {
 					return Ext.DomHelper.markup({

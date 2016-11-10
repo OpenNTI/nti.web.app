@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
 				duration: assignment.isTimed && assignment.getDuration(),
 				isExcused: grade && grade.get('IsExcused'),
-				isNoSubmitAssignment: assignment.isNoSubmit(),
+				isNoSubmitAssignment: assignment.isNoSubmit() || (history && history.isSyntheticSubmission()),
 				isDraft: assignment.isDraft()
 			});
 

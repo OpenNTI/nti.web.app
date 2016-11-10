@@ -338,7 +338,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			due: this.assignment.getDueDate(),
 			maxTime: this.assignment.isTimed && this.assignment.getMaxTime(),
 			duration: this.assignment.isTimed && (this.assignment.getDuration() || historyDuration),
-			isNoSubmitAssignment: this.assignment.isNoSubmit(),
+			isNoSubmitAssignment: this.assignment.isNoSubmit() || (history && history.isSyntheticSubmission()),
 			completed: completed,
 			isExcused: grade && grade.get('IsExcused')
 		}));

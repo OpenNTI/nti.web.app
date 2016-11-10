@@ -31,6 +31,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{name: 'SubmissionCreatedTime', type: 'date', dateFormat: 'timestamp', persist: false},
 		{name: 'pendingAssessment', type: 'singleItem', persist: false},
 		{name: 'Metadata', type: 'auto', persit: false},
+		{name: 'SyntheticSubmission', type: 'boolean', persist: false},
 
 		//set by the store when it loads
 		{name: 'AssignmentId', type: 'string', persit: false},
@@ -132,6 +133,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 	isSubmitted: function () {
 		return this.get('pendingAssessment') || this.get('Submission');
+	},
+
+	isSyntheticSubmission () {
+		return this.get('SyntheticSubmission');
 	},
 
 	getDuration: function () {

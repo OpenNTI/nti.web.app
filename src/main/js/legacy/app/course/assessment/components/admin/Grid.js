@@ -65,6 +65,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.incomplete', {date: Ext.Date.format(d, 'm/d')})
 						});
 					}
+
+					//If the submission was created from an instructor adding a grade
+					if (rec.isSyntheticSubmission()) {
+						return Ext.DomHelper.markup({
+							cls: 'ontime',
+							cn: [
+								{tag: 'span', html: 'Graded '},
+								{tag: 'span', html: Ext.Date.format(s, 'm/d')}
+							]
+						});
+					}
+
 					//if the submisson is before the due date
 					if (d > s) {
 						return Ext.DomHelper.markup({cls: 'ontime', html: getString('NextThought.view.courseware.assessment.admin.Grid.ontime')});

@@ -243,6 +243,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			number = values && values.value,
 			letter = values && values.letter,
 			due = this.assignment.getDueDate(),
+			isNoSubmitAssignment = this.assignmentHistory.isSyntheticSubmission(),
 			submission = this.assignmentHistory.get('Submission'),
 			completed = submission && submission.get('CreatedTime'),
 			maxTime = this.assignment.isTimed && this.assignment.getMaxTime(),
@@ -253,7 +254,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 				due,
 				completed,
 				maxTime,
-				duration
+				duration,
+				isNoSubmitAssignment
 			});
 
 		this.letterEl.setStyle({display: 'none'});
@@ -270,7 +272,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 
 		if (status.completed) {
-			if (status.overdue) {
+			if (isNoSubmitAssignment) {
+				this.completedEl.addCls('ontime');
+				this.completedEl.dom.setAttribute('data-qtip', status.completed.date);
+				this.completedEl.update('Graded');
+			} else if (status.overdue) {
 				this.completedEl.addCls('late');
 				this.completedEl.dom.setAttribute('data-qtip', status.overdue.qtip);
 				this.completedEl.update(TimeUtils.getNaturalDuration(completed.getTime() - due.getTime(), 1) + ' late');
