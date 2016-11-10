@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		const isPracticeSubmission = assignment && assignment.hasLink('PracticeSubmission');
 
 		//If the assignment hasn't started yet, and you can't do a practice submission
-		if (!assignment.isAvailable() && !isPracticeSubmission) {
+		if (!assignment.isAvailable() && !assignment.isTimed && !isPracticeSubmission) {
 			return {
 				xtype: 'assignment-notstarted-placeholder',
 				assignment: assignment,
