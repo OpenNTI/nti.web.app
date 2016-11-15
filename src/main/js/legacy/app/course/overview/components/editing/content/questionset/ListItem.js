@@ -24,6 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.course.getAssignments()
 			.then(function (assignments) {
+				me.IsAssignment = assignments.isAssignment(record.get('Target-NTIID'));
 				me.assignment = assignments.getItem(record.get('Target-NTIID'));
 
 				me.setRecord(record);
@@ -36,8 +37,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return this.course.getAssignments()
 			.then((assignments) => {
-				this.IsAssignment = assignments.getItem(target);
+				this.IsAssignment = assignments.isAssignment(target);
 				this.assignment = assignments.getItem(target);
+
+				if (this.IsAssignment && !this.assignment) {
+					this.hide();
+				}
 			});
 	},
 
