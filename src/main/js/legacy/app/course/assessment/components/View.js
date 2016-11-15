@@ -438,7 +438,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				if (this.assignmentsView) {
 					this.setActiveItem(this.assignmentsView, route.path);
 
-					return this.assignmentsView.setAssignmentsData(this.assignmentCollection, this.currentBundle);
+					return this.assignmentsView.setAssignmentsData(this.assignmentCollection, this.currentBundle, null, true);
 				}
 			})
 			.then(() => {

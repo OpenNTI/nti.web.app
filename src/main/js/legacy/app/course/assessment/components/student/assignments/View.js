@@ -455,11 +455,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 *
 	 * @param {AssignmentCollection} assignments	the assignment collection
 	 * @param {Bundle} instance	   the bundle we are in
+	 * @param {silent} Boolean to trigger early termination
+	 * @param {doNotCache} Boolean on whether we should load a fresh copy of assignments
 	 */
-	setAssignmentsData: function (assignments, instance, silent) {
+	setAssignmentsData: function (assignments, instance, silent, doNotCache) {
 		var me = this,
-			outlineInterface = instance.getOutlineInterface();
-
+			outlineInterface = instance.getOutlineInterface(doNotCache);
 
 		if (me.data && me.data.instance === instance && me.store.getCount() === assignments.getCount() && silent) {
 			return Promise.resolve();
@@ -489,7 +490,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		return Promise.all([
-			assignments.updateAssignments(),
+			assignments.updateAssignments(doNotCache),
 			outlineInterface.onceBuilt()
 		]).then(finish)
 			.catch(function (reason) {
