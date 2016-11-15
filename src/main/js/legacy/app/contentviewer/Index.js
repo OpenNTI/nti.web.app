@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 	resolveAssignmentPageInfo (assignment, bundle) {
 		return Service.getPageInfo(assignment.getId(), null, null, null, this.bundle)
 			.catch(() => {
-				return Service.getObject(assignment.getId())
+				return Service.getObject(assignment.getId(), null, null, null, null, this.bundle)
 					.then(a => this.ContentViewerActions.getAssignmentPageInfo(a, bundle));
 			});
 	},
