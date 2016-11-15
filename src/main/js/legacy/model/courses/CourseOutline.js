@@ -44,7 +44,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		];
 	},
 
-	__loadContents: function (link, key, doNotCache) {
+
+	__loadContents: function (link, key, doNotCache, outline) {
 		var me = this,
 			load;
 
@@ -56,15 +57,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 				.then(function (json) { return ParseUtils.parseItems(json); })
 				.then(function (items) {
 					//create a clone of this model
-					var clone = me.self.create(me.getData());
+					this[outline] = this[outline] || me.self.create(me.getData());
 
-					clone.set('Items', items);
+					this[outline].set('Items', items);
 
 					if (me.bundle) {
-						clone.setBundle(me.bundle);
+						this[outline].setBundle(me.bundle);
 					}
 
-					return clone;
+					return this[outline];
 				});
 
 			me.cacheForShortPeriod(key, load);
@@ -76,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 	getOutlineContents: function (doNotCache) {
 		var link = this.getLink('contents');
 
-		return this.__loadContents(link, 'LoadContents', doNotCache);
+		return this.__loadContents(link, 'LoadContents', doNotCache, 'OutlineContents');
 	},
 
 	getAdminOutlineContents: function (doNotCache) {
@@ -89,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		parts.search = '?' + Ext.Object.toQueryString(query);
 		link = Url.format(parts);
 
-		return this.__loadContents(link, 'AdminLoadContents', doNotCache);
+		return this.__loadContents(link, 'AdminLoadContents', doNotCache, 'AdminOutlineContents');
 	},
 
 	hasSharedEntries: function () {
