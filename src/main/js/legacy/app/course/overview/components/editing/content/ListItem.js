@@ -45,37 +45,42 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setRecord(record, enableDragging);
 	},
 
+	setUpRecord () { return Promise.resolve(); },
+
 	setRecord: function (record, enableDragging) {
 		this.removeAll(true);
 
-		var preview = this.getPreview(record),
-			controls = this.getControls(record, this.course),
-			items = [];
+		this.setUpRecord(record)
+			.then(() => {
+				var preview = this.getPreview(record),
+					controls = this.getControls(record, this.course),
+					items = [];
 
-		this.mon(record, {
-			single: true,
-			destroyable: true,
-			'update': this.updateRecord.bind(this, record)
-		});
+				this.mon(record, {
+					single: true,
+					destroyable: true,
+					'update': this.updateRecord.bind(this, record)
+				});
 
-		if (controls) {
-			items.push(controls);
-		}
+				if (controls) {
+					items.push(controls);
+				}
 
-		if (preview) {
-			items.push({
-				xtype: 'container',
-				cls: 'body',
-				layout: 'none',
-				items: [preview]
+				if (preview) {
+					items.push({
+						xtype: 'container',
+						cls: 'body',
+						layout: 'none',
+						items: [preview]
+					});
+				}
+
+				this.add(items);
+
+				if (enableDragging || (this.Draggable && this.Draggable.isEnabled)) {
+					this.enableDragging();
+				}
 			});
-		}
-
-		this.add(items);
-
-		if (enableDragging || (this.Draggable && this.Draggable.isEnabled)) {
-			this.enableDragging();
-		}
 	},
 
 	getDragHandle: function () {

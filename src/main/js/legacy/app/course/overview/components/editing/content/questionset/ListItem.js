@@ -30,7 +30,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
+
+	setUpRecord (record) {
+		const target = record.get('Target-NTIID');
+
+		return this.course.getAssignments()
+			.then((assignments) => {
+				this.IsAssignment = assignments.getItem(target);
+				this.assignment = assignments.getItem(target);
+			});
+	},
+
+
 	getPreviewType: function () {
-		return this.assignment ? 'course-overview-assignment' : 'course-overview-naquestionset';
+		return this.IsAssignment ? 'course-overview-assignment' : 'course-overview-naquestionset';
 	}
 });
