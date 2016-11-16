@@ -659,6 +659,13 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.assignment-list-empty {
+	font: italic 300 1.5em/1.5 $font;
+	color: $primary-grey;
+	text-align: center;
+	margin-top: 50px;
+}
+
 
 .assignment-status-container {
 	position: relative;

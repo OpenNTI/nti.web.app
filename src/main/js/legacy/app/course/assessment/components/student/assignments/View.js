@@ -437,6 +437,31 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}], true);
 			}
 		});
+
+		this.maybeShowEmpty();
+	},
+
+	maybeShowEmpty () {
+		const cmp = this.getContent();
+		const count = (this.activeStores || []).reduce((cv, store) => {
+			return store.getCount() + cv;
+		}, 0);
+
+		if (count === 0) {
+			this.emptyCmp = cmp.add({
+				xtype: 'box',
+				cls: 'assignment-list-empty',
+				autoEl: {
+					html: 'No Assignments found.'
+				}
+			});
+		}
+		else {
+			if (this.emptyCmp) {
+				this.emptyCmp.destroy();
+				delete this.emptyCmp;
+			}
+		}
 	},
 
 	clearAssignmentsData: function () {
