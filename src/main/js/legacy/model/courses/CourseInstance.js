@@ -640,7 +640,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		if (!this.AdminOutlineInterface) {
 			this.AdminOutlineInterface = new NextThought.store.courseware.OutlineInterface({
 				getOutlineContents: (noCache) => {
-					return this.getOutlineContents(noCache);
+					return this.getAdminOutlineContents(noCache);
 				},
 				tocPromise: this.__getTocOutline(),
 				courseInstance: this
