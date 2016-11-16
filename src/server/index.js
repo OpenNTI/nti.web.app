@@ -8,10 +8,11 @@ const page = require('./lib/page');
 
 function exists (f) {
 	try {
-		return fs.accessSync(f);
+		fs.accessSync(f);
 	} catch (e) {
 		return false;
 	}
+	return true;
 }
 
 const distAssets = path.resolve(__dirname, '../client');
