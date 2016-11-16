@@ -66,15 +66,26 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 		this.callParent(arguments);
 
 		this.courseInstance = config.courseInstance;
-		this.outlineContentsPromise = config.outlineContentsPromise;
+		this.getOutlineContents = config.getOutlineContents;
 		this.tocPromise = config.tocPromise || Promise.resolve();
 
-		this.building = Promise.all([
-			this.outlineContentsPromise,
-			this.tocPromise
-		]).then(this.__build.bind(this));
+		this.onOutlineUpdate = this.onOutlineUpdate.bind(this);
+
+		this.__startBuild(true, (results) => this.__build(results));
 
 		this.mixins.observable.constructor.call(this, config);
+	},
+
+
+	__startBuild (noCache, fn) {
+		this.building = Promise.all([
+			this.getOutlineContents(noCache),
+			this.tocPromise
+		]).then((results) => {
+			return fn(results);
+		}).then(() => this);
+
+		return this.building;
 	},
 
 
@@ -84,12 +95,16 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 
 
 	__build: function (results) {
+		if (this.outline) {
+			this.mun(this.outline, 'update', this.onOutlineUpdate);
+		}
+
 		this.outline = results[0];
 		this.tocStore = results[1];
 
 		this.__flattenOutline(this.outline);
 
-		this.mon(this.outline, 'update', this.__flattenOutline.bind(this, this.outline));
+		this.mon(this.outline, 'update', this.onOutlineUpdate);
 
 		this.isBuilt = true;
 
@@ -99,6 +114,17 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 
 	__flattenOutline: function (outline) {
 		this.__flatContents = this.self.flattenOutline(outline);
+	},
+
+
+	updateContents (noCache) {
+		return this.__startBuild(noCache, (results) => this.__build(results));
+	},
+
+
+	onOutlineUpdate () {
+		this.__flattenOutline(this.outline);
+		this.fireEvent('update');
 	},
 
 

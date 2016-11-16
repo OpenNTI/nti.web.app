@@ -99,6 +99,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 
 	constructor: function () {
 		this.callParent(arguments);
+
+		this.fillInItems();
 	},
 
 	findNode: function (id) {

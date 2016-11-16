@@ -84,14 +84,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return body && body.el && body.el.dom;
 	},
 
-	addCollectionMonitors (collection) {
-		this.updateMonitor = this.mon(collection, {
-			'update': this.onCollectionUpdate.bind(this, collection)
-		});
-	},
 
 	onCollectionUpdate: function (outline) {
-		console.debug('collection update triggered: ', outline);
 		if (this.activeBundle && this.outline && outline.getId() === this.outline.getId()) {
 			this.activeBundle.set('Outline', outline);
 		}
@@ -105,7 +99,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		this.disableOrderingContainer();
-		console.debug('Updating the outline collection: ', outline);
 
 		var catalog = bundle.getCourseCatalogEntry(),
 			body = this.getBodyContainer();

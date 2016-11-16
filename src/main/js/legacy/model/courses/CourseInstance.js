@@ -621,19 +621,36 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	getOutlineInterface: function (doNotCache) {
-		return new NextThought.store.courseware.OutlineInterface({
-			outlineContentsPromise: this.getOutlineContents(doNotCache),
-			tocPromise: this.__getTocOutline(),
-			courseInstance: this
-		});
+		if (!this.OutlineInterface) {
+			this.OutlineInterface = new NextThought.store.courseware.OutlineInterface({
+				getOutlineContents: (noCache) => {
+					return this.getOutlineContents(noCache);
+				},
+				tocPromise: this.__getTocOutline(),
+				courseInstance: this
+			});
+		} else {
+			this.OutlineInterface.updateContents(doNotCache);
+		}
+
+		return this.OutlineInterface;
 	},
 
 	getAdminOutlineInterface: function (doNotCache) {
-		return new NextThought.store.courseware.OutlineInterface({
-			outlineContentsPromise: this.getAdminOutlineContents(doNotCache),
-			tocPromise: this.__getTocOutline(),
-			courseInstance: this
-		});
+		if (!this.AdminOutlineInterface) {
+			this.AdminOutlineInterface = new NextThought.store.courseware.OutlineInterface({
+				getOutlineContents: (noCache) => {
+					return this.getOutlineContents(noCache);
+				},
+				tocPromise: this.__getTocOutline(),
+				courseInstance: this
+			});
+		} else {
+			this.AdminOutlineInterface.updateContents(doNotCache);
+		}
+
+		return this.AdminOutlineInterface;
+
 	},
 
 	hasOutline: function () {

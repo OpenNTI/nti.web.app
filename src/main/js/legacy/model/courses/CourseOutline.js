@@ -4,6 +4,7 @@ var ParseUtils = require('../../util/Parsing');
 var ModelBase = require('../Base');
 var MixinsDurationCache = require('../../mixins/DurationCache');
 var MixinsMovingRoot = require('../../mixins/MovingRoot');
+var OrderedContents = require('../../mixins/OrderedContents');
 var CoursewareOutlineInterface = require('../../store/courseware/OutlineInterface');
 var NavigationCourseOutlineNode = require('./navigation/CourseOutlineNode');
 var NavigationCourseOutlineContentNode = require('./navigation/CourseOutlineContentNode');
@@ -17,7 +18,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 
 	mixins: {
 		DurationCache: 'NextThought.mixins.DurationCache',
-		MovingRoot: 'NextThought.mixins.MovingRoot'
+		MovingRoot: 'NextThought.mixins.MovingRoot',
+		OrderedContents: 'NextThought.mixins.OrderedContents'
 	},
 
 	fields: [
@@ -25,6 +27,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		{name: 'Items', type: 'arrayItem', persist: false},
 		{name: 'IsCourseOutlineShared', type: 'bool', persist: false}
 	],
+
+	constructor () {
+		this.callParent(arguments);
+
+		this.fillInItems();
+	},
 
 	hasContentsLink: function () {
 		return !!this.getLink('contents');
@@ -60,6 +68,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 					this[outline] = this[outline] || me.self.create(me.getData());
 
 					this[outline].set('Items', items);
+					this[outline].fillInItems();
 
 					if (me.bundle) {
 						this[outline].setBundle(me.bundle);
