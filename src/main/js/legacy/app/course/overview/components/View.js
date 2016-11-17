@@ -328,7 +328,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				// Record from outline might cached, sync it with the newest one.
 				if (editing && rec && record) {
-					rec.syncWith(record);
+					//Try silencing this, to see if it prevents an update event
+					//that was triggering the route to reload.
+					rec.syncWith(record, true);
 				}
 
 				//With editing the record may or may not be a content node
@@ -339,8 +341,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				// In case, we have no record, get the first available record.
 				// TODO: should we check if it's not in edit mode?
 				if (!rec) {
-					rec = builtOutline.findNodeBy(function (rec) {
-						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
+					rec = builtOutline.findNodeBy(function (r) {
+						return r.get('type') === 'lesson' && r.get('NTIID') && r.get('isAvailable');
 					});
 				}
 
