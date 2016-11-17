@@ -54,30 +54,27 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 
 
 	__loadContents: function (link, key, doNotCache, outline) {
-		var me = this,
-			load;
-
-		load = me.getFromCache(key);
+		let load = this.getFromCache(key);
 
 		if (!load || doNotCache) {
 			load = Service.request(link)
-				.then(function (text) { return Ext.decode(text); })
-				.then(function (json) { return ParseUtils.parseItems(json); })
-				.then(function (items) {
+				.then((text) => Ext.decode(text))
+				.then((json) => ParseUtils.parseItems(json))
+				.then((items) => {
 					//create a clone of this model
-					this[outline] = this[outline] || me.self.create(me.getData());
+					this[outline] = this[outline] || this.self.create(this.getData());
 
 					this[outline].set('Items', items);
 					this[outline].fillInItems();
 
-					if (me.bundle) {
-						this[outline].setBundle(me.bundle);
+					if (this.bundle) {
+						this[outline].setBundle(this.bundle);
 					}
 
 					return this[outline];
 				});
 
-			me.cacheForShortPeriod(key, load);
+			this.cacheForShortPeriod(key, load);
 		}
 
 		return load;
