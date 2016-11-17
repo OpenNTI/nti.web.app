@@ -95,11 +95,16 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 
 
 	__build: function (results) {
+		const newOutline = results[0];
+
 		if (this.outline) {
 			this.mun(this.outline, 'update', this.onOutlineUpdate);
 		}
 
-		this.outline = results[0];
+		if (!this.outline || this.outline.get('Last Modified') < newOutline.get('Last Modified')) {
+			this.outline = newOutline;
+		}
+
 		this.tocStore = results[1];
 
 		this.__flattenOutline(this.outline);
