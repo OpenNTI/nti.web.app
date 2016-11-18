@@ -68,9 +68,9 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	getFooter: function () {
 		var due = this.record.getDueDate();
 
-		if (!due) { return ''; }
-
-		due = moment(due);
+		if (due) {
+			due = moment(due);
+		}
 
 		return this.getHistory()
 			.then(function (history) {
@@ -90,6 +90,9 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			})
 			.catch(function () {
 				var now = new Date();
+
+				if (!due) { return ''; }
+
 				if (due.isSame(now, 'day') && due.isSame(now, 'month') && due.isSame(now, 'year')) {
 					return 'Due Today';
 				}
