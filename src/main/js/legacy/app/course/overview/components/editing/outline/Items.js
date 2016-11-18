@@ -162,6 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onDrop: function (record, newIndex, moveInfo) {
-		return this.record.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
+		return this.record.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline)
+			.then(() => this.record.updateFromServer());
 	}
 });
