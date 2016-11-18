@@ -792,7 +792,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 					if(me.el && me.el.unmask) {  me.el.unmask(); }
 				}
 
-				if(me.onError) { 
+				if(me.onError) {
 					me.onError(reason);
 				}
 
@@ -814,7 +814,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	submitToRecord: function (record) {
+	submitToRecord: function (record, silent) {
 		var link = record.getLink('edit'),
 			values = this.getChangedValues();
 
@@ -825,7 +825,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return this.submitTo(link)
 			.then(function (response) {
 				record.set(values);
-				record.syncWithResponse(response);
+				record.syncWithResponse(response, silent);
 
 				return record;
 			});

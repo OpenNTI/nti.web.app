@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 		}
 
-		return form.submitToRecord(record);
+		return form.submitToRecord(record, true);
 	},
 
 
@@ -113,6 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	__updateRecord: function (form, record, originalPosition, newPosition, root) {
 		return this.__saveRecord(form, record)
 			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
+			.then(() => record.fireEvent('update'))
 			.catch(this.parseError.bind(this));
 	},
 
