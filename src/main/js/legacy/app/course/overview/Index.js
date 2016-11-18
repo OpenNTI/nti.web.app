@@ -113,10 +113,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 						collection.updateAssignments(true);
 					}
 				});
+
+			this.store = bundle.getAdminOutlineInterface();
 		}
 
 		this.currentBundle = bundle;
-		this.store = bundle.getAdminOutlineInterface();
 
 		if (lessons === item) {
 			return lessons.bundleChanged(bundle);
