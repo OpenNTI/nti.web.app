@@ -274,15 +274,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		if (status.completed) {
 			if (isNoSubmitAssignment) {
 				this.completedEl.addCls('ontime');
-				this.completedEl.dom.setAttribute('data-qtip', status.completed.date);
+
+				if (status.completed.date) {
+					this.completedEl.dom.setAttribute('data-qtip', status.completed.date);
+				}
+
 				this.completedEl.update('Graded');
 			} else if (status.overdue) {
 				this.completedEl.addCls('late');
-				this.completedEl.dom.setAttribute('data-qtip', status.overdue.qtip);
+
+				if (status.overdue.qtip) {
+					this.completedEl.dom.setAttribute('data-qtip', status.overdue.qtip);
+				}
+
 				this.completedEl.update(TimeUtils.getNaturalDuration(completed.getTime() - due.getTime(), 1) + ' late');
 			} else {
 				this.completedEl.addCls('ontime');
-				this.completedEl.dom.setAttribute('data-qtip', status.completed.qtip);
+
+				if (status.completed.qtip) {
+					this.completedEl.dom.setAttribute('data-qtip', status.completed.qtip);
+				}
+
 				this.completedEl.update('On Time');
 			}
 
