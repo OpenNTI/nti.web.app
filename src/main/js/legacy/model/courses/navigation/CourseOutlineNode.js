@@ -73,21 +73,6 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 			}
 		},
 
-		{ name: 'pageInfo', type: 'Synthetic', persist: false,
-			fn: function (r) {
-
-				if (r.data.hasOwnProperty('$pageInfo')) {
-					return r.data.$pageInfo;
-				}
-
-				Service.getPageInfo(r.getId(), function (p) {
-					r.data.$pageInfo = p;
-					r.afterEdit(['pageInfo']);
-				});
-				return null;
-			}
-		},
-
 		{ name: 'tocOutlineNode', type: 'auto', persist: false},
 
 		{ name: 'tocNode', type: 'Synthetic', persist: false, fn: function (r) {
