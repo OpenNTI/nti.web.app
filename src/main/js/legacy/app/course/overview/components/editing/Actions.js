@@ -114,6 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.__saveRecord(form, record)
 			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
 			.then(() => record.fireEvent('update'))
+			.then(() => record)
 			.catch(this.parseError.bind(this));
 	},
 
