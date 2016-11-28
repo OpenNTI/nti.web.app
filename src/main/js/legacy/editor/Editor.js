@@ -1339,8 +1339,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	detectTypingAttributes: function () {
 		var actions = this.supportedTypingAttributes, attrs = [];
 		Ext.each(actions, function (action) {
-			if (document.queryCommandState(action)) {
-				attrs.push(action);
+			try {
+				if (document.queryCommandState(action)) {
+					attrs.push(action);
+				}
+			} catch (e) {
+				Globals.swallow(e);
 			}
 		});
 		this.setTypingAttributes(attrs, true);
@@ -2203,7 +2207,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		var buttonsName = ['bold', 'italic', 'underline'], me = this, selection;
 		this.contentEl.innerHTML = '<div>' + this.defaultValue + '</div>';
 		this.contentEl.addCls('show-placeholder');
-		
+
 		this.cleanTrackedParts();
 		if (this.sharedList) {
 			this.sharedList.reset();
