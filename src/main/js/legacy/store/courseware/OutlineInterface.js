@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 			this.mun(this.outline, 'update', this.onOutlineUpdate);
 		}
 
-		if (!this.outline || this.outline.get('Last Modified') < newOutline.get('Last Modified')) {
+		if (!this.outline || this.outline.get('Last Modified') <= newOutline.get('Last Modified')) {
 			this.outline = newOutline;
 		}
 

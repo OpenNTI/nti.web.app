@@ -313,7 +313,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	__getRecord: function (id, record, editing, doNotCache) {
-		var outline = editing ? this.updateOutline(editing, doNotCache) :
+		var outline = editing || doNotCache ? this.updateOutline(editing, doNotCache) :
 								this.activeOutlineInterface || this.updateOutline(editing, doNotCache);
 
 		return outline.onceBuilt()
@@ -361,11 +361,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.navigation.stopEditing();
 		this.body.showNotEditing();
 
-		delete this.isEditing;
-
 		const node = route.params && route.params.node;
 		const id = node && decodeFromURI(node);
 		const changedEditing = this.isEditing;
+
+		delete this.isEditing;
 
 		return this.__getRecord(id, route.precache.outlineNode, false, changedEditing)
 			.then(record => {
@@ -393,12 +393,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.navigation.startEditing();
 		this.body.showEditing();
 
-		this.isEditing = true;
-
 		this.editingMap[this.currentBundle.getId()] = true;
 
 		const id = route.params && route.params.node && decodeFromURI(route.params.node);
 		const changedEditing = !this.isEditing;
+
+		this.isEditing = true;
 
 		return this.__getRecord(id, route.precache.outlineNode, true, changedEditing)
 			.then(record => {
