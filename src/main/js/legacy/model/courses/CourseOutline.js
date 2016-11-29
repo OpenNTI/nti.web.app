@@ -53,6 +53,37 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 	},
 
 
+	__syncItems (itemsToSync) {
+		if (!this.CACHED_ITEMS) {
+			this.CACHED_ITEMS = {};
+		}
+
+		const mapItems = (items) => {
+			return items.map(item => {
+				const id = item.getId();
+				let cachedItem = this.CACHED_ITEMS[id];
+
+				if (!cachedItem) {
+					this.CACHED_ITEMS[id] = item;
+					cachedItem = item;
+				} else if (cachedItem.get('Last Modified') <= item.get('Last Modified')) {
+					cachedItem.syncWith(item, true);
+				}
+
+				const subItems = cachedItem.get('Items');
+
+				if (subItems) {
+					cachedItem.set('Items', mapItems(subItems));
+				}
+
+				return cachedItem;
+			});
+		};
+
+		return mapItems(itemsToSync);
+	},
+
+
 	__loadContents: function (link, key, doNotCache, outline) {
 		let load = this.getFromCache(key);
 
@@ -64,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 					//create a clone of this model
 					this[outline] = this[outline] || this.self.create(this.getData());
 
-					this[outline].set('Items', items);
+					this[outline].set('Items', this.__syncItems(items));
 					this[outline].fillInItems();
 
 					if (this.bundle) {
