@@ -1237,9 +1237,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	applyTypingAttributesToEditable: function () {
 		var actions = this.supportedTypingAttributes, me = this;
 		Ext.each(actions, function (action) {
-			if (document.queryCommandSupported(action) &&
-				document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)) {
-				document.execCommand(action, false, false);
+			try {
+				if (document.queryCommandSupported(action) &&
+					document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)) {
+					document.execCommand(action, false, false);
+				}
+			} catch (e) {
+				Globals.swallow(e);
 			}
 		});
 	},
