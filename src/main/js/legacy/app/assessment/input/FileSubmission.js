@@ -94,6 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		try {
 			this.filereader = new FileReader();
 			this.filereader.onload = this.onFileLoaded.bind(this);
+			this.filereader.onloadend = this.onLoadEnd.bind(this);
 			this.filereader.onprogress = this.updateProgress.bind(this);
 			this.filereader.onloadstart = this.onLoadStart.bind(this);
 		} catch (e) {
@@ -252,6 +253,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	updateProgress: function (e) {
 		if (this.progressBar) {
 			this.progressBar.setProps({value: e.loaded});
+		}
+	},
+
+
+	onLoadEnd (e) {
+		if (this.progressBar) {
+			this.progressBar.setProps({value: e.total});
 		}
 	},
 
