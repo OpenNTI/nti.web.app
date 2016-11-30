@@ -148,8 +148,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 		var me = this,
 			view = me.__getGridView(), store = me.store,
 			historyItem = me.getHistoryItemFromRecord(record),
-			node = view.getNode(record),
-			save;
+			node = view.getNode(record);
 
 		//mask the input
 		if (node) {
@@ -157,16 +156,16 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 		}
 
 		if (historyItem.shouldSaveGrade(value, '-')) {
-			save = historyItem.saveGrade(value, '-');
+			this.save = historyItem.saveGrade(value, '-');
 		} else {
-			save = Promise.resolve();
+			this.save = Promise.resolve();
 		}
 
 		if (me.beforeEdit) {
 			me.beforeEdit();
 		}
 
-		save.always(function () {
+		this.save.always(function () {
 			var n = view.getNode(record);//get the node fresh since it may have changed
 
 			console.log(node);
@@ -177,6 +176,8 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 			if (me.afterEdit) {
 				me.afterEdit();
 			}
+
+			delete me.save;
 		});
 
 	}

@@ -4,6 +4,7 @@ var MixinsState = require('../../../../../../mixins/State');
 var PerformanceHeader = require('./Header');
 var AdminGrid = require('../Grid');
 const { encodeForURI } = require('nti-lib-ntiids');
+const { wait } = require('legacy/util/Promise');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
 	extend: 'Ext.container.Container',
@@ -198,12 +199,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	maybeShowAssignment: function (view, record, node, index, e) {
+		const grid = this.down('grid');
 		var selModel = view.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex;
 
 		if (dataIndex !== 'Grade') {
-			this.showAssignment(selModel, record);
+			if (grid && grid.save) {
+				grid.save.then(() => {
+					wait().then(() => this.showAssignment(selModel, record));
+				});
+			}
+			else {
+				this.showAssignment(selModel, record);
+			}
 		}
 	},
 
