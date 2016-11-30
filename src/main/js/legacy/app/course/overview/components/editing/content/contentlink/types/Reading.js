@@ -160,6 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					rootRecord: me.rootRecord,
 					editorGroup: me.editorGroup,
 					copyValues: me.copyValues,
+					copyVisibility: me.copyVisibility,
 					switchRecordType: me.switchRecordType,
 					selectedItem: selection,
 					doClose: me.doClose,

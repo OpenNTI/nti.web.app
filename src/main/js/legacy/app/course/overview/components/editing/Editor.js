@@ -261,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	doSwitchType: function () {
 		if (this.switchRecordType) {
-			this.switchRecordType(this.editorGroup, this.formCmp && this.formCmp.getValues());
+			this.switchRecordType(this.editorGroup, this.formCmp && this.formCmp.getValues(), this.visibilityCmp && this.visibilityCmp.getValue());
 		}
 	},
 

@@ -20,6 +20,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		contentEl: '.toggle'
 	},
 
+
+	initComponent () {
+		this.callParent(arguments);
+
+
+		this.defaultValue = this.defaultValue || (this.record && this.record.get('visibility'));
+	},
+
+
 	beforeRender: function () {
 		this.callParent(arguments);
 
@@ -49,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				parentRecord: this.parentRecord,
 				renderTo: this.contentEl,
 				schema: this.schema,
-				defaultValue:  this.record && this.record.get('visibility'),
+				defaultValue:  this.defaultValue,
 				onChange: this.onChange.bind(this)
 			});
 
@@ -61,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 		else {
 			this.visibilityCmp.hide();
-		}	
+		}
 	},
 
 	onChange: function () {},
@@ -76,5 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.visibilityCmp) {
 			return this.visibilityCmp.getValue();
 		}
+
+		return {visibility: this.defaultValue};
 	}
 });

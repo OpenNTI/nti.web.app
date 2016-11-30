@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	addAdvancedDisclosure: function () {
-		var visibility = this.record && this.record.get('visibility'),
+		var visibility = (this.record && this.record.get('visibility')) || (this.copyVisibility && this.copyVisibility.visibility) ,
 			me = this;
 
 		if (this.visibilityCmp) { return; }

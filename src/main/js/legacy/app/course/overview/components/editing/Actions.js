@@ -121,13 +121,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	updateRecordVisibility: function (record, visibilityCmp) {
 		var link = record && record.getLink('edit'),
-			values = visibilityCmp && visibilityCmp.getChangedValues && visibilityCmp.getChangedValues();
+			values = visibilityCmp && visibilityCmp.getValue();
 
 		if (!link) {
 			return Promise.reject('No Edit Link');
 		}
 
 		if (!values || Object.keys(values) === 0) {
+			return Promise.resolve();
+		}
+
+		//If nothing changed don't put the same value
+		if (record && values.visibility === record.get('visibility')) {
 			return Promise.resolve();
 		}
 
