@@ -18,6 +18,12 @@ var ContentviewerIndex = require('../contentviewer/Index');
 var ContentviewerActions = require('../contentviewer/Actions');
 const { encodeForURI } = require('nti-lib-ntiids');
 
+const Topic = require('legacy/model/forums/Topic');
+const HeadlineTopic = require('legacy/model/forums/HeadlineTopic');
+const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
+const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic');
+const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
+
 const DASHBOARD = 'course-dashboard';
 const OVERVIEW = 'course-overview';
 const ASSESSMENT = 'course-assessment-container';
@@ -94,6 +100,14 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
 		this.addObjectHandler('application/vnd.nextthought.courses.courseoutlinecontentnode', this.getLessonRoute.bind(this));
+
+		this.addObjectHandler([
+			Topic.mimeType,
+			HeadlineTopic.mimeType,
+			DFLHeadlineTopic.mimeType,
+			ContentHeadlineTopic.mimeType,
+			CommunityHeadlineTopic.mimeType
+		], this.getTopicRoute.bind(this));
 
 		this.addDefaultRoute('/lessons');
 	},
@@ -452,6 +466,37 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			}
 		};
 	},
+
+
+	getTopicRoute (obj) {
+		if (!obj.get) {
+			throw new Error('Can\'t resolve topic route for just an NTIID, need the full object');
+		}
+
+		const boardId = obj.get('BoardNTIID');
+		let forumID = obj.get('ContainerId');
+		let topicID = obj.getId();
+
+		if (!forumID || !topicID) {
+			return Promise.reject('No Forum Id for the Topic');
+		}
+
+		if (!this.activeBundle || !this.activeBundle.containsBoard(boardId)) {
+			return Promise.reject('Board is not in the active course');
+		}
+
+		forumID = encodeForURI(forumID);
+		topicID = encodeForURI(topicID);
+
+		return {
+			route: `/discussions/${forumID}/object/${topicID}`,
+			title: obj.get('title'),
+			precache: {
+				topic: obj
+			}
+		};
+	},
+
 
 	getRouteForPath: function (path, course) {
 		var root = path[0] || {},

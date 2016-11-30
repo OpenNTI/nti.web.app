@@ -8,6 +8,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Topic', {
 	isTopic: true,
 
 	fields: [
+		{ name: 'BoardNTIID', type: 'string', persist: false},
 		{ name: 'PostCount', type: 'int', persist: false },
 		{ name: 'title', type: 'string' },
 		{ name: 'PublicationState', type: 'string', persist: false },

@@ -1325,6 +1325,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			.then(me.__binToForumList.bind(me));//create a forum list for the ui to build from
 	},
 
+
+	containsBoard (id) {
+		const discussions = this.get('Discussions');
+		const parentDiscussions = this.get('ParentDiscussions');
+
+		return (discussions && discussions.getId() === id) || (parentDiscussions && parentDiscussions.getId() === id);
+	},
+
+
 	represents: function (catalogEntry) {
 		var cceId = catalogEntry.getId(),
 			cceHref = catalogEntry.get('href'),
