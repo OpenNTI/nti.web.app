@@ -59,7 +59,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		commentBox = this.comment.feedbackBox;
 
 		if (this.history) {
-			this.mon(this.history, 'force-submission', this.onForceSubmission.bind(this));
+			this.mon(this.history, {
+				'force-submission': this.onForceSubmission.bind(this),
+				'was-destroyed': this.onHistoryDestroyed.bind(this)
+			});
 
 			this.setHistory(this.history);
 		}
@@ -134,6 +137,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 
 
 	onForceSubmission () {
+		this.setHistory(this.history);
+	},
+
+
+	onHistoryDestroyed () {
 		this.setHistory(this.history);
 	},
 
