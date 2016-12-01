@@ -262,7 +262,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 				isNoSubmitAssignment
 			});
 
-		this.letterEl.setStyle({display: 'none'});
+		if (this.letterEl) {
+			this.letterEl.setStyle({display: 'none'});
+		}
 
 		if (!grade) {
 			console.warn('No grade not even a placeholder');

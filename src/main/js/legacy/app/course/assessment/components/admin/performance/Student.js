@@ -5,6 +5,7 @@ var PerformanceHeader = require('./Header');
 var AdminGrid = require('../Grid');
 const { encodeForURI } = require('nti-lib-ntiids');
 const { wait } = require('legacy/util/Promise');
+const Globals = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
 	extend: 'Ext.container.Container',
@@ -206,9 +207,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (dataIndex !== 'Grade') {
 			if (grid && grid.save) {
-				grid.save.then(() => {
-					wait().then(() => this.showAssignment(selModel, record));
-				});
+				grid.save.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
+						 .then(() => this.showAssignment(selModel, record));
 			}
 			else {
 				this.showAssignment(selModel, record);

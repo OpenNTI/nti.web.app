@@ -6,6 +6,8 @@ var UxFilterMenu = require('../../../../../../common/ux/FilterMenu');
 var AdminListHeader = require('../ListHeader');
 var AdminPagedGrid = require('../PagedGrid');
 const { encodeForURI } = require('nti-lib-ntiids');
+const { wait } = require('legacy/util/Promise');
+const Globals = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assignment', {
 	extend: 'Ext.container.Container',
@@ -784,11 +786,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	fireGoToAssignment: function (v, record, pageSource) {
 		var student = record.get('User'),
-			historyItem = record.get('HistoryItemSummary');
+			historyItem = record.get('HistoryItemSummary')
+			grid = this.down('course-admin-paged-grid');
 
 		if (typeof student === 'string' || !student.isModel) {
 			console.error('Unable to show assignment for student', student.getName(), this.assignment.get('title'));
 			return;
+		}
+
+		if (grid && grid.save) {
+			return grid.save.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
+							.then(() => this.showStudentForAssignment(student, this.assignment, historyItem));
 		}
 
 		this.showStudentForAssignment(student, this.assignment, historyItem);
