@@ -1944,13 +1944,28 @@ canvas.x-component-course-assessment {
 				.grade {
 					width: 9.7em;
 
+					.label {
+						line-height: 2.6;
+					}
+
 					.gradebox {
 						width: 8.1em;
 						height: 2.9em;
+						display: flex;
+						background: none;
+						align-items: center;
 
 						input {
 							width: 100%;
 							border-width: 0;
+							flex: 1 1 auto;
+							text-align: right;
+						}
+
+						.total-points {
+							flex: 0 0 auto;
+							padding: 0 0 0 0.5rem;
+							background: none;
 						}
 					}
 				}

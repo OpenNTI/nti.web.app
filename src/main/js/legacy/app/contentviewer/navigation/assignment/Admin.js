@@ -33,6 +33,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			{ cls: 'label', html: '{gradeTitle} {{{NextThought.view.courseware.assessment.admin.Header.grade}}}'},
 			{ cls: 'gradebox', cn: [
 				{ tag: 'input', size: 3, type: 'text', value: '{grade}'},
+				{ tag: 'tpl', 'if': 'totalPoints', cn: [
+					{tag: 'span', 'cls': 'total-points', html: '/ {totalPoints}'}
+				]},
 				{ cls: 'dropdown letter grade', html: '{letter}'}
 			]}
 		]},
@@ -99,7 +102,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			gradeTitle: this.gradeTitle || getString('NextThought.view.courseware.assessment.admin.Header.assignment'),
 			creator: this.student,
 			presence: this.student.getPresence().getName(),
-			excused: this.__getExcusedTpl()
+			excused: this.__getExcusedTpl(),
+			totalPoints: this.assignment && this.assignment.get('total_points')
 		});
 
 		this.createGradeMenu();
