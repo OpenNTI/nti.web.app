@@ -172,7 +172,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		const {grid} = this;
 		if (grid && grid.store) {
 			const view = grid.getView();
-			if (view && view.getViewRange().length > 0 && this.initialLoad) {
+			const range = (view && view.getViewRange()) || [];
+
+			if (range.length > 0 && this.initialLoad) {
 				view.refresh();
 				this.initialLoad = false;
 			}
