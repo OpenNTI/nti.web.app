@@ -450,17 +450,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 
 	__getHistoryItem: function (historyItem) {
-		var link = historyItem && historyItem.getLink('UsersCourseAssignmentHistoryItem'),
-			load;
-
-		if (link && historyItem.isSummary) {
-			load = Service.request(link)
-				.then(resp => historyItem.syncWithResponse(resp));
-		} else {
-			load = historyItem.updateFromServer();
-		}
-
-		return load;
+		return historyItem.resolveFullItem();
 	},
 
 

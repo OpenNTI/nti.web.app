@@ -203,6 +203,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		if (val === me.pendingSaveValue) { return Promise.resolve(me); }
 
 		me.pendingSaveValue = val;
+		me.isSaving = true;
 
 		oldVal = me.get('value');
 
@@ -227,6 +228,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 						console.error('failed to parse response text for a saved grade:', e, text);
 					} finally {
 						delete me.pendingSaveValue;
+						delete me.isSaving;
 
 						//alert that the value succesfully changed
 						me.fireEvent('value-change');
@@ -235,8 +237,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 				},
 				failure: function () {
 					delete me.pendingSaveValue;
+					delete me.isSaving;
 					me.set('value', oldVal);
 					reject();
+					me.fireEvent('value-change-failed');
 				}
 			});
 		});

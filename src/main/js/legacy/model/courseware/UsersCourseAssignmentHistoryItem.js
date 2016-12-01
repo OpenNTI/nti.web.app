@@ -121,6 +121,44 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		}
 	},
 
+
+	__whileGradeSaving () {
+		return new Promise ((fulfill) => {
+			const grade = this.get('Grade');
+			const onChanged = () => {
+				Ext.destroy(this.gradeChangeMonitor);
+				fulfill();
+			};
+
+			if (!grade || !grade.isSaving) {
+				fulfill();
+			} else {
+				this.mon(grade, {
+					destroyable: true,
+					'value-changed': onChanged,
+					'value-changed-failed': onChanged
+				});
+			}
+		});
+	},
+
+
+	resolveFullItem () {
+		const link = this.getLink('UsersCourseAssignmentHistoryItem');
+
+		return this.__whileGradeSaving()
+			.then(() => {
+				if (link && this.isSummary) {
+					return  Service.request(link)
+								.then(resp => this.syncWithResponse(resp));
+				}
+
+				return this.updateFromServer();
+			})
+			.then(() => this);
+	},
+
+
 	getAssignmentId: function () {
 		var r = this.raw,
 			g = r.Grade,
