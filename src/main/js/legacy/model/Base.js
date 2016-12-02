@@ -204,6 +204,9 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 */
 	SYNC_BLACKLIST: [],
 
+
+	getDataForSync (data) { return data; },
+
 	/**
 	 * Given another instance of the same class, update this values.
 	 *
@@ -217,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			return;
 		}
 
-		var newData = record.getData();
+		var newData = this.getDataForSync(record.getData());
 
 		this.SYNC_BLACKLIST.forEach(function (key) {
 			delete newData[key];

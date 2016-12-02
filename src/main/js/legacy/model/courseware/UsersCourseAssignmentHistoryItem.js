@@ -109,6 +109,22 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		}
 	},
 
+
+	getDataForSync (data) {
+		const newGrade = data.Grade;
+		const oldGrade = this.get('Grade');
+
+		if (newGrade) {
+			oldGrade.syncWith(newGrade);
+			oldGrade.phantom = newGrade.phantom;
+
+			data.Grade = oldGrade;
+		}
+
+		return data;
+	},
+
+
 	onSync: function (record) {
 		var cls = this.get('Class');
 
@@ -124,22 +140,18 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 	__whileGradeSaving () {
 		return new Promise ((fulfill) => {
-			const grade = this.get('Grade');
-
 			const onChanged = () => {
 				Ext.destroy(this.gradeChangeMonitor);
 				fulfill();
 			};
 
-			if (!grade || !grade.isSaving) {
-				fulfill();
-			} else {
-				this.gradeChangeMonitor = this.mon(grade, {
+			if (this.gradeIsSaving) {
+				this.gradeChangeMonitor = this.on({
 					destroyable: true,
-					'value-change': onChanged,
-					'value-change-failed': onChanged,
-					'grade-deleted': onChanged
+					'grade-saved': onChanged
 				});
+			} else {
+				fulfill();
 			}
 		});
 	},
@@ -459,6 +471,12 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	 */
 	saveGrade: function (value, letter) {
 		const oldGrade = this.get('Grade');
+		const cleanUp = () => {
+			delete this.gradeIsSaving;
+			this.fireEvent('grade-saved');
+		};
+
+		this.gradeIsSaving = true;
 
 		return this.__maybeUpdateFromServer()
 			.then(updated => {
@@ -466,6 +484,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 				if (newGrade) {
 					oldGrade.syncWith(newGrade);
+					oldGrade.phantom = newGrade.phantom;
 
 					//Keep the same cached instance of the grade
 					updated.set('Grade', oldGrade);
@@ -494,6 +513,16 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				}
 
 				return update;
+			})
+			.then((result) => {
+				cleanUp();
+
+				return result;
+			})
+			.catch((result) => {
+				cleanUp();
+
+				return Promise.reject(result);
 			});
 	}
 });
