@@ -125,6 +125,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	__whileGradeSaving () {
 		return new Promise ((fulfill) => {
 			const grade = this.get('Grade');
+
 			const onChanged = () => {
 				Ext.destroy(this.gradeChangeMonitor);
 				fulfill();
@@ -136,7 +137,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				this.gradeChangeMonitor = this.mon(grade, {
 					destroyable: true,
 					'value-change': onChanged,
-					'value-change-failed': onChanged
+					'value-change-failed': onChanged,
+					'grade-deleted': onChanged
 				});
 			}
 		});

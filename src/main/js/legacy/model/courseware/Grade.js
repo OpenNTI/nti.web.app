@@ -323,6 +323,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		config.failure = Ext.Function.createSequence(config.failure || Ext.emptyFn, failed, null);
 
 		if (this.isEmpty()) {
+			delete this.isSaving;
+			this.fireEvent('grade-deleted');
 			this.destroy(config);
 			return;
 		}
