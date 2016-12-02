@@ -133,10 +133,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 			if (!grade || !grade.isSaving) {
 				fulfill();
 			} else {
-				this.mon(grade, {
+				this.gradeChangeMonitor = this.mon(grade, {
 					destroyable: true,
-					'value-changed': onChanged,
-					'value-changed-failed': onChanged
+					'value-change': onChanged,
+					'value-change-failed': onChanged
 				});
 			}
 		});
