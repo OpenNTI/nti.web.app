@@ -238,6 +238,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	setUpGradeBox: function (historyItem) {
 		if (!this.assignmentHistory && !historyItem) { return; }
 
+		if (!this.rendered) { return; }
+
 		if (historyItem) {
 			this.assignmentHistory = historyItem;
 		}
