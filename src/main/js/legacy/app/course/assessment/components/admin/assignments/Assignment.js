@@ -6,6 +6,7 @@ var UxFilterMenu = require('../../../../../../common/ux/FilterMenu');
 var AdminListHeader = require('../ListHeader');
 var AdminPagedGrid = require('../PagedGrid');
 const { encodeForURI } = require('nti-lib-ntiids');
+const {wait} = require('legacy/util/Promise');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assignment', {
 	extend: 'Ext.container.Container',
@@ -778,7 +779,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 		if (dataIndex !== 'Grade') {
-			this.fireGoToAssignment(selModel, record);
+			wait(100)
+				.then(() => {
+					this.fireGoToAssignment(selModel, record);
+				});
 		}
 	},
 
