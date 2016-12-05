@@ -138,7 +138,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			search: {fn: 'doSearch', buffer: 450}
 		});
 
-		this.on('activate', this.onActivate.bind(this));
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 		this.PromptActions = NextThought.app.prompt.Actions.create();
@@ -164,8 +163,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		// this.mon(this.inviteEl, 'click', this.openInvite.bind(this));
 	},
 
-	onActivate: function () {
-		this.refreshRosterGrid();
+	onRouteActivate: function () {
+		if (this.initialLoad) {
+			this.loadStore();
+		} else {
+			this.refreshRosterGrid();
+		}
 	},
 
 	refreshRosterGrid () {
@@ -183,6 +186,34 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		}
 	},
 
+
+	loadStore () {
+		if (this.store) {
+			if (this.el) {
+				this.el.mask('Loading...');
+			}
+
+			this.store.load();
+		}
+	},
+
+
+	onStoreLoad () {
+		if (this.el) {
+			this.el.unmask();
+		}
+
+		this.updateFilterCount();
+
+		if (this.grid.store !== this.store) {
+			// Bind store after load.
+			this.grid.bindStore(this.store);
+		}
+
+		this.refreshRosterGrid();
+	},
+
+
 	updateFilterCount: function () {
 		if (!this.rendered) {
 			this.on('afterrender', 'updateFilterCount', this, {once: true});
@@ -192,13 +223,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		const {el} = this.filterLink;
 		el.update(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
 		el.repaint();
-
-		if (this.grid.store !== this.store) {
-			// Bind store after load.
-			this.grid.bindStore(this.store);
-		}
-
-		this.refreshRosterGrid();
 	},
 
 	__getGridMaxHeight: function () {
@@ -285,13 +309,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			remoteFilter: true
 		});
 
-
-		//TODO: only load if we're visible!
-		this.store.load();
 		Ext.destroy(this.storeMonitors);
 		this.storeMonitors = this.mon(this.store, {
 			destroyable: true,
-			load: () => this.updateFilterCount()
+			load: () => this.onStoreLoad()
 		});
 	},
 

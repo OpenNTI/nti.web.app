@@ -117,9 +117,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('roster').then(function () {
-			me.body.scrollRosterIntoView(route, subRoute);
-		});
+
+		return me.body.showRoster(route, subRoute);
 	},
 
 	showReports: function (route, subRoute) {

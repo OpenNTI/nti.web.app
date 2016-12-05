@@ -74,5 +74,15 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		scrollTarget = scrollTarget && scrollTarget.getEl();
 		brect = scrollTarget && scrollTarget.dom.getBoundingClientRect();
 		window.scrollTo(0, brect.top);
+	},
+
+
+	showRoster (route, subRoute) {
+		const roster = this.getComponent('roster');
+
+		this.setActiveItem('roster');
+		this.scrollRosterIntoView(route, subRoute);
+
+		return roster.onRouteActivate();
 	}
 });
