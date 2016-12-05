@@ -26,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		leadingBufferZone: 150
 	},
 
+	disableSelection: true,
 	selType: 'cellmodel',
 
 	columns: {

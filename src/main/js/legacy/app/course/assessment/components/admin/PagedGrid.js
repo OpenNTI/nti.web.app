@@ -26,6 +26,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		layout: 'none'
 	},
 
+	disableSelection: true,
+
 	selType: 'cellmodel',
 
 	columns: {
