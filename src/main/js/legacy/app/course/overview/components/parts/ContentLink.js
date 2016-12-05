@@ -40,7 +40,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	constructor: function (config) {
 		var n = config.node || {getAttribute: function (a) { return config[a];} },
-			i = config.locationInfo,
+			i = config.locationInfo || {
+				root: config.course && config.course.getContentRoots()[0]
+			},
 			href = config.record && config.record.getHref ? config.record.getHref() : n.getAttribute('href'),
 			icon = n.getAttribute('icon'),
 			ntiid = n.getAttribute('ntiid'),
