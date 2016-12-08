@@ -1,5 +1,4 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.Hit', {
@@ -7,15 +6,7 @@ module.exports = exports = Ext.define('NextThought.model.Hit', {
 	idProperty: null,
 
 	statics: {
-		mimeTypes: {
-			'bookcontent': 'Books',
-			'forums.personalblogentrypost': 'Thoughts',
-			'forums.personalblogcomment': 'Thoughts',
-			'forums.communityheadlinepost': 'Forums',
-			'forums.generalforumcomment': 'Forums',
-			'messageinfo': 'Chats',
-			'videotranscript': 'Videos'
-		}
+		mimeType: 'application/vnd.nextthought.search.searchhit'
 	},
 
 	fields: [
@@ -29,25 +20,7 @@ module.exports = exports = Ext.define('NextThought.model.Hit', {
 		{ name: 'EndMilliSecs', type: 'auto' },
 		{ name: 'VideoID', type: 'string'},
 		//This really needs to move up onto a SearchResult object but we don't have that.  The proxy roots at Items
-		{ name: 'PhraseSearch', type: 'auto'},
-		{ name: 'GroupingField', persist: false, type: 'auto', convert: function (o, r) {
-			var mime = r.get('TargetMimeType'),
-				group, type;
-
-			if (mime) {
-				group = NextThought.model.Hit.mimeTypes[mime.replace('application/vnd.nextthought.', '')];
-				if (group) {
-					return group;
-				}
-			}
-
-			type = r.get('Type');
-			if (type) {
-				type = Ext.String.capitalize(type);
-				type = Ext.util.Inflector.pluralize(type);
-			}
-			return type;
-		}}
+		{ name: 'PhraseSearch', type: 'auto'}
 	],
 
 	//We don't use the idProperty because there isn't a unique id,
