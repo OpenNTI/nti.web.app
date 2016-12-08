@@ -3,7 +3,7 @@ const XRegExp = require('xregexp');
 const SearchUtils = require('../Search');
 const Hit = require('legacy/model/Hit');
 
-describe('Search utils', () => {
+fdescribe('Search utils', () => {
 
 	/*global XRegExp*/
 	describe('contentRegexFromSearchTerm', () => {
@@ -82,8 +82,7 @@ describe('Search utils', () => {
 
 		it('Will pull multiple matches from one fragment', () => {
 			const hit = hitWithFragments({
-				text: 'The quick brown fox',
-				matches: [[1,3], [10, 19]]
+				Matches: ['T<em>he</em> quick <em>brown fox</em>']
 			});
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 
@@ -94,11 +93,9 @@ describe('Search utils', () => {
 
 		it('Pulls from multiple fragments', () => {
 			const hit = hitWithFragments([{
-				text: 'The quick brown fox',
-				matches: [[1,3], [10, 19]]
+				Matches: ['T<em>he</em> quick <em>brown fox</em>']
 			},{
-				text: 'See spot run',
-				matches: [[4, 8]]
+				Matches: ['See <em>spot</em> run']
 			}]);
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 
@@ -110,11 +107,9 @@ describe('Search utils', () => {
 
 		it('Returns unique terms', () => {
 			const hit = hitWithFragments([{
-				text: 'The quick quick fox',
-				matches: [[4,9], [10, 15]]
+				Matches: ['The <em>quick</em> <em>quick</em> fox']
 			},{
-				text: 'See quick spot run',
-				matches: [[4,9], [10, 14]]
+				Matches: ['See quick <em>spot</em> run']
 			}]);
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 

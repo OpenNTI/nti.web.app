@@ -77,9 +77,26 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 		return term;*/
 	},
 
+	MATCH_SPLIT_REGEX: /<em>|<\/em>/g,
+
 	extractMatchFromFragment: function (fragText, match) {
 		return fragText.slice(match[0], match[1]);
 	},
+
+
+	extractTermFromMatch (match) {
+		const parts = match.split(this.MATCH_SPLIT_REGEX);
+
+		//With splitting on the em tags the odd items should be the terms between the tags
+		return parts.reduce((acc, part, index) => {
+			if (index % 2 === 1) {
+				acc.push(part);
+			}
+
+			return acc;
+		}, []);
+	},
+
 
 	contentRegexPartsForHit: function (hit) {
 		var fragments = hit.get('Fragments'),
@@ -89,33 +106,23 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 			return null;
 		}
 
-		Ext.each(fragments, function (fragment, index) {
-			var fragTerms = [];
-			if (!fragment.matches || fragment.matches.length === 0 || !fragment.text) {
+		fragments.forEach((fragment, index) => {
+			let fragTerms = [];
+
+			if (!fragment.Matches || fragment.Matches.length === 0) {
 				console.warn('No matches or text for fragment. Dropping', fragment);
-			}
-			else {
-				//Sort the matches backwards so we can do string replaces without invalidating
-				fragment.matches.sort(function (a, b) {return b[0] - a[0];});
-				Ext.each(fragment.matches, function (match, idx) {
-					var term,
-					//Attempt to detect bad data from the server
-						next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0];
-					if (next[1] > match[1]) {
-						console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
-						return true; //continue
-					}
+			} else {
+				fragment.Matches.forEach((match, idx) => {
+					let term = this.extractTermFromMatch(match);
 
-					term = this.extractMatchFromFragment(fragment.text, match);
 					if (term) {
-						fragTerms.push(term);
+						fragTerms = fragTerms.concat(term);
 					}
-					return true;
-				}, this);
+				});
 
-				terms = Ext.Array.merge(terms, fragTerms);
+				terms = terms.concat(fragTerms);
 			}
-		}, this);
+		});
 
 		terms = Ext.Array.unique(terms);
 

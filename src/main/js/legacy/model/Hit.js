@@ -14,6 +14,7 @@ module.exports = exports = Ext.define('NextThought.model.Hit', {
 		{ name: 'Title', type: 'string' },
 		{ name: 'Type', type: 'string' },
 		{ name: 'TargetMimeType', type: 'string' },
+		{ name: 'Containers', type: 'auto'},
 		{ name: 'Fragments', type: 'auto'},
 		{ name: 'Score', type: 'auto'},
 		{ name: 'StartMilliSecs', type: 'auto' },
@@ -30,6 +31,19 @@ module.exports = exports = Ext.define('NextThought.model.Hit', {
 	},
 
 	isContent: function () {
-		return (/content/i).test(this.get('Type'));
+		const target = this.get('TargetMimeType');
+
+		return (/contentunit/i).test(target);
+	},
+
+
+	getContainerId () {
+		const containers = this.get('Containers');
+
+		if (this.isContent()) {
+			return this.get('NTIID');
+		}
+
+		return containers[0];
 	}
 });
