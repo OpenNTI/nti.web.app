@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 				});
 		}
 
-		me.getObject = Service.getObject(hit.get('NTIID'));
+		me.getObject = me.fetchObject();
 
 		me.getObject
 			.then(function (obj) {
@@ -101,6 +101,16 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 			.catch(() => {
 				me.hide();
 			});
+	},
+
+	/**
+	 * Retrieve the hit object
+	 * Can be overriden by subclasses
+	 * @return {Promise} Return promise that
+	 *         resolves when the object is loaded or fails to.
+	 */
+	fetchObject ()  {
+		return Service.getObject(this.hit && this.hit.get('NTIID'));
 	},
 
 	setCreator: function (user) {

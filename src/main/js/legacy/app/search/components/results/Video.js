@@ -6,6 +6,10 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	extend: 'NextThought.app.search.components.results.Base',
 	alias: 'widget.search-result-ntitranscript',
 
+	fetchObject () {
+		return Service.getObject(this.hit && this.hit.getContainerId());
+	},
+
 	clicked: function (e) {
 		var me = this,
 			hit = me.hit,
