@@ -259,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	getFragmentLocation: function (fragment, phrase) {
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 			doc = this.reader.getDocumentElement(),
-			ranges = TextRangeFinderUtils.findTextRanges(doc, doc, fragRegex.re, fragRegex.matchingGroups),
+			ranges = TextRangeFinderUtils.findTextRanges(doc, doc, fragRegex),
 			range, pos = -2, nodeTop, scrollOffset, assessmentAdjustment = 0, indexOverlayData,
 			olDom = Ext.getDom(this.reader.getComponentOverlay().componentOverlayEl);
 

@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 	onceReadyForSearch: function () {
 		return this.initialLoad
-			.then(function () { return wait(); });
+			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT));
 	},
 
 	allowNavigation: function () {

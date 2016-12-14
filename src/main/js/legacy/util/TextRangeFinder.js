@@ -282,7 +282,7 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 			console.log('Working on frag', frag);
 			var re = SearchUtils.contentRegexForFragment(frag, phrase, true);
 
-			Ext.Array.push(ranges, this.findTextRanges(node, doc, re.re, re.matchingGroups, textIndex));
+			Ext.Array.push(ranges, this.findTextRanges(node, doc, re, undefined, textIndex));
 		}, this);
 
 		return ranges;

@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 			searchIn = this.el.dom,
 			doc = searchIn.ownerDocument,
 			index = this.buildSearchIndex(),
-			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex && fragRegex.re, fragRegex && fragRegex.matchingGroups, index),
+			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex, undefined, index),
 			p = this.getSearchScrollTarget(),
 			height = Ext.Element.getViewportHeight(),
 			scrollOffset = p.getScrollTop(),
