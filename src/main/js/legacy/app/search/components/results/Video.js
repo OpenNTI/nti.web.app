@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	alias: 'widget.search-result-ntitranscript',
 
 	fetchObject () {
-		return Service.getObject(this.hit && this.hit.getContainerId());
+		return Service.getObject(this.hit && this.hit.get('ContainerId'));
 	},
 
 	clicked: function (e) {
