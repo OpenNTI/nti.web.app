@@ -9,7 +9,8 @@ module.exports = exports = Ext.define('NextThought.model.Hit', {
 		mimeType: [
 			'application/vnd.nextthought.search.searchhit',
 			'application/vnd.nextthought.search.contentunitsearchhit',
-			'application/vnd.nextthought.search.ugdsearchhit'
+			'application/vnd.nextthought.search.ugdsearchhit',
+			'application/vnd.nextthought.search.transcriptsearchhit'
 		]
 	},
 
