@@ -182,7 +182,8 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 
 		this.getObject
 			.then(function (obj) {
-				me.navigateToSearchHit(obj, me.hit, fragIndex);
+				const containerId = me.hit && me.hit.isModel && me.hit.get('ContainerId');
+				me.navigateToSearchHit(obj, me.hit, fragIndex, containerId);
 			});
 	}
 });

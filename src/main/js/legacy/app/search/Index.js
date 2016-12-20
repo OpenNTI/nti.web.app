@@ -272,7 +272,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	navigateToSearchHit: function (record, hit, frag, containerId) {
-		this.SearchStore.setHitForContainer(containerId || hit.getContainerId(), hit, frag);
+		containerId  = containerId || (hit.get('Containers') || [])[0];
+		this.SearchStore.setHitForContainer(containerId, hit, frag);
 
 		this.Router.root.attemptToNavigateToObject(record);
 	}

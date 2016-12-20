@@ -6,7 +6,11 @@ module.exports = exports = Ext.define('NextThought.model.Hit', {
 	idProperty: null,
 
 	statics: {
-		mimeType: 'application/vnd.nextthought.search.searchhit'
+		mimeType: [
+			'application/vnd.nextthought.search.searchhit',
+			'application/vnd.nextthought.search.contentunitsearchhit',
+			'application/vnd.nextthought.search.ugdsearchhit'
+		]
 	},
 
 	fields: [
@@ -34,16 +38,5 @@ module.exports = exports = Ext.define('NextThought.model.Hit', {
 		const target = this.get('TargetMimeType');
 
 		return (/contentunit/i).test(target);
-	},
-
-
-	getContainerId () {
-		const containers = this.get('Containers');
-
-		if (this.isContent()) {
-			return this.get('NTIID');
-		}
-
-		return containers[0];
 	}
 });
