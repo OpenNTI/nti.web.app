@@ -77,9 +77,26 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 		return term;*/
 	},
 
+	MATCH_SPLIT_REGEX: /<em>|<\/em>/g,
+
 	extractMatchFromFragment: function (fragText, match) {
 		return fragText.slice(match[0], match[1]);
 	},
+
+
+	extractTermFromMatch (match) {
+		const parts = match.split(this.MATCH_SPLIT_REGEX);
+
+		//With splitting on the em tags the odd items should be the terms between the tags
+		return parts.reduce((acc, part, index) => {
+			if (index % 2 === 1) {
+				acc.push(part);
+			}
+
+			return acc;
+		}, []);
+	},
+
 
 	contentRegexPartsForHit: function (hit) {
 		var fragments = hit.get('Fragments'),
@@ -89,33 +106,23 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 			return null;
 		}
 
-		Ext.each(fragments, function (fragment, index) {
-			var fragTerms = [];
-			if (!fragment.matches || fragment.matches.length === 0 || !fragment.text) {
+		fragments.forEach((fragment, index) => {
+			let fragTerms = [];
+
+			if (!fragment.Matches || fragment.Matches.length === 0) {
 				console.warn('No matches or text for fragment. Dropping', fragment);
-			}
-			else {
-				//Sort the matches backwards so we can do string replaces without invalidating
-				fragment.matches.sort(function (a, b) {return b[0] - a[0];});
-				Ext.each(fragment.matches, function (match, idx) {
-					var term,
-					//Attempt to detect bad data from the server
-						next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0];
-					if (next[1] > match[1]) {
-						console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
-						return true; //continue
-					}
+			} else {
+				fragment.Matches.forEach((match, idx) => {
+					let term = this.extractTermFromMatch(match);
 
-					term = this.extractMatchFromFragment(fragment.text, match);
 					if (term) {
-						fragTerms.push(term);
+						fragTerms = fragTerms.concat(term);
 					}
-					return true;
-				}, this);
+				});
 
-				terms = Ext.Array.merge(terms, fragTerms);
+				terms = terms.concat(fragTerms);
 			}
-		}, this);
+		});
 
 		terms = Ext.Array.unique(terms);
 
@@ -146,64 +153,25 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 	 * is the regular expression, matchingGroups is an array of ints marking which capture
 	 * group of re corresponds to each for the fragments matches.  These values are indexed start
 	 * at 1.  Example;	a fragment of "the brown fox" with a match corresponding to "brown" will
-	 * return the following. {re: /(the )(brown)( fox)/, matchingGroups: [2]}
+	 * return the following: /(the )(brown)( fox)/
 	 */
 	contentRegexForFragment: function (fragment, phraseSearch, captureMatches) {
-		var sortedMatches, currentIdx = 0, terms = [], groups = [], currentCapture = 1, me = this;
+		const {Matches: matches = []} = fragment;
+		let terms = [];
 
-		function regexify (text, phrase, noCapture) {
-			var re = me.contentRegexFromSearchTerm(text, phrase);
-			if (noCapture) {
-				return re;
+		matches.forEach((match, idx) => {
+			let term = this.extractTermFromMatch(match);
+
+			if (term) {
+				terms = terms.concat(term);
 			}
-			currentCapture++;
-			return '(' + re + ')';
-		}
+		});
 
-		if (!fragment) {
-			return null;
-		}
-
-		if (!captureMatches) {
-			return new XRegExp(this.contentRegexFromSearchTerm(fragment.text, true), 'ig');
-		}
-
-		if (Ext.isEmpty(fragment.matches)) {
-			return null;
-		}
-
-		sortedMatches = fragment.matches.slice();
-		sortedMatches.sort(function (a, b) {return a[0] - b[0];});
-
-		Ext.each(sortedMatches, function (match, idx) {
-			var term,
-			//Attempt to detect bad data from the server
-				next = idx + 1 < sortedMatches.length ? sortedMatches[idx + 1] : [Infinity, Infinity];
-			if (next[0] < match[1]) {
-				console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', sortedMatches);
-				return true; //continue
-			}
-
-			//slice from current index up to the match. this is a none
-			//match part
-			if (currentIdx < match[0]) {
-				terms.push(regexify(fragment.text.slice(currentIdx, match[0]), true));
-			}
-			groups.push(currentCapture);
-			//Now snag the actual match
-			terms.push(regexify(this.extractMatchFromFragment(fragment.text, match), phraseSearch));
-
-			//update current
-			currentIdx = match[1];
-			return true;
+		const escapedParts = Ext.Array.map(terms, (item) => {
+			return this.contentRegexFromSearchTerm(item, phraseSearch);
 		}, this);
 
-		//snag what is left
-		if (currentIdx < fragment.text.length) {
-			terms.push(regexify(fragment.text.slice(currentIdx, fragment.text.length), true, true));
-		}
-
-		return {re: new XRegExp(terms.join(''), 'ig'), matchingGroups: groups};
+		return new XRegExp(escapedParts.join('|'), 'ig');
 	}
 
 

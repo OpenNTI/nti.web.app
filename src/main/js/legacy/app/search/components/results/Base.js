@@ -1,6 +1,5 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../../cache/UserRepository');
-var UtilSearch = require('../../../../util/Search');
 var {isMe} = require('legacy/util/Globals');
 
 
@@ -22,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		{cls: 'fragments', cn: [
 			{tag: 'tpl', 'for': 'fragments', cn: [
 				{cls: 'avatar-container hidden'},
-				{cls: 'fragment', ordinal: '{#}', html: '{.}'}
+				{cls: 'fragment', ordinal: '{fragIndex}', html: '{text}'}
 			]}
 		]},
 		{cls: 'meta', cn: [
@@ -41,22 +40,35 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	initComponent: function () {
 		this.callParent(arguments);
 
-		var hit = this.hit,
-			name = hit.get('Creator');
-
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.hit.get('Title') || '',
-			fragments: Ext.pluck(hit.get('Fragments'), 'text'),
+			fragments: this.getFragmentsData(this.hit),
 			label: this.label || ''
 		});
 
 		this.fillInData();
 	},
 
-	beforeRender: function () {
-		this.wrapFragmentHits();
-		return this.callParent(arguments);
+
+	getFragmentsData (hit) {
+		const fragments = hit.get('Fragments') || [];
+
+		return fragments.reduce((acc, frag, fragIndex) => {
+			const {Matches:matches = []} = frag;
+
+			matches.reduce((ac, match) => {
+				ac.push({
+					fragIndex,
+					text: match.trim()
+				});
+
+				return ac;
+			}, acc);
+
+			return acc;
+		}, []);
 	},
+
 
 	fillInData: function () {
 		var me = this,
@@ -76,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 				});
 		}
 
-		me.getObject = Service.getObject(hit.get('NTIID'));
+		me.getObject = me.fetchObject();
 
 		me.getObject
 			.then(function (obj) {
@@ -85,7 +97,20 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 
 				me.getPathToObject(obj)
 					.then(me.showBreadCrumb.bind(me));
+			})
+			.catch(() => {
+				me.hide();
 			});
+	},
+
+	/**
+	 * Retrieve the hit object
+	 * Can be overriden by subclasses
+	 * @return {Promise} Return promise that
+	 *         resolves when the object is loaded or fails to.
+	 */
+	fetchObject ()  {
+		return Service.getObject(this.hit && this.hit.get('NTIID'));
 	},
 
 	setCreator: function (user) {
@@ -139,41 +164,6 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-	wrapFragmentHits: function () {
-		var fragments = this.hit.get('Fragments') || [],
-			wrapped = [];
-
-		fragments.forEach(function (fragment) {
-			var matches = fragment.matches,
-				wrappedText = fragment.text;
-
-			if (!matches || matches.length === 0 || !fragment.text) {
-				console.warn('No matches or text for fragment. Dropping', fragment);
-			} else {
-				matches.sort(function (a, b) { return b[0] - a[0]; });
-
-				matches.forEach(function (match, idx) {
-					var next = idx + 1 < matches.length ? matches[idx + 1] : [0, 0],
-						newString = '';
-
-					if (next[1] > match[1]) {
-						console.warn('Found a match that is a subset of a previous match. Server breaking its promise?', matches);
-						return;
-					}
-
-					newString += wrappedText.slice(0, match[0]);
-					newString += Ext.DomHelper.markup({tag: 'span', html: wrappedText.slice(match[0], match[1])});
-					newString += wrappedText.slice(match[1]);
-
-					wrappedText = newString;
-				});
-			}
-
-			wrapped.push(wrappedText);
-		});
-
-		this.renderData.fragments = wrapped || this.renderData.fragments;
-	},
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -187,13 +177,13 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 
 	clicked: function (e) {
 		var me = this,
-			hit = me.hit,
 			fragEl = e.getTarget('[ordinal]'),
 			fragIndex = fragEl && fragEl.getAttribute('ordinal');
 
 		this.getObject
 			.then(function (obj) {
-				me.navigateToSearchHit(obj, me.hit, fragIndex);
+				const containerId = me.hit && me.hit.isModel && me.hit.get('ContainerId');
+				me.navigateToSearchHit(obj, me.hit, fragIndex, containerId);
 			});
 	}
 });

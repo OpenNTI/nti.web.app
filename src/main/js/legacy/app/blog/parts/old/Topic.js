@@ -133,11 +133,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 		if (this.threaded) {
 			this.add({xtype: 'forum-comment-thread', topic: this.record});
 		} else {
-			this.buildStore();
+			this.initialLoad = new Promise(this.buildStore.bind(this));
 		}
 	},
 
-	buildStore: function () {
+	buildStore: function (fulfill, reject) {
 		var s = NextThought.store.NTI.create({
 			storeId: this.getRecord().get('Class') + '-' + this.getRecord().get('NTIID'),
 			url: this.getRecord().getLink('contents'),
@@ -154,7 +154,10 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 		this.mon(this.store, {
 			scope: this,
 			add: this.addComments,
-			load: this.loadComments
+			load: (store, records) => {
+				this.loadComments(store, records);
+				fulfill();
+			}
 		});
 
 		this.store.load();
@@ -708,7 +711,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 			searchIn = this.el.dom,
 			doc = searchIn.ownerDocument,
 			index = this.buildSearchIndex(),
-			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex.re, fragRegex.matchingGroups, index),
+			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex, undefined, index),
 			range, pos = -2, nodeTop, scrollOffset, p;
 
 

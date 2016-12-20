@@ -481,7 +481,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			searchIn = this.el.dom,
 			doc = searchIn.ownerDocument,
 			index = this.buildSearchIndex(),
-			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex.re, fragRegex.matchingGroups, index),
+			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex, undefined, index),
 			range, pos = -2, nodeTop, scrollOffset, p;
 
 

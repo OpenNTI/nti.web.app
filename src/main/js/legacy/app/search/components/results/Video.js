@@ -4,7 +4,11 @@ var ResultsBase = require('./Base');
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.Video', {
 	extend: 'NextThought.app.search.components.results.Base',
-	alias: 'widget.search-result-videotranscript',
+	alias: 'widget.search-result-ntitranscript',
+
+	fetchObject () {
+		return Service.getObject(this.hit && this.hit.getContainerId());
+	},
 
 	clicked: function (e) {
 		var me = this,

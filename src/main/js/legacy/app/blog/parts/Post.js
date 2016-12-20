@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		}
 	},
 
-	buildStore: function () {
+	buildStore: function (fulfill, reject) {
 		this.store = NextThought.store.Blog.create({
 			storeId: this.record.get('Class') + '-' + this.record.get('NTIID')
 		});
@@ -116,7 +116,10 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		this.mon(this.store, {
 			scope: this,
 			add: this.addComments,
-			load: this.loadComments
+			load: (s, recs) => {
+				this.loadComments(s, recs);
+				fulfill();
+			}
 		});
 
 		this.store.load();
@@ -146,7 +149,12 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	},
 
 	onceReadyForSearch: function () {
-		return wait();
+		if (!this.initialLoad) {
+			return wait();
+		}
+
+		return this.initialLoad
+				.then(Promise.minWait(Globals.WAIT_TIMES.SHORT));
 	},
 
 	closeView: function () {

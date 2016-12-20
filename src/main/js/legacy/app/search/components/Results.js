@@ -16,13 +16,13 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 
 	TYPE_TO_CLS: {
 		'note': 'note',
-		'videotranscript': 'video',
+		'ntitranscript': 'video',
 		'forums-communityheadlinepost': 'topic',
 		'forums-generalforumcomment': 'topic-comment',
 		'messageinfo': 'chat',
 		'forum-personalblogentrypost': 'thought',
 		'forum-personalblogcomment': 'thought-comment',
-		'bookcontent': 'reading',
+		'contentunit': 'reading',
 		'highlight': 'highlight'
 	},
 
