@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 			return false;
 		}
 
-		this.editGrade = Ext.Function.createBuffered(this.editGrade.bind(this), 100);
+		// this.editGrade = Ext.Function.createThrottled(this.editGrade.bind(this), 100);
 
 		observer = new MutationObserver(this.bindInputs.bind(this));
 
@@ -85,12 +85,29 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
+	getEditRecordFor (record) {
+		if (!this.editFunctions) {
+			this.editFunctions = {};
+		}
+
+		const historyItem = this.getHistoryItemFromRecord(record);
+		const id = historyItem.getId() || historyItem.id;
+
+		if (!this.editFunctions[id]) {
+			this.editFunctions[id] = Ext.Function.createBuffered(this.editGrade.bind(this), 100);
+		}
+
+		return this.editFunctions[id];
+	},
+
+
 	onInputBlur: function (e, dom) {
 		var record = this.getRecordFromEvent(e),
-			value = Ext.fly(dom).getValue();
+			value = Ext.fly(dom).getValue(),
+			editGradeFn = record && this.getEditRecordFor(record);
 
-		if (record) {
-			this.editGrade(record, value);
+		if (editGradeFn) {
+			editGradeFn(record, value);
 		}
 
 		// Clear the focused flag
@@ -179,6 +196,8 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 
 			delete me.save;
 		});
+
+
 
 	}
 });
