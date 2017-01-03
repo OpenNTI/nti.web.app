@@ -55,7 +55,6 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	},
 
 	addResults: function (items) {
-		debugger;
 		var results = items.map(this.mapHitToCmp.bind(this));
 
 		this.hitContainer.add(results);
