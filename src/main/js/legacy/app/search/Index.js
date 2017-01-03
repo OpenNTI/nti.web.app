@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	clearResults: function () {
-		this.Results.removeAll(true);
+		this.Results.removeResults();
 	},
 
 	getAcceptFilter: function (filter) {

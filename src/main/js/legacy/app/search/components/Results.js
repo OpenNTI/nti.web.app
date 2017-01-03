@@ -29,16 +29,36 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	layout: 'none',
 	cls: 'search-results',
 
+	items: [
+		{
+			xtype: 'container',
+			layout: 'none',
+			hitContainer: true,
+			cls: 'search-results-hits',
+			items: []
+		},
+		{
+			xtype: 'container',
+			layout: 'none',
+			actionContainer: true,
+			cls: 'search-results-actions'
+		}
+	],
+
 	initComponent: function () {
 		this.callParent(arguments);
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 		this.WindowActions = NextThought.app.windows.Actions.create();
+
+		this.hitContainer = this.down('[hitContainer]');
+		this.actionContainer = this.down('[actionContainer]');
 	},
 
 	addResults: function (items) {
+		debugger;
 		var results = items.map(this.mapHitToCmp.bind(this));
 
-		this.add(results);
+		this.hitContainer.add(results);
 	},
 
 	getMimePart: function (mime) {
@@ -73,10 +93,10 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	},
 
 	showEmpty: function () {
-		var emptyCmp = this.down('[emptyCmp]');
+		var emptyCmp = this.hitContainer.down('[emptyCmp]');
 
 		if (!emptyCmp) {
-			this.add({
+			this.hitContainer.add({
 				xtype: 'box',
 				emptyCmp: true,
 				autoEl: {cls: 'empty control-item', html: 'No results found.'}
@@ -85,10 +105,10 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	},
 
 	showError: function () {
-		var errorCmp = this.down('[errorCmp]');
+		var errorCmp = this.hitContainer.down('[errorCmp]');
 
 		if (!errorCmp) {
-			this.add({
+			this.hitContainer.add({
 				xtype: 'box',
 				errorCmp: true,
 				autoEl: {cls: 'error control-item', html: 'Error loading search results.'}
@@ -97,10 +117,10 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	},
 
 	showLoading: function () {
-		var loadingCmp = this.down('[loadingCmp]');
+		var loadingCmp = this.actionContainer.down('[loadingCmp]');
 
 		if (!loadingCmp) {
-			this.add({
+			this.actionContainer.add({
 				xtype: 'box',
 				loadingCmp: true,
 				autoEl: {cls: 'loading-container control-item', cn: {cls: 'loading', html: 'Loading...'}}
@@ -109,18 +129,22 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	},
 
 	removeLoading: function () {
-		var loadingCmp = this.down('[loadingCmp]');
+		var loadingCmp = this.actionContainer.down('[loadingCmp]');
 
 		if (loadingCmp) {
-			this.remove(loadingCmp, true);
+			this.actionContainer.remove(loadingCmp, true);
 		}
 	},
 
+	removeResults () {
+		this.hitContainer.removeAll(true);
+	},
+
 	showNext: function (handler) {
-		var nextCmp = this.down('[nextCmp]');
+		var nextCmp = this.actionContainer.down('[nextCmp]');
 
 		if (!nextCmp) {
-			nextCmp = this.add({
+			nextCmp = this.actionContainer.add({
 				xtype: 'box',
 				nextCmp: true,
 				autoEl: {cls: 'control-item load-more', html: 'Show More'},
@@ -132,10 +156,10 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	},
 
 	removeNext: function () {
-		var nextCmp = this.down('[nextCmp]');
+		var nextCmp = this.actionContainer.down('[nextCmp]');
 
 		if (nextCmp) {
-			this.remove(nextCmp, true);
+			this.actionContainer.remove(nextCmp, true);
 		}
 	}
 });
