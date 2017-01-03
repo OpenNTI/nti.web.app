@@ -120,6 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		var loadingCmp = this.actionContainer.down('[loadingCmp]');
 
 		if (!loadingCmp) {
+			this.actionContainer.removeAll(true);
 			this.actionContainer.add({
 				xtype: 'box',
 				loadingCmp: true,
