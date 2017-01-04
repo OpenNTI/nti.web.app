@@ -298,39 +298,44 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 	showMediaViewer: function (route, subRoute) {
-		var me = this,
-			lessonId = decodeFromURI(route.params.lesson);
+		const lessonId = decodeFromURI(route.params.lesson);
 
-		if (!me.activeMediaWindow) {
-			me.activeMediaWindow = me.add({
+		return this.showCourseMedia(subRoute, route.precache, lessonId);
+	},
+
+
+	showCourseMedia (subRoute, precache = {}, lessonId) {
+		if (!this.activeMediaWindow) {
+			this.activeMediaWindow = this.add({
 				xtype: 'media-window-view',
-				currentBundle: me.currentBundle,
+				currentBundle: this.currentBundle,
 				autoShow: true,
-				handleNavigation: me.handleNavigation.bind(me),
-				handleClose: me.handleMediaClose.bind(me)
+				handleNavigation: this.handleNavigation.bind(this),
+				handleClose: this.handleMediaClose.bind(this)
 			});
 
-			me.addChildRouter(me.activeMediaWindow);
+			this.addChildRouter(this.activeMediaWindow);
 
-			me.activeMediaWindow.fireEvent('suspend-annotation-manager', this);
-			me.activeMediaWindow.on({
-				'beforedestroy': function () {
-					me.getLayout().setActiveItem(me.getLessons());
+			this.activeMediaWindow.fireEvent('suspend-annotation-manager', this);
+			this.activeMediaWindow.on({
+				'beforedestroy': () => {
+					this.getLayout().setActiveItem(this.getLessons());
 				},
-				'destroy': function () {
-					if (me.activeMediaWindow) {
-						me.activeMediaWindow.fireEvent('resume-annotation-manager', this);
+				'destroy': () => {
+					if (this.activeMediaWindow) {
+						this.activeMediaWindow.fireEvent('resume-annotation-manager', this);
 					}
-					delete me.activeMediaWindow;
+					delete this.activeMediaWindow;
 				}
 			});
 		}
 
-		me.getLayout().setActiveItem(me.activeMediaWindow);
-		me.activeMediaWindow.currentBundle = me.currentBundle;
-		me.activeMediaWindow.parentLesson = lessonId;
-		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
+		this.getLayout().setActiveItem(this.activeMediaWindow);
+		this.activeMediaWindow.currentBundle = this.currentBundle;
+		this.activeMediaWindow.parentLesson = lessonId;
+		return this.activeMediaWindow.handleRoute(subRoute, precache);
 	},
+
 
 	getPageInfoRoute: function (obj) {
 		var lesson = obj.parent || this.activeLesson,

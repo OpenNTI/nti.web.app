@@ -97,6 +97,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/reports', this.showReports.bind(this));
 		this.addRoute('/info', this.showInfo.bind(this));
 		this.addRoute('/content', this.showContent.bind(this));
+		//TODO: add a /video route to show the grid view
+		this.addRoute('/videos/:id', this.showVideos.bind(this));
 
 		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
 		this.addObjectHandler('application/vnd.nextthought.courses.courseoutlinecontentnode', this.getLessonRoute.bind(this));
@@ -403,6 +405,22 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 				return item.handleRoute(subRoute, route.precache);
 			});
 	},
+
+
+	showVideos (route, subRoute) {
+		const {id} = route.params;
+
+		return this.setActiveView(OVERVIEW, [
+			DASHBOARD,
+			ASSESSMENT,
+			FORUM,
+			REPORTS,
+			INFO
+		]).then((item) => {
+			return item.showCourseMedia(id);
+		});
+	},
+
 
 	getPageInfoRoute: function (obj) {
 		var id = obj.getId ? obj.getId() : obj.NTIID;
