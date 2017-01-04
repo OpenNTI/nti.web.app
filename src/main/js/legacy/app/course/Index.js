@@ -23,6 +23,7 @@ const HeadlineTopic = require('legacy/model/forums/HeadlineTopic');
 const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
 const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic');
 const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
+const Video = require('legacy/model/Video');
 
 const DASHBOARD = 'course-dashboard';
 const OVERVIEW = 'course-overview';
@@ -538,7 +539,9 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			subPath = subPath.slice(1);
 		}
 
-		if (root.isForum) {
+		if (this.isCourseMediaPath(path)) {
+			route = this.getCourseMediaRoute(path);
+		} else if (root.isForum) {
 			route = this.getRouteForForum(root, subPath);
 		} else if (root instanceof NextThought.model.assessment.Assignment) {
 			route = this.getRouteForAssignment(root, subPath);
@@ -555,6 +558,39 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		return route;
 	},
+
+
+	isCourseMediaPath (path) {
+		let seenOutlineNode = false;
+		let seenVideo = false;
+
+		for (let part of path) {
+			if (part instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
+				seenOutlineNode = true;
+			} else if (part instanceof NextThought.model.Video) {
+				seenVideo = true;
+			}
+		}
+
+		return seenVideo && !seenOutlineNode;
+	},
+
+
+	getCourseMediaRoute (path) {
+		let videoId;
+
+		for (let part of path) {
+			if (part instanceof NextThought.model.Video) {
+				videoId = encodeForURI(part.getId());
+			}
+		}
+
+		return {
+			path: `videos/${videoId}`,
+			isFull: true
+		};
+	},
+
 
 	getRouteForAssignment: function (assignment, path) {
 		var cmp = this.down(ASSESSMENT),
