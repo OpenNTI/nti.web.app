@@ -118,6 +118,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		this.initSearch();
 	},
 
+
+	getRangePositionAdjustments: function (key) {
+		const scrollTop = Ext.getBody().getScrollTop();
+
+		return {top: -1 * (this.el.getY() - scrollTop), left: -1 * this.el.getX()};
+	},
+
+
 	createEditor: function () {
 		this.callParent();
 		this.editor.el.down('.title')
