@@ -73,7 +73,9 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 			return;
 		}
 
-		this.inputEl.dom.value = term;
+		if (this.inputEl.dom.value !== term) {
+			this.inputEl.dom.value = term;
+		}
 	},
 
 	focusInput: function () {
