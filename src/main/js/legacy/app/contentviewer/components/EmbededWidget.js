@@ -3,6 +3,15 @@ const Path = require('path');
 const Url = require('url');
 const QueryString = require('query-string');
 
+function getOriginFrom (uri) {
+	const o = Url.parse(uri);
+
+	o.pathname = '';
+	o.search = '';
+	o.hash = '';
+
+	return o.format();
+}
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 	extend: 'Ext.Component',
@@ -14,7 +23,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'splash', style: {backgroundImage: 'url({splash})'}},
-		{ tag: 'iframe', scrolling: 'no', frameborder: 'no', src: '{src}', width: '100%', height: '{height}', allowfullscreen: 'allowFullscreen' }
+		{
+			tag: 'iframe', scrolling: 'no', frameborder: 'no', src: '{src}',
+			sandbox: '{sandbox}',
+			width: '100%', height: '{height}', allowfullscreen: 'allowFullscreen'
+		}
 	]),
 
 
@@ -65,6 +78,30 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 
 		data.source = src.format();
+
+		const srcOrigin = getOriginFrom(src.format());
+		const {origin: currentOrigin} = global.location || {};
+		// See sandbox docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-sandbox
+		// We want the same behavior the browser provides for content on remote-domains to be applied to local content.
+		// The sandbox flag provides this... Would be nice to only add the sandbox flag for same-origin URI's,
+		// but ExtJS's template format doesn't have a way to do conditional attributes cleanly.
+		const sandboxFlags = [
+			'allow-forms',
+			'allow-modals',
+			'allow-orientation-lock',
+			'allow-pointer-lock',
+			'allow-popups',
+			'allow-popups-to-escape-sandbox',
+			'allow-presentation',
+			'allow-scripts'
+		];
+		if (srcOrigin !== currentOrigin) {
+			//allow-same-origin combined with allow-scripts when the origin of the iframe is the same as ours,
+			//negates the sandbox...so only add it when the embeded content is NOT in the contentPackage.
+			sandboxFlags.push('allow-same-origin');
+		}
+
+		rd.sandbox = sandboxFlags.join(' ');
 
 		rd.src = defer ? '' : data.source;
 	},
