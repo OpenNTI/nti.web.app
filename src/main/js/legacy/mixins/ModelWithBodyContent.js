@@ -218,6 +218,8 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 
 	attachmentRenderer: function (o, clickHandlerMaker, size, callback, scope, config) {
+		o = Ext.clone(o);
+
 		var type = (o && o.contentType || o.FileMimeType) || '',
 			p;
 
@@ -225,7 +227,6 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			o.size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(o.size), 1);
 		}
 
-		o = Ext.clone(o);
 		o.type = type.split('/').last() || '';
 		o = Ext.apply(o, this.getIconDataForAttachment(o));
 		p = this.CONTENT_FILE_TPL.apply(o);
