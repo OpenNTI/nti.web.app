@@ -251,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				}
 
 				me.activeOutline = outline;
-				me.body.setOutline(outline);
+				me.body.setOutline(outline, builtOutlineInterface);
 
 				return outline;
 			})

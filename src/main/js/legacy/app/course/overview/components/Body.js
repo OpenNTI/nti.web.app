@@ -208,8 +208,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.currentBundle = bundle;
 	},
 
-	setOutline: function (outline) {
+	setOutline: function (outline, outlineInterface) {
 		this.currentOutline = outline;
+		this.outlineInterface = outlineInterface;
 	},
 
 	showOutlineNode: function (record, doNotCache) {
@@ -245,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		editor.show();
 
-		return editor.editOutlineNode(record, this.currentOutline);
+		return editor.editOutlineNode(record, this.currentOutline, this.outlineInterface);
 	},
 
 	showEmptyState: function () {

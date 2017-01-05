@@ -64,6 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			record: record,
 			parentRecord: this.parentRecord,
 			outline: this.outline,
+			outlineInterface: this.outlineInterface,
 			bundle: this.bundle,
 			afterDelete: this.onDelete.bind(this),
 			navigateToOutlineNode: this.navigateToOutlineNode,

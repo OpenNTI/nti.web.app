@@ -36,10 +36,36 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 		}
 
-		me.mon(me.record, 'update', function () {
-			if (me.navigateToOutlineNode) {
-				me.navigateToOutlineNode(me.record);
+		const update = () => {
+			const findRecord = this.outlineInterface ?
+									this.outlineInterface.onceBuilt().then((x) => x.findOutlineNode(this.record.getId())) :
+									Promise.resolve(this.record);
+
+			if (this.rendered) {
+				this.el.mask('Updating...');
 			}
+
+			this.removeAll(true);
+
+			findRecord
+				.then(rec => this.record = rec)
+				.then(() => this.showOutlineNode(this.record, this.parentRecord))
+				.then(() => {
+					if (this.rendered) {
+						this.el.unmask();
+					}
+				})
+				.then(() => {
+					this.mon(this.record, {
+						single: true,
+						update: update
+					});
+				});
+		};
+
+		this.mon(this.record, {
+			single: true,
+			update: update
 		});
 	},
 

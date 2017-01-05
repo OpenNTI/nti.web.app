@@ -64,6 +64,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.onceRendered
 			.then(function () {
+				//If we got destroyed don't do anything
+				if (!me.rendered) { return; }
+
 				var start = me.record && me.record.get('AvailableBeginning'),
 					config;
 
