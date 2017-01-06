@@ -338,6 +338,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 	},
 
 	addAnnotation: function (range, xy) {
+		const pageInfo = this.reader.getLocation().pageInfo;
+		const isFake = pageInfo && pageInfo.get('isFakePageInfo');
+
 		if (!range) {
 			console.warn('bad range');
 			return;
@@ -345,6 +348,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 
 		if (!xy || !Boolean(xy[0]) || !Boolean(xy[1])) {
 			console.warn('xy are null or undefined: ', xy);
+			return;
+		}
+
+		if (isFake) {
+			this.selectRange(range);
+			console.warn('Trying highlight on fake page info');
 			return;
 		}
 
@@ -402,7 +411,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 				}
 			}
 		});
-
 
 		define = me.getDefinitionMenuItem(range);
 		if (define) {
