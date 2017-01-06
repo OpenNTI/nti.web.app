@@ -2064,14 +2064,16 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		const out = [];
-		const sel = this.el.select('.content > *');
+		const content = this.el.dom.querySelector('.content');
+		const sel = Array.prototype.slice.call(content.childNodes);
 
-		sel.each(div => {
+		sel.forEach(div => {
 			try {
 				//don't let manipulations here effect the dom
 				let dom = Ext.getDom(div).cloneNode(true);
 				div = Ext.fly(dom, '__editer-flyweight');
-				let html = div.getHTML() || '';
+
+				let html = div.getHTML() || div.dom.textContent || div.dom.innerText || '';
 
 				if (div.is('.attachment-part')) {
 					html = this.getAttachmentPart(div);
