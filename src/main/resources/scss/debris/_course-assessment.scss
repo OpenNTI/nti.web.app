@@ -1911,9 +1911,19 @@ canvas.x-component-course-assessment {
 
 					.grade{
 						color: $secondary-grey;
-						width: 100%;
+						width: 50%;
 						line-height: 2.4;
+
+						.grade-value {
+							padding-right: 0.3rem;
+						}
+
+						.total-points {
+							font-weight: 700;
+							color: $primary-grey;
+						}
 					}
+
 				}
 			}
 		}

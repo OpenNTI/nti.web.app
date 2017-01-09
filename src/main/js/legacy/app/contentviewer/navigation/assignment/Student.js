@@ -45,7 +45,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		]},
 		{cls: 'grade-container', cn: [
 			{cls: 'title', html: '{{{NextThought.view.courseware.assessment.reader.Header.grade}}}'},
-			{cls: 'grade'}
+			{cls: 'grade', cn: [
+				{tag: 'span', cls: 'grade-value'},
+				{ tag: 'tpl', 'if': 'totalPoints', cn: [
+					{tag: 'span', 'cls': 'total-points', html: '/ {totalPoints}'}
+				]}
+			]}
 		]}
 	]),
 
@@ -53,7 +58,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		ontimeIconEl: '.quiz-container .ontime-icon',
 		turnedInEl: '.quiz-container .turned-in',
 		gradeContainerEl: '.grade-container',
-		gradeEl: '.grade-container .grade',
+		gradeEl: '.grade-container .grade .grade-value',
+		totalEl: '.grade-container .total-points',
 		timeContainerEl: '.time-remaining',
 		loadingBarEl: '.time-remaining .time .loading-bar',
 		timeLabelEl: '.time-remaining .time .meta span.label',
@@ -69,6 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	beforeRender: function () {
 		this.callParent(arguments);
 
+		const totalPoints = this.assignment && this.assignment.get('total_points');
 		var rd = {};
 
 		this.AccountActions = NextThought.app.account.Actions.create();
@@ -83,6 +90,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			}
 		} else {
 			this.setHistory(this.assignmentHistory);
+		}
+
+		if (totalPoints) {
+			rd.totalPoints = totalPoints;
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, rd);
