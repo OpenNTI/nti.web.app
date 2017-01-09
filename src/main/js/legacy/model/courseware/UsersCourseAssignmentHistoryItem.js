@@ -273,6 +273,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 										Feedback: null,
 										Metadata: null,
 										completed: null,
+										SubmissionCreatedTime: null,
 										submission: null,
 										pendingAssessment: null
 									});
@@ -343,6 +344,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 									Feedback: null,
 									Metadata: null,
 									completed: null,
+									SubmissionCreatedTime: null,
 									submission: null,
 									pendingAssessment: null
 								});
