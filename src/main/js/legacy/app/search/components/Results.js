@@ -92,13 +92,14 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	},
 
 	showEmpty: function () {
+		const text = this.getResultCount() > 0 ? 'No more results found.' : 'No results found.';
 		var emptyCmp = this.actionContainer.down('[emptyCmp]');
 
 		if (!emptyCmp) {
 			this.actionContainer.add({
 				xtype: 'box',
 				emptyCmp: true,
-				autoEl: {cls: 'empty control-item', html: 'No results found.'}
+				autoEl: {cls: 'empty control-item', html: text}
 			});
 		}
 	},
@@ -138,6 +139,10 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 
 	removeResults () {
 		this.hitContainer.removeAll(true);
+	},
+
+	getResultCount () {
+		return this.hitContainer.items.length;
 	},
 
 	showNext: function (handler) {
