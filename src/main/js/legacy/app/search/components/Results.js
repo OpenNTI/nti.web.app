@@ -20,8 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		'forums-communityheadlinepost': 'topic',
 		'forums-generalforumcomment': 'topic-comment',
 		'messageinfo': 'chat',
-		'forum-personalblogentrypost': 'thought',
-		'forum-personalblogcomment': 'thought-comment',
+		'forums-personalblogentrypost': 'thought',
+		'forums-personalblogcomment': 'thought-comment',
 		'contentunit': 'reading',
 		'highlight': 'highlight'
 	},
@@ -92,10 +92,10 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	},
 
 	showEmpty: function () {
-		var emptyCmp = this.hitContainer.down('[emptyCmp]');
+		var emptyCmp = this.actionContainer.down('[emptyCmp]');
 
 		if (!emptyCmp) {
-			this.hitContainer.add({
+			this.actionContainer.add({
 				xtype: 'box',
 				emptyCmp: true,
 				autoEl: {cls: 'empty control-item', html: 'No results found.'}
