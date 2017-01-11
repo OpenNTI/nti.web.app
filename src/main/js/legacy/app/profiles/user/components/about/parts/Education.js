@@ -102,6 +102,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return text.trim();
 	},
 
+	getCleanTextMultiline: (text) => {
+		text = (text || '').replace(/\r?\n/g, '<br>');
+		return text.replace(/\s{2,}/g, '').trim();
+	},
 
 	entryToValues: function (entry) {
 		var school = entry.querySelector('[data-field=school]'),
@@ -114,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		degree = degree && this.getCleanText(degree.innerText || degree.textContent);
 		startYear = startYear && this.getCleanText(startYear.innerText || startYear.textContent);
 		endYear = endYear && this.getCleanText(endYear.innerText || endYear.textContent);
-		description = description && this.getCleanText(description.innerText || description.textContent);
+		description = description && this.getCleanTextMultiline(description.innerText || description.textContent);
 
 		function normalizeYear (year) {
 			return year ? parseInt(year, 10) : null;

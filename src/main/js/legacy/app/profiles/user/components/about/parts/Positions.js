@@ -93,6 +93,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return !schema || !schema.positions || schema.positions.readonly;
 	},
 
+	processNewline: (text) => {
+		text = (text || '').replace(/\r?\n/g, '<br>');
+		return text.replace(/\s{2,}/g, '').trim();
+	},
+
 
 	entryToValues: function (entry) {
 		var companyName = entry.querySelector('[data-field=companyName]'),
@@ -105,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		title = title && (title.innerText || title.textContent);
 		startYear = startYear && (startYear.innerText || startYear.textContent);
 		endYear = endYear && (endYear.innerText || endYear.textContent);
-		description = description && (description.innerText || description.textContent);
+		description = description && this.processNewline(description.innerText || description.textContent);
 
 		function normalizeYear (year) {
 			return year ? parseInt(year, 10) : null;
