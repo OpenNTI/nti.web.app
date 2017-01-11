@@ -363,7 +363,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		}
 	},
 
-	mark: function () {
+	mark: function (mark) {
 		var s = (this.part.get('solutions') || [])[0],
 			c = (s && s.get('value')) || {}, me = this,
 			values = Ext.clone(this.part.get('values')),
@@ -379,7 +379,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 				cls = (!Ext.isEmpty(key) && value === c[key]) ? 'correct' : 'incorrect';
 
 			e.down('.dropzone').addCls('graded');
-			e.addCls(cls);
+
+			if (mark) {
+				e.addCls(cls);
+			}
+
 			console.log('marking key:', key, 'val:', value, '=?=', c[key] || 'blank', cls);
 		}
 
@@ -393,7 +397,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 
 	markSubmitted: function (state) {
 		this.callParent(arguments);
-		this.mark();
+		this.mark(!!state);
 	},
 
 	//</editor-fold>
