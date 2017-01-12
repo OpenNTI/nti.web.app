@@ -155,6 +155,6 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 
 		route = parts.join('/');
 
-		return route;
+		return route + (this.getCurrentSearch() || '') + (this.getCurrentHash() || '');
 	}
 });
