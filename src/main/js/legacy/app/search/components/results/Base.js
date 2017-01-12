@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 
 	addCreator (name) {
 		UserRepository.getUser(name)
-			.then((user) => this.setCreator(user.getName()));
+			.then((user) => this.setCreator(user));
 	},
 
 	setCreator: function (user) {
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 
 
 	addTitle (obj) {
-		this.setTitle(obj);
+		this.setTitle(obj.get('title'));
 	},
 
 	setTitle: function (title) {
