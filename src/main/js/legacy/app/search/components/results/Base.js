@@ -82,18 +82,17 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		if (name === this.SYSTEM_CREATOR) {
 			me.renderData.creator === '';
 		} else if (name) {
-			UserRepository.getUser(name)
-				.then(function (user) {
-					me.setCreator(user);
-				});
+			this.addCreator(name);
 		}
 
 		me.getObject = me.fetchObject();
 
 		me.getObject
 			.then(function (obj) {
-				me.setTitle(obj);
 				me.hitRecord = obj;
+
+				me.addTitle(obj);
+				me.addObject(obj);
 
 				me.getPathToObject(obj)
 					.then(me.showBreadCrumb.bind(me));
@@ -113,6 +112,12 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		return Service.getObject(this.hit && this.hit.get('NTIID'));
 	},
 
+
+	addCreator (name) {
+		UserRepository.getUser(name)
+			.then((user) => this.setCreator(user.getName()));
+	},
+
 	setCreator: function (user) {
 		var creator = 'By ' + user.getName();
 
@@ -123,9 +128,15 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-	setTitle: function (record) {
-		var title = record.get('title');
 
+	addObject (obj) {},
+
+
+	addTitle (obj) {
+		this.setTitle(obj);
+	},
+
+	setTitle: function (title) {
 		this.renderData.title = title;
 
 		if (this.rendered) {
