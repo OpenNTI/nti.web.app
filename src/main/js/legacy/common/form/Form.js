@@ -653,11 +653,11 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		formData = new FormData(form);
 
-		keys.forEach(function (key) {
+		keys.forEach((key) => {
 			var cmp = components[key];
 
 			if (cmp.appendToFormData) {
-				cmp.appendToFormData(formData);
+				cmp.appendToFormData(formData, this.sendAllValues);
 			}
 		});
 

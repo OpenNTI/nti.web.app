@@ -208,12 +208,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 	},
 
 
-	appendToFormData: function (data) {
+	appendToFormData: function (data, sendAllValues) {
 		var value = this.getValue(),
 			name = this.getValueName();
 
 		if (value) {
-			if (value !== this.defaultValue) {
+			if (value !== this.defaultValue || sendAllValues) {
 				if (typeof value === 'string') {
 					data.append(this.schema.name, value);
 				}
