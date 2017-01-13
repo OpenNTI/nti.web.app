@@ -27,7 +27,8 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		'contentunit': 'reading',
 		'highlight': 'highlight',
 		'relatedworkref': 'reading',
-		'ntitimeline': 'reading'
+		'ntitimeline': 'reading',
+		'ntivideo': 'video'
 	},
 
 	layout: 'none',
