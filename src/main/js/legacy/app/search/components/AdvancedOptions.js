@@ -30,7 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 		'videos': {
 			label: 'Videos',
 			accepts: [
-				'videotranscript'
+				'videotranscript',
+				'ntivideo'
 			]
 		},
 		'highlights': {
