@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var TemplatesForNotes = require('../../../../annotations/note/Templates');
 var UserRepository = require('../../../../../cache/UserRepository');
+const Globals = require('legacy/util/Globals');
 require('../../../../../model/User');
 var DomUtils = require('../../../../../util/Dom');
 require('../../../../../mixins/Searchable');
@@ -847,15 +848,19 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 					var rec = me.store.getById(ref);
 
 					if (rec && rec.get('depth') === 0) {
-						me.mon(me.store, {
-							single: true,
-							buffer: 1,
-							add: function () {
-								me.scrollCommentIntoView(comment);
-								fulfill();
-							}
-						});
-						me.store.showCommentThread(rec);
+						if (rec.get('threadShowing')) {
+							me.scrollCommentIntoView(comment);
+						} else {
+							me.mon(me.store, {
+								single: true,
+								buffer: 1,
+								add: function () {
+									me.scrollCommentIntoView(comment);
+									fulfill();
+								}
+							});
+							me.store.showCommentThread(rec);
+						}
 					}
 				});
 			});
