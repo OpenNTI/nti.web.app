@@ -13,6 +13,7 @@ require('../../../Actions');
 require('../../../../video/window/Window');
 require('legacy/app/contentviewer/Actions');
 var {isMe} = require('legacy/util/Globals');
+const Scrolling = require('legacy/util/Scrolling');
 const {wait} = require('legacy/util/Promise');
 
 
@@ -849,7 +850,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 					if (rec && rec.get('depth') === 0) {
 						if (rec.get('threadShowing')) {
-							me.scrollCommentIntoView(comment);
+							wait()
+								.then(() => me.scrollCommentIntoView(comment));
 						} else {
 							me.mon(me.store, {
 								single: true,
@@ -879,7 +881,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 
 		if (win) {
-			node.scrollCompletelyIntoView(win.el);
+			Scrolling.scrollCompletelyIntoView(node.dom, win.el.dom, 5);
 		} else {
 			node.scrollCompletelyIntoView(node.getScrollingEl());
 		}

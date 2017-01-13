@@ -29,6 +29,46 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 			}
 
 			return this.pageScrolling;
+		},
+
+
+		scrollCompletelyIntoView (node, container, padding = 0, duration = 500) {
+			container = container || this.getPageScrollingEl();
+
+			const nodeRect = node.getBoundingClientRect();
+			const containerRect = container.getBoundingClientRect();
+			const originalScrollTop = container.scrollTop;
+			let scrollTop;
+
+			//If the node is taller than the container just scroll to its top
+			if (nodeRect.height > container.height) {
+				scrollTop = nodeRect.top - padding;
+			} else if (nodeRect.top - containerRect.top < 0) {
+				scrollTop = nodeRect.top - padding;
+			} else if (nodeRect.bottom > containerRect.bottom) {
+				scrollTop = originalScrollTop + (nodeRect.bottom - containerRect.bottom - padding);
+			} else {
+				scrollTop = originalScrollTop;
+			}
+
+			if (scrollTop === originalScrollTop) { return; }
+
+			scrollTop = Math.max(scrollTop, 0);
+
+			const direction = scrollTop > originalScrollTop ? 1 : -1;
+			const scrollDiff = direction * (scrollTop - originalScrollTop);
+
+			const animation = new AnimationFrame ((next, diff) => {
+				const scrollDelta = scrollDiff * (diff / duration);
+				const currentScrollTop = container.scrollTop;
+				const newScrollTop = currentScrollTop + (direction * scrollDelta);
+
+				container.scrollTop = newScrollTop;
+
+				if ((direction < 0 && newScrollTop > scrollTop) || (direction > 0 && newScrollTop < scrollTop)) { next(); }
+			});
+
+			animation.start();
 		}
 	},
 
