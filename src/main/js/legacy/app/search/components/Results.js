@@ -6,6 +6,7 @@ var ResultsTranscriptResult = require('./results/TranscriptResult');
 var ResultsHighlightResult = require('./results/HighlightResult');
 var ResultsVideo = require('./results/Video');
 var ResultsNote = require('./results/Note');
+var Transcripts = require('./results/Timeline');
 var RelatedWorkRef = require('./results/RelatedWorkRef');
 var PathActions = require('../../navigation/path/Actions');
 var WindowsActions = require('../../windows/Actions');
@@ -25,7 +26,8 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		'forums-personalblogcomment': 'thought-comment',
 		'contentunit': 'reading',
 		'highlight': 'highlight',
-		'relatedworkref': 'reading'
+		'relatedworkref': 'reading',
+		'ntitimeline': 'reading'
 	},
 
 	layout: 'none',
