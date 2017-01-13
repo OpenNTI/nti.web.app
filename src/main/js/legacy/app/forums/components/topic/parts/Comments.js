@@ -15,6 +15,7 @@ var {isMe} = require('legacy/util/Globals');
 const {wait} = require('legacy/util/Promise');
 
 
+
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forums-topic-comment-thread',
@@ -591,12 +592,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 			if (!record.threadLoaded && record.get('ReferencedByCount')) {
 				me.store.on('add', function () {
-					var el = me.getNode(record);
+					wait().then(() => {
+						var el = me.getNode(record);
 
-					el = Ext.get(el);
+						el = Ext.get(el);
 
-					me.openEditor(newRecord, el.down('.editor-box'), width);
-					fulfill();
+						me.openEditor(newRecord, el.down('.editor-box'), width);
+
+						fulfill();
+					});
 				}, me, {single: true});
 				me.loadThread(record, el);
 			} else {

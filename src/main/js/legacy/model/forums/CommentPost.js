@@ -89,7 +89,9 @@ module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 
 		while (p) {
 			count = p.get('ReferencedByCount') || 0;
+			p.suspendEvents();
 			p.set('ReferencedByCount', count + 1);
+			p.resumeEvents();
 			p = p.parent;
 		}
 	}
