@@ -56,14 +56,16 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		return fragments.reduce((acc, frag, fragIndex) => {
 			const {Matches:matches = []} = frag;
 
-			matches.reduce((ac, match) => {
-				ac.push({
-					fragIndex,
-					text: match.trim()
-				});
+			if (frag.Field !== 'keywords') {
+				matches.reduce((ac, match) => {
+					ac.push({
+						fragIndex,
+						text: match.trim()
+					});
 
-				return ac;
-			}, acc);
+					return ac;
+				}, acc);
+			}
 
 			return acc;
 		}, []);
