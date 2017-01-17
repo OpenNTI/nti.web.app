@@ -28,7 +28,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				replaceState: this.replaceState,
 				alignNavigation: this.alignNavigation.bind(this),
 				showStudentsForAssignment: this.showStudentsForAssignment.bind(this),
-				createAssignment: this.createAssignment && this.createAssignment.bind(this)
+				createAssignment: this.createAssignment && this.createAssignment.bind(this),
+				createDiscussionAssignment: this.createDiscussionAssignment
 			});
 			this.addChildRouter(root);
 		}

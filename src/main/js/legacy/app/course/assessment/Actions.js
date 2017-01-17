@@ -9,6 +9,29 @@ const ASSIGNMENT_TPL = {
 	'title': 'Untitled Assignment'
 };
 
+const DISCUSSION_TPL = {
+	'Class': 'DiscussionAssignment',
+	'MimeType': 'application/vnd.nextthought.assessment.discussionassignment',
+	'content': '',
+	'parts': '[]',
+	'title': 'Untitled Assignment'
+};
+
+function createAssignmentWithData (link, data) {
+	if (!link) {
+		return Promise.reject('No Link');
+	}
+
+	return Service.post(link, data)
+		.then((resp) => {
+			return ParseUtils.parseItems(resp)[0];
+		})
+		.catch((reason) => {
+			console.error('Failed to create assignment: ', reason);
+			return Promise.reject(reason);
+		});
+}
+
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -16,17 +39,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Actions
 	createAssignmentIn (bundle) {
 		const link = bundle.getLink('CourseEvaluations');
 
-		if (!link) {
-			return Promise.reject('No link');
-		}
+		return createAssignmentWithData(link, ASSIGNMENT_TPL);
+	},
 
-		return Service.post(link, ASSIGNMENT_TPL)
-			.then((resp) => {
-				return ParseUtils.parseItems(resp)[0];
-			})
-			.catch((reason) => {
-				console.error('Failed to create assignment: ', reason);
-				return Promise.reject(reason);
-			});
+
+	createDiscussionAssignmentIn (bundle) {
+		const link = bundle.getLink('CourseEvaluations');
+
+		return createAssignmentWithData(link, DISCUSSION_TPL);
 	}
 });
