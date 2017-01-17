@@ -1,6 +1,9 @@
 var Ext = require('extjs');
 var ParseUtils = require('../../../util/Parsing');
 
+require('legacy/model/assessment/Assignment');
+require('legacy/model/assessment/DiscussionAssignment');
+
 const ASSIGNMENT_TPL = {
 	'Class': 'Assignment',
 	'MimeType': 'application/vnd.nextthought.assessment.assignment',
@@ -13,7 +16,6 @@ const DISCUSSION_TPL = {
 	'Class': 'DiscussionAssignment',
 	'MimeType': 'application/vnd.nextthought.assessment.discussionassignment',
 	'content': '',
-	'parts': '[]',
 	'title': 'Untitled Assignment'
 };
 

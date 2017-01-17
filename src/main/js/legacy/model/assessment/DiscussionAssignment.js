@@ -2,11 +2,11 @@ const Ext = require('extjs');
 
 require('legacy/mixins/ModelWithPublish');
 
-require('legacy/model/Base');
+require('./Assignment');
 
 module.exports = exports = Ext.define('NextThought.model.assessment.DiscussionAssignment', {
-	extend: 'NextThought.model.Base',
-	isAssignment: true,
+	extend: 'NextThought.model.assessment.Assignment',
+
 	isDiscussionAssignment: true,
 
 	statics: {
@@ -15,9 +15,8 @@ module.exports = exports = Ext.define('NextThought.model.assessment.DiscussionAs
 
 	mimeType: 'application/vnd.nextthought.assessment.discussionassignment',
 
-	mixins: {
-		ModelWithPublish: NextThought.mixins.ModelWithPublish
-	},
 
-	fields: []
+	fields: [
+		{name: 'discussion_ntiid', type: 'string'}
+	]
 });
