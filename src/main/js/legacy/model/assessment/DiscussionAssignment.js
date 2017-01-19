@@ -7,7 +7,7 @@ require('./Assignment');
 module.exports = exports = Ext.define('NextThought.model.assessment.DiscussionAssignment', {
 	extend: 'NextThought.model.assessment.Assignment',
 
-	isDiscussionAssignment: true,
+	isDiscussion: true,
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.assessment.discussionassignment'
@@ -18,5 +18,12 @@ module.exports = exports = Ext.define('NextThought.model.assessment.DiscussionAs
 
 	fields: [
 		{name: 'discussion_ntiid', type: 'string'}
-	]
+	],
+
+
+	resolveTopic () {
+		const discussionId = this.get('discussion_ntiid');
+
+		return Service.getObject(discussionId);
+	}
 });

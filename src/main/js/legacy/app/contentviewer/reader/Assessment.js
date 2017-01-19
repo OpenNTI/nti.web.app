@@ -594,15 +594,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		return !!this.injectedAssignment;
 	},
 
-	setAssignmentFromInstructorProspective: function (assignment, history) {
+	setAssignmentFromInstructorProspective: function (assignment, history, student) {
 		this.isInstructorProspective = true;
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
+		this.activeStudent = student;
 	},
 
 	setAssignmentFromStudentProspective: function (assignment, history) {
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
+		this.activeStudent = null;
 	},
 
 	cleanQuestionsThatAreInQuestionSets: function (items, objects) {
