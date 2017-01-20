@@ -160,6 +160,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 	},
 
 
+	alignNavigation () {
+		if (this.reader) {
+			this.reader.alignNavigation();
+		}
+	},
+
+
 	getContainerIdForSearch: function () {
 		return this.pageInfo && this.pageInfo.getId();
 	},

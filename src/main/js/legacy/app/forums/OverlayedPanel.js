@@ -1,5 +1,8 @@
 const Ext = require('extjs');
 const {Forums} = require('nti-web-discussions');
+const ParseUtils = require('legacy/util/Parsing');
+const WindowActions = require('legacy/app/windows/Actions');
+
 const DomUtils = require('../../util/Dom');
 
 require('legacy/overrides/ReactHarness');
@@ -30,6 +33,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.OverlayedPanel', {
 		const assessment = config.reader.getAssessment();
 		const student = assessment.activeStudent;
 		const data = DomUtils.parseDomObject(config.contentElement);
+		const windowActions = new WindowActions();
+
+		const gotoItem = (item) => {
+			const itemData = item.getData();
+			const model = ParseUtils.parseItems(itemData)[0];
+
+			windowActions.pushWindow(model, null, null, {afterClose: () => this.refresh()});
+		};
 
 		Ext.apply(config, {
 			layout: 'none',
@@ -37,11 +48,20 @@ module.exports = exports = Ext.define('NextThought.app.forums.OverlayedPanel', {
 				xtype: 'react',
 				component: Forums.TopicParticipationSummary,
 				topicID: data.ntiid,
-				user: student && student.getId()
+				userID: student && student.getId(),
+				gotoTopic: gotoItem,
+				gotoComment: gotoItem
 			}]
 		});
 
 		this.callParent([config]);
+	},
+
+
+	initComponent () {
+		this.callParent(arguments);
+
+		this.reactComponent = this.down('react');
 	},
 
 
@@ -63,5 +83,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.OverlayedPanel', {
 				observer.disconnect();
 			}
 		});
+	},
+
+	refresh () {
+		if (this.reactComponent && this.reactComponent.componentInstance) {
+			this.reactComponent.componentInstance.refresh();
+		}
 	}
 });
