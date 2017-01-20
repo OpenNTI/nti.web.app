@@ -166,10 +166,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	},
 
 
-	getContentsForDiscussionAssignment (assignment, bundle) {
+	getContentsForDiscussionAssignment (assignment, bundle, student) {
 		return this.getContentsForAssignment(assignment, bundle)
 			.then((contents) => {
-				return assignment.resolveTopic()
+				return assignment.resolveTopic(student)
 						.then((topic) => {
 							const ntiid = topic.getId();
 
@@ -191,8 +191,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	},
 
 
-	getDiscussionAssignmentPageInfo (assignment, bundle) {
-		return this.getContentsForDiscussionAssignment(assignment, bundle)
+	getDiscussionAssignmentPageInfo (assignment, bundle, student) {
+		return this.getContentsForDiscussionAssignment(assignment, bundle, student)
 			.then((contents) => {
 				return buildPageInfoForAssignment(assignment, contents, (newAssignment) => {
 					return this.getDiscussionAssignmentPageInfo(newAssignment || assignment, bundle);
@@ -201,9 +201,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	},
 
 
-	getAssignmentPageInfo (assignment, bundle) {
+	getAssignmentPageInfo (assignment, bundle, student) {
 		return assignment.isDiscussion ?
-					this.getDiscussionAssignmentPageInfo(assignment, bundle) :
+					this.getDiscussionAssignmentPageInfo(assignment, bundle, student) :
 					this.getRegularAssignmentPageInfo(assignment, bundle);
 	},
 

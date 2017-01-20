@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const ParseUtils = require('legacy/util/Parsing');
 
 require('legacy/mixins/ModelWithPublish');
 
@@ -21,10 +22,16 @@ module.exports = exports = Ext.define('NextThought.model.assessment.DiscussionAs
 	],
 
 
-	resolveTopic () {
-		//use the resolve topic link on the need to potentially pass a user param
-		const discussionId = this.get('discussion_ntiid');
+	resolveTopic (user) {
+		const url = this.getLink('ResolveTopic');
+		const params = user ? {user: user.getId()} : {};
 
-		return Service.getObject(discussionId);
+		return Service.request({
+			method: 'GET',
+			url,
+			params
+		}).then((resp) => {
+			return ParseUtils.parseItems([resp])[0];
+		});
 	}
 });
