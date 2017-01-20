@@ -1,8 +1,20 @@
 const Ext = require('extjs');
+const {Forums} = require('nti-web-discussions');
 const DomUtils = require('../../util/Dom');
 
 require('legacy/overrides/ReactHarness');
 require('../contentviewer/overlay/Panel');
+
+function getMutationObserver () {
+	return window.MutationObserver || window.WebKitMutationObserver;
+}
+
+const OBSERVER_INIT = {
+	childList: true,
+	characterData: true,
+	subtree: true,
+	attributes: true
+};
 
 module.exports = exports = Ext.define('NextThought.app.forums.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
@@ -19,17 +31,37 @@ module.exports = exports = Ext.define('NextThought.app.forums.OverlayedPanel', {
 		const student = assessment.activeStudent;
 		const data = DomUtils.parseDomObject(config.contentElement);
 
-
 		Ext.apply(config, {
-			layout: 'fit',
+			layout: 'none',
 			items: [{
-				xtype: 'box',
-				autoEl: {html: 'Topic Embed'},
-				topicId: data.ntiid,
-				perspective: student && student.getId()
+				xtype: 'react',
+				component: Forums.TopicParticipationSummary,
+				topicID: data.ntiid,
+				user: student && student.getId()
 			}]
 		});
 
 		this.callParent([config]);
+	},
+
+
+	afterRender () {
+		this.callParent(arguments);
+
+		const mutation = getMutationObserver();
+		const mutationHandler = Ext.Function.createBuffered(() => this.syncElementHeight(), 100);
+		const observer = new mutation(mutationHandler);
+
+		this.syncElementHeight();
+
+		if (this.el.dom) {
+			observer.observe(this.el.dom, OBSERVER_INIT);
+		}
+
+		this.on('destroy', () => {
+			if (observer) {
+				observer.disconnect();
+			}
+		});
 	}
 });

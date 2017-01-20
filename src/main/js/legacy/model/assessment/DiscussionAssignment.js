@@ -22,6 +22,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.DiscussionAs
 
 
 	resolveTopic () {
+		//use the resolve topic link on the need to potentially pass a user param
 		const discussionId = this.get('discussion_ntiid');
 
 		return Service.getObject(discussionId);
