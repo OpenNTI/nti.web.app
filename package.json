@@ -68,6 +68,7 @@
     "nti-util-logger": "^1.0.0",
     "nti-web-client": "^1.1.1",
     "nti-web-commons": ">=0.0.87",
+    "nti-web-discussions": "0.0.1",
     "nti-web-video": "^1.0.0",
     "null-loader": "^0.1.0",
     "postcss-cli": "^2.5.1",
