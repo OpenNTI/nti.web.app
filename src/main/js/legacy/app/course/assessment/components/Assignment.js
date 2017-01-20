@@ -44,5 +44,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (reader && reader.updateHistory) {
 			reader.updateHistory(h);
 		}
+	},
+
+
+	isSameConfig (config) {
+		const currentConfig = this.readerConfig;
+		const sameAssignment = currentConfig.assignment.getId() === config.assignment.getId();
+		const sameStudent = currentConfig.student.getId() === config.student.getId();
+
+		return sameAssignment && sameStudent;
+	},
+
+
+	alignNavigation () {
+		if (this.reader) {
+			this.reader.alignNavigation();
+		}
 	}
 });

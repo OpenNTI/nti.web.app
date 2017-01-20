@@ -128,6 +128,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 
 	showReader: function (config) {
+		if (this.assignment && !this.assignment.isDestroyed && this.assignment.isSameConfig(config)) {
+			this.getLayout().setActiveItem(this.assignment);
+			this.assignment.alignNavigation();
+			return;
+		}
+
 		if (this.assignment) {
 			if (this.assignment.reader && this.assignment.reader.el) {
 				this.assignment.reader.el.unmask();

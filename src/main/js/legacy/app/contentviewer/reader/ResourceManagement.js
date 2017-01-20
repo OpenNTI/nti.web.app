@@ -10,6 +10,7 @@ var ContentOverlayedPanel = require('../../mediaviewer/content/OverlayedPanel');
 var VideoOverlayedPanel = require('../../video/OverlayedPanel');
 var RollOverlayedPanel = require('../../video/roll/OverlayedPanel');
 var ImageOverlayedPanel = require('../../image/OverlayedPanel');
+var TopicOverlayedPanel = require('../../forums/OverlayedPanel');
 var {guidGenerator} = require('legacy/util/Globals');
 
 
@@ -145,7 +146,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 
 		'object[type$=embeded\\2e widget]': 'overlay-content-embeded-widget',
 
-		'object[class=ntirelatedworkref]': 'overlay-card'
+		'object[class=ntirelatedworkref]': 'overlay-card',
+		'object[type$=embededtopic]': 'overlay-topic'
 	},
 
 	constructor: function (config) {

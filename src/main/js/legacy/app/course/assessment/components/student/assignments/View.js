@@ -354,6 +354,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 		}
 
+		if (this.createDiscussionAssignment) {
+			this.on('create-discussion-assignment', () => {
+				this.createDiscussionAssignment();
+			});
+		}
+
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),
 			sorters: [

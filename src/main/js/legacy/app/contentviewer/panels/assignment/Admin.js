@@ -26,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		this.callParent(arguments);
 
 		var reader = this.down('reader-content'),
+			student = this.student,
 			bundle = this.bundle,
 			pageInfo = this.pageInfo,
 			assignment = this.assignment,
@@ -50,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 
 		assignmentHistory.then(function (h) {
-			readerAssessment.setAssignmentFromInstructorProspective(assignment, h);
+			readerAssessment.setAssignmentFromInstructorProspective(assignment, h, student);
 			reader.getNoteOverlay().disable();
 
 			return reader.setPageInfo(pageInfo, bundle);

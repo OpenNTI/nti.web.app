@@ -4,6 +4,8 @@ require('../../Base');
 require('../../../mixins/DurationCache');
 require('../../courseware/UsersCourseAssignmentHistory');
 require('../../courseware/UsersCourseAssignmentHistoryItem');
+require('../../assessment/Assignment');
+require('../../assessment/DiscussionAssignment');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.assignments.BaseCollection', {

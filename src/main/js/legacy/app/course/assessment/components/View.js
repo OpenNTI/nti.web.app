@@ -313,7 +313,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			title: getString('NextThought.view.courseware.assessment.View.assignments'),
 			route: '/',
 			alignNavigation: this.alignNavigation.bind(this),
-			createAssignment: this.createAssignment.bind(this)
+			createAssignment: this.createAssignment.bind(this),
+			createDiscussionAssignment: this.createDiscussionAssignment.bind(this)
 		});
 
 		this.performanceView = this.body.add({
@@ -360,7 +361,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			title: getString('NextThought.view.courseware.assessment.View.assignments'),
 			route: '/',
 			alignNavigation: this.alignNavigation.bind(this),
-			createAssignment: this.createAssignment.bind(this)
+			createAssignment: this.createAssignment.bind(this),
+			createDiscussionAssignment: this.createDiscussionAssignment.bind(this)
 		});
 
 		this.performanceView = this.body.add({
@@ -474,7 +476,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(() => {
 				this.assignmentsView.showAssignment(assignment, student);
 			})
-			.then(() => { this.setTitle(assignment.get('title')) })
+			.then(() => { this.setTitle(assignment.get('title')); })
 			.then(this.maybeUnmask.bind(this))
 			.then(this.alignNavigation.bind(this));
 	},
@@ -508,34 +510,48 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	createAssignment () {
-		const bundle = this.currentBundle;
-
 		this.el.mask('Loading...');
 
 		this.AssessmentActions.createAssignmentIn(this.currentBundle)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
-			.then((assignment) => {
-				this.appendAssignment(assignment);
-
-				if (this.shouldPushViews()) {
-					delete this.currentBundle;
-
-					return this.bundleChanged(bundle)
-						.then(() => assignment);
-				}
-
-				return assignment;
-			})
-			.then((assignment) => {
-				const title = assignment.get('title');
-				let id = assignment.getId();
-
-				id = encodeForURI(id);
-				this.pushRoute(title, id + '/edit/', {assignment});
-			})
+			.then((assignment) => this.setUpCreatedAssignment(assignment))
 			.always(() => {
 				this.el.unmask();
 			});
+	},
+
+
+	createDiscussionAssignment () {
+		this.el.mask('Loading...');
+
+		this.AssessmentActions.createDiscussionAssignmentIn(this.currentBundle)
+			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
+			.then((assignment) => this.setUpCreatedAssignment(assignment))
+			.always(() => {
+				this.el.unmask();
+			});
+	},
+
+
+	setUpCreatedAssignment (assignment) {
+		return new Promise((fulfill) => {
+			this.appendAssignment(assignment);
+
+			if (this.shouldPushViews()) {
+				delete this.currentBundle;
+
+				this.bundleChanged(this.bundle)
+					.then(() => fulfill(assignment));
+			} else {
+				fulfill(assignment);
+			}
+		}).then(() => {
+			const title = assignment.get('title');
+			let id = assignment.getId();
+
+			id = encodeForURI(id);
+			this.pushRoute(title, id + '/edit/', {assignment});
+		});
 	},
 
 

@@ -9,6 +9,34 @@ require('../../model/RelatedWork');
 require('../../util/Content');
 require('./components/attachment/Window');
 
+
+function buildPageInfoForAssignment (assignment, contents, regenerate) {
+	const ntiid = assignment.getId();
+	const assessmentItems = [assignment];
+	const pageInfo = NextThought.model.PageInfo.create({
+		ID: ntiid,
+		NTIID: ntiid,
+		AssessmentItems: assessmentItems,
+		DoNotLoadAnnotations: true,
+		isFakePageInfo: true,
+		content: Ext.DomHelper.markup([
+			{tag: 'head', cn: [
+				{tag: 'title', html: assignment.get('title')}
+			]},
+			{tag: 'body', cn: [{
+				cls: 'page-contents',
+				cn: [
+					{'data-ntiid': ntiid, ntiid: ntiid, cn: contents}
+				]
+			}]}
+		])
+	});
+
+	pageInfo.regenerate = regenerate;
+
+	return pageInfo;
+}
+
 module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	extend: 'NextThought.common.Actions',
 
@@ -80,13 +108,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	},
 
 
-	getContentsForAssignment (assignment/*, bundle*/) {
-		let parts = assignment && assignment.get('parts');
-		let part = parts && parts[0];
-		let questionSet = part && part.get('question_set');
-		let questions = questionSet && questionSet.get('questions');
-		let title = assignment && assignment.get('title');
-		let description = assignment && assignment.get('content');
+	getContentsForAssignment (assignment) {
+		const title = assignment && assignment.get('title');
+		const description = assignment && assignment.get('content');
 		let contents = [];
 
 		if (title) {
@@ -97,55 +121,90 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 			contents.push({cls: 'sidebar', html: description});
 		}
 
-		return (questions || []).reduce((acc, question) => {
-			let ntiid = question.get('NTIID');
-
-			acc.push({
-				tag: 'object',
-				data: ntiid,
-				'data-canindividual': true,
-				'data-ntiid': ntiid,
-				type: question.get('MimeType'),
-				cn: [
-					{tag: 'param', name: 'canindividual', value: true},
-					{tag: 'param', name: 'ntiid', value: ntiid},
-					{html: '&nbsp;'}
-				]
-			});
-
-
-			return acc;
-		}, contents);
+		return Promise.resolve(contents);
 	},
 
 
-	getAssignmentPageInfo (assignment, bundle) {
-		const ntiid = assignment.getId();
-		const contents = this.getContentsForAssignment(assignment, bundle);
-		const assessmentItems = [assignment];
-		const pageInfo = NextThought.model.PageInfo.create({
-			ID: ntiid,
-			NTIID: ntiid,
-			AssessmentItems: assessmentItems,
-			DoNotLoadAnnotations: true,
-			isFakePageInfo: true,
-			content: Ext.DomHelper.markup([
-				{tag: 'head', cn: [
-					{tag: 'title', html: assignment.get('title')}
-				]},
-				{tag: 'body', cn: [{
-					cls: 'page-contents',
-					cn: [
-						{'data-ntiid': ntiid, ntiid: ntiid, cn: contents}
-					]
-				}]}
-			])
-		});
+	getContentsForRegularAssignment (assignment, bundle) {
+		return this.getContentsForAssignment(assignment, bundle)
+			.then((contents) => {
+				let parts = assignment && assignment.get('parts');
+				let part = parts && parts[0];
+				let questionSet = part && part.get('question_set');
+				let questions = questionSet && questionSet.get('questions');
+
+				return (questions || []).reduce((acc, question) => {
+					let ntiid = question.get('NTIID');
+
+					acc.push({
+						tag: 'object',
+						data: ntiid,
+						'data-canindividual': true,
+						'data-ntiid': ntiid,
+						type: question.get('MimeType'),
+						cn: [
+							{tag: 'param', name: 'canindividual', value: true},
+							{tag: 'param', name: 'ntiid', value: ntiid},
+							{html: '&nbsp;'}
+						]
+					});
 
 
-		pageInfo.regenerate = (newAssignment) => this.getAssignmentPageInfo(newAssignment || assignment, bundle);
+					return acc;
+				}, contents);
+			});
+	},
 
-		return pageInfo;
+
+	getRegularAssignmentPageInfo (assignment, bundle) {
+		return this.getContentsForRegularAssignment(assignment, bundle)
+			.then((contents) => {
+				return buildPageInfoForAssignment(assignment, contents, (newAssignment) => {
+					return this.getRegularAssignmentPageInfo(newAssignment || assignment, bundle);
+				});
+			});
+	},
+
+
+	getContentsForDiscussionAssignment (assignment, bundle, student) {
+		return this.getContentsForAssignment(assignment, bundle)
+			.then((contents) => {
+				return assignment.resolveTopic(student)
+						.then((topic) => {
+							const ntiid = topic.getId();
+
+							contents.push({
+								tag: 'object',
+								data: ntiid,
+								'data-canindividual': true,
+								'data-ntiid': ntiid,
+								type: 'application/vnd.nextthought.app.embededtopic',
+								cn: [
+									{tag: 'param', name: 'canindividual', value: true},
+									{tag: 'param', name: 'ntiid', value: ntiid}
+								]
+							});
+
+							return contents;
+						});
+			});
+	},
+
+
+	getDiscussionAssignmentPageInfo (assignment, bundle, student) {
+		return this.getContentsForDiscussionAssignment(assignment, bundle, student)
+			.then((contents) => {
+				return buildPageInfoForAssignment(assignment, contents, (newAssignment) => {
+					return this.getDiscussionAssignmentPageInfo(newAssignment || assignment, bundle);
+				});
+			});
+	},
+
+
+	getAssignmentPageInfo (assignment, bundle, student) {
+		return assignment.isDiscussion ?
+					this.getDiscussionAssignmentPageInfo(assignment, bundle, student) :
+					this.getRegularAssignmentPageInfo(assignment, bundle);
 	},
 
 
