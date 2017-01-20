@@ -185,8 +185,16 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			Ext.destroy(commentCmp);
 		}
 
-		topicCmp = this.add({xtype: 'forums-topic-topic', record: topic, forum: forum});
+		topicCmp = this.add({
+			xtype: 'forums-topic-topic',
+			record: topic,
+			forum,
+			showAllCommentThreads: this.showAllCommentThreads.bind(this),
+			collapseAllCommentThreads: this.collapseAllCommentThreads.bind(this)
+		});
+
 		commentCmp = this.add({xtype: 'forums-topic-comment-thread', topic: topic, activeComment: activeComment});
+		this.commentCmp = commentCmp;
 
 		if (!commentCmp.ready) {
 			this.mon(commentCmp, {
@@ -206,6 +214,18 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			'record-deleted': this.doClose.bind(this),
 			'edit-topic': this.showEditor.bind(this, topic, forum)
 		});
+	},
+
+	showAllCommentThreads () {
+		if (this.commentCmp) {
+			this.commentCmp.expandAllCommentThreads();
+		}
+	},
+
+	collapseAllCommentThreads () {
+		if (this.commentCmp) {
+			this.commentCmp.hideAllCommentThreads();
+		}
 	},
 
 	showEditor: function (topic, forum) {

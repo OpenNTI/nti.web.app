@@ -68,7 +68,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 						{ tag: 'tpl', 'if': 'canReply', cn: [
 							{ tag: 'span', cls: 'reply link', html: '{{{NextThought.view.forums.topic.parts.Topic.add}}}' }
 						]},
-						{ tag: 'span', cls: 'report link', html: '{{{NextThought.view.forums.topic.parts.Topic.report}}}' }
+						{ tag: 'span', cls: 'report link', html: '{{{NextThought.view.forums.topic.parts.Topic.report}}}' },
+						{ tag: 'span', cls: 'expand link', html: 'Expand All'},
+						{ tag: 'span', cls: 'collapse link', html: 'Collapse All'}
 					]}
 				]}
 			]}
@@ -90,6 +92,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		responseEl: '.comment-box .response',
 		replyLinkEl: '.comment-box .response .reply',
 		reportLinkEl: '.comment-box .response .report',
+		expandLinkEl: '.comment-box .response .expand',
+		collapseLinkEl: '.comment-box .response .collapse',
 		commentEditorBox: '.editor-box'
 	},
 
@@ -200,6 +204,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 			this.mon(this.replyLinkEl, 'click', this.createRootReply, this);
+		}
+
+		if (this.expandLinkEl) {
+			this.mon(this.expandLinkEl, 'click', this.showAllCommentThreads, this);
+		}
+
+		if (this.collapseLinkEl) {
+			this.mon(this.collapseLinkEl, 'click', this.collapseAllCommentThreads, this);
 		}
 
 		this.initSearch();

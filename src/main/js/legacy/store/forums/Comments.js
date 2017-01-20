@@ -41,6 +41,22 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		});
 	},
 
+	expandAllCommentThreads () {
+		this.each(comment => {
+			if (comment.get('depth') === 0) {
+				this.showCommentThread(comment);
+			}
+		});
+	},
+
+	hideAllCommentThreads () {
+		this.each(comment => {
+			if (comment.get('depth') === 0) {
+				this.hideCommentThread(comment);
+			}
+		});
+	},
+
 	hideCommentThread: function (comment) {
 		this.__addFilter(comment.getThreadFilter(), true);
 		comment.set('threadShowing', false);

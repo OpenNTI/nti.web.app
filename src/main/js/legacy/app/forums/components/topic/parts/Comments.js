@@ -892,5 +892,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			key: 'forum',
 			mainViewId: 'forums'
 		};
+	},
+
+	expandAllCommentThreads () {
+		this.store.expandAllCommentThreads();
+	},
+
+	hideAllCommentThreads () {
+		this.store.hideAllCommentThreads();
 	}
 });
