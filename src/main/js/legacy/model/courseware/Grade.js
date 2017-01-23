@@ -22,10 +22,19 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		 * @return {String}		   [escription]
 		 */
 		getDisplay: function (values) {
-			var value = values.value || values.Correctness,
-				letter = values.letter || values.Grade;
+			const value = values.value || values.Correctness;
+			const letter = values.letter || values.Grade;
+			const display = [];
 
-			return value + ' ' + letter;
+			if (value) {
+				display.push(value);
+			}
+
+			if (letter) {
+				display.push(letter);
+			}
+
+			return display.join(' ');
 		},
 
 

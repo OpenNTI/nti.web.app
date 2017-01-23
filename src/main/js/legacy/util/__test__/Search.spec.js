@@ -3,7 +3,7 @@ const XRegExp = require('xregexp');
 const SearchUtils = require('../Search');
 const Hit = require('legacy/model/Hit');
 
-fdescribe('Search utils', () => {
+describe('Search utils', () => {
 
 	/*global XRegExp*/
 	describe('contentRegexFromSearchTerm', () => {
