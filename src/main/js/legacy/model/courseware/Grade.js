@@ -26,11 +26,11 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 			const letter = values.letter || values.Grade;
 			const display = [];
 
-			if (value) {
+			if (value || value === 0) {
 				display.push(value);
 			}
 
-			if (letter) {
+			if (letter || letter === 0) {
 				display.push(letter);
 			}
 
