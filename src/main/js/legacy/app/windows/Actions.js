@@ -63,6 +63,8 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 			if (objectOrNTIID.addMimeTypeToRoute) {
 				mimeType = objectOrNTIID.mimeType;
 			}
+		} else {
+			this.WindowStore.cacheObject(id, null, el, monitors, precache);
 		}
 
 		this.WindowStore.firePushWindow(id, mimeType, state);
@@ -96,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		cache = this.WindowStore.getObject(id);
 
 		if (cache) {
-			objectOrNTIID = cache.obj;
+			objectOrNTIID = cache.obj || objectOrNTIID;
 			el = el || cache.el;
 			monitors = monitors || cache.monitors;
 			precache = precache || cache.precache;
