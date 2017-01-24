@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	createAssignment () {
-		if (!Service.canDoAdvancedEditing() && false) {//TODO: remove forcing this to be false
+		if (!Service.canDoAdvancedEditing()) {
 			this.fireEvent('create-assignment');
 			return;
 		}
