@@ -1,6 +1,5 @@
 const Ext = require('extjs');
 const {Forums} = require('nti-web-discussions');
-const ParseUtils = require('legacy/util/Parsing');
 const WindowActions = require('legacy/app/windows/Actions');
 
 const DomUtils = require('../../util/Dom');
@@ -36,10 +35,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.OverlayedPanel', {
 		const windowActions = new WindowActions();
 
 		const gotoItem = (item) => {
-			const itemData = item.getData();
-			const model = ParseUtils.parseItems(itemData)[0];
+			const itemId = item.getID();
 
-			windowActions.pushWindow(model, null, null, {afterClose: () => this.refresh()});
+			windowActions.pushWindow(itemId, null, null, {afterClose: () => this.refresh()});
 		};
 
 		Ext.apply(config, {
