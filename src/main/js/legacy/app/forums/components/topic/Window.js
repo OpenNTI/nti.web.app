@@ -1,17 +1,20 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../../../util/Analytics');
-var ForumsDFLHeadlineTopic = require('../../../../model/forums/DFLHeadlineTopic');
-var WindowsStateStore = require('../../../windows/StateStore');
-var ComponentsHeader = require('../../../windows/components/Header');
-var ComponentsLoading = require('../../../windows/components/Loading');
-var WindowsActions = require('../../../windows/Actions');
-var ForumsCommunityHeadlineTopic = require('../../../../model/forums/CommunityHeadlineTopic');
-var ForumsContentHeadlineTopic = require('../../../../model/forums/ContentHeadlineTopic');
-var ForumsCommunityHeadlinePost = require('../../../../model/forums/CommunityHeadlinePost');
-var PartsComment = require('./parts/Comments');
-var PartsEditor = require('./parts/Editor');
-var PartsPager = require('./parts/Pager');
-var PartsTopic = require('./parts/Topic');
+const Ext = require('extjs');
+const AnalyticsUtil = require('../../../../util/Analytics');
+const {isFeature} = require('legacy/util/Globals');
+
+require('../../../../model/forums/DFLHeadlineTopic');
+require('../../../windows/StateStore');
+require('../../../windows/components/Header');
+require('../../../windows/components/Loading');
+require('../../../windows/Actions');
+require('../../../../model/forums/CommunityHeadlineTopic');
+require('../../../../model/forums/ContentHeadlineTopic');
+require('../../../../model/forums/CommunityHeadlinePost');
+require('./parts/Comments');
+require('./parts/Editor');
+require('./parts/Pager');
+require('./parts/Topic');
+require('./parts/CommentControls');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.Window', {
@@ -134,6 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 	showTopic: function (topic, forum, activeComment) {
 		var topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
+			controlCmp = this.down('forums-topic-comment-controls'),
 			me = this;
 
 		function stopTimer () {
@@ -149,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 				AnalyticsUtil.getResourceTimer(me.currentAnalyticId, {
 					type: 'discussion-viewed',
-					topic_id: me.currentAnalyticId
+					'topic_id': me.currentAnalyticId
 				});
 			}
 		}
@@ -183,18 +187,22 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		if (topic) {
 			Ext.destroy(topicCmp);
 			Ext.destroy(commentCmp);
+			Ext.destroy(controlCmp);
 		}
 
-		topicCmp = this.add({
-			xtype: 'forums-topic-topic',
-			record: topic,
-			forum,
-			showAllCommentThreads: this.showAllCommentThreads.bind(this),
-			collapseAllCommentThreads: this.collapseAllCommentThreads.bind(this)
-		});
+		topicCmp = this.add({xtype: 'forums-topic-topic', record: topic, forum});
+
+		if (isFeature('forum-comment-expand-collapse')) {
+			controlCmp = this.add({xtype: 'forums-topic-comment-controls'});
+		} else {
+			controlCmp = null;
+		}
 
 		commentCmp = this.add({xtype: 'forums-topic-comment-thread', topic: topic, activeComment: activeComment});
-		this.commentCmp = commentCmp;
+
+		if (controlCmp) {
+			controlCmp.setCommentCmp(commentCmp);
+		}
 
 		if (!commentCmp.ready) {
 			this.mon(commentCmp, {
@@ -216,17 +224,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		});
 	},
 
-	showAllCommentThreads () {
-		if (this.commentCmp) {
-			this.commentCmp.expandAllCommentThreads();
-		}
-	},
-
-	collapseAllCommentThreads () {
-		if (this.commentCmp) {
-			this.commentCmp.hideAllCommentThreads();
-		}
-	},
 
 	showEditor: function (topic, forum) {
 		var me = this,
@@ -242,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		editor = me.add({xtype: 'forums-topic-editor', record: topic, forum: forum});
 
 		me.mon(editor, {
-			'cancel': function (rec) {
+			'cancel': function (/*rec*/) {
 				me.remove(editor);
 
 				if (me.record) {

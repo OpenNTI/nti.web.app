@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		});
 	},
 
-	hideAllCommentThreads () {
+	collapseAllCommentThreads () {
 		this.each(comment => {
 			if (comment.get('depth') === 0) {
 				this.hideCommentThread(comment);
