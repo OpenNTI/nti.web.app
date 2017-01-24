@@ -1791,6 +1791,25 @@
 	box-shadow: 0 0 1px 1px #ccc;
 }
 
+.forums-topic-comment-controls {
+	padding: 0.3rem 25px;
+
+	span {
+		display: inline-block;
+		font-size: 0.875rem;
+		color: $primary-blue;
+		cursor: pointer;
+
+		&:first-of-type::after {
+			font-weight: 600;
+			content: '\00B7';
+			vertical-align: baseline;
+			display: inline-block;
+			padding: 0 0.6em;
+		}
+	}
+}
+
 /*.x-container.x-border-item.x-box-item.x-container-default.x-layout-fit{
 	.navigation-bar{
 		z-index: 3;
