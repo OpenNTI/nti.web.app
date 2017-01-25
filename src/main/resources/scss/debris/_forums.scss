@@ -1789,6 +1789,10 @@
 //The topic embed overlay in the reader
 .topic-embed-widget {
 	box-shadow: 0 0 1px 1px #ccc;
+
+	figure {
+		margin: 0;
+	}
 }
 
 .forums-topic-comment-controls {

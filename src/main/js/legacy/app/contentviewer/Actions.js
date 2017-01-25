@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const ContentUtils = require('../../util/Content');
 const ParseUtils = require('legacy/util/Parsing');
+const {guidGenerator} = require('legacy/util/Globals');
 
 require('legacy/app/prompt/Actions');
 require('../../common/Actions');
@@ -8,6 +9,8 @@ require('../../model/PageInfo');
 require('../../model/RelatedWork');
 require('../../util/Content');
 require('./components/attachment/Window');
+
+const TOPIC_EMBED = 'application/vnd.nextthought.app.embededtopic';
 
 
 function buildPageInfoForAssignment (assignment, contents, regenerate) {
@@ -178,10 +181,26 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 								data: ntiid,
 								'data-canindividual': true,
 								'data-ntiid': ntiid,
-								type: 'application/vnd.nextthought.app.embededtopic',
+								type: TOPIC_EMBED,
 								cn: [
 									{tag: 'param', name: 'canindividual', value: true},
 									{tag: 'param', name: 'ntiid', value: ntiid}
+								]
+							});
+
+							return contents;
+						})
+						.catch(() => {
+							const ntiid = guidGenerator();
+
+							contents.push({
+								tag: 'object',
+								data: ntiid,
+								'data-canindividual': true,
+								'data-ntiid': ntiid,
+								type: TOPIC_EMBED,
+								cn: [
+									{tag: 'param', name: 'canindividual', value: true}
 								]
 							});
 
