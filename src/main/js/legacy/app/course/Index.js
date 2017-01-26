@@ -24,6 +24,8 @@ const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
 const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic');
 const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
 const Video = require('legacy/model/Video');
+const Assignment = require('legacy/model/assessment/Assignment');
+const DiscussionAssignment = require('legacy/model/assessment/DiscussionAssignment');
 
 const DASHBOARD = 'course-dashboard';
 const OVERVIEW = 'course-overview';
@@ -101,7 +103,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		//TODO: add a /video route to show the grid view
 		this.addRoute('/videos/:id', this.showVideos.bind(this));
 
-		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
+		this.addObjectHandler(Assignment.mimeType, this.getAssignmentRoute.bind(this));
+		this.addObjectHandler(DiscussionAssignment.mimeType, this.getAssignmentRoute.bind(this));
 		this.addObjectHandler('application/vnd.nextthought.courses.courseoutlinecontentnode', this.getLessonRoute.bind(this));
 
 		this.addObjectHandler([
