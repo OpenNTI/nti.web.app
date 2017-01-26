@@ -60,17 +60,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			this.pageInfo.replaceAssignment(assignment);
 		}
 
-		if (this.pageInfo.regenerate) {
-			this.pageInfo = this.pageInfo.regenerate(assignment);
-		}
-
 		this.assignment = assignment;
-		this.showReader();
-		delete this.hasTimedPlaceholder;
 
-		if (this.rendered) {
-			this.showAssignment();
-		}
+		const regenerate = this.pageInfo.regenerate ? this.pageInfo.regenerate(assignment) : Promise.resolve(this.pageInfo);
+
+		regenerate
+			.then((pageInfo) => {
+				this.pageInfo = pageInfo;
+				this.showReader();
+				delete this.hasTimedPlaceholder;
+
+				if (this.rendered) {
+					this.showAssignment();
+				}
+			});
+
 	},
 
 	showAllowedTime: function () {
