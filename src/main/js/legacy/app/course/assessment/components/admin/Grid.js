@@ -423,8 +423,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	onItemClicked: function (v, record, dom, ix, e) {
 		var nib = e.getTarget('.actions');
+
+		const gradeUpdated = () => {
+			this.fireEvent('grade-updated', record);
+		}
+
 		if (nib) {
-			NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(record).showBy(nib, 'tr-br');
+			NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(record, gradeUpdated, gradeUpdated).showBy(nib, 'tr-br');
 			return false;
 		}
 	}

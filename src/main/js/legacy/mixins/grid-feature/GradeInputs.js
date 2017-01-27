@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 				me.afterEdit();
 			}
 
-			me.fireEvent('grade-edited', record);
+			me.fireEvent('grade-updated', record);
 
 			delete me.save;
 		});

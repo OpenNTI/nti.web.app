@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		 * @param  {UsersCourseAssignmentHistoryItem} record the history item we are getting actions for
 		 * @return {Ext.Menu}		 a menu component
 		 */
-		getActionsMenu: function (record) {
+		getActionsMenu: function (record, onReset = () => {}, onExcused = () => {}) {
 			var menu = Ext.widget('menu', {
 					ownerCmp: this,
 					constrainTo: Ext.getBody(),
@@ -239,7 +239,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 				menu.add(new Ext.Action({
 					text: 'Reset Assignment',
 					scope: this,
-					handler: Ext.bind(record.beginReset, record),
+					handler: () => {
+						record.beginReset()
+							.then(onReset);
+					},
 					itemId: 'delete-assignment-history',
 					ui: 'nt-menuitem', plain: true
 				}));
@@ -253,7 +256,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 				menu.add(new Ext.Action({
 					text: txt,
 					scope: this,
-					handler: Ext.bind(record.handleExcuseGrade, record),
+					handler: () => {
+						record.handleExcuseGrade()
+							.then(onExcused);
+					},
 					itemId: 'excuse-grade-item',
 					ui: 'nt-menuitem',
 					plain: true

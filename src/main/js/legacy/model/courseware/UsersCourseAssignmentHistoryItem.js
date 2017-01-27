@@ -296,74 +296,79 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		let record = this;
 		// let store = record.store;
 
-		Ext.MessageBox.alert({
-			title: 'Are you sure?',
-			msg: 'This will reset this assignment for this student. It is not recoverable.' +
-				'\nFeedback and work will be deleted.',
-			icon: 'warning-red',
-			buttonText: true,
-			buttons: {
-				primary: {
-					name: 'yes',
-					text: 'Yes',
-					cls: 'caution'
+		return new Promise ((fulfill, reject) => {
+			Ext.MessageBox.alert({
+				title: 'Are you sure?',
+				msg: 'This will reset this assignment for this student. It is not recoverable.' +
+					'\nFeedback and work will be deleted.',
+				icon: 'warning-red',
+				buttonText: true,
+				buttons: {
+					primary: {
+						name: 'yes',
+						text: 'Yes',
+						cls: 'caution'
+					},
+					secondary: 'Cancel'
 				},
-				secondary: 'Cancel'
-			},
-			fn: function (button) {
-				if (button === 'yes') {
-					Service.request({
-						url: record.getLink('UsersCourseAssignmentHistoryItem') || record.get('href'),
-						method: 'DELETE'})
-							.catch(function () {
-								alert('Sorry, I could not do that.');
-								console.error(arguments);
-							})
-							.then(function () {
-								var user = record.get('Creator'),
-									item = record.get('item'),
-									grade = null;
+				fn: function (button) {
+					if (button === 'yes') {
+						Service.request({
+							url: record.getLink('UsersCourseAssignmentHistoryItem') || record.get('href'),
+							method: 'DELETE'})
+								.catch(function () {
+									alert('Sorry, I could not do that.');
+									reject();
+									console.error(arguments);
+								})
+								.then(function () {
+									var user = record.get('Creator'),
+										item = record.get('item'),
+										grade = null;
 
-								delete record.isSummary;
-								delete record.raw.SubmissionCreatedTime;
-								delete record.raw.Submission;
-								delete record.raw.FeedbackCount;
-								delete record.raw.Grade;
-								delete record.raw.Feedback;
-								delete record.raw.Metadata;
+									delete record.isSummary;
+									delete record.raw.SubmissionCreatedTime;
+									delete record.raw.Submission;
+									delete record.raw.FeedbackCount;
+									delete record.raw.Grade;
+									delete record.raw.Feedback;
+									delete record.raw.Metadata;
 
-								if (record.collection && record.collection.createPlaceholderGrade) {
-									grade = record.collection.createPlaceholderGrade(item, user);
+									if (record.collection && record.collection.createPlaceholderGrade) {
+										grade = record.collection.createPlaceholderGrade(item, user);
 
-									record.raw.Grade = grade;
-								}
+										record.raw.Grade = grade;
+									}
 
-								record.set({
-									Submission: null,
-									Grade: grade,
-									Feedback: null,
-									Metadata: null,
-									completed: null,
-									SubmissionCreatedTime: null,
-									submission: null,
-									pendingAssessment: null
+									record.set({
+										Submission: null,
+										Grade: grade,
+										Feedback: null,
+										Metadata: null,
+										completed: null,
+										SubmissionCreatedTime: null,
+										submission: null,
+										pendingAssessment: null
+									});
+
+									record.isPlaceholder = true;
+									record.fireEvent('reset-assignment');
+									record.fireEvent('was-destroyed');
+									fulfill();
 								});
 
-								record.isPlaceholder = true;
-								record.fireEvent('reset-assignment');
-								record.fireEvent('was-destroyed');
-							});
-
+					}
 				}
-			}
+			});
 		});
 	},
 
 	handleExcuseGrade: function (menuItemEl) {
 		var grade = this.get('Grade'), me = this;
+		var handle;
 
 		if (grade && grade.excuseGrade) {
-			grade.excuseGrade()
+			handle = grade.excuseGrade()
 				.then(function (record) {
 					let txt = record.get('IsExcused') === true ? 'Unexcuse Grade' : 'Excuse Grade';
 					// let store = me.store;
@@ -378,7 +383,11 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				.catch(function (err) {
 					console.log('Excusing grade failed: ' + err);
 				});
+		} else {
+			handle = Promise.resolve();
 		}
+
+		return handle;
 	},
 
 	getSubmissionStatus: function (due) {

@@ -39,7 +39,23 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Sum
 									{Correctness: grade.get('Correctness'), Grade: grade.get('Grade'), RawValue: grade.get('RawValue')} :
 									null;
 
+				//Dirty hack to cover up extjs' mess
+				this.suspendEvents();
+				this.editing = true;
 				this.set('PredictedGrade', predicted);
+				delete this.editing;
+				this.resumeEvents();
+
+				this.fireEvent('update');
+			})
+			.catch(() => {
+				//Dirty hack to cover up extjs' mess
+				this.suspendEvents();
+				this.editing = true;
+				this.set('PredictedGrade', null);
+				delete this.editing;
+				this.resumeEvents();
+
 				this.fireEvent('update');
 			});
 	}

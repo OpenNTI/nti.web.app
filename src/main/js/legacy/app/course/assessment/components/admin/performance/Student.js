@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(grid, {
 			'itemClick': this.maybeShowAssignment.bind(this),
 			'sortchange': this.changeSort.bind(this),
-			'grade-edited': () => this.onGradeEdited()
+			'grade-updated': () => this.onGradeUpdated()
 		});
 	},
 
@@ -212,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	onGradeEdited () {
+	onGradeUpdated () {
 		this.updateSummary();
 	},
 
