@@ -195,7 +195,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 							contents.push({
 								tag: 'object',
-								data: ntiid,
 								'data-canindividual': true,
 								'data-ntiid': ntiid,
 								type: TOPIC_EMBED,
