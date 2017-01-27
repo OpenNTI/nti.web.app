@@ -53,9 +53,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			doNavigation: this.doNavigation.bind(this)
 		});
 
+
+		this.mon(this.summary, 'update', () => this.updateHeader());
 		this.mon(grid, {
 			'itemClick': this.maybeShowAssignment.bind(this),
-			'sortchange': this.changeSort.bind(this)
+			'sortchange': this.changeSort.bind(this),
+			'grade-edited': () => this.onGradeEdited()
 		});
 	},
 
@@ -106,7 +109,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		view.refresh();
 
+		this.updateSummary();
+
 		return Promise.resolve();
+	},
+
+	updateSummary () {
+		if (this.summary && this.summary.updatePredicted) {
+			this.summary.updatePredicted();
+		}
+	},
+
+	updateHeader () {
+		this.header.setGradeBook(this.summary.hasFinalGrade() && this.FinalGradeHistoryItem);
+		this.header.setPredictedGrade(this.summary.get('PredictedGrade') || this.predictedGrade);
 	},
 
 	setAssignmentsData: function (assignments) {
@@ -117,9 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		var state = this.getCurrentState() || {};
 
-		this.header.setGradeBook(this.summary.hasFinalGrade() && this.FinalGradeHistoryItem);
-
-		this.header.setPredictedGrade(this.predictedGrade);
+		this.updateHeader();
 
 		this.store = assignments.getStudentHistory(this.historiesURL, this.student.getId());
 
@@ -196,6 +210,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (!this.applyingState) {
 			this.setState(state);
 		}
+	},
+
+	onGradeEdited () {
+		this.updateSummary();
 	},
 
 	maybeShowAssignment: function (view, record, node, index, e) {

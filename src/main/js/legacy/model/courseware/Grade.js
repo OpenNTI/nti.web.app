@@ -66,6 +66,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 			return v;
 		}},
 		{name: 'Correctness', type: 'string', persist: false},
+		{name: 'Grade', type: 'string', persist: false},
+		{name: 'RawValue', type: 'string', persist: false},
 		{name: 'IsPredicted', type: 'bool', persist: false},
 		{name: 'AssignmentId', type: 'string'},
 		{name: 'assignmentName', type: 'string', persist: false},
