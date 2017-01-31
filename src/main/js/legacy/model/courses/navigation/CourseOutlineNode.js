@@ -221,25 +221,19 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 	},
 
 	getContents: function () {
-		const key = 'contents';
 		const link = this.getLink('overview-content');
+		let contents;
 
-		let contents = this.getFromCache(key);
-
-		if (!contents) {
-			if (!link) {
-				contents = Promise.resolve(null);
-			} else {
-				contents = Service.request(link)
-							.then(response => ParseUtils.parseItems(response)[0])
-							.then(content => (content.outlineNode = this, content))
-							.catch(error => {
-								console.error('Unable to get contents because: %o', error.stack || error.message || error);
-								return null;
-							});
-			}
-
-			this.cacheForShortPeriod(key, contents);
+		if (!link) {
+			contents = Promise.resolve(null);
+		} else {
+			contents = Service.request(link)
+						.then(response => ParseUtils.parseItems(response)[0])
+						.then(content => (content.outlineNode = this, content))
+						.catch(error => {
+							console.error('Unable to get contents because: %o', error.stack || error.message || error);
+							return null;
+						});
 		}
 
 		return contents;
