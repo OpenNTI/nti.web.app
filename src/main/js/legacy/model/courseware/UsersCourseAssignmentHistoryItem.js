@@ -459,7 +459,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		const batcher = this.self.getBatchExecution();
 
 		return batcher.schedule(() => grade.saveValue(value, letter))
-			.then(newGrade => grade.set(newGrade.asJSON()))
+			.then(newGrade => grade.syncWith(newGrade))
 			.then(() => {});
 	},
 
