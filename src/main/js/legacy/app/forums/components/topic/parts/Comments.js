@@ -183,6 +183,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		me.mon(me.editor, 'save', me.saveComment.bind(me));
 
+		me.on('refresh', () => {
+			me.fireEvent('realign-editor');
+		});
+
 		if (me.scrollToComment) {
 			me.goToComment(me.scrollToComment);
 		}
@@ -902,6 +906,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 	collapseAllCommentThreads () {
+		if (this.editor && this.editor.isActive()) {
+			this.refocusEditor();
+			return;
+		}
+
 		this.store.collapseAllCommentThreads();
 	}
 });
