@@ -105,6 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 
 		me.resolvePageInfo()
 			.then(function (pageInfo) {
+				me.resolvedPageInfo = pageInfo;
 				me.readerConfig.pageInfo = pageInfo;
 
 				me.readerConfig = me.__fixConfigForPageInfo(me.readerConfig, pageInfo);
@@ -168,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 
 
 	getContainerIdForSearch: function () {
-		return this.pageInfo && this.pageInfo.getId();
+		return this.resolvedPageInfo && this.resolvedPageInfo.getId();
 	},
 
 
