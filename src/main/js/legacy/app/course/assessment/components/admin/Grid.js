@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var TimeUtils = require('../../../../../util/Time');
 var GridFeatureGradeInputs = require('../../../../../mixins/grid-feature/GradeInputs');
+var Globals = require('../../../../../util/Globals');
 var AssessmentAssignmentStatus = require('../../AssignmentStatus');
 
 
@@ -43,7 +44,39 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				name: 'name',
 				tdCls: 'padded-cell',
 				padding: '0 0 0 30',
-				flex: 1
+				flex: 1,
+				doSort: function (state) {
+					let get = (o) => { return o.get('name'); },
+						store = this.up('grid').getStore(),
+						sorters = [
+							{
+								direction: state,
+								property: 'name',
+								sorterFn: function (a, b) {
+									let aVal = get(a),
+										bVal = get(b),
+										aNum = parseFloat(aVal),
+										bNum = parseFloat(bVal),
+										sort;
+
+									/*
+										Identical to student sorting
+									 */
+									if (!isNaN(aNum) && isNaN(bNum)) {
+										sort = -1;
+									} else if (isNaN(aNum) && !isNaN(bNum)) {
+										sort = 1;
+									} else if (!isNaN(aNum) && !isNaN(bNum)) {
+										sort = aNum > bNum ? -1 : aNum === bNum ? 0 : 1;
+									} else {
+										sort = Globals.naturalSortComparator((aVal || '').toUpperCase(), (bVal || '').toUpperCase());
+									}
+									return sort;
+								}
+							}
+						];
+					store.sort(sorters);
+				}
 			},
 
 
