@@ -7,11 +7,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	extend: 'NextThought.app.profiles.user.components.about.parts.EntrySet',
 	alias: 'widget.profile-user-about-education',
 
-	cls: 'education fieldset groupset',
+	cls: 'education fieldset groupset education-entryset',
 	name: 'education',
 
 	title: 'Education',
-	errorMsg: 'Missing Required Education Field',
+	missingErrorMsg: 'Missing Required Education Field',
+	errorMsg: this.missingErrorMsg,
 	emptyText: 'Where did you go to school?',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -121,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		description = description && this.getCleanTextMultiline(description.innerText || description.textContent);
 
 		function normalizeYear (year) {
-			return year ? parseInt(year, 10) : null;
+			return year || year === 0 ? parseInt(year, 10) : null;
 		}
 
 		return {
@@ -136,8 +137,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	validateEntry: function (entry) {
-		var valid = true;
-		values = this.entryToValues(entry);
+		var valid = true,
+			values = this.entryToValues(entry);
 
 		if (!values.school) {
 			this.showErrorForField(entry, 'school', 'Required');
@@ -148,6 +149,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			this.showErrorForField(entry, 'startYear', 'Required');
 			valid = false;
 		}
+
+		if (!valid) {
+			let dom = Ext.dom.Query.select('.profile-about'),
+				el = Ext.get(dom[0]);
+
+			el.removeErrors && el.removeErrors();
+		}
+
+		this.errorMsg = values.startYear === 0 ? 'Education Start Year Must Be Greater Than Or Equal To 1900' : this.missingErrorMsg;
 
 		return valid ? '' : this.errorMsg;
 	}

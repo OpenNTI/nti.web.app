@@ -9,9 +9,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	name: 'positions',
 
-	cls: 'positions fieldset groupset',
+	cls: 'positions fieldset groupset position-entryset',
 	title: 'Professional',
-	errorMsg: 'Missing Required Professional Field',
+	missingErrorMsg: 'Missing Required Professional Field',
+	errorMsg: this.missingErrorMsg,
 	emptyText: 'Where do you work?',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -113,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		description = description && this.processNewline(description.innerText || description.textContent);
 
 		function normalizeYear (year) {
-			return year ? parseInt(year, 10) : null;
+			return year || year === 0 ? parseInt(year, 10) : null;
 		}
 
 		return {
@@ -127,8 +128,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	validateEntry: function (entry) {
-		var valid = true;
-		values = this.entryToValues(entry);
+		var valid = true,
+			values = this.entryToValues(entry);
+
 
 		if (!values.companyName) {
 			this.showErrorForField(entry, 'companyName', 'Required');
@@ -144,6 +146,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			this.showErrorForField(entry, 'startYear', 'Required');
 			valid = false;
 		}
+
+		if (!valid) {
+			let dom = Ext.dom.Query.select('.profile-about'),
+				el = Ext.get(dom[0]);
+
+			el.removeErrors && el.removeErrors();
+		}
+
+		this.errorMsg = values.startYear === 0 ? 'Position Start Year Must Be Greater Than Or Equal To 1900' : this.missingErrorMsg;
 
 		return valid ? '' : this.errorMsg;
 	}
