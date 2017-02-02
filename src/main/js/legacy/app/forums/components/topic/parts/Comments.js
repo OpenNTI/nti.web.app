@@ -46,65 +46,72 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'new-root'},
 		{ tag: 'tpl', 'for': '.', cn: [
-			{ cls: 'topic-comment-container {[values.threadShowing ? "expanded" : "collapsed"]}', 'data-depth': '{depth}', tabindex: -1, cn: [
-				{ tag: 'tpl', 'if': 'Deleted', cn: {
-					cls: 'topic-comment placeholder {[values.threadShowing? "expanded" : "collapsed"]}',
-					'data-depth': '{depth}',
-					cn: [
-						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
-							{ cls: 'body', html: '{{{NextThought.view.forums.topic.parts.Comments.deleted}}}'},
-							{ cls: 'foot', cn: [
-								{ tag: 'tpl', 'if': 'depth == 0 &amp;&amp; ReferencedByCount &gt; 0', cn: [
-									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
+			{
+				cls: 'topic-comment-container {[values.threadShowing ? "expanded" : "collapsed"]} {[values.threadShowing && !values.repliesLoaded && values.ReferencedByCount > 0? "loading" : ""]}',
+				'data-depth': '{depth}',
+				tabindex: -1,
+				cn: [
+					{ tag: 'tpl', 'if': 'Deleted', cn: {
+						cls: 'topic-comment placeholder {[values.threadShowing? "expanded" : "collapsed"]}',
+						'data-depth': '{depth}',
+						cn: [
+							{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
+								{ cls: 'body', html: '{{{NextThought.view.forums.topic.parts.Comments.deleted}}}'},
+								{ cls: 'foot', cn: [
+									{ tag: 'tpl', 'if': 'depth == 0 &amp;&amp; ReferencedByCount &gt; 0', cn: [
+										{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
+									]}
 								]}
 							]}
-						]}
-					]
-				}},
-				{ tag: 'tpl', 'if': '!Deleted', cn: {
-					cls: 'topic-comment {[values.threadShowing ? "expanded" : "collapsed"]} {[values.depth === 0 && values.ReferencedByCount > 0 ? "toggle" : ""]}',
-					'data-depth': '{depth}',
-					cn: [
-						{ cls: 'controls', cn: [
-							{cls: 'favorite-spacer'},
-							{cls: 'like {[values.liked? "on" : "off"]}', html: '{likeCount}'}
-						]},
-						'{Creator:avatar("commentAvatar")}',
-						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
-							{ cls: 'meta', cn: [
-								{ tag: 'span', html: '{Creator:displayName()}', cls: 'name link'},
-								{ tag: 'tpl', 'if': 'depth &gt; 4', cn: [
-									{ tag: 'span', html: '{{{NextThought.view.forums.topic.parts.Comments.repliedto}}}'}
-								]},
-								{ tag: 'tpl', 'if': 'depth &lt; 5', cn: [
-									{ tag: 'span', cls: 'datetime nodot', html: '{CreatedTime:ago}'}
-								]}
+						]
+					}},
+					{ tag: 'tpl', 'if': '!Deleted', cn: {
+						cls: 'topic-comment {[values.threadShowing ? "expanded" : "collapsed"]} {[values.depth === 0 && values.ReferencedByCount > 0 ? "toggle" : ""]}',
+						'data-depth': '{depth}',
+						cn: [
+							{ cls: 'controls', cn: [
+								{cls: 'favorite-spacer'},
+								{cls: 'like {[values.liked? "on" : "off"]}', html: '{likeCount}'}
 							]},
-							{ cls: 'body', html: '{bodyContent}'},
-							{ cls: 'foot', cn: [
-								{ tag: 'tpl', 'if': 'depth === 0', cn: [
-									{ tag: 'span', cls: 'comments  {[values.ReferencedByCount > 0 ? "link toggle" : ""]}', html: '{ReferencedByCount:plural("Comment")}'}
+							'{Creator:avatar("commentAvatar")}',
+							{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
+								{ cls: 'meta', cn: [
+									{ tag: 'span', html: '{Creator:displayName()}', cls: 'name link'},
+									{ tag: 'tpl', 'if': 'depth &gt; 4', cn: [
+										{ tag: 'span', html: '{{{NextThought.view.forums.topic.parts.Comments.repliedto}}}'}
+									]},
+									{ tag: 'tpl', 'if': 'depth &lt; 5', cn: [
+										{ tag: 'span', cls: 'datetime nodot', html: '{CreatedTime:ago}'}
+									]}
 								]},
-								{ tag: 'span', cls: 'reply thread-reply link', html: '{{{NextThought.view.forums.topic.parts.Comments.reply}}}'},
-								{ tag: 'tpl', 'if': 'isModifiable', cn: [
-									{ tag: 'span', cls: 'edit link', html: '{{{NextThought.view.forums.topic.parts.Comments.edit}}}'},
-									{ tag: 'span', cls: 'delete link', html: '{{{NextThought.view.forums.topic.parts.Comments.delete}}}'}
+								{ cls: 'body', html: '{bodyContent}'},
+								{ cls: 'foot', cn: [
+									{ tag: 'tpl', 'if': 'depth === 0', cn: [
+										{ tag: 'span', cls: 'comments  {[values.ReferencedByCount > 0 ? "link toggle" : ""]}', html: '{ReferencedByCount:plural("Comment")}'}
+									]},
+									{ tag: 'span', cls: 'reply thread-reply link', html: '{{{NextThought.view.forums.topic.parts.Comments.reply}}}'},
+									{ tag: 'tpl', 'if': 'isModifiable', cn: [
+										{ tag: 'span', cls: 'edit link', html: '{{{NextThought.view.forums.topic.parts.Comments.edit}}}'},
+										{ tag: 'span', cls: 'delete link', html: '{{{NextThought.view.forums.topic.parts.Comments.delete}}}'}
+									]},
+									{ tag: 'tpl', 'if': '!isModifiable', cn: [
+										{
+											tag: 'span',
+											cls: 'flag link {flagged:boolStr("on","off")}',
+											html: '{flagged:boolStr("NextThought.view.forums.topic.parts.Comments.reported","NextThought.view.forums.topic.parts.Comments.report")}'
+										}
+									]}
 								]},
-								{ tag: 'tpl', 'if': '!isModifiable', cn: [
-									{
-										tag: 'span',
-										cls: 'flag link {flagged:boolStr("on","off")}',
-										html: '{flagged:boolStr("NextThought.view.forums.topic.parts.Comments.reported","NextThought.view.forums.topic.parts.Comments.report")}'
-									}
-								]}
-							]},
 
-							{ cls: 'editor-box' }
-						]}
-					]
-				}},
-				{ cls: 'load-box'}
-			]}
+								{ cls: 'editor-box' }
+							]}
+						]
+					}},
+					{cls: 'load-box', cn: [
+						{tag: 'span', html: 'Loading...'}
+					]}
+				]
+			}
 		]}
 	]),
 
@@ -285,13 +292,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		var loading = (records || []).map(this.fillInData.bind(this));
 
 		return Promise.all((loading))
-			.then(this.clearLoadBox.bind(this))
 			.then(this.fireEvent('realign-editor'));
 	},
 
 	onStoreUpdate: function (store, record) {
 		this.fillInData(record);
-		this.clearLoadBox();
 		this.fireEvent('realign-editor');
 	},
 
@@ -406,17 +411,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-	clearLoadBox: function () {
-		if (!this.currentLoadBox) { return; }
-		this.currentLoadBox.unmask();
-		this.currentLoadBox.setHeight(0);
-	},
+	// clearLoadBox: function () {
+	// 	if (!this.currentLoadBox) { return; }
+	// 	this.currentLoadBox.unmask();
+	// 	this.currentLoadBox.setHeight(0);
+	// },
 
-	maskLoadBox: function (el) {
-		this.currentLoadBox = el.down('.load-box');
-		this.currentLoadBox.setHeight(40);
-		this.currentLoadBox.mask('Loading...');
-	},
+	// maskLoadBox: function (el) {
+	// 	this.currentLoadBox = el.down('.load-box');
+	// 	this.currentLoadBox.setHeight(40);
+	// 	this.currentLoadBox.mask('Loading...');
+	// },
 
 	whiteboardContainerClick: function (record, container, e, el) {
 		var me = this,
@@ -479,11 +484,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 	},
 
-	loadThread: function (record, el) {
-		if (!record.threadLoaded) {
-			this.maskLoadBox(el);
-		}
-
+	loadThread: function (record) {
 		this.store.showCommentThread(record);
 	},
 
@@ -599,8 +600,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			me.isNewRecord = true;
 			newRecord = record.makeReply();
 
-			if (!record.threadLoaded && record.get('ReferencedByCount')) {
-				me.store.on('add', function () {
+			if (!record.get('threadShowing') && record.get('ReferencedByCount')) {
+				me.store.on(record.threadLoaded ? 'filterchange' : 'add', function () {
 					wait().then(() => {
 						var node = me.getNode(record);
 

@@ -3,6 +3,8 @@ var ParseUtils = require('../../util/Parsing');
 var StoreNTI = require('../NTI');
 var UtilUserDataThreader = require('../../util/UserDataThreader');
 
+const OPEN_THREADS = Symbol('Open Threads');
+const ALL = Symbol('All');
 
 module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 	extend: 'NextThought.store.NTI',
@@ -32,6 +34,10 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 	constructor: function () {
 		this.callParent(arguments);
 
+		this[OPEN_THREADS] = {};
+
+		this.addExpandCollapseFilter();
+
 		this.on('load', 'topLevelLoaded');
 	},
 
@@ -41,35 +47,68 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		});
 	},
 
-	expandAllCommentThreads () {
-		this.each(comment => {
-			if (comment.get('depth') === 0) {
-				this.showCommentThread(comment);
+
+	addExpandCollapseFilter () {
+		this.addFilter({
+			filterFn: (record) => {
+				if (this[OPEN_THREADS][ALL]) { return true; }
+
+				const references = record.get('references');
+
+				if (!references || !references.length) { return true; }
+
+				return references.some((ref) => this[OPEN_THREADS][ref]);
 			}
 		});
 	},
 
-	collapseAllCommentThreads () {
+	expandAllCommentThreads () {
+		this[OPEN_THREADS][ALL] = true;
+
+		this.filter();
+
 		this.each(comment => {
-			if (comment.get('depth') === 0) {
-				this.hideCommentThread(comment);
+			if (comment.get('depth') === 0 && comment.get('ReferencedByCount') > 0) {
+				this.showCommentThread(comment, true);
 			}
+		});
+
+		delete this[OPEN_THREADS][ALL];
+	},
+
+	collapseAllCommentThreads () {
+		this[OPEN_THREADS] = {};
+
+		this.filter();
+
+		this.each(comment => {
+			comment.set('threadShowing', false);
 		});
 	},
 
 	hideCommentThread: function (comment) {
-		this.__addFilter(comment.getThreadFilter(), true);
+		const id = comment.getId();
+
+		delete this[OPEN_THREADS][id];
 		comment.set('threadShowing', false);
+
+		this.filter();
 	},
 
-	showCommentThread: function (comment) {
+	showCommentThread: function (comment, silent) {
 		if (!comment) {
 			console.error('Cant show thread for a comment thats not loaded:', id);
 			return;
 		}
 
-		this.removeFilter(comment.getThreadFilter().id, true);
+		const id = comment.getId();
+
+		this[OPEN_THREADS][id] = true;
 		comment.set('threadShowing', true);
+
+		if (!silent) {
+			this.filter();
+		}
 
 		if (!comment.threadLoaded) {
 			this.__loadCommentThread(comment);
@@ -102,6 +141,8 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 
 				flatList = this.__flattenReplies(tree[0].children, comment.get('depth') || 0);
 
+				comment.set('repliesLoaded', true);
+
 				this.__insertFlatThread(flatList, comment);
 			}
 		};
@@ -129,6 +170,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 				t.threadLoaded = true;
 				t.set('depth', depth);
 				t.set('threadShowing', true);
+				t.set('repliesLoaded', true);
 				flatTree.push(t);
 
 				flattenThread(t.children, depth + 1);
@@ -207,6 +249,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 
 	//insert a single record into the right spot in the store
 	insertSingleRecord: function (record) {
+		debugger;
 		this.__clearFilters();
 
 		var parentId = record.get('inReplyTo'), i, current,
@@ -223,7 +266,11 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 			if (parent && parentId !== this.parentTopic.getId()) {
 				parent.children = parent.children || [];
 				parent.addChild(record);
+
+				this[OPEN_THREADS][parent.getId()] = true;
+
 				parent.set('threadShowing', true);
+				parent.set('repliesLoaded', true);
 				parent.threadLoaded = true;
 			}
 

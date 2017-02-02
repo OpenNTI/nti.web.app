@@ -667,6 +667,21 @@
 				background-color: $primary-blue;
 			}
 		}
+
+		.load-box {
+			display: none;
+			height: 2.5rem;
+			line-height: 2.5rem;
+			text-align: center;
+			font-size: 0.75rem;
+			color: $primary-grey;
+		}
+
+		&[data-depth='0'].loading {
+			.load-box {
+				display: block;
+			}
+		}
 	}
 
 	&.no-reply {

@@ -22,6 +22,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 		{ name: 'bodyPreview', type: 'string', persist: false},
 		{ name: 'threadShowing', type: 'boolean', persist: false},
 		{ name: 'depth', type: 'number', persist: false},
+		{ name: 'repliesLoaded', type: 'boolean', persist: false},
 		{ name: 'creatorAvatarURL', type: 'AvatarUrl'},
 		{ name: 'flagged', type: 'Synthetic', fn: function (rec) {
 			return rec.isFlagged();
