@@ -50,7 +50,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		]
 	},
 
-	mimeType: 'application/vnd.nextthought.grade',
+	//TODO: pull this out into its own model
+	mimeType: ['application/vnd.nextthought.grade', 'application/vnd.nextthought.predictedgrade'],
 	fields: [
 		{name: 'Username', type: 'string'},
 		{name: 'value', type: 'string', convert: function (v) {
