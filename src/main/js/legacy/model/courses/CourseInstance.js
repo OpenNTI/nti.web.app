@@ -1422,7 +1422,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		return Service.request(link)
 					.then(function (response) {
-						return ParseUtils.parseItems(response)[0];
+						const json = JSON.parse(response);
+						const raw = json.IsPredicted ? json.PredictedGrade : json.FinalGrade;
+
+						return ParseUtils.parseItems(raw)[0];
 					});
 	},
 

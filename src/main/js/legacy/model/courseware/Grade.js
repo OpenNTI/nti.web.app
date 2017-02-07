@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	},
 
 	isPredicted: function () {
-		return this.get('IsPredicted');
+		return this.get('Class') === 'PredictedGrade';
 	},
 
 
