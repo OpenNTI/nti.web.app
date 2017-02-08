@@ -138,7 +138,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	validateEntry: function (entry) {
 		var valid = true,
-			values = this.entryToValues(entry);
+			values = this.entryToValues(entry),
+			startEnd = 'Start';
 
 		if (!values.school) {
 			this.showErrorForField(entry, 'school', 'Required');
@@ -150,6 +151,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			valid = false;
 		}
 
+		if (values.endYear === 0) {
+			this.showErrorForField(entry, 'endYear', 'Required');
+			valid = false;
+			startEnd = 'End';
+		}
+
 		if (!valid) {
 			let dom = Ext.dom.Query.select('.profile-about'),
 				el = Ext.get(dom[0]);
@@ -157,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			el.removeErrors && el.removeErrors();
 		}
 
-		this.errorMsg = values.startYear === 0 ? 'Education Start Year Must Be Greater Than Or Equal To 1900' : this.missingErrorMsg;
+		this.errorMsg = values.startYear === 0 || values.endYear === 0 ? `Education ${startEnd} Year Must Be Greater Than Or Equal To 1900` : this.missingErrorMsg;
 
 		return valid ? '' : this.errorMsg;
 	}

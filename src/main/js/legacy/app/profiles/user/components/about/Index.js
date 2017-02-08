@@ -295,6 +295,36 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				failure: function (resp) {
 					var msg = Ext.JSON.decode(resp.responseText, true) || {};
 
+					let displayYearError = (errorMsg, section, startEnd) => {
+						me.showError({
+							name: 'this',
+							msg: errorMsg
+						});
+
+						let selector = `.${section}-entryset [data-field="${startEnd}Year"]`,
+							field = document.querySelector(selector),
+							container = field && field.parentNode,
+							error = container && container.querySelector('.error-msg');
+
+						field && field.classList.add('error');
+						if (error) {
+							error.innerHTML = 'Invalid';
+						}
+
+						let onKeyPress = (e) => {
+							me.removeErrors();
+							if (e.target.classList.contains('error')) {
+								let parent = e.target && e.target.parentNode,
+									err = parent && parent.querySelector('.error-msg');
+
+								e.target.classList.remove('error');
+								err.innerHTML = '';
+							}
+						};
+
+						field && field.addEventListener('keypress', onKeyPress);
+					};
+
 					if (me.aboutCmp.showError(msg)) {
 						me.showError({
 							name: me.aboutCmp.name,
@@ -315,39 +345,23 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 							name: me.interestsCmp.name,
 							msg: msg.message
 						});
-					} else if (msg.code === 'InvalidStartYear') {
-						me.removeErrors();
+					} else if (msg.code === 'InvalidStartYear' || msg.code === 'InvalidEndYear') {
+						let startEnd = msg.code === 'InvalidStartYear' ? 'start' : 'end';
 
 						let section = msg.message.split(' ')[1] || '',
 							sectionUpper = section && (section.charAt(0).toUpperCase() + section.slice(1) + ' ');
-						me.showError({
-							name: 'this',
-							msg: sectionUpper + 'Start Year Must Be Greater Than Or Equal To 1900'
-						});
+						sectionUpper += startEnd.charAt(0).toUpperCase() + startEnd.slice(1) + ' ';
 
-						let selector = '.' + section + '-entryset [data-field="startYear"]',
-							field = document.querySelector(selector),
-							container = field && field.parentNode,
-							error = container && container.querySelector('.error-msg');
+						const errorMsg = sectionUpper + 'Year Must Be Greater Than Or Equal To 1900';
 
-						field && field.classList.add('error');
-						if (error) {
-							error.innerHTML = 'Invalid';
-						}
+						displayYearError(errorMsg, section, startEnd);
+					} else if (msg.code === 'InvalidYearRange') {
+						let section = msg.message.split(' ')[1] || '',
+							sectionUpper = section && (section.charAt(0).toUpperCase() + section.slice(1) + ' ');
 
-						let onKeyPress = (e) => {
-							if (e.target.classList.contains('error')) {
-								let parent = e.target && e.target.parentNode,
-									errorMsg = parent && parent.querySelector('.error-msg');
+						const errorMsg = sectionUpper + 'End Year Cannot Be Less Than Start Year';
 
-								e.target.classList.remove('error');
-								errorMsg.innerHTML = '';
-							}
-						};
-
-						field && field.addEventListener('keypress', onKeyPress);
-
-
+						displayYearError(errorMsg, section, 'end');
 					} else {
 						me.showError({
 							name: 'this',
