@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			params.course = bundle;
 		}
 
-		return StoreUtils.loadBatch(url, params);
+		return StoreUtils.loadBatch(url, params, null, null, true);
 	},
 
 	setSearchContext: function (term, silent) {

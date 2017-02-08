@@ -97,9 +97,10 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 	 * @param  {Object} queryParams params to add to the request
 	 * @param  {String} itemProp	the item property of the batch
 	 * @param  {Object} model		model to use to parse the items
+	 * @param  {Boolean} doNotParseItems flag to not parse the items
 	 * @return {Promise}			fulfills with the batch
 	 */
-	loadBatch: function (url, queryParams, itemProp, model) {
+	loadBatch: function (url, queryParams, itemProp, model, doNotParseItems) {
 		itemProp = itemProp || 'Items';
 
 		return this.loadRawItems(url, queryParams)
@@ -109,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 
 				if (model && model.create) {
 					items = items.map(function (item) { return model.create(item); });
-				} else {
+				} else if (!doNotParseItems) {
 					items = ParseUtils.parseItems(items);
 				}
 

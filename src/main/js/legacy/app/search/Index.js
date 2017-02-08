@@ -1,4 +1,5 @@
 var Ext = require('extjs');
+var Search = require('../../../nti-web-components-search');
 var ParseUtils = require('../../util/Parsing');
 var StoreUtils = require('../../util/Store');
 var MixinsRouter = require('../../mixins/Router');
@@ -7,6 +8,7 @@ var NavigationActions = require('../navigation/Actions');
 var SearchStateStore = require('./StateStore');
 var ComponentsAdvancedOptions = require('./components/AdvancedOptions');
 var ComponentsResults = require('./components/Results');
+var ReactHarness = require('legacy/overrides/ReactHarness');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.search.Index', {
@@ -23,6 +25,10 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.callParent(arguments);
 
 		this.add([
+			{
+				xtype: 'react',
+				component: Search
+			},
 			{
 				xtype: 'search-advanced-menu',
 				changeFilter: this.changeFilter.bind(this)
@@ -52,6 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.onContextUpdate = this.onContextUpdate.bind(this);
 
 		this.OptionMenu = this.down('search-advanced-menu');
+		this.ReactResults = this.down('react');
 		this.Results = this.down('search-results');
 	},
 
@@ -127,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			this.NavActions.setActiveContent(null);
 		} else {
 			this.LibraryActions.findBundle(bundle)
-				.then(function (bundle) {
+				.then(function () {
 					navActions.setActiveContent(bundle, true);
 				});
 		}
@@ -246,7 +253,10 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.removeLoading();
 
 		if (batch.Items && batch.Items.length) {
-			this.Results.addResults(batch.Items);
+			this.ReactResults.setProps({
+				hits: batch.Items
+			});
+			// this.Results.addResults(batch.Items);
 		} else {
 			this.showEmpty();
 		}
