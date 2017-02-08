@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 
 
 	getFragmentsData (hit) {
-		const fragments = hit.Fragments || [];
+		const fragments = hit.get('Fragments') || [];
 
 		return fragments.reduce((acc, frag, fragIndex) => {
 			const {Matches:matches = []} = frag;
