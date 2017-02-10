@@ -4,7 +4,8 @@ import Hit from './Hit';
 
 export default class SearchResults extends React.Component {
 	static propTypes = {
-		hits: React.PropTypes.arrayOf(React.PropTypes.object)
+		hits: React.PropTypes.arrayOf(React.PropTypes.object),
+		getBreadCrumb: React.PropTypes.func
 	}
 
 	render () {
@@ -18,8 +19,10 @@ export default class SearchResults extends React.Component {
 	}
 
 	renderHit = (hit, index) => {
+		const {getBreadCrumb} = this.props;
+
 		return (
-			<Hit key={index} hit={hit} />
+			<Hit key={index} hit={hit} getBreadCrumb={getBreadCrumb}/>
 		);
 	}
 }

@@ -3,6 +3,7 @@ var Search = require('../../../nti-web-components-search');
 var ParseUtils = require('../../util/Parsing');
 var StoreUtils = require('../../util/Store');
 var MixinsRouter = require('../../mixins/Router');
+var PathActions = require('../navigation/path/Actions');
 var LibraryActions = require('../library/Actions');
 var NavigationActions = require('../navigation/Actions');
 var SearchStateStore = require('./StateStore');
@@ -24,10 +25,19 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
+		this.PathActions = PathActions.create();
+
 		this.add([
 			{
 				xtype: 'react',
-				component: Search
+				component: Search,
+				getBreadCrumb: (obj) => {
+					const rec = ParseUtils.parseItems(obj.toJSON())[0];
+					return this.PathActions.getBreadCrumb(rec)
+						.then((path) => {
+							return path;
+						});
+				}
 			},
 			{
 				xtype: 'search-advanced-menu',
@@ -252,11 +262,14 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 
+
+
 		if (batch.Items && batch.Items.length) {
 			this.ReactResults.setProps({
 				hits: batch.Items
 			});
 			// this.Results.addResults(batch.Items);
+
 		} else {
 			this.showEmpty();
 		}
