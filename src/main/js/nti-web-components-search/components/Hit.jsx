@@ -4,43 +4,47 @@ import Fragments from './Fragments';
 
 import {
 	resolveTitle,
-	resolveFragments
-	// resolvePath,
-	// resolveContainerID
+	resolveFragments,
+	resolvePath,
+	resolveContainerID
 } from '../resolvers';
 
 
 
 export default class Hit extends React.Component {
 	static propTypes = {
-		hit: React.PropTypes.object.isRequired
+		hit: React.PropTypes.object.isRequired,
+		getBreadCrumb: React.PropTypes.func
 	}
 
 	constructor (props) {
 		super(props);
-
 		this.state = {};
 	}
 
 	componentDidMount () {
 		const {hit} = this.props;
+		const {getBreadCrumb} = this.props;
 
 		resolveTitle(hit)
 			.then((title) => {
 				this.setState({title});
 			});
 
-		resolveFragments(hit).then((fragments) => {
-			this.setState({fragments});
-		});
-		//
-		// resolvePath(hit).then((path) => {
-		// 	this.setState({path});
-		// });
-		//
-		// resolveContainerID(hit).then((containerID) => {
-		// 	this.setState({containerID});
-		// });
+		resolveFragments(hit)
+			.then((fragments) => {
+				this.setState({fragments});
+			});
+
+		resolvePath(hit, getBreadCrumb)
+			.then((path) => {
+				this.setState({path});
+			});
+
+		resolveContainerID(hit)
+			.then((containerID) => {
+				this.setState({containerID});
+			});
 	}
 
 	render () {
@@ -52,6 +56,12 @@ export default class Hit extends React.Component {
 				<div className="title">{title}</div>
 				<span className="list-item creator" />
 				<Fragments fragments={fragments} />
+				<div className="meta">
+					<div className="root-icon hidden"></div>
+					<div className="path">
+						<span className="list-item">{path}</span>
+					</div>
+				</div>
 			</div>
 
 		);

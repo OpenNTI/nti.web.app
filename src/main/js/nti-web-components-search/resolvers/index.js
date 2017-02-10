@@ -54,11 +54,11 @@ export function resolveFragments (hit) {
 	});
 }
 
-export function resolvePath (hit) {
+export function resolvePath (hit, getBreadCrumb) {
 	const target = getTargetForHit(hit);
 
 	return getObject(hit).then((obj) => {
-		return target && target.resolvePath ? target.resolvePath(obj, hit) : Base.resolvePath(obj, hit);
+		return target && target.resolvePath ? target.resolvePath(obj, hit, getBreadCrumb) : Base.resolvePath(obj, hit, getBreadCrumb);
 	});
 }
 
