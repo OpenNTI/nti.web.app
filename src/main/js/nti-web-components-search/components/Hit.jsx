@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Fragments from './Fragments';
+import Path from './Path';
 
 import {
 	resolveTitle,
@@ -57,10 +58,8 @@ export default class Hit extends React.Component {
 				<span className="list-item creator" />
 				<Fragments fragments={fragments} />
 				<div className="meta">
-					<div className="root-icon hidden"></div>
-					<div className="path">
-						<span className="list-item">{path}</span>
-					</div>
+					<div className="root-icon hidden" />
+					<Path pathObject={path} />
 				</div>
 			</div>
 

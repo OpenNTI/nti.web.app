@@ -32,7 +32,7 @@ export default {
 
 	resolvePath (obj, hit, getBreadCrumb) {
 		return getBreadCrumb(obj).then(function (breadCrumb) {
-			return breadCrumb[0].label;
+			return breadCrumb;
 		});
 	},
 
