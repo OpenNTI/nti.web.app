@@ -12,6 +12,7 @@ var ForumIndex = require('../content/forum/Index');
 var InfoIndex = require('./info/Index');
 var OverviewIndex = require('./overview/Index');
 var ReportsIndex = require('./reports/Index');
+var ResourcesIndex = require('./resources/Index');
 var ContentIndex = require('../content/content/Index');
 var TimelineWindow = require('../content/timeline/Window');
 var ContentviewerIndex = require('../contentviewer/Index');
@@ -33,6 +34,8 @@ const ASSESSMENT = 'course-assessment-container';
 const FORUM = 'bundle-forum';
 const REPORTS = 'course-reports';
 const INFO = 'course-info';
+const RESOURCES = 'course-resources';
+
 
 
 module.exports = exports = Ext.define('NextThought.app.course.Index', {
@@ -74,6 +77,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			id: INFO
 		},
 		{
+			xtype: RESOURCES,
+			id: RESOURCES
+		},
+		{
 			xtype: 'bundle-content',
 			courseLevel: true,
 			id: 'course-content',
@@ -102,6 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/content', this.showContent.bind(this));
 		//TODO: add a /video route to show the grid view
 		this.addRoute('/videos/:id', this.showVideos.bind(this));
+		this.addRoute('/resources', this.showResources.bind(this));
 
 		this.addObjectHandler(Assignment.mimeType, this.getAssignmentRoute.bind(this));
 		this.addObjectHandler(DiscussionAssignment.mimeType, this.getAssignmentRoute.bind(this));
@@ -391,10 +399,28 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			FORUM,
 			REPORTS
 		]).then(function (item) {
-				if (item && item.handleRoute) {
-					item.handleRoute(subRoute, route.precache);
-				}
-			});
+			if (item && item.handleRoute) {
+				item.handleRoute(subRoute, route.precache);
+			}
+		});
+	},
+
+	showResources (route, subRoute) {
+		this.setCmpRouteState(RESOURCES, subRoute);
+
+		debugger;
+
+		return this.setActiveView(RESOURCES, [
+			DASHBOARD,
+			OVERVIEW,
+			ASSESSMENT,
+			FORUM,
+			REPORTS
+		], OVERVIEW).then((item) => {
+			if (item && item.handleRoute) {
+				return item.handleRoute(subRoute, route.precache);
+			}
+		});
 	},
 
 	showContent: function (route, subRoute) {
