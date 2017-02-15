@@ -23,11 +23,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'splash', style: {backgroundImage: 'url({splash})'}},
-		{
-			tag: 'iframe', scrolling: 'no', frameborder: 'no', src: '{src}',
-			sandbox: '{sandbox}',
-			width: '100%', height: '{height}', allowfullscreen: 'allowFullscreen'
-		}
+		{tag: 'tpl', 'if': 'sandbox', cn: [
+			{
+				tag: 'iframe', scrolling: 'no', frameborder: 'no', src: '{src}',
+				sandbox: '{sandbox}',
+				width: '100%', height: '{height}', allowfullscreen: 'allowFullscreen'
+			}
+		]},
+		{tag: 'tpl', 'if': '!sandbow', cn: [
+			{
+				tag: 'iframe', scrolling: 'no', frameborder: 'no', src: '{src}',
+				width: '100%', height: '{height}', allowfullscreen: 'allowFullscreen'
+			}
+		]}
+
 	]),
 
 
@@ -101,7 +110,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			sandboxFlags.push('allow-same-origin');
 		}
 
-		rd.sandbox = sandboxFlags.join(' ');
+		if (!data['no-sandboxing']) {
+			rd.sandbox = sandboxFlags.join(' ');
+		}
 
 		rd.src = defer ? '' : data.source;
 	},
