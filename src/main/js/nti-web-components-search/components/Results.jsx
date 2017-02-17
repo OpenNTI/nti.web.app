@@ -5,7 +5,8 @@ import Hit from './Hit';
 export default class SearchResults extends React.Component {
 	static propTypes = {
 		hits: React.PropTypes.arrayOf(React.PropTypes.object),
-		getBreadCrumb: React.PropTypes.func
+		getBreadCrumb: React.PropTypes.func,
+		navigateToSearchHit: React.PropTypes.func
 	}
 
 	render () {
@@ -19,10 +20,10 @@ export default class SearchResults extends React.Component {
 	}
 
 	renderHit = (hit, index) => {
-		const {getBreadCrumb} = this.props;
+		const {getBreadCrumb, navigateToSearchHit} = this.props;
 
 		return (
-			<Hit key={index} hit={hit} getBreadCrumb={getBreadCrumb}/>
+			<Hit key={index} hit={hit} getBreadCrumb={getBreadCrumb} navigateToSearchHit={navigateToSearchHit}/>
 		);
 	}
 }

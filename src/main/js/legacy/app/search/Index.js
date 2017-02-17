@@ -29,6 +29,10 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.add([
 			{
+				xtype: 'search-advanced-menu',
+				changeFilter: this.changeFilter.bind(this)
+			},
+			{
 				xtype: 'react',
 				component: Search,
 				getBreadCrumb: (obj) => {
@@ -37,11 +41,14 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 						.then((path) => {
 							return path;
 						});
+				},
+				navigateToSearchHit: (record, hit, frag, containerId) => {
+					record = ParseUtils.parseItems(record)[0];
+					hit = ParseUtils.parseItems(hit)[0];
+					this.SearchStore.setHitForContainer(containerId, hit, frag);
+
+					this.Router.root.attemptToNavigateToObject(record);
 				}
-			},
-			{
-				xtype: 'search-advanced-menu',
-				changeFilter: this.changeFilter.bind(this)
 			},
 			{
 				xtype: 'search-results',

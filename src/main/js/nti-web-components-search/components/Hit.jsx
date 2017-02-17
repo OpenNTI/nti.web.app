@@ -15,7 +15,8 @@ import {
 export default class Hit extends React.Component {
 	static propTypes = {
 		hit: React.PropTypes.object.isRequired,
-		getBreadCrumb: React.PropTypes.func
+		getBreadCrumb: React.PropTypes.func,
+		navigateToSearchHit: React.PropTypes.func
 	}
 
 	constructor (props) {
@@ -24,8 +25,7 @@ export default class Hit extends React.Component {
 	}
 
 	componentDidMount () {
-		const {hit} = this.props;
-		const {getBreadCrumb} = this.props;
+		const {hit, getBreadCrumb} = this.props;
 
 		resolveTitle(hit)
 			.then((title) => {
@@ -50,17 +50,14 @@ export default class Hit extends React.Component {
 
 	render () {
 		const {title, fragments, path, containerID, navObject} = this.state;
+		const {hit, navigateToSearchHit} = this.props;
 		// const isLoading = !title;
 
 		return (
 			<div className="search-result">
-				<div className="title">{title}</div>
-				<span className="list-item creator" />
-				<Fragments fragments={fragments} />
-				<div className="meta">
-					<div className="root-icon hidden" />
-					<Path pathObject={path} />
-				</div>
+				<div className="hit-title">{title}</div>
+				<Fragments fragments={fragments} hit={hit} navigateToSearchHit={navigateToSearchHit} />
+				<Path pathObject={path} />
 			</div>
 
 		);

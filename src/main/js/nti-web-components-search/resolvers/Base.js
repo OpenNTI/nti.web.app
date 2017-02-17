@@ -37,6 +37,12 @@ export default {
 	},
 
 	resolveContainerID (obj, hit) {
-		return hit.ContainerId || (hit.Containers || [])[0];
+		return hit && hit.isModel && hit.ContainerId || (hit.Containers || [])[0];
 	},
+
+	resolveNavigateToSearchHit (obj, hit, fragment) {
+		const containerId = hit && hit.isModel && hit.ContainerId || (hit.Containers || [])[0],
+			fragIndex = fragment.fragIndex;
+		return Promise.resolve({obj, fragIndex, containerId});
+	}
 };

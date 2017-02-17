@@ -9,10 +9,14 @@ export default class Path extends React.Component {
 		const {pathObject = []} = this.props;
 
 		return (
-			<div className="path">
+			<div className="hit-path">
 					{
 						pathObject.map((path, index) => {
-							return <span className="list-item" key={index}>{path.label}</span>;
+							if (index === 0) {
+								return <span key={index}>{path.label}</span>;
+							} else {
+								return <span key={index}> &#8226; {path.label}</span>;
+							}
 						})
 					}
 			</div>

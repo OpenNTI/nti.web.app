@@ -32,7 +32,7 @@ function getObject (hit) {
 	const target = getTargetForHit(hit);
 
 	if (!OBJECT[hit]) {
-		OBJECT[hit] = target && target.resolveObject ? target.resolveObject(hit) : Base.resolveObject(hit);//getService().then(service => service.getObject(ntiid));
+		OBJECT[hit] = target && target.resolveObject ? target.resolveObject(hit) : Base.resolveObject(hit);
 	}
 
 	return OBJECT[hit];
@@ -67,5 +67,13 @@ export function resolveContainerID (hit) {
 
 	return getObject(hit).then((obj) => {
 		return target && target.resolveContainerID ? target.resolveContainerID(obj, hit) : Base.resolveContainerID(obj, hit);
+	});
+}
+
+export function resolveNavigateToSearchHit (hit, fragment) {
+	const target = getTargetForHit(hit);
+
+	return getObject(hit).then((obj) => {
+		return target && target.navigateToSearchHit ? target.resolveNavigateToSearchHit(obj, hit) : Base.resolveNavigateToSearchHit(obj, hit, fragment);
 	});
 }

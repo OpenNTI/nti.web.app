@@ -1,22 +1,38 @@
 import React from 'react';
 
+import {
+	resolveNavigateToSearchHit
+} from '../resolvers';
+
 export default class Fragments extends React.Component {
 	static propTypes = {
-		fragments: React.PropTypes.arrayOf(React.PropTypes.object)
+		fragments: React.PropTypes.arrayOf(React.PropTypes.object),
+		hit: React.PropTypes.object.isRequired,
+		navigateToSearchHit: React.PropTypes.func
 	}
 
 	render () {
-		const {fragments = []} = this.props;
+		const {fragments = [], hit, navigateToSearchHit} = this.props;
 
 		function createFragment (fragment) {
 			return {__html: fragment};
 		}
 
+		function navigateToFragment (fragment) {
+			resolveNavigateToSearchHit(hit, fragment)
+				.then(({obj, fragIndex, containerId}) => {
+					return navigateToSearchHit(obj, hit, fragIndex, containerId);
+				});
+		}
+
 		return (
-			<div className="fragments">
+			<div className="hit-fragments">
 					{
 						fragments.map((fragment, index) => {
-							return <div className="fragment" key={index} dangerouslySetInnerHTML={createFragment(fragment.text)} />;
+							function navigate () {
+								navigateToFragment(fragment);
+							}
+							return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createFragment(fragment.text)} onClick={navigate} />;
 						})
 					}
 			</div>
