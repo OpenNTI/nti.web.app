@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var TilesHeader = require('./tiles/Header');
+var {naturalSortComparator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.AbstractView', {
@@ -50,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			var wA = a.weight || 0,
 				wB = b.weight || 0;
 
-			return wA < wB ? 1 : wA === wB ? 0 : -1;
+			return wA < wB ? 1 : wA === wB ? naturalSortComparator((a.record.get('title') || '').toUpperCase(), (b.record.get('title') || '').toUpperCase()) : -1;
 		};
 	},
 

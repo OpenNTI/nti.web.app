@@ -14,8 +14,12 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 		MAX_NOT_DUE: 5,
 
+		__TIME_MODIFIER: .1,
+
 		getWeight: function (record) {
-			var time = NextThought.app.course.dashboard.components.widgets.Base.getTimeWeight(record.get('availableEnding'));
+			const lorentzian = (x) => 1 / (Math.pow(x - 1, 2) + 1);
+
+			var time = NextThought.app.course.dashboard.components.widgets.Base.getTimeWeight(record.get('availableEnding'), lorentzian);
 
 			return this.__BASE_WEIGHT + time;
 		},

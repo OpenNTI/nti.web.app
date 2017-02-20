@@ -54,12 +54,15 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * @param  {Date} time			the time from the record
 		 * @return {Number}				the time modifier to add to the weight
 		 */
-		getTimeWeight: function (time) {
+		getTimeWeight: function (time, scale) {
+			if (!time) { return 0; }
+
+			scale = scale || ((x) => x);
 			time = moment(time).toDate().getTime();
 
 			var now = (new Date()).getTime();
 
-			return (time / now) * this.__TIME_MODIFIER;
+			return scale(time / now) * this.__TIME_MODIFIER;
 		}
 	}
 });
