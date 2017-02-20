@@ -249,7 +249,6 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 
 	//insert a single record into the right spot in the store
 	insertSingleRecord: function (record) {
-		debugger;
 		this.__clearFilters();
 
 		var parentId = record.get('inReplyTo'), i, current,

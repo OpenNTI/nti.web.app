@@ -1,10 +1,22 @@
 const Ext = require('extjs');
 const Resources = require('nti-web-course-resources');
-
-debugger;
+const {getService} = require('nti-web-client');
+const {encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+const {Editor} = require('nti-content');
 
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
+
+function findContentPackage (course, id) {
+	const {ContentPackageBundle} = course;
+	const {ContentPackages} = ContentPackageBundle;
+
+	for (let pkg of ContentPackages) {
+		if (pkg.NTIID === id || pkg.OID === id) {
+			return pkg;
+		}
+	}
+}
 
 module.exports = exports = Ext.define('NextThought.app.course.resources.Index', {
 	extend: 'Ext.container.Container',
@@ -13,6 +25,8 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
+
+	cls: 'course-content-resources',
 
 	layout: 'none',
 	items: [],
@@ -40,23 +54,45 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	},
 
 
+	getCourse () {
+		return getService()
+			.then((service) => {
+				return service.getObject(this.currentBundle.raw);
+			});
+	},
+
+
+	gotoReading (readingID) {
+		this.pushRoute('', `/readings/${encodeForURI(readingID)}`);
+	},
+
+
 	showReadings () {
-		this.resources.setProps({
-			course: this.currentBundle,
-			activeType: Resources.READINGS,
-			activeResource: null
-		});
-
-		return Promise.resolve();
+		return	this.getCourse()
+			.then((course) => {
+				this.resources.setProps({
+					course,
+					gotoResource: (id) => this.gotoReading(id)
+				});
+			});
 	},
 
 
-	showReading () {
-		debugger;
-	},
+	showReading (route) {
+		const {id} = route.params;
 
+		return this.getCourse()
+			.then((course) => {
+				const contentPackage = findContentPackage(course, decodeFromURI(id));
 
-	gotoResources (id) {
-		debugger;
+				this.resources.hide();
+
+				this.editor = this.add({
+					xtype: 'react',
+					component: Editor,
+					course,
+					contentPackage
+				});
+			});
 	}
 });
