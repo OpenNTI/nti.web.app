@@ -33,18 +33,15 @@ build: compile deploy
 	@rm -rf $(STAGE)
 
 
-compile: clean-stage stage $(STAGE)server styles
+compile: clean-stage stage styles
+##the server code doesn't compile, just copy it.
+	@cp -r $(SRC)server/ $(STAGE)server/
 ## copy static assets
 	@(cd $(SRC)main; rsync -Rr . ../../$(STAGE)client)
 	@rm -r $(STAGE)client/js
 	@rm -r $(STAGE)client/resources/scss
 ##compile
 	@NODE_ENV="production" $(CC) ./webpack.config.js
-
-
-$(STAGE)server:
-##the server code doesn't compile, just copy it.
-	@cp -r $(SRC)server $(STAGE)server
 
 
 stage:
