@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const {getService} = require('nti-web-client');
 const Socket = require('legacy/proxy/Socket');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const B64 = require('legacy/util/Base64');
@@ -265,14 +266,8 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		var me = this,
 			unauthed = {401: true, 403: true};
 
-		return me.ServiceInterface.request({
-			url: Globals.getURL($AppConfig['server-path']),
-			timeout: 20000,
-			headers: {
-				'Accept': 'application/vnd.nextthought.workspace+json'
-			},
-			scope: this
-		})
+		return getService()
+			.then(doc => JSON.stringify(doc))
 			.then(function (doc) {
 				doc = ModelService.create(Globals.parseJSON(doc));
 
