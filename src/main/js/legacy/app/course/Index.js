@@ -408,8 +408,6 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	showResources (route, subRoute) {
 		this.setCmpRouteState(RESOURCES, subRoute);
 
-		debugger;
-
 		return this.setActiveView(RESOURCES, [
 			DASHBOARD,
 			OVERVIEW,
