@@ -3,8 +3,17 @@ import {Button} from 'nti-web-commons';
 
 export default class ResourceControls extends React.Component {
 	static propTypes = {
-		onClick: React.PropTypes.func,
+		onCreate: React.PropTypes.func,
 		onSearch: React.PropTypes.func
+	}
+
+
+	onCreate = () => {
+		const {onCreate} = this.props;
+
+		if (onCreate) {
+			onCreate();
+		}
 	}
 
 	render () {
