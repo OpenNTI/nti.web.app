@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const Resources = require('nti-web-course-resources');
 const {getService} = require('nti-web-client');
+const ParseUtils = require('legacy/util/Parsing');
 const {encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 const {Editor} = require('nti-content');
 
@@ -17,6 +18,14 @@ function findContentPackage (course, id) {
 		}
 	}
 }
+
+
+const EMPTY_CONTENT_PACKAGE = {
+	'title': 'Untitled Reading',
+	'Class': 'RenderableContentPackage',
+	'MimeType': 'application/vnd.nextthought.renderablecontentpackage',
+	'content': ''
+};
 
 module.exports = exports = Ext.define('NextThought.app.course.resources.Index', {
 	extend: 'Ext.container.Container',
@@ -37,7 +46,8 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 		this.resources = this.add({
 			xtype: 'react',
 			component: Resources,
-			gotoResource: (id) => this.gotoResource(id)
+			gotoResource: (id) => this.gotoReading(id),
+			createResource: () => this.createReading()
 		});
 
 		this.initRouter();
@@ -62,6 +72,20 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	},
 
 
+	createReading () {
+		const link = this.currentBundle && this.currentBundle.getLink('Library');
+
+		if (link) {
+			Service.post(link, EMPTY_CONTENT_PACKAGE)
+				.then((contentPackage) => {
+					const pack = ParseUtils.parseItems(JSON.parse(contentPackage))[0];
+
+					this.gotoReading(pack.get('OID'));
+				});
+		}
+	},
+
+
 	gotoReading (readingID) {
 		this.pushRoute('', `/readings/${encodeForURI(readingID)}`);
 	},
@@ -70,9 +94,13 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	showReadings () {
 		return	this.getCourse()
 			.then((course) => {
+				if (this.editor) {
+					this.editor.destroy();
+					delete this.editor;
+				}
+
 				this.resources.setProps({
-					course,
-					gotoResource: (id) => this.gotoReading(id)
+					course
 				});
 			});
 	},
