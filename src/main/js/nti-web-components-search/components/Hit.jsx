@@ -4,6 +4,7 @@ import Fragments from './Fragments';
 import Path from './Path';
 
 import {
+	initComponent,
 	resolveTitle,
 	resolveFragments,
 	resolvePath,
@@ -26,6 +27,8 @@ export default class Hit extends React.Component {
 
 	componentDidMount () {
 		const {hit, getBreadCrumb} = this.props;
+
+		initComponent(hit);
 
 		resolveTitle(hit)
 			.then((title) => {

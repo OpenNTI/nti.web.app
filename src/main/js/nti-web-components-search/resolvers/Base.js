@@ -1,4 +1,5 @@
 import {getService} from 'nti-web-client';
+const {isMe} = require('legacy/util/Globals');
 
 export default {
 	resolveObject (hit) {
@@ -6,8 +7,22 @@ export default {
 			.then(service => service.getObject(hit.NTIID));
 	},
 
+	initComponent (obj, hit) {
+		const name = hit.creator;
+
+		if (isMe(name)) {
+			obj.addCls('me');
+		}
+
+		if (name === this.SYSTEM_CREATOR) {
+			obj.creator === '';
+		} else if (name) {
+			obj.addCreator(name);
+		}
+	},
+
 	resolveTitle (obj, hit) {
-		return obj.Title || obj.label || '';
+		return obj.title || obj.label || obj.Title || '';
 	},
 
 	resolveFragments (obj, hit) {

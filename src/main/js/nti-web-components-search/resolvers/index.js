@@ -1,25 +1,23 @@
 import Base from './Base';
-// import Note from './Note';
-// import Video from './Video';
-// import Reading from './Reading';
-// import Highlight from './Highlight';
-// import Blog from './Blog';
-// import Chat from './Chat';
-// import Forum from './Forum';
-// import RelatedWorkRef from './RelatedWorkRef';
-// import Timeline from './Timeline';
-// import TranscriptResult from './TranscriptResult';
+import Note from './Note';
+import Video from './Video';
+import Blog from './Blog';
+import Chat from './Chat';
+import Forum from './Forum';
+import RelatedWorkRef from './RelatedWorkRef';
+import Timeline from './Timeline';
+import TranscriptResult from './TranscriptResult';
 
 const OBJECT = new WeakMap();
 
-const HANDLERS = [];
+const HANDLERS = [Note, Video, Blog, Chat, Forum, RelatedWorkRef, Timeline, TranscriptResult];
 
 function getTargetForHit (hit) {
 	const {TargetMimeType:targetMimeType} = hit;
 	let target;
 
 	for (let h of HANDLERS) {
-		if (h.handles[targetMimeType]) {
+		if (h.handles(targetMimeType)) {
 			target = h;
 			break;
 		}
@@ -31,11 +29,19 @@ function getTargetForHit (hit) {
 function getObject (hit) {
 	const target = getTargetForHit(hit);
 
-	if (!OBJECT[hit]) {
-		OBJECT[hit] = target && target.resolveObject ? target.resolveObject(hit) : Base.resolveObject(hit);
+	if (!OBJECT.has(hit)) {
+		OBJECT.set(hit, target && target.resolveObject ? target.resolveObject(hit) : Base.resolveObject(hit));
 	}
 
-	return OBJECT[hit];
+	return OBJECT.get(hit);
+}
+
+export function initComponent (hit) {
+	const target = getTargetForHit(hit);
+
+	return getObject(hit).then((obj) => {
+		return target && target.initComponent ? target.initComponent(obj, hit) : Base.initComponent(obj, hit);
+	});
 }
 
 export function resolveTitle (hit) {
