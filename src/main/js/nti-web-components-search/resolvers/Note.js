@@ -1,48 +1,18 @@
-import {getService} from 'nti-web-client';
-
 export default {
-	resolveObject (hit) {
-		return getService()
-			.then(service => service.getObject(hit.NTIID));
+	handles (targetMimeType) {
+		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
+		targetMimeType = targetMimeType.replace('.', '-');
+
+		if(targetMimeType === 'note') {
+			return true;
+		} else {
+			return false;
+		}
 	},
 
-	resolveTitle (obj, hit) {
-		return obj.Title || obj.label || '';
-	},
-
-	resolveFragments (obj, hit) {
-		const fragments = hit.Fragments;
-
-		return fragments.reduce((acc, frag, fragIndex) => {
-			const {Matches:matches = []} = frag;
-
-			if (frag.Field !== 'keywords') {
-				matches.reduce((ac, match) => {
-					ac.push({
-						fragIndex,
-						text: match.trim()
-					});
-
-					return ac;
-				}, acc);
-			}
-			return acc;
-		}, []);
-	},
-
-	resolvePath (obj, hit, getBreadCrumb) {
-		return getBreadCrumb(obj).then(function (breadCrumb) {
-			return breadCrumb;
-		});
-	},
-
-	resolveContainerID (obj, hit) {
-		return hit.ContainerId || (hit.Containers || [])[0];
-	},
-
-	resolveNavigateToSearchHit (obj, hit, navigateToSearchHit) {
-		const containerId = hit.ContainerId || (hit.Containers || [])[0];
-
-		return navigateToSearchHit(obj, hit, obj.fragIndex, containerId);
+	resolveNavigateToSearchHit (obj, hit, fragment) {
+		const fragIndex = fragment.fragIndex,
+			id = obj.objId || obj.NTIID;
+		return Promise.resolve({obj, fragIndex, id});
 	}
 };

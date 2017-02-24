@@ -6,7 +6,10 @@ export default class SearchResults extends React.Component {
 	static propTypes = {
 		hits: React.PropTypes.arrayOf(React.PropTypes.object),
 		getBreadCrumb: React.PropTypes.func,
-		navigateToSearchHit: React.PropTypes.func
+		navigateToSearchHit: React.PropTypes.func,
+		gotoPage: React.PropTypes.func,
+		currentPage: React.PropTypes.number,
+		totalPages: React.PropTypes.number
 	}
 
 	render () {
