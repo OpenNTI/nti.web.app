@@ -79,7 +79,14 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	addItem: function (item, prepend) {
 		item = this.unwrap(item);
 
-		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType],
+		const getCmp = (mimeType, cmpMap) => {
+			const isValid = (element) => !!cmpMap[element];
+			return Array.isArray(mimeType) ?
+				cmpMap[mimeType.find(isValid)] :
+				cmpMap[mimeType];
+		};
+
+		var cmp = getCmp(item.mimeType, this.self.MIME_TO_COMPONENT),
 			config = {
 				record: item,
 				navigateToItem: this.navigateToItem.bind(this)
