@@ -1,11 +1,13 @@
 var Ext = require('extjs');
 var ParseUtils = require('legacy/util/Parsing');
+var {getURL} = require('legacy/util/Globals');
+
 require('legacy/model/Base');
 require('legacy/mixins/BundleLike');
 require('legacy/mixins/PresentationResources');
 require('legacy/model/forums/ContentBoard');
 require('legacy/model/ContentPackage');
-var {getURL} = require('legacy/util/Globals');
+require('legacy/model/RenderableContentPackage');
 
 
 module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
@@ -25,6 +27,12 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 	fields: [
 		{ name: 'ContentPackages', type: 'arrayItem' },
+		{ name: 'LegacyContentPackages', type: 'array', convert: (v, r) => {
+			return (r.get('ContentPackages') || []).filter(x => !x.isRenderableContentPackage);
+		}},
+		{ name: 'RenderableContentPackages', type: 'array', convert: (v, r) => {
+			return (r.get('ContentPackages') || []).filter(x => x.isRenderableContentPackage);
+		}},
 		{ name: 'DCCreator', type: 'auto' },
 		{ name: 'DCDescription', type: 'string' },
 		{ name: 'DCTitle', type: 'string' },
@@ -89,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	getDefaultAssetRoot: function () {
-		var root = ([this].concat(this.get('ContentPackages')))
+		var root = ([this].concat(this.get('LegacyContentPackages')))
 				.reduce(function (agg, o) {
 					return agg || o.get('root');
 				}, null);
@@ -143,11 +151,12 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	getTocs: function (status) {
-		var packages = this.get('ContentPackages');
+		var packages = this.get('LegacyContentPackages');
 
-		packages = packages.map(function (pack) {
-			return pack.getToc(status);
-		});
+		packages = packages
+			.map(function (pack) {
+				return pack.getToc(status);
+			});
 
 		return Promise.all(packages);
 	},
@@ -200,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	getLocationInfo: function (status) {
-		var firstPackage = this.get('ContentPackages')[0],
+		var firstPackage = this.get('LegacyContentPackages')[0],
 			firstPage = this.getFirstPage(),
 			uiData = this.asUIData();
 
