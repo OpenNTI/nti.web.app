@@ -11,7 +11,7 @@ require('legacy/mixins/DurationCache');
 module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	extend: 'NextThought.model.Base',
 
-	statics: {
+	inheritableStatics: {
 		TOC_REQUESTS: {}
 	},
 
@@ -31,6 +31,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		{ name: 'installable', type: 'bool' },
 		{ name: 'root', type: 'string' },
 		{ name: 'title', type: 'string' },
+		{ name: 'description', type: 'string'},
 		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator', defaultValue: ['Author Name Here']},
 		{ name: 'version', type: 'string'},
 		{ name: 'PlatformPresentationResources', type: 'auto'},

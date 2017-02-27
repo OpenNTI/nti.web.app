@@ -4,6 +4,7 @@ const ContentUtils = require('../../../../../../../../util/Content');
 require('./Base');
 require('../../../../../../../content/Actions');
 require('../ReadingSelection');
+require('../ContentPackageSelection');
 require('../ReadingEditor');
 
 
@@ -55,22 +56,80 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.record) {
 			this.showReadingEditor();
 		} else {
-			this.showReadingList();
+			this.showContentPackageList();
 		}
 	},
 
 	onBack: function () {
 		if (this.readingEditorCmp) {
-			this.showReadingList(this.readingEditorCmp.selectedItem);
+			this.maybeShowReadingList(this.readingEditorCmp.selectedItem);
+		} else if (this.readingSelectionCmp) {
+			this.showContentPackageList();
 		} else if (this.doBack) {
 			this.doBack();
 		}
 	},
 
 	maybeEnableBack: function (text) {
-		if (!this.record && this.enableBack) {
+		if ((!this.record || !this.readingSelctionCmp) && this.enableBack) {
 			this.enableBack(text);
 		}
+	},
+
+
+	maybeShowReadingList (selection) {
+		ContentUtils.getContentPackageContainingReading(selection.getAttribute ? selection.getAttribute('ntiid') : selection, this.bundle)
+			.then((contentPackage) => {
+				if (!contentPackage) {
+					return Promise.reject();
+				}
+
+				return ContentUtils.getReadings(this.bundle, false, contentPackage.get('NTIID'))
+					.then((readings) => {
+						if (readings.length === 1) {
+							this.showContentPackageList(contentPackage);
+						} else {
+							this.showReadingList(selection);
+						}
+					});
+			})
+			.catch(() => {
+				this.showContentPackageList();
+			});
+	},
+
+
+	getContentPackageList () {
+		return this.bundle.getContentPackages();
+	},
+
+
+	showContentPackageList (selectedItems) {
+		if (this.contentPackageSelectionCmp) {
+			this.contentPackageSelectionCmp.destroy();
+			delete this.contentPackageSelectionCmp;
+		}
+
+		if (this.readingSelectionCmp) {
+			this.readingSelectionCmp.destroy();
+			delete this.readingSelectionCmp;
+		}
+
+		if (this.readingEditorCmp) {
+			this.readingEditorCmp.destroy();
+			delete this.readingEditorCmp;
+		}
+
+		this.maybeEnableBack(this.backText);
+		this.removeAll(true);
+
+		this.contentPackageSelectionCmp = this.add({
+			xtype: 'overview-editing-content-package-item-selection',
+			onSelectionChanged: this.onContentPackageSelectionChange.bind(this),
+			selectionItems: this.getContentPackageList(),
+			selectedItems
+		});
+
 	},
 
 	showReadingList: function (selectedItems) {
@@ -87,43 +146,77 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.maybeEnableBack(this.backText);
 		this.removeAll(true);
 
-		this.readingSelectionCmp = this.add({
-			xtype: 'overview-editing-reading-selection',
-			onSelectionChanged: this.onReadingListSelectionChange.bind(this),
-			selectedItems: selectedItems,
-			applyFilter: this.showFilteredList.bind(this),
-			removeFilter: this.showUnfilteredList.bind(this)
-		});
+		this.loading = true;
 
-		this.showFilteredList();
+		if (this.rendered) {
+			this.el.mask('Loading...');
+		}
+
+		this.getContentPackageSelection()
+			.then((selection) => {
+				this.readingSelectionCmp = this.add({
+					xtype: 'overview-editing-reading-selection',
+					onSelectionChanged: this.onReadingListSelectionChange.bind(this),
+					selectedItems: selectedItems,
+					applyFilter: () => this.showFilteredList(selection),
+					removeFilter: () => this.showUnfilteredList(selection)
+				});
+
+				return this.showFilteredList(selection);
+			})
+			.then(() => {
+				if (this.contentPackageSelectionCmp) {
+					this.contentPackageSelectionCmp.destroy();
+					delete this.contentPackageSelectionCmp;
+				}
+			})
+			.always(() => {
+				delete this.loading;
+
+				if (this.rendered) {
+					this.el.unmask();
+				}
+			});
 	},
 
 
-	showFilteredList: function () {
-		ContentUtils.getReadings(this.bundle)
+	showFilteredList: function (contentPackage) {
+		return ContentUtils.getReadings(this.bundle, false, contentPackage.get('NTIID'))
 			.then(this.showReadings.bind(this));
 	},
 
 
-	showUnfilteredList: function () {
-		ContentUtils.getReadings(this.bundle, true)
+	showUnfilteredList: function (contentPackage) {
+		return ContentUtils.getReadings(this.bundle, true, contentPackage.get('NTIID'))
 			.then(this.showReadings.bind(this));
 	},
 
 
 	showReadings: function (readings) {
-		// NOTE: When we have one content package,
-		// Simplify this and only return the list of items.
-		// However, in other cases,
-		// we need to pass the title and items for each content package.
-		if (readings.length === 1) {
-			readings = readings[0] && readings[0].items;
-		}
-
 		this.readingSelectionCmp.setSelectionItems(readings);
+
+		if (readings.length === 1) {
+			this.readingSelectionCmp.selectItem(readings[0]);
+			this.showReadingEditor();
+		}
 	},
 
-	getSelection: function () {
+
+	getContentPackageSelection () {
+		let getContentPackage;
+
+		if (this.contentPackageSelectionCmp) {
+			getContentPackage = Promise.resolve(this.contentPackageSelectionCmp.getSelection()[0]);
+		} else if (this.record) {
+			getContentPackage = ContentUtils.getContentPackageContainingReading(this.record.get('href'), this.bundle);
+		} else {
+			getContentPackage = Promise.resolve(null);
+		}
+
+		return getContentPackage;
+	},
+
+	getReadingSelection: function () {
 		var getReading;
 
 		if (this.readingSelectionCmp) {
@@ -151,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.el.mask('Loading...');
 		}
 
-		me.getSelection()
+		me.getReadingSelection()
 			.then(function (selection) {
 				me.readingEditorCmp = me.add({
 					xtype: 'overview-editing-reading-editor',
@@ -164,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					switchRecordType: me.switchRecordType,
 					selectedItem: selection,
 					doClose: me.doClose,
-					onChangeReading: me.showReadingList.bind(me, [selection]),
+					onChangeReading: () => me.maybeShowReadingList(selection),
 					showError: me.showError,
 					enableSave: me.enableSave,
 					disableSave: me.disableSave,
@@ -188,7 +281,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	onReadingListSelectionChange: function (selection) {
+	onContentPackageSelectionChange (selection) {
+		var length = selection.length;
+
+		this.setSaveText('Select');
+
+		if (length === 0) {
+			this.disableSave();
+		} else {
+			this.enableSave();
+		}
+	},
+
+	onReadingListSelectionChange (selection) {
 		var length = selection.length;
 
 		this.setSaveText('Select');
@@ -212,6 +317,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	onSave: function () {
 		var me = this;
+
+		if (!me.readingSelectionCmp && !me.readingEditorCmp) {
+			me.showReadingList();
+			return Promise.reject(me.SWITCHED);
+		}
 
 		if (!me.readingEditorCmp) {
 			me.showReadingEditor();

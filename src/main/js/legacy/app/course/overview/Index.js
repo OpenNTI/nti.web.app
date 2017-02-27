@@ -152,6 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 	showContent: function (route/*, subRoute*/) {
+		debugger;
 		var me = this,
 			rootId = route.params.id,
 			pageId = route.params.page,

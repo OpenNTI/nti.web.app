@@ -59,6 +59,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return ntiid || thing;
 	},
 
+
+	__getContentPackages (x) {
+		return x.getContentPackages ? x.getContentPackages() : [];
+	},
+
+
 	__resolveTocs: function (bundleOrTocOrNTIID) {
 		var x = bundleOrTocOrNTIID,
 			load;
@@ -71,6 +77,19 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			load = x.getTocs();
 		} else {
 			load = Promise.resolve([x]);
+		}
+
+		return load;
+	},
+
+
+	__resolveTocFor: function (bundle, ID) {
+		let load;
+
+		if (bundle && bundle.getTocFor) {
+			load = bundle.getTocFor(ID);
+		} else {
+			load = Promise.reject('Invalid bundle');
 		}
 
 		return load;
@@ -791,7 +810,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		var path = this.getReadingPath(reading);
 
 		return path.map(function (part) {
-			return part.getAttribute('label');
+			return (part.getAttribute && part.getAttribute('label')) || part.title;
 		});
 	},
 
@@ -827,7 +846,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	getReading: function (ntiid, bundle) {
 		function findReading (toc) {
 			var escaped = ParseUtils.escapeId(ntiid),
-				query = 'topic[ntiid="' + escaped + '"]';
+				query = 'toc[ntiid="' + escaped + '"],topic[ntiid="' + escaped + '"]';
 
 			return toc.querySelector(query);
 		}
@@ -838,7 +857,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			});
 	},
 
-	getReadings: function (bundle, unfiltered) {
+	getReadings: function (bundle, unfiltered, contentPackageID) {
 		function getTitle (toc) {
 			var t = toc.querySelector('toc');
 
@@ -868,24 +887,16 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 		function findUnfilteredReadings (toc) {
 			var navigation = buildNavigationMap(toc),
-				topLevel = toc.querySelectorAll('toc > topic');
+				topLevel = toc.querySelectorAll('toc, toc > topic');
 
 			topLevel = Array.prototype.slice.call(topLevel);
 
-			return {
-				title: getTitle(toc),
-				id: getTocID(toc),
-				items: topLevel.filter(function (node) {
-					var ntiid = node.getAttribute('ntiid');
-
-					return !navigation[ntiid];
-				})
-			};
+			return topLevel;
 		}
 
 		function findFilteredReadings (toc) {
 			var navigation = buildNavigationMap(toc),
-				readingNodes = toc.querySelectorAll('topic[label=Readings]');
+				readingNodes = toc.querySelectorAll('toc, topic[label=Readings]');
 
 			readingNodes = Array.prototype.slice.call(readingNodes);
 
@@ -895,26 +906,59 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				return !navigation[ntiid];
 			});
 
-			return {
-				title: getTitle(toc),
-				id: getTocID(toc),
-				items: readingNodes.reduce(function (acc, node) {
-					var topics = node.childNodes;
-
-					topics = Array.prototype.slice.call(topics);
-
-					topics = topics.filter(function (topic) {
-						return topic.tagName === 'topic';
-					});
-
-					return acc.concat(topics);
-				}, [])
-			};
+			return readingNodes;
 		}
 
-		return this.__resolveTocs(bundle)
+		let resolve = contentPackageID ? this.__resolveTocFor(bundle, contentPackageID) : this.__resolveTocs(bundle);
+
+		return resolve
 			.then(function (tocs) {
-				return tocs.map(unfiltered ? findUnfilteredReadings : findFilteredReadings);
+				if (!Array.isArray(tocs)) {
+					tocs = [tocs];
+				}
+
+				const readings = tocs.map(unfiltered ? findUnfilteredReadings : findFilteredReadings);
+
+				return contentPackageID ? readings[0] : readings;
 			});
+	},
+
+
+	getContentPackageContainingReading (ntiid, bundle) {
+		debugger;
+		const contentPackages = this.__getContentPackages(bundle);
+		let toCheck = [...contentPackages];
+
+		function findReading (toc) {
+			var escaped = ParseUtils.escapeId(ntiid),
+				query = 'toc[ntiid="' + escaped + '"],topic[ntiid="' + escaped + '"]';
+
+			return toc.querySelector(query);
+		}
+
+
+		const checkNext = (onFound, notFound) => {
+			const current = toCheck.pop();
+			const id = current && current.get('NTIID');
+
+			if (!current) {
+				return notFound();
+			}
+
+			this.__resolveTocFor(bundle, id)
+				.then((toc) => {
+					if (findReading(toc)) {
+						onFound(current);
+					} else {
+						checkNext(onFound, notFound);
+					}
+				});
+		}
+
+
+		return new Promise((fulfill, reject) => {
+			checkNext(fulfill, reject);
+		})
+		.catch(() => null);
 	}
 }).create();
