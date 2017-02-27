@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	getDefaultAssetRoot: function () {
-		var root = ([this].concat(this.get('LegacyContentPackages')))
+		var root = ([this].concat(this.get('ContentPackages')))
 				.reduce(function (agg, o) {
 					return agg || o.get('root');
 				}, null);
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 	getTocs: function (status) {
-		var packages = this.get('LegacyContentPackages');
+		var packages = this.get('ContentPackages');
 
 		packages = packages
 			.map(function (pack) {

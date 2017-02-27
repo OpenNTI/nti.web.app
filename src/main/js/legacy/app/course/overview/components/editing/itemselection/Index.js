@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.searchInput = search && search.el && search.el.dom && search.el.dom.querySelector('input');
 
-		if (!this.itemSet) {
+		if (!this.itemsSet) {
 			this.el.mask('Loading...');
 		}
 
@@ -140,7 +140,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			};
 		}));
 
-		me.el.unmask();
+		if (me.rendered) {
+			me.el.unmask();
+		}
 
 		me.applySelection(me.selection);
 	},
@@ -173,7 +175,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.selection = selection;
 
 		//NTI-1288: Set the min height due to the height changing after searching
-		this.setMinHeight(this.getHeight());
+		if (this.rendered) {
+			this.setMinHeight(this.getHeight());
+		}
 	},
 
 	getSelection: function () {

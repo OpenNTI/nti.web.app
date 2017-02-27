@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return label.indexOf(searchTerm) >= 0 || searchTerm === ntiid;
 	},
-	
+
 
 	onSelectItem: function (el) {
 		el.classList.add('selected');
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.breadcrumbCmp.add(path.map(function (part) {
 			var hasChildren, label, cls = [];
 
-			label = part.getAttribute('label');
+			label = (part.getAttribute && part.getAttribute('label')) || part.title;
 
 			if (part.tagName === 'toc') {
 				hasChildren = true;
