@@ -78,6 +78,10 @@ body.x-body {
     }
 }
 
+body.white-shade-mask .body-shade-mask {
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
 .body-shade-mask {
 	position: fixed;
 	top: 0; bottom: 0;

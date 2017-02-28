@@ -438,7 +438,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		}
 	},
 
-	updateBodyContent: function (content, masked) {
+	updateBodyContent: function (content, masked, whiteMask) {
 		var body = Ext.getBody(),
 			getBackground = content && content.getBackgroundImage && content.getBackgroundImage(),
 			mask = document.querySelector('.body-shade-mask');
@@ -457,6 +457,12 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			}
 		} else if (mask) {
 			document.body.removeChild(mask);
+		}
+
+		if (whiteMask) {
+			body.addCls('white-shade-mask');
+		} else {
+			body.removeCls('white-shade-mask');
 		}
 	},
 

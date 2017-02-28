@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return me.setActiveItem(INFO);
 	},
 
-	setActiveView: function (active, inactive, tab, navBarConfig) {
+	setActiveView: function (active, inactive, tab, navBarConfig, whiteMask) {
 		var bundle = this.activeBundle,
 			base = NextThought.app.course,
 			tabs = [
@@ -309,7 +309,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			active = inactive.shift();
 		}
 
-		return this.callParent([active, inactive, tab, navBarConfig]);
+		return this.callParent([active, inactive, tab, navBarConfig, whiteMask]);
 	},
 
 	showDashboard: function (route, subRoute) {
@@ -430,7 +430,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			ASSESSMENT,
 			FORUM,
 			REPORTS
-		], OVERVIEW, navBarConfig).then((item) => {
+		], OVERVIEW, navBarConfig, true).then((item) => {
 			if (item && item.handleRoute) {
 				return item.handleRoute(subRoute, route.precache);
 			}
