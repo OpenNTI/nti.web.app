@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	},
 
 
-	__loadBundle: function () {
+	__loadBundle: function (useWhiteMask) {
 		var bundle = this.activeBundle;
 
 		this.navBarConfig = {
@@ -175,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 		this.NavigationActions.updateNavBar(this.navBarConfig);
 
-		this.NavigationActions.setActiveContent(bundle);
+		this.NavigationActions.setActiveContent(bundle, useWhiteMask, useWhiteMask);
 	},
 
 	/**
@@ -184,12 +184,13 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
 	 * @param {String} tab the tab to mark as active if different than the one for the xtype
 	 * @param {Object} navConfig override the navbar config
+	 * @param {Boolean} useWhiteMask mask the course image with white
 	 * @return {Promise}		 fulfills when the tab is set up
 	 */
-	setActiveView: function (active, inactive, tab, navConfig) {
+	setActiveView: function (active, inactive, tab, navConfig, useWhiteMask) {
 		var me = this;
 
-		me.__loadBundle();
+		me.__loadBundle(useWhiteMask);
 
 		me.navigation.bundleChanged(me.activeBundle, me.getCurrentRoute());
 

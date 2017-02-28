@@ -149,8 +149,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * @param {Object} obj the thins to set active
 	 */
-	setActiveContent: function (obj, masked) {
-		this.store.fireEvent('set-active-content', obj, masked);
+	setActiveContent: function (obj, masked, whiteMask) {
+		this.store.fireEvent('set-active-content', obj, masked, whiteMask);
 	},
 
 	markReturnPoint: function (route) {
