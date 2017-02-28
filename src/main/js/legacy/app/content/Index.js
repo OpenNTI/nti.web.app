@@ -165,12 +165,15 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return shadow || '';
 	},
 
+
 	__loadBundle: function () {
 		var bundle = this.activeBundle;
 
-		this.NavigationActions.updateNavBar({
+		this.navBarConfig = {
 			cmp: this.getNavigation()
-		});
+		};
+
+		this.NavigationActions.updateNavBar(this.navBarConfig);
 
 		this.NavigationActions.setActiveContent(bundle);
 	},
@@ -179,14 +182,24 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	 * Set up the active tab
 	 * @param  {String} active	 xtype of the active tab
 	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
+	 * @param {String} tab the tab to mark as active if different than the one for the xtype
+	 * @param {Object} navConfig override the navbar config
 	 * @return {Promise}		 fulfills when the tab is set up
 	 */
-	setActiveView: function (active, inactive, tab) {
+	setActiveView: function (active, inactive, tab, navConfig) {
 		var me = this;
 
 		me.__loadBundle();
 
 		me.navigation.bundleChanged(me.activeBundle, me.getCurrentRoute());
+
+		if (navConfig) {
+			this.hasAlternateNav = true;
+			this.NavigationActions.updateNavBar(navConfig);
+		} else if (this.hasAlternateNav) {
+			delete this.hasAlternateNav;
+			this.NavigationActions.updateNavBar({showNavCmp});
+		}
 
 		me.activeState = {
 			active: tab || active

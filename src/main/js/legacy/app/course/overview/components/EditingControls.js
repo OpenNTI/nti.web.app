@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const {wait} = require('legacy/util/Promise');
 
 const ControlBar = require('nti-web-course-overview-controls').default;
 const ReactHarness = require('legacy/overrides/ReactHarness');
@@ -39,13 +40,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	isHidden () {
+		return this.doHide;
+	},
+
+
 	hide () {
 		this.doHide = true;
 
 		if (this.controlBar) {
-			this.controlBar.setProps({
-				hide: true
-			});
+			wait()
+				.then(() => {
+					if (this.doHide) {
+						this.controlBar.setProps({
+							hide: true
+						});
+					}
+				});
+
 		}
 	},
 

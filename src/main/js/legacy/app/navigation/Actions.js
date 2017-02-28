@@ -143,6 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		this.store.updateNavBar(config);
 	},
 
+
 	/**
 	 * the active object to set the background from
 	 *
