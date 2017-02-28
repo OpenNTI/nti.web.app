@@ -57,5 +57,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return matches;
+	},
+
+
+	onSelectItem: function (el) {
+		el.classList.add('selected');
+	},
+
+
+	onUnselectItem: function (el) {
+		el.classList.remove('selected');
+	},
+
+
+	getSelectionItemId (item) {
+		return item.get('NTIID') || item.get('OID');
 	}
 });
