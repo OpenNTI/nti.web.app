@@ -1,8 +1,9 @@
 var Ext = require('extjs');
-var MixinsRouter = require('../../../../mixins/Router');
-var ComponentsEditingControls = require('./EditingControls');
-var ComponentsLesson = require('./Lesson');
-var EditingIndex = require('./editing/Index');
+
+require('../../../../mixins/Router');
+require('./EditingControls');
+require('./Lesson');
+require('./editing/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.Body', {
@@ -39,17 +40,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 
 		me.editingControlsCmp.openAuditLog = function () {
-			if(me.openAuditLog) {
+			if (me.openAuditLog) {
 				me.openAuditLog();
+			}
+		};
+
+		me.editingControlsCmp.gotoResources = function () {
+			if (me.gotoResources) {
+				me.gotoResources();
 			}
 		};
 
 		me.editingControlsCmp.hide();
 	},
 
+
 	onRouteDeactivate () {
 		const lesson = this.getLesson();
 		const editor = this.getEditor();
+
+		this.editingControlsCmp.hide();
+		delete this.hasEditingControls;
 
 		if (lesson && lesson.onRouteDeactivate) {
 			lesson.onRouteDeactivate();

@@ -138,6 +138,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.CourseViewStore.markRouteFor(this.activeBundle.getId(), route);
 	},
 
+	gotoResources () {
+		this.pushRoute('Resources', '/resources');
+	},
+
 	setActiveCourse: function (ntiid, course) {
 		var me = this;
 
@@ -325,7 +329,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	},
 
 	showOverview: function (route, subRoute) {
-		this.setCmpRouteState(OVERVIEW, subRoute)
+		this.setCmpRouteState(OVERVIEW, subRoute);
 
 		return this.setActiveView(OVERVIEW, [
 			DASHBOARD,
@@ -333,8 +337,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			FORUM,
 			REPORTS,
 			INFO
-		]).then(function (item) {
+		]).then((item) => {
 				if (item && item.handleRoute) {
+					item.gotoResources = () => this.gotoResources();
+
 					return item.handleRoute(subRoute, route.precache)
 						.then();
 				}

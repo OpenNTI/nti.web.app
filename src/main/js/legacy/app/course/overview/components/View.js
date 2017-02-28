@@ -39,6 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.body.openEditing = this.openEditing.bind(this);
 		this.body.closeEditing = this.closeEditing.bind(this);
 		this.body.openAuditLog = this.openAuditLog.bind(this);
+		this.body.gotoResources = this.gotoResources.bind(this);
 
 		this.navigation.selectOutlineNode = this.selectOutlineNode.bind(this);
 		this.body.navigateToOutlineNode = this.selectOutlineNode.bind(this);
@@ -95,6 +96,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getActiveLesson: function () {
 		return this.activeLesson;
+	},
+
+	gotoResources () {
+		if (this.gotoResources) {
+			this.gotoResources();
+		}
 	},
 
 	openEditing: function () {
