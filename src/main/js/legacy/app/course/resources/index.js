@@ -59,6 +59,13 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	},
 
 
+	onRouteDeactivate () {
+		if (this.editor) {
+			this.editor.destroy();
+		}
+	},
+
+
 	bundleChanged (bundle) {
 		this.currentBundle = bundle;
 	},

@@ -1,10 +1,15 @@
 var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-var MixinsRouter = require('../../../mixins/Router');
-var ContentActions = require('../Actions');
-var ContentviewerStateStore = require('../../contentviewer/StateStore');
-var ComponentsResourceNotFound = require('../../../common/components/ResourceNotFound');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+const {getService} = require('nti-web-client');
+const {Editor} = require('nti-content');
+
+require('../../../util/Parsing');
+require('../../../mixins/Router');
+require('../Actions');
+require('../../contentviewer/StateStore');
+require('../../../common/components/ResourceNotFound');
+
+require('legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	extend: 'Ext.container.Container',
@@ -26,7 +31,9 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		this.addRoute('/', this.showRoot.bind(this));
 		this.addRoute('/:id', this.showContent.bind(this));
+		this.addRoute('/:id/edit', this.showEditContent.bind(this));
 		this.addRoute('/:id/:page', this.showPage.bind(this));
+		this.addRoute('/:id/:page/edit', this.showEditContent.bind(this));
 
 		this.addDefaultRoute('/');
 
@@ -122,6 +129,47 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			});
 	},
 
+
+	showEditor (page, pageSource) {
+		if (!this.rendered) {
+			this.on('afterrender', this.showEditor.bind(this, page));
+			return;
+		}
+
+		const packageId = page.get('ContentPackageNTIID');
+
+		this.el.mask('Loading...');
+
+		if (this.editor) {
+			this.editor.destroy();
+		}
+
+		if (this.reader) {
+			this.reader.destroy();
+		}
+
+
+		return getService()
+			.then((service) => service.getObject(this.currentBundle.raw))
+			.then((course) => {
+				const contentPackage = course.getPackage(packageId);
+
+				this.editor = this.add({
+					xtype: 'react',
+					component: Editor,
+					cls: 'native-content-editor',
+					course,
+					contentPackage,
+					pageSource,
+					pageID: page.getId()
+				});
+			})
+			.always(() => {
+				this.el.unmask();
+			});
+	},
+
+
 	showReader: function (page, parent, hash, note) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showReader.bind(this, page));
@@ -146,6 +194,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			} else {
 				this.reader.destroy();
 			}
+		}
+
+		if (this.editor) {
+			this.editor.destroy();
 		}
 
 		pageSource.then(function (ps) {
@@ -256,6 +308,22 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 			});
 	},
+
+
+	showEditContent (route) {
+		const obj = route.precache.pageInfo || route.precache.relatedWork;
+		let root = route.params.id;
+		let page = route.params.page;
+
+		root = root && decodeFromURI(root);
+		page = page && decodeFromURI(page);
+
+		return this.__loadContent(root, obj)
+			.then((page) => {
+				this.showEditor(page, route.precache.pageSource, route.precache.parent, route.hash);
+			});
+	},
+
 
 	showRoot: function (route, subRoute) {
 		var me = this;

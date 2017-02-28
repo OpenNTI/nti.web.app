@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 	getProps () {
 		const {initialConfig: config} = this;
-		return {...config, component: void 0};
+		return {...config, component: void 0, cls: void 0};
 	},
 
 
