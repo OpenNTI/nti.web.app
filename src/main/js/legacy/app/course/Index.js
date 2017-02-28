@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return me.setActiveItem(INFO);
 	},
 
-	setActiveView: function (active, inactive, tab) {
+	setActiveView: function (active, inactive, tab, navBarConfig) {
 		var bundle = this.activeBundle,
 			base = NextThought.app.course,
 			tabs = [
@@ -309,7 +309,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			active = inactive.shift();
 		}
 
-		return this.callParent([active, inactive, tab]);
+		return this.callParent([active, inactive, tab, navBarConfig]);
 	},
 
 	showDashboard: function (route, subRoute) {
@@ -412,6 +412,16 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	},
 
 	showResources (route, subRoute) {
+		const prevRoute = this.previousFullRoute;
+		const navBarConfig = {
+			hideBranding: true,
+			noRouteOnSearch: true,
+			hideNavCmp: true,
+			onBack: () => {
+				this.pushRoute('', prevRoute || '');
+			}
+		};
+
 		this.setCmpRouteState(RESOURCES, subRoute);
 
 		return this.setActiveView(RESOURCES, [
@@ -420,7 +430,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			ASSESSMENT,
 			FORUM,
 			REPORTS
-		], OVERVIEW).then((item) => {
+		], OVERVIEW, navBarConfig).then((item) => {
 			if (item && item.handleRoute) {
 				return item.handleRoute(subRoute, route.precache);
 			}

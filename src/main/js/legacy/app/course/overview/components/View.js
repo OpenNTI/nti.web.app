@@ -66,6 +66,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.hasEditControls) {
 			this.addScrollListener();
 		}
+
+		this.body.onRouteActivate();
 	},
 
 	onRouteDeactivate: function () {

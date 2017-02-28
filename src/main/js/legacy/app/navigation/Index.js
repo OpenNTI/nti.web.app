@@ -107,6 +107,21 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			this.searchCmp.isActive = true;
 			this.searchEl.addCls('collapsed');
 			this.hasNavCmp = true;
+		} else if (config && config.hideNavCmp && this.hasNavCmp) {
+			this.addCls('removing-nav');
+			this.addCls('no-nav');
+			this.removeCls('has-nav');
+
+			wait(300)
+				.then(this.removeCls.bind(this, 'removing-nav'));
+
+			this.searchCmp.isActive = false;
+			this.searchEl.removeCls('collapsed');
+		} else if (config && config.showNavCmp && this.hasNavCmp) {
+			this.removeCls('no-nav');
+			this.addCls('has-nav');
+			this.searchCmp.isActive = true;
+			this.searchCmp.addCls('collapsed');
 		} else {
 			this.addCls('removing-nav');
 			this.addCls('no-nav');
@@ -120,6 +135,12 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			this.searchCmp.isActive = false;
 
 			this.searchEl.removeCls('collapsed');
+		}
+
+		if (config && config.onBack) {
+			this.onBackOverride = config.onBack;
+		} else {
+			delete this.onBackOverride;
 		}
 
 		if (config && config.hideBranding) {
@@ -270,6 +291,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 	goBack: function () {
 		var returnPoint = this.NavStore.getReturnPoint();
+
+		if (this.onBackOverride) {
+			this.onBackOverride();
+			return;
+		}
 
 		if (returnPoint) {
 			this.pushRootRoute('', returnPoint);

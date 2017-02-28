@@ -251,6 +251,9 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 			subRoute += '#' + route.hash;
 		}
 
+		this.previousFullRoute = this.currentFullRoute;
+		this.previousRoute = this.currentRoute;
+
 		this.currentFullRoute = path;
 		this.currentRoute = currentRoute;
 
