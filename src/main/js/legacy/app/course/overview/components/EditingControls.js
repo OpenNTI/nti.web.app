@@ -1,4 +1,7 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
+const ControlBar = require('nti-web-course-overview-controls').default;
+const ReactHarness = require('legacy/overrides/ReactHarness');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.EditingControls', {
@@ -7,98 +10,110 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	cls: 'editing-controls',
 
-	buttonTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'tip', cn: [
-			{cls: 'button {cls}', 'data-action': '{action}', 'data-qtip': '{tip}', html: '{label}'}
-		]},
-		{tag: 'tpl', 'if': '!tip', cn: [
-			{cls: 'button {cls}', 'data-action': '{action}', html: '{label}'}
-		]}
-	])),
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'buttons'}
+		{cls: 'controls'}
 	]),
 
 
 	renderSelectors: {
-		buttonsEl: '.buttons'
+		controlsEl: '.controls'
 	},
 
 
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.mon(this.buttonsEl, 'click', this.onButtonClicked.bind(this));
+		this.controlBar = new ReactHarness({
+			component: ControlBar,
+			renderTo: this.controlsEl,
+			gotoResources: () => this.gotoResources(),
+			switchToEdit: () => this.switchToEdit(),
+			switchToPreview: () => this.switchToPreview(),
+			showAuditLog: () => this.showAuditLog(),
+			canDoAdvancedEditing: Service.canDoAdvancedEditing(),
+			mode: this.mode,
+			hide: this.doHide,
+			disabled: false
+		});
 	},
 
 
-	onButtonClicked: function (e) {
-		var button = e.getTarget('.button'),
-			action = button.getAttribute('data-action');
+	hide () {
+		this.doHide = true;
 
-		if (action && this[action] && !button.classList.contains('busy')) {
-			this[action](this);
+		if (this.controlBar) {
+			this.controlBar.setProps({
+				hide: true
+			});
 		}
 	},
 
 
-	addButton: function (data) {
-		data.tip = data.tip || '';
+	show () {
+		this.doHide = false;
 
-		this.buttonTpl.append(this.buttonsEl, data);
-	},
-
-
-	clearButtons: function () {
-		if (this.buttonsEl) {
-			this.buttonsEl.dom.innerHTML = '';
+		if (this.controlBar) {
+			this.controlBar.setProps({
+				hide: false
+			});
 		}
 	},
 
 
 	showNotEditing: function () {
-		this.clearButtons();
+		this.mode = ControlBar.PREVIEW;
 
-		this.addButton({
-			cls: 'edit',
-			action: 'doEdit',
-			label: 'Edit'
-		});
+		if (this.controlBar) {
+			this.controlBar.setProps({
+				mode: ControlBar.PREVIEW,
+				disabled: false
+			});
+		}
 	},
 
 
 	showEditing: function () {
-		this.clearButtons();
+		this.mode = ControlBar.EDITING;
 
-		if (Service.canDoAdvancedEditing()) {
-			this.addButton({
-				cls: 'auditLog',
-				action: 'showAuditLog',
-				label: 'Change Log'
+		if (this.controlBar) {
+			this.controlBar.setProps({
+				mode: ControlBar.EDITING,
+				disabled: false
 			});
 		}
-
-		this.addButton({
-			cls: 'edit',
-			action: 'stopEdit',
-			label: 'Stop Editing'
-		});
 	},
 
 
-	doEdit: function () {
+	switchToEdit: function () {
+		if (this.controlBar) {
+			this.controlBar.setProps({
+				disabled: true
+			});
+		}
+
 		if (this.openEditing) {
-			this.buttonsEl.down('.edit').addCls('busy');
 			this.openEditing();
 		}
 	},
 
 
-	stopEdit: function () {
+	switchToPreview: function () {
+		if (this.controlBar) {
+			this.controlBar.setProps({
+				disabled: true
+			});
+		}
+
 		if (this.closeEditing) {
-			this.buttonsEl.down('.edit').addCls('busy');
 			this.closeEditing();
+		}
+	},
+
+
+	gotoResources () {
+		if (this.gotoResources) {
+			this.gotoResources();
 		}
 	},
 

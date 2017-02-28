@@ -58,6 +58,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		this.lessons = this.down('course-overview-view');
 
+		this.lessons.gotoResources = () => {
+			if (this.gotoResources) {
+				this.gotoResources();
+			}
+		};
+
 		this.addChildRouter(this.lessons);
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
@@ -152,7 +158,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 	showContent: function (route/*, subRoute*/) {
-		debugger;
 		var me = this,
 			rootId = route.params.id,
 			pageId = route.params.page,

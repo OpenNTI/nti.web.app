@@ -1,0 +1,29 @@
+@import "~nti-style-common";
+
+.course-overview-control-bar {
+	display: flex;
+	align-items: center;
+	padding: 0 1.125rem;
+
+	.resources, .message {
+		flex: 0 0 auto;
+		line-height: 3.75rem;
+	}
+
+	.spacer {
+		flex: 1 1 auto;
+	}
+
+	.buttons {
+		flex: 0 0 auto;
+
+		.start-editing, .audit-logs, .show-preview {
+			cursor: pointer;
+		}
+
+		.audit-logs {
+			background: $primary-grey;
+			margin-right: 0.3rem;
+		}
+	}
+}
