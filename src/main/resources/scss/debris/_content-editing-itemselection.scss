@@ -522,3 +522,44 @@
 		}
 	}
 }
+
+
+.content-package-item-selection {
+	padding: 0 1.25rem;
+
+	.selected .content-package-item {
+		box-shadow: 0 0 0 2px $primary-blue;
+	}
+
+	.content-package-item {
+		display: flex;
+		background-color: $panel-background-blue;
+		margin-bottom: 1rem;
+		box-shadow: 0 0 0 1px rgba(63, 179, 246, 0.3);
+
+		.icon {
+			flex: 0 0 100px;
+			max-width: 100px;
+			height: 128px;
+			background-size: contain;
+			background-color: white;
+			box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.08);
+		}
+
+		.wrap {
+			flex: 1 1 auto;
+			padding: 1rem 1.25rem;
+			color: $primary-grey;
+
+			.title {
+				font-size: 1rem;
+				font-weight: 600
+			}
+
+			.description {
+				font-size: 0.875rem;
+				line-height: 1.38;
+			}
+		}
+	}
+}
