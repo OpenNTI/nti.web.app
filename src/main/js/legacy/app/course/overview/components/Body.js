@@ -56,6 +56,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onRouteActivate () {
+		this.isActive = true;
+
 		if (this.hasEditingControls) {
 			this.editingControlsCmp.show();
 		}
@@ -63,6 +65,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onRouteDeactivate () {
+		delete this.isActive;
+
 		const lesson = this.getLesson();
 		const editor = this.getEditor();
 
@@ -78,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	showEditControls: function () {
-		if (this.hasEditingControls && !this.editingControlsCmp.isHidden()) { return; }
+		if (!this.editingControlsCmp.isHidden() || !this.isActive) { return; }
 
 		this.addCls('has-editing-controls');
 		this.hasEditingControls = true;
