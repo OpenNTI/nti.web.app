@@ -1,6 +1,10 @@
-var Ext = require('extjs');
-var MenusJumpTo = require('../../../common/menus/JumpTo');
-var NavigationTableOfContents = require('./TableOfContents');
+const Ext = require('extjs');
+const {ControlBar} = require('nti-content');
+const ReactHarness = require('legacy/overrides/ReactHarness');
+const { encodeForURI } = require('nti-lib-ntiids');
+
+require('../../../common/menus/JumpTo');
+require('./TableOfContents');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.Base', {
@@ -41,7 +45,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		{cls: 'path-items', html: '{pathContent}'}
 	]),
 
-	headerTpl: '',
+	headerTpl: Ext.DomHelper.markup([
+		{cls: 'control-bar-container'}
+	]),
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'toolbar', html: '{toolbarContents}'},
@@ -55,7 +61,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		currentPageEl: '.page .currentPage',
 		nextEl: '.right.controls .next',
 		previousEl: '.right.controls .prev',
-		tocEl: '.toc'
+		tocEl: '.toc',
+		controlBarEl: '.control-bar-container'
 	},
 
 	onClassExtended: function (cls, data) {
@@ -84,6 +91,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			data.pathTpl = cls.superclass.pathTpl || false;
 		} else {
 			data.pathTpl = data.pathTpl.replace('{super}', cls.superclass.pathTpl || '');
+		}
+
+		if (!data.headerTpl) {
+			data.headerTpl = cls.superclass.headerTpl || false;
+		} else {
+			data.headerTpl = data.headerTpl.replace('{super}', cls.superclass.headerTpl || '');
 		}
 
 		if (!data.toolbarTpl) {
@@ -155,6 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			nextEl: {click: 'onNext'}
 		});
 	},
+
 
 	onPathLoad: function (path) {
 		if (!this.rendered) {
@@ -371,7 +385,37 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		if (this.tocComponent) {
 			this.tocComponent.selectId(this.activeNTIID);
 		}
+
+		this.maybeAddControlbarForPageInfo(pageInfo);
 	},
+
+
+	maybeAddControlbarForPageInfo (pageInfo) {
+		if (pageInfo.get('isFakePageInfo')) { return; }
+
+		if (!this.rendered) {
+			this.on('afterrender', () => this.maybeAddControlbarForPageInfo(pageInfo));
+			return;
+		}
+
+		this.controlBar = ReactHarness.create({
+			component: ControlBar,
+			renderTo: this.controlBarEl,
+			doEdit: () => {
+				const route = this.rootRoute ? this.rootRoute : `/${encodeForURI(this.activeNTIID)}/`;
+
+				this.doNavigation('', `${route}edit`);
+			}
+		});
+
+		this.on('destroy', () => {
+			if (this.controlBar) {
+				this.controlBar.destroy();
+			}
+		});
+	},
+
+
 
 	buildTocComponent: function (store) {
 		this.tocComponent = Ext.widget({

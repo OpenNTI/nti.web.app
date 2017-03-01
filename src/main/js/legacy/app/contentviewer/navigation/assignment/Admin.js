@@ -201,6 +201,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 	},
 
+
+	maybeAddControlbarForPageInfo () {},
+
+
 	setupEmail: function () {
 		var me = this;
 		this.getStudentEnrollment(this.student)

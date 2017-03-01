@@ -925,7 +925,6 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 
 	getContentPackageContainingReading (ntiid, bundle) {
-		debugger;
 		const contentPackages = this.__getContentPackages(bundle);
 		let toCheck = [...contentPackages];
 
