@@ -12,6 +12,9 @@ module.exports = exports = Ext.define('NextThought.model.RenderableContentPackag
 
 	fields: [
 		{name: 'isPublished', type: 'bool'}
-	]
+	],
+
+
+	__setImage () {}
 });
 
