@@ -207,6 +207,10 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 	getDataForSync (data) { return data; },
 
+	getRawForConverting () {
+		return this.updatedRaw || this.raw;
+	},
+
 	/**
 	 * Given another instance of the same class, update this values.
 	 *
@@ -227,6 +231,8 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		});
 
 		this.set(newData);
+
+		this.updatedRaw = record.raw;
 
 		if (this.onSync) {
 			this.onSync(record);
