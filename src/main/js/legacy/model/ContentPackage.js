@@ -23,6 +23,8 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	VIDEO_INDEX_TYPE: 'application/vnd.nextthought.videoindex',
 	idProperty: 'index',
 
+	isContentPackage: true,
+
 	fields: [
 		{ name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'archive', type: 'string' },

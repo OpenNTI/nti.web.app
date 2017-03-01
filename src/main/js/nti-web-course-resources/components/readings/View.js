@@ -68,8 +68,6 @@ export default function Readings ({course, gotoResource}) {
 		);
 	};
 
-	debugger;
-
 	return (
 		<Table.ListTable
 			className="course-resources-readings"
