@@ -2,22 +2,9 @@ const Ext = require('extjs');
 const Resources = require('nti-web-course-resources');
 const {getService} = require('nti-web-client');
 const ParseUtils = require('legacy/util/Parsing');
-const {encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
-const {Editor} = require('nti-content');
 
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
-
-function findContentPackage (course, id) {
-	const {ContentPackageBundle} = course;
-	const {ContentPackages} = ContentPackageBundle;
-
-	for (let pkg of ContentPackages) {
-		if (pkg.NTIID === id || pkg.OID === id) {
-			return pkg;
-		}
-	}
-}
 
 
 const EMPTY_CONTENT_PACKAGE = {

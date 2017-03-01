@@ -130,7 +130,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			.then((obj) => {
 				//if we don't get a page (pageinfo or related work) request a page info
 				if (!obj.isPage) {
-					return Service.getPageInfo(id, null, null, null, this.currentBundle);
+					return Service.getPageInfo(id, null, null, null, this.currentBundle)
+						.catch(() => {
+							return Promise.reject(obj);
+						});
 				}
 
 				return obj;
@@ -144,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			return;
 		}
 
-		const packageId = page.get('ContentPackageNTIID');
+		const packageId = page.get('ContentPackageNTIID') || page.get('NTIID');
 
 		this.el.mask('Loading...');
 
@@ -328,7 +331,15 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		return this.__loadContent(root, obj)
 			.then((page) => {
-				this.showEditor(page, route.precache.pageSource, route.precache.parent, route.hash);
+				this.showEditor(page, route.precache.pageSource);
+			})
+			.catch((obj) => {
+				if (obj.isContentPackage) {
+					this.showEditor(obj, route.precache.pageSource);
+					return;
+				}
+
+				return Promise.reject(obj);
 			});
 	},
 
