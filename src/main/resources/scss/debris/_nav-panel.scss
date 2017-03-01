@@ -13,6 +13,10 @@
 		html.msg-bar-open & {
 			top: 130px !important; // $header-height + $msg-bar-height + 20
 		}
+
+		body.control-bar-open & {
+			bottom: 65px;
+		}
 	}
 
 	//Override these, since the placeholder is not suppose to be visible
