@@ -19,7 +19,7 @@ export default class ResourceControls extends React.Component {
 	render () {
 		return (
 			<div className="resource-controls">
-				<Button className="create-resource" onClick={this.onCreate}>
+				<Button className="create-resource" onClick={this.onCreate} rounded>
 					<span>Create</span>
 				</Button>
 			</div>

@@ -1,0 +1,20 @@
+@import "~nti-style-common";
+
+.course-resources {
+	padding-top: 40px;
+
+	.course-resources-header {
+		display: flex;
+		align-items: center;
+
+		.header {
+			flex: 1 1 auto;
+			font: normal 300 2.25rem/1 $body-font-family;
+			color: $primary-grey;
+		}
+
+		.resource-controls {
+			flex: 0 0 auto;
+		}
+	}
+}
