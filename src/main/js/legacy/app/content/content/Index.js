@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			return;
 		}
 
-		const packageId = page.get('ContentPackageNTIID') || page.get('NTIID');
+		const packageId = page.get ? page.get('ContentPackageNTIID') : page;
 
 		this.el.mask('Loading...');
 
@@ -159,9 +159,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			this.reader.destroy();
 		}
 
-
 		return getService()
-			.then((service) => service.getObject(this.currentBundle.raw))
+			.then((service) => service.getObject(this.currentBundle.getRaw()))
 			.then((course) => {
 				const contentPackage = course.getPackage(packageId);
 
@@ -172,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					course,
 					contentPackage,
 					pageSource,
-					pageID: page.getId()
+					pageID: page.getId ? page.getId() : ''
 				});
 			})
 			.always(() => {
@@ -324,22 +323,17 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	showEditContent (route) {
 		const obj = route.precache.pageInfo || route.precache.relatedWork;
 		let root = route.params.id;
-		let page = route.params.page;
+		let pageID = route.params.page;
 
 		root = root && decodeFromURI(root);
-		page = page && decodeFromURI(page);
+		pageID = pageID && decodeFromURI(pageID);
 
 		return this.__loadContent(root, obj)
 			.then((page) => {
-				this.showEditor(page, route.precache.pageSource);
+				this.showEditor(page, route.precache.pageSource, pageID);
 			})
 			.catch((obj) => {
-				if (obj.isContentPackage) {
-					this.showEditor(obj, route.precache.pageSource);
-					return;
-				}
-
-				return Promise.reject(obj);
+				this.showEditor(root, route.precache.pageSource);
 			});
 	},
 
