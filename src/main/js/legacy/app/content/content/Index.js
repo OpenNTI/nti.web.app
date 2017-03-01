@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		}
 
 		return getService()
-			.then((service) => service.getObject(this.currentBundle.getRaw()))
+			.then((service) => service.getObject(this.currentBundle.getRawForConverting()))
 			.then((course) => {
 				const contentPackage = course.getPackage(packageId);
 
