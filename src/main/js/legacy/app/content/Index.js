@@ -199,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 			this.NavigationActions.updateNavBar(navConfig);
 		} else if (this.hasAlternateNav) {
 			delete this.hasAlternateNav;
-			this.NavigationActions.updateNavBar({showNavCmp});
+			this.NavigationActions.updateNavBar({showNavCmp: true});
 		}
 
 		me.activeState = {

@@ -142,6 +142,12 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.pushRoute('Resources', '/resources');
 	},
 
+
+	gotoResource (id) {
+		this.pushRoute('', `/content/${encodeForURI(id)}/edit`);
+	},
+
+
 	setActiveCourse: function (ntiid, course) {
 		var me = this;
 
@@ -432,6 +438,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			REPORTS
 		], OVERVIEW, navBarConfig, true).then((item) => {
 			if (item && item.handleRoute) {
+				item.gotoResource = (id) => this.gotoResource(id);
+
 				return item.handleRoute(subRoute, route.precache);
 			}
 		});

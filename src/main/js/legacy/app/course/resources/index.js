@@ -53,16 +53,8 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 		this.initRouter();
 
 		this.addRoute('/readings', this.showReadings.bind(this));
-		this.addRoute('/readings/:id', this.showReading.bind(this));
 
 		this.addDefaultRoute('/readings');
-	},
-
-
-	onRouteDeactivate () {
-		if (this.editor) {
-			this.editor.destroy();
-		}
 	},
 
 
@@ -94,11 +86,15 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 
 
 	gotoReading (readingID) {
-		this.pushRoute('', `/readings/${encodeForURI(readingID)}`);
+		if (this.gotoResource) {
+			this.gotoResource(readingID);
+		}
 	},
 
 
 	showReadings () {
+		this.setTitle('Readings');
+
 		return	this.getCourse()
 			.then((course) => {
 				if (this.editor) {
@@ -108,25 +104,6 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 
 				this.resources.setProps({
 					course
-				});
-			});
-	},
-
-
-	showReading (route) {
-		const {id} = route.params;
-
-		return this.getCourse()
-			.then((course) => {
-				const contentPackage = findContentPackage(course, decodeFromURI(id));
-
-				this.resources.hide();
-
-				this.editor = this.add({
-					xtype: 'react',
-					component: Editor,
-					course,
-					contentPackage
 				});
 			});
 	}
