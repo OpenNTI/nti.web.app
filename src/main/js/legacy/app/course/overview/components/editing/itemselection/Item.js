@@ -164,7 +164,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	maybeSelectItem: function (item) {
-		debugger;
 		if (!this.hasItemData) {
 			this.on({
 				single: true,

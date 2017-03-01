@@ -155,6 +155,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 
+	maybeAddControlbarForPageInfo () {},
+
+
 	alignTimer: function () {
 		if (!this.rendered) {
 			return;
