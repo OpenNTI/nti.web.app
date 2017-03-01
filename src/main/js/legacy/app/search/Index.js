@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	getActiveItem: function () {
-		return this.Results;
+		return this.ReactResults;
 	},
 
 	onActivate: function () {
@@ -203,7 +203,10 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	clearResults: function () {
-		this.Results.removeResults();
+		//this.Results.removeResults();
+		this.ReactResults.setProps({
+			hits: []
+		});
 	},
 
 	getAcceptFilter: function (filter) {
@@ -224,6 +227,19 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 	showNext: function () {
 		this.Results.showNext(this.loadNextPage.bind(this));
+
+		// var nextCmp = this.actionContainer.down('[nextCmp]');
+		//
+		// if (!nextCmp) {
+		// 	nextCmp = this.actionContainer.add({
+		// 		xtype: 'box',
+		// 		nextCmp: true,
+		// 		autoEl: {cls: 'control-item load-more', html: 'Show More'},
+		// 		afterRender: function () {
+		// 			this.mon(this.el, 'click', this.loadNextPage.bind(this));
+		// 		}
+		// 	});
+		// }
 	},
 
 	removeNext: function () {
