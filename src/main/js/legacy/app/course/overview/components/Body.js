@@ -99,7 +99,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	hideEditControls: function () {
 		this.removeCls('has-editing-controls');
 		delete this.hasEditingControls;
-		this.editingControlsCmp.clearButtons();
 		this.editingControlsCmp.hide();
 	},
 
