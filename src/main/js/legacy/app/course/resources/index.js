@@ -61,12 +61,24 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	createReading () {
 		const link = this.currentBundle && this.currentBundle.getLink('Library');
 
+		if (this.el) {
+			this.el.mask('Loading...');
+		}
+
 		if (link) {
 			Service.post(link, EMPTY_CONTENT_PACKAGE)
 				.then((contentPackage) => {
 					const pack = ParseUtils.parseItems(JSON.parse(contentPackage))[0];
 
-					this.gotoReading(pack.get('OID'));
+					return this.currentBundle.updateFromServer()
+						.then(() => {
+							this.gotoReading(pack.get('OID'));
+						});
+				})
+				.always(() => {
+					if (this.el) {
+						this.el.unmask();
+					}
 				});
 		}
 	},
