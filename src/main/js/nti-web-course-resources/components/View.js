@@ -1,7 +1,14 @@
 import React from 'react';
+import {scoped} from 'nti-lib-locale';
 
 import Controls from './Controls';
 import Readings, {KEY as READINGS} from './Readings';
+
+const DEFAULT_STRINGS = {
+	'readings': 'Readings'
+};
+
+const t = scoped('COURSE_RESOURCES_VIEWS', DEFAULT_STRINGS);
 
 export default class CourseResources extends React.Component {
 	static READINGS = READINGS
@@ -40,7 +47,10 @@ export default class CourseResources extends React.Component {
 
 		return (
 			<div className="course-resources">
-				<Controls onCreate={this.onCreate} />
+				<div className="course-resources-header">
+					<span className="header">{t('readings')}</span>
+					<Controls onCreate={this.onCreate} />
+				</div>
 				<Readings course={course} gotoResource={this.gotoResource} />
 			</div>
 		);

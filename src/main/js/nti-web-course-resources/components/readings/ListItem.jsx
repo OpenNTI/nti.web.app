@@ -1,4 +1,14 @@
 import React from 'react';
+import {scoped} from 'nti-lib-locale';
+import {DateTime} from 'nti-web-commons';
+
+const DEFAULT_TEXT = {
+	published: 'Published',
+	draft: 'Draft',
+	edit: 'Edit'
+};
+
+const t = scoped('READING_LIST_ITEM', DEFAULT_TEXT);
 
 export default class ReadingListItem extends React.Component {
 	static propTypes = {
@@ -16,11 +26,51 @@ export default class ReadingListItem extends React.Component {
 
 	render () {
 		const {reading} = this.props;
-		const {title} = reading;
 
 		return (
-			<div onClick={this.gotoResource}>
-				<span>{title}</span>
+			<div className="course-resources-reading-list-item">
+				{this.renderMeta(reading)}
+				{this.renderPublish(reading)}
+				{this.renderModified(reading)}
+			</div>
+		);
+	}
+
+
+	renderMeta = (reading) => {
+		const {icon, title, isPublished} = reading;
+		const canEdit = reading.hasLink('edit');
+
+		return (
+			<div className="meta">
+				<div className="icon" style={{backgroundImage: `url(${icon})`}} />
+				<div className="wrap">
+					<div className="title">{title}</div>
+					<div className="published-inline">{t(isPublished ? 'published' : 'draft')}</div>
+				</div>
+				{canEdit && (<div className="edit" onClick={this.gotoResource}>{t('edit')}</div>)}
+			</div>
+		);
+	}
+
+
+	renderPublish = (reading) => {
+		const {isPublished} = reading;
+
+		return (
+			<div className="published">
+				{t(isPublished ? 'published' : 'draft')}
+			</div>
+		);
+	}
+
+
+	renderModified = (reading) => {
+		const lastModified = reading.getLastModified();
+
+		return (
+			<div className="modified">
+				<DateTime date={lastModified} />
 			</div>
 		);
 	}

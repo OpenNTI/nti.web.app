@@ -1,0 +1,21 @@
+@import "~nti-style-common";
+
+.course-resources-reading-list-item {
+	display: flex;
+
+	.meta {
+		flex: 1 1 auto;
+	}
+
+	.edit {
+		flex: 0 0 auto;
+	}
+
+	.published {
+		flex: 0 0 166px;
+	}
+
+	.modifiedd {
+		flex: 0 0 166px;
+	}
+}
