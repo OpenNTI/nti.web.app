@@ -93,12 +93,20 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	},
 
 	onBeforeDeactivate: function () {
-		if (!this.reader) { return; }
+		if (this.reader) {
+			this.reader.hide();
 
-		this.reader.hide();
+			this.reader.destroy();
+			delete this.reader;
+		}
 
-		this.reader.destroy();
-		delete this.reader;
+		if (this.editor) {
+			this.editor.hide();
+
+			this.editor.destroy();
+			delete this.editor;
+		}
+
 	},
 
 	bundleChanged: function (bundle) {
