@@ -1345,6 +1345,14 @@ input[type=number]{
 	background-color: #fafafa;
 	position: relative;
 
+	body.control-bar-open & {
+		padding-bottom: 80px;
+
+		.course-overview-footer {
+			bottom: 35px
+		}
+	}
+
 	.dnd-drop-placeholder, .dnd-save-placeholder {
 		margin-bottom: 10px;
 	}
