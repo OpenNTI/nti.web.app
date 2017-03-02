@@ -155,10 +155,13 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 		packages = packages
 			.map(function (pack) {
-				return pack.getToc(status);
+				return pack.getToc(status).catch(() => null);
 			});
 
-		return Promise.all(packages);
+		return Promise.all(packages)
+			.then((results) => {
+				return results.filter(x => x);
+			});
 	},
 
 	getTitle: function () {
