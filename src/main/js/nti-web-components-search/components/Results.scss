@@ -1,7 +1,5 @@
 .hit-fragments {
 	margin: 5px 0;
-	// width: 581px;
-	// height: 75px;
 	font-family: "Open Sans";
 	font-size: 14px;
 	line-height: 25px;
@@ -19,8 +17,6 @@
 }
 
 .hit-path {
-	// width: 581px;
-	// height: 25px;
 	font-family: "Open Sans";
 	font-size: 14px;
 	line-height: 25px;
@@ -29,8 +25,6 @@
 
 .hit-title {
 	margin-top: 20px;
-	// width: 346px;
-	// height: 24px;
 	font-family: "Open Sans";
 	font-size: 18px;
 	font-weight: 600;
@@ -40,4 +34,20 @@
 
 .search-results-hits {
 	background-color: #FBFBFB;
+}
+
+.show-more-button {
+	background: #3fb3f6;
+	color: #fff;
+	cursor: pointer;
+	font-size: 0.875em;
+	font-weight: 600;
+	line-height: 1em;
+	text-transform: uppercase;
+	padding: 25px;
+	height: auto;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 10px;
+	border: 0;
 }

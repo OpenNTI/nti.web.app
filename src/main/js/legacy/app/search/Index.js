@@ -8,7 +8,6 @@ var LibraryActions = require('../library/Actions');
 var NavigationActions = require('../navigation/Actions');
 var SearchStateStore = require('./StateStore');
 var ComponentsAdvancedOptions = require('./components/AdvancedOptions');
-var ComponentsResults = require('./components/Results');
 var ReactHarness = require('legacy/overrides/ReactHarness');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
@@ -48,11 +47,10 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					this.SearchStore.setHitForContainer(containerId, hit, frag);
 
 					this.Router.root.attemptToNavigateToObject(record);
+				},
+				showNext: (handler) => {
+					this.mon(this.el, 'click', handler);
 				}
-			},
-			{
-				xtype: 'search-results',
-				navigateToSearchHit: this.navigateToSearchHit.bind(this)
 			}
 		]);
 
@@ -76,7 +74,6 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.OptionMenu = this.down('search-advanced-menu');
 		this.ReactResults = this.down('react');
-		this.Results = this.down('search-results');
 	},
 
 	getActiveItem: function () {
@@ -203,7 +200,6 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	clearResults: function () {
-		//this.Results.removeResults();
 		this.ReactResults.setProps({
 			hits: []
 		});
@@ -214,40 +210,47 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	showLoading: function () {
-		this.Results.showLoading();
+		this.ReactResults.setProps({
+			showLoading: true
+		});
 	},
 
 	removeLoading: function () {
-		this.Results.removeLoading();
+		this.ReactResults.setProps({
+			showLoading: false
+		});
 	},
 
 	showError: function () {
-		this.Results.showError();
+		const text = 'Error loading search results.';
+
+		this.ReactResults.setProps({
+			errorLoadingText: text,
+			showMoreButton: false
+		});
 	},
 
 	showNext: function () {
-		this.Results.showNext(this.loadNextPage.bind(this));
-
-		// var nextCmp = this.actionContainer.down('[nextCmp]');
-		//
-		// if (!nextCmp) {
-		// 	nextCmp = this.actionContainer.add({
-		// 		xtype: 'box',
-		// 		nextCmp: true,
-		// 		autoEl: {cls: 'control-item load-more', html: 'Show More'},
-		// 		afterRender: function () {
-		// 			this.mon(this.el, 'click', this.loadNextPage.bind(this));
-		// 		}
-		// 	});
-		// }
+		this.ReactResults.setProps({
+			showMoreButton: true
+		});
+		this.ReactResults.showNext(this.loadNextPage.bind(this));
 	},
 
 	removeNext: function () {
-		this.Results.removeNext();
+		this.ReactResults.setProps({
+			showMoreButton: false
+		});
 	},
 
 	showEmpty: function () {
-		this.Results.showEmpty();
+		const text = this.ReactResults.getProps().hits.length > 0 ? 'No more results found.' : 'No results found.';
+
+		if(typeof this.ReactResults.getProps().emptyText === 'undefined') {
+			this.ReactResults.setProps({
+				emptyText: text
+			});
+		}
 	},
 
 	loadSearchPage: function (page) {
@@ -285,18 +288,15 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 
-
-
 		if (batch.Items && batch.Items.length) {
 			this.ReactResults.setProps({
-				hits: batch.Items
+				hits: batch.Items,
+				errorLoadingText: undefined,
+				emptyText: undefined
 			});
-			// this.Results.addResults(batch.Items);
-
 		} else {
 			this.showEmpty();
 		}
-
 		if (nextLink) {
 			this.nextPageLink = nextLink;
 			this.showNext();
@@ -315,12 +315,5 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 		this.showError();
-	},
-
-	navigateToSearchHit: function (record, hit, frag, containerId) {
-		containerId  = containerId || (hit.get('Containers') || [])[0];
-		this.SearchStore.setHitForContainer(containerId, hit, frag);
-
-		this.Router.root.attemptToNavigateToObject(record);
 	}
 });
