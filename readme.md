@@ -31,7 +31,7 @@ npm login --registry https://npm.nextthought.com
 ## Quickstart
 
 ```bash
-git clone ssh://repos.nextthought.com/nti.web.app
+git clone git@github.com:NextThought/nti.web.app
 cd nti.web.app
 npm install
 ```
@@ -101,11 +101,11 @@ npm link {dependency-name}
 
 | dependency-name        | repository:source                                        |
 |------------------------|----------------------------------------------------------|
-| nti-lib-anchorjs       | ssh://repos.nextthought.com/nti.lib.anchorjs             |
-| nti-lib-dom            | ssh://repos.nextthought.com/nti.lib.domjs                |
-| nti-lib-interfaces     | ssh://repos.nextthought.com/nti.lib.interfaces           |
-| nti-lib-ranges         | ssh://repos.nextthought.com/nti.lib.ranges               |
-| nti-lib-whiteboardjs   | ssh://repos.nextthought.com/nti.lib.whiteboardjs         |
+| nti-lib-anchorjs       | git@github.com:NextThought/nti.lib.anchorjs             |
+| nti-lib-dom            | git@github.com:NextThought/nti.lib.domjs                |
+| nti-lib-interfaces     | git@github.com:NextThought/nti.lib.interfaces           |
+| nti-lib-ranges         | git@github.com:NextThought/nti.lib.ranges               |
+| nti-lib-whiteboardjs   | git@github.com:NextThought/nti.lib.whiteboardjs         |
 | react-editor-component | git@github.com:NextThought/react-editor-component.git    |
 
 
