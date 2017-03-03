@@ -48,8 +48,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 					this.Router.root.attemptToNavigateToObject(record);
 				},
-				showNext: (handler) => {
-					this.mon(this.el, 'click', handler);
+				showNext: () => {
+					this.loadNextPage();
 				}
 			}
 		]);
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			this.NavActions.setActiveContent(null);
 		} else {
 			this.LibraryActions.findBundle(bundle)
-				.then(function () {
+				.then(function (bundle) {
 					navActions.setActiveContent(bundle, true);
 				});
 		}
@@ -234,7 +234,6 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.ReactResults.setProps({
 			showMoreButton: true
 		});
-		this.ReactResults.showNext(this.loadNextPage.bind(this));
 	},
 
 	removeNext: function () {
