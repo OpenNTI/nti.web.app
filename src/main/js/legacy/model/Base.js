@@ -268,8 +268,34 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 *
 	 * @return {String} the link
 	 */
-	__getLinkForUpdate: function () {
+	getLinkForUpdate: function () {
 		return this.get('href');
+	},
+
+
+	fetchFromServer () {
+		const link = this.getLinkForUpdate();
+		let update;
+
+
+		if (link) {
+			update = Service.request(link)
+				.then((response) => {
+					this.syncWithResponse(response);
+
+					return this;
+				});
+		} else {
+			update = Service.getObject(this.get('NTIID'))
+				.then((object) => {
+					this.syncWith(object);
+
+					return this;
+				});
+		}
+
+		return update;
+
 	},
 
 	/**
@@ -281,32 +307,11 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 * @return {Promise} fulfills with the record after it is updated
 	 */
 	updateFromServer: function () {
-		var me = this,
-			link = this.__getLinkForUpdate(),
-			update;
-
-		if (link) {
-			update = Service.request(link)
-				.then(function (response) {
-					me.syncWithResponse(response);
-
-					return me;
-				});
-		} else {
-			console.warn('No link to update record from server with. ', this);
-			update = Service.getObject(this.getId())
-				.then(function (object) {
-					me.syncWith(object);
-
-					return me;
-				});
-		}
-
-		return update
-			.catch(function (reason) {
+		this.fetchFromServer()
+			.catch((reason) => {
 				console.error('Failed to update record from server.', reason);
 
-				return me;
+				return this;
 			});
 	},
 

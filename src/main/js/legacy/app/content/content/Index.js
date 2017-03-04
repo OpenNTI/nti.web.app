@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		}
 
 		return getService()
-			.then((service) => service.getObject(this.currentBundle.getRawForConverting()))
+			.then((service) => service.getObject(this.currentBundle.getId()))
 			.then((course) => {
 				const contentPackage = course.getPackage(packageId);
 
@@ -171,7 +171,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					course,
 					contentPackage,
 					pageSource,
-					pageID: page.getId ? page.getId() : ''
+					pageID: page.getId ? page.getId() : '',
+					onDidChange: () => {
+						this.currentBundle.updateContentPackage(packageId);
+					}
 				});
 			})
 			.always(() => {
