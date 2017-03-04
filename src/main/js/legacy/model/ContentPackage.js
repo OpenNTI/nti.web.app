@@ -66,6 +66,17 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		return this.get('icon');
 	},
 
+
+	update (targetBundle) {
+		const link = Service.getObjectURL(this.get('NTIID'));
+
+		return Service.getObjectRaw(link, this.get('MimeType'), true, targetBundle)
+			.then((response) => {
+				return this.syncWithResponse(response.responseText);
+			});
+	},
+
+
 	getToc: function (status) {
 		var me = this,
 			library = me.LibraryActions,
