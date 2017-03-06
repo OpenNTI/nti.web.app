@@ -307,7 +307,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 * @return {Promise} fulfills with the record after it is updated
 	 */
 	updateFromServer: function () {
-		this.fetchFromServer()
+		return this.fetchFromServer()
 			.catch((reason) => {
 				console.error('Failed to update record from server.', reason);
 
