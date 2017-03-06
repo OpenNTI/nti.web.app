@@ -531,6 +531,10 @@
 		box-shadow: 0 0 0 2px $primary-blue;
 	}
 
+	.filtered {
+		display: none;
+	}
+
 	.content-package-item {
 		display: flex;
 		background-color: $panel-background-blue;
