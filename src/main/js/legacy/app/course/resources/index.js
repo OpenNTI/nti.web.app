@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	getCourse () {
 		return getService()
 			.then((service) => {
-				return service.getObject(this.currentBundle.raw);
+				return service.getObject(this.currentBundle.getId());
 			});
 	},
 
