@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			gotoResources: () => this.gotoResources(),
 			switchToEdit: () => this.switchToEdit(),
 			switchToPreview: () => this.switchToPreview(),
-			showAuditLog: () => this.showAuditLog(),
+			showAuditLogs: () => this.showAuditLogs(),
 			canDoAdvancedEditing: Service.canDoAdvancedEditing(),
 			mode: this.mode,
 			hide: this.doHide,
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	showAuditLog: function () {
+	showAuditLogs: function () {
 		if (this.openAuditLog) {
 			this.openAuditLog();
 		}
