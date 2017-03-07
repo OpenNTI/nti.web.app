@@ -136,7 +136,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				onSelectItem: me.onSelectItem.bind(me),
 				onUnselectItem: me.onUnselectItem.bind(me),
 				onItemExpand: me.onItemExpand.bind(me),
-				onItemCollapse: me.onItemCollapse.bind(me)
+				onItemCollapse: me.onItemCollapse.bind(me),
+				isItemDisabled: me.isItemDisabled.bind(me)
 			};
 		}));
 
@@ -197,6 +198,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return acc;
 		}, false);
 	},
+
+
+	isItemDisabled () {
+		return false;
+	},
+
 
 	getItemData: function (item) {
 		return {

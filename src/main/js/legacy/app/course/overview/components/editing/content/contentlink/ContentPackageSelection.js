@@ -72,5 +72,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getSelectionItemId (item) {
 		return item.get('NTIID') || item.get('OID');
+	},
+
+
+	isItemDisabled (item) {
+		return !item.get('isPublished');
 	}
 });

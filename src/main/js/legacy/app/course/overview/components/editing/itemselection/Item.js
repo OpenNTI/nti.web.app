@@ -70,7 +70,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						onSelectItem: me.onSelectItem.bind(me),
 						onUnselectItem: me.onUnselectItem.bind(me),
 						onItemCollapse: me.onItemCollapse,
-						onItemExpand: me.onItemExpand
+						onItemExpand: me.onItemExpand,
+						isItemDisabled: me.isItemDisabled
 					};
 				})
 			});
@@ -105,6 +106,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onItemClick: function (e) {
+		if (this.isItemDisabled && this.isItemDisabled(this.selectionItem, e)) {
+			return;
+		}
+
 		if (e.getTarget('.expand')) {
 			if (this.hasCls('expanded')) {
 				this.doCollapse();
@@ -129,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	unexclude: function (item) {
+	unexclude: function () {
 		if (this.hasItemData) {
 			this.itemCmp.removeCls('excluded');
 			this.itemCmp.el.dom.removeAttribute('data-qtip');
