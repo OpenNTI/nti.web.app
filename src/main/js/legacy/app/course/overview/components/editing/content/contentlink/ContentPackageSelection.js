@@ -76,6 +76,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	isItemDisabled (item) {
-		return !item.get('isPublished');
+		return item.isRenderableContentPackage && !item.get('isPublished');
 	}
 });
