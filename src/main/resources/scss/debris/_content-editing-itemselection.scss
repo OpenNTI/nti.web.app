@@ -541,6 +541,11 @@
 		margin-bottom: 1rem;
 		box-shadow: 0 0 0 1px rgba(63, 179, 246, 0.3);
 
+		&.unpublished {
+			opacity: 0.6;
+			pointer-events: none;
+		}
+
 		.icon {
 			flex: 0 0 100px;
 			max-width: 100px;
