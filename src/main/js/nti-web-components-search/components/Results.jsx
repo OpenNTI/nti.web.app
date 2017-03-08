@@ -16,7 +16,8 @@ export default class SearchResults extends React.Component {
 	}
 
 	render () {
-		const {hits = [], showLoading} = this.props;
+		const {hits = [], showLoading, showNext, errorLoadingText, emptyText, showMoreButton} = this.props;
+
 		if(showLoading) {
 			return (
 				<div className="search-results">
@@ -29,27 +30,25 @@ export default class SearchResults extends React.Component {
 			return (
 				<div className="search-results">
 					{hits.map(this.renderHit)}
+					{showMoreButton &&
+						<button className="show-more-button" onClick={showNext}>Show More</button>
+					}
+					{errorLoadingText &&
+						<div className="error control-item">{errorLoadingText}</div>
+					}
+					{emptyText &&
+						<div className="empty control-item">{emptyText}</div>
+					}
 				</div>
 			);
 		}
 	}
 
 	renderHit = (hit, index) => {
-		const {hits, getBreadCrumb, navigateToSearchHit, showNext, errorLoadingText, emptyText, showMoreButton} = this.props;
+		const {getBreadCrumb, navigateToSearchHit} = this.props;
 
 		return (
-			<div key={index}>
-			<Hit hit={hit} getBreadCrumb={getBreadCrumb} navigateToSearchHit={navigateToSearchHit}/>
-			{index === hits.length - 1 && showMoreButton &&
-				<button className="show-more-button" onClick={showNext}>Show More</button>
-			}
-			{index === hits.length - 1 && errorLoadingText &&
-				<div className="error control-item">{errorLoadingText}</div>
-			}
-			{index === hits.length - 1 && emptyText &&
-				<div className="empty control-item">{emptyText}</div>
-			}
-			</div>
+			<Hit hit={hit} key={index} getBreadCrumb={getBreadCrumb} navigateToSearchHit={navigateToSearchHit}/>
 		);
 	}
 }
