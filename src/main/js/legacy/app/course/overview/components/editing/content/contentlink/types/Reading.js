@@ -244,8 +244,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.el.mask('Loading...');
 		}
 
-		me.getReadingSelection()
-			.then(function (selection) {
+		Promise.all([
+			me.getContentPackageSelection(),
+			me.getReadingSelection()
+		])
+			.then(function (results) {
+				const contentPackage = results[0];
+				const selection = results[1];
+
 				me.readingEditorCmp = me.add({
 					xtype: 'overview-editing-reading-editor',
 					record: me.record,
@@ -255,6 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					copyValues: me.copyValues,
 					copyVisibility: me.copyVisibility,
 					switchRecordType: me.switchRecordType,
+					contentPackage,
 					selectedItem: selection,
 					doClose: me.doClose,
 					onChangeReading: () => me.maybeShowReadingList(selection),
