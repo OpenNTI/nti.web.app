@@ -271,6 +271,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 					currentBundle: me.currentBundle,
 					handleNavigation: me.handleNavigation.bind(me),
 					navigateToObject: me.navigateToObject.bind(me),
+					onDelete: () => {
+						me.pushRoute(route.precache.parent.title, route.precache.parent.route);
+					},
 					root: rootId,
 					rootRoute: route.precache.parent.route + '/content/' + route.params.id + '/'
 				});

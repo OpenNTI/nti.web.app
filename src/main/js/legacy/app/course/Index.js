@@ -453,9 +453,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			FORUM,
 			REPORTS,
 			INFO
-		], OVERVIEW).then(function (item) {
-				return item.handleRoute(subRoute, route.precache);
-			});
+		], OVERVIEW).then((item) => {
+			item.onDelete = () => this.gotoResources();
+
+			return item.handleRoute(subRoute, route.precache);
+		});
 	},
 
 
