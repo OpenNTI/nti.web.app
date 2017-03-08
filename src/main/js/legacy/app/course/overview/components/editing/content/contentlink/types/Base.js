@@ -23,6 +23,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	allowTypeSwitch: true,
 
+	getIconPlaceholder () { return null; },
+
 	getFormSchema: function () {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},

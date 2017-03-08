@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var ParseUtils = require('legacy/util/Parsing');
 var {getURL} = require('legacy/util/Globals');
+var ContentUtils = require('legacy/util/Content');
 
 require('legacy/model/Base');
 require('legacy/mixins/BundleLike');
@@ -171,6 +172,12 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	getIcon: function () {
 		return this.get('icon');
 	},
+
+
+	getContentPackageContaining (id) {
+		return ContentUtils.getContentPackageContainingReading(id, this);
+	},
+
 
 	getContentPackage (id) {
 		const packages = this.get('ContentPackages');

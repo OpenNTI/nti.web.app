@@ -12,6 +12,21 @@ require('legacy/model/RelatedWork');
 require('legacy/app/contentviewer/Actions');
 require('legacy/util/Parsing');
 
+function resolveIcon (config, n, root) {
+	const icon = n.getAttribute('icon');
+	let getIcon;
+
+	if (config.record && config.record.resolveIcon) {
+		getIcon = config.record.resolveIcon(root, config.course);
+	} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
+		getIcon = Promise.resolve({url: getURL(icon)});
+	} else {
+		getIcon = Promise.resolve({url: getURL((root || '') + icon)});
+	}
+
+	return getIcon;
+}
+
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 	extend: 'NextThought.common.components.cards.Card',
@@ -38,13 +53,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]}
 	]),
 
+	renderSelectors: {
+		iconEl: '.thumbnail .icon',
+		extensionEl: '.thumbnail .icon .extension'
+	},
+
 	constructor: function (config) {
 		var n = config.node || {getAttribute: function (a) { return config[a];} },
 			i = config.locationInfo || {
 				root: config.course && config.course.getContentRoots()[0]
 			},
 			href = config.record && config.record.getHref ? config.record.getHref() : n.getAttribute('href'),
-			icon = n.getAttribute('icon'),
 			ntiid = n.getAttribute('ntiid'),
 			root = i && i.root;
 
@@ -54,21 +73,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			href = getURL((root || '') + href);
 		}
 
-		if (config.record && config.record.getIcon) {
-			icon = config.record.getIcon(root || '');
-		} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
-			icon = {url: getURL(icon)};
-		} else {
-			icon = {url: getURL((root || '') + icon)};
-		}
+		resolveIcon(config, n)
+			.then((icon = {}) => {
+				this.data.thumbnail = icon.url;
+				this.data.extension = icon.extension;
+				this.data.iconCls = icon.iconCls;
+
+
+				if (this.iconEl) {
+					this.iconEl.addCls([icon.extension || '', icon.iconCls || '']);
+					this.iconEl.setStyle({backgroundImage: `url('${icon.url}')`});
+				}
+
+				if (this.extensionEl && icon.extension) {
+					this.extensionEl.update(icon.extension);
+				}
+			});
+
 
 		config.data = {
 			'attribute-data-href': href, href: href,
 			creator: n.getAttribute('byline') || n.getAttribute('creator'),
 			description: n.getAttribute('desc') || n.getAttribute('description'),
-			thumbnail: icon.url,
-			extension: icon.extension,
-			iconCls: icon.iconCls,
 			ntiid: ntiid,
 			title: n.getAttribute('label'),
 			targetMimeType: n.getAttribute('targetMimeType'),

@@ -73,6 +73,11 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		},
 
 
+		isContent (mimeType) {
+			return mimeType === 'application/vnd.nextthought.content';
+		},
+
+
 		getIconForMimeType: function (mimeType) {
 			var base = this.FILE_ICON_BASE,
 				icon = this.MIMETYPE_TO_ICON[mimeType],
@@ -246,6 +251,29 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 			data = this.self.getIconForMimeType(targetMimeType);
 		}
 		return data;
+	},
+
+	/**
+	 * Resolve the icon to the content package if we don't have one set
+	 *
+	 * @param  {String} root   the base rot
+	 * @param  {Object} bundle the bundle to look in
+	 * @return {Promise}        fulfills with the a object that has url, extension, and icon cls
+	 */
+	resolveIcon (root, bundle) {
+		const icon = this.get('icon');
+		const targetMimeType = this.get('targetMimeType');
+
+		if (!this.self.isContent(targetMimeType) || icon) {
+			return Promise.resolve(this.getIcon(root));
+		}
+
+		return bundle.getContentPackageContaining(this.get('target-NTIID'))
+			.then((contentPackage) => {
+				const contentIcon = contentPackage.isRenderableContentPackage && contentPackage.get('icon');
+
+				return contentIcon ? {url: contentIcon} : this.getIcon(root);
+			});
 	},
 
 	getTitle: function () {

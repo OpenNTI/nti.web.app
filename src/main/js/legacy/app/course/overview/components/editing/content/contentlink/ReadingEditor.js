@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForMimeType('unknown'));
+		this.formCmp.setPlaceholder('icon', this.getIconPlaceholder());
 
 		if (this.readingHasChanged()) {
 			this.formCmp.setValue('label', this.selectedItem.getAttribute('label'));
@@ -83,6 +83,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		});
 	},
+
+
+	getIconPlaceholder () {
+		const icon = this.contentPackage && this.contentPackage.get('icon');
+
+		return icon  || NextThought.model.RelatedWork.getIconForMimeType('unknown');
+	},
+
 
 	getFormSchema: function () {
 		var schema = this.callParent(arguments);
