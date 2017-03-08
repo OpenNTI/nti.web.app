@@ -7,6 +7,10 @@ module.exports = exports = Ext.define('NextThought.model.converters.DCCreatorToA
 	DCCREATORTOAUTHOR: {
 		type: 'DCCreatorToAuthor',
 		convert: function (v) {
+			if (!Array.isArray(v)) {
+				return v;
+			}
+
 			return v && v.join(', ');
 		},
 		sortType: 'none'

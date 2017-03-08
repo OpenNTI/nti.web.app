@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		const packages = this.get('ContentPackages');
 
 		for (let p of packages) {
-			if (p.get('NTIID') === id) {
+			if (p.get('NTIID') === id || p.get('OID') === id) {
 				return p;
 			}
 		}
