@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			selectedItem = this.selectedItem;
 
 		if (!this.record && selectedItem) {
-			values.label = values.label || selectedItem.getAttribute('label');
+			values.label = values.label || selectedItem.getAttribute('label') || selectedItem.getAttribute('title');
 			values.href = selectedItem.getAttribute('ntiid');
 			values.target = values.href;
 		}
