@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 
 
 	update (targetBundle) {
-		const link = Service.getObjectURL(this.get('NTIID'));
+		const link = Service.getObjectURL(this.get('NTIID') || this.get('OID'));
 
 		return Service.getObjectRaw(link, this.get('MimeType'), true, targetBundle)
 			.then((response) => {
