@@ -380,7 +380,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	updateContentPackage (id) {
 		const contentPackage = this.getContentPackage(id);
 
-		return contentPackage.update(this);
+		return contentPackage ?  contentPackage.update(this) : Promise.reject('No Content Package');
 	},
 
 
