@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 
 import Fragments from './Fragments';
 import Path from './Path';
@@ -11,8 +12,6 @@ import {
 	resolveContainerID
 } from '../resolvers';
 
-
-
 export default class Hit extends React.Component {
 	static propTypes = {
 		hit: React.PropTypes.object.isRequired,
@@ -22,7 +21,7 @@ export default class Hit extends React.Component {
 
 	constructor (props) {
 		super(props);
-		this.state = {};
+		this.state = {loaded: false};
 	}
 
 	componentDidMount () {
@@ -30,39 +29,38 @@ export default class Hit extends React.Component {
 
 		initComponent(hit);
 
-		resolveTitle(hit)
-			.then((title) => {
-				this.setState({title});
-			});
+		Promise.all([
+			resolveTitle(hit),
+			resolveFragments(hit),
+			resolvePath(hit, getBreadCrumb).catch(() => {}),
+			resolveContainerID(hit)
+		]).then((results) => {
+			const title = results[0];
+			const fragments = results[1];
+			const path = results[2];
+			const containerID = results[3];
 
-		resolveFragments(hit)
-			.then((fragments) => {
-				this.setState({fragments});
+			this.setState({
+				loaded: true,
+				title,
+				fragments,
+				path,
+				containerID
 			});
-
-		resolvePath(hit, getBreadCrumb)
-			.then((path) => {
-				this.setState({path});
-			});
-
-		resolveContainerID(hit)
-			.then((containerID) => {
-				this.setState({containerID});
-			});
+		});
 	}
 
 	render () {
-		const {title, fragments, path, containerID, navObject} = this.state;
+		const {title, fragments, path, loaded} = this.state;
 		const {hit, navigateToSearchHit} = this.props;
-		// const isLoading = !title;
+		const cls = cx('search-result-react', {loaded});
 
 		return (
-			<div className="search-result">
+			<div className={cls}>
 				<div className="hit-title">{title}</div>
 				<Fragments fragments={fragments} hit={hit} navigateToSearchHit={navigateToSearchHit} />
 				<Path pathObject={path} />
 			</div>
-
 		);
 	}
 }

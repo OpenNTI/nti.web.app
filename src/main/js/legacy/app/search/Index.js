@@ -35,7 +35,13 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 				xtype: 'react',
 				component: Search,
 				getBreadCrumb: (obj) => {
-					const rec = ParseUtils.parseItems(obj.toJSON())[0];
+					let rec;
+					if(typeof obj.toJSON === 'function') {
+						rec = ParseUtils.parseItems(obj.toJSON())[0];
+					} else {
+						rec = ParseUtils.parseItems(obj)[0];
+					}
+
 					return this.PathActions.getBreadCrumb(rec)
 						.then((path) => {
 							return path;
