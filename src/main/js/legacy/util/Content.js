@@ -853,7 +853,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 		return this.__resolveTocs(bundle)
 			.then(function (tocs) {
-				return tocs.map(findReading)[0];
+				return tocs.map(findReading).filter(x => x)[0];
 			});
 	},
 
