@@ -810,7 +810,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		var path = this.getReadingPath(reading);
 
 		return path.map(function (part) {
-			return (part.getAttribute && part.getAttribute('label')) || part.title;
+			return (part.getAttribute && part.getAttribute('label')) || (part.getAttribute && part.getAttribute('title')) || part.title;
 		});
 	},
 
