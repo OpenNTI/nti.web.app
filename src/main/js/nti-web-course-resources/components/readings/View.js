@@ -16,16 +16,16 @@ function sortOnTitle (a, b) {
 	return a.title.localeCompare(b.title);
 }
 
-const CELLS = [
+const COLS = [
 	{
 		name: 'name',
-		className: 'name',
+		className: 'name sort-inactive',
 		display: t('name'),
 		sortFn: sortOnTitle
 	},
 	{
 		name: 'publish',
-		className: 'publish',
+		className: 'publish sort-inactive',
 		display: t('publish'),
 		sortFn: (a, b) => {
 			const {isPublished:aPublished} = a;
@@ -36,7 +36,7 @@ const CELLS = [
 	},
 	{
 		name: 'modified',
-		className: 'last-modified',
+		className: 'last-modified sort-inactive',
 		display: t('lastModified'),
 		sortFn: (a, b) => {
 			const aModified = a.getLastModified();
@@ -59,6 +59,7 @@ Readings.propTypes = {
 	course: React.PropTypes.object,
 	gotoResource: React.PropTypes.func
 };
+
 export default function Readings ({course, gotoResource}) {
 	const readings = getReadings(course);
 
@@ -70,12 +71,12 @@ export default function Readings ({course, gotoResource}) {
 
 	return (
 		<Table.ListTable
-			className="course-resources-readings"
+			className="course-resources-readings ascending"
 			headerClassName="course-resources-header"
 			bodyClassName="course-resources-body"
 			items={readings}
 			renderItem={renderItem}
-			cells={CELLS}
+			cells={COLS}
 		/>
 	);
 }

@@ -1,11 +1,29 @@
 @import "~nti-style-common";
 
+.course-resources-overlay {
+	background-image: none;
+	background-color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	min-height: 100%;
+	min-width: 100%;
+	background: #ffff;
+	z-index: 5;
+}
+
 .course-resources {
 	padding-top: 40px;
+	z-index: 150 !important; //Same as main-navigation
+	position: relative;
 
 	.course-resources-header {
 		display: flex;
 		align-items: center;
+
+		.list-table-header {
+			text-transform: uppercase;
+		}
 
 		.header {
 			flex: 1 1 auto;
