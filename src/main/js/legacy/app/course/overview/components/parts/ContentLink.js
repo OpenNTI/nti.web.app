@@ -55,7 +55,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	renderSelectors: {
 		iconEl: '.thumbnail .icon',
-		extensionEl: '.thumbnail .icon .extension'
+		extensionEl: '.thumbnail .icon .extension',
+		meta: '.meta',
+		titleEl: '.meta .title',
+		liked: '.controls .like',
+		favorites: '.controls .favorite',
+		thumbnailEl: '.thumbnail'
 	},
 
 	constructor: function (config) {
