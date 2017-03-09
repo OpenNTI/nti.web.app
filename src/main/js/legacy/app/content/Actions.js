@@ -99,6 +99,10 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 					return;
 				}
 
+				if (location.location && location.location.tagName === 'toc') {
+					return me.buildContentRootPath(parentNode, location, ntiid, allowMenus, bundle, rootPageId, rootRoute);
+				}
+
 				return me.buildContentPath(parentNode, location.location, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute || '');
 			})
 			.then(function (path) {
@@ -172,6 +176,36 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				return path.reverse();
 			});
 	},
+
+
+	buildContentRootPath (parentNode, location, ntiid, allowMenus, bundle, rootPageId, rootRoute) {
+		const part = {};
+
+		part.label = location.label || location.title;
+		part.ntiid = location.NTIID;
+
+		part.route = rootRoute;
+
+		if (allowMenus) {
+			return this.buildContentPathPartMenu(location, parentNode, bundle, rootRoute)
+					.then((siblings) => {
+						part.siblings = siblings;
+
+						if (!siblings.length) {
+							part.cls = 'locked';
+						} else {
+							part.cls = '';
+						}
+
+						return [part];
+					});
+		} else {
+			part.cls = 'locked';
+		}
+
+		return [part];
+	},
+
 
 	buildContentPathPart: function (label, ntiid, parentNode, allowMenus, bundle, rootPageId, rootRoute) {
 		if (!ntiid) {

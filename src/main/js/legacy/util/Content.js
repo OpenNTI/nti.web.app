@@ -564,7 +564,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				return Promise.all((tocs || []).map(getPageInToc));
 			})
 			.then(function (pages) {
-				return pages && pages[0];
+				return pages && pages.filter(x => x)[0];
 			});
 	},
 
@@ -587,7 +587,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 					node = info.location;
 
 					while (node && node.parentNode) {
-						if (node.parentNode === node.ownerDocument.firstChild) { break; }
+						if (node.parentNode === node.ownerDocument.firstChild || node.parentNode === node.ownerDocument) { break; }
 
 						node = node.parentNode;
 
