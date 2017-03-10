@@ -8,5 +8,11 @@ export default {
 		} else {
 			return false;
 		}
+	},
+
+	addObject (obj) {
+		const label = obj.get('label');
+
+		this.setTitle(label);
 	}
 };

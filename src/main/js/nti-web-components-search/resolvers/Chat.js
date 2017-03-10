@@ -28,21 +28,21 @@ export default {
 
 				if (users.length === 1) {
 					const title = 'Chat with ' + users[0];
-					this.titleEl.update(title);
+					obj.titleEl.update(title);
 				} else if (users.length === 2) {
 					const title = 'Chat with ' + users[0] + ' and ' + users[1];
-					this.titleEl.update(title);
+					obj.titleEl.update(title);
 				} else {
 					const last = users.pop();
 					const title = 'Chat with ' + users.join(', ') + ' and ' + last;
-					this.titleEl.update(title);
+					obj.titleEl.update(title);
 				}
 			});
 
 		//Kick this off so its faster on click
-		this.onLoadTranscript = this.ChatActions.loadTranscript(obj.ContainerId);
+		obj.onLoadTranscript = obj.ChatActions.loadTranscript(obj.ContainerId);
 
-		return obj.sharedWith;
+		return obj.titleEl;
 	},
 
 	resolveNavigateToSearchHit (obj, hit, fragment) {
