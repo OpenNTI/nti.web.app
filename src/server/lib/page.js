@@ -6,6 +6,8 @@ const url = require('url');
 const Path = require('path');
 const fs = require('fs');
 
+const SITE_ASSETS = '/site-assets/';
+
 const isRootPath = /^\/(?!\/).*/;
 const basepathreplace = /(manifest|src|href)="(.*?)"/igm;
 const configValues = /<\[cfg\:([^\]]*)\]>/igm;
@@ -51,7 +53,7 @@ exports.getPage = function getPage () {
 		let basePathFix = (original, attr, val) => {
 			let part = `${attr}="`;
 
-			if (!isRootPath.test(val) || val.startsWith(basePath)) {
+			if (!isRootPath.test(val) || val.startsWith(basePath) || val.startsWith(SITE_ASSETS)) {
 				part += `${val}"`;
 			} else {
 				part += `${(basePath || '/')}${val.substr(1)}"`;
