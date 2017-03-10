@@ -951,8 +951,11 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 					} else {
 						checkNext(onFound, notFound);
 					}
+				})
+				.catch(() => {
+					checkNext(onFound, notFound);
 				});
-		}
+		};
 
 
 		return new Promise((fulfill, reject) => {
