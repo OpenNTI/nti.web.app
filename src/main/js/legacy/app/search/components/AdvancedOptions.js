@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 
 	OPTIONS: {
 		'all': {
-			label: 'All Results',
+			label: 'All',
 			accepts: []
 		},
 		'social': {
@@ -42,12 +42,12 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 		}
 	},
 
-	cls: 'search-advanced-menu',
+	cls: 'search-advanced-menu-items',
 
 
 	renderTpl: Ext.DomHelper.markup({
 		tag: 'tpl', 'for': 'options', cn: [
-			{tag: 'span', cls: 'search-option', 'data-type': '{type}', html: '{label}'}
+			{tag: 'span', cls: 'search-item', 'data-type': '{type}', html: '{label}'}
 		]
 	}),
 
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 
 
 	doClick: function (e) {
-		var option = e.getTarget('.search-option');
+		var option = e.getTarget('.search-item');
 
 		if (this.changeFilter && option) {
 			this.changeFilter(option.getAttribute('data-type'));
@@ -99,8 +99,8 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 			return;
 		}
 
-		var option = this.el.down('.search-option[data-type="' + type + '"]'),
-			active = this.el.down('.search-option.active');
+		var option = this.el.down('.search-item[data-type="' + type + '"]'),
+			active = this.el.down('.search-item.active');
 
 		if (active) {
 			active.removeCls('active');
