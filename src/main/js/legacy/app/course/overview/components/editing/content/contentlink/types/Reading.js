@@ -18,7 +18,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return [
 				{
 					title: 'From Catalog',
-					advanced: true,
 					category: 'content',
 					iconCls: 'reading',
 					description: '',
