@@ -30,11 +30,14 @@
 		flex: 0 0 100px;
 		color: $primary-blue;
 		text-align: right;
-		cursor: pointer;
 		font-size: .875rem;
 		margin-right: 40px;
 		vertical-align: middle;
 		line-height: 50px;
+
+		& span {
+			cursor: pointer;
+		}
 	}
 
 	.published, .modified {

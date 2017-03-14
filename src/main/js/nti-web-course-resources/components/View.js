@@ -46,15 +46,12 @@ export default class CourseResources extends React.Component {
 		const {course} = this.props;
 
 		return (
-			<div>
-				<div className="course-resources-overlay" />
-				<div className="course-resources">
-					<div className="course-resources-header">
-						<span className="header">{t('readings')}</span>
-						<Controls onCreate={this.onCreate} />
-					</div>
-					<Readings course={course} gotoResource={this.gotoResource} />
+			<div className="course-resources">
+				<div className="course-resources-header">
+					<span className="header">{t('readings')}</span>
+					<Controls onCreate={this.onCreate} />
 				</div>
+				<Readings course={course} gotoResource={this.gotoResource} />
 			</div>
 		);
 	}
