@@ -253,7 +253,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		if(typeof this.ReactResults.getProps().emptyText === 'undefined') {
 			this.ReactResults.setProps({
-				emptyText: text
+				emptyText: text,
+				errorLoadingText: undefined
 			});
 		}
 	},
@@ -281,7 +282,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.lock = Date.now();
 
-		StoreUtils.loadBatch(this.nextPageLink)
+		StoreUtils.loadBatch(this.nextPageLink, null, null, null, true)
 			.then(this.onLoadResults.bind(this, this.lock))
 			.catch(this.onLoadFail.bind(this, this.lock));
 	},

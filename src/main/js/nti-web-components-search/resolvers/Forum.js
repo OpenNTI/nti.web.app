@@ -1,58 +1,45 @@
 const UserRepository = require('../../legacy/cache/UserRepository');
 
-
 export default {
 	handles (targetMimeType) {
 		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
 		targetMimeType = targetMimeType.replace('.', '-');
 
-		if(targetMimeType === ('forums-communityheadlinepost' || 'forums-generalforumcomment')) {
+		if(['forums-communityheadlinepost', 'forums-generalforumcomment'].indexOf(targetMimeType) > -1) {
 			return true;
 		} else {
 			return false;
 		}
 	},
+	resolveTitle (obj, hit, getBreadCrumb) {
+		if(hit.TargetMimeType === 'application/vnd.nextthought.forums.generalforumcomment') {
+			let title = Promise.all([
+				getBreadCrumb(obj)
+					.then(function (breadCrumb) {
+						return breadCrumb;
+					}),
+				UserRepository.getUser(hit.Creator)
+					.then(function (user) {
+						return user.getName() + ' Commented';
+					})
+			]).then((results) => {
+				const path = results[0];
+				title = results[1];
+				let leaf, leafTitle;
 
-	resolveTitle (obj, hit) {
-		let {TargetMimeType:targetMimeType} = hit;
-		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
-		targetMimeType = targetMimeType.replace('.', '-');
-
-		if (targetMimeType === 'forums-communityheadlinepost') {
-			return this.callParent(arguments);
-		}
-	},
-
-	resolvePath (obj, hit, getBreadCrumb) {
-		let {TargetMimeType:targetMimeType} = hit;
-		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
-		targetMimeType = targetMimeType.replace('.', '-');
-
-		this.callParent(arguments);
-
-		if (targetMimeType === 'forums-communityheadlinepost') {
-			return;
-		}
-
-		getBreadCrumb(obj).then(function (breadCrumb) {
-			this.setTitleForReply(hit, breadCrumb);
-		});
-	},
-
-	setTitleForReply: function (record, path) {
-		let me = this,
-			leaf = path.last(),
-			leafTitle = leaf && leaf.get('title');
-
-		UserRepository.getUser(record.get('Creator'))
-			.then(function (user) {
-				let title = user.getName() + ' Commented';
+				leaf = path[path.length - 1];
+				leafTitle = leaf && leaf.label;
 
 				if (leafTitle) {
-					title += ' on ' + leafTitle;
+					return title += ' on ' + leafTitle;
+				} else {
+					return title;
 				}
-
-				me.titleEl.update(title);
 			});
-	}
+
+			return title;
+		} else {
+			return obj.title || obj.label || obj.Title || '';
+		}
+	},
 };
