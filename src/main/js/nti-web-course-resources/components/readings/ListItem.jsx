@@ -40,10 +40,11 @@ export default class ReadingListItem extends React.Component {
 	renderMeta = (reading) => {
 		const {icon, title, isPublished} = reading;
 		const canEdit = reading.hasLink('edit');
+		const iconFallback = (iconUrl) => iconUrl || '/app/resources/images/file-icons/generic.png';
 
 		return (
 			<div className="meta">
-				<div className="icon" style={{backgroundImage: `url(${icon})`}} />
+				<div className="icon" style={{backgroundImage: `url(${iconFallback(icon)})`}} />
 				<div className="wrap">
 					<div className="title">{title}</div>
 					<div className="published-inline">{t(isPublished ? 'published' : 'draft')}</div>
