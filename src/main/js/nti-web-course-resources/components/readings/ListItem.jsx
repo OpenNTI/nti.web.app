@@ -48,7 +48,7 @@ export default class ReadingListItem extends React.Component {
 					<div className="title">{title}</div>
 					<div className="published-inline">{t(isPublished ? 'published' : 'draft')}</div>
 				</div>
-				{canEdit && (<div className="edit" onClick={this.gotoResource}>{t('edit')}</div>)}
+				{canEdit && (<div className="edit" onClick={this.gotoResource}><span>{t('edit')}</span></div>)}
 			</div>
 		);
 	}
