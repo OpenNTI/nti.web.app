@@ -9,10 +9,17 @@ export default {
 		targetMimeType = targetMimeType.replace('.', '-');
 
 		if(targetMimeType === ('messageinfo')) {
+			console.log('chat');
 			return true;
 		} else {
 			return false;
 		}
+	},
+
+	initComponent: function () {
+		this.callParent(arguments);
+
+		this.ChatActions = ChatActions.create();
 	},
 
 	resolveTitle (obj, hit) {

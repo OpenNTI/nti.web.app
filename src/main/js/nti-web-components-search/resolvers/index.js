@@ -44,11 +44,15 @@ export function initComponent (hit) {
 	});
 }
 
-export function resolveTitle (hit) {
+export function resolveTitle (hit, getBreadCrumb) {
 	const target = getTargetForHit(hit);
 
 	return getObject(hit).then((obj) => {
-		return target && target.resolveTitle ? target.resolveTitle(obj, hit) : Base.resolveTitle(obj, hit);
+		if(hit.TargetMimeType === 'application/vnd.nextthought.forums.generalforumcomment') {
+			return target && target.resolveTitle(obj, hit, getBreadCrumb);
+		} else {
+			return target && target.resolveTitle ? target.resolveTitle(obj, hit) : Base.resolveTitle(obj, hit);
+		}
 	});
 }
 

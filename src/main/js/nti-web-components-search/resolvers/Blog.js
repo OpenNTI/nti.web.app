@@ -3,7 +3,7 @@ export default {
 		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
 		targetMimeType = targetMimeType.replace('.', '-');
 
-		if(targetMimeType === ('forums-personalblogentrypost' || 'forums-personalblogcomment')) {
+		if(['forums-personalblogentrypost', 'forums-personalblogcomment'].indexOf(targetMimeType) > -1) {
 			return true;
 		} else {
 			return false;

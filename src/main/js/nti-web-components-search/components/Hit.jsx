@@ -30,9 +30,9 @@ export default class Hit extends React.Component {
 		initComponent(hit);
 
 		Promise.all([
-			resolveTitle(hit),
+			resolveTitle(hit, getBreadCrumb),
 			resolveFragments(hit),
-			resolvePath(hit, getBreadCrumb).catch(() => {}),
+			resolvePath(hit, getBreadCrumb),
 			resolveContainerID(hit)
 		]).then((results) => {
 			const title = results[0];
