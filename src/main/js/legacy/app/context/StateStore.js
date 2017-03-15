@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		var root = this.getRootContext(),
 			cmp = root && root.cmp;
 
-		if (cmp && cmp instanceof NextThought.app.content.content.Index) {
+		if (cmp && cmp instanceof NextThought.app.content.content.Index && cmp.hasReader()) {
 			return cmp.getLocation();
 		}
 
