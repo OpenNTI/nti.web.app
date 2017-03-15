@@ -34,7 +34,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Sum
 
 		return Service.request(link)
 			.then((resp) => {
-				const grade = ParseUtils.parseItems(resp)[0];
+				const json = JSON.parse(resp);
+				const grade = ParseUtils.parseItems(json.PredictedGrade)[0];
 				const predicted = grade.isPredicted() ?
 									{Correctness: grade.get('Correctness'), Grade: grade.get('Grade'), RawValue: grade.get('RawValue')} :
 									null;
