@@ -43,7 +43,7 @@ export default class CourseResources extends React.Component {
 
 
 	render () {
-		const {course} = this.props;
+		const {course, filter} = this.props;
 
 		return (
 			<div className="course-resources">
@@ -51,7 +51,7 @@ export default class CourseResources extends React.Component {
 					<span className="header">{t('readings')}</span>
 					<Controls onCreate={this.onCreate} />
 				</div>
-				<Readings course={course} gotoResource={this.gotoResource} />
+				<Readings filter={filter} course={course} gotoResource={this.gotoResource} />
 			</div>
 		);
 	}

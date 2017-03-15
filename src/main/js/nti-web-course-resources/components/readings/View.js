@@ -57,11 +57,12 @@ function getReadings (course) {
 
 Readings.propTypes = {
 	course: React.PropTypes.object,
+	filter: React.PropTypes.func,
 	gotoResource: React.PropTypes.func
 };
 
-export default function Readings ({course, gotoResource}) {
-	const readings = getReadings(course);
+export default function Readings ({course, filter, gotoResource}) {
+	const readings = getReadings(course).filter((x) => filter(x.title));
 
 	const renderItem = (item) => {
 		return (
