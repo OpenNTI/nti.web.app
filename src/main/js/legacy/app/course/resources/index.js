@@ -43,7 +43,9 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 
 		this.addDefaultRoute('/readings');
 
-		this.initSearchHandler();
+		this.SearchStore = NextThought.app.search.StateStore.getInstance();
+
+		this.initSearchHandler(this.SearchStore);
 	},
 
 
@@ -60,23 +62,15 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	},
 
 
-	initSearchHandler () {
-		const searchBtn = document.querySelector('.search-icon');
-		const searchField = document.querySelector('.search-field input');
-
-		if (!(searchBtn && searchField)) { return; }
-
-		const handleSearch = e => {
-			this.readingTitleFilter = (str) => new RegExp(searchField.value, 'i').test(str);
+	initSearchHandler (store) {
+		const handleSearch = () => {
+			this.readingTitleFilter = (str) => new RegExp(store.getTerm(), 'i').test(str);
 			this.resources.setProps({
 				filter: this.readingTitleFilter
 			});
 		};
 
-		searchBtn.addEventListener('click', handleSearch);
-		searchField.addEventListener('keydown', e => {
-			e.key === 'Enter' && handleSearch(e)
-		});
+		this.mon(store, 'context-updated', handleSearch);
 	},
 
 
