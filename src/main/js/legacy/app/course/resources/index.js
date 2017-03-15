@@ -42,6 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 		this.addRoute('/readings', this.showReadings.bind(this));
 
 		this.addDefaultRoute('/readings');
+
+		this.initSearchHandler();
 	},
 
 
@@ -55,6 +57,26 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 			.then((service) => {
 				return service.getObject(this.currentBundle.getId());
 			});
+	},
+
+
+	initSearchHandler () {
+		const searchBtn = document.querySelector('.search-icon');
+		const searchField = document.querySelector('.search-field input');
+
+		if (!(searchBtn && searchField)) { return; }
+
+		const handleSearch = e => {
+			this.readingTitleFilter = (str) => new RegExp(searchField.value, 'i').test(str);
+			this.resources.setProps({
+				filter: this.readingTitleFilter
+			});
+		};
+
+		searchBtn.addEventListener('click', handleSearch);
+		searchField.addEventListener('keydown', e => {
+			e.key === 'Enter' && handleSearch(e)
+		});
 	},
 
 
@@ -94,6 +116,10 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	showReadings () {
 		this.setTitle('Readings');
 
+		const filter = (name) => {
+			return this.readingTitleFilter ? this.readingTitleFilter(name) : true;
+		};
+
 		return	this.getCourse()
 			.then((course) => {
 				if (this.editor) {
@@ -102,7 +128,8 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 				}
 
 				this.resources.setProps({
-					course
+					course,
+					filter
 				});
 			});
 	}
