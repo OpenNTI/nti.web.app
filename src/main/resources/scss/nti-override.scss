@@ -409,9 +409,6 @@ body.x-body {margin:0;}
 
 		.placeholder {display: none;}
 
-		li > p.par {
-			display: inline;
-		}
 	}
 
 	.mdseries     {font-weight: 600;}
@@ -531,6 +528,12 @@ body.x-body {margin:0;}
 
 		.label {
 			font-size: 1rem;
+		}
+	}
+
+	.itemize, .enumerate {
+		& > li > a {
+			position: absolute;
 		}
 	}
 
