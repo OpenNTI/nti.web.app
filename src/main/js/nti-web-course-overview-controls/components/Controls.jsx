@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import {scoped} from 'nti-lib-locale';
+
 import {ControlBar, Button} from 'nti-web-commons';
 
 const PREVIEW = 'preview';

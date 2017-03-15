@@ -3,11 +3,36 @@
 .course-overview-control-bar {
 	display: flex;
 	align-items: center;
-	padding: 0 1.125rem;
 
-	.resources, .message {
+	.message,
+	.resources {
 		flex: 0 0 auto;
 		line-height: 3.75rem;
+	}
+
+	.message {
+		i,
+		span {
+			display: inline-block;
+			vertical-align: middle;
+			color: #757474;
+		}
+
+		i {
+			margin-right: 0.3125rem;
+		}
+
+		span {
+			font-size: 0.875rem;
+		}
+	}
+
+	.resources {
+		color: $primary-blue;
+
+		i {
+			margin-right: 0.3125rem;
+		}
 	}
 
 	.spacer {
@@ -17,7 +42,9 @@
 	.buttons {
 		flex: 0 0 auto;
 
-		.start-editing, .audit-logs, .show-preview {
+		.audit-logs,
+		.show-preview,
+		.start-editing {
 			cursor: pointer;
 		}
 
