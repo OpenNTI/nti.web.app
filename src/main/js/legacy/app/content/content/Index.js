@@ -151,6 +151,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		this.el.mask('Loading...');
 
+		if (this.notFound) {
+			this.notFound.destroy();
+		}
+
 		if (this.editor) {
 			this.editor.destroy();
 		}
@@ -165,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				const contentPackage = course.getPackage(packageId);
 
 				if (!contentPackage) {
-					//TODO: handle this case
+					this.__onFail();
 					return;
 				}
 
@@ -222,6 +226,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			}
 		}
 
+		if (this.notFound) {
+			this.notFound.destroy();
+		}
+
 		if (this.editor) {
 			this.editor.destroy();
 		}
@@ -260,6 +268,14 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		console.error('Failed to load page:', reason);
 		this.setTitle('Not Found');
 
+		if (this.reader) {
+			this.reader.destroy();
+		}
+
+		if (this.editor) {
+			this.editor.destroy();
+		}
+
 		if (!this.notFound) {
 			this.notFound = this.add({
 				xtype: 'notfound',
@@ -281,6 +297,9 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				if (me.activeMediaWindow) {
 					me.activeMediaWindow.destroy();
 				}
+			})
+			.catch(() => {
+				this.__onFail();
 			});
 	},
 
@@ -314,6 +333,9 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 						route.precache.video = video;
 						me.showMediaView(route, subRoute);
 					});
+				})
+				.catch(() => {
+					this.__onFail();
 				});
 		}
 
