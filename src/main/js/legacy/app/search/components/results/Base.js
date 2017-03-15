@@ -121,12 +121,14 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	},
 
 	setCreator: function (user) {
-		var creator = 'By ' + user.getName();
+		if(!user.getName().includes('Anonymous')) {
+			var creator = 'By ' + user.getName();
 
-		this.renderData.creator = creator;
+			this.renderData.creator = creator;
 
-		if (this.rendered) {
-			this.creatorEl.update(creator);
+			if (this.rendered) {
+				this.creatorEl.update(creator);
+			}
 		}
 	},
 
