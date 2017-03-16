@@ -18,7 +18,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'},
 		{ name: 'assignmentName', type: 'string', persist: false },
 		{ name: 'assignmentContainer', type: 'string', persist: false },
-		{ name: 'assignmentDueDate', type: 'date', persist: false}
+		{ name: 'assignmentDueDate', type: 'date', persist: false},
+		{ name: 'SubmissionCreator', type: 'string'}
 	],
 
 	mixins: {
