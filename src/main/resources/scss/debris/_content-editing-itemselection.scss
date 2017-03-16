@@ -550,7 +550,9 @@
 			flex: 0 0 100px;
 			max-width: 100px;
 			height: 128px;
-			background-size: contain;
+			background-size: cover;
+			background-position: center center;
+			background-repeat: no-repeat;
 			background-color: white;
 			box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.08);
 		}

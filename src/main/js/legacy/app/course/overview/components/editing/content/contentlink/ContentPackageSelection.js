@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getItemData: function (item) {
 		return {
 			title: item.get('title'),
-			icon: item.get('icon'),
+			icon: item.get('icon') || '/app/resources/images/file-icons/generic.png',
 			description: item.get('description'),
 			isNativeAuthored: item.isRenderableContentPackage,
 			isPublished: item.get('isPublished')
