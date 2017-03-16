@@ -1,4 +1,6 @@
 var Ext = require('extjs');
+var {isMe} = require('legacy/util/Globals');
+var UserRepository = require('legacy/cache/UserRepository');
 var LibraryActions = require('../../../library/Actions');
 var CoursewareGrade = require('../../../../model/courseware/Grade');
 var AssessmentAssignment = require('../../../../model/assessment/Assignment');
@@ -44,12 +46,22 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Ass
 	},
 
 	getPathToFeedback: function (feedback, getPathTo) {
+		const submissionCreator = feedback.get('SubmissionCreator');
+
 		return Service.getObject(feedback.get('AssignmentId'))
 			.then(function (assignment) {
 				return getPathTo(assignment);
 			})
 			.then(function (path) {
 				return path.concat([feedback]);
+			})
+			.then((path) => {
+				if (isMe(submissionCreator)) { return path; }
+
+				return UserRepository.getUser(submissionCreator)
+					.then((user) => {
+						return path.concat([user]);
+					});
 			})
 			.catch(function (reason) {
 				console.error('Failed to get path for feedback: ', reason);

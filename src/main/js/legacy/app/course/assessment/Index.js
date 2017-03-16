@@ -766,6 +766,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		route = '/' + assignmentId;
 
 		if (root instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback) {
+			if(path[1].isUser) {
+				const student = path[1].getURLPart();
+				route += '/students/' + student + '/';
+			}
+
 			route += '#feedback';
 		}
 
