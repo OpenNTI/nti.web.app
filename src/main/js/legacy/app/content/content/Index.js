@@ -173,6 +173,15 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					return;
 				}
 
+				const onDelete = () => {
+					this.currentBundle.updateFromServer()
+						.then(() => {
+							if (this.onDelete) {
+								this.onDelete();
+							}
+						});
+				};
+
 				this.editor = this.add({
 					xtype: 'react',
 					component: Editor,
@@ -184,14 +193,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					onDidChange: () => {
 						this.currentBundle.updateContentPackage(packageId);
 					},
-					onDelete: () => {
-						this.currentBundle.updateFromServer()
-							.then(() => {
-								if (this.onDelete) {
-									this.onDelete();
-								}
-							});
-					}
+					onDelete: onDelete,
+					gotoResources: onDelete
 				});
 			})
 			.always(() => {
