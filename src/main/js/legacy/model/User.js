@@ -347,6 +347,13 @@ exports = Ext.define('NextThought.model.User', {
 			return sitePattern.replace(hashPlaceholder, hash);
 		},
 
+		getUsernameForURL: function (username) {
+			if ($AppConfig.obscureUsernames) {
+				username = B64.encodeURLFriendly(username);
+			}
+
+			return encodeURIComponent(username);
+		},
 
 		getProfileStateFromFragment: function (fragment) {
 			var re = /^#!profile\/([^\/]+)\/?(.*)$/i, o = re.exec(fragment);

@@ -18,7 +18,6 @@ var TimelineWindow = require('../content/timeline/Window');
 var ContentviewerIndex = require('../contentviewer/Index');
 var ContentviewerActions = require('../contentviewer/Actions');
 const { encodeForURI } = require('nti-lib-ntiids');
-
 const Topic = require('legacy/model/forums/Topic');
 const HeadlineTopic = require('legacy/model/forums/HeadlineTopic');
 const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
@@ -27,6 +26,7 @@ const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTop
 const Video = require('legacy/model/Video');
 const Assignment = require('legacy/model/assessment/Assignment');
 const DiscussionAssignment = require('legacy/model/assessment/DiscussionAssignment');
+const User = require('legacy/model/User');
 
 const DASHBOARD = 'course-dashboard';
 const OVERVIEW = 'course-overview';
@@ -602,6 +602,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route = this.getRouteForLesson(root, subPath);
 		} else if (root instanceof NextThought.model.PageInfo) {
 			route = this.getRouteForPageInfo(root, subPath);
+		} else if (root instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItem) {
+			route = this.getRouteForHistoryItem(root, subPath);
 		} else {
 			route = {
 				path: '',
@@ -661,5 +663,24 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		route.path = '/lessons/' + Globals.trimRoute(route.path);
 
 		return route;
+	},
+
+	getRouteForHistoryItem: function (historyItem, path) {
+		let	root = path[0],
+			route;
+
+		const AssignmentId = encodeForURI(root.get('AssignmentId'));
+		const submissionCreator = User.getUsernameForURL(root.get('SubmissionCreator'));
+
+		console.log(submissionCreator);
+
+		if (root instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback) {
+			route = `/assignments/${AssignmentId}/students/${submissionCreator}/#feedback`;
+
+			return {
+				path: route,
+				isFull: true
+			};
+		}
 	}
 });

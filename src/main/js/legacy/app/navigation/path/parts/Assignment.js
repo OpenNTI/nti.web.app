@@ -1,6 +1,4 @@
 var Ext = require('extjs');
-var {isMe} = require('legacy/util/Globals');
-var UserRepository = require('legacy/cache/UserRepository');
 var LibraryActions = require('../../../library/Actions');
 var CoursewareGrade = require('../../../../model/courseware/Grade');
 var AssessmentAssignment = require('../../../../model/assessment/Assignment');
@@ -18,8 +16,6 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Ass
 		for (let mimeType of NextThought.model.assessment.Assignment.mimeType) {
 			handlers[mimeType] = this.getPathToAssignment.bind(this);
 		}
-		handlers[NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback.mimeType] = this.getPathToFeedback.bind(this);
-		handlers['application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback'] = this.getPathToFeedback.bind(this);
 
 		return handlers;
 	},
@@ -41,30 +37,6 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Ass
 			})
 			.catch(function (reason) {
 				console.error('Failed to get path for grade: ', reason);
-				return Promise.resolve([]);
-			});
-	},
-
-	getPathToFeedback: function (feedback, getPathTo) {
-		const submissionCreator = feedback.get('SubmissionCreator');
-
-		return Service.getObject(feedback.get('AssignmentId'))
-			.then(function (assignment) {
-				return getPathTo(assignment);
-			})
-			.then(function (path) {
-				return path.concat([feedback]);
-			})
-			.then((path) => {
-				if (isMe(submissionCreator)) { return path; }
-
-				return UserRepository.getUser(submissionCreator)
-					.then((user) => {
-						return path.concat([user]);
-					});
-			})
-			.catch(function (reason) {
-				console.error('Failed to get path for feedback: ', reason);
 				return Promise.resolve([]);
 			});
 	}

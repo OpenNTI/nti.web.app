@@ -758,21 +758,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 	getRouteForPath: function (path, assignment) {
 		var assignmentId = assignment.getId(),
-			root = path[0],
 			route;
 
 		assignmentId = encodeForURI(assignmentId);
 
 		route = '/' + assignmentId;
-
-		if (root instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback) {
-			if(path[1].isUser) {
-				const student = path[1].getURLPart();
-				route += '/students/' + student + '/';
-			}
-
-			route += '#feedback';
-		}
 
 		return {
 			path: route,
