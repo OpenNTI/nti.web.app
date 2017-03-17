@@ -141,13 +141,14 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
-	showEditor (page, pageSource) {
+	showEditor (page, parent, pageSource) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showEditor.bind(this, page));
 			return;
 		}
 
 		const packageId = page.get ? page.get('ContentPackageNTIID') : page;
+		let breadcrumb;
 
 		this.el.mask('Loading...');
 
@@ -161,6 +162,15 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		if (this.reader) {
 			this.reader.destroy();
+		}
+
+		if (parent) {
+			breadcrumb = [{
+				label: parent.label,
+				handleRoute: () => {
+					this.handleNavigation(parent.title, parent.route);
+				}
+			}];
 		}
 
 		return getService()
@@ -182,6 +192,12 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 						});
 				};
 
+				const gotoResources = () => {
+					if (this.gotoResources) {
+						this.gotoResources();
+					}
+				};
+
 				this.editor = this.add({
 					xtype: 'react',
 					component: Editor,
@@ -189,12 +205,13 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					course,
 					contentPackage,
 					pageSource,
+					breadcrumb,
 					pageID: page.getId ? page.getId() : '',
 					onDidChange: () => {
 						this.currentBundle.updateContentPackage(packageId);
 					},
 					onDelete: onDelete,
-					gotoResources: onDelete
+					gotoResources: gotoResources
 				});
 			})
 			.always(() => {
@@ -371,10 +388,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		return this.__loadContent(root, obj)
 			.then((page) => {
-				this.showEditor(page, route.precache.pageSource, pageID);
+				this.showEditor(page, route.precache.parent, route.precache.pageSource, pageID);
 			})
 			.catch((obj) => {
-				this.showEditor(root, route.precache.pageSource);
+				this.showEditor(root, route.precache.parent, route.precache.pageSource);
 			});
 	},
 

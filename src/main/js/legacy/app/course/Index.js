@@ -455,6 +455,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			INFO
 		], OVERVIEW).then((item) => {
 			item.onDelete = () => this.gotoResources();
+			item.gotoResources = () => this.gotoResources();
 
 			return item.handleRoute(subRoute, route.precache);
 		});
