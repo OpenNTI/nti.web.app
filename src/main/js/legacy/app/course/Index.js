@@ -672,8 +672,6 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		const AssignmentId = encodeForURI(root.get('AssignmentId'));
 		const submissionCreator = User.getUsernameForURL(root.get('SubmissionCreator'));
 
-		console.log(submissionCreator);
-
 		if (root instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback) {
 			route = `/assignments/${AssignmentId}/students/${submissionCreator}/#feedback`;
 
