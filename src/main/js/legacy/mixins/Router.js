@@ -319,8 +319,8 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	beforeRouteChange: function () {
 		var activeItem = this.getActiveItem();
 
-		if (activeItem && activeItem.onRouteDeactivate) {
-			activeItem.onRouteDeactivate();
+		if (activeItem && activeItem.__onInternalRouteDeactivate) {
+			activeItem.__onInternalRouteDeactivate();
 		}
 
 		if (activeItem && activeItem.beforeRoute) {
