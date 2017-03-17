@@ -274,6 +274,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 					onDelete: () => {
 						me.pushRoute(route.precache.parent.title, route.precache.parent.route);
 					},
+					gotoResources: () => {
+						if (me.gotoResources) {
+							me.gotoResources();
+						}
+					},
 					root: rootId,
 					rootRoute: route.precache.parent.route + '/content/' + route.params.id + '/'
 				});
