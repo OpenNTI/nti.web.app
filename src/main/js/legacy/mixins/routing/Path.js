@@ -257,6 +257,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		this.currentFullRoute = path;
 		this.currentRoute = currentRoute;
 
+		this.handlingRoute = true;
+
 		let val = null;
 
 		//if the sub route has a handler call it
@@ -290,7 +292,11 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 		val
 			.then(this.afterRoute.bind(this, path))
-			.then(this.onRouteActivate.bind(this));
+			.then(this.__onInternalRouteActivate.bind(this))
+			.then(x => {
+				delete this.handlingRoute;
+				return x;
+			});
 
 		return val;
 	},
@@ -381,6 +387,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		this.currentFullRoute = path;
 		this.currentRoute = currentRoute;
 
+		this.handlingRoute = true;
+
 		//if the sub route has a handler call it
 		if (sub.handler) {
 			val = sub.handler.call(null, {
@@ -412,7 +420,11 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 		val
 			.then(this.afterRoute.bind(this, path))
-			.then(this.onRouteActivate.bind(this));
+			.then(this.__onInternalRouteActivate.bind(this))
+			.then((x) => {
+				delete this.handlingRoute;
+				return x;
+			});
 
 		return val;
 	},
@@ -424,13 +436,27 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Gets called whenever a route we handle becomes active
 	 * @override
 	 */
-	onRouteActivate: function () {},
+	__onInternalRouteActivate: function () {
+		if (this.wasDeactivedWhileHandlingRoute) {
+			delete this.wasDeactivedWhileHandlingRoute;
+		} else if (this.onRouteActivate) {
+			this.onRouteActivate();
+		}
+	},
 
 	/**
 	 * Gets called whenever a route we handle changes
 	 * @override
 	 */
-	onRouteDeactivate: function () {},
+	__onInternalRouteDeactivate: function () {
+		if (this.handlingRoute) {
+			this.wasDeactivedWhileHandlingRoute = true;
+		}
+
+		if (this.onRouteDeactivate) {
+			this.onRouteDeactivate();
+		}
+	},
 
 
 	getCurrentRoute: function () {
