@@ -28,6 +28,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.getItemChildren) {
 			this.addChildren();
 		}
+
+		if (this.selectionItem.isModel) {
+			this.mon(this.selectionItem, 'update', x => this.onSelectionItemUpdated(x));
+		}
 	},
 
 
@@ -75,6 +79,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					};
 				})
 			});
+		}
+	},
+
+
+	onSelectionItemUpdated () {
+		if (this.itemCmp && this.itemCmp.el && this.itemCmp.el.dom) {
+			this.itemCmp.el.dom.innerHTML = '';
+		}
+
+		var data = this.getItemData(this.selectionItem);
+
+		if (!data) {
+			this.addCls('hidden');
+		} else if (data instanceof Promise) {
+			data.then(this.setItemData.bind(this));
+		} else {
+			this.setItemData(data);
 		}
 	},
 
