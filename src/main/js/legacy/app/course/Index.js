@@ -335,6 +335,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	},
 
 	showOverview: function (route, subRoute) {
+		this.previousLessonRoute = this.currentFullRoute;
 		this.setCmpRouteState(OVERVIEW, subRoute);
 
 		return this.setActiveView(OVERVIEW, [
@@ -418,7 +419,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	},
 
 	showResources (route, subRoute) {
-		const prevRoute = this.previousFullRoute;
+		const prevRoute = this.previousLessonRoute;
 		const navBarConfig = {
 			hideBranding: true,
 			noRouteOnSearch: true,
