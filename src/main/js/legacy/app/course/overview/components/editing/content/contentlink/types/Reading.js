@@ -311,15 +311,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onSaveFailure: function (reason) {
-		if (reason === this.SWITCHED) { return; }
-
-		this.callParent(arguments);
-	},
 
 	doValidation: function () {
 		return this.readingEditorCmp ? this.readingEditorCmp.doValidation() : Promise.resolve();
 	},
+
+
+	onSaveFailure (reason) {
+		if (reason === this.SWITCHED) { return; }
+
+		if (this.readingEditorCmp) {
+			return this.readingEditorCmp.onSaveFailure(reason);
+		}
+
+		//TODO: figure out this case
+	},
+
 
 	onSave: function () {
 		var me = this;
