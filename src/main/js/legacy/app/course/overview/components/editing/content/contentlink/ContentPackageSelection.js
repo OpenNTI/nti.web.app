@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'content-package-item-selection item-selection',
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
-		{cls: 'content-package-item {[!values.isNativeAuthored || values.isPublished ? "published" : "unpublished"]}', cn: [
+		{cls: 'content-package-item {[!values.isNativeAuthored || (values.isPublished && values.isRendered) ? "published" : "unpublished"]}', cn: [
 			{cls: 'icon', style: {backgroundImage: 'url({icon})'}},
 			{cls: 'wrap', cn: [
 				{cls: 'title', html: '{title}'},
@@ -25,7 +25,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			icon: item.get('icon') || '/app/resources/images/file-icons/generic.png',
 			description: item.get('description'),
 			isNativeAuthored: item.isRenderableContentPackage,
-			isPublished: item.get('isPublished')
+			isPublished: item.get('isPublished'),
+			isRendered: item.isRendered && item.isRendered()
 		};
 	},
 
