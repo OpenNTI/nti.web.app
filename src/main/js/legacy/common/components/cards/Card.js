@@ -89,17 +89,19 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 			console.error(er.message);
 		}
 
-		const type = this.data && this.data.targetMimeType;
-		let icon = this.data && (this.data.thumbnail || this.data.icon);
-		icon = icon && icon.indexOf(RelatedWork.FILE_FALLBACK_BLANK_IMAGE) > -1 ? null : icon;
-		Ext.widget({
-			xtype: 'react',
-			src: icon,
-			component: AssetIcon,
-			mimeType: type,
-			svg: icon ? false : true,
-			renderTo: this.thumbnailEl
-		});
+		if (!this.doNotRenderIcon) {
+			const type = this.data && this.data.targetMimeType;
+			let icon = this.data && (this.data.thumbnail || this.data.icon);
+			icon = icon && icon.indexOf(RelatedWork.FILE_FALLBACK_BLANK_IMAGE) > -1 ? null : icon;
+			Ext.widget({
+				xtype: 'react',
+				src: icon,
+				component: AssetIcon,
+				mimeType: type,
+				svg: icon ? false : true,
+				renderTo: this.thumbnailEl
+			});
+		}
 	},
 
 
