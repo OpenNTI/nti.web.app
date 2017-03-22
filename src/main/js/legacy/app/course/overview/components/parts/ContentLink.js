@@ -37,6 +37,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		'widget.course-overview-externallink'
 	],
 
+	doNotRenderIcon: true,
+
 	// requires: ['NextThought.view.contentviewer.View'],
 
 	renderTpl: Ext.DomHelper.markup([
