@@ -77,6 +77,11 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	},
 
 
+	shouldAllowTocLoad () {
+		return true;
+	},
+
+
 	getToc: function (status) {
 		var me = this,
 			library = me.LibraryActions,
@@ -85,19 +90,31 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		if (me.self.TOC_REQUESTS[index + '-' + status]) {
 			me.tocPromise = me.self.TOC_REQUESTS[index + '-' + status];
 		} else {
-			me.tocPromise = Service.request(Globals.getURL(index))
-					//parse the response into a xml
-					.then(library.parseXML.bind(library))
-					//set my root, icon, and title on the doc
-					.then(function (xml) {
-						var doc = xml.documentElement;
+			me.tocPromise = new Promise ((fulfill, reject) => {
+				if (this.shouldAllowTocLoad()) {
+					fulfill();
+				} else {
+					reject();
+				}
+			})
+				.then(() => Service.request(Globals.getURL(index)))
+				//parse the response into a xml
+				.then(library.parseXML.bind(library))
+				//set my root, icon, and title on the doc
+				.then(function (xml) {
+					var doc = xml.documentElement;
 
-						doc.setAttribute('base', me.get('root'));
-						doc.setAttribute('icon', me.get('icon'));
-						doc.setAttribute('title', me.get('title'));
+					doc.setAttribute('base', me.get('root'));
+					doc.setAttribute('icon', me.get('icon'));
+					doc.setAttribute('title', me.get('title'));
 
-						return xml;
-					});
+					return xml;
+				})
+				.catch((reason) => {
+					delete me.self.TOC_REQUESTS[index + '-' + status];
+
+					return Promise.reject(reason);
+				});
 
 			me.self.TOC_REQUESTS[index + '-' + status] = me.tocPromise;
 		}
