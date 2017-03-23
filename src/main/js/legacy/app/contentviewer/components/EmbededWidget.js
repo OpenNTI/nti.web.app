@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				width: '100%', height: '{height}', allowfullscreen: 'allowFullscreen'
 			}
 		]},
-		{tag: 'tpl', 'if': '!sandbow', cn: [
+		{tag: 'tpl', 'if': '!sandbox', cn: [
 			{
 				tag: 'iframe', scrolling: 'no', frameborder: 'no', src: '{src}',
 				width: '100%', height: '{height}', allowfullscreen: 'allowFullscreen'
