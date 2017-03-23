@@ -18,9 +18,7 @@
   "scripts": {
     "test": "karma start --single-run --reporters dots,html,junit,coverage",
     "start": "make styles && web-service --config ./src/server/config/env.json.example",
-    "prepublish": "not-in-install && make || in-install",
-    "bump": "npm version",
-    "postversion": "git push && git push --tags && npm publish"
+    "prepublish": "not-in-install && make || in-install"
   },
   "main": "./dist/server/index.js",
   "publishConfig": {
