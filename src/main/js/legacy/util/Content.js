@@ -944,6 +944,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				return notFound();
 			}
 
+			if (id === ntiid) {
+				return onFound(current);
+			}
+
 			this.__resolveTocFor(bundle, id)
 				.then((toc) => {
 					if (findReading(toc)) {
