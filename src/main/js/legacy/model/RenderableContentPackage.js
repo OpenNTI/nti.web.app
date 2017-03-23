@@ -17,7 +17,7 @@ function monitorRenderJob (renderJob, onFinish) {
 		if (stop) { return; }
 
 		if (job.State === SUCCESS || job.State === FAILED) {
-			onFinish(job.State);
+			onFinish(job.State, job);
 			return;
 		}
 
@@ -69,6 +69,11 @@ module.exports = exports = Ext.define('NextThought.model.RenderableContentPackag
 	},
 
 
+	shouldAllowTocLoad () {
+		return this.isRendered();
+	},
+
+
 	stopMonitor () {
 		if (this.__stopMonitor) {
 			this.__stopMonitor();
@@ -80,9 +85,16 @@ module.exports = exports = Ext.define('NextThought.model.RenderableContentPackag
 		const renderJob = this.get('LatestRenderJob');
 
 		if (renderJob && renderJob.State === PENDING) {
-			this.__stopMonitor = monitorRenderJob(this.get('LatestRenderJob'), (status) => {
+			this.__stopMonitor = monitorRenderJob(this.get('LatestRenderJob'), (status, job) => {
+				this.set('index', job.index);
+				this.set('index_jsonp', job.index_jsonp);
+
 				this.LatestRenderJobStatus = status;
 				this.fireEvent('update');
+
+				if (this.__onRenderFinish) {
+					this.__onRenderFinish();
+				}
 			});
 		}
 	},
