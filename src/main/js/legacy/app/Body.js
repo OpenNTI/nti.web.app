@@ -201,7 +201,8 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			}
 		} else {
 			state = null;
-			location.pathname = this.ContextStore.removeObjectRoute();
+			const objectLessUrl = this.ContextStore.removeObjectRoute();
+			location.pathname = Globals.getURLParts(objectLessUrl).pathname;
 		}
 
 		if (search) {
