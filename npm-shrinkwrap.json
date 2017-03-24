@@ -5058,9 +5058,9 @@
       }
     },
     "nti-content": {
-      "version": "1.1.0",
+      "version": "1.0.3",
       "from": "nti-content@latest",
-      "resolved": "https://npm.nextthought.com/nti-content/-/nti-content-1.1.0.tgz",
+      "resolved": "https://npm.nextthought.com/nti-content/-/nti-content-1.0.3.tgz",
       "dev": true,
       "dependencies": {
         "core-js": {
