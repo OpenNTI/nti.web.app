@@ -1,4 +1,5 @@
 var Ext = require('extjs');
+var {isFeature} = require('legacy/util/Globals');
 var Globals = require('../../util/Globals');
 var ParseUtils = require('../../util/Parsing');
 var StoreUtils = require('../../util/Store');
@@ -81,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			params.course = bundle;
 		}
 
-		return StoreUtils.loadBatch(url, params, null, null, true);
+		return StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search'));
 	},
 
 	setSearchContext: function (term, silent) {
