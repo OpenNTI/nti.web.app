@@ -13,7 +13,7 @@ const DEFAULT_TEXT = {
 const t = scoped('COURSE_RESOURCES_READINGS', DEFAULT_TEXT);
 
 function sortOnTitle (a, b) {
-	return a.title.localeCompare(b.title);
+	return (a.title || '').localeCompare(b.title);
 }
 
 const COLS = [
