@@ -1,4 +1,5 @@
 var Ext = require('extjs');
+var {isFeature} = require('legacy/util/Globals');
 var Search = require('../../../nti-web-components-search');
 var ParseUtils = require('../../util/Parsing');
 var StoreUtils = require('../../util/Store');
@@ -8,6 +9,7 @@ var LibraryActions = require('../library/Actions');
 var NavigationActions = require('../navigation/Actions');
 var SearchStateStore = require('./StateStore');
 var ComponentsAdvancedOptions = require('./components/AdvancedOptions');
+var ComponentsResults = require('./components/Results');
 var ReactHarness = require('legacy/overrides/ReactHarness');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
@@ -26,39 +28,52 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.PathActions = PathActions.create();
 
-		this.add([
-			{
-				xtype: 'search-advanced-menu',
-				changeFilter: this.changeFilter.bind(this)
-			},
-			{
-				xtype: 'react',
-				component: Search,
-				getBreadCrumb: (obj) => {
-					let rec;
-					if(typeof obj.toJSON === 'function') {
-						rec = ParseUtils.parseItems(obj.toJSON())[0];
-					} else {
-						rec = ParseUtils.parseItems(obj)[0];
-					}
+		if(isFeature('use-new-search')) {
+			this.add([
+				{
+					xtype: 'search-advanced-menu',
+					changeFilter: this.changeFilter.bind(this)
+				},
+				{
+					xtype: 'react',
+					component: Search,
+					getBreadCrumb: (obj) => {
+						let rec;
+						if(typeof obj.toJSON === 'function') {
+							rec = ParseUtils.parseItems(obj.toJSON())[0];
+						} else {
+							rec = ParseUtils.parseItems(obj)[0];
+						}
 
-					return this.PathActions.getBreadCrumb(rec)
+						return this.PathActions.getBreadCrumb(rec)
 						.then((path) => {
 							return path;
 						});
-				},
-				navigateToSearchHit: (record, hit, frag, containerId) => {
-					record = ParseUtils.parseItems(record)[0];
-					hit = ParseUtils.parseItems(hit)[0];
-					this.SearchStore.setHitForContainer(containerId, hit, frag);
+					},
+					navigateToSearchHit: (record, hit, frag, containerId) => {
+						record = ParseUtils.parseItems(record)[0];
+						hit = ParseUtils.parseItems(hit)[0];
+						this.SearchStore.setHitForContainer(containerId, hit, frag);
 
-					this.Router.root.attemptToNavigateToObject(record);
-				},
-				showNext: () => {
-					this.loadNextPage();
+						this.Router.root.attemptToNavigateToObject(record);
+					},
+					showNext: () => {
+						this.loadNextPage();
+					}
 				}
-			}
-		]);
+			]);
+		} else {
+			this.add([
+				{
+					xtype: 'search-advanced-menu',
+					changeFilter: this.changeFilter.bind(this)
+				},
+				{
+					xtype: 'search-results',
+					navigateToSearchHit: this.navigateToSearchHit.bind(this)
+				}
+			]);
+		}
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -79,11 +94,16 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.onContextUpdate = this.onContextUpdate.bind(this);
 
 		this.OptionMenu = this.down('search-advanced-menu');
-		this.ReactResults = this.down('react');
+
+		if(isFeature('use-new-search')) {
+			this.Results = this.down('react');
+		} else {
+			this.Results = this.down('search-results');
+		}
 	},
 
 	getActiveItem: function () {
-		return this.ReactResults;
+		return this.Results;
 	},
 
 	onActivate: function () {
@@ -206,9 +226,13 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	clearResults: function () {
-		this.ReactResults.setProps({
-			hits: []
-		});
+		if(isFeature('use-new-search')) {
+			this.Results.setProps({
+				hits: []
+			});
+		} else {
+			this.Results.removeResults();
+		}
 	},
 
 	getAcceptFilter: function (filter) {
@@ -216,46 +240,70 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	showLoading: function () {
-		this.ReactResults.setProps({
-			showLoading: true
-		});
+		if(isFeature('use-new-search')) {
+			this.Results.setProps({
+				showLoading: true
+			});
+		} else {
+			this.Results.showLoading();
+		}
 	},
 
 	removeLoading: function () {
-		this.ReactResults.setProps({
-			showLoading: false
-		});
+		if(isFeature('use-new-search')) {
+			this.Results.setProps({
+				showLoading: false
+			});
+		} else {
+			this.Results.removeLoading();
+		}
 	},
 
 	showError: function () {
-		const text = 'Error loading search results.';
+		if(isFeature('use-new-search')) {
+			const text = 'Error loading search results.';
 
-		this.ReactResults.setProps({
-			errorLoadingText: text,
-			showMoreButton: false
-		});
+			this.Results.setProps({
+				errorLoadingText: text,
+				showMoreButton: false
+			});
+		} else {
+			this.Results.showError();
+		}
 	},
 
 	showNext: function () {
-		this.ReactResults.setProps({
-			showMoreButton: true
-		});
+		if(isFeature('use-new-search')) {
+			this.Results.setProps({
+				showMoreButton: true
+			});
+		} else {
+			this.Results.showNext(this.loadNextPage.bind(this));
+		}
 	},
 
 	removeNext: function () {
-		this.ReactResults.setProps({
-			showMoreButton: false
-		});
+		if(isFeature('use-new-search')) {
+			this.Results.setProps({
+				showMoreButton: false
+			});
+		} else {
+			this.Results.removeNext();
+		}
 	},
 
 	showEmpty: function () {
-		const text = this.ReactResults.getProps().hits.length > 0 ? 'No more results found.' : 'No results found.';
+		if(isFeature('use-new-search')) {
+			const text = this.Results.getProps().hits.length > 0 ? 'No more results found.' : 'No results found.';
 
-		if(typeof this.ReactResults.getProps().emptyText === 'undefined') {
-			this.ReactResults.setProps({
-				emptyText: text,
-				errorLoadingText: undefined
-			});
+			if(typeof this.Results.getProps().emptyText === 'undefined') {
+				this.Results.setProps({
+					emptyText: text,
+					errorLoadingText: undefined
+				});
+			}
+		} else {
+			this.Results.showEmpty();
 		}
 	},
 
@@ -282,7 +330,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.lock = Date.now();
 
-		StoreUtils.loadBatch(this.nextPageLink, null, null, null, true)
+		StoreUtils.loadBatch(this.nextPageLink, null, null, null, isFeature('use-new-search'))
 			.then(this.onLoadResults.bind(this, this.lock))
 			.catch(this.onLoadFail.bind(this, this.lock));
 	},
@@ -295,11 +343,15 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.removeLoading();
 
 		if (batch.Items && batch.Items.length) {
-			this.ReactResults.setProps({
-				hits: batch.Items,
-				errorLoadingText: undefined,
-				emptyText: undefined
-			});
+			if(isFeature('use-new-search')) {
+				this.Results.setProps({
+					hits: batch.Items,
+					errorLoadingText: undefined,
+					emptyText: undefined
+				});
+			} else {
+				this.Results.addResults(batch.Items);
+			}
 		} else {
 			this.showEmpty();
 		}
@@ -321,5 +373,14 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 		this.showError();
+	},
+
+	navigateToSearchHit: function (record, hit, frag, containerId) {
+		containerId  = containerId || (hit.get('Containers') || [])[0];
+		record = ParseUtils.parseItems(record)[0];
+		hit = ParseUtils.parseItems(hit)[0];
+		this.SearchStore.setHitForContainer(containerId, hit, frag);
+
+		this.Router.root.attemptToNavigateToObject(record);
 	}
 });

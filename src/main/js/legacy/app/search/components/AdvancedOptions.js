@@ -1,5 +1,5 @@
 var Ext = require('extjs');
-
+var {isFeature} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.app.search.components.AdvancedOptions', {
 	extend: 'Ext.Component',
@@ -42,12 +42,12 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 		}
 	},
 
-	cls: 'search-advanced-menu-items',
+	cls: 'search-advanced-menu',
 
 
 	renderTpl: Ext.DomHelper.markup({
 		tag: 'tpl', 'for': 'options', cn: [
-			{tag: 'span', cls: 'search-item', 'data-type': '{type}', html: '{label}'}
+			{tag: 'span', cls: 'search-option', 'data-type': '{type}', html: '{label}'}
 		]
 	}),
 
@@ -73,12 +73,16 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 	afterRender: function () {
 		this.callParent(arguments);
 
+		if (isFeature('use-new-search')) {
+			this.addCls('search-advanced-menu-react');
+		}
+
 		this.mon(this.el, 'click', this.doClick.bind(this));
 	},
 
 
 	doClick: function (e) {
-		var option = e.getTarget('.search-item');
+		var option = e.getTarget('.search-option');
 
 		if (this.changeFilter && option) {
 			this.changeFilter(option.getAttribute('data-type'));
@@ -99,8 +103,8 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 			return;
 		}
 
-		var option = this.el.down('.search-item[data-type="' + type + '"]'),
-			active = this.el.down('.search-item.active');
+		var option = this.el.down('.search-option[data-type="' + type + '"]'),
+			active = this.el.down('.search-option.active');
 
 		if (active) {
 			active.removeCls('active');
