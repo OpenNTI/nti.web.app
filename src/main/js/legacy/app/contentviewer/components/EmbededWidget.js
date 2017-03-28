@@ -112,6 +112,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 		if (!data['no-sandboxing']) {
 			rd.sandbox = sandboxFlags.join(' ');
+		} else {
+			rd.sandbox = false;
 		}
 
 		rd.src = defer ? '' : data.source;
