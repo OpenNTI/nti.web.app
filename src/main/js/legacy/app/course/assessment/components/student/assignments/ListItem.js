@@ -62,9 +62,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.mon(this.el, 'click', this.onItemClick.bind(this));
 
-		if(this.assignment.hasLink('edit')) {
-			this.assignment.on('update', () => this.updateItem());
-		}
+
+		this.assignment.on('update', () => this.updateItem());
 	},
 
 	updateItem () {
