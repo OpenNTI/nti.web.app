@@ -26,9 +26,11 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
+		this.useNewSearch = isFeature('use-new-search');
+
 		this.PathActions = PathActions.create();
 
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			this.add([
 				{
 					xtype: 'search-advanced-menu',
@@ -95,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.OptionMenu = this.down('search-advanced-menu');
 
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			this.Results = this.down('react');
 		} else {
 			this.Results = this.down('search-results');
@@ -171,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		}
 
 		if (!bundle) {
-			this.NavActions.setActiveContent(null);
+			this.NavActions.setActiveContent(null, this.useNewSearch, this.useNewSearch);
 		} else {
 			this.LibraryActions.findBundle(bundle)
 				.then(function (bundle) {
@@ -226,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	clearResults: function () {
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			this.Results.setProps({
 				hits: []
 			});
@@ -240,7 +242,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	showLoading: function () {
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			this.Results.setProps({
 				showLoading: true
 			});
@@ -250,7 +252,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	removeLoading: function () {
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			this.Results.setProps({
 				showLoading: false
 			});
@@ -260,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	showError: function () {
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			const text = 'Error loading search results.';
 
 			this.Results.setProps({
@@ -273,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	showNext: function () {
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			this.Results.setProps({
 				showMoreButton: true
 			});
@@ -283,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	removeNext: function () {
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			this.Results.setProps({
 				showMoreButton: false
 			});
@@ -293,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	showEmpty: function () {
-		if(isFeature('use-new-search')) {
+		if(this.useNewSearch) {
 			const text = this.Results.getProps().hits.length > 0 ? 'No more results found.' : 'No results found.';
 
 			if(typeof this.Results.getProps().emptyText === 'undefined') {
@@ -330,7 +332,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.lock = Date.now();
 
-		StoreUtils.loadBatch(this.nextPageLink, null, null, null, isFeature('use-new-search'))
+		StoreUtils.loadBatch(this.nextPageLink, null, null, null, this.useNewSearch)
 			.then(this.onLoadResults.bind(this, this.lock))
 			.catch(this.onLoadFail.bind(this, this.lock));
 	},
@@ -343,7 +345,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.removeLoading();
 
 		if (batch.Items && batch.Items.length) {
-			if(isFeature('use-new-search')) {
+			if(this.useNewSearch) {
 				this.Results.setProps({
 					hits: batch.Items,
 					errorLoadingText: undefined,
