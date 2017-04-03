@@ -3,7 +3,8 @@ html.x-viewport {
 	overflow-y: auto !important;
 	padding-top: $header-height;
 
-	&.window-open, &.scroll-lock {
+	&.scroll-lock,
+	&.window-open {
 		overflow: hidden !important;
 	}
 
@@ -42,8 +43,6 @@ html.x-viewport {
 	}
 }
 
-
-
 body.x-body {
 	min-height: calc(100vh - #{$header-height});
 	height: auto !important;
@@ -64,28 +63,30 @@ body.x-body {
 
 #view {
 	@include hardware-accelerate();
-    min-height: 100%;
-    width: 1024px;
-    margin: 0 auto;
+	min-height: 100%;
+	width: 1024px;
+	margin: 0 auto;
 
-    &.fullwidth {
-    	width: 100%;
-    	margin: 0;
-    }
+	&.fullwidth {
+		width: 100%;
+		margin: 0;
+	}
 
-    &.height-locked {
-    	overflow: hidden;
-    }
+	&.height-locked {
+		overflow: hidden;
+	}
 }
 
 body.white-shade-mask .body-shade-mask {
-	background-color: #fff;
+	background-color: #FBFBFB;
 }
 
 .body-shade-mask {
 	position: fixed;
-	top: 0; bottom: 0;
-	left: 0; right: 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	z-index: -1;
 	background-color: rgba(0, 0, 0, 0.3);
 }
@@ -95,7 +96,8 @@ body.white-shade-mask .body-shade-mask {
 
 	.main-message-bar {
 		position: fixed;
-		top: 0; left: 0;
+		top: 0;
+		left: 0;
 		right: 0;
 		height: $msg-bar-height;
 		z-index: 99;
@@ -105,7 +107,8 @@ body.white-shade-mask .body-shade-mask {
 
 .main-navigation {
 	position: fixed;
-	top: 0; left: 0;
+	top: 0;
+	left: 0;
 	right: 0;
 	height: $header-height;
 	z-index: 150;
@@ -121,11 +124,10 @@ body.white-shade-mask .body-shade-mask {
 		}
 	}
 
-	&::after{
+	&::after {
 		content: '';
 		display: block;
 		position: absolute;
-
 		bottom: 0;
 		left: 0;
 		right: 0;
@@ -137,15 +139,12 @@ body.white-shade-mask .body-shade-mask {
 		content: '';
 		display: block;
 		position: absolute;
-
 		bottom: 0;
 		left: 0;
 		right: 0;
-
 		z-index: 1;
 		height: 10px;
 		overflow: hidden;
-
 		//border-radius: 10% / 10px;
 		background: #ccc;
 		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
@@ -155,8 +154,10 @@ body.white-shade-mask .body-shade-mask {
 
 .prompt-layer {
 	position: fixed;
-	top: 0; bottom: 0;
-	left: 0; right: 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 201;
 	overflow: auto;
@@ -171,11 +172,12 @@ body.media-viewer-open .window-container {
 	}
 }
 
-
 .window-container {
 	position: fixed;
-	top: $header-height; bottom: 0;
-	left: 0; right: 0;
+	top: $header-height;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	background-color: rgba(0, 0, 0, 0.3);
 	z-index: 100;
 	overflow: auto;
@@ -187,21 +189,22 @@ body.media-viewer-open .window-container {
 		margin: 20px auto;
 		background-color: white;
 
-		.window-header{
+		.window-header {
 			.title {
-				span{
+				span {
 					color: #3fb3f6;
 
 					&:after {
-					    content: ' / ';
-					    color: #b8b8b8;
+						content: ' / ';
+						color: #b8b8b8;
 					}
 
 					&:last-of-type:after {
-					    content: '';
+						content: '';
 					}
+
 					&:last-of-type {
-					    color: #b8b8b8;
+						color: #b8b8b8;
 					}
 				}
 			}
