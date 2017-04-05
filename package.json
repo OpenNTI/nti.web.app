@@ -30,6 +30,7 @@
     "autoprefixer": "^6.3.3",
     "babel-core": "^6.1.0",
     "babel-eslint": "^7.0.0",
+    "babel-jest": "^19.0.0",
     "babel-loader": "^6.2.0",
     "babel-plugin-transform-runtime": "^6.1.0",
     "babel-polyfill": "^6.1.0",
@@ -54,6 +55,8 @@
     "html-loader": "^0.4.0",
     "imports-loader": "^0.6.5",
     "in-publish": "^2.0.0",
+    "jest": "^19.0.2",
+    "jest-junit": "^1.4.0",
     "json-loader": "^0.5.1",
     "moment": "^2.12.0",
     "node-natural-sort": "^0.8.6",
@@ -93,5 +96,19 @@
     "webpack-dev-server": "^1.8.2",
     "whatwg-fetch": "^1.0.0",
     "xregexp": "^3.1.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!**/*.spec.js"
+    ],
+    "coverageDirectory": "reports/coverage",
+    "coverageReporters": ["text", "lcov", "cobertura"],
+    "roots": ["<rootDir>/src/"],
+    "testResultsProcessor": "./node_modules/jest-junit"
+  },
+  "jest-junit": {
+    "output": "reports/test-results/index.xml"
   }
 }
