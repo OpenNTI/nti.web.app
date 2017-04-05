@@ -1,5 +1,6 @@
 /*eslint strict:0*/
 'use strict';
+const {worker} = require('cluster');
 
 const logger = require('./logger');
 
@@ -9,19 +10,23 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 
 	const WebpackServer = require('webpack-dev-server');
 
-	const port = config.port;
+	const {debug = false, port} = config;
 	const devPort = config['webpack-dev-server'] || 0;
 
 	const webpackConfig = Object.assign({}, webpackConfigFile);
 
 	webpackConfig.output.path = '/';
-	webpackConfig.output.publicPath = '/app/';
+	webpackConfig.output.publicPath = config.basepath;
 	webpackConfig.output.filename = 'js/index.js';
 	webpackConfig.entry = './src/main/js/index.js';
 
 	const webpackServer = new WebpackServer(webpack(webpackConfig), {
 		contentBase: port,
 		//hot: true,
+		// For webpack2 uncomment this block: (and delete contentBase line)
+		// proxy: {
+		// 	'*': '//localhost:' + port
+		// },
 
 		noInfo: false,
 		quiet: false,
@@ -32,17 +37,18 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 		publicPath: '/',
 
 		stats: {
-			version: true,
-			hash: true,
-			timings: true,
+			version: debug,
+			hash: debug,
+			timings: debug,
 
 			assets: false,
 
-			chunks: true,
+			chunks: debug,
 			chunkModules: false,
 			chunkOrigins: false,
 
 			modules: false,
+			children: false,
 
 			// cached: false,
 			// cachedAssets: false,
@@ -66,6 +72,11 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 				}
 
 				logger.info('WebPack Dev Server Started');
+			});
+
+			worker.on('disconnect', () => {
+				logger.info('Shutting down Webpack Dev Server');
+				webpackServer.close();
 			});
 		}
 	};

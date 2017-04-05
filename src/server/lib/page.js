@@ -1,82 +1,71 @@
 /*eslint strict: 0*/
 'use strict';
-const logger = require('./logger');
-
 const url = require('url');
-const Path = require('path');
-const fs = require('fs');
 
-const SITE_ASSETS = '/site-assets/';
+const logger = require('./logger');
+const {resolveTemplateFile, getModules, getTemplate} = require('./utils');
 
 const isRootPath = /^\/(?!\/).*/;
 const basepathreplace = /(manifest|src|href)="(.*?)"/igm;
 const configValues = /<\[cfg\:([^\]]*)\]>/igm;
+const injectConfig = (cfg, orginal, prop) => cfg[prop] || 'MissingConfigValue';
 
-function injectConfig (cfg, orginal, prop) {
-	return cfg[prop] || 'MissingConfigValue';
-}
 
-function isFile (file) {
-	try {
-		return fs.statSync(file).isFile();
-	} catch (e) {
-		return false;
-	}
-}
 
 exports.getPage = function getPage () {
-	let template;
-	let scriptFilename = 'js/index.js';
-	let revision = require('./git-revision');
+	const templateFile = resolveTemplateFile();
+	let warnedAboutChunks = false;
 
-	try {
-
-		let file = Path.resolve(__dirname, '../../client/index.html'); //production
-		if (!isFile(file)) {
-			file = Path.resolve(__dirname, '../../main/index.html'); //dev
+	function warnAboutChunks (e) {
+		if (!warnedAboutChunks) {
+			warnedAboutChunks = true;
+			logger.warn('Could not resolve chunk names: %s', e.message || e);
 		}
-
-		template = fs.readFileSync(file, 'utf8');
-	} catch (er) {
-		logger.error('%s', er.stack || er.message || er);
-		template = 'Could not load page template.';
 	}
 
 
 	return (basePath, req, clientConfig) => {
-		let u = url.parse(req.url);
-		let manifest = u.query === 'cache' ? '<html manifest="/manifest.appcache"' : '<html';
+		const ScriptFilenameMap = { index: 'js/index.js' };
+		const u = url.parse(req.url);
+		const manifest = u.query === 'cache' ? '<html manifest="/manifest.appcache"' : '<html';
 
-		let cfg = Object.assign({revision}, clientConfig.config || {});
-		let html = '';
+		return Promise.all([
+			getTemplate(templateFile),
+			getModules()
+				.catch(warnAboutChunks)
+		])
+			.then(([template = 'Bad Template', modules]) => {
+				if (modules != null) {
+					Object.assign(ScriptFilenameMap, modules);
+				}
 
-		let basePathFix = (original, attr, val) => {
-			let part = `${attr}="`;
+				const cfg = Object.assign({}, clientConfig.config || {});
 
-			if (!isRootPath.test(val) || val.startsWith(basePath) || val.startsWith(SITE_ASSETS)) {
-				part += `${val}"`;
-			} else {
-				part += `${(basePath || '/')}${val.substr(1)}"`;
-			}
+				const basePathFix = (original, attr, val) => {
+					const part = `${attr}="`;
 
-			return part;
-		};
+					if (!isRootPath.test(val) || val.startsWith(basePath)) {
+						return `${part}${val}"`;
+					}
 
-		// let basePathFix = (original, attr, val) => attr + '="' +
-		// 		(isRootPath.test(val) ? (basePath || '/') + val.substr(1) : val) + '"';
+					return `${part}${(basePath || '/')}${val.substr(1)}"`;
+				};
 
-		html += clientConfig.html;
 
-		//template.replace('<!-- x-itunes -->', `<meta name="apple-itunes-app" content="app-id=${appleAppId}" />`)
+				const html = /*rendererdHtml +*/ clientConfig.html;
 
-		let out = template
-				.replace(/<html/, manifest)
-				.replace(configValues, injectConfig.bind(this, cfg))
-				.replace(basepathreplace, basePathFix)
-				.replace(/<!--html:server-values-->/i, html)
-				.replace(/resources\/styles\.css/, 'resources/styles.css?rel=' + encodeURIComponent(scriptFilename))
-				.replace(/js\/index\.js/, scriptFilename);
+				let out = template
+						.replace(/<html/, manifest)
+						.replace(configValues, injectConfig.bind(this, cfg))
+						.replace(basepathreplace, basePathFix)
+						.replace(/<!--html:server-values-->/i, html)
+						.replace(/resources\/styles\.css/, 'resources/styles.css?rel=' + encodeURIComponent(ScriptFilenameMap.index));
 
-		return out;
+				for (let script of Object.keys(ScriptFilenameMap)) {
+					out = out.replace(new RegExp(`js\\/${script}\\.js`), ScriptFilenameMap[script]);
+				}
+
+				return out;
+			});
 	};
 };
