@@ -61,9 +61,37 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		});
 
 		window.addEventListener('scroll', scroll);
-
+		this.initClipboardListener();
 
 		Ext.EventManager.onWindowResize(me.onWindowResize, me);
+	},
+
+	/*
+	 * Listens for the user copying to clipboard and sets the text/html
+	 * clipboard data to an appropriate value. This is necessary to work
+	 * around Webkit's implementation of ClipboardEvent.clipboardData:
+	 * https://bugs.webkit.org/show_bug.cgi?id=19893
+	 */
+	initClipboardListener: function () {
+		const getSelectionHtml = (doc) => {
+			let html;
+
+			if (window.getSelection().rangeCount) {
+				const container = doc.createElement('div');
+				for (let i = 0; i < window.getSelection().rangeCount; i++) {
+					container.appendChild(window.getSelection().getRangeAt(i).cloneContents());
+				}
+				html = container.innerHTML;
+			}
+
+			return html;
+		};
+
+		window.addEventListener('copy', e => {
+			e.clipboardData.setData('text/plain', window.getSelection().toString());
+			e.clipboardData.setData('text/html', getSelectionHtml(this.getDocumentElement()));
+			e.preventDefault();
+		});
 	},
 
 	onWindowResize: function () {
