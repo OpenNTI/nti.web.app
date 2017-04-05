@@ -106,7 +106,8 @@
     ],
     "coverageDirectory": "reports/coverage",
     "coverageReporters": ["text", "lcov", "cobertura"],
-    "roots": ["<rootDir>/src/"],
+    "moduleDirectories": ["<rootDir>/src/main/js","node_modules"],
+    "roots": ["<rootDir>/src/main/js"],
     "testResultsProcessor": "./node_modules/jest-junit"
   },
   "jest-junit": {
