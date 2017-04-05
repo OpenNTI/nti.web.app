@@ -49,6 +49,7 @@
     "eslint-config-nti-codestyle-js": "^1.1.0",
     "eslint-config-nti-codestyle-jsx": "^1.0.0",
     "exports-loader": "^0.6.2",
+    "extjs": "4.2.0-nti",
     "extract-text-webpack-plugin": "^1.0.0",
     "file-loader": "^0.9.0",
     "formatter.js": "^0.1.5",
