@@ -29,7 +29,7 @@ exports = module.exports =
 	name: 'browser',
 	output: {
 		path: outPath + 'client/',
-		filename: 'js/index.js',
+		filename: 'js/[name]-[hash].js',
 		chunkFilename: 'js/[hash]-[id].js',
 		publicPath: publicPath
 	},
