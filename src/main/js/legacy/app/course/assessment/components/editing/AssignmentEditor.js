@@ -32,7 +32,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			pageSource: new FakePageSource(pageSource),
 			onDeleted: () => this.deletedAssignment(),
 			gotoRoot: () => this.gotoRoot(),
-			previewAssignment: () => this.gotoPreview()
+			previewAssignment: () => this.gotoPreview(),
+			onDueDateUpdate: () => this.updateAssignment()
 		});
 	},
 
