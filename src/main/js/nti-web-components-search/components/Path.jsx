@@ -14,7 +14,7 @@ export default class Path extends React.Component {
 						pathObject.map((path, index) => {
 							if (index === 0) {
 								return <span key={index}>{path.label}</span>;
-							} else {
+							} else if(index !== pathObject.length - 1) {
 								return <span key={index}> &#8226; {path.label}</span>;
 							}
 						})
