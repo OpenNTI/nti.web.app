@@ -18,6 +18,10 @@ export default class Fragments extends React.Component {
 			return {__html: fragment};
 		}
 
+		function createAnotherFragment (fragment) {
+			return {__html: ' ... ' + fragment};
+		}
+
 		function navigateToFragment (fragment) {
 			resolveNavigateToSearchHit(hit, fragment)
 				.then(({obj, fragIndex, containerId}) => {
@@ -32,7 +36,11 @@ export default class Fragments extends React.Component {
 							function navigate () {
 								navigateToFragment(fragment);
 							}
-							return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createFragment(fragment.text)} onClick={navigate} />;
+							if(index === 0) {
+								return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createFragment(fragment.text)} onClick={navigate} />;
+							} else {
+								return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createAnotherFragment(fragment.text)} onClick={navigate} />;
+							}
 						})
 					}
 			</div>

@@ -1,10 +1,11 @@
 .hit-fragment {
 	margin-bottom: 5px;
+	display: inline;
 }
 
 .hit-fragment em {
-	color: black;
-	font-weight: bold;
+	color: #757474;
+	font-weight: 700;
 	font-style: normal;
 }
 
@@ -15,6 +16,8 @@
 	font-size: 14px;
 	line-height: 25px;
 	color: #757474;
+	text-align: left;
+	width: 600px;
 }
 
 .hit-path {
@@ -27,9 +30,9 @@
 .hit-title {
 	font-family: "Open Sans";
 	font-size: 18px;
-	font-weight: 600;
+	font-weight: 500;
 	line-height: 24px;
-	color: #494949;
+	color: #3FB3F6;
 }
 
 .search-advanced-menu-react.search-advanced-menu {
