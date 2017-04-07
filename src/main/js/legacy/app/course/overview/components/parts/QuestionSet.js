@@ -189,11 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.addCls('assignment');
 		this.setAsNotStarted();
 
-		if (this.inEditMode) {
-			status.enableEditing();
-		} else {
-			status.disableEditing();
-		}
+		status.enableEditing();
 
 		if (titleEl) {
 			titleEl.update(assignment.get('title'));
