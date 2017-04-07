@@ -64,55 +64,6 @@
 	min-height: 84px;
 }
 
-.loaded {
-	animation: fadein 2s;
-	-moz-animation: fadein 2s;
-	/* Firefox */
-	-webkit-animation: fadein 2s;
-	/* Safari and Chrome */
-	-o-animation: fadein 2s;
-	/* Opera */
-}
-@keyframes fadein {
-	from {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
-}
-@-moz-keyframes fadein {
-	/* Firefox */
-	from {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
-}
-@-webkit-keyframes fadein {
-	/* Safari and Chrome */
-	from {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
-}
-@-o-keyframes fadein {
-	/* Opera */
-	from {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
-}
-
 .show-more-button {
 	background: #3fb3f6;
 	color: #fff;
@@ -129,3 +80,53 @@
 	margin-bottom: 10px;
 	border: 0;
 }
+// .pagination-container {
+// 	height: 40px;
+// 	padding-left: 0;
+// }
+//
+// .pagination-item {
+// 	border: 1px solid #EFEFEF;
+// 	display: inline-block;
+// 	margin-right: 10px;
+// 	color: #B8B8B8;
+// 	line-height: 19px;
+// 	height: 40px;
+// 	width: 40px;
+// 	cursor: pointer;
+//
+// 	&.active {
+// 		color: #FFFFFF;
+// 		background-color: #3FB3F6;
+// 	}
+// }
+//
+// .page-num {
+// 	height: 19px;
+// 	width: 8px;
+// 	font-family: "Open Sans";
+// 	font-size: 14px;
+// 	font-weight: bold;
+// 	display: inline-block;
+// 	padding: 10px 16px 11px;
+// }
+//
+// .next-results-page {
+// 	display: inline-block;
+// 	margin-right: 10px;
+// 	color: #B8B8B8;
+// 	line-height: 19px;
+// 	height: 40px;
+// 	width: 40px;
+// 	cursor: pointer;
+// }
+//
+// .next-results-page-symbol {
+// 	height: 19px;
+// 	width: 8px;
+// 	font-family: "Open Sans";
+// 	font-size: 14px;
+// 	font-weight: bold;
+// 	display: inline-block;
+// 	padding: 10px 16px 11px;
+// }
