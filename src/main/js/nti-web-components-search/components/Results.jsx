@@ -53,6 +53,7 @@ export default class SearchResults extends React.Component {
 
 	componentDidUpdate (prevProps, prevState) {
 		if(prevProps.hits !== this.props.hits) {
+			this.state = {loaded: false, hits: []};
 			const {hits = [], getBreadCrumb} = this.props;
 			this.getHitData(hits, getBreadCrumb);
 		}
@@ -83,6 +84,12 @@ export default class SearchResults extends React.Component {
 				<div className={cls}>
 					{hits.map(this.renderHit)}
 					{showMoreButton &&
+						// <ul className="pagination-container">
+						// 	<li className="pagination-item active"><a className="page-num">1</a></li>
+						// 	<li className="pagination-item"><a className="page-num">2</a></li>
+						// 	<li className="next-results-page" onClick={showNext}><a className="next-results-page-symbol">&gt;</a></li>
+						// </ul>
+
 						<button className="show-more-button" onClick={showNext}>Show More</button>
 					}
 					{errorLoadingText &&
