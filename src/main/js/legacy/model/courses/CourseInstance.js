@@ -115,6 +115,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__instanceEnrollment;
 	},
 
+
+	prepareData () {
+		return this.__precacheEntry()
+			.then(() => this);
+	},
+
 	__precacheEntry: function () {
 		var p = this.precachePromise,
 			me = this,
@@ -591,25 +597,29 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		//the enrollment instance shouldn't change so we can cache this logic
 		if (!me.__findWrapper) {
-			me.__findWrapper = new Promise(function (fulfill, reject) {
-				var found = false,
-					enrollment = me.getEnrollment();
+			me.__findWrapper = new Promise((fulfill) => {
+				const enrollment = this.getEnrollment();
 
 				if (enrollment) {
-					found = true;
 					fulfill(enrollment);
+				} else if (this.hasLink('UserCoursePreferredAccess')) {
+					Service.request(me.getLink('UserCoursePreferredAccess'))
+						.then((resp) => {
+							fulfill(ParseUtils.parseItems(JSON.parse(resp))[0]);
+						});
 				} else {
 					me.stores.forEach(function (obj) {
 						if (obj.isModel) {
 							fulfill(obj);
-							found = true;
 						}
 					});
 				}
-
-				if (!found) {
-					console.error('The Enrollment instance wasnt in the course instances stores');
+			}).then((enrollment) => {
+				if (!enrollment) {
+					console.error('The Enrollment instance wasnt in the course instance stores');
 				}
+
+				return enrollment;
 			});
 		}
 
