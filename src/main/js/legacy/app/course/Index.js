@@ -156,37 +156,31 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			me.getActiveCourse = Promise.resolve(me.activeBundle);
 		} else {
 			me.clearRouteStates();
-			me.getActiveCourse = me.CourseStore.onceLoaded()
-				.then(function () {
-					var current;
-					//if the course was cached, no need to look for it
-					if (course && (course.getId() || '') === ntiid) {
-						current = course;
-					} else {
-						//find which ever course whose ntiid matches
-						current = me.CourseStore.findCourseBy(function (enrollment) {
-							var instance = enrollment.get('CourseInstance'),
-								instanceId = instance.getId() || '',
-								enrollmentId = enrollment.get('NTIID') || '';
 
-							return instanceId === ntiid || enrollmentId === ntiid;
-						});
-					}
+			me.getActiveCourse = new Promise((fulfill) => {
+				if (course) {
+					fulfill(course);
+				} else {
+					Service.getObject(ntiid)
+						.then(c => c.prepareData())
+						.then(fulfill)
+						.catch(() => fulfill(null));
+				}
+			}).then((current) => {
+				if (!current) {
+					return Promise.reject('No Course found for: ', ntiid);
+				}
 
-					if (!current) {
-						return Promise.reject('No Course found for:', ntiid);
-					}
+				if (current instanceof NextThought.model.courses.CourseInstanceAdministrativeRole) {
+					this.isAdmin = true;
+				} else {
+					this.isAdmin = false;
+				}
 
-					if (current instanceof NextThought.model.courses.CourseInstanceAdministrativeRole) {
-						me.isAdmin = true;
-					} else {
-						me.isAdmin = false;
-					}
+				this.activeBundle = current;
 
-					me.activeBundle = current.get('CourseInstance') || current;
-
-					return current;
-				});
+				return current;
+			});
 		}
 
 		return me.getActiveCourse;
