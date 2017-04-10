@@ -3,7 +3,7 @@ import {scoped} from 'nti-lib-locale';
 import PropTypes from 'prop-types';
 
 import Controls from './Controls';
-import Readings, {KEY as READINGS} from './Readings';
+import Readings, {KEY as READINGS} from './readings';
 
 const DEFAULT_STRINGS = {
 	'readings': 'Readings'
@@ -17,7 +17,8 @@ export default class CourseResources extends React.Component {
 	static propTypes = {
 		course: PropTypes.object,
 		createResource: PropTypes.func,
-		gotoResource: PropTypes.func
+		gotoResource: PropTypes.func,
+		filter: PropTypes.func
 	}
 
 	static defaultProps = {
