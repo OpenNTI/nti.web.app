@@ -71,6 +71,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	 * clipboard data to an appropriate value. This is necessary to work
 	 * around Webkit's implementation of ClipboardEvent.clipboardData:
 	 * https://bugs.webkit.org/show_bug.cgi?id=19893
+	 * According to the spec, the default behavior of setting clipboardData
+	 * does not happen until after the event listener is called, so we
+	 * cannot detect its existence beforehand and cannot easily detect
+	 * whether this is necessary or not without resorting to UA sniffing,
+	 * so the listener is added unconditionally.
 	 */
 	initClipboardListener: function () {
 		const getSelectionHtml = (doc) => {
