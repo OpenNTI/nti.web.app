@@ -38,7 +38,9 @@ exports = module.exports =
 	// devtool: PROD ? 'hidden-source-map' : 'source-map',
 	devtool: 'source-map',
 
-	entry: './src/main/js/index.js',
+	entry: {
+		index: './src/main/js/index.js'
+	},
 
 	target: 'web',
 
