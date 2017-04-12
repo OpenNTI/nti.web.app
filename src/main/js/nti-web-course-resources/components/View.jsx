@@ -52,7 +52,7 @@ export default class CourseResources extends React.Component {
 					<span className="header">{t('readings')}</span>
 					<Controls onCreate={this.onCreate} />
 				</div>
-				<Readings filter={filter} course={course} gotoResource={this.gotoResource} />
+				<Readings filter={filter} course={course} gotoResource={this.gotoResource} onCreate={this.onCreate} />
 			</div>
 		);
 	}

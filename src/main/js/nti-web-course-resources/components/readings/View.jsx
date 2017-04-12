@@ -57,12 +57,13 @@ function getReadings (course) {
 
 
 Readings.propTypes = {
-	course: PropTypes.object,
-	filter: PropTypes.func,
-	gotoResource: PropTypes.func
+	course: React.PropTypes.object,
+	filter: React.PropTypes.func,
+	gotoResource: React.PropTypes.func,
+	onCreate: React.PropTypes.func
 };
 
-export default function Readings ({course, filter, gotoResource}) {
+export default function Readings ({course, filter, gotoResource, onCreate}) {
 	const readings = getReadings(course).filter((x) => filter(x.title));
 
 	const renderItem = (item) => {
@@ -71,7 +72,13 @@ export default function Readings ({course, filter, gotoResource}) {
 		);
 	};
 
-	return (
+	const emptyState = () => (
+		<div className="empty-resources">
+			This folder is empty. To create a new reading, <span onClick={onCreate}>click here.</span>
+		</div>
+	);
+
+	return readings.length !== 0 ? (
 		<Table.ListTable
 			className="course-resources-readings ascending"
 			headerClassName="course-resources-header"
@@ -80,5 +87,5 @@ export default function Readings ({course, filter, gotoResource}) {
 			renderItem={renderItem}
 			cells={COLS}
 		/>
-	);
+	) : emptyState(onCreate);
 }
