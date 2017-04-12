@@ -387,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 	createGradeMenu: function () {
 		//Wasn't sure if this needs to be translated or not?
-		var items = NextThought.model.courseware.Grade.Items;
+		var items = NextThought.model.courseware.Grade.getLetterItems();
 
 		this.gradeMenu = Ext.widget('menu', {
 			cls: 'letter-grade-menu',

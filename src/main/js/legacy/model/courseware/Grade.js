@@ -37,17 +37,18 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 			return display.join(' ');
 		},
 
-
-		Items: [
-			{text: '-'},
-			{text: 'A'},
-			{text: 'B'},
-			{text: 'C'},
-			{text: 'D'},
-			{text: 'F'},
-			{text: 'I'},
-			{text: 'W'}
-		]
+		getLetterItems () {
+			return [
+				{text: '-'},
+				{text: 'A'},
+				{text: 'B'},
+				{text: 'C'},
+				{text: 'D'},
+				{text: 'F'},
+				{text: 'I'},
+				{text: 'W'}
+			];
+		}
 	},
 
 	//TODO: pull this out into its own model

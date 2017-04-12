@@ -943,7 +943,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 			},
 			//Don't know if these need to be translated
-			items: NextThought.model.courseware.Grade.Items
+			items: NextThought.model.courseware.Grade.getLetterItems()
 		});
 	},
 
