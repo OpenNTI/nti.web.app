@@ -44,7 +44,7 @@ export default class ReadingListItem extends React.Component {
 		const iconFallback = (iconUrl) => iconUrl || '/app/resources/images/file-icons/generic.png';
 
 		return (
-			<div className="meta">
+			<div className="meta" role="cell">
 				<div className="icon" style={{backgroundImage: `url(${iconFallback(icon)})`}} />
 				<div className="wrap">
 					<div className="title">{title}</div>
@@ -60,7 +60,7 @@ export default class ReadingListItem extends React.Component {
 		const {isPublished} = reading;
 
 		return (
-			<div className="published">
+			<div className="published" role="cell">
 				{t(isPublished ? 'published' : 'draft')}
 			</div>
 		);
@@ -71,7 +71,7 @@ export default class ReadingListItem extends React.Component {
 		const lastModified = reading.getLastModified();
 
 		return (
-			<div className="modified">
+			<div className="modified" role="cell">
 				<DateTime date={lastModified} />
 			</div>
 		);
