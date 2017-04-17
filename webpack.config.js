@@ -36,7 +36,7 @@ exports = module.exports =
 
 	cache: true,
 	// devtool: PROD ? 'hidden-source-map' : 'source-map',
-	devtool: 'source-map',
+	devtool: 'cheap-module-source-map',
 
 	entry: {
 		index: './src/main/js/index.js'
