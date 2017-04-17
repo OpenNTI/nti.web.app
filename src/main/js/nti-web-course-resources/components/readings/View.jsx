@@ -48,9 +48,9 @@ Readings.propTypes = {
 export default function Readings ({course, filter, gotoResource}) {
 	const readings = getReadings(course).filter((x) => filter(x.title));
 
-	const renderRow = (row, cols) => {
+	const renderItem = (item, cols) => {
 		return (
-			<ListItem reading={row} gotoResource={gotoResource} columns={cols} />
+			<ListItem reading={item} gotoResource={gotoResource} columns={cols} />
 		);
 	};
 
@@ -94,9 +94,9 @@ export default function Readings ({course, filter, gotoResource}) {
 	return readings.length !== 0 ? (
 		<Table.ListTable
 			classes={tableClasses}
-			rows={readings}
+			items={readings}
 			columns={columns}
-			renderRow={renderRow}
+			renderItem={renderItem}
 		/>
 	) : <EmptyState
 			header="This folder is empty."
