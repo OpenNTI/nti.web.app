@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import {scoped} from 'nti-lib-locale';
+import PropTypes from 'prop-types';
 
 import {ControlBar, Button} from 'nti-web-commons';
 
@@ -22,14 +23,14 @@ export default class CourseOverviewControls extends React.Component {
 	static EDITING = EDITING
 
 	static propTypes = {
-		gotoResources: React.PropTypes.func,
-		switchToEdit: React.PropTypes.func,
-		switchToPreview: React.PropTypes.func,
-		showAuditLogs: React.PropTypes.func,
-		mode: React.PropTypes.oneOf([PREVIEW, EDITING]),
-		canDoAdvancedEditing: React.PropTypes.bool,
-		hide: React.PropTypes.bool,
-		disabled: React.PropTypes.bool
+		gotoResources: PropTypes.func,
+		switchToEdit: PropTypes.func,
+		switchToPreview: PropTypes.func,
+		showAuditLogs: PropTypes.func,
+		mode: PropTypes.oneOf([PREVIEW, EDITING]),
+		canDoAdvancedEditing: PropTypes.bool,
+		hide: PropTypes.bool,
+		disabled: PropTypes.bool
 	}
 
 	static defaultProps = {

@@ -1,5 +1,6 @@
 import React from 'react';
 import {scoped} from 'nti-lib-locale';
+import PropTypes from 'prop-types';
 
 import Controls from './Controls';
 import Readings, {KEY as READINGS} from './Readings';
@@ -14,9 +15,9 @@ export default class CourseResources extends React.Component {
 	static READINGS = READINGS
 
 	static propTypes = {
-		course: React.PropTypes.object,
-		createResource: React.PropTypes.func,
-		gotoResource: React.PropTypes.func
+		course: PropTypes.object,
+		createResource: PropTypes.func,
+		gotoResource: PropTypes.func
 	}
 
 	static defaultProps = {

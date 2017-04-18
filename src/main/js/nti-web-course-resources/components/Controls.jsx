@@ -1,10 +1,11 @@
 import React from 'react';
 import {Button} from 'nti-web-commons';
+import PropTypes from 'prop-types';
 
 export default class ResourceControls extends React.Component {
 	static propTypes = {
-		onCreate: React.PropTypes.func,
-		onSearch: React.PropTypes.func
+		onCreate: PropTypes.func,
+		onSearch: PropTypes.func
 	}
 
 

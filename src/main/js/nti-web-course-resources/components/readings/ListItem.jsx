@@ -1,6 +1,7 @@
 import React from 'react';
 import {scoped} from 'nti-lib-locale';
 import {DateTime} from 'nti-web-commons';
+import PropTypes from 'prop-types';
 
 const DEFAULT_TEXT = {
 	published: 'Published',
@@ -12,8 +13,8 @@ const t = scoped('READING_LIST_ITEM', DEFAULT_TEXT);
 
 export default class ReadingListItem extends React.Component {
 	static propTypes = {
-		reading: React.PropTypes.object,
-		gotoResource: React.PropTypes.func
+		reading: PropTypes.object,
+		gotoResource: PropTypes.func
 	}
 
 	gotoResource = () => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import {scoped} from 'nti-lib-locale';
 import {Table} from 'nti-web-commons';
+import PropTypes from 'prop-types';
 
 import ListItem from './ListItem';
 
@@ -56,9 +57,9 @@ function getReadings (course) {
 
 
 Readings.propTypes = {
-	course: React.PropTypes.object,
-	filter: React.PropTypes.func,
-	gotoResource: React.PropTypes.func
+	course: PropTypes.object,
+	filter: PropTypes.func,
+	gotoResource: PropTypes.func
 };
 
 export default function Readings ({course, filter, gotoResource}) {
