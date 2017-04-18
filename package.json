@@ -34,14 +34,15 @@
     "babel-loader": "^6.2.0",
     "babel-plugin-transform-runtime": "^6.1.0",
     "babel-polyfill": "^6.1.0",
-    "babel-preset-es2015": "^6.1.0",
     "babel-preset-env": "^1.1.4",
+    "babel-preset-es2015": "^6.1.0",
     "babel-preset-react": "^6.1.0",
     "babel-preset-stage-1": "^6.1.0",
     "babel-register": "^6.3.13",
     "baggage-loader": "^0.2.4",
     "clamp-js": "^0.7.0",
     "classnames": "^2.2.3",
+    "create-react-class": "^15.5.2",
     "css-loader": "^0.25.0",
     "detect-zoom": "^1.0.2",
     "durationjs": "1.1.1",
@@ -80,9 +81,10 @@
     "null-loader": "^0.1.0",
     "postcss-cli": "^2.5.1",
     "postcss-loader": "^0.13.0",
+    "prop-types": "^15.5.8",
     "rangy": "^1.3.0",
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
     "react-proxy-loader": "^0.3.4",
     "resolve-url-loader": "^1.4.3",
     "sass-loader": "^4.0.0",
@@ -105,9 +107,18 @@
       "!**/*.spec.js"
     ],
     "coverageDirectory": "reports/coverage",
-    "coverageReporters": ["text", "lcov", "cobertura"],
-    "moduleDirectories": ["<rootDir>/src/main/js","node_modules"],
-    "roots": ["<rootDir>/src/main/js"],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "cobertura"
+    ],
+    "moduleDirectories": [
+      "<rootDir>/src/main/js",
+      "node_modules"
+    ],
+    "roots": [
+      "<rootDir>/src/main/js"
+    ],
     "testResultsProcessor": "./node_modules/jest-junit"
   },
   "jest-junit": {

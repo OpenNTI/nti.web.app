@@ -1,6 +1,8 @@
 const Ext = require('extjs');
+const PropTypes = require('prop-types');
 const React = require('react');
 const ReactDOM = require('react-dom');
+const createReactClass = require('create-react-class');
 const {getService} = require('nti-web-client');
 const ContextStore = require('legacy/app/context/StateStore');
 
@@ -9,18 +11,18 @@ const unwrap = x => (x && x.default) ? x.default : x;
 /*
  * Bridge React Component so we can pass environment contexts down to components in React.
  */
-const Bridge = React.createClass({
+const Bridge = createReactClass({
 
 	propTypes: {
-		bundle: React.PropTypes.object,
-		children: React.PropTypes.any
+		bundle: PropTypes.object,
+		children: PropTypes.any
 	},
 
 	childContextTypes: {
-		defaultEnvironment: React.PropTypes.object,
-		routerLinkComponent: React.PropTypes.func,
-		router: React.PropTypes.object,
-		course: React.PropTypes.object
+		defaultEnvironment: PropTypes.object,
+		routerLinkComponent: PropTypes.func,
+		router: PropTypes.object,
+		course: PropTypes.object
 	},
 
 	getChildContext () {
