@@ -61,7 +61,11 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					},
 					showNext: () => {
 						this.loadNextPage();
-					}
+					},
+					loadPage: (page) => {
+						this.loadSearchPage(page);
+					},
+					numPages: 1
 				}
 			]);
 		} else {
@@ -224,6 +228,12 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.clearResults();
 
+		if(this.useNewSearch) {
+			this.Results.setProps({
+				numPages: 1
+			});
+		}
+
 		this.loadSearchPage(1);
 	},
 
@@ -277,7 +287,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	showNext: function () {
 		if(this.useNewSearch) {
 			this.Results.setProps({
-				showMoreButton: true
+				showMoreButton: true,
+				numPages: this.Results.getProps().numPages + 1
 			});
 		} else {
 			this.Results.showNext(this.loadNextPage.bind(this));
@@ -310,6 +321,20 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	loadSearchPage: function (page) {
+		if(this.useNewSearch) {
+			if(this.Results.getProps().numPages !== 1 && this.Results.getProps().numPages !== page) {
+				this.Results.setProps({
+					currentPage: page,
+					// quick fix for the extra page that gets added when load finishes
+					numPages: this.Results.getProps().numPages - 1
+				});
+			} else {
+				this.Results.setProps({
+					currentPage: page
+				});
+			}
+		}
+
 		var search = this.currentSearch,
 			accepts = this.getAcceptFilter(search.filter);
 
@@ -325,6 +350,20 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	loadNextPage: function () {
 		if (!this.nextPageLink) {
 			return this.loadSearchPage(1);
+		}
+
+		if(this.useNewSearch) {
+			if(this.Results.getProps().numPages !== this.Results.getProps().currentPage + 1) {
+				this.Results.setProps({
+					currentPage: this.Results.getProps().currentPage + 1,
+					// quick fix for the extra page that gets added when load finishes
+					numPages: this.Results.getProps().numPages - 1
+				});
+			} else {
+				this.Results.setProps({
+					currentPage: this.Results.getProps().currentPage + 1
+				});
+			}
 		}
 
 		this.removeNext();
