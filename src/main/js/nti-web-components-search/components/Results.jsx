@@ -9,6 +9,7 @@ import {
 } from '../resolvers';
 
 import Hit from './Hit';
+import Pager from './Pager';
 
 function loadHitData (hit, getBreadCrumb) {
 
@@ -34,11 +35,13 @@ export default class SearchResults extends React.Component {
 		getBreadCrumb: React.PropTypes.func,
 		navigateToSearchHit: React.PropTypes.func,
 		showNext: React.PropTypes.func,
-		removeNext: React.PropTypes.func,
+		loadPage: React.PropTypes.func,
 		errorLoadingText: React.PropTypes.string,
 		emptyText: React.PropTypes.string,
 		showMoreButton: React.PropTypes.bool,
-		showLoading: React.PropTypes.bool
+		showLoading: React.PropTypes.bool,
+		currentPage: React.PropTypes.number,
+		numPages: React.PropTypes.number
 	}
 
 	constructor (props) {
@@ -68,10 +71,10 @@ export default class SearchResults extends React.Component {
 
 	render () {
 		const {loaded, hits} = this.state;
-		const {showLoading, showNext, errorLoadingText, emptyText, showMoreButton} = this.props;
+		const {showLoading, errorLoadingText, emptyText, numPages} = this.props;
 		const cls = cx('search-results', {loaded});
 
-		if(showLoading) {
+		if(showLoading || !loaded) {
 			return (
 				<div className="search-results">
 					<div className="loading-container control-item">
@@ -83,14 +86,8 @@ export default class SearchResults extends React.Component {
 			return (
 				<div className={cls}>
 					{hits.map(this.renderHit)}
-					{showMoreButton &&
-						// <ul className="pagination-container">
-						// 	<li className="pagination-item active"><a className="page-num">1</a></li>
-						// 	<li className="pagination-item"><a className="page-num">2</a></li>
-						// 	<li className="next-results-page" onClick={showNext}><a className="next-results-page-symbol">&gt;</a></li>
-						// </ul>
-
-						<button className="show-more-button" onClick={showNext}>Show More</button>
+					{loaded && !errorLoadingText && !emptyText &&
+						this.renderPages(numPages)
 					}
 					{errorLoadingText &&
 						<div className="error control-item">{errorLoadingText}</div>
@@ -108,6 +105,14 @@ export default class SearchResults extends React.Component {
 
 		return (
 			<Hit hit={hit.hit} title={hit.title} key={index} fragments={hit.fragments} path={hit.path} navigateToSearchHit={navigateToSearchHit}/>
+		);
+	}
+
+	renderPages = (pagesToShow) => {
+		const {currentPage, showNext, loadPage, showMoreButton} = this.props;
+
+		return (
+			<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>
 		);
 	}
 }
