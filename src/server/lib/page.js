@@ -9,7 +9,8 @@ const {resolveTemplateFile, getModules, getTemplate} = require('./utils');
 
 const isRootPath = RegExp.prototype.test.bind(/^\/(?!\/).*/);
 const isSiteAssets = RegExp.prototype.test.bind(/^\/site\-assets/);
-const shouldPrefixBasePath = val => isRootPath(val) && !isSiteAssets(val);
+const isFavicon = RegExp.prototype.test.bind(/^\/favicon\.ico/);
+const shouldPrefixBasePath = val => isRootPath(val) && !isSiteAssets(val) && !isFavicon(val);
 
 const basepathreplace = /(manifest|src|href)="(.*?)"/igm;
 const configValues = /<\[cfg\:([^\]]*)\]>/igm;
