@@ -399,7 +399,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 			})
 			.then(this.maybeUnmask.bind(this))
-			.then(this.setTitle.bind(this, this.notificationsView.title))
+			.then(() => this.setTitle(this.notificationsView ? this.notificationsView.title : ''))
 			.then(this.alignNavigation.bind(this));
 
 	},
@@ -426,7 +426,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 			})
 			.then(this.maybeUnmask.bind(this, this.performanceView, isActiveItem, 'root'))
-			.then(this.setTitle.bind(this, this.performanceView.title))
+			.then(() => this.setTitle(this.performanceView ? this.performanceView.title : ''))
 			.then(this.alignNavigation.bind(this));
 	},
 
