@@ -179,10 +179,14 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		if (!bundle) {
 			this.NavActions.setActiveContent(null, this.useNewSearch, this.useNewSearch);
 		} else {
-			this.LibraryActions.findBundle(bundle)
-				.then(function (bundle) {
-					navActions.setActiveContent(bundle, true);
-				});
+			if(this.useNewSearch) {
+				this.NavActions.setActiveContent(null, this.useNewSearch, this.useNewSearch);
+			} else {
+				this.LibraryActions.findBundle(bundle)
+					.then(function (bundle) {
+						navActions.setActiveContent(bundle, true);
+					});
+			}
 		}
 
 		this.currentSearch = {
