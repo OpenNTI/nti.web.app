@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	alias: ['widget.search-result-forums-communityheadlinepost', 'widget.search-result-forums-generalforumcomment'],
 
 
-	setTitle: function (record) {
+	addTitle: function (record) {
 		if (record instanceof NextThought.model.forums.CommunityHeadlinePost) {
 			return this.callParent(arguments);
 		}
