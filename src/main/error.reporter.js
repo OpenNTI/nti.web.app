@@ -51,6 +51,7 @@
 			}
 			try {
 				count = seenErrors[msg] = (seenErrors[msg] || 0) + 1;
+				//this blocks events 2-99, 101-199,... probably up the base count to see more repeated errors
 				if (count > 1 && count % 100 !== 0) {
 					return;
 				}
@@ -61,6 +62,7 @@
 						file: url,
 						line: line,
 						char: column,
+						count: count,
 						stacktrace: errObj && (errObj.stack || errObj)
 					};
 
