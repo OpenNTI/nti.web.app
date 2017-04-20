@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			href = getURL((root || '') + href);
 		}
 
-		resolveIcon(config, n)
+		resolveIcon(config, n, root)
 			.then((icon = {}) => {
 				this.data.thumbnail = icon.url;
 				this.data.extension = icon.extension;
