@@ -76,17 +76,3 @@
 		color: $tertiary-grey;
 	}
 }
-
-.empty-resources {
-	background-color: white;
-	padding: 100px 20px;
-	text-align: center;
-	font-weight: 300;
-	font-size: 30px;
-	color: $tertiary-grey;
-
-	& > span {
-		color: $primary-blue;
-		cursor: pointer;
-	}
-}
