@@ -1,5 +1,8 @@
+
+
 .chat-window {
 	@extend .nti-window;
+
 	right: 80px !important;
 	left: auto !important;
 	top: 100px !important;
@@ -14,7 +17,7 @@
 		height: 42px;
 		background-color: #2d2d2d;
 		border: none;
-		box-shadow: none;
+  		box-shadow: none;
 
 		.header-body {
 			> span {
@@ -34,11 +37,12 @@
 					&.minimize {
 						display: none;
 					}
+
+
 				}
 
 				&.has-tools {
 					padding-left: 5px;
-
 					&:after {
 						content: none;
 					}
@@ -47,14 +51,13 @@
 
 			.tools {
 				padding-right: 0;
-
-				img.tool {
+				img.tool{
 					&.settings {
 						opacity: 0.6;
 						margin-right: 5px;
 						@include sprite($chat_options);
 
-						&:hover {
+						&:hover{
 							opacity: 1;
 						}
 					}
@@ -64,24 +67,19 @@
 						opacity: 0.6;
 						margin-right: 5px;
 						@include sprite($add_people);
-
-						&:hover {
+						&:hover{
 							opacity: 1;
 						}
 					}
-
 					&.flag-for-moderation {
 						display: none;
 						margin-right: 5px;
 						@include sprite($flag-chat-13);
-
-						&:hover {
+						&:hover{
 							@include sprite($flag-chat-13_hover);
 						}
-
 						&.moderating {
-							&,
-							&:hover {
+							&,&:hover{
 								@include sprite($flag-chat-13_active);
 							}
 						}
@@ -106,10 +104,10 @@
 		& > div.gutter-entry:first-child {
 			border-radius: 5px 0 0 0;
 		}
-
 		.gutter-entry {
 			overflow: hidden;
 			position: relative;
+
 			@include bottom-etch;
 
 			img {
@@ -120,7 +118,6 @@
 				float: left;
 				margin: 3px 10px 3px 6px;
 			}
-
 			.wrapper {
 				margin: 6px 0 10px 53px;
 				width: 115px;
@@ -128,7 +125,6 @@
 				.name {
 					@include menu-label-text-treatment;
 				}
-
 				.status {
 					@include menu-label-text-treatment;
 					text-transform: none;
@@ -176,7 +172,6 @@
 					}
 				}
 			}
-
 			&.moderating {
 				.log-entry-wrapper {
 					div.message-bounding-box {
@@ -185,19 +180,22 @@
 				}
 			}
 		}
+
 	}
 
 	.chat-log-view {
-		overflow: {
+		overflow:{
 			x: hidden;
 			y: auto; //scroll;
 		}
+
 		//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
 		// REFRESHER: box-shadow syntax is:
 		// box-shadow:  none | <shadow> [,<shadow>]*
 		//	where <shadow> is defined as:
 		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 		//
+
 		.x-mask {
 			background: rgba(245,245,245,0); // Make it transparent
 		}
@@ -208,34 +206,28 @@
 
 		&.moderating {
 			.control {
-				top: 15px;
-				left: 7px;
+				top: 15px; left: 7px;
 				float: left;
 				display: inline-block;
 				width: 15px;
 				height: 15px;
 				@include icon($checkbox-14);
-
 				&:hover {
-					&::after {
+					&::after{
 						@include sprite($checkbox-14_hover);
 					}
 				}
-
-				&.checked {
-					&,
-					&:hover {
-						&::after {
+				&.checked{
+					&,&:hover {
+						&::after{
 							@include sprite($checkbox-14_active);
 						}
 					}
 				}
-
 				&.confirmFlagged {
 					display: none;
 				}
 			}
-
 			.log-entry-wrapper {
 				div.message-bounding-box {
 					margin-left: 25px;
@@ -251,17 +243,17 @@
 			font-style: italic;
 			font-weight: 600;
 
-			.message {
+			.message{
 				word-wrap: break-word;
 
 				&.more {
-					padding: 10px;
-					background-color: #3f3f3f;
-					font-size: 14px;
-					width: 160px;
-					margin: 8px auto;
-					border-radius: 5px;
-					cursor: pointer;
+					padding: 10px 10px;
+    				background-color: #3f3f3f;
+				    font-size: 14px;
+				    width: 160px;
+				    margin: 8px auto;
+				    border-radius: 5px;
+				    cursor: pointer;
 				}
 			}
 		}
@@ -271,14 +263,14 @@
 			position: relative;
 
 			&.me {
-				.avatar,
-				.name {
+				.name,
+				.avatar {
+					display: none;
+				}
+				.control{
 					display: none;
 				}
 
-				.control {
-					display: none;
-				}
 			}
 
 			.avatar-container {
@@ -306,20 +298,18 @@
 				&.flagged {
 					border: 1px solid #fd9191;
 					background: #fefefe;
-
-					.name {
+					.name{
 						color: #fd817f;
 					}
-
 					.body-text {
 						color: #fec1bf;
 						text-decoration: line-through;
 					}
-
 					&::before {
-						content: url("../images/elements/other-bubble-tip-flagged.png");
+						content: url(../images/elements/other-bubble-tip-flagged.png);
 					}
 				}
+
 				//whiteboards inside chat:
 				img {
 					display: inline-block;
@@ -332,7 +322,7 @@
 					top: 0;
 					left: -9px;
 					position: absolute;
-					content: url("../images/elements/other-bubble-tip.png");
+					content: url(../images/elements/other-bubble-tip.png);
 				}
 
 				&.me {
@@ -342,21 +332,18 @@
 					background: #fefefe;
 					border: 1px solid #e3e3e3;
 					margin: 14px;
-
 					.name {
 						display: none;
 					}
-
 					.body-text {
 						color: $secondary-grey;
 					}
-
 					&::before {
 						left: inherit;
 						top: inherit;
 						bottom: 4px;
 						right: -8px;
-						content: url("../images/elements/my-bubble-tip.png");
+						content: url(../images/elements/my-bubble-tip.png);
 					}
 				}
 
@@ -370,11 +357,11 @@
 					overflow: hidden;
 					max-width: 210px;
 				}
-
 				.body-text {
 					font-size: 10pt;
 					font-weight: 700;
 					color: #ffffff;
+
 					// break-word for most browsers works fine, but need to insert
 					// hyphens for longer bits of text, and ms workaround
 					word-wrap: break-word;
@@ -390,7 +377,6 @@
 
 	.entry-card {
 		border: none;
-
 		.mod-buttons {
 			// border-radius: 0 0 5px 5px;
 			padding: 4px 12px;
@@ -407,18 +393,18 @@
 		.chat-entry {
 			position: absolute;
 			background-color: rgba(35, 35, 35, 0.0); //transparent
-			bottom: 0;
-			right: 0;
-			left: 0;
-			z-index: 10;
-			border: none;
+			bottom: 0px;
+	  		right: 0px;
+	  		left: 0px;
+	  		z-index: 10;
+	  		border: none;
 
-			.x-mask {
-				background: rgba(63,63,63, 0.9); //TODO: find a better color.
-			}
+	  		.x-mask {
+	  			background: rgba(63,63,63, 0.9); //TODO: find a better color.
+	  		}
 
 			.entry-wrapper {
-				margin: 10px 8px;
+				margin: 10px 8px 10px 8px;
 				background-color: #3f3f3f;
 				border-radius: 5px;
 				height: 42px;
@@ -442,6 +428,7 @@
 					input {
 						padding: 5px;
 						color: $tertiary-grey;
+
 						//Make it transparent
 						background-color: rgba(35,35,35,0.0);
 						height: 30px;
@@ -467,14 +454,11 @@
 
 .chat-transcript {
 	@include divider;
-
 	.divider {
 		margin: 20px 15px;
-
 		&::after {
 			border-bottom: none;
 		}
-
 		span {
 			color: $tertiary-grey;
 		}
@@ -484,29 +468,24 @@
 		.message:not(.moderated) {
 			.control {
 				position: relative;
-				top: 15px;
-				left: 7px;
+				top: 15px; left: 7px;
 				float: left;
 				display: inline-block;
 				width: 15px;
 				height: 15px;
 				@include icon($checkbox-14);
-
 				&:hover {
-					&::after {
+					&::after{
 						@include sprite($checkbox-14_hover);
 					}
 				}
-
-				&.checked {
-					&,
-					&:hover {
-						&::after {
+				&.checked{
+					&,&:hover {
+						&::after{
 							@include sprite($checkbox-14_active);
 						}
 					}
 				}
-
 				&.confirmFlagged {
 					display: none;
 				}
@@ -515,12 +494,11 @@
 			.time {
 				margin-left: 30px;
 			}
-
 			.wrap {
 				margin-left: 100px;
 
 				.body .body-divider {
-					margin-right: 0;
+						margin-right: 0;
 				}
 			}
 		}
@@ -544,11 +522,9 @@
 
 		.wrap {
 			margin-left: 70px;
-
 			.name {
 				@include menu-label-text-treatment;
 				color: $primary-blue;
-
 				.me {
 					color: $tertiary-grey;
 				}
@@ -558,15 +534,11 @@
 				color: $primary-grey;
 				word-wrap: break-word;
 				word-break: break-word;
-
 				.body-divider {
 					margin-right: 30px;
 
 					.whiteboard-container {
-						.overlay {
-							bottom: 0;
-						}
-
+						.overlay {bottom: 0;}
 						.toolbar {
 							display: none !important;
 						}
@@ -576,35 +548,33 @@
 		}
 
 		&.moderated {
-			.body,
 			.name,
+			.body,
 			.time {
 				color: $tertiary_grey;
 			}
 		}
 
-		&.confirmFlagged,
-		&.flagged {
+		&.flagged,
+		&.confirmFlagged {
 			background: #fefefe;
-
-			.name {
+			.name{
 				color: #fd817f;
 			}
-
 			.body {
 				color: #fec1bf;
 				text-decoration: line-through;
 			}
 		}
 	}
+
+
 }
 
-#chat-dock-placeholder {
-	cursor: pointer;
-}
+#chat-dock-placeholder { cursor: pointer; }
 
-#chat-dock > .x-panel-header,
-#chat-dock-placeholder {
+#chat-dock-placeholder,
+#chat-dock > .x-panel-header{
 	background-color: $panel-background;
 	box-shadow: 0 -1px #dbdbdb, inset 0 1px #fcfcfc;
 	border-bottom: 1px solid #dfdfdf;
@@ -625,8 +595,7 @@
 
 	.count {
 		position: absolute;
-		top: 9px;
-		right: 10px;
+		top: 9px; right: 10px;
 		padding: 0 4px;
 		text-align: center;
 		min-width: 29px;
@@ -634,8 +603,11 @@
 		background: #299bdc;
 		font: normal 600 12px/17px $font;
 		color: #ffffff;
-		box-shadow: 0 1px rgba(255,255,255,0.3), inset 0 1px rgba(0,0,0,0.15), inset 0 0 1px rgba(0,0,0,0.15);
+		box-shadow: 0 1px rgba(255,255,255,0.3),
+				inset 0 1px rgba(0,0,0,0.15),
+				inset 0 0 1px rgba(0,0,0,0.15);
 	}
+
 }
 
 #chat-dock-placeholder {
@@ -645,11 +617,13 @@
 }
 
 #chat-dock-placeholder.notice-me,
-#chat-dock.notice-me > .x-panel-header {
+#chat-dock.notice-me > .x-panel-header
+{
 	background-color: #3fb3f6;
 	box-shadow: 0 -1px #d9d9d9, inset 0 1px #95ddfb;
 	border-bottom-color: #30a1f4;
 	background-image: linear-gradient(to top, #30a1f4 0%, #4ec6f8 100%);
+
 	color: #ffffff;
 	text-shadow: 0 -1px #33a4f4;
 	font-weight: 600;
@@ -659,16 +633,15 @@
 	}
 }
 
-#chat-dock-placeholder.notice-me {
+#chat-dock-placeholder.notice-me{
 	.x-header-text-container {
 		@include icon($rhp-arrow-closed, $top: 14px, $left:8px);
 	}
 }
 
 #chat-dock-placeholder.hide-arrow,
-#chat-dock.hide-arrow .x-panel-header {
+#chat-dock.hide-arrow .x-panel-header{
 	cursor: default;
-
 	.x-header-text-container {
 		&::after {
 			display: none !important;
@@ -676,7 +649,7 @@
 	}
 }
 
-.chat-dock-item {
+.chat-dock-item{
 	position: relative;
 	overflow: hidden;
 	min-height: 50px;
@@ -685,16 +658,17 @@
 		$val: opacity 0.5s, color 0.5s, background 0.5s;
 		@include experimental(transition, $val);
 	}
+
 	background: #ffffff;
 
-	.avatars {
+	.avatars{
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 50px;
 		height: 50px;
 
-		.avatar {
+		.avatar{
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -703,46 +677,38 @@
 			background-size: cover;
 			background-position: center;
 
-			&.img2,
-			&.img3,
-			&.img4 {
+			&.img2,&.img3,&.img4{
 				display: none;
 			}
 		}
 
-		&.quad {
-			.avatar {
+		&.quad{
+			.avatar{
 				width: 50%;
 				height: 50%;
 
-				&.img2,
-				&.img4 {
+				&.img2,&.img4{
 					left: 50%;
 				}
 
-				&.img3,
-				&.img4 {
+				&.img3,&.img4{
 					top: 50%;
 				}
 
-				&.img2,
-				&.img3,
-				&.img4 {
+				&.img2,&.img3,&.img4{
 					display: block;
 				}
 			}
 		}
 	}
 
-	.close,
-	.count {
+	.count,.close{
 		position: absolute;
 	}
 
 	.count {
 		padding: 0 4px;
-		top: 17px;
-		right: 10px;
+		top: 17px; right: 10px;
 		text-align: center;
 		min-width: 24px;
 		border-radius: 8px;
@@ -751,7 +717,7 @@
 		color: #ffffff;
 	}
 
-	.close {
+	.close{
 		top: 0;
 		bottom: 0;
 		right: 0;
@@ -760,14 +726,13 @@
 		opacity: 0;
 		visibility: hidden;
 		@include icon($rhp-close-chat,$top:19px,$left:19px);
+
 		position: absolute;
 
 		&::before {
 			content: '';
-			top: 0;
-			bottom: 0;
-			left: -1px;
-			width: 1px;
+			top: 0; bottom: 0;
+			left: -1px; width: 1px;
 			overflow: hidden;
 			position: absolute;
 			z-index: 2;
@@ -777,33 +742,19 @@
 		&:hover {
 			background: $primary-red;
 
-			&::after {
-				@include sprite($rhp-close-chat_hover);
-			}
+			&::after{ @include sprite($rhp-close-chat_hover); }
+			&::before {display: none;}
 
-			&::before {
-				display: none;
-			}
-
-			& ~ .avatars {
-				opacity: 0.25;
-			}
-
+			& ~ .avatars { opacity: 0.25; }
 			& ~ .wrap {
 				background: #feeeee;
-
-				.names {
-					color: #df9b9b;
-				}
-
-				.status {
-					color: #f4c3c3;
-				}
+				.names{ color: #df9b9b; }
+				.status { color: #f4c3c3; }
 			}
 		}
 	}
 
-	.wrap {
+	.wrap{
 		padding: 10px 40px 0 60px;
 		height: 50px;
 
@@ -812,22 +763,23 @@
 			color: $tertiary-grey;
 		}
 
-		.names {
+		.names{
 			@include ellipse;
 			overflow: hidden;
 			font: normal 600 12px/16px $font;
 			color: $primary-grey;
 
-			&.overflown::before {
+			&.overflown::before{
 				content: "(" attr(data-count) ")";
 				display: block;
 				float: left;
 				padding-right: 4px;
 			}
 		}
+
 	}
 
-	&:hover {
+	&:hover{
 		background: #f6f6f6;
 		box-shadow: 0 0 2px rgba(0,0,0,0.15), inset 0 1px rgba(255,255,255,0.1);
 
@@ -837,10 +789,7 @@
 			}
 		}
 
-		.count {
-			opacity: 0;
-		}
-
+		.count { opacity: 0; }
 		.close {
 			opacity: 1;
 			visibility: visible;
@@ -848,8 +797,9 @@
 	}
 }
 
+
 #chat-history {
-	.x-panel-header {
+	.x-panel-header{
 		background: #f1f1f1;
 		color: $primary-grey;
 		text-transform: uppercase;
@@ -860,27 +810,28 @@
 		}
 	}
 
-	#chat-history-body {
-		.more {
+	#chat-history-body{
+		.more{
 			background-color: white;
 			text-align: center;
 			font-size: 14px;
-			padding: 5px 0;
+			padding: 5px 0px 5px 0px;
 			color: #3fb3f6;
 			cursor: pointer;
 
-			&::after {
+			&::after{
 				content: '...';
 			}
 		}
 
-		.no-history {
+		.no-history{
 			background-color: white;
-			padding: 5px 0;
+			padding: 5px 0px 5px 0px;
 			font: italic 300 14px/28px $font;
 			text-align: center;
 			color: $tertiary-grey;
 		}
+
 	}
 }
 
@@ -905,117 +856,110 @@
 }
 
 body.white-shade-mask .chat-gutter-window {
-	background-color: rgba(35, 35, 35, 0.15);
+ 	background-color: rgba(35, 35, 35, 0.15);
 }
 
-.chat-gutter-list-window,
-.chat-gutter-window {
+.chat-gutter-window, .chat-gutter-list-window {
 	position: fixed;
 	top: 100px;
 	bottom: 60px;
 	right: 15px;
 	z-index: 200;
-	width: 60px;
-	background-color: rgba(35, 35, 35, 0.70);
+  	width: 60px;
+  	background-color: rgba(35, 35, 35, 0.70);
 	border-radius: 5px;
 	padding-bottom: 60px;
 
 	html.msg-bar-open & {
 		top: 140px;
 	}
+
 	@media #{$hide-chat-break-point} {
 		.chat-container:not(.show-gutter) & {
 			display: none;
 		}
 	}
 
-	.presence-gutter-entry {
-		margin: 8px auto;
-		width: 45px;
-		height: 45px;
-		cursor: pointer;
+  	.presence-gutter-entry {
+  		margin: 8px auto;
+  		width: 45px;
+  		height: 45px;
+  		cursor: pointer;
 
-		&.show-contacts {
-			position: absolute !important;
-			bottom: 0;
-			left: 8px;
-			@include icon($contacts-2,$top:1px,$left:1px);
-			opacity: 0.6;
+  		&.show-contacts {
+  			position: absolute !important;
+  			bottom: 0;
+  			left: 8px;
+  			@include icon($contacts-2,$top:1px,$left:1px);
+  			opacity: 0.6;
+  			&:hover {
+  				opacity: 1.0;
+  			}
+  		}
 
-			&:hover {
-				opacity: 1.0;
-			}
-		}
-
-		&.other-contacts {
+  		&.other-contacts {
 			position: absolute !important;
 			color: #ffffff;
 			bottom: 55px;
 			left: 8px;
 			@include icon($more,$top:1px,$left:1px);
 			opacity: 0.6;
-
-			&:hover {
-				opacity: 1.0;
-			}
+  			&:hover {
+  				opacity: 1.0;
+  			}
 		}
 
-		 &.other-contacts,
-		.profile-pic {
-			&[data-badge]:not([data-badge="0"]) {
-				&::before {
+  		.profile-pic, &.other-contacts {
+  			&[data-badge]:not([data-badge="0"]) {
+  				&::before {
 					content: attr(data-badge);
 					background-color: $primary-red;
 					font-size: 0.55em;
 					font-weight: 500;
 					color: white;
-					padding: 0.3em;
+					padding: 0.3em 0.3em;
 					border: 2px solid white;
 					position: absolute;
 					top: -4px;
-					left: -4px;
+  					left: -4px;
 					border-radius: 12em;
 					z-index: 100;
 					text-indent: 0;
 					line-height: 1.0em;
 					width: auto;
 				}
-			}
-		}
+  			}
+  		}
 
-		&.active {
-			.profile-pic {
-				.avatar-pic {
-					border: 2px solid #747474;
-				}
+  		&.active {
+  			.profile-pic{
+  				.avatar-pic {
+  					border: 2px solid #747474;
+  				}
 
-				&.Online,
-				&.available,
-				&.online {
+  				&.Online,&.online,&.available {
 					.avatar-pic {
-						border: 2px solid #8eb737;
-					}
+	  					border: 2px solid #8eb737;
+	  				}
+
 				}
-
 				&.idle {}
-
-				&.away {
+				&.away{
 					.avatar-pic {
 						border: 2px solid #ebcd25;
 					}
 				}
-
-				&.DnD,
-				&.dnd {
+				&.DnD,&.dnd {
 					.avatar-pic {
 						border: 2px solid #F35252;
 					}
 				}
-			}
-		}
-	}
+  			}
+  		}
+  	}
 
-	&.chat-gutter-list-window {
+
+  	&.chat-gutter-list-window {
 		right: 10px;
 		width: 220px;
 
@@ -1050,15 +994,16 @@ body.white-shade-mask .chat-gutter-window {
 		}
 
 		.presence-gutter-entry {
-			padding: 0;
+			padding: 0px;
 			width: 200px;
 			position: relative;
 
-			.profile-pic {
+			.profile-pic{
 				position: absolute;
 				left: 0;
 				top: 0;
 				width: 42px;
+
 				// .presence {
 				// 	background-color: #232323;
 				// }
@@ -1070,7 +1015,7 @@ body.white-shade-mask .chat-gutter-window {
 				width: 150px;
 				height: 42px;
 				color: #ffffff;
-				padding: 12px 4px 0;
+				padding: 12px 4px 0 4px;
 				overflow: hidden;
 				font-size: 14px;
 				font-weight: 200;
@@ -1097,10 +1042,13 @@ body.white-shade-mask .chat-gutter-window {
 			.show-contacts {
 				position: relative !important;
 				left: 0;
+
 			}
 		}
+
 	}
 }
+
 
 .chat-notifications-icon {
 	width: 50px;
@@ -1112,16 +1060,19 @@ body.white-shade-mask .chat-gutter-window {
 		right: 125px;
 		top: 0;
 	}
+
 	@media #{$hide-chat-break-point} {
 		.media-toolbar & {
 			display: block;
 		}
 	}
+
 	@media #{$show-chat-break-point} {
 		.media-toolbar & {
 			display: none;
 		}
 	}
+
 	@include icon($rhp-contacts, $side: after, $top: 50%, $left: 50%);
 
 	&::after {
@@ -1129,8 +1080,7 @@ body.white-shade-mask .chat-gutter-window {
 		margin-left: -15px;
 	}
 
-	&.gutter-showing,
-	&:hover {
+	&:hover, &.gutter-showing {
 		@include icon($rhp-contacts_active, $side: after, $top: 50%, $left: 50%);
 	}
 
@@ -1163,8 +1113,7 @@ body.white-shade-mask .chat-gutter-window {
 			opacity: 0.8;
 		}
 
-		&.gutter-showing,
-		&:hover {
+		&:hover, &.gutter-showing {
 			&::after {
 				opacity: 1;
 			}
