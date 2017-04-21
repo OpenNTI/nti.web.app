@@ -25,7 +25,6 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Actions',
 		store.setLoading();
 
 		return Promise.all([
-			this.setUpContentPackages((service.getCollection('Main', 'Library') || {}).href),
 			this.setUpContentBundles((service.getCollection('VisibleContentBundles', 'ContentBundles') || {}).href)
 		]);
 	},
