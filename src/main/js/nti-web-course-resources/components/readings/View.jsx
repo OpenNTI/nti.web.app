@@ -1,6 +1,6 @@
 import React from 'react';
 import {scoped} from 'nti-lib-locale';
-import {Table} from 'nti-web-commons';
+import {Table, EmptyState} from 'nti-web-commons';
 import PropTypes from 'prop-types';
 
 import ListItem from './ListItem';
@@ -57,13 +57,12 @@ function getReadings (course) {
 
 
 Readings.propTypes = {
-	course: React.PropTypes.object,
-	filter: React.PropTypes.func,
-	gotoResource: React.PropTypes.func,
-	onCreate: React.PropTypes.func
+	course: PropTypes.object,
+	filter: PropTypes.func,
+	gotoResource: PropTypes.func
 };
 
-export default function Readings ({course, filter, gotoResource, onCreate}) {
+export default function Readings ({course, filter, gotoResource}) {
 	const readings = getReadings(course).filter((x) => filter(x.title));
 
 	const renderItem = (item) => {
@@ -71,12 +70,6 @@ export default function Readings ({course, filter, gotoResource, onCreate}) {
 			<ListItem reading={item} gotoResource={gotoResource} />
 		);
 	};
-
-	const emptyState = () => (
-		<div className="empty-resources">
-			This folder is empty. To create a new reading, <span onClick={onCreate}>click here.</span>
-		</div>
-	);
 
 	return readings.length !== 0 ? (
 		<Table.ListTable
@@ -87,5 +80,8 @@ export default function Readings ({course, filter, gotoResource, onCreate}) {
 			renderItem={renderItem}
 			cells={COLS}
 		/>
-	) : emptyState(onCreate);
+	) : <EmptyState
+			header="This folder is empty."
+			subHeader="Click the button above to create a new reading."
+		/>;
 }
