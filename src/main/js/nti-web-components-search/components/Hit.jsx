@@ -1,5 +1,9 @@
 import React from 'react';
 
+import {
+	resolveNavigateToSearchHit
+} from '../resolvers';
+
 import Fragments from './Fragments';
 import Path from './Path';
 
@@ -12,9 +16,17 @@ Hit.propTypes = {
 };
 
 export default function Hit ({hit, title, fragments, path, navigateToSearchHit}) {
+
+	function navigate () {
+		resolveNavigateToSearchHit(hit, fragments[0])
+			.then(({obj, fragIndex, containerId}) => {
+				return navigateToSearchHit(obj, hit, fragIndex, containerId);
+			});
+	}
+
 	return (
 		<div className="search-result-react">
-			<div className="hit-title">{title}</div>
+			<div className="hit-title" onClick={navigate}>{title}</div>
 			<Fragments fragments={fragments} hit={hit} navigateToSearchHit={navigateToSearchHit} />
 			<Path pathObject={path} />
 		</div>
