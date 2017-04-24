@@ -209,51 +209,77 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		value = (value && value.trim()) || '';
 		letter = (letter && letter.trim()) || '-';
 
-		var me = this, oldVal,
-			val = value + ' ' + letter;
+		const oldVal = this.get('value');
+		const newVal = value + ' ' + letter;
 
 		//if we are attempting to save the same value we are already in the middle of saving stop
-		if (val === me.pendingSaveValue) { return Promise.resolve(me); }
+		if (newVal === this.pendingSaveValue || newVal === oldVal) { return Promise.resolve(this); }
 
-		me.pendingSaveValue = val;
+		this.pendingSaveValue = newVal;
 
-		oldVal = me.get('value');
-
-		me.set('value', val);
-
-		return new Promise(function (fulfill, reject) {
-			me.save({
-				success: function (grade, req) {
-					var response = req && req.response,
-						text = response && response.responseText,
-						json;
-
-					try {
-						if (!Ext.isEmpty(text)) {
-							json = JSON.parse(text);
-
-							//update the links so we can get the link for the assignment history item
-							//if there is one
-							grade.set('Links', json.Links);
-						}
-					} catch (e) {
-						console.error('failed to parse response text for a saved grade:', e, text);
-					} finally {
-						delete me.pendingSaveValue;
-
-						//alert that the value successfully changed
-						me.fireEvent('value-change');
-						fulfill(grade);
+		this.__setAndSaveValue(newVal)
+			.then((resp) => {
+				try {
+					if (resp) {
+						this.syncWithResponse(resp, true);
 					}
-				},
-				failure: function () {
-					delete me.pendingSaveValue;
-					me.set('value', oldVal);
-					reject();
-					me.fireEvent('value-change-failed');
+				} catch (e) {
+					console.error('failed to parse response text for a saved grade: ', e, resp);
+				} finally {
+					delete this.pendingSaveValue;
+
+					//alert that the value successfully changed
+					this.fireEvent('value-changed');
 				}
+
+				return this;
+			})
+			.catch(() => {
+				delete this.pendingSaveValue;
+
+				this.set('value', oldVal);
+
+				this.fireEvent('value-change-failed');
+
+				return Promise.reject();
 			});
-		});
+
+
+
+
+		// return new Promise(function (fulfill, reject) {
+		// 	me.save({
+		// 		success: function (grade, req) {
+		// 			var response = req && req.response,
+		// 				text = response && response.responseText,
+		// 				json;
+
+		// 			try {
+		// 				if (!Ext.isEmpty(text)) {
+		// 					json = JSON.parse(text);
+
+		// 					//update the links so we can get the link for the assignment history item
+		// 					//if there is one
+		// 					grade.set('Links', json.Links);
+		// 				}
+		// 			} catch (e) {
+		// 				console.error('failed to parse response text for a saved grade:', e, text);
+		// 			} finally {
+		// 				delete me.pendingSaveValue;
+
+		// 				//alert that the value successfully changed
+		// 				me.fireEvent('value-change');
+		// 				fulfill(grade);
+		// 			}
+		// 		},
+		// 		failure: function () {
+		// 			delete me.pendingSaveValue;
+		// 			me.set('value', oldVal);
+		// 			reject();
+		// 			me.fireEvent('value-change-failed');
+		// 		}
+		// 	});
+		// });
 	},
 
 
@@ -316,6 +342,42 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	},
 
 	isModifiable: function () { return true; },
+
+
+	__setAndSaveValue (value) {
+		if (value) {
+			this.set('value', value);
+		}
+
+		const link = this.getLink('edit') || this.getLink('href');
+
+		let update;
+
+		if (this.isEmpty()) {
+			update = Service.requestDelete(link);
+		} else {
+			update = Service.put(link, {value});
+		}
+
+		return update
+				.then(
+					resp => resp,
+					(reason) => {
+						Ext.MessageBox.alert({
+							title: 'Error',
+							msg: 'There was an error saving the grade value.',
+							icon: 'warning-red',
+							buttonText: true,
+							buttons: {
+								primary: 'Ok'
+							}
+						});
+
+						return Promise.reject(reason);
+					}
+				);
+	},
+
 
 	save: function (config) {
 		function failed () {
