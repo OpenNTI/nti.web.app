@@ -698,17 +698,22 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		refreshMon = me.mon(me, {
 			destroyable: true,
 			'realign-editor': function () {
-				//if there isn't a record its a new top level comment and we don't need to resize/realign anything
+				let node;
+
+				//if there isn't a record its a new top level comment
 				if (!record) {
-					return;
-				}
-				//if i'm editing get the node for the record, if its a reply get its parent node
-				var parentId = isEdit ? false : record.get('inReplyTo'),
-					parent = parentId && me.store.getById(parentId),
+					node = this.el.down('.new-root');
+				} else {
+					//if i'm editing get the node for the record, if its a reply get its parent node
+					var parentId = isEdit ? false : record.get('inReplyTo'),
+						parent = parentId && me.store.getById(parentId);
+
 					node = isEdit ? me.getNodeByRecord(record) : parent && me.getNodeByRecord(parent);
 
-				//if we have a node, if its an edit get the body if its a reply get the editor-box
-				node = node && isEdit ? Ext.fly(node).down('.body') : Ext.fly(node).down('.editor-box');
+					//if we have a node, if its an edit get the body if its a reply get the editor-box
+					node = node && isEdit ? Ext.fly(node).down('.body') : Ext.fly(node).down('.editor-box');
+				}
+
 
 				if (!node) {
 					console.error('Failed to find new node to align editor to, so closing it');
@@ -728,18 +733,20 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			'grew': size,
 			'shrank': size,
 			'deactivated-editor': function () {
+				let node;
 				//if there isn't a record its a new top level comment
 				if (!record) {
-					el.setHeight(undefined);
-					return;
-				}
-				//if I'm editing get the node for the record, if its a reply get its parent node
-				var parentId = isEdit ? false : record.get('inReplyTo'),
-					parent = parentId && me.store.getById(parentId),
+					node = me.el.down('.new-root');
+				} else {
+					//if I'm editing get the node for the record, if its a reply get its parent node
+					var parentId = isEdit ? false : record.get('inReplyTo'),
+						parent = parentId && me.store.getById(parentId);
+
 					node = isEdit ? me.getNodeByRecord(record) : parent && me.getNodeByRecord(parent);
 
-				// if we have a node, if its an edit get the body if its a reply get the editor-box
-				node = node && isEdit ? Ext.fly(node).down('.body') : Ext.fly(node).down('.editor-box');
+					// if we have a node, if its an edit get the body if its a reply get the editor-box
+					node = node && isEdit ? Ext.fly(node).down('.body') : Ext.fly(node).down('.editor-box');
+				}
 
 				Ext.destroy(refreshMon);
 				Ext.callback(cancelCallback);
