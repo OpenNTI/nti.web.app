@@ -1,14 +1,18 @@
 import React from 'react';
-import {scoped} from 'nti-lib-locale';
-import {Table, EmptyState} from 'nti-web-commons';
 import PropTypes from 'prop-types';
+import {scoped} from 'nti-lib-locale';
+
+import {Table, EmptyState, Loading} from 'nti-web-commons';
 
 import ListItem from './ListItem';
 
 const DEFAULT_TEXT = {
 	name: 'Name',
 	publish: 'Publish Status',
-	lastModified: 'Last Modified'
+	lastModified: 'Last Modified',
+	loading: 'Loading',
+	emptyHeader: 'This folder is empty.',
+	emptyMessage: 'Click the button above to create a new reading.'
 };
 
 const t = scoped('COURSE_RESOURCES_READINGS', DEFAULT_TEXT);
@@ -46,6 +50,7 @@ Readings.propTypes = {
 };
 
 export default function Readings ({course, filter, gotoResource}) {
+	const loading = !course;
 	const readings = getReadings(course).filter((x) => filter(x.title));
 
 	const renderItem = (item, cols) => {
@@ -91,15 +96,15 @@ export default function Readings ({course, filter, gotoResource}) {
 		}
 	];
 
-	return readings.length !== 0 ? (
-		<Table.ListTable
-			classes={tableClasses}
-			items={readings}
-			columns={columns}
-			renderItem={renderItem}
-		/>
-	) : <EmptyState
-			header="This folder is empty."
-			subHeader="Click the button above to create a new reading."
-		/>;
+	return (
+		<div className="nti-web-course-resources">
+			{
+				readings.length !== 0 ?
+					(<Table.ListTable classes={tableClasses} items={readings} columns={columns} renderItem={renderItem}	/>) :
+					loading ?
+						(<Loading.Mask message={t('loading')} />) :
+						(<EmptyState header={t('emptyHeader')} subHeader={t('emptyMessage')}/>)
+			}
+		</div>
+	);
 }

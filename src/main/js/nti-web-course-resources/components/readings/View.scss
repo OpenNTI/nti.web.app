@@ -1,78 +1,82 @@
 @import "~nti-style-common";
 
-.course-resources-readings {
-	padding: 1.625rem 0;
+.nti-web-course-resources {
+	min-height: 200px;
 
-	.course-resources-header {
-		display: flex;
-		margin-bottom: 20px;
-		text-transform: uppercase;
+	.course-resources-readings {
+		padding: 1.625rem 0;
 
-		.name, .publish, .last-modified {
-			font-size: 0.625rem;
-			font-weight: bold;
+		.course-resources-header {
+			display: flex;
+			margin-bottom: 20px;
+			text-transform: uppercase;
+
+			.name, .publish, .last-modified {
+				font-size: 0.625rem;
+				font-weight: bold;
+				color: $secondary-grey;
+			}
+
+			.sort-inactive {
+				color: $tertiary-grey;
+			}
+
+			.sort-active {
+				color: $secondary-grey;
+			}
+
+			.sort-default::after {
+				content: " " url(../../../../resources/images/elements/menu-arrow-down-default.png);
+				position: relative;
+				top: -1px;
+			}
+
+			.sort-asc::after {
+				content: " " url(../../../../resources/images/elements/menu-arrow-up-active.png);
+				position: relative;
+				top: -1px;
+			}
+
+			.sort-desc::after {
+				content: " " url(../../../../resources/images/elements/menu-arrow-down-active.png);
+				position: relative;
+				top: -1px;
+			}
+
+			.name {
+				flex: 1 1 auto;
+				cursor: pointer;
+			}
+
+			.publish {
+				flex: 0 0 150px;
+				cursor: pointer;
+			}
+
+			.last-modified {
+				flex: 0 0 150px;
+				cursor: pointer;
+			}
+		}
+
+		.course-resources-body {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.title {
+			font-size: 1em;
+			margin-top: 5px;
+			margin-bottom: 2px;
 			color: $secondary-grey;
 		}
 
-		.sort-inactive {
+		.published-inline {
+			font-size: .625rem;
+			font-weight: bold;
+			text-transform: uppercase;
 			color: $tertiary-grey;
 		}
-
-		.sort-active {
-			color: $secondary-grey;
-		}
-
-		.sort-default::after {
-			content: " " url(../../../../resources/images/elements/menu-arrow-down-default.png);
-			position: relative;
-			top: -1px;
-		}
-
-		.sort-asc::after {
-			content: " " url(../../../../resources/images/elements/menu-arrow-up-active.png);
-			position: relative;
-			top: -1px;
-		}
-
-		.sort-desc::after {
-			content: " " url(../../../../resources/images/elements/menu-arrow-down-active.png);
-			position: relative;
-			top: -1px;
-		}
-
-		.name {
-			flex: 1 1 auto;
-			cursor: pointer;
-		}
-
-		.publish {
-			flex: 0 0 150px;
-			cursor: pointer;
-		}
-
-		.last-modified {
-			flex: 0 0 150px;
-			cursor: pointer;
-		}
-	}
-
-	.course-resources-body {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	.title {
-		font-size: 1em;
-		margin-top: 5px;
-		margin-bottom: 2px;
-		color: $secondary-grey;
-	}
-
-	.published-inline {
-		font-size: .625rem;
-		font-weight: bold;
-		text-transform: uppercase;
-		color: $tertiary-grey;
 	}
 }
