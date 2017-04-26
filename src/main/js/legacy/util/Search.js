@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 		return term;*/
 	},
 
-	MATCH_SPLIT_REGEX: /<em>|<\/em>/g,
+	MATCH_SPLIT_REGEX: /<hit>|<\/hit>/g,
 
 	extractMatchFromFragment: function (fragText, match) {
 		return fragText.slice(match[0], match[1]);
