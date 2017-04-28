@@ -25,6 +25,20 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 			'do-load': () => this.loadCourses(),
 			'load-favorites': () => this.loadFavorites()
 		});
+
+		if (window.Service) {
+			this.onLogin();
+		} else {
+			this.LoginStore.registerLoginAction(this.onLogin.bind(this), 'load-all-courses-link');
+		}
+	},
+
+
+	onLogin () {
+		this.LoginStore.getService()
+			.then((service) => {
+				return this.setUpAllCourses((service.getCollection('AllCourses', 'Courses') || {}).href);
+			});
 	},
 
 
