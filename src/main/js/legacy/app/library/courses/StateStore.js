@@ -10,6 +10,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	ENROLLED_COURSES: [],
 	ALL_COURSES: [],
 
+	FAVORITE_ENROLLED_COURSES: [],
+	FAVORITE_ADMIN_COURSES: [],
+
+	TOTAL_ADMIN: 0,
+	TOTAL_ENROLLED: 0,
 
 	getEnrolledCourses: function () { return this.ENROLLED_COURSES; },
 
@@ -18,6 +23,26 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 
 	getAllCourses: function () { return this.ALL_COURSES; },
+
+
+	getFavoriteAdminCourses () {
+		return this.FAVORITE_ADMIN_COURSES;
+	},
+
+
+	getFavoriteEnrolledCourses () {
+		return this.FAVORITE_ENROLLED_COURSES;
+	},
+
+
+	getTotalEnrolledCourses () {
+		return this.TOTAL_ENROLLED;
+	},
+
+
+	getTotalAdminCourses () {
+		return this.TOTAL_ADMIN;
+	},
 
 	__updateCoursesEnrollmentState: function (courses) {
 		var me = this;
@@ -42,6 +67,21 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		});
 	},
 
+
+	setFavoriteEnrolledCourses (courses) {
+		this.FAVORITE_ENROLLED_COURSES = courses;
+		this.__updateCoursesEnrollmentState(courses);
+		this.fireEvent('favorite-enrolled-courses-set', this.FAVORITE_ENROLLED_COURSES);
+	},
+
+
+	setFavoriteAdminCourses (courses) {
+		this.FAVORITE_ADMIN_COURSES = courses;
+		this.__updateCoursesEnrollmentState(courses);
+		this.fireEvent('favorite-admin-courses-set', this.FAVORITE_ADMIN_COURSES);
+	},
+
+
 	setEnrolledCourses: function (courses) {
 		this.ENROLLED_COURSES = courses;
 		this.__updateCoursesEnrollmentState(courses);
@@ -63,6 +103,16 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		this.__updateCoursesEnrollmentState(this.ADMIN_COURSES);
 
 		this.fireEvent('all-courses-set', this.ALL_COURSES);
+	},
+
+
+	setTotalAdminCount (count) {
+		this.TOTAL_ADMIN = count;
+	},
+
+
+	setTotalEnrolledCount (count) {
+		this.TOTAL_ENROLLED = count;
 	},
 
 
@@ -392,6 +442,41 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			var instance = course.get('CourseInstance');
 
 			return instance.isInFamily(familyId);
+		});
+	},
+
+
+	isFavoritesLoading () {
+		return this.favoritesLoading;
+	},
+
+
+	setFavoritesLoading () {
+		this.favoritesLoading = true;
+	},
+
+
+	setFavoritesLoaded () {
+		this.favoritesLoaded = true;
+		delete this.favoritesLoading;
+		this.fireEvent('favorites-loaded');
+	},
+
+
+	onceFavoritesLoaded (force) {
+		if (this.favoritesLoaded && !force) {
+			return Promise.resolve(this);
+		}
+
+		delete this.favoritesLoaded;
+
+		this.fireEvent('load-favorites');
+
+		return new Promise((fulfill) => {
+			this.on({
+				single: true,
+				'favorites-loaded': () => fulfill(this)
+			});
 		});
 	}
 });

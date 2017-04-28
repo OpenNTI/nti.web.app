@@ -16,9 +16,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		shouldShow: function () {
 			var CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 
-			return CourseStore.onceLoaded()
+			return CourseStore.onceFavoritesLoaded()
 				.then(function () {
-					var enrolledCourses = CourseStore.getCurrentEnrolledCourses() || [],
+					var enrolledCourses = CourseStore.getFavoriteEnrolledCourses() || [],
 						hasAvailable = CourseStore.hasAllCoursesLink();
 
 					return enrolledCourses.length || hasAvailable;
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 
 		this.maybeShowAdd();
 
-		this.CourseStore.onceLoaded()
+		this.CourseStore.onceFavoritesLoaded()
 			.then(this.showCurrentItems.bind(this));
 
 		//update the list every time you enroll or drop a course in a course
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 					this.el.mask('Loading...');
 				}
 			},
-			'enrolled-courses-set': this.showCurrentItems.bind(this)
+			'enrolled-courses-set': () => this.updateCurrentItems()
 		});
 	},
 
@@ -69,38 +69,16 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		}
 	},
 
+	updateCurrentItems () {
+		this.CourseStore.onceFavoritesLoaded(true)
+			.then(() => this.showCurrentItems());
+	},
+
 	showCurrentItems: function () {
-		var current = this.CourseStore.getCurrentEnrolledCourses(),
-			upcoming = this.CourseStore.getUpcomingEnrolledCourses(),
-			archived = this.CourseStore.getArchivedEnrolledCourses(),
-			otherCourses = upcoming.concat(archived), otherLength;
+		const current = this.CourseStore.getFavoriteEnrolledCourses();
+		const total = this.CourseStore.getTotalEnrolledCourses();
 
-		function sort (a, b) {
-			var aVal = a.get('CreatedTime'),
-				bVal = b.get('CreatedTime');
-
-				//Since we want the most recent enrollments to be at the, sort the lower value
-				//to the higher index
-			return aVal > bVal ? -1 : aVal === bVal ? 0 : 1;
-		}
-
-		current.sort(sort);
-
-		//make sure we have at least 4 if its at all possible
-		otherLength = 4 - current.length;
-
-		//if we have < 4 current enrolled courses
-		if (otherLength > 0) {
-
-			//get the number of upcoming or archived we need, sorted on when you enrolled
-			otherCourses.sort(sort);
-
-			current = current.concat(otherCourses.slice(0, otherLength));
-		}
-
-		//We are already showing all the current enrollment, so we only need to check
-		//if there are more upcoming and archived than we added to get to at least 4
-		if ((upcoming.length + archived.length) > otherLength) {
+		if (current.length < total) {
 			this.showSeeAll();
 		} else {
 			this.hideSeeAll();
@@ -110,9 +88,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			this.el.unmask();
 		}
 
-
 		return this.showItems(current);
 	},
+
 
 	showItems: function (current) {
 		if (current.length === 0) {
