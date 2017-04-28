@@ -278,6 +278,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 				//TODO: figure out how to get this off of window...
 				window.Service = $AppConfig.service = doc;
+				me.store.setService(doc);
 
 				if (Ext.isEmpty($AppConfig.userObject)) {
 					return me.attemptLoginCallback(doc);

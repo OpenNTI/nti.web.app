@@ -4,6 +4,8 @@ var CommonActions = require('../../../common/Actions');
 var ContentStateStore = require('./StateStore');
 var {getURL} = require('legacy/util/Globals');
 
+require('legacy/login/StateStore');
+
 
 module.exports = exports = Ext.define('NextThought.app.library.content.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -12,21 +14,35 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Actions',
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
+		this.LoginStore = NextThought.login.StateStore.getInstance();
+
+		this.mon(this.ContentStore, 'do-load', () => this.loadContent());
 	},
 
-	loadContent: function (service) {
+	loadContent: function () {
 		var store = this.ContentStore;
 
-		if (!service) {
-			console.error('No Service document defined');
+		if (store.isLoading()) {
 			return;
 		}
 
 		store.setLoading();
 
-		return Promise.all([
-			this.setUpContentBundles((service.getCollection('VisibleContentBundles', 'ContentBundles') || {}).href)
-		]);
+		return this.LoginStore.getService()
+			.then((service) => {
+
+				if (!service) {
+					console.error('No Service document defined');
+					return;
+				}
+
+				return Promise.all([
+					this.setUpContentBundles((service.getCollection('VisibleContentBundles', 'ContentBundles') || {}).href)
+				]);
+			})
+			.then(() => {
+				store.setLoaded();
+			});
 	},
 
 	setUpContentPackages: function (link) {

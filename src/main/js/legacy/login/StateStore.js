@@ -175,5 +175,22 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 				setter: function () { throw new Error( 'readonly' ); }
 			}
 		});
+	},
+
+
+	setService (doc) {
+		this.__serviceDoc = doc;
+		this.fireEvent('service-doc-set');
+	},
+
+	getService () {
+		if (this.__serviceDoc) { return Promise.resolve(this.__serviceDoc); }
+
+		return new Promise((fulfill) => {
+			this.on({
+				single: true,
+				'service-doc-set': () => fulfill(this.__serviceDoc)
+			});
+		});
 	}
 });

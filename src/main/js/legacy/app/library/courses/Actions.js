@@ -3,6 +3,7 @@ const StoreUtils = require('../../../util/Store');
 const {getURL} = require('legacy/util/Globals');
 
 require('../../../common/Actions');
+require('legacy/login/StateStore');
 require('./StateStore');
 require('../../../model/courses/CourseInstance');
 require('../../../model/courses/CourseInstanceAdministrativeRole');
@@ -18,6 +19,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 		this.callParent(arguments);
 
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.LoginStore = NextThought.login.StateStore.getInstance();
+
+		this.mon(this.CourseStore, 'do-load', () => this.loadCourses());
 	},
 
 
@@ -26,21 +30,30 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	 * @param  {Service} s the service doc to get the links from
 	 * @return {Promise}   fulfills when all the courses have been loaded
 	 */
-	loadCourses: function (s) {
+	loadCourses: function () {
 		var store = this.CourseStore;
 
-		if (!s) {
-			console.error('No Service document defined');
+		if (store.isLoading()) {
 			return;
 		}
 
 		store.setLoading();
 
-		return Promise.all([
-			this.setUpAdministeredCourses((s.getCollection('AdministeredCourses', 'Courses') || {}).href),
-			this.setUpAllCourses((s.getCollection('AllCourses', 'Courses') || {}).href),
-			this.setUpEnrolledCourses((s.getCollection('EnrolledCourses', 'Courses') || {}).href)
-		]);
+		return this.LoginStore.getService()
+			.then((service) => {
+
+				if (!service) {
+					console.error('No Service document defined');
+					return;
+				}
+
+				return Promise.all([
+					this.setUpAdministeredCourses((service.getCollection('AdministeredCourses', 'Courses') || {}).href),
+					this.setUpAllCourses((service.getCollection('AllCourses', 'Courses') || {}).href),
+					this.setUpEnrolledCourses((service.getCollection('EnrolledCourses', 'Courses') || {}).href)
+				]);
+			})
+			.then(() => store.setLoaded());
 	},
 
 

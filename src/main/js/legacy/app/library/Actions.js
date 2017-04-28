@@ -27,77 +27,9 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
 		this.LoginStore = NextThought.login.StateStore.getInstance();
-
-		var store = this.LibraryStore;
-
-		if (window.Service && !store.loading && !store.hasFinishedLoad) {
-			this.onLogin();
-		} else {
-			this.LoginStore.registerLoginAction(this.onLogin.bind(this), 'load-library');
-		}
 	},
 
 
-	onLogin () {
-		this.LibraryStore.setLoading();
-
-		this.reload()
-			.then(() => {
-				this.LibraryStore.setLoaded();
-				this.CourseStore.setLoaded();
-				this.ContentStore.setLoaded();
-			});
-	},
-
-
-	reload () {
-		let s = window.Service;
-
-		return Promise.all([
-			this.CourseActions.loadCourses(s),
-			this.ContentActions.loadContent(s)
-		]).then(() => {
-			this.deDupContentPackages();
-		});
-	},
-
-
-	/**
-	 * Iterate the courses, admin courses, and content bundles, adding the content packages
-	 * they use to a list, then tell the content store to remove any content packages in that
-	 * list
-	 *
-	 * TODO: needs unit tests
-	 * @return {void}
-	 */
-	deDupContentPackages: function () {
-		var courses = this.CourseStore.getEnrolledCourses(),
-			admin = this.CourseStore.getAdminCourses(),
-			bundles = this.ContentStore.getContentBundles(),
-			used = {};
-
-		function unWrapBundle (bundle) {
-			var packages = bundle.getContentPackages();
-
-			packages.forEach(function (p) {
-				used[p.getId()] = true;
-			});
-		}
-
-		function unWrapCourse (course) {
-			return unWrapBundle(course.get('CourseInstance'));
-		}
-
-		courses.forEach(unWrapCourse);
-
-
-		admin.forEach(unWrapCourse);
-
-
-		bundles.forEach(unWrapBundle);
-
-		this.ContentStore.deDupContentPackages(used);
-	},
 
 	parseXML: function (xml) {
 		try {

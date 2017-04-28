@@ -67,6 +67,8 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 
 		var me = this;
 
+		this.fireEvent('do-load');
+
 		return new Promise(function (fulfill) {
 			me.on({
 				single: true,

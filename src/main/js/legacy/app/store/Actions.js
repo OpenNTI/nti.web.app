@@ -4,7 +4,7 @@ var {getURL} = Globals;
 var ParseUtils = require('../../util/Parsing');
 var StoreUtils = require('../../util/Store');
 var CommonActions = require('../../common/Actions');
-var LibraryStateStore = require('../library/StateStore');
+var ContentStateStore = require('../library/Content/StateStore');
 var StoreStateStore = require('./StateStore');
 var LoginStateStore = require('../../login/StateStore');
 
@@ -15,59 +15,51 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
+		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 		this.Store = NextThought.app.store.StateStore.getInstance();
 
-		if (window.Service && !this.Store.loading && !this.Store.hasFinishedLoad) {
-			this.onLogin();
-		} else {
-			this.LoginStore.registerLoginAction(this.onLogin.bind(this), 'load-purchasables');
-		}
-	},
-
-	onLogin: function () {
-		if (this.LibraryStore.hasLoaded()) {
-			this.loadPurchasables();
-		} else {
-			this.mon(this.LibraryStore, 'loaded', this.loadPurchasables.bind(this));
-		}
+		this.mon(this.Store, 'do-load', () => this.loadPurchasables());
 	},
 
 	loadPurchasables: function () {
-		var service = window.Service,
-			collection = service && service.getCollection('store', 'store'),
-			link = collection && service.getLinkFrom(collection.Links, 'get_purchasables'),
-			store = this.Store;
+		return this.LoginStore.getService()
+			.then((service) => {
+				const collection = service && service.getCollection('store', 'store');
+				const link = collection && service.getLinkFrom(collection.Links, 'get_purchasables');
 
 
-		if (!link) { return; }
+				if (!link) { return; }
 
-		store.setLoading();
+				this.Store.setLoading();
 
-		StoreUtils.loadItems(getURL(link))
-			.then(this.__updateLibraryWithPurchasables.bind(this))
-			.then(store.setPurchasables.bind(store))
-			.then(store.setLoaded.bind(store));
+				StoreUtils.loadItems(getURL(link))
+					.then(this.__updateLibraryWithPurchasables.bind(this))
+					.then(x => this.Store.setPurchasables(x))
+					.then(x => this.Store.setLoaded());
+			});
 	},
 
 	__updateLibraryWithPurchasables: function (items) {
-		var library = this.LibraryStore;
+		var library = this.ContentStore;
 
-		(items || []).forEach(function (p) {
-			(p.get('Items') || []).forEach(function (itemId) {
-				var title = library.getTitle(itemId);
+		return library.onceLoaded()
+			.then(() => {
+				(items || []).forEach(function (p) {
+					(p.get('Items') || []).forEach(function (itemId) {
+						var title = library.getTitle(itemId);
 
-				if (title) {
-					title.set('sample', !p.get('Activated'));
-				}
-				else {
-					console.warn('This purchasable item is not in the library:', itemId);
-				}
+						if (title) {
+							title.set('sample', !p.get('Activated'));
+						}
+						else {
+							console.warn('This purchasable item is not in the library:', itemId);
+						}
+					});
+				});
+
+				return items;
 			});
-		});
-
-		return items;
 	},
 
 	/**
