@@ -21,7 +21,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 
-		this.mon(this.CourseStore, 'do-load', () => this.loadCourses());
+		this.mon(this.CourseStore, {
+			'do-load': () => this.loadCourses(),
+			'load-favorites': () => this.loadFavorites()
+		});
 	},
 
 
@@ -57,6 +60,38 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	},
 
 
+	loadFavorites () {
+		var store = this.CourseStore;
+
+		if (store.isFavoritesLoading()) {
+			return;
+		}
+
+		store.setFavoritesLoading();
+
+		return this.LoginStore.getService()
+			.then((service) => {
+				if (!service) {
+					console.error('No Service document defined');
+					return;
+				}
+
+				const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+
+				const getFavoritesLink = (collection) => collection && service.getLinkFrom(collection.Links, 'Favorites');
+
+				return Promise.all([
+					this.setUpFavoriteAdminCourses(getFavoritesLink(adminCollection)),
+					this.setUpFavoriteEnrolledCourses(getFavoritesLink(enrolledCollection))
+				]);
+			})
+			.then(() => {
+				store.setFavoritesLoaded();
+			});
+	},
+
+
 	/**
 	 * Iterate the items and call __precacheEntry on those that have it
 	 * @param  {Array} items items to iterate
@@ -83,6 +118,42 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 						return !!r;
 					});
 				});
+	},
+
+
+	setUpFavoriteAdminCourses (link) {
+		if (!link) {
+			this.CourseStore.setFavoriteAdminCourses([]);
+
+			return Promise.resolve();
+		}
+
+		return StoreUtils.loadBatch(getURL(link))
+			.then(batch => {
+				this.CourseStore.setTotalAdminCount(batch.Total);
+
+				return batch.Items;
+			})
+			.then(items => this.__precacheItems(items))
+			.then(items => this.CourseStore.setFavoriteAdminCourses(items))
+	},
+
+
+	setUpFavoriteEnrolledCourses (link) {
+		if (!link) {
+			this.CourseStore.setFavoriteEnrolledCourses([]);
+
+			return Promise.resolve();
+		}
+
+		return StoreUtils.loadBatch(getURL(link))
+			.then(batch => {
+				this.CourseStore.setTotalEnrolledCount(batch.Total);
+
+				return batch.Items;
+			})
+			.then(items => this.__precacheItems(items))
+			.then(items => this.CourseStore.setFavoriteEnrolledCourses(items))
 	},
 
 
