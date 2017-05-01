@@ -1,2 +1,11 @@
-//Import all files (webpack extention)
-(x => x.keys().forEach(x))(require.context('./', true, /^.\/(?!index).+js$/));
+require('./ContentRangeDescription');
+require('./Date');
+require('./DCCreatorToAuthor');
+require('./Future');
+require('./GroupByTime');
+require('./Items');
+require('./Links');
+require('./PresenceInfo');
+require('./Synthetic');
+require('./Users');
+require('./VideoSources');
