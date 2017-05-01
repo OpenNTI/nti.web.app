@@ -33,6 +33,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 			return;
 		}
 
+		me.CourseStore.beforeDropCourse();
+
 		me.__toggleEnrollmentStatus(course, enrollment)
 			.then(function () {
 				var updateCatalog, updateEnrolled;
@@ -90,6 +92,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 			callback.call(null, true, false);
 			return;
 		}
+
+		me.CourseStore.beforeAddCourse();
 
 		me.__toggleEnrollmentStatus(course)
 			.then(function (response) {

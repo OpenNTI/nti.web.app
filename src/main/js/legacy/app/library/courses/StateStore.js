@@ -478,5 +478,15 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 				'favorites-loaded': () => fulfill(this)
 			});
 		});
+	},
+
+
+	beforeDropCourse () {
+		this.fireEvent('dropping-course');
+	},
+
+
+	beforeAddCourse () {
+		this.fireEvent('adding-course');
 	}
 });
