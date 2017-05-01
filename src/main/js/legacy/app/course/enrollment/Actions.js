@@ -64,6 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 						}
 					}
 
+					me.CourseStore.afterDropCourse();
 					callback.call(null, success, true);
 				}).catch(function (reason) {
 					console.error('Failed to enroll in course: ', reason);
@@ -124,6 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 				]).then(function (results) {
 					var success = results[1];
 
+					me.CourseStore.afterAddCourse();
 					callback.call(null, success, true);
 				}).catch(function (reason) {
 					console.error('Failed to enroll in course: ', reason);

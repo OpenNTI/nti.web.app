@@ -44,13 +44,15 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			}
 		};
 
+		const update = () => this.updateCurrentItems();
+
 
 		//update the list every time you enroll or drop a course in a course
 		this.mon(this.CourseStore, {
-			'loading': mask,
 			'dropping-course': mask,
 			'adding-course': mask,
-			'enrolled-courses-set': () => this.updateCurrentItems()
+			'dropped-course': update,
+			'added-course': update
 		});
 	},
 

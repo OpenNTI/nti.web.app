@@ -486,7 +486,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
+	afterDropCourse () {
+		this.fireEvent('dropped-course');
+	},
+
+
 	beforeAddCourse () {
 		this.fireEvent('adding-course');
+	},
+
+
+	afterAddCourse () {
+		this.fireEvent('added-course');
 	}
 });
