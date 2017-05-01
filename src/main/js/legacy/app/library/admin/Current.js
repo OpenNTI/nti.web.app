@@ -10,6 +10,8 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 	title: 'Administered Courses',
 	storeModel: 'NextThought.model.courses.CourseInstanceAdministrativeRole',
 
+	doNotMaskOnLoad: true,
+
 	statics: {
 		shouldShow: function () {
 			var CourseStore = NextThought.app.library.courses.StateStore.getInstance();

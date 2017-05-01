@@ -38,13 +38,18 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		this.CourseStore.onceFavoritesLoaded()
 			.then(this.showCurrentItems.bind(this));
 
+		const mask = () => {
+			if (this.el && !this.doNotMaskOnLoad) {
+				this.el.mask('Loading...');
+			}
+		};
+
+
 		//update the list every time you enroll or drop a course in a course
 		this.mon(this.CourseStore, {
-			'loading': () => {
-				if (this.el) {
-					this.el.mask('Loading...');
-				}
-			},
+			'loading': mask,
+			'dropping-course': mask,
+			'adding-course': mask,
 			'enrolled-courses-set': () => this.updateCurrentItems()
 		});
 	},
