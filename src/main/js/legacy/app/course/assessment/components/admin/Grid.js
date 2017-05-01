@@ -82,7 +82,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 			{ text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'), dataIndex: 'completed', name: 'completed', width: 140,
 				renderer: function (v, col, rec) {
-					var d = this.dueDate || rec.get('due'),
+					const getDueDateFromCollection = collection => {
+						const assignments = collection.get('Assignments');
+						const collectionItem = assignments && assignments.find(item => item.get('NTIID') === rec.get('item').internalId);
+						return collectionItem.get('availableEnding');
+					};
+
+					const getDueDate = record => {
+						let date;
+						if (record.get('item') && record.get('item').modified.hasOwnProperty('availableEnding')) {
+							date = getDueDateFromCollection(record.collection);
+						}
+						return date || record.get('due');
+					};
+
+					var d = this.dueDate || getDueDate(rec),
 						s = (v && v.get && v.get('Last Modified')) || v,
 						item = rec.get('item'),
 						parts = item && item.get('parts');
