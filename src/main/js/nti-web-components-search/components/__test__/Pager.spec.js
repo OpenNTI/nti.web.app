@@ -3,67 +3,57 @@ import { shallow } from 'enzyme';
 
 import Pager from '../Pager';
 
+const pagesToShow = 14;
+const currentPage = 13;
+const showMoreButton = true;
+const showNext = jest.fn();
+const loadPage = jest.fn();
+
 describe('<Pager />', () => {
-
-	function buildProps (props) {
-		const newProps = {props};
-
-		spyOn(newProps, 'onChange');
-
-		return newProps;
-	}
 
 	it('should render a `.pagination-container`', () => {
 		const wrapper = shallow(<Pager />);
-		expect(wrapper.find('.pagination-container')).to.have.length(1);
+		expect(wrapper.find('.pagination-container').length).toBe(1);
 	});
 
 	it('should render at least one `.pagination-item`', () => {
-		const wrapper = shallow(<Pager />);
-		expect(wrapper.contains('.pagination-item')).to.equal(true);
+		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
+		expect(wrapper.find('.pagination-item').length).toBe(12);
 	});
 
 	it('should render a `.next-results-page-button`', () => {
-		const inputProps = buildProps({});
+		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 
-		const wrapper = shallow(<Pager />);
-
-		if(inputProps.showMoreButton === true) {
-			expect(wrapper.find('.next-results-page-button')).to.have.length(1);
+		if(showMoreButton === true) {
+			expect(wrapper.find('.next-results-page-button').length).toBe(1);
 		}
 	});
 
 	it('should render a `.prev-results-page` if the current page is greater than 12', () => {
-		const inputProps = buildProps({});
+		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 
-		const wrapper = shallow(<Pager />);
-
-		if(inputProps.currentPage > 12) {
-			expect(wrapper.find('.prev-results-page')).to.have.length(1);
+		if(currentPage > 12) {
+			expect(wrapper.find('.prev-results-page').length).toBe(1);
 		}
 	});
 
 	it('simulates clicks on next results page button', () => {
-		const inputProps = buildProps({});
-
-		const wrapper = shallow(<Pager />);
-		wrapper.find('.next-results-page-button').simulate('click');
-		expect(inputProps.showNext).toHaveBeenCalled();
+		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
+		wrapper.find('.next-results-page').simulate('click');
+		expect(showNext).toHaveBeenCalled();
 	});
 
 	it('simulates clicks on a page number', () => {
-		const inputProps = buildProps({});
-
-		const wrapper = shallow(<Pager />);
-		wrapper.find('.pagination-item').simulate('click');
-		expect(inputProps.loadPage).toHaveBeenCalled();
+		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
+		const pageNum = wrapper.find('.pagination-item');
+		// Clicks page with key value of 1
+		pageNum.at(1).simulate('click');
+		expect(loadPage).toHaveBeenCalled();
 	});
 
 	it('simulates clicks on previous page button', () => {
-		const inputProps = buildProps({});
-
-		const wrapper = shallow(<Pager />);
+		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 		wrapper.find('.prev-results-page').simulate('click');
-		expect(inputProps.loadPage).toHaveBeenCalled();
+		expect(loadPage).toHaveBeenCalled();
 	});
 });

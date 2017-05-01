@@ -1,7 +1,5 @@
-const {isMe} = require('legacy/util/Globals');
-const UserRepository = require('../../legacy/cache/UserRepository.js');
 const { encodeForURI } = require('nti-lib-ntiids');
-const ChatActions = require('../../legacy/app/chat/Actions');
+const { getAppUser, getAppUsername} = require('nti-web-client');
 
 export default {
 	handles (targetMimeType) {
@@ -9,7 +7,6 @@ export default {
 		targetMimeType = targetMimeType.replace('.', '-');
 
 		if(targetMimeType === ('messageinfo')) {
-			console.log('chat');
 			return true;
 		} else {
 			return false;
@@ -18,16 +15,24 @@ export default {
 
 	initComponent: function () {
 		this.callParent(arguments);
-
-		this.ChatActions = ChatActions.create();
 	},
 
 	resolveTitle (obj, hit) {
 		const sharedWith = obj.sharedWith.filter(function (u) {
-			return !isMe(u);
+			let id = u;
+
+			if (typeof u !== 'string' && u && u.getId) {
+				id = u.getId();
+			}
+
+			if(getAppUsername() === id) {
+				return false;
+			} else {
+				return true;
+			}
 		});
 
-		UserRepository.getUser(sharedWith)
+		getAppUser(sharedWith).then
 			.then(function (users) {
 				if (!Array.isArray(users)) { users = [users]; }
 
@@ -45,9 +50,6 @@ export default {
 					obj.titleEl.update(title);
 				}
 			});
-
-		//Kick this off so its faster on click
-		obj.onLoadTranscript = obj.ChatActions.loadTranscript(obj.ContainerId);
 
 		return obj.titleEl;
 	},
