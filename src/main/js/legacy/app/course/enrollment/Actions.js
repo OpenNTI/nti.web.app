@@ -155,6 +155,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 
 		reject = reject || function () {};
 
+		//Call this when refreshing enrolled courses to
+		//trigger the favorites to update
+		me.CourseStore.afterAddCourse();
+
 		me.CourseActions.setUpEnrolledCourses(collection)
 			.then(fulfill)
 			.catch(reject);
