@@ -551,6 +551,12 @@
 .note-window .main-view .context,
 #NTIContent {
 
+	.figure {
+		[itemprop*="nti-data-markup"]:not(.no-details) {
+			max-width: 100%;
+		}
+	}
+
 	.no-details {
 		.bar {
 			display: none;
