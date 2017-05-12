@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 		return Promise.all([
 			Service.request(link),
-			this.LibraryActions.findContentPackage(contentPackage)
+			Service.getObjectOfType(contentPackage, 'application/vnd.nextthought.contentpackage')
 		]).then(function (results) {
 				var xml = results[0],
 					content = results[1];

@@ -593,6 +593,19 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 	},
 
 
+	getObjectOfType (ntiid, mime, forceMime, targetBundle) {
+		const url = this.getObjectURL(ntiid);
+
+		return this.getObjectRaw(url, mime, forceMime, targetBundle)
+			.then((resp) => {
+				return ParseUtils.parseItems(resp.responseText)[0]
+			})
+			.catch(() => {
+				return;
+			});
+	},
+
+
 	getObject: function (ntiid, success, failure, scope, safe, targetBundle) {
 		var url, result;
 
