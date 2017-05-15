@@ -179,6 +179,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 				this.activeBundle = current;
 
+				current.getWrapper()
+					.then((enrollment) => {
+						this.CourseViewStore.addCourse(enrollment);
+					});
+
 				return current;
 			});
 		}
