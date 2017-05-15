@@ -24,14 +24,24 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 	 */
 	dropCourse: function (course, callback) {
 		var me = this,
-			enrollment = me.CourseStore.findEnrollmentForCourse(course.getId()),
-			courseHref = course.get('href');
-
+			enrollment = me.CourseStore.findEnrollmentForCourse(course.getId());
 
 		if (!enrollment) {
 			callback.call(null, true, false);
 			return;
 		}
+
+		this.dropEnrollment(course, enrollment, callback);
+	},
+
+	/**
+	 * Drops a course
+	 * @param  {CourseCatalogEntry}	  course   the course to enroll or drop
+	 * @param  {boolean}   enrolled	  true to enroll false to drop
+	 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
+	 */
+	dropEnrollment: function (course, enrollment, callback) {
+		var me = this;
 
 		me.CourseStore.beforeDropCourse();
 
@@ -74,7 +84,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 
 				callback.call(null, false, false);
 			});
-
 	},
 
 	/**
@@ -140,6 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 
 	__toggleEnrollmentStatus: function (catelogEntry, enrollement) {
 		var collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
+
 		if (enrollement) {
 			return Service.requestDelete(enrollement.get('href'));
 		}
