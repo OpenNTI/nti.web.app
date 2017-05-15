@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 	findEnrollmentForCourse: function (courseOrNtiid) {
 		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid,
-			me = this, match;
+			me = this;
 
 		function fn (rec) {
 			var catalog = rec.getCourseCatalogEntry(),
@@ -290,7 +290,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			return match;
 		}
 
-		return me.__findIn(me.ENROLLED_COURSES, fn);
+		const enrolled = me.__findIn(me.ENROLLED_COURSES, fn);
+
+		if(enrolled) {
+			return enrolled;
+		} else {
+			return me.__findIn(me.FAVORITE_ENROLLED_COURSES, fn);
+		}
 	},
 
 	findCourseForNtiid: function (ntiid) {
