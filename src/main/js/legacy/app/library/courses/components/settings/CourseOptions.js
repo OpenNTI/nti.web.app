@@ -74,6 +74,18 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		const catalog = course && course.getCourseCatalogEntry();
 		const courseTitle = catalog && catalog.get('Title');
 
+		function undoEnrollment (cmp) {
+			return new Promise(function (fulfill, reject) {
+				cmp.CourseEnrollmentActions.dropEnrollment(catalog, course, function (success, changed, status) {
+					if (success) {
+						fulfill(changed);
+					} else {
+						reject(status);
+					}
+				});
+			});
+		}
+
 		me.changingEnrollment = true;
 
 		Ext.Msg.show({
@@ -86,28 +98,20 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 					cls: 'caution',
 					handler: function () {
 						me.addMask();
-						me.CourseEnrollmentStore.getEnrollmentDetails(catalog)
-							.then(me.__onDetailsLoaded.bind(me))
-							.then(() => {
-								const type = me.course.get('Status');
-								const optionName = type && me.statusToOptionMap[type];
-								const option = me.enrollmentOptions[optionName] || {undoEnrollment: function () { return Promise.reject(); }};
+						undoEnrollment(me)
+										.catch(function (reason) {
+											var msg;
 
-								option.undoEnrollment(me)
-									.catch(function (reason) {
-										var msg;
+											if (reason === 404) {
+												msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
+											} else {
+												msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
+											}
 
-										if (reason === 404) {
-											msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
-										} else {
-											msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
-										}
-
-										console.error('failed to drop course', reason);
-										//already dropped?? -- double check the string to make sure it's correct
-										alert(msg);
-									});
-							});
+											console.error('failed to drop course', reason);
+											//already dropped?? -- double check the string to make sure it's correct
+											alert(msg);
+										});
 					}
 				},
 				secondary: {
