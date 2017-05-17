@@ -333,10 +333,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 			}
 			el.querySelector('.wrapper').appendChild(target);
 
-			width = (parseInt(getStyle(target).width || get(target, 'width'), 10) || Ext.fly(target).getWidth()) +
-				Ext.get(el).getBorderWidth('lr');
 
-			Ext.get(el).setWidth(width);
+			let imgWidth = (parseInt(getStyle(target).width || get(target, 'width'), 10) || Ext.fly(target).getWidth());
+
+			width = imgWidth + Ext.get(el).getBorderWidth('lr');
+
+
+			if (imgWidth) {
+				Ext.get(el).setWidth(width);
+			}
 
 
 			Ext.each(p, function (feature) {
