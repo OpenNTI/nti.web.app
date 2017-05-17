@@ -615,6 +615,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					});
 				}
 			}).then((enrollment) => {
+				if (enrollment) {
+					enrollment.set('CourseInstance', this);
+				}
+
 				if (!enrollment) {
 					console.error('The Enrollment instance wasnt in the course instance stores');
 				}

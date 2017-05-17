@@ -44,6 +44,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		return this.TOTAL_ADMIN;
 	},
 
+	addCourse (course) {
+		const courseKey = course.isAdministrative ? 'ADMIN_COURSES' : 'ENROLLED_COURSES';
+		const courses = this[courseKey];
+		const included = courses.every(x => x.getId() !== course.getId());
+
+		if (!included) {
+			courses.push(course);
+			this[courseKey] = courses;
+		}
+	},
+
 	__updateCoursesEnrollmentState: function (courses) {
 		var me = this;
 
