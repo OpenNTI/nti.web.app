@@ -554,6 +554,10 @@
 	.figure {
 		[itemprop*="nti-data-markup"]:not(.no-details) {
 			max-width: 100%;
+
+			& + .caption {
+				display: none;
+			}
 		}
 	}
 
