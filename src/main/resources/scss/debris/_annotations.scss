@@ -555,7 +555,7 @@
 		[itemprop*="nti-data-markup"]:not(.no-details) {
 			max-width: 100%;
 
-			& + .caption {
+			& ~ .caption {
 				display: none;
 			}
 		}
