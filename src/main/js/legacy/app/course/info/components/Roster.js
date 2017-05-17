@@ -274,6 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 					}));
 
 		this.grid.bindStore(Ext.getStore('ext-empty-store'));
+		this.grid.getView().refresh();
 
 		this.filterMenu.setState('*');
 
