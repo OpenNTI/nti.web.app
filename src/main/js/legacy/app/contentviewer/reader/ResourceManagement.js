@@ -338,8 +338,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 
 			width = imgWidth + Ext.get(el).getBorderWidth('lr');
 
-
-			if (imgWidth) {
+			//If the image gets deleted this width is being set very small
+			//so the caption if wrapping after every character, use 30 px as
+			//the cutoff since thats what IE
+			if (width > 30) {
 				Ext.get(el).setWidth(width);
 			}
 
