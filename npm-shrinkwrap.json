@@ -5849,9 +5849,9 @@
       "dev": true
     },
     "nti-content": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "from": "nti-content@>=1.0.0 <2.0.0",
-      "resolved": "https://npm.nextthought.com/nti-content/-/nti-content-1.2.0.tgz",
+      "resolved": "https://npm.nextthought.com/nti-content/-/nti-content-1.2.1.tgz",
       "dev": true,
       "dependencies": {
         "draft-js": {
