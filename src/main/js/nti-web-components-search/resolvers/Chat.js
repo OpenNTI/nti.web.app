@@ -32,7 +32,7 @@ export default {
 			}
 		});
 
-		getAppUser(sharedWith).then
+		getAppUser(sharedWith)
 			.then(function (users) {
 				if (!Array.isArray(users)) { users = [users]; }
 
