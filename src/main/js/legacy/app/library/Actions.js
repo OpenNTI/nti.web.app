@@ -30,6 +30,13 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	},
 
 
+	reload () {
+		return Promise.all([
+			this.CourseActions.loadCourses(),
+			this.ContentActions.loadContent()
+		]);
+	},
+
 
 	parseXML: function (xml) {
 		try {
