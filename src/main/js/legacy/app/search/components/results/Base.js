@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var UserRepository = require('../../../../cache/UserRepository');
 var {isMe} = require('legacy/util/Globals');
 
+const noop = () => {};
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.Base', {
 	extend: 'Ext.Component',
@@ -97,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 				me.addObject(obj);
 
 				me.getPathToObject(obj)
-					.then(me.showBreadCrumb.bind(me));
+					.then(me.showBreadCrumb.bind(me)).catch(noop);
 			})
 			.catch(() => {
 				me.hide();
