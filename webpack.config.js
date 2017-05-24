@@ -154,7 +154,7 @@ exports = module.exports =
 	},
 
 	plugins: [
-		new StatsPlugin('../server/compile-data.json'),
+		new StatsPlugin('../compile-data.json'),
 		new AppCachePlugin({
 			cache: [
 				'index.html',
