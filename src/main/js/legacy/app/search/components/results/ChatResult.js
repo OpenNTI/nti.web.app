@@ -39,6 +39,10 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
+	addTitle (obj) {
+		this.setTitle(obj);
+	},
+
 	setTitle: function (record) {
 		var me = this,
 			sharedWith = record.get('sharedWith');
