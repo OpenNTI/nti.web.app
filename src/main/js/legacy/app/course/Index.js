@@ -27,6 +27,7 @@ const Video = require('legacy/model/Video');
 const Assignment = require('legacy/model/assessment/Assignment');
 const DiscussionAssignment = require('legacy/model/assessment/DiscussionAssignment');
 const User = require('legacy/model/User');
+const {getService} = require('nti-web-client');
 
 const DASHBOARD = 'course-dashboard';
 const OVERVIEW = 'course-overview';
@@ -143,8 +144,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	gotoResource (id) {
-		this.pushRoute('', `/content/${encodeForURI(id)}/edit`);
+	gotoResource (reading) {
+		reading.NTIID ? this.pushRoute('', `/content/${encodeForURI(reading.NTIID)}/edit`) : this.pushRoute('', `/content/${encodeForURI(reading.get('NTIID'))}/edit`);
+
+		this.setTitle(reading.DCTitle);
 	},
 
 

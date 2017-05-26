@@ -21,7 +21,7 @@ export default class ReadingListItem extends React.Component {
 		const {reading, gotoResource} = this.props;
 
 		if (gotoResource) {
-			gotoResource(reading.NTIID);
+			gotoResource(reading);
 		}
 	}
 
