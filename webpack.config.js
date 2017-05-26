@@ -2,7 +2,7 @@
 'use strict';
 
 const publicPath = '/app/';
-const outPath = './stage/';
+const outPath = './dist/';
 
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');

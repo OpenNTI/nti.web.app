@@ -1,7 +1,6 @@
 .PHONY: all setup check build compile styles stage deploy clean-dist clean-stage clean-styles clean
 
 DIST=./dist/
-STAGE=./stage/
 SRC=./src/
 RES=resources/
 
@@ -26,45 +25,29 @@ styles: clean-styles
 	@node-sass $(SRC)main/resources/scss -o $(SRC)main/resources/css
 	@postcss --use autoprefixer -r $(SRC)main/resources/css/*.css
 
+build: compile
+	@echo "Done."
 
-build: compile deploy
-	@npm la 2>/dev/null > $(DIST)client/js/versions.txt || true
-	@npm ls 2>/dev/null | grep nti- | sed -e 's/^[\│\├\─\┬\└\ ]\{1,\}/z /g' | sort | sed -e 's/^z/-/g' > $(DIST)client/js/nti-versions.txt || true
-	@rm -rf $(STAGE)
-
-
-compile: clean-stage stage styles
+compile: clean styles
+	@mkdir -p $(DIST)client
+	@mkdir -p $(DIST)server
 ##the server code doesn't compile, just copy it.
-	@cp -r $(SRC)server/ $(STAGE)server/
+	@cp -r $(SRC)server/ $(DIST)server/
 ## copy static assets
-	@(cd $(SRC)main; rsync -Rr . ../../$(STAGE)client)
-	@rm -r $(STAGE)client/js
-	@rm -r $(STAGE)client/resources/scss
+	@(cd $(SRC)main; rsync -Rr . ../../$(DIST)client)
+	@rm -r $(DIST)client/js
+	@rm -r $(DIST)client/resources/scss
 ##compile
 	@NODE_ENV="production" $(CC) ./webpack.config.js
+##record versions
+	@npm la 2>/dev/null > $(DIST)client/js/versions.txt || true
+	@npm ls 2>/dev/null | grep nti- | sed -e 's/^[\│\├\─\┬\└\ ]\{1,\}/z /g' | sort | sed -e 's/^z/-/g' > $(DIST)client/js/nti-versions.txt || true
 
-
-stage:
-	@mkdir -p $(STAGE)client
-	@mkdir -p $(STAGE)server
-
-
-deploy: clean-dist
-	@mkdir -p $(DIST)
-	@mv -f $(STAGE)client $(DIST)client
-	@mv -f $(STAGE)server $(DIST)server
-
-
-clean-dist:
-	@rm -rf $(DIST)
-
-
-clean-stage:
-	@rm -rf $(STAGE)
 
 clean-styles:
 	@rm -rf $(SRC)main/resources/css
 	@rm -f $(SRC)main/resources/scss/utils/_icons.scss
 	@rm -f $(SRC)main/resources/images/sprite.png
 
-clean: clean-stage clean-dist clean-styles
+clean: clean-styles
+	@rm -rf $(DIST)
