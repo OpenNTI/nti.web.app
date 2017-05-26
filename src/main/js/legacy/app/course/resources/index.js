@@ -88,7 +88,8 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 
 					return this.currentBundle.updateFromServer()
 						.then(() => {
-							this.gotoReading(pack.get('NTIID'));
+							this.gotoReading(pack);
+							this.setTitle('Untitled Reading');
 						});
 				})
 				.always(() => {
@@ -100,9 +101,9 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 	},
 
 
-	gotoReading (readingID) {
+	gotoReading (reading) {
 		if (this.gotoResource) {
-			this.gotoResource(readingID);
+			this.gotoResource(reading);
 		}
 	},
 
