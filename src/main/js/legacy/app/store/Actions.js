@@ -4,7 +4,7 @@ var {getURL} = Globals;
 var ParseUtils = require('../../util/Parsing');
 var StoreUtils = require('../../util/Store');
 var CommonActions = require('../../common/Actions');
-var ContentStateStore = require('../library/Content/StateStore');
+var ContentStateStore = require('../library/content/StateStore');
 var StoreStateStore = require('./StateStore');
 var LoginStateStore = require('../../login/StateStore');
 
