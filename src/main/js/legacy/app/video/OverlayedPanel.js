@@ -105,6 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.callParent([config]);
 
+		//TODO: figure out how to not need the video index
 		this.LibraryActions.getVideoIndex(bundle, content)
 			.then(this.fillVideo.bind(this));
 	},

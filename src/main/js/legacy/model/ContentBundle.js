@@ -179,6 +179,11 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
+	hasContentPackage (id) {
+		return !!this.getContentPackage(id);
+	},
+
+
 	getContentPackage (id) {
 		const packages = this.get('ContentPackages');
 

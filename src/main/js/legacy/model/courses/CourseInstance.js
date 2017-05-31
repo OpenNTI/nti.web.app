@@ -376,6 +376,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 
+	hasContentPackage (id) {
+		const bundle = this.get('Bundle');
+
+		return bundle.getContentPackage(id);
+	},
+
+
 	getContentPackage (id) {
 		const bundle = this.get('Bundle');
 
