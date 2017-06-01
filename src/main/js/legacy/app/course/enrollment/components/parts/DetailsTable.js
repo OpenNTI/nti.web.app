@@ -39,23 +39,32 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					{cls: 'value', html: '{school}'}
 				]}
 			]},
-			{cls: 'line course-info', cn: [
-				{cls: 'field fourth', cn: [
-					{cls: 'name', html: 'start date'},
-					{cls: 'value', html: '{start}'}
-				]},
-				{cls: 'field fourth', cn: [
-					{cls: 'name', html: 'end date'},
-					{cls: 'value', html: '{end}'}
-				]},
-				{cls: 'field fourth', cn: [
-					{cls: 'name', html: 'duration'},
-					{cls: 'value', html: '{duration}'}
+			{tag: 'tpl', 'if': 'start || end || duration', cn: [
+				{cls: 'line course-info', cn: [
+					{tag: 'tpl', 'if': 'start', cn: [
+						{cls: 'field fourth', cn: [
+							{cls: 'name', html: 'start date'},
+							{cls: 'value', html: '{start}'}
+						]},
+					]},
+					{tag: 'tpl', 'if': 'end', cn: [
+						{cls: 'field fourth', cn: [
+							{cls: 'name', html: 'end date'},
+							{cls: 'value', html: '{end}'}
+						]},
+					]},
+					{tag: 'tpl', 'if': 'duration', cn: [
+						{cls: 'field fourth', cn: [
+							{cls: 'name', html: 'duration'},
+							{cls: 'value', html: '{duration}'}
+						]}
+					]}
+
+					// {cls: 'field fourth', cn: [
+					//	{cls: 'name', html: 'course type'},
+					//	{cls: 'value', html: '{type}'}
+					// ]}
 				]}
-				// {cls: 'field fourth', cn: [
-				//	{cls: 'name', html: 'course type'},
-				//	{cls: 'value', html: '{type}'}
-				// ]}
 			]}
 	]}),
 
@@ -71,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		showCredit = credit && !Ext.isEmpty(prereqs);
 
-		duration = new Duration(duration);
+		duration = duration && new Duration(duration);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			price: this.getPrice(),
@@ -84,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			start: Ext.Date.format(c.get('StartDate'), 'F j, Y'),
 			end: Ext.Date.format(c.get('EndDate'), 'F j, Y'),
 			school: c.get('ProviderDepartmentTitle'),
-			duration: Math.floor(duration.inWeeks()) + ' Weeks',
+			duration: duration && duration.inWeeks() > 0 ? Math.floor(duration.inWeeks()) + ' Weeks' : null,
 			type: 'Fully Online'
 		});
 	},
