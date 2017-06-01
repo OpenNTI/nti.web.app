@@ -125,17 +125,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			return Promise.resolve(obj);
 		}
 
-		let refresh;
-
-		if (this.currentBundle.hasContentPackage(id)) {
-			refresh = this.currentBundle.updateContentPackage(id);
-		} else {
-			refresh = Promise.resolve();
-		}
-
 		//Try getting the object first, since it would return a related work or page info
-		return refresh
-			.then(() => Service.getObject(id, null, null, null, null, this.currentBundle))
+		return Service.getObject(id, null, null, null, null, this.currentBundle)
 			.then((obj) => {
 				//if we don't get a page (pageinfo or related work) request a page info
 				if (!obj.isPage) {
@@ -146,6 +137,15 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				}
 
 				return obj;
+			})
+			.then(page => {
+				return page.getContentPackage()
+					.then((contentPackage) => {
+						this.currentBundle.syncContentPackage(contentPackage);
+
+						return page;
+					})
+					.catch(() => page);
 			});
 	},
 
@@ -324,6 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		return this.__loadContent(ntiid, obj)
 			.then(function (page) {
 				me.showReader(page, route.precache.parent, route.hash, route.precache.note);
+
 				if (me.activeMediaWindow) {
 					me.activeMediaWindow.destroy();
 				}

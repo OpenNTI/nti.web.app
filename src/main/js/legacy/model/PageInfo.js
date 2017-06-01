@@ -8,7 +8,7 @@ require('legacy/model/assessment/Question');
 
 const Assignment = require('legacy/model/assessment/Assignment');
 
-
+const ContentPackageMimeType = 'application/vnd.nextthought.renderablecontentpackage';
 
 module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 	extend: 'NextThought.model.Base',
@@ -61,6 +61,16 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 
 	isPageRoot: function () {
 		return !this.getLinkFragment('content');
+	},
+
+	getContentPackage () {
+		const url = this.getLink('package');
+		const request = url ? Service.request({url, headers: {Accept: ContentPackageMimeType}}) : Promise.reject('No Link');
+
+		return request
+				.then((resp) => {
+					return ParseUtils.parseItems(resp)[0];
+				});
 	},
 
 	getPageRootID: function () {

@@ -179,6 +179,24 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
+	__addContentPackage (contentPackage) {
+		const packages = this.getContentPackages();
+
+		this.set('ContentPackages', [...packages, contentPackage]);
+	},
+
+
+	syncContentPackage (contentPackage) {
+		const original = this.getContentPackage(contentPackage.get('NTIID'));
+
+		if (original) {
+			original.syncWith(contentPackage);
+		} else {
+			this.__addContentPackage(contentPackage);
+		}
+	},
+
+
 	hasContentPackage (id) {
 		return !!this.getContentPackage(id);
 	},
