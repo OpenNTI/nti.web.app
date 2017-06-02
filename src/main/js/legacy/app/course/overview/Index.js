@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				me.reader = me.add({
 					xtype: 'bundle-content',
 					currentBundle: me.currentBundle,
-					handleNavigation: me.handleNavigation.bind(me),
+					handleNavigation: me.handleContentNavigation.bind(me),
 					navigateToObject: me.navigateToObject.bind(me),
 					onDelete: () => {
 						me.pushRoute(route.precache.parent.title, route.precache.parent.route);
@@ -433,6 +433,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			}
 		};
 	},
+
+
+	handleContentNavigation (title, route, precache) {
+		const lessonId = this.activeLesson.getId();
+		const lessonPart = encodeForURI(lessonId);
+
+		return this.handleNavigation(title, `${lessonPart}/content/${route}`, precache);
+	},
+
 
 	handleNavigation: function (title, route, precache) {
 		this.pushRoute(title, route, precache);
