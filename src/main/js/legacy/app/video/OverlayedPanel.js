@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			path = bundleContent.getVideoRouteForObject(v);
 
 			if (path && path.route) {
-				bundleContent.handleNavigation(path.title, path.route, path.precache);
+				bundleContent.handleContentNavigation(path.title, path.route, path.precache);
 			}
 		}
 	},

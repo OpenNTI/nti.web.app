@@ -269,7 +269,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				me.reader = me.add({
 					xtype: 'bundle-content',
 					currentBundle: me.currentBundle,
-					handleNavigation: me.handleContentNavigation.bind(me),
+					handleContentNavigation: me.handleContentNavigation.bind(me),
+					handleNavigation: me.handleNavigation.bind(me),
 					navigateToObject: me.navigateToObject.bind(me),
 					onDelete: () => {
 						me.pushRoute(route.precache.parent.title, route.precache.parent.route);
