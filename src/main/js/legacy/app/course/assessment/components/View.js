@@ -183,10 +183,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	getAssignmentList: function () {
-		if (!this.assignmentsView) {
-			return Promise.resolve(this.assignmentCollection ? this.assignmentCollection.get('Assignments') : []);
-		}
+		return new Promise ((fulfill) => {
+			if(this.assignmentsView) {
+				fulfill();
+			}
+			else {
+				this.on('assignments-view-initialized', fulfill);
+			}
+		}).then(() => this.getAssignmentsFromAssignmentView());
+	},
 
+	getAssignmentsFromAssignmentView: function () {
 		return Promise.resolve(this.assignmentCollection ? this.assignmentCollection
 			: this.currentBundle.getAssignments())
 			.then(collection => this.assignmentsView.setAssignmentsData(collection, this.currentBundle, true))
@@ -324,6 +331,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			alignNavigation: this.alignNavigation.bind(this)
 		});
 
+		this.fireEvent('assignments-view-initialized');
+
 		//override the push route to use my change route, since my parent is incharge of handling routes
 		this.addChildRouter(this.notificationsView);
 		this.addChildRouter(this.assignmentsView);
@@ -372,6 +381,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			alignNavigation: this.alignNavigation.bind(this)
 		});
 
+		this.fireEvent('assignments-view-initialized');
 
 		this.addChildRouter(this.notificationsView);
 		this.addChildRouter(this.assignmentsView);

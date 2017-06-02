@@ -215,6 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				});
 			})
 			.always(() => {
+				this.setTitle(page.get('Title'));
 				this.el.unmask();
 			});
 	},

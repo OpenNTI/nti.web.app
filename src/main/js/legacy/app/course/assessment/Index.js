@@ -383,6 +383,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 					total: assignments.length
 				};
 
+				if(assignment) {
+					this.setTitle(assignment.get('title'));
+				}
+
 				return {
 					assignmentId: id,
 					assignment: assignment || (route.precache || {}).assignment,
