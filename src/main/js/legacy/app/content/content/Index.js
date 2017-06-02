@@ -139,6 +139,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				return obj;
 			})
 			.then(page => {
+				if(!page.getContentPackage) {
+					return page;
+				}
+
 				return page.getContentPackage()
 					.then((contentPackage) => {
 						this.currentBundle.syncContentPackage(contentPackage);
