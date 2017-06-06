@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		return Promise.all([
 			this.CourseActions.loadCourses(),
 			this.ContentActions.loadContent()
-		]);
+		]).then(() => this.CourseStore.afterAddCourse());
 	},
 
 

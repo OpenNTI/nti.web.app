@@ -66,17 +66,27 @@ module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 	onSuccess () {},
 
 	onError (error) {
-		let response = error && JSON.parse(error.responseText),
-			errorMessage = response.message || 'Error with the code.';
+		try {
+			let response = error && JSON.parse(error.responseText),
+				errorMessage = response.message || 'Error with the code.';
 
-		this.errorLabel.setHTML(errorMessage);
-		this.errorContainer.show();
-		this.form.addCls('error');
+			this.errorLabel.setHTML(errorMessage);
+			this.errorContainer.show();
+			this.form.addCls('error');
+		}
+		catch(e) {
+			// not always guaranteed JSON responseText, so if that errors out
+			// then at least show some kind of generic error message instead of
+			// nothing
+			this.errorLabel.setHTML('Could not redeem course code');
+			this.errorContainer.show();
+			this.form.addCls('error');
+		}
 	},
 
 	onFormChange (e) {
 		if(!e) { return; }
-		
+
 		if(e.type === 'keyup' || e.type === 'keydown') {
 			this.errorContainer.hide();
 			this.form.removeCls('error');
