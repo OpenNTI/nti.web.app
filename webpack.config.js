@@ -1,8 +1,6 @@
 /*eslint strict: 0, no-console: 0, import/no-unresolved: 0, import/order: 0*/
 'use strict';
 
-const publicPath = '/app/';
-const outPath = './dist/';
 
 const path = require('path');
 
@@ -13,6 +11,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
 // const CompressionPlugin = require('compression-webpack-plugin');
 
+const publicPath = '/app/';
+const outPath = path.resolve(__dirname, './dist');
 
 const root = path.resolve(__dirname, 'src', 'main', 'js');
 const modules = path.resolve(__dirname, 'node_modules');
@@ -28,7 +28,7 @@ exports = module.exports =
 {
 	name: 'browser',
 	output: {
-		path: outPath + 'client/',
+		path: path.resolve(outPath, './client'),
 		filename: 'js/[name]-[hash].js',
 		chunkFilename: 'js/[hash]-[id].js',
 		publicPath: publicPath
@@ -101,7 +101,7 @@ exports = module.exports =
 
 			{
 				test: /\.js(x?)$/i,
-				exclude: /node_modules/,
+				include: /src.main.js/,
 				loader: 'babel-loader'
 			},
 
