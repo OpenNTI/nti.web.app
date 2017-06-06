@@ -228,7 +228,16 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				});
 			})
 			.always(() => {
-				this.setTitle(page.get('Title'));
+				if(page.get) {
+					this.setTitle(page.get('Title'));
+				}
+				else {
+					// specifically for the case of creating a new reading
+					// since there is no title, setting it to blank removes
+					// the "Loading..." title and defaults to the lesson name
+					this.setTitle('');
+				}
+
 				this.el.unmask();
 			});
 	},
