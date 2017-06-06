@@ -70,8 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 					this.setUpEnrolledCourses((service.getCollection('EnrolledCourses', 'Courses') || {}).href)
 				]);
 			})
-			.then(() => store.setLoaded())
-			.then(() => store.afterAddCourse());
+			.then(() => store.setLoaded());
 	},
 
 
