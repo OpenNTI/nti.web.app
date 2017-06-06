@@ -1,23 +1,23 @@
-/*eslint strict: 0, no-console: 0*/
+/*eslint strict: 0, no-console: 0, import/no-unresolved: 0, import/order: 0*/
 'use strict';
 
 const publicPath = '/app/';
 const outPath = './dist/';
 
-const autoprefixer = require('autoprefixer');
-const webpack = require('webpack');
-
-const AppCachePlugin = require('appcache-webpack-plugin');
-const StatsPlugin = require('stats-webpack-plugin');
-// const CompressionPlugin = require('compression-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const path = require('path');
 
+const autoprefixer = require('autoprefixer');
+const AppCachePlugin = require('appcache-webpack-plugin');
+const StatsPlugin = require('stats-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+// const CompressionPlugin = require('compression-webpack-plugin');
+
+
 const root = path.resolve(__dirname, 'src', 'main', 'js');
-const sassRoot = path.resolve(__dirname, 'src', 'main', 'resources', 'scss');
 const modules = path.resolve(__dirname, 'node_modules');
-const eslintrc = path.resolve(__dirname, '.eslintrc');
+const sassRoot = path.resolve(__dirname, 'src', 'main', 'resources', 'scss');
+// const eslintrc = path.resolve(__dirname, '.eslintrc');
 
 const gitRevision = JSON.stringify(require('nti-util-git-rev'));
 
@@ -61,55 +61,54 @@ exports = module.exports =
 	],
 
 	resolve: {
-		root: [root, modules],
-		extensions: ['', '.jsx', '.js', '.json', '.css', '.scss', '.html']
+		modules: [root, modules],
+		extensions: ['.jsx', '.js', '.json', '.css', '.scss', '.html']
 	},
 
-	resolveLoader: {
-		root: [modules]
-	},
 
 	module: {
-		preLoaders: [
+		rules: [
 			// {
 			// 	test: /src.main.js.+jsx?$/,
-			// 	loader: 'eslint-loader',
+			// 	loader: 'eslint',
+			// 	enforce: 'pre',
 			// 	exclude: /node_modules/
+			// 	options: {
+			// 		configFile: eslintrc,
+			// 		emitError: true,
+			// 		failOnError: true,
+			// 		quiet: true
+			// 	}
 			// },
 			{
 				test: /src.main.js.+jsx?$/,
 				loader: 'baggage-loader',
-				query: {
-					'[file].scss': true
+				options: {
+					'[file].scss':{}
 				}
 			},
 			{
 				test: /\.js(x?)$/,
+				enforce: 'pre',
+				include: /nti\-/,
 				loader: 'source-map-loader'
-			}
-		],
-		loaders: [
+			},
+
 			{
 				test: /\.async\.jsx$/i,
-				//unclear how to write this piped loader config in object notation in stead of stirng.
-				loader: 'react-proxy-loader!exports-loader?exports.default'
+				loader: 'react-proxy-loader'
 			},
 
 			{
 				test: /\.js(x?)$/i,
-				loader: 'babel-loader',
-				include: root
-			},
-
-			{
-				test: /\.json$/,
-				loader: 'json-loader'
+				exclude: /node_modules/,
+				loader: 'babel-loader'
 			},
 
 			{
 				test: /\.(ico|gif|png|jpg|svg)$/,
 				loader: 'url-loader',
-				query: {
+				options: {
 					limit: 10000,
 					name: 'resources/images/[name].[ext]',
 					mimeType: 'image/[ext]'
@@ -119,42 +118,60 @@ exports = module.exports =
 			{
 				test: /\.(eot|ttf|woff)$/,
 				loader: 'file-loader',
-				query: {
+				options: {
 					name: 'resources/fonts/[name].[ext]'
 				}
 			},
 
-			{ test: /\.(s?)css$/, loader: ExtractTextPlugin.extract(
-				'style-loader',
-				[
-					'css-loader?sourceMap&-minimize',
-					'postcss-loader',
-					'resolve-url-loader',
-					'sass-loader?sourceMap'
-				].join('!')
-				)
+			{
+				test: /\.(s?)css$/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: [
+						{
+							loader: 'css-loader',
+							options: {
+								sourceMap: true
+							}
+						},
+						{
+							loader: 'postcss-loader',
+							options: {
+								sourceMap: true,
+								plugins: () => [
+									autoprefixer({ browsers: ['> 1% in US', 'last 2 versions', 'iOS > 8'] })
+								]
+							}
+						},
+						{
+							loader: 'resolve-url-loader',
+							options: {
+								// debug:true,
+								// silent: false,
+								sourceMap: true,
+								root: __dirname
+							}
+						},
+						{
+							loader: 'sass-loader',
+							options: {
+								sourceMap: true,
+								includePaths: [sassRoot]
+							}
+						}
+					]
+				})
 			}
 		]
 	},
 
-	eslint: {
-		configFile: eslintrc,
-		emitError: true,
-		failOnError: true,
-		quiet: true
-	},
-
-	postcss: [
-		autoprefixer({ browsers: ['> 1%', 'last 2 versions'] })
-	],
-
-	sassLoader: {
-		sourceMap: true,
-		includePaths: [sassRoot]
-	},
-
 	plugins: [
-		new StatsPlugin('../compile-data.json'),
+		new webpack.EnvironmentPlugin({
+			NODE_ENV: PROD ? 'production' : 'development'
+		}),
+
+		PROD && new StatsPlugin('../compile-data.json'),
+
 		new AppCachePlugin({
 			cache: [
 				'index.html',
@@ -172,24 +189,22 @@ exports = module.exports =
 			exclude: [],
 			output: 'manifest.appcache'
 		}),
-		new webpack.optimize.DedupePlugin(),
-		new webpack.optimize.OccurenceOrderPlugin(),
+
 		new webpack.DefinePlugin({
-			'SERVER': false,
-			'BUILD_SOURCE': gitRevision,
-			'process.browser': true,
-			'process.env': {
-				'NODE_ENV': JSON.stringify(ENV)
-			}
+			'BUILD_SOURCE': gitRevision
 		}),
-		new webpack.ProvidePlugin({
-			'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+
+		new ExtractTextPlugin({
+			filename: 'resources/styles.css',
+			allChunks: true,
+			disable: false
 		}),
-		new ExtractTextPlugin('resources/styles.css', {allChunks: true}),
+
 		PROD && new webpack.optimize.UglifyJsPlugin({
 			test: /\.js(x?)($|\?)/i,
 			compress: { warnings: false }
-		})//,
+		}),
+
 		// PROD && new CompressionPlugin({ algorithm: 'gzip' })
 	].filter(x => x)
 };

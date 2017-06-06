@@ -1,4 +1,4 @@
-.PHONY: all setup check build compile styles stage deploy clean-dist clean-stage clean-styles clean
+.PHONY: all setup test check build compile styles clean-styles clean
 
 DIST=./dist/
 SRC=./src/
@@ -16,6 +16,8 @@ setup:
 	@rm -rf node_modules
 	@npm install
 
+test:
+	@jest --coverage
 
 check:
 	@eslint --ext .js,.jsx . || true

@@ -4,6 +4,8 @@ const {worker} = require('cluster');
 
 const logger = require('./logger');
 
+const first = x => Array.isArray(x) ? x[0] : x;
+
 exports.setupDeveloperMode = function setupDeveloperMode (config) {
 	const webpack = require('webpack');
 	const webpackConfigFile = require('../../../webpack.config');
@@ -13,20 +15,17 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 	const {debug = false, port} = config;
 	const devPort = config['webpack-dev-server'] || 0;
 
-	const webpackConfig = Object.assign({}, webpackConfigFile);
+	const webpackConfig = Object.assign({}, first(webpackConfigFile));
 
 	webpackConfig.output.path = '/';
 	webpackConfig.output.publicPath = config.basepath;
-	webpackConfig.output.filename = 'js/index.js';
-	webpackConfig.entry = './src/main/js/index.js';
+	webpackConfig.output.filename = 'js/[name].js';
 
 	const webpackServer = new WebpackServer(webpack(webpackConfig), {
-		contentBase: port,
 		//hot: true,
-		// For webpack2 uncomment this block: (and delete contentBase line)
-		// proxy: {
-		// 	'*': '//localhost:' + port
-		// },
+		proxy: {
+			'*': '//localhost:' + port
+		},
 
 		noInfo: false,
 		quiet: false,
@@ -34,7 +33,6 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 		watchOptions: {
 			aggregateTimeout: 5000
 		},
-		publicPath: '/',
 
 		stats: {
 			version: debug,
