@@ -121,6 +121,9 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 		node.select('.redactionAction .controls').remove();
 
+		//Remove video objects for now, in the future we should show the video player
+		node.select('object[type*=ntivideo]').remove();
+
 		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'), function (i) {
 			var e = Ext.get(i);
 			//only strip off the style for width that are too wide.
