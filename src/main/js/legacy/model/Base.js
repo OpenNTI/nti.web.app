@@ -4,12 +4,17 @@ const {isMe, getURL} = Globals;
 const ParseUtils = require('legacy/util/Parsing');
 const TimeUtils = require('legacy/util/Time');
 
+// intended to allow object updates, but should be used sparingly
+// to avoid memory leaks
+const {EventEmitter} = require('events');
+
 require('legacy/mixins/HasLinks');
 require('legacy/util/Time');
 require('legacy/proxy/Rest');
 
 require('legacy/model/converters');
 
+const MODIFICATION_BUS = new EventEmitter();
 
 module.exports = exports = Ext.define('NextThought.model.Base', {
 	extend: 'Ext.data.Model',
@@ -54,6 +59,14 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			var a = this['__SHARED_LOCATION_INTERFACE'];
 			a.setAttribute('href', ref);
 			return a;
+		},
+
+		addListener(event, handlerFn) {
+			MODIFICATION_BUS.addListener(event, handlerFn);
+		},
+
+		removeListener(event, handlerFn) {
+			MODIFICATION_BUS.removeListener(event, handlerFn);
 		}
 	},
 
@@ -535,6 +548,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		function announce () {
 			me.fireEvent('deleted', me);
+			MODIFICATION_BUS.emit('deleted', me.get('NTIID'));
 		}
 
 		options = Ext.apply(options || {},{

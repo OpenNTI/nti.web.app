@@ -23,14 +23,26 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 
 	]})),
 
+	constructor: function () {
+		this.callParent(arguments);
+
+		this.deleteNote = this.deleteNote.bind(this);
+	},
 
 	afterRender: function () {
 		this.callParent(arguments);
 
 		this.on('beforedeactivate', 'beforeDeactivate');
 		this.on('select', 'navigateToNote');
+
+		NextThought.model.Base.addListener('deleted', this.deleteNote);
 	},
 
+	onDestroy: function () {
+		NextThought.model.Base.removeListener('deleted', this.deleteNote);
+
+		this.callParent(arguments);
+	},
 
 	handleEvent: function (e) {
 		if (e.getTarget('a[href]')) {
@@ -39,6 +51,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 		return this.callParent(arguments);
 	},
 
+	deleteNote: function (id) {
+		const rec = this.store.findRecord('ID', id);
+
+		if (rec) {
+			this.store.remove(rec);
+		}
+	},
 
 	beforeDeactivate: function () {
 		// FIXME: they should be a better way to check if the editor is open on the note window.
