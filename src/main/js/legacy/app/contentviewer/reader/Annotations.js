@@ -50,6 +50,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		me.mixins.observable.constructor.apply(me);
 		me.UserDataActions = NextThought.app.userdata.Actions.create();
 
+		this.deleteNote = this.deleteNote.bind(this);
+
 		reader.on('destroy', 'destroy',
 				  reader.relayEvents(me, [
 					  'filter-by-line',
@@ -63,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 					  'resize'
 				  ]));
 
-		reader.on('destroy', 'clearAnnotations', this);
+		reader.on('destroy', 'onDestroy', this);
 
 		Ext.apply(me, {
 			annotations: {},
@@ -94,6 +96,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		me.mon(me.annotationManager.events, 'finish', function (c) {
 			me.fireEvent('rendered', c);
 		}, me, {buffer: 500});
+
+		NextThought.model.Base.addListener('deleted', this.deleteNote);
+	},
+
+	onDestroy: function () {
+		this.clearAnnotations();
+		NextThought.model.Base.removeListener('deleted', this.deleteNote);
+	},
+
+	deleteNote: function (id) {
+		this.remove(id);
 	},
 
 	getDocumentElement: function () {
