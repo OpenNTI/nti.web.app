@@ -67,6 +67,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		this.addChildRouter(this.lessons);
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
+
+		this.on('deactivate', this.closeReading.bind(this));
 	},
 
 	onAddedToParentRouter: function () {
@@ -94,6 +96,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			this.reader.fireEvent('deactivate');
 		}
 	},
+
+
+	closeReading () {
+		const lessons = this.getLessons();
+
+		if (this.reader) {
+			this.reader.destroy();
+			delete this.reader;
+		}
+
+		this.getLayout().setActiveItem(lessons);
+	},
+
 
 	getContext: function () {
 		var lessons = this.getLessons(), item = this.getLayout().getActiveItem();
