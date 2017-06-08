@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		//look closer at it, but for now remove the depreciation message.
 		// console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
 		var cache = this.LibraryStore.videoIndex = this.LibraryStore.videoIndex || {},
-			index = bundle.getId(), toc, root;
+			toc, root;
 
 		function query (tag, id) {
 			return tag + '[ntiid="' + ParseUtils.escapeId(id) + '"]';
@@ -116,12 +116,10 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			return o;
 		}
 
-		if (cache[index]) { return cache[index]; }
-
 		const getToc = contentPackageID ? bundle.getTocFor(contentPackageID) : bundle.getTocs().then(tocs => tocs[0]);
 		const contentPackage = contentPackageID ? bundle.getContentPackage(contentPackageID) : bundle.getContentPackages[0];
 
-		cache[index] = Promise.all([
+		return Promise.all([
 			getToc,
 			contentPackage
 		])
@@ -188,15 +186,8 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			vi.containers = containers;
 
 			return vi;
-		});
-
-		cache[index].catch(function (reason) {
+		}).catch((reason) => {
 			console.error('Failed to load video index', reason);
-			//it fails, remove the cached promise so it can retry.
-			delete cache[index];
 		});
-
-
-		return cache[index];
 	}
 });
