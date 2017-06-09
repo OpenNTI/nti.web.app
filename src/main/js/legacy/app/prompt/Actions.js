@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var CommonActions = require('../../common/Actions');
-var PromptStateStore = require('./StateStore');
+require('../../common/Actions');
+const Ext = require('extjs');
+
+const PromptStateStore = require('./StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.prompt.Actions', {
@@ -13,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.PromptStateStore = NextThought.app.prompt.StateStore.getInstance();
+		this.PromptStateStore = PromptStateStore.getInstance();
 	},
 
 	prompt: function (type, data) {

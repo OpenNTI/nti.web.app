@@ -23,5 +23,6 @@
 		"no-underscore-dangle": 0, /*damn, because this is has become so pervasive in the Ext/Legacy code, we're turning this rule off. JavaScript does not have "private" anything. underscores are ugly. Internal methods & variables should be wrapped in closures.*/
 		"no-var": 0,
 		"strict": [2, "never"],
+		"import/no-extraneous-dependencies": 0
 	}
 }
