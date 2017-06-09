@@ -5523,9 +5523,9 @@
       }
     },
     "nti-assignment-editor": {
-      "version": "1.2.2",
-      "resolved": "https://npm.nextthought.com/nti-assignment-editor/-/nti-assignment-editor-1.2.2.tgz",
-      "integrity": "sha512-bKKhduDS0Z5/Srk+egsNK/Gtc6ywZ/YpjFCFoHOt+FdzMFmkJSZRsuahHCW3BdXIxZYb+bJuAVY96gHbrnHndA==",
+      "version": "1.2.3",
+      "resolved": "https://npm.nextthought.com/nti-assignment-editor/-/nti-assignment-editor-1.2.3.tgz",
+      "integrity": "sha512-KUt1KfNWcuul6x6iEGlUNBHqV2NjIuS5DpXEOrOH4ogZKbkyL9m+K7sUW4Z4+86DJKTngmFexj627bqde+I2eg==",
       "dev": true,
       "dependencies": {
         "uuid": {
@@ -5711,9 +5711,9 @@
       "dev": true
     },
     "nti-web-commons": {
-      "version": "0.0.202",
-      "resolved": "https://npm.nextthought.com/nti-web-commons/-/nti-web-commons-0.0.202.tgz",
-      "integrity": "sha512-rNF9yHXBDq7ZkZD1BAoKJa3mbGpvvePHswgj4YT8zYt390pNfetpv8PQ9FdZkXNSIpna/NK03YADlLD2Xj795w==",
+      "version": "0.0.203",
+      "resolved": "https://npm.nextthought.com/nti-web-commons/-/nti-web-commons-0.0.203.tgz",
+      "integrity": "sha512-V9ifAKzQCnVwjbhzXI1NQ6UUPmysworfNCwuAkU7IpglG7nRG/3dDT8YD9FChG/E6SkTBCYP+LynuG2gA4m2cg==",
       "dev": true
     },
     "nti-web-discussions": {
