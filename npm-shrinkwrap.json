@@ -5523,9 +5523,9 @@
       }
     },
     "nti-assignment-editor": {
-      "version": "1.2.3",
-      "resolved": "https://npm.nextthought.com/nti-assignment-editor/-/nti-assignment-editor-1.2.3.tgz",
-      "integrity": "sha512-KUt1KfNWcuul6x6iEGlUNBHqV2NjIuS5DpXEOrOH4ogZKbkyL9m+K7sUW4Z4+86DJKTngmFexj627bqde+I2eg==",
+      "version": "1.2.4",
+      "resolved": "https://npm.nextthought.com/nti-assignment-editor/-/nti-assignment-editor-1.2.4.tgz",
+      "integrity": "sha512-iLo9LQVjMFFAWreAFVC96cOBmFB+aEsxiFPhtZlsm5CG+rHEalR8OJHKuVG+SrPya8lV2CF3B71Pm75fmNOlwQ==",
       "dev": true,
       "dependencies": {
         "uuid": {
