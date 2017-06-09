@@ -422,6 +422,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 				this.log('Clearing command queue for ', this.activeVideoService, ' as part of deactivate');
 				delete this.commandQueue[this.activeVideoService];
 				this.issueCommand(this.activeVideoService, 'deactivate', null, true);
+				this.fireEvent('player-deactivated');
 			}
 			catch (e) {
 				console.warn('Error caught deactivating video', e.stack || e.message || e);

@@ -90,6 +90,9 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 							Ext.defer(video.deactivatePlayer, 1, video);
 						}
 						//console.log(me);
+					},
+					'player-deactivated': () => {
+						me.onPlayerDeactivated();
 					}
 				},
 				xhooks: {
@@ -202,6 +205,12 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			this.openMediaViewer();
 		}
 	},
+
+
+	onPlayerDeactivated () {
+		this.removeCls('playing');
+	},
+
 
 	openMediaViewer: function () {
 		var v = this.playlist[0],
