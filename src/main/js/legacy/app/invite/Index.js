@@ -231,27 +231,29 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 			.catch( error => {
 				const inviteErrors = JSON.parse(error.responseText);
 
-				let warnings = inviteErrors && inviteErrors.warnings,
+				// treat 'warnings' and 'message' field the same. either way,
+				// it's an error message unrelated to 'invalidEmails'
+				let msg = inviteErrors && (inviteErrors.warnings || inviteErrors.message),
 					invalidEmails = inviteErrors.InvalidEmails,
 					emails = invalidEmails && invalidEmails.Items;
 
-				if(emails || warnings) {
-					this.showErrors(emails || [], warnings || '');
+				if(emails || msg) {
+					this.showErrors(emails || [], msg || '');
 				}
 				return Promise.reject('Unable to save');
 			});
 	},
 
-	showErrors (invalidEmails, warnings = '') {
+	showErrors (invalidEmails, msg = '') {
 		if(Array.isArray(invalidEmails) && invalidEmails.length !== 0) {
 			if(invalidEmails[0].slice(0, -1).toLowerCase() === 'email') {
 				invalidEmails.shift();
 				if(invalidEmails.length === 0) { return; }
 			}
 
-			this.form.showErrorOn('emails', `The following emails are invalid: ${invalidEmails.join(', ')}. ${warnings}`);
-		} else if (warnings !== '') {
-			this.form.showErrorOn('emails', warnings);
+			this.form.showErrorOn('emails', `The following emails are invalid: ${invalidEmails.join(', ')}. ${msg}`);
+		} else if (msg !== '') {
+			this.form.showErrorOn('emails', msg);
 		}
 	}
 });

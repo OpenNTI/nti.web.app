@@ -35,6 +35,11 @@ module.exports = exports = Ext.define('NextThought.app.invite.Prompt', {
 
 	onSave () {
 		if (this.inviteForm && this.inviteForm.onSave) {
+			// prevent users from continually clicking the Send button while
+			// indicating to them that something is happening behind the scenes
+			this.Prompt.Footer.disableSave();
+			this.Prompt.Footer.setSaveText('Sending...');
+
 			return this.inviteForm.onSave();
 		}
 
@@ -46,6 +51,9 @@ module.exports = exports = Ext.define('NextThought.app.invite.Prompt', {
 	},
 
 	onSaveFailure () {
+		// reset Send button
+		this.Prompt.Footer.setSaveText('Send');
+		this.Prompt.Footer.enableSave();
 	}
 }, function () {
 	NextThought.app.prompt.StateStore.register('invite', this);
