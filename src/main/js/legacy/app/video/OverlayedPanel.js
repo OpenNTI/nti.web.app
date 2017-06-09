@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			this.addCls('playing');
 			this.down('content-video').resumePlayback(true);
 		}
-		if (!e.getTarget('.launch-player') && e.getTarget('.label')) {
+		else {
 			this.openMediaViewer();
 		}
 	},
