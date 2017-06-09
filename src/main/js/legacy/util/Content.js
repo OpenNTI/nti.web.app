@@ -136,14 +136,14 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 */
 	isExternalUri: function (r) {
 		var anchor = document.createElement('a'),
-			currentHost = window.location && window.location.host,
+			currentHostname = window.location && window.location.hostname,
 			targetHost;
 
 		anchor.href = r;
 
-		targetHost = anchor.host;
+		targetHostname = anchor.hostname;
 
-		return targetHost !== currentHost;
+		return targetHostname !== currentHostname;
 	},
 
 	/**
