@@ -544,7 +544,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onFormSubmit: function () {
-		if (this.doSave) {
+		// don't attempt a save if we don't have values
+		if (!this.isEmpty() && this.doSave) {
 			this.doSave();
 		}
 	}
