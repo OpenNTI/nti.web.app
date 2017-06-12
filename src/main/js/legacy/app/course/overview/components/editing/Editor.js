@@ -361,6 +361,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.enableSave) {
 			this.enableSave();
 		}
+
+		this.isSubmittable = true;
 	},
 
 
@@ -368,6 +370,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.disableSave) {
 			this.disableSave();
 		}
+
+		this.isSubmittable = false;
 	},
 
 
@@ -544,8 +548,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onFormSubmit: function () {
-		// don't attempt a save if we don't have values
-		if (!this.isEmpty() && this.doSave) {
+		// don't attempt a save if we don't have proper save conditions
+		if (this.isSubmittable && this.doSave) {
 			this.doSave();
 		}
 	}
