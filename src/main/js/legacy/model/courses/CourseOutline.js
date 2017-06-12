@@ -114,6 +114,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 	getOutlineContents: function (doNotCache) {
 		var link = this.getLink('contents');
 
+		if(!link) {
+			return Promise.reject('No Link');
+		}
+
 		return this.__loadContents(link, 'LoadContents', doNotCache, 'OutlineContents');
 	},
 
@@ -121,6 +125,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		var link = this.getLink('contents'),
 			parts = Url.parse(link),
 			query = Ext.Object.fromQueryString(parts.search);
+
+		if(!link) {
+			return Promise.reject('No Link');
+		}
 
 		delete query['omit_unpublished'];
 
