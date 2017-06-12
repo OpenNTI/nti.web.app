@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 	]),
 
 	//INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
-	LEAD_HTML5: (!Ext.isIE9).toString(),
+	LEAD_HTML5: 'true',
 
 	//Note: reset in the constructor
 
@@ -153,11 +153,9 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.handleMessage = Ext.bind(this.handleMessage, this);
 
 		this.USE_PROGRESSIVE = isFeature('kaltura.progressive').toString();
+		this.LEAD_HTML5 = Ext.isIE9 ? 'false' : 'true';
 
-		$AppConfig.Preferences.getPreference('WebApp', function (value) {
-			me.LEAD_HTML5 = value ? value.get('preferFlashVideo').toString() : 'false';
-			me.playerSetup();
-		});
+		this.playerSetup();
 	},
 
 	playerSetup: function () {
