@@ -6,7 +6,6 @@ module.exports = exports = Ext.define('NextThought.model.preference.WebApp', {
 	extend: 'NextThought.model.preference.Base',
 
 	fields: [
-		{name: 'preferFlashVideo', type: 'bool'},
 		{name: 'useHighContrast', type: 'bool'}
 	],
 

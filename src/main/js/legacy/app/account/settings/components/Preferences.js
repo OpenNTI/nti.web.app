@@ -21,21 +21,6 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				'data-preference-key': 'useHighContrast'
 			}
 		]},
-		{ tag: 'tpl', 'if': 'isFeature(\'video-settings\')', cn:
-			{ tag: 'fieldset', cn: [
-				{ tag: 'legend', html: 'Videos' },
-				{
-					tag: 'span',
-					cls: 'not-ready nti-checkbox prefer-flash',
-					html: 'Prefer experimental HTML5 video when possible.',
-					tabIndex: 0,
-					role: 'button',
-					'aria-role': 'button',
-					'data-preference-path': 'WebApp',
-					'data-preference-key': 'preferFlashVideo'
-				}
-			]}
-		},
 		{tag: 'tpl', 'if': 'isFeature(\'notifications\')', cn:
 			{ tag: 'fieldset', cn: [
 				{ tag: 'legend', html: 'Communications' },
