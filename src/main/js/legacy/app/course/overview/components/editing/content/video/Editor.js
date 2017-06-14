@@ -1,9 +1,13 @@
 var Ext = require('extjs');
+
 var ContentEditor = require('../Editor');
+var PromptActions = require('legacy/app/prompt/Actions');
 var ModelVideo = require('../../../../../../../model/Video');
 var ModelVideoRoll = require('../../../../../../../model/VideoRoll');
 var VideoItemSelection = require('./ItemSelection');
 var VideoVideoEditor = require('./VideoEditor');
+
+require('legacy/app/video/Picker');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.Editor', {
@@ -43,6 +47,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.PromptActions = PromptActions.create();
 	},
 
 	showEditor: function () {
@@ -115,6 +121,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.maybeEnableBack(this.backText);
 
+		me.addVideoBtn = me.add({
+			xtype: 'box',
+			autoEl: {tag: 'div', cls: 'create-video-overview-editing', html: 'Create Video'},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: me.createVideo.bind(me)
+				}
+			}
+		});
+
 		me.videoSelectionCmp = me.add({
 			xtype: 'overview-editing-video-item-selection',
 			onSelectionChanged: this.onVideoListSelectionChange.bind(this),
@@ -128,6 +145,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				me.videoSelectionCmp.excludeItems(exclude);
 			});
 	},
+
+
+	createVideo () {
+		this.PromptActions.prompt('video-picker', {bundle: this.bundle});
+	},
+
 
 	showVideoEditor: function () {
 		if (this.videoEditorCmp) {
