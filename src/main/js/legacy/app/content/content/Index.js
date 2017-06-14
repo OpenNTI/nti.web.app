@@ -186,8 +186,6 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			}];
 		}
 
-		const handleNavigation = this.handleContentNavigation.bind(this);
-
 		return getService()
 			.then((service) => service.getObject(this.currentBundle.getId()))
 			.then((course) => {
@@ -197,6 +195,11 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					this.__onFail();
 					return;
 				}
+
+				const handleNavigation = this.handleContentNavigation.bind(
+					this,
+					'',
+					encodeForURI(contentPackage.NTIID));
 
 				const onDelete = () => {
 					this.currentBundle.updateFromServer()
