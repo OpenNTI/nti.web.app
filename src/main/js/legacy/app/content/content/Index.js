@@ -186,6 +186,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			}];
 		}
 
+		const handleNavigation = this.handleContentNavigation.bind(this);
+
 		return getService()
 			.then((service) => service.getObject(this.currentBundle.getId()))
 			.then((course) => {
@@ -219,6 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					contentPackage,
 					pageSource,
 					breadcrumb,
+					handleNavigation,
 					pageID: page.getId ? page.getId() : '',
 					onDidChange: () => {
 						this.currentBundle.updateContentPackage(packageId);
