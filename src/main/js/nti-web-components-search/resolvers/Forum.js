@@ -1,4 +1,4 @@
-const { getAppUser} = require('nti-web-client');
+const UserRepository = require('../../legacy/cache/UserRepository');
 
 export default {
 	handles (targetMimeType) {
@@ -18,7 +18,7 @@ export default {
 					.then(function (breadCrumb) {
 						return breadCrumb;
 					}),
-				getAppUser.getUser(hit.Creator)
+				UserRepository.getUser(hit.Creator)
 					.then(function (user) {
 						return user.getName() + ' Commented';
 					})
