@@ -15,7 +15,7 @@ export default {
 	},
 
 	resolveFragments (obj, hit) {
-		const fragments = hit.Fragments;
+		const fragments = hit.Fragments || [];
 
 		return fragments.reduce((acc, frag, fragIndex) => {
 			const {Matches:matches = []} = frag;
