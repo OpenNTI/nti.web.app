@@ -86,7 +86,7 @@ export default class SearchResults extends React.Component {
 			return (
 				<div className={cls}>
 					{hits.map(this.renderHit)}
-					{loaded && !errorLoadingText && !emptyText &&
+					{loaded && !errorLoadingText && !emptyText && numPages > 1 &&
 						this.renderPages(numPages)
 					}
 					{errorLoadingText &&
