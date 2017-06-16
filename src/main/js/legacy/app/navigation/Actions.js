@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	},
 
 
-	closeMessageBar: function() {
+	closeMessageBar: function () {
 		var messageCmp = Ext.getCmp('message-bar');
 
 		if (messageCmp) {

@@ -379,8 +379,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				Price: null,
 				Wording: me.__getEnrollmentText(details, option),
 				doEnrollment: function (cmp, type, config) {
-						cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
-					},
+					cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
+				},
 				undoEnrollment: null
 			};
 

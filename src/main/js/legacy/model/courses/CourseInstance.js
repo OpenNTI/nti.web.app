@@ -1034,21 +1034,21 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			url: link,
 			method: 'GET'
 		}).then(function (resp) {
-				var json = JSON.parse(resp),
-					items = [];
+			var json = JSON.parse(resp),
+				items = [];
 
-				for (var k in json.Items) {
-					if (json.Items.hasOwnProperty(k)) {
-						items.push(json.Items[k]);
-					}
+			for (var k in json.Items) {
+				if (json.Items.hasOwnProperty(k)) {
+					items.push(json.Items[k]);
 				}
+			}
 
-				return ParseUtils.parseItems(items);
-			}).catch(function (reason) {
-				console.error('Failed to load Discussions: ', reason);
+			return ParseUtils.parseItems(items);
+		}).catch(function (reason) {
+			console.error('Failed to load Discussions: ', reason);
 
-				return [];
-			});
+			return [];
+		});
 	},
 
 	getVideosByContentPackage: function () {

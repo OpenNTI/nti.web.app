@@ -20,10 +20,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	},
 
 	initialWidgetConfig: function () {
-			return { xtype: 'created-event', entity: this.user };
+		return { xtype: 'created-event', entity: this.user };
 	},
 
 	hasInitialWidget: function () {
-			return !!this.down('created-event');
+		return !!this.down('created-event');
 	}
 });

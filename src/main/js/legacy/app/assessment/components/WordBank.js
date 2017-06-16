@@ -23,8 +23,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 				cn: [{cls: 'reset'}, '{[this.parseWord(values, parent.ownerCmp)]}']
 			}
 		]}}), {
-		parseWord: function (values, cmp) { return cmp.parseWordEntry(values.content || values.word); }
-	}),
+			parseWord: function (values, cmp) { return cmp.parseWordEntry(values.content || values.word); }
+		}),
 
 
 	audioTeplate: new Ext.XTemplate(Ext.DomHelper.markup({

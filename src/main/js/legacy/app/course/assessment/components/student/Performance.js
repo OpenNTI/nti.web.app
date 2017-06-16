@@ -124,12 +124,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						{ text: 'Completed', dataIndex: 'completed', width: 80, resizable: false, renderer: function (v) {
 							return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
 						} },
-					{
-						text: 'Score',
-						dataIndex: 'grade',
-						width: 70,
-						resizable: false,
-						doSort: function (state) {
+						{
+							text: 'Score',
+							dataIndex: 'grade',
+							width: 70,
+							resizable: false,
+							doSort: function (state) {
 								function get (o) {
 									var grade = o.get('Grade'),
 										values = grade && grade.getValues(),
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 								store.sort(sorter);
 							}
-					},
+						},
 						{ text: 'Feedback', dataIndex: 'feedback', tdCls: 'feedback', width: 140, resizable: false,
 							renderer: function (value, col, rec) {
 								var grade = rec.get('Grade'),
@@ -163,29 +163,29 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 								return excusedTpl + feedbackTpl;
 							} }
-				],
+					],
 
 					listeners: {
-					sortchange: function (ct, column) { ct.up('grid').markColumn(column); },
-					selectionchange: function (sm, selected) { sm.deselect(selected); },
-					viewready: function (grid) {
-						grid.mon(grid.getView(), 'refresh', function () {
-							grid.markColumn(grid.down('gridcolumn[sortState]'));
-						});
-					}
-				},
+						sortchange: function (ct, column) { ct.up('grid').markColumn(column); },
+						selectionchange: function (sm, selected) { sm.deselect(selected); },
+						viewready: function (grid) {
+							grid.mon(grid.getView(), 'refresh', function () {
+								grid.markColumn(grid.down('gridcolumn[sortState]'));
+							});
+						}
+					},
 
 					markColumn: function (c) {
-					console.log('Marking...');
-					var cls = 'sortedOn',
-						el = this.getEl();
-					if (el) {
-						el.select('.' + cls).removeCls(cls);
-						if (c) {
-							Ext.select(c.getCellSelector()).addCls(cls);
+						console.log('Marking...');
+						var cls = 'sortedOn',
+							el = this.getEl();
+						if (el) {
+							el.select('.' + cls).removeCls(cls);
+							if (c) {
+								Ext.select(c.getCellSelector()).addCls(cls);
+							}
 						}
-					}
-				},
+					},
 
 					checkMarkTpl: Ext.DomHelper.markup({cls: 'check', html: '&#10003;'})
 				}

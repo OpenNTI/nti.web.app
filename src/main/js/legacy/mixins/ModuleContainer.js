@@ -9,15 +9,15 @@ module.exports = exports = Ext.define('NextThought.mixins.ModuleContainer', {
 
 
   	buildModule: function (ns, name,config) {
-	var m = Ext.createByAlias(ns + '.' + name, Ext.apply({container: this},config)),
-		getterName = this.getterNameForModule(name);
+		var m = Ext.createByAlias(ns + '.' + name, Ext.apply({container: this},config)),
+			getterName = this.getterNameForModule(name);
 
-	if (config && config.hasOwnProperty('moduleName')) {
+		if (config && config.hasOwnProperty('moduleName')) {
 	  	getterName = this.getterNameForModule(config.moduleName);
-	}
+		}
 
-	this[getterName] = function () {return m;};
-  },
+		this[getterName] = function () {return m;};
+	},
 
 	//Returns a function that will forward the function specified by fnName
 	//to the given module

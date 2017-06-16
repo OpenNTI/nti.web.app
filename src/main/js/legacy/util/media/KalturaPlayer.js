@@ -780,37 +780,37 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 			function playerReady () {
 				var player = document.getElementById(playerId),
 					events = [
-							'changeMedia',
-							'closeFullScreen',
-							'entryFailed',
-							'entryNotAvailable',
-							'entryReady',
-							'initiateApp',
-							'kdpEmpty',
-							'kdpReady',
-							'layoutReady',
-							'mediaLoaded',
-							'mediaLoadError',
-							'mediaReady',
-							'openFullScreen',
-							'playerPlayEnd',
-							'playerStateChange',
-							'playerUpdatePlayhead',
-							'pluginsLoaded',
-							'readyToLoad',
-							'readyToPlay',
-							'singlePluginFailedToLoad',
-							'singlePluginLoaded',
-							'skinLoaded',
-							'skinLoadFailed',
-							'sourceReady',
-							'startup',
-							'playerSeekStart',
-							'playerSeekEnd',
-							'doSeek',
-							'durationChange',
-							'updatedPlaybackRate'
-						],
+						'changeMedia',
+						'closeFullScreen',
+						'entryFailed',
+						'entryNotAvailable',
+						'entryReady',
+						'initiateApp',
+						'kdpEmpty',
+						'kdpReady',
+						'layoutReady',
+						'mediaLoaded',
+						'mediaLoadError',
+						'mediaReady',
+						'openFullScreen',
+						'playerPlayEnd',
+						'playerStateChange',
+						'playerUpdatePlayhead',
+						'pluginsLoaded',
+						'readyToLoad',
+						'readyToPlay',
+						'singlePluginFailedToLoad',
+						'singlePluginLoaded',
+						'skinLoaded',
+						'skinLoadFailed',
+						'sourceReady',
+						'startup',
+						'playerSeekStart',
+						'playerSeekEnd',
+						'doSeek',
+						'durationChange',
+						'updatedPlaybackRate'
+					],
 					i = events.length - 1;
 
 				for (i; i >= 0; i--) {
@@ -843,7 +843,6 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 			window.addEventListener('message', handleMessage, false);
-
 
 
 

@@ -155,11 +155,11 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 			me.__getPrevious(relativeIndex, absoluteIndex),
 			me.__getNext(relativeIndex, absoluteIndex)
 		]).then(function (result) {
-				me.previous = result[0];
-				me.next = result[1];
+			me.previous = result[0];
+			me.next = result[1];
 
-				return me;
-			});
+			return me;
+		});
 	},
 
 

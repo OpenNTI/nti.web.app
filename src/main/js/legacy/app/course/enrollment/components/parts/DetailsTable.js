@@ -9,63 +9,63 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	cls: 'enrollment-details-table',
 
 	renderTpl: Ext.DomHelper.markup({cls: 'info', cn: [
-			{cls: 'line', cn: [
+		{cls: 'line', cn: [
 				{cls: 'course-number', html: '{number}'},
 				{cls: 'title', html: '{title}'},
 				{cls: 'instructor', html: 'instructed by {instructor}'},
 				{cls: 'enroll-now', html: '{price}'}
-			]},
-			{tag: 'tpl', 'if': 'showCredit', cn: {
-				cls: 'line course-info', cn: [
-					{cls: 'field long', cn: [
+		]},
+		{tag: 'tpl', 'if': 'showCredit', cn: {
+			cls: 'line course-info', cn: [
+				{cls: 'field long', cn: [
 						{cls: 'name', html: 'prerequisites'},
-						{tag: 'tpl', 'for': 'prereqs', cn: [
+					{tag: 'tpl', 'for': 'prereqs', cn: [
 							{cls: 'value', html: '{title}'}
-						]}
-					]},
-					{cls: 'field medium green', cn: [
+					]}
+				]},
+				{cls: 'field medium green', cn: [
 						{cls: 'name', html: 'credit hours'},
 						{cls: 'value green', html: '{credit}'}
-					]}
-				]
-			}},
-			{cls: 'line course-info', cn: [
-				{cls: 'field long', cn: [
+				]}
+			]
+		}},
+		{cls: 'line course-info', cn: [
+			{cls: 'field long', cn: [
 					{cls: 'name', html: '{number}'},
 					{cls: 'value', html: '{title}'}
-				]},
-				{cls: 'field medium', cn: [
+			]},
+			{cls: 'field medium', cn: [
 					{cls: 'name', html: 'school'},
 					{cls: 'value', html: '{school}'}
-				]}
-			]},
-			{tag: 'tpl', 'if': 'start || end || duration', cn: [
-				{cls: 'line course-info', cn: [
-					{tag: 'tpl', 'if': 'start', cn: [
-						{cls: 'field fourth', cn: [
+			]}
+		]},
+		{tag: 'tpl', 'if': 'start || end || duration', cn: [
+			{cls: 'line course-info', cn: [
+				{tag: 'tpl', 'if': 'start', cn: [
+					{cls: 'field fourth', cn: [
 							{cls: 'name', html: 'start date'},
 							{cls: 'value', html: '{start}'}
-						]},
 					]},
-					{tag: 'tpl', 'if': 'end', cn: [
-						{cls: 'field fourth', cn: [
+				]},
+				{tag: 'tpl', 'if': 'end', cn: [
+					{cls: 'field fourth', cn: [
 							{cls: 'name', html: 'end date'},
 							{cls: 'value', html: '{end}'}
-						]},
 					]},
-					{tag: 'tpl', 'if': 'duration', cn: [
-						{cls: 'field fourth', cn: [
+				]},
+				{tag: 'tpl', 'if': 'duration', cn: [
+					{cls: 'field fourth', cn: [
 							{cls: 'name', html: 'duration'},
 							{cls: 'value', html: '{duration}'}
-						]}
 					]}
+				]}
 
 					// {cls: 'field fourth', cn: [
 					//	{cls: 'name', html: 'course type'},
 					//	{cls: 'value', html: '{type}'}
 					// ]}
-				]}
 			]}
+		]}
 	]}),
 
 

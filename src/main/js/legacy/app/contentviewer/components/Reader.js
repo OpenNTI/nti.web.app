@@ -422,16 +422,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			request: function (req) {
 				var pageInfo = req.pageInfo,
 					resp = {
-							getAllResponseHeaders: Ext.emptyFn,
-							getResponseHeader: Ext.emptyFn,
-							requestId: NaN,
-							responseXML: null,
-							status: 200,
-							statusText: 'OK',
-							request: {options: Ext.apply({url: ''}, req)},
+						getAllResponseHeaders: Ext.emptyFn,
+						getResponseHeader: Ext.emptyFn,
+						requestId: NaN,
+						responseXML: null,
+						status: 200,
+						statusText: 'OK',
+						request: {options: Ext.apply({url: ''}, req)},
 							//hack: ---v (getting dynamic content from the pageInfo)
-							responseText: pageInfo.get('content') || ''
-						};
+						responseText: pageInfo.get('content') || ''
+					};
 
 				Ext.callback(req.success, req.scope, [resp]);
 			}

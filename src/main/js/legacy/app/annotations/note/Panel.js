@@ -363,8 +363,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 					e.stopEvent();
 
 					if (a && !Ext.isEmpty(i) && u) {
-							me.navigateToProfile(u);
-						}
+						me.navigateToProfile(u);
+					}
 				});
 			});
 	},

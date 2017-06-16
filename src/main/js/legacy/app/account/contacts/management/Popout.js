@@ -24,14 +24,14 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		cn: [{
 			cls: 'card-wrap',
 			cn: [{
-					cls: 'contact-card',
-					cn: [
-						'{user:avatar}',
-						{
-							cls: 'text-wrap',
-							cn: [
+				cls: 'contact-card',
+				cn: [
+					'{user:avatar}',
+					{
+						cls: 'text-wrap',
+						cn: [
 								{cls: 'name', html: '{name}'},
-								{tag: 'tpl', 'if': '!disableProfiles', cn: [
+							{tag: 'tpl', 'if': '!disableProfiles', cn: [
 								{cls: 'meta-role', cn: [
 									{tag: 'tpl', 'if': 'role', cn: [
 										{tag: 'span', cls: 'role', html: '{role}'}
@@ -46,11 +46,11 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 								{tag: 'tpl', 'if': 'location', cn: [
 									{cls: 'location', html: '{location}'}
 								]}
-								]}
-							]
-						}
-					]
-				}]
+							]}
+						]
+					}
+				]
+			}]
 		}
 		]},
 	{

@@ -128,12 +128,12 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 			var r = null,
 				f = function (o)
 					{
-						if (o && o.get && o.getId() === id) {
-							r = o;
-							return false;
-						}
-						return true;
-					};
+					if (o && o.get && o.getId() === id) {
+						r = o;
+						return false;
+					}
+					return true;
+				};
 			Ext.each(list, f);
 			if (!r) {
 				Ext.each(tree, f);

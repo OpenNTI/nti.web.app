@@ -14,12 +14,12 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 				role: 'button',
 				children: [
 						{ tag: 'a', href: '#', html: 'Create New List' },
-						{ cls: 'input-wrap empty', style: {display: 'none'}, cn: [
+					{ cls: 'input-wrap empty', style: {display: 'none'}, cn: [
 							{ cls: 'clear' },
 							{ tag: 'input', type: 'text', cls: 'new-group-input' },
 							{ cls: 'save-button save-button-disabled', html: 'Add' }
-						]}
-					]
+					]}
+				]
 			}, true);
 
 		link.down('a').on('click', this.addGroupClicked, this);
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		// Make sure nothing steals focus while the input is visible
 		input.un('blur').on('blur', function () {
 		  	if (input.isVisible()) {
-			input.focus(200);
+				input.focus(200);
 		  }
 		}).focus();
 

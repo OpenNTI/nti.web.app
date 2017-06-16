@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	},
 
 	__getLevelLabel: function (level, levelName, useTocLevelName) {
-		var label = Boolean(useTocLevelName) ? 'Select ' + levelName : this.levelLabels[level], i;
+		var label = useTocLevelName ? 'Select ' + levelName : this.levelLabels[level], i;
 
 		if (label) { return label; }
 
@@ -349,21 +349,21 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			p,
 			ContentUtils.getSiblings(currentNode, bundle)
 		]).then(function (results) {
-				var outline = results[0],
-					siblings = results[1] || [],
-					visible,
-					presentation = me.__getPresentationProps(parentNode, bundle),
-					num = presentation.start || 1;
+			var outline = results[0],
+				siblings = results[1] || [],
+				visible,
+				presentation = me.__getPresentationProps(parentNode, bundle),
+				num = presentation.start || 1;
 
-				currentNode = currentNode.getAttribute('ntiid');
+			currentNode = currentNode.getAttribute('ntiid');
 
-				visible = siblings.map(function (sibling) {
-					if (!/topic/i.test(sibling.tagName) || sibling.getAttribute('suppressed') === 'true') {
-						return Promise.resolve(null);
-					}
+			visible = siblings.map(function (sibling) {
+				if (!/topic/i.test(sibling.tagName) || sibling.getAttribute('suppressed') === 'true') {
+					return Promise.resolve(null);
+				}
 
-					if (outline && false) {
-						return outline.isVisible(sibling.getAttribute('ntiid'))
+				if (outline && false) {
+					return outline.isVisible(sibling.getAttribute('ntiid'))
 							.then(function (visible) {
 								if (!visible) {
 									return null;
@@ -372,12 +372,12 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 								return sibling;
 							});
 
-					}
+				}
 
-					return Promise.resolve(sibling);
-				});
+				return Promise.resolve(sibling);
+			});
 
-				return Promise.all(visible)
+			return Promise.all(visible)
 					.then(function (results) {
 						return results.filter(function (x) { return !!x; });
 					})
@@ -398,7 +398,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 							};
 						});
 					});
-			});
+		});
 	},
 
 	getContentPageSource: function (ntiid, bundle, root) {

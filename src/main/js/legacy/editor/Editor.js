@@ -52,15 +52,15 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		[
 			{
 				cls: 'aux', cn: [
-				{tag: 'tpl', 'if': 'enableShareControls', cn: {
-					cls: 'recipients'
-				}},
-				{tag: 'tpl', 'if': 'enablePublishControls', cn: {
-					cls: 'action publish on'
-				}},
-				{tag: 'tpl', 'if': 'enableTags', cn: {
-					cls: 'tags'
-				}}
+					{tag: 'tpl', 'if': 'enableShareControls', cn: {
+						cls: 'recipients'
+					}},
+					{tag: 'tpl', 'if': 'enablePublishControls', cn: {
+						cls: 'action publish on'
+					}},
+					{tag: 'tpl', 'if': 'enableTags', cn: {
+						cls: 'tags'
+					}}
 				]
 			}
 		]),
@@ -132,7 +132,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 						{cls: 'action cancel', html: 'Cancel'}
 					]
 				}
-			]
+				]
 			}
 		]),
 

@@ -46,11 +46,11 @@ function showCard (e, el, position) {
 
 	if (!pop || pop.isDestroyed) {
 		pop = Popup.create({
-						renderTo: Ext.getBody(),
-						record: user,
-						refEl: el,
-						hidden: true
-					});
+			renderTo: Ext.getBody(),
+			record: user,
+			refEl: el,
+			hidden: true
+		});
 	}
 
 	pop.show();
@@ -93,9 +93,9 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 	enableProfileClicks: function () {
 		var me = this,
 			events = {
-					scope: me,
-					click: onUserNameClick
-				};
+				scope: me,
+				click: onUserNameClick
+			};
 
 		Ext.each(arguments, function (el) {
 			var user = me.userObject || me.user;

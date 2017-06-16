@@ -112,10 +112,10 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 			storeId: 'schoolStore',
 			autoLoad: true,
 			fields: [{
-					mapping: 0,
-					name: 'school',
-					type: 'string'
-				}],
+				mapping: 0,
+				name: 'school',
+				type: 'string'
+			}],
 			proxy: {
 				type: 'ajax',
 				url: '/resources/misc/school-data.json',

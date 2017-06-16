@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 				return batch.Items;
 			})
 			.then(items => this.__precacheItems(items))
-			.then(items => this.CourseStore.setFavoriteAdminCourses(items))
+			.then(items => this.CourseStore.setFavoriteAdminCourses(items));
 	},
 
 
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 				return batch.Items;
 			})
 			.then(items => this.__precacheItems(items))
-			.then(items => this.CourseStore.setFavoriteEnrolledCourses(items))
+			.then(items => this.CourseStore.setFavoriteEnrolledCourses(items));
 	},
 
 

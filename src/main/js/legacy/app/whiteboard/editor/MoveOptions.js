@@ -124,16 +124,16 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOpt
 		if (options.stroke) {
 	  		val = null;
 	  		if (options.stroke !== 'NONE') {
-		hex = Color.rgbaToHex(options.stroke);
-		val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
+				hex = Color.rgbaToHex(options.stroke);
+				val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
 	  }
 	  		strokeButton.setValue(val);
 		}
 		if (options.fill) {
 	  		val = null;
 	  		if (options.fill !== 'NONE') {
-		hex = Color.rgbaToHex(options.fill);
-		val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
+				hex = Color.rgbaToHex(options.fill);
+				val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
 	  }
 			fillButton.setValue(val);
 		}

@@ -94,12 +94,12 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 		if (hscroll !== false) {
 		  	newPos = null;
 		  	if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
-			newPos = left;
+				newPos = left;
 		  } else if (right > ctRight) {
 			newPos = right - container.clientWidth;
 		  }
 		  	if (newPos !== null) {
-			me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
+				me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
 		  }
 		}
 		return me;

@@ -177,10 +177,10 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 
 	getInnerTpl: function (displayField) {
 		return ['<div class="name" data-qtip="{' + displayField + ':htmlEncode}">',
-				'<tpl>',
-				'{' + displayField + '}',
-				'</tpl>',
-				'</div>'
+			'<tpl>',
+			'{' + displayField + '}',
+			'</tpl>',
+			'</div>'
 		].join('');
 	},
 

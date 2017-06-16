@@ -95,22 +95,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.getItems(record),
 			me.getContents(record)
 		]).then(function (results) {
-				var items = results[0],
-					contents = results[1],
-					cmps = [
-						me.getPreviewConfig(record, parentRecord, contents, outline, bundle)
-					];
+			var items = results[0],
+				contents = results[1],
+				cmps = [
+					me.getPreviewConfig(record, parentRecord, contents, outline, bundle)
+				];
 
-				if (!me.hideItemsIfEmpty || (items && items.length)) {
-					cmps.push(me.getItemsConfig(items, record, outline, bundle));
-				}
+			if (!me.hideItemsIfEmpty || (items && items.length)) {
+				cmps.push(me.getItemsConfig(items, record, outline, bundle));
+			}
 
-				if (contents) {
-					cmps.push(me.getContentsConfig(contents, record, bundle));
-				}
+			if (contents) {
+				cmps.push(me.getContentsConfig(contents, record, bundle));
+			}
 
-				me.add(cmps);
-			});
+			me.add(cmps);
+		});
 	},
 
 	getItems: function (record) {

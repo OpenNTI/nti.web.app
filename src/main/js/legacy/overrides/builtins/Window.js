@@ -13,14 +13,14 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Window', {
 			request;
 
 		request = names.reduce(function (acc, name) {
-				return acc || window[name];
-			}, null);
+			return acc || window[name];
+		}, null);
 
 		if (!request) {
-				request = function (callback) {
-					return setTimeout(callback, 1000 / 60);
-				};
-			}
+			request = function (callback) {
+				return setTimeout(callback, 1000 / 60);
+			};
+		}
 
 		return request;
 	}

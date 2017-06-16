@@ -12,10 +12,10 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 			{xtype: 'simpletext', name: 'email', cls: 'input-box', inputType: 'email', placeholder: getString('NextThought.view.account.recovery.Email.email')}
 		]},
 		{xtype: 'box', hidden: true, name: 'error', autoEl:
-			{cls: 'error-box', tag: 'div', cn: [
+		{cls: 'error-box', tag: 'div', cn: [
 				{cls: 'error-field'},
 				{cls: 'error-desc'}
-			]}
+		]}
 		},
 		{xtype: 'container', cls: 'submit', name: 'buttons', layout: 'none', items: [
 			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: getString('NextThought.view.account.recovery.Email.cancel'), handler: function () {

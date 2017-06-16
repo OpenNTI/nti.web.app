@@ -244,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		if (!Ext.isIterable(records)) {
 
 			if (typeof records === 'object' && !records.isModel) {
-					records = this.resolveRange(records);
+				records = this.resolveRange(records);
 			}
 			else {
 				records = [records];

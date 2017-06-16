@@ -97,35 +97,35 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							]}
 						]}
 					]), {
-							getGrade: function (values) {
-								var historyItem = values.HistoryItemSummary,
-									grade = historyItem && historyItem.get('Grade'),
-									gradeVals = (grade && grade.getValues()) || {};
+						getGrade: function (values) {
+							var historyItem = values.HistoryItemSummary,
+								grade = historyItem && historyItem.get('Grade'),
+								gradeVals = (grade && grade.getValues()) || {};
 
-								return gradeVals.value || '';
-							},
+							return gradeVals.value || '';
+						},
 
-							isGradeExcused: function (values) {
-								var historyItem = values.HistoryItemSummary,
-									grade = historyItem && historyItem.get('Grade');
+						isGradeExcused: function (values) {
+							var historyItem = values.HistoryItemSummary,
+								grade = historyItem && historyItem.get('Grade');
 
-								return grade && grade.get('IsExcused');
-							},
+							return grade && grade.get('IsExcused');
+						},
 
-							hasTotalPoints: (values) => {
-								const {HistoryItemSummary:historyItem} = values;
-								const item = historyItem.get('item');
+						hasTotalPoints: (values) => {
+							const {HistoryItemSummary:historyItem} = values;
+							const item = historyItem.get('item');
 
-								return item && !!item.get('total_points');
-							},
+							return item && !!item.get('total_points');
+						},
 
-							getTotalPoints: (values) => {
-								const {HistoryItemSummary:historyItem} = values;
-								const item = historyItem.get('item');
+						getTotalPoints: (values) => {
+							const {HistoryItemSummary:historyItem} = values;
+							const item = historyItem.get('item');
 
-								return item && item.get('total_points');
-							}
+							return item && item.get('total_points');
 						}
+					}
 					)
 				}
 			}
@@ -788,8 +788,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	fireGoToAssignment: function (v, record, pageSource) {
 		var student = record.get('User'),
-			historyItem = record.get('HistoryItemSummary')
-			grid = this.down('course-admin-paged-grid');
+			historyItem = record.get('HistoryItemSummary');
+		grid = this.down('course-admin-paged-grid');
 
 		if (typeof student === 'string' || !student.isModel) {
 			console.error('Unable to show assignment for student', student.getName(), this.assignment.get('title'));

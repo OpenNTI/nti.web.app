@@ -13,10 +13,10 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 						{xtype: 'simpletext', name: 'code', cls: 'input-box', inputType: 'text', placeholder: getString('NextThought.view.account.code.Main.enter-code')}
 		]},
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
-						cn: [
+			cn: [
 				{cls: 'error-field'},
 				{cls: 'error-desc'}
-						]}
+			]}
 		},
 		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
 			{

@@ -180,14 +180,14 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			courses,
 			family.getThumbnail()
 		]).then(function (results) {
-				uiData.cls = 'has-sub-items';
-				uiData.subItems = results[0];
-				uiData.thumb = results[1];
-				uiData.rootRoute = me.CourseActions.getRootRouteForId(bundle.getId());
-				uiData.activeRoute = me.CourseStateStore.getRouteFor(bundle.id);
+			uiData.cls = 'has-sub-items';
+			uiData.subItems = results[0];
+			uiData.thumb = results[1];
+			uiData.rootRoute = me.CourseActions.getRootRouteForId(bundle.getId());
+			uiData.activeRoute = me.CourseStateStore.getRouteFor(bundle.id);
 
-				return uiData;
-			});
+			return uiData;
+		});
 	},
 
 	getCourseOrFamilyData: function (bundle, route) {

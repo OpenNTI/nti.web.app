@@ -28,21 +28,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getFormSchema: function () {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
-				{type: 'group', name: 'card', inputs: [
+			{type: 'group', name: 'card', inputs: [
 					{name: 'icon', type: 'image', height: 125, width: 100},
-					{type: 'group', name: 'meta', inputs: [
-						{
-							name: 'label',
-							type: 'text',
-							placeholder: 'Title',
-							required: true,
-							maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
-						},
+				{type: 'group', name: 'meta', inputs: [
+					{
+						name: 'label',
+						type: 'text',
+						placeholder: 'Title',
+						required: true,
+						maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+					},
 						{name: 'byline', type: 'text', placeholder: 'Author'},
 						{name: 'description', type: 'textarea', placeholder: 'Description'}
-					]},
+				]},
 					{type: 'saveprogress'}
-				]}
+			]}
 		];
 
 		return schema;

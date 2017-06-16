@@ -650,7 +650,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return this.getObjectRaw(url, mime, forceMime, targetBundle)
 			.then((resp) => {
-				return ParseUtils.parseItems(resp.responseText)[0]
+				return ParseUtils.parseItems(resp.responseText)[0];
 			})
 			.catch(() => {
 				return;

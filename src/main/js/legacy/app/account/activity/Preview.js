@@ -109,13 +109,13 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Preview'
 		{
 			cls: 'respond', cn: {
 				cn: [
-				{
-					cls: 'reply-options',
-					cn: [
+					{
+						cls: 'reply-options',
+						cn: [
 						{ cls: 'link reply', html: '{{{NextThought.view.account.activity.Preview.add-comment}}}' }
-					]
-				}
-			]}
+						]
+					}
+				]}
 		}
 	]),
 

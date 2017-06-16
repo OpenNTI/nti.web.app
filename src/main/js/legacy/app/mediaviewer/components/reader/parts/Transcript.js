@@ -55,9 +55,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 				]}
 		},{
 			tag: 'tpl', 'if': 'type', cn:
-				{cls: 'row-item timestamp-container {type}', cn:
+			{cls: 'row-item timestamp-container {type}', cn:
 					{tag: 'a', cls: 'timestamp', html: '{%this.toTimeFormat(values,out)%}', 'data-time': '{startTime}'}
-				}
+			}
 		}]}
 	]), {
 		toTimeFormat: function (values, out) {

@@ -154,17 +154,17 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 		for (i = 0; i < path.length; i++) {
 			if (i + 1 < path.length) {
 				if (value.get(path[i])) {
-						nextValue = value.get(path[i]);
+					nextValue = value.get(path[i]);
 
 						//if a parent preference isn't load yet, init it to an empty one
-						if (nextValue && nextValue.isFuture) {
-							result = Ext.create(name + '.' + path[i]);
-							value.set(path[i], result);
-							value = result;
-						}else {
-							value = nextValue;
-						}
+					if (nextValue && nextValue.isFuture) {
+						result = Ext.create(name + '.' + path[i]);
+						value.set(path[i], result);
+						value = result;
+					}else {
+						value = nextValue;
 					}
+				}
 
 				name = name + '.' + path[i].toLowerCase();
 			} else {

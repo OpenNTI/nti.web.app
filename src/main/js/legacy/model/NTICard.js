@@ -11,13 +11,13 @@ module.exports = exports = Ext.define('NextThought.model.NTICard', {
 	},
 
 	fields: [
-		{ name: 'byline', type: 'string', convert(v, r) {
+		{ name: 'byline', type: 'string', convert (v, r) {
 			return v || r.raw.creator || r.raw.Creator;
 		} },
-		{ name: 'label', type: 'string', convert(v, r) {
+		{ name: 'label', type: 'string', convert (v, r) {
 			return v || r.raw.title;
 		} },
-		{ name: 'icon', type: 'string', convert(v, r) {
+		{ name: 'icon', type: 'string', convert (v, r) {
 			return v || r.raw.image;
 		} }
 	]

@@ -23,15 +23,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorPa
 		{ name: 'purple',	value: '6F3D93' },
 		{ name: 'yellow',	value: 'FFF02A' },
 		{ name: 'none', value: 'NONE' }
-  ],
+	],
 
   	colorRe: /(?:^|\s)color-(.{6}|NONE)(?:\s|$)/,
 
   	renderTpl: [
-	'<tpl for="colors">',
-	'<a href="#" class="color {name} color-{value}" hidefocus="on">',
-	'<em class="button"><span class="whiteboard-color-icon" unselectable="on">&#160;</span></em>',
-	'</a>',
-	'</tpl>'
-  ]
+		'<tpl for="colors">',
+		'<a href="#" class="color {name} color-{value}" hidefocus="on">',
+		'<em class="button"><span class="whiteboard-color-icon" unselectable="on">&#160;</span></em>',
+		'</a>',
+		'</tpl>'
+	]
 });

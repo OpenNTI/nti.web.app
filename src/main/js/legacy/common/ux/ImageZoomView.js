@@ -96,10 +96,10 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		var n, keyMap = new Ext.util.KeyMap({
 				target: document,
 				binding: [{
-				key: Ext.EventObject.ESC,
-				fn: this.destroy,
-				scope: this
-			}]
+					key: Ext.EventObject.ESC,
+					fn: this.destroy,
+					scope: this
+				}]
 			});
 		this.on('destroy', function () {keyMap.destroy(false);});
 

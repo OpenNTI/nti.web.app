@@ -34,16 +34,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						cls: 'row receiver', cn: [
 						{cls: 'label', html: 'To'},
 						{cls: 'field'},
-						{cls: 'action', cn: [
-							{cls: 'reply-option option', cn: [
-								{tag: 'span', cls:'toggle', cn: [
+							{cls: 'action', cn: [
+								{cls: 'reply-option option', cn: [
+									{tag: 'span', cls:'toggle', cn: [
 									{tag: 'input', type: 'checkbox', id: 'reply-check-toggle', cls: 'reply-check'},
 									{tag: 'label', 'for': 'reply-check-toggle', html: 'Allow Replies'}
-								]},
+									]},
 								{tag: 'span', cls: 'reply-scope link arrow', html: ''}
+								]}
 							]}
-						]}
-					]
+						]
 					}
 				]}
 		]),
@@ -465,7 +465,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.record.set({
 				'Body': v.body,
 				'Subject': v.title,
-				'NoReply': !Boolean(isAllowReply)
+				'NoReply': !isAllowReply
 			});
 
 			this.EmailActions.sendEmail(this.record)

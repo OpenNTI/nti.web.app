@@ -82,15 +82,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 	buildHeaderComponent: function () {
 		return {
-				xtype: 'profile-user-header',
-				saveProfile: this.saveProfile.bind(this),
-				removeContact: this.removeContact.bind(this),
-				addContact: this.addContact.bind(this)
+			xtype: 'profile-user-header',
+			saveProfile: this.saveProfile.bind(this),
+			removeContact: this.removeContact.bind(this),
+			addContact: this.addContact.bind(this)
 		};
 	},
 
 	finalizeInit: function () {
-			window.saveProfile = this.saveProfile.bind(this);
+		window.saveProfile = this.saveProfile.bind(this);
 	},
 
 	onAddedToParentRouter: function () {
@@ -124,12 +124,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		var me = this;
 		return UserRepository.getUser(id, null, null, true)
 			.then(function (user) {
-			me.activeEntity = user;
+				me.activeEntity = user;
 
-			me.isMe = isMe(user);
+				me.isMe = isMe(user);
 
-			return user;
-		});
+				return user;
+			});
 	},
 
 	getRouteTitle: function () {

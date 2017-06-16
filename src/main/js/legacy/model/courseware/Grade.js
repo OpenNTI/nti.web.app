@@ -248,7 +248,6 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 
 
 
-
 		// return new Promise(function (fulfill, reject) {
 		// 	me.save({
 		// 		success: function (grade, req) {

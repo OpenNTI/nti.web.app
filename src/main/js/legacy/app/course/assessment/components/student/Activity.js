@@ -36,29 +36,29 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	tpl: new Ext.XTemplate(
 			Ext.DomHelper.markup(
-					{ tag: 'tpl', 'for': '.', cn: [
-						{ cls: 'item {[this.isUnread(values.date)]}', cn: [
+				{ tag: 'tpl', 'for': '.', cn: [
+					{ cls: 'item {[this.isUnread(values.date)]}', cn: [
 							{ tag: 'time', cls: 'datetime', datetime: '{date:date("c")}', html: '{[this.getTime(values.date)]}'},
 							{ tag: 'span', cls: 'label', html: '{label:htmlEncode} '},
 							{ tag: 'span', cls: 'target', html: '{target:htmlEncode}'},
 							{ tag: 'tpl', 'if': 'suffix', cn: { tag: 'span', cls: 'label suffix', html: '{suffix:htmlEncode}'}}
-						]}
-					]}), {
+					]}
+				]}), {
 				//template functions
 
-						isUnread: function (date) {
-					return date > this.ownerCmp.getLastRead() ? 'unread' : '';
-				},
+					isUnread: function (date) {
+						return date > this.ownerCmp.getLastRead() ? 'unread' : '';
+					},
 
-						getTime: function (date) {
-					var format = 'M j',
-						today = new Date((new Date()).setHours(0, 0, 0, 0));
-					if (date > today) {
-						format = 'g:i a';
+					getTime: function (date) {
+						var format = 'M j',
+							today = new Date((new Date()).setHours(0, 0, 0, 0));
+						if (date > today) {
+							format = 'g:i a';
+						}
+						return Ext.Date.format(date, format);
 					}
-					return Ext.Date.format(date, format);
-				}
-					}),
+				}),
 
 	clear: function () {
 		this.store.removeAll();

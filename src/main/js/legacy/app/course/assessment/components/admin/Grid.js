@@ -459,7 +459,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		const gradeUpdated = () => {
 			this.fireEvent('grade-updated', record);
-		}
+		};
 
 		if (nib) {
 			NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(record, gradeUpdated, gradeUpdated).showBy(nib, 'tr-br');

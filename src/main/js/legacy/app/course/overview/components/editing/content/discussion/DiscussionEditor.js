@@ -14,30 +14,30 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
 				{name: 'target', type: 'hidden'},
-				{type: 'group', name: 'card', inputs: [
-					{
-						name: 'icon',
-						type: 'image',
-						height: 115,
-						width: 230,
-						placeholder: NextThought.model.DiscussionRef.defaultIcon
-					},
-					{
-						type: 'group',
-						name: 'meta',
-						inputs: [
-							{
-								name: 'title',
-								type: 'textarea',
-								placeholder: 'Title',
-								required: true,
-								keep: true,
-								maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
-							}
-						]
-					},
+			{type: 'group', name: 'card', inputs: [
+				{
+					name: 'icon',
+					type: 'image',
+					height: 115,
+					width: 230,
+					placeholder: NextThought.model.DiscussionRef.defaultIcon
+				},
+				{
+					type: 'group',
+					name: 'meta',
+					inputs: [
+						{
+							name: 'title',
+							type: 'textarea',
+							placeholder: 'Title',
+							required: true,
+							keep: true,
+							maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+						}
+					]
+				},
 					{type: 'saveprogress'}
-				]}
+			]}
 		];
 
 		return schema;

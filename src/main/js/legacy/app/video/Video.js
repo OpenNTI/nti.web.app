@@ -745,7 +745,6 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 
 
 
-
 	//keys that exist mean "maybe" supports.  (Apparently canPlayType doesn't return a "Yes")
 	this.supports = {};
 	var video = document.createElement('video'), i, o,
@@ -762,7 +761,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 				{mime: 'audio/x-mpegurl', key: 'm3u8'},
 				{mime: 'video/mpegurl', key: 'm3u8'},
 				{mime: 'audio/mpegurl', key: 'm3u8'}
-			];
+		];
 	if (video && video.canPlayType) {
 		while ((o = types.pop()) !== undefined) {
 			i = !!video.canPlayType(o.mime);

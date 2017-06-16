@@ -31,24 +31,24 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 			]}
 		]},{
 			cls: 'right', cn: [
-			{cls: 'video-picker', cn: [
+				{cls: 'video-picker', cn: [
 				{cls: 'grid-view'},
 				{cls: 'selected-mv-type hasTranscript video-focus', html: 'split video'}
-			]}
-		]
+				]}
+			]
 		}]), {
-		splitNumberFromTitle: function (values) {
-			var s = (values.title || '').split(' '),
-				number = s.shift(),
-				numberVal = parseFloat(number),
-				title = s.join(' ');
+			splitNumberFromTitle: function (values) {
+				var s = (values.title || '').split(' '),
+					number = s.shift(),
+					numberVal = parseFloat(number),
+					title = s.join(' ');
 
-			if (!values.sectionNumber && !isNaN(numberVal) && isFinite(numberVal)) {
-				values.sectionNumber = number;
-				values.title = title;
+				if (!values.sectionNumber && !isNaN(numberVal) && isFinite(numberVal)) {
+					values.sectionNumber = number;
+					values.title = title;
+				}
 			}
-		}
-	}),
+		}),
 
 	renderSelectors: {
 		gridEl: '.grid-view',
