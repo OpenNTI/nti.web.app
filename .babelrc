@@ -1,29 +1,5 @@
 {
-	"compact": false,
-	"sourceMaps": "both",
-	"presets": [
-		["env", {
-			"targets": {
-				"browsers": ["> 1% in US", "last 2 versions", "safari >= 6"]
-			}
-		}],
-		"stage-1",
-		"react"
-	],
-	"env": {
-		"production": {
-			"plugins": ["transform-runtime"]
-		},
-		"test": {
-			"presets": [
-				["env", {
-					"targets": {
-						"node": "current"
-					}
-				}],
-				"stage-1",
-				"react"
-			]
-		}
-	}
+	"presets":[
+		"./node_modules/nti-app-scripts/config/babelrc.js"
+	]
 }
