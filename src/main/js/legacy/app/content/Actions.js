@@ -68,7 +68,8 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 					rootId = results[3],
 					leftOvers = [],
 					parentNode = lineage.last(),
-					rootIdx, allowMenus = true;
+					rootIdx,
+					allowMenus = parentNode !== rootPageId;
 
 				// If passed, lets get the index of the rootId so we know where in the
 				// lineage to cut to Re-Root the tree.
