@@ -4,10 +4,6 @@
   "description": "NextThought web application",
   "author": "nextthought",
   "license": "UNLICENSED",
-  "engines": {
-    "node": ">=5.0.0",
-    "npm": ">=3.3.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/NextThought/nti.web.app.git"
@@ -15,10 +11,15 @@
   "files": [
     "dist"
   ],
+  "homepage": "proxy://localhost:8083/app/",
   "scripts": {
-    "test": "make test",
-    "start": "make styles && web-service --config ./src/server/config/env.json.example",
-    "prepublish": "not-in-install && make || in-install"
+    "test": "nti-app-scripts test",
+    "start": "nti-app-scripts start",
+    "prepack": "nti-app-scripts build",
+    "build": "nti-app-scripts build",
+    "clean": "nti-app-scripts clean",
+    "check": "nti-app-scripts check",
+    "release": "nti-app-scripts release"
   },
   "main": "./dist/server/index.js",
   "publishConfig": {
@@ -27,40 +28,21 @@
   "dependencies": {},
   "devDependencies": {
     "appcache-webpack-plugin": "^1.2.1",
-    "autoprefixer": "^7.0.0",
-    "babel-core": "^6.1.0",
-    "babel-eslint": "^7.0.0",
-    "babel-jest": "^20.0.0",
-    "babel-loader": "^7.0.0",
-    "babel-plugin-transform-runtime": "^6.1.0",
-    "babel-polyfill": "^6.1.0",
-    "babel-preset-env": "^1.1.4",
-    "babel-preset-react": "^6.1.0",
-    "babel-preset-stage-1": "^6.1.0",
-    "babel-register": "^6.3.13",
-    "baggage-loader": "^0.3.0",
     "clamp-js": "^0.7.0",
     "classnames": "^2.2.3",
     "create-react-class": "^15.5.2",
-    "css-loader": "0.x.x",
     "detect-zoom": "^1.0.2",
     "durationjs": "1.1.1",
     "email-validator": "^1.0.4",
     "enzyme": "^2.8.2",
-    "eslint-config-nti-codestyle-jsx": "^1.0.0",
     "exports-loader": "0.x.x",
     "extjs": "4.2.0-nti",
-    "extract-text-webpack-plugin": "^2.0.0",
-    "file-loader": "0.x.x",
     "formatter.js": "^0.1.5",
     "html-loader": "0.x.x",
     "imports-loader": "0.x.x",
-    "in-publish": "^2.0.0",
-    "jest": "^20.0.0",
-    "jest-junit": "^1.4.0",
     "moment": "^2.12.0",
     "node-natural-sort": "^0.8.6",
-    "node-sass": "^4.5.3",
+    "nti-app-scripts": "^1.0.4",
     "nti-assignment-editor": "^1.2.4",
     "nti-commons": "^2.0.0",
     "nti-content": "^1.4.1",
@@ -70,57 +52,22 @@
     "nti-lib-ntiids": "^1.0.2",
     "nti-lib-store": "^1.0.1",
     "nti-style-common": "^1.1.6",
-    "nti-util-git-rev": "^1.0.0",
     "nti-util-logger": "^1.0.2",
     "nti-web-client": "^1.1.1",
     "nti-web-commons": "0.x.x",
     "nti-web-discussions": "0.x.x",
     "nti-web-service": "^1.5.2",
     "nti-web-video": "^1.0.0",
-    "null-loader": "0.x.x",
     "postcss-cli": "^4.0.0",
-    "postcss-loader": "^2.0.0",
     "prop-types": "^15.5.8",
     "rangy": "^1.3.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-proxy-loader": "github:jsg2021/react-proxy-loader#react-15.5",
     "react-test-renderer": "^15.5.4",
-    "resolve-url-loader": "^2.0.0",
-    "sass-loader": "^6.0.0",
     "script-loader": "0.x.x",
-    "source-map-loader": "0.x.x",
     "spritesmith-cli": "^1.1.2",
-    "stats-webpack-plugin": "0.x.x",
-    "style-loader": "0.x.x",
     "url": "0.x.x",
-    "url-loader": "0.x.x",
-    "webpack": "^2.0.0",
-    "webpack-dev-server": "^2.0.0",
     "whatwg-fetch": "^2.0.0",
     "xregexp": "^3.1.0"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}",
-      "!**/*.spec.js"
-    ],
-    "coverageDirectory": "reports/coverage",
-    "coverageReporters": [
-      "text",
-      "lcov",
-      "cobertura"
-    ],
-    "moduleDirectories": [
-      "<rootDir>/src/main/js",
-      "node_modules"
-    ],
-    "roots": [
-      "<rootDir>/src/main/js"
-    ],
-    "testResultsProcessor": "./node_modules/jest-junit"
-  },
-  "jest-junit": {
-    "output": "reports/test-results/index.xml"
   }
 }

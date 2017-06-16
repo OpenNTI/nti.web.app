@@ -1,9 +1,6 @@
-import 'babel-polyfill';//applies hooks into global
 import 'legacy'; //kick start the app (the core is still defined in extjs)
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import {addFeatureCheckClasses} from 'nti-lib-dom';
 import {ConflictResolutionHandler} from 'nti-web-commons';
 import {init as initLocale} from 'nti-lib-locale';

@@ -1,11 +1,10 @@
 {
-	"extends": "nti-codestyle-js",
-	"parser": "babel-eslint",
+	"extends": "../../../../.eslintrc",
 
 	"parserOptions": {
 		"sourceType": "script",
 		"ecmaFeatures": {
-			"impliedStrict": false,
+			"impliedStrict": false
 		}
 	},
 
@@ -13,16 +12,15 @@
 		"$AppConfig": true,
 		"NextThought": true,
 		"Service": true,
-
+		"NTIStrings": true,
 		"getString": true
 	},
 
 	"rules": {
-		"no-console": 0,
-		"no-undef": 2,
-		"no-underscore-dangle": 0, /*damn, because this is has become so pervasive in the Ext/Legacy code, we're turning this rule off. JavaScript does not have "private" anything. underscores are ugly. Internal methods & variables should be wrapped in closures.*/
-		"no-var": 0,
-		"strict": [2, "never"],
-		"import/no-extraneous-dependencies": 0
+		"no-console": "off",
+		"no-underscore-dangle": "off",
+		"no-var": "off",
+		"strict": ["error", "never"],
+		"import/no-extraneous-dependencies": "off"
 	}
 }
