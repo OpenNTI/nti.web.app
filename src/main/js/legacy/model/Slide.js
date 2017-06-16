@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var ContentUtils = require('../util/Content');
-var ParseUtils = require('../util/Parsing');
-var ModelBase = require('./Base');
-var ModelPlaylistItem = require('./PlaylistItem');
+const Ext = require('extjs');
+
+const ContentUtils = require('../util/Content');
+const ParseUtils = require('../util/Parsing');
+
+const PlaylistItem = require('./PlaylistItem');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.Slide', {
@@ -37,21 +39,6 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 		},
 
 		fromDom: function (dom, containerId, videoIndex) {
-
-			function getParam (name) {
-				var el = DQ.select('param[name="' + name + '"]', dom)[0];
-				return el ? el.getAttribute('value') : null;
-			}
-
-			function getImage () {
-				var el = DQ.select('[itemprop] img', dom)[0], v = null;
-				if (el) {
-					v = el.getAttribute('data-nti-image-thumbnail') ||
-						el.getAttribute('data-nti-image-quarter');
-				}
-				return v;
-			}
-
 			var DQ = Ext.DomQuery, vid,
 				el = Ext.get(dom.parentNode || dom),
 				frag = (dom.ownerDocument || document).createDocumentFragment(),
@@ -85,13 +72,13 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 			}
 
 			if (nodes.first()) {
-				o.media = NextThought.model.PlaylistItem.fromDom(nodes.first(), videoIndex);
+				o.media = PlaylistItem.fromDom(nodes.first(), videoIndex);
 				o.media.set('mediaId', o.ordinal);
 				o.media.set('start', o['video-start'] || 0.0);
 				o.media.set('end', o['video-end'] || -1.0);
 			}
 			else {
-				o.media = new NextThought.model.PlaylistItem({
+				o.media = new PlaylistItem({
 					mediaId: o.ordinal,
 					sources: [
 						{
@@ -107,6 +94,21 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 			frag.appendChild(dom.cloneNode(true));
 
 			return ParseUtils.parseItems(o)[0];
+
+
+			function getParam (name) {
+				var elm = DQ.select('param[name="' + name + '"]', dom)[0];
+				return elm ? elm.getAttribute('value') : null;
+			}
+
+			function getImage () {
+				var elm = DQ.select('[itemprop] img', dom)[0], v = null;
+				if (elm) {
+					v = elm.getAttribute('data-nti-image-thumbnail') ||
+						elm.getAttribute('data-nti-image-quarter');
+				}
+				return v;
+			}
 		}
 	}
 });

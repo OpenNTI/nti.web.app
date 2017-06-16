@@ -12,7 +12,8 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	 *
 	 * batchSize: Number, //how many to run at once, default 5
 	 *
-	 * @param  {Object} config
+	 * @param  {Object} config - config object
+	 * @returns {void}
 	 */
 	constructor: function (config) {
 		this.batchSize = (config && config.batchSize) || 5;
@@ -30,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	schedule: function (fn) {
 		var me = this;
 
-		return new Promise(function (fulfill, rejeect) {
+		return new Promise(function (fulfill/*, reject*/) {
 			me.__queue(function () {
 				var resp = fn.call();
 

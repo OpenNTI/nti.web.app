@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var StoreUtils = require('../../util/Store');
-var ForumsBase = require('./Base');
-var StoreNTI = require('../../store/NTI');
-var ForumsCommentPost = require('./CommentPost');
+const Ext = require('extjs');
+
+const ParseUtils = require('../../util/Parsing');
+const StoreUtils = require('../../util/Store');
+const NTI = require('../../store/NTI');
+
+const Board = require('./Board');
+require('./CommentPost');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.Board', {
@@ -14,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 		buildContentsStoreFromData: function (id, data) {
 			var store;
 
-			store = Ext.getStore(id) || NextThought.store.NTI.create({
+			store = Ext.getStore(id) || NTI.create({
 				storeId: id,
 				data: data,
 				sorters: [{
@@ -36,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 				}
 
 				if (item.children) {
-					board = NextThought.model.forums.Board.getBoardFromForumList(item.children);
+					board = Board.getBoardFromForumList(item.children);
 				}
 
 				return !board;
@@ -56,17 +59,13 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 	},
 
 	findBundle: function () {
-		var me = this;
-
-		return ContentManagementUtils.findBundleBy(function (bundle) {
-			var links = bundle.get('Links'),
+		return ContentManagementUtils.findBundleBy(bundle => {
+			const links = bundle.get('Links'),
 				link = links && links.getRelLink('DiscussionBoard');
 
-			return link && link.ntiid === me.getId();
+			return link && link.ntiid === this.getId();
 		})
-		.catch(function (reason) {
-			return me.findCourse();
-		});
+		.catch(() => this.findCourse());
 	},
 
 	findCourse: function () {

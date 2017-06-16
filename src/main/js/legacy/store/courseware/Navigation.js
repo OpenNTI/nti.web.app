@@ -1,7 +1,7 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var NavigationCourseOutlineNode = require('../../model/courses/navigation/CourseOutlineNode');
+const Ext = require('extjs');
 
+const Globals = require('../../util/Globals');
+require('../../model/courses/navigation/CourseOutlineNode');
 require('../../model/courses/navigation/Node');
 
 module.exports = exports = Ext.define('NextThought.store.courseware.Navigation', {
@@ -64,8 +64,8 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Navigation',
 
 				fill.position = index++;
 
-				node._max_depth = maxDepth;
-				node._depth = depth;
+				node['_max_depth'] = maxDepth;
+				node['_depth'] = depth;
 
 				if (!node.get('label')) {
 					fill.label = 'Empty';

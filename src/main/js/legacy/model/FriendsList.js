@@ -1,14 +1,16 @@
-var Ext = require('extjs');
-var ObjectUtils = require('../util/Object');
-var ParseUtils = require('../util/Parsing');
-var ModelBase = require('./Base');
-var MixinsGroupLike = require('../mixins/GroupLike');
-var MixinsShareEntity = require('../mixins/ShareEntity');
-var MixinsAvatar = require('../mixins/Avatar');
-var UtilObject = require('../util/Object');
-var ForumsDFLBoard = require('./forums/DFLBoard');
-var ForumsDFLForum = require('./forums/DFLForum');
+const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+
+const ObjectUtils = require('../util/Object');
+const ParseUtils = require('../util/Parsing');
+
+require('./forums/DFLBoard');
+require('./forums/DFLForum');
+
+require('../mixins/GroupLike');
+require('../mixins/ShareEntity');
+require('../mixins/Avatar');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.FriendsList', {
@@ -50,12 +52,12 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		ObjectUtils.defineAttributes(this, {
 			isDFL: {
 				getter: this.mixins.shareEntity.isDynamicSharing,
-				setter: function () { throw 'readonly'; }
+				setter: function () { throw new Error('readonly'); }
 			},
 
 			readableType: {
 				getter: this.mixins.shareEntity.getPresentationType,
-				setter: function () { throw 'readonly'; }
+				setter: function () { throw new Error('readonly'); }
 			}
 		});
 

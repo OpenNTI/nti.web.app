@@ -1,10 +1,11 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
-var ParseUtils = require('./Parsing');
-var {getURL} = require('legacy/util/Globals');
+const {getURL} = require('legacy/util/Globals');
+const lazy = require('legacy/util/lazy-require')
+	.get('UserRepository', () => require('legacy/cache/UserRepository'));
 
-var lazy = require('legacy/util/lazy-require')
-			.get('UserRepository', () => require('legacy/cache/UserRepository'));
+const ParseUtils = require('./Parsing');
+
 
 module.exports = exports = Ext.define('NextThought.util.Store', {
 
@@ -22,10 +23,10 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 
 		records = records || [];
 
-		var users = records.map(function (r) {return r.get('Creator');});
+		let users = records.map(function (r) {return r.get('Creator');});
 
 		function apply (r, i) {
-			var u = users[i],
+			const u = users[i],
 				id = u.getId(),
 				c = r.get('Creator');
 

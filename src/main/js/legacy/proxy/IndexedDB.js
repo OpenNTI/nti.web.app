@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
@@ -30,14 +30,14 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 
 	//<editor-fold desc="IndexedDB Wrapper functions">
 	open: function () {
-		var me = this, store,
+		var me = this,
 			request = me.indexedDB.open(me.id, me.version);
 
 		function useDatabase (db) {
 			// Make sure to add a handler to be notified if another page requests a version
 			// change. We must close the database. This allows the other page to upgrade the database.
 			// If you don't do this then the upgrade won't happen until the user closes the tab.
-			db.onversionchange = function (event) {
+			db.onversionchange = function (/*event*/) {
 				db.close();
 				alert('A new version of this is ready. Please reload!');
 			};
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 			me.fireEvent('opened', me);
 		}
 
-		request.onblocked = function (event) {
+		request.onblocked = function (/*event*/) {
 			// If some other tab is loaded with the database, then it needs to be closed
 			// before we can proceed.
 			alert('Please close all other tabs with this open!');
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 				db.deleteObjectStore(me.storeName);
 			}
 
-			store = db.createObjectStore(me.storeName, me.keyConfig);
+			/*store = */db.createObjectStore(me.storeName, me.keyConfig);
 			me.fireEvent('createdstore', me);
 			useDatabase(db);
 		};
@@ -79,14 +79,12 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 
 
 	getStore: function (mode) {
-		var me = this,
-			db = me.db,
-			trans = db.transaction([me.storeName], mode || 'readwrite');
-		return trans.objectStore(me.storeName);
+		const trans = this.db.transaction([this.storeName], mode || 'readwrite');
+		return trans.objectStore(this.storeName);
 	},
 
 
-	onerror: function (e) {
+	onerror: function (/*e*/) {
 		console.error(arguments);
 		this.fireEvent('exception');
 	},
@@ -98,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 			request = store.add(me.__getRecordData(record));
 
 		return new Promise(function (fulfill, reject) {
-			request.onsuccess = function (e) {
+			request.onsuccess = function (/*e*/) {
 				me.fireEvent('added', '...');
 				fulfill();
 			};
@@ -147,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 			request = store.delete(id);
 
 		return new Promise(function (fulfill, reject) {
-			request.onsuccess = function (e) {
+			request.onsuccess = function (/*e*/) {
 				me.fireEvent('removed');
 				fulfill();
 			};
@@ -214,11 +212,11 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 
 		return new Promise(function (fulfill, reject) {
 
-			request.onsuccess = function (e) {
+			request.onsuccess = function (/*e*/) {
 				fulfill();
 			};
 
-			request.onerror = function (e) {
+			request.onerror = function (/*e*/) {
 				reject();
 			};
 		});
@@ -258,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 			req = store.clear();
 
 		return new Promise(function (fulfill, reject) {
-			req.onsuccess = function (evt) {
+			req.onsuccess = function (/*evt*/) {
 				fulfill();
 			};
 
@@ -331,6 +329,24 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 
 	read: function (operation, callback, scope) {
 		//TODO: respect sorters, filters, start and limit options on the Operation
+		var me = this,
+			Model = me.model,
+			idProp = Model.prototype.idProperty;
+
+		operation.setStarted();
+
+		//read a single record
+		if (operation.id) {
+			me.get(operation.id)
+					.then(function (v) {operation.setSuccessful(); return v;})
+					.always(finish);
+			return;
+		}
+
+		me.getRange(operation.start, operation.limit)
+				.then(function (v) {operation.setSuccessful(); return v;})
+				.always(finish);
+
 
 		function finish (records) {
 			records = Ext.isArray(records) ? records : [records];
@@ -354,24 +370,6 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 				callback.call(scope || me, operation);
 			}
 		}
-
-		var me = this,
-			Model = me.model,
-			idProp = Model.prototype.idProperty;
-
-		operation.setStarted();
-
-		//read a single record
-		if (operation.id) {
-			me.get(operation.id)
-					.then(function (v) {operation.setSuccessful(); return v;})
-					.always(finish);
-			return;
-		}
-
-		me.getRange(operation.start, operation.limit)
-				.then(function (v) {operation.setSuccessful(); return v;})
-				.always(finish);
 	},
 
 
@@ -388,11 +386,11 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 		}
 
 		this.putAll(records)
-				.then(function () {operation.setSuccessful();})
-				.always(function () {
+				.then(() => {operation.setSuccessful();})
+				.always(() => {
 					operation.setCompleted();
 					if (typeof callback === 'function') {
-						callback.call(scope || me, operation);
+						callback.call(scope || this, operation);
 					}
 				});
 	},

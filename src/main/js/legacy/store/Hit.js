@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ReaderJson = require('../proxy/reader/Json');
-var FilterFilterGroup = require('../filter/FilterGroup');
-var FilterFilter = require('../filter/Filter');
+const Ext = require('extjs');
+
+require('../proxy/reader/Json');
+require('../filter/FilterGroup');
+require('../filter/Filter');
 require('../model/Hit');
 
 

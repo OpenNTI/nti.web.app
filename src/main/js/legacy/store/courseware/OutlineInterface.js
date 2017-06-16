@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInterface', {
@@ -14,9 +14,9 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 				index = 0, depth = 0;
 
 			function itr (node) {
-				node._max_depth = maxDepth;
-				node._position = index;
-				node._depth = depth;
+				node['_max_depth'] = maxDepth;
+				node['_position'] = index;
+				node['_depth'] = depth;
 
 				if (node.fillInItems) {
 					node.fillInItems();
@@ -32,20 +32,21 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 			}
 
 			function getDepth (n) {
-				var items = ((n && n.get('Items')) || []),
-					depth;
+				let items = ((n && n.get('Items')) || []);
 
-				depth = items.reduce(function (max, item) {
-					var depth = getDepth(item);
+				function findMax (max, item) {
+					let d = getDepth(item);
 
-					if (depth > max) {
-						max = depth;
+					if (d > max) {
+						max = d;
 					}
 
 					return max;
-				}, 0);
+				}
 
-				return items.length ? depth + 1 : 0;
+				return !items.length
+					? 0 :
+					1 + items.reduce(findMax, 0);
 			}
 
 			maxDepth = getDepth(outline);

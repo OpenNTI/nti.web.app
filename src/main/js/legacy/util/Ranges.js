@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var Anchors = require('./Anchors');
-var Globals = require('./Globals');
-var RectUtils = require('./Rects');
+const Ext = require('extjs');
+
+const Anchors = require('./Anchors');
+const Globals = require('./Globals');
+const RectUtils = require('./Rects');
 
 
 module.exports = exports = Ext.define('NextThought.util.Ranges', {

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var FieldsSimpleTextField = require('../form/fields/SimpleTextField');
+const Ext = require('extjs');
+
+require('../form/fields/SimpleTextField');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.SearchItem', {
@@ -19,14 +20,14 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchItem', {
 		this.inputEl.set({size: 13});
 
 		this.mon(this.inputEl, {
-			keydown: 'stop', 
-			keyup: 'stop', 
+			keydown: 'stop',
+			keyup: 'stop',
 			keypress: 'stop'
 		});
 	},
 
-	 stop: function (e) {
-		//Because it is in a view, it is preventing the default function of space 
+	stop: function (e) {
+		//Because it is in a view, it is preventing the default function of space
 		e.stopPropagation();
-	 }
+	}
 });

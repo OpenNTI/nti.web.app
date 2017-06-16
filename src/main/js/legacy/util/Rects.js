@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.util.Rects', {
@@ -111,8 +111,8 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 		}
 
 		var rs = Array.prototype.slice.call(rects),
-			i = rs.length - 1, out = [], o, h, w,
-			lh2 = lineHeight * 2;
+			i = rs.length - 1, out = [], o, h, w;
+			// lh2 = lineHeight * 2;
 
 		if (!i || Ext.isIE || !lineHeight) { return rects; }
 

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AnnotationUtils = require('./Annotations');
+const Ext = require('extjs');
+
+const AnnotationUtils = require('./Annotations');
 
 
 module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
@@ -144,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 	//	console.groupEnd("Build Tree");
 	},
 
-	prune: function (tree) {
+	prune: function (/*tree*/) {
 		//until we decide we want to prune from the root down... this is a non-desired function. (we cannot have leaf
 		// placeholders with the current threading algorithm.)
 

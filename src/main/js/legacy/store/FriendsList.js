@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
 require('../model/FriendsList');
 
 module.exports = exports = Ext.define('NextThought.store.FriendsList', {
@@ -159,9 +160,9 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 	 * TODO: The following functions handling sending contacts-added and contacts-removed events probably need to be
 	 * optimized at some point
 	 *
-	 * @param {Array} newFriends
+	 * @param {Array} newFriends - users
 	 * @param {boolean} [noUpdatedEvent] @private
-	 * @return {boolean}
+	 * @return {boolean} true if something changed
 	 */
 	maybeFireContactsAdded: function (newFriends, noUpdatedEvent) {
 		var contactsWithDups, newContacts = [];
@@ -313,7 +314,7 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 	/**
 	 *
 	 * @param {Boolean} [leaveDuplicates] @private
-	 * @return {Array}
+	 * @return {Array} names
 	 */
 	getContacts: function (leaveDuplicates) {
 		var names = [];

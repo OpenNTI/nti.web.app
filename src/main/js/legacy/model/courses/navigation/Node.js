@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
+const Ext = require('extjs');
+
+const ParseUtils = require('../../../util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node', {
@@ -57,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 			}
 		},
 
-			 //unit, lesson
+		//unit, lesson
 		{ name: 'type', type: 'string', mapping: '@nodeName', convert: function (v) {return v && v.toLowerCase(); } },
 
 			//due date

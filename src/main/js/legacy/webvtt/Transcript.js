@@ -624,7 +624,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		// To remember how many span tags to close
 			spanCount = 0,
 		// TO remember how many misformed V tags were encountered
-			badVCount = 0,
+			// badVCount = 0,
 		// RegExp for matching <v> tags
 			reV = /<v[^>]*>/gi,
 		// RegExp for matching </v> tags
@@ -643,7 +643,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			// Check whether this is a valid tag (it must have an annotation), return empty span if not
 			if (!reGoodV.test(str)) {
 				console.error(str + ' is not a well-formed voice tag.');
-				badVCount++;
+				// badVCount++;
 				return '<span>';
 			}
 			replacement = str;

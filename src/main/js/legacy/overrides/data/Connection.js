@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {getURL} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 	override: 'Ext.data.Connection',
@@ -15,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 		var i, badParams = ['id', 'page', 'start', 'limit', 'group', 'sort'],//'_dc'
 			params = options.params || {};
 		if (Ext.isGecko) {
-	  	badParams.shift();
+			badParams.shift();
 		}
 		if (Ext.isFunction(params)) {
 			console.warn('Params were a function!');
@@ -80,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 	Ext.Ajax.on('requestexception', function (conn, response, options) {
 		function onConfirmed () {
 			//TODO better way to send the user to the login page?
-			location.reload();
+			window.location.reload();
 		}
 
 		if (response && response.status === 401) {

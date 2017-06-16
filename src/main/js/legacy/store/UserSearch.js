@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ProxyUserSearch = require('../proxy/UserSearch');
-var GroupsStateStore = require('../app/groups/StateStore');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isMe} = require('legacy/util/Globals');
+
+const GroupsStateStore = require('../app/groups/StateStore');
+require('../proxy/UserSearch');
 
 
 module.exports = exports = Ext.define('NextThought.store.UserSearch', {
@@ -22,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.store.UserSearch', {
 		{sorterFn: function (a, b) {
 			var list = this.contactsList, aa, bb;
 			if (!this.contactsList || (new Date() - (this.lastUsed || 0)) > 0) {
-				this.contactsList = list = NextThought.app.groups.StateStore.getInstance().getFriendsList().getContacts();
+				this.contactsList = list = GroupsStateStore.getInstance().getFriendsList().getContacts();
 				this.lastUsed = new Date();
 			}
 

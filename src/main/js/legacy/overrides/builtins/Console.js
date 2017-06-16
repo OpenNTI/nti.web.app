@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', function () {
@@ -27,78 +27,78 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 
 	var log = [],
 		fns = ['log', 'debug', 'info', 'warn', 'error', 'group', 'trace', 'groupCollapsed', 'groupEnd', 'time', 'timeEnd'],
-		ignored = {
-			debug: 1, group: 1, trace: 1, groupCollapsed: 1, groupEnd: 1, time: 1, timeEnd: 1
-		},
+		// ignored = {
+		// 	debug: 1, group: 1, trace: 1, groupCollapsed: 1, groupEnd: 1, time: 1, timeEnd: 1
+		// },
 		originalLogFns = {};
 
 	//capture the originals...
 	Ext.copyTo(originalLogFns, console, fns, true);
 
 
-	function collect (string) {
-		if (log.last() !== string) {
-			log.push(string);
-		}
-		var max = $AppConfig.maxLogCapture,
-			len = log.length;
-		if (len > max) {
-			log.splice(0, len - max);
-		}
-	}
+	// function collect (string) {
+	// 	if (log.last() !== string) {
+	// 		log.push(string);
+	// 	}
+	// 	var max = $AppConfig.maxLogCapture,
+	// 		len = log.length;
+	// 	if (len > max) {
+	// 		log.splice(0, len - max);
+	// 	}
+	// }
+	//
+	//
+	// function getReportableValue (val) {
+	// 	var v = val;
+	// 	if (!val) {
+	// 		v = val;
+	// 	}
+	// 	else if (val.asJSON) {
+	// 		v = val.asJSON();
+	// 	} else if (val.toJSON) {
+	// 		v = val.toJSON();
+	// 	} else if (val.isComponent) {
+	// 		v = '{Component: xtype=' + val.xtype + ', id=' + val.id + '}';
+	// 	} else if (Ext.isObject(val)) {
+	// 		try {
+	// 			v = Ext.encode(val);
+	// 		} catch (encodeError) {
+	// 			v = '{Could not encode}';
+	// 		}
+	// 	} else if (Ext.isArray(val)) {
+	// 		v = Ext.Array.map(val, getReportableValue).join(',');
+	// 	}
+	//
+	// 	return v;
+	// }
 
 
-	function getReportableValue (val) {
-		var v = val;
-		if (!val) {
-			v = val;
-		}
-		else if (val.asJSON) {
-			v = val.asJSON();
-		} else if (val.toJSON) {
-			v = val.toJSON();
-		} else if (val.isComponent) {
-			v = '{Component: xtype=' + val.xtype + ', id=' + val.id + '}';
-		} else if (Ext.isObject(val)) {
-			try {
-				v = Ext.encode(val);
-			} catch (encodeError) {
-				v = '{Could not encode}';
-			}
-		} else if (Ext.isArray(val)) {
-			v = Ext.Array.map(val, getReportableValue).join(',');
-		}
-
-		return v;
-	}
-
-
-	function getReporter (name) {
-		if (ignored.hasOwnProperty(name) || !$AppConfig.enableLogCapture) {
-			return function () {};
-		}
-		return function () {
-
-			try {
-				//get a trace (in WebKit)
-	//			var e = new Error(name),
-	//				stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '')
-	//				  .replace(/^\s+at\s+/gm, '')
-	//				  .replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@'),
-
-				var args = [[name, ':'].join('')].concat(Array.prototype.slice.call(arguments)),
-					x = args.length - 1;
-
-				for (x; x >= 0; x--) {
-					args[x] = getReportableValue(args[x]);
-				}
-
-				collect(args.join(' '));
-			} catch (e) {
-				collect('Could not collect log... ' + e.stack || e.message);
-			}
-		};
-	}
+	// function getReporter (name) {
+	// 	if (ignored.hasOwnProperty(name) || !$AppConfig.enableLogCapture) {
+	// 		return function () {};
+	// 	}
+	// 	return function () {
+	//
+	// 		try {
+	// 			//get a trace (in WebKit)
+	// //			var e = new Error(name),
+	// //				stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '')
+	// //				  .replace(/^\s+at\s+/gm, '')
+	// //				  .replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@'),
+	//
+	// 			var args = [[name, ':'].join('')].concat(Array.prototype.slice.call(arguments)),
+	// 				x = args.length - 1;
+	//
+	// 			for (x; x >= 0; x--) {
+	// 				args[x] = getReportableValue(args[x]);
+	// 			}
+	//
+	// 			collect(args.join(' '));
+	// 		} catch (e) {
+	// 			collect('Could not collect log... ' + e.stack || e.message);
+	// 		}
+	// 	};
+	// }
 
 
 

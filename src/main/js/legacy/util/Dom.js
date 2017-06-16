@@ -194,7 +194,8 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	/**
 	 * recursively remove an elment (if removing a node produces an empty parent node, remove it too...until we get to the root)
 	 *
-	 * @param {Node} el
+	 * @param {Node} el - element to remove
+	 * @return {void}
 	 * @private
 	 */
 	__removeNodeRecursively: function remove (el) {
@@ -214,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	 *
 	 * @param {Node} root - Root Node to select unwanted elements
 	 * @param {Boolean} cleanAttributes - if true, will remove all attributes that are not white listed. (See KEEP_ATTRS)
-	 * @return {Node[]}
+	 * @return {Node[]} list of elements
 	 * @private
 	 */
 	__pickUnsanitaryElements: function (root, cleanAttributes) {
@@ -270,8 +271,8 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 
 
 	/**
-	 * @param {String|Node} html
-	 * @return {String}
+	 * @param {String|Node} html markup/dom to clean
+	 * @return {String} sanitized markup
 	 */
 	sanitizeExternalContentForInput: function (html) {
 		console.debug('Sanitizing html...', html);

@@ -1,15 +1,19 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../util/Content');
-var ParseUtils = require('../../util/Parsing');
-var ModelBase = require('../Base');
-var MixinsDurationCache = require('../../mixins/DurationCache');
-var MixinsMovingRoot = require('../../mixins/MovingRoot');
-var OrderedContents = require('../../mixins/OrderedContents');
-var CoursewareOutlineInterface = require('../../store/courseware/OutlineInterface');
-var NavigationCourseOutlineNode = require('./navigation/CourseOutlineNode');
-var NavigationCourseOutlineContentNode = require('./navigation/CourseOutlineContentNode');
-var NavigationCourseOutlineCalendarNode = require('./navigation/CourseOutlineCalendarNode');
-var Url = require('url');
+const Url = require('url');
+
+const Ext = require('extjs');
+
+const ContentUtils = require('../../util/Content');
+const ParseUtils = require('../../util/Parsing');
+
+const CourseOutlineNode = require('./navigation/CourseOutlineNode');
+
+require('./navigation/CourseOutlineContentNode');
+require('./navigation/CourseOutlineCalendarNode');
+require('../../store/courseware/OutlineInterface');
+require('../../mixins/DurationCache');
+require('../../mixins/MovingRoot');
+require('../../mixins/OrderedContents');
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline', {
@@ -48,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 
 	getAllowedTypes: function () {
 		return [
-			NextThought.model.courses.navigation.CourseOutlineNode.mimeType
+			CourseOutlineNode.mimeType
 		];
 	},
 
@@ -181,13 +185,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		}
 
 		return this.getContents()
-				.then(function (me) { return me.getNode(id); })
-				.then(function (node) {
-					if (!node) {
-						throw 'Not found';
-					}
-					return node;//probably not needed
-				});
+				.then(me => me.getNode(id))
+				.then(node => node || Promise.reject('Not found'));
 	},
 
 	getNode: function (id) {

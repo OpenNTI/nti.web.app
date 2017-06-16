@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.TagField', {
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	onBeforeRemoveToken: function (token) {},
+	onBeforeRemoveToken: function (/*token*/) {},
 
 
 	onClick: function (e) {
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	to_ascii: {
+	'to_ascii': {
 		'188': 44,
 		'109': 45,
 		'190': 46,
@@ -127,14 +127,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 		'187': 61,
 		'186': 59,
 		'189': 45
-  	},
+	},
 
 
 	isDelimiter: function (ch) {
 
 		//see http://jsfiddle.net/S2dyB/17/
 		if (this.to_ascii.hasOwnProperty(ch)) {
-	  		ch = this.to_ascii[ch];
+			ch = this.to_ascii[ch];
 		}
 
 		return Boolean(String.fromCharCode(ch).match(this.delimiterRe));
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	onPaste: function (e) {
+	onPaste: function (/*e*/) {
 		//wait for paste data to actually populate tne input
 		Ext.defer(this.updateTags, 100, this);
 	},

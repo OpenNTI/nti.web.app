@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var ModelBase = require('../Base');
+/*globals OpenBadges*/
+const Ext = require('extjs');
+
+const ParseUtils = require('../../util/Parsing');
+
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {

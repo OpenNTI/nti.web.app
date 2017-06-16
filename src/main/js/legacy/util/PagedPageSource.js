@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var StoreUtils = require('./Store');
+const Ext = require('extjs');
+
+const StoreUtils = require('./Store');
 
 
 module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isFeature} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	extend: 'Ext.data.Store',
@@ -38,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	],
 
 
-	remove: function (record, isMove, silent) {
+	remove: function (record, isMove/*, silent*/) {
 		var r = record || [],
 			args = Array.prototype.slice.call(arguments);
 
@@ -47,9 +48,9 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 		}
 
 		if (isMove) {
-			Ext.each(r, function (r, i, a) {
-				if (r.placeholder) {
-					console.log('>>???');
+			Ext.each(r, function (rec, i, a) {
+				if (rec.placeholder) {
+					// console.log('>>???');
 					a.splice(i, 1); }
 			}, this, true);
 		}
@@ -104,10 +105,15 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 
 
 		function add (s, rec) {
+			var placeholders = Ext.Array.filter(s.getItems(), function (r) {return r.placeholder && !r.parent;}),
+				records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders),
+				currentFilters = me.filters.getRange();
 
-			function doesRecordPassFilters (rec) {
+			Ext.each(records, addMe);
+
+			function doesRecordPassFilters (record) {
 				return Ext.Array.every(currentFilters, function (f) {
-					if (f.id !== 'lineFilter' && f.filterFn) { return f.filterFn.apply(f, [rec]); }
+					if (f.id !== 'lineFilter' && f.filterFn) { return f.filterFn.apply(f, [record]); }
 					return true;
 				});
 			}
@@ -141,16 +147,12 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 				}
 			}
 
-			var placeholders = Ext.Array.filter(s.getItems(), function (r) {return r.placeholder && !r.parent;}),
-				records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders),
-				currentFilters = me.filters.getRange();
 
-			Ext.each(records, addMe);
 		}
 
 		function load (s, rec) {
 			var placeholders = Ext.Array.filter(s.getItems(), function (r) {return r.placeholder && !r.parent;}),
-				records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders), me = this;
+				records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders);
 
 			Ext.each(records, function (r) {
 				var i = me.find('NTIID', r.get('NTIID'), 0, false, true, true);

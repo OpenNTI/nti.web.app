@@ -271,7 +271,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 
 Ext.util.Format.timeDifference = exports.timeDifference.bind(exports);
 
-/**
+/*
  * A utility to do a count down or count up from a starting point until a stopping point or infinity
  */
 exports._timer = function () {

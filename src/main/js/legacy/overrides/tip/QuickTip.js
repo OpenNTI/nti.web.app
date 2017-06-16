@@ -189,23 +189,23 @@ module.exports = exports = Ext.define('NextThought.overrides.tip.QuickTip', {
 		var me = this, pos;
 		me.callParent(arguments);
 		switch (me.tipAnchor.charAt(0)) {
-	  case 't': pos = 'b-t'; break;
-	  case 'r': pos = 'l-r'; break;
-	  case 'b': pos = 't-b'; break;
-	  default: pos = 'r-l'; break;
+		case 't': pos = 'b-t'; break;
+		case 'r': pos = 'l-r'; break;
+		case 'b': pos = 't-b'; break;
+		default: pos = 'r-l'; break;
 		}
 		me.anchorEl.alignTo(me.el, pos);
-  	},
+	},
 
 	//We prefer to align to the center posisitions instead of the corner positions.
 	getAnchorAlign: function () {
 		switch (this.anchor) {
-	  case 'top': return 't-b';
-	  case 'left': return 'l-r';
-	  case 'right': return 'r-l';
-	  default: return 'b-t';
+		case 'top': return 't-b';
+		case 'left': return 'l-r';
+		case 'right': return 'r-l';
+		default: return 'b-t';
 		}
-  	}
+	}
 });
 
 
@@ -239,10 +239,10 @@ module.exports = exports = Ext.define('NextThought.view.tip.Tooltip', {
 		var me = this, pos, off = [0, 0];
 		me.callParent(arguments);
 		switch (me.tipAnchor.charAt(0)) {
-	  case 't': pos = 'b-t'; break;
-	  case 'r': pos = 'l-r'; break;
-	  case 'b': pos = 't-b'; break;
-	  default: pos = 'r-l'; break;
+		case 't': pos = 'b-t'; break;
+		case 'r': pos = 'l-r'; break;
+		case 'b': pos = 't-b'; break;
+		default: pos = 'r-l'; break;
 		}
 
 		if (this.defaultAlign === 'tr-br') {
@@ -251,17 +251,17 @@ module.exports = exports = Ext.define('NextThought.view.tip.Tooltip', {
 		}
 
 		me.anchorEl.alignTo(me.el, pos, off);
-  	},
+	},
 
 
 	//We prefer to align to the center posisitions instead of the corner positions.
 	getAnchorAlign: function () {
 		switch (this.anchor) {
-	  case 'top': return 't-b';
-	  case 'left': return 'l-r';
-	  case 'right': return 'r-l';
-	  default: return 'b-t';
+		case 'top': return 't-b';
+		case 'left': return 'l-r';
+		case 'right': return 'r-l';
+		default: return 'b-t';
 		}
-  	}
+	}
 
 });

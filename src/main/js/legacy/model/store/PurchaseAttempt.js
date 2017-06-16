@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var StoreStripePurchaseOrder = require('./StripePurchaseOrder');
-var StorePricingResults = require('./PricingResults');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {getURL} = require('legacy/util/Globals');
+
+require('../Base');
+
+require('./StripePurchaseOrder');
+require('./PricingResults');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.PurchaseAttempt', {
@@ -16,22 +19,22 @@ module.exports = exports = Ext.define('NextThought.model.store.PurchaseAttempt',
 	},
 
 	fields: [
-	  { name: 'Items', type: 'auto', persist: false },
-	  { name: 'State', type: 'string', persist: false },
-	  { name: 'Processor', type: 'string', persist: false },
-	  { name: 'StartTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
-	  { name: 'Error', type: 'singleItem', persist: false},
-	  { name: 'Description', type: 'string', persist: false },
-	  { name: 'Quantity', type: 'int', persist: false },
-	  { name: 'TransactionID', type: 'string', persist: false},
-	  { name: 'TokenID', type: 'string', persist: false },
-		  { name: 'InvitationCode', type: 'string', persist: false },
-		  { name: 'RemainingInvitations', type: 'int', persist: false },
-		  { name: 'Order', type: 'singleitem', persist: false},
-		  { name: 'Pricing', type: 'singleitem', persist: false},
-		  { name: 'RedemptionCode', type: 'string', persist: false },
-		  { name: 'RedemptionTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
-		  { name: 'VendorThankYouPage', type: 'auto'}
+		{ name: 'Items', type: 'auto', persist: false },
+		{ name: 'State', type: 'string', persist: false },
+		{ name: 'Processor', type: 'string', persist: false },
+		{ name: 'StartTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'Error', type: 'singleItem', persist: false},
+		{ name: 'Description', type: 'string', persist: false },
+		{ name: 'Quantity', type: 'int', persist: false },
+		{ name: 'TransactionID', type: 'string', persist: false},
+		{ name: 'TokenID', type: 'string', persist: false },
+		{ name: 'InvitationCode', type: 'string', persist: false },
+		{ name: 'RemainingInvitations', type: 'int', persist: false },
+		{ name: 'Order', type: 'singleitem', persist: false},
+		{ name: 'Pricing', type: 'singleitem', persist: false},
+		{ name: 'RedemptionCode', type: 'string', persist: false },
+		{ name: 'RedemptionTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'VendorThankYouPage', type: 'auto'}
 	],
 
 	isPurchaseAttempt: true,
