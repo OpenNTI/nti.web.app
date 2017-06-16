@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
@@ -26,12 +26,11 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 	 * will resolve or reject.
 	 *
 	 * @param {String} functionName
-	 * @param {...} var_args Arguments to pass to the functionName
+	 * @param {...} args Arguments to pass to the functionName
 	 * @return {Promise}
 	 */
-	performAnd: function (functionName, var_args) {
-		var app = this.getApplication(),
-			args = Array.prototype.slice.call(arguments, 1);
+	performAnd: function (functionName, ...args) {
+		var app = this.getApplication();
 
 		function perform (ctlr) {
 			var f = ctlr[functionName];

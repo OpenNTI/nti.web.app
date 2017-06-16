@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var Anchors = require('./Anchors');
-var AnnotationUtils = require('./Annotations');
-var lazyResolve = {
+const Ext = require('extjs');
+
+const Anchors = require('./Anchors');
+const AnnotationUtils = require('./Annotations');
+const lazyResolve = {
 	get ReaderPanel () {
 		delete this.ReaderPanel;
 		return this.ReaderPanel = require('../app/contentviewer/components/Reader');
@@ -26,9 +27,9 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 	/**
 	 * This is the main exported function in this utility.
 	 *
-	 * @param y
-	 * @param [doc]
-	 * @return {*}
+	 * @param {Number} y - y coordinate
+	 * @param {Document} [doc] - document to search
+	 * @return {Object|null} - An object with a rect & range, or null.
 	 */
 	findLine: function (y, doc) {
 		y = Math.round(y);
@@ -429,7 +430,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 	},
 
 
-	/** @private */
+	/* @private */
 	isNodeAnchorable: function (n) {
 		if (!n) {return false;}
 

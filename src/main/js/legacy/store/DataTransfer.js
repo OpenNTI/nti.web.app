@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../util/Parsing');
+const Ext = require('extjs');
+
+const ParseUtils = require('../util/Parsing');
 
 
 /**
@@ -33,6 +34,7 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	 *
 	 * @param {String|Mixed} key   the key to store the value on (typically a mimetype), or the object to store
 	 * @param {Mixed} value the value to store
+	 * @returns {void}
 	 */
 	setData: function (key, value) {
 		if (!value) {
@@ -77,6 +79,7 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	 * instead of passing the event.
 	 *
 	 * @param  {Function} fn callback
+	 * @returns {void}
 	 */
 	forEach: function (fn) {
 		var data = this.transferData,
@@ -116,9 +119,9 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 			data = JSON.parse(data);
 		} catch (e) {
 			data = null;
-		} finally {
-			return data;
 		}
+
+		return data;
 	},
 
 

@@ -1,14 +1,13 @@
-var Ext = require('extjs');
-var User = require('legacy/model/User');
+const Ext = require('extjs');
 
-var Highlight = require('legacy/model/Highlight');
-var Note = require('legacy/model/Note');
-
-require('legacy/app/whiteboard/Canvas');
-
+const User = require('legacy/model/User');
+const Highlight = require('legacy/model/Highlight');
+const Note = require('legacy/model/Note');
 const lazy = require('legacy/util/lazy-require')
 			.get('Anchors', () => require('legacy/util/Anchors'))
 			.get('RectUtils', () => require('legacy/util/Rects'));
+
+require('legacy/app/whiteboard/Canvas');
 
 
 module.exports = exports = Ext.define('NextThought.util.Annotations', {
@@ -25,8 +24,8 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 	//needs testing? where did the test go?
 	/**
 	 * From a reply, build its absent parent
-	 * @param {NextThought.model.Note} note
-	 * @return {NextThought.model.Note}
+	 * @param {NextThought.model.Note} note note
+	 * @return {NextThought.model.Note} placeholder
 	 */
 	replyToPlaceHolder: function (note) {
 		var holder = new Note(),

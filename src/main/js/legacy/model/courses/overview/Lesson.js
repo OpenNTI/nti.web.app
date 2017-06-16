@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ModelBase = require('../../Base');
-var MixinsMovingRoot = require('../../../mixins/MovingRoot');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+require('../../../mixins/MovingRoot');
+require('../../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.overview.Lesson', {

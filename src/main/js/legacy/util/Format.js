@@ -1,7 +1,9 @@
 const Ext = require('extjs');
-const User = require('../model/User');
-const {isMe} = require('legacy/util/Globals');
 const {DateTime} = require('nti-web-commons');
+
+const {isMe} = require('legacy/util/Globals');
+
+const User = require('../model/User');
 
 const NTIFormat =
 module.exports = exports = Ext.define('NextThought.util.Format', {
@@ -23,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 		return Ext.util.Format.currency(value, sign, decimals, end);
 	},
 
-	ago: function (value, max, format) {
+	ago: function (value/*, max, format*/) {
 		return DateTime.fromNow(value);
 	},
 

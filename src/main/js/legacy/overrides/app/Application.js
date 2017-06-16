@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
+/*globals Deferred*/
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const Globals = require('../../util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.app.Application', {

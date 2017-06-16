@@ -1,11 +1,12 @@
 const Ext = require('extjs');
 const {URL: {join: urlJoin}} = require('nti-commons');
 
+const {getURL, isFeature} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
 const ContentUtils = require('../../util/Content');
 const ObjectUtils = require('../../util/Object');
 const ParseUtils = require('../../util/Parsing');
-const {getURL, isFeature} = require('legacy/util/Globals');
-const {getString} = require('legacy/util/Localization');
 
 require('../Base');
 require('../../mixins/BundleLike');
@@ -138,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		this.__instanceEnrollment = enrollment;
 	},
 
-	getEnrollment: function (enrollment) {
+	getEnrollment: function (/*enrollment*/) {
 		return this.__instanceEnrollment;
 	},
 
@@ -193,8 +194,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	/**
-	 * Get the catalog family for this course
-	 * @return {CatalogFamily}
+	 * @return {CatalogFamily} Get the catalog family for this course
 	 */
 	getCatalogFamily: function () {
 		return this.__courseCatalogEntry.getCatalogFamily();
@@ -804,7 +804,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	/**
 	 * get the link, and cache the results
 	 * @param  {String} link rel of the link to get
-	 * @return {Promise}	  the request for the link
+	 * @param  {Boolean} force -
+	 * @param  {Number} timeout -
+	 * @return {Promise} the request for the link
 	 */
 	__getList: function (link, force, timeout) {
 		var promiseName = '__get' + link + 'Promise';
@@ -1073,26 +1075,26 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		}
 
 		this.videoIndexPromise = this.getMediaByOutline(force)
-									.then(function (outline) {
-										var items = outline.Items;
+			.then(function (outline) {
+				let items = outline.Items;
 
-										// if we have slidedeck, map video obj to their respective slidedeck
-										for (var key in items) {
-											if (items.hasOwnProperty(key)) {
-												item = items[key] || {};
-												if (item.Class === 'NTISlideDeck') {
-													Ext.each(item.Videos || [], function (slidevideo) {
-														var vid = slidevideo.video_ntiid;
-														if (vid && items[vid]) {
-															items[vid].slidedeck = item.NTIID;
-														}
-													});
-												}
-											}
-										}
+				// if we have slidedeck, map video obj to their respective slidedeck
+				for (let key in items) {
+					if (items.hasOwnProperty(key)) {
+						let item = items[key] || {};
+						if (item.Class === 'NTISlideDeck') {
+							Ext.each(item.Videos || [], function (slidevideo) {
+								let vid = slidevideo.video_ntiid;
+								if (vid && items[vid]) {
+									items[vid].slidedeck = item.NTIID;
+								}
+							});
+						}
+					}
+				}
 
-										return Promise.resolve(items || {});
-									});
+				return Promise.resolve(items || {});
+			});
 
 		return this.videoIndexPromise;
 	},
@@ -1111,9 +1113,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				});
 	},
 
-	/**
-	/*	Check if a video belongs to a slidedeck
-	*/
+	/*
+	 * Check if a video belongs to a slidedeck
+	 */
 	getSlidedeckForVideo: function (vid) {
 		return this.getVideoIndex()
 				.then(function (index) {
@@ -1312,6 +1314,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	/**
 	 * Sends requests for the contents link of the discussions and parent discussions if they are there
+	 * @param {String} prop -
 	 * @return {Promise} Fulfills or rejects with the response of the request
 	 */
 	getDiscussionContents: function (prop) {
@@ -1368,7 +1371,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				var parent;
 
 				if (!response) {
-					return Proimse.reject('No response');
+					return Promise.reject('No response');
 				}
 
 				try {

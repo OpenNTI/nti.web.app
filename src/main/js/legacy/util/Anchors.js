@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const XRegExp = require('xregexp');
+
 const rangy = require('legacy/util/rangy');
 const Globals = require('legacy/util/Globals');
 const TextContext = require('legacy/model/anchorables/TextContext');
@@ -8,7 +9,6 @@ const ElementDomContentPointer = require('legacy/model/anchorables/ElementDomCon
 const DomContentRangeDescription = require('legacy/model/anchorables/DomContentRangeDescription');
 const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDescription');
 require('legacy/model/anchorables/DomContentPointer');
-
 const lazy = require('legacy/util/lazy-require')
 			.get('RangeUtils', () => require('./Ranges'))
 			.get('AnnotationUtils', () => require('./Annotations'));
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			return clean;
 		}
 
-		function cacheLocatorForDescription (desc, docElement, cleanRoot, containerId, docElementContainerId) {
+		function cacheLocatorForDescription (desc, givenDocElement, givenCleanRoot, containerId, givenDocElementContainerId) {
 			var searchWithin, ancestorNode, virginNode;
 
 			if (!containerId) {
@@ -104,12 +104,12 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				return;
 			}
 
-			if (desc.isEmpty || me.cachedLocatorEnsuringDocument(desc, docElement)) {
+			if (desc.isEmpty || me.cachedLocatorEnsuringDocument(desc, givenDocElement)) {
 				locatorsFound++;
 				return;
 			}
 
-			searchWithin = me.scopedContainerNode(cleanRoot, containerId, docElementContainerId);
+			searchWithin = me.scopedContainerNode(givenCleanRoot, containerId, givenDocElementContainerId);
 			if (!searchWithin) {
 				Ext.Error.raise('Unable to find container ' + containerId + ' in provided doc element');
 			}
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			virginNode = getVirginNode(ancestorNode);
 
 			try {
-				if (me.resolveCleanLocatorForDesc(desc, virginNode, docElement)) {
+				if (me.resolveCleanLocatorForDesc(desc, virginNode, givenDocElement)) {
 					locatorsFound++;
 				}
 			}
@@ -491,26 +491,26 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		var n = Ext.get(node), ntiidAttr = 'data-ntiid',
 			containerNode;
 
-		function ancestorOrSelfMatchingSelector (node, sel) {
-			if (!node) {
+		function ancestorOrSelfMatchingSelector (givenNode, sel) {
+			if (!givenNode) {
 				return false;
 			}
-			return Ext.fly(node).is(sel) ? node : Ext.fly(node).parent(sel, true);
+			return Ext.fly(givenNode).is(sel) ? givenNode : Ext.fly(givenNode).parent(sel, true);
 		}
 
 		function nodeIfObject (o) {
-			var node = null;
+			var myNode = null;
 
 			if (!o) {
 				return null;
 			}
 
 			Ext.each(this.containerSelectors, function (sel) {
-				node = ancestorOrSelfMatchingSelector(o, sel);
-				return node === null;
+				myNode = ancestorOrSelfMatchingSelector(o, sel);
+				return myNode === null;
 			}, this);
 
-			return node;
+			return myNode;
 		}
 
 		containerNode = nodeIfObject(node);

@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 /**
@@ -82,7 +82,7 @@ if (!Function.prototype.bind) {
 					}
 
 					if ((hasOwnProp.call(descriptor, 'get') ||
-						 hasOwnProp.call(descriptor, 'set')))
+						hasOwnProp.call(descriptor, 'set')))
 					{
 						// descriptor has a value prop but accessor already exists
 						throw new TypeError('Cannot specify an accessor and a value');
@@ -92,7 +92,7 @@ if (!Function.prototype.bind) {
 				// can't switch off these features in ECMAScript 3
 				// so throw a TypeError if any are false
 				if (!(descriptor.writable && descriptor.enumerable &&
-					  descriptor.configurable))
+					descriptor.configurable))
 				{
 					throw new TypeError(
 									'This implementation of Object.defineProperty does not support' +
@@ -169,7 +169,7 @@ if (!Function.prototype.bind) {
 if (!document.documentElement.dataset &&
 	// FF is empty while IE gives empty object
 	(!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset') ||
-	 !Object.getOwnPropertyDescriptor(Element.prototype, 'dataset').get)
+	!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset').get)
 		) {
 	var propDescriptor = {
 		enumerable: true,
@@ -177,16 +177,16 @@ if (!document.documentElement.dataset &&
 			'use strict';
 			var i,
 				that = this,
-				HTML5_DOMStringMap = {},
+				HTML5DOMStringMap = {},
 				attrVal, attrName, propName,
 				attribute,
 				attributes = this.attributes,
 				attsLength = attributes.length;
 			function toUpperCase (n0) { return n0.charAt(1).toUpperCase(); }
 			function getter () { return String(this); }
-			function setter (attrName, value) {
+			function setter (name, value) {
 				return (typeof value !== 'undefined') ?
-						this.setAttribute(attrName, value) : this.removeAttribute(attrName); }
+						this.setAttribute(name, value) : this.removeAttribute(name); }
 
 			for (i = 0; i < attsLength; i++) {
 				attribute = attributes[i];
@@ -199,18 +199,18 @@ if (!document.documentElement.dataset &&
 					// Change to CamelCase
 					propName = attrName.substr(5).replace(/-./g, toUpperCase);
 					try {
-						Object.defineProperty(HTML5_DOMStringMap, propName, {
+						Object.defineProperty(HTML5DOMStringMap, propName, {
 							enumerable: true,
 							get: getter.bind(attrVal || ''),
 							set: setter.bind(that, attrName)
 						});
 					}
 					catch (e2) { // if accessors are not working
-						HTML5_DOMStringMap[propName] = attrVal;
+						HTML5DOMStringMap[propName] = attrVal;
 					}
 				}
 			}
-			return HTML5_DOMStringMap;
+			return HTML5DOMStringMap;
 		}
 	};
 

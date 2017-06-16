@@ -1,10 +1,11 @@
-var Ext = require('extjs');
-var RectUtils = require('../../util/Rects');
+const Ext = require('extjs');
+
+const RectUtils = require('../../util/Rects');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	override: 'Ext.dom.Element',
-  //	requires: ['NextThought.util.Rects'],
+//	requires: ['NextThought.util.Rects'],
 
 	constructor: function () {
 		this.callParent(arguments);
@@ -83,24 +84,24 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 			newPos;
 
 		if (dom.offsetHeight > ctClientHeight || top < ctScrollTop) {
-		  	newPos = top - this.getHeight();
+			newPos = top - this.getHeight();
 		} else if (bottom > ctBottom) {
-		  	newPos = (bottom - ctClientHeight) + this.getHeight();
+			newPos = (bottom - ctClientHeight) + this.getHeight();
 		}
 		if (newPos !== null) {
-		  	me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
+			me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
 		}
 
 		if (hscroll !== false) {
-		  	newPos = null;
-		  	if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
+			newPos = null;
+			if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
 				newPos = left;
-		  } else if (right > ctRight) {
-			newPos = right - container.clientWidth;
-		  }
-		  	if (newPos !== null) {
+			} else if (right > ctRight) {
+				newPos = right - container.clientWidth;
+			}
+			if (newPos !== null) {
 				me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
-		  }
+			}
 		}
 		return me;
 	},

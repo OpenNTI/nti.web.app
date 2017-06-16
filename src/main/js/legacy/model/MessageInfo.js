@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
-var MixinsModelWithBodyContent = require('../mixins/ModelWithBodyContent');
+const Ext = require('extjs');
+
+require('../mixins/ModelWithBodyContent');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.MessageInfo', {
@@ -22,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.model.MessageInfo', {
 		{ name: 'sharedWith', type: 'auto'}
 	],
 
-  	hasBeenModerated: function () {
+	hasBeenModerated: function () {
 		return Boolean(!this.getLink('flag') && !this.getLink('flag.metoo'));
 	},
 

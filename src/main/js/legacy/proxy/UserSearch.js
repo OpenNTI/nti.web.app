@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ReaderJson = require('./reader/Json');
+const Ext = require('extjs');
+
+require('./reader/Json');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.UserSearch', {
@@ -12,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.proxy.UserSearch', {
 	reader: {
 		type: 'nti',
 		root: 'Items'
-  	},
+	},
 
 	constructor: function (config) {
 		Ext.copyTo(this.reader, config, 'model');

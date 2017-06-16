@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 /**
@@ -27,7 +27,6 @@ module.exports = exports = Ext.define('NextThought.common.ux.ComponentReferencin
 	},
 
 
-	//<editor-fold desc="Code from Ext.app.Controller">
 	ref: function (refs) {
 		var me = this,
 			cmp = me.getCmp(),
@@ -40,27 +39,28 @@ module.exports = exports = Ext.define('NextThought.common.ux.ComponentReferencin
 		me.references = me.references || [];
 
 		for (i; i < length; i++) {
-	  	info = refs[i];
-	  	ref = info.ref;
-	  	fn = 'get' + Ext.String.capitalize(ref);
+			info = refs[i];
+			ref = info.ref;
+			fn = 'get' + Ext.String.capitalize(ref);
 
-	  	if (!me[fn]) {
-			cmp[fn] = Ext.Function.pass(me.getRef, [ref, info], me);
-	  }
-	  	me.references.push(ref.toLowerCase());
+			if (!me[fn]) {
+				cmp[fn] = Ext.Function.pass(me.getRef, [ref, info], me);
+			}
+			me.references.push(ref.toLowerCase());
 		}
-  	},
+	},
 
-  /**
+	/**
 	 * Registers one or more {@link #refs references}.
 	 *
-	 * @param {Object/Object[]} refs
+	 * @param {Object/Object[]} refs -
+	 * @return {void}
 	 */
-  	addRef: function (refs) {
+	addRef: function (refs) {
 		this.ref(refs);
 	},
 
-  	getRef: function (ref, info, config) {
+	getRef: function (ref, info, config) {
 		var me = this,
 			refCache = me.refCache = (me.refCache || {}),
 			cached = refCache[ref];
@@ -71,37 +71,37 @@ module.exports = exports = Ext.define('NextThought.common.ux.ComponentReferencin
 		Ext.apply(info, config);
 
 		if (info.forceCreate) {
-	  	return Ext.ComponentManager.create(info, 'component');
+			return Ext.ComponentManager.create(info, 'component');
 		}
 
 		if (!cached) {
-	  	if (info.selector) {
-			refCache[ref] = cached = Ext.ComponentQuery.query(info.selector)[0];
-	  }
+			if (info.selector) {
+				refCache[ref] = cached = Ext.ComponentQuery.query(info.selector)[0];
+			}
 
-	  	if (!cached && info.autoCreate) {
-			refCache[ref] = cached = Ext.ComponentManager.create(info, 'component');
-	  }
+			if (!cached && info.autoCreate) {
+				refCache[ref] = cached = Ext.ComponentManager.create(info, 'component');
+			}
 
-	  	if (cached) {
-			cached.on('beforedestroy', function () {
-		  	refCache[ref] = null;
-			});
-	  }
+			if (cached) {
+				cached.on('beforedestroy', function () {
+					refCache[ref] = null;
+				});
+			}
 		}
 
 		return cached;
 	},
 
-  /**
+	/**
 	 * Returns `true` if a {@link #refs reference} is registered.
 	 *
-	 * @return {Boolean}
+	 * @param {any} ref -
+	 * @return {Boolean} -
 	 */
-  	hasRef: function (ref) {
+	hasRef: function (ref) {
 		var references = this.references;
 		return references && Ext.Array.indexOf(references, ref.toLowerCase()) !== -1;
 	}
-	//</editor-fold>
 
 });

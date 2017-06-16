@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
-var ReaderJson = require('../proxy/reader/Json');
+const Ext = require('extjs');
+
+const Globals = require('../util/Globals');
+require('../proxy/reader/Json');
 
 
 /**
@@ -79,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 	],
 
 	constructor: function () {
-		var s, me = this;
+		var me = this;
 		me.callParent(arguments);
 
 		if (!me.hasSource() && me.storeId !== 'Stream') {
@@ -108,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		return !!this.getProxy().url;
 	},
 
-	/**
+	/*
 	 * Like last but doesn't include any filtering
 	 */
 	unfilteredLast: function () {

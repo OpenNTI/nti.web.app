@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var B64 = require('../util/Base64');
-var Globals = require('../util/Globals');
+const Ext = require('extjs');
+
+const B64 = require('../util/Base64');
+const Globals = require('../util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
@@ -42,11 +43,12 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	request: function (options) {
 		// an absolute url must be used. Luckily, thats all we use.
 		// and we care about the first 3 parts: [(protocoll:)//domain]/path/to/resource
-		var domain = options.url.split('/').slice(0, 3),
-			protocol = domain[0],
-			gap = domain[1],
-			host = domain[2],
-			postfix = 'p';
+		const domain = options.url.split('/').slice(0, 3);
+		const gap = domain[1];
+		const host = domain[2];
+		const {location} = global;
+		let protocol = domain[0];
+		let postfix = 'p';
 
 		if (Ext.isEmpty(protocol)) {
 			protocol = domain[0] = location.protocol;//protocoless urls inherit ours
@@ -83,19 +85,20 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	/**
 	 *
 	 * @param {Object} options Object with keys:
-	 * @param {String} [options.jsonpUrl]
-	 * @param {String} options.url
-	 * @param {String} [options.expectedContentType]
-	 * @param {Function} [options.success]
-	 * @param {Function} [options.failure]
-	 * @param {Object} [options.scope]
+	 * @param {String} [options.jsonpUrl] -
+	 * @param {String} options.url -
+	 * @param {String} [options.expectedContentType] -
+	 * @param {Function} [options.success] -
+	 * @param {Function} [options.failure] -
+	 * @param {Object} [options.scope] -
+	 * @returns {Promise} fulfills with JSON, or rejects with an error.
 	 */
 	requestJSONP: function (options) {
 		var me = this;
 		return new Promise(function (fulfill, reject) {
 			var opts = Ext.apply({},options), script, t;
 
-			function jsonp (script) {
+			function jsonp (element) {
 				clearTimeout(t);
 				var resp = {
 					responseText: me.getContent(opts.ntiid, opts.expectedContentType),
@@ -106,15 +109,15 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 					opts.callback.call(opts.scope || window, opts, true, resp);
 					opts.success.call(opts.scope || window, resp, opts);
 				} finally {
-					Ext.fly(script).remove();
+					Ext.fly(element).remove();
 					fulfill(resp.responseText);
 				}
 			}
 
-			function onError (script, reason) {
-				delete script.onload;
+			function onError (element, reason) {
+				delete element.onload;
 				clearTimeout(t);
-				Ext.fly(script).remove();
+				Ext.fly(element).remove();
 
 				var resp = {
 					status: 0,
@@ -199,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	},
 
 
-	/**
+	/*
 	 * @deprecated Workaround until content is rerendered.
 	 */
 	receiveContentVTT: function (content) {
@@ -215,13 +218,13 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 		console.warn('JSONP is already defined!!!');
 	}
 
-	window.JSONP = this;
+	const JSONP = window.JSONP = this;
 
-	window.jsonpReceiveContent = Ext.bind(JSONP.receiveContent, JSONP);
-	/** @deprecated use jsonpReceiveContent instaed */
-	window.jsonpContent = Ext.bind(JSONP.receiveContent, JSONP);
-	/** @deprecated use jsonpReceiveContent instaed */
-	window.jsonpToc = Ext.bind(JSONP.receiveContent, JSONP);
-	/** @deprecated use jsonpReceiveContent instaed */
-	window.jsonpData = Ext.bind(JSONP.receiveContentVTT, JSONP);
+	window.jsonpReceiveContent = (...args) => JSONP.receiveContent(...args);
+	/* @deprecated use jsonpReceiveContent instaed */
+	window.jsonpContent = (...args) => JSONP.receiveContent(...args);
+	/* @deprecated use jsonpReceiveContent instaed */
+	window.jsonpToc = (...args) => JSONP.receiveContent(...args);
+	/* @deprecated use jsonpReceiveContent instaed */
+	window.jsonpData = (...args) => JSONP.receiveContentVTT(...args);
 }).create();
