@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 					height: imageInfo.height
 				},
 				locked: true
-			}
+			};
 		}
 
 		function getHeight (width) {

@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		this.el.on('click', this.click, this);
 		Ext.each(this.el.query('.control'), function (c) {
 	  	this.mon(Ext.fly(c), 'click', this.onControlClick, this);
-	}, this);
+		}, this);
 	},
 
 
@@ -168,22 +168,22 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 
 
   	onControlClick: function (evt, dom, opts) {
-	var message = evt.getTarget('.message');
+		var message = evt.getTarget('.message');
 
-	Ext.fly(message).toggleCls('flagged');
-	Ext.fly(dom).toggleCls('checked');
-	this.up('chat-transcript-window').fireEvent('control-clicked');
-  },
+		Ext.fly(message).toggleCls('flagged');
+		Ext.fly(dom).toggleCls('checked');
+		this.up('chat-transcript-window').fireEvent('control-clicked');
+	},
 
 
   	toggleModerationPanel: function () {
-	this.el.toggleCls('moderating');
-	Ext.each(this.el.query('.flagged'), function (d) {
+		this.el.toggleCls('moderating');
+		Ext.each(this.el.query('.flagged'), function (d) {
 	  		Ext.fly(d).removeCls('flagged');
 		});
-	Ext.each(this.el.query('.control.checked'), function (d) {
+		Ext.each(this.el.query('.control.checked'), function (d) {
 	  	Ext.fly(d).removeCls('checked');
-	});
-  }
+		});
+	}
 
 });

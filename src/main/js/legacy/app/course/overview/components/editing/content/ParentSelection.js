@@ -3,7 +3,7 @@ var ParentselectionIndex = require('../parentselection/Index');
 var OverviewgroupInlineEditor = require('./overviewgroup/InlineEditor');
 
 
- module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ParentSelection', {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ParentSelection', {
 	 extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
 	 alias: 'widget.overview-editing-content-parentselection',
 	 label: 'Section:',
@@ -20,4 +20,4 @@ var OverviewgroupInlineEditor = require('./overviewgroup/InlineEditor');
 	 getEditor: function () {
 		 return NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor;
 	 }
- });
+});

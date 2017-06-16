@@ -248,10 +248,10 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		if (!this.isReady || !this.player) { return; }
 		if (this.player.pauseVideo) {
 			try {
-					this.player.pauseVideo();
-				} catch (e) {
-					console.error('Error pausing youtube video: ', e);
-				}
+				this.player.pauseVideo();
+			} catch (e) {
+				console.error('Error pausing youtube video: ', e);
+			}
 		}
 	},
 

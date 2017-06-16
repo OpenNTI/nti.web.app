@@ -20,18 +20,18 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOp
 			xtype: 'wb-tool-option',
 			toggleGroup: 'shape-selected-',
 	  		handler: function (btn) {
-		var me = btn.up('wb-tool-shape-options'),
-			fill = me.down('color-picker-button[fillSelect]'),
-			lbl = me.down('tbtext[fillLabel]');
-		if (btn.sides === 1) {
+				var me = btn.up('wb-tool-shape-options'),
+					fill = me.down('color-picker-button[fillSelect]'),
+					lbl = me.down('tbtext[fillLabel]');
+				if (btn.sides === 1) {
 		  	fill.disable();
-			fill.hide();
-			lbl.hide();
-		}else {
-			fill.show();
-			lbl.show();
-			fill.enable();
-		}
+					fill.hide();
+					lbl.hide();
+				}else {
+					fill.show();
+					lbl.show();
+					fill.enable();
+				}
 	  }
 		},
 		items: [

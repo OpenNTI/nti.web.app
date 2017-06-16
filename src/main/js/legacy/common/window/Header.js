@@ -8,23 +8,23 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
   	cls: 'nti-window-header',
 
   	renderTpl: [
-	'<div id="{id}-body" class="header-body">',
-	'<div class="controls {hasTools}">',
-	'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool close" title="Close" />',
-	'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize" title="Minimize"/>',
-	'</div>',
+		'<div id="{id}-body" class="header-body">',
+		'<div class="controls {hasTools}">',
+		'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool close" title="Close" />',
+		'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize" title="Minimize"/>',
+		'</div>',
 
-	'<div class="tools">',
+		'<div class="tools">',
 	//TODO: render tool images here AND add CSS rules
-	'<tpl for="tools">',
+		'<tpl for="tools">',
 	//Note we don't obey tooltip and tooltipType
-	'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool {tool}" alt="{tip}" title="{tip}" />',
-	'</tpl>',
-	'</div>',
+		'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool {tool}" alt="{tip}" title="{tip}" />',
+		'</tpl>',
+		'</div>',
 
-	'<span>{title}</span>',
-	'</div>'
-  ],
+		'<span>{title}</span>',
+		'</div>'
+	],
 
   /**
 	 * @cfg {Object} tools
@@ -46,102 +46,102 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 	 */
 
   	renderSelectors: {
-	textEl: 'span',
-	closeEl: 'img.tool.close',
-	minimizeEl: 'img.tool.minimize'
-  },
+		textEl: 'span',
+		closeEl: 'img.tool.close',
+		minimizeEl: 'img.tool.minimize'
+	},
 
 
   	initComponent: function () {
-	this.callParent(arguments);
+		this.callParent(arguments);
 
-	var me = this,
-		tools = [];
+		var me = this,
+			tools = [];
 
-	Ext.Object.each(this.tools, function (tool, info) {
+		Ext.Object.each(this.tools, function (tool, info) {
 	  	tools.push({ tool: tool, tip: info.tip });
 	  	me.renderSelectors[tool] = Ext.String.format('img.tool.{0}', tool);
-	});
+		});
 
-	this.renderData = Ext.apply(this.renderData || {}, {
+		this.renderData = Ext.apply(this.renderData || {}, {
 	  	title: this.title,
 	  	tools: tools,
 	  	hasTools: tools.length === 0 ? '' : 'has-tools'
-	});
-  },
+		});
+	},
 
 
   	addTools: function (tools) {
-	var me = this,
-		rd = this.renderData;
+		var me = this,
+			rd = this.renderData;
 
-	if (!me.rendered) {
+		if (!me.rendered) {
 	  	Ext.Object.each(tools, function (tool, info) {
-		if (!me.renderSelectors[tool]) {
+			if (!me.renderSelectors[tool]) {
 		  	me.tools[tool] = info;//merge it in
 		  	me.renderSelectors[tool] = Ext.String.format('img.tool.{0}', tool);
 		  	rd.tools.push({tool: tool, tip: info.tip});
 		  	rd.hasTools = 'has-tools';
-		}
+			}
 	  });
-	}
-	else {
+		}
+		else {
 	  	Ext.Error.raise('not implemented yet');
 	  //			this.applyToolHandlers();
-	}
-  },
+		}
+	},
 
 
   	applyToolHandlers: function () {
-	var me = this;
-	Ext.Object.each(me.tools, function (tool, info) {
+		var me = this;
+		Ext.Object.each(me.tools, function (tool, info) {
 	  	var t = me[tool],
 		  sc = info && (info.scope || me.ownerCt),
 		  fn = info && info.handler;
 
 	  	if (t && !t.toolAttached) {
-		fn = typeof fn === 'string' ? sc[fn] : fn;
-		t.on('click', fn, sc);
-		t.addClsOnOver('tool-over');
-		t.toolAttached = true;
+			fn = typeof fn === 'string' ? sc[fn] : fn;
+			t.on('click', fn, sc);
+			t.addClsOnOver('tool-over');
+			t.toolAttached = true;
 	  }
-	});
-  },
+		});
+	},
 
 
   	update: function (text) {
-	this.title = text;
-	if (this.textEl) {
+		this.title = text;
+		if (this.textEl) {
 	  	this.textEl.update(text);
-	}
-	else {
+		}
+		else {
 	  	this.renderData.title = text;
-	}
-  },
+		}
+	},
 
 
   	getTitle: function () {
-	if (this.textEl) {
+		if (this.textEl) {
 	  	return this.textEl.getHTML();
-	}
-	return this.renderData.title;
-  },
+		}
+		return this.renderData.title;
+	},
 
 
   	afterRender: function () {
-	var me = this;
+		var me = this;
 
-	me.callParent(arguments);
-	me.closeEl.on('click', me.ownerCt.close, me.ownerCt);
-	me.minimizeEl.on('click', me.ownerCt.minimize, me.ownerCt);
+		me.callParent(arguments);
+		me.closeEl.on('click', me.ownerCt.close, me.ownerCt);
+		me.minimizeEl.on('click', me.ownerCt.minimize, me.ownerCt);
 
-	if (!me.ownerCt.closable) {
+		if (!me.ownerCt.closable) {
 	  	me.closeEl.remove();
-	}
-	if (!me.ownerCt.minimizable) {
+		}
+		if (!me.ownerCt.minimizable) {
 	  	me.minimizeEl.remove();
-	}
+		}
 
-	me.applyToolHandlers();
-  }
+		me.applyToolHandlers();
+	}
 });

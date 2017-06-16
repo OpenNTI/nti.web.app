@@ -359,7 +359,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			return;
 		}
 
-		if (!xy || !Boolean(xy[0]) || !Boolean(xy[1])) {
+		if (!xy || !xy[0] || !xy[1]) {
 			console.warn('xy are null or undefined: ', xy);
 			return;
 		}
@@ -461,14 +461,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
 			menu.add({
-					text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
-					handler: redaction(false)
-				});
+				text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
+				handler: redaction(false)
+			});
 
 			menu.add({
-					text: getString('NextThought.view.content.reader.Annotations.redact-block'),
-					handler: redaction(true)
-				});
+				text: getString('NextThought.view.content.reader.Annotations.redact-block'),
+				handler: redaction(true)
+			});
 		}
 
 		//on close make sure it gets destroyed.
@@ -555,20 +555,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		});
 
 		menu.add({
-				text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
-				handler: function () {
+			text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
+			handler: function () {
 						 createHighlight();
 						 me.UserDataActions.savePhantomAnnotation(record, false);
 					 }
-			});
+		});
 
 		menu.add({
-				text: getString('NextThought.view.content.reader.Annotations.add-note'),
-				handler: function () {
+			text: getString('NextThought.view.content.reader.Annotations.add-note'),
+			handler: function () {
 						 createHighlight();
 						 me.fireEvent('create-note', range, rect2, 'plain');
 					 }
-			});
+		});
 
 
 		function redaction (block) {
@@ -594,12 +594,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			menu.add({
 				text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
 				handler: redaction(false)
-				});
+			});
 
 			menu.add({
-					text: getString('NextThought.view.content.reader.Annotations.redact-block'),
-					handler: redaction(true)
-				});
+				text: getString('NextThought.view.content.reader.Annotations.redact-block'),
+				handler: redaction(true)
+			});
 		}
 
 		//on close make sure it gets destroyed.

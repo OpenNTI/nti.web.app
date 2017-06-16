@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 			return c;
 		}
 
-		if (!!(m = me.dsRGBARe.exec(string))) {
+		if (m = me.dsRGBARe.exec(string)) {
 			//console.log('DataServer color value: ',string);
 			m = [
 				+(parseFloat(m[1]) * 255).toFixed(0),
@@ -73,13 +73,13 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 				+m[8]
 			];
 		}
-		else if (!!(m = me.rgbaRe.exec(string))) {
+		else if (m = me.rgbaRe.exec(string)) {
 			m = parseRGBA(m[1].split(','));
 		}
-		else if (!!(m = me.hex16Re.exec(string))) {
+		else if (m = me.hex16Re.exec(string)) {
 			m = parseHex(m, false);
 		}
-		else if (!!(m = me.hex8Re.exec(string))) {
+		else if (m = me.hex8Re.exec(string)) {
 			m = parseHex(m, true);
 		}
 		else {
@@ -96,10 +96,10 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 		}
 
 		return{ r: m[0],
-				g: m[1],
-				b: m[2],
-				a: m[3],
-				toString: function () {return color;}};
+			g: m[1],
+			b: m[2],
+			a: m[3],
+			toString: function () {return color;}};
 	},
 
 	rgbaToHex: function (color) {

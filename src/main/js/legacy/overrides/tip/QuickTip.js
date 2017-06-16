@@ -31,13 +31,13 @@ module.exports = exports = Ext.define('NextThought.overrides.tip.QuickTip', {
 				getTargetXY: function () {
 					try {
 						var me = this,
-						o = me.readerOffsets,
-						r = me.callParent(arguments);
+							o = me.readerOffsets,
+							r = me.callParent(arguments);
 
 						if (r && o) {
-						r[0] += o.left;
-						r[1] += o.top;
-					}
+							r[0] += o.left;
+							r[1] += o.top;
+						}
 						return r;
 					}
 					catch (e) {
@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.overrides.tip.QuickTip', {
 	  case 'r': pos = 'l-r'; break;
 	  case 'b': pos = 't-b'; break;
 	  default: pos = 'r-l'; break;
-	}
+		}
 		me.anchorEl.alignTo(me.el, pos);
   	},
 
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.overrides.tip.QuickTip', {
 	  case 'left': return 'l-r';
 	  case 'right': return 'r-l';
 	  default: return 'b-t';
-	}
+		}
   	}
 });
 
@@ -243,7 +243,7 @@ module.exports = exports = Ext.define('NextThought.view.tip.Tooltip', {
 	  case 'r': pos = 'l-r'; break;
 	  case 'b': pos = 't-b'; break;
 	  default: pos = 'r-l'; break;
-	}
+		}
 
 		if (this.defaultAlign === 'tr-br') {
 			pos = 't-br';
@@ -261,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.view.tip.Tooltip', {
 	  case 'left': return 'l-r';
 	  case 'right': return 'r-l';
 	  default: return 'b-t';
-	}
+		}
   	}
 
 });

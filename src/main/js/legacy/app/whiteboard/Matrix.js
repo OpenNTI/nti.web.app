@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 		if (Ext.isArray(x)) {
 	  	y = x[1];
 	  	x = x[0];
-	}
+		}
 		this.multiply({m: [1, 0, 0, 1, x, y]});
 	},
 
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 		if (Ext.isArray(sx)) {
 	  	sy = sx[1];
 	  	sx = sx[0];
-	}
+		}
 		if (sy === undefined) { sy = sx; }
 		this.multiply({m: [sx, 0, 0, sy, 0, 0]});
 	},

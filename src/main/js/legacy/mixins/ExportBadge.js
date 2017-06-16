@@ -116,10 +116,10 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 			subTitle: 'Verifying your email allows you to export your completion badge',
 			saveText: action.buttonTitle
 		}).then(function (rec) {
-				if (action && action.onSubmit) {
-					action.onSubmit();
-				}
-			});
+			if (action && action.onSubmit) {
+				action.onSubmit();
+			}
+		});
 	},
 
 

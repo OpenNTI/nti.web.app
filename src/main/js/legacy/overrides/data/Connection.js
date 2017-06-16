@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 			params = options.params || {};
 		if (Ext.isGecko) {
 	  	badParams.shift();
-	}
+		}
 		if (Ext.isFunction(params)) {
 			console.warn('Params were a function!');
 			options.params = (params = params.call(scope, options));

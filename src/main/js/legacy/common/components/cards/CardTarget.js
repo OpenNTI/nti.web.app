@@ -98,8 +98,8 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 			this.resolveHref(data),
 			this.resolveTargetMimeType(data)
 		]).then(function (results) {
-				me.addIframeFromHref(results[0], results[1]);
-			});
+			me.addIframeFromHref(results[0], results[1]);
+		});
 	},
 
 	addIframeFromHref: function (href, targetMimeType) {

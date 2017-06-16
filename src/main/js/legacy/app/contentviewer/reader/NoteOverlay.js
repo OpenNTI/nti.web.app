@@ -56,14 +56,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		var me = this,
 			box,
 			container = {
-					cls: 'note-gutter', onclick: 'void(0)',
-					style: {
-						height: me.reader.getIframe().get().getHeight()
-					},
-					cn: [
+				cls: 'note-gutter', onclick: 'void(0)',
+				style: {
+					height: me.reader.getIframe().get().getHeight()
+				},
+				cn: [
 						{ cls: 'note-here-control-box', onclick: 'void(0)' }
-					]
-				};
+				]
+			};
 
 		me.container = container = Ext.DomHelper.insertAfter(me.reader.getInsertionPoint().first(), container, true);
 
@@ -108,17 +108,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 			me.reader.on({
 							 //no buffer
-					'iframe-mouseout': 'mouseOut',
-					'iframe-mousedown': 'suspendResolver',
-					'iframe-mouseup': 'resumeResolver',
-					scope: me
-				});
+				'iframe-mouseout': 'mouseOut',
+				'iframe-mousedown': 'suspendResolver',
+				'iframe-mouseup': 'resumeResolver',
+				scope: me
+			});
 
 			me.reader.on({
-					scope: me,
-					'iframe-mousemove': 'mouseOver',
-					buffer: 400
-				});
+				scope: me,
+				'iframe-mousemove': 'mouseOver',
+				buffer: 400
+			});
 		}
 
 		if (this.disabled) {

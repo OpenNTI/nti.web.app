@@ -24,8 +24,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		},{
 			cls: 'footer',
 			cn: [{
-					cls: 'left', html: '{toolbar}'
-				},{
+				cls: 'left', html: '{toolbar}'
+			},{
 					 cls: 'right',
 					 cn: [
 						 {cls: 'action check'},

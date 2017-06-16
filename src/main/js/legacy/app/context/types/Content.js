@@ -52,17 +52,17 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			Service.request(link),
 			Service.getObjectOfType(contentPackage, 'application/vnd.nextthought.contentpackage')
 		]).then(function (results) {
-				var xml = results[0],
-					content = results[1];
+			var xml = results[0],
+				content = results[1];
 
-				xml = (new DOMParser()).parseFromString(xml, 'text/xml');
+			xml = (new DOMParser()).parseFromString(xml, 'text/xml');
 
-				if (xml.querySelector('parsererror')) {
-					return Promise.resolve('');
-				}
+			if (xml.querySelector('parsererror')) {
+				return Promise.resolve('');
+			}
 
-				return me.__parseNode(xml, content && content.get('root'), contextKind);
-			});
+			return me.__parseNode(xml, content && content.get('root'), contextKind);
+		});
 	},
 
 	__parseNode: function (doc, root, contextKind) {

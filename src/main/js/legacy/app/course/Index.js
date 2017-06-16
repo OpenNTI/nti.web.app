@@ -330,10 +330,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			REPORTS,
 			INFO
 		]).then(function (item) {
-				if (item && item.handleRoute) {
-					return item.handleRoute(subRoute, route.precache);
-				}
-			});
+			if (item && item.handleRoute) {
+				return item.handleRoute(subRoute, route.precache);
+			}
+		});
 	},
 
 	showOverview: function (route, subRoute) {
@@ -347,13 +347,13 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			REPORTS,
 			INFO
 		]).then((item) => {
-				if (item && item.handleRoute) {
-					item.gotoResources = () => this.gotoResources();
+			if (item && item.handleRoute) {
+				item.gotoResources = () => this.gotoResources();
 
-					return item.handleRoute(subRoute, route.precache)
+				return item.handleRoute(subRoute, route.precache)
 						.then();
-				}
-			});
+			}
+		});
 	},
 
 	showAssignments: function (route, subRoute) {
@@ -370,10 +370,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			REPORTS,
 			INFO
 		]).then(function (item) {
-				if (item && item.handleRoute) {
-					return item.handleRoute(subRoute, route.precache);
-				}
-			});
+			if (item && item.handleRoute) {
+				return item.handleRoute(subRoute, route.precache);
+			}
+		});
 	},
 
 	showDiscussions: function (route, subRoute) {
@@ -386,10 +386,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			REPORTS,
 			INFO
 		]).then(function (item) {
-				if (item && item.handleRoute) {
-					return item.handleRoute(subRoute, route.precache);
-				}
-			});
+			if (item && item.handleRoute) {
+				return item.handleRoute(subRoute, route.precache);
+			}
+		});
 	},
 
 	showReports: function (route, subRoute) {

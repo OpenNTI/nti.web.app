@@ -87,20 +87,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return siblings.reduce(function getVideoIds (acc, item) {
 			if (item instanceof NextThought.model.Video) {
-					acc.push(item.getId());
-				} else if (item instanceof NextThought.model.VideoRoll) {
-					acc = item.get('Items').reduce(getVideoIds, acc);
-				}
+				acc.push(item.getId());
+			} else if (item instanceof NextThought.model.VideoRoll) {
+				acc = item.get('Items').reduce(getVideoIds, acc);
+			}
 
 			return acc;
 		}, []).reduce(function (acc, item) {
-				acc.push({
-					id: item,
-					msg: 'Videos can not be in the same section more than once'
-				});
+			acc.push({
+				id: item,
+				msg: 'Videos can not be in the same section more than once'
+			});
 
-				return acc;
-			}, []);
+			return acc;
+		}, []);
 	},
 
 	showVideoList: function (selectedItems, onEdit) {

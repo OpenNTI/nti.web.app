@@ -33,37 +33,37 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			this.getCommunities(),
 			this.getGroups()
 		]).then(function (results) {
-				var suggestions = results[0],
-					communities = results[1],
-					groups = results[2],
-					data = [];
+			var suggestions = results[0],
+				communities = results[1],
+				groups = results[2],
+				data = [];
 
-				if (suggestions && suggestions.length) {
-					data.push(NextThought.model.UserSearch.create({
-						realname: 'Suggestions',
-						isLabel: true
-					}));
-					data = data.concat(suggestions);
-				}
+			if (suggestions && suggestions.length) {
+				data.push(NextThought.model.UserSearch.create({
+					realname: 'Suggestions',
+					isLabel: true
+				}));
+				data = data.concat(suggestions);
+			}
 
-				if (communities && communities.length) {
-					data.push(NextThought.model.UserSearch.create({
-						realname: 'Communities',
-						isLabel: true
-					}));
-					data = data.concat(communities);
-				}
+			if (communities && communities.length) {
+				data.push(NextThought.model.UserSearch.create({
+					realname: 'Communities',
+					isLabel: true
+				}));
+				data = data.concat(communities);
+			}
 
-				if (groups && groups.length) {
-					data.push(NextThought.model.UserSearch.create({
-						realname: 'Groups',
-						isLabel: true
-					}));
-					data = data.concat(groups);
-				}
+			if (groups && groups.length) {
+				data.push(NextThought.model.UserSearch.create({
+					realname: 'Groups',
+					isLabel: true
+				}));
+				data = data.concat(groups);
+			}
 
-				return data;
-			});
+			return data;
+		});
 	},
 
 	getSiteCommunity: function () {

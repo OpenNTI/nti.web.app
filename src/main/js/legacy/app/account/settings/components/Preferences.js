@@ -22,34 +22,34 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			}
 		]},
 		{tag: 'tpl', 'if': 'isFeature(\'notifications\')', cn:
-			{ tag: 'fieldset', cn: [
+		{ tag: 'fieldset', cn: [
 				{ tag: 'legend', html: 'Communications' },
-				{
-					tag: 'span',
-					cls: 'not-ready nti-checkbox email',
-					html: 'Send me email notifications about activity I may have missed.',
-					tabIndex: 0,
-					role: 'button',
-					'aria-role': 'button',
-					'data-preference-path': 'PushNotifications/Email',
-					'data-preference-key': 'email_a_summary_of_interesting_changes'
-				}
-			]}
+			{
+				tag: 'span',
+				cls: 'not-ready nti-checkbox email',
+				html: 'Send me email notifications about activity I may have missed.',
+				tabIndex: 0,
+				role: 'button',
+				'aria-role': 'button',
+				'data-preference-path': 'PushNotifications/Email',
+				'data-preference-key': 'email_a_summary_of_interesting_changes'
+			}
+		]}
 		},
 		{tag: 'tpl', 'if': 'isFeature(\'badges\')', cn:
-			{tag: 'fieldset', cn: [
+		{tag: 'fieldset', cn: [
 				{tag: 'legend', html: 'Badges'},
-				{
-					tag: 'span',
-					cls: 'not-ready nti-checkbox course-badges',
-					html: 'Make badges earned for completing a course public.',
-					tabIndex: 0,
-					role: 'button',
-					'aria-role': 'button',
-					'data-preference-path': 'Badges/Course',
-					'data-preference-key': 'show_course_badges'
-				}
-			]}
+			{
+				tag: 'span',
+				cls: 'not-ready nti-checkbox course-badges',
+				html: 'Make badges earned for completing a course public.',
+				tabIndex: 0,
+				role: 'button',
+				'aria-role': 'button',
+				'data-preference-path': 'Badges/Course',
+				'data-preference-key': 'show_course_badges'
+			}
+		]}
 		}
 	]),
 

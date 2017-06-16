@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 			type = [type];
 		}
 
-		return type.reduce(function(acc, t) {
+		return type.reduce(function (acc, t) {
 			if (!acc) {
 				acc = map[t];
 			}

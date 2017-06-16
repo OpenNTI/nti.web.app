@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				{cls: 'information', html: '{help}'}
 			]}
 		]}
-		]),
+	]),
 
 	renderSelectors: {
 		textareaEl: '.input-container textarea'

@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	__getSchemaFromParent: function() {
+	__getSchemaFromParent: function () {
 		let mimeTypes = this.self.getHandledMimeTypes() || [];
 
 		if (!this.parentRecord || !this.parentRecord.getLink('schema')) {

@@ -68,12 +68,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		dragzoneEl.dom.id = Ext.id();
 	},
 
-	getDragzoneEl: function() {
+	getDragzoneEl: function () {
 		return this.el && this.el.down('.ordering-dd-zone');
 	},
 
 
-	getDraggableEl: function() {
+	getDraggableEl: function () {
 		return this.el && this.el.down('.ordinal .draggable-area');
 	},
 

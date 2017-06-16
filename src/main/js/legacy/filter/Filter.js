@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 		return (this.fieldName	=== o.fieldName
 				&&	this.value	=== o.value
 				&&	this.operation	=== o.operation
-			);
+		);
 	},
 
 	test: function (obj) {

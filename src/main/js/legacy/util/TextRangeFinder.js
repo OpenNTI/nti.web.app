@@ -18,10 +18,10 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 
 	  	redactionAction = redactionParent.prev('.redactionAction');
 	  	if (!redactionAction) {
-		blockRedaction = redactionParent.prev('.block-redaction');
-		if (blockRedaction) {
+			blockRedaction = redactionParent.prev('.block-redaction');
+			if (blockRedaction) {
 		  	redactionAction = blockRedaction.down('.redactionAction');
-		}
+			}
 	  }
 
 	  	return redactionAction;
@@ -227,15 +227,15 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 		function processGroup (whichGroup) {
 			var range;
 			try {
-					range = this.mapMatchToTextRange(matchingText, whichGroup, indexedText, doc);
-					if (range) {
-						ranges.push(range);
-					}
+				range = this.mapMatchToTextRange(matchingText, whichGroup, indexedText, doc);
+				if (range) {
+					ranges.push(range);
 				}
-				catch (e) {
-					quit = true;
-					return false;
-				}
+			}
+			catch (e) {
+				quit = true;
+				return false;
+			}
 		}
 
 		// loop until no more matches

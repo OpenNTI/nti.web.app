@@ -14,10 +14,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{ tag: 'label', cls: 'timeline-item', cn: [
 					{tag: 'input', type: 'checkbox'},
 					{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
-					{cls: 'meta', cn: [
+				{cls: 'meta', cn: [
 						{cls: 'title', html: '{title}'},
 						{cls: 'description', html: '{description}'}
-					]}
+				]}
 			]
 			}
 		]}

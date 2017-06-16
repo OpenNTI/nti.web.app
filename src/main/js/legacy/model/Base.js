@@ -61,11 +61,11 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			return a;
 		},
 
-		addListener(event, handlerFn) {
+		addListener (event, handlerFn) {
 			MODIFICATION_BUS.addListener(event, handlerFn);
 		},
 
-		removeListener(event, handlerFn) {
+		removeListener (event, handlerFn) {
 			MODIFICATION_BUS.removeListener(event, handlerFn);
 		}
 	},

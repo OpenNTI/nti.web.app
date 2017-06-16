@@ -29,4 +29,3 @@ module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogEntr
 
 });
 
-

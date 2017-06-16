@@ -10,12 +10,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.MultiPartSubmi
 		{
 			cls: 'footer',
 			cn: [{cls: 'left'},
-			{
-				cls: 'right',
-				cn: [
+				{
+					cls: 'right',
+					cn: [
 						{cls: 'action check disabled'}
 					]
-			}
+				}
 			]
 		}),
 

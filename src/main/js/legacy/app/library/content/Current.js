@@ -21,12 +21,12 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Current',
 				ContentStore.onceLoaded(),
 				PurchaseStore.onceLoaded()
 			]).then(function () {
-					var bundles = ContentStore.getContentBundles() || [],
-						packages = ContentStore.getContentPackages() || [],
-						hasAvailablePurchases = PurchaseStore.getPurchasables().length > 0;
+				var bundles = ContentStore.getContentBundles() || [],
+					packages = ContentStore.getContentPackages() || [],
+					hasAvailablePurchases = PurchaseStore.getPurchasables().length > 0;
 
-					return bundles.length || packages.length;//TODO: add || hasAvailablePurchases back once we have the UI
-				});
+				return bundles.length || packages.length;//TODO: add || hasAvailablePurchases back once we have the UI
+			});
 		}
 	},
 

@@ -27,14 +27,14 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 			sharable.set('sharedWith', sharedTo);
 		}
 		sharable.save({
-					async: !!callback,
-					callback: function (record, operation) {
+			async: !!callback,
+			callback: function (record, operation) {
 							  success = operation.success;//if we're synchronous
 							  if (callback) {
 								  Ext.callback(callback, null, arguments);
 							  }
 						  }
-				});
+		});
 
 		return success;
 	},

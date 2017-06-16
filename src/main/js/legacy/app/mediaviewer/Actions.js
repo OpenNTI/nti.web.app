@@ -345,16 +345,16 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			Service.request(link),
 			me.LibraryActions.findContentPackage(contentPackage)
 		]).then(function (results) {
-				var xml = results[0],
-					content = results[1];
+			var xml = results[0],
+				content = results[1];
 
-				xml = (new DOMParser()).parseFromString(xml, 'text/xml');
+			xml = (new DOMParser()).parseFromString(xml, 'text/xml');
 
-				if (xml.querySelector('parsererror')) {
-					return Promise.resolve('');
-				}
-				return Promise.resolve(xml);
-			});
+			if (xml.querySelector('parsererror')) {
+				return Promise.resolve('');
+			}
+			return Promise.resolve(xml);
+		});
 	},
 
 	parseSlideDocFragments: function (containerId, slideStore, doc) {

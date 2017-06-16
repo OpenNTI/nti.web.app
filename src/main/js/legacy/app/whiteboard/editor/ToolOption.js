@@ -61,11 +61,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ToolOpt
 				border: false,
 				minWidth: 70,
 				xhooks: {
-				showBy: function (cmp, pos, off) {
-					off = [0, 5];
-					return this.callParent([cmp, pos, off]);
+					showBy: function (cmp, pos, off) {
+						off = [0, 5];
+						return this.callParent([cmp, pos, off]);
+					}
 				}
-			}
 			};
 
 		function builder (o) {

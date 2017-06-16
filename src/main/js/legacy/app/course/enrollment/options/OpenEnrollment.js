@@ -149,27 +149,27 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				Wording: me.__getEnrollmentText(details, option),
 				lock: true,
 				doEnrollment: function (cmp) {
-						return new Promise(function (fulfill, reject) {
-							cmp.CourseEnrollmentActions.enrollCourse(course, function (success, changed, status) {
-								if (success) {
-									fulfill(changed);
-								} else {
-									reject(status);
-								}
-							});
+					return new Promise(function (fulfill, reject) {
+						cmp.CourseEnrollmentActions.enrollCourse(course, function (success, changed, status) {
+							if (success) {
+								fulfill(changed);
+							} else {
+								reject(status);
+							}
 						});
-					},
+					});
+				},
 				undoEnrollment: function (cmp) {
-						return new Promise(function (fulfill, reject) {
-							cmp.CourseEnrollmentActions.dropCourse(course, function (success, changed, status) {
-								if (success) {
-									fulfill(changed);
-								} else {
-									reject(status);
-								}
-							});
+					return new Promise(function (fulfill, reject) {
+						cmp.CourseEnrollmentActions.dropCourse(course, function (success, changed, status) {
+							if (success) {
+								fulfill(changed);
+							} else {
+								reject(status);
+							}
 						});
-					}
+					});
+				}
 			};
 
 			fulfill(catalogData);

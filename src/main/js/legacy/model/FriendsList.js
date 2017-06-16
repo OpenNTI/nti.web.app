@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 	},
 
 	getAboutData: function () {
-			return {
+		return {
 			displayName: this.getName(),
 			about: this.get('about')
 		};

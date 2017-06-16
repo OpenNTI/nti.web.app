@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 
 	AUDIO_SNIPPET_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ tag: 'button', id: '{id}', cls: 'x-component-assessment audio-clip', cn: { tag: 'audio',
-				cn: { tag: 'tpl', 'for': 'sources', cn: [
+			cn: { tag: 'tpl', 'for': 'sources', cn: [
 					{ tag: 'source', src: '{source}', type: '{type}'}]}}}
 	])),
 

@@ -60,14 +60,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 
 		try {
 			this.add({
-					reader: this.up('[reader]').reader,
-					xtype: type,
-					question: question,
-					part: part,
-					ordinal: 0,
-					questionSet: questionSet,
-					tabIndexTracker: tabIndexTracker
-				});
+				reader: this.up('[reader]').reader,
+				xtype: type,
+				question: question,
+				part: part,
+				ordinal: 0,
+				questionSet: questionSet,
+				tabIndexTracker: tabIndexTracker
+			});
 		}
 		catch (e) {
 			console.warn('missing question type: ' + type, '\n\tUnderlying Error: ', (e.stack || e.message || e));
@@ -101,11 +101,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 
 			try {
 				this.add({
-						xtype: 'container',
-						layout: 'auto',
-						cls: 'part-container',
-						items: items
-					});
+					xtype: 'container',
+					layout: 'auto',
+					cls: 'part-container',
+					items: items
+				});
 			}
 			catch (e) {
 				console.warn('missing question type: ' + type, '\n\tUnderlying Error: ', (e.stack || e.message || e));

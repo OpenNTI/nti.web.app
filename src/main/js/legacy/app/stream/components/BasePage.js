@@ -39,10 +39,10 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.BasePag
 	},
 
 
-	prependItems: function(records) {
+	prependItems: function (records) {
 		records.reverse().forEach((record) => this.prependItem(record));
 	},
 
 
-	prependItem: function(/*record*/) {}
+	prependItem: function (/*record*/) {}
 });

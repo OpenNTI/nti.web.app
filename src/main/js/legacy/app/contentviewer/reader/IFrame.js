@@ -289,8 +289,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		doc.getElementsByTagName('head')[0].appendChild(meta);
 
 		g.loadStyleSheet({
-				url: base + document.getElementById('main-stylesheet').getAttribute('href'),
-				document: doc });
+			url: base + document.getElementById('main-stylesheet').getAttribute('href'),
+			document: doc });
 
 		on(doc, ['keypress', 'keydown', 'keyup'], function (e) {
 			e = Ext.EventObject.setEvent(e || event);
@@ -364,22 +364,22 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				me.reader.onContextMenuHandler(
 					{
 						getTarget: function () {
-								return fakeEvent.getTarget.apply(fakeEvent, arguments);
-							},
+							return fakeEvent.getTarget.apply(fakeEvent, arguments);
+						},
 
 						preventDefault: function () {
-								fakeEvent.preventDefault();
-							},
+							fakeEvent.preventDefault();
+						},
 
 						stopPropagation: function () {
-								fakeEvent.stopPropagation();
-							},
+							fakeEvent.stopPropagation();
+						},
 
 						getXY: function () {
-								var xy = fakeEvent.getXY();
-								xy[1] -= t;
-								return xy;
-							}
+							var xy = fakeEvent.getXY();
+							xy[1] -= t;
+							return xy;
+						}
 					});
 			}
 		});
@@ -518,11 +518,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		var mainBodyStyleString = Ext.getBody().getAttribute('class') || '',
 			mainBodyStyleList = mainBodyStyleString.split(' '),
 			styleBlacklist = [
-					'x-container',
-					'x-reset',
-					'x-unselectable',
-					'x-border-layout-ct'
-				];
+				'x-container',
+				'x-reset',
+				'x-unselectable',
+				'x-border-layout-ct'
+			];
 
 		return Ext.Array.difference(mainBodyStyleList, styleBlacklist);
 	},

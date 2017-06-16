@@ -122,8 +122,8 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 		}
 
 		if (this.favorites) {
-		this.markAsFavorited(record && record.isFavorited());
-	}
+			this.markAsFavorited(record && record.isFavorited());
+		}
 	},
 
 

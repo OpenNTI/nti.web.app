@@ -21,11 +21,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				xtype: 'box',
 				autoScroll: true,
 				autoEl: {
-						cls: 'bubble',
-						cn: [
+					cls: 'bubble',
+					cn: [
 							{cls: 'text', html: this.text}
-						]
-					}
+					]
+				}
 			});
 	},
 

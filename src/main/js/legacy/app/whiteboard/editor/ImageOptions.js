@@ -123,10 +123,10 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		if (!file || !(/image\/.*/i).test(file.type)) {
 			//TODO: alert user
 	  		cfg = {
-		title: 'Sorry.',
-		icon: 'warning-red',
-		msg: 'You can\'t upload that type of file.'
-	};
+				title: 'Sorry.',
+				icon: 'warning-red',
+				msg: 'You can\'t upload that type of file.'
+			};
 	  		alert(cfg);
 			console.log('selected file was invalid, or the browser does not support FileAPI');
 			return;

@@ -293,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		var me = this,
 			msg = Ext.DomHelper.markup(['The ', group.readableType, ' ',
 									{tag: 'span', html: group.get('displayName')},
-									' will be permanently deleted...']);
+				' will be permanently deleted...']);
 		function cb (str) {
 			if (str === 'ok') {
 				me.GroupActions.deleteGroup(me.associatedGroup);

@@ -128,10 +128,10 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		return this.setActiveView('bundle-content', [
 			'bundle-forum'
 		]).then(function (item) {
-				if (item.handleRoute) {
-					item.handleRoute(subRoute, route);
-				}
-			});
+			if (item.handleRoute) {
+				item.handleRoute(subRoute, route);
+			}
+		});
 	},
 
 	showDiscussions: function (route, subRoute) {
@@ -140,10 +140,10 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		return this.setActiveView('bundle-forum', [
 			'bundle-forum'
 		]).then(function (item) {
-				if (item.handleRoute) {
-					item.handleRoute(subRoute, route);
-				}
-			});
+			if (item.handleRoute) {
+				item.handleRoute(subRoute, route);
+			}
+		});
 	},
 
 	getRouteForPath: function (path, bundle) {

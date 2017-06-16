@@ -89,8 +89,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 
 		if (!this.innerFootnotes) {
 	  	this.innerFootnotes = this.containedFootnotes();
-		this.assureRedactedFootnoteText(this.innerFootnotes);
-	}
+			this.assureRedactedFootnoteText(this.innerFootnotes);
+		}
 
 		if (this.actionSpan) {
 			return this.actionSpan.getBoundingClientRect().top || this.rendered[0].getBoundingClientRect().top || y;
@@ -282,7 +282,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 
 		//If there are any innerFootnotes we need to toggle them also
 		if (this.innerFootnotes) {
-		this.innerFootnotes.each(function (footnote) {
+			this.innerFootnotes.each(function (footnote) {
 				var redactedText = footnote.down('.redacted-text'),
 					count = footnote ? footnote.getAttribute('data-redactedCount') : undefined,
 					clsMnpFn;
@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 					footnote[clsMnpFn](me.cls);
 				}
 			});
-	}
+		}
 
 
 		return false;
@@ -327,10 +327,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		  }
 
 	  	this.compElements.each(function (e) {
-		var fns = e.query('a.footnote');
-		Ext.each(fns, function (fn) {
+			var fns = e.query('a.footnote');
+			Ext.each(fns, function (fn) {
 		  	footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
-		});
+			});
 	  });
 	  	return new Ext.dom.CompositeElement(footnotes);
 	}
@@ -339,12 +339,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 	var p = this.prototype,
 		tpl = {tag: 'span', 'data-non-anchorable': 'true', 'data-no-anchors-within': 'true', cls: 'redactionAction {style}', cn: [
 					{tag: 'span', 'data-non-anchorable': 'true', cls: 'editableSpan', html: '{replacementContent}'},
-					{tag: 'span', 'data-non-anchorable': 'true', cls: 'controls', cn: [
+			{tag: 'span', 'data-non-anchorable': 'true', cls: 'controls', cn: [
 						{tag: 'span', 'data-non-anchorable': 'true', cls: 'edit', 'data-qtip': '{{{NextThought.view.annotations.Redaction.edit}}}'},
 						{tag: 'span', 'data-non-anchorable': 'true', cls: 'share', 'data-qtip': '{{{NextThought.view.annotations.Redaction.share}}}'},
 						{tag: 'span', 'data-non-anchorable': 'true', cls: 'delete', 'data-qtip': '{{{NextThought.view.annotations.Redaction.delete}}}'}
-					]}
-	]};
+			]}
+		]};
 
 	p.actionTpl = new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'if': 'block', cn: [

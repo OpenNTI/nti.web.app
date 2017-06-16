@@ -393,13 +393,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		{
 			cls: 'respond', cn: {
 				cn: [
-				{
-					cls: 'reply-options',
-					cn: [
+					{
+						cls: 'reply-options',
+						cn: [
 						{ cls: 'link reply', html: 'Add a comment' }
-					]
-				}
-			]}
+						]
+					}
+				]}
 		}
 	]);
 });
