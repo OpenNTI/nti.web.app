@@ -1,11 +1,12 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
-var ParseUtils = require('../util/Parsing');
-var ReaderJson = require('../proxy/reader/Json');
-var UtilUserDataThreader = require('../util/UserDataThreader');
+const Ext = require('extjs');
+
+const Globals = require('../util/Globals');
+const ParseUtils = require('../util/Parsing');
+const UtilUserDataThreader = require('../util/UserDataThreader');
+require('../proxy/reader/Json');
 require('../model/GenericObject');
 
-var coordinator = new Ext.util.Observable();
+const coordinator = new Ext.util.Observable();
 
 module.exports = exports = Ext.define('NextThought.store.PageItem', {
 	extend: 'Ext.data.Store',
@@ -147,6 +148,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		console.log('Adding record to store', record, this);
 		//get added to the store:
 		this.callParent(arguments);
+		let adopted = false;
 
 		if (this.isFiltered()) {
 			Ext.defer(this.filter, 1, this);
@@ -178,10 +180,9 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			};
 		}
 
-		function updateRef (record) {
+		function updateRef (r) {
 			//find my parent if it's there and add myself to it:
-			var adopted,
-				refs = (record.get('references') || []).slice();
+			var refs = (r.get('references') || []).slice();
 
 			if (!Ext.isEmpty(refs)) {
 				while (!adopted && !Ext.isEmpty(refs)) {
@@ -189,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 				}
 
 				if (!adopted) {
-					console.warn('Unable to parent child', record);
+					console.warn('Unable to parent child', r);
 				}
 			}
 		}

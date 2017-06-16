@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var Globals = require('../Globals');
-var {isFeature} = Globals;
+const Ext = require('extjs');
+
+const Globals = require('../Globals');
+
+const {isFeature} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
@@ -130,8 +132,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 	changeMediaTimeoutMillis: 1000,
 	neverQueue: ['getPlayerState', 'getCurrentTime'],
 
-	constructor: function (config) {
-		var me = this;
+	constructor (config) {
 
 		this.mixins.observable.constructor.call(this);
 
@@ -164,14 +165,15 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 
-		var iframeId,
-			data = {
+		var iframeId;
+		var loc = window.location;
+		var data = {
 				id: this.id,
 				height: this.height,
 				width: this.width,
-				basePath: location.protocol + '//' + location.host + location.pathname,
+				basePath: loc.protocol + '//' + loc.host + loc.pathname,
 				code: this.buildWrapperCode(),
-				sheme: location.protocol,
+				sheme: loc.protocol,
 				partnerid: this.PARTNER_ID,
 				uiconfid: this.UICONF_ID
 			},
@@ -524,7 +526,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 	}()),
 
 	playerUpdatePlayheadHandler: function (event) {
-		var position = event.data[0];
+		// var position = event.data[0];
 
 		if (this.seekingStart && this.seekingStop) {
 			this.fireEvent('player-seek', {start: this.seekingStart, end: this.seekingStop});
@@ -571,7 +573,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		//duration will be in seconds so make it in milli like
 		//everything else in JS
-		this.video_duration = duration * 1000;
+		this['video_duration'] = duration * 1000;
 	},
 
 	updatedPlaybackRateHandler: function (message) {
@@ -586,7 +588,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 	},
 
 	getDuration: function () {
-		return this.video_duration;
+		return this['video_duration'];
 	},
 
 	getPlaybackSpeed: function () {
@@ -757,14 +759,14 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			function send (event, data) {
 				//console.log('Event: '+event, playerId, data);
-				host.postMessage(JSON.stringify({ event: 'kalturaplayer.' + event, id: playerId, data: data }), '*');
+				window.host.postMessage(JSON.stringify({ event: 'kalturaplayer.' + event, id: window.playerId, data: data }), '*');
 			}
 
 			function makeHandler (name) {
 				var newName = '__' + name,
 					seen = {};
 
-				window[newName] = function (id) {
+				window[newName] = function (/*id*/) {
 					seen[name] = (seen[name] || 0) + 1;
 
 					if (/error/i.test(name) && seen[name] < 2) {
@@ -778,7 +780,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 			}
 
 			function playerReady () {
-				var player = document.getElementById(playerId),
+				var player = document.getElementById(window.playerId),
 					events = [
 						'changeMedia',
 						'closeFullScreen',
@@ -818,7 +820,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 				}
 
 				window.playerMode = player.tagName === 'OBJECT' ? 'Flash' : 'HTML5';
-				console.log(window.playerId, 'Player is ', playerMode);
+				console.log(window.playerId, 'Player is ', window.playerMode);
 			}
 
 
@@ -826,8 +828,8 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 				var eventData, player, state;
 				try {
 					eventData = JSON.parse(event.data);
-					player = document.getElementById(playerId);
-					console.debug('Player Command to: ' + playerId + ', command: ' + eventData.name + ', data:', eventData.data);
+					player = document.getElementById(window.playerId);
+					console.debug('Player Command to: ' + window.playerId + ', command: ' + eventData.name + ', data:', eventData.data);
 
 					state = player.evaluate('{video.player.state}');
 					if (eventData.name === 'doStop' && (state && state !== 'playing')) {
@@ -845,7 +847,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 			window.addEventListener('message', handleMessage, false);
 
 
-
+			/*global mw, kWidget, VideoSupports*/
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
@@ -898,9 +900,9 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 			}
 
 			kWidget.embed({
-				targetId: playerId,
+				targetId: window.playerId,
 				wid: '_%PARTNER_ID%',
-				uiconf_id: '%UICONF_ID%',
+				'uiconf_id': '%UICONF_ID%',
 				flashvars: vars,
 				params: {
 					wmode: 'transparent'

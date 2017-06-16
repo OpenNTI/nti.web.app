@@ -1,8 +1,12 @@
-var Ext = require('extjs');
-var Globals = require('./Globals');
-var {getURL, isFeature} = Globals;
-var PageVisibility = require('./Visibility');
-var ContextStateStore = require('../app/context/StateStore');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const ContextStateStore = require('../app/context/StateStore');
+
+const Globals = require('./Globals');
+const PageVisibility = require('./Visibility');
+
+const {isFeature} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.util.Analytics', {
@@ -73,14 +77,14 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-	addContext: function (context, isRoot) {},
+	addContext: function (/*context, isRoot*/) {},
 
 	getContextRoot: function () {
 		return this.getContext().first();
 	},
 
 	getContext: function () {
-		var ContextSS = NextThought.app.context.StateStore.getInstance(),
+		var ContextSS = ContextStateStore.getInstance(),
 			contextObjects = ContextSS.getContext(),
 			contextStrings = [];
 
@@ -106,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 	beginSession: function () {
 		//if we've already started one don't start another
-		if (this.session_started) { return; }
+		if (this['session_started']) { return; }
 
 		var me = this,
 			collection = Service.getWorkspace('Analytics'),
@@ -116,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		if (url) {
 			Service.post(url)
 				.then(function () {
-					me.session_started = true;
+					me['session_started'] = true;
 					console.log('Analytics session started.');
 				})
 				.catch(function () {
@@ -151,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			events: this.batch
 		}));
 
-		this.session_started = false;
+		this['session_started'] = false;
 	},
 
 	getResourceTimer: function (resourceId, data) {
@@ -163,15 +167,15 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			};
 		}
 
-		data.context_path = this.getContext();
+		data['context_path'] = this.getContext();
 		data.timestamp = now.getTime() / 1000;//send seconds back
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;
 		data.ResourceId = resourceId;
-		data.RootContextID = data.RootContextId || data.context_path[0] || '';
+		data.RootContextID = data.RootContextId || data['context_path'][0] || '';
 
-		if (data.course && data.context_path.first() != data.course) {
-			data.context_path.unshift(data.course);
+		if (data.course && data['context_path'].first() !== data.course) {
+			data['context_path'].unshift(data.course);
 		}
 
 		//if we need to track this type client side add it to the map
@@ -194,13 +198,13 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	fillInData: function (resource, data) {
 		var now = new Date();
 
-		data.time_length = (now - resource.start) / 1000;//send seconds back
+		data['time_length'] = (now - resource.start) / 1000;//send seconds back
 
 		return data;
 	},
 
 	fillInVideo: function (resource, data) {
-		data.time_length = Math.abs(data.video_end_time - data.video_start_time);
+		data['time_length'] = Math.abs(data.video_end_time - data.video_start_time);
 
 		return data;
 	},
@@ -227,8 +231,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	},
 
 	stopResourceTimer: function (resourceId, type, data, doNotStartTimer) {
-		var resource = this.TIMER_MAP[resourceId + type],
-			now = new Date();
+		var resource = this.TIMER_MAP[resourceId + type];
 
 		data = data || {};
 
@@ -264,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			};
 		}
 
-		data.context_path = this.getContext();
+		data['context_path'] = this.getContext();
 		data.timestamp = now.getTime() / 1000;//send seconds back
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;

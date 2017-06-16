@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 
 		for (i = 0; i < len; i++) {
 			src = source[i].source;
-			src = /^\/\//i.test(src) ? (location.protocol + src) : src;
+			src = /^\/\//i.test(src) ? (window.location.protocol + src) : src;
 			sourceTpl.append(player, {src: src, type: source[i].type}, false);
 		}
 

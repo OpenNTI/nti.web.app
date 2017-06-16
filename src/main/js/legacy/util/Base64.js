@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 /**
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 			chr1, chr2, chr3, enc1, enc2, enc3, enc4,
 			i = 0;
 
-		input = this._utf8_encode(input);
+		input = this.utf8Encode(input);
 
 		while (i < input.length) {
 
@@ -107,14 +107,14 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 
 		}
 
-		output = this._utf8_decode(output);
+		output = this.utf8Decode(output);
 
 		return output;
 
 	},
 
 	// private method for UTF-8 encoding
-	_utf8_encode: function (string) {
+	utf8Encode: function (string) {
 		string = string.replace(/\r\n/g, '\n');
 		var utftext = '', n, c;
 
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 	},
 
 	// private method for UTF-8 decoding
-	_utf8_decode: function (utftext) {
+	utf8Decode: function (utftext) {
 		var string = '',
 			i = 0, c3 = 0, c2 = 0,
 			c = 0;

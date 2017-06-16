@@ -1,6 +1,7 @@
 /*globals YT */
-var Ext = require('extjs');
-var Globals = require('../Globals');
+const Ext = require('extjs');
+
+const Globals = require('../Globals');
 
 
 module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
@@ -50,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 				rel: 0,
 				showinfo: 0
 			},
-			origin: location.protocol + '//' + location.host,
+			origin: window.location.protocol + '//' + window.location.host,
 			events: {
 				'onReady': Ext.bind(this.playerReady, this),
 				'onError': Ext.bind(this.playerError, this),
@@ -198,9 +199,9 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		var me = this,
 			current = me.getCurrentTime;
 
-		function maybeFireSeek (current, last) {
-			if (Math.abs(current - last) > 1) {
-				me.fireEvent('player-seek', {start: last, end: current});
+		function maybeFireSeek (currentTime, last) {
+			if (Math.abs(currentTime - last) > 1) {
+				me.fireEvent('player-seek', {start: last, end: currentTime});
 			}
 		}
 
@@ -321,5 +322,5 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 	}
 
 	window.onYouTubeIframeAPIReady = Ext.Function.createSequence(onReady, window.onYouTubeIframeAPIReady, null);
-	Globals.loadScript(location.protocol + '//www.youtube.com/iframe_api');
+	Globals.loadScript(window.location.protocol + '//www.youtube.com/iframe_api');
 });

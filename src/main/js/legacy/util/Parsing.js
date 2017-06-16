@@ -1,14 +1,18 @@
-var Ext = require('extjs');
-var ObjectUtils = require('./Object');
-var JSONProxy = require('../proxy/reader/Json');
+const Ext = require('extjs');
+
+const JSONProxy = require('../proxy/reader/Json');
+
+const ObjectUtils = require('./Object');
+
 
 
 module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
 
 	/**
-	 * @param {String|String[]|Object|Object[]} items
+	 * @param {String|String[]|Object|Object[]} items items
 	 * @param {Object} [supplemental] Properties to add to the parsed items (such as flags)
+	 * @returns {Object[]} Parsed models.
 	 */
 	parseItems: function (items, supplemental) {
 		var key, item, reader, results = [];
@@ -113,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * Parses an id and returns an object containing the split portions
 	 * See http://excelsior.nextthought.com/server-docs/ntiid-structure/
 
-	 * @param {String} id
+	 * @param {String} id id
 	 * @return {Object} an object containing the components of the id
 	 */
 	parseNTIID: function (id) {
@@ -203,7 +207,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 	/**
 	 * CSS escape ids
-	 * @param {string} id
+	 * @param {string} id id
 	 * @return {string} CSS-friendly string to use in a selector
 	 */
 	escapeId: function (id) {
@@ -214,8 +218,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 	/**
 	 * Returns the prefix of the content ntiid we think this ntiid would reside beneath
-	 * @param {String} id
-	 * @return {String}
+	 * @param {String} id id
+	 * @return {String} see description
 	 */
 	ntiidPrefix: function (id) {
 		var ntiid = this.parseNTIID(id);
@@ -313,7 +317,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 }).create();
 
 
-JSONProxy.findModel = 
+JSONProxy.findModel =
 JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 
 /*
@@ -328,8 +332,8 @@ JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 /*! @source https://gist.github.com/1129031 */
 (function (DOMParser) {
 	'use strict';
-	var DOMParser_proto = DOMParser.prototype,
-		real_parseFromString = DOMParser_proto.parseFromString;
+	var DOMParserProto = DOMParser.prototype,
+		RealParseFromString = DOMParserProto.parseFromString;
 
 	// Firefox/Opera/IE throw errors on unsupported types
 	try {
@@ -338,20 +342,20 @@ JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 			// text/html parsing is natively supported
 			return;
 		}
-	} catch (ex) {}
+	} catch (ex) {/*ignore*/}
 
-	DOMParser_proto.parseFromString = function (markup, type) {
+	DOMParserProto.parseFromString = function (markup, type) {
 		if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
 			var doc = document.implementation.createHTMLDocument(''),
-				doc_elt = doc.documentElement,
-				first_elt;
+				docElement = doc.documentElement,
+				firstElement;
 
 			try {
-				doc_elt.innerHTML = markup;
-				first_elt = doc_elt.firstElementChild;
+				docElement.innerHTML = markup;
+				firstElement = docElement.firstElementChild;
 
-				if (doc_elt.childElementCount === 1 && first_elt.localName.toLowerCase() === 'html') {
-					doc.replaceChild(first_elt, doc_elt);
+				if (docElement.childElementCount === 1 && firstElement.localName.toLowerCase() === 'html') {
+					doc.replaceChild(firstElement, docElement);
 				}
 			}
 			catch (IE_SUCKS) {
@@ -361,6 +365,6 @@ JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 
 			return doc;
 		}
-		return real_parseFromString.apply(this, arguments);
+		return RealParseFromString.apply(this, arguments);
 	};
 }(global.DOMParser));
