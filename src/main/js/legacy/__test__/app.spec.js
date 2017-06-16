@@ -1,5 +1,6 @@
+/* eslint-env jest */
 /*eslint no-console: 0*/
-var Ext = require('extjs');
+const Ext = require('extjs');
 Ext.Loader.setConfig({enabled: false});
 
 // require('legacy/util/Globals');
@@ -7,8 +8,8 @@ Ext.Loader.setConfig({enabled: false});
 // require('legacy/overrides');
 // require('legacy/controller/Application');
 
-xdescribe('All Classes Exist', function () {
-	var bootstrap = {
+describe.skip('All Classes Exist', function () {
+	const bootstrap = {
 		'NextThought.app.Body': [],
 		'NextThought.app.Index': [],
 		'NextThought.app.MessageBar': [],
@@ -1186,7 +1187,7 @@ xdescribe('All Classes Exist', function () {
 		'NextThought.webvtt.Transcript': []
 	};
 
-	it('Exists', function () {
+	test ('Exists', function () {
 		const missing = [''];
 
 		for (let clazz of Object.keys(bootstrap)) {

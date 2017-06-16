@@ -1,9 +1,10 @@
+/* globals NTIStrings */
 //Define externalized strings using the following form
 //NTIStrings['key'] = 'value'
 
 NTIStrings['months'] = {
 	1: 'January',
- 	2: 'Febuary',
+	2: 'Febuary',
 	3: 'March',
 	4: 'April',
 	5: 'May',
@@ -360,11 +361,11 @@ NTIStrings['NextThought.view.contacts.outline.View.join'] = 'Присоедин�
 NTIStrings['NextThought.view.contacts.outline.View.create'] = 'Создать группу';
 NTIStrings['NextThought.view.contacts.outline.View.search'] = 'Поиск';
 NTIStrings['NextThought.view.contacts.outline.search.View.empty'] = 'Пользователей не найдено';
-NTIStrings['NextThought.view.contacts.suggestions.Window.title'] = "Add Peers to Contacts";
-NTIStrings['NextThought.view.contacts.suggestions.Window.AddContacts'] = "Add Contacts";
-NTIStrings['NextThought.view.contacts.suggestions.Window.AddContactsWithCount'] = "Add {number} Contacts";
-NTIStrings['NextThought.view.contacts.suggestions.Window.Cancel'] = "Cancel";
-NTIStrings['NextThought.view.contacts.suggestions.Window.Done'] = "Done";
+NTIStrings['NextThought.view.contacts.suggestions.Window.title'] = 'Add Peers to Contacts';
+NTIStrings['NextThought.view.contacts.suggestions.Window.AddContacts'] = 'Add Contacts';
+NTIStrings['NextThought.view.contacts.suggestions.Window.AddContactsWithCount'] = 'Add {number} Contacts';
+NTIStrings['NextThought.view.contacts.suggestions.Window.Cancel'] = 'Cancel';
+NTIStrings['NextThought.view.contacts.suggestions.Window.Done'] = 'Done';
 NTIStrings['NextThought.view.content.Navigation.toc'] = 'Table of Contents';
 NTIStrings['NextThought.view.content.Navigation.select-chapter'] = 'Выбрать главу';
 NTIStrings['NextThought.view.content.Navigation.select-section'] = 'Выбрать раздел';
@@ -846,7 +847,7 @@ NTIStrings['NextThought.view.account.notifications.types.Badge.wording'] = '{bad
 NTIStrings['NextThought.view.profiles.parts.events.Badge.name'] = '{username} earned the {badgename} badge.';
 NTIStrings['NextThought.view.account.notifications.types.Note.titlewording'] = '{creator} shared a note: {title}.';
 NTIStrings['undefined'] = 'undefined';
-NTIStrings.PluralForms = {"question":{"forms":["{#} questions","{#} question"],"ranges":{"0":0,"1":1,"undefined":0}},"Comment":{"forms":["{#} Comments","{#} Comment"],"ranges":{"0":0,"1":1,"undefined":0}},"Instructor":{"forms":["{#} Instructors","{#} Instructor"],"ranges":{"0":0,"1":1,"undefined":0}},"Credit":{"forms":["{#} Credits","{#} Credit"],"ranges":{"0":0,"1":1,"undefined":0}},"Match":{"forms":["{#} Matches","{#} Match"],"ranges":{"0":0,"1":1,"undefined":0}},"Like":{"forms":["{#} Likes","{#} Like"],"ranges":{"0":0,"1":1,"undefined":0}},"Tag":{"forms":["{#} Tags","{#} Tag"],"ranges":{"0":0,"1":1,"undefined":0}},"other":{"forms":["{#} others","{#} other"],"ranges":{"0":0,"1":1,"undefined":0}},"Topic":{"forms":["{#} Topics","{#} Topic"],"ranges":{"0":0,"1":1,"undefined":0}}};
+NTIStrings.PluralForms = {'question':{'forms':['{#} questions','{#} question'],'ranges':{'0':0,'1':1,'undefined':0}},'Comment':{'forms':['{#} Comments','{#} Comment'],'ranges':{'0':0,'1':1,'undefined':0}},'Instructor':{'forms':['{#} Instructors','{#} Instructor'],'ranges':{'0':0,'1':1,'undefined':0}},'Credit':{'forms':['{#} Credits','{#} Credit'],'ranges':{'0':0,'1':1,'undefined':0}},'Match':{'forms':['{#} Matches','{#} Match'],'ranges':{'0':0,'1':1,'undefined':0}},'Like':{'forms':['{#} Likes','{#} Like'],'ranges':{'0':0,'1':1,'undefined':0}},'Tag':{'forms':['{#} Tags','{#} Tag'],'ranges':{'0':0,'1':1,'undefined':0}},'other':{'forms':['{#} others','{#} other'],'ranges':{'0':0,'1':1,'undefined':0}},'Topic':{'forms':['{#} Topics','{#} Topic'],'ranges':{'0':0,'1':1,'undefined':0}}};
 NTIStrings['NextThought.view.library.available.CourseWindow.Finished'] = 'Finished';
 NTIStrings['NextThought.view.library.available.CourseWindow.Continue'] = 'Continue';
 NTIStrings['NextThought.view.library.available.CourseWindow.Welcome'] = 'Welcome';
@@ -859,7 +860,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Redeem.AccessKeyInput'] = 'Ac
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.HelpFindAccessKey'] = 'Not sure where to find your Access Key?';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.CheckEmail'] = 'Please check your purchase confirmation emails. Contact <a href="{link}">{support}</a> if additional support is required.';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.LicensingAgree'] = 'I have read and agree to the <a data-event="viewLicense">licensing terms.</a>';
-NTIStrings['NextThought.view.courseware.enrollment.Redeem.NotRedeemed'] = 'You have not redeemed your access key!'
+NTIStrings['NextThought.view.courseware.enrollment.Redeem.NotRedeemed'] = 'You have not redeemed your access key!';
 NTIStrings['NextThought.view.courseware.enrollment.PaymentConfirmation.SubmitPayment'] = 'Submit Payment';
 NTIStrings['NextThought.view.courseware.enrollment.PaymentConfirmation.Cancel'] = 'Cancel';
 NTIStrings['NextThought.view.courseware.enrollment.PaymentConfirmation.ReviewPay'] = 'Review and Pay';
@@ -1068,4 +1069,4 @@ NTIStrings['NextThought.view.courseware.enrollment.Enroll.AlreadyEnrolled'] = 'Y
 NTIStrings['NextThought.view.courseware.enrollment.Enroll.ExternalPay'] = 'Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction.';
 NTIStrings['NextThought.view.courseware.enrollment.Enroll.HelpDesk'] = 'Please contact <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.';
 NTIStrings['undefined'] = 'undefined';
-NTIStrings.PluralForms = {"question":{"forms":["{#} questions","{#} question"],"ranges":{"0":0,"1":1,"undefined":0}},"Comment":{"forms":["{#} Comments","{#} Comment"],"ranges":{"0":0,"1":1,"undefined":0}},"Instructor":{"forms":["{#} Instructors","{#} Instructor"],"ranges":{"0":0,"1":1,"undefined":0}},"Credit":{"forms":["{#} Credits","{#} Credit"],"ranges":{"0":0,"1":1,"undefined":0}},"Match":{"forms":["{#} Matches","{#} Match"],"ranges":{"0":0,"1":1,"undefined":0}},"Like":{"forms":["{#} Likes","{#} Like"],"ranges":{"0":0,"1":1,"undefined":0}},"Tag":{"forms":["{#} Tags","{#} Tag"],"ranges":{"0":0,"1":1,"undefined":0}},"other":{"forms":["{#} others","{#} other"],"ranges":{"0":0,"1":1,"undefined":0}},"Topic":{"forms":["{#} Topics","{#} Topic"],"ranges":{"0":0,"1":1,"undefined":0}}};
+NTIStrings.PluralForms = {'question':{'forms':['{#} questions','{#} question'],'ranges':{'0':0,'1':1,'undefined':0}},'Comment':{'forms':['{#} Comments','{#} Comment'],'ranges':{'0':0,'1':1,'undefined':0}},'Instructor':{'forms':['{#} Instructors','{#} Instructor'],'ranges':{'0':0,'1':1,'undefined':0}},'Credit':{'forms':['{#} Credits','{#} Credit'],'ranges':{'0':0,'1':1,'undefined':0}},'Match':{'forms':['{#} Matches','{#} Match'],'ranges':{'0':0,'1':1,'undefined':0}},'Like':{'forms':['{#} Likes','{#} Like'],'ranges':{'0':0,'1':1,'undefined':0}},'Tag':{'forms':['{#} Tags','{#} Tag'],'ranges':{'0':0,'1':1,'undefined':0}},'other':{'forms':['{#} others','{#} other'],'ranges':{'0':0,'1':1,'undefined':0}},'Topic':{'forms':['{#} Topics','{#} Topic'],'ranges':{'0':0,'1':1,'undefined':0}}};

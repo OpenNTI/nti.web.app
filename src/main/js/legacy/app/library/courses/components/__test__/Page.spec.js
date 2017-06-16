@@ -1,3 +1,4 @@
+/* eslint-env jest */
 const Page = require('../Page');
 
 describe('Course Page Tests', () => {
@@ -22,7 +23,7 @@ describe('Course Page Tests', () => {
 			};
 		}
 
-		it ('Store sorts correctly', () => {
+		test ('Store sorts correctly', () => {
 			const courses = ['b', 'c', 'a'].map(createCourseWithId);
 			const sorted = courses.sort(Page.prototype.sorterFn);
 			const sortedIDs = sorted.map(x => x.get('CourseInstance').getCourseCatalogEntry().get('ProviderUniqueID'));

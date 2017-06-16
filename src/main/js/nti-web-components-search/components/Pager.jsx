@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 Pager.propTypes = {
-	pagesToShow: React.PropTypes.number,
-	currentPage: React.PropTypes.number,
-	showNext: React.PropTypes.func,
-	loadPage: React.PropTypes.func,
-	showMoreButton: React.PropTypes.bool
+	pagesToShow: PropTypes.number,
+	currentPage: PropTypes.number,
+	showNext: PropTypes.func,
+	loadPage: PropTypes.func,
+	showMoreButton: PropTypes.bool
 };
 
 export default function Pager ({pagesToShow, currentPage, showNext, loadPage, showMoreButton}) {

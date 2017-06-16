@@ -21,6 +21,7 @@
 		"no-underscore-dangle": "off",
 		"no-var": "off",
 		"strict": ["error", "never"],
-		"import/no-extraneous-dependencies": "off"
+		"import/no-commonjs": "off",
+		"import/no-extraneous-dependencies": "off",
 	}
 }

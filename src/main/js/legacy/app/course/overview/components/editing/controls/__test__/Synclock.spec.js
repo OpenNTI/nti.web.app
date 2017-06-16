@@ -1,4 +1,5 @@
-require('legacy/app/course/overview/components/editing/controls/Synclock');
+/* eslint-env jest */
+const Synclock = require('legacy/app/course/overview/components/editing/controls/Synclock');
 
 describe('NextThought.app.course.overview.components.editing.controls.Synclock', () => {
 
@@ -9,17 +10,17 @@ describe('NextThought.app.course.overview.components.editing.controls.Synclock',
 	let data;
 	let contents;
 
-	beforeAll(() => {
+	beforeAll (() => {
 		previousService = global.Service;
 	});
 
-	afterAll(() => {
+	afterAll (() => {
 		global.Service = previousService;
 	});
 
-	beforeEach(() => {
+	beforeEach (() => {
 		global.Service = {};
-		synclock = NextThought.app.course.overview.components.editing.controls.Synclock.create({});
+		synclock = Synclock.create({});
 
 		links = { hasLink: (link) => { return !!links[link]; } };
 		data = { Links: links };
@@ -29,20 +30,20 @@ describe('NextThought.app.course.overview.components.editing.controls.Synclock',
 		Service.canDoAdvancedEditing = () => { return true; };
 	});
 
-	it('should not appear for users without advanced editing abilities.', () => {
+	test ('should not appear for users without advanced editing abilities.', () => {
 		Service.canDoAdvancedEditing = () => { return false; };
 		synclock.beforeRender();
 
 		expect(!!synclock.hidden).toBe(true);
 	});
 
-	it('should not appear for items that are not sync locked.', () => {
+	test ('should not appear for items that are not sync locked.', () => {
 		synclock.beforeRender();
 
 		expect(!!synclock.hidden).toBe(true);
 	});
 
-	it('should only appear for advanced editors on sync locked content.', () => {
+	test ('should only appear for advanced editors on sync locked content.', () => {
 		synclock.contents.data.Links.SyncUnlock = true;
 		synclock.beforeRender();
 

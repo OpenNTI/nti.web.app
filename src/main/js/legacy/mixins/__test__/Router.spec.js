@@ -1,26 +1,28 @@
+/* globals spyOn */
+/* eslint-env jest */
 require('legacy/mixins/Router');
 
-describe('Router mixin tests', function () {
-	describe('Path Router Tests', function () {
+describe ('Router mixin tests', () => {
+	describe ('Path Router Tests', () => {
 		var router;
 
-		beforeEach(function () {
+		beforeEach (() => {
 			router = NextThought.mixins.Router.create({});
 		});
 
 
-		it('trimRoute works correctly', function () {
+		test ('trimRoute works correctly', () => {
 			var url = router.trimRoute('/root/path1/path2/');
 
 			expect(url).toEqual('root/path1/path2');
 		});
 
-		describe('Adding a route gets put into the right place', function () {
-			beforeEach(function () {
+		describe ('Adding a route gets put into the right place', () => {
+			beforeEach (() => {
 				router.__routeMap = {};
 			});
 
-			it('it two sub routes', function () {
+			test ('it two sub routes', () => {
 				var a = '/root',
 					b = '/root/path1',
 					c = '/root/path2';
@@ -46,7 +48,7 @@ describe('Router mixin tests', function () {
 				expect(router.__routeMap.root.path2.handler).toBe(fn3);
 			});
 
-			it('variable route', function () {
+			test ('variable route', () => {
 				var a = '/root',
 					b = '/root/:test',
 					c = '/root/:test/path1';
@@ -73,14 +75,14 @@ describe('Router mixin tests', function () {
 				expect(router.__routeMap.root['@var'].path1.handler).toBe(fn3);
 			});
 
-			it('route collision', function () {
+			test ('route collision', () => {
 				var err,
 					a = '/root/path1',
 					b = '/root/path1';
 
 				try {
-					router.addRoute(a, function () {});
-					router.addRoute(b, function () {});
+					router.addRoute(a, () => {});
+					router.addRoute(b, () => {});
 				} catch (e) {
 					err = e;
 				}
@@ -89,12 +91,12 @@ describe('Router mixin tests', function () {
 			});
 		});
 
-		describe('Handling routes is done correctly', function () {
-			beforeEach(function () {
+		describe('Handling routes is done correctly', () => {
+			beforeEach(() => {
 				router.__routeMap = {};
 			});
 
-			it('sub routes get called correclty', function () {
+			test ('sub routes get called correclty', () => {
 				var a = '/root/',
 					b = '/root/path/:test/path1/',
 					c = '/root/path/:test/path2/:foo',
@@ -133,7 +135,7 @@ describe('Router mixin tests', function () {
 				expect(precache).toEqual({});
 			});
 
-			it('default route handler gets called', function () {
+			test ('default route handler gets called', () => {
 				var a = '/root/',
 					called = '';
 
@@ -157,7 +159,7 @@ describe('Router mixin tests', function () {
 				expect(called).toEqual('default');
 			});
 
-			it('default route path gets called', function () {
+			test ('default route path gets called', () => {
 				var a = '/root/',
 					called = '';
 
@@ -174,15 +176,15 @@ describe('Router mixin tests', function () {
 			});
 		});
 
-		describe('Adding a subroute', function () {
+		describe('Adding a subroute', () => {
 			var parent, first, second, testCtrl;
 
-			beforeEach(function () {
+			beforeEach(() => {
 				//the push and replace function will be set on the main view by the
 				//application controller, so fake that out here
 				testCtrl = {
-					pushRootRoute: function () {},
-					replaceRootRoute: function () {}
+					pushRootRoute: () => {},
+					replaceRootRoute: () => {}
 				};
 
 				parent = NextThought.mixins.Router.create({});
@@ -190,16 +192,16 @@ describe('Router mixin tests', function () {
 				second = NextThought.mixins.Router.create({});
 
 				parent.currentRoute = 'first';
-				parent.getRouteTitle = function () { return 'parent'; };
+				parent.getRouteTitle = () => { return 'parent'; };
 
 				parent.pushRootRoute = function (title, url) { testCtrl.pushRootRoute(title, url); };
 				parent.replaceRootRoute = function (title, url) { testCtrl.replaceRootRoute(title, url); };
 
 				first.currentRoute = 'second';
-				first.getRouteTitle = function () { return 'first'; };
+				first.getRouteTitle = () => { return 'first'; };
 
 				second.currentRoute = 'foo';
-				second.getRouteTitle = function () { return 'second'; };
+				second.getRouteTitle = () => { return 'second'; };
 
 				parent.addChildRouter(first);
 				first.addChildRouter(second);
@@ -212,27 +214,27 @@ describe('Router mixin tests', function () {
 				spyOn(first, 'replaceRoute').and.callThrough();
 			});
 
-			it('pushRoute', function () {
+			test ('pushRoute', () => {
 				second.pushRoute('second', 'third');
 
-				expect(first.pushRoute).toHaveBeenCalledWith('second - first', 'second/third', jasmine.any(Object));
-				expect(parent.pushRoute).toHaveBeenCalledWith('second - first - parent', 'first/second/third', jasmine.any(Object));
+				expect(first.pushRoute).toHaveBeenCalledWith('second - first', 'second/third', expect.any(Object));
+				expect(parent.pushRoute).toHaveBeenCalledWith('second - first - parent', 'first/second/third', expect.any(Object));
 			});
 
-			it('replaceRoute', function () {
+			test ('replaceRoute', () => {
 				second.replaceRoute('second', 'third');
 
-				expect(first.replaceRoute).toHaveBeenCalledWith('second - first', 'second/third', jasmine.any(Object));
-				expect(parent.replaceRoute).toHaveBeenCalledWith('second - first - parent', 'first/second/third', jasmine.any(Object));
+				expect(first.replaceRoute).toHaveBeenCalledWith('second - first', 'second/third', expect.any(Object));
+				expect(parent.replaceRoute).toHaveBeenCalledWith('second - first - parent', 'first/second/third', expect.any(Object));
 			});
 
-			it('pushRootRoute', function () {
+			test ('pushRootRoute', () => {
 				second.pushRootRoute('second', 'third');
 
 				expect(testCtrl.pushRootRoute).toHaveBeenCalledWith('second', 'third');
 			});
 
-			it('replaceRootRoute', function () {
+			test ('replaceRootRoute', () => {
 				second.replaceRootRoute('second', 'third');
 
 				expect(testCtrl.replaceRootRoute).toHaveBeenCalledWith('second', 'third');
@@ -240,16 +242,16 @@ describe('Router mixin tests', function () {
 		});
 	});
 
-	describe('Object Router Tests', function () {
+	describe('Object Router Tests', () => {
 		var router;
 
-		beforeEach(function () {
+		beforeEach(() => {
 			router = NextThought.mixins.Router.create();
 		});
 
 
-		it('Correct handler gets called', function () {
-			var obj = { handler: function () {}},
+		test ('Correct handler gets called', () => {
+			var obj = { handler: () => {}},
 				note = NextThought.model.Note.create(),
 				page = NextThought.model.PageInfo.create();
 
@@ -269,8 +271,8 @@ describe('Router mixin tests', function () {
 			expect(obj.handler).toHaveBeenCalledWith(page);
 		});
 
-		it('Navigate to Object calls parent', function (done) {
-			var obj = {parent: function () { console.log('Parent'); }, child: function () { console.log('Child'); }},
+		test ('Navigate to Object calls parent', function (done) {
+			var obj = {parent: () => { console.log('Parent'); }, child: () => { console.log('Child'); }},
 				// first = false, second = false,
 				note = NextThought.model.Note.create(),
 				page = NextThought.model.PageInfo.create(),
@@ -289,44 +291,44 @@ describe('Router mixin tests', function () {
 			], obj.parent);
 
 			child.navigateToObject(page)
-				.then(function () {
+				.then(() => {
 					expect(obj.child).toHaveBeenCalledWith(page);
 					expect(obj.parent).not.toHaveBeenCalled();
 
 					return child.navigateToObject(note);
 				})
-				.then(function () {
+				.then(() => {
 					expect(obj.child.calls.count()).toEqual(1);
 					expect(obj.parent).toHaveBeenCalledWith(note);
 				})
-				.then(function () {
+				.then(() => {
 					done();
 				});
 
 			// child.navigateToObject(page)
-			// 	.then(function () {
+			// 	.then(() => {
 			// 		first = true;
 			// 	});
 
-			// waitsFor(function () {
+			// waitsFor(() => {
 			// 	return first;
 			// }, 'navigate never finishes', 500);
 
-			// runs(function () {
+			// runs(() => {
 			// 	expect(obj.child).toHaveBeenCalledWith(page);
 			// 	expect(obj.parent).not.toHaveBeenCalled();
 
 			// 	child.navigateToObject(note)
-			// 		.then(function () {
+			// 		.then(() => {
 			// 			second = true;
 			// 		});
 			// });
 
-			// waitsFor(function () {
+			// waitsFor(() => {
 			// 	return second;
 			// }, 'navigate never finishes', 500);
 
-			// runs(function () {
+			// runs(() => {
 			// 	expect(obj.child.callCount).toEqual(1);
 			// 	expect(obj.parent).toHaveBeenCalledWith(note);
 			// });

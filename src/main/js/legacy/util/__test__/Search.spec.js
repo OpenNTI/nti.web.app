@@ -1,13 +1,16 @@
+/* globals spyOn */
+/* eslint-env jest */
 const Ext = require('extjs');
 const XRegExp = require('xregexp');
-const SearchUtils = require('../Search');
+
 const Hit = require('legacy/model/Hit');
 
-describe('Search utils', () => {
+const SearchUtils = require('../Search');
 
-	/*global XRegExp*/
-	describe('contentRegexFromSearchTerm', () => {
-		it('Deals with funky unicode equality', () => {
+describe ('Search utils', () => {
+
+	describe ('contentRegexFromSearchTerm', () => {
+		test ('Deals with funky unicode equality', () => {
 			const content = 'Court\u0027s';
 			const term = 'Court\'s';
 			const re = SearchUtils.contentRegexFromSearchTerm(term);
@@ -15,7 +18,7 @@ describe('Search utils', () => {
 			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 
-		it('Non-phrase doesn\'t span space', () => {
+		test ('Non-phrase doesn\'t span space', () => {
 			const content = 'sand which';
 			const term = 'sandwhich';
 			const re = SearchUtils.contentRegexFromSearchTerm(term);
@@ -23,7 +26,7 @@ describe('Search utils', () => {
 			expect(new XRegExp(re).test(content)).toBeFalsy();
 		});
 
-		it('Phrase search ignores punctuation', () => {
+		test ('Phrase search ignores punctuation', () => {
 			const content = 'were, did? Court\u0027s belong!';
 			const term = 'were did Court\'s belong?';
 			const re = SearchUtils.contentRegexFromSearchTerm(term, true);
@@ -31,7 +34,7 @@ describe('Search utils', () => {
 			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 
-		it('Allows phrase search to span ?', () => {
+		test ('Allows phrase search to span ?', () => {
 			const content = 'beef? chicken';
 			const term = 'beef chicken';
 			const re = SearchUtils.contentRegexFromSearchTerm(term, true);
@@ -39,7 +42,7 @@ describe('Search utils', () => {
 			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 
-		it('checks a long phrase search', () => {
+		test ('checks a long phrase search', () => {
 			const content = 'to shareholders, how to apply what little I\u0027d learned about management to the business of the company, how to maintain editorial quality while exercising financial';
 			const term = 'to shareholders how to apply what little I\'d learned about management to the business of the company how to maintain editorial quality while exercising financial';
 			const re = SearchUtils.contentRegexFromSearchTerm(term, true);
@@ -47,7 +50,7 @@ describe('Search utils', () => {
 			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 
-		it('Survives punctuation that are regex special chars', () => {
+		test ('Survives punctuation that are regex special chars', () => {
 			const content = 'of basketball have developed for casual play. Competitive basketball is primarily an indoor sport played';
 			const re = SearchUtils.contentRegexFromSearchTerm(content, true);
 
@@ -55,14 +58,14 @@ describe('Search utils', () => {
 		});
 	});
 
-	describe('extractMatchFromFragment', () => {
-		it('Finds partial string', () => {
+	describe ('extractMatchFromFragment', () => {
+		test ('Finds partial string', () => {
 			const result = SearchUtils.extractMatchFromFragment('I like cake', [2, 6]);
 
 			expect(result).toBe('like');
 		});
 
-		it('Finds entire string', () => {
+		test ('Finds entire string', () => {
 			const str = 'I like cake';
 			const match = [0, 11];
 			const result = SearchUtils.extractMatchFromFragment(str, match);
@@ -71,7 +74,7 @@ describe('Search utils', () => {
 		});
 	});
 
-	describe('contentRegexPartsForHit', () => {
+	describe ('contentRegexPartsForHit', () => {
 
 		function hitWithFragments (frags) {
 			return Hit.create({
@@ -80,7 +83,7 @@ describe('Search utils', () => {
 			});
 		}
 
-		it('Will pull multiple matches from one fragment', () => {
+		test ('Will pull multiple matches from one fragment', () => {
 			const hit = hitWithFragments({
 				Matches: ['T<em>he</em> quick <em>brown fox</em>']
 			});
@@ -91,7 +94,7 @@ describe('Search utils', () => {
 			expect(Ext.Array.contains(terms, 'brown fox')).toBeTruthy();
 		});
 
-		it('Pulls from multiple fragments', () => {
+		test ('Pulls from multiple fragments', () => {
 			const hit = hitWithFragments([{
 				Matches: ['T<em>he</em> quick <em>brown fox</em>']
 			},{
@@ -105,7 +108,7 @@ describe('Search utils', () => {
 			expect(Ext.Array.contains(terms, 'spot')).toBeTruthy();
 		});
 
-		it('Returns unique terms', () => {
+		test ('Returns unique terms', () => {
 			const hit = hitWithFragments([{
 				Matches: ['The <em>quick</em> <em>quick</em> fox']
 			},{
@@ -120,13 +123,13 @@ describe('Search utils', () => {
 	});
 
 	//TODO rewrite this test to not use Ext.create
-	xdescribe('contentRegexForSearchHit', () => {
+	describe.skip ('contentRegexForSearchHit', () => {
 
-		var MockSearchUtils;
-		var MockTerms;
+		let MockSearchUtils;
+		let MockTerms;
 
-		it('Short ciruits for bad input', () => {
-			var hit = Ext.create('NextThought.model.Hit', {
+		test ('Short ciruits for bad input', () => {
+			let hit = Ext.create('NextThought.model.Hit', {
 				Type: 'Content'
 			});
 
@@ -145,8 +148,8 @@ describe('Search utils', () => {
 			spyOn(MockSearchUtils, 'contentRegexFromSearchTerm').andCallThrough();
 		});
 
-		it('Escapes each term', () => {
-			var spy;
+		test ('Escapes each term', () => {
+			let spy;
 
 			expect(MockSearchUtils.contentRegexForSearchHit(null, true)).toBeTruthy();
 			spy = MockSearchUtils.contentRegexFromSearchTerm;
@@ -156,8 +159,8 @@ describe('Search utils', () => {
 			});
 		});
 
-		it('ORs the terms', () => {
-			var re = MockSearchUtils.contentRegexForSearchHit(null, true);
+		test ('ORs the terms', () => {
+			let re = MockSearchUtils.contentRegexForSearchHit(null, true);
 			expect(re).toBeTruthy();
 
 			Ext.each(MockTerms, (term) => {
