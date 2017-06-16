@@ -1,5 +1,5 @@
 const { encodeForURI } = require('nti-lib-ntiids');
-const { getAppUser, getAppUsername} = require('nti-web-client');
+const { User, getAppUsername} = require('nti-web-client');
 
 export default {
 	handles (targetMimeType) {
@@ -11,10 +11,6 @@ export default {
 		} else {
 			return false;
 		}
-	},
-
-	initComponent: function () {
-		this.callParent(arguments);
 	},
 
 	resolveTitle (obj, hit) {
@@ -32,26 +28,29 @@ export default {
 			}
 		});
 
-		getAppUser(sharedWith)
-			.then(function (users) {
+		let title = Promise.all(
+				sharedWith.map(u => User.resolve({entityId : u}))
+			).then(function (users) {
 				if (!Array.isArray(users)) { users = [users]; }
 
-				users = users.map(function (u) { return u.getName(); });
+				users = users.map(function (u) { return u.alias; });
 
 				if (users.length === 1) {
-					const title = 'Chat with ' + users[0];
-					obj.titleEl.update(title);
+					return 'Chat with ' + users[0];
 				} else if (users.length === 2) {
-					const title = 'Chat with ' + users[0] + ' and ' + users[1];
-					obj.titleEl.update(title);
+					return 'Chat with ' + users[0] + ' and ' + users[1];
 				} else {
 					const last = users.pop();
-					const title = 'Chat with ' + users.join(', ') + ' and ' + last;
-					obj.titleEl.update(title);
+					return 'Chat with ' + users.join(', ') + ' and ' + last;
 				}
 			});
 
-		return obj.titleEl;
+
+		return title;
+	},
+
+	resolvePath (obj, hit, getBreadCrumb) {
+		return null;
 	},
 
 	resolveNavigateToSearchHit (obj, hit, fragment) {

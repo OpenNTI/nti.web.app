@@ -8,7 +8,7 @@ export default class Path extends React.Component {
 	render () {
 		const {pathObject = []} = this.props;
 
-		return (
+		return pathObject ? (
 			<div className="hit-path">
 					{
 						pathObject.map((path, index) => {
@@ -20,7 +20,8 @@ export default class Path extends React.Component {
 						})
 					}
 			</div>
-		);
+		)
+		: null;
 	}
 
 }
