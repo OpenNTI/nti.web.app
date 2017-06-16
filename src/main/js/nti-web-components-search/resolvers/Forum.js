@@ -1,6 +1,6 @@
-import UserModel from '../../legacy/model/User';
+import { User } from 'nti-web-client';
 
-const { User } = require('nti-web-client');
+import UserModel from 'legacy/model/User';
 
 export default {
 	handles (targetMimeType) {
@@ -17,13 +17,9 @@ export default {
 		if(hit.TargetMimeType === 'application/vnd.nextthought.forums.generalforumcomment') {
 			let title = Promise.all([
 				getBreadCrumb(obj)
-					.then(function (breadCrumb) {
-						return breadCrumb;
-					}),
+					.then(breadCrumb => breadCrumb),
 				User.resolve({entityId: hit.Creator})
-					.then(function (user) {
-						return user.alias + ' Commented';
-					})
+					.then(user => user.alias + ' Commented')
 					.catch(() => {
 						const u = UserModel.getUnresolved(hit.Creator);
 						return u.get('alias') + ' Commented';

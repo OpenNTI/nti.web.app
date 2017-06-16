@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import React from 'react';
 import { shallow } from 'enzyme';
 
@@ -49,27 +50,27 @@ describe('<Hit />', () => {
 	beforeEach(onBefore);
 	afterEach(onAfter);
 
-	it('should render at least one <Fragments /> components', () => {
+	test ('should render at least one <Fragments /> components', () => {
 		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
 		expect(wrapper.find(Fragments).length).toBe(1);
 	});
 
-	it('should render one <Path /> component', () => {
+	test ('should render one <Path /> component', () => {
 		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
 		expect(wrapper.find(Path).length).toBe(1);
 	});
 
-	it('should render a `.search-result-react`', () => {
+	test ('should render a `.search-result-react`', () => {
 		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
 		expect(wrapper.find('.search-result-react').length).toBe(1);
 	});
 
-	it('should render a `.hit-title`', () => {
+	test ('should render a `.hit-title`', () => {
 		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
 		expect(wrapper.find('.hit-title').length).toBe(1);
 	});
 
-	it('simulates clicks on title', () => {
+	test ('simulates clicks on title', () => {
 		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
 		wrapper.find('.hit-title').simulate('click');
 

@@ -1,7 +1,7 @@
-import UserModel from '../../legacy/model/User';
+import { encodeForURI } from 'nti-lib-ntiids';
+import { User, getAppUsername} from 'nti-web-client';
 
-const { encodeForURI } = require('nti-lib-ntiids');
-const { User, getAppUsername} = require('nti-web-client');
+import UserModel from 'legacy/model/User';
 
 export default {
 	handles (targetMimeType) {
@@ -15,7 +15,7 @@ export default {
 		}
 	},
 
-	resolveTitle (obj, hit) {
+	resolveTitle (obj/*, hit*/) {
 		const sharedWith = obj.sharedWith.filter(function (u) {
 			let id = u;
 
@@ -61,11 +61,11 @@ export default {
 		return null;
 	},
 
-	resolveNavigateToSearchHit (obj, hit, fragment) {
+	resolveNavigateToSearchHit (obj, hit/*, fragment*/) {
 		const hitId = encodeForURI(hit.NTIID);
 
 		obj.onLoadTranscript
-			.then(function (transcript) {
+			.then(transcript => {
 				obj.pushWindow(transcript, hitId, obj.el);
 			});
 	}

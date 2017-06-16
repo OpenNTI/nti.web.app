@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class Path extends React.Component {
+export default class Path extends React.PureComponent {
 	static propTypes = {
-		pathObject: React.PropTypes.arrayOf(React.PropTypes.object)
+		pathObject: PropTypes.arrayOf(PropTypes.object)
 	}
 
 	render () {

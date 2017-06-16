@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
 	resolveNavigateToSearchHit
@@ -6,9 +7,9 @@ import {
 
 export default class Fragments extends React.Component {
 	static propTypes = {
-		fragments: React.PropTypes.arrayOf(React.PropTypes.object),
-		hit: React.PropTypes.object.isRequired,
-		navigateToSearchHit: React.PropTypes.func
+		fragments: PropTypes.arrayOf(PropTypes.object),
+		hit: PropTypes.object.isRequired,
+		navigateToSearchHit: PropTypes.func
 	}
 
 	render () {

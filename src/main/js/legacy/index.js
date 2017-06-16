@@ -91,7 +91,7 @@ Ext.application({
 
 		if (reasons.length > 0) {
 			console.error(reasons.join('\n'));
-			location.replace($AppConfig.unsupported);
+			window.location.replace($AppConfig.unsupported);
 			return;//we're leaving... so lets just stop here.
 		}
 
@@ -118,6 +118,6 @@ Ext.application({
 });
 
 //lets not show our dirty lawndry... urls sould be pretty with no "files" in them.
-if (location.toString().indexOf('index.html') > 0) {
-	location.replace(location.toString().replace('index.html', ''));
+if (window.location.toString().indexOf('index.html') > 0) {
+	window.location.replace(window.location.toString().replace('index.html', ''));
 }

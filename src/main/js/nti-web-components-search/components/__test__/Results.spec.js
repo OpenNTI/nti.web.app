@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import React from 'react';
 import { shallow } from 'enzyme';
 
@@ -164,7 +165,7 @@ describe('<SearchResults />', () => {
 	beforeEach(onBefore);
 	afterEach(onAfter);
 
-	it('should render ten <Hit /> components', () => {
+	test ('should render ten <Hit /> components', () => {
 		const wrapper = shallow(<SearchResults hits={fakeHits} />);
 
 		setTimeout(function () {
@@ -172,14 +173,14 @@ describe('<SearchResults />', () => {
 		},500);
 	});
 
-	it('should render one <Pager /> component', () => {
+	test ('should render one <Pager /> component', () => {
 		const wrapper = shallow(<SearchResults hits={fakeHits} />);
 		setTimeout(function () {
 			expect(wrapper.find(Pager).length).toBe(1);
 		},500);
 	});
 
-	it('should render a `.search-results`', () => {
+	test ('should render a `.search-results`', () => {
 		const wrapper = shallow(<SearchResults hits={fakeHits} />);
 		expect(wrapper.find('.search-results').length).toBe(1);
 	});

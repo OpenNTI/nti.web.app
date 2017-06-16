@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import React from 'react';
 import { shallow } from 'enzyme';
 
@@ -9,19 +10,19 @@ const showMoreButton = true;
 const showNext = jest.fn();
 const loadPage = jest.fn();
 
-describe('<Pager />', () => {
+describe ('<Pager />', () => {
 
-	it('should render a `.pagination-container`', () => {
+	test ('should render a `.pagination-container`', () => {
 		const wrapper = shallow(<Pager />);
 		expect(wrapper.find('.pagination-container').length).toBe(1);
 	});
 
-	it('should render at least one `.pagination-item`', () => {
+	test ('should render at least one `.pagination-item`', () => {
 		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 		expect(wrapper.find('.pagination-item').length).toBe(12);
 	});
 
-	it('should render a `.next-results-page-button`', () => {
+	test ('should render a `.next-results-page-button`', () => {
 		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 
 		if(showMoreButton === true) {
@@ -29,7 +30,7 @@ describe('<Pager />', () => {
 		}
 	});
 
-	it('should render a `.prev-results-page` if the current page is greater than 12', () => {
+	test ('should render a `.prev-results-page` if the current page is greater than 12', () => {
 		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 
 		if(currentPage > 12) {
@@ -37,13 +38,13 @@ describe('<Pager />', () => {
 		}
 	});
 
-	it('simulates clicks on next results page button', () => {
+	test ('simulates clicks on next results page button', () => {
 		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 		wrapper.find('.next-results-page').simulate('click');
 		expect(showNext).toHaveBeenCalled();
 	});
 
-	it('simulates clicks on a page number', () => {
+	test ('simulates clicks on a page number', () => {
 		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 		const pageNum = wrapper.find('.pagination-item');
 		// Clicks page with key value of 1
@@ -51,7 +52,7 @@ describe('<Pager />', () => {
 		expect(loadPage).toHaveBeenCalled();
 	});
 
-	it('simulates clicks on previous page button', () => {
+	test ('simulates clicks on previous page button', () => {
 		const wrapper = shallow(<Pager pagesToShow={pagesToShow} currentPage={currentPage} showNext={showNext} loadPage={loadPage} showMoreButton={showMoreButton}/>);
 		wrapper.find('.prev-results-page').simulate('click');
 		expect(loadPage).toHaveBeenCalled();

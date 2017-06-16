@@ -1,24 +1,25 @@
+/* eslint-env jest */
 // require('legacy/model/courses/CourseInstance');
-// require('legacy/app/library/courses/Current');
+const Current = require('legacy/app/library/courses/Current');
 
-xdescribe('Current Courses Widget', () => {
+describe.skip ('Current Courses Widget', () => {
 	let CurrentCourseCmp;
 	let containerEl;
 
-	beforeEach(() => {
+	beforeEach (() => {
 		containerEl = document.createElement('div');
 		containerEl.classList.add('test-container');
 
 		document.body.appendChild(containerEl);
 
-		CurrentCourseCmp = NextThought.app.library.courses.Current.create({
+		CurrentCourseCmp = Current.create({
 			renderTo: containerEl
 		});
 
 	});
 
 
-	afterEach(() => {
+	afterEach (() => {
 		if (CurrentCourseCmp && !CurrentCourseCmp.isDestroyed) {
 			CurrentCourseCmp.destroy();
 		}
@@ -26,12 +27,10 @@ xdescribe('Current Courses Widget', () => {
 		document.body.removeChild(containerEl);
 	});
 
-	function createCourse (name, startDate) {
+	// function createCourse (name, startDate) {}
 
-	}
-
-	describe('Four Current Courses', () => {
-		it('Only ', () => {
+	describe ('Four Current Courses', () => {
+		test ('Only ', () => {
 
 		});
 	});

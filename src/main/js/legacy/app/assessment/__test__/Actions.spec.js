@@ -1,3 +1,4 @@
+/* eslint-env jest */
 require('../Actions.js');
 require('legacy/model/assessment/AssignmentSubmission');
 require('legacy/model/assessment/QuestionSetSubmission');
@@ -6,15 +7,15 @@ require('legacy/model/assessment/AssignmentPart');
 require('legacy/model/assessment/UsersCourseAssignmentSavepointItem');
 require('legacy/model/assessment/AssignmentSubmission');
 
-var { guidGenerator } = require('legacy/util/Globals');
+// const { guidGenerator } = require('legacy/util/Globals');
 
-describe('Assessment Actions tests', function () {
-	describe('Assignment version tests', function () {
+describe ('Assessment Actions tests', () => {
+	describe ('Assignment version tests', () => {
 
 		const ASSIGNMENT_VERSION = '2016-05-05 23:45:16.943';
 		let Assignment;
 
-		beforeEach(function () {
+		beforeEach (() => {
 			Assignment = NextThought.model.assessment.Assignment.create({
 				ContainerId: 'tag:nextthought.com,2011-10:NTI-CourseInfo-NTI_NTI1000',
 				Creator: 'carlos.sanchez@nextthought.com',
@@ -33,7 +34,7 @@ describe('Assessment Actions tests', function () {
 						Class: 'AssignmentPart',
 						MimeType:'application/vnd.nextthought.assessment.assignmentpart',
 						NTIID:'tag:nextthought.com,2011-10:system-OID-0x02208d:5573657273',
-						question_set: {
+						'question_set': {
 							MimeType:'application/vnd.nextthought.naquestionset',
 							title:'File Upload',
 							NTIID: 'tag:nextthought.com,2011-10:Foo-bar',
@@ -49,7 +50,7 @@ describe('Assessment Actions tests', function () {
 			});
 		});
 
-		afterEach(function () {
+		afterEach (function () {
 			Assignment = null;
 		});
 
@@ -87,7 +88,7 @@ describe('Assessment Actions tests', function () {
 		}
 
 
-		it('that the assignment version is passed', function () {
+		test ('that the assignment version is passed', function () {
 			const questionData = {CreatorRecordedEffortDuration: 'John Doe'};
 			const qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(questionData);
 			const submission = NextThought.model.assessment.AssignmentSubmission.create({
@@ -100,7 +101,7 @@ describe('Assessment Actions tests', function () {
 			expect(submission.get('version')).toBe(Assignment.get('version'));
 		});
 
-		it('savepoint: assignment and submission have the same version', function (done) {
+		test ('savepoint: assignment and submission have the same version', function (done) {
 			const questionData = {CreatorRecordedEffortDuration: '35'};
 			const qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(questionData);
 			const submission = NextThought.model.assessment.AssignmentSubmission.create({
@@ -127,7 +128,7 @@ describe('Assessment Actions tests', function () {
 				});
 		});
 
-		it('savepoint: assignment and submission have the different version', function (done) {
+		test ('savepoint: assignment and submission have the different version', function (done) {
 			const questionData = {CreatorRecordedEffortDuration: 'John Doe'};
 			const qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(questionData);
 			const OLD_VERSION = 'assignment-id-old-version';

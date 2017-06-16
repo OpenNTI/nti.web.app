@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import {
@@ -30,18 +31,18 @@ function loadHitData (hit, getBreadCrumb) {
 
 export default class SearchResults extends React.Component {
 	static propTypes = {
-		hits: React.PropTypes.arrayOf(React.PropTypes.object),
-		getBreadCrumb: React.PropTypes.func,
-		navigateToSearchHit: React.PropTypes.func,
-		showNext: React.PropTypes.func,
-		loadPage: React.PropTypes.func,
-		errorLoadingText: React.PropTypes.string,
-		emptyText: React.PropTypes.string,
-		showMoreButton: React.PropTypes.bool,
-		showLoading: React.PropTypes.bool,
-		currentPage: React.PropTypes.number,
-		numPages: React.PropTypes.number,
-		onResultsLoaded: React.PropTypes.func
+		hits: PropTypes.arrayOf(PropTypes.object),
+		getBreadCrumb: PropTypes.func,
+		navigateToSearchHit: PropTypes.func,
+		showNext: PropTypes.func,
+		loadPage: PropTypes.func,
+		errorLoadingText: PropTypes.string,
+		emptyText: PropTypes.string,
+		showMoreButton: PropTypes.bool,
+		showLoading: PropTypes.bool,
+		currentPage: PropTypes.number,
+		numPages: PropTypes.number,
+		onResultsLoaded: PropTypes.func
 	}
 
 	constructor (props) {
@@ -54,7 +55,7 @@ export default class SearchResults extends React.Component {
 		}
 	}
 
-	componentDidUpdate (prevProps, prevState) {
+	componentDidUpdate (prevProps) {
 		if(prevProps.hits !== this.props.hits) {
 			this.state = {loaded: false, hits: []};
 			const {hits = [], getBreadCrumb} = this.props;

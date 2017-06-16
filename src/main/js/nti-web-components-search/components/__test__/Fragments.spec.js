@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import React from 'react';
 import { shallow } from 'enzyme';
 
@@ -45,17 +46,17 @@ describe('<Fragments />', () => {
 	beforeEach(onBefore);
 	afterEach(onAfter);
 
-	it('should render a `.hit-fragments`', () => {
+	test ('should render a `.hit-fragments`', () => {
 		const wrapper = shallow(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} />);
 		expect(wrapper.find('.hit-fragments').length).toBe(1);
 	});
 
-	it('should render at least one `.hit-fragment`', () => {
+	test ('should render at least one `.hit-fragment`', () => {
 		const wrapper = shallow(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} />);
 		expect(wrapper.find('.hit-fragment').length).toBe(2);
 	});
 
-	it('simulates click events on fragments', () => {
+	test ('simulates click events on fragments', () => {
 		const wrapper = shallow(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} />);
 		// Clicks fragment with key value of 1
 		wrapper.find('.hit-fragment').at(1).simulate('click');

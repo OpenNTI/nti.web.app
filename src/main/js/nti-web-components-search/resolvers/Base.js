@@ -6,11 +6,11 @@ export default {
 			.then(service => service.getObject(hit.NTIID));
 	},
 
-	initComponent (obj, hit) {
+	initComponent (/*obj, hit*/) {
 
 	},
 
-	resolveTitle (obj, hit) {
+	resolveTitle (obj/*, hit*/) {
 		return obj.title || obj.label || obj.Title || '';
 	},
 
@@ -35,9 +35,7 @@ export default {
 	},
 
 	resolvePath (obj, hit, getBreadCrumb) {
-		return getBreadCrumb(obj).then(function (breadCrumb) {
-			return breadCrumb;
-		});
+		return getBreadCrumb(obj).then(breadCrumb => breadCrumb);
 	},
 
 	resolveContainerID (obj, hit) {

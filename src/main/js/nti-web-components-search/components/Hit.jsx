@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
 	resolveNavigateToSearchHit
@@ -9,11 +10,11 @@ import Path from './Path';
 
 export default class Hit extends React.Component {
 	static propTypes = {
-		hit: React.PropTypes.object.isRequired,
-		title: React.PropTypes.string,
-		fragments: React.PropTypes.arrayOf(React.PropTypes.object),
-		resolvePath: React.PropTypes.func,
-		navigateToSearchHit: React.PropTypes.func
+		hit: PropTypes.object.isRequired,
+		title: PropTypes.string,
+		fragments: PropTypes.arrayOf(PropTypes.object),
+		resolvePath: PropTypes.func,
+		navigateToSearchHit: PropTypes.func
 	}
 
 	constructor (props) {
