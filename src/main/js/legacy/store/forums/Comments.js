@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var StoreNTI = require('../NTI');
-var UtilUserDataThreader = require('../../util/UserDataThreader');
+const Ext = require('extjs');
+
+require('../NTI');
+const ParseUtils = require('../../util/Parsing');
+const UtilUserDataThreader = require('../../util/UserDataThreader');
 
 const OPEN_THREADS = Symbol('Open Threads');
 const ALL = Symbol('All');
@@ -97,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 
 	showCommentThread: function (comment, silent) {
 		if (!comment) {
-			console.error('Cant show thread for a comment thats not loaded:', id);
+			console.error('Cant show thread for a comment thats not loaded');
 			return;
 		}
 
@@ -184,8 +185,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 
 	__insertFlatThread: function (flatList, parent) {
 		this.__clearFilters();
-		var me = this,
-			index = this.indexOf(parent);
+		var index = this.indexOf(parent);
 
 		this.insert(index + 1, flatList);
 

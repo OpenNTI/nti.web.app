@@ -1,13 +1,16 @@
 const Ext = require('extjs');
-const Globals = require('./Globals');
-const {getURL} = Globals;
-const ParseUtils = require('./Parsing');
 
 const LibraryStateStore = require('legacy/app/library/StateStore');
+const lazy = require('legacy/util/lazy-require')
+	.get('AnnotationUtils', () => require('legacy/util/Annotations'));
+
 require('legacy/overrides/builtins/RegExp');
 
-const lazy = require('legacy/util/lazy-require')
-				.get('AnnotationUtils', () => require('legacy/util/Annotations'));
+const Globals = require('./Globals');
+const ParseUtils = require('./Parsing');
+
+const {getURL} = Globals;
+
 
 
 module.exports = exports = Ext.define('NextThought.util.Content', {
@@ -129,21 +132,19 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	/** @private */
 	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
+
 	/**
 	 * Detect whether or not a uri is pointing out of the site
 	 * @param  {String}	 r uri to check
 	 * @return {Boolean}   true if its outside of the side
 	 */
 	isExternalUri: function (r) {
-		var anchor = document.createElement('a'),
-			currentHostname = window.location && window.location.hostname,
-			targetHost;
+		const anchor = document.createElement('a');
+		const currentHostname = window.location && window.location.hostname;
 
 		anchor.href = r;
 
-		targetHostname = anchor.hostname;
-
-		return targetHostname !== currentHostname;
+		return anchor.hostname !== currentHostname;
 	},
 
 	/**
@@ -241,6 +242,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * for all the tocs in the bundle
 	 *
 	 * @param  {String} ntiid	   ntiid to start at
+	 * @param  {Boolean} showBundleAsRoot --
 	 * @param  {Bundle|XML} bundleOrToc context to look under
 	 * @return {Promise}			 fulfills with the paths for all the tocs that have one
 	 */
@@ -512,9 +514,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 					result = Promise.all([
 						bundleOrToc.canGetToContent(info.previous, rootId),
 						bundleOrToc.canGetToContent(info.next, rootId)
-					]).then(function (result) {
-						info.previous = result[0] ? info.previous : null;
-						info.next = result[1] ? info.next : null;
+					]).then(r => {
+						info.previous = r[0] ? info.previous : null;
+						info.next = r[1] ? info.next : null;
 
 						return info;
 					});
@@ -638,7 +640,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			children = children ? Array.prototype.slice.call(children) : [];
 
 			children.forEach(function (child) {
-				var ntiid;
+				var childId;
 
 				if (/topic/i.test(child.tagName)) {
 					nodes.push(child);
@@ -646,19 +648,19 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				}
 
 				if (/content:related/i.test(child.tagName) && /^application\/vnd.nextthought\.content$/i.test(child.getAttribute('type'))) {
-					ntiid = child.getAttribute('href');
+					childId = child.getAttribute('href');
 				} else if (/lesson/i.test(child.tagName)) {
-					ntiid = child.getAttribute('topic-ntiid');
+					childId = child.getAttribute('topic-ntiid');
 				} else {
 					return;
 				}
 
-				if (!ParseUtils.isNTIID(ntiid)) {
+				if (!ParseUtils.isNTIID(childId)) {
 					console.warn('bad ntiid in content!!');
 					return;
 				}
 
-				child = info && info.toc && info.toc.querySelector('topic[ntiid="' + ntiid + '"]');
+				child = info && info.toc && info.toc.querySelector('topic[ntiid="' + childId + '"]');
 				if (child) {
 					nodes.push(child);
 				}
@@ -677,8 +679,6 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				});
 	},
 
-	/** @private */
-	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
 	bustCorsForResources: function (string, name, value) {
 		//Look for things we know come out of a different domain
@@ -708,6 +708,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			locationHash = String.hash(window.location.hostname + envSalt);
 
 		function fixReferences (original, attr, url) {
+			const {location} = global;
 			var firstChar = url.charAt(0),
 				absolute = firstChar === '/',
 				anchor = firstChar === '#',
@@ -743,8 +744,8 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	/**
 	 * @param  {String|Node} html content to get the snippet from
-	 * @param  {int} max
-	 * @return {String}
+	 * @param  {int} max max...
+	 * @return {String} html
 	 */
 	getHTMLSnippet: function (html, max) {
 		var i = /[^\.\?!]+[\.\?!]?/,
@@ -858,18 +859,15 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	},
 
 	getReadings: function (bundle, unfiltered, contentPackageID) {
-		function getTitle (toc) {
-			var t = toc.querySelector('toc');
+		// function getTitle (toc) {
+		// 	var t = toc.querySelector('toc');
+		// 	return t && t.getAttribute('title');
+		// }
 
-			return t && t.getAttribute('title');
-		}
-
-
-		function getTocID (toc) {
-			var t = toc.querySelector('toc');
-
-			return t && t.getAttribute('ntiid');
-		}
+		// function getTocID (toc) {
+		// 	var t = toc.querySelector('toc');
+		// 	return t && t.getAttribute('ntiid');
+		// }
 
 		function buildNavigationMap (toc) {
 			var nodes = toc.querySelectorAll('course, course unit, course lesson');
@@ -886,8 +884,8 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		function findUnfilteredReadings (toc) {
-			var navigation = buildNavigationMap(toc),
-				topLevel = toc.querySelectorAll('toc, toc > topic');
+			buildNavigationMap(toc);
+			let topLevel = toc.querySelectorAll('toc, toc > topic');
 
 			topLevel = Array.prototype.slice.call(topLevel);
 

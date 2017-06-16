@@ -1,5 +1,5 @@
-var Ext = require('extjs');
-var XRegExp = require('xregexp');
+const Ext = require('extjs');
+const XRegExp = require('xregexp');
 
 module.exports = exports = Ext.define('NextThought.util.Search', {
 
@@ -28,8 +28,7 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 		return this._regexcache[str] = this.searchRe(str, partial, wholeWordOnly);
 	},
 
-	 /*
-	 *
+	/*
 	 * @param string
 	 * @param partial Set true to match the entire word not just the substring.
 	 * @return {RegExp}
@@ -106,13 +105,13 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 			return null;
 		}
 
-		fragments.forEach((fragment, index) => {
+		fragments.forEach(fragment => {
 			let fragTerms = [];
 
 			if (!fragment.Matches || fragment.Matches.length === 0) {
 				console.warn('No matches or text for fragment. Dropping', fragment);
 			} else {
-				fragment.Matches.forEach((match, idx) => {
+				fragment.Matches.forEach((match) => {
 					let term = this.extractTermFromMatch(match);
 
 					if (term) {
@@ -155,11 +154,11 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 	 * at 1.  Example;	a fragment of "the brown fox" with a match corresponding to "brown" will
 	 * return the following: /(the )(brown)( fox)/
 	 */
-	contentRegexForFragment: function (fragment, phraseSearch, captureMatches) {
+	contentRegexForFragment: function (fragment, phraseSearch/*, captureMatches*/) {
 		const {Matches: matches = []} = fragment;
 		let terms = [];
 
-		matches.forEach((match, idx) => {
+		matches.forEach(match => {
 			let term = this.extractTermFromMatch(match);
 
 			if (term) {

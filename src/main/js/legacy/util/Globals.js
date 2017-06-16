@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var ParseUtils = require('./Parsing');
+/*global ActiveXObject*/
+const Url = require('url');
 
-var Url = require('url');
+const Ext = require('extjs');
+
+const ParseUtils = require('./Parsing');
+
 
 const HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
 
@@ -90,12 +93,11 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 
 	parseError: function (response) {
-		var error,
-			status = response.status,
-			error;
+		let error;
+		const {status, responseText} = response;
 
 		if (status === 422) {
-			error = this.parseJSON(response.responseText, true);
+			error = this.parseJSON(responseText, true);
 		}
 
 		return error;
@@ -126,15 +128,16 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * or in another window.
 	 * @param  {String} ntiid		   the ntiid of the thing
 	 * @param  {Srring} url			   the url to the thing
-	 * @param  {String} basePath
+	 * @param  {String} basePath		the pathname the app is hosted at.
 	 * @param  {String} targetMimeType the mimeType of the thing to open
 	 * @return {Boolean}			   if we can show this in the app
 	 */
 	shouldOpenInApp: function (ntiid, url, basePath, targetMimeType) {
-		var isTargetAnNTIID = ParseUtils.isNTIID(url),
-			canHandleTypeInternally = this.INTERNAL_MIMETYPES[targetMimeType] || (/\.pdf$/i).test((url || '').split('?')[0]),
-			parts = this.getURLParts(url),
-			internal = true;
+		const isTargetAnNTIID = ParseUtils.isNTIID(url);
+		const canHandleTypeInternally = this.INTERNAL_MIMETYPES[targetMimeType] || (/\.pdf$/i).test((url || '').split('?')[0]);
+		const parts = this.getURLParts(url);
+		const {location} = global;
+		let internal = true;
 
 		if ($AppConfig.openExternalPDFsInNewWindow) {
 			internal = (!parts.protocol || parts.protocol === location.protocol) && (!parts.hostname || parts.hostname === location.hostname);
@@ -151,9 +154,9 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @return {MimeType}	 the mimeType if we find it or null
 	 */
 	getNavigatorMimeType: function (type) {
-		var key, mimeType;
+		let mimeType;
 
-		for (key in navigator.mimeTypes) {
+		for (let key of Object.keys(navigator.mimeTypes)) {
 			mimeType = navigator.mimeTypes[key];
 
 			if (mimeType && mimeType.type === type) {
@@ -162,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		}
 	},
 
-	swallow: function (e) {},
+	swallow: function (/*e*/) {},
 
 
 	/**
@@ -171,10 +174,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @return {Plugin}		 the plugin if we find it or null
 	 */
 	getNavigatorPlugin: function (name) {
-		var key, plugin;
-
-		for (key in navigator.plugins) {
-			plugin = navigator.plugins[key];
+		for (let key of Object.keys(navigator.plugins)) {
+			const plugin = navigator.plugins[key];
 
 			if (plugin && plugin.name === name) {
 				return plugin;
@@ -270,8 +271,9 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		// const HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1;
 		// const HOST_PATTERN_DOMAIN_MATCH_GROUP = 3;
 		// const HOST_PATTERN_PORT_MATCH_GROUP = 5;
+		const {location, $AppConfig} = global;
 
-		if (window.$AppConfig === undefined || $AppConfig['server-path'] === undefined) {
+		if ($AppConfig === undefined || $AppConfig['server-path'] === undefined) {
 			alert('Bad or no configuration.');
 			return false;
 		}
@@ -304,23 +306,25 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Loads a script into the dom
 	 *
-	 * @param {String} url
-	 * @param {Function} [onLoad]
-	 * @param {Function} [onError]
-	 * @param {Object} [scope]
+	 * @param {String} url --
+	 * @param {Function} [onLoad] --
+	 * @param {Function} [onError] --
+	 * @param {Object} [scope] --
+	 * @param {Boolean} [bustCache] --
+	 * @returns {Script} the script element
 	 */
 	loadScript: function (url, onLoad, onError, scope, bustCache) {
 		var head, doc = document,
 			script, onLoadFn, onErrorFn;
 
-		function buildCallback (cb, scope) {
+		function buildCallback (cb, callScope) {
 			return function () {
 				script.onload = null;
 				script.onreadystatechange = null;
 				script.onerror = null;
 
 				if (cb && cb.call) {
-					cb.call(scope || window, script);
+					cb.call(callScope || window, script);
 				}
 			};
 		}
@@ -388,7 +392,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		//TODO: maybe try to restore the old one if it fails
 		return new Promise(function (fulfill, reject) {
 			var doc = document, i = 0,
-				link, checkInterval, sibling;
+				link, checkInterval;
 
 			if (typeof url === 'object') {
 				doc = url.document;
@@ -452,10 +456,11 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Load a stylesheet file (.css) into the DOM.
 	 *
-	 * @param {String} url
-	 * @param {Function} [onLoad]
-	 * @param {Function} [onFail]
+	 * @param {String} url --
+	 * @param {Function} [onLoad] --
+	 * @param {Function} [onFail] --
 	 * @param {Object} [scope] Context object to execute the onLoad/onFail callbacks
+	 * @returns {Link} The link element
 	 */
 	loadStyleSheet: function (url, onLoad, onFail, scope) {
 		var t, i = 0, doc = document, head, link, call, check;
@@ -504,7 +509,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			var ac = window.applicationCache;
 			if (!ac) { return; }
 
-			ac.addEventListener('updateready', function (e) {
+			ac.addEventListener('updateready', (/*e*/) => {
 				if (ac.status === ac.UPDATEREADY) {
 					ac.swapCache();
 					Ext.MessageBox.confirm(
@@ -588,7 +593,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		var re = naturalSort.re = (naturalSort.re || /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi),
 			sre = naturalSort.sre = (naturalSort.sre || /(^[ ]*|[ ]*$)/g),
 			dre = naturalSort.dre =
-				  (naturalSort.dre || /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/),
+				(naturalSort.dre || /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/),
 			hre = naturalSort.hre = (naturalSort.hre || /^0x[0-9a-f]+$/i),
 			ore = naturalSort.ore = (naturalSort.ore || /^0/),
 			// convert all to strings strip whitespace
@@ -600,7 +605,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			// numeric, hex or date detection
 			xD = parseInt(x.match(hre), 10) || (xN.length !== 1 && x.match(dre) && Date.parse(x)),
 			yD = parseInt(y.match(hre), 10) || (xD && y.match(dre) && Date.parse(y)) || null,
-			oFxNcL, oFyNcL, cLoc;
+			oFxNcL, oFyNcL, cLoc, numS;
 
 
 		// first try and sort Hex codes or Dates
@@ -650,6 +655,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param {String} [dir] - Direction "ASC" or "DESC" defaults to "DESC"
 	 * @param {Function} [g] - Getter function, where the value in the array is passed, and the getter returns the comparable.
 	 * @param {Boolean} [natural] - Sort strings naturally (1 2...10 vs 1 10 2 20 ...etc)
+	 * @returns {Function} A comparator function
 	 */
 	SortModelsBy: function (key, dir, g, natural) {
 		function $ (v) {
@@ -692,7 +698,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	/**
+	/*
 	 * @see http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
 	 */
 	guidGenerator: function () {
@@ -731,7 +737,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 					time);
 
 			if (block) {
-				throw 'stop';
+				throw new Error('stop');
 			}
 		};
 	},
@@ -867,7 +873,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		href += '?subject=' + subject + '&body=' + body + '&cc=' + cc + '&bcc=' + bcc;
 
 		console.debug('Opening email', href);
-		location.href = href;
+		window.location.href = href;
 	}
 
 }).create();

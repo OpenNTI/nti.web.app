@@ -1,30 +1,30 @@
-var Ext = require('extjs');
-var SearchUtils = require('./Search');
-var UtilSearch = require('./Search');
+const Ext = require('extjs');
+
+const SearchUtils = require('./Search');
 
 
 const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 	rangeIsInsideRedaction: function (r) {
-	  	if (r.dom && r.hasCls('redacted')) {return r;}
-	  	else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
-	  	return false;
+		if (r.dom && r.hasCls('redacted')) {return r;}
+		else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
+		return false;
 	},
 
 	getRedactionActionSpan: function (r) {
-	  	var redactionParent = this.rangeIsInsideRedaction(r),
-			 redactionAction, blockRedaction;
-	  	if (!redactionParent) {return null;}
+		var redactionParent = this.rangeIsInsideRedaction(r),
+			redactionAction, blockRedaction;
+		if (!redactionParent) {return null;}
 
 
-	  	redactionAction = redactionParent.prev('.redactionAction');
-	  	if (!redactionAction) {
+		redactionAction = redactionParent.prev('.redactionAction');
+		if (!redactionAction) {
 			blockRedaction = redactionParent.prev('.block-redaction');
 			if (blockRedaction) {
-		  	redactionAction = blockRedaction.down('.redactionAction');
+				redactionAction = blockRedaction.down('.redactionAction');
 			}
-	  }
+		}
 
-	  	return redactionAction;
+		return redactionAction;
 	},
 
 	/**
@@ -103,7 +103,8 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 			if (!stack.length) {
 				break;
 			}
-			state = stack.pop();
+
+			const state = stack.pop();
 			node = state.n;
 			nNodes = state.l;
 			iNode = state.i;
@@ -174,25 +175,20 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 	},
 
 	/**
-	 * @param node - the node to search for ranges beneath
-	 * @param doc - the document fragment node is a child of
-	 * @param searchFor - a string or a regex to search for
-	 * @param [which] - if provided the subexpression of the regex to be matched or an array of subexpression idexes
-	 * @param [textIndex]
+	 * @param {Node} node - the node to search for ranges beneath
+	 * @param {document} doc - the document fragment node is a child of
+	 * @param {String} searchFor - a string or a regex to search for
+	 * @param {Number} [which] - if provided the subexpression of the regex to be matched or an array of subexpression idexes
+	 * @param {Number} [textIndex]
 	 * Note cutz: for the which param to work it expects each part of your regex to be captured
 	 * IE if your goal is to have a capture in the middle of the regex you must also capture the first portion prior to it
 	 *
-	 * @return a list of range objects that represent the portion of text to highlight
+	 * @return {Range[]} a list of range objects that represent the portion of text to highlight
 	 **/
 	findTextRanges: function (node, doc, searchFor, which, textIndex) {
-		var iMatch, matchingText,
-			iTextStart, iTextEnd,
-			i, iLeft, iRight,
-			iEntryLeft, iEntryRight, entryLeft, entryRight,
-			parentNode, nextNode, newNode,
-			iNodeTextStart, iNodeTextEnd,
-			textStart, textMiddle, textEnd, range, indexedText, ranges = [],
-			text, indices, quit;
+		let matchingText,
+			indexedText, ranges = [],
+			text, quit;
 
 		//console.log('Finding text range for ', searchFor);
 
@@ -222,7 +218,7 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 
 		text = indexedText.text;
 		//console.log(text);
-		indices = indexedText.indices;
+		// let indices = indexedText.indices;
 
 		function processGroup (whichGroup) {
 			var range;

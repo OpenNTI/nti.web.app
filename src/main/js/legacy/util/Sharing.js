@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var UserRepository = require('../cache/UserRepository');
-var ParseUtils = require('./Parsing');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isMe} = require('legacy/util/Globals');
+
+const UserRepository = require('../cache/UserRepository');
+
+const ParseUtils = require('./Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.util.Sharing', {
@@ -16,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		return !!Service.get('SiteCommunity');
 	},
 
-	entitiesDefiningPublic: function (scopeProvider) {
+	entitiesDefiningPublic: function (/*scopeProvider*/) {
 		return null;
 	},
 
@@ -28,12 +31,12 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		}
 		sharable.save({
 			async: !!callback,
-			callback: function (record, operation) {
-							  success = operation.success;//if we're synchronous
-							  if (callback) {
-								  Ext.callback(callback, null, arguments);
-							  }
-						  }
+			callback: (record, operation) => {
+				success = operation.success;//if we're synchronous
+				if (callback) {
+					Ext.callback(callback, null, arguments);
+				}
+			}
 		});
 
 		return success;
@@ -81,8 +84,9 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		}
 
 
-		var communities = [], sharedWithIds,
-			publicScope;
+		// let communities = [];
+		let sharedWithIds;
+		let publicScope;
 
 		publicScope = this.entitiesDefiningPublic(scopeProvider) || [];
 		if (Ext.isEmpty(publicScope)) {
@@ -200,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
 			prefix = isPublic && 'Public',
-			str, others, suffix, names = [], comma = ',';
+			str, others, suffix, names = [];
 
 		if (Ext.isEmpty(explicitEntities)) {
 			return Promise.resolve(prefix || 'Only Me');

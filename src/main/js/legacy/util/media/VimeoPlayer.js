@@ -40,17 +40,17 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 
 		this.playerTpl = Ext.DomHelper.createTemplate(Ext.apply({
 			src: this.self.PLAYER_ORIGIN + '/video/{videoId}?' +
-				 Ext.Object.toQueryString({
-					 api: 1,
-					 player_id: this.playerId,
-					 //autopause: 0, //we handle this for other videos, but its nice we only have to do this for cross-provider videos.
-					 autoplay: 0,
-					 badge: 0,
-					 byline: 0,
-					 loop: 0,
-					 portrait: 0,
-					 title: 0
-				 })
+			Ext.Object.toQueryString({
+				api: 1,
+				'player_id': this.playerId,
+				//autopause: 0, //we handle this for other videos, but its nice we only have to do this for cross-provider videos.
+				autoplay: 0,
+				badge: 0,
+				byline: 0,
+				loop: 0,
+				portrait: 0,
+				title: 0
+			})
 		}, this.playerTpl));
 		this.handleMessage = this.handleMessage.bind(this);
 		this.playerSetup();
@@ -290,11 +290,11 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 
 		//value is in seconds so make it milliseconds
 		//like everything else in JS
-		this.video_duration = value * 1000;
+		this['video_duration'] = value * 1000;
 	},
 
 
 	getDuration: function () {
-		return this.video_duration || 0;
+		return this['video_duration'] || 0;
 	}
 });

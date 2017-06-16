@@ -20,7 +20,7 @@
 		"no-console": "off",
 		"no-underscore-dangle": "off",
 		"no-var": "off",
-		"strict": ["error", "never"],
+		"strict": "off",
 		"import/no-commonjs": "off",
 		"import/no-extraneous-dependencies": "off",
 	}

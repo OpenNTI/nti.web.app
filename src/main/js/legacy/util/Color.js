@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.util.Color', {
 
@@ -39,6 +39,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	 *
 	 * @param {String} string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
 	 * @param {number} [alpha] If supplied, the float will override or add alpha to this color.
+	 * @return {Object} Color components
 	 */
 	parse: function (string, alpha) {
 		var me = this,
@@ -64,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 			return c;
 		}
 
-		if (m = me.dsRGBARe.exec(string)) {
+		if ((m = me.dsRGBARe.exec(string))) {
 			//console.log('DataServer color value: ',string);
 			m = [
 				+(parseFloat(m[1]) * 255).toFixed(0),
@@ -73,13 +74,13 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 				+m[8]
 			];
 		}
-		else if (m = me.rgbaRe.exec(string)) {
+		else if ((m = me.rgbaRe.exec(string))) {
 			m = parseRGBA(m[1].split(','));
 		}
-		else if (m = me.hex16Re.exec(string)) {
+		else if ((m = me.hex16Re.exec(string))) {
 			m = parseHex(m, false);
 		}
-		else if (m = me.hex8Re.exec(string)) {
+		else if ((m = me.hex8Re.exec(string))) {
 			m = parseHex(m, true);
 		}
 		else {
@@ -125,7 +126,8 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 
 	/**
 	 * http://ridiculousfish.com/blog/posts/colors.html
-	 * @param {number} idx
+	 * @param {number} idx --
+	 * @return {number} --
 	 */
 	hue: function (idx) {
 		/*
@@ -149,8 +151,8 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	},
 
 	/**
-	 *
 	 * @param {number} idx - either the known index (a number) or a username with which to look up the index for
+	 * @return {Color} --
 	 */
 	getColor: function (idx) {
 		if (typeof idx === 'string') {
