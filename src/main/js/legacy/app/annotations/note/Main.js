@@ -1,19 +1,24 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../cache/UserRepository');
-var ImageZoomView = require('../../../common/ux/ImageZoomView');
-var SlideDeck = require('../../../common/ux/SlideDeck');
-var ContentUtils = require('../../../util/Content');
-var Globals = require('../../../util/Globals');
-var NotePanel = require('./Panel');
-var MixinsSearchable = require('../../../mixins/Searchable');
-var UxSlideDeck = require('../../../common/ux/SlideDeck');
-var ContentOverlayedPanel = require('../../mediaviewer/content/OverlayedPanel');
-var DeckOverlayedPanel = require('../../mediaviewer/content/deck/OverlayedPanel');
-var ContentSlideVideo = require('../../mediaviewer/content/SlideVideo');
-var CardsOverlayedPanel = require('../../../common/components/cards/OverlayedPanel');
-var ContentSlidedeck = require('../../mediaviewer/content/Slidedeck');
-var CardsCard = require('../../../common/components/cards/Card');
-var WBUtils = require('../../whiteboard/Utils');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const ImageZoomView = require('legacy/common/ux/ImageZoomView');
+const SlideDeck = require('legacy/common/ux/SlideDeck');
+const ContentUtils = require('legacy/util/Content');
+const Globals = require('legacy/util/Globals');
+
+const WBUtils = require('../../whiteboard/Utils');
+
+require('legacy/common/ux/SlideDeck');
+require('legacy/common/components/cards/OverlayedPanel');
+require('legacy/common/components/cards/Card');
+require('legacy/mixins/Searchable');
+
+require('../../mediaviewer/content/OverlayedPanel');
+require('../../mediaviewer/content/deck/OverlayedPanel');
+require('../../mediaviewer/content/SlideVideo');
+require('../../mediaviewer/content/Slidedeck');
+require('./Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {

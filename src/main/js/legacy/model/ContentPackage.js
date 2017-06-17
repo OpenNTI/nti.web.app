@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
 const {wait} = require('legacy/util/Promise');
@@ -149,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	fireNavigationEvent: function (eventSource) {
 		var id = this.get('NTIID');
 		return new Promise(function (fulfill, reject) {
-			var txn = history.beginTransaction('book-navigation-transaction-' + Globals.guidGenerator());
+			var txn = window.history.beginTransaction('book-navigation-transaction-' + Globals.guidGenerator());
 			eventSource.fireEvent('set-last-location-or-root', id, function (ntiid, reader, error) {
 				if (error) {
 					txn.abort();

@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Transition', {
@@ -19,6 +20,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 	/**
 	 * Get the name of the event to listen to for when the transition ends
 	 *
+	 * @param {Node} el --
 	 * @return {String} event name
 	 */
 	__getTransitionEndEventName: function (el) {

@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var AnnotationsHighlight = require('./Highlight');
-var CacheIdCache = require('../../cache/IdCache');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+require('legacy/cache/IdCache');
+require('./Highlight');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
@@ -11,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 	cls: 'redacted',
 
 	constructor: function (config) {
-		var r = config && config.record;
+		const r = config && config.record;
 		if (r && r.phantom) {
 			this.record = r;
 			return;
@@ -88,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		console.debug('render', this.record.phantom);
 
 		if (!this.innerFootnotes) {
-	  	this.innerFootnotes = this.containedFootnotes();
+			this.innerFootnotes = this.containedFootnotes();
 			this.assureRedactedFootnoteText(this.innerFootnotes);
 		}
 
@@ -283,8 +285,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		//If there are any innerFootnotes we need to toggle them also
 		if (this.innerFootnotes) {
 			this.innerFootnotes.each(function (footnote) {
-				var redactedText = footnote.down('.redacted-text'),
-					count = footnote ? footnote.getAttribute('data-redactedCount') : undefined,
+				var count = footnote ? footnote.getAttribute('data-redactedCount') : undefined,
 					clsMnpFn;
 				count = Ext.isEmpty(count) ? 0 : parseInt(count, 10);
 				count = Ext.isNumber(count) ? count : 0;
@@ -311,7 +312,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		}
 
 		footnotes.each(function (footnote) {
-			var toAdd;
 			if (!footnote.down('.redacted-text')) {
 				me.footnoteRedactedTpl.append(footnote);
 			}
@@ -319,20 +319,20 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 	},
 
 	containedFootnotes: function () {
-	  	var me = this,
-			 footnotes = [];
+		var me = this,
+			footnotes = [];
 
-		  if (!this.compElements) {
-			  return null;
-		  }
+		if (!this.compElements) {
+			return null;
+		}
 
-	  	this.compElements.each(function (e) {
+		this.compElements.each(function (e) {
 			var fns = e.query('a.footnote');
 			Ext.each(fns, function (fn) {
-		  	footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
+				footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
 			});
-	  });
-	  	return new Ext.dom.CompositeElement(footnotes);
+		});
+		return new Ext.dom.CompositeElement(footnotes);
 	}
 }, function () {
 
@@ -355,11 +355,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 
 
 	p.footnoteRedactedTpl = new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'span',
-		 cls: 'redacted-text',
-		 html: '{{{NextThought.view.annotations.Redaction.footnote-message}}}',
-		 'data-non-anchorable': 'true',
-		 'data-no-anchors-within': 'true'
+		{
+			tag: 'span',
+			cls: 'redacted-text',
+			html: '{{{NextThought.view.annotations.Redaction.footnote-message}}}',
+			'data-non-anchorable': 'true',
+			'data-no-anchors-within': 'true'
 		}
 	]));
 

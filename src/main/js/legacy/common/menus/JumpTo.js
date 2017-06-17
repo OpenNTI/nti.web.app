@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var MixinsMenuShowHideBehavior = require('../../mixins/MenuShowHideBehavior');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+require('../../mixins/MenuShowHideBehavior');
 
 
 module.exports = exports = Ext.define('NextThought.common.menus.JumpTo', {

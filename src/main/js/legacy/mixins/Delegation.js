@@ -1,4 +1,32 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
+
+/**
+ * Utility class to aid in defining delegated functions.
+ */
+var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
+
+	/** @property This is a special value to return form a delegated function to prevent the default */
+	PREVENT_DEFAULT: {},
+
+	/**
+	 * Makes a delegated function with a default of the passed function.
+	 *
+	 * @param {Function} [fn] The default behavior if there is no delegate or if the delegate does not return
+	 *						{@link #PREVENT_DEFAULT}
+	 * @param {Boolean} [applyAll] If more than one delegate offer an implementation, use them all. (Obviously the
+	 *						return value will be meaningless, so don't use this for functions that need to return
+	 *						something)
+	 *
+	 * @return {Function} The delegated function.
+	 */
+	getDelegated: function (fn,applyAll) {
+		fn = fn || function () {};
+		fn.delegated = true;
+		fn.applyAll = Boolean(applyAll);
+		return fn;
+	}
+}).create();
 
 /**
  * Enables auto-magical delegation of methods.
@@ -12,19 +40,19 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.mixins.Delegation', function () {
 	var debug = $AppConfig.debugDelegation;
 
-	/** @private */
+	/* @private */
 	function getInheritedDelegates (cmp) {
 		var ancestor = cmp.up('[delegate]:not([delegate="inherit"])');
 		return ancestor && ancestor.delegate;
 	}
 
-	/** @private */
+	/* @private */
 	function askDelegate (cmp,fn,applyAll,args) {
 		var result = null,
 			found = false;
 
-		function getAgent (o,fn) {
-			return (o.deletgationAgent || {})[fn] || o[fn];
+		function getAgent (o,f) {
+			return (o.deletgationAgent || {})[f] || o[f];
 		}
 
 		if (cmp.delegate === 'inherit') {
@@ -76,9 +104,8 @@ module.exports = exports = Ext.define('NextThought.mixins.Delegation', function 
 		return result;
 	}
 
-	/** @private */
+	/* @private */
 	function setupDelegates (cmp) {
-		var k, v;
 
 		function makeDelegate (k,fn,o) {
 			return function () {
@@ -90,8 +117,8 @@ module.exports = exports = Ext.define('NextThought.mixins.Delegation', function 
 		}
 
 		//I WANT all properties... so skipping !hasOwnProperty is not an option.
-		for (k in cmp) { //eslint-disable-line guard-for-in
-			v = cmp[k];
+		for (let k in cmp) { //eslint-disable-line guard-for-in
+			const v = cmp[k];
 			if (Ext.isFunction(v) && v.delegated) {
 				if (debug) {console.debug('Rewriting...', k);}
 				cmp[k] = makeDelegate(k, v, cmp);
@@ -120,31 +147,3 @@ module.exports = exports = Ext.define('NextThought.mixins.Delegation', function 
 		}
 	};
 });
-
-
-/**
- * Utility class to aid in defining delegated functions.
- */
-var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
-
-	/** @property This is a special value to return form a delegated function to prevent the default */
-	PREVENT_DEFAULT: {},
-
-	/**
-	 * Makes a delegated function with a default of the passed function.
-	 *
-	 * @param {Function} [fn] The default behavior if there is no delegate or if the delegate does not return
-	 *						{@link #PREVENT_DEFAULT}
-	 * @param {Boolean} [applyAll] If more than one delegate offer an implementation, use them all. (Obviously the
-	 *						return value will be meaningless, so don't use this for functions that need to return
-	 *						something)
-	 *
-	 * @return {Function} The delegated function.
-	 */
-	getDelegated: function (fn,applyAll) {
-		fn = fn || function () {};
-		fn.delegated = true;
-		fn.applyAll = Boolean(applyAll);
-		return fn;
-	}
-}).create();

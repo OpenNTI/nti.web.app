@@ -1,5 +1,6 @@
 const Ext = require('extjs');
-const TemplatesForNotes = require('./Templates');
+const {wait} = require('nti-commons');
+
 const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');
 const AnalyticsUtil = require('legacy/util/Analytics');
@@ -8,12 +9,19 @@ const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
 const SharingUtils = require('legacy/util/Sharing');
 const ParseUtils = require('legacy/util/Parsing');
-const {wait} = require('legacy/util/Promise');
+const ContentViewerActions = require('legacy/app/contentviewer/Actions');
+const UserDataActions = require('legacy/app/userdata/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
+const ContextStateStore = require('legacy/app/context/StateStore');
+
+const TemplatesForNotes = require('./Templates');
+
 require('legacy/mixins/ProfileLinks');
 require('legacy/mixins/LikeFavoriteActions');
 require('legacy/mixins/FlagActions');
 require('legacy/cache/UserRepository');
 require('legacy/layout/component/Natural');
+
 require('../../userdata/Actions');
 require('../../sharing/Window');
 require('../../context/StateStore');
@@ -22,7 +30,6 @@ require('../../context/components/cards/Question');
 require('../../context/components/cards/RelatedWork');
 require('../../context/components/cards/Slide');
 require('../../context/components/cards/Video');
-require('legacy/app/contentviewer/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', {
@@ -128,11 +135,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
 		}
 
-		hooks.onBeforeCreated = function (cls, data) {
-			if (data.cls) {
-				data.cls = [cls.superclass.cls, data.cls].join(' ');
+		hooks.onBeforeCreated = function (clazz, classData) {
+			if (classData.cls) {
+				classData.cls = [clazz.superclass.cls, classData.cls].join(' ');
 			}
-			onBeforeClassCreated.call(this, cls, data, hooks);
+			onBeforeClassCreated.call(this, clazz, classData, hooks);
 		};
 	},
 
@@ -159,8 +166,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
 		this.on('beforedestroy', this.onBeforeDestroyCheck, this);
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.UserDataActions = UserDataActions.create();
+		this.ContextStore = ContextStateStore.getInstance();
 	},
 
 	replyIdPrefix: function () {
@@ -263,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 
 				if (a) {
 					e.stopEvent();
-					NextThought.app.navigation.Actions.navigateToHref(a.href);
+					NavigationActions.navigateToHref(a.href);
 				}
 			}, this);
 		}
@@ -993,8 +1000,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 	},
 
 	adjustRootsReferenceCount: function (r, added) {
-		var root = r.parent,
-			rootCmp = this.rootToCountComponentsFrom();
+		let root = r.parent;
+		// let rootCmp = this.rootToCountComponentsFrom();
 
 		while (root && root.parent) {
 			root = root.parent;
@@ -1051,7 +1058,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 
 		AnalyticsUtil.getResourceTimer(this.record.getId(), {
 			type: 'note-viewed',
-			note_id: this.record.getId()
+			'note_id': this.record.getId()
 		});
 	},
 
@@ -1139,11 +1146,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			part = this.getAttachmentPart(el);
 
 		if (part && !e.getTarget('.download')) {
-			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+			let contentViewerActions = ContentViewerActions.create();
 
 			e.stopEvent();
-			if (ContentViewerActions) {
-				ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
+			if (contentViewerActions) {
+				contentViewerActions.showAttachmentInPreviewMode(part, this.record);
 			}
 		}
 	},

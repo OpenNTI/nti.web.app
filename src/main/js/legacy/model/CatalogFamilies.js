@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
-var ModelCatalogFamily = require('./CatalogFamily');
+const Ext = require('extjs');
+
+require('./CatalogFamily');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
@@ -33,11 +34,10 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 	hasInstersectionWith: function (families) {
 		if (!families) { return false; }
 
-		var me = this;
-		items = families.get('Items');
+		let items = families.get('Items');
 
-		return items.reduce(function (acc, family) {
-			if (me.containsFamily(family)) {
+		return items.reduce((acc, family) => {
+			if (this.containsFamily(family)) {
 				acc = true;
 			}
 

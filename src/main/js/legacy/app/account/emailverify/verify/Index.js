@@ -1,4 +1,6 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
 const ParseUtils = require('legacy/util/Parsing');
 const {isMe} = require('legacy/util/Globals');
 
@@ -283,8 +285,7 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 
 
 	setupEmailEdit: function () {
-		var me = this,
-			profileSchema;
+		var me = this;
 		this.user.getSchema()
 			.then(function (schema) {
 				var profileSchema = schema.ProfileSchema,
@@ -338,9 +339,8 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 
 
 	handlePendingError: function () {
-		var txt = getString('NextThought.view.account.verification.EmailToken.PendingTitle'),
-			sub = getFormattedString('NextThought.view.account.verification.EmailToken.PendingSubTitle', {time: timeTxt});
-
+		// var txt = getString('NextThought.view.account.verification.EmailToken.PendingTitle'),
+		// 	sub = getFormattedString('NextThought.view.account.verification.EmailToken.PendingSubTitle', {time: txt});
 	},
 
 
@@ -437,9 +437,9 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 					});
 			})
 			.catch(function (resp) {
-				var e = Ext.decode(resp.responseText);
+				var er = Ext.decode(resp.responseText);
 				if (resp.status === 422) {
-					me.presentPendingVerification(e && e.seconds);
+					me.presentPendingVerification(er && er.seconds);
 				}
 				me.requestLinkEl.update('Send another email');
 				me.requestLinkEl.removeCls('sending');

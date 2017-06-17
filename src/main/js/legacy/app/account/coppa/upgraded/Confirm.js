@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var Globals = require('../../../../util/Globals');
-var UpgradedMonthPicker = require('./MonthPicker');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+require('./MonthPicker');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
@@ -225,15 +227,15 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 	},
 
 	save: function () {
-		function fail (res, req) {
+		var params = this.getFormValues(),
+			me = this, url, req, p;
+
+		function fail (res) {
 			var r = Ext.decode(res.responseText);
 			me.markFields();
 			me.markInvalidated(r);
 			console.log('FAIL: ', r);
 		}
-
-		var params = this.getFormValues(),
-			me = this, url, req, p;
 
 		if (Ext.isEmpty(params)) { return; }
 
@@ -253,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 						// can now have social features. Since we set that early when the app starts,
 						// we don't have a way of updating the sidebar. Thus we require a full reload.
 						// this is not the best solution. Ideally we wouldn't want a full reload.
-						location.reload();
+						window.location.reload();
 					}
 					else {
 						Ext.defer(p.destroy, 1, p);
@@ -330,14 +332,14 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 	},
 
 	getBirthdayValue: function () {
-		function isValidBirthday () {
-			return (bd && !isNaN(bd.getTime()) && bd.getFullYear() === y && bd.getMonth() === m && bd.getDate() === d);
-		}
-
 		var m = this.monthEl.getAttribute('data-value'),
 			d = this.el.down('[name=day]').getValue(),
 			y = this.el.down('[name=year]').getValue(),
 			bd, me = this;
+
+		function isValidBirthday () {
+			return (bd && !isNaN(bd.getTime()) && bd.getFullYear() === y && bd.getMonth() === m && bd.getDate() === d);
+		}
 
 		m = parseInt(m, 10);
 		d = parseInt(d, 10);
@@ -353,6 +355,16 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 	},
 
 	preflight: function (params, successCallBack, failCallBack) {
+		var preflightUrl = this.getLink('upgrade_preflight_coppa_user'),
+			req = {
+				url: preflightUrl,
+				params: JSON.stringify(params),
+				method: 'POST',
+				success: success,
+				failure: fail
+			},
+			me = this;
+
 		function fail () {
 			console.error('Preflight failed, ', arguments);
 			Ext.callback(failCallBack, me, arguments);
@@ -365,16 +377,6 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 			console.log('Profile Schema is: ', o.ProfileSchema);
 			Ext.callback(successCallBack, me, [o.ProfileSchema]);
 		}
-
-		var preflightUrl = this.getLink('upgrade_preflight_coppa_user'),
-			req = {
-				url: preflightUrl,
-				params: JSON.stringify(params),
-				method: 'POST',
-				success: success,
-				failure: fail
-			},
-			me = this;
 
 		Ext.Ajax.request(req);
 	},

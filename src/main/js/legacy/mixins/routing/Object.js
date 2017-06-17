@@ -24,6 +24,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 *
 	 * @param {String|Array} mimeTypes MimeType or list of MimeTypes to use the handler for
 	 * @param {Function} handler   function to handle mime types
+	 * @returns {void}
 	 */
 	addObjectHandler: function (mimeTypes, handler) {
 		if (!(mimeTypes instanceof Array)) {
@@ -38,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
 		(mimeTypes || []).forEach(function (mimeType) {
 			if (map[mimeType]) {
-				throw 'MimeType collision' + mimeType;
+				throw new Error('MimeType collision' + mimeType);
 			} else {
 				map[mimeType] = handler;
 			}
@@ -53,8 +54,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
 	/**
 	 * Given an object return the mime type
-	 * @param  {Object|String} object
-	 * @return {String}		  object's mime type
+	 * @param  {Object|String} object --
+	 * @returns {String}		  object's mime type
 	 */
 	__getMimeType: function (object) {
 		if (typeof object === 'string') {

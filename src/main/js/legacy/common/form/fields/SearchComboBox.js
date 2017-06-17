@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const Globals = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComboBox', {
@@ -291,8 +293,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	__selectSibling: function (options, direction) {
 		var currentIndex, item;
 
-		currentIndex = options.reduce(function (acc, item, index) {
-			if (item.classList.contains('active')) {
+		currentIndex = options.reduce(function (acc, o, index) {
+			if (o.classList.contains('active')) {
 				acc = index;
 			}
 

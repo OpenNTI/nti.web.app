@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
+const {wait} = require('nti-commons');
+
 const Socket = require('legacy/proxy/Socket');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const B64 = require('legacy/util/Base64');
@@ -7,9 +9,9 @@ const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
 const LoginStateStore = require('legacy/login/StateStore');
 const ModelService = require('legacy/model/Service');
-
-const {wait} = require('legacy/util/Promise');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
+
+const {location} = global;
 
 module.exports = exports = Ext.define('NextThought.login.Actions', {
 	constructor: function () {

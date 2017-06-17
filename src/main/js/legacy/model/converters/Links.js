@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Links', {
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Links', {
 
 					try {
 						for (i = len - 1; i >= 0; i--) {
-							if (c[i].rel == rel) {
+							if (c[i].rel === rel) {
 								return c[i];
 							}
 						}
@@ -60,4 +60,3 @@ module.exports = exports = Ext.define('NextThought.model.converters.Links', {
 },function () {
 	this.LINKS.sortType = Ext.data.SortTypes.none;
 });
-

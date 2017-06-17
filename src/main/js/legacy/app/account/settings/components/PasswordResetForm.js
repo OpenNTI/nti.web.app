@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var AccountActions = require('../../Actions');
-var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
+const Ext = require('extjs');
+
+const Actions = require('../../Actions');
+
+require('../../../../common/form/fields/SimpleTextField');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.PasswordResetForm', {
@@ -108,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			}];
 		}
 
-		this.AccountActions = NextThought.app.account.Actions.create();
+		this.AccountActions = Actions.create();
 
 		this.callParent(arguments);
 	},
@@ -141,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 	getValues: function () {
 		return {
-			old_password: this.down('[name=old_password]').getValue(),
+			'old_password': this.down('[name=old_password]').getValue(),
 			password: this.down('[name=password]').getValue()
 		};
 	},
@@ -162,6 +164,8 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 	checkValidity: function (value, input) {
+		var me = this,
+			v = false;
 
 		function val (i, s) {
 			try {
@@ -175,14 +179,10 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			return false;
 		}
 
-		var me = this,
-			v = false;
-
 		if (val(input)) {
 			me.setMessage();
 			v = me.inputs.reduce(function (accum, o) { return accum && val(o, true); }, true);
-	  //			if(input.name === 'password'){
-	  //			}
+			// if(input.name === 'password'){}
 		}
 
 		me.down('button[save]')[v ? 'enable' : 'disable']();

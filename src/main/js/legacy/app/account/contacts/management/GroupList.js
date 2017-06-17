@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var Globals = require('../../../../util/Globals');
-var MixinsAddGroup = require('../../../../mixins/AddGroup');
-var GroupsStateStore = require('../../../groups/StateStore');
-var GroupsActions = require('../../../groups/Actions');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const StateStore = require('legacy/app/groups/StateStore');
+const Actions = require('legacy/app/groups/Actions');
+
+require('legacy/mixins/AddGroup');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.contacts.management.GroupList', {
@@ -26,8 +28,8 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 	selModel: { mode: 'SIMPLE' },
 
 	initComponent: function () {
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.GroupStore = StateStore.getInstance();
+		this.GroupActions = Actions.create();
 		this.buildGroupListStore();
 		this.callParent(arguments);
 		this.itemSelector = '.selection-list-item';
@@ -46,11 +48,6 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 	},
 
 	buildGroupListStore: function () {
-		function filterList (rec) {
-			if (Ext.Array.contains(blocked || [], rec.get('Username'))) { return false; }
-			return rec.isModifiable() && !rec.isDFL;
-		}
-
 		var fstore = this.GroupStore.getFriendsList(),
 			blocked = this.blocked,
 			mycontact = 'mycontacts-' + $AppConfig.username, me = this;
@@ -61,7 +58,10 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			proxy: 'memory',
 			filters: [
 				function (item) { return item.get('Username') !== mycontact; },
-				filterList
+				function filterList (rec) {
+					if (Ext.Array.contains(blocked || [], rec.get('Username'))) { return false; }
+					return rec.isModifiable() && !rec.isDFL;
+				}
 			]
 		});
 
@@ -72,7 +72,6 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 				me.store.add(record);
 			}
 		}, this);
-
 	},
 
 	getSelected: function () {
@@ -98,9 +97,9 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}, this);
 
 		this.mon(this.el, 'mouseout', function (e) {
-	  //			if(!this.isClosing){
-				//this.startHideTimeout();
-	  //			}
+			// if(!this.isClosing){
+			// 	this.startHideTimeout();
+			// }
 			this.isClosing = false;
 			this.doDismiss = true;
 		}, this);
@@ -125,8 +124,8 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 	refresh: function () {
 		var el = this.getEl(),
 			ul,
-			selection = this.getSelectionModel(),
-			blocked = this.blocked;
+			selection = this.getSelectionModel();
+			// blocked = this.blocked;
 
 		this.callParent(arguments);
 

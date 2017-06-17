@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ParseUtils = require('legacy/util/Parsing');
-var {getURL} = require('legacy/util/Globals');
-var ContentUtils = require('legacy/util/Content');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const ParseUtils = require('legacy/util/Parsing');
+const {getURL} = require('legacy/util/Globals');
+const ContentUtils = require('legacy/util/Content');
 
 require('legacy/model/Base');
 require('legacy/mixins/BundleLike');
@@ -261,8 +263,8 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 					ContentNTIID: firstPackage,
 					title: firstPackage,
 					root: firstPackage.get('root'),
-					getIcon: function () { return uiData.icon; },
-					getPathLabel: function () { return Promise.resolve(data.title); }
+					getIcon: () => uiData.icon,
+					getPathLabel: () => Promise.resolve(uiData.title)
 				}, uiData);
 			});
 	},
@@ -358,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return p;
 	},
 
-	represents: function (catalogEntry) {return false;},
+	represents: function (/*catalogEntry*/) {return false;},
 
 	getVideosByContentPackage: function () {
 		var contentPackages = this.get('ContentPackages'),

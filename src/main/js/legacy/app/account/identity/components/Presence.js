@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-var ComponentsPresenceEditor = require('./PresenceEditor');
-var CacheAbstractStorage = require('../../../../cache/AbstractStorage');
-var ChatStateStore = require('../../../chat/StateStore');
-var ChatActions = require('../../../chat/Actions');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const StateStore = require('legacy/app/chat/StateStore');
+const Actions = require('legacy/app/chat/Actions');
+const PresenceInfo = require('legacy/model/PresenceInfo');
+const {isMe} = require('legacy/util/Globals');
+
+require('legacy/cache/AbstractStorage');
+require('./PresenceEditor');
 
 
 //styles in identity.scss
@@ -48,8 +51,8 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 
 		me.callParent(arguments);
 
-		me.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		me.ChatActions = NextThought.app.chat.Actions.create();
+		me.ChatStore = StateStore.getInstance();
+		me.ChatActions = Actions.create();
 
 		me.renderData = Ext.apply(me.renderData || {}, {
 			states: [
@@ -203,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 
 		var label,
 			current = this.el.down('.selected'),
-			show = presence.get('show'),
+			// show = presence.get('show'),
 			name = presence.getName();
 
 		if (current && name) {
@@ -295,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 
 
-		presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
+		presence = PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
 
 		if (this.isNewPresence(presence)) {
 			this.ChatActions.changePresence(presence);
@@ -331,12 +334,11 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 
 		var row = cmp.boundEl.up('.status'),
 			target = this.getTarget(row),
-			isNewPresence,
 			type = (target === 'unavailable') ? 'unavailable' : 'available',
 			show = (target === 'available') ? 'chat' : target,
 			status = (this.isStatus(value)) ? value : '';
 
-		newPresence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
+		const newPresence = PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
 
 		row.removeCls('active');
 

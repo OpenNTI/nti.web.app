@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../cache/UserRepository');
-var ActivityPreview = require('./Preview');
-var UxPointer = require('../../../common/ux/Pointer');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const UserRepository = require('legacy/cache/UserRepository');
+
+require('legacy/common/ux/Pointer');
+require('./Preview');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.activity.Popout', {
@@ -82,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 			// Why do we destroy the popout here?
 			// it was destroying the popout on every added reply. So it's commented for now.
 			// The refEl might have changed but that doesn't mean the parent (note) rec doesn't exist anymore.
-	  //			this.destroy();
+			// this.destroy();
 		}
 	},
 

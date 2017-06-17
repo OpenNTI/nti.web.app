@@ -1,23 +1,24 @@
-var Ext = require('extjs');
-var StateStateStore = require('../common/state/StateStore');
-var StateActions = require('../common/state/Actions');
+const Ext = require('extjs');
+
+const StateStore = require('../common/state/StateStore');
+const Actions = require('../common/state/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.State', {
-	state_key: 'default',
+	'state_key': 'default',
 
 	getStateKey: function () {
-		return this.STATE_KEY || this.state_key;
+		return this.STATE_KEY || this['state_key'];
 	},
 
 	__getStateActions: function () {
-		this.__StateActions = this.__StateActions || NextThought.common.state.Actions.create();
+		this.__StateActions = this.__StateActions || Actions.create();
 
 		return this.__StateActions;
 	},
 
 	__getStateStore: function () {
-		this.__StateStore = this.__StateStore || NextThought.common.state.StateStore.getInstance();
+		this.__StateStore = this.__StateStore || StateStore.getInstance();
 
 		return this.__StateStore;
 	},
@@ -27,9 +28,9 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 	 * @return {Object} the current state
 	 */
 	getCurrentState: function () {
-		var actions = this.__getStateActions(),
-			store = this.__getStateStore(),
-			key = this.getStateKey();
+		// let actions = this.__getStateActions();
+		let store = this.__getStateStore();
+		let key = this.getStateKey();
 
 		return store.getState(key);
 	},

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var FilterFilter = require('./Filter');
+const Ext = require('extjs');
+
+require('./Filter');
 
 
 module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
@@ -63,6 +64,12 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 			return false;
 		}
 
+		const m = this;
+		return (same(m.value, o.value)
+				&&	m.operation === o.operation
+				&&	m.scope === o.scope
+		);
+
 		function same (a,b) {
 			if (!Ext.isArray(a) || !Ext.isArray(b) || a.length !== b.length) {
 				return false;
@@ -73,12 +80,6 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 			}
 			return true;
 		}
-
-		var m = this;
-		return (same(m.value, o.value)
-				&&	m.operation === o.operation
-				&&	m.scope === o.scope
-		);
 	},
 
 

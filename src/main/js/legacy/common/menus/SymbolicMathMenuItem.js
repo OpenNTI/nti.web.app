@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+/*global jQuery*/
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.common.menus.SymbolicMathMenuItem', {
