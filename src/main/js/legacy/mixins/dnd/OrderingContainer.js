@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var DndDropzone = require('./Dropzone');
-var AppMoveInfo = require('../../model/app/MoveInfo');
-var DndActions = require('../../app/dnd/Actions');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
+const Globals = require('legacy/util/Globals');
+const MoveInfo = require('legacy/model/app/MoveInfo');
+const Actions = require('legacy/app/dnd/Actions');
+
+require('./Dropzone');
 
 module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	mixins: {
@@ -12,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 
 	statics: {
 		hasMoveInfo: function (dataTransfer) {
-			return dataTransfer.containsType(NextThought.model.app.MoveInfo.mimeType);
+			return dataTransfer.containsType(MoveInfo.mimeType);
 		}
 	},
 
@@ -55,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 		var items = this.getOrderingItems(),
 			dropzoneRect = this.getDropzoneBoundingClientRect(),
 			dropzoneWidth = dropzoneRect.width,
-			info, i, current, previous, isBefore;
+			info, i, current, isBefore;
 
 		x = x - dropzoneRect.left;
 		y = y - dropzoneRect.top;
@@ -65,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 		});
 
 		for (i = 0; i < items.length; i++) {
-			previous = items[i - 1];
+			// previous = items[i - 1];
 			current = items[i];
 
 			if (styles && styles.side) {
@@ -210,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 
 		}
 
-		var dndActions = NextThought.app.dnd.Actions.create(),
+		var dndActions = Actions.create(),
 			placeholderStyles = dndActions.getPlaceholderStyles(),
 			info = this.getInfoForCoordinates(e.clientX, e.clientY, placeholderStyles),
 			placeholder = this.__getDropPlaceholder();
@@ -220,13 +222,13 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 	},
 
 	onDragDrop: function (e, dataTransfer) {
-		var dndActions = NextThought.app.dnd.Actions.create(),
+		var dndActions = Actions.create(),
 			placeholderStyles = dndActions.getPlaceholderStyles(),
 			info = this.getInfoForCoordinates(e.clientX, e.clientY, placeholderStyles),
 			handlers = this.getHandlersForDataTransfer(dataTransfer),
 			handler = handlers[0], //TODO: think about what to do if there is more than one
 			data = handler && dataTransfer.findDataFor(handler.key),
-			moveInfo = dataTransfer.findDataFor(NextThought.model.app.MoveInfo.mimeType),
+			moveInfo = dataTransfer.findDataFor(MoveInfo.mimeType),
 			move, placeholder, minWait = Globals.WAIT_TIMES.SHORT;
 
 		if (!info || !handler || !handler.onDrop || !data) {

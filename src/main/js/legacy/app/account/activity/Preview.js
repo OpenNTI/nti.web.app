@@ -1,14 +1,16 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../cache/UserRepository');
-var ContentUtils = require('../../../util/Content');
-var DomUtils = require('../../../util/Dom');
-var MixinsLikeFavoriteActions = require('../../../mixins/LikeFavoriteActions');
-var MixinsQuestionContent = require('../../../mixins/QuestionContent');
-var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
-var CacheLocationMeta = require('../../../cache/LocationMeta');
-var EditorEditor = require('../../../editor/Editor');
-var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
-var ComponentNatural = require('../../../layout/component/Natural');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const ContentUtils = require('legacy/util/Content');
+const DomUtils = require('legacy/util/Dom');
+
+require('legacy/mixins/LikeFavoriteActions');
+require('legacy/mixins/QuestionContent');
+require('legacy/mixins/ProfileLinks');
+
+require('legacy/cache/LocationMeta');
+require('legacy/editor/Editor');
+require('legacy/layout/component/Natural');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.activity.Preview', {
@@ -194,17 +196,17 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Preview'
 	/**
 	 * Maps the records 'reply/comment/post' counts to a single value.
 	 *
-	 * @param {Ext.data.Model} record
-	 * @return {Number}
+	 * @param {Ext.data.Model} record -
+	 * @return {Number} -
 	 */
 	getCommentCount: function (record) {
-		throw 'Do not use the base class directly. Subclass and implement this';
+		throw new Error('Do not use the base class directly. Subclass and implement this');
 	},
 
 	/**
 	 * Place to derive fields that should be put into the template.
 	 *
-	 * @param {Ext.data.Model} record
+	 * @param {Ext.data.Model} record -
 	 * @return {Object} Object
 	 */
 	getDerivedData: function (record) {
@@ -220,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Preview'
 		return record.title;
 	},
 
-	/** @private */
+	/* @private */
 	prepareRenderData: function (record) {
 		var me = this,
 			o = record.getData();

@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var AssessmentQuestion = require('./Question');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+require('./Question');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Poll', {

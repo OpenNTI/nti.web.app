@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var ResolversVideoPosters = require('../resolvers/VideoPosters');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const VideoPosters = require('../resolvers/VideoPosters');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.VideoSources', {
@@ -62,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 		convert: function (v, r, source) {
 			var name = this.mapping || this.name, len, x, s,
 				raw = r && r.raw,
-				resolver = NextThought.model.resolvers.VideoPosters;
+				resolver = VideoPosters;
 
 			if (v && Ext.isString(v)) {//if we already have a value, done.
 				return v;
@@ -99,4 +101,3 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 	this.VIDEOSOURCES.sortType = Ext.data.SortTypes.none;
 	this.VIDEOPOSTER.sortType = Ext.data.SortTypes.none;
 });
-

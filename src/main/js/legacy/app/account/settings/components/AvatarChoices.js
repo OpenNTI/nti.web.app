@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var WhiteboardUtils = require('../../../whiteboard/Utils');
+const Ext = require('extjs');
+
+require('../../../whiteboard/Utils');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
@@ -69,8 +70,8 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		var me = this,
 			u = $AppConfig.userObject,
-			url = u.get('avatarURL'),
-			background = u.get('backgroundURL');
+			url = u.get('avatarURL');
+			// background = u.get('backgroundURL');
 
 		if (!url) {
 			me.editAvatarChoice.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -85,14 +86,14 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		me.mon(me.list, 'click', me.clickHandler.bind(me));
 
-		me.mon(me.up('window').down('picture-editor'), 'saved', function (url) {
-			var url = u.get('avatarURL'),
-				background = u.get('backgroundURL');
+		me.mon(me.up('window').down('picture-editor'), 'saved', function () {
+			const avatarUrl = u.get('avatarURL');
+				//const background = u.get('backgroundURL');
 
 			me.avatarWrapper.dom.innerHTML = Ext.util.Format.avatar(u);
 			// me.backgroundURL.dom.innerHTML = Ext.util.Format.background(u);
 
-			if (url) {
+			if (avatarUrl) {
 				me.editAvatarChoice.show();
 			}
 
@@ -105,9 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	clickHandler: function (e) {
 		e.stopEvent();
 
-		var item = e.getTarget('li', null, true),
-			action = e.getTarget('a', null, true),
-			url, changing = false;
+		let action = e.getTarget('a', null, true);
 
 		if (action) {
 			action = action.getAttribute('href');

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
+const Ext = require('extjs');
+
+const Globals = require('../../util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Users', {
@@ -7,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 
 	USERLIST: {
 		type: 'UserList',
-		convert: function (v, record) {
+		convert: function (v/*, record*/) {
 			var a = arguments,
 				u = [];
 			try {
@@ -38,31 +39,31 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 		sortType: 'asUCString',
 		convert: function convert (v, rec) {
 			var re = convert.re = (convert.re || /https/i), url,
-				needsSecure = re.test(location.protocol) || $AppConfig.forceSSL;
+				needsSecure = re.test(window.location.protocol) || $AppConfig.forceSSL;
 
-			function secure (v, i, a) {
-				if (!v) {
-					return v;
+			function secure (value, i, a) {
+				if (!value) {
+					return value;
 				}
 
-				v = v.replace('www.gravatar.com', 'secure.gravatar.com').replace('http:', 'https:');
+				value = value.replace('www.gravatar.com', 'secure.gravatar.com').replace('http:', 'https:');
 
 				if (a) {
-					a[i] = v;
+					a[i] = value;
 				}
 
-				return v;
+				return value;
 			}
 
-			function maybeSecure (v, i, a) {
+			function maybeSecure (value, i, a) {
 
 				if (needsSecure) {
-					v = secure(v, i, a);
+					value = secure(value, i, a);
 				}
 
 				// //preload
-				// (new Image()).src = v;
-				return v;
+				// (new Image()).src = value;
+				return value;
 			}
 
 			if (v && v === '@@avatar') {

@@ -1,5 +1,7 @@
-const Ext = require('extjs');
 const Url = require('url');
+
+const Ext = require('extjs');
+
 const PromptStateStore = require('legacy/app/prompt/StateStore');
 
 const SURVEY_COMPLETE = 'survey-complete';
@@ -28,7 +30,7 @@ let prompt = module.exports = exports = Ext.define('NextThought.app.account.regi
 		this.callParent(arguments);
 
 		let src = this.Prompt.data.link;
-		this.postMessageSourceId = Url.resolve(location.href, src);
+		this.postMessageSourceId = Url.resolve(window.location.href, src);
 
 
 		this.Prompt.Header.disableClose();
@@ -56,7 +58,7 @@ let prompt = module.exports = exports = Ext.define('NextThought.app.account.regi
 
 
 	onPostMessage (event) {
-		if (event.origin !== location.origin) { return; }
+		if (event.origin !== window.location.origin) { return; }
 
 		const data = getData(event);
 

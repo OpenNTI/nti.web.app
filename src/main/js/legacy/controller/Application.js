@@ -1,23 +1,22 @@
-var Ext = require('extjs');
-var B64 = require('../util/Base64');
-var Globals = require('../util/Globals');
-var ParseUtils = require('../util/Parsing');
-
-
-var LoginStore = require('../login/StateStore');
-var LoginActions = require('../login/Actions');
-var LibraryActions = require('../app/library/Actions');
-var StoreActions = require('../app/store/Actions');
-var ChatActions = require('../app/chat/Actions');
-var GroupActions = require('../app/groups/Actions');
-var ContextStore = require('../app/context/StateStore');
-var NotificationActions = require('../app/notifications/Actions');
-var StateActions = require('../common/state/Actions');
-var NavigationActions = require('../app/navigation/Actions');
-var Globals = require('../util/Globals');
+const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+const {wait} = require('nti-commons');
 
-var Index = require('../app/Index');
+const B64 = require('legacy/util/Base64');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const LoginStore = require('legacy/login/StateStore');
+const LoginActions = require('legacy/login/Actions');
+const LibraryActions = require('legacy/app/library/Actions');
+const StoreActions = require('legacy/app/store/Actions');
+const ChatActions = require('legacy/app/chat/Actions');
+const GroupActions = require('legacy/app/groups/Actions');
+const ContextStore = require('legacy/app/context/StateStore');
+const NotificationActions = require('legacy/app/notifications/Actions');
+const StateActions = require('legacy/common/state/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
+
+require('legacy/app/Index');
 
 module.exports = exports = Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
@@ -78,9 +77,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 
 	onLogin: function () {
-		var masterView = Ext.widget('master-view'),
-			nav = this.getNav(),
-			body = this.getBody();
+		// const masterView = Ext.widget('master-view');
+		const nav = this.getNav();
+		const body = this.getBody();
 
 		this.loggedIn = true;
 
@@ -137,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		var path = '',
 			parts = fragment.split('/'),
 			subRoute = '',
-			id, state, hash;
+			id, hash;
 
 		if (this.OBJECT_FRAG_ROUTE.test(fragment)) {
 			id = parts.last();
@@ -241,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		//since its an absolute path the path name will start
 		//with a / so there will be an empty space at the end of the string
 		//so use that when we join to keep the path absolute
-		parts = location.pathname.split('/');
+		// const parts = location.pathname.split('/');
 
 
 		//if we are navigating to an object remove it from the path
@@ -324,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			allow = body.allowNavigation();
 
 		function finish () {
-			history[fn](state || history.state, myTitle, myRoute);
+			window.history[fn](state || window.history.state, myTitle, myRoute);
 			document.title = title;
 			me.handleRoute(title, route, precache);
 		}

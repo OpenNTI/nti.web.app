@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.ModuleContainer', {
@@ -8,12 +8,12 @@ module.exports = exports = Ext.define('NextThought.mixins.ModuleContainer', {
 	},
 
 
-  	buildModule: function (ns, name,config) {
+	buildModule: function (ns, name,config) {
 		var m = Ext.createByAlias(ns + '.' + name, Ext.apply({container: this},config)),
 			getterName = this.getterNameForModule(name);
 
 		if (config && config.hasOwnProperty('moduleName')) {
-	  	getterName = this.getterNameForModule(config.moduleName);
+			getterName = this.getterNameForModule(config.moduleName);
 		}
 
 		this[getterName] = function () {return m;};

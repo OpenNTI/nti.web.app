@@ -1,10 +1,15 @@
-var Ext = require('extjs');
-var NavigationActions = require('../app/navigation/Actions');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
+// const {isMe} = require('legacy/util/Globals');
 
-var contactCardPopout, showCardTimer,
-	canShow;
+const Actions = require('legacy/app/navigation/Actions');
+const Popout = require('legacy/app/account/contacts/management/Popout');
+const MenuItem = require('legacy/app/account/identity/components/MenuItem');
+
+// let contactCardPopout;
+// let showCardTimer;
+// let canShow;
 
 //the scope is being set by the caller
 function onUserNameClick (e) {
@@ -16,15 +21,15 @@ function onUserNameClick (e) {
 		profileUrl = u.getProfileUrl && u.getProfileUrl();
 
 	if (profileUrl) {
-		if (this instanceof NextThought.app.account.contacts.management.Popout) {
+		if (this instanceof Popout) {
 			wait()
 				.then(this.destroy.bind(this));
-		} else if (this instanceof NextThought.app.account.identity.components.MenuItem) {
+		} else if (this instanceof MenuItem) {
 			wait()
 				.then(this.setMenuClosed.bind(this));
 		}
 
-		NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
+		Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
 			user: u
 		});
 
@@ -33,44 +38,44 @@ function onUserNameClick (e) {
 }
 
 
-function showCard (e, el, position) {
-	var Popup = NextThought.app.account.contacts.management.Popout,
-		pop,
-		user = this.userObject || this.user;
+// function showCard (e, el, position) {
+// 	var Popup = Popout,
+// 		pop,
+// 		user = this.userObject || this.user;
+//
+// 	if (!user || this instanceof Popup || (!el.parent('.activity-popout') && !Popup.beforeShowPopup(user, el))) {
+// 		return;
+// 	}
+//
+// 	pop = contactCardPopout;
+//
+// 	if (!pop || pop.isDestroyed) {
+// 		pop = Popup.create({
+// 			renderTo: Ext.getBody(),
+// 			record: user,
+// 			refEl: el,
+// 			hidden: true
+// 		});
+// 	}
+//
+// 	pop.show();
+// 	if (el && el.dom) {
+// 		pop.alignTo(el, 'tl-bl?', [0, 0]);
+// 	} else {
+// 		pop.setPosition(position || {});
+// 	}
+//
+// 	contactCardPopout = canShow ? null : pop;
+// }
 
-	if (!user || this instanceof Popup || (!el.parent('.activity-popout') && !Popup.beforeShowPopup(user, el))) {
-		return;
-	}
+// function startShowCard (e, el) {
+// 	var p = el.getAnchorXY('tl');
+// 	showCardTimer = Ext.defer(showCard, canShow ? 0 : 500, this, [e, el, p]);
+// }
 
-	pop = contactCardPopout;
-
-	if (!pop || pop.isDestroyed) {
-		pop = Popup.create({
-			renderTo: Ext.getBody(),
-			record: user,
-			refEl: el,
-			hidden: true
-		});
-	}
-
-	pop.show();
-	if (el && el.dom) {
-		pop.alignTo(el, 'tl-bl?', [0, 0]);
-	} else {
-		pop.setPosition(position || {});
-	}
-
-	contactCardPopout = canShow ? null : pop;
-}
-
-function startShowCard (e, el) {
-	var p = el.getAnchorXY('tl');
-	showCardTimer = Ext.defer(showCard, canShow ? 0 : 500, this, [e, el, p]);
-}
-
-function stopShowCard () {
-	clearTimeout(showCardTimer);
-}
+// function stopShowCard () {
+// 	clearTimeout(showCardTimer);
+// }
 
 module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 	navigateToProfile: function (u) {
@@ -83,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 		}
 	},
 
-	/**
+	/*
 	 * Pass in Dom Nodes or Ext.Elements (var arg style) and this will make them clickable and add the css class "over"
 	 * when the mouse is hovering over these elements. (it will also remove the class as the mouse leaves)
 	 *
@@ -98,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 			};
 
 		Ext.each(arguments, function (el) {
-			var user = me.userObject || me.user;
+			// var user = me.userObject || me.user;
 			el = Ext.get(el);
 
 			if (!Ext.isEmpty(el)) {

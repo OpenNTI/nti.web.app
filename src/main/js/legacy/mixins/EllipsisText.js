@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 /**
@@ -96,18 +96,21 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 	},
 
 	/**
-	* @param: {Node} node - HTML element that we would like to ellipsis or expand into multiple lines
-	* @param: {String} measure - the box that we should use as reference. Defaults to self node.
-	* NOTE: the box should have a max-height property set on it.
-	*/
+	 * NOTE: the box should have a max-height property set on it.
+	 *
+	 * @param {Node} node - HTML element that we would like to ellipsis or expand into multiple lines
+	 * @param {String} measure - the box that we should use as reference. Defaults to self node.
+	 * @param {Boolean} noEllipse -
+	 * @returns {void}
+	 */
 	truncateText: function (node, measure, noEllipse) {
-		var box = node,
-			textProperty = node.textContent !== null ? 'textContent' : 'innerText',
-			setToolTipOnce;
+		// let box = node;
+		let textProperty = node.textContent !== null ? 'textContent' : 'innerText';
+		let setToolTipOnce;
 
-		if (measure === 'parent') {
-			box = node.parentNode;
-		}
+		// if (measure === 'parent') {
+		// 	box = node.parentNode;
+		// }
 
 		setToolTipOnce = function () {
 			node.setAttribute('data-qtip', node[textProperty]);
@@ -118,15 +121,15 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 			setToolTipOnce = function () {};
 		}
 
-		function work () {
-			// NOTE: because of line-height, in different browsers, we might have a slight difference
-			// between the box's scrollHeight and its offsetHeight. And since no line should be 5px tall, check against 5.
-			if (box.scrollHeight - (box.clientHeight || box.offsetHeight) >= 5) {
-				if (node[textProperty] !== '...') {
-					setTipOnce();
-				}
-			}
-		}
+		// function work () {
+		// 	// NOTE: because of line-height, in different browsers, we might have a slight difference
+		// 	// between the box's scrollHeight and its offsetHeight. And since no line should be 5px tall, check against 5.
+		// 	if (box.scrollHeight - (box.clientHeight || box.offsetHeight) >= 5) {
+		// 		if (node[textProperty] !== '...') {
+		// 			setTipOnce();
+		// 		}
+		// 	}
+		// }
 
 		NextThought.mixins.EllipsisText.schedule(function () {
 			var box = node;

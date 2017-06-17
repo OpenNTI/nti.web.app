@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var GroupsActions = require('../app/groups/Actions');
+const Ext = require('extjs');
+
+const Actions = require('../app/groups/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
@@ -86,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 	},
 
 	submitNewGroup: function (groupName) {
-		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.GroupActions = Actions.create();
 		var input = this.addGroupDom.down('input'),
 			me = this,
 			friends = [];
@@ -124,9 +125,9 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 
 		// Make sure nothing steals focus while the input is visible
 		input.un('blur').on('blur', function () {
-		  	if (input.isVisible()) {
+			if (input.isVisible()) {
 				input.focus(200);
-		  }
+			}
 		}).focus();
 
 		return false;

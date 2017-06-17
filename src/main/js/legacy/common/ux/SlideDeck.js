@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../util/Content');
-var ModelPlaylistItem = require('../../model/PlaylistItem');
-var ModelSlide = require('../../model/Slide');
-var ContentOverlay = require('../../app/mediaviewer/content/Overlay');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const ContentUtils = require('legacy/util/Content');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+const Slide = require('legacy/model/Slide');
+const {getURL} = require('legacy/util/Globals');
+
+require('legacy/app/mediaviewer/content/Overlay');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
@@ -17,8 +19,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 			startingVideo, slidedeckId;
 
 		function getParam (name) {
-			var el = DQ.select('param[name="' + name + '"]', obj)[0];
-			return el ? el.getAttribute('value') : null;
+			var e = DQ.select('param[name="' + name + '"]', obj)[0];
+			return e ? e.getAttribute('value') : null;
 		}
 
 		//If we don't find a starting slide it may be launched from a video
@@ -28,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 			obj = el;
 			dom = Ext.fly(el).down('object[type$=ntivideo]');
 			if (dom) {
-				startingVideo = NextThought.model.PlaylistItem.fromDom(dom);
+				startingVideo = PlaylistItem.fromDom(dom);
 			}
 		}
 
@@ -57,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 
 		Ext.getBody().mask('Loading Slides...', 'navigation');
 
-		function findRecordWithSource (store, sources) {
+		function findRecordWithSource (sources) {
 			var i, j, currentItem, currentSources,
 				items = store.data.items;
 
@@ -66,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 				currentSources = currentItem.get('media').get('sources');
 				if (currentSources.length === sources.length) {
 					for (j = 0; j < sources.length; j++) {
-						if (NextThought.model.PlaylistItem.compareSources(currentSources[j].source, sources[j].source)) {
+						if (PlaylistItem.compareSources(currentSources[j].source, sources[j].source)) {
 							return currentItem;
 						}
 					}
@@ -82,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 
 			//If now startingSlide but we have a starting video, find the earliest starting slide for that video
 			if (!startingSlide && startingVideo) {
-				earliestSlide = findRecordWithSource(store, startingVideo.get('sources'));
+				earliestSlide = findRecordWithSource(startingVideo.get('sources'));
 				//The store is sorted by slide, so the first find is the earliest
 				if (earliestSlide) {
 					startingSlide = earliestSlide.getId();
@@ -107,8 +109,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 			dom = ContentUtils.parseXML(content);
 			slides = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]', dom);
 
-			Ext.each(slides, function (dom, i, a) {
-				a[i] = NextThought.model.Slide.fromDom(dom, pageInfo.getId(), videoIndex);
+			Ext.each(slides, function (doc, i, a) {
+				a[i] = Slide.fromDom(doc, pageInfo.getId(), videoIndex);
 			});
 
 			store.add(slides);

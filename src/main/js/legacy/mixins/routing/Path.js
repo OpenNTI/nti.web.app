@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const Globals = require('../../util/Globals');
 
 
@@ -508,7 +509,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	getRouteState: function () {
 		var key = this.getRouteStateKey ? this.getRouteStateKey() : this.state_key || this.xtype;
 
-		return (history.state || {})[key] || {};
+		return (window.history.state || {})[key] || {};
 	},
 
 

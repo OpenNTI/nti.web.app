@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const {wait} = require('legacy/util/Promise');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
@@ -34,13 +35,14 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 		keys = Object.keys(values);
 
 		(keys || []).forEach(function (key) {
-			var input = me.down('[name="' + key + '"]'),
-				parent;
+			const value = values[key];
+			const input = me.down('[name="' + key + '"]');
+			let parent;
 
 			if (input) {
 
 				if (input.setValue) {
-					input.setValue(values[key]);
+					input.setValue(value);
 				} else {
 					parent = input.up('[setValue]');
 
@@ -128,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 
 
 	hideItem: function (name) {
-		var me = this, item, parent;
+		var me = this, item;
 
 		if (Ext.isArray(name)) {
 			name.forEach(function (n) {
@@ -167,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 
 
 	revealItem: function (name) {
-		var me = this, item, parent;
+		var me = this, item;
 
 		if (Ext.isArray(name)) {
 			name.forEach(function (n) {
@@ -233,7 +235,8 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 
 	/**
 	 * Fire an event to show an error on the window
-	 * @param  {Object || String} json the message to alert
+	 * @param  {Object|String} json the message to alert
+	 * @returns {void}
 	 */
 	showError: function (json) {
 		var input;
@@ -256,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 		}
 	},
 
-	/**
+	/*
 	 * If there is a link to get the nations from the server, request it and fill in the inputs
 	 * TODO: Don't hard code the inputs to fill in the nations with in the mixin
 	 */
@@ -297,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 		}
 	},
 
-	/**
+	/*
 	 * If there is a link to get the states from the server request it and fill in the inputs
 	 * TODO: Don't hard code the inputs to fill in the states with in the mixin
 	 */
@@ -330,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 					}
 				})
 				.catch(function (reason) {
-					console.error('Failed to load state list: ', reaseon);
+					console.error('Failed to load state list: ', reason);
 				});
 		}
 	},

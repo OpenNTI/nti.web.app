@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var UtilLocalization = require('../../../util/Localization');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+require('legacy/util/Localization');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
@@ -133,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 
 		var u = $AppConfig.userObject,
 			realname = u.get('realname'),
-			email = u.get('email'),
+			// email = u.get('email'),
 			aff = u.get('affiliation'),
 			fn, ln;
 
@@ -159,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 			firstname: firstname,
 			lastname: lastname,
 			realname: firstname + ' ' + lastname,
-			opt_in_email_communication: check,
+			'opt_in_email_communication': check,
 			affiliation: affiliation
 		};
 

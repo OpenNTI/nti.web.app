@@ -1,5 +1,5 @@
-var Ext = require('extjs');
-
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.mixins.DurationCache', {
 	cacheFor: function (key, value, duration) {

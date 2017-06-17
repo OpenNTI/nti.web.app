@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.PictureCanvas', {
@@ -99,6 +100,25 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	onMouseMove: function (e) {
 		if (!this.mouseDown) { return; }
 
+		var xy = e.getXY().slice(),
+			dx, dy,
+			el = this.el,
+			i = this.imageInfo,
+			s = i.selection;
+
+		dx = this.lastPoint[0] - xy[0];
+		dy = this.lastPoint[1] - xy[1];
+
+		if (!this.hasOwnProperty('inCorner')) {
+			doMove();
+		}
+		else {
+			doSize(this.inCorner, this.getOppositeCorner(this.inCorner));
+		}
+
+		this.lastPoint = xy;
+		this.drawCropTool();
+
 		function clamp (v, min, max) {
 			return (v < min) ? min : ((v > max) ? max : v);
 		}
@@ -138,27 +158,6 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			if (mX) { s.x = clamp((s.x + diff), 0, anchor[0] - s.size); }
 			if (mY) { s.y = clamp((s.y + diff), 0, anchor[1] - s.size); }
 		}
-
-
-
-		var xy = e.getXY().slice(),
-			dx, dy,
-			el = this.el,
-			i = this.imageInfo,
-			s = i.selection;
-
-		dx = this.lastPoint[0] - xy[0];
-		dy = this.lastPoint[1] - xy[1];
-
-		if (!this.hasOwnProperty('inCorner')) {
-			doMove();
-		}
-		else {
-			doSize(this.inCorner, this.getOppositeCorner(this.inCorner));
-		}
-
-		this.lastPoint = xy;
-		this.drawCropTool();
 	},
 
 
@@ -241,9 +240,9 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		function fin (f, action) {
 			Ext.getBody().unmask();
-			var url = ((action || {}).result || {}).dataurl || false;//prevent an error, and force false if its not there.
-			if (url) {
-				me.setImage(url);
+			var dataurl = ((action || {}).result || {}).dataurl || false;//prevent an error, and force false if its not there.
+			if (dataurl) {
+				me.setImage(dataurl);
 			}
 			else {
 				me.clear();

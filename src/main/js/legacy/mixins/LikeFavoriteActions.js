@@ -1,10 +1,10 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', {
 
 	constructor: function () {
-		var me = this;
+		const me = this;
 
 		function onAfterRender () {
 			me.updateLikeAndFavoriteFromRecord();
@@ -79,11 +79,11 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 
 	tearDownLikeAndFavorite: function () {
 		if (this.liked) {
-			this.mun(this.liked, 'click', function () { rec.like(this); }, this);
+			this.mun(this.liked, 'click', function () { this.getRecord().like(this); }, this);
 			this.liked.remove();
 		}
 		if (this.favorites) {
-			this.mon(this.favorites, 'click', function () { rec.favorite(this); },this);
+			this.mon(this.favorites, 'click', function () { this.getRecord().favorite(this); },this);
 			this.favorites.remove();
 		}
 
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 		this.updateLikeAndFavoriteFromRecord(record);
 		if (this.liked) {
 			this.updateLikeCount(record);
-	  		this.markAsLiked(record && record.isLiked());
+			this.markAsLiked(record && record.isLiked());
 		}
 
 		if (this.favorites) {

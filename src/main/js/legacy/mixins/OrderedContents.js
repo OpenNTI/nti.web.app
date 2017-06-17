@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
-var ParseUtils = require('../util/Parsing');
+const Ext = require('extjs');
+
+const Globals = require('../util/Globals');
+const ParseUtils = require('../util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
@@ -162,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 
 	__submitContent: function (content, link) {
 		if (!link) {
-			return Proimse.reject('No Link');
+			return Promise.reject('No Link');
 		}
 
 		return Service.post(link, content)
@@ -181,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	 * the Items field.
 	 *
 	 * @param  {Object} content the values to append
-	 * @return {Promise}
+	 * @return {Promise} -
 	 */
 	appendContent: function (content) {
 		var link = this.getContentsLink();
@@ -218,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	/**
 	 * Append the values form a form component
 	 * @param  {NextThought.common.form.Form} form the form component
-	 * @return {Promise}
+	 * @return {Promise} -
 	 */
 	appendForm: function (form) {
 		var link = this.getContentsLink();
@@ -311,7 +312,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	 * @param  {Object} record	  record to move
 	 * @param  {Object|String} oldParent the current parent
 	 * @param  {Object} root	  the root of me and the oldParent
-	 * @return {Promise}
+	 * @return {Promise} -
 	 */
 	appendFromContainer: function (record, oldParent, root) {
 		var move;
@@ -338,7 +339,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	 * @param {Number} oldIndex the old position
 	 * @param  {Object|String} oldParent old parent or ntiid
 	 * @param  {Object} root	  the root of me and the oldParent
-	 * @return {Promise}
+	 * @return {Promise} -
 	 */
 	moveToFromContainer: function (record, index, oldIndex, oldParent, root) {
 		if (index === undefined) {
