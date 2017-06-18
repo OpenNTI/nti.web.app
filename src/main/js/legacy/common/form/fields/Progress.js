@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var FieldsFilePicker = require('./FilePicker');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const FilePicker = require('./FilePicker');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.Progress', {
@@ -72,14 +74,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.Progress',
 
 	update: function () {
 		var progress = this.progress || {},
-			filePicker = NextThought.common.form.fields.FilePicker,
 			total = progress.total || 0,
 			loaded = progress.loaded || 0,
 			percent = progress.percent || 0,
-			unit = filePicker.getUnit(total);
+			unit = FilePicker.getUnit(total);
 
-		total = filePicker.getHumanReadableFileSize(total, 2, unit);
-		loaded = filePicker.getHumanReadableFileSize(loaded, 2, unit);
+		total = FilePicker.getHumanReadableFileSize(total, 2, unit);
+		loaded = FilePicker.getHumanReadableFileSize(loaded, 2, unit);
 
 		loaded = loaded.replace(unit, '').trim();
 

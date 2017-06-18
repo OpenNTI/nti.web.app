@@ -1,11 +1,14 @@
-var Ext = require('extjs');
-var DomUtils = require('../../util/Dom');
-var OverlayPanel = require('../contentviewer/overlay/Panel');
-var UtilDom = require('../../util/Dom');
-var ModelPlaylistItem = require('../../model/PlaylistItem');
-var ResolversVideoPosters = require('../../model/resolvers/VideoPosters');
-var VideoVideo = require('./Video');
-var LibraryActions = require('../library/Actions');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+const VideoPosters = require('legacy/model/resolvers/VideoPosters');
+
+const LibraryActions = require('../library/Actions');
+
+require('../contentviewer/overlay/Panel');
+require('./Video');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
@@ -34,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 	constructor: function (config) {
 		if (!config || !config.contentElement) {
-			throw 'you must supply a contentElement';
+			throw new Error('you must supply a contentElement');
 		}
 
 		var me = this,
@@ -49,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			playlist = [],
 			size = this.getSize(dom, 640);
 
-		playlist.push(NextThought.model.PlaylistItem.fromDom(dom));
+		playlist.push(PlaylistItem.fromDom(dom));
 
 		Ext.applyIf(data, {
 			basePath: reader && reader.basePath,
@@ -58,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.size = size;
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 
 		Ext.apply(config, {
 			layout: 'fit',
@@ -123,13 +126,13 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	},
 
 	getSize: function (dom, desiredWidth) {
-		var parent = dom.parentElement, left, width,
+		var parent = dom.parentElement, left,
 			parentRect = parent && parent.getBoundingClientRect();
 
 		if (!parentRect) {
 			return {
 				left: 0,
-				width: destiredWidth
+				width: desiredWidth
 			};
 		}
 
@@ -164,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		if (poster) {
 			me.setBackground(poster, label);
 		} else {
-			NextThought.model.resolvers.VideoPosters.resolveForSource(source)
+			VideoPosters.resolveForSource(source)
 				.then(function (imgs) {
 					me.setBackground(imgs.poster, label);
 				});

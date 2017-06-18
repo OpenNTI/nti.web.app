@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var PathActions = require('../../navigation/path/Actions');
+const Ext = require('extjs');
+
+const Actions = require('../../navigation/path/Actions');
+const StateStore = require('../../context/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.windows.components.Header', {
@@ -35,8 +37,8 @@ module.exports = exports = Ext.define('NextThought.app.windows.components.Header
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.NavigationActions = NextThought.app.navigation.path.Actions.create();
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.NavigationActions = Actions.create();
+		this.ContextStore = StateStore.getInstance();
 	},
 
 	afterRender: function () {
@@ -102,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.components.Header
 			rootObj = rootContext.obj,
 			rootId = rootObj && rootObj.getId();
 
-		if (this.record && (this.record.get('ContainerId') != rootId)) {
+		if (this.record && (this.record.get('ContainerId') !== rootId)) {
 			this.doNavigate(this.record);
 		}
 	}

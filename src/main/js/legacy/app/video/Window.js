@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../common/window/Window');
-var VideoPanel = require('./Panel');
+const Ext = require('extjs');
+
+require('../../common/window/Window');
+require('./Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.video.Window', {
@@ -25,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Window', {
 
 	constructor: function (config) {
 		if (!config || !config.src || !Ext.isArray(config.src)) {
-			throw 'you must supply a src array';
+			throw new Error('you must supply a src array');
 		}
 
 		config = Ext.applyIf(config, {

@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var MenusLabeledSeparator = require('../menus/LabeledSeparator');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const Globals = require('legacy/util/Globals');
+
+require('../menus/LabeledSeparator');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.Navigation', {
@@ -90,8 +93,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 
 	onMouseEnterTitle: function () {
 		var el = this.titleContainerEl.dom,
-			span = el.querySelector('span'),
-			title = span && span.textContent;
+			span = el.querySelector('span');
 
 		//if we are wide enough to show the whole title don't do anything
 		if (el.clientWidth >= span.offsetWidth) {
@@ -116,6 +118,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 	 *		active: Boolean //if this is the active tab
 	 * }
 	 * @param {Array} tabs a list of tab configs to show
+	 * @returns {void}
 	 */
 	setTabs: function (tabs) {
 		if (!this.rendered) {
@@ -125,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 
 		var me = this,
 			container = me.tabContainerEl,
-			tabs, active;
+			active;
 
 		function alignCurrentTab () {
 			//if for some reason the element was removed before we could call this

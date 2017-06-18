@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var InputBase = require('./Base');
-var MixinsQuestionContent = require('../../../mixins/QuestionContent');
+const Ext = require('extjs');
+
+require('legacy/mixins/QuestionContent');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank', {
@@ -212,12 +213,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 
 
 	setupDropZones: function (dropzones) {
-
-		function isValid (data) {
-			return data.question === me.question.getId() &&
-					(!data.part || me.ordinal.toFixed(0) === data.part);
-		}
-
 		var me = this,
 			common = {
 				//<editor-fold desc="Boilerplate">
@@ -259,6 +254,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 					return true;
 				}
 			};
+
+		function isValid (data) {
+			return data.question === me.question.getId() &&
+					(!data.part || me.ordinal.toFixed(0) === data.part);
+		}
 
 		this.dropZones = dropzones.map(function (zone) {
 			return new Ext.dd.DropZone(zone, Ext.apply({}, dropOnAnswer, common));
@@ -353,9 +353,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 			}
 		}
 
-		this[allFilledIn ?
-			 'enableSubmission' :
-			 'disableSubmission']();
+		this[allFilledIn
+			? 'enableSubmission'
+			: 'disableSubmission']();
 	},
 
 
@@ -464,8 +464,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 							me.part.get('input')
 									.replace(/<input([^>]+?)\/?>/igm, re)));
 
-		Ext.each(part.get('solutions'), function (s) {
-			var x = s.get('value');
+		Ext.each(part.get('solutions'), function (sol) {
+			var x = sol.get('value');
 			// x may or may not be an Array.  Ext.each handles that for us.
 			Ext.each(x, function (s) {
 				var k, w, v = {};

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var InputFreeResponse = require('./FreeResponse');
+const Ext = require('extjs');
+
+require('./FreeResponse');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.NumericMath', {
@@ -23,12 +24,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.NumericM
 		}
 	}
 }, function () {
-	function range (a,b) { var i = m.min(a, b), e = m.max(a, b); for (e; e >= i; e--) { me.allowKeys[e] = 1; } }
-	function set () { var i = arguments.length; for (i; i >= 0; i--) {me.allowKeys[arguments[i]] = 1;} }
-
 	var me = this.prototype,
 		m = Math,
 		c = Ext.EventObject;
+
+	function range (a,b) { var i = m.min(a, b), e = m.max(a, b); for (e; e >= i; e--) { me.allowKeys[e] = 1; } }
+	function set () { var i = arguments.length; for (i; i >= 0; i--) {me.allowKeys[arguments[i]] = 1;} }
+
 
 
 	range(c.PAGE_UP, c.NINE);//number keys accross the top of keyboard, and home/page/etc...

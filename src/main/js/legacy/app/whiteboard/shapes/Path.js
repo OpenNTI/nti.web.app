@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ShapesBase = require('./Base');
+const Ext = require('extjs');
+
+const NTMatrix = require('../Matrix');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', {

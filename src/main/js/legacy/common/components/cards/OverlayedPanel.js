@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var OverlayPanel = require('../../../app/contentviewer/overlay/Panel');
-var UtilDom = require('../../../util/Dom');
-var CardsCard = require('./Card');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
+
+require('legacy/app/contentviewer/overlay/Panel');
+require('./Card');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.cards.OverlayedPanel', {
@@ -36,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Overl
 
 	constructor: function (config) {
 		if (!config || !config.contentElement) {
-			throw 'you must supply a contentElement';
+			throw new Error('you must supply a contentElement');
 		}
 
 		Ext.apply(config, {

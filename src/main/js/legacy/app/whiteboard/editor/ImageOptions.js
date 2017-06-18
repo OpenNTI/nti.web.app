@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var NTMatrix = require('../Matrix');
-var WBUtils = require('../Utils');
-var FileBrowserItem = require('../../../common/menus/file/BrowserItem');
+const Ext = require('extjs');
+
+const NTMatrix = require('../Matrix');
+const WBUtils = require('../Utils');
+
+require('../../../common/menus/file/BrowserItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
@@ -122,12 +124,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		//file.size
 		if (!file || !(/image\/.*/i).test(file.type)) {
 			//TODO: alert user
-	  		cfg = {
+			let cfg = {
 				title: 'Sorry.',
 				icon: 'warning-red',
 				msg: 'You can\'t upload that type of file.'
 			};
-	  		alert(cfg);
+			alert(cfg);
 			console.log('selected file was invalid, or the browser does not support FileAPI');
 			return;
 		}

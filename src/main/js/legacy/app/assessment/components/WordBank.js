@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.components.WordBank', {
@@ -49,8 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	parseWordEntry: function (word) {
 		var d = this.parseDomString(word),
 			tpl = this.audioTeplate,
-			elements = d.querySelectorAll('object[type$=ntiaudio]'),
-			x = elements.length - 1, c, o, p;
+			elements = d.querySelectorAll('object[type$=ntiaudio]');
 
 		function trn (o) {
 			if (o.service !== 'html5' || o.source.length !== o.type.length) {
@@ -72,22 +72,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 		function flatten (agg, v) { return agg.concat(v); }
 
 
-		for (x; x >= 0; x--) {
-			o = elements[x];
+		for (let x = elements.length - 1; x >= 0; x--) {
+			const o = elements[x];
 			tpl.insertAfter(o, {
 				sources: o.querySelectorAll('object[type$=audiosource]').toArray()
-								 .map(DomUtils.parseDomObject)
-								 .map(trn)
-								 .reduce(flatten, [])});
+							.map(DomUtils.parseDomObject)
+							.map(trn)
+							.reduce(flatten, [])});
 			o.parentNode.removeChild(o);
 		}
 
 		elements = d.querySelectorAll('p');
-		x = elements.length - 1;
-		for (x; x >= 0; x--) {
-			o = elements[x];
-			p = o.parentNode;
-			c = o.getChildren();
+		for (let x = elements.length - 1; x >= 0; x--) {
+			const o = elements[x];
+			const p = o.parentNode;
+			const c = o.getChildren();
 			if (c.length === 1) {
 				p.insertBefore(c[0], o);
 				p.removeChild(o);
@@ -108,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 			part: num,
 			ownerCmp: this,
 			question: this.questionId,
-			entries: e.map(function (e) {return e.getData();})
+			entries: e.map(et => et.getData())
 		});
 
 		return this.callParent(arguments);

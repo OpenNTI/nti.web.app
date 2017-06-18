@@ -1,10 +1,13 @@
-var Ext = require('extjs');
-var OverlayPanel = require('../contentviewer/overlay/Panel');
-var ChartScore = require('../../common/chart/Score');
-var AssessmentScore = require('./Score');
-var AssessmentScoreboardHeader = require('./ScoreboardHeader');
-var AssessmentScoreboardTally = require('./ScoreboardTally');
-var AssessmentQuizSubmission = require('./QuizSubmission');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+require('../../common/chart/Score');
+require('./Score');
+require('./ScoreboardHeader');
+require('./ScoreboardTally');
+require('./QuizSubmission');
+
+require('../contentviewer/overlay/Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {

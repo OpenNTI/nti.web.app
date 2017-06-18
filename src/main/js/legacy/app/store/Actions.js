@@ -1,13 +1,19 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var {getURL} = Globals;
-var ParseUtils = require('../../util/Parsing');
-var StoreUtils = require('../../util/Store');
-var CommonActions = require('../../common/Actions');
-var ContentStateStore = require('../library/content/StateStore');
-var StoreStateStore = require('./StateStore');
-var LoginStateStore = require('../../login/StateStore');
+/*global Stripe */
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const StoreUtils = require('legacy/util/Store');
+const LoginStateStore = require('legacy/login/StateStore');
+
+const ContentStateStore = require('../library/content/StateStore');
+
+const StoreStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
+
+const {getURL} = Globals;
 
 module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -15,9 +21,9 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
-		this.LoginStore = NextThought.login.StateStore.getInstance();
-		this.Store = NextThought.app.store.StateStore.getInstance();
+		this.ContentStore = ContentStateStore.getInstance();
+		this.LoginStore = LoginStateStore.getInstance();
+		this.Store = StoreStateStore.getInstance();
 
 		this.mon(this.Store, 'do-load', () => this.loadPurchasables());
 	},
@@ -65,9 +71,12 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	/**
 	 * Called to generate a stripe payment token from purchase information
 	 *
-	 * @param {NextThought.view.store.purchase.Form} cmp the owner cmp
-	 * @param {Object} desc
+	 * @param {NextThought.view.store.purchase.Form} sender the owner cmp
+	 * @param {Object} desc -
 	 * @param {Object} cardinfo to provide to stripe in exchange for a token
+	 * @param {Function} success -
+	 * @param {Function} failure -
+	 * @returns {void}
 	 */
 	createEnrollmentPurchase: function (sender, desc, cardinfo, success, failure) {
 		var purchasable = desc.Purchasable || {},
@@ -139,6 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.	 Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param {Function} success The success callback called if the provided coupone is valid
 	 * @param {Function} failure The failure callback called if we are unable to validate the coupon for any reason
+	 * @return {void}
 	 */
 	priceEnrollmentPurchase: function (sender, desc, success, failure) {
 		desc = desc || {};
@@ -183,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 					}
 
 					if (!result || !result.isPricedPurchase) {
-						throw 'Unknown response from pricing call';
+						throw new Error('Unknown response from pricing call');
 					} else {
 						success.call(null, result);
 					}
@@ -345,12 +355,13 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	/**
 	 * Make the purchase for purchasable using tokenObject
 	 *
-	 * @param {Component} cmp the owner cmp
+	 * @param {Component} sender the owner cmp
 	 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.	Omitted quantity is assumed 1, Coupon is optional.
 	 * @param {Object} tokenObject the stripe token object
-	 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
+	 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo -
 	 * @param {Function} success success callback
 	 * @param {Function} failure failure callback
+	 * @returns {void}
 	 */
 	submitEnrollmentPurchase: function (sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
 		var me = this;
@@ -399,12 +410,13 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	/**
 	 * Make the purchase for purchasable using tokenObject
 	 *
-	 * @param {Component} cmp the owner cmp
+	 * @param {Component} sender the owner cmp
 	 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.	Omitted quantity is assumed 1, Coupon is optional.
 	 * @param {Object} tokenObject the stripe token object
-	 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
+	 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo -
 	 * @param {Function} success success callback
 	 * @param {Function} failure failure callback
+	 * @returns {void}
 	 */
 	submitGiftPurchase: function (sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
 		var me = this;
@@ -459,10 +471,10 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {String} ntiid ntiid of the thing you are redeeming
 	 * @param  {Function} success	success callback
 	 * @param  {Function} failure	failure callback
+	 * @returns {void}
 	 */
 	redeemGift: function (sender, purchasable, token, allowVendorUpdates, ntiid, success, failure) {
-		var me = this,
-			url = purchasable && purchasable.getLink('redeem_gift');
+		var url = purchasable && purchasable.getLink('redeem_gift');
 
 		if (sender.lockPurchaseAction) {
 			console.error('Window already locked aborting redeem gift', arguments);

@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.video.Panel', {
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 
 			for (i = 0, len = this.src.length; i < len; i++) {
 				if (!Ext.isObject(this.src[i])) {
-					throw 'source list passed to video panel must be an array of objects';
+					throw new Error('source list passed to video panel must be an array of objects');
 				}
 
 				cfg.children.push(

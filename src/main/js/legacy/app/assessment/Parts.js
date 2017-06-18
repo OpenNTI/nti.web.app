@@ -90,14 +90,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 			type = 'question-input-' + part.get('Class').toLowerCase();
 			items.push({xtype: 'part-content', question: question, part: part, ordinal: i, reader: this.up('[reader]').reader});
 			items.push({
-						 xtype: type,
-						 reader: this.up('[reader]').reader,
-						 question: question,
-						 part: part,
-						 ordinal: i,
-						 questionSet: questionSet,
-						 tabIndexTracker: tabIndexTracker
-					 });
+				xtype: type,
+				reader: this.up('[reader]').reader,
+				question: question,
+				part: part,
+				ordinal: i,
+				questionSet: questionSet,
+				tabIndexTracker: tabIndexTracker
+			});
 
 			try {
 				this.add({

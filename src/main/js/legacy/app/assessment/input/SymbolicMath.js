@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var InputFreeResponse = require('./FreeResponse');
-var MenusSymbolicMathMenuItem = require('../../../common/menus/SymbolicMathMenuItem');
+/*global jQuery*/
+const Ext = require('extjs');
+
+require('legacy/common/menus/SymbolicMathMenuItem');
+require('./FreeResponse');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.SymbolicMath', {

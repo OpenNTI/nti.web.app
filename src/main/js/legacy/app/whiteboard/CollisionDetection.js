@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 /**
@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetec
 	},
 
 
-	dot_product: function (v1,v2) {
+	dotProduct: function (v1,v2) {
 		var dot = 0, i;
 		for (i = 0; i < v1.length; i++) {
 			dot += v1[i] * v2[i];
@@ -32,26 +32,26 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetec
 	},
 
 
-	is_colliding: function (obj1, obj2) {
+	isColliding: function (obj1, obj2) {
 		var w1 = obj1.width;
 		var h1 = obj1.height;
 		var x1 = obj1.x;
 		var y1 = obj1.y;
-		var angle_1 = obj1.angle;
+		var angle1 = obj1.angle;
 
 		var w2 = obj2.width;
 		var h2 = obj2.height;
 		var x2 = obj2.x;
 		var y2 = obj2.y;
-		var angle_2 = obj2.angle;
+		var angle2 = obj2.angle;
 
 		var axes = [];
 
 		var j, i;
-		axes[0] = this.normal([Math.cos(angle_1), Math.sin(angle_1)]);
-		axes[1] = this.normal([Math.cos(angle_1 + Math.PI / 2), Math.sin(angle_1 + Math.PI / 2)]);
-		axes[2] = this.normal([Math.cos(angle_2), Math.sin(angle_2)]);
-		axes[3] = this.normal([Math.cos(angle_2 + Math.PI / 2), Math.sin(angle_2 + Math.PI / 2)]);
+		axes[0] = this.normal([Math.cos(angle1), Math.sin(angle1)]);
+		axes[1] = this.normal([Math.cos(angle1 + Math.PI / 2), Math.sin(angle1 + Math.PI / 2)]);
+		axes[2] = this.normal([Math.cos(angle2), Math.sin(angle2)]);
+		axes[3] = this.normal([Math.cos(angle2 + Math.PI / 2), Math.sin(angle2 + Math.PI / 2)]);
 
 		var l1 = Math.sqrt(w1 * w1 + h1 * h1);
 		var l2 = Math.sqrt(w2 * w2 + h2 * h2);
@@ -63,8 +63,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetec
 			var p2 = [];
 
 			for (i = 0; i < 4; i++) {
-				var newAng1 = angle_1;
-				var newAng2 = angle_2;
+				var newAng1 = angle1;
+				var newAng2 = angle2;
 				if (i === 0) {
 					newAng1 += ang1;
 					newAng2 += ang2;
@@ -82,9 +82,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetec
 					newAng2 -= ang2;
 				}
 				var point1 = [x1 + l1 * Math.cos(newAng1), y1 + l1 * Math.sin(newAng1)];
-				point1 = this.dot_product(point1, axes[j]) / this.magnitude(axes[j]);
+				point1 = this.dotProduct(point1, axes[j]) / this.magnitude(axes[j]);
 				var point2 = [x2 + l2 * Math.cos(newAng2), y2 + l2 * Math.sin(newAng2)];
-				point2 = this.dot_product(point2, axes[j]) / this.magnitude(axes[j]);
+				point2 = this.dotProduct(point2, axes[j]) / this.magnitude(axes[j]);
 
 				if ((point1 < p1[0]) || (!p1[0])) {
 					p1[0] = Math.round(point1);
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetec
 					p2[1] = Math.round(point2);
 				}
 			}
-			if (!this.is_touching(p1, p2)) {
+			if (!this.isTouching(p1, p2)) {
 				return false;
 			}
 		}
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetec
 	},
 
 
-	is_touching: function (p1,p2) {
+	isTouching: function (p1,p2) {
 		if ((p2[1] >= p1[0]) && (p2[1] <= p1[1])) {
 			return true;
 		}

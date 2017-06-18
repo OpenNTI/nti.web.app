@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	obj_map: {},
+	'obj_map': {},
 	OPEN_COUNT: 0,
 
 	constructor: function () {
@@ -100,12 +100,12 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 
 
 	removeCache: function (id) {
-		delete this.obj_map[id];
+		delete this['obj_map'][id];
 	},
 
 
 	cacheObject: function (id, obj, el, monitors, precache) {
-		this.obj_map[id] = {
+		this['obj_map'][id] = {
 			obj: obj,
 			el: el,
 			monitors: monitors,
@@ -115,13 +115,13 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 
 
 	getObject: function (id) {
-		return this.obj_map[id];
+		return this['obj_map'][id];
 	},
 
 
 	addAllowNavigationHandler: function (fn) {
-		if (!this.allow_navigation_handler) {
-			this.allow_navigation_handler = fn;
+		if (!this['allow_navigation_handler']) {
+			this['allow_navigation_handler'] = fn;
 		} else {
 			console.error('The window cannot have more than one navigation handler');
 		}
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 
 
 	allowNavigation: function () {
-		return (this.allow_navigation_handler && this.allow_navigation_handler.call(null)) || false;
+		return (this['allow_navigation_handler'] && this['allow_navigation_handler'].call(null)) || false;
 	},
 
 
@@ -150,8 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 
 
 	addOpenCls: function (doNotIncrement) {
-		var html = this.getHTML(),
-			viewport = this.getViewport();
+		var html = this.getHTML();
 
 		if (doNotIncrement !== true) {
 			this.incrementOpenWindows();
@@ -169,8 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 
 		if (this.hasOpenWindows()) { return; }
 
-		var html = this.getHTML(),
-			viewport = this.getViewport();
+		var html = this.getHTML();
 
 		this.fireEvent('unlock-body-height');
 

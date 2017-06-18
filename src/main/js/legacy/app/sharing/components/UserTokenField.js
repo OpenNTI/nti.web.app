@@ -1,11 +1,15 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../cache/UserRepository');
-var SearchUtils = require('../../../util/Search');
-var FieldsTagField = require('../../../common/form/fields/TagField');
-var ComponentsShareSearch = require('./ShareSearch');
-var SharingActions = require('../Actions');
-var UtilSearch = require('../../../util/Search');
-var StoreUserSearch = require('../../../store/UserSearch');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const SearchUtils = require('legacy/util/Search');
+const UserSearch = require('legacy/store/UserSearch');
+
+const SharingActions = require('../Actions');
+
+require('legacy/common/form/fields/TagField');
+require('./ShareSearch');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.sharing.components.UserTokenField', {
@@ -31,14 +35,14 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.UserTo
 	},
 
 	getType: function (modelData) {
-		return NextThought.model.UserSearch.getType(modelData);
+		return UserSearch.getType(modelData);
 	},
 
 	initComponent: function () {
 		this.callParent(arguments);
 		this.selections = [];
 
-		this.SharingActions = NextThought.app.sharing.Actions.create();
+		this.SharingActions = SharingActions.create();
 	},
 
 	afterRender: function () {
@@ -51,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.UserTo
 		this.searchStore = this.buildSearchStore();
 		this.suggestionStore = this.buildSuggestionStore();
 		this.setupPickerView();
-		
+
 
 		this.mon(this.searchStore, {
 			scope: this,
@@ -107,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.UserTo
 
 	setupPickerView: function () {
 		var spEl = this.scrollParentEl;
-		
+
 		this.pickerView = Ext.widget('search-sharesearch', {
 			ownerCls: this.ownerCls,
 			focusOnToFront: false,
@@ -118,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.UserTo
 	},
 
 	buildSearchStore: function () {
-		return new NextThought.store.UserSearch();
+		return new UserSearch();
 	},
 
 	buildSuggestionStore: function () {
@@ -225,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.UserTo
 	},
 
 	containsUnresolved: function () {
-		c = Ext.Array.filter(this.selections, function (o, i) { return o.Unresolved === true; });
+		const c = Ext.Array.filter(this.selections, function (o, i) { return o.Unresolved === true; });
 		return c.length > 0;
 	},
 

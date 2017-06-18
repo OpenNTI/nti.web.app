@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var Color = require('../../../util/Color');
-var EditorColorPickerButton = require('./ColorPickerButton');
-var EditorStrokeWidthSelector = require('./StrokeWidthSelector');
-var EditorToolOption = require('./ToolOption');
-var UtilColor = require('../../../util/Color');
+const Ext = require('extjs');
+
+const Color = require('legacy/util/Color');
+
+require('./ColorPickerButton');
+require('./StrokeWidthSelector');
+require('./ToolOption');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
@@ -122,19 +123,19 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOpt
 		}
 
 		if (options.stroke) {
-	  		val = null;
-	  		if (options.stroke !== 'NONE') {
+			val = null;
+			if (options.stroke !== 'NONE') {
 				hex = Color.rgbaToHex(options.stroke);
 				val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
-	  }
-	  		strokeButton.setValue(val);
+			}
+			strokeButton.setValue(val);
 		}
 		if (options.fill) {
-	  		val = null;
-	  		if (options.fill !== 'NONE') {
+			val = null;
+			if (options.fill !== 'NONE') {
 				hex = Color.rgbaToHex(options.fill);
 				val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
-	  }
+			}
 			fillButton.setValue(val);
 		}
 
