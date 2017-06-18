@@ -726,6 +726,7 @@ function worker () {
 		role: 1
 	};
 
+	// eslint-disable-next-line no-restricted-globals
 	self.addEventListener('message', function (e) {
 		var resp = {};
 		fetch(e.data, function (json, shell) {
@@ -759,6 +760,7 @@ function worker () {
 				}
 			}
 
+			// eslint-disable-next-line no-restricted-globals
 			self.postMessage(resp);
 		});
 	}, false);

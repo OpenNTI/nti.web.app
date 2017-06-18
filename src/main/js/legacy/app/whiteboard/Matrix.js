@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 /**
@@ -53,8 +53,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	translate: function (x, y) {
 		if (Ext.isArray(x)) {
-	  	y = x[1];
-	  	x = x[0];
+			y = x[1];
+			x = x[0];
 		}
 		this.multiply({m: [1, 0, 0, 1, x, y]});
 	},
@@ -62,8 +62,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	scale: function (sx, sy) {
 		if (Ext.isArray(sx)) {
-	  	sy = sx[1];
-	  	sx = sx[0];
+			sy = sx[1];
+			sx = sx[0];
 		}
 		if (sy === undefined) { sy = sx; }
 		this.multiply({m: [sx, 0, 0, sy, 0, 0]});
@@ -80,7 +80,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	/**
 	 *
-	 * @param [averaged]
+	 * @param {Boolean} [averaged]-
+	 * @returns {Number} scale
 	 */
 	getScale: function (averaged) {
 		var m = this.m,
@@ -109,8 +110,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	/**
 	 *
-	 * @param px
-	 * @param [py]
+	 * @param {Number} px -
+	 * @param {Number} [py] -
+	 * @returns {Number[]} -
 	 */
 	transformPoint: function (px, py) {
 		if (Ext.isArray(px)) {
@@ -126,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	toTransform: function () {
 		var i = this.m.length - 1;
-		for (; i >= 0; i--) { if (isNaN(this.m[i])) { throw 'NaN in matrix at index: ' + i; } }
+		for (; i >= 0; i--) { if (isNaN(this.m[i])) { throw new Error('NaN in matrix at index: ' + i); } }
 
 		return {
 			'Class': 'CanvasAffineTransform',
@@ -139,4 +141,3 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 		};
 	}
 });
-

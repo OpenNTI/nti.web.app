@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var Globals = require('../../../util/Globals');
-var OverlayPanel = require('../../../app/contentviewer/overlay/Panel');
-var UtilDom = require('../../../util/Dom');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
+const Globals = require('legacy/util/Globals');
+
+require('legacy/app/contentviewer/overlay/Panel');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.cards.CardTarget', {
@@ -31,16 +32,16 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 
 	constructor: function (config) {
 		if (!config || !config.contentElement) {
-			throw 'you must supply a contentElement';
+			throw new Error('you must supply a contentElement');
 		}
 
-		var version, data = DomUtils.parseDomObject(config.contentElement),
-			nativeSupport = Globals.hasPDFSupport(),
-			anchorAttr = 'class=\'link\' target=\'_blank\'',
-			chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>',
-			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>',
-			ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox,</a>',
-			ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer.</a>';
+		let version, data = DomUtils.parseDomObject(config.contentElement);
+		let nativeSupport = Globals.hasPDFSupport();
+		// let anchorAttr = 'class=\'link\' target=\'_blank\'';
+		// let chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>';
+		// let safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>';
+		// let ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox,</a>';
+		// let ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer.</a>';
 
 		//the data-href has the adjusted href.
 		data.href = data['attribute-data-href'];

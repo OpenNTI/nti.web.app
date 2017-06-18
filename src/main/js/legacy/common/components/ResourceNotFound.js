@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.ResourceNotFound', {
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.common.components.ResourceNot
 
 
 	goBack: function () {
-		history.back();
+		window.history.back();
 	},
 
 
@@ -54,4 +54,3 @@ module.exports = exports = Ext.define('NextThought.common.components.ResourceNot
 		}
 	}
 });
-

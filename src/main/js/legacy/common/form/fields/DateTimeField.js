@@ -1,7 +1,7 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
+require('legacy/util/Scrolling');
 require('./LegacySearchComboBox');
-require('../../../util/Scrolling');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeField', {
@@ -313,12 +313,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 
 		value = parseInt(value, 10);
 
-		if (this.meridiemSelect.isDisabled()) {
-			value = value;
-		} else if (meridiem === this.AM && value === 12) {
-			value = 0;
-		} else if (meridiem === this.PM && value < 12) {
-			value = value + 12;
+		if (!this.meridiemSelect.isDisabled()) {
+			if (meridiem === this.AM && value === 12) {
+				value = 0;
+			} else if (meridiem === this.PM && value < 12) {
+				value = value + 12;
+			}
 		}
 
 		return value;
@@ -384,10 +384,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		var useShort = this.useShortDates,
 			months;
 
-		months = this.MONTHS.map(function (month) {
+		months = this.MONTHS.map(function (monthObj) {
 			return {
-				value: month.value,
-				text: useShort ? month.shortLabel : month.longLabel
+				value: monthObj.value,
+				text: useShort ? monthObj.shortLabel : monthObj.longLabel
 			};
 		});
 
@@ -419,12 +419,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 
 		var range = this.yearSelect.getOptions();
 
-		if (range.indexOf(year) >= 0) {
-			year = year;
-		} else if (range[0] > year) {
-			year = range[0];
-		} else if (range.last() < year) {
-			year = range.last();
+		if (range.indexOf(year) < 0) {
+			if (range[0] > year) {
+				year = range[0];
+			} else if (range.last() < year) {
+				year = range.last();
+			}
 		}
 
 		this.yearSelect.setValue(year);
@@ -441,12 +441,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 
 		var range = this.monthSelect.getOptions();
 
-		if (range.indexOf(month) >= 0) {
-			month = month;
-		} else if (range[0] > month) {
-			month = range[0];
-		} else if (range.last() < month) {
-			month = range.last();
+		if (range.indexOf(month) < 0) {
+			if (range[0] > month) {
+				month = range[0];
+			} else if (range.last() < month) {
+				month = range.last();
+			}
 		}
 
 		this.monthSelect.setValue(month);
@@ -463,12 +463,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 
 		var range = this.daySelect.getOptions();
 
-		if (range.indexOf(day) >= 0) {
-			day = day;
-		} else if (range[0] > day) {
-			day = range[0];
-		} else if (range.last() < day) {
-			day = range.last();
+		if (range.indexOf(day) < 0) {
+			if (range[0] > day) {
+				day = range[0];
+			} else if (range.last() < day) {
+				day = range.last();
+			}
 		}
 
 		this.daySelect.setValue(day);
@@ -534,7 +534,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		}
 	},
 
-	onHourChanged: function (hour) {
+	onHourChanged: function (/*hour?*/) {
 		var hour = this.hourInput.dom.value,
 			meridiem = this.meridiemSelect.getValue();
 

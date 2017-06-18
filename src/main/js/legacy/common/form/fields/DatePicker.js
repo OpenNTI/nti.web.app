@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const moment = require('moment');
+const {wait} = require('nti-commons');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker', {
@@ -151,9 +152,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 	onKeyDown: function (e) {
 		var key = e.keyCode,
-			target = e.target,
-			el = Ext.get(target),
-			name = target && target.getAttribute('name'),
+			// target = e.target,
+			// el = Ext.get(target),
+			// name = target && target.getAttribute('name'),
 			nextEl = this.minuteEl;
 
 		if (key === e.ENTER || key === e.TAB || this.isDelimiter(key)) {
@@ -243,14 +244,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 	setValue: function (value, forceSelect) {
-		var date = new Date(value),
-			me = this, dateString, hour, minute, m = 'am';
+		let date = new Date(value),
+			me = this, m = 'am';
 
 		if (isNaN(date)) { return; }
 
-		dateString = Ext.Date.format(date, 'F j, Y');
-		hour = date.getHours();
-		minute = date.getMinutes();
+		// let dateString = Ext.Date.format(date, 'F j, Y');
+		let hour = date.getHours();
+		let minute = date.getMinutes();
 
 		if (hour > 12) {
 			hour = hour % 12;
@@ -337,11 +338,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 
 	onTimeChange: function () {
-		var p = this.datepicker,
-			hour = this.hourEl && this.hourEl.dom.value,
-			minutes = this.minuteEl && this.minuteEl.dom.value,
-			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
-			date;
+		// let p = this.datepicker;
+		let hour = this.hourEl && this.hourEl.dom.value;
+		let minutes = this.minuteEl && this.minuteEl.dom.value;
+		// let meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
+		// let date;
 
 		hour = parseInt(hour, 10);
 		minutes = parseInt(minutes, 10);
@@ -391,14 +392,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 	getErrors: function () {
 		var fields = [this.hourEl.dom, this.minuteEl.dom],
-			field, isValid = true, min, max, val,
-			validity, errors = [], name, d;
+			field, min, max, val,
+			errors = [], name;
 
 		if (!this.selectedDate) {
 			errors.push({name: 'date', error: 'Please select a date above.'});
 		}
 
-		for (var i = 0; i < fields.length; i++) {
+		for (let i = 0; i < fields.length; i++) {
 			field = fields[i];
 			min = field.getAttribute('min');
 			max = field.getAttribute('max');
@@ -467,7 +468,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 
 	getDateMilliseconds: function () {
-		var v, date;
+
 		if (this.selectedDate) {
 			return this.selectedDate.getTime();
 		}
@@ -477,8 +478,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 
 	getTimeMilliseconds: function () {
-		var v, time,
-			hour = this.hourEl && this.hourEl.dom.value,
+		var hour = this.hourEl && this.hourEl.dom.value,
 			minutes = this.minuteEl && this.minuteEl.dom.value,
 			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
 			t;

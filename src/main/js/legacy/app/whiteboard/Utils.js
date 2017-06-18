@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var NTMatrix = require('./Matrix');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {getURL} = require('legacy/util/Globals');
+
+const NTMatrix = require('./Matrix');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
@@ -51,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 	},
 
 	canUse: function (image, fastOnCORS) {
-		var c, ctx, img, l = location;
+		var c, ctx, l = window.location;
 		var origin = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '');
 		try {
 			var src = image.src;
@@ -63,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 				return false;
 			}
 
-			img = Ext.getDom(image);
+			//const img = Ext.getDom(image);
 			c = document.createElement('canvas');
 			ctx = c.getContext('2d');
 			ctx.drawImage(image, 0, 0);
@@ -79,6 +81,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 	},
 
 	maybeProxyImage: function (url, image) {
+		var tempImage = new Image(),
+			me = this;
+
 		function errorPassthrough () {
 			console.error('Could not load: ' + url);
 			passthrough();
@@ -94,8 +99,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 			passthrough();
 		}
 
-		var tempImage = new Image(),
-			me = this;
 		tempImage.onload = finishTest;
 		tempImage.onerror = errorPassthrough;
 		tempImage.src = url;
@@ -104,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 	proxyImage: function (imageUrl) {
 		if (/^data:/i.test(imageUrl)) {
 			console.error('A data url was attempted to be proxied.');
-			throw 'A data url was attempted to be proxied.';
+			throw new Error('A data url was attempted to be proxied.');
 		}
 		return getURL($AppConfig['server-path'] + '@@echo_image_url?image_url=' + encodeURIComponent(imageUrl));
 	},

@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var Color = require('../../../../util/Color');
-var NTMatrix = require('../../Matrix');
-var WBUtils = require('../../Utils');
+const Ext = require('extjs');
+
+const Color = require('legacy/util/Color');
+
+const NTMatrix = require('../../Matrix');
+const WBUtils = require('../../Utils');
 
 
 /**
@@ -23,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 			mouseup: this.onCanvasMouseUp,
 
 			mouseenter: this.onCanvasMouseEnter,
-	  		mouseout: this.onCanvasMouseLeave
+			mouseout: this.onCanvasMouseLeave
 		});
 
 		this.mon(this.toolbar.el, {
@@ -63,9 +65,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 				var e = evt.browserEvent,
 					from = e.relatedTarget || e.toElement;
 				if (!from || from.nodeName === 'HTML') {
-		  //					if(this.mouseLeftNoMouseUp){
-		  //						alert({title:'Color in the Lines!',msg: 'You have just gone too far this time!'});
-		  //					}
+					// if(this.mouseLeftNoMouseUp){
+					// 	alert({title:'Color in the Lines!',msg: 'You have just gone too far this time!'});
+					// }
 					clearFlag.call(this);
 				}
 			}
@@ -98,9 +100,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 	},
 
 	onToolbarClick: function (e) {
-		var action, c, me = this, n;
+		var action, c, me = this;
 		function togglePressed () {
-			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), function (b) { return b.pressed; });
+			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), ({pressed}) => pressed);
 			if (b.length > 0) { b[0].toggle();}
 		}
 
@@ -144,13 +146,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 	onPathStrokeWidthChange: function (e) {
 		if (!this.selected) { return; }
 
-		var pressed = this.toolbar.down('[pathSelectStrokeWidth]').query('button[pressed]'), strokeValue = 0, stroke;
+		var pressed = this.toolbar.down('[pathSelectStrokeWidth]').query('button[pressed]'),
+			strokeValue = 0;
+
 		Ext.each(pressed, function (b) {
 			if (b.strokeWidth) {
 				strokeValue = b.strokeWidth;
 			}
 			else if (b.stroke) {
-				stroke = b.stroke;
+				// stroke = b.stroke;
 			}
 		});
 
@@ -262,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 			s = null,
 			cs = this.selected,
 			p = this.getRelativeXY(e),
-			sp = this.scalePoint(p), l, sw, angle = 0;
+			sp = this.scalePoint(p);
 
 		if (cs && cs.isPointInNib.apply(cs, p)) {
 			return;
@@ -284,8 +288,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 
 		//Set toolbar Options.
 		if (this.selected) {
-			sw = this.selected.strokeWidth;
-			l = Ext.isString(sw) ? this.selected.strokeWidth.replace('%', '') : sw;
+			const sw = this.selected.strokeWidth;
+			const l = Ext.isString(sw) ? this.selected.strokeWidth.replace('%', '') : sw;
 			this.toolbar.getCurrentTool().setOptions({
 				fill: this.selected.fill,
 				stroke: this.selected.stroke,
@@ -295,22 +299,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 		}
 
 		c.drawScene();
-
-	//		clearInterval(this.rotationTimer);
-	//		if(!s){ return;}
-	//
-	//		angle = 0;
-	//		this.rotationTimer = setInterval( function(){
-	//		//debugger;
-	//			var center = new NTMatrix(Ext.clone(s.transform)).getTranslation(),
-	//				x = Math.cos(angle),
-	//				y = Math.sin(angle);
-	//			x += center[0];
-	//			y += center[1];
-	//			s.modify('rot', x, y);
-	//			angle += 0.1;
-	//			c.drawScene();
-	//		}, 1000);
 	},
 
 	doMove: function (e) {
@@ -457,7 +445,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 		}
 
 		// FIXME: Stop rotating as we draw.
-	//		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
+		// m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
 		m.scaleAll(1 / w);//do this after
 		s.transform = m.toTransform();
@@ -575,14 +563,14 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 			defs.sides = opts.sides;
 			console.debug('implement path');
 		}
-  /*
+		/*
 		else if(/line/i.test(shape)){
 			defs.sides = 1;
 			defs.Class = 'CanvasPolygonShape';
 		}
-  */
+		*/
 		else if (/text/i.test(shape)) {
-	  //			defs.text = this.textValueField.getValue();
+			// defs.text = this.textValueField.getValue();
 			console.debug('implement path');
 		}
 

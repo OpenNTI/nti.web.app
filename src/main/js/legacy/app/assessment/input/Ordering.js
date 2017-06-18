@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var InputBase = require('./Base');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering', {
@@ -153,9 +155,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 
 	mark: function () {
 		var s = (this.part.get('solutions') || [])[0],
-			c = (s && s.get('value')) || {}, i = 0, me = this,
-			values = Ext.clone(this.part.get('values')),
-			labels = Ext.clone(this.part.get('labels'));
+			c = (s && s.get('value')) || {}, i = 0,
+			me = this;
+
 
 		this.getEl().select('.ordinal').removeCls(['correct', 'incorrect']);
 
@@ -233,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		this.callParent();
 	},
 
-	/**
+	/*
 	 * Set the ordering question to submitted state.
 	 * Once an ordering question has been submitted, we disable drag and drop.
 	 */
@@ -271,8 +273,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	},
 
 	hideSolution: function () {
-		var me = this,
-			dragzoneEl = this.getDragzoneEl();
+		var dragzoneEl = this.getDragzoneEl();
 
 		dragzoneEl.setStyle({'width': undefined});
 		this.callParent();
@@ -358,7 +359,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 					e = this.dragData.sourceEl,
 					w = e.getWidth() + 'px',
 					h = e.getHeight() + 'px',
-					m = e.up('.ordinal'),
 					leftMargin = e.getX() + 6;
 
 				this.initPageX = this.lastPageX = this.startPageX =

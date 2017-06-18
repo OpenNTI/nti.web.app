@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var Anchors = require('../../../util/Anchors');
-var Globals = require('../../../util/Globals');
-var {guidGenerator} = Globals;
+const Ext = require('extjs');
+
+const Anchors = require('../../../util/Anchors');
+const Globals = require('../../../util/Globals');
+const {guidGenerator} = Globals;
 
 require('../../../util/Line');
 
@@ -35,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		this.put = function (o, key) {
 			key = typeof key === 'number' ? key : guidGenerator();
 			if (this.values[key]) {
-				throw 'existing value';
+				throw new Error('existing value');
 			}
 			this.values[key] = o;
 			this.length += 1;

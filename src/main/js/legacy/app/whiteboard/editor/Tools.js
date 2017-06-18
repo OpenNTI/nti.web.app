@@ -1,11 +1,12 @@
-var Ext = require('extjs');
-var EditorImageOptions = require('./ImageOptions');
-var EditorMoveOptions = require('./MoveOptions');
-var EditorPencilOptions = require('./PencilOptions');
-var EditorShapeOptions = require('./ShapeOptions');
-var EditorTextOptions = require('./TextOptions');
-var EditorEraserOptions = require('./EraserOptions');
-var EditorTool = require('./Tool');
+const Ext = require('extjs');
+
+require('./ImageOptions');
+require('./MoveOptions');
+require('./PencilOptions');
+require('./ShapeOptions');
+require('./TextOptions');
+require('./EraserOptions');
+require('./Tool');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tools', {
@@ -29,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tools',
 			{ tool: 'shape' },
 			{ tool: 'text', disabled: true, hidden: true },
 			{ tool: 'image' }
-	  //			{ tool: 'eraser'}
+			// { tool: 'eraser'}
 		]
 	},{
 		ui: 'secondary',
@@ -45,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tools',
 			{xtype: 'wb-tool-shape-options', forTool: 'shape'},
 			{xtype: 'wb-tool-text-options', forTool: 'text'},
 			{xtype: 'wb-tool-image-options', forTool: 'image'}
-	  //			{xtype: 'wb-tool-eraser-options', forTool: 'eraser'}
+			// {xtype: 'wb-tool-eraser-options', forTool: 'eraser'}
 		]
 	}],
 

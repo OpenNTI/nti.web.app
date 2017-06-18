@@ -1,17 +1,21 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../util/Analytics');
-var Globals = require('../../util/Globals');
-var ObjectUtils = require('../../util/Object');
-var PageVisibility = require('../../util/Visibility');
-var MixinsInstanceTracking = require('../../mixins/InstanceTracking');
-var UtilGlobals = require('../../util/Globals');
-var MediaHTML5Player = require('../../util/media/HTML5Player');
-var MediaHTML5VideoPlayer = require('../../util/media/HTML5VideoPlayer');
-var MediaKalturaPlayer = require('../../util/media/KalturaPlayer');
-var MediaVimeoPlayer = require('../../util/media/VimeoPlayer');
-var MediaYouTubePlayer = require('../../util/media/YouTubePlayer');
-var ModelPlaylistItem = require('../../model/PlaylistItem');
-var ResolversVideoPosters = require('../../model/resolvers/VideoPosters');
+const Ext = require('extjs');
+
+const AnalyticsUtil = require('legacy/util/Analytics');
+const Globals = require('legacy/util/Globals');
+const ObjectUtils = require('legacy/util/Object');
+const PageVisibility = require('legacy/util/Visibility');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+const VideoPosters = require('legacy/model/resolvers/VideoPosters');
+const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
+const Youtube = require('legacy/model/resolvers/videoservices/Youtube');
+
+require('legacy/util/media/HTML5Player');
+require('legacy/util/media/HTML5VideoPlayer');
+require('legacy/util/media/KalturaPlayer');
+require('legacy/util/media/VimeoPlayer');
+require('legacy/util/media/YouTubePlayer');
+
+require('legacy/mixins/InstanceTracking');
 
 
 
@@ -57,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 	]),
 
 	onClassExtended: function (cls, data, hooks) {
-		var onBeforeClassCreated = hooks.onBeforeCreated;
+		const onBeforeClassCreated = hooks.onBeforeCreated;
 
 		//merge with subclass's render selectors
 		data.listeners = Ext.applyIf(data.listeners || {},cls.superclass.listeners);
@@ -65,12 +69,12 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
 		}
 
-		hooks.onBeforeCreated = function (cls, data) {
-			if (data.cls) {
-				data.cls = [cls.superclass.cls, data.cls].join(' ');
+		hooks.onBeforeCreated = function (clazz, classData) {
+			if (classData.cls) {
+				classData.cls = [clazz.superclass.cls, classData.cls].join(' ');
 			}
-			data.listeners = Ext.applyIf(data.listeners || {},cls.superclass.listeners);
-			onBeforeClassCreated.call(this, cls, data, hooks);
+			classData.listeners = Ext.applyIf(classData.listeners || {}, clazz.superclass.listeners);
+			onBeforeClassCreated.call(this, clazz, classData, hooks);
 		};
 	},
 
@@ -87,21 +91,21 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 
 	statics: {
 		urlToPlaylist: function (url) {
-			var item = NextThought.model.PlaylistItem.fromURL(url);
+			var item = PlaylistItem.fromURL(url);
 			return item && [item];
 		},
 
 
 		resolvePosterFromEmbedded: function (embedded) {
-			var PosterResolver = NextThought.model.resolvers.VideoPosters,
+			var PosterResolver = VideoPosters,
 				type = embedded.type,
 				url = embedded.embedURL,
 				id;
 
 			if (type === PosterResolver.YOUTUBE) {
-				id = NextThought.model.resolvers.videoservices.Youtube.getIdFromURL(url);
+				id = Youtube.getIdFromURL(url);
 			} else if (type === PosterResolver.VIMEO) {
-				id = NextThought.model.resolvers.videoservices.Vimeo.getIdFromURL(url);
+				id = Vimeo.getIdFromURL(url);
 			} else {
 				return Promise.resolve(Globals.CANVAS_BROKEN_IMAGE.src);
 			}
@@ -404,10 +408,11 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 			return null;
 		}
 
-		function call (fn, o, args) {
+		function call (fn, o, cargs) {
 			if (!o || !Ext.isFunction(fn)) {return null;}
-			return fn.apply(o, args);
+			return fn.apply(o, cargs);
 		}
+
 		this.debug(this.id, 'Invoking command ', command, arguments);
 		this.fireEvent('player-command-' + command);
 		return call(t[command], t, args);
@@ -478,7 +483,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		if (this.hasWatchEvent && (diff > threshold || diff < 0)) {
 			delete this.hasWatchEvent;
 			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
-				video_end_time: this.lasttime,
+				'video_end_time': this.lasttime,
 				MaxDuration: state.duration / 1000
 			});
 
@@ -487,9 +492,9 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 			if (state.state !== this.self.states.UNSTARTED) {
 				AnalyticsUtil.getResourceTimer(id, {
 					type: 'video-skip',
-					with_transcript: hasTranscript,
-					video_start_time: this.lasttime,
-					video_end_time: time
+					'with_transcript': hasTranscript,
+					'video_start_time': this.lasttime,
+					'video_end_time': time
 				});
 
 				AnalyticsUtil.stopResourceTimer(id, 'video-skip');
@@ -500,7 +505,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		if (this.hasWatchEvent && (state.state === this.self.states.PAUSED)) {
 			delete this.hasWatchEvent;
 			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
-				video_end_time: this.lasttime,
+				'video_end_time': this.lasttime,
 				MaxDuration: state.duration / 1000
 			});
 		}
@@ -509,8 +514,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		if (!this.hasWatchEvent && ((state.state === this.self.states.PLAYING) || (state.state === this.self.states.BUFFERING))) {
 			AnalyticsUtil.getResourceTimer(id, {
 				type: 'video-watch',
-				with_transcript: hasTranscript,
-				video_start_time: time,
+				'with_transcript': hasTranscript,
+				'video_start_time': time,
 				MaxDuration: state.duration / 1000,
 				PlaySpeed: state.speed
 			});
@@ -529,7 +534,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 			current = this.playlist[this.playlistIndex];
 			delete this.hasWatchEvent;
 			AnalyticsUtil.stopResourceTimer(current.getId(), 'video-watch', {
-				video_end_time: state && state.time
+				'video_end_time': state && state.time
 			});
 		}
 
@@ -601,7 +606,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 	},
 
 	setVideoAndPosition: function (videoId, startAt) {
-		var compareSources = NextThought.model.PlaylistItem.compareSources;
+		var compareSources = PlaylistItem.compareSources;
 		const playlistItem = this.playlist[this.playlistIndex];
 
 		this.maybeActivatePlayer();

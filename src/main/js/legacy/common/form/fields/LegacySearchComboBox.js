@@ -1,6 +1,6 @@
-var Ext = require('extjs');
-var MixinsScrolling = require('../../../mixins/Scrolling');
+const Ext = require('extjs');
 
+require('legacy/mixins/Scrolling');
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
 	extend: 'Ext.Component',
@@ -254,6 +254,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	 * Set the current option and update the input
 	 * @param  {Node} el the li to select
 	 * @param  {Boolean} silent don't fire an event
+	 * @returns {void}
 	 */
 	selectOption: function (el, silent) {
 		var index = el.getAttribute('data-index'),
@@ -418,7 +419,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 				this.filterOptions(value, true);
 			}
 		} else {
-			if (this.KEY_CODES.BACKSPACE == e.getCharCode()) {
+			if (this.KEY_CODES.BACKSPACE === e.getCharCode()) {
 				this.clear();
 			}
 			this.selectNextMatch(e);
@@ -427,13 +428,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 
 
 	inputBlur: function () {
-		function search (o) {
-			return o.text.toLowerCase() === value;
-		}
-
-		var value = (this.inputEl.getValue() || '').toLowerCase(),
+		const value = (this.inputEl.getValue() || '').toLowerCase(),
 			isEmpty = Ext.isEmpty(value),
-			isValid = this.options.filter(search).length === 1;
+			isValid = this.options.filter(o => o.text.toLowerCase() === value).length === 1;
 
 		//if its not empty and the value is not a valid option
 		this.inputEl.removeCls('error');

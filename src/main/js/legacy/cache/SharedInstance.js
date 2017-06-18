@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../util/Parsing');
+const Ext = require('extjs');
+
+const ParseUtils = require('../util/Parsing');
 
 
 /**
@@ -70,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 		if (!this.KEY_TO_RECORD[key]) {
 			this.KEY_TO_RECORD[key] = record;
 		} else {
-			throw 'Key Collision';
+			throw new Error('Key Collision');
 		}
 	},
 
@@ -79,6 +80,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * Set the values of the record from the server to the shared instance
 	 * @param {String} key key for the record
 	 * @param {ModelInstance} record the record to sync from
+	 * @returns {void}
 	 */
 	__updateRecord: function (key, record) {
 		var cachedRecord = this.__getRecordForKey(key),
@@ -103,6 +105,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	/**
 	 * Fetch the record from the server and update the values in the shared instance
 	 * @param  {ModelInstance} record record to sync
+	 * @returns {void}
 	 */
 	__syncRecordWithServer: function (record) {
 		var href = this.getHrefForRecord(record),

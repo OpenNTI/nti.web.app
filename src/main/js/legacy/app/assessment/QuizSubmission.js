@@ -1,7 +1,10 @@
 var Ext = require('extjs');
+
+const {getFormattedString, getString} = require('legacy/util/Localization');
+
+require('legacy/model/assessment/Survey');
 require('../contentviewer/overlay/Panel');
 require('./Actions');
-require('../../model/assessment/Survey');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission', {
@@ -276,7 +279,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 		this.answeredMap[question.getId()][part.id] = count;
 		this.reflectStateChange();
-		return status;
 	},
 
 	historyUpdated: function () {
@@ -288,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 	reflectStateChange: function () {
 		var totalAnsweredParts = 0,
-			totalParts = 0,
+			// totalParts = 0,
 			answeredQuestions = 0,
 			totalQuestions = 0,
 			newStatus;
@@ -303,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			});
 
 			totalAnsweredParts += answeredParts;
-			totalParts += partsCount;
+			// totalParts += partsCount;
 
 			if (answeredParts === partsCount) {
 				answeredQuestions += 1;

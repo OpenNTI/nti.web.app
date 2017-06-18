@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var MenusAnswerHistory = require('../../../common/menus/AnswerHistory');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const Globals = require('legacy/util/Globals');
+
+require('legacy/common/menus/AnswerHistory');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
@@ -26,14 +29,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			cn: [{
 				cls: 'left', html: '{toolbar}'
 			},{
-					 cls: 'right',
-					 cn: [
-						 {cls: 'action check'},
-						 {cls: 'action solution', html: '{{{NextThought.view.assessment.input.Base.show-solution}}}'},
-						 {cls: 'action results', html: 'View Results'},
-						 {cls: 'action report', html: 'View Report'}
-					 ]
-				 }]
+				cls: 'right',
+				cn: [
+					{cls: 'action check'},
+					{cls: 'action solution', html: '{{{NextThought.view.assessment.input.Base.show-solution}}}'},
+					{cls: 'action results', html: 'View Results'},
+					{cls: 'action report', html: 'View Report'}
+				]
+			}]
 		}
 	]),
 
@@ -459,7 +462,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 
 	buildAnswerHistoryStore: function (id) {
 		var s = NextThought.store.PageItem.create({containerid: id}),
-			params = 'application/vnd.nextthought.assessment.assessedquestion', url, root, me = this;
+			params = 'application/vnd.nextthought.assessment.assessedquestion',
+			url, root;
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
 			sortOn: 'createdTime',

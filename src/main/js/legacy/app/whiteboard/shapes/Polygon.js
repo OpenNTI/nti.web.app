@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ShapesBase = require('./Base');
+const Ext = require('extjs');
+
+const NTMatrix = require('../Matrix');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon', {
@@ -56,28 +59,28 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 		if (this.migrated) { return;}
 		this.migrated = true;
 
-		function triangleCenter (m) {
-			var scale = m.getScale(), r, h, c = m.getTranslation(), dc, ct = [],
-				rot = m.getRotation();
-
-			//Take rotation out
-			//m.rotate(-rot);
-			console.log('scale: ', scale);
-			r = scale[0] / 2;
-
-			h = (r * 3 * Math.cos(Math.PI / 6)) / Math.sqrt(3);
-			console.log('h: ', h);
-
-			dc = r - h / 2;
-
-			ct[0] = c[0];
-			ct[1] = c[1] - dc;
-
-			//m.rotate(rot);
-			console.log('dc: ', dc);
-			console.log('center: ', ct);
-			return ct;
-		}
+		// function triangleCenter (m) {
+		// 	let scale = m.getScale(), r, h, c = m.getTranslation(), dc, ct = [];
+		// 	// let rot = m.getRotation();
+		//
+		// 	//Take rotation out
+		// 	//m.rotate(-rot);
+		// 	console.log('scale: ', scale);
+		// 	r = scale[0] / 2;
+		//
+		// 	h = (r * 3 * Math.cos(Math.PI / 6)) / Math.sqrt(3);
+		// 	console.log('h: ', h);
+		//
+		// 	dc = r - h / 2;
+		//
+		// 	ct[0] = c[0];
+		// 	ct[1] = c[1] - dc;
+		//
+		// 	//m.rotate(rot);
+		// 	console.log('dc: ', dc);
+		// 	console.log('center: ', ct);
+		// 	return ct;
+		// }
 
 		function triangleHeight (m) {
 			var scale = m.getScale(),
@@ -86,12 +89,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 			return h;
 		}
 
-		var m = new NTMatrix(Ext.clone(this.transform)),
-			scale, dx, dy, t, ct, nt;
+		var m = new NTMatrix(Ext.clone(this.transform));
 
 		m.rotate(Math.PI / 2);
-		dx = 0;
-		dy = triangleHeight(m) / 6;
+		const dx = 0;
+		const dy = triangleHeight(m) / 6;
 
 		console.log('center dx', dx, 'center dy', dy);
 		m.scale(1, Math.cos(Math.PI / 6));

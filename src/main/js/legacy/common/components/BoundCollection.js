@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var MixinsTransition = require('../../mixins/Transition');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+
+require('legacy/mixins/Transition');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.BoundCollection', {
@@ -202,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		 * Then if there is anything left in the old list, append them with a remove transition
 		 */
 
-		 while (oldItems[oldIndex] || newItems[newIndex]) {
+		while (oldItems[oldIndex] || newItems[newIndex]) {
 			newItem = newItems[newIndex];
 			oldItem = oldItems[oldIndex];
 
@@ -226,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 
 			oldIndex += 1;
 			newIndex += 1;
-		 }
+		}
 
 		return merge;
 	},

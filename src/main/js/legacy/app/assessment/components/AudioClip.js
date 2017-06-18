@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.components.AudioClip', {
@@ -46,9 +47,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 
 		Ext.apply(this.renderData, {
 			sources: this.domObject.querySelectorAll('object[type$=audiosource]').toArray()
-							 .map(DomUtils.parseDomObject)
-							 .map(trn)
-							 .reduce(flatten, [])
+						.map(DomUtils.parseDomObject)
+						.map(trn)
+						.reduce(flatten, [])
 		});
 
 		return this.callParent(arguments);

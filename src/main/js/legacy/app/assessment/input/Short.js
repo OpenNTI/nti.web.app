@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var InputBase = require('./Base');
-var MixinsQuestionContent = require('../../../mixins/QuestionContent');
+const Ext = require('extjs');
+
+require('legacy/mixins/QuestionContent');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', {
@@ -115,8 +116,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 							me.part.get('input')
 									.replace(/<input([^>]+?)\/?>/igm, re)));
 
-		Ext.each(part.get('solutions'), function (s) {
-			var x = s.get('value');
+		Ext.each(part.get('solutions'), function (sol) {
+			var x = sol.get('value');
 			// x may or may not be an Array.  Ext.each handles that for us.
 			Ext.each(x, function (s) {
 				var k, v = {}, o;
@@ -157,9 +158,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 		}
 
 
-		this[allFilledIn ?
-			 'enableSubmission' :
-			 'disableSubmission']();
+		this[allFilledIn
+			? 'enableSubmission'
+			: 'disableSubmission']();
 	},
 
 

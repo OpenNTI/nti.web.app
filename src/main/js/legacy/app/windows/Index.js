@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-var MixinsRouter = require('../../mixins/Router');
-var ComponentsContainer = require('./components/Container');
-var WindowsStateStore = require('./StateStore');
-var WindowsActions = require('./Actions');
-var NoteWindow = require('../annotations/note/Window');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const StateStore = require('./StateStore');
+const Actions = require('./Actions');
+
+require('legacy/mixins/Router');
+require('../annotations/note/Window');
+require('./components/Container');
 
 
 module.exports = exports = Ext.define('NextThought.app.windows.Index', {
@@ -25,8 +28,8 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = StateStore.getInstance();
+		this.WindowActions = Actions.create();
 
 		this.WindowStore.addAllowNavigationHandler(this.allowNavigation.bind(this));
 

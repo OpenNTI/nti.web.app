@@ -1,12 +1,15 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var {swallow} = Globals;
-var ShapesCircle = require('./shapes/Circle');
-var ShapesLine = require('./shapes/Line');
-var ShapesPath = require('./shapes/Path');
-var ShapesPolygon = require('./shapes/Polygon');
-var ShapesText = require('./shapes/Text');
-var ShapesUrl = require('./shapes/Url');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+require('./shapes/Circle');
+require('./shapes/Line');
+require('./shapes/Path');
+require('./shapes/Polygon');
+require('./shapes/Text');
+require('./shapes/Url');
+
+const {swallow} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
@@ -153,6 +156,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 
 		drawScene: function (data, canvas, finished) {
+			var c = canvas.dom,
+				w = c.width,
+				h = c.height,
+				ctx,
+				shapes = data.shapeList || [],
+				i = shapes.length - 1;
 
 			function draw (x, cb) {
 				if (x < 0) {
@@ -167,13 +176,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 					draw(x - 1, cb);
 				});
 			}
-
-			var c = canvas.dom,
-				w = c.width,
-				h = c.height,
-				ctx,
-				shapes = data.shapeList || [],
-				i = shapes.length - 1;
 
 			//reset context
 			c.width = 1; c.width = w;
@@ -191,6 +193,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 
 		getThumbnail: function (scene, resultCallback) {
+			var c = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}},true),
+				width = 580,
+				height = width / (scene.viewportRatio || 1);
 
 			function finish () {
 				var data = Globals.CANVAS_BROKEN_IMAGE.src;
@@ -199,9 +204,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 				resultCallback.call(window, data);
 			}
 
-			var c = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}},true),
-				width = 580,
-				height = width / (scene.viewportRatio || 1);
 
 			c.dom.width = width;
 			c.dom.height = height;

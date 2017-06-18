@@ -1,14 +1,18 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
-var MixinsExportBadge = require('../../mixins/ExportBadge');
-var WindowsStateStore = require('../windows/StateStore');
-var OpenbadgesBadge = require('../../model/openbadges/Badge');
-var ComponentsBadge = require('./components/Badge');
-var ComponentsHeader = require('../windows/components/Header');
-var ComponentsFooter = require('./components/Footer');
-var ComponentsPrompt = require('./components/Prompt');
-var PromptActions = require('../prompt/Actions');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const Badge = require('legacy/model/openbadges/Badge');
+
+const StateStore = require('../windows/StateStore');
+
+require('../windows/components/Header');
+require('legacy/mixins/ExportBadge');
+require('./components/Badge');
+require('./components/Footer');
+require('./components/Prompt');
+require('../prompt/Actions');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.badge.Window', {
@@ -35,8 +39,8 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 		this.showExportMenu(this.record, Ext.get(target));
 	}
 }, function () {
-	NextThought.app.windows.StateStore.register(NextThought.model.openbadges.Badge.mimeType, this);
-	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.openbadges.Badge.mimeType, function (id, raw) {
+	StateStore.register(Badge.mimeType, this);
+	StateStore.registerCustomResolver(Badge.mimeType, function (id, raw) {
 		var workspace = Service.getWorkspace('Badges'),
 			earnedLink = getBadgesLink(workspace.Items, 'EarnedBadges'),
 			link = Service.getLinkFrom(workspace.Links, 'OpenBadges'),
@@ -44,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 
 		function getBadgesLink (items, type) {
 			var i, item, href;
-			items = items || []; 
+			items = items || [];
 			for (i = 0; i < items.length && !link; i++) {
 				item = items[i];
 				if (type === item.Title) {
@@ -57,12 +61,12 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 
 		targetLink = '/' + Globals.trimRoute(link) + '/' + raw;
 
-		// NOTE: When we request the badges directly through the link we build using the OpenBadges URL, 
+		// NOTE: When we request the badges directly through the link we build using the OpenBadges URL,
 		// we get the right object back but they are not decorated with links. With the links object missing
 		// we cannot properly allow/disallow the user from exporting the badges when some preconditions may not be met.
 		// Ideally the server should be returning the appropriate links.
-		// 
-		// As a workaround, we are building the href given the id of the badge. 
+		//
+		// As a workaround, we are building the href given the id of the badge.
 		// Then, we load all earned badges and filter the one with the requested href.
 		// FIXME: This will fail if the badge hasn't been earned yet.
 		if (earnedLink) {
@@ -71,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 					var badge, record,
 						badges = JSON.parse(collection).Items;
 
-					for (i = 0; i < badges.length; i++) {
+					for (let i = 0; i < badges.length; i++) {
 						badge = badges[i];
 						if (badge.href === targetLink) {
 							record = badge;

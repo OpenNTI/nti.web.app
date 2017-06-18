@@ -1,5 +1,9 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../common/StateStore');
+
+const Ext = require('extjs');
+
+const Socket = require('legacy/proxy/Socket');
+
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
@@ -15,14 +19,14 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 
 
 	setPreference: function (key, pref) {
-		this.page_preference_map = this.page_preference_map || {};
+		this.pagePreferenceMap = this.pagePreferenceMap || {};
 
-		this.page_preference_map[key] = pref;
+		this.pagePreferenceMap[key] = pref;
 	},
 
 
 	getPreference: function (key) {
-		return this.page_preference_map && this.page_preference_map[key];
+		return this.pagePreferenceMap && this.pagePreferenceMap[key];
 	},
 
 
@@ -91,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	//Calls the provided fn on all the stores.	Optionally takes a predicate
 	//which skips stores that do not match the predicate
 	applyToStores: function (fn, predicate) {
-		Ext.Object.each(this.flatPageContextMap, function (k, o) {
+		Ext.Object.each(this.flatPageContextMap, function (_, o) {
 			Ext.Object.each(o.currentPageStores, function (k) {
 				if (k === 'root') {
 					return;

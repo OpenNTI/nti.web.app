@@ -1,10 +1,14 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../util/Content');
-var OverlayPanel = require('../contentviewer/overlay/Panel');
-var MixinsQuestionContent = require('../../mixins/QuestionContent');
-var AssessmentHeader = require('./Header');
-var AssessmentParts = require('./Parts');
-var AssessmentActions = require('./Actions');
+const Ext = require('extjs');
+
+const ContentUtils = require('legacy/util/Content');
+
+const AssessmentActions = require('./Actions');
+
+require('legacy/mixins/QuestionContent');
+require('../contentviewer/overlay/Panel');
+require('./Header');
+require('./Parts');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
@@ -67,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 
 		this.startTimestamp = new Date().getTime();
 
-		this.AssessmentActions = NextThought.app.assessment.Actions.create();
+		this.AssessmentActions = AssessmentActions.create();
 	},
 
 	getInsertionEl: function () {
@@ -125,7 +129,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	/**
 	 * Takes a question set submission and updates the inputs with those values, without triggering
 	 * it to be marked correct or incorrect
-	 * @param  {QuestionSetSubmission} questionSetSubmission the users last values they had
+	 * @param {QuestionSetSubmission} questionSetSubmission the users last values they had
+	 * @param {Object} eopts -
+	 * @param {Boolean} reapplying -
+	 * @return {void}
 	 */
 	updateWithProgress: function (questionSetSubmission, eopts, reapplying) {
 		if (!questionSetSubmission) { return; }
@@ -253,9 +260,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 
 		this.questionContainer.update(
 			Ext.DomHelper.markup({
-				 cls: 'question-content',
-				 html: this.buildContent(ContentUtils.fixReferences(c + p, root) || '<p></p>')
-			 }));
+				cls: 'question-content',
+				html: this.buildContent(ContentUtils.fixReferences(c + p, root) || '<p></p>')
+			}));
 
 		function santatize () {
 			me.el.select('a[href]').set({target: '_blank'});

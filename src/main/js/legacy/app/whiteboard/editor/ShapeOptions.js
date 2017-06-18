@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var EditorColorPickerButton = require('./ColorPickerButton');
-var EditorStrokeWidthSelector = require('./StrokeWidthSelector');
-var EditorToolOption = require('./ToolOption');
-var {guidGenerator} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {guidGenerator} = require('legacy/util/Globals');
+
+require('./ColorPickerButton');
+require('./StrokeWidthSelector');
+require('./ToolOption');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
@@ -19,12 +21,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOp
 		defaults: {
 			xtype: 'wb-tool-option',
 			toggleGroup: 'shape-selected-',
-	  		handler: function (btn) {
-				var me = btn.up('wb-tool-shape-options'),
-					fill = me.down('color-picker-button[fillSelect]'),
-					lbl = me.down('tbtext[fillLabel]');
+			handler: function (btn) {
+				const me = btn.up('wb-tool-shape-options');
+				const fill = me.down('color-picker-button[fillSelect]');
+				const lbl = me.down('tbtext[fillLabel]');
 				if (btn.sides === 1) {
-		  	fill.disable();
+					fill.disable();
 					fill.hide();
 					lbl.hide();
 				}else {
@@ -32,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOp
 					lbl.show();
 					fill.enable();
 				}
-	  }
+			}
 		},
 		items: [
 			{ option: 'line shape', tipText: 'line', sides: 1, pressed: true },

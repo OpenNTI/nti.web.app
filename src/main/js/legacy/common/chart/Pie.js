@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 //See Working preview at http://jsfiddle.net/jsg2021/7gaU2/
@@ -35,21 +35,23 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 
 
 
-	updateSeries: function (v) {
-		function sum (a, v) { return a + v.value; }
-		function p (v) { return v.value / total; }
+	updateSeries: function (value) {
+		const sum = (a, v) => a + v.value;
+		const total = value && value.reduce && value.reduce(sum, 0);
+		const colors = this.colors;
+
+		const percent = (v) => v.value / total;
+
 		function str (p, i) {
 			return {
 				percent: (p * 100).toFixed(0),
-				label: v[i].label,
+				label: value[i].label,
 				color: colors[i % colors.length],
-				sub: v[i].value
+				sub: value[i].value
 			};
 		}
 
-		var total = v && v.reduce && v.reduce(sum, 0),
-			colors = this.colors;
-		this.data = (v && v.map && v.map(p)) || [];
+		this.data = (value && value.map && value.map(percent)) || [];
 
 		if (this.rendered) {
 			this.legendary.overwrite(this.legendEl, {total: total, series: this.data.map(str)});
