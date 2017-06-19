@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const {getService} = require('nti-web-client');
 
 const {EmbedInput, Editor, createMediaSourceFromUrl, getCanonicalUrlFrom} = require('nti-web-video');
+const ParseUtils = require('legacy/util/Parsing');
 const PromptStateStore = require('legacy/app/prompt/StateStore');
 const Video = require('legacy/model/Video');
 
@@ -46,8 +47,13 @@ function createVideo (link, raw) {
 }
 
 
-function getVideo (video) {
-	debugger;
+function getVideo (/*video*/) {
+	//TODO: resolve the lib interfaces model
+}
+
+
+function parseVideo (video) {
+	return ParseUtils.parseItems(video)[0];
 }
 
 module.exports = exports = Ext.define('NextThought.app.video.Picker', {
@@ -70,7 +76,10 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 		if (video) {
 			getVideo()
-				.then(video => this.editVideo(video));
+				.then(v => {
+					this.video = v;
+					this.editVideo(v);
+				});
 		} else {
 			this.createVideo();
 		}
@@ -85,12 +94,17 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 
 	createPlaceholderVideo (raw) {
-		return {...raw, save: (...args) => this.onPlaceholderSaved(...args)};
+		this.placeholderVideo = {...raw, save: (...args) => this.onPlaceholderSaved(raw, ...args)};
+
+		return this.placeholderVideo;
 	},
 
 
-	onPlaceholderSaved () {
-		debugger;
+	onPlaceholderSaved (raw, data) {
+		return createVideo(this.getAssetLink(), {...raw, ...data})
+			.then((v) => {
+				this.placeholderVideo = v;
+			});
 	},
 
 
@@ -103,7 +117,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			xtype: 'react',
 			component: Editor,
 			video,
-			onDone: () => this.onVideoEdit()
+			onSave: v => this.onVideoSave(v),
+			onCancel: () => this.doClose()
 		});
 	},
 
@@ -117,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			xtype: 'react',
 			component: EmbedInput,
 			onSelect: src => this.onNewVideoSelect(src),
-			onCancel: () => this.onCancel()
+			onCancel: () => this.doClose()
 		});
 	},
 
@@ -130,7 +145,17 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 	},
 
 
-	onCancel () {
+	onVideoSave () {
+		const video = this.placeholderVideo ?
+							parseVideo(this.placeholderVideo) :
+							this.video;
+
+		this.Prompt.doImmediateSave(video);
+	},
+
+
+
+	doClose () {
 		this.Prompt.doClose();
 	}
 }, function () {

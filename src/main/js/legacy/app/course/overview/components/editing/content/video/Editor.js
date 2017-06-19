@@ -148,7 +148,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	createVideo () {
-		this.PromptActions.prompt('video-picker', {bundle: this.bundle});
+		this.PromptActions.prompt('video-picker', {bundle: this.bundle})
+			.then((video) => {
+				debugger;
+			});
 	},
 
 
