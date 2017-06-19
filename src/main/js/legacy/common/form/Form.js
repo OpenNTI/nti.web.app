@@ -441,7 +441,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 */
 	onFormChange: function (e) {
 		var vals = this.getValues(),
-			key = e && (e.key || e.keyCode);
+			key = e && e.keyCode;
 
 		if (this.onChange && (key !== Ext.EventObject.ENTER)) {
 			this.onChange(vals);
