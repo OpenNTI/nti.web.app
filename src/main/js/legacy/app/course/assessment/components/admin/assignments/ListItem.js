@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{cls: 'edit-assignment', html: 'Edit'}
 		]},
 		{ tag: 'tpl', 'if': 'hasReports', cn: [
-			{ cls: 'report'}
+			{ cls: 'report', 'data-qtip': '{{{NextThought.view.forums.forum.parts.TopicListView.reports}}}'}
 		]},
 		{ cls: 'name-container', cn: [
 			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}'},
