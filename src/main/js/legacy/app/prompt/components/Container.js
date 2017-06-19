@@ -74,6 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 				type: this.promptType,
 				doClose: this.doCancel.bind(this),
 				doSave: this.doSave.bind(this),
+				doImmediateSave: this.doImmediateSave.bind(this),
 				allowFullScreen: this.allowFullScreen.bind(this),
 				addCls: this.addCls.bind(this),
 				removeCls: this.removeCls.bind(this),
@@ -143,6 +144,11 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 				.then(this.onSaveSuccess.bind(this))
 				.catch(this.onSaveFailure.bind(this));
 		}
+	},
+
+
+	doImmediateSave (value) {
+		this.onSaveSuccess(value);
 	},
 
 
