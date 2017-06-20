@@ -2,6 +2,8 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices.Youtube', {
+	alias: 'resolvers.videoservices.youtube',
+
 	statics: {
 		TYPE: 'youtube',
 
@@ -36,5 +38,22 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 		urlIsFor: function (url) {
 			return this.URL_MATCHES.test(url);
 		}
+	},
+
+
+	constructor: function (data) {
+		var source = data.source;
+		this.callParent(arguments);
+
+		if (source.service !== 'youtube') {
+			Ext.Error.raise('Source Service Missmatch');
+		}
+
+		this.videoId = source.source[0];
+	},
+
+	resolve () {
+		return this.self.resolvePosterForID(this.videoId)
+			.then((poster) => { return {poster, thumbnail: poster}; });
 	}
 });

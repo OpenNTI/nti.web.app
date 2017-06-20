@@ -110,6 +110,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this[term ? 'addCls' : 'removeCls']('has-search-term');
 	},
 
+
+	getConfigForItem (item) {
+		return {
+			xtype: 'overview-editing-item-selection-item',
+			selectionItem: item,
+			itemTpl: this.itemTpl,
+			getItemData: this.getItemData.bind(this),
+			getItemChildren: this.getItemChildren && this.getItemChildren.bind(this),
+			getSelectionItemId: this.getSelectionItemId.bind(this),
+			itemMatchesSearch: this.itemMatchesSearch.bind(this),
+			multiSelect: this.multiSelect,
+			selectItem: this.selectItem.bind(this),
+			unselectItem: this.unselectItem.bind(this),
+			onSelectItem: this.onSelectItem.bind(this),
+			onUnselectItem: this.onUnselectItem.bind(this),
+			onItemExpand: this.onItemExpand.bind(this),
+			onItemCollapse: this.onItemCollapse.bind(this),
+			isItemDisabled: this.isItemDisabled.bind(this)
+		};
+	},
+
+
 	setSelectionItems: function (items) {
 		var me = this;
 
@@ -121,25 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.selectionItems = items;
 		me.itemsSet = true;
 
-		me.itemsContainer.add(items.map(function (item) {
-			return {
-				xtype: 'overview-editing-item-selection-item',
-				selectionItem: item,
-				itemTpl: me.itemTpl,
-				getItemData: me.getItemData.bind(me),
-				getItemChildren: me.getItemChildren && me.getItemChildren.bind(me),
-				getSelectionItemId: me.getSelectionItemId.bind(me),
-				itemMatchesSearch: me.itemMatchesSearch.bind(me),
-				multiSelect: me.multiSelect,
-				selectItem: me.selectItem.bind(me),
-				unselectItem: me.unselectItem.bind(me),
-				onSelectItem: me.onSelectItem.bind(me),
-				onUnselectItem: me.onUnselectItem.bind(me),
-				onItemExpand: me.onItemExpand.bind(me),
-				onItemCollapse: me.onItemCollapse.bind(me),
-				isItemDisabled: me.isItemDisabled.bind(me)
-			};
-		}));
+		me.itemsContainer.add(items.map(x => me.getConfigForItem(x)));
 
 		if (me.rendered) {
 			me.el.unmask();
@@ -147,6 +151,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.applySelection(me.selection);
 	},
+
+
+	addSelectionItem (item, select) {
+		this.selectionItems = [item, ...this.selectionItems];
+
+		this.itemsContainer.insert(0, this.getConfigForItem(item));
+
+		if (select) {
+			this.selectItem(item);
+		}
+	},
+
 
 	excludeItems: function (exclude) {
 		if (!Array.isArray(exclude)) {

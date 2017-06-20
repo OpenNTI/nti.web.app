@@ -65,9 +65,9 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 
 		return this.__resolvePosterFromSource()
 			.then(function (posters) {
-				var poster = posters[0];
+				var resolved = posters[0];
 
-				return poster.thumbnail || poster.poster;
+				return resolved.thumbnail || resolved.poster || resolved;
 			});
 	},
 
