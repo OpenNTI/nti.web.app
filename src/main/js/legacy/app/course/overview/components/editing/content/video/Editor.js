@@ -112,6 +112,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			delete this.videoSelectionCmp;
 		}
 
+		if (this.addVideoBtn) {
+			this.addVideoBtn.destroy();
+			delete this.addVideoBtn;
+		}
+
 		if (this.videoEditorCmp) {
 			this.videoEditorCmp.destroy();
 			delete this.videoEditorCmp;
@@ -150,7 +155,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	createVideo () {
 		this.PromptActions.prompt('video-picker', {bundle: this.bundle})
 			.then((video) => {
-				debugger;
+				if (this.videoSelectionCmp) {
+					this.videoSelectionCmp.addSelectionItem(video, true);
+				}
 			});
 	},
 
@@ -160,6 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.viedoEditorCmp.destroy();
 			delete this.videoEditorCmp;
 		}
+
 
 		this.videoEditorCmp = this.add({
 			xtype: 'overview-editing-video-editor',
@@ -172,6 +180,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			showError: this.showError,
 			bundle: this.bundle
 		});
+
+		if (this.addVideoBtn) {
+			this.addVideoBtn.destroy();
+			delete this.addVideoBtn;
+		}
 
 		if (this.videoSelectionCmp) {
 			this.videoSelectionCmp.destroy();

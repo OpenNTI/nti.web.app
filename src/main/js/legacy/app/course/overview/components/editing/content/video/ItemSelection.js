@@ -35,6 +35,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					title: item.get('title'),
 					providers: sources.map(function (source) { return {label: source.service}; })
 				};
+			})
+			.catch(() => {
+				const sources = item.get('sources');
+
+				item.resolveThumbnail();
+
+				return {
+					title: item.get('title'),
+					providers: sources.map(source => {label: source.service})
+				};
 			});
 	},
 
