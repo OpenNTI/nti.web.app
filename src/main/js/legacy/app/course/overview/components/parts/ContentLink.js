@@ -1,15 +1,18 @@
 const Ext = require('extjs');
+
+const ContentviewerActions = require('legacy/app/contentviewer/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+const WindowsStateStore = require('legacy/app/windows/StateStore');
+const Note = require('legacy/model/Note');
+const RelatedWork = require('legacy/model/RelatedWork');
+const PageInfo = require('legacy/model/PageInfo');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
-const {getURL} = Globals;
 const ParseUtils = require('legacy/util/Parsing');
 
 require('legacy/mixins/EllipsisText');
 require('legacy/common/components/cards/Card');
-require('legacy/model/Note');
-require('legacy/model/RelatedWork');
-require('legacy/app/contentviewer/Actions');
 require('legacy/util/Parsing');
 
 function resolveIcon (config, n, root) {
@@ -19,9 +22,9 @@ function resolveIcon (config, n, root) {
 	if (config.record && config.record.resolveIcon) {
 		getIcon = config.record.resolveIcon(root, config.course);
 	} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
-		getIcon = Promise.resolve({url: getURL(icon)});
+		getIcon = Promise.resolve({url: Globals.getURL(icon)});
 	} else {
-		getIcon = Promise.resolve({url: getURL((root || '') + icon)});
+		getIcon = Promise.resolve({url: Globals.getURL((root || '') + icon)});
 	}
 
 	return getIcon;
@@ -75,9 +78,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			root = i && i.root;
 
 		if (Globals.ROOT_URL_PATTERN.test(href)) {
-			href = getURL(href);
+			href = Globals.getURL(href);
 		} else if (!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
-			href = getURL((root || '') + href);
+			href = Globals.getURL((root || '') + href);
 		}
 
 		resolveIcon(config, n, root)
@@ -109,12 +112,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			asDomSpec: DomUtils.asDomSpec
 		};
 
-		this.ContentActions = NextThought.app.contentviewer.Actions.create();
+		this.ContentActions = ContentviewerActions.create();
 
 		this.callParent([config]);
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
+		this.WindowStore = WindowsStateStore.getInstance();
 	},
 
 	commentTpl: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -139,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			scope: this,
 			method: 'GET',
 			params: {
-				accept: NextThought.model.Note.mimeType,
+				accept: Note.mimeType,
 				batchStart: 0,
 				batchSize: 1,
 				filter: 'TopLevel'
@@ -184,9 +187,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var config;
 
 		if (ParseUtils.isNTIID(this.target)) {
-			config = NextThought.model.PageInfo.fromOutlineNode(this.data);
+			config = PageInfo.fromOutlineNode(this.data);
 		} else {
-			config = NextThought.model.RelatedWork.fromOutlineNode(this.data);
+			config = RelatedWork.fromOutlineNode(this.data);
 		}
 
 		this.navigate.call(null, config);

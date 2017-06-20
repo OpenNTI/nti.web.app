@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ParentselectionMenu = require('./Menu');
-var ParentselectionPositionMenu = require('./PositionMenu');
+const Ext = require('extjs');
+
+const ParentselectionMenu = require('./Menu');
+const ParentselectionPositionMenu = require('./PositionMenu');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.Index', {
@@ -98,10 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @return {Component}				the menu component
 	 */
 	buildMenu: function (items, editor, parentRecord) {
-		var me = this,
-			menu;
-
-		menu = new NextThought.app.course.overview.components.editing.parentselection.Menu({
+		var menu = new ParentselectionMenu({
 			selectionItems: items,
 			parentRecord: parentRecord,
 			itemTpl: this.itemTpl,
@@ -121,9 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	buildPositionMenu: function () {
-		var menu;
-
-		menu = new NextThought.app.course.overview.components.editing.parentselection.PositionMenu({
+		var menu = new ParentselectionPositionMenu({
 			renderTo: Ext.getBody(),
 			close: this.hidePositionMenu.bind(this),
 			enable: this.enablePositionMenu.bind(this),

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ListContent = require('./Content');
+const Ext = require('extjs');
+
+require('./Content');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.list.Video', {

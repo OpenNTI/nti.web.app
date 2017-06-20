@@ -1,10 +1,12 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../../util/Parsing');
-var MixinsState = require('../../../../../../mixins/State');
-var PerformanceHeader = require('./Header');
-var AdminGrid = require('../Grid');
-const { encodeForURI } = require('nti-lib-ntiids');
+const Ext = require('extjs');
 const {wait} = require('nti-commons');
+const { encodeForURI } = require('nti-lib-ntiids');
+
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/mixins/State');
+require('../Grid');
+require('./Header');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
 	extend: 'Ext.container.Container',
@@ -217,7 +219,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	maybeShowAssignment: function (view, record, node, index, e) {
-		const grid = this.down('grid');
 		var selModel = view.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex;
@@ -240,8 +241,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	doNavigation: function (title, route, precache) {
-		var userId = this.student.getId();
-
 		this.pushRoute(title, route, precache);
 	}
 });

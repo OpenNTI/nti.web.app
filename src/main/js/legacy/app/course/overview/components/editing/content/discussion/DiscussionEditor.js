@@ -1,6 +1,10 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../../../util/Globals');
-var {getURL} = Globals;
+const Ext = require('extjs');
+
+const DiscussionRef = require('legacy/model/DiscussionRef');
+const Globals = require('legacy/util/Globals');
+
+const EditingActions = require('../../Actions');
+
 require('../Editor');
 require('legacy/model/DiscussionRef');
 
@@ -20,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					type: 'image',
 					height: 115,
 					width: 230,
-					placeholder: NextThought.model.DiscussionRef.defaultIcon
+					placeholder: DiscussionRef.defaultIcon
 				},
 				{
 					type: 'group',
@@ -32,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 							placeholder: 'Title',
 							required: true,
 							keep: true,
-							maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+							maxlength: EditingActions.MAX_TITLE_LENGTH
 						}
 					]
 				},
@@ -50,14 +54,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			data = Ext.apply(data, {
 				'icon': this.getThumbnailURL(),
 				'target': this.record.get('Target-NTIID') || this.record.get('ID') || this.record.getId(),
-				MimeType: NextThought.model.DiscussionRef.mimeType
+				'MimeType': DiscussionRef.mimeType
 			});
 
 			return data;
 		}
 
 		return {
-			MimeType: NextThought.model.DiscussionRef.mimeType
+			MimeType: DiscussionRef.mimeType
 		};
 	},
 
@@ -67,12 +71,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		let form = this.getForm(),
 			url = this.getThumbnailURL();
 		if (Ext.isEmpty(url) && form && form.setPlaceholder) {
-			form.setPlaceholder('icon', NextThought.model.DiscussionRef.defaultIcon);
+			form.setPlaceholder('icon', DiscussionRef.defaultIcon);
 		}
 	},
 
 	isDiscussionRef: function (record) {
-		if (record && record.get('MimeType') === NextThought.model.DiscussionRef.mimeType) {
+		if (record && record.get('MimeType') === DiscussionRef.mimeType) {
 			return true;
 		}
 
@@ -92,11 +96,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var iconURL = this.record && this.record.get('icon');
 		if (iconURL) {
 			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
-				return getURL(iconURL);
+				return Globals.getURL(iconURL);
 			}
 
 			iconURL = (this.basePath || '') + iconURL;
-			return getURL(iconURL);
+			return Globals.getURL(iconURL);
 		}
 
 		return '';
@@ -114,9 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.disableSubmission();
 
 		return me.EditingActions.saveEditorForm(me.formCmp, rec, originalPosition, currentPosition, me.rootRecord)
-			.then(function (rec) {
-
-			})
+			.then(() => {})
 			.catch(function (reason) {
 				me.enableSubmission();
 

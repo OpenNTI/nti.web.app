@@ -1,22 +1,25 @@
 const Ext = require('extjs');
-const TemplatesForNotes = require('../../../../annotations/note/Templates');
-const UserRepository = require('../../../../../cache/UserRepository');
+const {wait} = require('nti-commons');
+
+const TemplatesForNotes = require('legacy/app/annotations/note/Templates');
+const ContentviewerActions = require('legacy/app/contentviewer/Actions');
+const UserRepository = require('legacy/cache/UserRepository');
+const ForumsComments = require('legacy/store/forums/Comments');
 const Globals = require('legacy/util/Globals');
-const DomUtils = require('../../../../../util/Dom');
+const DomUtils = require('legacy/util/Dom');
 const Localization = require('legacy/util/Localization');
 const {isMe} = require('legacy/util/Globals');
 const Scrolling = require('legacy/util/Scrolling');
-const {wait} = require('nti-commons');
+const {getString} = require('legacy/util/Localization');
 
-require('../../../../../model/User');
-require('../../../../../mixins/Searchable');
-require('../../../../../mixins/ProfileLinks');
-require('../../../../../store/forums/Comments');
-require('../../../../../util/UserDataThreader');
-require('../../../../whiteboard/Window');
-require('../../../Actions');
-require('../../../../video/window/Window');
-require('legacy/app/contentviewer/Actions');
+require('legacy/model/User');
+require('legacy/mixins/Searchable');
+require('legacy/mixins/ProfileLinks');
+require('legacy/util/UserDataThreader');
+require('legacy/app/whiteboard/Window');
+require('legacy/app/video/window/Window');
+
+const ForumsActions = require('../../../Actions');
 
 
 
@@ -134,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		this.initialLoad = new Promise(this.buildStore.bind(this));
 		this.buildReadyPromise();
 
-		this.ForumActions = NextThought.app.forums.Actions.create();
+		this.ForumActions = ForumsActions.create();
 	},
 
 
@@ -243,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 	buildStore: function (fulfill/*, reject*/) {
 		var me = this,
-			s = NextThought.store.forums.Comments.create({
+			s = ForumsComments.create({
 				parentTopic: me.topic,
 				storeId: me.topic.get('Class') + '-' + me.topic.get('NTIID'),
 				url: me.topic.getLink('contents'),
@@ -465,7 +468,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 
 		if (part) {
-			let ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+			let ContentViewerActions = ContentviewerActions.create();
 
 			if (ContentViewerActions) {
 				ContentViewerActions.showAttachmentInPreviewMode(part, this.record);

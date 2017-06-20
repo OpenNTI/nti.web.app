@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../../util/Globals');
-var AppMessageBox = require('../../../../../MessageBox');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const PromptActions = require('legacy/app/prompt/Actions');
+
+require('legacy/app/MessageBox');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Delete', {
@@ -13,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.PromptActions = NextThought.app.prompt.Actions.create();
+		this.PromptActions = PromptActions.create();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.name

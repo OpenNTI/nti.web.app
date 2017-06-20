@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var ComponentsUserTokenField = require('../../../../../sharing/components/UserTokenField');
-var ComponentsScopeSearch = require('./components/ScopeSearch');
+const Ext = require('extjs');
+
+const UserSearch = require('legacy/model/UserSearch');
+
+require('legacy/app/sharing/components/UserTokenField');
+require('./components/ScopeSearch');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.EmailTokenField', {
@@ -46,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	onBeforeAddToken: function (record) {
 		if (!Ext.isEmpty(this.selections) && !this.containsToken(record)) {
-			// NOTE: All Students and Enrolled Students are hieararchical scopes, 
+			// NOTE: All Students and Enrolled Students are hieararchical scopes,
 			// so for now, selecting one un-does the other, since it would cause a confusion otherwise.
 			this.removeTokenForUser(this.selections[0]);
 		}
@@ -91,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	buildSearchStore: function () {
 		/**
-		 * NOTE: Right now, there no way to add any user/entity to the email sender list. At the gradebook level, 
+		 * NOTE: Right now, there no way to add any user/entity to the email sender list. At the gradebook level,
 		 * it's either All Students or Enrolled Students.
 		 * Both those options are given by the suggestions store.
 		 */
@@ -108,19 +111,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				model: 'NextThought.model.UserSearch'
 			});
 
-		data.push(NextThought.model.UserSearch.create({
+		data.push(UserSearch.create({
 			realname: 'All Students',
 			studentFilter: 'All',
 			isLabel: true
 		}));
 
-		data.push(NextThought.model.UserSearch.create({
+		data.push(UserSearch.create({
 			realname: 'Enrolled Students',
 			studentFilter: 'ForCredit',
 			isLabel: true
 		}));
 
-		data.push(NextThought.model.UserSearch.create({
+		data.push(UserSearch.create({
 			realname: 'Open Students',
 			studentFilter: 'Open',
 			isLabel: true

@@ -1,11 +1,14 @@
 const Ext = require('extjs');
-const Globals = require('../../../../../util/Globals');
+
+const Globals = require('legacy/util/Globals');
+
+const EditingActions = require('../../../editing/Actions');
+
 const PublishState = require('./components/PublishState');
 const DueDate = require('./components/DueDate');
 const ResetMenu = require('./components/Reset');
 
-require('../../../../../common/form/fields/DateTimeField');
-require('../../../editing/Actions');
+require('legacy/common/form/fields/DateTimeField');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.editing.InlineEditor', {
@@ -21,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		const {assignment} = this;
 		const clearError = () => this.clearError();
 
-		this.EditingActions = NextThought.app.course.editing.Actions.create();
+		this.EditingActions = EditingActions.create();
 
 		this.add([
 			{xtype: 'container', isContents: true, layout: 'none', cls: 'contents', items: [

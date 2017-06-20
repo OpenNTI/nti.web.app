@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../../../util/Globals');
-var {getURL} = Globals;
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const DiscussionRef = require('legacy/model/DiscussionRef');
+
 require('../../itemselection/Index');
-require('legacy/model/DiscussionRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ItemSelection', {
@@ -33,14 +34,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var iconURL = item && item.get('icon');
 		if (iconURL) {
 			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
-				return getURL(iconURL);
+				return Globals.getURL(iconURL);
 			}
 
 			iconURL = (this.basePath || '') + iconURL;
-			return getURL(iconURL);
+			return Globals.getURL(iconURL);
 		}
 
-		return NextThought.model.DiscussionRef.defaultIcon;
+		return DiscussionRef.defaultIcon;
 	},
 
 	onSelectItem: function (el) {

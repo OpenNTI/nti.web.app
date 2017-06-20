@@ -1,15 +1,19 @@
+const Path = require('path');
+
 const Ext = require('extjs');
-const path = require('path');
-const UserRepository = require('../../../cache/UserRepository');
-const ParseUtils = require('../../../util/Parsing');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
-require('../../../mixins/Router');
+const UserRepository = require('legacy/cache/UserRepository');
+const ParseUtils = require('legacy/util/Parsing');
+const PageSource = require('legacy/util/PageSource');
+const PagedPageSource = require('legacy/util/PagedPageSource');
+const User = require('legacy/model/User');
+const Assignment = require('legacy/model/assessment/Assignment');
+
+require('legacy/mixins/Router');
 require('./components/View');
 require('./components/Assignment');
 require('./components/editing/AssignmentEditor');
-require('../../../util/PageSource');
-require('../../../util/PagedPageSource');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.Index', {
@@ -48,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		this.addDefaultRoute('/');
 
-		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
+		this.addObjectHandler(Assignment.mimeType, this.getAssignmentRoute.bind(this));
 
 		this.add({
 			xtype: 'course-assessment',
@@ -184,10 +188,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				this.pushRoute('Assignments', '/');
 			},
 			gotoAssignment: (NTIID, title) => {
-				this.pushRoute(title, path.join(encodeForURI(NTIID), 'edit'));
+				this.pushRoute(title, Path.join(encodeForURI(NTIID), 'edit'));
 			},
 			previewAssignment: (NTIID, title) => {
-				this.pushRoute(title, path.join(encodeForURI(NTIID)));
+				this.pushRoute(title, Path.join(encodeForURI(NTIID)));
 			},
 			findAssignment: (id) =>
 				config.bundle.getAssignments()
@@ -234,8 +238,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 	showAssignment: function (route, subRoute) {
 		var me = this,
 			id = route.params.assignment,
-			assignment = route.precache.assignment,
-			now = new Date(),
+			assignmentLoad = route.precache.assignment,
 			view = this.getView();
 
 		const loaded = view.bundleLoaded || Promise.reject();
@@ -244,21 +247,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		return loaded
 			.then(() => {
-				assignment = assignment || view.assignmentCollection.fetchAssignment(id);
+				assignmentLoad = assignmentLoad || view.assignmentCollection.fetchAssignment(id);
 
 				if (this.assignment && this.assignment.reader && this.assignment.reader.el) {
 					this.assignment.reader.el.mask('Loading...');
 				}
 
 				return Promise.all([
-					assignment,
+					assignmentLoad,
 					view.getAssignmentList()
-				]).then(function (result) {
-					var assignment = result[0],
-						assignments = result[1] || [],
-						enrollment = result[2],
-						assignmentStart = assignment.get('availableBeginning'),
-						index, prev, next, path = [], pageSource;
+				]).then(([assignment, assignments = [], enrollment]) => {
+					// let assignmentStart = assignment.get('availableBeginning');
+					let index, prev, next, path = [], pageSource;
 
 					assignments.forEach(function (item, i) {
 						if (item.getId() === assignment.getId()) {
@@ -304,16 +304,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						});
 					}
 
-					pageSource = NextThought.util.PageSource.create({
+					pageSource = PageSource.create({
 						next: next && next.getId(),
 						nextTitle: next && next.get('title'),
 						previous: prev && prev.getId(),
 						previousTitle: prev && prev.get('title'),
 						currentIndex: index,
 						total: assignments.length,
-						getRoute: function (id) {
-							return id && encodeForURI(id);
-						}
+						getRoute: (i) => i && encodeForURI(i)
 					});
 
 					return {
@@ -483,7 +481,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				}
 
 				assignmentId = decodeFromURI(assignmentId);
-				studentId = NextThought.model.User.getIdFromURIPart(studentId);
+				studentId = User.getIdFromURIPart(studentId);
 
 				assignment = assignment && assignment.getId() === assignmentId ? assignment : view.assignmentCollection.getItem(assignmentId);
 				student = student && student.getId() === studentId ? student : UserRepository.getUser(studentId);
@@ -542,7 +540,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 						load = me.__getHistoryItem(historyItem);
 
-						pageSource = NextThought.util.PagedPageSource.create({
+						pageSource = PagedPageSource.create({
 							store: students,
 							currentIndex: current,
 							getTitle: function (rec) {
@@ -630,7 +628,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		return loaded
 			.then(() => {
 				assignmentId = decodeFromURI(assignmentId);
-				studentId = NextThought.model.User.getIdFromURIPart(studentId);
+				studentId = User.getIdFromURIPart(studentId);
 
 				assignment = assignment && assignment.getId() === assignmentId ? assignment : view.assignmentCollection.getItem(assignmentId);
 				student = student && student.getId() === studentId ? student : UserRepository.getUser(studentId);
@@ -646,7 +644,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						return view.getAssignmentListForStudent(student.get('Username'));
 					})
 					.then(function (assignments) {
-						var record, pageSource, path = [], next, previous,
+						var record, pageSource, path = [],
 							current = assignments.findBy(function (rec) {
 								return rec.get('AssignmentId') === assignment.getId();
 							});
@@ -659,17 +657,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 						record = assignments.getAt(current);
 
-						pageSource = NextThought.util.PagedPageSource.create({
+						pageSource = PagedPageSource.create({
 							store: assignments,
 							currentIndex: current,
 							getTitle: function (rec) {
 								if (!rec) { return ''; }
 
 								var id = rec.get('AssignmentId'),
-									assignment = view.assignmentCollection.getItem(id);
+									assignment2 = view.assignmentCollection.getItem(id);
 
-								if (assignment) {
-									return assignment.get('title');
+								if (assignment2) {
+									return assignment2.get('title');
 								}
 							},
 							getRoute: function (rec) {

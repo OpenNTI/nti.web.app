@@ -1,7 +1,9 @@
 const Ext = require('extjs');
 const {AssetIcon} = require('nti-web-commons');
+
 const RelatedWork = require('legacy/model/RelatedWork');
-require('../../StateStore');
+
+const ContextStateStore = require('../../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.cards.RelatedWork', {
@@ -29,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 
 		this.renderData = Ext.applyIf(this.renderData || {}, {
 			title: this.content && this.content.get('label'),
@@ -60,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		}
 	},
 
-	/**
+	/*
 	 * Override this if you want to set content after the component's been rendered.
 	 */
 	setContent: function () {

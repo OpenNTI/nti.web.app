@@ -1,15 +1,19 @@
-var Ext = require('extjs');
-var OutlinePrompt = require('../outline/Prompt');
-var LessonoverviewChildCreation = require('./lessonoverview/ChildCreation');
-var OverviewgroupChildCreation = require('./overviewgroup/ChildCreation');
-var OutlinenodeChildCreation = require('../outline/outlinenode/ChildCreation');
-var ContentlinkEditor = require('./contentlink/Editor');
-var VideoEditor = require('./video/Editor');
-var DiscussionEditor = require('./discussion/Editor');
-var PollEditor = require('./poll/Editor');
-var QuestionsetEditor = require('./questionset/Editor');
-var SurveyEditor = require('./survey/Editor');
-var TimelineEditor = require('./timeline/Editor');
+const Ext = require('extjs');
+
+const OutlinenodeChildCreation = require('../outline/outlinenode/ChildCreation');
+
+const LessonoverviewChildCreation = require('./lessonoverview/ChildCreation');
+const OverviewgroupChildCreation = require('./overviewgroup/ChildCreation');
+const OverviewgroupEditor = require('./overviewgroup/Editor');
+const ContentlinkEditor = require('./contentlink/Editor');
+const VideoEditor = require('./video/Editor');
+const DiscussionEditor = require('./discussion/Editor');
+const PollEditor = require('./poll/Editor');
+const QuestionsetEditor = require('./questionset/Editor');
+const SurveyEditor = require('./survey/Editor');
+const TimelineEditor = require('./timeline/Editor');
+
+require('../outline/Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
@@ -19,30 +23,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 
 		getCreators: function () {
-			var base = NextThought.app.course.overview.components.editing.content,
-				outline = NextThought.app.course.overview.components.editing.outline;
-
-
 			return [
-				base.lessonoverview.ChildCreation,
-				base.overviewgroup.ChildCreation,
-				outline.outlinenode.ChildCreation
+				LessonoverviewChildCreation,
+				OverviewgroupChildCreation,
+				OutlinenodeChildCreation
 			];
 		},
 
 
 		getTypeEditors: function () {
-			var base = NextThought.app.course.overview.components.editing.content;
-
 			return [
-				base.contentlink.Editor,
-				base.overviewgroup.Editor,
-				base.video.Editor,
-				base.discussion.Editor,
-				base.poll.Editor,
-				base.questionset.Editor,
-				base.survey.Editor,
-				base.timeline.Editor
+				ContentlinkEditor,
+				OverviewgroupEditor,
+				VideoEditor,
+				DiscussionEditor,
+				PollEditor,
+				QuestionsetEditor,
+				SurveyEditor,
+				TimelineEditor
 			];
 		}
 	}

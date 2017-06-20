@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var TilesHeader = require('./tiles/Header');
-var {naturalSortComparator} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {naturalSortComparator} = require('legacy/util/Globals');
+
+require('./tiles/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.AbstractView', {
@@ -121,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		return tiles;
 	},
 
-	/**
+	/*
 	 * Add the tiles back, use the previous configs so the layout doesn't change any
 	 */
 	addTilesBack: function () {
@@ -136,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		});
 	},
 
-	/**
+	/*
 	 * Add an array of tile components
 	 */
 	setTiles: function (tiles) {

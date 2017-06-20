@@ -1,8 +1,10 @@
 const Ext = require('extjs');
+
 const DomUtils = require('legacy/util/Dom');
+const Launcher = require('legacy/common/components/cards/Launcher');
+
 require('legacy/app/contentviewer/overlay/Panel');
 require('legacy/common/ux/ImagePopout');
-require('legacy/common/components/cards/Launcher');
 
 require('./Roll');
 
@@ -16,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 	statics: {
 		getData: function (dom, reader) {
 			var images = DomUtils.getImagesFromDom(dom);
-			return NextThought.common.components.cards.Launcher.getData(dom, reader, images, function () {
+			return Launcher.getData(dom, reader, images, function () {
 				var thumb = images[0];
 				return thumb && thumb.url;
 			});

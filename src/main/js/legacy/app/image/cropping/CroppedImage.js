@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.image.cropping.CroppedImage', {

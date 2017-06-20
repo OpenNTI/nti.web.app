@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var EditingEditor = require('../../Editor');
-var OverviewGroup = require('../../../../../../../model/courses/overview/Group');
-var OverviewgroupParentSelection = require('./ParentSelection');
-var OverviewgroupInlineEditor = require('./InlineEditor');
+const Ext = require('extjs');
+
+const OverviewGroup = require('legacy/model/courses/overview/Group');
+
+const ParentSelection = require('./ParentSelection');
+
+require('../../Editor');
+require('./InlineEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Editor', {
@@ -12,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.courses.overview.Group.mimeType
+				OverviewGroup.mimeType
 			];
 		},
 
@@ -39,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onSave: function () {
-		var me = this,
+		const me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
 			currentPosition = parentSelection && parentSelection.getCurrentPosition();
@@ -57,9 +60,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	addParentSelection: function (record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
-		var items = rootRecord.get('Items');
+		// const items = rootRecord.get('Items');
 
-		return this.add(new NextThought.app.course.overview.components.editing.content.overviewgroup.ParentSelection({
+		return this.add(new ParentSelection({
 			selectionItems: [rootRecord],
 			selectedItem: rootRecord,
 			parentRecord: parentRecord,

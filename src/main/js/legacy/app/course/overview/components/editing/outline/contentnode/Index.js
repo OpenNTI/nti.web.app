@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var CalendarnodeIndex = require('../calendarnode/Index');
-var NavigationCourseOutlineContentNode = require('../../../../../../../model/courses/navigation/CourseOutlineContentNode');
-var ContentnodePreview = require('./Preview');
+const Ext = require('extjs');
+
+const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
+
+require('../calendarnode/Index');
+require('./Preview');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.Index', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSupported: function () {
-			return NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType;
+			return CourseOutlineContentNode.mimeType;
 		}
 	},
 

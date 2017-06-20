@@ -5,13 +5,17 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {}
 
 (function () {
 
-	/** @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/Reduce#Compatibility
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/Reduce#Compatibility
 	 *
-	 * @param callback
-	 * @param [initialValue]
-	 * @return {*}
+	 * @param {Function} callback -
+	 * @param {*} [initialValue] -
+	 * @return {*} -
 	 */
 	function reduce (callback, initialValue) {
+		// Strict is blacklisted in the 'legacy' folder because ExtJS breaks in strict mode...
+		// so were we need strict-mode, we have to do this...(this may be the only place in the legacy branch)
+		//eslint-disable-next-line strict
 		'use strict';
 		if (null === this || 'undefined' === typeof this) {
 			// At the moment all modern browsers, that support strict mode, have

@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const moment = require('moment');
+
 const ContentUtils = require('legacy/util/Content');
 
 require('./Item');

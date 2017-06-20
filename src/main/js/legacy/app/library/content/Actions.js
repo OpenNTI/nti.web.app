@@ -1,10 +1,12 @@
-var Ext = require('extjs');
-var StoreUtils = require('../../../util/Store');
-var CommonActions = require('../../../common/Actions');
-var ContentStateStore = require('./StateStore');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
 
-require('legacy/login/StateStore');
+const StoreUtils = require('legacy/util/Store');
+const {getURL} = require('legacy/util/Globals');
+const LoginStateStore = require('legacy/login/StateStore');
+
+const ContentStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.content.Actions', {
@@ -13,8 +15,8 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Actions',
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
-		this.LoginStore = NextThought.login.StateStore.getInstance();
+		this.ContentStore = ContentStateStore.getInstance();
+		this.LoginStore = LoginStateStore.getInstance();
 
 		this.mon(this.ContentStore, 'do-load', () => this.loadContent());
 	},

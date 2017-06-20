@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-require('./Actions');
-require('../../model/app/DndInfo');
-require('../../store/DataTransfer');
-
+const Ext = require('extjs');
 const {wait} = require('nti-commons');
+
+const DndInfo = require('legacy/model/app/DndInfo');
+const DataTransferStore = require('legacy/store/DataTransfer');
+
+const DndActions = require('./Actions');
+
+
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 	constructor: function (config) {
@@ -23,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		this.dropPlaceholderStyles = config.dropPlaceholderStyles;
 		this.ghostImageScale = config.ghostImageScale !== undefined ? config.ghostImageScale : 1;
 
-		this.transferData = new NextThought.store.DataTransfer();
+		this.transferData = new DataTransferStore();
 
 		this.handlers = {
 			dragStart: this.__dragStart.bind(this),
@@ -32,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 			handleMouseUp: this.__handleMouseUp.bind(this)
 		};
 
-		this.DnDActions = NextThought.app.dnd.Actions.create();
+		this.DnDActions = DndActions.create();
 	},
 
 	__addTargetListeners: function () {
@@ -124,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 	},
 
 	getDnDEventData: function () {
-		return new NextThought.model.app.DndInfo();
+		return new DndInfo();
 	},
 
 	getPlaceholderStyles: function () {

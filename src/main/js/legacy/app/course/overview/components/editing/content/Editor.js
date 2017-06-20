@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var EditingEditor = require('../Editor');
+const Ext = require('extjs');
+
+const ParentSelection = require('./ParentSelection');
+
+require('../Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Editor', {
@@ -11,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		var items = rootRecord.get('Items');
 
-		return this.add(new NextThought.app.course.overview.components.editing.content.ParentSelection({
+		return this.add(new ParentSelection({
 			selectionItems: items,
 			selectedItem: parentRecord !== rootRecord ? parentRecord : null,
 			parentRecord: parentRecord,

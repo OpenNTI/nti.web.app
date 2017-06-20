@@ -1,5 +1,7 @@
 const Ext = require('extjs');
+
 const CourseOutlineCalendarNode = require('legacy/model/courses/navigation/CourseOutlineCalendarNode');
+
 require('../outlinenode/Index');
 require('./Preview');
 

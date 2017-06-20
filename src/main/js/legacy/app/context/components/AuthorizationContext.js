@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ContextStateStore = require('../StateStore');
-var WindowsActions = require('../../windows/Actions');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+const {getURL} = require('legacy/util/Globals');
+
+const ContextStateStore = require('../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.AuthorizationContext', {
@@ -27,8 +29,8 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Author
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.ContextStore = ContextStateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
 
 		this.renderData = Ext.applyIf(this.renderData || {}, {
 			title: this.catalogEntry && this.catalogEntry.get('title'),

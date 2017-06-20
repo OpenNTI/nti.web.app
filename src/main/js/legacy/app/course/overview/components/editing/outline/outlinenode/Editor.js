@@ -1,8 +1,12 @@
-var Ext = require('extjs');
-var EditingEditor = require('../../Editor');
-var NavigationCourseOutlineNode = require('../../../../../../../model/courses/navigation/CourseOutlineNode');
-var EditingActions = require('../../Actions');
-var OutlinenodeParentSelection = require('./ParentSelection');
+const Ext = require('extjs');
+
+const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
+
+const EditingActions = require('../../Actions');
+
+const OutlinenodeParentSelection = require('./ParentSelection');
+
+require('../../Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Editor', {
@@ -13,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.courses.navigation.CourseOutlineNode.mimeType
+				CourseOutlineNode.mimeType
 			];
 		},
 
@@ -44,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				name: 'title',
 				placeholder: 'Title',
 				required: true,
-				maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+				maxlength: EditingActions.MAX_TITLE_LENGTH
 			}
 		];
 
@@ -72,10 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	addParentSelection: function (record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
-		var items = rootRecord.get('Items'),
-			bundle = this.bundle;
-
-		return this.add(new NextThought.app.course.overview.components.editing.outline.outlinenode.ParentSelection({
+		return this.add(new OutlinenodeParentSelection({
 			selectionItems: [rootRecord],
 			selectedItem: rootRecord,
 			parentRecord: parentRecord,

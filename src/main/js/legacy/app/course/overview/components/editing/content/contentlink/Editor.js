@@ -1,10 +1,11 @@
 const Ext = require('extjs');
-const TypeSwitcher = require('./TypeSwitcher');
 
-var EditingEditorGroup = require('../../EditorGroup');
-var TypesDoc = require('./types/Doc');
-var TypesReading = require('./types/Reading');
-var TypesURL = require('./types/URL');
+const TypeSwitcher = require('./TypeSwitcher');
+const TypesDoc = require('./types/Doc');
+const TypesReading = require('./types/Reading');
+const TypesURL = require('./types/URL');
+
+require('../../EditorGroup');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.Editor', {
@@ -13,13 +14,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSubEditors: function () {
-			var base = NextThought.app.course.overview.components.editing.content.contentlink.types;
-
 			return [
-				base.Doc,
-				// base.EmbeddedPDF,
-				base.Reading,
-				base.URL
+				TypesDoc,
+				TypesReading,
+				TypesURL
 			];
 		},
 

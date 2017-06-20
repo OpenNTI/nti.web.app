@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var ContentListItem = require('../ListItem');
-var PartsQuestionSet = require('../../../parts/QuestionSet');
-var ModelQuestionSetRef = require('../../../../../../../model/QuestionSetRef');
-var ModelAssignmentRef = require('../../../../../../../model/AssignmentRef');
+const Ext = require('extjs');
+
+const QuestionSetRef = require('legacy/model/QuestionSetRef');
+const AssignmentRef = require('legacy/model/AssignmentRef');
+
+require('../../../parts/QuestionSet');
+require('../ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.ListItem', {
@@ -13,8 +15,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		isAssessmentWidget: true,
 		getSupported: function () {
 			return [
-				NextThought.model.QuestionSetRef.mimeType,
-				NextThought.model.AssignmentRef.mimeType
+				QuestionSetRef.mimeType,
+				AssignmentRef.mimeType
 			];
 		}
 	},

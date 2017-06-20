@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ControlsEdit = require('./Edit');
+const Ext = require('extjs');
+
+require('./Edit');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Add', {

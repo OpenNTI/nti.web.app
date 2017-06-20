@@ -1,9 +1,13 @@
+const { extname } = require('path');
+
 const Ext = require('extjs');
-const Form = require('legacy/common/form/Form');
+
 const UserCourseInvitations = require('legacy/model/courses/UserCourseInvitations');
 const ParseUtils = require('legacy/util/Parsing');
-const EmailTokens = require('legacy/app/invite/EmailTokens');
-const { extname } = require('path');
+
+require('legacy/common/form/Form');
+require('legacy/app/invite/EmailTokens');
+
 
 module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	extend: 'Ext.container.Container',
@@ -24,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 	getDefaultValues: function () {
 		return {
-			MimeType: NextThought.model.courses.UserCourseInvitations.mimeType
+			MimeType: UserCourseInvitations.mimeType
 		};
 	},
 

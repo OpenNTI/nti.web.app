@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ContentIndex = require('../../../content/content/Index');
+const Ext = require('extjs');
 
+const ContentviewerIndex = require('legacy/app/contentviewer/Index');
+
+require('legacy/app/content/content/Index');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.Assignment', {
 	extend: 'NextThought.app.content.content.Index',
@@ -9,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.reader = NextThought.app.contentviewer.Index.create(this.readerConfig);
+		this.reader = ContentviewerIndex.create(this.readerConfig);
 
 		this.setTitle(this.readerConfig.assignment.get('title'));
 

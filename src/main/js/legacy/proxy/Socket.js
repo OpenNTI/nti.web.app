@@ -1,7 +1,7 @@
 /*globals io*/
-var Ext = require('extjs');
+const Ext = require('extjs');
 
-var Globals = require('legacy/util/Globals');
+const Globals = require('legacy/util/Globals');
 
 
 global.Socket =
@@ -38,12 +38,9 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	/**
+	/*
 	 * Set up a task that will check io availability every second until it becomes
 	 * available, then call setupSocket.
-	 *
-	 * @param username
-	 * @param password
 	 */
 	ensureSocketAvailable: function () {
 		var task;
@@ -101,11 +98,8 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	/**
+	/*
 	 * Attempts to create a socket connection to the dataserver for this user.
-	 *
-	 * @param username
-	 * @param password
 	 */
 	setup: function () {
 		if (!window.io) {//if no io, then call ensure to wait until io is available
@@ -183,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		}
 	},
 
-	/**
+	/*
 	 * Destroy the socket.
 	 */
 	tearDownSocket: function () {

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PartsSet = require('./Set');
+const Ext = require('extjs');
+
+require('./Set');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.GroupedSet', {

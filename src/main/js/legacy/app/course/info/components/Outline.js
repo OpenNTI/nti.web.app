@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var ComponentsMenu = require('./Menu');
-var ComponentsOpenCourseInfo = require('./OpenCourseInfo');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('./Menu');
+require('./OpenCourseInfo');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Outline', {

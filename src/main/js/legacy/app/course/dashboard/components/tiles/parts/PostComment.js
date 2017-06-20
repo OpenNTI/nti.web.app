@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const moment = require('moment');
+
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
 

@@ -1,5 +1,6 @@
 var Ext = require('extjs');
-var ComponentsCollection = require('./Collection');
+
+require('./Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.communities.components.Page', {

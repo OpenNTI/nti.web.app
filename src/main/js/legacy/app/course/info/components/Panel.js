@@ -1,11 +1,12 @@
-var Ext = require('extjs');
-var ContentProxy = require('../../../../proxy/JSONP');
-var ProxyJSONP = require('../../../../proxy/JSONP');
-var PartsDescription = require('./parts/Description');
-var PartsInstructors = require('./parts/Instructors');
-var PartsNotStarted = require('./parts/NotStarted');
-var PartsSupport = require('./parts/Support');
-var PartsTitle = require('./parts/Title');
+const Ext = require('extjs');
+
+const ContentProxy = require('legacy/proxy/JSONP');
+
+require('./parts/Description');
+require('./parts/Instructors');
+require('./parts/NotStarted');
+require('./parts/Support');
+require('./parts/Title');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Panel', {

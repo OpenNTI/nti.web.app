@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
-var {getURL} = Globals;
-var WriterJson = require('./writer/Json');
-var ReaderJson = require('./reader/Json');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+require('./writer/Json');
+require('./reader/Json');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.Rest', {
@@ -77,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Rest', {
 			if (!collection.href) {
 				Ext.Error.raise('No HREF found for mimetype ' + mimeType);
 			}
-			href = getURL(Globals.ensureSlash(collection.href, true));
+			href = Globals.getURL(Globals.ensureSlash(collection.href, true));
 		}
 		else if (action === 'read') {
 			href = record.get('href');

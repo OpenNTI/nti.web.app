@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var Color = require('../../../../../../../util/Color');
-var EditingActions = require('../../Actions');
-var OverviewGroup = require('../../../../../../../model/courses/overview/Group');
+const Ext = require('extjs');
+
+const OverviewGroup = require('legacy/model/courses/overview/Group');
+const Color = require('legacy/util/Color');
+
+const EditingActions = require('../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor', {
@@ -39,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		var colors = NextThought.model.courses.overview.Group.COLOR_CHOICES,
+		var colors = OverviewGroup.COLOR_CHOICES,
 			title = this.record ? this.record.get('title') : '',
 			accent = this.record ? this.record.get('accentColor') : '';
 
@@ -61,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			currentColor: accent || colors[0],
 			advanced: Service.canDoAdvancedEditing(),
 			title: title,
-			maxLength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+			maxLength: EditingActions.MAX_TITLE_LENGTH
 		});
 	},
 
@@ -180,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getValue: function () {
 		return {
-			MimeType: NextThought.model.courses.overview.Group.mimeType,
+			MimeType: OverviewGroup.mimeType,
 			title: this.getTitle(),
 			accentColor: this.getSelectedColor()
 		};

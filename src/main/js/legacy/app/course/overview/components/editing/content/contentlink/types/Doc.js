@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var TypesBase = require('./Base');
+const Ext = require('extjs');
+
+const RelatedWork = require('legacy/model/RelatedWork');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Doc', {
@@ -64,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onFileAdded: function (type) {
-		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForMimeType(type));
+		this.formCmp.setPlaceholder('icon', RelatedWork.getIconForMimeType(type));
 		this.removeCls('file-only');
 
 		this.formCmp.focusField('label');

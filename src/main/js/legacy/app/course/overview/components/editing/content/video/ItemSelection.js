@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ItemselectionIndex = require('../../itemselection/Index');
+const Ext = require('extjs');
+
 const VideoModel = require('legacy/model/Video');
+
+require('../../itemselection/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.ItemSelection', {

@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var AssignmentsList = require('../../student/assignments/List');
-var AssignmentsListItem = require('./ListItem');
-var MenusReports = require('../../../../../../common/menus/Reports');
-var AssessmentAssignmentStatus = require('../../../AssignmentStatus');
+const Ext = require('extjs');
+
+require('legacy/common/menus/Reports');
+
+require('../../../AssignmentStatus');
+require('../../student/assignments/List');
+require('./ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.List', {

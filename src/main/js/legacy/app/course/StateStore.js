@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../common/StateStore');
-var CoursesStateStore = require('../library/courses/StateStore');
+const Ext = require('extjs');
+
+const CoursesStateStore = require('../library/courses/StateStore');
+
+require('../../common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.StateStore', {
@@ -8,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.StateStore', {
 
 	constructor: function () {
 		this.ROUTES = {};
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.CourseStore = CoursesStateStore.getInstance();
 
 		this.callParent(arguments);
 	},

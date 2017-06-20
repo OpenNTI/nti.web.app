@@ -1,6 +1,8 @@
 const Ext = require('extjs');
 const {Publish} = require('nti-web-commons');
+
 const Actions = require('../Actions');
+
 require('legacy/overrides/ReactHarness');
 
 

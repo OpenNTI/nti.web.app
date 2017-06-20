@@ -1,11 +1,14 @@
-var Ext = require('extjs');
-var MixinsRouter = require('../../mixins/Router');
-var AdminCurrent = require('./admin/Current');
-var CommunitiesCurrent = require('./communities/Current');
-var ContentCurrent = require('./content/Current');
-var CoursesCurrent = require('./courses/Current');
-var BundleActions = require('../bundle/Actions');
-var CourseActions = require('../course/Actions');
+const Ext = require('extjs');
+
+const BundleActions = require('../bundle/Actions');
+const CourseActions = require('../course/Actions');
+
+const AdminCurrent = require('./admin/Current');
+const CommunitiesCurrent = require('./communities/Current');
+const ContentCurrent = require('./content/Current');
+const CoursesCurrent = require('./courses/Current');
+
+require('legacy/mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.Home', {
@@ -31,10 +34,10 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 		var me = this,
 			loadingCmp = me.down('[loadingCmp]'),
 			cmps = [
-				NextThought.app.library.communities.Current,
-				NextThought.app.library.courses.Current,
-				NextThought.app.library.admin.Current,
-				NextThought.app.library.content.Current
+				CommunitiesCurrent,
+				CoursesCurrent,
+				AdminCurrent,
+				ContentCurrent
 			];
 
 		Promise.all(cmps.map(function (c) {
@@ -64,8 +67,8 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 				});
 			});
 
-		me.CourseViewActions = NextThought.app.course.Actions.create();
-		me.BundleViewActions = NextThought.app.bundle.Actions.create();
+		me.CourseViewActions = CourseActions.create();
+		me.BundleViewActions = BundleActions.create();
 	},
 
 	navigateToBundle: function (bundle, el) {

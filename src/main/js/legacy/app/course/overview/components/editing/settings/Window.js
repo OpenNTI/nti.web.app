@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var PromptStateStore = require('../../../../../prompt/StateStore');
-var ControlsVisibility = require('../controls/Visibility');
-var EditingActions = require('../Actions');
+const Ext = require('extjs');
+
+const PromptStateStore = require('legacy/app/prompt/StateStore');
+
+const EditingActions = require('../Actions');
+
+require('../controls/Visibility');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.settings.Window', {
@@ -24,8 +27,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		var data = this.Prompt.data;
 
-		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
-		
+		this.EditingActions = EditingActions.create();
+
 		this.record = data && data.record;
 		this.parentRecord = data && data.parentRecord;
 
@@ -36,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				parentRecord: this.parentRecord,
 				defaultValue:  this.record && this.record.get('visibility'),
 				onChange: this.enableSave.bind(this)
-			}); 
+			});
 		}
 	},
 
@@ -66,5 +69,5 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve();
 	}
 }, function () {
-	NextThought.app.prompt.StateStore.register('overview-editing-settings', this);
+	PromptStateStore.register('overview-editing-settings', this);
 });

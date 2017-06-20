@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var ComponentsQuestion = require('../components/Question');
-var ListQuestion = require('../components/list/Question');
-var CardsQuestion = require('../components/cards/Question');
-var LibraryActions = require('../../library/Actions');
+const Ext = require('extjs');
+
+const LibraryActions = require('legacy/app/library/Actions');
+const Question = require('legacy/model/assessment/Question');
+
+require('../components/Question');
+require('../components/list/Question');
+require('../components/cards/Question');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Question', {
@@ -10,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 		type: 'question',
 
 		canHandle: function (obj) {
-			return obj instanceof NextThought.model.assessment.Question;
+			return obj instanceof Question;
 		}
 	},
 
@@ -23,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 		this.doNavigate = config.doNavigate;
 		this.maxWidth = config.maxWidth || 574;
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 	},
 
 	parse: function (question, kind) {

@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var TypesBase = require('./Base');
+const Ext = require('extjs');
+
+const RelatedWork = require('legacy/model/RelatedWork');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.URL', {
@@ -34,14 +37,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForURL());
+		this.formCmp.setPlaceholder('icon', RelatedWork.getIconForURL());
 	},
 
 
 	getDefaultValues: function () {
 		var base = this.callParent(arguments);
 
-		base.targetMimeType = NextThought.model.RelatedWork.EXTERNAL_TYPE;
+		base.targetMimeType = RelatedWork.EXTERNAL_TYPE;
 
 		return base;
 	},

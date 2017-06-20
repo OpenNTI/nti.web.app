@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var WidgetsBase = require('./Base');
-var TilesNote = require('../tiles/Note');
-var TilesTopic = require('../tiles/Topic');
-var TilesTopicComment = require('../tiles/TopicComment');
+const Ext = require('extjs');
+
+require('../tiles/Note');
+require('../tiles/Topic');
+require('../tiles/TopicComment');
+
+const Base = require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Stream', {
@@ -18,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		__BASE_WEIGHT: 2,
 
 		getWeight: function (record) {
-			var timeWeight = NextThought.app.course.dashboard.components.widgets.Base.getTimeWeight(record.get('Last Modified'));
+			var timeWeight = Base.getTimeWeight(record.get('Last Modified'));
 
 			return this.__BASE_WEIGHT + timeWeight;
 		},
@@ -31,6 +33,9 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 			function getCmpConfig (record) {
 				var cls = classMap[record.get('Class')],
+					//This should be rewritten to create an array at the top of the file instead
+					//Tof using the "Magic" ExtJS class namespace object...
+					//eslint-disable-next-line no-undef
 					getConfig = cls && NextThought.app.course.dashboard.components.tiles[cls].getTileConfig(record, course);
 
 				return getConfig

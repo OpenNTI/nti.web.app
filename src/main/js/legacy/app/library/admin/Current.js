@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var CoursesCurrent = require('../courses/Current');
-var CoursesStateStore = require('../courses/StateStore');
+const Ext = require('extjs');
+
+const CoursesStateStore = require('../courses/StateStore');
+
+require('../courses/Current');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
@@ -14,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 
 	statics: {
 		shouldShow: function () {
-			var CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+			var CourseStore = CoursesStateStore.getInstance();
 
 			return CourseStore.onceFavoritesLoaded()
 				.then(function () {

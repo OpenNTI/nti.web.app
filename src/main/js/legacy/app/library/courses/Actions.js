@@ -1,15 +1,17 @@
 const Ext = require('extjs');
-const StoreUtils = require('../../../util/Store');
-const {getURL} = require('legacy/util/Globals');
 
-require('../../../common/Actions');
-require('legacy/login/StateStore');
+const StoreUtils = require('legacy/util/Store');
+const {getURL} = require('legacy/util/Globals');
+const LoginStateStore = require('legacy/login/StateStore');
+const CoursesStateStore = require('legacy/app/library/courses/StateStore');
+
+require('legacy/common/Actions');
+require('legacy/model/courses/CourseInstance');
+require('legacy/model/courses/CourseInstanceAdministrativeRole');
+require('legacy/model/courseware/CourseInstanceEnrollment');
+require('legacy/model/courses/LegacyCommunityBasedCourseInstance');
+require('legacy/util/Store');
 require('./StateStore');
-require('../../../model/courses/CourseInstance');
-require('../../../model/courses/CourseInstanceAdministrativeRole');
-require('../../../model/courseware/CourseInstanceEnrollment');
-require('../../../model/courses/LegacyCommunityBasedCourseInstance');
-require('../../../util/Store');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.Actions', {
@@ -18,8 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
-		this.LoginStore = NextThought.login.StateStore.getInstance();
+		this.CourseStore = CoursesStateStore.getInstance();
+		this.LoginStore = LoginStateStore.getInstance();
 
 		this.mon(this.CourseStore, {
 			'do-load': () => this.loadCourses(),

@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var ContentListItem = require('../ListItem');
-var PartsDiscussion = require('../../../parts/Discussion');
-var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
+const Ext = require('extjs');
+
+const DiscussionRef = require('legacy/model/DiscussionRef');
+
+require('../../../parts/Discussion');
+require('../ListItem');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ListItem', {
@@ -10,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSupported: function () {
-			return NextThought.model.DiscussionRef.mimeType;
+			return DiscussionRef.mimeType;
 		}
 	},
 

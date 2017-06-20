@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var PromptStateStore = require('../prompt/StateStore');
-const InviteForm = require('./Index');
+const Ext = require('extjs');
+
+const PromptStateStore = require('../prompt/StateStore');
+
+require('./Index');
 
 module.exports = exports = Ext.define('NextThought.app.invite.Prompt', {
 	extend: 'Ext.container.Container',
@@ -56,5 +58,5 @@ module.exports = exports = Ext.define('NextThought.app.invite.Prompt', {
 		this.Prompt.Footer.enableSave();
 	}
 }, function () {
-	NextThought.app.prompt.StateStore.register('invite', this);
+	PromptStateStore.register('invite', this);
 });

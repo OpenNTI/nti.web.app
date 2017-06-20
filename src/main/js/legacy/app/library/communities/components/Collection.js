@@ -1,9 +1,9 @@
 const Ext = require('extjs');
-
+const {wait} = require('nti-commons');
 const {toCSSClassName} = require('nti-lib-dom');
 
 const NTIFormat = require('legacy/util/Format');
-const {wait} = require('nti-commons');
+
 require('legacy/mixins/EllipsisText');
 
 

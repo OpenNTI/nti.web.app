@@ -1,12 +1,18 @@
 const Ext = require('extjs');
-require('legacy/common/ux/FilterMenu');
-require('legacy/common/chart/Pie');
-require('legacy/app/prompt/Actions');
-require('legacy/proxy/courseware/Roster');
-require('legacy/common/menus/Reports');
-require('legacy/app/invite/Prompt');
-require('legacy/model/courses/CourseInstanceEnrollment');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+const WindowsStateStore = require('legacy/app/windows/StateStore');
+const PromptActions = require('legacy/app/prompt/Actions');
+const CourseInstanceEnrollment = require('legacy/model/courses/CourseInstanceEnrollment');
+const Email = require('legacy/model/Email');
 const {isFeature} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/app/invite/Prompt');
+require('legacy/common/chart/Pie');
+require('legacy/common/menus/Reports');
+require('legacy/common/ux/FilterMenu');
+require('legacy/proxy/courseware/Roster');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Roster', {
@@ -138,9 +144,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			search: {fn: 'doSearch', buffer: 450}
 		});
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
-		this.PromptActions = NextThought.app.prompt.Actions.create();
+		this.WindowActions = WindowsActions.create();
+		this.WindowStore = WindowsStateStore.getInstance();
+		this.PromptActions = PromptActions.create();
 	},
 
 	afterRender: function () {
@@ -298,7 +304,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 	buildStore: function (url) {
 		this.store = Ext.data.Store.create({
-			model: NextThought.model.courses.CourseInstanceEnrollment,
+			model: CourseInstanceEnrollment,
 			proxy: {
 				type: 'nti.roster',
 				url: url,
@@ -370,7 +376,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	showEmailEditor: function (e) {
-		var emailRecord = new NextThought.model.Email(),
+		var emailRecord = new Email(),
 			scope = this.currentFilter || 'All';
 
 		if (scope === '*') {
@@ -481,7 +487,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		if (rec && rec.getLink('Mail')) {
 			mailLink = rec.getLink('Mail');
 
-			emailRecord = new NextThought.model.Email();
+			emailRecord = new Email();
 
 			// Set the link to post the email to
 			emailRecord.set('url', mailLink);

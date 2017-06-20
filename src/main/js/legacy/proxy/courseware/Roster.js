@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var UserRepository = require('../../cache/UserRepository');
-var User = require('../../model/User');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const User = require('legacy/model/User');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
@@ -63,17 +64,16 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 
 
 	buildUrl: function (request) {
-		var sort, dir, filter,
-			p = request.params;
+		var p = request.params;
 
 		if (Ext.isEmpty(this.url)) {
 			Ext.Error.raise('URL required');
 		}
 
 		if (p && p.filter) {
-			filter = p.filter;
+			const filters = p.filter;
 			delete p.filter;
-			Ext.decode(filter).forEach(function (filter) {
+			Ext.decode(filters).forEach(filter => {
 				if (filter.property === 'LegacyEnrollmentStatus' && filter.value !== '*') {
 					p.filter = filter.property + filter.value;
 				} else if (filter.property === 'usernameSearchTerm') {
@@ -83,11 +83,11 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 		}
 
 		if (p && p.sort) {
-			dir = {
+			const dir = {
 				asc: 'ascending',
 				desc: 'descending'
 			};
-			sort = Ext.decode(p.sort)[0];
+			const sort = Ext.decode(p.sort)[0];
 			p.sortOn = sort.property;
 			p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()] || sort.direction;
 			delete p.sort;

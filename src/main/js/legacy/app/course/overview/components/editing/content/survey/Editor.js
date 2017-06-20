@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var TypesAssignment = require('../questionset/types/Assignment');
-var ModelSurveyRef = require('../../../../../../../model/SurveyRef');
-var QuestionsetSurveySelection = require('./SurveySelection');
-var QuestionsetSurveyEditor = require('./SurveyEditor');
+const Ext = require('extjs');
+
+const SurveyRef = require('legacy/model/SurveyRef');
+
+require('../questionset/types/Assignment');
+require('./SurveySelection');
+require('./SurveyEditor');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.survey.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment',
@@ -13,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.SurveyRef.mimeType
+				SurveyRef.mimeType
 			];
 		},
 
@@ -31,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 		getEditorForRecord: function (record) {
-			if (record instanceof NextThought.model.SurveyRef) {
+			if (record instanceof SurveyRef) {
 				return this;
 			}
 		}

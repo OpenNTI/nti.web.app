@@ -1,27 +1,29 @@
-var Ext = require('extjs');
-var ProxyPreference = require('../proxy/Preference');
-var BadgesBase = require('../model/preference/badges/Base');
-var BadgesCourse = require('../model/preference/badges/Course');
-var ChatpresenceActive = require('../model/preference/chatpresence/Active');
-var ChatpresenceAvailable = require('../model/preference/chatpresence/Available');
-var ChatpresenceAway = require('../model/preference/chatpresence/Away');
-var ChatpresenceBase = require('../model/preference/chatpresence/Base');
-var ChatpresenceDND = require('../model/preference/chatpresence/DND');
-var PushnotificationsBase = require('../model/preference/pushnotifications/Base');
-var PushnotificationsEmail = require('../model/preference/pushnotifications/Email');
-var PreferenceBadges = require('../model/preference/Badges');
-var PreferenceBase = require('../model/preference/Base');
-var PreferenceChatPresence = require('../model/preference/ChatPresence');
-var PreferenceGradebook = require('../model/preference/Gradebook');
-var PreferencePushNotifications = require('../model/preference/PushNotifications');
-var PreferenceRoot = require('../model/preference/Root');
-var PreferenceWebApp = require('../model/preference/WebApp');
+const Ext = require('extjs');
+
+const PreferenceBase = require('legacy/model/preference/Base');
+const PreferenceRoot = require('legacy/model/preference/Root');
+
+require('legacy/model/preference/Badges');
+require('legacy/model/preference/badges/Base');
+require('legacy/model/preference/badges/Course');
+require('legacy/model/preference/ChatPresence');
+require('legacy/model/preference/chatpresence/Active');
+require('legacy/model/preference/chatpresence/Available');
+require('legacy/model/preference/chatpresence/Away');
+require('legacy/model/preference/chatpresence/Base');
+require('legacy/model/preference/chatpresence/DND');
+require('legacy/model/preference/Gradebook');
+require('legacy/model/preference/PushNotifications');
+require('legacy/model/preference/pushnotifications/Base');
+require('legacy/model/preference/pushnotifications/Email');
+require('legacy/model/preference/WebApp');
+require('legacy/proxy/Preference');
 
 
 module.exports = exports = Ext.define('NextThought.preference.Manager', {
 	constructor: function (config) {
 		this.baseUrl = config.href;
-		this.root = NextThought.model.preference.Root.create({Class: 'preference', href: this.baseUrl});
+		this.root = PreferenceRoot.create({Class: 'preference', href: this.baseUrl});
 	},
 
 	/*
@@ -103,6 +105,9 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 	},
 
 	classNameToModel: function (className) {
+		//This should be rewritten to create an array at the top of the file instead
+		//Tof using the "Magic" ExtJS class namespace object...
+		//eslint-disable-next-line no-undef
 		var i, model = NextThought,
 			names = className.split('.');
 
@@ -118,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 			url = me.baseUrl + '/' + key;
 
 		return new Promise(function (fulfill, reject) {
-			NextThought.model.preference.Base.load(url, {
+			PreferenceBase.load(url, {
 				failure: function (rec, op) {
 					reject(op.response);
 					Ext.callback(cb, scope, [false]);
@@ -145,9 +150,9 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 			path = cls.split('_'),
 			value = this.root, nextValue;
 
-		function sp (name) {
-			if (json[name]) {
-				me.setSubPreference(json[name]);
+		function sp (key) {
+			if (json[key]) {
+				me.setSubPreference(json[key]);
 			}
 		}
 

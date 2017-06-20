@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 const moment = require('moment');
+
 const UserRepository = require('legacy/cache/UserRepository');
-const Globals = require('legacy/util/Globals');
 const SharingUtils = require('legacy/util/Sharing');
 
 require('./BaseContainer');
@@ -267,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 		var me = this,
 			show = false,
-			emptySrc = Globals.CANVAS_BROKEN_IMAGE.src, cmp;
+			cmp;
 
 		if (context.type && this.contextEl) {
 			show = true;

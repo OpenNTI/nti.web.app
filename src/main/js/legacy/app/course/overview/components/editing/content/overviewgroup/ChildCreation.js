@@ -1,12 +1,16 @@
-var Ext = require('extjs');
-var CreationChildCreation = require('../../creation/ChildCreation');
-var OverviewGroup = require('../../../../../../../model/courses/overview/Group');
-var ContentlinkEditor = require('../contentlink/Editor');
-var VideoEditor = require('../video/Editor');
-var DiscussionEditor = require('../discussion/Editor');
-var QuestionsetEditor = require('../questionset/Editor');
-var TimelineEditor = require('../timeline/Editor');
-var SurveyEditor = require('../survey/Editor');
+const Ext = require('extjs');
+
+const OverviewGroup = require('legacy/model/courses/overview/Group');
+
+const ContentlinkEditor = require('../contentlink/Editor');
+const VideoEditor = require('../video/Editor');
+const DiscussionEditor = require('../discussion/Editor');
+const QuestionsetEditor = require('../questionset/Editor');
+const TimelineEditor = require('../timeline/Editor');
+const SurveyEditor = require('../survey/Editor');
+
+require('../../creation/ChildCreation');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation', {
@@ -19,20 +23,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.courses.overview.Group.mimeType
+				OverviewGroup.mimeType
 			];
 		},
 
 		getEditors: function () {
-			var base = NextThought.app.course.overview.components.editing.content;
-
 			return [
-				base.contentlink.Editor,
-				base.video.Editor,
-				base.discussion.Editor,
-				base.questionset.Editor,
-				base.timeline.Editor,
-				base.survey.Editor
+				ContentlinkEditor,
+				VideoEditor,
+				DiscussionEditor,
+				QuestionsetEditor,
+				TimelineEditor,
+				SurveyEditor
 			];
 		}
 	},

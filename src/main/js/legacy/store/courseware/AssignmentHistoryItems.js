@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CoursewareGradeBookSummaries = require('./GradeBookSummaries');
+const Ext = require('extjs');
+
+require('./GradeBookSummaries');
 
 
 module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentHistoryItems', {

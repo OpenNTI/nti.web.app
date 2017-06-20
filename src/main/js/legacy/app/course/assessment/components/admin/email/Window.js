@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-var EmailEditor = require('./Editor');
-var WindowsStateStore = require('../../../../../windows/StateStore');
-var ComponentsHeader = require('../../../../../windows/components/Header');
-var ComponentsLoading = require('../../../../../windows/components/Loading');
-var WindowsActions = require('../../../../../windows/Actions');
+const Ext = require('extjs');
+
+const WindowsStateStore = require('legacy/app/windows/StateStore');
+const WindowsActions = require('legacy/app/windows/Actions');
+const Email = require('legacy/model/Email');
+
+require('legacy/app/windows/components/Header');
+require('legacy/app/windows/components/Loading');
+require('./Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
@@ -24,9 +27,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.record = this.record || this.precache && this.precache.record;
 		this.showEditor();
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
-		// NOTE: Override the default behavior of the doClose function 
+		// NOTE: Override the default behavior of the doClose function
 		// since we would like to avoid a refresh of the page.
 		if (this.doClose) {
 			this.doClose = this.onClose.bind(this);
@@ -41,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (win instanceof Promise) {
 			return win
 					.then(function () {
-						me.WindowActions.closeActiveWindow();				
+						me.WindowActions.closeActiveWindow();
 					});
 		}
 
@@ -60,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var me = this,
 			editor;
 
-		editor = me.add({xtype: 'course-email-editor', record: this.record});	
+		editor = me.add({xtype: 'course-email-editor', record: this.record});
 
 		me.mon(editor, {
 			'cancel': function (rec) {
@@ -79,6 +82,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.editor = editor;
 	}
 }, function () {
-	NextThought.app.windows.StateStore.register('new-email', this);
-	NextThought.app.windows.StateStore.register(NextThought.model.Email.mimeType, this);
+	WindowsStateStore.register('new-email', this);
+	WindowsStateStore.register(Email.mimeType, this);
 });

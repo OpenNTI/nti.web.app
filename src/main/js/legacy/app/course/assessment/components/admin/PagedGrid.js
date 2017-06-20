@@ -1,11 +1,13 @@
 const Ext = require('extjs');
-const TimeUtils = require('legacy/util/Time');
 const {wait} = require('nti-commons');
-const {getFormattedString} = require('legacy/util/Localization');
+
+const TimeUtils = require('legacy/util/Time');
+const {getString, getFormattedString} = require('legacy/util/Localization');
+
+const AssignmentStatus = require('../../AssignmentStatus');
 
 require('legacy/model/User');
 require('legacy/mixins/grid-feature/GradeInputs');
-require('../../AssignmentStatus');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
@@ -275,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			renderer: function (v, col, rec) {
 				var item = rec.get('HistoryItemSummary');
 
-				if (item && NextThought.app.course.assessment.AssignmentStatus.hasActions(item)) {
+				if (item && AssignmentStatus.hasActions(item)) {
 					return v && Ext.DomHelper.markup({cls: 'actions'});
 				}
 			}
@@ -592,7 +594,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			menu;
 
 		if (nib) {
-			menu = NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(historyItem);
+			menu = AssignmentStatus.getActionsMenu(historyItem);
 
 			menu.showBy(nib, 'tr-br');
 

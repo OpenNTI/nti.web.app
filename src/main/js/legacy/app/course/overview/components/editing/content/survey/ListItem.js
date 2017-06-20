@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ContentListItem = require('../ListItem');
-var PartsSurvey = require('../../../parts/Survey');
-var ModelSurveyRef = require('../../../../../../../model/SurveyRef');
+const Ext = require('extjs');
+
+const SurveyRef = require('legacy/model/SurveyRef');
+
+require('../../../parts/Survey');
+require('../ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.survey.ListItem', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSupported: function () {
-			return NextThought.model.SurveyRef.mimeType;
+			return SurveyRef.mimeType;
 		}
 	},
 

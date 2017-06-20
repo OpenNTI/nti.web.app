@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var TypesAssignment = require('./Assignment');
-var AssessmentQuestionSet = require('../../../../../../../../model/assessment/QuestionSet');
-var ModelQuestionSetRef = require('../../../../../../../../model/QuestionSetRef');
-var QuestionsetSelfAssessmentSelection = require('../SelfAssessmentSelection');
-var QuestionsetSelfAssessmentEditor = require('../SelfAssessmentEditor');
+const Ext = require('extjs');
+
+const QuestionSetRef = require('legacy/model/QuestionSetRef');
+
+require('legacy/model/assessment/QuestionSet');
+require('../SelfAssessmentSelection');
+require('../SelfAssessmentEditor');
+require('./Assignment');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.SelfAssessment', {
@@ -13,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.QuestionSetRef.mimeType
+				QuestionSetRef.mimeType
 			];
 		},
 
@@ -31,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 		getEditorForRecord: function (record) {
-			if (record instanceof NextThought.model.QuestionSetRef) {
+			if (record instanceof QuestionSetRef) {
 				return this;
 			}
 		}

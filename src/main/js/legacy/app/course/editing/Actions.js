@@ -1,9 +1,11 @@
 const Ext = require('extjs');
-const ParseUtils = require('../../../util/Parsing');
 
-require('../../../common/Actions');
-require('../../../model/conflict/DestructiveChallenge');
-require('../../conflict/Actions');
+const ParseUtils = require('legacy/util/Parsing');
+
+const ConflictActions = require('../../conflict/Actions');
+
+require('legacy/common/Actions');
+require('legacy/model/conflict/DestructiveChallenge');
 
 const BEGINNING = 'available_for_submission_beginning';
 const ENDING = 'available_for_submission_ending';
@@ -15,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.ConflictActions = NextThought.app.conflict.Actions.create();
+		this.ConflictActions = ConflictActions.create();
 	},
 
 

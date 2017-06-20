@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var RecorderTransactionRecord = require('../../../../../../model/recorder/TransactionRecord');
-var AuditlogItem = require('./Item');
+const Ext = require('extjs');
+
+require('legacy/model/recorder/TransactionRecord');
+require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', {

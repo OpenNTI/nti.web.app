@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
 
 require('legacy/model/assessment/Assignment');
 require('legacy/model/assessment/DiscussionAssignment');

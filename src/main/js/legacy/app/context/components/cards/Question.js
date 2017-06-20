@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsQuestion = require('../Question');
+const Ext = require('extjs');
+
+require('../Question');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.cards.Question', {

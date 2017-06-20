@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var DiscussionItemSelection = require('../discussion/ItemSelection');
-var ModelTimelineRef = require('../../../../../../../model/TimelineRef');
+const Ext = require('extjs');
+
+require('legacy/model/TimelineRef');
+require('../discussion/ItemSelection');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.ItemSelection', {

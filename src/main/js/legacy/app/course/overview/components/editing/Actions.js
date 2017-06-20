@@ -1,7 +1,8 @@
 const Ext = require('extjs');
-const ParseUtils = require('../../../../../util/Parsing');
 
-require('../../../../../common/Actions');
+const ParseUtils = require('legacy/util/Parsing');
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Actions', {

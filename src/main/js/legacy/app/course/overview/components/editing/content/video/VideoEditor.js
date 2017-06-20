@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ContentEditor = require('../Editor');
-var VideoActions = require('./Actions');
-var ItemsItems = require('./items/Items');
+const Ext = require('extjs');
+
+const VideoActions = require('./Actions');
+
+require('../Editor');
+require('./items/Items');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.VideoEditor', {
@@ -13,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.VideoEditingActions = NextThought.app.course.overview.components.editing.content.video.Actions.create();
+		this.VideoEditingActions = VideoActions.create();
 	},
 
 	showEditor: function () {

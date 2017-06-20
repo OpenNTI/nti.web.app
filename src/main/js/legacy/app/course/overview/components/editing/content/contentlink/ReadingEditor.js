@@ -1,8 +1,9 @@
 const Ext = require('extjs');
-const ContentUtils = require('../../../../../../../util/Content');
+
+const RelatedWork = require('legacy/model/RelatedWork');
+const ContentUtils = require('legacy/util/Content');
 
 require('./types/Base');
-require('../../../../../../../model/RelatedWork');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingEditor', {
@@ -86,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getIconPlaceholder () {
 		const icon = this.contentPackage && this.contentPackage.get('icon');
 
-		return icon  || NextThought.model.RelatedWork.getIconForMimeType('unknown');
+		return icon  || RelatedWork.getIconForMimeType('unknown');
 	},
 
 
@@ -111,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			values.description = contentPackage ? contentPackage.get('description') : '';
 		}
 
-		values.type = NextThought.model.RelatedWork.CONTENT_TYPE;
+		values.type = RelatedWork.CONTENT_TYPE;
 
 		return values;
 	}

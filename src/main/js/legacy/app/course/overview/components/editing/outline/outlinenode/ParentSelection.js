@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ParentselectionIndex = require('../../parentselection/Index');
+const Ext = require('extjs');
+
+require('../../parentselection/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ParentSelection', {

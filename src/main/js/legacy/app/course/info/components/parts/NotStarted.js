@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var ComponentsOpenCourseInfo = require('../OpenCourseInfo');
-var EnrollmentStateStore = require('../../../enrollment/StateStore');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const EnrollmentStateStore = require('legacy/app/course/enrollment/StateStore');
+
+const OpenCourseInfo = require('../OpenCourseInfo');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
@@ -30,10 +33,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		var i = this.getInfo() || {},
 			c = (i.get('Credit') || [])[0],
 			e = (c && c.get('Enrollment')) || {},
-			data = {},
 			registeredText;
 
-		this.EnrolledStateStore = NextThought.app.course.enrollment.StateStore.getInstance();
+		this.EnrolledStateStore = EnrollmentStateStore.getInstance();
 
 		registeredText = this.EnrolledStateStore.getEnrolledText(i);
 
@@ -58,5 +60,5 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 
 	}
 }, function () {
-	this.borrow(NextThought.app.course.info.components.OpenCourseInfo, ['showEnrollWindow']);
+	this.borrow(OpenCourseInfo, ['showEnrollWindow']);
 });

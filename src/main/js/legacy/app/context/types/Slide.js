@@ -1,6 +1,11 @@
-var Ext = require('extjs');
-var ComponentsDefault = require('../components/Default');
-var CardsSlide = require('../components/cards/Slide');
+const Ext = require('extjs');
+
+const MediaviewerActions = require('legacy/app/mediaviewer/Actions');
+const PathActions = require('legacy/app/navigation/path/Actions');
+const Slide = require('legacy/model/Slide');
+
+require('../components/Default');
+require('../components/cards/Slide');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
@@ -8,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 		type: 'slide',
 
 		canHandle: function (obj) {
-			return obj && (obj.Class === 'Slide' || obj instanceof NextThought.model.Slide);
+			return obj && (obj.Class === 'Slide' || obj instanceof Slide);
 		}
 	},
 
@@ -21,13 +26,12 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 	constructor: function (config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
-		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.MediaActions = MediaviewerActions.create();
+		this.PathActions = PathActions.create();
 	},
 
 	getBasePath: function (obj) {
-		var slidedeckId = obj && obj.get('slidedeckid'),
-			me = this;
+		var slidedeckId = obj && obj.get('slidedeckid');
 
 		if (!slidedeckId) {
 			return Promise.resolve();
@@ -38,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 	},
 
 	parse: function (slide, kind) {
-		var context, cmp, me = this, store, t;
+		var me = this;
 
 		return this.getBasePath(slide)
 				.then(function (basePath) {
@@ -67,10 +71,10 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 							cmp = Ext.apply(config, {xtype: 'context-slide-card'});
 						}
 						else {
-							cmp = Ext.widget('context-slide-card', config); 
+							cmp = Ext.widget('context-slide-card', config);
 						}
 
-						
+
 					}
 					else {
 						cmp = Ext.widget('context-default', {

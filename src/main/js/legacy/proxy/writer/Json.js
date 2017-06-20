@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
@@ -9,13 +9,12 @@ module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
 		this.callParent(arguments);
 	},
 
-	getRecordData: function (obj) {
+	getRecordData: function (object) {
 		var defaults = this.callParent(arguments),
 			output = {},
 			key;
 
 		function getJSON (obj) {
-			var a = [];
 			if (obj && Ext.isFunction(obj.asJSON)) {
 				obj = obj.asJSON();
 			}
@@ -58,4 +57,3 @@ module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
 		return request;
 	}
 });
-

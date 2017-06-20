@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsShareSearch = require('../../../../../../sharing/components/ShareSearch');
+const Ext = require('extjs');
+
+require('legacy/app/sharing/components/ShareSearch');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.components.ScopeSearch', {

@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var PromptActions = require('../../../../prompt/Actions');
-var WindowsActions = require('../../../../windows/Actions');
-var PublishingMenu = require('./publishing/Menu');
+const Ext = require('extjs');
+
+const PromptActions = require('legacy/app/prompt/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+
+const PublishingMenu = require('./publishing/Menu');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Controls', {
@@ -64,8 +66,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.PromptActions = NextThought.app.prompt.Actions.create();
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.PromptActions = PromptActions.create();
+		this.WindowActions = WindowsActions.create();
 	},
 
 	beforeRender: function () {
@@ -127,12 +129,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	initPublishMenu: function (el) {
-		var menuContainer = el && el.down('.menu-container'), me = this,
-			html = Ext.query('.x-viewport')[0];
+		const me = this;
+		const menuContainer = el && el.down('.menu-container');
 
 		if (!menuContainer) { return; }
 
-		this.publishMenu = NextThought.app.course.overview.components.editing.publishing.Menu.create({
+		this.publishMenu = PublishingMenu.create({
 			record: this.record,
 			contents: this.contents,
 			renderTo: menuContainer,
@@ -141,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			setNotPublished: this.setPublishState.bind(this)
 		});
 
-		
+
 		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.onWindowResize, 10, this);
 		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
 		window.addEventListener('scroll', this.onWindowResizeBuffer.bind(this));
@@ -153,11 +155,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	/**
+	/*
 	 * Set the initial publication state of the lesson control.
 	 * Since publishing affects both the outline node and the lesson overview,
 	 * we will take into account both to make sure they follow the intended business logic.
-	 * 
 	 */
 	setPublishState: function () {
 		var node = this.record,
@@ -243,7 +244,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	alignPublishingMenu: function (menuContainer) {
 		var box = menuContainer && menuContainer.dom.getBoundingClientRect() || {},
-			me = this,
 			menu = this.publishMenu,
 			top = box.bottom + 15,
 			right = box.right + 25,
@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			menu.el.setStyle('top', top + 'px');
 			menu.el.setStyle('right', right + 'px');
 			menu.el.setStyle('left', 'auto');
-			menu.el.setStyle('maxHeight', maxHeight + 'px');	
+			menu.el.setStyle('maxHeight', maxHeight + 'px');
 		}
 	},
 

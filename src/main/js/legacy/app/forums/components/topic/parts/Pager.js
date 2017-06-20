@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AdminPager = require('../../../../course/assessment/components/admin/Pager');
+const Ext = require('extjs');
+
+require('legacy/app/course/assessment/components/admin/Pager');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Pager', {
@@ -33,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 
 	getPageList: function (count, current) {
-		var pageList = [], pages = [], spots, i;
+		var pageList = [], spots, i;
 
 		if (count < this.MAX_VISIBLE) {
 			for (i = 1; i <= count; i++) {

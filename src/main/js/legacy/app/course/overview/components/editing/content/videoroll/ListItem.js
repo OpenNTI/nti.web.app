@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ContentListItem = require('../ListItem');
-var PartsVideoRoll = require('../../../parts/VideoRoll');
-var ModelVideoRoll = require('../../../../../../../model/VideoRoll');
+const Ext = require('extjs');
+
+const VideoRoll = require('legacy/model/VideoRoll');
+
+require('../../../parts/VideoRoll');
+require('../ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.videoroll.ListItem', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSupported: function () {
-			return NextThought.model.VideoRoll.mimeType;
+			return VideoRoll.mimeType;
 		}
 	},
 

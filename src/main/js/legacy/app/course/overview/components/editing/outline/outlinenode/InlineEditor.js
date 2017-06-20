@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var OutlineInlineEditor = require('../InlineEditor');
+const Ext = require('extjs');
+
+const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
+
+require('../InlineEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor', {
@@ -11,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		getTypes: function () {
 			return {
-				mimeType: NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
+				mimeType: CourseOutlineNode.mimeType,
 				types: []
 			};
 		}

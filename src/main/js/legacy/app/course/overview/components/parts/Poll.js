@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var CardsCard = require('../../../../../common/components/cards/Card');
-var ModelPollRef = require('../../../../../model/PollRef');
+const Ext = require('extjs');
+
+require('legacy/common/components/cards/Card');
+require('legacy/model/PollRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Poll', {

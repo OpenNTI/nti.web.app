@@ -1,8 +1,13 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../util/Parsing');
-var OptionsBase = require('./Base');
-var StoreActions = require('../../../store/Actions');
-var EnrollmentActions = require('../Actions');
+const Ext = require('extjs');
+
+const StoreActions = require('legacy/app/store/Actions');
+const PurchasableCourse = require('legacy/model/store/PurchasableCourse');
+const ParseUtils = require('legacy/util/Parsing');
+const {getString} = require('legacy/util/Localization');
+
+const EnrollmentActions = require('../Actions');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
@@ -42,8 +47,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	constructor: function (config) {
 		this.callParent(arguments);
 
-		this.StoreActions = NextThought.app.store.Actions.create();
-		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
+		this.StoreActions = StoreActions.create();
+		this.CourseEnrollmentActions = EnrollmentActions.create();
 	},
 
 	__getPurchasableByNTIID: function (ntiid, option) {
@@ -60,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		}
 
 		if (purchasable && !purchasable.isModel) {
-			purchasable = NextThought.model.store.PurchasableCourse.create(purchasable);
+			purchasable = PurchasableCourse.create(purchasable);
 			items[i] = purchasable;
 		}
 
@@ -179,8 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	},
 
 	__addGiftSteps: function (course, option, steps) {
-		var me = this,
-			redemptionText = getString('RedemptionConfirmation') || {};
+		var me = this;
 
 		me.__addStep({
 			xtype: 'enrollment-gift-purchase',
@@ -352,7 +356,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	buildEnrollmentDetails: function (course, details) {
 		var me = this,
 			option = course.getEnrollmentOption(this.NAME),
-			giftPurchasable = this.__getGiftPurchasable(option),
 			defaultPurchasable = this.__getPurchasable(option),
 			loadDetails;
 
@@ -398,8 +401,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	buildGiftOptions: function (course, details) {
 		var me = this,
 			option = course.getEnrollmentOption(this.NAME),
-			giftPurchasable = this.__getGiftPurchasable(option),
-			loadDetails;
+			giftPurchasable = this.__getGiftPurchasable(option);
 
 
 		if (!giftPurchasable || !(giftPurchasable.isGiftable() || giftPurchasable.isRedeemable())) {
