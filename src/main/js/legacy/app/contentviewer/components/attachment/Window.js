@@ -1,7 +1,9 @@
 const Ext = require('extjs');
-require('legacy/app/prompt/StateStore');
-require('./Panel');
+
 const Globals = require('legacy/util/Globals');
+const PromptStateStore = require('legacy/app/prompt/StateStore');
+
+require('./Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.attachment.Window', {
@@ -124,5 +126,5 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	}
 
 }, function () {
-	NextThought.app.prompt.StateStore.register('attachment-preview-mode', this);
+	PromptStateStore.register('attachment-preview-mode', this);
 });

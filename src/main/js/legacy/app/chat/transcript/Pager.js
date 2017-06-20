@@ -1,10 +1,14 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var ChatActions = require('../Actions');
-var ChatStateStore = require('../StateStore');
-var ModelTranscriptSummary = require('../../../model/TranscriptSummary');
-var ModelTranscript = require('../../../model/Transcript');
-var LogPagerEntry = require('../components/log/PagerEntry');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const TranscriptSummary = require('legacy/model/TranscriptSummary');
+const Transcript = require('legacy/model/Transcript');
+const PageItem = require('legacy/store/PageItem');
+
+const ChatActions = require('../Actions');
+const ChatStateStore = require('../StateStore');
+
+require('../components/log/PagerEntry');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
@@ -16,8 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 
 	constructor: function (cfg) {
 		this.initConfig(cfg || {});
-		this.ChatActions = NextThought.app.chat.Actions.create();
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+		this.ChatActions = ChatActions.create();
+		this.ChatStore = ChatStateStore.getInstance();
 
 		this.mixins.observable.constructor.apply(this);
 	},
@@ -25,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 	buildTranscriptStore: function (occupants) {
 		var user = Ext.Array.remove(occupants.slice(), $AppConfig.username)[0],
 			url = Service.getContainerUrl(Globals.CONTENT_ROOT, Globals.RECURSIVE_USER_GENERATED_DATA),
-			s = NextThought.store.PageItem.make(url, Globals.CONTENT_ROOT, true);
+			s = PageItem.make(url, Globals.CONTENT_ROOT, true);
 
 		if (!user) { return; }
 
@@ -37,8 +41,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 			batchStart: 0,
 			transcriptUser: user || '',
 			accept: [
-				NextThought.model.TranscriptSummary.prototype.mimeType,
-				NextThought.model.Transcript.prototype.mimeType
+				TranscriptSummary.prototype.mimeType,
+				Transcript.prototype.mimeType
 			].join(',')
 		});
 
@@ -145,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 
 			this.pagingCmp.onceRendered
 				.then(function () {
-					me.mon(me.pagingCmp.messageEl, 'click', me.loadNext.bind(me));		
+					me.mon(me.pagingCmp.messageEl, 'click', me.loadNext.bind(me));
 				});
 		}
 

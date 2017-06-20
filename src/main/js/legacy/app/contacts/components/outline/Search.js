@@ -1,12 +1,15 @@
-var Ext = require('extjs');
-var NTIFormat = require('../../../../util/Format');
-var GroupsStateStore = require('../../../groups/StateStore');
-var StoreUserSearch = require('../../../../store/UserSearch');
-var ChatStateStore = require('../../../chat/StateStore');
-var ManagementPopout = require('../../../account/contacts/management/Popout');
-var GroupsActions = require('../../../groups/Actions');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
 
+const NTIFormat = require('legacy/util/Format');
+const {getString} = require('legacy/util/Localization');
+const UserSearch = require('legacy/store/UserSearch');
+const GroupsActions = require('legacy/app/groups/Actions');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
+const ChatActions = require('legacy/app/chat/Actions');
+const ChatStateStore = require('legacy/app/chat/StateStore');
+const {isMe} = require('legacy/util/Globals');
+
+require('legacy/app/account/contacts/management/Popout');
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.outline.Search', {
 	extend: 'Ext.view.View',
@@ -33,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 			return a;
 		},
 		isContact: function (values) {
-			var a = NextThought.app.groups.StateStore.getInstance();
+			var a = GroupsStateStore.getInstance();
 			return (values.Class !== 'User' || a.isContact(values.Username)) ? 'contact' : 'not-contact';
 		}
 	}),
@@ -52,10 +55,10 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 	constructor: function (config) {
 		var me = this;
 
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.ChatActions = NextThought.app.chat.Actions.create();
-		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.GroupStore = GroupsStateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
+		this.ChatActions = ChatActions.create();
+		this.GroupActions = GroupsActions.create();
 
 		me.buildStore();
 
@@ -123,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 
 	buildStore: function () {
 		var flStore = this.GroupStore.getFriendsList();
-		this.store = new NextThought.store.UserSearch({
+		this.store = new UserSearch({
 			filters: [
 				//filter out communities, lists, groups and yourself. Just return users.
 				function (rec) {

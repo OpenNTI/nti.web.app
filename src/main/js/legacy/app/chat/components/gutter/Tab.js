@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var User = require('../../../../model/User');
+const Ext = require('extjs');
+
+const ChatActions = require('legacy/app/chat/Actions');
+const ChatStateStore = require('legacy/app/chat/StateStore');
+const NavigationStateStore = require('legacy/app/navigation/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Tab', {
@@ -10,9 +13,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ta
 	afterRender: function () {
 		this.callParent(arguments),
 
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.ChatActions = NextThought.app.chat.Actions.create();
-		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
+		this.ChatActions = ChatActions.create();
+		this.NavigationStore = NavigationStateStore.getInstance();
 
 		this.mon(this.el, {
 			click: this.toggleChatGutter.bind(this)

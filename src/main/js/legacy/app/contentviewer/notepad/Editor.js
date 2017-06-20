@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var EditorEditor = require('../../../editor/Editor');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
+const Editor = require('legacy/editor/Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Editor', {
@@ -123,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 		}
 
 		this.el.select('.body > *').each(function (div) {
-			var html, tmp, dom;
+			var html, dom;
 			try {
 				//don't let manipulations here effect the dom
 				dom = Ext.getDom(div).cloneNode(true);
@@ -146,5 +147,5 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 		});
 	}
 },function () {
-	this.borrow(NextThought.editor.AbstractEditor, ['moveCursorToEnd']);
+	this.borrow(Editor.AbstractEditor, ['moveCursorToEnd']);
 });

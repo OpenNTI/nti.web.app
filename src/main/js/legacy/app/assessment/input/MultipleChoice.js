@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var InputBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.MultipleChoice', {
@@ -107,8 +108,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 		var choices = this.choices,
 			out = [], tpl = this.solTpl;
 
-		Ext.each(part.get('solutions'), function (s) {
-			var x = s.get('value');
+		Ext.each(part.get('solutions'), function (x) {
+			x = x.get('value');
 			// x may or may not be an Array.  Ext.each handles that for us.
 			Ext.each(x, function (s) {
 				out.push(tpl.apply([String.fromCharCode(65 + s), choices[s]]));
@@ -124,9 +125,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 
 		// Extract the solutions. A solution may or may not be an array
 		// Ext.each handles this case for us.
-		Ext.each(this.part.get('solutions'), function (s) {
+		Ext.each(this.part.get('solutions'), function (x) {
 			c = c || {};
-			var value = s.get('value');
+			var value = x.get('value');
 			Ext.each(value, function (s) {c[s] = true;});
 		});
 

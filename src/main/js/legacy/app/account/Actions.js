@@ -1,23 +1,24 @@
 const Ext = require('extjs');
-const Globals = require('legacy/util/Globals');
 
 const PromptActions = require('legacy/app/prompt/Actions');
+const Globals = require('legacy/util/Globals');
+const lazy = require('legacy/util/lazy-require')
+	.get('LibraryActions', ()=> require('legacy/app/library/Actions'));
+const UserPasswordSet = require('legacy/model/UserPasswordSet');
+
+const EmailverifyActions = require('./emailverify/Actions');
+
 require('legacy/common/Actions');
 require('legacy/common/ux/WelcomeGuide');
 require('legacy/common/ux/IframeConfirmWindow');
 require('legacy/common/ux/UpdatedTos');
 require('legacy/common/ux/IframeWindow');
-require('legacy/model/UserPasswordSet');
 
 require('./contact/Window');
 require('./coppa/Window');
 require('./coppa/upgraded/Window');
 require('./recovery/Window');
 require('./registration/Prompt');
-require('./emailverify/Actions');
-
-const lazy = require('legacy/util/lazy-require')
-				.get('LibraryActions', ()=> require('legacy/app/library/Actions'));
 
 
 module.exports = exports = Ext.define('NextThought.app.account.Actions', {
@@ -26,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 	constructor () {
 		this.callParent(arguments);
 
-		NextThought.app.account.emailverify.Actions.create();
+		EmailverifyActions.create();
 	},
 
 	maybeShowCoppaWindow: function () {
@@ -352,7 +353,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 	},
 
 	changePassword: function (values) {
-		var u = NextThought.model.UserPasswordSet.fromUser($AppConfig.userObject);
+		var u = UserPasswordSet.fromUser($AppConfig.userObject);
 
 		return new Promise(function (fulfill, reject) {
 			u.set(values);

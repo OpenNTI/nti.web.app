@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-require('../../../util/Anchors');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
+
+require('legacy/util/Anchors');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Panel', {

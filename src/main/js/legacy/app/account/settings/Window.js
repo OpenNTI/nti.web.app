@@ -1,10 +1,12 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
-require('../../../common/window/Window');
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/common/window/Window');
+require('./components/AvatarChoices');
 require('./components/PasswordResetForm');
+require('./components/PictureEditor');
 require('./components/Preferences');
-var ComponentsAvatarChoices = require('./components/AvatarChoices');
-var ComponentsPictureEditor = require('./components/PictureEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.Window', {
@@ -121,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 
 	syncHeight: function () {},
 
-	/**
+	/*
 	 * This is always going to be positioned  fixed, so don't
 	 * let Ext layout try to calculate according to parents.
 	 */

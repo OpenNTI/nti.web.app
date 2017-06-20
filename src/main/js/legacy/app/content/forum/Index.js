@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var MixinsRouter = require('../../../mixins/Router');
-var ForumsIndex = require('../../forums/Index');
+const Ext = require('extjs');
+
+require('legacy/mixins/Router');
+require('legacy/app/forums/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
@@ -45,8 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 	},
 
 	bundleChanged: function (bundle) {
-		var container = this.forumContainer,
-			getForumList;
+		var container = this.forumContainer;
 
 		if (this.currentBundle === bundle) { return; }
 

@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ComponentsEditor = require('./Editor');
+const Ext = require('extjs');
+
+const PromptStateStore = require('legacy/app/prompt/StateStore');
+
+require('./Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.badge.components.Prompt', {
@@ -122,5 +125,5 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Prompt',
 		return Promise.resolve();
 	}
 }, function () {
-	NextThought.app.prompt.StateStore.register('badge-exporting', this);
+	PromptStateStore.register('badge-exporting', this);
 });

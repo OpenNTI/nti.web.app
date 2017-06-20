@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ChartScore = require('../../common/chart/Score');
+const Ext = require('extjs');
+
+require('legacy/common/chart/Score');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Score', {
@@ -29,8 +30,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Score', {
 	},
 
 	setValue: function (value) {
-		var v = value || 4,
-			data = [{p: v},{p: (100 - v)}],
-			c = this.down('chart-score').setValue(value);
+		this.down('chart-score').setValue(value);
 	}
 });

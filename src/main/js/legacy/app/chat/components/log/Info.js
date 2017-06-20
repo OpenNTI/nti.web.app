@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.log.Info', {

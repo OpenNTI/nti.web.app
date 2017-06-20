@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AssessmentDateMenu = require('./DateMenu');
+const Ext = require('extjs');
+
+require('./DateMenu');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardHeader', {

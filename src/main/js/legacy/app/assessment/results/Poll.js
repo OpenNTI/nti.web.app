@@ -1,12 +1,15 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var PartContent = require('../PartContent');
-var PartsMultiChoice = require('./parts/MultiChoice');
-var PartsMultiAnswer = require('./parts/MultiAnswer');
-var PartsMatching = require('./parts/Matching');
-var PartsOrdering = require('./parts/Ordering');
-var PartsModeledContent = require('./parts/ModeledContent');
-var PartsFreeResponse = require('./parts/FreeResponse');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+const PartContent = require('../PartContent');
+
+require('./parts/MultiChoice');
+require('./parts/MultiAnswer');
+require('./parts/Matching');
+require('./parts/Ordering');
+require('./parts/ModeledContent');
+require('./parts/FreeResponse');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll', {
@@ -22,7 +25,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 
 	initComponent: function () {
 		this.callParent(arguments);
-
+		//This should be rewritten to create an array at the top of the file instead
+		//Tof using the "Magic" ExtJS class namespace object...
+		//eslint-disable-next-line no-undef
 		var parts = NextThought.app.assessment.results.parts;
 
 		this.fillInMimeTypeToComponent([

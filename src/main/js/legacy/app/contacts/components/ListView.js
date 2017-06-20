@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var StoreUtils = require('../../../util/Store');
-var ComponentsTabView = require('./TabView');
-var GroupsStateStore = require('../../groups/StateStore');
-var UtilStore = require('../../../util/Store');
-var ModelUser = require('../../../model/User');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const StoreUtils = require('legacy/util/Store');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
+
+require('./TabView');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.ListView', {
@@ -41,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.ListV
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.GroupStore = GroupsStateStore.getInstance();
 		this.buildStore();
 	},
 
@@ -56,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.ListV
 		this.body.bindStore(s);
 		this.navigation.bindStore(store);
 
-		// FIXME: for some reason the first time this is shown 
+		// FIXME: for some reason the first time this is shown
 		// if it's not the active view, it doesn't display the navigation records.
 		// For now add force it to refresh.
 		this.navigation.on({

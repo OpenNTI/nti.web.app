@@ -1,11 +1,12 @@
-var Ext = require('extjs');
-var Anchors = require('../../util/Anchors');
-var AnnotationUtils = require('../../util/Annotations');
-var Globals = require('../../util/Globals');
-var RangeUtils = require('../../util/Ranges');
-var RectUtils = require('../../util/Rects');
+const Ext = require('extjs');
 
-require('./Base');
+const Anchors = require('legacy/util/Anchors');
+const AnnotationUtils = require('legacy/util/Annotations');
+const Globals = require('legacy/util/Globals');
+const RangeUtils = require('legacy/util/Ranges');
+const RectUtils = require('legacy/util/Rects');
+
+const AnnotationsBase = require('./Base');
 
 var lazyResolve = {
 	get ReaderPanel () {
@@ -173,10 +174,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 		rect = r && RangeUtils.safeBoundingBoxForRange(r);
 		if (!rect) {
-			return NextThought.app.annotations.Base.NOT_FOUND;
+			return AnnotationsBase.NOT_FOUND;
 		}
 
-		return !RectUtils.isZeroRect(rect) ? rect.top : NextThought.app.annotations.Base.HIDDEN;
+		return !RectUtils.isZeroRect(rect) ? rect.top : AnnotationsBase.HIDDEN;
 	},
 
 	render: function () {

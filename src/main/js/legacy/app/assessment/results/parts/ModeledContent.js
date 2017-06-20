@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var MixinsModelWithBodyContent = require('../../../../mixins/ModelWithBodyContent');
+const Ext = require('extjs');
+
+require('legacy/mixins/ModelWithBodyContent');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {

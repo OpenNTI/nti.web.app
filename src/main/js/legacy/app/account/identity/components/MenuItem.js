@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
-var SettingsWindow = require('../../settings/Window');
+const Ext = require('extjs');
+
+const SettingsWindow = require('../../settings/Window');
+
+require('legacy/mixins/ProfileLinks');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.identity.components.MenuItem', {
@@ -79,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 	},
 
 	showAccount: function () {
-		var win = NextThought.app.account.settings.Window.create();
+		var win = SettingsWindow.create();
 
 		win.show();
 		win.center();

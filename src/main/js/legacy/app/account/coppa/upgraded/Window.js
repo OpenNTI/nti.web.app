@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../../../common/window/Window');
-var UpgradedConfirm = require('./Confirm');
-var AccountHeader = require('../../Header');
+const Ext = require('extjs');
+
+require('legacy/common/window/Window');
+require('../../Header');
+require('./Confirm');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Window', {

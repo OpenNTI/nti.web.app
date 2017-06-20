@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
-var MixinsChatLinks = require('../../../mixins/ChatLinks');
-var ManagementPopout = require('../../account/contacts/management/Popout');
+const Ext = require('extjs');
+
+const ManagementPopout = require('../../account/contacts/management/Popout');
+
+require('legacy/mixins/ChatLinks');
+require('legacy/mixins/ProfileLinks');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.Card', {
@@ -161,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Card'
 		if (refEl) {
 			refEl.up('.contact-card').addCls('active');
 		}
-		pop = NextThought.app.account.contacts.management.Popout.create({record: me.userObject, refEl: refEl, anchor: 'tl-tr?', offsets: offsets});
+		pop = ManagementPopout.create({record: me.userObject, refEl: refEl, anchor: 'tl-tr?', offsets: offsets});
 
 		pop.on('destroy', function () {
 			refEl.up('.contact-card').removeCls('active');

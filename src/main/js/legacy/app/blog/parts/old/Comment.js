@@ -1,12 +1,16 @@
-var Ext = require('extjs');
-var UserRepository = require('legacy/cache/UserRepository');
-var DomUtils = require('legacy/util/Dom');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const DomUtils = require('legacy/util/Dom');
+const {isMe} = require('legacy/util/Globals');
+const ContentviewerActions = require('legacy/app/contentviewer/Actions');
+
+const BlogActions = require('../../Actions');
+
 require('legacy/mixins/ProfileLinks');
 require('legacy/mixins/LikeFavoriteActions');
 require('legacy/mixins/FlagActions');
 require('legacy/editor/Editor');
-var {isMe} = require('legacy/util/Globals');
-require('legacy/app/contentviewer/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', {
@@ -68,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		this.enableBubble(['delete-post']);
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
 
-		this.BlogActions = NextThought.app.blog.Actions.create();
+		this.BlogActions = BlogActions.create();
 	},
 
 	beforeRender: function () {
@@ -198,8 +202,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 
 		el.update(html);
 		DomUtils.adjustLinks(el, window.location.href);
-		el.select('img.whiteboard-thumbnail').each(function (el) {
-			el.replace(el.up('.body-divider'));
+		el.select('img.whiteboard-thumbnail').each(function (el2) {
+			el2.replace(el2.up('.body-divider'));
 		});
 
 		this.mon(this.bodyEl, 'click', this.onBodyClick.bind(this));
@@ -261,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		if (part  && !e.getTarget('.download')) {
 			e.stopEvent();
 			if (!this.ContentViewerActions) {
-				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+				this.ContentViewerActions = ContentviewerActions.create();
 			}
 
 			this.ContentViewerActions.showAttachmentInPreviewMode(part, this.record);

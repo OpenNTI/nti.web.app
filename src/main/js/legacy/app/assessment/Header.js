@@ -1,8 +1,8 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var {isFeature} = Globals;
-var UxVideoPopout = require('../../common/ux/VideoPopout');
+const Ext = require('extjs');
 
+const Globals = require('legacy/util/Globals');
+
+require('legacy/common/ux/VideoPopout');
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 	extend: 'Ext.Component',
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 		try {
 			this.question = assessmentParent.question;
 
-			if (isFeature('mathcounts-question-number-hack')) {
+			if (Globals.isFeature('mathcounts-question-number-hack')) {
 				//HACK: there should be a more correct way to get the problem name/number...
 				id = this.question.getId().split('.').last() + '.';
 			} else {

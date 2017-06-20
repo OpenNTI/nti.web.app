@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.SimplePopoverWidget', {
@@ -48,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		if (!target || !ParseUtils.isNTIID(id)) {return;}
 		e.stopEvent();
 
-		NextThought.app.navigation.Actions.navigateToHref(target.href);
+		NavigationActions.navigateToHref(target.href);
 		this.destroy();
 	},
 

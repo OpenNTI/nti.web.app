@@ -1,12 +1,14 @@
-var Ext = require('extjs');
-var IdCache = require('../../../../cache/IdCache');
-var UserRepository = require('../../../../cache/UserRepository');
-var NTIFormat = require('../../../../util/Format');
-var ComponentNatural = require('../../../../layout/component/Natural');
-var UtilAnnotations = require('../../../../util/Annotations');
-var CacheIdCache = require('../../../../cache/IdCache');
-var UtilFormat = require('../../../../util/Format');
-var ChatActions = require('../../Actions');
+const Ext = require('extjs');
+
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
+const NTIFormat = require('legacy/util/Format');
+const NavigationActions = require('legacy/app/navigation/Actions');
+
+const ChatActions = require('../../Actions');
+
+require('legacy/layout/component/Natural');
+require('legacy/util/Annotations');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry', {
@@ -43,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		this.enableBubble('rendered-late');
 		this.callParent(arguments);
 		this.update(this.message);
-		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.ChatActions = ChatActions.create();
 	},
 
 	add: function () {
@@ -132,8 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 	click: function (event) {
 		event.stopEvent();
 		var me = this, t = event.getTarget('.whiteboard-container', null, true),
-			a = event.getTarget('a'),
-			whref = window.location.href.split('#')[0];
+			a = event.getTarget('a');
 
 
 		if (!t && !a) {return false;}
@@ -148,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 			);
 		}else if (a) {
 			//its a link
-			if (NextThought.app.navigation.Actions.navigateToHref(a.href)) {
+			if (NavigationActions.navigateToHref(a.href)) {
 				return false;
 			}
 

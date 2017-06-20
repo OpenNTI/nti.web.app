@@ -1,8 +1,7 @@
-var Ext = require('extjs');
-var IdCache = require('../../../../cache/IdCache');
-var UserRepository = require('../../../../cache/UserRepository');
-var UtilAnnotations = require('../../../../util/Annotations');
-var CacheIdCache = require('../../../../cache/IdCache');
+const Ext = require('extjs');
+
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moderated', {

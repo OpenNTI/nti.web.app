@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var Color = require('../../../../util/Color');
+const Ext = require('extjs');
+
+const Color = require('legacy/util/Color');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.BarChart', {

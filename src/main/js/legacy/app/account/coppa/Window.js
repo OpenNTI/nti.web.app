@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../../common/window/Window');
-var AccountHeader = require('../Header');
-var CoppaMain = require('./Main');
+const Ext = require('extjs');
+
+require('legacy/common/window/Window');
+require('../Header');
+require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.coppa.Window', {

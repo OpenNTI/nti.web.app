@@ -1,10 +1,14 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-var ComponentsBoundPanel = require('../../../common/components/BoundPanel');
-var MixinsUserContainer = require('../../../mixins/UserContainer');
-var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
-var ToolAction = require('../../../common/components/tool/Action');
-var ComponentsCard = require('./Card');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const ParseUtils = require('legacy/util/Parsing');
+
+require('legacy/common/components/BoundPanel');
+require('legacy/mixins/UserContainer');
+require('legacy/mixins/ProfileLinks');
+require('legacy/common/components/tool/Action');
+
+require('./Card');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.Grouping', {

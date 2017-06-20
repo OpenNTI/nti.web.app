@@ -1,9 +1,14 @@
 const Ext = require('extjs');
+
 const {isMe} = require('legacy/util/Globals');
-require('../contentviewer/overlay/Panel');
-require('../../editor/Editor');
-require('./components/feedback/List');
+const {getString} = require('legacy/util/Localization');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+const UsersCourseAssignmentHistoryItemFeedback = require('legacy/model/courseware/UsersCourseAssignmentHistoryItemFeedback');
+
 require('legacy/common/form/fields/FilePicker');
+require('legacy/editor/Editor');
+require('legacy/app/contentviewer/overlay/Panel');
+require('./components/feedback/List');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeedback', {
@@ -96,8 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 	},
 
 	addFeedback: function (editor) {
-		var item = new NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback(
-						{body: editor.getValue().body}),
+		var item = new UsersCourseAssignmentHistoryItemFeedback({body: editor.getValue().body}),
 			me = this,
 			feedback = this.history.get('Feedback'),
 			store = this.store;
@@ -121,8 +125,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 				}
 
 				if (err.code === 'MaxFileSizeUploadLimitError') {
-					let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+					let maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
+						currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
 					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 				}
 				if (err.code === 'MaxAttachmentsExceeded') {
@@ -159,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			feedback = history.get('Feedback').get('href');
 
 		this.store = new Ext.data.Store({
-			model: NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback,
+			model: UsersCourseAssignmentHistoryItemFeedback,
 			proxy: {
 				type: 'rest',
 				url: feedback,

@@ -1,16 +1,16 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
+const DestructiveChallenge = require('legacy/model/conflict/DestructiveChallenge');
 
 module.exports = exports = Ext.define('NextThought.app.conflict.types.DestructiveChallenge', {
 	getType: function () {
-		return NextThought.model.conflict.DestructiveChallenge.mimeType;
+		return DestructiveChallenge.mimeType;
 	},
 
 
 	__confirmAction: function (conflict) {
-		var me = this;
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise((fulfill, reject) => {
 			return Ext.Msg.show({
 				title: 'Are you sure?',
 				msg: conflict.getMessage(),
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.conflict.types.Destructiv
 						text: 'No',
 						handler: reject
 					}
-				}, 
+				},
 				closeHandler:reject		// click on the x close button.
 			});
 		});
@@ -56,8 +56,6 @@ module.exports = exports = Ext.define('NextThought.app.conflict.types.Destructiv
 
 
 	resolve: function (conflict, data) {
-		var me = this;
-
 		return this.__confirmAction(conflict)
 			.then(this.__continueAction.bind(this, conflict, data), this.__stopAction.bind(this, conflict, data));
 	}

@@ -1,13 +1,19 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 const {getService} = require('nti-web-client');
 const {Editor} = require('nti-content');
 
-require('../../../util/Parsing');
-require('../../../mixins/Router');
-require('../Actions');
-require('../../contentviewer/StateStore');
-require('../../../common/components/ResourceNotFound');
+const ContentviewerIndex = require('legacy/app/contentviewer/Index');
+const PageInfo = require('legacy/model/PageInfo');
+const RelatedWork = require('legacy/model/RelatedWork');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+
+const ContentActions = require('../Actions');
+
+require('legacy/util/Parsing');
+require('legacy/mixins/Router');
+require('legacy/common/components/ResourceNotFound');
+require('legacy/app/contentviewer/StateStore');
 
 require('legacy/overrides/ReactHarness');
 
@@ -25,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.ContentActions = NextThought.app.content.Actions.create();
+		this.ContentActions = ContentActions.create();
 
 		this.initRouter();
 
@@ -75,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	},
 
 	isShowingPage: function (ntiid) {
-		var isShowing, assessmentItems;
+		var assessmentItems;
 
 		if (!this.page) {
 			return false;
@@ -127,16 +133,16 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		//Try getting the object first, since it would return a related work or page info
 		return Service.getObject(id, null, null, null, null, this.currentBundle)
-			.then((obj) => {
+			.then(o => {
 				//if we don't get a page (pageinfo or related work) request a page info
-				if (!obj.isPage) {
+				if (!o.isPage) {
 					return Service.getPageInfo(id, null, null, null, this.currentBundle)
 						.catch(() => {
-							return Promise.reject(obj);
+							return Promise.reject(o);
 						});
 				}
 
-				return obj;
+				return o;
 			})
 			.then(page => {
 				if(!page.getContentPackage) {
@@ -299,9 +305,9 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		this.page = page;
 		this.pageId = page.getId();
 
-		this.reader = NextThought.app.contentviewer.Index.create({
-			pageInfo: page instanceof NextThought.model.PageInfo ? page : null,
-			relatedWork: page instanceof NextThought.model.RelatedWork ? page : null,
+		this.reader = ContentviewerIndex.create({
+			pageInfo: page instanceof PageInfo ? page : null,
+			relatedWork: page instanceof RelatedWork ? page : null,
 			toc: !this.currentBundle.isCourse ? this.ContentActions.getTocStore(this.currentBundle) : null,
 			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle, parent, this.root, rootRoute),
 			rootRoute: rootRoute,
@@ -363,31 +369,29 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	showPage: function (route, subRoute) {
 		var me = this,
 			root = route.params.id,
-			page = route.params.page,
+			pageId = route.params.page,
 			obj = route.precache.pageInfo || route.precache.relatedWork,
-			precache = route.precache,
-			vid, video;
+			precache = route.precache;
 
 		root = decodeFromURI(root);
 
-		if (page === 'video') {
-			vid = subRoute.split('/')[1];
-			vid = decodeFromURI(vid);
-			video = precache.video || precache.precache && precache.precache.video;
+		if (pageId === 'video') {
+			const vid = decodeFromURI(subRoute.split('/')[1]);
+			const video = precache.video || precache.precache && precache.precache.video;
 
 			return this.__loadContent(root, obj)
-				.then(function (page) {
+				.then(page => {
 					me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 					var p = video ? Promise.resolve(video) :
 									Service.getObject(vid).then(function (v) {
-										var o = v.isModel ? v.raw : v,
-											video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
-
-										return Promise.resolve(video);
+										var o = v.isModel ? v.raw : v;
+										return Promise.resolve(
+											PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o))
+										);
 									});
 
-					p.then(function (video) {
-						route.precache.video = video;
+					p.then(v => {
+						route.precache.video = v;
 						me.showMediaView(route, subRoute);
 					});
 				})
@@ -396,7 +400,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				});
 		}
 
-		page = decodeFromURI(page);
+		pageId = decodeFromURI(pageId);
 
 		if (!this.root) {
 			this.root = root;
@@ -408,7 +412,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			me.activeMediaWindow.destroy();
 		}
 
-		return this.__loadContent(page, obj)
+		return this.__loadContent(pageId, obj)
 			.then(function (page) {
 				me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 			});
@@ -427,7 +431,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			.then((page) => {
 				this.showEditor(page, route.precache.parent, route.precache.pageSource, pageID);
 			})
-			.catch((obj) => {
+			.catch(err => {
 				this.showEditor(root, route.precache.parent, route.precache.pageSource);
 			});
 	},

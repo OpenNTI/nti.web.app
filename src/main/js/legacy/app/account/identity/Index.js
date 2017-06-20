@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var NTIFormat = require('../../../util/Format');
-var ComponentsSettings = require('./components/Settings');
+const Ext = require('extjs');
+
+const NTIFormat = require('legacy/util/Format');
+
+require('./components/Settings');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.identity.Index', {

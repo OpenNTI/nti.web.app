@@ -6,18 +6,18 @@ const ImageZoomView = require('legacy/common/ux/ImageZoomView');
 const SlideDeck = require('legacy/common/ux/SlideDeck');
 const ContentUtils = require('legacy/util/Content');
 const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+const CommonOverlayedPanel = require('legacy/common/components/cards/OverlayedPanel');
+const CommonCard = require('legacy/common/components/cards/Card');
+const MediaviewerOverlayedPanel = require('legacy/app/mediaviewer/content/OverlayedPanel');
+const MediaviewerDeckOverlayedPanel = require('legacy/app/mediaviewer/content/deck/OverlayedPanel');
+const MediaviewerSlideVideo = require('legacy/app/mediaviewer/content/SlideVideo');
+const MediaviewerSlidedeck = require('legacy/app/mediaviewer/content/Slidedeck');
 
 const WBUtils = require('../../whiteboard/Utils');
 
-require('legacy/common/ux/SlideDeck');
-require('legacy/common/components/cards/OverlayedPanel');
-require('legacy/common/components/cards/Card');
 require('legacy/mixins/Searchable');
 
-require('../../mediaviewer/content/OverlayedPanel');
-require('../../mediaviewer/content/deck/OverlayedPanel');
-require('../../mediaviewer/content/SlideVideo');
-require('../../mediaviewer/content/Slidedeck');
 require('./Panel');
 
 
@@ -212,23 +212,23 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 			}
 		}, this);
 
-		cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: NextThought.common.components.cards.Card.prototype.renderTpl.html});
+		cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: CommonCard.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=nticard]'), function (c) {
-			var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
+			var d = CommonOverlayedPanel.getData(c);
 			cardTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
-		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.Slidedeck.prototype.renderTpl.html});
+		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: MediaviewerSlidedeck.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidedeck]'), function (c) {
-			var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
+			var d = MediaviewerDeckOverlayedPanel.getData(c);
 			slideDeckTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
-		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.SlideVideo.prototype.renderTpl.html});
+		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: MediaviewerSlideVideo.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function (c) {
-			var d = NextThought.app.mediaviewer.content.OverlayedPanel.getData(c);
+			var d = MediaviewerOverlayedPanel.getData(c);
 			slideVideoTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});

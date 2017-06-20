@@ -1,15 +1,17 @@
-var Ext = require('extjs');
-var User = require('../../model/User');
-var ChatStateStore = require('./StateStore');
-var ChatActions = require('./Actions');
-var ChatGutter = require('./Gutter');
-var TranscriptWindow = require('./transcript/Window');
-var ComponentsWindow = require('./components/Window');
-var GutterList = require('./components/gutter/List');
-var NavigationStateStore = require('../navigation/StateStore');
+const Ext = require('extjs');
 
+const NavigationStateStore = require('legacy/app/navigation/StateStore');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
 
-module.exports = exports = Ext.define('NextThought.app.chat.Index', {
+const ChatStateStore = require('./StateStore');
+const ChatActions = require('./Actions');
+
+require('./Gutter');
+require('./transcript/Window');
+require('./components/Window');
+require('./components/gutter/List');
+
+const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chats-view',
 	layout: 'none',
@@ -40,10 +42,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.ChatActions = NextThought.app.chat.Actions.create();
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
+		this.ChatActions = ChatActions.create();
+		this.GroupStore = GroupsStateStore.getInstance();
+		this.NavigationStore = NavigationStateStore.getInstance();
 
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
@@ -61,7 +63,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 	},
 
 	showAllOnlineContacts: function (gutter) {
-		var me = this;
 		if (!this.listWin) {
 			this.listWin = Ext.widget('chat-gutter-list-view', {
 				store: gutter && gutter.store,
@@ -114,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 	shouldHaveChatTab: function () {
 		var viewportWidth = Ext.Element.getViewportWidth();
 		// We would like to hide the gutter if the window is too small.
-		return viewportWidth <= NextThought.app.chat.Index.MIN_VIEWPORT_WIDTH;
+		return viewportWidth <= ChatIndex.MIN_VIEWPORT_WIDTH;
 	},
 
 	handleTabNotifications: function (win, msg) {

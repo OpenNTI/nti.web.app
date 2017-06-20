@@ -1,8 +1,8 @@
-var Ext = require('extjs');
-var LocationMeta = require('../../../../cache/LocationMeta');
-var UserRepository = require('../../../../cache/UserRepository');
-var CacheLocationMeta = require('../../../../cache/LocationMeta');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const LocationMeta = require('legacy/cache/LocationMeta');
+const UserRepository = require('legacy/cache/UserRepository');
+const {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.log.Content', {

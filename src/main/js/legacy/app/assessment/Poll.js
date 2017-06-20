@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-require('./Question');
-require('../../model/assessment/UsersCourseInquiryItem');
-require('../../model/assessment/UsersCourseInquiryItemResponse');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+
+require('legacy/model/assessment/UsersCourseInquiryItem');
+require('legacy/model/assessment/UsersCourseInquiryItemResponse');
 require('./results/Poll');
+require('./Question');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {

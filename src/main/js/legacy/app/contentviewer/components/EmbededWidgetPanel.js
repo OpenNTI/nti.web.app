@@ -1,5 +1,7 @@
 const Ext = require('extjs');
+
 const DomUtils = require('legacy/util/Dom');
+
 require('../overlay/Panel');
 require('./EmbededWidget');
 

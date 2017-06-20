@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var UtilDom = require('../../../util/Dom');
-var UtilTabIndexTracker = require('../../../util/TabIndexTracker');
-var {guidGenerator} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const TabIndexTracker = require('legacy/util/TabIndexTracker');
+const {guidGenerator} = require('legacy/util/Globals');
+
+const OverlayPanel = require('../overlay/Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
@@ -11,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 		Ext.apply(this, config);
 
 		function sync () {
-			var p = NextThought.app.contentviewer.overlay.Panel;
+			var p = OverlayPanel;
 
 			p.relayout();
 			p.syncPositioningTillStable();
@@ -28,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 			'sync-overlays': sync
 		});
 
-		this.tabIndexer = new NextThought.util.TabIndexTracker();
+		this.tabIndexer = new TabIndexTracker();
 		this.activeOverlayedPanels = {};
 	},
 
@@ -60,9 +62,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 	},
 
 	/**
-	 *
-	 * @param {String|Object} key
-	 * @param {Object} [panel]
+	 * @param {String|Object} key -
+	 * @param {Object} [panel] -
+	 * @returns {Panel} ?
 	 */
 	registerOverlayedPanel: function (key, panel) {
 
@@ -84,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 	},
 
 	adjustOverlayedPanels: function () {
-		NextThought.app.contentviewer.overlay.Panel.syncPositioning();
+		OverlayPanel.syncPositioning();
 	},
 
 	clearOverlayedPanels: function () {

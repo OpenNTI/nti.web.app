@@ -1,14 +1,16 @@
 const Ext = require('extjs');
-const ContentUtils = require('../../util/Content');
+
+const PromptActions = require('legacy/app/prompt/Actions');
+const PageInfo = require('legacy/model/PageInfo');
+const ContentUtils = require('legacy/util/Content');
 const ParseUtils = require('legacy/util/Parsing');
 const {guidGenerator} = require('legacy/util/Globals');
 
-require('legacy/app/prompt/Actions');
-require('../../common/Actions');
-require('../../model/PageInfo');
-require('../../model/RelatedWork');
-require('../../util/Content');
-require('./components/attachment/Window');
+const AttachmentWindow = require('./components/attachment/Window');
+
+require('legacy/common/Actions');
+require('legacy/model/RelatedWork');
+require('legacy/util/Content');
 
 const TOPIC_EMBED = 'application/vnd.nextthought.app.embededtopic';
 
@@ -16,7 +18,7 @@ const TOPIC_EMBED = 'application/vnd.nextthought.app.embededtopic';
 function buildPageInfoForAssignment (assignment, contents, regenerate) {
 	const ntiid = assignment.getId();
 	const assessmentItems = [assignment];
-	const pageInfo = NextThought.model.PageInfo.create({
+	const pageInfo = PageInfo.create({
 		ID: ntiid,
 		NTIID: ntiid,
 		AssessmentItems: assessmentItems,
@@ -71,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 					postfix = data.noTarget ? '' : '-target';
 
-					pageInfo = NextThought.model.PageInfo.create({
+					pageInfo = PageInfo.create({
 						ID: ntiid,
 						NTIID: ntiid,
 						content: DH.markup([
@@ -228,15 +230,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 	showAttachmentInPreviewMode: function (contentFile, parentRecord) {
 		var rec = ParseUtils.parseItems(contentFile)[0],
-			type = contentFile && (contentFile.fileMimeType || contentFile.contentType),
-			AttachmentWindow = NextThought.app.contentviewer.components.attachment.Window;
+			type = contentFile && (contentFile.fileMimeType || contentFile.contentType);
 
 		if (!AttachmentWindow.canShowFile(type)) {
 			return;
 		}
 
 		if (!this.PromptActions) {
-			this.PromptActions = NextThought.app.prompt.Actions.create();
+			this.PromptActions = PromptActions.create();
 		}
 
 		this.PromptActions.prompt('attachment-preview-mode', {

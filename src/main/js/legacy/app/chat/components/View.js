@@ -1,8 +1,13 @@
-var Ext = require('extjs');
-var ComponentsLog = require('./Log');
-var ComponentsEntry = require('./Entry');
-var ChatActions = require('../Actions');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const {isMe} = require('legacy/util/Globals');
+
+const ChatActions = require('../Actions');
+
+require('./Log');
+require('./Entry');
+require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
@@ -80,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		this.on('resize', this.reanchorLog, this);
 		this.on('status-change', this.trackChatState, this);
 		this.maybeShowFlagIcon();
-		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.ChatActions = ChatActions.create();
 
 		if (Ext.is.iOS) {
 			this.makeAdjustmentForiOS();

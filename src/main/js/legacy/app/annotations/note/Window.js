@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-var WindowsStateStore = require('../../windows/StateStore');
-var ComponentsHeader = require('../../windows/components/Header');
-var ComponentsLoading = require('../../windows/components/Loading');
-var NoteMain = require('./Main');
-var ContextContainerContext = require('../../context/ContainerContext');
+const Ext = require('extjs');
+
+const WindowsStateStore = require('legacy/app/windows/StateStore');
+const ContainerContext = require('legacy/app/context/ContainerContext');
+const Note = require('legacy/model/Note');
+
+require('legacy/app/windows/components/Header');
+require('legacy/app/windows/components/Loading');
+require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Window', {
@@ -31,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 	},
 
 	loadNote: function (record) {
-		var context = NextThought.app.context.ContainerContext.create({
+		var context = ContainerContext.create({
 			container: record.get('ContainerId'),
 			range: record.get('applicableRange'),
 			contextRecord: record,
@@ -79,5 +82,5 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		return panel.allowNavigation();
 	}
 }, function () {
-	NextThought.app.windows.StateStore.register(NextThought.model.Note.mimeType, this);
+	WindowsStateStore.register(Note.mimeType, this);
 });

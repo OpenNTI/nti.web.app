@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var TimeUtils = require('../../../../util/Time');
+const Ext = require('extjs');
+
+const TimeUtils = require('legacy/util/Time');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.assignment.TimedPlaceholder', {

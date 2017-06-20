@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var NotepadEditor = require('./Editor');
+const Ext = require('extjs');
+
+require('./Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Item', {

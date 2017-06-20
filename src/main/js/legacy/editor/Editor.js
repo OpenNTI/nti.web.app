@@ -1,21 +1,24 @@
-var Ext = require('extjs');
-var AnnotationUtils = require('../util/Annotations');
-var DomUtils = require('../util/Dom');
-var ParseUtils = require('../util/Parsing');
-var RangeUtils = require('../util/Ranges');
-var SharingUtils = require('../util/Sharing');
-var {guidGenerator: guidFn} = require('legacy/util/Globals');
-var {isFeature} = require('legacy/util/Globals');
-const Globals = require('legacy/util/Globals');
+const Ext = require('extjs');
 const Mime = require('mime-types');
 const {wait} = require('nti-commons');
-require('legacy/common/form/fields/FilePicker');
-require('legacy/model/RelatedWork');
+
+const AnnotationUtils = require('legacy/util/Annotations');
+const DomUtils = require('legacy/util/Dom');
+const ParseUtils = require('legacy/util/Parsing');
+const RangeUtils = require('legacy/util/Ranges');
+const SharingUtils = require('legacy/util/Sharing');
+const {guidGenerator: guidFn} = require('legacy/util/Globals');
+const {isFeature} = require('legacy/util/Globals');
+const TabIndexTracker = require('legacy/util/TabIndexTracker');
+const Globals = require('legacy/util/Globals');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+const RelatedWork = require('legacy/model/RelatedWork');
+
 require('legacy/editor/embedvideo/Window');
 
 const guidGenerator = () => `guid-${guidFn()}`; //CSS id selectors cannot start with numbers.
 
-Ext.define('NextThought.editor.AbstractEditor', {
+const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	extend: 'Ext.Component',
 	enableShareControls: false,
 	enablePublishControls: false,
@@ -458,7 +461,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			el = me.el,
 			scrollParentEl = Ext.getBody(),
 			Ce = Ext.CompositeElement,
-			tabTracker = new NextThought.util.TabIndexTracker();
+			tabTracker = new TabIndexTracker();
 
 		me.trackedParts = {};
 
@@ -718,7 +721,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		let content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
-			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(file.size), 1),
+			size = FilePicker.getHumanReadableFileSize(parseFloat(file.size), 1),
 			iconData = this.getFileIconDataFromFile(file, name),
 			type = Mime.extension(file.type),
 			data = {size: size, filename: file.name, name: name, extension: type, placeholder: this.defaultValue},
@@ -759,7 +762,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		let data = model && model.isModel ? model.getData() : model,
 			content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
-			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(data.size), 1),
+			size = FilePicker.getHumanReadableFileSize(parseFloat(data.size), 1),
 			iconData = this.getFileIconDataFromValue(data),
 			type = data.contentType || data.FileMimeType || '';
 
@@ -822,7 +825,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	getFallbackIconData: function (type) {
-		return NextThought.model.RelatedWork.getIconForMimeType(type);
+		return RelatedWork.getIconForMimeType(type);
 	},
 
 
@@ -2264,7 +2267,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	}
 });
 
-module.exports = exports =	Ext.define('NextThought.editor.Editor', {
+const Editor = module.exports = exports =	Ext.define('NextThought.editor.Editor', {
 	extend: 'NextThought.editor.AbstractEditor',
 	alias: 'widget.nti-editor'
 });
+
+Editor.AbstractEditor = AbstractEditor;

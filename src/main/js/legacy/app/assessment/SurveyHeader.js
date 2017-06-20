@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var OverlayPanel = require('../contentviewer/overlay/Panel');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('../contentviewer/overlay/Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader', {

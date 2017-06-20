@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 /**
@@ -17,12 +17,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 	},
 
 
-	/**
-	 *
-	 * @param publicName
-	 * @param fn
-	 * @param scope
-	 */
 	register: function (publicName, fn, scope) {
 		if (typeof publicName !== 'string') {
 			Ext.Error.raise('publicName must be a string');
@@ -39,9 +33,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 	},
 
 
-	/**
-	 *
-	 */
 	getAPI: function () {
 		return Ext.clone(this.registry);
 	}

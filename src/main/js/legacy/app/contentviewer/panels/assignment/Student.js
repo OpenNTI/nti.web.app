@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const {isMe} = require('legacy/util/Globals');
 
 require('../Reader');
