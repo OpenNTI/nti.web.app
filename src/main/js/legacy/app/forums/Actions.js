@@ -1,11 +1,15 @@
 const Ext = require('extjs');
-const ParseUtils = require('../../util/Parsing');
+
+const UserdataActions = require('legacy/app/userdata/Actions');
+const UserdataStateStore = require('legacy/app/userdata/StateStore');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+const Post = require('legacy/model/forums/Post');
+const ParseUtils = require('legacy/util/Parsing');
 const {isMe} = require('legacy/util/Globals');
+
 const ForumStore = require('./StateStore');
-require('../../common/Actions');
-require('../userdata/Actions');
-require('../userdata/StateStore');
-require('legacy/common/form/fields/FilePicker');
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
@@ -13,13 +17,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 
 	constructor: function () {
 		this.callParent(arguments);
-		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
+		this.UserDataStore = UserdataStateStore.getInstance();
 
 		this.ForumStore = ForumStore.getInstance();
 	},
 
 
-	/**
+	/*
 	 * Save a topic comment
 	 *
 	 * When the we have a form data, we will save it as such othewise we will do the default save.
@@ -28,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		var isEdit = Boolean(comment) && !comment.phantom,
 			postLink = topic.getLink('add');
 
-		comment = comment || NextThought.model.forums.Post.create();
+		comment = comment || Post.create();
 
 		const originalBody = comment.get('body');
 		let depth;
@@ -70,8 +74,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				}
 
 				if (err.code === 'MaxFileSizeUploadLimitError') {
-					let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+					let maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
+						currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
 					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 				}
 				if (err.code === 'MaxAttachmentsExceeded') {
@@ -88,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 
 	saveTopic: function (editorCmp, record, forum, title, tags, body, autoPublish) {
 		var isEdit = Boolean(record),
-			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create(),
+			post = isEdit ? record.get('headline') : Post.create(),
 			me = this;
 
 		//NOTE: Forums entries are PUBLIC only.
@@ -193,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 	},
 
 	applyTopicToStores: function (topic) {
-		var actions = NextThought.app.userdata.Actions.create(),
+		var actions = UserdataActions.create(),
 			headline = topic.get('headline'),
 			headlineJSON = headline.asJSON(),
 			recordForStore;

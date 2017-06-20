@@ -1,5 +1,11 @@
-var Ext = require('extjs');
-var AssignmentAdmin = require('../../../../../contentviewer/navigation/assignment/Admin');
+const Ext = require('extjs');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+const WindowsStateStore = require('legacy/app/windows/StateStore');
+const Grade = require('legacy/model/courseware/Grade');
+const Email = require('legacy/model/Email');
+
+require('legacy/app/contentviewer/navigation/assignment/Admin');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Header', {
@@ -18,8 +24,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
+		this.WindowStore = WindowsStateStore.getInstance();
 	},
 
 
@@ -42,10 +48,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		var me = this,
 			grade = me.historyItem.get('Grade');
-
-		var values = grade && grade.getValues(),
-			number = values && values.value,
-			letter = values && values.letter;
 
 		function fillInValue () {
 			var values = grade && grade.getValues(),
@@ -85,8 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	showEmailEditor: function (e) {
-		var me = this,
-			emailRecord = new NextThought.model.Email();
+		var emailRecord = new Email();
 
 		// Set the link to post the email to
 		emailRecord.set('url', this.emailLink);
@@ -125,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		if (grade) {
-			this.predictedEl.update(NextThought.model.courseware.Grade.getDisplay(grade));
+			this.predictedEl.update(Grade.getDisplay(grade));
 			this.predictedContainerEl.removeCls('hidden');
 		} else {
 			this.predictedContainerEl.addCls('hidden');

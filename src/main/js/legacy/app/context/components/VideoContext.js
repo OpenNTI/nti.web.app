@@ -1,7 +1,11 @@
-var Ext = require('extjs');
-var ContextStateStore = require('../StateStore');
-var PathActions = require('../../navigation/path/Actions');
-var VideoVideo = require('../../video/Video');
+const Ext = require('extjs');
+
+const PathActions = require('legacy/app/navigation/path/Actions');
+const PageInfo = require('legacy/model/PageInfo');
+
+const ContextStateStore = require('../StateStore');
+
+require('legacy/app/video/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.VideoContext', {
@@ -27,8 +31,8 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.ContextStore = ContextStateStore.getInstance();
+		this.PathActions = PathActions.create();
 	},
 
 	isInContext: function () {
@@ -57,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 				var pageInfo, i;
 
 				for (i = path.length - 1; i >= 0; i--) {
-					if (path[i] instanceof NextThought.model.PageInfo) {
+					if (path[i] instanceof PageInfo) {
 						pageInfo = path[i];
 						break;
 					}

@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const {getString} = require('legacy/util/Localization');
 
 require('../../store/Collection');

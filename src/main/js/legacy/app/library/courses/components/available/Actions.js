@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var CommonActions = require('../../../../../common/Actions');
-var CoursesStateStore = require('../../StateStore');
+const Ext = require('extjs');
+
+require('legacy/common/Actions');
+require('../../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.Actions', {

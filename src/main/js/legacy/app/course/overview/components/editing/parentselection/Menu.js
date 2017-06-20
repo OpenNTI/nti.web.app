@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ParentselectionMenuItem = require('./MenuItem');
-var ParentselectionNewItem = require('./NewItem');
+const Ext = require('extjs');
+
+require('./MenuItem');
+require('./NewItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.Menu', {

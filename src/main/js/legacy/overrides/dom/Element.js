@@ -1,11 +1,10 @@
 const Ext = require('extjs');
 
-const RectUtils = require('../../util/Rects');
+const RectUtils = require('legacy/util/Rects');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	override: 'Ext.dom.Element',
-//	requires: ['NextThought.util.Rects'],
 
 	constructor: function () {
 		this.callParent(arguments);
@@ -109,9 +108,9 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 
 	/**
 	 *
-	 * @param {Node} el
-	 * @param {Number} [bufferZone]
-	 * @return {*}
+	 * @param {Node} el -
+	 * @param {Number} [bufferZone] -
+	 * @return {*} -
 	 */
 	isOnScreenRelativeTo: function (el, bufferZone) {
 		var myRect = Ext.getDom(this).getBoundingClientRect(),

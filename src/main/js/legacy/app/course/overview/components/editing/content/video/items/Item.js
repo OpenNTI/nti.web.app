@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var DndOrderingItem = require('../../../../../../../../mixins/dnd/OrderingItem');
+const Ext = require('extjs');
+
+const MoveInfo = require('legacy/model/app/MoveInfo');
+
+require('legacy/mixins/dnd/OrderingItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Item', {
@@ -37,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.setDataTransfer(new NextThought.model.app.MoveInfo({
+		this.setDataTransfer(new MoveInfo({
 			OriginContainer: null,
 			OriginIndex: this.index
 		}));

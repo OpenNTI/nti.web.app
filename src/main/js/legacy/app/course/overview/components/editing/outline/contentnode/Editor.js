@@ -1,7 +1,11 @@
-var Ext = require('extjs');
-var CalendarnodeEditor = require('../calendarnode/Editor');
-var NavigationCourseOutlineNode = require('../../../../../../../model/courses/navigation/CourseOutlineNode');
-var OutlineParentSelection = require('../ParentSelection');
+const Ext = require('extjs');
+
+const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
+
+const OutlineParentSelection = require('../ParentSelection');
+
+require('legacy/model/courses/navigation/CourseOutlineNode');
+require('../calendarnode/Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.Editor', {
@@ -11,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType
+				CourseOutlineContentNode.mimeType
 			];
 		},
 
@@ -33,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		var items = rootRecord.get('Items');
 
-		return this.add(new NextThought.app.course.overview.components.editing.outline.ParentSelection({
+		return this.add(new OutlineParentSelection({
 			selectionItems: items,
 			selectedItem: parentRecord !== rootRecord ? parentRecord : null,
 			parentRecord: parentRecord,

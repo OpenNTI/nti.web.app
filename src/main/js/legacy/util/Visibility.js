@@ -1,9 +1,9 @@
 const Ext = require('extjs');
 const logger = require('nti-util-logger').default.get('util:visibility');
+const {wait} = require('nti-commons');
 
 const Toaster = require('legacy/common/toast/Manager');
 const {isFeature} = require('legacy/util/Globals');
-const {wait} = require('nti-commons');
 
 
 module.exports = exports = Ext.define('NextThought.util.Visibility', {

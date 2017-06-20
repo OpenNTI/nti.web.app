@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var QuestionsetAssignmentSelection = require('../questionset/AssignmentSelection');
+const Ext = require('extjs');
+
+require('../questionset/AssignmentSelection');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.survey.SurveySelection', {

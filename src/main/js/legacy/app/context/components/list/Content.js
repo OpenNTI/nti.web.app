@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var PathActions = require('../../../navigation/path/Actions');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const PathActions = require('legacy/app/navigation/path/Actions');
+const {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.list.Content', {
@@ -39,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.PathActions = PathActions.create();
 
 		this.PathActions.getPathToObject(this.record)
 			.then(this.setPath.bind(this));

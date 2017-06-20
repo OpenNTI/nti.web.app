@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PromptActions = require('../../../../../prompt/Actions');
+const Ext = require('extjs');
+
+const PromptActions = require('legacy/app/prompt/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
@@ -16,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.record && !this.record.getLink('edit')) {
 			this.hide();
 		} else {
-			this.PromptActions = NextThought.app.prompt.Actions.create();
+			this.PromptActions = PromptActions.create();
 
 			this.renderData = Ext.apply(this.renderData || {}, {
 				name: this.name
@@ -70,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.onPromptClose(false);
 		}
 
-		if (reason === NextThought.app.prompt.Actions.DELETED && this.onDelete) {
+		if (reason === PromptActions.DELETED && this.onDelete) {
 			this.onDelete();
 		}
 	}

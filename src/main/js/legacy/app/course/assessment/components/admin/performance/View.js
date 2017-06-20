@@ -1,13 +1,15 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../cache/UserRepository');
-var User = require('../../../../../../model/User');
-var ParseUtils = require('../../../../../../util/Parsing');
-var MixinsRouter = require('../../../../../../mixins/Router');
-var PerformanceRoot = require('./Root');
-var PerformanceStudent = require('./Student');
-var UtilPagedPageSource = require('../../../../../../util/PagedPageSource');
-var ModelUser = require('../../../../../../model/User');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const User = require('legacy/model/User');
+const ParseUtils = require('legacy/util/Parsing');
+const PagedPageSource = require('legacy/util/PagedPageSource');
+const {isFeature} = require('legacy/util/Globals');
+
+require('./Root');
+require('./Student');
+
+require('legacy/mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.View', {
@@ -104,9 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		//to load to this student, so when this calls the store will already have loaded
 		//the page that contains this record.
 		current = me.store.findBy(function (rec) {
-			var user = rec.get('User');
-
-			return student === NextThought.model.User.getIdFromRaw(user);
+			return student === User.getIdFromRaw(rec.get('User'));
 		});
 
 		record = me.store.getAt(current);
@@ -129,30 +129,26 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			Ext.destroy(view);
 		}
 
-		pageSource = NextThought.util.PagedPageSource.create({
+		pageSource = PagedPageSource.create({
 			currentIndex: current,
 			store: me.store,
 			getTitle: function (rec) {
 				return rec ? rec.get('Alias') : '';
 			},
 			getRoute: function (rec) {
-				var user = rec.get('User');
+				var recUser = rec.get('User');
 
-				return 'performance/' + user.getURLPart();
+				return 'performance/' + recUser.getURLPart();
 			},
 			fillInRecord: function (item) {
-				var user = item.get('User');
+				var itemUser = item.get('User');
 
-				if (!user) {
+				if (!itemUser) {
 					return item;
 				}
 
-				return UserRepository.getUser(user.Username || user)
-					.then(function (u) {
-						item.set('User', u);
-
-						return item;
-					});
+				return UserRepository.getUser(itemUser.Username || itemUser)
+					.then(u => (item.set('User', u), item));
 			}
 		});
 

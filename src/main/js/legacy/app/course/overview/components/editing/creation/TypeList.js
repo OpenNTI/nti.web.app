@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CreationType = require('./Type');
+const Ext = require('extjs');
+
+require('./Type');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.creation.TypeList', {

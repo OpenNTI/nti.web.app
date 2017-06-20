@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ContextStateStore = require('../StateStore');
+const Ext = require('extjs');
+
+const ContextStateStore = require('../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.Default', {
@@ -19,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Defaul
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 	},
 
 	isInContext: function () {

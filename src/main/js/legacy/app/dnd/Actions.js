@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var CommonActions = require('../../common/Actions');
-var DndStateStore = require('./StateStore');
-var UtilScrolling = require('../../util/Scrolling');
+const Ext = require('extjs');
+
+const Scrolling = require('../../util/Scrolling');
+
+const DndStateStore = require('./StateStore');
+
+require('../../common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Actions', {
@@ -10,9 +13,9 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Actions', {
 	constructor: function (config) {
 		this.callParent(arguments);
 
-		this.DnDStore = NextThought.app.dnd.StateStore.getInstance();
+		this.DnDStore = DndStateStore.getInstance();
 
-		this.pageScrolling = NextThought.util.Scrolling.getPageScrolling();
+		this.pageScrolling = Scrolling.getPageScrolling();
 	},
 
 	startDrag: function (activeItem) {

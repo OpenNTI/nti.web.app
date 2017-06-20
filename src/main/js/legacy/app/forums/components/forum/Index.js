@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ComponentsNavPanel = require('../../../../common/components/NavPanel');
-var ForumNavigation = require('./Navigation');
-var ForumForum = require('./Forum');
+const Ext = require('extjs');
+
+require('legacy/common/components/NavPanel');
+require('./Navigation');
+require('./Forum');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Index', {

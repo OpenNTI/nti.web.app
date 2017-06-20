@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ContentListItem = require('../ListItem');
-var PartsTimeline = require('../../../parts/Timeline');
-var ModelTimeline = require('../../../../../../../model/Timeline');
+const Ext = require('extjs');
+
+const Timeline = require('legacy/model/Timeline');
+
+require('../../../parts/Timeline');
+require('../ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.ListItem', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSupported: function () {
-			return NextThought.model.Timeline.mimeType;
+			return Timeline.mimeType;
 		}
 	},
 

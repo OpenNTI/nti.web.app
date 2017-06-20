@@ -1,10 +1,13 @@
 const Ext = require('extjs');
+
 const PlaylistItem = require('legacy/model/PlaylistItem');
 const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
 const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 const PathActions = require('legacy/app/navigation/path/Actions');
 const Video = require('legacy/model/Video');
-require('legacy/model/transcript/TranscriptItem');
+const Cue = require('legacy/model/transcript/Cue');
+const TranscriptItem = require('legacy/model/transcript/TranscriptItem');
+
 require('legacy/app/context/components/Default');
 require('legacy/app/context/components/VideoContext');
 require('legacy/app/context/components/cards/Content');
@@ -46,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 		var cuesList = [], s;
 
 		Ext.each(vttCueList, function (c) {
-			var m = NextThought.model.transcript.Cue.fromParserCue(c);
+			var m = Cue.fromParserCue(c);
 			cuesList.push(m);
 		});
 
@@ -99,11 +102,11 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 
 		return this.__getBasePath(obj)
 				.then(function (basePath) {
-					t = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+					t = TranscriptItem.fromVideo(video, basePath);
 					return Promise.resolve(t);
 				})
 				.catch(function () {
-					t = NextThought.model.transcript.TranscriptItem.fromVideo(video);
+					t = TranscriptItem.fromVideo(video);
 					return Promise.resolve(t);
 				})
 				.then(function (transcript) {

@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var PromptStateStore = require('../../prompt/StateStore');
-var CroppingEditor = require('./Editor');
+const Ext = require('extjs');
+
+const PromptStateStore = require('../../prompt/StateStore');
+
+require('./Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
@@ -63,5 +65,5 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
 		return Promise.reject('Nothing to submit.');
 	}
 }, function () {
-	NextThought.app.prompt.StateStore.register('image-cropping', this);
+	PromptStateStore.register('image-cropping', this);
 });

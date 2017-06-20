@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var UserRepository = require('../cache/UserRepository');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const {isMe} = require('legacy/util/Globals');
+const ChatStateStore = require('legacy/app/chat/StateStore');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.store.Contacts', {
@@ -25,8 +28,8 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+		this.GroupStore = GroupsStateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
 
 		this.mon(this.GroupStore.getFriendsList(), {
 			'contacts-added': this.addContacts.bind(this),

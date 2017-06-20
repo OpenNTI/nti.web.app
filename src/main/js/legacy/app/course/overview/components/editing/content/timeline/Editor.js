@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var ContentEditor = require('../Editor');
-var TimelineItemSelection = require('./ItemSelection');
-var TimelineTimelineEditor = require('./TimelineEditor');
-var ModelTimeline = require('../../../../../../../model/Timeline');
+const Ext = require('extjs');
+
+const Timeline = require('legacy/model/Timeline');
+
+require('../Editor');
+require('./ItemSelection');
+require('./TimelineEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Editor', {
@@ -12,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.Timeline.mimeType
+				Timeline.mimeType
 			];
 		},
 

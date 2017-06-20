@@ -1,18 +1,24 @@
 const Ext = require('extjs');
-const Globals = require('legacy/util/Globals');
 const { encodeForURI, decodeFromURI, isNTIID } = require('nti-lib-ntiids');
 
-require('legacy/util/Parsing');
-require('legacy/mixins/Router');
+const LibraryActions = require('legacy/app/library/Actions');
+const Globals = require('legacy/util/Globals');
+const Lesson = require('legacy/model/courses/overview/Lesson');
+const PageInfo = require('legacy/model/PageInfo');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+const QuestionSetRef = require('legacy/model/QuestionSetRef');
+const RelatedWork = require('legacy/model/RelatedWork');
+const SurveyRef = require('legacy/model/SurveyRef');
+const Slidedeck = require('legacy/model/Slidedeck');
+const Video = require('legacy/model/Video');
+
 require('legacy/mixins/FillScreen');
-require('./components/View');
+require('legacy/mixins/Router');
+require('legacy/util/Parsing');
+
 require('../../content/content/Index');
 require('../../mediaviewer/Index');
-require('legacy/model/RelatedWork');
-require('legacy/model/QuestionSetRef');
-require('legacy/model/SurveyRef');
-require('legacy/model/NTICard');
-require('legacy/model/courses/overview/Lesson');
+require('./components/View');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
@@ -51,10 +57,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addDefaultRoute(this.showLessons.bind(this));
 
-		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
-		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
-		this.addObjectHandler(NextThought.model.PlaylistItem.mimeType, this.getVideoRoute.bind(this));
-		this.addObjectHandler(NextThought.model.Slidedeck.mimeType, this.getSlidedeckRoute.bind(this));
+		this.addObjectHandler(PageInfo.mimeType, this.getPageInfoRoute.bind(this));
+		this.addObjectHandler(RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
+		this.addObjectHandler(PlaylistItem.mimeType, this.getVideoRoute.bind(this));
+		this.addObjectHandler(Slidedeck.mimeType, this.getSlidedeckRoute.bind(this));
 
 		this.lessons = this.down('course-overview-view');
 
@@ -66,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addChildRouter(this.lessons);
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 
 		this.on('deactivate', this.closeReading.bind(this));
 	},
@@ -485,23 +491,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 	getRouteForRoot: function (root, subPath, lesson) {
 		let route;
-		if (root instanceof NextThought.model.QuestionSetRef) {
+		if (root instanceof QuestionSetRef) {
 			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof NextThought.model.SurveyRef) {
+		} else if (root instanceof SurveyRef) {
 			route = this.getRouteForSurveyPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof NextThought.model.RelatedWork) {
+		} else if (root instanceof RelatedWork) {
 			route = this.getRouteForRelatedWorkPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof NextThought.model.PageInfo) {
+		} else if (root instanceof PageInfo) {
 			route = this.getRouteForPageInfoPath(root, subPath);
 			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof NextThought.model.Video) {
+		} else if (root instanceof Video) {
 			route = this.getRouteForVideoPath(root, subPath);
-		} else if (root instanceof NextThought.model.Slidedeck) {
+		} else if (root instanceof Slidedeck) {
 			route = this.getRouteForSlidedeckPath(root, subPath);
-		} else if (root instanceof NextThought.model.courses.overview.Lesson) {
+		} else if (root instanceof Lesson) {
 			route = {
 				path: '',
 				isFull: true
@@ -518,12 +524,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 	getRouteForRelatedWorkPath: function (relatedWork, path, lesson) {
 		var page = path[0],
-			pageId = page && page instanceof NextThought.model.PageInfo ? page.getId() : null,
+			pageId = page && page instanceof PageInfo ? page.getId() : null,
 			relatedWorkId = relatedWork && relatedWork.get('target'),
 			urlPath = '',
 			subPath = path.slice(1), subRoute;
 
-		if (subPath[0] instanceof NextThought.model.Video) {
+		if (subPath[0] instanceof Video) {
 			subRoute = this.getRouteForRoot(subPath[0], subPath.slice(1));
 		}
 

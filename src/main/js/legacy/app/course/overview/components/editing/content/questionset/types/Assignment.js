@@ -1,11 +1,13 @@
-var Ext = require('extjs');
-var ContentEditor = require('../../Editor');
-var ModelAssignmentRef = require('../../../../../../../../model/AssignmentRef');
-var QuestionsetAssignmentSelection = require('../AssignmentSelection');
+const Ext = require('extjs');
+const {encodeForURI} = require('nti-lib-ntiids');
+
+const AssignmentRef = require('legacy/model/AssignmentRef');
 const AssessmentActions = require('legacy/app/course/assessment/Actions');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
 const NavigationActions = require('legacy/app/navigation/Actions');
-const {encodeForURI} = require('nti-lib-ntiids');
+
+require('../../Editor');
+require('../AssignmentSelection');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.Assignment', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -14,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.AssignmentRef.mimeType
+				AssignmentRef.mimeType
 			];
 		},
 
@@ -32,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 		getEditorForRecord: function (record) {
-			if (record instanceof NextThought.model.AssignmentRef) {
+			if (record instanceof AssignmentRef) {
 				return this;
 			}
 		}
@@ -134,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				.then((assignment) => {
 					const {rootRecord, parentRecord} = this;
 					const values =  {
-						MimeType: NextThought.model.AssignmentRef.mimeType,
+						MimeType: AssignmentRef.mimeType,
 						label: assignment.get('title'),
 						title: assignment.get('title'),
 						'Target-NTIID': assignment.get('NTIID')
@@ -158,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 							//Navigate to the created assignment
 							const route = `/course/${encodeForURI(this.bundle.getId())}/assignments/${encodeForURI(assignment.getId())}/edit/`;
 
-							NextThought.app.navigation.Actions.pushRootRoute(null, route, {assignment});
+							NavigationActions.pushRootRoute(null, route, {assignment});
 
 							if (this.el) {
 								this.el.unmask();

@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var StoreUtils = require('../../../../../util/Store');
-var TilesPost = require('./Post');
-var PartsTopicComment = require('./parts/TopicComment');
-var PathActions = require('../../../../navigation/path/Actions');
+const Ext = require('extjs');
+
+const StoreUtils = require('legacy/util/Store');
+const PathActions = require('legacy/app/navigation/path/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+
+require('./Post');
+require('./parts/TopicComment');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
@@ -29,8 +32,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.NavigationActions = NextThought.app.navigation.path.Actions.create();
+		this.WindowActions = WindowsActions.create();
+		this.NavigationActions = PathActions.create();
 	},
 
 	handleNavigation: function (e) {

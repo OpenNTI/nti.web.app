@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var AssignmentsView = require('../../student/assignments/View');
-var AssignmentsList = require('./List');
-var UxGrouping = require('../../../../../../common/ux/Grouping');
+const Ext = require('extjs');
+
+require('legacy/common/ux/Grouping');
+
+require('../../student/assignments/View');
+require('./List');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Root', {

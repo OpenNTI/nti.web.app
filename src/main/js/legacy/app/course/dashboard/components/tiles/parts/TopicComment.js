@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var PartsPostComment = require('./PostComment');
+const Ext = require('extjs');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+
+require('./PostComment');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.parts.TopicComment', {
@@ -13,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 	},
 
 

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PartsBaseInput = require('./BaseInput');
+const Ext = require('extjs');
+
+require('./BaseInput');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.SubmitButton', {

@@ -1,11 +1,14 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../../../util/Globals');
-var ComponentsBoundCollection = require('../../../../../../../common/components/BoundCollection');
-var DndOrderingContainer = require('../../../../../../../mixins/dnd/OrderingContainer');
-var MixinsFillScreen = require('../../../../../../../mixins/FillScreen');
-var OverviewGroup = require('../../../../../../../model/courses/overview/Group');
-var ControlsAdd = require('../../controls/Add');
-var OverviewgroupListItem = require('../overviewgroup/ListItem');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
+const OverviewGroup = require('legacy/model/courses/overview/Group');
+
+const OverviewgroupListItem = require('../overviewgroup/ListItem');
+
+require('legacy/common/components/BoundCollection');
+require('legacy/mixins/FillScreen');
+require('../../controls/Add');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.Index', {
@@ -25,9 +28,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.setDataTransferHandler(NextThought.model.courses.overview.Group.mimeType, {
+		this.setDataTransferHandler(OverviewGroup.mimeType, {
 			onDrop: this.onGroupDrop.bind(this),
-			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			isValid: DndOrderingContainer.hasMoveInfo,
 			effect: 'move'
 		});
 
@@ -113,8 +116,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getCmpForRecord: function (record, transition, initialState) {
-		if (record instanceof NextThought.model.courses.overview.Group) {
-			return NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem.create({
+		if (record instanceof OverviewGroup) {
+			return OverviewgroupListItem.create({
 				record: record,
 				lessonOverview: this.lessonOverview,
 				outlineNode: this.record,

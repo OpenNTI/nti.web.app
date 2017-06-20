@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ControlsEdit = require('../../controls/Edit');
-var ControlsPublish = require('../../controls/Publish');
-var ControlsCalendar = require('../../controls/Calendar');
+const Ext = require('extjs');
+
+require('../../controls/Edit');
+require('../../controls/Publish');
+require('../../controls/Calendar');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Preview', {

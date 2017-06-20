@@ -1,11 +1,14 @@
-var Ext = require('extjs');
-var MixinsRouter = require('../../mixins/Router');
-var NavigationActions = require('../navigation/Actions');
-var CommunitiesIndex = require('./communities/Index');
-var AdminIndex = require('./admin/Index');
-var ContentIndex = require('./content/Index');
-var CoursesIndex = require('./courses/Index');
-var LibraryHome = require('./Home');
+const Ext = require('extjs');
+
+const NavigationActions = require('../navigation/Actions');
+
+require('legacy/mixins/Router');
+require('./communities/Index');
+require('./admin/Index');
+require('./content/Index');
+require('./courses/Index');
+require('./Home');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.library.Index', {
@@ -23,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.NavActions = NextThought.app.navigation.Actions.create();
+		this.NavActions = NavigationActions.create();
 
 		this.addRoute('/', this.showHome.bind(this));
 		this.addRoute('/courses', this.showCourses.bind(this));

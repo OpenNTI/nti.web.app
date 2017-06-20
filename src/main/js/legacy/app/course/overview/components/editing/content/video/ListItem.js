@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ContentListItem = require('../ListItem');
-var PartsVideo = require('../../../parts/Video');
-var ModelVideo = require('../../../../../../../model/Video');
+const Ext = require('extjs');
+
+const Video = require('legacy/model/Video');
+
+require('../../../parts/Video');
+require('../ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.ListItem', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSupported: function () {
-			return NextThought.model.Video.mimeType;
+			return Video.mimeType;
 		}
 	},
 

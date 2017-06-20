@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const moment = require('moment');
+
 const ParseUtils = require('legacy/util/Parsing');
 const StoreUtils = require('legacy/util/Store');
 

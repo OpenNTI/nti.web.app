@@ -1,13 +1,18 @@
-var Ext = require('extjs');
-var LocationMeta = require('../../../../../cache/LocationMeta');
-var UserRepository = require('../../../../../cache/UserRepository');
-var ContentUtils = require('../../../../../util/Content');
-var StoreUtils = require('../../../../../util/Store');
-var TilesPost = require('./Post');
-var MixinsQuestionContent = require('../../../../../mixins/QuestionContent');
-var PartsNoteComment = require('./parts/NoteComment');
-var ContextContainerContext = require('../../../../context/ContainerContext');
-var PathActions = require('../../../../navigation/path/Actions');
+const Ext = require('extjs');
+
+const ContainerContext = require('legacy/app/context/ContainerContext');
+const PathActions = require('legacy/app/navigation/path/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+const Video = require('legacy/app/context/types/Video');
+const LocationMeta = require('legacy/cache/LocationMeta');
+const UserRepository = require('legacy/cache/UserRepository');
+const ContentUtils = require('legacy/util/Content');
+const StoreUtils = require('legacy/util/Store');
+
+require('legacy/mixins/QuestionContent');
+require('./Post');
+require('./parts/NoteComment');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
@@ -28,20 +33,20 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			so wait to determine this and cache the useful async stuff we do along the way
 		 */
 		getTileConfig: function (record, course, width, removeOnDelete) {
-			var me = this,
-				context = NextThought.app.context.ContainerContext.create({
-					container: record.get('ContainerId'),
-					range: record.get('applicableRange'),
-					course: course,
-					contextRecord: record
-				});
+			var me = this;
 
-			return context.load('card')
-				.then(function (context) {
+			return ContainerContext.create({
+				container: record.get('ContainerId'),
+				range: record.get('applicableRange'),
+				course: course,
+				contextRecord: record
+			})
+				.load('card')
+				.then(context => {
 					var height = Math.min((record.get('ReplyCount') || 0), 2) * me.COMMENT_HEIGHT;
 
 					if (context) {
-						if (context.type === NextThought.app.context.types.Video.type) {
+						if (context.type === Video.type) {
 							height += me.WIDTH / me.VIDEO_THUMB_ASPECT;
 							context.width = width || me.WIDTH;
 							context.height = Math.round(me.WIDTH / me.VIDEO_THUMB_ASPECT);
@@ -80,8 +85,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.WindowActions = WindowsActions.create();
+		this.PathActions = PathActions.create();
 	},
 
 	handleNavigation: function (e) {
@@ -172,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			return this.CACHE.context;
 		}
 
-		var context = NextThought.app.context.ContainerContext.create({
+		var context = ContainerContext.create({
 			container: this.record.get('ContainerId'),
 			course: this.course
 		});

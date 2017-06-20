@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var CardsCard = require('../../../../../common/components/cards/Card');
-var UxIframeWindow = require('../../../../../common/ux/IframeWindow');
+const Ext = require('extjs');
+
+require('legacy/common/components/cards/Card');
+require('legacy/common/ux/IframeWindow');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.IframeWindow', {

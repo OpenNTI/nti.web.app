@@ -1,15 +1,18 @@
 const Ext = require('extjs');
-const AnalyticsUtil = require('../../../../util/Analytics');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+const WindowsStateStore = require('legacy/app/windows/StateStore');
+const CommentPost = require('legacy/model/forums/CommentPost');
+const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
+const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
+const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic');
+const CommunityHeadlinePost = require('legacy/model/forums/CommunityHeadlinePost');
+const AnalyticsUtil = require('legacy/util/Analytics');
 const {isFeature} = require('legacy/util/Globals');
 
-require('../../../../model/forums/DFLHeadlineTopic');
-require('../../../windows/StateStore');
-require('../../../windows/components/Header');
-require('../../../windows/components/Loading');
-require('../../../windows/Actions');
-require('../../../../model/forums/CommunityHeadlineTopic');
-require('../../../../model/forums/ContentHeadlineTopic');
-require('../../../../model/forums/CommunityHeadlinePost');
+require('legacy/app/windows/components/Header');
+require('legacy/app/windows/components/Loading');
+require('legacy/app/windows/Actions');
 require('./parts/Comments');
 require('./parts/Editor');
 require('./parts/Pager');
@@ -26,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.headerCmp = this.add({
 			xtype: 'window-header',
@@ -38,9 +41,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 		if (!this.record || this.state === 'edit') {
 			this.loadEditor();
-		} else if (this.record instanceof NextThought.model.forums.CommentPost) {
+		} else if (this.record instanceof CommentPost) {
 			this.loadComment();
-		} else if (this.record instanceof NextThought.model.forums.CommunityHeadlinePost) {
+		} else if (this.record instanceof CommunityHeadlinePost) {
 			this.loadPost();
 		} else {
 			this.loadTopic();
@@ -262,10 +265,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		});
 	}
 }, function () {
-	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
-	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);
-	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlineTopic.mimeType, this);
-	NextThought.app.windows.StateStore.register(NextThought.model.forums.DFLHeadlineTopic.mimeType, this);
-	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlinePost.mimeType, this);
-	NextThought.app.windows.StateStore.register('new-topic', this);
+	WindowsStateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
+	WindowsStateStore.register(ContentHeadlineTopic.mimeType, this);
+	WindowsStateStore.register(CommunityHeadlineTopic.mimeType, this);
+	WindowsStateStore.register(DFLHeadlineTopic.mimeType, this);
+	WindowsStateStore.register(CommunityHeadlinePost.mimeType, this);
+	WindowsStateStore.register('new-topic', this);
 });

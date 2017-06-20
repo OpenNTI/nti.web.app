@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CroppingCroppedImage = require('./CroppedImage');
+const Ext = require('extjs');
+
+const CroppedImage = require('./CroppedImage');
 
 
 module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
@@ -61,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		return new Promise(function (fulfill, reject) {
 			c.toBlob(fulfill, 'image/png');
 		}).then(function (blob) {
-			return new NextThought.app.image.cropping.CroppedImage({
+			return new CroppedImage({
 				blob: blob,
 				name: name
 			});
@@ -99,12 +100,12 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 			};
 		}
 
-		function getHeight (width) {
-			return Math.ceil(width / aspectRatio);
+		function getHeight (w) {
+			return Math.ceil(w / aspectRatio);
 		}
 
-		function getWidth (height) {
-			return Math.ceil(aspectRatio * height);
+		function getWidth (h) {
+			return Math.ceil(aspectRatio * h);
 		}
 
 		if (!width && !height) {

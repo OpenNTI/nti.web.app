@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ItemsItem = require('./Item');
+const Ext = require('extjs');
+
+require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.items.Items', {
@@ -11,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	initComponent: function () {
 		this.callParent(arguments);
-		
+
 		this.addItems(this.record || this.selectedItems);
 	},
 
@@ -20,9 +21,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (items && !(items instanceof Array)) {
 			items = [items];
 		}
-		
+
 		me.selectedItems = items;
-		
+
 		me.add(items.map(function (item, index) {
 			return {
 				xtype: 'overview-editing-timeline-items-item',

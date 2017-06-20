@@ -1,8 +1,8 @@
 const Ext = require('extjs');
-const Globals = require('../../../../../../util/Globals');
 const {wait} = require('nti-commons');
 
-require('legacy/common/form/Form');
+const Globals = require('legacy/util/Globals');
+const Form = require('legacy/common/form/Form');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.NewItem', {
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					required.fields.push(field);
 				} else {
 					required = {
-						msg: NextThought.common.form.Form.getMessageForError(error),
+						msg: Form.getMessageForError(error),
 						error: error,
 						fields: [field]
 					};
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				}
 			} else {
 				msgs.push({
-					msg: NextThought.common.form.Form.getMessageForError(error),
+					msg: Form.getMessageForError(error),
 					error: error,
 					key: field,
 					fields: [field]

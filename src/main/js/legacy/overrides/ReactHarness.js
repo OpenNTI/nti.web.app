@@ -4,6 +4,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService} = require('nti-web-client');
+
 const ContextStore = require('legacy/app/context/StateStore');
 
 const unwrap = x => (x && x.default) ? x.default : x;

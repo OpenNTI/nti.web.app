@@ -1,8 +1,8 @@
-var Ext = require('extjs');
-var VideoVideo = require('../../../../video/Video');
-var PartsVideoRollItem = require('./VideoRollItem');
-var ModelPlaylistItem = require('../../../../../model/PlaylistItem');
-var LibraryActions = require('../../../../library/Actions');
+const Ext = require('extjs');
+
+require('legacy/app/video/Video');
+require('legacy/model/PlaylistItem');
+require('./VideoRollItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.VideoRoll', {
@@ -110,8 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (!progress) { return; }
 
-		var me = this,
-			videoListItems = this.videoList.items.items;
+		var videoListItems = this.videoList.items.items;
 
 		videoListItems.forEach(function (item) {
 			if(item.setProgress) {

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ReaderJson = require('./reader/Json');
+const Ext = require('extjs');
+
+require('./reader/Json');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.Preference', {

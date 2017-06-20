@@ -1,7 +1,6 @@
 const Ext = require('extjs');
-const StoreUtils = require('../util/Store');
 
-require('../util/Store');
+const StoreUtils = require('../util/Store');
 
 
 /**
@@ -11,6 +10,7 @@ require('../util/Store');
  * @class NextThought.store.BatchInterface
  * @author andrew.ligon@nextthought.com (Andrew Ligon)
  */
+const BatchInterface =
 module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 	/**
 	 * @memberOf NextThought.store.BatchInterface#
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 		config.getNextConfig = this.getNextConfig;
 		config.getPreviousConfig = this.getPreviousConfig;
 
-		return NextThought.store.BatchInterface.create(config);
+		return BatchInterface.create(config);
 	},
 
 

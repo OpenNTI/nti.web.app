@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CalendarnodePreview = require('../calendarnode/Preview');
+const Ext = require('extjs');
+
+require('../calendarnode/Preview');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.Preview', {

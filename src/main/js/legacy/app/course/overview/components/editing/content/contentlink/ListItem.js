@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ContentListItem = require('../ListItem');
-var PartsContentLink = require('../../../parts/ContentLink');
-var ModelRelatedWork = require('../../../../../../../model/RelatedWork');
+const Ext = require('extjs');
+
+const RelatedWork = require('legacy/model/RelatedWork');
+
+require('../../../parts/ContentLink');
+require('../ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ListItem', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSupported: function () {
-			return NextThought.model.RelatedWork.mimeType;
+			return RelatedWork.mimeType;
 		}
 	},
 

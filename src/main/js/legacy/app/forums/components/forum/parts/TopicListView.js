@@ -1,9 +1,14 @@
 const Ext = require('extjs');
-const UserRepository = require('../../../../../cache/UserRepository');
-const TimeUtils = require('../../../../../util/Time');
-const {isFeature, WAIT_TIMES} = require('legacy/util/Globals');
 
-require('../../../../../mixins/UIHelpers');
+const WindowsActions = require('legacy/app/windows/Actions');
+const UserRepository = require('legacy/cache/UserRepository');
+const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
+const {isFeature, WAIT_TIMES} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+const TimeUtils = require('legacy/util/Time');
+
+
+require('legacy/mixins/UIHelpers');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
@@ -100,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 
 		me.tpl.searchTerm = 'adsfasdf';
 
-		me.WindowActions = NextThought.app.windows.Actions.create();
+		me.WindowActions = WindowsActions.create();
 
 		if (!me.record.getLink('add')) {
 			me.emptyText = Ext.DomHelper.markup({
@@ -286,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			grouper = this.groupers[by];
 
 		function getHeader (name, value) {
-			var header = NextThought.model.forums.CommunityHeadlineTopic.create();
+			var header = CommunityHeadlineTopic.create();
 
 			header.set(grouper.property, value);
 			header.set('isGroupHeader', true);

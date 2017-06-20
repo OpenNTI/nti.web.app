@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ParentselectionIndex = require('../parentselection/Index');
-var OutlinenodeInlineEditor = require('./outlinenode/InlineEditor');
+const Ext = require('extjs');
+
+const OutlinenodeInlineEditor = require('./outlinenode/InlineEditor');
+
+require('../parentselection/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.ParentSelection', {
@@ -17,6 +19,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getEditor: function () {
-		return NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor;
+		return OutlinenodeInlineEditor;
 	}
 });

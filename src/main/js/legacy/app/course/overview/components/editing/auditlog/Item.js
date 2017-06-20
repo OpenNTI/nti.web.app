@@ -1,8 +1,8 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 const {DateTime} = require('nti-web-commons');
 const {Parsing} = require('nti-commons');
 
-var UserRepository = require('../../../../../../cache/UserRepository');
+const UserRepository = require('legacy/cache/UserRepository');
 
 function getTitle (r) {
 	let title = '';

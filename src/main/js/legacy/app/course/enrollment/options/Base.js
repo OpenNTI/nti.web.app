@@ -1,5 +1,6 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.Base', {
 	NAME: '', //the name of the option
@@ -128,13 +129,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		return text;
 	},
 
-	/**
-	 * Takes the details of the option, and returns the wording for the state
-	 * @param  {Object} details the details of course and option, return value from __getOptionDetails
-	 * @return {Object}		   the wording for the state it is in
-	 */
 	__getEnrollmentText: function (course, option) {
-		var details = this.__getOptionDetails(course, option);
+		// var details = this.__getOptionDetails(course, option);
 	},
 
 	/*
@@ -168,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	 *
 	 * @param {CourseCatalogEnrty} course the course we are looking at
 	 * @param {Object} details parsed enrollment details for the course
-	 * @return {Object}
+	 * @return {Object} -
 	 */
 	buildEnrollmentDetails: function (course, details) {}
 });

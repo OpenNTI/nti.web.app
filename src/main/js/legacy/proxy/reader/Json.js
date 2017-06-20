@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ReaderBase = require('./Base');
+const Ext = require('extjs');
+
+const Base = require('legacy/model/Base');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
@@ -73,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 						//Stores like to have one type of model in them, but we need non-homogenous stores.
 						//e.g. PageItem stores have notes, highlights, redaction, etc.	So make sure we coerce the proper model
 						//here.	 TODO move into NextThought.proxy.reader.Base and/or a more elegant way to do this
-						if (record instanceof NextThought.model.Base && !record.homogenous) {
+						if (record instanceof Base && !record.homogenous) {
 							modelName = record.get('Class');
 							if (record.modelName.substr(-modelName.length) !== modelName) {
 								result.records[i] = this.__rebuildRecordAsType(

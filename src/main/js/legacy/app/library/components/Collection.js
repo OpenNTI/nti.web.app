@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsCollection = require('../../../common/components/Collection');
+const Ext = require('extjs');
+
+require('../../../common/components/Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.components.Collection', {
@@ -73,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 	prepareData: function (data, index, record) {
 		var i = this.callParent(arguments),
 			catalog = record.getCourseCatalogEntry && record.getCourseCatalogEntry();
-		
+
 		if (record.getIconImage) {
 			record.getIconImage();
 		}

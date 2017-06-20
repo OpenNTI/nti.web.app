@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var PartsBaseInput = require('./BaseInput');
-var FieldsDateField = require('../../../../../common/form/fields/DateField');
+const Ext = require('extjs');
+
+require('legacy/common/form/fields/DateField');
+require('./BaseInput');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.DateInput', {

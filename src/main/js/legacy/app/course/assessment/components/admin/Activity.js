@@ -1,11 +1,13 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../cache/UserRepository');
-var ParseUtils = require('../../../../../util/Parsing');
-var StudentActivity = require('../student/Activity');
-var CoursewareCourseActivity = require('../../../../../model/courseware/CourseActivity');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const {isMe} = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
 const {getFormattedString} = require('legacy/util/Localization');
+
+require('legacy/model/courseware/CourseActivity');
+require('../student/Activity');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Activity', {

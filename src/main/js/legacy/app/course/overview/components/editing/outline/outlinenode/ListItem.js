@@ -1,6 +1,8 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
+const MoveInfo = require('legacy/model/app/MoveInfo');
+
 require('legacy/mixins/dnd/OrderingItem');
-require('legacy/model/app/MoveInfo');
 require('../../controls/Publish');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ListItem', {
@@ -29,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		var move = new NextThought.model.app.MoveInfo({
+		var move = new MoveInfo({
 			OriginContainer: this.record.parent && this.record.parent.getId && this.record.parent.getId(),
 			OriginIndex: this.record.listIndex
 		});
@@ -67,8 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				//If we got destroyed don't do anything
 				if (!me.rendered) { return; }
 
-				var start = me.record && me.record.get('AvailableBeginning'),
-					config;
+				var config;
 
 				// Set dates
 				me.getStartDate()
@@ -91,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	/**
+	/*
 	 * For now, restrict the drag and drop to only the title.
 	 * We don't want drag the controls.
 	 */
@@ -130,7 +131,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	setDayAndMonth: function (date) {
-		var parts, m;
 		if (this.dateCmp && this.dateCmp.setDayAndMonth) {
 			this.dateCmp.setDayAndMonth(date);
 		}

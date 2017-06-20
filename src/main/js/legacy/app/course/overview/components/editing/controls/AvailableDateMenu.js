@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var FieldsDatePicker = require('../../../../../../common/form/fields/DatePicker');
+const Ext = require('extjs');
+
+const EditingActions = require('../Actions');
+
+require('legacy/common/form/fields/DatePicker');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.AvailableDateMenu', {
@@ -32,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.EditingActions = new NextThought.app.course.overview.components.editing.Actions();
+		this.EditingActions = new EditingActions();
 
 		this.realign = this.realign.bind(this);
 		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.realign, 10, this);
@@ -80,7 +83,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			buttonRect = button && button.getBoundingClientRect(),
 			buttonRelativeTop = buttonRect.top - bodyRect.top,
 			buttonRelativeBottom = buttonRelativeTop + buttonRect.height,
-			viewHeight = Ext.Element.getViewportHeight(),
 			viewWidth = Ext.Element.getViewportWidth(),
 			positions = {
 				below: {
@@ -176,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			defaultValue.setSeconds(0);
 		}
 
-		return defaultValue.getTime() / 1000; 
+		return defaultValue.getTime() / 1000;
 	},
 
 	createDatePicker: function (dateContainer) {
@@ -199,7 +201,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			key = selected && selected.dom && selected.dom.getAttribute('data-action');
 
 		if (key) {
-			this.values[key] = seconds; 
+			this.values[key] = seconds;
 		}
 		if (this.saveEl.hasCls('disabled')) {
 			this.saveEl.removeCls('disabled');
@@ -209,8 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	handleSelectionClick: function (e) {
-		var el = Ext.get(e.target),
-			me = this;
+		var el = Ext.get(e.target);
 
 		e.stopEvent();
 
@@ -223,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var t = el && el.hasCls('part') ? el : el && el.up('.part'),
 			selectedEl = this.el.down('.selected');
 
-		if (t && selectedEl && t !== selectedEl) { 
+		if (t && selectedEl && t !== selectedEl) {
 			selectedEl.removeCls('selected');
 			t.addCls('selected');
 		}
@@ -256,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (this.picker && this.picker.isValid && this.picker.isValid() === false) {
 			return false;
-		} 
+		}
 
 		if (!start && end) {
 			error = {

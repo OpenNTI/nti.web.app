@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var ResolversVideoPosters = require('../../../../../model/resolvers/VideoPosters');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const VideoPosters = require('legacy/model/resolvers/VideoPosters');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
@@ -53,8 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		var me = this,
-			sources = me.video.sources || me.video.get('sources') || [],
-			resolver = NextThought.model.resolvers.VideoPosters;
+			sources = me.video.sources || me.video.get('sources') || [];
 
 		Promise.all(
 			sources.map(function (source) {
@@ -66,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						thumbnail: source.thumbnail
 					};
 				} else {
-					data = resolver.resolveForSource(source)
+					data = VideoPosters.resolveForSource(source)
 						.catch(function () {
 							return null;
 						});

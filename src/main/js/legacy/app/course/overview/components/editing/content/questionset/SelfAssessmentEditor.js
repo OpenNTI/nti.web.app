@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var QuestionsetAssignmentEditor = require('./AssignmentEditor');
-var ModelQuestionSetRef = require('../../../../../../../model/QuestionSetRef');
+const Ext = require('extjs');
+
+const QuestionSetRef = require('legacy/model/QuestionSetRef');
+
+require('./AssignmentEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentEditor', {
@@ -40,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var item = this.selectedItem;
 
 		return {
-			MimeType: NextThought.model.QuestionSetRef.mimeType,
+			MimeType: QuestionSetRef.mimeType,
 			label: item.get('title'),
 			title: item.get('title'),
 			'Target-NTIID': item.get('NTIID')

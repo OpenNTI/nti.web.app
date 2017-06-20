@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var MixinsRouter = require('../../../../../mixins/Router');
-var MixinsScrolling = require('../../../../../mixins/Scrolling');
-var OutlineIndex = require('./outline/Index');
-var EditingPrompt = require('./Prompt');
+const Ext = require('extjs');
+
+const OutlineIndex = require('./outline/Index');
+
+require('legacy/mixins/Router');
+require('legacy/mixins/Scrolling');
+require('./Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Index', {
@@ -78,10 +80,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.activeRecord = record;
 
-		var Outline = NextThought.app.course.overview.components.editing.outline.Index,
-			cmp, loaded;
+		var cmp, loaded;
 
-		if (Outline.canHandle(record.mimeType)) {
+		if (OutlineIndex.canHandle(record.mimeType)) {
 			cmp = this.add({
 				xtype: 'overview-editing-outline',
 				record: record,

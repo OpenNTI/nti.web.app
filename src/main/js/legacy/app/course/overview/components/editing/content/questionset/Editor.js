@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var EditingEditorGroup = require('../../EditorGroup');
-var TypesSelfAssessment = require('./types/SelfAssessment');
-var TypesAssignment = require('./types/Assignment');
+const Ext = require('extjs');
+
+const TypesSelfAssessment = require('./types/SelfAssessment');
+const TypesAssignment = require('./types/Assignment');
+
+require('../../EditorGroup');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.Editor', {
@@ -10,11 +12,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSubEditors: function () {
-			var base = NextThought.app.course.overview.components.editing.content.questionset.types;
-
 			return [
-				base.SelfAssessment,
-				base.Assignment
+				TypesSelfAssessment,
+				TypesAssignment
 			];
 		}
 	}

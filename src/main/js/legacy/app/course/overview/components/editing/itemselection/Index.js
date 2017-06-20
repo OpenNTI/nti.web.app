@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ItemselectionItem = require('./Item');
+const Ext = require('extjs');
+
+require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.itemselection.Index', {
@@ -16,8 +17,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	initComponent: function () {
 		this.callParent(arguments);
-
-		var headerCmps = [];
 
 		this.selection = this.selectedItems || [];
 
@@ -220,8 +219,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			itemId = me.getSelectionItemId(item),
 			selection = me.getSelection();
 
-		return selection.reduce(function (acc, item) {
-			if (me.getSelectionItemId(item) === itemId) {
+		return selection.reduce(function (acc, item2) {
+			if (me.getSelectionItemId(item2) === itemId) {
 				acc = true;
 			}
 

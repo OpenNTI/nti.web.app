@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ContextStateStore = require('../../StateStore');
+const Ext = require('extjs');
+
+const ContextStateStore = require('../../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.cards.Content', {
@@ -19,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 	},
 
 	afterRender: function () {
@@ -27,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		this.setContent();
 	},
 
-	/**
+	/*
 	 * Override this if you want to set content after the component's been rendered.
 	 */
 	setContent: function () {

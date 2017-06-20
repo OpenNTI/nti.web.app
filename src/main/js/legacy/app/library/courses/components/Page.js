@@ -1,5 +1,8 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 const naturalSort = require('node-natural-sort');
+
+const {getString} = require('legacy/util/Localization');
+const CourseCatalogEntry = require('legacy/model/courses/CourseCatalogEntry');
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.Page', {
 	extend: 'Ext.container.Container',
@@ -40,17 +43,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	*/
 	binCourses: function (courses) {
-		var me = this,
-			bins = {upcoming: {}},
+		var bins = {upcoming: {}},
 			years = [], upcoming = [],
 			semesters = Ext.Object.getValues(getString('months'));
 
-		function getSemester (date) {
-			var month = date.getMonth();
-		}
 
 		(courses || []).forEach(function (course) {
-			var isCatalogEntry = course instanceof NextThought.model.courses.CourseCatalogEntry,
+			var isCatalogEntry = course instanceof CourseCatalogEntry,
 				catalog = isCatalogEntry ? course : course.getCourseCatalogEntry(),
 				start = catalog.get('StartDate'),
 				year = start.getFullYear(),
@@ -84,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	addBinnedCourses: function (binObj, label, options) {
-		var me = this, i, semester,
+		var me = this,
 			bins = binObj.bins || {},
 			years = binObj.years || [],
 			semesters = binObj.semesters || [];

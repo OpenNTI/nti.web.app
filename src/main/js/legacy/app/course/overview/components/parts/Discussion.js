@@ -1,10 +1,11 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../util/Globals');
-var {getURL} = Globals;
-var ParseUtils = require('../../../../../util/Parsing');
-var MixinsEllipsisText = require('../../../../../mixins/EllipsisText');
-var ModelDiscussion = require('../../../../../model/Discussion');
-var ModelDiscussionRef = require('../../../../../model/DiscussionRef');
+const Ext = require('extjs');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const DiscussionRef = require('legacy/model/DiscussionRef');
+
+require('legacy/mixins/EllipsisText');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
@@ -49,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (icon) {
 			icon = this.getIcon(icon, i.root || '');
 		} else {
-			icon = NextThought.model.DiscussionRef.defaultIcon;
+			icon = DiscussionRef.defaultIcon;
 		}
 
 		config.data = {
@@ -66,10 +67,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getIcon: function (icon, root) {
 		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
-			return getURL(icon);
+			return Globals.getURL(icon);
 		}
 		else {
-			return getURL(root + icon);
+			return Globals.getURL(root + icon);
 		}
 	},
 
@@ -83,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.renderData = Ext.apply(this.renderData || {},this.data);
 		this.idsToLookup = Ext.clone(this.data.ntiid) || [];
 		this.loadTopic(this.idsToLookup.shift());
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 	},
 
 	afterRender: function () {

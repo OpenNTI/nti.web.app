@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
-require('../../Actions');
+
+const EditingActions = require('../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode', {
@@ -23,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
+		this.EditingActions = EditingActions.create();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			iconCls: this.iconCls,
@@ -55,6 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * However, if the inline editor is hidden, the click action implies that we should show it.
 	 *
 	 * @param  {Event} e Browser Event
+	 * @returns {void}
 	 */
 	onClick: function (e) {
 		const me = this;

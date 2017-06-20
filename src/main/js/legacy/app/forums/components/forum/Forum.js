@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var PartsFilterBar = require('./parts/FilterBar');
-var Header = require('./parts/Header');
-var PartsTopicListView = require('./parts/TopicListView');
+const Ext = require('extjs');
+
+require('./parts/FilterBar');
+require('./parts/Header');
+require('./parts/TopicListView');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Forum', {

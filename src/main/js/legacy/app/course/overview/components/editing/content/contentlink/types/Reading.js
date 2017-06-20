@@ -1,12 +1,13 @@
 const {encodeForURI} = require('nti-lib-ntiids');
 const Ext = require('extjs');
-const ContentUtils = require('../../../../../../../../util/Content');
 
-require('./Base');
-require('../../../../../../../content/Actions');
-require('../ReadingSelection');
+const ContentUtils = require('legacy/util/Content');
+const ContentActions = require('legacy/app/content/Actions');
+
 require('../ContentPackageSelection');
 require('../ReadingEditor');
+require('../ReadingSelection');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Reading', {
@@ -39,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'content-editor reading-editor',
 
 	initComponent: function () {
-		this.ContentActions = NextThought.app.content.Actions.create();
+		this.ContentActions = ContentActions.create();
 
 		this.callParent(arguments);
 	},

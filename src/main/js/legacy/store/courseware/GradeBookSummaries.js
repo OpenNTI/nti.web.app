@@ -1,8 +1,9 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
 const {PersistentStorage} = require('legacy/cache/AbstractStorage');
-const {wait} = require('nti-commons');
 
 require('legacy/model/courses/assignments/Summary');
 
@@ -136,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 			alias = record.get('Alias'),
 			username = record.get('Username'),
 			user = record.get('User'),
-			userId = user && NextThought.model.User.getIdFromRaw(user),
+			userId = user && User.getIdFromRaw(user),
 			historyItem = record.get('HistoryItemSummary'),
 			grade;
 

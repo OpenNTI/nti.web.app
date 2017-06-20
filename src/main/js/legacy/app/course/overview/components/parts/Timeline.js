@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var CardsCard = require('../../../../../common/components/cards/Card');
-var ModelTimeline = require('../../../../../model/Timeline');
-var WindowsActions = require('../../../../windows/Actions');
+const Ext = require('extjs');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+const Timeline = require('legacy/model/Timeline');
 const Globals = require('legacy/util/Globals');
-const {getURL} = Globals;
+
+require('legacy/common/components/cards/Card');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
@@ -30,21 +31,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			jsonURL = this.href;
 
 		if (Globals.ROOT_URL_PATTERN.test(jsonURL)) {
-			jsonURL = getURL(jsonURL);
+			jsonURL = Globals.getURL(jsonURL);
 		} else {
-			jsonURL = getURL((root || '') + thumbURL);
+			jsonURL = Globals.getURL((root || '') + thumbURL);
 		}
 
 		if (Globals.ROOT_URL_PATTERN.test(thumbURL)) {
-			thumbURL = getURL(thumbURL);
+			thumbURL = Globals.getURL(thumbURL);
 		} else {
-			thumbURL = getURL((root || '') + thumbURL);
+			thumbURL = Globals.getURL((root || '') + thumbURL);
 		}
 
 		height = height ? parseInt(height, 10) : -1;
 		width = width ? parseInt(width, 10) : -1;
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.data = {
 			thumbnail: thumbURL,
@@ -67,8 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	shouldOpenInApp: function () { return true; },
 
 	onCardClicked: function () {
-		var me = this,
-			model = NextThought.model.Timeline.fromOutlineNode(this.data);
+		var model = Timeline.fromOutlineNode(this.data);
 
 		this.WindowActions.pushWindow(model, null, this.el, {
 			afterClose: this.setProgress.bind(this, null)

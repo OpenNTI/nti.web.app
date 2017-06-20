@@ -1,7 +1,9 @@
 const Ext = require('extjs');
-const ContentUtils = require('../../../../util/Content');
 
-require('../../../../mixins/Router');
+const ContentUtils = require('legacy/util/Content');
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
 

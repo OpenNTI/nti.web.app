@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var PromptStateStore = require('../../../../prompt/StateStore');
-var ContentPrompt = require('./content/Prompt');
-var OutlinePrompt = require('./outline/Prompt');
+const Ext = require('extjs');
+
+const PromptStateStore = require('legacy/app/prompt/StateStore');
+
+const ContentPrompt = require('./content/Prompt');
+const OutlinePrompt = require('./outline/Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
@@ -33,8 +35,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	editRecord: function (record, parentRecord, rootRecord, bundle, outlineNode) {
-		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
-			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
+		var Outline = OutlinePrompt,
+			Contents = ContentPrompt,
 			config = {
 				record: record,
 				parentRecord: parentRecord,
@@ -56,8 +58,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	addRecord: function (parentRecord, rootRecord, bundle, outlineNode) {
-		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
-			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
+		var Outline = OutlinePrompt,
+			Contents = ContentPrompt,
 			config = {
 				parentRecord: parentRecord,
 				rootRecord: rootRecord,
@@ -115,6 +117,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve();
 	}
 }, function () {
-	NextThought.app.prompt.StateStore.register('overview-editing', this);
-	NextThought.app.prompt.StateStore.register('overview-creation', this);
+	PromptStateStore.register('overview-editing', this);
+	PromptStateStore.register('overview-creation', this);
 });

@@ -25,9 +25,9 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 	 * the value returned by each to be a promise or a value.  When all performances are done, the pool promise
 	 * will resolve or reject.
 	 *
-	 * @param {String} functionName
-	 * @param {...} args Arguments to pass to the functionName
-	 * @return {Promise}
+	 * @param {String} functionName -
+	 * @param {Array} args Arguments to pass to the functionName
+	 * @return {Promise} -
 	 */
 	performAnd: function (functionName, ...args) {
 		var app = this.getApplication();

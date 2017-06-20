@@ -1,12 +1,14 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
+const Ext = require('extjs');
 
-require('../../../mixins/Router');
-require('./StateStore');
+const Globals = require('legacy/util/Globals');
+
+const CourseActions = require('../../course/Actions');
+
+const CoursesStateStore = require('./StateStore');
+
+require('legacy/mixins/Router');
 require('./components/available/CoursePage');
-require('../../course/Actions');
 require('./components/available/CourseWindow');
-
 require('./components/Collection');
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
@@ -37,8 +39,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 		var me = this;
 
-		me.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
-		me.CourseViewActions = NextThought.app.course.Actions.create();
+		me.CourseStore = CoursesStateStore.getInstance();
+		me.CourseViewActions = CourseActions.create();
 
 		me.addRoute('/', me.showCourses.bind(me));
 		me.addRoute('/available', me.showAvailableCourses.bind(me));

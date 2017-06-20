@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var MenusReports = require('../../../../../common/menus/Reports');
+const Ext = require('extjs');
+
+require('legacy/common/menus/Reports');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.Header', {
@@ -32,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 	afterRender: function () {
-		var me = this, total;
+		var me = this;
 
 		if (!me.record.getLink('add')) {
 			me.newTopicEl.destroy();

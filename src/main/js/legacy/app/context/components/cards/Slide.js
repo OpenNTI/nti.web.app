@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var CardsContent = require('./Content');
-var MediaviewerActions = require('../../../mediaviewer/Actions');
+const Ext = require('extjs');
+
+const MediaviewerActions = require('legacy/app/mediaviewer/Actions');
+
+require('./Content');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.cards.Slide', {
@@ -18,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 
 	constructor: function () {
 		this.callParent(arguments);
-		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
+		this.MediaActions = MediaviewerActions.create();
 	},
 
 	setContent: function () {

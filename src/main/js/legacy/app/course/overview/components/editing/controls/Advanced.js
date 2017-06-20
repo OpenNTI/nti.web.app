@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var SettingsWindow = require('../settings/Window');
-var ControlsVisibility = require('./Visibility');
+const Ext = require('extjs');
+
+const PromptActions = require('legacy/app/prompt/Actions');
+
+require('../settings/Window');
+require('./Visibility');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced', {
@@ -32,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.PromptActions = NextThought.app.prompt.Actions.create();
+		this.PromptActions = PromptActions.create();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.name

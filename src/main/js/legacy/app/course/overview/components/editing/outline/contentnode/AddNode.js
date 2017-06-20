@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var OutlinenodeAddNode = require('../outlinenode/AddNode');
+const Ext = require('extjs');
+
+require('../outlinenode/AddNode');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.AddNode', {

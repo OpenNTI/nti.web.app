@@ -1,25 +1,30 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var {getURL} = Globals;
-var RangeUtils = require('../../../util/Ranges');
-var UtilRanges = require('../../../util/Ranges');
-var CardsOverlayedPanel = require('../../../common/components/cards/OverlayedPanel');
-var CardsCard = require('../../../common/components/cards/Card');
-var CardsLauncher = require('../../../common/components/cards/Launcher');
-var LibraryActions = require('../../library/Actions');
-var DeckOverlayedPanel = require('../../mediaviewer/content/deck/OverlayedPanel');
-var ContentSlidedeck = require('../../mediaviewer/content/Slidedeck');
-var ContentSlideVideo = require('../../mediaviewer/content/SlideVideo');
-var ImageOverlayedPanel = require('../../image/OverlayedPanel');
-var ContentOverlayedPanel = require('../../mediaviewer/content/OverlayedPanel');
-var RollOverlayedPanel = require('../../video/roll/OverlayedPanel');
-var CardsContent = require('../components/cards/Content');
-var CardsQuestion = require('../components/cards/Question');
-var CardsRelatedWork = require('../components/cards/RelatedWork');
-var CardsSlide = require('../components/cards/Slide');
-var CardsVideo = require('../components/cards/Video');
-var ComponentsDefault = require('../components/Default');
-var ListContent = require('../components/list/Content');
+const Ext = require('extjs');
+
+const LibraryActions = require('legacy/app/library/Actions');
+const MediaviewerDeckOverlayedPanel = require('legacy/app/mediaviewer/content/deck/OverlayedPanel');
+const MediaviewerOverlayedPanel = require('legacy/app/mediaviewer/content/OverlayedPanel');
+const PartsSlide = require('legacy/app/mediaviewer/components/reader/parts/Slide');
+const Slidedeck = require('legacy/app/mediaviewer/content/Slidedeck');
+const SlideVideo = require('legacy/app/mediaviewer/content/SlideVideo');
+const ImageOverlayedPanel = require('legacy/app/image/OverlayedPanel');
+const RollOverlayedPanel = require('legacy/app/video/roll/OverlayedPanel');
+const PageInfo = require('legacy/model/PageInfo');
+const Slide = require('legacy/model/Slide');
+const Globals = require('legacy/util/Globals');
+const RangeUtils = require('legacy/util/Ranges');
+const OverlayedPanel = require('legacy/common/components/cards/OverlayedPanel');
+const Card = require('legacy/common/components/cards/Card');
+const Launcher = require('legacy/common/components/cards/Launcher');
+
+require('../components/cards/Content');
+require('../components/cards/Question');
+require('../components/cards/RelatedWork');
+require('../components/cards/Slide');
+require('../components/cards/Video');
+require('../components/Default');
+require('../components/list/Content');
+
+const {getURL} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
@@ -27,14 +32,14 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		type: 'content',
 
 		canHandle: function (obj) {
-			return obj instanceof NextThought.model.PageInfo;
+			return obj instanceof PageInfo;
 		}
 	},
 
 	constructor: function (config) {
 		this.callParent(arguments);
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 
 		this.container = config.container;
 		this.range = config.range;
@@ -104,9 +109,9 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 	//TODO: clean this up to not rely on ext so much.
 	__fixUpContext: function (n, root) {
-		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl, dom, data,
+		var node = Ext.get(n), dom, data,
 			imgs = n && n.querySelectorAll('img'),
-			maxWidth = this.maxWidth, Slide, c;
+			maxWidth = this.maxWidth, c;
 
 		if (!node) { return;}
 
@@ -187,16 +192,15 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 		if (node.query('object[type*=ntislidevideo][itemprop$=card]').length > 0) {
 			c = node.query('object[type*=ntislidevideo][itemprop$=card]')[0];
-			data = NextThought.app.mediaviewer.content.OverlayedPanel.getData(c);
-			dom = new Ext.XTemplate(NextThought.app.mediaviewer.content.SlideVideo.prototype.renderTpl).apply(data);
+			data = MediaviewerOverlayedPanel.getData(c);
+			dom = new Ext.XTemplate(SlideVideo.prototype.renderTpl).apply(data);
 			dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 			return dom;
 		}
 
 		if (node.query('object[type$=slide]').length) {
-			data = NextThought.model.Slide.getParamFromDom(node.query('object[type$=slide]')[0], 'slideimage');
-			Slide = NextThought.app.mediaviewer.components.reader.parts.Slide;
-			dom = new Ext.XTemplate(Slide && Slide.prototype.contextTpl).apply({image: root + data});
+			data = Slide.getParamFromDom(node.query('object[type$=slide]')[0], 'slideimage');
+			dom = new Ext.XTemplate(PartsSlide && PartsSlide.prototype.contextTpl).apply({image: root + data});
 			dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 			return dom;
 		}
@@ -227,15 +231,15 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 	__fixCards: function (node, root) {
 		var cardTpl = new Ext.XTemplate(Ext.DomHelper.markup({
 				cls: 'content-card',
-				html: NextThought.common.components.cards.Card.prototype.renderTpl
+				html: Card.prototype.renderTpl
 			})),
 			slideDeckTpl = Ext.DomHelper.createTemplate({
 				cls: 'content-launcher',
-				html: NextThought.app.mediaviewer.content.Slidedeck.prototype.renderTpl.html
+				html: Slidedeck.prototype.renderTpl.html
 			}),
 			contentLauncherTpl = Ext.DomHelper.createTemplate({
 				cls: 'content-launcher',
-				html: NextThought.common.components.cards.Launcher.prototype.renderTpl.html
+				html: Launcher.prototype.renderTpl.html
 			});
 
 		function fixLink (link) {
@@ -249,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		}
 
 		Ext.each(node.query('object[type*=nticard]'), function (c) {
-			var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
+			var d = OverlayedPanel.getData(c);
 
 			d.thumbnail = fixLink(d.thumbnail);
 
@@ -258,19 +262,19 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		});
 
 		Ext.each(node.query('object[type*=ntislidedeck]'), function (c) {
-			var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
+			var d = MediaviewerDeckOverlayedPanel.getData(c);
 			slideDeckTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
 		Ext.each(node.query('object[type*=videoroll]'), function (c) {
-			var d = NextThought.app.video.roll.OverlayedPanel.getData(c);
+			var d = RollOverlayedPanel.getData(c);
 			contentLauncherTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
 		Ext.each(node.query('object[type*=image-collection]'), function (c) {
-			var d = NextThought.app.image.OverlayedPanel.getData(c);
+			var d = ImageOverlayedPanel.getData(c);
 
 			d.thumbnail = fixLink(d.thumbnail);
 

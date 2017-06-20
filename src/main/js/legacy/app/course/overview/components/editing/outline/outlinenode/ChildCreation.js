@@ -1,7 +1,11 @@
-var Ext = require('extjs');
-var CreationChildCreation = require('../../creation/ChildCreation');
-var NavigationCourseOutlineNode = require('../../../../../../../model/courses/navigation/CourseOutlineNode');
-var OutlinenodeEditor = require('./Editor');
+const Ext = require('extjs');
+
+const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
+
+const ContentnodeEditor = require('../contentnode/Editor');
+// const OutlinenodeEditor = require('./Editor');
+
+require('../../creation/ChildCreation');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation', {
@@ -13,15 +17,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.courses.navigation.CourseOutlineNode.mimeType
+				CourseOutlineNode.mimeType
 			];
 		},
 
 		getEditors: function () {
-			var base = NextThought.app.course.overview.components.editing.outline;
-
 			return [
-				base.contentnode.Editor
+				ContentnodeEditor
+				//I think this was meant to be:
+				// OutlinenodeEditor
 			];
 		}
 	},

@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ContentEditor = require('../Editor');
-var ModelAssignmentRef = require('../../../../../../../model/AssignmentRef');
+const Ext = require('extjs');
+
+const AssignmentRef = require('legacy/model/AssignmentRef');
+
+require('../Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.AssignmentEditor', {
@@ -53,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var item = this.selectedItem;
 
 		return {
-			MimeType: NextThought.model.AssignmentRef.mimeType,
+			MimeType: AssignmentRef.mimeType,
 			label: item.get('title'),
 			title: item.get('title'),
 			'Target-NTIID': item.get('NTIID')

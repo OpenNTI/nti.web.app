@@ -1,9 +1,9 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var CourseStateStore = require('./StateStore');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
 
+const CourseStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -11,19 +11,19 @@ module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.StateStore = NextThought.app.course.StateStore.getInstance();
+		this.StateStore = CourseStateStore.getInstance();
 	},
 
 	/**
 	 * Transition to a course, if passed an element from the library show the image expanding
 	 * @param  {CourseInstance} course	   the course to navigate to
-	 * @param  {Element} libraryCars dom node of the image to expand
+	 * @param  {Element} libraryCard dom node of the image to expand
 	 * @return {Promise}			fulfills with the route for the course, once the animation is done
 	 */
 	transitionToCourse: function (course, libraryCard) {
-		var ntiid = course.getId(),
-			route = this.getRootRouteForId(ntiid),
-			subRoute = this.StateStore.getRouteFor(ntiid);
+		const ntiid = course.getId();
+		const route = this.getRootRouteForId(ntiid);
+		// const subRoute = this.StateStore.getRouteFor(ntiid);
 
 		return Promise.resolve(route);
 	},

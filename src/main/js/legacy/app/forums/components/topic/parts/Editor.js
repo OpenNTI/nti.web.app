@@ -1,6 +1,12 @@
 const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const Post = require('legacy/model/forums/Post');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+
+const ForumsActions = require('../../../Actions');
+
 require('legacy/editor/Editor');
-require('../../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
@@ -30,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	initComponent: function () {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
-		this.ForumActions = NextThought.app.forums.Actions.create();
+		this.ForumActions = ForumsActions.create();
 	},
 
 	afterRender: function () {
@@ -38,8 +44,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		var r = this.record,
 			me = this,
 			h,
-			parentCtEl = this.ownerCt.getEl(),
-			hasScrollBar = Ext.getDom(parentCtEl).scrollHeight !== parentCtEl.getHeight();
+			parentCtEl = this.ownerCt.getEl();
+		// const hasScrollBar = Ext.getDom(parentCtEl).scrollHeight !== parentCtEl.getHeight();
 
 		this.mon(this.tags, 'new-tag', this.syncHeight, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
@@ -158,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 
 	getMimeType: function () {
-		return this.record ? this.record.get('MimeType') :  NextThought.model.forums.Post.mimeType;
+		return this.record ? this.record.get('MimeType') :  Post.mimeType;
 	},
 
 
@@ -267,8 +273,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		console.error('Failed to save the discussion: ', reason);
 		if (error.code === 'MaxFileSizeUploadLimitError') {
-			let current = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.provided_bytes),
-				expected = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.max_bytes);
+			let current = FilePicker.getHumanReadableFileSize(error.provided_bytes),
+				expected = FilePicker.getHumanReadableFileSize(error.max_bytes);
 
 			msg = current && expected ? 'Maximum Size Allowed: ' + expected + ', Your uploaded file size: ' + current : '';
 			msg = (error.message || '') + ' ' + msg;

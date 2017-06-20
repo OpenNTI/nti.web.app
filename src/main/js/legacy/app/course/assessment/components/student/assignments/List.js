@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var AssignmentsListItem = require('./ListItem');
-var {naturalSortComparator} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {naturalSortComparator} = require('legacy/util/Globals');
+
+require('./ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.List', {

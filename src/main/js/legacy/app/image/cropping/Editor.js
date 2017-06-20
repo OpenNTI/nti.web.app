@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CroppingCanvas = require('./Canvas');
+const Ext = require('extjs');
+
+require('./Canvas');
 
 
 module.exports = exports = Ext.define('NextThought.app.image.cropping.Editor', {

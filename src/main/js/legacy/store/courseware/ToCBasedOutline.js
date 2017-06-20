@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var NavigationNode = require('../../model/courses/navigation/Node');
+const Ext = require('extjs');
+
+require('legacy/model/courses/navigation/Node');
 
 
 module.exports = exports = Ext.define('NextThought.store.courseware.ToCBasedOutline', {

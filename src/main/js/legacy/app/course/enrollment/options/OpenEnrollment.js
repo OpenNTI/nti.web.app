@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var OptionsBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
@@ -149,23 +150,23 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				Wording: me.__getEnrollmentText(details, option),
 				lock: true,
 				doEnrollment: function (cmp) {
-					return new Promise(function (fulfill, reject) {
+					return new Promise((fulfill2, reject2) => {
 						cmp.CourseEnrollmentActions.enrollCourse(course, function (success, changed, status) {
 							if (success) {
-								fulfill(changed);
+								fulfill2(changed);
 							} else {
-								reject(status);
+								reject2(status);
 							}
 						});
 					});
 				},
 				undoEnrollment: function (cmp) {
-					return new Promise(function (fulfill, reject) {
+					return new Promise(function (fulfill2, reject2) {
 						cmp.CourseEnrollmentActions.dropCourse(course, function (success, changed, status) {
 							if (success) {
-								fulfill(changed);
+								fulfill2(changed);
 							} else {
-								reject(status);
+								reject2(status);
 							}
 						});
 					});

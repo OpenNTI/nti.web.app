@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ComponentsLesson = require('../../Lesson');
-var LessonoverviewIndex = require('./lessonoverview/Index');
+const Ext = require('extjs');
+
+require('../../Lesson');
+
+require('./lessonoverview/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Index', {

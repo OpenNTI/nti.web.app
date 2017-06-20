@@ -1,6 +1,8 @@
 const Ext = require('extjs');
 const {Publish, Constants} = require('nti-web-commons');
+
 require('legacy/common/form/fields/DateTimeComponent');
+
 const {PUBLISH_STATES} = Constants;
 const getPublishState = value => PUBLISH_STATES[value] || (value instanceof Date ? PUBLISH_STATES.SCHEDULE : null);
 
@@ -21,8 +23,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.onDraftCheckChanged = this.onDraftCheckChanged.bind(this);
 
 		const group = 'publish-state-' + this.id;
-		const now = new Date();
-
 
 		// Used to set the default time for the DateTimeComponent
 		const defaultTime = new Date();

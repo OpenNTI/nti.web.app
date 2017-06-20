@@ -1,17 +1,19 @@
-var Ext = require('extjs');
-var ComponentsBoundCollection = require('../../../../../common/components/BoundCollection');
-var MixinsEllipsisText = require('../../../../../mixins/EllipsisText');
-var DndOrderingItem = require('../../../../../mixins/dnd/OrderingItem');
-var DndOrderingContainer = require('../../../../../mixins/dnd/OrderingContainer');
-var AppMoveInfo = require('../../../../../model/app/MoveInfo');
-var NavigationCourseOutlineNode = require('../../../../../model/courses/navigation/CourseOutlineNode');
-var NavigationCourseOutlineContentNode = require('../../../../../model/courses/navigation/CourseOutlineContentNode');
-var NavigationCourseOutlineCalendarNode = require('../../../../../model/courses/navigation/CourseOutlineCalendarNode');
-var ContentnodeAddNode = require('../editing/outline/contentnode/AddNode');
-var OutlinePrompt = require('../editing/outline/Prompt');
+const Ext = require('extjs');
 
+const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
+const MoveInfo = require('legacy/model/app/MoveInfo');
+const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
+const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
+const OutlinePrompt = require('../editing/outline/Prompt');
+
+require('legacy/common/components/BoundCollection');
+require('legacy/mixins/EllipsisText');
+require('legacy/mixins/dnd/OrderingItem');
+require('legacy/model/courses/navigation/CourseOutlineCalendarNode');
+require('../editing/outline/contentnode/AddNode');
+
+const OutlineNode = module.exports = exports = Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.course-outline-group',
 
@@ -28,16 +30,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.setDataTransfer(new NextThought.model.app.MoveInfo({
+		this.setDataTransfer(new MoveInfo({
 			OriginContainer: this.outlineNode.parent.getId(),
 			OriginIndex: this.outlineNode.listIndex
 		}));
 
 		this.setDataTransfer(this.outlineNode);
 
-		this.setDataTransferHandler(NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType, {
+		this.setDataTransferHandler(CourseOutlineContentNode.mimeType, {
 			onDrop: this.onDrop.bind(this),
-			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			isValid: DndOrderingContainer.hasMoveInfo,
 			effect: 'move'
 		});
 
@@ -150,7 +152,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	buildFooter: function (collection) {
 		var me = this,
-			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
 			allowedTypes = this.outlineNode.getAllowedTypes();
 
 		if (this.isEditing) {
@@ -223,7 +224,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	stopEditing: function () {
-		var body = this.getBodyContainer();
 		if (this.addNodeCmp) {
 			this.remove(this.addNodeCmp, true);
 		}
@@ -232,8 +232,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getCmpForRecord: function (record) {
-		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
-			return NextThought.app.course.overview.components.outline.OutlineNode.create({
+		if (record instanceof CourseOutlineNode) {
+			return OutlineNode.create({
 				outlineNode: record,
 				shouldShowDates: this.shouldShowDates,
 				doSelectNode: this.doSelectNode,

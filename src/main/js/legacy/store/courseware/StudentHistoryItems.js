@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CoursewareHistoryItems = require('./HistoryItems');
+const Ext = require('extjs');
+
+require('./HistoryItems');
 
 
 module.exports = exports = Ext.define('NextThought.store.courseware.StudentHistoryItems', {

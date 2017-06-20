@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var CreationChildCreation = require('../../creation/ChildCreation');
-var OverviewLesson = require('../../../../../../../model/courses/overview/Lesson');
-var OverviewgroupEditor = require('../overviewgroup/Editor');
+const Ext = require('extjs');
+
+const OverviewLesson = require('legacy/model/courses/overview/Lesson');
+
+const OverviewgroupEditor = require('../overviewgroup/Editor');
+
+require('../../creation/ChildCreation');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation', {
@@ -13,15 +16,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.courses.overview.Lesson.mimeType
+				OverviewLesson.mimeType
 			];
 		},
 
 		getEditors: function () {
-			var base = NextThought.app.course.overview.components.editing.content;
-
 			return [
-				base.overviewgroup.Editor
+				OverviewgroupEditor
 			];
 		}
 	},

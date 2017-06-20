@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var TimeUtils = require('../../../util/Time');
+const Ext = require('extjs');
+
+const TimeUtils = require('legacy/util/Time');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
@@ -222,7 +223,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		/**
 		 * Return a menu of actions available for a history item
 		 * @param  {UsersCourseAssignmentHistoryItem} record the history item we are getting actions for
-		 * @return {Ext.Menu}		 a menu component
+		 * @param {Function} onReset -
+		 * @param {Function} onExcused -
+		 * @return {Ext.Menu} a menu component
 		 */
 		getActionsMenu: function (record, onReset = () => {}, onExcused = () => {}) {
 			var menu = Ext.widget('menu', {

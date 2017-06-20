@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ComponentsQuestion = require('../Question');
-var PathActions = require('../../../navigation/path/Actions');
+const Ext = require('extjs');
+
+const PathActions = require('legacy/app/navigation/path/Actions');
+
+require('../Question');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.list.Question', {
@@ -35,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.Q
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.PathActions = PathActions.create();
 
 		this.PathActions.getPathToObject(this.record)
 			.then(this.setLineage.bind(this));

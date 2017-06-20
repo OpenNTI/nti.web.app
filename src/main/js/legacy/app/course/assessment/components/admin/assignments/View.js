@@ -1,10 +1,11 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../../util/Parsing');
-var MixinsRouter = require('../../../../../../mixins/Router');
-var UtilPageSource = require('../../../../../../util/PageSource');
-var AssignmentsRoot = require('./Root');
-var AssignmentsAssignment = require('./Assignment');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const PageSource = require('legacy/util/PageSource');
+
+require('legacy/mixins/Router');
+require('./Root');
+require('./Assignment');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.View', {
 	extend: 'Ext.container.Container',
@@ -97,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				pushRouteState: this.pushRouteState.bind(this),
 				replaceRouteState: this.replaceRouteState.bind(this),
 				showStudentForAssignment: this.showStudentForAssignment.bind(this),
-				pageSource: NextThought.util.PageSource.create({
+				pageSource: PageSource.create({
 					next: next && next.getId(),
 					nextTitle: next && next.get('name'),
 					previous: previous && previous.getId(),

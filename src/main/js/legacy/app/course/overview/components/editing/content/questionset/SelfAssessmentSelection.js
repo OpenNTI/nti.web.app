@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var QuestionsetAssignmentSelection = require('./AssignmentSelection');
+const Ext = require('extjs');
+
+require('./AssignmentSelection');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentSelection', {

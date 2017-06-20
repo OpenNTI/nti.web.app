@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var NavigationCourseOutlineNode = require('../../../../../../../model/courses/navigation/CourseOutlineNode');
-var EditingControls = require('../../Controls');
-var OutlineItems = require('../Items');
-var ContentIndex = require('../../content/Index');
-var OutlinenodePreview = require('./Preview');
+const Ext = require('extjs');
+
+const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
+
+require('../../Controls');
+require('../../content/Index');
+require('../Items');
+require('./Preview');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Index', {
@@ -12,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		getSupported: function () {
-			return NextThought.model.courses.navigation.CourseOutlineNode.mimeType;
+			return CourseOutlineNode.mimeType;
 		}
 	},
 

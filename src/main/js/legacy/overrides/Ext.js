@@ -1,6 +1,6 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
-var {swallow} = Globals;
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.Ext', {
@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 	 *
 	 * @param {Object} o The object or array to apply to.
 	 * @param {Object} cfg The values to apply to the object in the first arg.
-	 * @return {*}
+	 * @return {*} -
 	 */
 	applyRecursively: function applyRecursively (o, cfg) {
 		if (!o) {return o;}
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 		Element = Ext.dom.Element,
 		get = Ext.getElementById;
 
-	/**
+	/*
 	 *	This is not to be confused with document.getElementById.  Ext has a periodic task that checks that cached
 	 *	elements are still present, and if not cleans their registered event listeners and destroys the associated cache
 	 *	entries.
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 					el = win.document.getElementById(id) || false;
 				}
 			//for iframes where we cannot access its content(Cross Origin Content) ignore.
-			} catch (e) { swallow(e); }
+			} catch (e) { /*ignore*/ }
 			return !el;
 		}
 
@@ -125,7 +125,6 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 						if (d.id !== eid) {
 							//this is just an access check, if d.id throws an access denied, clean it out.
 							//This should never happen...so don't put anything really long here.
-							swallow();
 						}
 					} catch (e) {
 						clean = true;

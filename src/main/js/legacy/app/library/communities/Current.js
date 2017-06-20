@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ComponentsCurrent = require('../components/Current');
-var ComponentsCollection = require('./components/Collection');
+const Ext = require('extjs');
+
+require('../components/Current');
+require('./components/Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.communities.Current', {
@@ -56,8 +57,6 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 	},
 
 	showItems: function (items) {
-		var siteCommunity = Service.get('SiteCommunity');
-
 		if (this.store) {
 			this.store.loadRecords(items);
 		} else {

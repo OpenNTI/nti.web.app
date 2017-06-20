@@ -1,11 +1,12 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
-var ContentEditor = require('../Editor');
-var PromptActions = require('legacy/app/prompt/Actions');
-var ModelVideo = require('../../../../../../../model/Video');
-var ModelVideoRoll = require('../../../../../../../model/VideoRoll');
-var VideoItemSelection = require('./ItemSelection');
-var VideoVideoEditor = require('./VideoEditor');
+const PromptActions = require('legacy/app/prompt/Actions');
+const Video = require('legacy/model/Video');
+const VideoRoll = require('legacy/model/VideoRoll');
+
+require('../Editor');
+require('./ItemSelection');
+require('./VideoEditor');
 
 require('legacy/app/video/Picker');
 
@@ -18,8 +19,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.Video.mimeType,
-				NextThought.model.VideoRoll.mimeType
+				Video.mimeType,
+				VideoRoll.mimeType
 			];
 		},
 
@@ -86,9 +87,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var siblings = this.parentRecord ? this.parentRecord.get('Items') : [];
 
 		return siblings.reduce(function getVideoIds (acc, item) {
-			if (item instanceof NextThought.model.Video) {
+			if (item instanceof Video) {
 				acc.push(item.getId());
-			} else if (item instanceof NextThought.model.VideoRoll) {
+			} else if (item instanceof VideoRoll) {
 				acc = item.get('Items').reduce(getVideoIds, acc);
 			}
 

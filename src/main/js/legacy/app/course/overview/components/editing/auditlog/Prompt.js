@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var AuditlogIndex = require('./Index');
-var PromptStateStore = require('../../../../../prompt/StateStore');
+const Ext = require('extjs');
+
+const PromptStateStore = require('legacy/app/prompt/StateStore');
+
+require('./Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.auditlog.Prompt', {
@@ -31,5 +33,5 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	}
 }, function () {
-	NextThought.app.prompt.StateStore.register('audit-log', this);
+	PromptStateStore.register('audit-log', this);
 });

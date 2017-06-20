@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../../common/StateStore');
+const Ext = require('extjs');
+
+const ContentBundle = require('legacy/model/ContentBundle');
+
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.content.StateStore', {
@@ -21,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 
 	setContentPackages: function (packages) {
 		packages = packages.map(function (p) {
-			return NextThought.model.ContentBundle.fromPackage(p);
+			return ContentBundle.fromPackage(p);
 		});
 
 		this.CONTENT_PACKAGES = packages;
@@ -41,6 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	 * Remove any content packages in the used map
 	 * TODO: needs unit tests
 	 * @param  {Object} used keys are the ids of content packages to remove
+	 * @returns {Boolean} -
 	 */
 	deDupContentPackages: function (used) {
 		this.CONTENT_PACKAGES = this.CONTENT_PACKAGES.filter(function (fakeBundle) {
@@ -53,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 
 
 	getTitle: function (index) {
-		var title, i, packages = this.CONTENT_PACKAGES, content;
+		var i, packages = this.CONTENT_PACKAGES, content;
 
 		for (i = 0; i < packages.length; i++) {
 			content = packages[i];

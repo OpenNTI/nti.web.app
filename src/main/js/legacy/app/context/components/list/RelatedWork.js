@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ListContent = require('./Content');
-var ModelPageInfo = require('../../../../model/PageInfo');
+const Ext = require('extjs');
+
+const PageInfo = require('legacy/model/PageInfo');
+
+require('./Content');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.list.RelatedWork', {
@@ -63,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.R
 			leafIdx = path.length - 1,
 			leaf = path[leafIdx];
 
-		if (leaf instanceof NextThought.model.PageInfo) {
+		if (leaf instanceof PageInfo) {
 			leafIdx -= 1;
 			leaf = path[leafIdx];
 		}

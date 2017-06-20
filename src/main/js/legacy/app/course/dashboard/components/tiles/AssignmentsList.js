@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var TilesBaseCmp = require('./BaseCmp');
+const Ext = require('extjs');
+
+require('./BaseCmp');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.AssignmentsList', {

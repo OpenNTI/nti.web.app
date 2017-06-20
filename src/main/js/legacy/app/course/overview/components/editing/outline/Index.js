@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var MixinsRouter = require('legacy/mixins/Router');
-var OutlinenodeIndex = require('./outlinenode/Index');
-var CalendarnodeIndex = require('./calendarnode/Index');
-var ContentnodeIndex = require('./contentnode/Index');
+const Ext = require('extjs');
+
+const OutlinenodeIndex = require('./outlinenode/Index');
+const CalendarnodeIndex = require('./calendarnode/Index');
+const ContentnodeIndex = require('./contentnode/Index');
+
+require('legacy/mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.Index', {
@@ -25,12 +27,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 		initRegistry: function () {
-			var base = NextThought.app.course.overview.components.editing.outline,
-				types = [
-					base.outlinenode.Index,
-					base.calendarnode.Index,
-					base.contentnode.Index
-				];
+			const types = [
+				OutlinenodeIndex,
+				CalendarnodeIndex,
+				ContentnodeIndex
+			];
 
 			this.HANDLES = types.reduce(function (acc, type) {
 				var supported = type.getSupported && type.getSupported();

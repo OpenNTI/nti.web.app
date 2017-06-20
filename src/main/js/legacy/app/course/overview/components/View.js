@@ -1,10 +1,11 @@
 const Ext = require('extjs');
-const Globals = require('legacy/util/Globals');
 const {wait} = require('nti-commons');
+const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
+const {getString} = require('legacy/util/Localization');
+const Globals = require('legacy/util/Globals');
 const WindowsActions = require('legacy/app/windows/Actions');
 const PromptActions = require('legacy/app/prompt/Actions');
-const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 require('legacy/common/components/NavPanel');
 require('legacy/mixins/Router');

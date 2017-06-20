@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ContentEditor = require('../Editor');
-var ModelPollRef = require('../../../../../../../model/PollRef');
+const Ext = require('extjs');
+
+const PollRef = require('legacy/model/PollRef');
+
+require('../Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.poll.Editor', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.PollRef.mimeType
+				PollRef.mimeType
 			];
 		}
 	},

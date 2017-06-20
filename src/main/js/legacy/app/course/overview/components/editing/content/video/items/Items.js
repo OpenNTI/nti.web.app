@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var DndOrderingContainer = require('../../../../../../../../mixins/dnd/OrderingContainer');
-var ModelVideo = require('../../../../../../../../model/Video');
-var ItemsItem = require('./Item');
+const Ext = require('extjs');
+
+const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
+const Video = require('legacy/model/Video');
+const VideoRoll = require('legacy/model/VideoRoll');
+
+require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Items', {
@@ -56,9 +59,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.addItems(me.getItems());
 
-		me.setDataTransferHandler(NextThought.model.Video.mimeType, {
+		me.setDataTransferHandler(Video.mimeType, {
 			onDrop: this.reorderVideo.bind(this),
-			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			isValid: DndOrderingContainer.hasMoveInfo,
 			effect: 'move'
 		});
 	},
@@ -91,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getItemsFromRecord: function (record) {
-		if (record instanceof NextThought.model.VideoRoll) {
+		if (record instanceof VideoRoll) {
 			return record.get('Items');
 		}
 

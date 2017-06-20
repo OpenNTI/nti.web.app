@@ -1,15 +1,14 @@
-var Ext = require('extjs');
-var CommonActions = require('../../../../../../common/Actions');
-var UtilParsing = require('../../../../../../util/Parsing');
-var CourseStateStore = require('../../../../StateStore');
+const Ext = require('extjs');
+
+require('legacy/app/course/StateStore');
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	sendEmail: function (record, postURL, scope) {
-		var me = this,
-			data = record && record.asJSON(),
+		var data = record && record.asJSON(),
 			params = {};
 
 		delete data.ContainerId;

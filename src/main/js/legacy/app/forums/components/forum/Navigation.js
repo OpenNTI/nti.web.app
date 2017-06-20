@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../util/Parsing');
-var MenusReports = require('../../../../common/menus/Reports');
-var ModelUIViewHeader = require('../../../../model/UIViewHeader');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const UIViewHeader = require('legacy/model/UIViewHeader');
+const {isFeature} = require('legacy/util/Globals');
+
+require('legacy/util/Parsing');
+require('legacy/common/menus/Reports');
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Navigation', {
 	extend: 'Ext.view.View',
@@ -68,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 		me.on('beforeselect', function (cmp, record) {
 			//don't allow headers to be selected
-			return !(record instanceof NextThought.model.UIViewHeader);
+			return !(record instanceof UIViewHeader);
 		});
 	},
 
@@ -86,10 +88,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			items = [];
 
 		function addList (list, level) {
-			var title;
 
 			if (!Ext.isEmpty(list.title)) {
-				items.push(NextThought.model.UIViewHeader.create({
+				items.push(UIViewHeader.create({
 					label: list.title,
 					depth: level,
 					attr: list.board && list.board.getId()
@@ -98,14 +99,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 			if (list.store) {
 				items = items.concat(list.store.getRange());
-
-				//if (me.canCreateForums(list.board)) {
-				//	items.push(NextThought.model.UIViewHeader.create({
-				//		label: 'Add Forum',
-				//		cls: 'add-forum',
-				//		depth: -1
-				//	}));
-				//}
 			}
 
 			if (list.children) {
@@ -139,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		var first;
 
 		this.store.each(function (record) {
-			if (!(record instanceof NextThought.model.UIViewHeader)) {
+			if (!(record instanceof UIViewHeader)) {
 				first = record;
 			}
 
@@ -150,11 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	},
 
 	setForumList: function (forumList) {
-		var me = this,
-			store = me.buildStore(forumList),
-			selModel = me.getSelectionModel();
-
-		me.refresh();
+		this.refresh();
 	},
 
 	selectRecord: function (id) {

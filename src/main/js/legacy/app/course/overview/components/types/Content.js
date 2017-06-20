@@ -1,11 +1,14 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../util/Parsing');
-var ComponentsBoundCollection = require('../../../../../common/components/BoundCollection');
-var PartsHeader = require('../parts/Header');
-var PartsGroup = require('../parts/Group');
-var OverviewLesson = require('../../../../../model/courses/overview/Lesson');
-var OverviewGroup = require('../../../../../model/courses/overview/Group');
-var CoursesLegacyCommunityBasedCourseInstance = require('../../../../../model/courses/LegacyCommunityBasedCourseInstance');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+const OverviewGroup = require('legacy/model/courses/overview/Group');
+const LegacyCommunityBasedCourseInstance = require('legacy/model/courses/LegacyCommunityBasedCourseInstance');
+
+const Group = require('../parts/Group');
+
+require('legacy/common/components/BoundCollection');
+require('legacy/model/courses/overview/Lesson');
+require('../parts/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.types.Content', {
@@ -102,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var json = JSON.parse(response),
 			items = json.Items || [];
 
-		if (this.course instanceof NextThought.model.courses.LegacyCommunityBasedCourseInstance) {
+		if (this.course instanceof LegacyCommunityBasedCourseInstance) {
 			json.Items = items.map(this.__collapseGroup);
 		}
 
@@ -133,8 +136,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getCmpForRecord: function (record) {
-		if (record instanceof NextThought.model.courses.overview.Group) {
-			return NextThought.app.course.overview.components.parts.Group.create({
+		if (record instanceof OverviewGroup) {
+			return Group.create({
 				record: record,
 				outlineNode: this.record,
 				enrollment: this.enrollment,

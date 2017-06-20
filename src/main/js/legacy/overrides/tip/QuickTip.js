@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ObjectUtils = require('../../util/Object');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const ObjectUtils = require('legacy/util/Object');
 
 
 /**
