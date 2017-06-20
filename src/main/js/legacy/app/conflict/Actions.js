@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var CommonActions = require('../../common/Actions');
-var TypesDestructiveChallenge = require('./types/DestructiveChallenge');
+const Ext = require('extjs');
+
+const DestructiveChallenge = require('./types/DestructiveChallenge');
+
+require('../../common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.conflict.Actions', {
@@ -9,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.conflict.Actions', {
 	getTypes: function () {
 		if (!this.types) {
 			this.types = [
-				new NextThought.app.conflict.types.DestructiveChallenge()
+				new DestructiveChallenge()
 			];
 		}
 

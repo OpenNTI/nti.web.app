@@ -1,9 +1,13 @@
-var Ext = require('extjs');
-var User = require('../../../../model/User');
-var ComponentsMenuItem = require('./MenuItem');
-var ComponentsPresence = require('./Presence');
-var AccountActions = require('../../Actions');
-var LoginActions = require('../../../../login/Actions');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const LoginActions = require('legacy/login/Actions');
+
+const AccountActions = require('../../Actions');
+
+require('legacy/model/User');
+require('./MenuItem');
+require('./Presence');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.identity.components.Settings', {
@@ -32,8 +36,8 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 			welcomeLink = u.getLink('content.permanent_welcome_page'),
 			childsLink = u.getLink('childrens-privacy');
 
-		this.AccountActions = NextThought.app.account.Actions.create();
-		this.LoginActions = NextThought.login.Actions.create();
+		this.AccountActions = AccountActions.create();
+		this.LoginActions = LoginActions.create();
 
 		items.push({xtype: 'account-menuitem', setMenuClosed: this.setMenuClosed.bind(this)});
 

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CourseStateStore = require('../course/StateStore');
+const Ext = require('extjs');
+
+require('../course/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.bundle.StateStore', {

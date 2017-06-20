@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var OldComment = require('./old/Comment');
-var BlogActions = require('../Actions');
+const Ext = require('extjs');
+
+const BlogActions = require('../Actions');
+
+require('./old/Comment');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Comment', {
@@ -11,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Comment', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.BlogActions = NextThought.app.blog.Actions.create();
+		this.BlogActions = BlogActions.create();
 	},
 
 	fireDeleteEvent: function () {

@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-var IdCache = require('../../cache/IdCache');
-var Globals = require('../../util/Globals');
-var {swallow} = Globals;
-var MixinsShareable = require('../../mixins/Shareable');
-var RendererManager = require('./renderer/Manager');
+const Ext = require('extjs');
+
+const IdCache = require('legacy/cache/IdCache');
+const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+const NavigationActions = require('legacy/app/navigation/Actions');
+
+require('legacy/mixins/Shareable');
+require('./renderer/Manager');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
@@ -22,11 +25,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 	onClassExtended: function (cls, data, hooks) {
 		var a, onBeforeClassCreated = hooks.onBeforeCreated;
-		hooks.onBeforeCreated = function (cls, data) {
-			if (data.requestRender) {
+		hooks.onBeforeCreated = function (cls2, data2) {
+			if (data2.requestRender) {
 				Ext.Error.raise('You should not replace requestRender');
 			}
-			onBeforeClassCreated.call(this, cls, data, hooks);
+			onBeforeClassCreated.call(this, cls2, data2, hooks);
 		};
 
 		function getType (t) {
@@ -141,7 +144,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 	/**
 	 * Query inside the reader frame
-	 * @param {String} selector
+	 * @param {String} selector css selector
+	 * @returns {Node[]} matching elements
 	 */
 	query: function (selector) {
 		return Ext.query(selector, this.doc);
@@ -177,7 +181,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			this.cleanup();
 		}
 		catch (e) {
-			swallow(e);
 			console.error(e.message, e);
 		}
 	},
@@ -302,19 +305,18 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			event = [event];
 		}
 
-		var called = false,
-			timerId;
+		var called = false;
 
 		function block () {
 			if (called) {return undefined;}
 			called = true;
 			var r = fn.apply(scope, arguments);
-			timerId = setTimeout(function () {called = false;},50);
+			setTimeout(function () {called = false;},50);
 			return r;
 		}
 
-		Ext.each(event, function (event) {
-			Ext.fly(dom).on(event, block);
+		Ext.each(event, function (e) {
+			Ext.fly(dom).on(e, block);
 		});
 	},
 
@@ -328,8 +330,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			xy = e.getXY().slice(),
 			scrollOffset = Ext.getBody().getScroll().top,
 			offsets = this.ownerCmp.getAnnotationOffsets(),
-			item = null,
-			me = this;
+			item = null;
 
 		//adjust points
 		xy[0] += offsets.left;
@@ -341,7 +342,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			item = {
 				text: 'Follow Link',
 				handler: function () {
-					NextThought.app.navigation.Actions.navigateToHref(a.href);
+					NavigationActions.navigateToHref(a.href);
 				}
 			};
 		}

@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ComponentsPictureCanvas = require('./PictureCanvas');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('./PictureCanvas');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.PictureEditor', {

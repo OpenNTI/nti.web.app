@@ -1,16 +1,21 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../util/Parsing');
-var TimeUtils = require('../../../../util/Time');
-var NavigationBase = require('../Base');
-var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
-var MixinsChatLinks = require('../../../../mixins/ChatLinks');
-var AssessmentAssignmentStatus = require('../../../course/assessment/AssignmentStatus');
-var ChatStateStore = require('../../../chat/StateStore');
-var {isFeature} = require('legacy/util/Globals');
-
+const Ext = require('extjs');
 const {ControlBar} = require('nti-assignment-editor');
-const ReactHarness = require('legacy/overrides/ReactHarness');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const ChatStateStore = require('legacy/app/chat/StateStore');
+const AssignmentStatus = require('legacy/app/course/assessment/AssignmentStatus');
+const WindowsActions = require('legacy/app/windows/Actions');
+const Grade = require('legacy/model/courseware/Grade');
+const Email = require('legacy/model/Email');
+const ReactHarness = require('legacy/overrides/ReactHarness');
+const {isFeature} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+const ParseUtils = require('legacy/util/Parsing');
+const TimeUtils = require('legacy/util/Time');
+
+require('legacy/mixins/ProfileLinks');
+require('legacy/mixins/ChatLinks');
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
@@ -81,8 +86,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.ChatStore = ChatStateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
 	},
 
 	beforeRender: function () {
@@ -259,7 +264,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			maxTime = this.assignment.isTimed && this.assignment.getMaxTime(),
 			duration = this.assignment.isTimed && this.assignmentHistory.getDuration(),
 			start = this.assignment.get('availableBeginning'),
-			status = NextThought.app.course.assessment.AssignmentStatus.getRenderData({
+			status = AssignmentStatus.getRenderData({
 				start,
 				due,
 				completed,
@@ -277,7 +282,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.gradeBoxEl.hide();
 		}
 
-		if (NextThought.app.course.assessment.AssignmentStatus.hasActions(this.assignmentHistory)) {
+		if (AssignmentStatus.hasActions(this.assignmentHistory)) {
 			this.actionsEl.removeCls('disabled');
 		} else {
 			this.actionsEl.addCls('disabled');
@@ -354,7 +359,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		if (e.getTarget('.disabled') || !this.assignmentHistory) { return; }
 
 		var me = this,
-			menu = NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(me.assignmentHistory);
+			menu = AssignmentStatus.getActionsMenu(me.assignmentHistory);
 
 		menu.showBy(me.actionsEl, 'tr-br');
 	},
@@ -387,7 +392,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 	createGradeMenu: function () {
 		//Wasn't sure if this needs to be translated or not?
-		var items = NextThought.model.courseware.Grade.getLetterItems();
+		var items = Grade.getLetterItems();
 
 		this.gradeMenu = Ext.widget('menu', {
 			cls: 'letter-grade-menu',
@@ -461,7 +466,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 	openEmail: function (e) {
-		var emailRecord = new NextThought.model.Email(),
+		var emailRecord = new Email(),
 			mailLink = this.studentEnrollment && this.studentEnrollment.getLink('Mail');
 
 		if (!mailLink) { return; }

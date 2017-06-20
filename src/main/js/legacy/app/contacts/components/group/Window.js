@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../../../common/window/Window');
-var AccountHeader = require('../../../account/Header');
-var GroupMain = require('./Main');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/common/window/Window');
+require('legacy/app/account/Header');
+require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.group.Window', {
@@ -69,4 +72,3 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		return this.query('codecreation-main-view')[0].showError(errorText);
 	}
 });
-

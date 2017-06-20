@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PartsMultiChoice = require('./MultiChoice');
+const Ext = require('extjs');
+
+require('./MultiChoice');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.MultiAnswer', {

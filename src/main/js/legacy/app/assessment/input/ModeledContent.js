@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var InputBase = require('./Base');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const DomUtils = require('legacy/util/Dom');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledContent', {
@@ -55,6 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 	 * @param  {Boolean} enable is the editor has something in it
 	 * @param  {Boolean} silent if we are setting the value, don't save the progress
 	 * @param  {Boolean} forceSubmissionCheck if we want to force checking submission status, thus skipping the early return
+	 * @returns {void}
 	 */
 	updateState: function (enable, silent, forceSubmissionCheck) {
 		//Prevent setting enabled/disabled repeatedly.

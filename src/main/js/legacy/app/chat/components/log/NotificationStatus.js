@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var LogNotificationEntry = require('./NotificationEntry');
+const Ext = require('extjs');
+
+require('./NotificationEntry');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.log.NotificationStatus', {

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PartsMatching = require('./Matching');
+const Ext = require('extjs');
+
+require('./Matching');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.Ordering', {

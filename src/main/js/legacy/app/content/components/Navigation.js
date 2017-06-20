@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ComponentsNavigation = require('../../../common/components/Navigation');
-var ComponentsContentSwitcher = require('./ContentSwitcher');
+const Ext = require('extjs');
+
+require('legacy/common/components/Navigation');
+require('./ContentSwitcher');
 
 
 module.exports = exports = Ext.define('NextThought.app.content.components.Navigation', {
@@ -42,8 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 
 		this.ContentSwitcher.addBundle(bundle, activeRoute);
 
-		var cls = 'is-book',
-			data = bundle.asUIData(),
+		var data = bundle.asUIData(),
 			catalog = bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry(),
 			isPreview = catalog && catalog.get('Preview');
 

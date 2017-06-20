@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/common/form/fields/SimpleTextField');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.coderetrieval.Main', {

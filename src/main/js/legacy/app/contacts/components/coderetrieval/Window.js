@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../../../common/window/Window');
-var AccountHeader = require('../../../account/Header');
-var CoderetrievalMain = require('./Main');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/common/window/Window');
+require('legacy/app/account/Header');
+require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.coderetrieval.Window', {
@@ -45,4 +48,3 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.coder
 		this.down('coderetrieval-main-view').updateCode(this.code);
 	}
 });
-

@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var InputBase = require('./Base');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResponse', {

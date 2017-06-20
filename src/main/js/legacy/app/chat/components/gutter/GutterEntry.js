@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../util/Parsing');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+const {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.GutterEntry', {

@@ -1,12 +1,16 @@
-var Ext = require('extjs');
-var CommonActions = require('../../common/Actions');
-var AssessmentQuestionSetSubmission = require('../../model/assessment/QuestionSetSubmission');
-var AssessmentAssignmentSubmission = require('../../model/assessment/AssignmentSubmission');
-var AssessmentQuestionSubmission = require('../../model/assessment/QuestionSubmission');
-var AssessmentSurveySubmission = require('../../model/assessment/SurveySubmission');
-var AssessmentPollSubmission = require('../../model/assessment/PollSubmission');
-var AssessmentUsersCourseInquiryItemResponse = require('../../model/assessment/UsersCourseInquiryItemResponse');
-var ContextStateStore = require('../context/StateStore');
+const Ext = require('extjs');
+
+const AssessmentQuestionSetSubmission = require('legacy/model/assessment/QuestionSetSubmission');
+const AssessmentAssignmentSubmission = require('legacy/model/assessment/AssignmentSubmission');
+const AssessmentQuestionSubmission = require('legacy/model/assessment/QuestionSubmission');
+const AssessmentSurveySubmission = require('legacy/model/assessment/SurveySubmission');
+const AssessmentPollSubmission = require('legacy/model/assessment/PollSubmission');
+
+const ContextStateStore = require('../context/StateStore');
+
+require('legacy/common/Actions');
+require('legacy/model/assessment/UsersCourseInquiryItemResponse');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
@@ -15,11 +19,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 	},
 
 	__getDataForSubmission: function (questionSet, submissionData, containerId, startTime, questionCls, questionMime, questionId) {
-		var me = this, key, value, qData,
+		var key, value, qData,
 			endTimeStamp = (new Date()).getTime(),
 			//in seconds
 			duration = (endTimeStamp - startTime) / 1000,
@@ -86,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
 			qsetSubmission;
 
-		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data);
+		qsetSubmission = AssessmentQuestionSetSubmission.create(data);
 
 		return new Promise(function (fulfill, reject) {
 			qsetSubmission.save({
@@ -124,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		var data = this.__getDataForSurveySubmission(survey, submissionData, containerId, startTime),
 			surveySubmission, me = this;
 
-		surveySubmission = NextThought.model.assessment.SurveySubmission.create(data);
+		surveySubmission = AssessmentSurveySubmission.create(data);
 
 		return new Promise(function (fulfill, reject) {
 			surveySubmission.save({
@@ -156,8 +160,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
 
-		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data);
-		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
+		qsetSubmission = AssessmentQuestionSetSubmission.create(data);
+		assignmentSubmission = AssessmentAssignmentSubmission.create({
 			assignmentId: assignmentId,
 			parts: [qsetSubmission],
 			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration,
@@ -222,8 +226,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
 
-		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data);
-		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
+		qsetSubmission = AssessmentQuestionSetSubmission.create(data);
+		assignmentSubmission = AssessmentAssignmentSubmission.create({
 			assignmentId: assignment.getId(),
 			parts: [qsetSubmission],
 			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration,
@@ -386,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			duration = (endTimestamp - startTime) / 1000,
 			readerContext = this.ContextStore.getReaderLocation(),
 			containerId = canSubmitIndividually ? question.getId() : readerContext.NTIID,
-			submission = NextThought.model.assessment.QuestionSubmission.create({
+			submission = AssessmentQuestionSubmission.create({
 				ContainerId: containerId,
 				questionId: question.getId(),
 				parts: answerValues,
@@ -415,9 +419,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			// TODO We may have to reset startTimestamp, depending on flow.
 			// SelfAssessments (and maybe assignments) could be re-submitted.
 			duration = (endTimeStamp - startTime) / 1000,
-			readerContext = this.ContextStore.getReaderLocation(),
-			containerId = canSubmitIndividually ? poll.getId() : readerContext.NTIID,
-			submission = NextThought.model.assessment.PollSubmission.create({
+			// readerContext = this.ContextStore.getReaderLocation(),
+			// containerId = canSubmitIndividually ? poll.getId() : readerContext.NTIID,
+			submission = AssessmentPollSubmission.create({
 				// ContainerId: containerId,
 				pollId: poll.getId(),
 				questionId: poll.getId(),

@@ -1,10 +1,13 @@
-var Ext = require('extjs');
-var User = require('../../../model/User');
-var ParseUtils = require('../../../util/Parsing');
-var ComponentsNavPanel = require('../../../common/components/NavPanel');
-var ComponentsGrouping = require('./Grouping');
-var OutlineView = require('./outline/View');
-var ComponentsBoundPanel = require('../../../common/components/BoundPanel');
+const Ext = require('extjs');
+
+const User = require('legacy/model/User');
+const ParseUtils = require('legacy/util/Parsing');
+
+require('legacy/common/components/NavPanel');
+require('legacy/common/components/BoundPanel');
+
+require('./outline/View');
+require('./Grouping');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.TabView', {
@@ -37,8 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.TabVi
 	},
 
 	injectLetterDividers: function (store) {
-		var User = NextThought.model.User,
-			pluck = Ext.Array.pluck,
+		var pluck = Ext.Array.pluck,
 			letters = {}, toAdd = [];
 
 		Ext.each(pluck(pluck(store.getRange(), 'data'), 'displayName'), function (v) {

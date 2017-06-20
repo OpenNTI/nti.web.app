@@ -1,5 +1,4 @@
-var Ext = require('extjs');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.Preferences', {
 	extend: 'Ext.Component',

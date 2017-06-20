@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const UserRepository = require('legacy/cache/UserRepository');
 require('./Item');
 

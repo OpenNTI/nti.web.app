@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var UserdataActions = require('../../userdata/Actions');
+const Ext = require('extjs');
+
+const UserdataActions = require('legacy/app/userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.PageWidgets', {
@@ -53,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			return;
 		}
 
-		var actions = NextThought.app.userdata.Actions.create(),
+		var actions = UserdataActions.create(),
 			location = this.reader.getLocation();
 
 		actions.saveNewBookmark(location.NTIID)

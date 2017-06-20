@@ -1,7 +1,11 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../../../common/window/Window');
-var AccountHeader = require('../../../account/Header');
-var ListMain = require('./Main');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/common/window/Window');
+require('legacy/app/account/Header');
+
+require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.list.Window', {

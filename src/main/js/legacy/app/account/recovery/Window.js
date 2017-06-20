@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../../common/window/Window');
-var RecoveryEmail = require('./Email');
-var AccountHeader = require('../Header');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/common/window/Window');
+require('../Header');
+require('./Email');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.recovery.Window', {

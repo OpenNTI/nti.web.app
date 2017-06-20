@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../util/Content');
-var MixinsQuestionContent = require('../../mixins/QuestionContent');
+const Ext = require('extjs');
+
+const ContentUtils = require('legacy/util/Content');
+
+require('legacy/mixins/QuestionContent');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.PartContent', {

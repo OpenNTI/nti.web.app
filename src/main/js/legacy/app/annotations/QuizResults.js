@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AnnotationsBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.QuizResults', {

@@ -1,8 +1,11 @@
 const Ext = require('extjs');
-const Globals = require('legacy/util/Globals');
-const CommonActions = require('legacy/common/Actions');
-const BundleStateStore = require('./StateStore');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const Globals = require('legacy/util/Globals');
+
+const BundleStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
@@ -17,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
 	/**
 	 * Transition to a bundle, if passed an element from the library show the image expanding
 	 * @param  {ContentBundle|ContentPackage} bundle	 the bundle to navigate to
-	 * @param  {Element} libraryCars dom node of the image to expand
+	 * @param  {Element} libraryCard dom node of the image to expand
 	 * @return {Promise}			fulfills with the route for the bundle, once the animation is done
 	 */
 	transitionToBundle: function (bundle, libraryCard) {

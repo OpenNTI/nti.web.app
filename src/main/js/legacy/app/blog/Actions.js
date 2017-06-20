@@ -1,12 +1,17 @@
-var Ext = require('extjs');
-var UserRepository = require('../../cache/UserRepository');
-var ParseUtils = require('../../util/Parsing');
+const Ext = require('extjs');
 
-require('../../common/Actions');
-require('../../model/forums/PersonalBlogComment');
-require('../../model/forums/PersonalBlogEntryPost');
-require('../userdata/Actions');
-require('./StateStore');
+const UserRepository = require('legacy/cache/UserRepository');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+const ParseUtils = require('legacy/util/Parsing');
+const {getString} = require('legacy/util/Localization');
+const UserdataActions = require('legacy/app/userdata/Actions');
+const PersonalBlogEntryPost = require('legacy/model/forums/PersonalBlogEntryPost');
+const PersonalBlogComment = require('legacy/model/forums/PersonalBlogComment');
+
+const BlogStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
@@ -15,8 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
-		this.BlogStateStore = NextThought.app.blog.StateStore.getInstance();
+		this.UserDataActions = UserdataActions.create();
+		this.BlogStateStore = BlogStateStore.getInstance();
 	},
 
 	__parseSharingInfo: function (sharingInfo) {
@@ -40,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 	savePost: function (record, blog, title, tags, body, sharingInfo) {
 		var isEdit = Boolean(record),
-			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
+			post = isEdit ? record.get('headline') : PersonalBlogEntryPost.create(),
 			me = this;
 
 		sharingInfo = this.__parseSharingInfo(sharingInfo);
@@ -155,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 	saveBlogComment: function (record, blogPost, valueObject) {
 		var isEdit = Boolean(record && !record.phantom),
-			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
+			commentPost = record || PersonalBlogComment.create();
 
 		const originalBody = commentPost.get('body');
 		commentPost.set('body', valueObject.body);
@@ -186,8 +191,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 				msg = getString('NextThought.view.profiles.parts.BlogEditor.longtitle');
 			}
 			else if (error.code === 'MaxFileSizeUploadLimitError') {
-				let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.max_bytes),
-					currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.provided_bytes);
+				let maxSize = FilePicker.getHumanReadableFileSize(error.max_bytes),
+					currentSize = FilePicker.getHumanReadableFileSize(error.provided_bytes);
 				msg = error.message + ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 			}
 			else if (error.code === 'MaxAttachmentsExceeded') {

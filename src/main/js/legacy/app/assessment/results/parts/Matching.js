@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var PartsBarChart = require('./BarChart');
-var PartsTable = require('./Table');
+const Ext = require('extjs');
+
+require('./BarChart');
+require('./Table');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.Matching', {
@@ -173,7 +174,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 	getTable: function () {
 		var resultParts = this.getResults(),
-			total = this.resultPart.Total,
 			rowLabels = this.getRowLabels(),
 			seriesLabels = this.getSeriesLabels(),
 			d = document.createElement('div'),

@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var StoreUtils = require('../../../util/Store');
-var ComponentsTabView = require('./TabView');
-var GroupsStateStore = require('../../groups/StateStore');
-var UtilStore = require('../../../util/Store');
-var ModelUser = require('../../../model/User');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const StoreUtils = require('legacy/util/Store');
+const User = require('legacy/model/User');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
+
+require('./TabView');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.ContactTabView', {
@@ -39,19 +41,19 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Conta
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.GroupStore = GroupsStateStore.getInstance();
 		this.buildStore();
 	},
 
 	buildStore: function () {
 		var s = this.GroupStore.getAllContactsStore(),
-			store = StoreUtils.newView(s), me = this;
+			store = StoreUtils.newView(s);
 
 		if (Ext.isFunction(this.filter)) {
 			s.filter(this.filter);
 		}
 
-		if (store.model === NextThought.model.User) {
+		if (store.model === User) {
 			store.on('datachanged', 'injectLetterDividers', this);
 			this.injectLetterDividers(store);
 		}

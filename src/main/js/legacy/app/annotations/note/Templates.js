@@ -1,6 +1,7 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
-var {isMe} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+const {isMe} = require('legacy/util/Globals');
 
 
 const TemplatesForNotes = Ext.define('NextThought.app.annotations.note.Templates', {
@@ -48,13 +49,13 @@ const TemplatesForNotes = Ext.define('NextThought.app.annotations.note.Templates
 		var more = e.getTarget('.more', undefined, true),
 			container = e.getTarget('.note-container', 0, true),
 			theme = (container && container.hasCls('dark')) ? 'dark' : '',
-			editItem, chatItem, flagItem, deleteItem, menu, items = [], mine,
-			options = opts.options, menuTimer, involved, shared, hideDelete = false, canEdit;
+			editItem, flagItem, deleteItem, menu, items = [], mine,
+			options = opts.options, menuTimer, shared, hideDelete = false, canEdit;
 
 		if (!more || !more.dom) {return false;}
 
-		function moreMenuClick (item, e) {
-			e.stopEvent();
+		function moreMenuClick (item, e2) {
+			e2.stopEvent();
 			var menuCls = 'on' + item.itemId;
 			if (this[menuCls]) {
 				this[menuCls]();
@@ -64,8 +65,8 @@ const TemplatesForNotes = Ext.define('NextThought.app.annotations.note.Templates
 			}
 		}
 
-		function flagItemClick (item , e) {
-			e.stopEvent();
+		function flagItemClick (item , e2) {
+			e2.stopEvent();
 			var menuCls = 'onFlag', me = this;
 
 			TemplatesForNotes.reportInappropriate(function (btn) {
@@ -76,16 +77,6 @@ const TemplatesForNotes = Ext.define('NextThought.app.annotations.note.Templates
 			});
 		}
 
-		function hasUser (users, name) {
-			var found = false;
-			Ext.each(users, function (user) {
-				if (user === name || (user.get && user.get('Username') === name)) {
-					found = true;
-				}
-				return !found;
-			});
-			return found;
-		}
 
 		editItem = new Ext.Action({
 			text: 'Edit',
@@ -96,14 +87,6 @@ const TemplatesForNotes = Ext.define('NextThought.app.annotations.note.Templates
 			handler: moreMenuClick
 		});
 
-		//		chatItem = new Ext.Action({
-		//			text: 'Start a chat',
-		//			cls: 'reply-option chat',
-		//			itemId: 'Chat',
-		//			scope: this,
-		//			ui: 'nt-menuitem', plain: true,
-		//			handler: moreMenuClick
-		//		});
 
 		flagItem = new Ext.Action({
 			text: getString('NextThought.view.annotations.note.Templates.flag-option'),

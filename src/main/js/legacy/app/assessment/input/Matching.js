@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var InputBase = require('./Base');
-var DdScrollingDragZone = require('../../../common/dd/ScrollingDragZone');
+const Ext = require('extjs');
+
+require('legacy/common/dd/ScrollingDragZone');
+require('./Base');
 
 
 function asInt (e, i) {
@@ -98,8 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 	},
 
 	injectMatchTerms: function () {
-		var s = this.shelfEl,
-			el, ownerMain;
+		var el, ownerMain;
 
 
 		ownerMain = this.up('assessment-question');
@@ -192,8 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 	},
 
 	setupDragging: function () {
-		var cfg, me = this,
-			el = this.up().getEl(), z;
+		var cfg, me = this;
 
 		cfg = {
 			scrollEl: me.reader.getScroll().scrollingEl,
@@ -365,9 +364,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 
 	mark: function (mark) {
 		var s = (this.part.get('solutions') || [])[0],
-			c = (s && s.get('value')) || {}, me = this,
-			values = Ext.clone(this.part.get('values')),
-			labels = Ext.clone(this.part.get('labels'));
+			c = (s && s.get('value')) || {}, me = this;
 
 		if (!s || !this.getValue()) {
 			return;

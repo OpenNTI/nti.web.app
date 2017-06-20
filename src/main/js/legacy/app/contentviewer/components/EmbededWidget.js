@@ -1,6 +1,7 @@
-const Ext = require('extjs');
 const Path = require('path');
 const Url = require('url');
+
+const Ext = require('extjs');
 const QueryString = require('query-string');
 
 function getOriginFrom (uri) {

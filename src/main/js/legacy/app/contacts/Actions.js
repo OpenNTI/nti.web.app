@@ -1,10 +1,10 @@
-var Ext = require('extjs');
-var CommonActions = require('../../common/Actions');
-var GroupsStateStore = require('../groups/StateStore');
-var ChatStateStore = require('../chat/StateStore');
-var CodeWindow = require('./components/code/Window');
-var GroupWindow = require('./components/group/Window');
-var ListWindow = require('./components/list/Window');
+const Ext = require('extjs');
+
+require('legacy/common/Actions');
+
+require('./components/code/Window');
+require('./components/group/Window');
+require('./components/list/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.Actions', {

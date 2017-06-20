@@ -1,8 +1,11 @@
 const Ext = require('extjs');
-const Globals = require('../../../util/Globals');
 const {AssetIcon, ProgressBar} = require('nti-web-commons');
-require('legacy/app/MessageBox');
 
+const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+
+require('legacy/app/MessageBox');
 require('legacy/common/form/fields/FilePicker');
 require('./Base');
 
@@ -153,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 	getDisplayMaxSize: function () {
 		let maxSize = this.part.get('MaxFileSize');
-		const FileUtils = NextThought.common.form.fields.FilePicker;
+		const FileUtils = FilePicker;
 		maxSize = FileUtils.getHumanReadableFileSize(maxSize, 1);
 		return maxSize;
 	},
@@ -308,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	setPreviewFromInput: function (file) {
-		const FileUtils = NextThought.common.form.fields.FilePicker;
+		const FileUtils = FilePicker;
 		const size = FileUtils.getHumanReadableFileSize(file.size, 1);
 		// const href = this.createObjectURL(file);
 
@@ -528,8 +531,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	markUploaded: function (date, doNotDisable) {
-		var q = this.questionSet,
-			assignment = q && q.associatedAssignment;
+		// var q = this.questionSet,
+		// 	assignment = q && q.associatedAssignment;
 
 		if (!doNotDisable) {
 			this.addCls('disabled');

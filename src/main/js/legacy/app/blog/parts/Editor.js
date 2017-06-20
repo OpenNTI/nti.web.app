@@ -1,10 +1,14 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../cache/UserRepository');
-var DomUtils = require('../../../util/Dom');
+const Ext = require('extjs');
 const {wait} = require('nti-commons');
-require('../../../editor/Editor');
-require('../Actions');
+
+const {getString} = require('legacy/util/Localization');
+const UserRepository = require('legacy/cache/UserRepository');
+const DomUtils = require('legacy/util/Dom');
+
+const BlogActions = require('../Actions');
+
 require('legacy/common/form/fields/FilePicker');
+require('legacy/editor/Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
@@ -36,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 	initComponent: function () {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
-		this.BlogActions = NextThought.app.blog.Actions.create();
+		this.BlogActions = BlogActions.create();
 	},
 
 	afterRender: function () {
@@ -154,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		e.stopEvent();
 		var me = this,
 			v = this.getValue(),
-			t, trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
+			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
 		if (DomUtils.isEmpty(v.body)) {
 			me.markError(me.editorBodyEl, getString('NextThought.view.profiles.parts.BlogEditor.emptybody'));

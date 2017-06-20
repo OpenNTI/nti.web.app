@@ -1,11 +1,15 @@
-var Ext = require('extjs');
-var ActivityPopout = require('../../activity/Popout');
-var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
-var ManagementGroupList = require('./GroupList');
-var ManagementOptions = require('./Options');
-var GroupsStateStore = require('../../../groups/StateStore');
-var GroupsActions = require('../../../groups/Actions');
-var ChatActions = require('../../../chat/Actions');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+const GroupsActions = require('../../../groups/Actions');
+const GroupsStateStore = require('../../../groups/StateStore');
+const ChatActions = require('../../../chat/Actions');
+
+require('legacy/mixins/ProfileLinks');
+require('../../activity/Popout');
+require('./GroupList');
+require('./Options');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.contacts.management.Popout', {
@@ -99,9 +103,9 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			items: [{xtype: 'management-group-list', allowSelect: true}]
 		});
 
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.GroupActions = NextThought.app.groups.Actions.create();
-		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.GroupStore = GroupsStateStore.getInstance();
+		this.GroupActions = GroupsActions.create();
+		this.ChatActions = ChatActions.create();
 		this.isContact = this.GroupStore.getFriendsList().isContact(this.record);
 
 		this.groupsList = this.groupsListMenu.down('management-group-list');

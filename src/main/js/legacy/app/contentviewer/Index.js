@@ -1,7 +1,8 @@
 const Ext = require('extjs');
-const {isMe} = require('legacy/util/Globals');
 const {wait} = require('nti-commons');
 
+const {isMe} = require('legacy/util/Globals');
+const ContentviewerActions = require('legacy/app/contentviewer/Actions');
 
 require('../../mixins/Searchable');
 require('./Actions');
@@ -101,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 
 		var me = this;
 
-		me.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+		me.ContentViewerActions = ContentviewerActions.create();
 
 		me.resolvePageInfo()
 			.then(function (pageInfo) {

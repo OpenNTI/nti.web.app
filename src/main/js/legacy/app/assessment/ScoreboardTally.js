@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var MixinsEllipsisText = require('../../mixins/EllipsisText');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/mixins/EllipsisText');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTally', {

@@ -1,9 +1,10 @@
 const Ext = require('extjs');
+
 const PromptStore = require('legacy/app/prompt/StateStore');
 
 const view = require('./Index');
 
-let prompt = module.exports = exports = Ext.define('NextThought.app.account.info.Prompt', {
+const prompt = module.exports = exports = Ext.define('NextThought.app.account.info.Prompt', {
 	extend: 'Ext.container.Container',
 
 	layout: 'none',

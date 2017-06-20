@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
-var GroupsActions = require('../../../groups/Actions');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const GroupsActions = require('legacy/app/groups/Actions');
+
+require('legacy/common/form/fields/SimpleTextField');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.group.Main', {
@@ -61,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 			specialkey: this.specialkey
 		});
 		this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
-		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.GroupActions = GroupsActions.create();
 	},
 
 	specialkey: function (el, event) {

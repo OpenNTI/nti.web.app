@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var InputMultipleChoice = require('./MultipleChoice');
+const Ext = require('extjs');
+
+require('./MultipleChoice');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.SingleChoice', {
