@@ -1,7 +1,10 @@
+/*globals jQuery*/
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
 const Formatter = require('formatter.js/dist/formatter');
-require('./BaseInput');
+
 require('legacy/common/form/fields/SimpleTextField');
+require('./BaseInput');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.TextInput', {
@@ -47,8 +50,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 	afterRender: function () {
 		this.callParent(arguments);
-
-		var helpIcon = this.el.down('.help .icon'), helpText;
 
 		this.input = Ext.widget('simpletext', {
 			inputType: 'text',

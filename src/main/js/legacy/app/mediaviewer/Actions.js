@@ -1,14 +1,22 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ContentProxy = require('../../proxy/JSONP');
-var CommonActions = require('../../common/Actions');
-var MediaviewerStateStore = require('./StateStore');
-var WebvttTranscript = require('../../webvtt/Transcript');
-var UserdataActions = require('../userdata/Actions');
-var UserdataStateStore = require('../userdata/StateStore');
-var PathActions = require('../navigation/path/Actions');
-var ModelSlidedeck = require('../../model/Slidedeck');
-var LibraryActions = require('../library/Actions');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const ContentProxy = require('legacy/proxy/JSONP');
+const WebvttTranscript = require('legacy/webvtt/Transcript');
+const Note = require('legacy/model/Note');
+const Slidedeck = require('legacy/model/Slidedeck');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+const TranscriptItem = require('legacy/model/transcript/TranscriptItem');
+const PageItem = require('legacy/store/PageItem');
+
+const UserdataActions = require('../userdata/Actions');
+const UserdataStateStore = require('../userdata/StateStore');
+const PathActions = require('../navigation/path/Actions');
+const LibraryActions = require('../library/Actions');
+
+const MediaviewerStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
@@ -17,11 +25,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.MediaUserDataStore = NextThought.app.mediaviewer.StateStore.getInstance();
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
-		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.MediaUserDataStore = MediaviewerStateStore.getInstance();
+		this.UserDataActions = UserdataActions.create();
+		this.UserDataStore = UserdataStateStore.getInstance();
+		this.PathActions = PathActions.create();
+		this.LibraryActions = LibraryActions.create();
 	},
 
 	initPageStores: function (cmp, cid) {
@@ -126,11 +134,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		}
 
 		var url = Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
-			store = NextThought.store.PageItem.make(url, containerId, true);
+			store = PageItem.make(url, containerId, true);
 
 		store.doesNotParticipateWithFlattenedPage = true;
 		Ext.apply(store.proxy.extraParams, {
-			accept: NextThought.model.Note.mimeType,
+			accept: Note.mimeType,
 			filter: 'TopLevel'
 		});
 
@@ -148,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		return new Promise(function (fulfill, reject) {
 			me.loadRawTranscript(transcript)
 				.then(function (c) {
-					var parser = new NextThought.webvtt.Transcript({ input: c, ignoreLFs: true }),
+					var parser = new WebvttTranscript({ input: c, ignoreLFs: true }),
 						cueList = parser.parseWebVTT();
 
 					fulfill(cueList);
@@ -239,7 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			transcripts = {}, me = this, promises,
 			slideStore;
 
-		if (!slidedeck || !(slidedeck instanceof NextThought.model.Slidedeck)) {
+		if (!slidedeck || !(slidedeck instanceof Slidedeck)) {
 			return Promise.reject();
 		}
 
@@ -258,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 				Service.getObject(slidevideo.video_ntiid)
 					.then(function (video) {
 						var obj = video.raw || video.getData();
-						video = NextThought.model.PlaylistItem.create(obj);
+						video = PlaylistItem.create(obj);
 						videos[slidevideo.NTIID] = video;
 
 						return me.PathActions.getPathToObject(slidedeck)
@@ -268,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 									basePath = course.getContentRoots()[0];
 								}
 
-								transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+								transcript = TranscriptItem.fromVideo(video, basePath);
 								transcripts[slidevideo.NTIID] = transcript;
 								me.fixSlideImagesPath(slideStore.getRange(), basePath, path);
 								fulfill();
@@ -312,9 +320,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 	__getSlidedeckContainer: function (slidedeck) {
 		var me = this;
-		return new Promise(function (fulfill) {
+		return new Promise((fulfill, reject) => {
 			me.PathActions.getPathToObject(slidedeck)
-			.then(function (path) {
+			.then(path => {
 				var last = path && path.last();
 				if (!last) { reject(); }
 
@@ -345,8 +353,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			Service.request(link),
 			me.LibraryActions.findContentPackage(contentPackage)
 		]).then(function (results) {
-			var xml = results[0],
-				content = results[1];
+			let xml = results[0];
+			// const content = results[1];
 
 			xml = (new DOMParser()).parseFromString(xml, 'text/xml');
 

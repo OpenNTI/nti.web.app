@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../../util/Analytics');
-var ModelTimeline = require('../../../model/Timeline');
-var WindowsStateStore = require('../../windows/StateStore');
-var ComponentsHeader = require('./components/Header');
-var UtilAnalytics = require('../../../util/Analytics');
+/*globals createStoryJS*/
+const Ext = require('extjs');
+
+const Timeline = require('legacy/model/Timeline');
+const AnalyticsUtil = require('legacy/util/Analytics');
+
+const WindowsStateStore = require('../../windows/StateStore');
+
+require('./components/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.content.timeline.Window', {
@@ -61,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 
 		createStoryJS({
 			source: this.record.get('href'),
-			embed_id: this.timelineContainer.id,
+			'embed_id': this.timelineContainer.id,
 			height: this.timelineHeight
 		});
 
@@ -117,5 +120,5 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 		return [width, height];
 	}
 }, function () {
-	NextThought.app.windows.StateStore.register(NextThought.model.Timeline.mimeType, this);
+	WindowsStateStore.register(Timeline.mimeType, this);
 });

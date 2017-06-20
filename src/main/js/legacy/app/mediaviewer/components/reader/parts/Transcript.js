@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const RangeUtils = require('legacy/util/Ranges');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 require('legacy/app/mediaviewer/components/reader/mixins/AnnotationsMixin');
 

@@ -1,33 +1,31 @@
-var Ext = require('extjs');
-var rangy = require('legacy/util/rangy');
-var FilterManager = require('../../../filter/FilterManager');
-var Anchors = require('../../../util/Anchors');
-var AnnotationUtils = require('../../../util/Annotations');
-var Color = require('../../../util/Color');
-var Globals = require('../../../util/Globals');
-var {guidGenerator} = Globals;
-var RectUtils = require('../../../util/Rects');
-var TextRangeFinderUtils = require('../../../util/TextRangeFinder');
-var SearchUtils = require('../../../util/Search');
-var ModelHighlight = require('../../../model/Highlight');
-var ModelNote = require('../../../model/Note');
-var ModelRedaction = require('../../../model/Redaction');
-var ModelTranscriptSummary = require('../../../model/TranscriptSummary');
-var ModelQuizResult = require('../../../model/QuizResult');
-var UtilAnnotations = require('../../../util/Annotations');
-var UtilColor = require('../../../util/Color');
-var UxSearchHits = require('../../../common/ux/SearchHits');
-var RendererManager = require('../../annotations/renderer/Manager');
-var AnnotationsRedaction = require('../../annotations/Redaction');
-var AnnotationsHighlight = require('../../annotations/Highlight');
-var AnnotationsNote = require('../../annotations/Note');
-var AnnotationsTranscript = require('../../annotations/Transcript');
-var AnnotationsQuizResults = require('../../annotations/QuizResults');
-var AssessmentScoreboard = require('../../assessment/Scoreboard');
-var CacheIdCache = require('../../../cache/IdCache');
-var UtilSearch = require('../../../util/Search');
-var UtilTextRangeFinder = require('../../../util/TextRangeFinder');
-var UserdataActions = require('../../userdata/Actions');
+const Ext = require('extjs');
+
+const Anchors = require('legacy/util/Anchors');
+const AnnotationUtils = require('legacy/util/Annotations');
+// const FilterManager = require('legacy/filter/FilterManager');
+const Globals = require('legacy/util/Globals');
+const ModelBase = require('legacy/model/Base');
+const Redaction = require('legacy/model/Redaction');
+const rangy = require('legacy/util/rangy');
+const RectUtils = require('legacy/util/Rects');
+const SearchUtils = require('legacy/util/Search');
+const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
+const {getString} = require('legacy/util/Localization');
+
+const RendererManager = require('../../annotations/renderer/Manager');
+const UserdataActions = require('../../userdata/Actions');
+
+require('legacy/model/Highlight');
+require('legacy/model/Note');
+require('legacy/model/QuizResult');
+require('legacy/model/TranscriptSummary');
+
+require('../../annotations/Highlight');
+require('../../annotations/Note');
+require('../../annotations/QuizResults');
+require('../../annotations/Redaction');
+require('../../annotations/Transcript');
+require('../../assessment/Scoreboard');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Annotations', {
@@ -48,22 +46,22 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 
 		me.up = reader.up.bind(reader);
 		me.mixins.observable.constructor.apply(me);
-		me.UserDataActions = NextThought.app.userdata.Actions.create();
+		me.UserDataActions = UserdataActions.create();
 
 		this.deleteNote = this.deleteNote.bind(this);
 
 		reader.on('destroy', 'destroy',
-				  reader.relayEvents(me, [
-					  'filter-by-line',
-					  'removed-from-line',
-					  'annotations-load',
-					  'filter-annotations',
-					  'define',
-					  'save-phantom',
-					  'create-note',
-					  'share-with',
-					  'resize'
-				  ]));
+		reader.relayEvents(me, [
+			'filter-by-line',
+			'removed-from-line',
+			'annotations-load',
+			'filter-annotations',
+			'define',
+			'save-phantom',
+			'create-note',
+			'share-with',
+			'resize'
+		]));
 
 		reader.on('destroy', 'onDestroy', this);
 
@@ -71,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			annotations: {},
 			filter: null,
 			searchAnnotations: null,
-			annotationManager: new NextThought.app.annotations.renderer.Manager(reader)
+			annotationManager: new RendererManager(reader)
 		});
 
 		reader.on('afterRender', function () {
@@ -97,12 +95,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			me.fireEvent('rendered', c);
 		}, me, {buffer: 500});
 
-		NextThought.model.Base.addListener('deleted', this.deleteNote);
+		ModelBase.addListener('deleted', this.deleteNote);
 	},
 
 	onDestroy: function () {
 		this.clearAnnotations();
-		NextThought.model.Base.removeListener('deleted', this.deleteNote);
+		ModelBase.removeListener('deleted', this.deleteNote);
 	},
 
 	deleteNote: function (id) {
@@ -235,8 +233,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		});
 
 		ranges = TextRangeFinderUtils.findTextRanges(o.componentOverlayEl.dom,
-													 o.componentOverlayEl.dom.ownerDocument,
-													 regex, undefined, indexedOverlayData);
+													o.componentOverlayEl.dom.ownerDocument,
+													regex, undefined, indexedOverlayData);
 		result.push({
 			ranges: ranges.slice(),
 			key: 'assessment'
@@ -444,7 +442,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		function redaction (block) {
 			return function () {
 				me.clearSelection();
-				var r = NextThought.model.Redaction.createFromHighlight(record, block);
+				var r = Redaction.createFromHighlight(record, block);
 				try {
 					me.UserDataActions.savePhantomAnnotation(r, true);
 				}
@@ -479,12 +477,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 
 		//Figure out where to position the menu, at the top right of the
 		//highest client rect in the range
-		function menuPosition (range, xy) {
+		function menuPosition (range2/*, xy*/) {
 			var readerRect = me.reader.el.dom.getBoundingClientRect(),
 				scrollOffSet = Ext.getBody().getScroll().top,
 				menuHeight = menu.getHeight() || 0,
 				menuWidth = menu.getWidth() || 0,
-				rects = range.getClientRects(), i,
+				rects = range2.getClientRects(), i,
 				dy, dx, y = readerRect.bottom, x = readerRect.right;
 
 			for (i = 0; i < rects.length; i++) {
@@ -557,17 +555,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		menu.add({
 			text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
 			handler: function () {
-						 createHighlight();
-						 me.UserDataActions.savePhantomAnnotation(record, false);
-					 }
+				createHighlight();
+				me.UserDataActions.savePhantomAnnotation(record, false);
+			}
 		});
 
 		menu.add({
 			text: getString('NextThought.view.content.reader.Annotations.add-note'),
 			handler: function () {
-						 createHighlight();
-						 me.fireEvent('create-note', range, rect2, 'plain');
-					 }
+				createHighlight();
+				me.fireEvent('create-note', range, rect2, 'plain');
+			}
 		});
 
 
@@ -575,7 +573,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			return function () {
 				createHighlight();
 				me.clearSelection();
-				var r = NextThought.model.Redaction.createFromHighlight(record, block);
+				var r = Redaction.createFromHighlight(record, block);
 				try {
 					me.UserDataActions.savePhantomAnnotation(r, true);
 				}
@@ -626,16 +624,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 
 	/**
 	 *
-	 * @param {String} type
+	 * @param {String} type - the type
 	 * @param {Ext.data.Model} record - annotation record (highlight, note, redaction, etc)
 	 * @param {Range} [browserRange] - optional, if we already have a range from the browser, that can be used instead of resolving it
 	 *						   from the record
 	 * @param {Function} [onCreated] - Function
-	 * @return {*}
+	 * @return {Boolean} success/failure
 	 */
 	createAnnotationWidget: function (type, record, browserRange, onCreated) {
 		var oid = record.getId(),
-			style = record.get('style'),
 			w;
 
 		if (record.get('inReplyTo') || record.parent) {
@@ -652,7 +649,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			w = Ext.widget(type.toLowerCase(), {browserRange: browserRange, record: record, reader: this.reader});
 
 			if (!oid) {
-				oid = type.toUpperCase() + '-TEMP-OID-' + guidGenerator();
+				oid = type.toUpperCase() + '-TEMP-OID-' + Globals.guidGenerator();
 				if (this.annotations[oid]) {
 					this.annotations[oid].cleanup();
 					delete this.annotations[oid];

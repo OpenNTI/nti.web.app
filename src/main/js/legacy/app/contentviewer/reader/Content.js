@@ -1,11 +1,16 @@
-var Ext = require('extjs');
-var ImageZoomView = require('../../../common/ux/ImageZoomView');
-var SlideDeck = require('../../../common/ux/SlideDeck');
-var ContentUtils = require('../../../util/Content');
-var Globals = require('../../../util/Globals');
-var ObjectUtils = require('../../../util/Object');
-var ParseUtils = require('../../../util/Parsing');
-var UxIFramePopout = require('../../../common/ux/IFramePopout');
+const Ext = require('extjs');
+
+const ImageZoomView = require('legacy/common/ux/ImageZoomView');
+const SlideDeck = require('legacy/common/ux/SlideDeck');
+const ContentUtils = require('legacy/util/Content');
+const Globals = require('legacy/util/Globals');
+const ObjectUtils = require('legacy/util/Object');
+const ParseUtils = require('legacy/util/Parsing');
+const {getString} = require('legacy/util/Localization');
+
+const NavigationActions = require('../../navigation/Actions');
+
+require('legacy/common/ux/IFramePopout');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Content', {
@@ -136,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 					Ext.fly(container).remove();
 				}
 			})
-			.catch(function (reason) {
+			.catch(function (e) {
 				console.warn('Could not insert related links due to: ', e.stack || e.message || e);
 				return;
 			});
@@ -229,6 +234,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 	},
 
 	parseHTML: function (request) {
+		const me = this;
+		const basePath = this.buildPath(request.request.options.url);
+		const rc = me.loadedResources;
+
+		const c = request.responseText;
+		const rf = c.toLowerCase();
+
+		const start = rf.indexOf('>', rf.indexOf('<body')) + 1;
+		const end = rf.indexOf('</body');
+
+		const head = c.substring(0, start).replace(/[\t\r\n\s]+/g, ' ');
+		const body = c.substring(start, end);
+
+
 		function toObj (a, k, v) {
 			var i = a.length - 1, o = {};
 			for (i; i >= 0; i--) { o[(k.exec(a[i]) || [])[2]] = Ext.htmlDecode((v.exec(a[i]) || [])[1]); }
@@ -240,9 +259,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		}
 
 		function cssObj (m) {
-			var i = 0, k = /href="([^"]*)"/i, o, c = {};
-			for (i; i < m.length; i++) {
-				o = k.test(m[i]) ? basePath + k.exec(m[i])[1] : m[i];
+			const key = /href="([^"]*)"/i;
+
+			for (let i = 0; i < m.length; i++) {
+				const o = key.test(m[i]) ? basePath + key.exec(m[i])[1] : m[i];
 				c[o] = {};
 				if (!rc[o]) {
 					rc[o] = c[o] = Globals.loadStyleSheet({
@@ -251,28 +271,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 					});
 				}
 			}
+
 			//remove resources not used anymore...
-			Ext.Object.each(rc, function (k, v, o) {
+			Ext.Object.each(rc, (k, v, o) => {
 				if (!c[k]) {
 					Ext.fly(v).remove();
 					delete o[k];
 				}
 			});
+
 			return c;
 		}
-
-		var me = this,
-			basePath = this.buildPath(request.request.options.url),
-			rc = me.loadedResources,
-
-			c = request.responseText,
-			rf = c.toLowerCase(),
-
-			start = rf.indexOf('>', rf.indexOf('<body')) + 1,
-			end = rf.indexOf('</body'),
-
-			head = c.substring(0, start).replace(/[\t\r\n\s]+/g, ' '),
-			body = c.substring(start, end);
 
 		me.basePath = basePath;
 
@@ -351,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 	onClick: function (e, el) {
 		//Stupid FF fires onClick for right click. WTF!
-		if (e.button != 0) {
+		if (e.button !== 0) {
 			return true;
 		}
 
@@ -406,7 +415,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 			return false;
 		}
 
-		if (NextThought.app.navigation.Actions.navigateToHref(r)) {
+		if (NavigationActions.navigateToHref(r)) {
 			//Someone handled us so stop the event
 			return false;
 		}

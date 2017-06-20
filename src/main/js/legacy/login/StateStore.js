@@ -11,7 +11,7 @@ const lazy = require('legacy/util/lazy-require')
 
 // const AccountActions = require('legacy/app/account/Actions');
 
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
 module.exports = exports = Ext.define('NextThought.login.StateStore', {

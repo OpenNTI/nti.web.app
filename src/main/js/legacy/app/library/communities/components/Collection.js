@@ -3,7 +3,7 @@ const Ext = require('extjs');
 const {toCSSClassName} = require('nti-lib-dom');
 
 const NTIFormat = require('legacy/util/Format');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 require('legacy/mixins/EllipsisText');
 
 

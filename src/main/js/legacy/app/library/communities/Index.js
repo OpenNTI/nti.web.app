@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var MixinsRouter = require('../../../mixins/Router');
-var ComponentsPage = require('./components/Page');
+const Ext = require('extjs');
+
+require('legacy/mixins/Router');
+require('./components/Page');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.library.communities.Index', {
@@ -38,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Index
 		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
-	loadCommunities: function () {
+	loadCommunities: function (force) {
 		var me = this;
 
 		me.loadingCmp = me.loadingCmp || me.add({

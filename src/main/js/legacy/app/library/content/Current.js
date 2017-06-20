@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var ComponentsCurrent = require('../components/Current');
-var ContentStateStore = require('./StateStore');
-var StoreStateStore = require('../../store/StateStore');
-var ComponentsCollection = require('../components/Collection');
+const Ext = require('extjs');
+
+const StoreStateStore = require('../../store/StateStore');
+
+const ContentStateStore = require('./StateStore');
+
+require('../components/Current');
+require('../components/Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.content.Current', {
@@ -14,16 +17,16 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Current',
 
 	statics: {
 		shouldShow: function () {
-			var ContentStore = NextThought.app.library.content.StateStore.getInstance(),
-				PurchaseStore = NextThought.app.store.StateStore.getInstance();
+			var ContentStore = ContentStateStore.getInstance(),
+				PurchaseStore = StoreStateStore.getInstance();
 
 			return Promise.all([
 				ContentStore.onceLoaded(),
 				PurchaseStore.onceLoaded()
 			]).then(function () {
-				var bundles = ContentStore.getContentBundles() || [],
-					packages = ContentStore.getContentPackages() || [],
-					hasAvailablePurchases = PurchaseStore.getPurchasables().length > 0;
+				const bundles = ContentStore.getContentBundles() || [];
+				const packages = ContentStore.getContentPackages() || [];
+				// const hasAvailablePurchases = PurchaseStore.getPurchasables().length > 0;
 
 				return bundles.length || packages.length;//TODO: add || hasAvailablePurchases back once we have the UI
 			});
@@ -35,8 +38,8 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Current',
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
-		this.PurchaseStore = NextThought.app.store.StateStore.getInstance();
+		this.ContentStore = ContentStateStore.getInstance();
+		this.PurchaseStore = StoreStateStore.getInstance();
 
 		//for now force the books to not have an add button
 		if (this.PurchaseStore.getPurchasables().length && false) {

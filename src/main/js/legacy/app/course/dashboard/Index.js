@@ -1,25 +1,29 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../../util/Analytics');
-var TimeUtils = require('../../../util/Time');
-var MixinsRouter = require('../../../mixins/Router');
-var TilesAssignment = require('./components/tiles/Assignment');
-var TilesAssignmentList = require('./components/tiles/AssignmentsList');
-var TilesBaseCmp = require('./components/tiles/BaseCmp');
-var TilesBaseContainer = require('./components/tiles/BaseContainer');
-var TilesBlog = require('./components/tiles/Blog');
-var TilesHeader = require('./components/tiles/Header');
-var TilesItem = require('./components/tiles/Item');
-var TilesLesson = require('./components/tiles/Lesson');
-var TilesNote = require('./components/tiles/Note');
-var TilesPost = require('./components/tiles/Post');
-var TilesTopic = require('./components/tiles/Topic');
-var TilesTopicComment = require('./components/tiles/TopicComment');
-var WidgetsAnnouncements = require('./components/widgets/Announcements');
-var WidgetsAssignments = require('./components/widgets/Assignments');
-var WidgetsBase = require('./components/widgets/Base');
-var WidgetsLesson = require('./components/widgets/Lessons');
-var WidgetsStream = require('./components/widgets/Stream');
-var ComponentsTileContainer = require('./components/TileContainer');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const AnalyticsUtil = require('legacy/util/Analytics');
+const {getString} = require('legacy/util/Localization');
+const TimeUtils = require('legacy/util/Time');
+require('legacy/mixins/Router');
+
+require('./components/tiles/Assignment');
+require('./components/tiles/AssignmentsList');
+require('./components/tiles/BaseCmp');
+require('./components/tiles/BaseContainer');
+require('./components/tiles/Blog');
+require('./components/tiles/Header');
+require('./components/tiles/Item');
+require('./components/tiles/Lesson');
+require('./components/tiles/Note');
+require('./components/tiles/Post');
+require('./components/tiles/Topic');
+require('./components/tiles/TopicComment');
+require('./components/widgets/Announcements');
+require('./components/widgets/Assignments');
+require('./components/widgets/Base');
+require('./components/widgets/Lessons');
+require('./components/widgets/Stream');
+require('./components/TileContainer');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', {
@@ -177,7 +181,10 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 	},
 
 	queryUpcomingTiles: function (date) {
-		var widgets = NextThought.app.course.dashboard.components.widgets,
+		//This should be rewritten to create an array at the top of the file instead
+		//Tof using the "Magic" ExtJS class namespace object...
+		//eslint-disable-next-line no-undef
+		const widgets = NextThought.app.course.dashboard.components.widgets,
 			course = this.course, tiles = [];
 
 		Ext.Object.each(widgets, function (clsName, cls) {
@@ -229,7 +236,10 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 	},
 
 	queryTiles: function (startDate, endDate, isCurrent) {
-		var widgets = NextThought.app.course.dashboard.components.widgets,
+		//This should be rewritten to create an array at the top of the file instead
+		//Tof using the "Magic" ExtJS class namespace object...
+		//eslint-disable-next-line no-undef
+		const widgets = NextThought.app.course.dashboard.components.widgets,
 			course = this.course, tiles = [];
 
 		Ext.Object.each(widgets, function (clsName, cls) {
@@ -263,10 +273,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 	},
 
 	scrollChanged: function () {
-		var me = this,
-			changes = [],
-			buffer = this.bufferThreshold,
-			containerPos = this.getScrollInfo();
+		var containerPos = this.getScrollInfo();
 
 		this.maybeLoadNextWeek(containerPos);
 

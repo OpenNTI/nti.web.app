@@ -6,7 +6,7 @@ const DomUtils = require('../../../../../util/Dom');
 const Localization = require('legacy/util/Localization');
 const {isMe} = require('legacy/util/Globals');
 const Scrolling = require('legacy/util/Scrolling');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 require('../../../../../model/User');
 require('../../../../../mixins/Searchable');

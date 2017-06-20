@@ -1,17 +1,20 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var UxImageZoomView = require('../../../common/ux/ImageZoomView');
-var UxSlideDeck = require('../../../common/ux/SlideDeck');
-var CardsCardTarget = require('../../../common/components/cards/CardTarget');
-var CardsOverlayedPanel = require('../../../common/components/cards/OverlayedPanel');
-var ComponentsEmbededWidget = require('../components/EmbededWidgetPanel');
-var DeckOverlayedPanel = require('../../mediaviewer/content/deck/OverlayedPanel');
-var ContentOverlayedPanel = require('../../mediaviewer/content/OverlayedPanel');
-var VideoOverlayedPanel = require('../../video/OverlayedPanel');
-var RollOverlayedPanel = require('../../video/roll/OverlayedPanel');
-var ImageOverlayedPanel = require('../../image/OverlayedPanel');
-var TopicOverlayedPanel = require('../../forums/OverlayedPanel');
-var {guidGenerator} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
+const {guidGenerator} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/common/ux/ImageZoomView');
+require('legacy/common/ux/SlideDeck');
+require('legacy/common/components/cards/CardTarget');
+require('legacy/common/components/cards/OverlayedPanel');
+require('../../mediaviewer/content/deck/OverlayedPanel');
+require('../../mediaviewer/content/OverlayedPanel');
+require('../../video/OverlayedPanel');
+require('../../video/roll/OverlayedPanel');
+require('../../image/OverlayedPanel');
+require('../../forums/OverlayedPanel');
+require('../components/EmbededWidgetPanel');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
@@ -233,9 +236,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 				obj = Ext.apply(DomUtils.parseDomObject(snip), {
 					id: id,
 					sources: Array.prototype
-									 .map.call(snip.querySelectorAll('object[type$=audiosource]'), DomUtils.parseDomObject)
-									 .map(trn)
-									 .reduce(flatten, [])
+									.map.call(snip.querySelectorAll('object[type$=audiosource]'), DomUtils.parseDomObject)
+									.map(trn)
+									.reduce(flatten, [])
 				});
 
 			tpl.insertBefore(snip, obj);
@@ -251,10 +254,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 
 		function updateAnnotations () {
 			try {
-				var reader = me.reader,
-					prefix = reader.prefix;
-
-				reader.getAnnotations().getManager().render(prefix);
+				var prefix = me.reader.prefix;
+				me.reader.getAnnotations().getManager().render(prefix);
 			}
 			catch (e) {
 				console.warn(e.stack || e.message || e);

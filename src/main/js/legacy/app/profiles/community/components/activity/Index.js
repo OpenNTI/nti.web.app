@@ -8,7 +8,7 @@ require('legacy/app/course/dashboard/components/tiles/Topic');
 require('legacy/app/course/dashboard/components/tiles/Blog');
 require('./parts/NewPost');
 require('legacy/app/windows/Actions');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	extend: 'Ext.container.Container',

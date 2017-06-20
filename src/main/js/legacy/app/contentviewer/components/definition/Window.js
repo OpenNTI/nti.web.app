@@ -1,6 +1,10 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../../../common/window/Window');
-var {getURL, swallow} = require('legacy/util/Globals');
+/*globals ActiveXObject*/
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const {getURL, swallow} = require('legacy/util/Globals');
+
+require('legacy/common/window/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.definition.Window', {
@@ -95,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		doc.write(content);
 		doc.close();
 		doc.onclick = function (e) {
-			e = Ext.EventObject.setEvent(e || event);
+			e = Ext.EventObject.setEvent(e || window.event);
 			e.stopEvent();
 			var t = e.getTarget('a[href]', null, true);
 
@@ -195,14 +199,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			xslt.stylesheet = xsldoc;
 			return xslt.createProcessor();
 		} catch (e) {
-			throw 'Dictionary may not be installed, or not configured properly.' + (e.stack || e.message || e);
+			throw new Error('Dictionary may not be installed, or not configured properly.' + (e.stack || e.message || e));
 		}
 	},
 
 
 	_hasStandardParts: function () {
 		if (!window.XSLTProcessor || !window.XMLSerializer || !window.DOMParser) {
-			throw 'do IE path';
+			throw new Error('do IE path');
 		}
 	},
 

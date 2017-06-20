@@ -1,12 +1,15 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-var MixinsRouter = require('../../../mixins/Router');
-var NavigationActions = require('../../navigation/Actions');
-var ActivityIndex = require('./components/activity/Index');
-var MembershipIndex = require('./components/membership/Index');
-var SidebarIndex = require('./components/sidebar/Index');
-var ComponentsHeader = require('./components/Header');
+const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+
+const ParseUtils = require('legacy/util/Parsing');
+
+const NavigationActions = require('../../navigation/Actions');
+
+require('legacy/mixins/Router');
+require('./components/activity/Index');
+require('./components/membership/Index');
+require('./components/sidebar/Index');
+require('./components/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.Index', {
@@ -23,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.NavActions = NextThought.app.navigation.Actions.create();
+		this.NavActions = NavigationActions.create();
 
 		this.headerCmp = this.add({
 			xtype: 'profile-community-header',
@@ -182,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 					var current, i;
 
 					for (i = 0; i < topics.length; i++) {
-						topic = topics[i];
+						let topic = topics[i];
 
 						if (topic && topic.getId && topic.getId() === id) {
 							current = topic;
@@ -190,11 +193,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 						}
 					}
 
-					if (!topic) {
+					if (!current) {
 						return Promise.reject();
 					}
 
-					return topic;
+					return current;
 				})
 				.catch(function (reason) {
 					console.error('failed to load forum: ', reason);
@@ -205,12 +208,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 					entity.getDefaultForum()
 						.then(cmp.setPostContainer.bind(cmp));
 				})
-				.then(function (forum) {
-					var link = forum.getLink('contents');
+				.then(function (f) {
+					var link = f.getLink('contents');
 
 					cmp.setSourceURL(link);
 
-					cmp.setPostContainer(forum);
+					cmp.setPostContainer(f);
 				});
 		}
 
@@ -347,11 +350,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 	},
 
 	getRouteForPath: function (path, community) {
-		var forum = path[1],//the first one should be the index
-			forumId = forum.getId(),
-			path = '/';
+		const [/*index*/, forum] = path;
+		const forumId = encodeForURI(forum.getId());
 
-		forumId = encodeForURI(forumId);
+		path = '/';
 
 		if (!community.isDefaultForum(forum)) {
 			path = '/topic/' + forumId;

@@ -1,25 +1,27 @@
-var Ext = require('extjs');
-var EnrollmentFeatureForm = require('../../../../mixins/enrollment-feature/Form');
-var PartsBaseInput = require('./parts/BaseInput');
-var PartsCheckbox = require('./parts/Checkbox');
-var PartsCheckboxGroup = require('./parts/CheckboxGroup');
-var PartsDateInput = require('./parts/DateInput');
-var PartsDescription = require('./parts/Description');
-var PartsDescription = require('./parts/Description');
-var PartsDetailsTable = require('./parts/DetailsTable');
-var PartsDropDown = require('./parts/DropDown');
-var PartsGroup = require('./parts/Group');
-var PartsGroupedSet = require('./parts/GroupedSet');
-var PartsLinks = require('./parts/Links');
-var PartsPricing = require('./parts/Pricing');
-var PartsRaioGroup = require('./parts/RadioGroup');
-var PartsSet = require('./parts/Set');
-var PartsSplitRadio = require('./parts/SplitRadio');
-var PartsSubmitButton = require('./parts/SubmitButton');
-var PartsTextarea = require('./parts/Textarea');
-var PartsTextInput = require('./parts/TextInput');
-var EnrollmentFeatureForm = require('../../../../mixins/enrollment-feature/Form');
+const Ext = require('extjs');
 
+const {getString, getFormattedString} = require('legacy/util/Localization');
+
+require('./parts/BaseInput');
+require('./parts/Checkbox');
+require('./parts/CheckboxGroup');
+require('./parts/DateInput');
+require('./parts/Description');
+require('./parts/Description');
+require('./parts/DetailsTable');
+require('./parts/DropDown');
+require('./parts/Group');
+require('./parts/GroupedSet');
+require('./parts/Links');
+require('./parts/Pricing');
+require('./parts/RadioGroup');
+require('./parts/Set');
+require('./parts/SplitRadio');
+require('./parts/SubmitButton');
+require('./parts/Textarea');
+require('./parts/TextInput');
+
+require('legacy/mixins/enrollment-feature/Form');
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Admission', {
 	extend: 'Ext.container.Container',
@@ -551,24 +553,24 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			lastName = user.get('LastName'),
 			email = user.get('email');
 
-		if (!values.first_name && firstName) {
-			values.first_name = firstName;
+		if (!values['first_name'] && firstName) {
+			values['first_name'] = firstName;
 		}
 
-		if (!values.last_name && lastName) {
-			values.last_name = lastName;
+		if (!values['last_name'] && lastName) {
+			values['last_name'] = lastName;
 		}
 
-		if (!values.contact_name && realname) {
-			values.contact_name = realname;
+		if (!values['contact_name'] && realname) {
+			values['contact_name'] = realname;
 		}
 
 		if (!values.email && email) {
 			values.email = email;
 		}
 
-		if (!values.contact_email && email) {
-			values.contact_email = email;
+		if (!values['.contact_email'] && email) {
+			values['.contact_email'] = email;
 		}
 
 		return values;
@@ -874,15 +876,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				name: value.contact_name,
 				email: value.contact_email,
 				phone: value.contact_phone,
-				street_line: value.contact_street_line1,
-				street_line2: value.contact_street_line2,
-				street_line3: value.contact_street_line3,
-				street_line4: value.contact_street_line4,
+				'street_line': value.contact_street_line1,
+				'street_line2': value.contact_street_line2,
+				'street_line3': value.contact_street_line3,
+				'street_line4': value.contact_street_line4,
 				city: value.contact_city,
 				state: value.contact_state,
 				zip: value.contact_zip,
 				country: value.contact_country,
-				date_of_birth: value.date_of_birth
+				'date_of_birth': value.date_of_birth
 			};
 		}
 

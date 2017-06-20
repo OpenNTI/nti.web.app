@@ -1,17 +1,20 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var MixinsState = require('../../../mixins/State');
-var BundleActions = require('../../bundle/Actions');
-var BundleStateStore = require('../../bundle/StateStore');
-var CourseActions = require('../../course/Actions');
-var CourseStateStore = require('../../course/StateStore');
-var CoursesStateStore = require('../../library/courses/StateStore');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+const BundleActions = require('../../bundle/Actions');
+const BundleStateStore = require('../../bundle/StateStore');
+const CourseActions = require('../../course/Actions');
+const CourseStateStore = require('../../course/StateStore');
+const CoursesStateStore = require('../../library/courses/StateStore');
+
+require('legacy/mixins/State');
 
 
 module.exports = exports = Ext.define('NextThought.app.content.components.ContentSwitcher', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-switcher',
-	state_key: 'content-switcher',
+	stateKey: 'content-switcher',
 
 	mixins: {
 		State: 'NextThought.mixins.State'
@@ -76,11 +79,11 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.BundleActions = NextThought.app.bundle.Actions.create();
-		this.BundleStateStore = NextThought.app.bundle.StateStore.getInstance();
-		this.CourseActions = NextThought.app.course.Actions.create();
-		this.CourseStateStore = NextThought.app.course.StateStore.getInstance();
-		this.LibraryCourseStateStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.BundleActions = BundleActions.create();
+		this.BundleStateStore = BundleStateStore.getInstance();
+		this.CourseActions = CourseActions.create();
+		this.CourseStateStore = CourseStateStore.getInstance();
+		this.LibraryCourseStateStore = CoursesStateStore.getInstance();
 	},
 
 	afterRender: function () {
@@ -152,19 +155,19 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 	},
 
 	getFamilyData: function (family, bundle, route) {
-		var me = this,
-			id = family.get('CatalogFamilyID'),
-			courses = this.LibraryCourseStateStore.findForCatalogFamily(id),
-			uiData = family.asUIData();
+		const me = this;
+		const id = family.get('CatalogFamilyID');
+
+		let courses = this.LibraryCourseStateStore.findForCatalogFamily(id);
 
 		if (courses.length === 1) {
 			return this.getCourseData(bundle, route);
 		}
 
 		courses = courses.map(function (course) {
-			var instance = course.get('CourseInstance'),
-				isCurrent = instance.getId() === bundle.getId(),
-				uiData = instance.asUIData();
+			const instance = course.get('CourseInstance');
+			const isCurrent = instance.getId() === bundle.getId();
+			const uiData = instance.asUIData();
 
 			return {
 				id: uiData.id,
@@ -175,6 +178,8 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 				activeRoute: isCurrent ? route : me.CourseStateStore.getRouteFor(uiData.id)
 			};
 		});
+
+		const uiData = family.asUIData();
 
 		return Promise.all([
 			courses,
@@ -235,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 
 	updateRouteFor: function (bundle, route) {
 		var id = bundle.getId(),
-			rootRoute = this[bundle.isCourse ? 'CourseActions' : 'BundleActions'].getRootRouteForId(id),
+			// rootRoute = this[bundle.isCourse ? 'CourseActions' : 'BundleActions'].getRootRouteForId(id),
 			state = this.getCurrentState() || {recent: []};
 
 		state.recent.forEach(function (item) {

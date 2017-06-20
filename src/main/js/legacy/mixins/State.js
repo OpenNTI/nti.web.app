@@ -5,10 +5,10 @@ const Actions = require('../common/state/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.State', {
-	'state_key': 'default',
+	stateKey: 'default',
 
 	getStateKey: function () {
-		return this.STATE_KEY || this['state_key'];
+		return this.STATE_KEY || this['stateKey'];
 	},
 
 	__getStateActions: function () {

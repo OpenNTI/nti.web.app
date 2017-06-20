@@ -1,11 +1,15 @@
-var Ext = require('extjs');
-var MixinsState = require('../../mixins/State');
-var NavigationStateStore = require('./StateStore');
-var IdentityIndex = require('../account/identity/Index');
-var NotificationsTab = require('../notifications/Tab');
-var SearchSearchBar = require('../search/SearchBar');
-var GutterTab = require('../chat/components/gutter/Tab');
-var ChatIndex = require('../chat/Index');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const IdentityIndex = require('../account/identity/Index');
+const NotificationsTab = require('../notifications/Tab');
+const SearchBar = require('../search/SearchBar');
+const GutterTab = require('../chat/components/gutter/Tab');
+
+const NavigationStateStore = require('./StateStore');
+
+require('legacy/mixins/State');
+require('../chat/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
@@ -45,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.NavStore = NextThought.app.navigation.StateStore.getInstance();
+		this.NavStore = NavigationStateStore.getInstance();
 
 		this.mon(this.NavStore, {
 			'update-nav': this.updateNav.bind(this),
@@ -225,20 +229,20 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.identityCmp = NextThought.app.account.identity.Index.create({
+		this.identityCmp = IdentityIndex.create({
 			setMenuOpen: this.setState.bind(this, {active: 'identityCmp'}),
 			setMenuClosed: this.setState.bind(this, {}),
 			pushRootRoute: this.pushRoute.bind(this)
 		});
 
-		this.notificationCmp = NextThought.app.notifications.Tab.create({
+		this.notificationCmp = NotificationsTab.create({
 			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
 			setMenuClosed: this.setState.bind(this, {}),
 			pushRootRoute: this.pushRoute.bind(this),
 			navigateToObject: this.gotoObject.bind(this)
 		});
 
-		this.searchCmp = NextThought.app.search.SearchBar.create({
+		this.searchCmp = SearchBar.create({
 			setMenuOpen: this.setState.bind(this, {active: 'searchCmp'}),
 			setMenuClosed: this.setState.bind(this, {}),
 			pushRootRoute: this.pushRoute.bind(this),
@@ -248,7 +252,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			containerCmp: this.searchEl
 		});
 
-		this.chatCmp = NextThought.app.chat.components.gutter.Tab.create({
+		this.chatCmp = GutterTab.create({
 			setMenuOpen: this.setState.bind(this, {active: 'chatTabCmp'}),
 			setMenuClosed: this.setState.bind(this, {}),
 			pushRootRoute: this.pushRoute.bind(this)
@@ -335,6 +339,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	 * write the state to local storage. We only want this state
 	 * to persist in memory, not across refreshs.
 	 * @param {Object} state the state to apply
+	 * @returns {void}
 	 */
 	setState: function (state) {
 		return this.applyState(state);

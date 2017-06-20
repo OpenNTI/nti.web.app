@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const TimeUtils = require('legacy/util/Time');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 const {getFormattedString} = require('legacy/util/Localization');
 
 require('legacy/model/User');

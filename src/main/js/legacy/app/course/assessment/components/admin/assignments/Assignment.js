@@ -1,17 +1,22 @@
-var Ext = require('extjs');
-var User = require('../../../../../../model/User');
-var ParseUtils = require('../../../../../../util/Parsing');
-var ComponentCustomTemplate = require('../../../../../../layout/component/CustomTemplate');
-var UxFilterMenu = require('../../../../../../common/ux/FilterMenu');
-var AdminListHeader = require('../ListHeader');
-var AdminPagedGrid = require('../PagedGrid');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 const { encodeForURI } = require('nti-lib-ntiids');
-const {wait} = require('legacy/util/Promise');
+
+const {getString, getFormattedString} = require('legacy/util/Localization');
+const User = require('legacy/model/User');
+
+
+require('legacy/common/ux/FilterMenu');
+require('legacy/layout/component/CustomTemplate');
+require('legacy/util/Parsing');
+require('../ListHeader');
+require('../PagedGrid');
+
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assignment', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-assignments-item',
-	state_key: 'admin-assignment-students',
+	stateKey: 'admin-assignment-students',
 	ui: 'course-assessment',
 	cls: 'course-assessment-header assignment-item',
 	layout: 'none',
@@ -225,10 +230,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		state.currentPage = state.currentPage || 1;
 
-		this.current_state = state || {};
+		this.currentState = state || {};
 		this.stateRestored = true;
 
-		return this.applyState(this.current_state);
+		return this.applyState(this.currentState);
 	},
 
 	/**
@@ -251,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		record = this.store.findBy(function (rec) {
 			var user = rec.get('User');
 
-			return student === NextThought.model.User.getIdFromRaw(user);
+			return student === User.getIdFromRaw(user);
 		});
 
 		if (record < 0) {
@@ -278,8 +283,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	afterRender: function () {
 		this.callParent(arguments);
-
-		var pager;
 
 		this.el.query('a.button').forEach(this._setupButtons);
 
@@ -326,7 +329,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	maybeSwitch: function () {
 		var menu = this.filterMenu,
-			s = this.store,
+			store = this.store,
 			item = menu.down('[checked]'),
 			initial = menu.initialState;
 
@@ -341,10 +344,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		if (item && item.filter === initial) {
-			if (!s.loading && s.loaded) {
-				loaded(s);
+			if (!store.loading && store.loaded) {
+				loaded(store);
 			} else {
-				s.on({single: true, loaded: loaded});
+				store.on({single: true, loaded: loaded});
 			}
 		}
 	},
@@ -661,9 +664,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	updateFilter: function () {
-		var state = this.current_state || {},
-			newPage = state.currentPage !== this.currentPage,
-			header = this.pageHeader;
+		var state = this.currentState || {},
+			newPage = state.currentPage !== this.currentPage;
 
 		if (this.stateDisabled) { return; }
 
@@ -698,7 +700,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			delete state.sort;
 		}
 
-		this.current_state = state;
+		this.currentState = state;
 
 		if (newPage) {
 			this.pushRouteState(state);
@@ -789,7 +791,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	fireGoToAssignment: function (v, record, pageSource) {
 		var student = record.get('User'),
 			historyItem = record.get('HistoryItemSummary');
-		grid = this.down('course-admin-paged-grid');
 
 		if (typeof student === 'string' || !student.isModel) {
 			console.error('Unable to show assignment for student', student.getName(), this.assignment.get('title'));

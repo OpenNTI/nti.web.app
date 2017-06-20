@@ -1,21 +1,23 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../../../util/Content');
-var ComponentsBoundCollection = require('../../../../../common/components/BoundCollection');
-var PartsContentLink = require('./ContentLink');
-var PartsDiscussion = require('./Discussion');
-var PartsHeader = require('./Header');
-var PartsIframeWindow = require('./IframeWindow');
-var PartsPoll = require('./Poll');
-var PartsQuestionSet = require('./QuestionSet');
-var PartsSectionHeader = require('./SectionHeader');
-var PartsSpacer = require('./Spacer');
-var PartsSurvey = require('./Survey');
-var PartsTimeline = require('./Timeline');
-var PartsTopic = require('./Topic');
-var PartsVideo = require('./Video');
-var PartsVideoRoll = require('./VideoRoll');
-var ModelVideoRoll = require('../../../../../model/VideoRoll');
-var ModelVideo = require('../../../../../model/Video');
+const Ext = require('extjs');
+
+require('legacy/common/components/BoundCollection');
+require('legacy/model/VideoRoll');
+require('legacy/model/Video');
+require('legacy/util/Content');
+
+require('./ContentLink');
+require('./Discussion');
+require('./Header');
+require('./IframeWindow');
+require('./Poll');
+require('./QuestionSet');
+require('./SectionHeader');
+require('./Spacer');
+require('./Survey');
+require('./Timeline');
+require('./Topic');
+require('./Video');
+require('./VideoRoll');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Group', {
@@ -89,7 +91,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this,
 			items = me.getItems(collection),
 			body = me.getBodyContainer(),
-			enrollment = me.enrollment,
 			assignments = me.assignments,
 			locInfo = me.locInfo,
 			course = me.course,
@@ -103,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 
-		items = (items || []).reduce(function (items, record) {
+		items = (items || []).reduce(function (accItems, record) {
 			var item = record.raw,
 				type = getType(item),
 				cls = getClass(type),
@@ -112,23 +113,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			if (!cls) {
 				console.debug('No component found for:', item);
-				return items;
+				return accItems;
 			}
 
 			//The server should be taking care of this now...
 			// if (!ContentUtils.hasVisibilityForContent({
 			//				getAttribute: function(i) { return item[i]; }},
 			//				enrollment.get('Status'))) {
-			//	return items;
+			//	return accItems;
 			// }
 
 			if (cls.isSection) {
-				items.push({
+				accItems.push({
 					xtype: type,
 					title: item.title,
 					type: 'content-driven',
 					color: item.accentColor,
-					items: getItems(item).reduce(process, [])
+					items: me.getItems(item).reduce(process, [])
 				});
 			} else {
 				Ext.applyIf(item, {
@@ -153,9 +154,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				}, item);
 
 				if (item && item.assignment) {
-					items.push(assignments.fetchAssignment(item['target-ntiid'])
-								.then(function (assignment) {
-									item.assignment = assignment;
+					accItems.push(assignments.fetchAssignment(item['target-ntiid'])
+								.then(function (newAssignment) {
+									item.assignment = newAssignment;
 
 									return item;
 								})
@@ -168,16 +169,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 								})
 							);
 				} else if (item) {
-					items.push(item);
+					accItems.push(item);
 				}
 			}
 
-			return items;
+			return accItems;
 		}, []);
 
 		Promise.all(items)
-			.then(function (items) {
-				body.add(items);
+			.then(function (newItem) {
+				body.add(newItem);
 
 				me.collectionSet = true;
 				me.fireEvent('collection-set');

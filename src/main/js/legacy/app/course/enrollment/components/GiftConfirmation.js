@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
-var StoreStateStore = require('../../../store/StateStore');
+const Ext = require('extjs');
+
+const {getString, getFormattedString} = require('legacy/util/Localization');
+
+require('legacy/common/form/fields/SimpleTextField');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.GiftConfirmation', {

@@ -1,13 +1,17 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var {isMe} = Globals;
-var ParseUtils = require('../../../util/Parsing');
-var SharingUtils = require('../../../util/Sharing');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const SharingUtils = require('legacy/util/Sharing');
+
 require('./old/Topic');
-require('../../../mixins/Searchable');
+require('legacy/mixins/Searchable');
 require('./Comment');
-require('../../../store/Blog');
+require('legacy/store/Blog');
 require('../Actions');
+
+const {isMe} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
@@ -281,23 +285,20 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	},
 
 	onReady: function () {
-		function scrollCommentIntoView () {
-			if (typeof (me.scrollToComment) === 'boolean') {
-				el = me.getTargetEl();
-			}
-			else {
-				el = me.el.down('[data-commentid="' + me.scrollToComment + '"]');
-			}
+		// console.debug('ready', arguments);
+
+		const scrollCommentIntoView = () => {
+			const el = (typeof (this.scrollToComment) === 'boolean')
+				? this.getTargetEl()
+				: this.el.down('[data-commentid="' + this.scrollToComment + '"]');
 
 			if (el) {
 				Ext.defer(el.scrollIntoView, 500, el, [Ext.get('profile'), false, Globals.ANIMATE_NO_FLASH]);
 			}
-		}
+		};
 
-		console.debug('ready', arguments);
-		var el, images, me = this;
 		if (this.scrollToComment) {
-			images = this.el.query('img');
+			const images = this.el.query('img');
 			Ext.each(images, function (img) {
 				img.onload = function () { scrollCommentIntoView(); };
 			});

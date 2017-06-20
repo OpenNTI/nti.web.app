@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var SearchActions = require('./Actions');
-var ComponentsAdvancedOptions = require('./components/AdvancedOptions');
+const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+const {wait} = require('nti-commons');
+
+const SearchActions = require('./Actions');
+const SearchStateStore = require('./StateStore');
+
+require('./components/AdvancedOptions');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
@@ -46,8 +49,8 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		this.callParent(arguments);
 		this.placeholder = 'Search';
 
-		this.SearchActions = NextThought.app.search.Actions.create();
-		this.SearchStore = NextThought.app.search.StateStore.getInstance();
+		this.SearchActions = SearchActions.create();
+		this.SearchStore = SearchStateStore.getInstance();
 
 		this.mon(this.SearchStore, 'sync-term', this.syncTerm.bind(this));
 	},

@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var IdCache = require('../../../cache/IdCache');
-var UserRepository = require('../../../cache/UserRepository');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
+const {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
@@ -53,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		if (r) {r.remove();}
 		this.el.on('click', this.click, this);
 		Ext.each(this.el.query('.control'), function (c) {
-	  	this.mon(Ext.fly(c), 'click', this.onControlClick, this);
+			this.mon(Ext.fly(c), 'click', this.onControlClick, this);
 		}, this);
 	},
 
@@ -139,15 +140,6 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		var me = this, t = e.getTarget('.whiteboard-container', null, true), guid,
 			a = e.getTarget('a');
 
-		function openHref (link, t) {
-			try {
-				window.open(link, t);
-			}
-			catch (er) {
-				window.location.href = link;
-			}
-		}
-
 		if (!t && !a) { return;}
 
 
@@ -167,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	},
 
 
-  	onControlClick: function (evt, dom, opts) {
+	onControlClick: function (evt, dom, opts) {
 		var message = evt.getTarget('.message');
 
 		Ext.fly(message).toggleCls('flagged');
@@ -176,13 +168,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	},
 
 
-  	toggleModerationPanel: function () {
+	toggleModerationPanel: function () {
 		this.el.toggleCls('moderating');
 		Ext.each(this.el.query('.flagged'), function (d) {
-	  		Ext.fly(d).removeCls('flagged');
+			Ext.fly(d).removeCls('flagged');
 		});
 		Ext.each(this.el.query('.control.checked'), function (d) {
-	  	Ext.fly(d).removeCls('checked');
+			Ext.fly(d).removeCls('checked');
 		});
 	}
 

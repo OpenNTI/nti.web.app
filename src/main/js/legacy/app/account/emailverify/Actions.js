@@ -1,10 +1,13 @@
 const Ext = require('extjs');
-const StateStore = require('./StateStore');
+const {wait} = require('nti-commons');
+
 const LoginStore = require('legacy/login/StateStore');
-const NavActions = require('../../navigation/Actions').create();
 const PromptActions = require('legacy/app/prompt/Actions').create();
 const {isFeature} = require('legacy/util/Globals');
-const {wait} = require('legacy/util/Promise');
+
+const NavActions = require('../../navigation/Actions').create();
+
+const StateStore = require('./StateStore');
 
 require('./info/Prompt');
 require('./verify/Prompt');

@@ -1,10 +1,14 @@
-var Ext = require('extjs');
-var ComponentsNavPanel = require('../../../common/components/NavPanel');
-var MixinsRouter = require('../../../mixins/Router');
-var ComponentsOutline = require('./components/Outline');
-var ComponentsBody = require('./components/Body');
-var WindowsActions = require('../../windows/Actions');
-var AvailableCourseDetailWindow = require('../../library/courses/components/available/CourseDetailWindow');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const WindowsActions = require('../../windows/Actions');
+const CoursesStateStore = require('../../library/courses/StateStore');
+
+require('legacy/common/components/NavPanel');
+require('legacy/mixins/Router');
+require('../../library/courses/components/available/CourseDetailWindow');
+require('./components/Body');
+require('./components/Outline');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
@@ -31,8 +35,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		me.addRoute('/report', me.showReports.bind(me));
 		me.on('activate', this.onActivate.bind(me));
 
-		me.WindowActions = NextThought.app.windows.Actions.create();
-		me.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		me.WindowActions = WindowsActions.create();
+		me.CourseStore = CoursesStateStore.getInstance();
 		me.mon(me.navigation,
 			{
 				'select-route': me.changeRoute.bind(me),

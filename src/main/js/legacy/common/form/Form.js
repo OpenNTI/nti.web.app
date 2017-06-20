@@ -7,7 +7,7 @@ const Progress = require('legacy/common/form/fields/Progress');
 const URL = require('legacy/common/form/fields/URL');
 const ErrorMessages = require('legacy/common/form/ErrorMessages');
 
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	extend: 'Ext.Component',

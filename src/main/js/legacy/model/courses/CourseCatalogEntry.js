@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 const Duration = require('durationjs');
 const {getURL} = require('legacy/util/Globals');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 require('legacy/mixins/PresentationResources');
 require('legacy/model/Base');

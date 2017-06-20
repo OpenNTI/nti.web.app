@@ -1,9 +1,11 @@
 const Ext = require('extjs');
-const {wait} = require('legacy/util/Promise');
-const {isFeature} = require('legacy/util/Globals');
-const LibraryActions = require('legacy/app/library/Actions');
-const CourseActions = require('legacy/app/library/courses/Actions');
+const {wait} = require('nti-commons');
 
+const LibraryActions = require('legacy/app/library/Actions');
+const CoursesActions = require('legacy/app/library/courses/Actions');
+const User = require('legacy/model/User');
+const {isFeature} = require('legacy/util/Globals');
+const {getString, getFormattedString} = require('legacy/util/Localization');
 var ParseUtils = require('legacy/util/Parsing');
 
 require('../Page');
@@ -69,8 +71,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			});
 		}
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
-		this.CourseActions = NextThought.app.library.courses.Actions.create();
+		this.LibraryActions = LibraryActions.create();
+		this.CourseActions = CoursesActions.create();
 	},
 
 
@@ -366,7 +368,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 				var a = Ext.getStore('all-contacts-store');
 				peersStore = new Ext.data.Store({
-					model: NextThought.model.User,
+					model: User,
 					proxy: 'memory',
 					data: items,
 					filters: [

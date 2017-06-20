@@ -1,11 +1,11 @@
-var Ext = require('extjs');
-var NotePanel = require('../../../../../../annotations/note/Panel');
-var NoteFeatureGetLatestReply = require('../../../../../../../mixins/note-feature/GetLatestReply');
-var EventsActivityItemReply = require('./ActivityItemReply');
-var NoteFeatureGetLatestReply = require('../../../../../../../mixins/note-feature/GetLatestReply');
-var ContextContainerContext = require('../../../../../../context/ContainerContext');
-var PathActions = require('../../../../../../navigation/path/Actions');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const ContainerContext = require('legacy/app/context/ContainerContext');
+const {isMe} = require('legacy/util/Globals');
+
+require('legacy/app/annotations/note/Panel');
+require('legacy/mixins/note-feature/GetLatestReply');
+require('./ActivityItemReply');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItem', {
@@ -185,6 +185,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	setRecordTitle: function () {
+		var me = this;
+
 		function callback (snip, value) {
 			if (snip && snip !== value) {
 				me.subjectEl.set({'data-qtip': value});
@@ -196,7 +198,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			}
 		}
 
-		var me = this;
 		me.record.resolveNoteTitle(callback);
 	},
 
@@ -205,7 +206,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	maybeFillIn: function () {
 		var me = this,
 			D = Ext.dom.Element.DISPLAY,
-			subject,
 			loaded = me.loaded,
 			onScreen = loaded || (me.el && me.el.first().isOnScreenRelativeTo(Ext.getBody(), {bottom: 1000}));
 
@@ -289,7 +289,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	loadContext: function () {
-		var context = NextThought.app.context.ContainerContext.create({
+		var context = ContainerContext.create({
 			container: this.record.get('ContainerId'),
 			range: this.record.get('applicableRange'),
 			contextRecord: this.record

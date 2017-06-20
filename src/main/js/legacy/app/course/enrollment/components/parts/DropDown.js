@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var PartsBaseInput = require('./BaseInput');
-var FieldsLegacySearchComboBox = require('../../../../../common/form/fields/LegacySearchComboBox');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+require('legacy/common/form/fields/LegacySearchComboBox');
+require('./BaseInput');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.DropDown', {

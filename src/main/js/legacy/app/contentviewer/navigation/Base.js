@@ -1,7 +1,9 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
 const {ControlBar} = require('nti-content');
-const ReactHarness = require('legacy/overrides/ReactHarness');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const ReactHarness = require('legacy/overrides/ReactHarness');
 
 require('../../../common/menus/JumpTo');
 require('./TableOfContents');
@@ -201,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 	__getPathFromEvent: function (e) {
-		var part = e.getTarget('.part');
+		// var part = e.getTarget('.part');
 	},
 
 	__getPathPart: function (part) {

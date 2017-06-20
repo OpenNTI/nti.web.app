@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const Globals = require('../../../../../../util/Globals');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 require('legacy/common/form/Form');
 

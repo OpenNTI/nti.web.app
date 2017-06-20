@@ -3,7 +3,7 @@ const logger = require('nti-util-logger').default.get('util:visibility');
 
 const Toaster = require('legacy/common/toast/Manager');
 const {isFeature} = require('legacy/util/Globals');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 
 module.exports = exports = Ext.define('NextThought.util.Visibility', {

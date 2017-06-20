@@ -1,11 +1,15 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var LoginStateStore = require('../../login/StateStore');
-var NotificationsStateStore = require('./StateStore');
-var UserdataStateStore = require('../userdata/StateStore');
-var ModelChange = require('../../model/Change');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const LoginStateStore = require('legacy/login/StateStore');
+
+const UserdataStateStore = require('../userdata/StateStore');
+
+const NotificationsStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
+require('legacy/model/Change');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
@@ -14,9 +18,9 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
-		this.LoginStore = NextThought.login.StateStore.getInstance();
-		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
+		this.NotificationsStore = NotificationsStateStore.getInstance();
+		const store = this.LoginStore = LoginStateStore.getInstance();
+		this.UserDataStore = UserdataStateStore.getInstance();
 
 		this.mon(this.UserDataStore, 'incomingChange', this.incomingChange, this);
 
@@ -62,18 +66,18 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 		this.NotificationsStore.getStore().then(function (store) {
 			if (!store) { return; }
 			if (!change.isModel) {
-				 change = ParseUtils.parseItems([change])[0];
+				change = ParseUtils.parseItems([change])[0];
 			}
 
 			if (change.isNotable()) {
-				 if (/^DELETE/i.test(change.get('ChangeType'))) {
-					  me.NotificationsStore.removeRecord(change);
-					  return;
-				 }
-				 
-				 if (change.get('ChangeType') !== 'Modified') {
-					me.NotificationsStore.addRecord(change);	 
-				 }
+				if (/^DELETE/i.test(change.get('ChangeType'))) {
+					me.NotificationsStore.removeRecord(change);
+					return;
+				}
+
+				if (change.get('ChangeType') !== 'Modified') {
+					me.NotificationsStore.addRecord(change);
+				}
 			}
 		});
 	}

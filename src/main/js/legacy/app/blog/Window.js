@@ -1,14 +1,19 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../util/Analytics');
-var ParseUtils = require('../../util/Parsing');
-var PartsEditor = require('./parts/Editor');
-var PartsPost = require('./parts/Post');
-var WindowsStateStore = require('../windows/StateStore');
-var ComponentsHeader = require('../windows/components/Header');
-var ComponentsLoading = require('../windows/components/Loading');
-var ForumsPersonalBlogEntry = require('../../model/forums/PersonalBlogEntry');
-var ForumsPersonalBlogComment = require('../../model/forums/PersonalBlogComment');
-var ForumsPersonalBlogEntryPost = require('../../model/forums/PersonalBlogEntryPost');
+const Ext = require('extjs');
+
+const AnalyticsUtil = require('legacy/util/Analytics');
+const ParseUtils = require('legacy/util/Parsing');
+const PersonalBlogEntry = require('legacy/model/forums/PersonalBlogEntry');
+const PersonalBlogComment = require('legacy/model/forums/PersonalBlogComment');
+const PersonalBlogEntryPost = require('legacy/model/forums/PersonalBlogEntryPost');
+
+const WindowsActions = require('../windows/Actions');
+const WindowsStateStore = require('../windows/StateStore');
+
+require('../windows/components/Header');
+require('../windows/components/Loading');
+
+require('./parts/Editor');
+require('./parts/Post');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.Window', {
@@ -21,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.headerCmp = this.add({
 			xtype: 'window-header',
@@ -33,13 +38,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 
 		if (!this.record || this.state === 'edit') {
 			this.loadEditor();
-		} else if (this.record instanceof NextThought.model.forums.PersonalBlogEntry) {
+		} else if (this.record instanceof PersonalBlogEntry) {
 			this.loadBlogPost();
-		} else if (this.record instanceof NextThought.model.forums.PersonalBlogEntryPost) {
+		} else if (this.record instanceof PersonalBlogEntryPost) {
 			this.loadBlogEntry();
-		} else if (this.record instanceof NextThought.model.forums.PersonalBlogComment) {
+		} else if (this.record instanceof PersonalBlogComment) {
 			this.loadBlogComment();
-		} 
+		}
 	},
 
 	onClose: function () {
@@ -119,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 
 				AnalyticsUtil.getResourceTimer(me.currentAnalyticId, {
 					type: 'thought-viewed',
-					topic_id: me.currentAnalyticId
+					'topic_id': me.currentAnalyticId
 				});
 			}
 		}
@@ -215,8 +220,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 		});
 	}
 }, function () {
-	NextThought.app.windows.StateStore.register('new-blog', this);
-	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogEntry.mimeType, this);
-	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogComment.mimeType, this);
-	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogEntryPost.mimeType, this);
+	WindowsStateStore.register('new-blog', this);
+	WindowsStateStore.register(PersonalBlogEntry.mimeType, this);
+	WindowsStateStore.register(PersonalBlogComment.mimeType, this);
+	WindowsStateStore.register(PersonalBlogEntryPost.mimeType, this);
 });

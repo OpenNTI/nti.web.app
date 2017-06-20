@@ -1,9 +1,13 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
-var WindowWindow = require('../common/window/Window');
-var MixinsState = require('../mixins/State');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
+const {getString} = require('legacy/util/Localization');
+const Globals = require('legacy/util/Globals');
 
+require('legacy/common/window/Window');
+require('legacy/mixins/State');
+
+const MessageBox =
 module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	extend: 'NextThought.common.window.Window',
 
@@ -11,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 		State: 'NextThought.mixins.State'
 	},
 
-	state_key: 'MessageBox',
+	stateKey: 'MessageBox',
 
 	ui: 'nti-alert',
 	cls: 'nti-alert',
@@ -27,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	height: 'auto',
 	width: 400,
 
-	layout: 'auto',
+	layout: 'none',
 	componentLayout: 'natural',
 	isOverlay: false,
 
@@ -67,8 +71,6 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	WARNING: 'warning-red',
 	QUESTION: 'question',
 	ERROR: 'error',
-
-	layout: 'none',
 
 	items: [],
 
@@ -264,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 		} else {
 			delete this.doNotShowCheckbox;
 		}
-		
+
 		if (me.isClosable && cfg.closeHandler) {
 			me.on('close', cfg.closeHandler.bind(null));
 		}
@@ -400,7 +402,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	}
 }, function () {
 	//This needs to be come lazy! create on first use, not at define time. (the current constructor seems to trigger an early Ext.isReady)
-	Ext.MessageBox = Ext.Msg = NextThought.app.MessageBox;
+	Ext.MessageBox = Ext.Msg = MessageBox;
 
 	window.alert = function (cfg, fn) {
 		Globals.removeLoaderSplash();

@@ -1,11 +1,17 @@
-var Ext = require('extjs');
-var MenusLabeledSeparator = require('../../../../../common/menus/LabeledSeparator');
-var AssessmentAssignmentStatus = require('../../AssignmentStatus');
-var EmailWindow = require('./email/Window');
-var ComponentsAssignmentStatus = require('../AssignmentStatus');
-var ModelEmail = require('../../../../../model/Email');
-var WindowsStateStore = require('../../../../windows/StateStore');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const {getString} = require('legacy/util/Localization');
+const Email = require('legacy/model/Email');
+const {isFeature} = require('legacy/util/Globals');
+
+const WindowsActions = require('../../../../windows/Actions');
+const WindowsStateStore = require('../../../../windows/StateStore');
+const AssignmentStatus = require('../../AssignmentStatus');
+const ComponentsAssignmentStatus = require('../AssignmentStatus');
+
+require('legacy/common/menus/LabeledSeparator');
+require('./email/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
@@ -112,8 +118,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.editAssignmentEl.hide();
 		}
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
+		this.WindowStore = WindowsStateStore.getInstance();
 		wait(10).then(this.onStudentFilterChange.bind(this));
 	},
 
@@ -280,9 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	showEmailEditor: function (e) {
-		var me = this,
-			editor,
-			emailRecord = new NextThought.model.Email(),
+		var emailRecord = new Email(),
 			scope = this.ownerCt && this.ownerCt.studentFilter;
 
 		// Set the link to post the email to
@@ -394,8 +398,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return;
 		}
 
-		var exportLink,
-			due;
+		var exportLink;
 
 		if (!assignment) {
 			this.assignmentEl.addCls('hidden');
@@ -413,7 +416,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.assignmentTitleEl.update(assignment.get('title'));
 		this.assignmentTitleEl.dom.setAttribute('data-qtip', assignment.get('title'));
 
-		this.assignmentDueEl.update(NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
+		this.assignmentDueEl.update(AssignmentStatus.getStatusHTML({
 			due: assignment.getDueDate(),
 			maxTime: assignment.isTimed && assignment.getMaxTime(),
 			duration: assignment.isTimed && assignment.getDuration(),
@@ -427,7 +430,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.assignmentDueEl.removeCls('arrow');
 		}
 
-		this.assignmentStatusCmp = new NextThought.app.course.assessment.components.AssignmentStatus({
+		this.assignmentStatusCmp = new ComponentsAssignmentStatus({
 			assignment: assignment,
 			renderTo: this.editorContainer
 		});

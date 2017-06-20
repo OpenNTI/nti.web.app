@@ -1,12 +1,16 @@
-var Ext = require('extjs');
-var FieldsSimpleTextField = require('../../../../../common/form/fields/SimpleTextField');
-var StoreActions = require('../../../../store/Actions');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+const StoreActions = require('../../../../store/Actions');
+
+require('legacy/common/form/fields/SimpleTextField');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Pricing', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-pricing',
-	base_top: 50,
+	baseTop: 50,
 	cls: 'enrollment-pricing',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -56,11 +60,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	]),
 
 	renderSelectors: {
-		priceEl: '.amount',
+		// priceEl: '.amount',
+		priceEl: '.price',
 		couponLabelEl: '.coupon .label',
 		couponContainerEl: '.coupon-container',
 		couponValueEl: '.coupon-value',
-		priceEl: '.price',
 		oldAmountEl: '.price .old-amount',
 		amountEl: '.price .amount'
 	},
@@ -70,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		this.enableBubble(['show-msg']);
 
-		this.StoreActions = NextThought.app.store.Actions.create();
+		this.StoreActions = StoreActions.create();
 
 		this.update = Ext.Function.createBuffered(this.update.bind(this), 2000);
 	},
@@ -111,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.el.setTop(this.base_top);
+		this.el.setTop(this.baseTop);
 
 		if (this.hidePrice) {
 			this.priceEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -159,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		if (difference > 0) {
 			this.removeCls('stick_bottom');
-			this.el.setTop(this.base_top);
+			this.el.setTop(this.baseTop);
 			return;
 		}
 
@@ -167,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			this.addCls('stick_bottom');
 		} else {
 			this.removeCls('stick_bottom');
-			this.el.setTop(this.base_top - containerTop);
+			this.el.setTop(this.baseTop - containerTop);
 		}
 
 	},
@@ -226,13 +230,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		function onSuccess (result) {
 			me.enrollmentOption.pricing = result;
 
-			var coupon = result && result.get('Coupon'),
-				discount = '';
+			const couponDetails = result && result.get('Coupon');
+			let discount = '';
 
-			if (coupon.PercentOff) {
-				discount = coupon.PercentOff + '% off';
-			} else if (coupon.AmountOff) {
-				discount = '$' + (coupon.AmountOff / 100).toFixed(2) + ' off';
+			if (couponDetails.PercentOff) {
+				discount = couponDetails.PercentOff + '% off';
+			} else if (couponDetails.AmountOff) {
+				discount = '$' + (couponDetails.AmountOff / 100).toFixed(2) + ' off';
 			}
 
 			me.couponLabelEl.update('Coupon Accepted: ' + discount);

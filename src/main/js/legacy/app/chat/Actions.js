@@ -1,16 +1,19 @@
-var Ext = require('extjs');
-var IdCache = require('../../cache/IdCache');
-var UserRepository = require('../../cache/UserRepository');
-var Toaster = require('../../common/toast/Manager');
-var Globals = require('../../util/Globals');
-var {isMe} = Globals;
-var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var LoginStateStore = require('../../login/StateStore');
-var ChatStateStore = require('./StateStore');
-var ModelPresenceInfo = require('../../model/PresenceInfo');
-var UtilParsing = require('../../util/Parsing');
-var ModelMessageInfo = require('../../model/MessageInfo');
+const Ext = require('extjs');
+
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
+const Toaster = require('legacy/common/toast/Manager');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const LoginStateStore = require('legacy/login/StateStore');
+const PresenceInfo = require('legacy/model/PresenceInfo');
+
+const ChatStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
+require('legacy/model/MessageInfo');
+
+const {isMe} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
@@ -20,8 +23,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.LoginStore = NextThought.login.StateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
+		this.LoginStore = LoginStateStore.getInstance();
 
 		var store = this.ChatStore;
 
@@ -84,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	changePresence: function (type, show, status, c) {
 		var socket = this.ChatStore.getSocket(),
 			username = $AppConfig.username,
-			newPresence = (type && type.isPresenceInfo) ? type : NextThought.model.PresenceInfo.createPresenceInfo(username, type, show, status),
+			newPresence = (type && type.isPresenceInfo) ? type : PresenceInfo.createPresenceInfo(username, type, show, status),
 			callback = c ? c : function () {};
 
 		if (!newPresence.isOnline()) {
@@ -139,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 			//no occupants required if there's a container id and it's a class/study room etc.
 			if (options.ContainerId && this.ChatStore.isPersistantRoomId(options.ContainerId)) {
-				roomCfg.Occupants = [];
+				m.Occupants = [];
 			}
 			socket.emit('chat_enterRoom', Ext.apply(m, options), me.shouldShowRoom.bind(me, options));
 		}
@@ -147,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	shouldShowRoom: function (options, msg) {
 		// This is mainly used as a callback to the socket to determine showing chat rooms that we created.
-		var rInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0], w;
+		var rInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0];
 		if (rInfo) {
 			if ((options || {}).silent === true) {
 				this.onEnteredRoom(rInfo);
@@ -242,8 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	presentInvationationToast: function (roomInfo) {
 		var me = this,
 			occupants = roomInfo.get('Occupants'),
-			isGroupChat = (occupants.length > 2),
-			creator = roomInfo.get('Creator');
+			isGroupChat = (occupants.length > 2);
 
 		//Rules for auto-accepting are getting complicated, I will enumerate them here:
 		//1) if it's not a group chat, accept if the creator is a contact.
@@ -341,7 +343,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		socket.emit('chat_postMessage', m, ack);
 	},
 
-	/**
+	/*
 	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
 	 */
 	publishChatStatus: function (room, newStatus, username) {
@@ -355,7 +357,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	onMessage: function (msg, opts) {
-		var me = this, args = Array.prototype.slice.call(arguments),
+		var me = this,
 			m = ParseUtils.parseItems([msg])[0],
 			channel = m && m.get('channel'),
 			cid = m && m.get('ContainerId'),
@@ -420,7 +422,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		}
 	},
 
-	/**
+	/*
 	 *	We use this method to update the state of other chat participants.
 	 *	Thus, it is responsible for updating the appropriate view,
 	 *	but we don't keep track of other participants' state, because they manage it themselves.
@@ -451,9 +453,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	/* CLIENT EVENTS */
 
 	sendAckHandler: function (result, m) {
-		function isError (result) {
+		function isError (r) {
 			var errorCode = 'error-type';
-			return result.hasOwnProperty(errorCode) && result[errorCode] === 'client-error';
+			return r.hasOwnProperty(errorCode) && r[errorCode] === 'client-error';
 		}
 
 		if (isError(result)) {
@@ -614,8 +616,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	leaveRoom: function (room) {
 		if (!room) { return; }
 
-		var me = this,
-			socket = this.ChatStore.getSocket();
+		var socket = this.ChatStore.getSocket();
 
 
 		// We want to remove the cached room when a user exits a room.

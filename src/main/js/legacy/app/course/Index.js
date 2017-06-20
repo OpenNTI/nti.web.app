@@ -1,33 +1,43 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
-var ContentIndex = require('../content/Index');
-var MixinsRouter = require('../../mixins/Router');
-var MixinsState = require('../../mixins/State');
-var CourseStateStore = require('./StateStore');
-var CoursesStateStore = require('../library/courses/StateStore');
-var AssessmentIndex = require('./assessment/Index');
-var DashboardIndex = require('./dashboard/Index');
-var ForumIndex = require('../content/forum/Index');
-var InfoIndex = require('./info/Index');
-var OverviewIndex = require('./overview/Index');
-var ReportsIndex = require('./reports/Index');
-var ResourcesIndex = require('./resources/Index');
-var ContentIndex = require('../content/content/Index');
-var TimelineWindow = require('../content/timeline/Window');
-var ContentviewerIndex = require('../contentviewer/Index');
-var ContentviewerActions = require('../contentviewer/Actions');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
-const Topic = require('legacy/model/forums/Topic');
-const HeadlineTopic = require('legacy/model/forums/HeadlineTopic');
-const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
-const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic');
-const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
-const Video = require('legacy/model/Video');
+
 const Assignment = require('legacy/model/assessment/Assignment');
+const UsersCourseAssignmentHistoryItemFeedback = require('legacy/model/courseware/UsersCourseAssignmentHistoryItemFeedback');
+const UsersCourseAssignmentHistoryItem = require('legacy/model/courseware/UsersCourseAssignmentHistoryItem');
+const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
+const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
+const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic');
+const CourseInstanceAdministrativeRole = require('legacy/model/courses/CourseInstanceAdministrativeRole');
+const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
 const DiscussionAssignment = require('legacy/model/assessment/DiscussionAssignment');
+const Globals = require('legacy/util/Globals');
+const HeadlineTopic = require('legacy/model/forums/HeadlineTopic');
+const Topic = require('legacy/model/forums/Topic');
 const User = require('legacy/model/User');
-const {getService} = require('nti-web-client');
+const PageInfo = require('legacy/model/PageInfo');
+const Video = require('legacy/model/Video');
+const {getString} = require('legacy/util/Localization');
+
+const ContentviewerActions = require('../contentviewer/Actions');
+const CoursesStateStore = require('../library/courses/StateStore');
+const ForumIndex = require('../content/forum/Index');
+
+const AssessmentIndex = require('./assessment/Index');
+const CourseStateStore = require('./StateStore');
+const DashboardIndex = require('./dashboard/Index');
+const InfoIndex = require('./info/Index');
+const OverviewIndex = require('./overview/Index');
+const ReportsIndex = require('./reports/Index');
+
+require('legacy/mixins/Router');
+require('legacy/mixins/State');
+require('legacy/util/Parsing');
+
+require('../content/Index');
+require('../content/content/Index');
+require('../contentviewer/Index');
+require('../content/timeline/Window');
+require('./resources/index');
 
 const DASHBOARD = 'course-dashboard';
 const OVERVIEW = 'course-overview';
@@ -42,7 +52,7 @@ const RESOURCES = 'course-resources';
 module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	extend: 'NextThought.app.content.Index',
 	alias: 'widget.course-view-container',
-	state_key: 'course_index',
+	stateKey: 'course_index',
 
 	mixins: {
 		Router: 'NextThought.mixins.Router',
@@ -94,9 +104,9 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		this.initRouter();
 
-		this.CourseViewStore = NextThought.app.course.StateStore.getInstance();
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
-		this.ContentActions = NextThought.app.contentviewer.Actions.create();
+		this.CourseViewStore = CourseStateStore.getInstance();
+		this.CourseStore = CoursesStateStore.getInstance();
+		this.ContentActions = ContentviewerActions.create();
 
 								//Get a "handled" rejected promise.
 		this.getActiveCourse = ((x) => (x = Promise.reject(), x.catch(()=>{}), x)());
@@ -174,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 					return Promise.reject('No Course found for: ', ntiid);
 				}
 
-				if (current instanceof NextThought.model.courses.CourseInstanceAdministrativeRole) {
+				if (current instanceof CourseInstanceAdministrativeRole) {
 					this.isAdmin = true;
 				} else {
 					this.isAdmin = false;
@@ -198,21 +208,17 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	applyState: function (state) {
 		var bundle = this.activeBundle,
 			active = state.active,
-			course = NextThought.app.course,
 			tabs = [];
 
-		/**
-		 * Wether or not a view should show its tab
+		/* Wether or not a view should show its tab
 		 * if the view doesn't have a static showTab then show it,
 		 * otherwise return the value of showTab
-		 * @param  {Object} index the view to check
-		 * @return {Boolean}	  show the tab or not
 		 */
 		function showTab (index) {
 			return !index.showTab || index.showTab(bundle);
 		}
 
-		if (showTab(course.dashboard.Index)) {
+		if (showTab(DashboardIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.dashboardtab', 'Activity'),
 				route: 'activity',
@@ -223,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 		}
 
-		if (showTab(course.overview.Index)) {
+		if (showTab(OverviewIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.lessontab', 'Lessons'),
 				route: 'lessons',
@@ -234,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 		}
 
-		if (showTab(course.assessment.Index)) {
+		if (showTab(AssessmentIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.assessmenttab', 'Assignments'),
 				route: 'assignments',
@@ -245,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 		}
 
-		if (showTab(NextThought.app.content.forum.Index)) {
+		if (showTab(ForumIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
 				route: 'discussions',
@@ -256,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 		}
 
-		if (showTab(course.reports.Index)) {
+		if (showTab(ReportsIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.reporttab', 'Reports'),
 				route: 'reports',
@@ -266,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 		}
 
-		if (showTab(course.info.Index)) {
+		if (showTab(InfoIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.infotab'),
 				route: 'info',
@@ -289,14 +295,13 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 	setActiveView: function (active, inactive, tab, navBarConfig, whiteMask) {
 		var bundle = this.activeBundle,
-			base = NextThought.app.course,
 			tabs = [
-				base.dashboard.Index,
-				base.overview.Index,
-				base.assessment.Index,
-				NextThought.app.content.forum.Index,
-				base.reports.Index,
-				base.info.Index
+				DashboardIndex,
+				OverviewIndex,
+				AssessmentIndex,
+				ForumIndex,
+				ReportsIndex,
+				InfoIndex
 			], activeCmp;
 
 		tabs = tabs.reduce(function (acc, cmp) {
@@ -359,7 +364,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	showAssignments: function (route, subRoute) {
 		this.setCmpRouteState(ASSESSMENT, subRoute);
 
-		if (!NextThought.app.course.assessment.Index.showTab(this.activeBundle)) {
+		if (!AssessmentIndex.showTab(this.activeBundle)) {
 			return this.showOverview(route, '');
 		}
 
@@ -581,7 +586,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route;
 
 		for (i = 0; i < subPath.length; i++) {
-			if (subPath[i] instanceof NextThought.model.PageInfo) {
+			if (subPath[i] instanceof PageInfo) {
 				page = subPath[i];
 				break;
 			}
@@ -600,13 +605,13 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route = this.getCourseMediaRoute(path);
 		} else if (root.isForum) {
 			route = this.getRouteForForum(root, subPath);
-		} else if (root instanceof NextThought.model.assessment.Assignment) {
+		} else if (root instanceof Assignment) {
 			route = this.getRouteForAssignment(root, subPath);
-		} else if (root instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
+		} else if (root instanceof CourseOutlineContentNode) {
 			route = this.getRouteForLesson(root, subPath);
-		} else if (root instanceof NextThought.model.PageInfo) {
+		} else if (root instanceof PageInfo) {
 			route = this.getRouteForPageInfo(root, subPath);
-		} else if (root instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItem) {
+		} else if (root instanceof UsersCourseAssignmentHistoryItem) {
 			route = this.getRouteForHistoryItem(root, subPath);
 		} else {
 			route = {
@@ -624,9 +629,9 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		let seenVideo = false;
 
 		for (let part of path) {
-			if (part instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
+			if (part instanceof CourseOutlineContentNode) {
 				seenOutlineNode = true;
-			} else if (part instanceof NextThought.model.Video) {
+			} else if (part instanceof Video) {
 				seenVideo = true;
 			}
 		}
@@ -639,7 +644,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		let videoId;
 
 		for (let part of path) {
-			if (part instanceof NextThought.model.Video) {
+			if (part instanceof Video) {
 				videoId = encodeForURI(part.getId());
 			}
 		}
@@ -676,7 +681,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		const AssignmentId = encodeForURI(root.get('AssignmentId'));
 		const submissionCreator = User.getUsernameForURL(root.get('SubmissionCreator'));
 
-		if (root instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback) {
+		if (root instanceof UsersCourseAssignmentHistoryItemFeedback) {
 			route = `/assignments/${AssignmentId}/students/${submissionCreator}/#feedback`;
 
 			return {

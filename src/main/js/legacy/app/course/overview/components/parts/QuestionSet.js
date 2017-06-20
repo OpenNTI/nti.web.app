@@ -1,13 +1,18 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../../../util/Content');
-var Globals = require('../../../../../util/Globals');
-var ParseUtils = require('../../../../../util/Parsing');
-var ModelQuestionSetRef = require('../../../../../model/QuestionSetRef');
-var ModelAssignmentRef = require('../../../../../model/AssignmentRef');
-var ChartScore = require('../../../../../common/chart/Score');
-var AssessmentScoreboardHeader = require('../../../../assessment/ScoreboardHeader');
-var AssessmentScoreboardTally = require('../../../../assessment/ScoreboardTally');
-var ComponentsAssignmentStatus = require('../../../assessment/components/AssignmentStatus');
+const Ext = require('extjs');
+
+const {getString, getFormattedString} = require('legacy/util/Localization');
+const ContentUtils = require('legacy/util/Content');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const AssessedQuestionSet = require('legacy/model/assessment/AssessedQuestionSet');
+const PageInfo = require('legacy/model/PageInfo');
+
+require('legacy/common/chart/Score');
+require('legacy/model/QuestionSetRef');
+require('legacy/model/AssignmentRef');
+require('../../../../assessment/ScoreboardHeader');
+require('../../../../assessment/ScoreboardTally');
+require('../../../assessment/components/AssignmentStatus');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
@@ -97,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			scope: me,
 			method: 'GET',
 			params: {
-				accept: NextThought.model.assessment.AssessedQuestionSet.mimeType,
+				accept: AssessedQuestionSet.mimeType,
 				batchStart: 0,
 				batchSize: 1,
 				sortOn: 'lastModified',
@@ -326,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		this.navigate(NextThought.model.PageInfo.fromOutlineNode({
+		this.navigate(PageInfo.fromOutlineNode({
 			href: this.getContainerId()
 		}));
 	}

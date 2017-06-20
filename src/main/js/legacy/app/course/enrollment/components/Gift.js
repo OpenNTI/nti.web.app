@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ComponentsPurchase = require('./Purchase');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('./Purchase');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Gift', {
@@ -186,8 +189,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		values = this.callParent(arguments);
 
-		if (!values.enable_recipient) {
-			values.enable_recipient = false;
+		if (!values['enable_recipient']) {
+			values['enable_recipient'] = false;
 		}
 
 		if (!values.from && email) {
@@ -240,7 +243,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		desc.from = formValue.from;
 
-		if (formValue.enable_recipient) {
+		if (formValue['enable_recipient']) {
 			desc.sender = formValue.sender;
 			desc.receiver = formValue.receiver;
 			desc.message = formValue.message;

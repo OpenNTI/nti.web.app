@@ -1,12 +1,15 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../../util/Content');
-var ParseUtils = require('../../../../util/Parsing');
-var MixinsSearchable = require('../../../../mixins/Searchable');
-var ReaderView = require('../reader/View');
-var VideoVideo = require('../../../video/Video');
-var VideoNavigation = require('../../../video/navigation/Video');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+const {wait} = require('nti-commons');
+
+const ContentUtils = require('legacy/util/Content');
+const {isFeature} = require('legacy/util/Globals');
+
+require('legacy/app/video/Video');
+require('legacy/app/video/navigation/Video');
+require('legacy/util/Parsing');
+require('legacy/mixins/Searchable');
+require('../reader/View');
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
 	extend: 'Ext.container.Container',
@@ -207,10 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		if (!this.resourceView) { return; }
 
 		var videoWidth = this.videoPlayerEl.getWidth(),
-			targetEl = this.getTargetEl(),
-			transcriptWidth = Math.floor(availableWidth * this.transcriptRatio),
-			tEl = this.el.down('.content-video-transcript'),
-			top = this.videoPlayerEl.getTop() - targetEl.getTop();
+			targetEl = this.getTargetEl();
 
 		targetEl.setStyle('height', availableHeight + 'px');
 		this.videoPlayerEl.setStyle('flex-basis', videoWidth + 'px');
@@ -253,7 +253,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 	},
 
 	unSyncVideo: function () {
-		var transcript = this.resourceView;
 		this.syncWithTranscript = false;
 
 		if (this.syncEl && this.resourceView) {
@@ -299,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 	getLocationInfo: function () {
 		var me = this;
 
-		return new Promise(function (fufill, reject) {
+		return new Promise(function (fulfill, reject) {
 			ContentUtils.getLineage(me.video.get('NTIID'), this.ownerCt && this.ownerCt.currentBundle)
 				.then(function (lineages) {
 					var lineage = lineages[0];

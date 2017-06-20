@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Pager', {
@@ -128,9 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	onStoreLoad: function () {
-		var s = this.store,
-			pages,
-			total = this.store.getTotalCount(),
+		var pages,
 			pageCount = this.store.getTotalPages(),
 			current = parseInt(this.store.getCurrentPage(), 10);
 
@@ -203,7 +201,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	loadPrev: function () {
-		var current = parseInt(this.store.getCurrentPage());
+		var current = parseInt(this.store.getCurrentPage(), 10);
 
 		if (current > 1) {
 			this.loadPage(current - 1);
@@ -212,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	loadNext: function () {
-		var current = parseInt(this.store.getCurrentPage()),
+		var current = parseInt(this.store.getCurrentPage(), 10),
 			total = this.store.getTotalPages();
 
 		if (current < total) {
@@ -222,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	loadLastPage: function () {
-		var current = parseInt(this.store.getCurrentPage()),
+		var current = parseInt(this.store.getCurrentPage(), 10),
 			lastPage = this.store.getTotalPages();
 
 		if (current !== lastPage) {
@@ -232,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	loadFirstPage: function () {
-		var current = parseInt(this.store.getCurrentPage());
+		var current = parseInt(this.store.getCurrentPage(), 10);
 
 		if (current !== 1) {
 			this.loadPage(1);

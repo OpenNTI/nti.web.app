@@ -1,9 +1,13 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var UxComponentReferencing = require('../../../common/ux/ComponentReferencing');
-var NotepadContainer = require('./Container');
-var NotepadItem = require('./Item');
-var NotepadEditor = require('./Editor');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/common/ux/ComponentReferencing');
+require('./Container');
+require('./Editor');
+require('./Item');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.View', {
@@ -313,7 +317,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 	detectOverflow: function () {
 		console.log('overflow detection');
 
-		var collided = {}, els, resort = false;
+		// let collided = {};
+		let els, resort = false;
 
 		function doesCollide (el, set) {
 			var top = el.getLocalY(),
@@ -349,11 +354,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 						cut = t;
 					}
 					//collided by
-		  //					else if(top > t && top < b && bottom <= b){
-		  //						shouldn't be possible with the current sort order
-		  //						console.log(id,'collided by',i, [top, t], [bottom, b]);
-		  //						cut = -3;
-		  //					}
+					// else if(top > t && top < b && bottom <= b){
+					// 	shouldn't be possible with the current sort order
+					// 	console.log(id,'collided by',i, [top, t], [bottom, b]);
+					// 	cut = -3;
+					// }
 
 				}
 				return !cut;

@@ -1,14 +1,18 @@
 const Ext = require('extjs');
-const UserRepository = require('../../cache/UserRepository');
-const Globals = require('../../util/Globals');
-const {guidGenerator, isMe, getURL} = Globals;
-const {wait} = require('legacy/util/Promise');
-const ParseUtils = require('../../util/Parsing');
+const {wait} = require('nti-commons');
 
-require('../../common/Actions');
-require('../../login/StateStore');
-require('./StateStore');
-require('../../model/DynamicFriendsList');
+const UserRepository = require('legacy/cache/UserRepository');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const LoginStateStore = require('legacy/login/StateStore');
+const FriendsList = require('legacy/model/FriendsList');
+const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
+
+const GroupsStateStore = require('./StateStore');
+
+const {guidGenerator, isMe, getURL} = Globals;
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
@@ -18,8 +22,8 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.LoginStore = NextThought.login.StateStore.getInstance();
+		this.GroupStore = GroupsStateStore.getInstance();
+		this.LoginStore = LoginStateStore.getInstance();
 
 		this.LoginStore.registerLoginAction(this.loadFriendsList.bind(this));
 		this.LoginStore.registerLoginAction(this.loadGroupsList.bind(this));
@@ -182,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 	createFriendsListUnguarded: function (displayName, username, friends, dynamic, callback, errorCallback, scope) {
 		var me = this,
-			rec = dynamic ? NextThought.model.DynamicFriendsList.create() : NextThought.model.FriendsList.create(),
+			rec = dynamic ? DynamicFriendsList.create() : FriendsList.create(),
 			store = dynamic ? me.GroupStore.getGroupsList() : me.GroupStore.getFriendsList();
 
 		rec.set('Username', username);

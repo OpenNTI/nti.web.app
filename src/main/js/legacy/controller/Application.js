@@ -358,7 +358,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		var body = this.getBody(),
 			historyState = {};
 
-		historyState[body.state_key] = state;
+		historyState[body.stateKey] = state;
 
 		this.__doRoute('pushState', historyState, title, route, precache);
 	},
@@ -368,7 +368,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		var body = this.getBody(),
 			historyState = {};
 
-		historyState[body.state_key] = state;
+		historyState[body.stateKey] = state;
 
 		this.__doRoute('replaceState', historyState, title, route, precache);
 	},

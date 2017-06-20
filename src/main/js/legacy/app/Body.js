@@ -1,39 +1,41 @@
-var Ext = require('extjs');
-
-var User = require('../model/User');
-var Globals = require('../util/Globals');
-var ParseUtils = require('../util/Parsing');
-var MixinsRouter = require('../mixins/Router');
-var MixinsState = require('../mixins/State');
-var MixinsScrolling = require('../mixins/Scrolling');
-
-var LibraryIndex = require('./library/Index');
-var LibraryStateStore = require('./library/StateStore');
-var BundleIndex = require('./bundle/Index');
-var ContentIndex = require('./content/Index');
-var CourseIndex = require('./course/Index');
-var SearchIndex = require('./search/Index');
-var UserIndex = require('./profiles/user/Index');
-var GroupIndex = require('./profiles/group/Index');
-var CommunityIndex = require('./profiles/community/Index');
-var NotificationsIndex = require('./notifications/Index');
-
-var UtilParsing = require('../util/Parsing');
-var NavigationStateStore = require('./navigation/StateStore');
-var PathActions = require('./navigation/path/Actions');
-var WindowsIndex = require('./windows/Index');
-var WindowsStateStore = require('./windows/StateStore');
-var WindowsActions = require('./windows/Actions');
-var ContextStateStore = require('./context/StateStore');
-var ContactsIndex = require('./contacts/Index');
-var AdminIndex = require('./siteadmin/Index');
-
+const Ext = require('extjs');
 const { isNTIID, encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+
+const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
+const ContentBundle = require('legacy/model/ContentBundle');
+const ContentPackage = require('legacy/model/ContentPackage');
+const Community = require('legacy/model/Community');
+const User = require('legacy/model/User');
+const Globals = require('legacy/util/Globals');
+
+const LibraryStateStore = require('./library/StateStore');
+const NavigationStateStore = require('./navigation/StateStore');
+const PathActions = require('./navigation/path/Actions');
+const WindowsStateStore = require('./windows/StateStore');
+const WindowsActions = require('./windows/Actions');
+const ContextStateStore = require('./context/StateStore');
+
+require('legacy/mixins/Router');
+require('legacy/mixins/State');
+require('legacy/mixins/Scrolling');
+require('legacy/util/Parsing');
+
+require('./library/Index');
+require('./bundle/Index');
+require('./content/Index');
+require('./course/Index');
+require('./search/Index');
+require('./profiles/user/Index');
+require('./profiles/group/Index');
+require('./profiles/community/Index');
+require('./notifications/Index');
+require('./windows/Index');
+require('./contacts/Index');
 
 module.exports = exports = Ext.define('NextThought.app.Body', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.main-views',
-	state_key: 'main-view',
+	stateKey: 'main-view',
 	ISCHANGE: /change$/,
 
 	mixins: {
@@ -51,12 +53,12 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		this.initRouter();
 
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
-		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
-		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
-		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
+		this.PathActions = PathActions.create();
+		this.NavigationStore = NavigationStateStore.getInstance();
+		this.WindowStore = WindowsStateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
+		this.ContextStore = ContextStateStore.getInstance();
+		this.LibraryStore = LibraryStateStore.getInstance();
 
 		this.mon(this.NavigationStore, 'set-active-content', this.updateBodyContent.bind(this));
 		this.mon(this.WindowStore, {
@@ -297,7 +299,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			id = route.params.id,
 			user = route.precache.user;
 
-		id = NextThought.model.User.getIdFromURIPart(id);
+		id = User.getIdFromURIPart(id);
 
 		return userView.setActiveEntity(id, user)
 			.then(userView.handleRoute.bind(userView, subRoute, route.precache))
@@ -352,9 +354,8 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			hash = route.hash,
 			id = route.params.id;
 
-		function doNavigate (obj, route) {
-			var path = route.path,
-				objId = obj.getId(),
+		function doNavigate (obj, {path}) {
+			var objId = obj.getId(),
 				hasWindow = me.Router.WindowActions.hasWindow(obj);
 
 			objId = encodeForURI(objId);
@@ -456,7 +457,6 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 	updateBodyContent: function (content, masked, whiteMask) {
 		var body = Ext.getBody(),
-			getBackground = content && content.getBackgroundImage && content.getBackgroundImage(),
 			mask = document.querySelector('.body-shade-mask');
 
 		if (content !== this.activeContent) {
@@ -520,15 +520,15 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		if (root && root.isCourse) {
 			route = this.getRouteForCourse(root, subPath);
-		} else if (root instanceof NextThought.model.ContentPackage) {
-			route = this.getRouteForBundle(NextThought.model.ContentBundle.fromPackage(root), subPath);
-		} else if (root instanceof NextThought.model.ContentBundle) {
+		} else if (root instanceof ContentPackage) {
+			route = this.getRouteForBundle(ContentBundle.fromPackage(root), subPath);
+		} else if (root instanceof ContentBundle) {
 			route = this.getRouteForBundle(root, subPath);
-		} else if (root instanceof NextThought.model.User) {
+		} else if (root instanceof User) {
 			route = this.getRouteForUser(root, subPath);
-		} else if (root instanceof NextThought.model.Community) {
+		} else if (root instanceof Community) {
 			route = this.getRouteForCommunity(root, subPath);
-		} else if (root instanceof NextThought.model.DynamicFriendsList) {
+		} else if (root instanceof DynamicFriendsList) {
 			route = this.getRouteForGroup(root, subPath);
 		} else {
 			console.error('No route for path: ', root, subPath);

@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../../cache/UserRepository');
-var TimeUtils = require('../../../../../../../util/Time');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const TimeUtils = require('legacy/util/Time');
+const {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.TranscriptSummaryItem', {
@@ -119,8 +120,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				if (me.rendered) {
 					//oops...we resolved later than the render...re-render
 					me.renderTpl.overwrite(me.el, me.renderData);
-		  //				}else{
-					//me.renderTpl.overwrite(me.el,me.renderData);
 				}
 
 				if (u.length > 1) {
@@ -153,8 +152,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 						if (me.rendered) {
 							//oops...we resolved later than the render...re-render
 							me.renderTpl.overwrite(me.el, me.renderData);
-			  //						}else{
-			  //							me.renderTpl.overwrite(me.el,me.renderData);
 						}
 					});
 					unMask();

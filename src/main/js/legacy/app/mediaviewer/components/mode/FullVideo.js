@@ -1,5 +1,9 @@
-var Ext = require('extjs');
-var ModeSplit = require('./Split');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const Video = require('legacy/app/video/Video');
+
+require('./Split');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mode.FullVideo', {
@@ -18,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			var screenHeight = Ext.Element.getViewportHeight(),
 				screenWidth = Ext.Element.getViewportWidth(),
 				paddingRatio = 0.20,
-				ratio = NextThought.app.video.Video.ASPECT_RATIO,
+				ratio = Video.ASPECT_RATIO,
 				defaultWidth = screenWidth - (screenWidth * paddingRatio),
 				defaultHeight = Math.round(defaultWidth * ratio),
 				y = 80,

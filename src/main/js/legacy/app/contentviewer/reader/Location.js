@@ -1,11 +1,11 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../util/Content');
-var LibraryActions = require('../../library/Actions');
-var CacheAbstractStorage = require('../../../cache/AbstractStorage');
-var VideoWindow = require('../../video/Window');
-var UtilContent = require('../../../util/Content');
-var UserdataActions = require('../../userdata/Actions');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const ContentUtils = require('legacy/util/Content');
+const {getURL} = require('legacy/util/Globals');
+
+const UserdataActions = require('../../userdata/Actions');
+
+require('../../video/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Location', {
@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 		this.mixins.observable.constructor.call(this);
 
 		var reader = this.reader,
-			UserDataActions = NextThought.app.userdata.Actions.create();
+			UserDataActions = UserdataActions.create();
 
 		reader.on('destroy', 'destroy',
 			reader.relayEvents(this, [
@@ -89,9 +89,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 
 		return ContentUtils.getNodes(ntiid, location.currentBundle)
 			.then(function (infos) {
-				var info = infos[0],
-					i, r,
-					related = info ? info.location.getElementsByTagName('Related') : [];
+				const info = infos[0];
+				const related = info ? info.location.getElementsByTagName('Related') : [];
 
 				Ext.each(related, function (r) {
 					r = r.firstChild;
@@ -100,16 +99,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 							continue;
 						}
 
-						var tag = r.tagName,
+						let tag = r.tagName,
 							id = r.getAttribute('ntiid'),
 							type = r.getAttribute('type'),
 							qual = r.getAttribute('qualifier'),
 
 							target = tag === 'page' ? ContentUtils.find(id) : null,
-							location = target ? target.location : null,
+							locationInfo = target ? target.location : null,
 
-							label = location ? location.getAttribute('label') : r.getAttribute('title'),
-							href = (location || r).getAttribute('href');
+							label = locationInfo ? locationInfo.getAttribute('label') : r.getAttribute('title'),
+							href = (locationInfo || r).getAttribute('href');
 
 						if (!map[id]) {
 							if (!info || !info.title) {
@@ -124,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 								href: href,
 								qualifier: qual,
 								root: info.title.get('root'),
-								icon: findIcon(r)
+								// icon: findIcon(r)
 							};
 						}
 						r = r.nextSibling;

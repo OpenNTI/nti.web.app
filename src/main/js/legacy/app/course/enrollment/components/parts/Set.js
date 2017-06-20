@@ -1,14 +1,15 @@
-var Ext = require('extjs');
-var PartsDescription = require('./Description');
-var PartsRadioGroup = require('./RadioGroup');
-var PartsCheckbox = require('./Checkbox');
-var PartsTextInput = require('./TextInput');
-var PartsTextarea = require('./Textarea');
-var PartsCheckboxGroup = require('./CheckboxGroup');
-var PartsDropDown = require('./DropDown');
-var PartsSubmitButton = require('./SubmitButton');
-var PartsSplitRadio = require('./SplitRadio');
-var PartsLinks = require('./Links');
+const Ext = require('extjs');
+
+require('./Description');
+require('./RadioGroup');
+require('./Checkbox');
+require('./TextInput');
+require('./Textarea');
+require('./CheckboxGroup');
+require('./DropDown');
+require('./SubmitButton');
+require('./SplitRadio');
+require('./Links');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Set', {
@@ -16,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	alias: 'widget.enrollment-set',
 
 	require: [
-		 'NextThought.layout.container.None'
+		'NextThought.layout.container.None'
 	],
 
 	cls: 'admission-set',
@@ -144,8 +145,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 	afterRender: function () {
 		this.callParent(arguments);
-
-		var me = this;
 
 		if (this.hides) {
 			this.fireEvent('hide-item', this.hides);

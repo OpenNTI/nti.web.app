@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var EditingActions = require('../Actions');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const EditingActions = require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEditor', {
@@ -32,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.renderData = Ext.apply(this.renderData || {}, {
 			defaultValue: this.getSuggestedNodeTitle(),
 			autocomplete: this.autocomplete || 'off',
-			maxLength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+			maxLength: EditingActions.MAX_TITLE_LENGTH
 		});
 	},
 
@@ -69,8 +71,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onKeyup: function (e) {
-		var record;
-
 		if (e.getKey() === e.ENTER) {
 			if (this.onSave) {
 				this.onSave(e);

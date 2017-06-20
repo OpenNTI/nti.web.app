@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../common/StateStore');
-var StoreFriendsList = require('../../store/FriendsList');
-var ChatStateStore = require('../chat/StateStore');
-var StoreContacts = require('../../store/Contacts');
+const Ext = require('extjs');
+
+const FriendsListStore = require('legacy/store/FriendsList');
+const ContactsStore = require('legacy/store/Contacts');
+
+require('legacy/common/StateStore');
+require('../chat/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.groups.StateStore', {
@@ -10,19 +12,19 @@ module.exports = exports = Ext.define('NextThought.app.groups.StateStore', {
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
 
 	getFriendsList: function () {
-		if (!this.friends_list_store) {
-			this.friends_list_store = NextThought.store.FriendsList.create();
+		if (!this['friends_list_store']) {
+			this['friends_list_store'] = FriendsListStore.create();
 		}
 
-		return this.friends_list_store;
+		return this['friends_list_store'];
 	},
 
 	getGroupsList: function () {
-		if (!this.groups_store) {
-			this.groups_store = NextThought.store.FriendsList.create();
+		if (!this['groups_store']) {
+			this['groups_store'] = FriendsListStore.create();
 		}
 
-		return this.groups_store;
+		return this['groups_store'];
 	},
 
 	isContact: function (username) {
@@ -59,8 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.StateStore', {
 	},
 
 	getAllContactsStore: function () {
-		var me = this,
-			flStore = this.getFriendsList(),
+		var flStore = this.getFriendsList(),
 			contacts = flStore.getContacts();
 
 		function isMyContactFilter (item) {
@@ -68,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.StateStore', {
 		}
 
 		if(!this.allContactsStore) {
-			this.allContactsStore = NextThought.store.Contacts.create({ filters: [isMyContactFilter], trackPresence: false });
+			this.allContactsStore = ContactsStore.create({ filters: [isMyContactFilter], trackPresence: false });
 
 			// In case the friendsList store has already been loaded, add contacts.
 			if (!Ext.isEmpty(contacts)) {
@@ -90,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.StateStore', {
 		}
 
 		if(!this.onlineContactsStore) {
-			this.onlineContactsStore = NextThought.store.Contacts.create({filters: [onlineFilter, isMyContactFilter]});
+			this.onlineContactsStore = ContactsStore.create({filters: [onlineFilter, isMyContactFilter]});
 		}
 
 		return this.onlineContactsStore;

@@ -1,17 +1,18 @@
 const Ext = require('extjs');
-const ParseUtils = require('../../util/Parsing');
-const ContentProxy = require('../../proxy/JSONP');
+
+const ParseUtils = require('legacy/util/Parsing');
+const ContentProxy = require('legacy/proxy/JSONP');
 const {getURL} = require('legacy/util/Globals');
+const LoginStateStore = require('legacy/login/StateStore');
 
+const ContentStateStore = require('./content/StateStore');
+const LibraryStateStore = require('./StateStore');
+const CoursesActions = require('./courses/Actions');
+const CoursesStateStore = require('./courses/StateStore');
+const ContentActions = require('./content/Actions');
+
+require('legacy/proxy/JSONP');
 require('../../common/Actions');
-require('./StateStore');
-require('./courses/Actions');
-require('./courses/StateStore');
-require('./content/Actions');
-require('./content/StateStore');
-require('../../login/StateStore');
-require('../../proxy/JSONP');
-
 
 module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -19,14 +20,14 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.CourseActions = NextThought.app.library.courses.Actions.create();
-		this.ContentActions = NextThought.app.library.content.Actions.create();
+		this.CourseActions = CoursesActions.create();
+		this.ContentActions = ContentActions.create();
 
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
-		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
+		this.CourseStore = CoursesStateStore.getInstance();
+		this.ContentStore = ContentStateStore.getInstance();
 
-		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
-		this.LoginStore = NextThought.login.StateStore.getInstance();
+		this.LibraryStore = LibraryStateStore.getInstance();
+		this.LoginStore = LoginStateStore.getInstance();
 	},
 
 
@@ -100,11 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 
 
 	getVideoIndex: function (bundle, contentPackageID) {
-		//For now at least it looks like we need this for raw videos in content. Need to
-		//look closer at it, but for now remove the depreciation message.
-		// console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
-		var cache = this.LibraryStore.videoIndex = this.LibraryStore.videoIndex || {},
-			toc, root;
+		var toc, root;
 
 		function query (tag, id) {
 			return tag + '[ntiid="' + ParseUtils.escapeId(id) + '"]';

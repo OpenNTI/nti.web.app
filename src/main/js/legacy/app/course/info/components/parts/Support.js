@@ -1,4 +1,6 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Support', {
@@ -40,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 					Label: getString('course-info.course-supoprt.link3.Label', null, true),
 					URL: getString('course-info.course-supoprt.link3.URL', null, true)
 				}
-				  ].filter(clean)
+			].filter(clean)
 		});
 
 		return this.callParent(arguments);

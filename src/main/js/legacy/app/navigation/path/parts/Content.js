@@ -1,10 +1,11 @@
-var Ext = require('extjs');
-var LibraryActions = require('../../../library/Actions');
+const Ext = require('extjs');
+
+const LibraryActions = require('../../../library/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Content', {
 	constructor: function () {
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 	},
 
 	addHandlers: function (handlers) {
@@ -26,11 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Con
 			});
 
 			return priority;
-		}).then(function (bundles) {
-			bundle = bundles[0];
-
-			return [bundle, pageInfo];
-		});
+		}).then(([bundle]) => [bundle, pageInfo]);
 	},
 
 	getPathToNote: function (note, getPathTo) {

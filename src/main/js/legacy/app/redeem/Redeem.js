@@ -1,6 +1,8 @@
 const Ext = require('extjs');
-const Form = require('legacy/common/form/Form');
-var {getURL} = require('legacy/util/Globals');
+const {wait} = require('nti-commons');
+
+require('legacy/common/form/Form');
+
 
 module.exports = exports = Ext.define('NextThought.app.redeem.Redeem', {
 	extend: 'Ext.container.Container',

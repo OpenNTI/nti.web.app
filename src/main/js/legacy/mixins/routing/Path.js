@@ -507,7 +507,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 
 	getRouteState: function () {
-		var key = this.getRouteStateKey ? this.getRouteStateKey() : this.state_key || this.xtype;
+		var key = this.getRouteStateKey ? this.getRouteStateKey() : this.stateKey || this.xtype;
 
 		return (window.history.state || {})[key] || {};
 	},
@@ -611,7 +611,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 
 	__getStateForCmp: function (cmp) {
-		return cmp.getRouteStateKey ? cmp.getRouteStateKey() : cmp.state_key || cmp.xtype;
+		return cmp.getRouteStateKey ? cmp.getRouteStateKey() : cmp.stateKey || cmp.xtype;
 	},
 
 

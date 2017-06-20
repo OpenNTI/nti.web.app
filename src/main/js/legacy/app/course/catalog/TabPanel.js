@@ -1,5 +1,9 @@
-var Ext = require('extjs');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const User = require('legacy/model/User');
+const {getString} = require('legacy/util/Localization');
+const {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel', {
@@ -271,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 
 				var a = Ext.getStore('all-contacts-store');
 				peersStore = new Ext.data.Store({
-					model: NextThought.model.User,
+					model: User,
 					proxy: 'memory',
 					data: items,
 					filters: [

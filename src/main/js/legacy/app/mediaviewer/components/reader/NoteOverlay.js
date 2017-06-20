@@ -10,7 +10,7 @@ require('legacy/app/whiteboard/Utils');
 require('legacy/editor/Editor');
 const UserDataActions = require('legacy/app/userdata/Actions');
 const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 	mixins: {

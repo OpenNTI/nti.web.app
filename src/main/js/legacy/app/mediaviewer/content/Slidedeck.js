@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var SlideDeck = require('../../../common/ux/SlideDeck');
+const Ext = require('extjs');
+
+const SlideDeck = require('legacy/common/ux/SlideDeck');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Slidedeck', {
@@ -34,6 +35,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Slide
 
 
 	onSlideDeckClicked: function (e) {
-		 SlideDeck.openFromDom(this.contentElement, this.reader);
+		SlideDeck.openFromDom(this.contentElement, this.reader);
 	}
 });

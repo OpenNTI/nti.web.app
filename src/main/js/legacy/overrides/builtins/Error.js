@@ -9,6 +9,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Error', {}
  * but will get caught by our error reporter (and send us a email)
  *
  * @param {String|Object} msg - message {@see Ext.Error#raise}
+ * @returns {void}
  */
 Error.raiseForReport = function (msg) {
 
@@ -19,4 +20,3 @@ Error.raiseForReport = function (msg) {
 		Ext.Error.raise(stack);
 	},1);
 };
-

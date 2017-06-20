@@ -1,21 +1,27 @@
-var Ext = require('extjs');
-var ContentAPIRegistry = require('../reader/ContentAPIRegistry');
-var RangeUtils = require('../../../util/Ranges');
-var ComponentsBase = require('./Base');
-var MixinsInstanceTracking = require('../../../mixins/InstanceTracking');
-var MixinsModuleContainer = require('../../../mixins/ModuleContainer');
-var ContentProxy = require('../../../proxy/JSONP');
-var ComponentsResourceNotFound = require('../../../common/components/ResourceNotFound');
-var ComponentsPageWidgets = require('./PageWidgets');
-var ReaderContent = require('../reader/Content');
-var ReaderIFrame = require('../reader/IFrame');
-var ReaderLocation = require('../reader/Location');
-var ReaderScroll = require('../reader/Scroll');
-var ReaderResourceManagement = require('../reader/ResourceManagement');
-var ReaderComponentOverlay = require('../reader/ComponentOverlay');
-var ReaderAssessment = require('../reader/Assessment');
-var ReaderAnnotations = require('../reader/Annotations');
-var ReaderNoteOverlay = require('../reader/NoteOverlay');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const RangeUtils = require('legacy/util/Ranges');
+const ContentProxy = require('legacy/proxy/JSONP');
+
+const ContentAPIRegistry = require('../reader/ContentAPIRegistry');
+
+require('legacy/mixins/InstanceTracking');
+require('legacy/mixins/ModuleContainer');
+require('legacy/common/components/ResourceNotFound');
+
+require('../reader/Annotations');
+require('../reader/Assessment');
+require('../reader/ComponentOverlay');
+require('../reader/Content');
+require('../reader/IFrame');
+require('../reader/Location');
+require('../reader/NoteOverlay');
+require('../reader/ResourceManagement');
+require('../reader/Scroll');
+
+require('./Base');
+require('./PageWidgets');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.Reader', {
@@ -440,7 +446,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 }, function () {
 	//TODO: can we get rid of this?
 	ContentAPIRegistry.register('togglehint', function (e) {
-		e = Ext.EventObject.setEvent(e || event);
+		e = Ext.EventObject.setEvent(e || window.event);
 		Ext.get(e.getTarget().nextSibling).toggleCls('hidden');
 		return false;
 	});

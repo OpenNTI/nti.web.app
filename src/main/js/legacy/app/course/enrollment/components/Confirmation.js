@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
-var AccountActions = require('../../../account/Actions');
-var CoursesStateStore = require('../../../library/courses/StateStore');
+const Ext = require('extjs');
 
+const {getString, getFormattedString} = require('legacy/util/Localization');
+
+const AccountActions = require('../../../account/Actions');
+const CoursesStateStore = require('../../../library/courses/StateStore');
+
+require('legacy/mixins/ProfileLinks');
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 	extend: 'Ext.Component',
@@ -47,8 +50,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.AccountActions = NextThought.app.account.Actions.create();
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.AccountActions = AccountActions.create();
+		this.CourseStore = CoursesStateStore.getInstance();
 	},
 
 	beforeRender: function () {

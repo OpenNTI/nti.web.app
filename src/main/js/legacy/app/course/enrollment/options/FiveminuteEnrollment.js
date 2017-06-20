@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var OptionsBase = require('./Base');
+const Ext = require('extjs');
 
+const OpenEnrollment = require('./OpenEnrollment');
+const StoreEnrollment = require('./StoreEnrollment');
+
+require('./Base');
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.FiveminuteEnrollment', {
 	extend: 'NextThought.app.course.enrollment.options.Base',
@@ -16,8 +19,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 
 	buildEnrollmentSteps: function (course) {
 		var enrollmentOption = course.getEnrollmentOption(this.NAME),
-			openOption = course.getEnrollmentOption(NextThought.app.course.enrollment.options.OpenEnrollment.NAME),
-			storeOption = course.getEnrollmentOption(NextThought.app.course.enrollment.options.StoreEnrollment.NAME),
+			openOption = course.getEnrollmentOption(OpenEnrollment.NAME),
+			storeOption = course.getEnrollmentOption(StoreEnrollment.NAME),
 			steps = [];
 
 		enrollmentOption.display = this.display;
@@ -113,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				return Service.post(link, {
 					crn: crn,
 					term: term,
-					return_url: returnUrl,
+					'return_url': returnUrl,
 					AllowVendorUpdates: data.subscribe
 				});
 			}
@@ -208,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	__getOptionDetails: function (course, option) {
 		var drop = option.OU_DropCutOffDate,
 			enroll = option.EnrollCutOffDate,
-			rv, unsupported = false;
+			unsupported = false;
 
 		drop = drop && new Date(drop);
 		enroll = enroll ? new Date(enroll) : new Date();
