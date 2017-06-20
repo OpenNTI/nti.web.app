@@ -7,7 +7,7 @@ require('../mixins/AnnotationsMixin');
 const lazy = require('legacy/util/lazy-require')
 				.get('Anchors', () => require('legacy/util/Anchors'));
 
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 	extend: 'Ext.Component',

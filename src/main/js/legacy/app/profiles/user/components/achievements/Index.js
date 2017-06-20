@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../util/Globals');
-var MixinsRouter = require('../../../../../mixins/Router');
-var PartsBadgeList = require('./parts/BadgeList');
-var OpenbadgesBadge = require('../../../../../model/openbadges/Badge');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+require('legacy/mixins/Router');
+require('legacy/model/openbadges/Badge');
+require('./parts/BadgeList');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
@@ -281,7 +282,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	buildIsMe: function (completed, current, achievements) {
 		var cCount = completed.length,
 			iCount = current.length,
-			aCount = achievements.length,
 			cDesired = this.completedCourses.desiredColumns,
 			iDesired = this.currentCourses.desiredColumns;
 
@@ -331,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		function setEmptyCls (add) {
 			if (!me.rendered) {
-				me.on('afterrender', setEmptyCls.bind(me, show));
+				me.on('afterrender', setEmptyCls.bind(me, add));
 			} else {
 				me.el.down('.course-badges')[add ? 'addCls' : 'removeCls']('empty');
 			}

@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-var CommonStateStore = require('../../../common/StateStore');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+const CourseInstanceAdministrativeRole = require('legacy/model/courses/CourseInstanceAdministrativeRole');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.StateStore', {
@@ -62,9 +63,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			var precached = course.getCourseCatalogEntry(),
 				ntiid = precached.getId(),
 				catalog = me.findCourseForNtiid(ntiid),
-				instance = course.get('CourseInstance'),
 				isOpen = course.isOpen(),
-				isAdmin = course instanceof NextThought.model.courses.CourseInstanceAdministrativeRole;
+				isAdmin = course instanceof CourseInstanceAdministrativeRole;
 
 			if (catalog) {
 				catalog.set('enrolled', precached.get('enrolled'));
@@ -133,17 +133,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 
 	setAllCoursesLink: function (link) {
-		this.all_courses_link = link;
+		this['all_courses_link'] = link;
 	},
 
 
 	getAllCoursesLink: function (link) {
-		return this.all_courses_link;
+		return this['all_courses_link'];
 	},
 
 
 	hasAllCoursesLink: function () {
-		return !!this.all_courses_link;
+		return !!this['all_courses_link'];
 	},
 
 
@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	findCourseBy: function (fn) {
 		var enrolled = this.ENROLLED_COURSES || [],
 			admin = this.ADMIN_COURSES || [],
-			i, course;
+			course;
 
 		course = this.__findIn(admin, fn);
 

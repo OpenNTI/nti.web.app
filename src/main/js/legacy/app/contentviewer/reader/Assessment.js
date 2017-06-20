@@ -1,8 +1,15 @@
-var Ext = require('extjs');
-var {guidGenerator, isMe, swallow} = require('legacy/util/Globals');
-var DomUtils = require('legacy/util/Dom');
-var ParseUtils = require('legacy/util/Parsing');
-var TimeUtils = require('legacy/util/Time');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const {guidGenerator, isMe, swallow} = require('legacy/util/Globals');
+const DomUtils = require('legacy/util/Dom');
+const ParseUtils = require('legacy/util/Parsing');
+const TimeUtils = require('legacy/util/Time');
+const AssignmentStatus = require('legacy/app/course/assessment/AssignmentStatus');
+const AssessedQuestionSet = require('legacy/model/assessment/AssessedQuestionSet');
+const UsersCourseAssignmentHistoryItem = require('legacy/model/courseware/UsersCourseAssignmentHistoryItem');
+
+const ComponentOverlay = require('./ComponentOverlay');
 
 require('legacy/app/assessment/Scoreboard');
 require('legacy/app/assessment/SurveyHeader');
@@ -10,7 +17,6 @@ require('legacy/app/assessment/Question');
 require('legacy/app/assessment/Poll');
 require('legacy/app/assessment/QuizSubmission');
 require('legacy/app/assessment/AssignmentFeedback');
-require('legacy/app/course/assessment/AssignmentStatus');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Assessment', {
@@ -82,8 +88,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			c = o.componentOverlayEl,
 			r = me.reader,
 			questions = survey.get('questions') || [],
-			historyLink = survey.getLink('History'),
-			reportLink = survey.getReportLink();
+			historyLink = survey.getLink('History');
+		//const reportLink = survey.getReportLink();
 
 		this.surveyHeader = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessent-survey-header', {
 			reader: r, renderTo: c, survey: survey,
@@ -136,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			}
 
 			if (isInstructor) {
-				temp = temp || NextThought.model.assessment.AssessedQuestionSet.from(set, h.isPlaceholder);
+				temp = temp || AssessedQuestionSet.from(set, h.isPlaceholder);
 			}
 
 			return temp;
@@ -280,17 +286,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 	notSubmittedTimed: function () {
 		var me = this,
 			assignment = me.injectedAssignment,
-			overrides = {week: 'Week', day: 'Day', hour: 'Hour', minute: 'Minute', second: 'Second'},
 			title = assignment && assignment.get('title'), time;
 
 		return assignment.getTimeRemaining()
 			.then(function (remaining) {
 				if (remaining < 0) {
 					time = TimeUtils.getTimePartsFromTime(-1 * remaining);
-					remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time) + ' Over';
+					remaining = AssignmentStatus.getTimeString(time) + ' Over';
 				} else {
 					time = TimeUtils.getTimePartsFromTime(remaining);
-					remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time, true) + ' Remaining';
+					remaining = AssignmentStatus.getTimeString(time, true) + ' Remaining';
 				}
 
 				return new Promise(function (fulfill, reject) {
@@ -317,8 +322,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		var me = this,
 			assignment = me.injectedAssignment,
 			title = (assignment && assignment.get('title')),
-			progress = ' Your progress has been saved and can be resumed at a later date.',
-			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
+			progress = ' Your progress has been saved and can be resumed at a later date.';
 
 
 		return new Promise(function (fulfill, reject) {
@@ -580,7 +584,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			e.parentNode.removeChild(e);
 		});
 
-		if (!(h instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItem)) {
+		if (!(h instanceof UsersCourseAssignmentHistoryItem)) {
 			h = h && (h.get('history') || h);
 		}
 
@@ -707,6 +711,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		return this.feedback && this.feedback.contentElement;
 	}
 }, function () {
-	var c = NextThought.app.contentviewer.reader.ComponentOverlay.prototype;
+	var c = ComponentOverlay.prototype;
 	Ext.copyTo(this.prototype, c, ['getRelatedElement', 'getContentElement']);
 });

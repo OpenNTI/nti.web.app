@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ComponentsAbstractView = require('./AbstractView');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const DashboardIndex = require('../Index');
+require('./AbstractView');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.TileContainer', {
@@ -110,11 +113,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 		if (state === this.currentState || this.isEmpty()) { return; }
 
-		if (state === NextThought.app.course.dashboard.Index.CURRENT) {
+		if (state === DashboardIndex.CURRENT) {
 			handler = this.updateCurrent.bind(this);
-		} else if (state === NextThought.app.course.dashboard.Index.OUT_OF_BUFFER) {
+		} else if (state === DashboardIndex.OUT_OF_BUFFER) {
 			handler = this.removeTilesFromDOM.bind(this);
-		} else if (state === NextThought.app.course.dashboard.Index.IN_BUFFER) {
+		} else if (state === DashboardIndex.IN_BUFFER) {
 			handler = this.reloadTilesToDom.bind(this);
 		}
 

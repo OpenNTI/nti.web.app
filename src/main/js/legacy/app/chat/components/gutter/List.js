@@ -1,7 +1,11 @@
-var Ext = require('extjs');
-var NTIFormat = require('../../../../util/Format');
-var ChatStateStore = require('../../StateStore');
-var ChatActions = require('../../Actions');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const NTIFormat = require('legacy/util/Format');
+const NavigationActions = require('legacy/app/navigation/Actions');
+
+const ChatStateStore = require('../../StateStore');
+// const ChatActions = require('../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.List', {
@@ -47,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Li
 			return model.unreadMessageCount || 0;
 		},
 		getPresence: function (model) {
-			var ChatStore = NextThought.app.chat.StateStore.getInstance(),
+			var ChatStore = ChatStateStore.getInstance(),
 				presence = ChatStore.getPresenceOf(model.Username);
 
 			return (presence && presence.getName()) || '';
@@ -61,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Li
 	initComponent: function () {
 		this.callParent(arguments);
 		this.on('itemclick', this.onItemClicked.bind(this));
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
 	},
 
 	afterRender: function () {
@@ -106,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Li
 	},
 
 	goToContacts: function (e) {
-		NextThought.app.navigation.Actions.pushRootRoute('Contacts', '/contacts/');
+		NavigationActions.pushRootRoute('Contacts', '/contacts/');
 	},
 
 	hideOtherContacts: function () {

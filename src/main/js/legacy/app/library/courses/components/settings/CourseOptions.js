@@ -1,8 +1,13 @@
 const Ext = require('extjs');
-require('../../../../course/enrollment/StateStore');
-require('../../../../windows/Actions');
+const {wait} = require('nti-commons');
+
+const {getString, getFormattedString} = require('legacy/util/Localization');
+const EnrollmentActions = require('legacy/app/course/enrollment/Actions');
+const EnrollmentStateStore = require('legacy/app/course/enrollment/StateStore');
+const WindowsActions = require('legacy/app/windows/Actions');
+
+
 require('../available/CourseDetailWindow');
-const {wait} = require('legacy/util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', {
@@ -26,8 +31,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			catalog = this.course.getCourseCatalogEntry(),
 			isDroppable = catalog && catalog.isDroppable();
 
-		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.CourseEnrollmentStore = EnrollmentStateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
 
 		registered = this.CourseEnrollmentStore.getEnrolledText(this.course.getCourseCatalogEntry());
 
@@ -44,8 +49,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', 'onClick', this);
-		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
-		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
+		this.CourseEnrollmentStore = EnrollmentStateStore.getInstance();
+		this.CourseEnrollmentActions = EnrollmentActions.create();
 
 		this.enrollmentOptions = {};
 
@@ -219,27 +224,27 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			priority = this.CourseEnrollmentStore.getBasePriority(),
 			me = this;
 
-		function addBase (option, details) {
-			details.name = details.name || option.name;
+		function addBase (option, optionDetails) {
+			optionDetails.name = optionDetails.name || option.name;
 
 			//if we are enrolled in an option it is the base
 			//and any other base is would be an add on
-			if (details.IsEnrolled) {
+			if (optionDetails.IsEnrolled) {
 				addOns.push(base);
-				base = details;
+				base = optionDetails;
 			//if we don't already have a base option, it is by default
 			} else if (!base) {
-				base = details;
+				base = optionDetails;
 			//if we are enrolled in current base, we are an addon
 			} else if (base.IsEnrolled) {
-				addOns.push(details);
+				addOns.push(optionDetails);
 			//if the current base is a higher priority, we are an addon
-			} else if (priority[base.name] > priority[details.name]) {
-				addOns.push(details);
+			} else if (priority[base.name] > priority[optionDetails.name]) {
+				addOns.push(optionDetails);
 			//otherwise the current base is an add on and we are the base
 			} else {
 				addOns.push(base);
-				base = details;
+				base = optionDetails;
 			}
 		}
 

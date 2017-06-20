@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../util/Content');
-var ContextStateStore = require('../StateStore');
+const Ext = require('extjs');
+
+const ContentUtils = require('legacy/util/Content');
+
+const ContextStateStore = require('../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.Question', {
@@ -20,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Questi
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 	},
 
 	afterRender: function () {
@@ -44,10 +46,11 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Questi
 	},
 
 	__setContent: function () {
-		var me = this,
+		let me = this,
 			content = me.question && me.question.get('content'),
-			root = me.question && me.question.get('ContentRoot'),
-			content = (root && ContentUtils.fixReferences(content, root)) || content;
+			root = me.question && me.question.get('ContentRoot');
+
+		content = (root && ContentUtils.fixReferences(content, root)) || content;
 
 		if (content && this.rendered) {
 			this.snippetEl.dom.innerHTML = content;

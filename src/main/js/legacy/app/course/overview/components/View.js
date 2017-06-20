@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const Globals = require('legacy/util/Globals');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const PromptActions = require('legacy/app/prompt/Actions');

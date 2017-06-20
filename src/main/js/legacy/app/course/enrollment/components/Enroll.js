@@ -1,5 +1,9 @@
-var Ext = require('extjs');
-var PartsDetailsTable = require('./parts/DetailsTable');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const {getString, getFormattedString} = require('legacy/util/Localization');
+
+require('./parts/DetailsTable');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Enroll', {
@@ -102,9 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 	stopClose: function () {
-		var me = this;
-
-		return new Promise(function (fulfill, reject) {
+		return new Promise((fulfill, reject) => {
 			Ext.Msg.show({
 				msg: getString('NextThought.view.courseware.enrollment.Enroll.NotFinished'),
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
@@ -115,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					'cancel': getString('NextThought.view.courseware.enrollment.Enroll.Stay')
 				},
 				title: getString('NextThought.view.courseware.enrollment.Enroll.AreYouSure'),
-				fn: function (str) {
+				fn: (str) => {
 					if (str === 'ok') {
 						fulfill();
 					} else {

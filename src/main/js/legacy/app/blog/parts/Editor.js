@@ -1,7 +1,7 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../cache/UserRepository');
 var DomUtils = require('../../../util/Dom');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 require('../../../editor/Editor');
 require('../Actions');
 require('legacy/common/form/fields/FilePicker');

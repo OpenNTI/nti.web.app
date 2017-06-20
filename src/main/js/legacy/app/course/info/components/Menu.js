@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isFeature} = require('legacy/util/Globals');
+const {getString, getFormattedString} = require('legacy/util/Localization');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Menu', {
@@ -56,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	},
 
 	addMenuItems: function () {
-		var me = this, items = [],
+		var me = this,
 			i = ( this.info && this.info.get('Instructors')) || [] ;
 		if (!this.rendered) {
 			this.onceRendered.then(me.addMenuItems.bind(me));

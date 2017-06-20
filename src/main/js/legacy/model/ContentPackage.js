@@ -2,7 +2,7 @@ const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 require('legacy/model/Base');
 require('legacy/mixins/PresentationResources');

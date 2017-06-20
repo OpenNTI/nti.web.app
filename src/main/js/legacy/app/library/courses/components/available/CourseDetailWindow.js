@@ -1,5 +1,10 @@
-var Ext = require('extjs');
-var AvailableCourseWindow = require('./CourseWindow');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const WindowsStateStore = require('legacy/app/windows/StateStore');
+const CourseCatalogEntry = require('legacy/model/courses/CourseCatalogEntry');
+
+require('./CourseWindow');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CourseDetailWindow', {
@@ -45,5 +50,5 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.doClose();
 	}
 }, function () {
-	NextThought.app.windows.StateStore.register(NextThought.model.courses.CourseCatalogEntry.mimeType, this);
+	WindowsStateStore.register(CourseCatalogEntry.mimeType, this);
 });

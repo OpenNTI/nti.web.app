@@ -3,7 +3,7 @@ require('./Actions');
 require('../../model/app/DndInfo');
 require('../../store/DataTransfer');
 
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 	constructor: function (config) {

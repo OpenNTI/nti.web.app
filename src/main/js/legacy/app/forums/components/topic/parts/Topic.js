@@ -1,8 +1,15 @@
 const Ext = require('extjs');
-const UserRepository = require('legacy/cache/UserRepository');
+const {wait} = require('nti-commons');
+
+const {getString} = require('legacy/util/Localization');
+const ContentviewerActions = require('legacy/app/contentviewer/Actions');
 const DomUtils = require('legacy/util/Dom');
-const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
 const SearchUtils = require('legacy/util/Search');
+const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
+const UserRepository = require('legacy/cache/UserRepository');
+
+const ForumsActions = require('../../../Actions');
+
 require('legacy/mixins/FlagActions');
 require('legacy/mixins/LikeFavoriteActions');
 require('legacy/mixins/ProfileLinks');
@@ -12,7 +19,7 @@ require('legacy/common/menus/BlogTogglePublish');
 require('legacy/common/ux/SearchHits');
 require('legacy/layout/component/Natural');
 require('legacy/common/menus/Reports');
-require('legacy/app/contentviewer/Actions');
+
 require('./Pager');
 
 
@@ -104,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		this.on('ready', this.onReady, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
-		this.ForumActions = NextThought.app.forums.Actions.create();
+		this.ForumActions = ForumsActions.create();
 	},
 
 	beforeRender: function () {
@@ -218,9 +225,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 	markAsPublished: function (key, value) {
-		var val = value ? 'public' : 'only me',
-			removeCls = value ? 'only me' : 'public',
-			text = value ? getString('NextThought.view.forums.topic.parts.Topic.onlyme') : getString('NextThought.view.forums.topic.parts.Topic.public');
+		const val = value ? 'public' : 'only me';
+		const removeCls = value ? 'only me' : 'public';
+
+		// const text = value
+		// 		? getString('NextThought.view.forums.topic.parts.Topic.onlyme')
+		// 		: getString('NextThought.view.forums.topic.parts.Topic.public');
+
 		this.publishStateEl.addCls(val);
 		this.publishStateEl.update(Ext.Array.map(val.split(' '), Ext.String.capitalize).join(' '));
 		this.publishStateEl.removeCls(removeCls);
@@ -280,6 +291,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 					vid.dom.innerHTML = null;
 					vid.dom.load();
 				} catch (e) {
+					//ignore
 				}
 			});
 		}
@@ -365,7 +377,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 	buildCommentPagingNav: function (commentCmp) {
-		var numPages = 0, me = this;
+		var me = this;
 
 		this.onceRendered.then(function () {
 			me.pagingCommentsNav = Ext.get(me.pagingCommentsNavTpl.append(me.el.down('.foot')));
@@ -428,7 +440,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		if (part  && !e.getTarget('.download')) {
 			e.stopEvent();
 			if (!this.ContentViewerActions) {
-				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+				this.ContentViewerActions = ContentviewerActions.create();
 			}
 
 			this.ContentViewerActions.showAttachmentInPreviewMode(part, this.record);

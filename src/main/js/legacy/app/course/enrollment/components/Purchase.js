@@ -1,23 +1,27 @@
-var Ext = require('extjs');
-var EnrollmentFeatureForm = require('../../../../mixins/enrollment-feature/Form');
-var PartsBaseInput = require('./parts/BaseInput');
-var PartsCheckbox = require('./parts/Checkbox');
-var PartsCheckboxGroup = require('./parts/CheckboxGroup');
-var PartsDateInput = require('./parts/DateInput');
-var PartsDescription = require('./parts/Description');
-var PartsDescription = require('./parts/Description');
-var PartsDetailsTable = require('./parts/DetailsTable');
-var PartsDropDown = require('./parts/DropDown');
-var PartsGroup = require('./parts/Group');
-var PartsGroupedSet = require('./parts/GroupedSet');
-var PartsLinks = require('./parts/Links');
-var PartsPricing = require('./parts/Pricing');
-var PartsRaioGroup = require('./parts/RadioGroup');
-var PartsSet = require('./parts/Set');
-var PartsSplitRadio = require('./parts/SplitRadio');
-var PartsSubmitButton = require('./parts/SubmitButton');
-var PartsTextarea = require('./parts/Textarea');
-var PartsTextInput = require('./parts/TextInput');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/mixins/enrollment-feature/Form');
+
+require('./parts/BaseInput');
+require('./parts/Checkbox');
+require('./parts/CheckboxGroup');
+require('./parts/DateInput');
+require('./parts/Description');
+require('./parts/Description');
+require('./parts/DetailsTable');
+require('./parts/DropDown');
+require('./parts/Group');
+require('./parts/GroupedSet');
+require('./parts/Links');
+require('./parts/Pricing');
+require('./parts/RadioGroup');
+require('./parts/Set');
+require('./parts/SplitRadio');
+require('./parts/SubmitButton');
+require('./parts/Textarea');
+require('./parts/TextInput');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Purchase', {
@@ -235,8 +239,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		var raw = this.getValue();
 
 		if (raw.exp_) {
-			raw.exp_month = raw.exp_.month;
-			raw.exp_year = raw.exp_.year;
+			raw['exp_month'] = raw.exp_.month;
+			raw['exp_year'] = raw.exp_.year;
 		}
 
 		if (raw.quantity < 0) {

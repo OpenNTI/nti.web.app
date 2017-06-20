@@ -1,15 +1,18 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../cache/UserRepository');
-var MixinsRouter = require('../../../mixins/Router');
-var GroupsActions = require('../../groups/Actions');
-var GroupsStateStore = require('../../groups/StateStore');
-var NavigationActions = require('../../navigation/Actions');
-var ComponentsHeader = require('./components/Header');
-var ActivityIndex = require('./components/activity/Index');
-var AboutIndex = require('./components/about/Index');
-var MembershipIndex = require('./components/membership/Index');
-var AchievementsIndex = require('./components/achievements/Index');
-var {isMe, isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const {isMe, isFeature} = require('legacy/util/Globals');
+
+const GroupsActions = require('../../groups/Actions');
+const GroupsStateStore = require('../../groups/StateStore');
+const NavigationActions = require('../../navigation/Actions');
+
+require('legacy/mixins/Router');
+require('./components/Header');
+require('./components/activity/Index');
+require('./components/about/Index');
+require('./components/membership/Index');
+require('./components/achievements/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
@@ -26,9 +29,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.NavActions = NextThought.app.navigation.Actions.create();
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.NavActions = NavigationActions.create();
+		this.GroupStore = GroupsStateStore.getInstance();
+		this.GroupActions = GroupsActions.create();
 
 		this.headerCmp = this.add(this.buildHeaderComponent());
 
@@ -109,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		if (me.activeEntity && (me.activeEntity.get('Username') || '').toLowerCase() === lowerId) {
 			me.getUser = Promise.resolve(me.activeEntity);
 			me.isMe = isMe(me.activeEntity);
-		} else if (user && (user.get('Username') || '').toLowerCase() == lowerId) {
+		} else if (user && (user.get('Username') || '').toLowerCase() === lowerId) {
 			me.activeEntity = user;
 			me.isMe = isMe(me.activeEntity);
 			me.getUser = Promise.resolve(user);
@@ -331,9 +334,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	},
 
 	getRouteForBlog: function (blog, path) {
-		var blogId = blog.getId(),
-			entry = path.shift();
-
 		// Select the activity tab.
 		return {
 			path: '/activity/',

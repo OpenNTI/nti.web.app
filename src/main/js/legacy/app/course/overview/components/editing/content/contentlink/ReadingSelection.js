@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../../../../../util/Content');
-var ItemselectionIndex = require('../../itemselection/Index');
+const Ext = require('extjs');
+
+const ContentUtils = require('legacy/util/Content');
+
+require('../../itemselection/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingSelection', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'reading-item-selection item-selection',
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		 cls: 'reading-item', cn: [
+		cls: 'reading-item', cn: [
 			{tag: 'tpl', 'if': 'hasChildren', cn: [
 				{cls: 'expand'},
 				{cls: 'icon folder'}

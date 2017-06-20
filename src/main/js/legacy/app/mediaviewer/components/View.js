@@ -3,7 +3,7 @@ const LibraryActions = require('legacy/app/library/Actions');
 const GutterTab = require('legacy/app/chat/components/gutter/Tab');
 const NotificationsTab = require('legacy/app/notifications/Tab');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 require('legacy/mixins/State');
 require('legacy/model/transcript/TranscriptItem');

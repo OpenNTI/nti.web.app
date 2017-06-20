@@ -1,11 +1,15 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var NavigationStateStore = require('./StateStore');
-var UtilContent = require('../../util/Content');
-var ContextStateStore = require('../context/StateStore');
-var ModelPageInfo = require('../../model/PageInfo');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const PageInfo = require('legacy/model/PageInfo');
+
+const ContextStateStore = require('../context/StateStore');
+
+const NavigationStateStore = require('./StateStore');
+
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
@@ -14,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	statics: {
 		getContext: function () {
 			if (!this.NavStateStore) {
-				this.NavStateStore = NextThought.app.context.StateStore.getInstance();
+				this.NavStateStore = ContextStateStore.getInstance();
 			}
 
 			return this.NavStateStore.getContext();
@@ -85,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 				u = encodeURIComponent($AppConfig.username),
 				context = this.getContext(), i;
 
-			pi = NextThought.model.PageInfo.create({
+			const pi = PageInfo.create({
 				ID: ntiid,
 				NTIID: ntiid,
 				content: DH.markup([
@@ -126,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	},
 
 	constructor: function () {
-		this.store = NextThought.app.navigation.StateStore.getInstance();
+		this.store = NavigationStateStore.getInstance();
 	},
 
 	/**
@@ -137,7 +141,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	 * noLibraryLink: Boolean, //if true don't let the branding link to the library
 	 * noRouteOnSearch: Boolean, //if true don't do a navigation on search, should really only be used by the search route
 	 *
-	 * @param  {Object} configuration to build the nav
+	 * @param  {Object} config to build the nav
+	 * @returns {void}
 	 */
 	updateNavBar: function (config) {
 		this.store.updateNavBar(config);
@@ -148,6 +153,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	 * the active object to set the background from
 	 *
 	 * @param {Object} obj the thins to set active
+	 * @param {Boolean} masked - masked, nor not
+	 * @param {Boolean} whiteMask - wtf... I guess make it a white mask?
+	 * @returns {void}
 	 */
 	setActiveContent: function (obj, masked, whiteMask) {
 		this.store.fireEvent('set-active-content', obj, masked, whiteMask);
@@ -174,16 +182,17 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	 *	}
 	 *
 	 * @param  {Object} cfg configuration to build a message bar.
+	 * @returns {void}
 	 */
 	presentMessageBar: function (cfg) {
 		var messageCmp = Ext.getCmp('message-bar'),
-			id = cfg.type || cfg.id,
+			//id = cfg.type || cfg.id,
 			// hasBeenSeen = !!this.store.getMessageBarItemFromSession(id),
-			htmlEl, me = this;
+			htmlEl;
 
 		if (messageCmp) {
 			messageCmp.onceRendered
-				.then(function () {
+				.then(() => {
 					messageCmp.setIcon(cfg.iconCls);
 					messageCmp.setMessage(cfg.message);
 					Ext.each(cfg.buttons || [], messageCmp.addButton.bind(messageCmp));
@@ -195,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 					}
 
 					// if (id) {
-					//	me.store.putMessageBarItemIntoSession(id, cfg);
+					//	this.store.putMessageBarItemIntoSession(id, cfg);
 					// }
 				});
 		}

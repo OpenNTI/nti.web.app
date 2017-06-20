@@ -1,17 +1,21 @@
-var Ext = require('extjs');
-var ContentIndex = require('../content/Index');
-var MixinsState = require('../../mixins/State');
-var MixinsRouter = require('../../mixins/Router');
-var BundleStateStore = require('./StateStore');
-var ContentStateStore = require('../library/content/StateStore');
-var ContentIndex = require('../content/content/Index');
-var ForumIndex = require('../content/forum/Index');
+const Ext = require('extjs');
+
+const ContentStateStore = require('../library/content/StateStore');
+
+const BundleStateStore = require('./StateStore');
+
+require('legacy/mixins/Router');
+require('legacy/mixins/State');
+
+require('../content/Index');
+require('../content/content/Index');
+require('../content/forum/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 	extend: 'NextThought.app.content.Index',
 	alias: 'widget.bundle-view-container',
-	state_key: 'bundle_index',
+	stateKey: 'bundle_index',
 
 	mixins: {
 		State: 'NextThought.mixins.State',
@@ -32,8 +36,8 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
-		this.BundleViewStore = NextThought.app.bundle.StateStore.getInstance();
+		this.ContentStore = ContentStateStore.getInstance();
+		this.BundleViewStore = BundleStateStore.getInstance();
 
 		this.getActiveBundle = Promise.reject();
 

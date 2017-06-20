@@ -1,15 +1,17 @@
-var Ext = require('extjs');
-var IdCache = require('../../../cache/IdCache');
-var UserRepository = require('../../../cache/UserRepository');
-var Globals = require('../../../util/Globals');
-var ModelMessageInfo = require('../../../model/MessageInfo');
-var LogEntry = require('./log/Entry');
-var LogNotificationEntry = require('./log/NotificationEntry');
-var LogNotificationStatus = require('./log/NotificationStatus');
-var LogModerated = require('./log/Moderated');
-var LogContent = require('./log/Content');
-var LogInfo = require('./log/Info');
-var CacheIdCache = require('../../../cache/IdCache');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
+const Globals = require('legacy/util/Globals');
+const MessageInfo = require('legacy/model/MessageInfo');
+
+require('./log/Entry');
+require('./log/NotificationEntry');
+require('./log/NotificationStatus');
+require('./log/Moderated');
+require('./log/Content');
+require('./log/Info');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
@@ -189,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 				//create place holder, reassign m the ref to place holder
 				m = this.add({
 					xtype: this.entryType,
-					message: new NextThought.model.MessageInfo(),
+					message: new MessageInfo(),
 					messageId: IdCache.getIdentifier(rid)
 				});
 			}
@@ -224,9 +226,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 	},
 
 	prepareMessagesBeforeAdd: function (messages) {
-		var m = [], me = this, lastTimeStamp, lastItem;
+		var m = [], me = this, lastTimeStamp;
 
-		
+
 
 		(messages || []).forEach(function (msg) {
 			var newMsgTime = msg.get('CreatedTime'),

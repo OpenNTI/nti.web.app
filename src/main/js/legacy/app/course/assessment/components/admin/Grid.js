@@ -1,8 +1,13 @@
-var Ext = require('extjs');
-var TimeUtils = require('../../../../../util/Time');
-var GridFeatureGradeInputs = require('../../../../../mixins/grid-feature/GradeInputs');
-var Globals = require('../../../../../util/Globals');
-var AssessmentAssignmentStatus = require('../../AssignmentStatus');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const {getString, getFormattedString} = require('legacy/util/Localization');
+const TimeUtils = require('legacy/util/Time');
+const Globals = require('legacy/util/Globals');
+
+const AssignmentStatus = require('../../AssignmentStatus');
+
+require('legacy/mixins/grid-feature/GradeInputs');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
@@ -83,9 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{ text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'), dataIndex: 'completed', name: 'completed', width: 140,
 				renderer: function (v, col, rec) {
 					var d = rec.collection.findItem(rec.get('item').getId()).get('availableEnding'),
-						s = (v && v.get && v.get('Last Modified')) || v,
-						item = rec.get('item'),
-						parts = item && item.get('parts');
+						s = (v && v.get && v.get('Last Modified')) || v;
 
 
 					if (!s && !d) {
@@ -180,8 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 					var grade = rec.get('Grade'),
 						scoreTpl = Ext.DomHelper.markup({tag: 'input', type: 'text', value: rec.get('grade')}),
-						isExcused = grade && grade.get('IsExcused'),
-						excusedCls = isExcused === true ? 'on' : 'off', excusedTpl;
+						isExcused = grade && grade.get('IsExcused'), excusedTpl;
 
 					if (isExcused) {
 						col.tdCls += ' excused';
@@ -399,8 +401,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	bindStore: function (store) {
 		var res = this.callParent(arguments),
-			sorts = store.getSorters(), s, sort,
-			cols = this.columns, c, col;
+			sorts = store.getSorters(),
+			cols = this.columns;
 
 		function sortForCol (col, sort) {
 			var p = col.getSortParam();
@@ -415,11 +417,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return 'DESC';
 		}
 
-		for (c = cols.length - 1; c >= 0; c--) {
-			col = cols[c];
+		for (let c = cols.length - 1; c >= 0; c--) {
+			const col = cols[c];
 
-			for (s = sorts.length - 1; s >= 0; s--) {
-				sort = sorts[s];
+			for (let s = sorts.length - 1; s >= 0; s--) {
+				const sort = sorts[s];
 				if (sortForCol(col, sort)) {
 					try {
 						col.setSortState(toState(sort), true, true);
@@ -436,7 +438,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return res;
 	},
 
-	/**
+	/*
 	 * This function sets the table layout to fixed.
 	 * We've observed that some browsers(i.e. Safari)
 	 * end up mixing our styles and Ext Js table styles.
@@ -462,7 +464,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 
 		if (nib) {
-			NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(record, gradeUpdated, gradeUpdated).showBy(nib, 'tr-br');
+			AssignmentStatus.getActionsMenu(record, gradeUpdated, gradeUpdated).showBy(nib, 'tr-br');
 			return false;
 		}
 	}

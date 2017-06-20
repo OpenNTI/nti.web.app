@@ -1,41 +1,44 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
-var CommonStateStore = require('../../common/StateStore');
+const Ext = require('extjs');
 const { decodeFromURI } = require('nti-lib-ntiids');
+
+const Globals = require('../../util/Globals');
+const ParseUtils = require('../../util/Parsing');
+const ContentIndex = require('../content/content/Index');
+
+require('../../common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	setContext: function (context, title, route) {
-		this.current_context = context;
+		this.currentContext = context;
 
 		this.ROUTE_PARTS = Globals.getURLParts(route);
 
-		this.current_title = title;
-		this.current_route = route;
+		this.currentTitle = title;
+		this.currentRoute = route;
 
 		this.fireEvent('new-context');
 	},
 
 
 	setCurrentTitle: function (title) {
-		this.current_title = title;
+		this.currentTitle = title;
 	},
 
 
 	getContext: function () {
-		return this.current_context || [];
+		return this.currentContext || [];
 	},
 
 
 	getRootContext: function () {
-		return this.current_context[this.current_context.length - 1];
+		return this.currentContext[this.currentContext.length - 1];
 	},
 
 
 	getRootBundle: function () {
-		var context = this.current_context || [],
+		var context = this.currentContext || [],
 			i, x;
 
 		for (i = 0; i < context.length; i++) {
@@ -49,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 
 
 	getRootProfile: function () {
-		var context = this.current_context || [],
+		var context = this.currentContext || [],
 			i, x;
 
 		for (i = 0; i < context.length; i++) {
@@ -66,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		var root = this.getRootContext(),
 			cmp = root && root.cmp;
 
-		if (cmp && cmp instanceof NextThought.app.content.content.Index && cmp.hasReader()) {
+		if (cmp && cmp instanceof ContentIndex && cmp.hasReader()) {
 			return cmp.getLocation();
 		}
 
@@ -90,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 
 
 	getCurrentTitle: function () {
-		return this.current_title;
+		return this.currentTitle;
 	},
 
 
@@ -112,19 +115,19 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 	__parseThreeObjectParts: function (parts) {
 		var first = parts[parts.length - 2],
 			last = parts.last(),
-			parts = {};
+			part = {};
 
 		if (ParseUtils.isEncodedNTIID(first)) {
-			parts.id = decodeFromURI(first);
-			parts.rawId = first;
-			parts.state = decodeURIComponent(last);
+			part.id = decodeFromURI(first);
+			part.rawId = first;
+			part.state = decodeURIComponent(last);
 		} else if (ParseUtils.isEncodedNTIID(last)) {
-			parts.id = decodeFromURI(last);
-			parts.rawId = last;
-			parts.mimeType = decodeURIComponent(first);
+			part.id = decodeFromURI(last);
+			part.rawId = last;
+			part.mimeType = decodeURIComponent(first);
 		}
 
-		return parts;
+		return part;
 	},
 
 

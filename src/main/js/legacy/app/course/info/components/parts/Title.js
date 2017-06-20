@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Title', {
@@ -77,9 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 			this.videoMonitor = this.mon(this.video, {
 				destroyable: true,
 				'beforeRender': {
-					fn: function () {
-						me.addCls('has-video');
-					},
+					fn: () => void this.addCls('has-video'),
 					single: true
 				},
 				'player-event-ended': {

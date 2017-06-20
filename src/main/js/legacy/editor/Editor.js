@@ -8,7 +8,7 @@ var {guidGenerator: guidFn} = require('legacy/util/Globals');
 var {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
 const Mime = require('mime-types');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 require('legacy/common/form/fields/FilePicker');
 require('legacy/model/RelatedWork');
 require('legacy/editor/embedvideo/Window');

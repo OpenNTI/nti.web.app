@@ -2,7 +2,7 @@ const Ext = require('extjs');
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
 const {PersistentStorage} = require('legacy/cache/AbstractStorage');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 require('legacy/model/courses/assignments/Summary');
 

@@ -1,8 +1,13 @@
 const Ext = require('extjs');
 
-require('../../../../../common/form/Form');
-require('../../../../prompt/Actions');
-require('./Actions');
+const {getFormattedString} = require('legacy/util/Localization');
+const PromptActions = require('legacy/app/prompt/Actions');
+const Form = require('legacy/common/form/Form');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+
+const EditingActions = require('./Actions');
+
+
 require('./controls/Delete');
 require('./controls/SwitchType');
 require('./auditlog/Index');
@@ -82,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			var msg = 'The uploaded file is too large.',
 				fileSize = reason && reason.max_bytes;
 
-			fileSize = fileSize && NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(fileSize);
+			fileSize = fileSize && FilePicker.getHumanReadableFileSize(fileSize);
 
 			if (fileSize) {
 				msg += ' The max file size is ' + fileSize + '.';
@@ -92,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 		fieldNames: {
 			title: 'Title',
-			max_file_size: 'Max File Size'
+			'max_file_size': 'Max File Size'
 		}
 	},
 
@@ -111,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.editorGroup = this.self.editorGroup || this.editorGroup;
 
-		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
+		this.EditingActions = EditingActions.create();
 
 		if (this.setSaveText && this.record) {
 			this.setSaveText(this.getSaveText());
@@ -287,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (success) {
-			this.doClose(NextThought.app.prompt.Actions.DELETED);
+			this.doClose(PromptActions.DELETED);
 		} else {
 			this.showError('Unable to delete record.');
 		}
@@ -394,7 +399,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					required.fields.push(field);
 				} else {
 					required = {
-						msg: NextThought.common.form.Form.getMessageForError(error),
+						msg: Form.getMessageForError(error),
 						error: error,
 						fields: [field]
 					};
@@ -403,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				}
 			} else {
 				msgs.push({
-					msg: NextThought.common.form.Form.getMessageForError(error),
+					msg: Form.getMessageForError(error),
 					error: error,
 					key: field,
 					fields: [field]
@@ -425,16 +430,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 		this.activeErrors = (this.activeErrors || []).reduce(function (acc, error) {
-			error.fields = error.fields.reduce(function (acc, field) {
-				var error = form.getErrorsFor(field);
+
+			error.fields = error.fields.reduce(function (acc2, field) {
+				/*var error2 = */form.getErrorsFor(field);
 
 				if (!form.getErrorsFor(field)) {
 					form.removeErrorOn(field);
 				} else {
-					acc.push(field);
+					acc2.push(field);
 				}
 
-				return acc;
+				return acc2;
 			}, []);
 
 			if (error.fields.length > 0) {
@@ -454,9 +460,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var form = this.formCmp;
 
 		this.activeErrors = (this.activeErrors || []).reduce(function (acc, error) {
-			error.fields = error.fields.reduce(function (acc, field) {
-				form.removeErrorOn(field);
-			}, []);
+			const {fields} = error;
+			fields.forEach(field => void form.removeErrorOn(field));
+			error.fields = void fields;
 
 			if (error.headerBar && error.headerBar.remove) {
 				error.headerBar.remove();

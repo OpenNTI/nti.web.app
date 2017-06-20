@@ -1,15 +1,22 @@
-var Ext = require('extjs');
-var IdCache = require('../../../cache/IdCache');
-var UserRepository = require('../../../cache/UserRepository');
-var User = require('../../../model/User');
-var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
-var ComponentsView = require('./View');
-var ComponentsEntry = require('./Entry');
-var ChatStateStore = require('../StateStore');
-var GroupsActions = require('../../groups/Actions');
-var GroupsStateStore = require('../../groups/StateStore');
-var TranscriptPager = require('../transcript/Pager');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
+const {isMe} = require('legacy/util/Globals');
+const {getFormattedString, getString} = require('legacy/util/Localization');
+
+const ChatActions = require('../../chat/Actions');
+const ChatStateStore = require('../../chat/StateStore');
+const GroupsActions = require('../../groups/Actions');
+const GroupsStateStore = require('../../groups/StateStore');
+const Pager = require('../transcript/Pager');
+
+require('legacy/mixins/ProfileLinks');
+require('legacy/model/User');
+require('./View');
+require('./Entry');
+require('../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.Window', {
@@ -85,12 +92,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Window', 
 		//	'hide': this.dragMaskOff
 		// });
 		this.titleBar = this.down('nti-window-header');
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.ChatActions = NextThought.app.chat.Actions.create();
-		this.GroupActions = NextThought.app.groups.Actions.create();
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
+		this.ChatActions = ChatActions.create();
+		this.GroupActions = GroupsActions.create();
+		this.GroupStore = GroupsStateStore.getInstance();
 
-		this.Pager = NextThought.app.chat.transcript.Pager.create();
+		this.Pager = Pager.create();
 		this.Pager.bindWindow(this);
 
 		this.setChatStatesMap();
@@ -162,8 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Window', 
 			return;
 		}  //Only do this if it's there.
 
-		var list = this.down('chat-gutter'),
-			me = this,
+		var me = this,
 			newOccupants = roomInfo.get('Occupants'),
 			oldOccupants = this.roomInfo.get('Occupants'),
 			whoLeft = Ext.Array.difference(oldOccupants, newOccupants),
@@ -488,7 +494,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Window', 
 		this.logView.insertBulkMessages(index, messages);
 	},
 
-	/**
+	/*
 	 *	We use this method to update the state of other chat participants.
 	 *	Thus, it is responsible for updating the appropriate view,
 	 *	but we don't keep track of other participants' state, because they manage it themselves.
@@ -498,8 +504,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Window', 
 			return;
 		}
 
-		var wasPreviouslyInactive = room.getRoomState(sender) === 'inactive' || !room.getRoomState(sender),
-			inputStates;
+		var inputStates;
 
 		this.logView.clearChatStatusNotifications();
 		inputStates = room.getInputTypeStates();

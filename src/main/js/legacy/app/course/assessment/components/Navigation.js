@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.Navigation', {
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		this.items = [];
-		this.cmp_map = {};
+		this.componentMapping = {};
 	},
 
 
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		var current = this.el.down('.outline-list .outline-row.x-item-selected'),
-			n = this.cmp_map[item.xtype];
+			n = this.componentMapping[item.xtype];
 
 		if (n.dom && route) {
 			n.dom.setAttribute('data-route', route);
@@ -100,12 +100,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		var me = this;
 
-		me.cmp_map = me.cmp_map || {};
+		me.componentMapping = me.componentMapping || {};
 
 		me.clear();
 
 		(items || []).forEach(function (item) {
-			me.cmp_map[item.xtype] = me.itemTpl.append(me.outlineEl, {
+			me.componentMapping[item.xtype] = me.itemTpl.append(me.outlineEl, {
 				route: item.route,
 				title: item.title,
 				count: item.count || 0,
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	disabledItem: function (xtype) {
-		var item = this.cmp_map[xtype];
+		var item = this.componentMapping[xtype];
 		if (item) {
 			item.addCls('disabled');
 		}

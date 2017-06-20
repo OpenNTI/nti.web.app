@@ -1,9 +1,12 @@
-var Ext = require('extjs');
-var ContentAPIRegistry = require('./ContentAPIRegistry');
-var Globals = require('../../../util/Globals');
-var {guidGenerator} = Globals;
-var ReaderContentAPIRegistry = require('./ContentAPIRegistry');
-var ComponentsSimplePopoverWidget = require('../components/SimplePopoverWidget');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const Globals = require('legacy/util/Globals');
+
+const ContentAPIRegistry = require('./ContentAPIRegistry');
+
+require('../components/SimplePopoverWidget');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFrame', {
@@ -23,23 +26,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	constructor: function (config) {
 		Ext.apply(this, config);
 
-		var me = this,
+		const me = this,
 			scroll = me.dismissPopover.bind(me),
 			reader = me.reader;
 
 		me.mixins.observable.constructor.apply(me);
 
 		reader.on('destroy', 'destroy',
-				  reader.relayEvents(me, [
-					  'dismiss-popover',
-					  'display-popover',
-					  'iframe-ready',
-					  'sync-height',
-					  'content-updated',
-					  'content-updated-with',
-					  'page-previous',
-					  'page-next'
-				  ]));
+		reader.relayEvents(me, [
+			'dismiss-popover',
+			'display-popover',
+			'iframe-ready',
+			'sync-height',
+			'content-updated',
+			'content-updated-with',
+			'page-previous',
+			'page-next'
+		]));
 
 		Ext.apply(reader, {
 			getDocumentElement: me.getDocumentElement.bind(me),
@@ -80,14 +83,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			readerRight = offsets.rect.left + offsets.width,
 			scrollOffSet = Ext.getBody().getScroll().top,
 			viewHeight = Ext.Element.getViewportHeight(),
-			x, y,
 			nodeRect = node.getBoundingClientRect(),
 			midpoint = nodeRect.width / 2;
 
 		//start out positioned centered, relative to the window
-		x = offsets.rect.left + nodeRect.left + midpoint;
+		let x0 = offsets.rect.left + nodeRect.left + midpoint;
 		//start out positioned at the bpttom, relative to the window
-		y = offsets.rect.top + nodeRect.top + nodeRect.height;
+		let y0 = offsets.rect.top + nodeRect.top + nodeRect.height;
 
 		function adjustPosition (x, y) {
 			var horizontalSpaceNeeded = me.popoverWidget.getWidth() / 2,
@@ -134,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		Ext.fly(html).select('a[href]', true).set({target: '_blank'});
 
 		me.popoverWidget = Ext.widget('simple-popover-widget', {reader: this.reader, text: html.innerHTML});
-		me.popoverWidget.showAt(adjustPosition(x, y));
+		me.popoverWidget.showAt(adjustPosition(x0, y0));
 	},
 
 	dismissPopover: function () {
@@ -159,10 +161,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			xtype: 'box',
 			autoEl: {
 				tag: 'iframe',
-				name: 'iframe-' + guidGenerator() + '-content',
+				name: 'iframe-' + Globals.guidGenerator() + '-content',
 				src: (Ext.isIE || Ext.isIE11p) ?
-					 Ext.SSL_SECURE_URL :
-					 Globals.EMPTY_WRITABLE_IFRAME_SRC,
+					Ext.SSL_SECURE_URL :
+					Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
 				scrolling: 'no',
 				seamless: true,
@@ -189,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				Ext.DomHelper.markup({tag: 'html', lang: 'en', cn: [
 					{tag: 'head'},{tag: 'body'}]}),
 			me = this,
-			task = { interval: 50 }, doc;
+			task = { interval: 50 };
 
 		me.loadedResources = {};
 
@@ -235,19 +237,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			if (!Ext.isArray(event)) {
 				event = [event];
 			}
-			Ext.each(event, function (event) {
+
+			Ext.each(event, e => {
 				if (dom.addEventListener) {
-					dom.addEventListener(event, fn, false);
+					dom.addEventListener(e, fn, false);
 				}
 				else if (dom.attachEvent) {
-					dom.attachEvent(event, fn);
+					dom.attachEvent(e, fn);
 				}
 			});
 		}
 
 		function forward (name) {
 			on(doc, name, function (e) {
-				e = Ext.EventObject.setEvent(e || event);
+				e = Ext.EventObject.setEvent(e || window.event);
 				var o = me.reader.getAnnotationOffsets(),
 					xy = e.getXY().slice();
 
@@ -293,7 +296,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			document: doc });
 
 		on(doc, ['keypress', 'keydown', 'keyup'], function (e) {
-			e = Ext.EventObject.setEvent(e || event);
+			e = Ext.EventObject.setEvent(e || window.event);
 			var t = e.getTarget(),
 				k = e.getKey();
 
@@ -332,7 +335,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		});
 
 		on(doc, 'click', function (e) {
-			var evt = Ext.EventObject.setEvent(e || event),
+			var evt = Ext.EventObject.setEvent(e || window.event),
 				target = evt.getTarget(),
 				anchor = evt.getTarget('A');
 
@@ -356,7 +359,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		});
 
 		on(doc, 'mouseup', function (e) {
-			var fakeEvent = Ext.EventObject.setEvent(e || event),
+			var fakeEvent = Ext.EventObject.setEvent(e || window.event),
 				t = Ext.getBody().getScroll().top,
 				s = me.get().win.getSelection();
 
@@ -394,8 +397,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			});
 
 			on(doc, 'selectionchange', function (e) {
-				function selectionChange (e) {
-					var fakeEvent = Ext.EventObject.setEvent(e || event),
+				function selectionChange (e2) {
+					var fakeEvent = Ext.EventObject.setEvent(e2 || window.event),
 						r = me.get().win.getSelection().getRangeAt(0);
 
 					function showMenu () {
@@ -435,7 +438,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 
 		on(doc, 'mouseout', function (e) {
-			var evt = Ext.EventObject.setEvent(e || event),
+			var evt = Ext.EventObject.setEvent(e || window.event),
 				target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry');
 
 			if (target) {
@@ -445,24 +448,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 
 		on(doc, 'mouseover', function (e) {
-			var evt = Ext.EventObject.setEvent(e || event),
+			var evt = Ext.EventObject.setEvent(e || window.event),
 				target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry'),
 				targetType, href, popContent;
 
-			function getId (e, type) {
-				if (!Ext.fly(e).hasCls(type)) {
-					e = Ext.fly(e).up('.' + type);
+			function getId (e2, type) {
+				if (!Ext.fly(e2).hasCls(type)) {
+					e2 = Ext.fly(e2).up('.' + type);
 				}
-				return e.getAttribute('href');
+				return e2.getAttribute('href');
 			}
 
-			function getPopoverContent (href) {
+			function getPopoverContent (href2) {
 				var fn, clonedFn, redactedPlaceholder;
 				try {
-					fn = doc.querySelector(href);
+					fn = doc.querySelector(href2);
 				}
-				catch (e) {
-					fn = doc.getElementById(href.substring(1));
+				catch (er) {
+					fn = doc.getElementById(href2.substring(1));
 				}
 
 				if (!fn) {
@@ -471,12 +474,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				clonedFn = fn.cloneNode(true);
 
 				Ext.each(Ext.fly(clonedFn).query('a'),
-						 function (d) {
-							 var href = d.getAttribute ? d.getAttribute('href') : '';
-							 if (href && href.indexOf('#m') >= 0) {
-								 clonedFn.removeChild(d);
-							 }
-						 }
+					function (d) {
+						let href3 = d.getAttribute ? d.getAttribute('href') : '';
+						if (href3 && href.indexOf('#m') >= 0) {
+							clonedFn.removeChild(d);
+						}
+					}
 				);
 
 				//Strip out the redacted text.	Note we look based on class
@@ -528,21 +531,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	},
 
 	onceSettled: function () {
-		var me = this, fn,
-			p = me.settledPromise || new Promise(function (fulfill, reject) {
-				fn = Ext.Function.createBuffered(function () {
-					fn = Ext.emptyFn;
-					Ext.destroy(fire);
-					fire = null;
-					fulfill(me);
-				}, 500);
-				var fire = me.on({
-					destroyable: true,
-					'sync-height': fn
-				});
+		const me = this;
+		const p = me.settledPromise || new Promise((fulfill, reject) => {
+			let fire;
+			let fn = Ext.Function.createBuffered(function () {
+				fn = Ext.emptyFn;
+				Ext.destroy(fire);
+				fire = null;
+				fulfill(me);
+			}, 500);
 
-				wait(1000).then(fn);
+			fire = me.on({
+				destroyable: true,
+				'sync-height': fn
 			});
+
+			wait(1000).then(fn);
+		});
 
 		me.settledPromise = p;
 		return p;
@@ -723,7 +728,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	/**
 	 * Makes pointer events go through the iframe so that all the
 	 * interactions can be handled manually.
-	 * @param {Boolean} should
+	 * @param {Boolean} should -
+	 * @returns {void}
 	 */
 	setClickthrough: function (should) {
 		var el = this.get();
@@ -746,6 +752,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	/**
 	 * @param {Number} x relative to the window's top left corner
 	 * @param {Number} y relative to the window's top left corner
+	 * @returns {Element|Boolean} -
 	 */
 	elementAt: function (x, y) {
 		var reader = this.reader,
@@ -811,33 +818,35 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 	/**
 	 * Positions relative to the window
-	 * @param {Number} x1
-	 * @param {Number} y1
-	 * @param {Number} x2
-	 * @param {Number} y2
+	 * @param {Number} x1 -
+	 * @param {Number} y1 -
+	 * @param {Number} x2 -
+	 * @param {Number} y2 -
+	 * @returns {Range} -
 	 */
 	makeRangeFrom: function (x1, y1, x2, y2) {
-
-		function rangeAtPoint (x, y) {
-			var reader = me.reader,
-				hasClickthrough = me.hasClickthrough(),
-				framePos = reader.getPosition(),
-				scrolledY = reader.getScroll().top(),
-				localX = x - framePos[0],
-				localY = y - framePos[1] + scrolledY,
-				range;
-
-			me.setClickthrough(false);
-			range = iFrameDoc.caretRangeFromPoint(localX, localY);
-			me.setClickthrough(hasClickthrough);
-			return range;
-		}
-
-		var me = this,
+		let me = this,
 			iFrameDoc = this.getDocumentElement(),
 			startRange = rangeAtPoint(x1, y1),
 			endRange = rangeAtPoint(x2, y2),
 			range = iFrameDoc.createRange();
+
+		function rangeAtPoint (x, y) {
+			let reader = me.reader,
+				hasClickthrough = me.hasClickthrough(),
+				framePos = reader.getPosition(),
+				scrolledY = reader.getScroll().top(),
+				localX = x - framePos[0],
+				localY = y - framePos[1] + scrolledY;
+
+			me.setClickthrough(false);
+			try {
+				return iFrameDoc.caretRangeFromPoint(localX, localY);
+			} finally {
+				me.setClickthrough(hasClickthrough);
+			}
+		}
+
 		range.setStart(startRange.startContainer, startRange.startOffset);
 		range.setEnd(endRange.startContainer, endRange.endOffset);
 		return range;

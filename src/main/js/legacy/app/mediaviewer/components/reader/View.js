@@ -1,20 +1,26 @@
-var Ext = require('extjs');
-var MixinsSearchable = require('../../../../mixins/Searchable');
-var ComponentNatural = require('../../../../layout/component/Natural');
-var UtilStore = require('../../../../util/Store');
-var ReaderNoteOverlay = require('../../../contentviewer/reader/NoteOverlay');
-var ReaderNoteOverlay = require('./NoteOverlay');
-var PartsTranscript = require('./parts/Transcript');
-var PartsSlide = require('./parts/Slide');
-var PartsVideoTitle = require('./parts/VideoTitle');
-var PartsNoTranscript = require('./parts/NoTranscript');
-var MediaviewerActions = require('../../Actions');
-var MediaviewerStateStore = require('../../StateStore');
-var RendererManager = require('../../../annotations/renderer/Manager');
-var AnnotationsIndex = require('../../../annotations/Index');
-var UserdataActions = require('../../../userdata/Actions');
-var WindowsActions = require('../../../windows/Actions');
-var {guidGenerator} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const FlatPage = require('legacy/store/FlatPage');
+const UserdataActions = require('legacy/app/userdata/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+const {guidGenerator} = require('legacy/util/Globals');
+
+const MediaviewerActions = require('../../Actions');
+const MediaviewerStateStore = require('../../StateStore');
+
+require('legacy/app/annotations/Index');
+require('legacy/app/annotations/renderer/Manager');
+require('legacy/app/contentviewer/reader/NoteOverlay');
+require('legacy/layout/component/Natural');
+require('legacy/mixins/Searchable');
+require('legacy/util/Store');
+
+require('./NoteOverlay');
+require('./parts/Transcript');
+require('./parts/Slide');
+require('./parts/VideoTitle');
+require('./parts/NoTranscript');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.View', {
@@ -36,12 +42,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts', 'jump-video-to']);
 
 		this.buildComponents();
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
-		this.MediaViewerActions = NextThought.app.mediaviewer.Actions.create();
-		this.MediaViewerStore = NextThought.app.mediaviewer.StateStore.getInstance();
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.UserDataActions = UserdataActions.create();
+		this.MediaViewerActions = MediaviewerActions.create();
+		this.MediaViewerStore = MediaviewerStateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
 
-		this.flatPageStore = new NextThought.store.FlatPage();
+		this.flatPageStore = new FlatPage();
 		this.UserDataActions.initPageStores(this);
 
 		this.callParent(arguments);
@@ -364,7 +370,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 
 		if (!s) {
-			s = NextThought.store.FlatPage.create({
+			s = FlatPage.create({
 				storeId: 'presentation-annotations-' + line,
 				filters: [{ id: 'nochildren', filterFn: function (r) { return !r.parent; }}]//override the base filter set
 			});

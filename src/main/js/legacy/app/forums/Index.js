@@ -1,33 +1,35 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var MixinsRouter = require('../../mixins/Router');
-var ForumIndex = require('./components/forum/Index');
-var TopicWindow = require('./components/topic/Window');
-var ForumsBase = require('../../model/forums/Base');
-var ForumsBoard = require('../../model/forums/Board');
-var ForumsCommentPost = require('../../model/forums/CommentPost');
-var ForumsCommunityBoard = require('../../model/forums/CommunityBoard');
-var ForumsCommunityForum = require('../../model/forums/CommunityForum');
-var ForumsCommunityHeadlinePost = require('../../model/forums/CommunityHeadlinePost');
-var ForumsCommunityHeadlineTopic = require('../../model/forums/CommunityHeadlineTopic');
-var ForumsContentBoard = require('../../model/forums/ContentBoard');
-var ForumsContentCommentPost = require('../../model/forums/ContentCommentPost');
-var ForumsContentForum = require('../../model/forums/ContentForum');
-var ForumsContentHeadlinePost = require('../../model/forums/ContentHeadlinePost');
-var ForumsContentHeadlineTopic = require('../../model/forums/ContentHeadlineTopic');
-var ForumsDFLBoard = require('../../model/forums/DFLBoard');
-var ForumsDFLForum = require('../../model/forums/DFLForum');
-var ForumsDFLHeadlinePost = require('../../model/forums/DFLHeadlinePost');
-var ForumsDFLHeadlineTopic = require('../../model/forums/DFLHeadlineTopic');
-var ForumsForum = require('../../model/forums/Forum');
-var ForumsHeadlinePost = require('../../model/forums/HeadlinePost');
-var ForumsHeadlineTopic = require('../../model/forums/HeadlineTopic');
-var ForumsPersonalBlog = require('../../model/forums/PersonalBlog');
-var ForumsPersonalBlogEntry = require('../../model/forums/PersonalBlogEntry');
-var ForumsPersonalBlogEntryPost = require('../../model/forums/PersonalBlogEntryPost');
-var ForumsPost = require('../../model/forums/Post');
-var ForumsTopic = require('../../model/forums/Topic');
+const Ext = require('extjs');
 const { decodeFromURI } = require('nti-lib-ntiids');
+
+require('legacy/mixins/Router');
+require('legacy/model/forums/Base');
+require('legacy/model/forums/Board');
+require('legacy/model/forums/CommentPost');
+require('legacy/model/forums/CommunityBoard');
+require('legacy/model/forums/CommunityForum');
+require('legacy/model/forums/CommunityHeadlinePost');
+require('legacy/model/forums/CommunityHeadlineTopic');
+require('legacy/model/forums/ContentBoard');
+require('legacy/model/forums/ContentCommentPost');
+require('legacy/model/forums/ContentForum');
+require('legacy/model/forums/ContentHeadlinePost');
+require('legacy/model/forums/ContentHeadlineTopic');
+require('legacy/model/forums/DFLBoard');
+require('legacy/model/forums/DFLForum');
+require('legacy/model/forums/DFLHeadlinePost');
+require('legacy/model/forums/DFLHeadlineTopic');
+require('legacy/model/forums/Forum');
+require('legacy/model/forums/HeadlinePost');
+require('legacy/model/forums/HeadlineTopic');
+require('legacy/model/forums/PersonalBlog');
+require('legacy/model/forums/PersonalBlogEntry');
+require('legacy/model/forums/PersonalBlogEntryPost');
+require('legacy/model/forums/Post');
+require('legacy/model/forums/Topic');
+require('legacy/util/Parsing');
+
+require('./components/forum/Index');
+require('./components/topic/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.Index', {
@@ -84,16 +86,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 
 	/**
 	 * Take a forum list or a promise that fulfills with a forum list
-	 * @param {Array|Object} boardList see comments in the CourseInstance model to see structure
+	 * @param {Array|Object} forumList see comments in the CourseInstance model to see structure
+	 * @returns {void}
 	 */
 	setForumList: function (forumList) {
 		this.forumView.setForumList(null);
 		delete this.forumView.forumList;
-		this.get_forum_list = forumList instanceof Promise ? forumList : Promise.resolve(forumList);
+		this['get_forum_list'] = forumList instanceof Promise ? forumList : Promise.resolve(forumList);
 	},
 
 	getForumList: function () {
-		return this.get_forum_list || Promise.reject('No forum list defined');
+		return this['get_forum_list'] || Promise.reject('No forum list defined');
 	},
 
 	showForum: function (route, subRoute) {

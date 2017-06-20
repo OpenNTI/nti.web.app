@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsHeader = require('../../components/Header');
+const Ext = require('extjs');
+
+require('../../components/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.components.Header', {
@@ -75,39 +76,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		if (this.settingsMenu) {
 			Ext.destroy(this.settingsMenu);
 		}
-		
+
 		return;
-
-		var show = community.getLink('unhide'),
-			hide = community.getLink('hide'),
-			items = [];
-
-		if (show) {
-			items.push({handler: this.onShow.bind(this), text: 'Show'});
-		}
-
-		if (hide) {
-			items.push({handler: this.onHide.bind(this), text: 'Hide'});
-		}
-
-		if (items.length) {
-			this.settingsMenu = Ext.widget('menu', {
-				cls: 'community-settings-menu',
-				ownerCmp: this,
-				items: items,
-				defaults: {
-					ui: 'nt-menuitems',
-					xtype: 'menucheckitem',
-					plain: true
-				}
-			});
-
-			this.addButton({
-				cls: 'settings',
-				action: 'showSettings',
-				label: ' '
-			});
-		}
 	},
 
 

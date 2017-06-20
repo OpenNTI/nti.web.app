@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var PartsBaseInput = require('./BaseInput');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+require('./BaseInput');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.CheckboxGroup', {
@@ -9,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	cls: 'enrollment-input-container',
 
 	renderTpl: Ext.DomHelper.markup({
-		 cls: 'enrollment-checkbox-group', cn: [
+		cls: 'enrollment-checkbox-group', cn: [
 			{cls: 'enrollment-input dark full radio yes', cn: [
 				{tag: 'input', id: '{id}-{name}-yes', type: 'radio', name: '{name}', value: 'Y'},
 				{tag: 'label', 'for': '{id}-{name}-yes', html: 'Yes.'},
@@ -101,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	setValue: function (value) {
+	setValue: function (value, name) {
 		var input;
 
 		if (!this.rendered) {

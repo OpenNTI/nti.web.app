@@ -1,15 +1,19 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../../util/Analytics');
-var ComponentsNavPanel = require('../../../common/components/NavPanel');
-var ComponentsReader = require('../components/Reader');
-var NavigationContent = require('../navigation/Content');
-var NotepadView = require('../notepad/View');
-var StoreFlatPage = require('../../../store/FlatPage');
-var AnnotationsIndex = require('../../annotations/Index');
-var UserdataActions = require('../../userdata/Actions');
-var ContextStateStore = require('../../context/StateStore');
-var WindowsActions = require('../../windows/Actions');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const AnalyticsUtil = require('legacy/util/Analytics');
+const FlatPage = require('legacy/store/FlatPage');
+const {isFeature} = require('legacy/util/Globals');
+const QuestionSet = require('legacy/model/assessment/QuestionSet');
+
+const UserdataActions = require('../../userdata/Actions');
+const ContextStateStore = require('../../context/StateStore');
+const WindowsActions = require('../../windows/Actions');
+
+require('legacy/common/components/NavPanel');
+require('../components/Reader');
+require('../navigation/Content');
+require('../../annotations/Index');
+require('../notepad/View');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Reader', {
@@ -50,9 +54,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		var me = this;
 
-		me.UserDataActions = NextThought.app.userdata.Actions.create();
-		me.WindowActions = NextThought.app.windows.Actions.create();
-		me.ContextStore = NextThought.app.context.StateStore.getInstance();
+		me.UserDataActions = UserdataActions.create();
+		me.WindowActions = WindowsActions.create();
+		me.ContextStore = ContextStateStore.getInstance();
 		me.showReader();
 
 		me.on({
@@ -76,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		Ext.EventManager.removeResizeListener(this.onWindowResize, this);
 	},
 
-	/**
+	/*
 	 * Handles resize event on the reader
 	 *
 	 * NOTE: Since most video APIs do not provide events for when the browser goes into fullscreen mode,
@@ -107,9 +111,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		var toolbarConfig = this.getToolbarConfig(),
 			readerConfig = this.getReaderConfig(),
-			readerContent, onWindowResize;
+			readerContent;
 
-		this.flatPageStore = this.flatPageStore || NextThought.store.FlatPage.create({ storeId: 'FlatPage-' + this.id });
+		this.flatPageStore = this.flatPageStore || FlatPage.create({ storeId: 'FlatPage-' + this.id });
 		this.UserDataActions.initPageStores(this);
 
 		//since the toolbar can be a bunch of different xtypes
@@ -210,11 +214,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 	},
 
 	getReaderConfig: function () {
-		 return {
+		return {
 			xtype: 'reader-content',
 			prefix: this.prefix,
 			flex: 1
-		 };
+		};
 	},
 
 	onceReadyForSearch: function () {
@@ -311,6 +315,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 	/**
 	 * Return true if the reader should allow itself to be close
 	 * false should attempt to stop the navigation if it can
+	 * @param {Boolean} forced forced?
 	 * @return {Promise} fulfills once it can navigate, or rejects if it needs to stop
 	 */
 	allowNavigation: function (forced) {
@@ -342,7 +347,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		for (i = 0; i < assessmentItems.length; i++) {
 			item = assessmentItems[i];
 
-			if (item && item instanceof NextThought.model.assessment.QuestionSet) {
+			if (item && item instanceof QuestionSet) {
 				return item;
 			}
 		}
@@ -356,11 +361,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		if (questionSet) {
 			data.type = 'assessment-viewed';
-			data.resource_id = questionSet.getId();
+			data['resource_id'] = questionSet.getId();
 			data.ContentId = this.pageInfo.getId();
 		} else {
 			data.type = 'resource-viewed';
-			data.resource_id = this.pageInfo.getId();
+			data['resource_id'] = this.pageInfo.getId();
 		}
 
 		return data;
@@ -369,10 +374,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 	beginViewedAnalytics: function () {
 		var data = this.getAnalyticData();
 		//if we don't have a resource id for some reason, we can't send a valid event
-		if (!data.resource_id) { return; }
+		if (!data['resource_id']) { return; }
 
 		//if we are trying to start an event for the one we already have going
-		if (this.__lastAnalyticEvent && this.__lastAnalyticEvent.resource_id === data.resource_id) {
+		if (this.__lastAnalyticEvent && this.__lastAnalyticEvent['resource_id'] === data['resource_id']) {
 			return;
 		}
 
@@ -382,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		this.__lastAnalyticEvent = data;
 
-		AnalyticsUtil.getResourceTimer(data.resource_id, data);
+		AnalyticsUtil.getResourceTimer(data['resource_id'], data);
 	},
 
 	endViewedAnalytics: function () {
@@ -390,6 +395,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		if (!data) { return; }
 
-		AnalyticsUtil.stopResourceTimer(data.resource_id, data.type, data);
+		AnalyticsUtil.stopResourceTimer(data['resource_id'], data.type, data);
 	}
 });

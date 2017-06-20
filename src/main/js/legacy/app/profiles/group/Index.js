@@ -1,11 +1,14 @@
-var Ext = require('extjs');
-var UserIndex = require('../user/Index');
-var ComponentsHeader = require('./components/Header');
-var MembershipIndex = require('../user/components/membership/Index');
-var ActivityIndex = require('./components/activity/Index');
-var MembershipIndex = require('./components/membership/Index');
-var GroupsActions = require('../../groups/Actions');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isMe} = require('legacy/util/Globals');
+
+const GroupsActions = require('../../groups/Actions');
+
+require('../user/Index');
+require('../user/components/membership/Index');
+require('./components/Header');
+require('./components/activity/Index');
+require('./components/membership/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
@@ -19,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 
 		this.addDefaultRoute('/activity');
 
-		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.GroupActions = GroupsActions.create();
 	},
 
 	buildHeaderComponent: function () {
@@ -70,8 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 	},
 
 	showMembership: function (route, subRoute) {
-		var membershipCmp = this.setActiveItem('group-profile-membership'),
-			headerCmp = this.headerCmp;
+		var membershipCmp = this.setActiveItem('group-profile-membership');
 
 		this.setState('members');
 
@@ -81,8 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 	},
 
 	showActivity: function (route, subRoute) {
-		var activityCmp = this.setActiveItem('profile-group-activity'),
-			headerCmp = this.headerCmp;
+		var activityCmp = this.setActiveItem('profile-group-activity');
 
 		activityCmp.gotoMembership = this.pushRoute.bind(this, 'Members', '/members');
 		this.setState('activity');

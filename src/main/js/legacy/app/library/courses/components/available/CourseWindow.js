@@ -1,18 +1,24 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../util/Parsing');
-var WindowWindow = require('../../../../../common/window/Window');
-var MixinsRouter = require('../../../../../mixins/Router');
-var CatalogCollection = require('../../../../course/catalog/Collection');
-var AvailableActions = require('./Actions');
-var CoursesStateStore = require('../../StateStore');
-var EnrollmentDetails = require('../../../../course/enrollment/Details');
-var EnrollmentStateStore = require('../../../../course/enrollment/StateStore');
-var EnrollmentDetails = require('../../../../course/enrollment/Details');
-var ComponentsProcess = require('../../../../course/enrollment/components/Process');
-var StoreActions = require('../../../../store/Actions');
-var {isFeature} = require('legacy/util/Globals');
-var CoursePage = require('./CoursePage');
+const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+const {wait} = require('nti-commons');
+
+const EnrollmentActions = require('legacy/app/course/enrollment/Actions');
+const EnrollmentStateStore = require('legacy/app/course/enrollment/StateStore');
+const StoreActions = require('legacy/app/store/Actions');
+const {isFeature} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
+const CoursesActions = require('../../Actions');
+const CoursesStateStore = require('../../StateStore');
+
+require('legacy/util/Parsing');
+require('legacy/common/window/Window');
+require('legacy/mixins/Router');
+require('legacy/app/course/catalog/Collection');
+require('legacy/app/course/enrollment/Details');
+require('legacy/app/course/enrollment/components/Process');
+require('./CoursePage');
+require('./Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CourseWindow', {
@@ -41,13 +47,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	childEls: ['body'],
 	getDockedItems: function () { return []; },
 
-	/**
+	/*
 	 * Ext is shooting us in the foot when it tries to center it
 	 * so for now just don't let Ext do anything here.
 	 */
 	setPosition: function () {},
 
-	/**
+	/*
 	 * This is always going to be positioned  fixed, so don't
 	 * let Ext layout try to calculate according to parents.
 	 */
@@ -160,11 +166,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.CourseActions = NextThought.app.library.courses.Actions.create();
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
-		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
-		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
-		this.StoreActions = NextThought.app.store.Actions.create();
+		this.CourseActions = CoursesActions.create();
+		this.CourseStore = CoursesStateStore.getInstance();
+		this.CourseEnrollmentStore = EnrollmentStateStore.getInstance();
+		this.CourseEnrollmentActions = EnrollmentActions.create();
+		this.StoreActions = StoreActions.create();
 
 		this.initRouter();
 
@@ -183,9 +189,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	setupCourses: function (courses) {
-		var current = this.CourseStore.getAllCurrentCourses(),
-			archived = this.CourseStore.getAllArchivedCourses();
-		upcoming = this.CourseStore.getAllUpcomingCourses();
+		const current = this.CourseStore.getAllCurrentCourses();
+		const archived = this.CourseStore.getAllArchivedCourses();
+		const upcoming = this.CourseStore.getAllUpcomingCourses();
 
 		this.updateAvailableCourses(current, upcoming, archived);
 		if (!this.tabpanel || this.tabpanel.activeTab) {
@@ -333,6 +339,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	 * @param  {Boolean} isError  whether or not we are showing an error
 	 * @param  {Number} timeout	 timeout...
 	 * @param  {String} msgid  id of the message element
+	 * @param  {Boolean} cursor  -
 	 * @return {Promise} fulfill if there is a click handler on click, and reject on close
 	 */
 	showMsg: function (msg, isError, timeout, msgid, cursor) {

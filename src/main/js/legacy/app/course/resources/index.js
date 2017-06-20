@@ -1,7 +1,9 @@
 const Ext = require('extjs');
-const Resources = require('nti-web-course-resources');
 const {getService} = require('nti-web-client');
+
+const Resources = require('nti-web-course-resources');
 const ParseUtils = require('legacy/util/Parsing');
+const SearchStateStore = require('legacy/app/search/StateStore');
 
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
@@ -43,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 
 		this.addDefaultRoute('/readings');
 
-		this.SearchStore = NextThought.app.search.StateStore.getInstance();
+		this.SearchStore = SearchStateStore.getInstance();
 		this.ContentActions = NextThought.app.content.Actions.create();
 
 		this.initSearchHandler(this.SearchStore);

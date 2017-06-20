@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ComponentsPurchase = require('./Purchase');
+const Ext = require('extjs');
+
+const {getString, getFormattedString} = require('legacy/util/Localization');
+
+require('./Purchase');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Redeem', {
@@ -87,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		if (this.enrollmentOption.AllowVendorUpdates) {
 			this.revealItem('allowupdates_container');
 		}
-		
+
 		this.redeemable = false;
 
 		this.on({

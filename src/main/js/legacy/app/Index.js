@@ -44,6 +44,8 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 	},
 
 	constructor: function () {
+		//This variable is set by phantomjs environment?
+		//eslint-disable-next-line no-undef
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
 
@@ -182,6 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		// Scroll scrollable element on two-finger scrolling
 		if (e.browserEvent.changedTouches[1]) {
 			scrollableElement = Ext.get(touch.target);
+			//while true?? ugly.
 			while (true) {
 				if (scrollableElement.isScrollable()) {
 					break;
@@ -290,20 +293,18 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 	},
 
 	lockOrientation: function () {
-		var optWindow, iframe, me = this;
+		var optWindow, me = this;
 
 		/*If user rotates to portrait, display screen saying to rotate it.
 		 * if they rotate back to landscape, destroy screen*/
 		window.addEventListener('orientationchange', function () {
-			var iframe;
-
 			if (optWindow) {
 				optWindow.destroy();
 				optWindow = null;
 			}
 			if (Math.abs(window.orientation) !== 90) {
 				optWindow = me.createPortraitOrientationScreen();
-				iframe = optWindow.el.down('iframe');
+				const iframe = optWindow.el.down('iframe');
 				iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
 					e.preventDefault();
 				});
@@ -313,7 +314,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 
 		if (Math.abs(window.orientation) !== 90) {
 			optWindow = this.createPortraitOrientationScreen();
-			iframe = optWindow.el.down('iframe');
+			const iframe = optWindow.el.down('iframe');
 			iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
 				e.preventDefault();
 			});

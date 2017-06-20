@@ -1,14 +1,19 @@
-var Ext = require('extjs');
-var MixinsRouter = require('../../mixins/Router');
-var MixinsState = require('../../mixins/State');
-var ComponentsTabView = require('./components/TabView');
-var ContactsActions = require('./Actions');
-var ContactsStateStore = require('./StateStore');
-var ComponentsContactTabView = require('./components/ContactTabView');
-var ComponentsGroupTabView = require('./components/GroupTabView');
-var ComponentsListView = require('./components/ListView');
-var ComponentsNavigation = require('../../common/components/Navigation');
-var NavigationActions = require('../navigation/Actions');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const ComponentsNavigation = require('legacy/common/components/Navigation');
+
+const NavigationActions = require('../navigation/Actions');
+
+const ContactsActions = require('./Actions');
+const ContactsStateStore = require('./StateStore');
+
+require('legacy/mixins/Router');
+require('legacy/mixins/State');
+require('./components/TabView');
+require('./components/ContactTabView');
+require('./components/GroupTabView');
+require('./components/ListView');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
@@ -37,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 
 	defaultType: 'box',
 	activeItem: 0,
-	cmp_map: {},
+	'componentMapping': {},
 
 	initComponent: function () {
 		var me = this;
@@ -45,9 +50,9 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		me.callParent(arguments);
 		this.removeCls('make-white');
 
-		this.ContactsActions = NextThought.app.contacts.Actions.create();
-		this.ContactsStore = NextThought.app.contacts.StateStore.getInstance();
-		this.NavigationActions = NextThought.app.navigation.Actions.create();
+		this.ContactsActions = ContactsActions.create();
+		this.ContactsStore = ContactsStateStore.getInstance();
+		this.NavigationActions = NavigationActions.create();
 
 		this.initRouter();
 
@@ -156,10 +161,10 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 	},
 
 	getItem: function (xtype) {
-		var cmp = this.cmp_map[xtype];
+		var cmp = this.componentMapping[xtype];
 
 		if (!cmp) {
-			cmp = this.cmp_map[xtype] = this.down(xtype);
+			cmp = this.componentMapping[xtype] = this.down(xtype);
 			if (cmp.handleRoute) {
 				this.addChildRouter(cmp);
 			}
@@ -180,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 
 	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
-			this.navigation = NextThought.common.components.Navigation.create({
+			this.navigation = ComponentsNavigation.create({
 				bodyView: this
 			});
 		}

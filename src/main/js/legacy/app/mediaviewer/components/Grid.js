@@ -1,7 +1,14 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../util/Content');
-var ParseUtils = require('../../../util/Parsing');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const VideoPosters = require('legacy/model/resolvers/VideoPosters');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+const ContentUtils = require('legacy/util/Content');
+
+const LibraryActions = require('../../library/Actions');
+
+require('legacy/util/Parsing');
+
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	extend: 'Ext.view.View',
@@ -79,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 
 		this.on({
 			itemclick: function (cmp, record, item) {
@@ -230,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 			thumbnail = source && source.thumbnail;
 
 		if (!thumbnail && source) {
-			NextThought.model.resolvers.VideoPosters.resolveForSource(source)
+			VideoPosters.resolveForSource(source)
 				.then(function (obj) {
 					source.thumbnail = obj.thumbnail;
 
@@ -242,7 +249,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 
 	/**
 	 * Get list of videos for a course with section titles.
-	 * @return {[type]} [description]
+	 * @param {Object} bundle [description]
+	 * @return {Promise} [description]
 	 */
 	getVideosForBundle: function (bundle) {
 		if (!bundle.getMediaByOutline || !bundle.getNavigationStore) {
@@ -253,11 +261,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 			return this.__getVideosPromise;
 		}
 
-		var outlineInterface = bundle.getOutlineInterface();
-
 		this.__getVideosPromise = Promise.all([
 			bundle.getMediaByOutline(),
-			outlineInterface.onceBuilt()
+			bundle.getOutlineInterface().onceBuilt()
 		])
 			.then(function (results) {
 				var outline = results[0],
@@ -272,7 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 						node = outlineInterface && outlineInterface.findOutlineNode(cid);
 
 					if (node && videoIds && videoIds.length) {
-						videos.push(NextThought.model.PlaylistItem({
+						videos.push(PlaylistItem({
 							section: node.get('label'),
 							sources: []
 						}));
@@ -283,7 +289,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 
 						// Filter Videos only
 						if (v && (v.Class === undefined || v.Class === 'Video')) {
-							v = NextThought.model.PlaylistItem(v);
+							v = PlaylistItem(v);
 							v.NTIID = v.ntiid;
 							v.section = cid;
 							videos.push(v);
@@ -316,13 +322,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 		this.getVideosForBundle(bundle)
 			.then(function (videos) {
 				me.store = new Ext.data.Store({
-					model: NextThought.model.PlaylistItem,
+					model: PlaylistItem,
 					proxy: 'memory',
 					data: videos
 				});
 
 				me.store.each(function (record) {
-					 me.getThumbnail(record);
+					me.getThumbnail(record);
 				});
 
 				me.bindStore(me.store);
@@ -359,7 +365,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 			root = this.currentBundle.getContentRoots()[0],
 			section = rec && rec.get('section'), route,
 			slidedeckId = rec && rec.get('slidedeck'),
-			me = this, isVideo = true;
+			isVideo = true;
 
 		if (!Ext.isEmpty(slidedeckId)) {
 			route = section && encodeForURI(section) + '/slidedeck/' + encodeForURI(slidedeckId);

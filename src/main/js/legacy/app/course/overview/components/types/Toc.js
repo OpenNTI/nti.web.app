@@ -1,18 +1,21 @@
-var Ext = require('extjs');
-var PartsContentLink = require('../parts/ContentLink');
-var PartsDiscussion = require('../parts/Discussion');
-var PartsHeader = require('../parts/Header');
-var PartsIframeWindow = require('../parts/IframeWindow');
-var PartsPoll = require('../parts/Poll');
-var PartsQuestionSet = require('../parts/QuestionSet');
-var PartsSection = require('../parts/Section');
-var PartsSpacer = require('../parts/Spacer');
-var PartsSurvey = require('../parts/Survey');
-var PartsTimeline = require('../parts/Timeline');
-var PartsTopic = require('../parts/Topic');
-var PartsVideo = require('../parts/Video');
-var ModelVideo = require('../../../../../model/Video');
-var ModelVideoRoll = require('../../../../../model/VideoRoll');
+const Ext = require('extjs');
+
+const Video = require('legacy/model/Video');
+const VideoRoll = require('legacy/model/VideoRoll');
+const {getString} = require('legacy/util/Localization');
+
+require('../parts/ContentLink');
+require('../parts/Discussion');
+require('../parts/Header');
+require('../parts/IframeWindow');
+require('../parts/Poll');
+require('../parts/QuestionSet');
+require('../parts/Section');
+require('../parts/Spacer');
+require('../parts/Survey');
+require('../parts/Timeline');
+require('../parts/Topic');
+require('../parts/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.types.Toc', {
@@ -76,12 +79,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
 			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
 			sections = {},
-			videoIndex = me.videoIndex || {},
 			children = this.collapseVideos(node.getChildren()),
 			items = [];
 
 		Ext.each(children, function (i) {
-			var c, t, p;
+			var c, t;
 
 			if (i.isModel) {
 				items.push(me.getComponentForRecord(i));
@@ -173,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getComponentForRecord: function (rec) {
 		var config;
 
-		if (rec instanceof NextThought.model.VideoRoll) {
+		if (rec instanceof VideoRoll) {
 			config = {
 				xtype: 'course-overview-videoroll',
 				record: rec,
@@ -181,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				navigate: this.navigate,
 				locationInfo: this.locInfo
 			};
-		} else if (rec instanceof NextThought.model.Video) {
+		} else if (rec instanceof Video) {
 			config = {
 				xtype: 'course-overview-video',
 				record: rec,
@@ -208,14 +210,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 					last.addVideo(video);
 				} else if (next && next.getAttribute('mimeType') === 'application/vnd.nextthought.ntivideo') {
-					var video = me.createVideo(item);
 
-					acc.push(NextThought.model.VideoRoll.create({
-						Items: [video]
+					acc.push(VideoRoll.create({
+						Items: [me.createVideo(item)]
 					}));
 				} else {
-					var video = me.createVideo(item);
-					acc.push(video);
+					acc.push(me.createVideo(item));
 				}
 			} else {
 				acc.push(item);
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var ntiid = node.getAttribute('ntiid'),
 			item = this.videoIndex[ntiid];
 
-		return NextThought.model.Video.create({
+		return Video.create({
 			'label': node.getAttribute('label'),
 			'title': item.title || node.getAttribute('label'),
 			'mediaId': item.title || node.getAttribute('label'),

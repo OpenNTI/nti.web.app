@@ -1,12 +1,14 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var TypesContent = require('./types/Content');
-var TypesQuestion = require('./types/Question');
-var TypesRelatedWork = require('./types/RelatedWork');
-var TypesSlide = require('./types/Slide');
-var TypesVideo = require('./types/Video');
-var ComponentsAuthorizationContext = require('./components/AuthorizationContext');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+const {isFeature} = require('legacy/util/Globals');
+
+require('./types/Content');
+require('./types/Question');
+require('./types/RelatedWork');
+require('./types/Slide');
+require('./types/Video');
+require('./components/AuthorizationContext');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.ContainerContext', {
@@ -59,10 +61,15 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 	},
 
 	__parseContext: function (contextType, obj) {
-		var typesPath = NextThought.app.context.types,
-			keys = Object.keys(typesPath), i, handler;
+		//This should be rewritten to create an array at the top of the file instead
+		//Tof using the "Magic" ExtJS class namespace object...
+		//eslint-disable-next-line no-undef
+		const typesPath = NextThought.app.context.types;
+		const keys = Object.keys(typesPath);
 
-		for (i = 0; i < keys.length; i++) {
+		let handler;
+
+		for (let i = 0; i < keys.length; i++) {
 			handler = typesPath[keys[i]];
 			if (handler.canHandle && handler.canHandle(obj)) {
 				break;
@@ -87,10 +94,9 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 	},
 
 	__handle403Response: function (response) {
-		var o = Ext.decode(response.responseText, true),
-			status = response.status,
-			req = response && response.request,
-			originalURL = req && req.options && req.options.url;
+		const status = response.status;
+		const req = response && response.request;
+		const originalURL = req && req.options && req.options.url;
 
 		if (status === 403 && originalURL) {
 			return this.requestForbiddenContext(originalURL);
@@ -107,11 +113,11 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 
 		return Service.request(url)
 					.then(function (resp) {
-						var p = Ext.decode(resp, true);
-						catalogEntry = p.Items && ParseUtils.parseItems(p.Items)[0];
+						let p = Ext.decode(resp, true);
+						let catalogEntry = p.Items && ParseUtils.parseItems(p.Items)[0];
 
 						if (catalogEntry) {
-							cmp = Ext.widget('context-authorization', {
+							let cmp = Ext.widget('context-authorization', {
 								catalogEntry: catalogEntry
 							});
 

@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 const {getString} = require('legacy/util/Localization');
 
 

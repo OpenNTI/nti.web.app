@@ -1,8 +1,12 @@
-var Ext = require('extjs');
-var ModelPlaylistItem = require('../../../../../model/PlaylistItem');
-var VideoVideo = require('../../../../video/Video');
-var LibraryActions = require('../../../../library/Actions');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const {getString} = require('legacy/util/Localization');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+const LibraryActions = require('legacy/app/library/Actions');
+const {getURL} = require('legacy/util/Globals');
+
+require('legacy/app/video/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Videos', {
@@ -126,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.addCls('singular');
 		}
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 
 		this.playlist = [];
 
@@ -148,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	applyVideoData: function (videoIndex) {
 		//console.debug(videoIndex);
-		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
+		var reader = Ext.data.reader.Json.create({model: PlaylistItem}),
 			me = this, selected = this.getSelectionModel().selected, toRemove = [], count,
 			store = this.getStore();
 
@@ -181,15 +185,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}).records[0];
 
 					me.mon(item, {
-						'resolved-poster': function (item) {
-							if( item.get('poster') !== r.get('poster')
-								|| item.get('thumbnail') !== r.get('thumbnail')) {
-								 r.set({
-									poster: item.get('poster'),
-									thumb: item.get('thumbnail')
-								 });
+						'resolved-poster': function (video) {
+							if( video.get('poster') !== r.get('poster')
+								|| video.get('thumbnail') !== r.get('thumbnail')) {
+								r.set({
+									poster: video.get('poster'),
+									thumb: video.get('thumbnail')
+								});
 
-								 me.onSelectChange(me.store, me.getSelectionModel().getSelection()[0]);
+								me.onSelectChange(me.store, me.getSelectionModel().getSelection()[0]);
 							}
 						}
 					});
@@ -470,7 +474,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this,
 			m = me.getSelectedVideo(),
 			li = me.locationInfo,
-			slidedeck, slideActions;
+			slidedeck;
 
 
 		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
@@ -524,7 +528,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.course.getVideoForId(videoItem.getId())
 			.then(function (o) {
-				var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+				var video = PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 				video.basePath = basePath;
 				me.navigate.call(null, video);
 			});

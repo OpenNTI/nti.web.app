@@ -1,10 +1,15 @@
-var Ext = require('extjs');
-var User = require('../../../../../../model/User');
-var GridFeatureGradeInputs = require('../../../../../../mixins/grid-feature/GradeInputs');
-var MixinsState = require('../../../../../../mixins/State');
-var AdminPagedGrid = require('../PagedGrid');
-var AdminListHeader = require('../ListHeader');
-var {swallow, isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const {getString} = require('legacy/util/Localization');
+const User = require('legacy/model/User');
+const Grade = require('legacy/model/courseware/Grade');
+const {swallow, isFeature} = require('legacy/util/Globals');
+
+require('legacy/mixins/grid-feature/GradeInputs');
+require('legacy/mixins/State');
+require('../PagedGrid');
+require('../ListHeader');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Root', {
@@ -139,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						cls: 'disclaimer-header', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Projected Grade'
 					}),
 					renderer: function (val) {
-						return NextThought.model.courseware.Grade.getDisplay(val);
+						return Grade.getDisplay(val);
 					}
 				}
 			}
@@ -230,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		record = this.store.findBy(function (rec) {
 			var user = rec.get('User');
 
-			return student === NextThought.model.User.getIdFromRaw(user) && !rec.isPagingRecord;
+			return student === User.getIdFromRaw(user) && !rec.isPagingRecord;
 		});
 
 		if (record < 0) {
@@ -246,8 +251,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	maybeShowPredicted: function () {
-		var rec = this.store.getRange()[0],
-			column = this.grid.down('[dataIndex=PredictedGrade]');
+		var rec = this.store.getRange()[0];
 
 		if (rec && rec.raw.hasOwnProperty('PredictedGrade')) {
 			this.grid.showColumn('PredictedGrade');
@@ -547,7 +551,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.stateDisabled = true;
 		this.clearSearch();
 		this.stateDisabled = false;
-		this.current_state = {};
+		this.currentState = {};
 	},
 
 	setSearch: function (val) {
@@ -592,7 +596,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			sorter = (sorters && sorters[0]) || {},
 			params = store.proxy.extraParams,
 			filters = params.filter ? params.filter.split(',') : [],
-			studentFilters, itemFilters, studentFilter, itemFilter;
+			studentFilters, itemFilters;
 
 		studentFilters = this.STUDENT_FILTERS.reduce(function (acc, filter) {
 			acc[filter.type] = true;
@@ -725,7 +729,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			store.setPageSize(50);
 		}
 
-		this.current_state = state;
+		this.currentState = state;
 
 		return new Promise(function (fulfill, reject) {
 			me.mon(store, {
@@ -767,9 +771,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	updateFilter: function () {
-		var state = Ext.clone(this.current_state) || {},
-			newPage = state.currentPage !== this.currentPage,
-			header = this.pageHeader;
+		var state = Ext.clone(this.currentState) || {},
+			newPage = state.currentPage !== this.currentPage;
 
 		if (this.stateDisabled) { return; }
 
@@ -943,7 +946,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 			},
 			//Don't know if these need to be translated
-			items: NextThought.model.courseware.Grade.getLetterItems()
+			items: Grade.getLetterItems()
 		});
 	},
 
@@ -951,8 +954,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var me = this,
 			rec = record || me.grid.getRecord(node),
 			el = Ext.get(node),
-			dropdown = el && el.down('.gradebox .letter'),
-			current;
+			dropdown = el && el.down('.gradebox .letter');
 
 		me.gradeMenu.items.each(function (item, index) {
 			var x = item.height * index;
@@ -960,7 +962,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			if (item.text === rec.get('letter')) {
 				item.setChecked(true, true);
 				me.gradeMenu.offset = [-1, -x];
-				current = item;
+				// current = item;
 			} else {
 				item.setChecked(false, true);
 			}
@@ -992,8 +994,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			node = view.getNode(record),
 			historyItem = record.get('HistoryItemSummary'),
 			grade = historyItem.get('Grade'),
-			oldValues = grade && grade.getValues(),
-			save;
+			oldValues = grade && grade.getValues();
 
 		//if a letter has not been passed use the old one
 		if (!letter) {

@@ -4,7 +4,7 @@ const ParseUtils = require('legacy/util/Parsing');
 const Socket = require('legacy/proxy/Socket');
 const RoomInfo = require('legacy/model/RoomInfo');
 const {isMe} = require('legacy/util/Globals');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
 require('legacy/common/StateStore');

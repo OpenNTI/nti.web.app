@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var PanelsReader = require('../Reader');
-var AssignmentAdmin = require('../../navigation/assignment/Admin');
+const Ext = require('extjs');
+
+require('../../navigation/assignment/Admin');
+require('../Reader');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Admin', {
@@ -67,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		var bundle = this.ContextStore.getRootBundle(),
 			data = {
 				type: 'assignment-viewed',
-				resource_id: this.assignment.getId(),
+				'resource_id': this.assignment.getId(),
 				ContentId: this.pageInfo.getId(),
 				course: bundle && bundle.getId()
 			};

@@ -1,8 +1,12 @@
-var Ext = require('extjs');
-var MixinsContactSearchMixin = require('../../../../mixins/ContactSearchMixin');
-var OutlineSearch = require('./Search');
-var ContactsActions = require('../../Actions');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const {isFeature} = require('legacy/util/Globals');
+
+const ContactsActions = require('../../Actions');
+
+require('legacy/mixins/ContactSearchMixin');
+require('./Search');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.outline.View', {
@@ -75,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 			this.mixins.contactSearching.constructor.apply(this, arguments);
 		}
 
-		this.ContactsActions = NextThought.app.contacts.Actions.create();
+		this.ContactsActions = ContactsActions.create();
 	},
 
 	beforeRender: function () {
@@ -102,10 +106,10 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 			itemclick: function () {
 				this.fromClick = true;
 			},
-			beforeselect: function (s, r) {
+			beforeselect: function (sel, r) {
 				var pass = r.data.type !== 'unit',
-					store = s.getStore(),
-					last = s.lastSelected || store.first(), next;
+					store = sel.getStore(),
+					last = sel.lastSelected || store.first(), next;
 
 				if (this.fromKey && !pass) {
 					last = store.indexOf(last);
@@ -113,12 +117,12 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 					next += ((next - last) || 1);
 
 					//do this in the next event pump
-					Ext.defer(s.select, 1, s, [next]);
+					Ext.defer(s.select, 1, sel, [next]);
 				}
 				return pass;
 
 			},
-			select: function (s, r) {
+			select: function (sel, r) {
 				if (this.fromClick || this.fromKey) {
 					console.debug('do something with selection');
 					this.fireEvent('contact-row-selected', r);
@@ -126,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 				delete this.fromClick;
 				delete this.fromKey;
 
-				s.deselect(r);
+				sel.deselect(r);
 			}
 		});
 	},

@@ -1,10 +1,13 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../util/Globals');
-var MixinsRouter = require('../../../../../mixins/Router');
-var ChartGrade = require('../../../../../common/chart/Grade');
-var ChartGradePerformance = require('../../../../../common/chart/GradePerformance');
+const Ext = require('extjs');
 
+const Globals = require('legacy/util/Globals');
+const {getString, getFormattedString} = require('legacy/util/Localization');
 
+require('legacy/mixins/Router');
+require('legacy/common/chart/Grade');
+require('legacy/common/chart/GradePerformance');
+
+const StudentPerformance =
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-performance',
@@ -130,20 +133,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							width: 70,
 							resizable: false,
 							doSort: function (state) {
-								function get (o) {
-									var grade = o.get('Grade'),
-										values = grade && grade.getValues(),
-										value = values && values.value;
-
-									return value || '';
-								}
-
 								var store = this.up('grid').getStore(),
 									sorter = new Ext.util.Sorter({
 										direction: state,
 										property: 'grade',
 										root: 'data',
-										sorterFn: NextThought.app.course.assessment.components.student.Performance.getScoreSorter()
+										sorterFn: StudentPerformance.getScoreSorter()
 									});
 
 								store.sort(sorter);
@@ -248,19 +243,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			c = me.store.getRange().filter(complete).length,
 			values;
 
-		function addGrade (values) {
+		function addGrade (grade) {
 			var elements = [];
 
-			if (values.value) {
-				elements.push({tag: 'span', cls: 'score-grade', html: values.value});
+			if (grade.value) {
+				elements.push({tag: 'span', cls: 'score-grade', html: grade.value});
 
-				if (values.letter) {
+				if (grade.letter) {
 					elements.push('&nbsp;');
 				}
 			}
 
-			if (values.letter) {
-				elements.push({tag: 'span', cls: 'letter-grade', html: values.letter});
+			if (grade.letter) {
+				elements.push({tag: 'span', cls: 'letter-grade', html: grade.letter});
 			}
 
 			me.tempGrade.update(Ext.DomHelper.markup(elements));
@@ -283,7 +278,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						return;
 					}
 
-					var elements = [];
 					values = grade.getValues();
 
 					addGrade(values);

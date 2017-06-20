@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PartsUsers = require('../../membership/parts/Users');
+const Ext = require('extjs');
+
+require('../../membership/parts/Users');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
@@ -42,8 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	},
 
 	setFriends: function (friends) {
-		var me = this,
-			friends = friends.slice();
+		friends = friends.slice();
 
 		if(this.creator) {
 			friends.unshift(this.creator);
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 
 		friends = friends.slice(0, this.limit);
-		headingString = Ext.String.format('{0} ({1})', this.title, this.totalCount);
+		let headingString = Ext.String.format('{0} ({1})', this.title, this.totalCount);
 		this.titleEl.setHTML(headingString);
 
 		return this.callParent([friends]);

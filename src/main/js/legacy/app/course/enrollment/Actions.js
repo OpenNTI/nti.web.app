@@ -1,26 +1,28 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-require('../../../common/Actions');
-require('../../library/courses/StateStore');
-require('../../library/courses/Actions');
-require('../../navigation/path/Actions');
-const {wait} = require('legacy/util/Promise');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
+const ParseUtils = require('legacy/util/Parsing');
+
+const CoursesStateStore = require('../../library/courses/StateStore');
+const CoursesActions = require('../../library/courses/Actions');
+const PathActions = require('../../navigation/path/Actions');
+
+require('legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	constructor: function () {
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
-		this.CourseActions = NextThought.app.library.courses.Actions.create();
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.CourseStore = CoursesStateStore.getInstance();
+		this.CourseActions = CoursesActions.create();
+		this.PathActions = PathActions.create();
 	},
 
 	/**
 	 * Drops a course
 	 * @param  {CourseCatalogEntry}	  course   the course to enroll or drop
-	 * @param  {boolean}   enrolled	  true to enroll false to drop
 	 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
+	 * @returns {void}
 	 */
 	dropCourse: function (course, callback) {
 		var me = this,
@@ -36,9 +38,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 
 	/**
 	 * Drops a course
-	 * @param  {CourseCatalogEntry}	  course   the course to enroll or drop
-	 * @param  {boolean}   enrolled	  true to enroll false to drop
-	 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
+	 * @param  {CourseCatalogEntry} course the course to enroll or drop
+	 * @param  {Object} enrollment course enrollement object
+	 * @param  {Function} callback what to do when its done, takes two arguments success,changed\
+	 * @returns {void}
 	 */
 	dropEnrollment: function (course, enrollment, callback) {
 		var me = this;
@@ -89,13 +92,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 	/**
 	 * Enrolls in a course
 	 * @param  {CourseCatalogEntry}	  course   the course to enroll or drop
-	 * @param  {boolean}   enrolled	  true to enroll false to drop
 	 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
+	 * @returns {void}
 	 */
 	enrollCourse: function (course, callback) {
-		var me = this;
-		enrollment = me.CourseStore.findEnrollmentForCourse(course.getId()),
-			courseHref = course.get('href');
+		const me = this;
+		const enrollment = me.CourseStore.findEnrollmentForCourse(course.getId());
 
 		//if we trying to enroll, and we are already enrolled no need to enroll again
 		if (enrollment) {

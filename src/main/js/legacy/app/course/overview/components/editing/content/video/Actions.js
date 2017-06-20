@@ -1,7 +1,7 @@
-var Ext = require('extjs');
-var EditingActions = require('../../Actions');
-var ModelVideoRoll = require('../../../../../../../model/VideoRoll');
-var ModelVideo = require('../../../../../../../model/Video');
+const Ext = require('extjs');
+
+const Video = require('legacy/model/Video');
+const VideoRoll = require('legacy/model/VideoRoll');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.Actions', {
@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	__getVideoRollData: function (videos) {
 		var data = {
-			MimeType: NextThought.model.VideoRoll.mimeType
+			MimeType: VideoRoll.mimeType
 		};
 
 		data.Items = videos.map(function (video) {
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	__getVideoData: function (video) {
 		return {
-			MimeType: NextThought.model.Video.mimeType,
+			MimeType: Video.mimeType,
 			NTIID: video.getId()
 		};
 	},
@@ -171,9 +171,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (!videos) {
 			save = this.__moveRecord(record, originalPosition, newPosition, root);
-		} else if (record instanceof NextThought.model.VideoRoll) {
+		} else if (record instanceof VideoRoll) {
 			save = this.__updateVideoRoll(videos, record, originalPosition, newPosition, root);
-		} else if (record instanceof NextThought.model.Video) {
+		} else if (record instanceof Video) {
 			save = this.__updateSingleVideo(videos, record, originalPosition, newPosition, root);
 		}
 

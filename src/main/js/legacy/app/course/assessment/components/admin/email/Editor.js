@@ -1,6 +1,12 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
 const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
+const EmailActions = require('./Actions');
+
 require('legacy/editor/Editor');
 require('legacy/model/Email');
 require('./Actions');
@@ -88,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		wait(500).then(this.syncHeight.bind(this)); //let the animation finish
 
-		this.EmailActions = NextThought.app.course.assessment.components.admin.email.Actions.create();
+		this.EmailActions = EmailActions.create();
 		this.replyScopeEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.setReceiverField();
 		this.setupTitleField();
@@ -407,6 +413,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 *
 	 * @param  {Ext.MenuItem} item [description]
 	 * @param  {Ext.Menu} menu [description]
+	 * @returns {void}
 	 */
 	handleNoReplyMenuClick: function (item, menu) {
 		this.record.set('NoReply', item.NoReply);
@@ -428,7 +435,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		e.stopEvent();
 		var me = this,
 			v = this.getValue(),
-			t, trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l, rec,
+			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l,
 			isAllowReply = this.replyCheckBoxEl && this.replyCheckBoxEl.dom.checked;
 
 		if (DomUtils.isEmpty(v.body)) {

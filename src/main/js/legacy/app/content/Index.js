@@ -1,10 +1,14 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var ComponentsNavigation = require('./components/Navigation');
-var NavigationActions = require('../navigation/Actions');
-var WindowsStateStore = require('../windows/StateStore');
-var ModelVideo = require('../../model/Video');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+const {wait} = require('nti-commons');
+
+const NavigationActions = require('../navigation/Actions');
+const WindowsStateStore = require('../windows/StateStore');
+
+const ComponentsNavigation = require('./components/Navigation');
+
+require('legacy/util/Parsing');
+require('legacy/model/Video');
 
 module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	extend: 'Ext.container.Container',
@@ -20,10 +24,10 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.callParent(arguments);
 
 		//Declare this here so its scope to the instance
-		this.cmp_map = {};
+		this['componentMapping'] = {};
 
-		this.NavigationActions = NextThought.app.navigation.Actions.create();
-		this.WindowStateStore = NextThought.app.windows.StateStore.getInstance();
+		this.NavigationActions = NavigationActions.create();
+		this.WindowStateStore = WindowsStateStore.getInstance();
 
 		this.on({
 			'beforedeactivate': this.onBeforeDeactivate.bind(this),
@@ -71,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
-			this.navigation = NextThought.app.content.components.Navigation.create({
+			this.navigation = ComponentsNavigation.create({
 				bodyView: this
 			});
 		}
@@ -80,10 +84,10 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	},
 
 	getItem: function (xtype) {
-		var cmp = this.cmp_map[xtype];
+		var cmp = this.componentMapping[xtype];
 
 		if (!cmp) {
-			cmp = this.cmp_map[xtype] = this.down(xtype);
+			cmp = this.componentMapping[xtype] = this.down(xtype);
 			this.addChildRouter(cmp);
 			cmp.courseContainer = this;
 			cmp.setShadowRoot = this.setShadowRoot.bind(this, xtype);
@@ -100,8 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 		bundle = bundle || this.activeBundle;
 
-		var me = this,
-			activeBundle = this.activeBundle;
+		var me = this;
 
 		xtypes = xtypes.map(function (xtype) {
 			var item = me.getItem(xtype);

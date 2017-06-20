@@ -1,14 +1,19 @@
-var Ext = require('extjs');
-var UserRepository = require('../../cache/UserRepository');
-var User = require('../../model/User');
-var ParseUtils = require('../../util/Parsing');
-var GroupsStateStore = require('../groups/StateStore');
-var ChatStateStore = require('./StateStore');
-var ChatActions = require('./Actions');
-var GutterGutterEntry = require('./components/gutter/GutterEntry');
-var GutterList = require('./components/gutter/List');
-var NavigationActions = require('../navigation/Actions');
-var ModelUser = require('../../model/User');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const User = require('legacy/model/User');
+const ParseUtils = require('legacy/util/Parsing');
+
+const GroupsStateStore = require('../groups/StateStore');
+const NavigationActions = require('../navigation/Actions');
+const NavigationStateStore = require('../navigation/StateStore');
+
+const ChatStateStore = require('./StateStore');
+const ChatActions = require('./Actions');
+
+require('./components/gutter/GutterEntry');
+require('./components/gutter/List');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
@@ -37,10 +42,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.ChatActions = NextThought.app.chat.Actions.create();
-		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
+		this.GroupStore = GroupsStateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
+		this.ChatActions = ChatActions.create();
+		this.NavigationStore = NavigationStateStore.getInstance();
 
 		this.buildStore();
 		this.mon(this.ChatStore, {
@@ -60,11 +65,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		// NOTE: The gutter needs to listen to online Contacts store but also handle chats from non-contacts.
 		// As a result, it can't just be an online contacts store, because it has to contains active chats as well.
-		// And some of those users in active chats might not pass the online contacts store filters, 
+		// And some of those users in active chats might not pass the online contacts store filters,
 		// namely the fact that they have to be in your contacts
 		store = new Ext.data.Store({
 			proxy: 'memory',
-			model: NextThought.model.User,
+			model: User,
 			data: onlineContactStore.getRange()
 		});
 
@@ -99,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 	syncWithRecentChats: function () {
 		// This function makes sure that we're in sync with the Chat Statestore.
-		// It helps recover and add gutter entries for people 
+		// It helps recover and add gutter entries for people
 		// whom we might not be following but recently chatted with.
 		var me = this,
 			occupantsKeys = this.ChatStore.getAllOccupantsKeyAccepted() || [];
@@ -128,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	goToContacts: function (e) {
-		NextThought.app.navigation.Actions.pushRootRoute('Contacts', '/contacts/');
+		NavigationActions.pushRootRoute('Contacts', '/contacts/');
 	},
 
 	showAllOnlineContacts: function (e) {
@@ -269,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		var d = this.getAnchorPointForUser(user),
 			entry = d && Ext.get(d);
 
-		
+
 		if (entry && entry.hasCls('active')) {
 			entry.removeCls('active');
 			this.activeUser = null;
@@ -294,7 +299,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		occupants = Ext.Array.remove(occupants.slice(), $AppConfig.userObject.get('Username'));
 		username = occupants[0];
 		if (!isGroupChat && username) {
-			entry = this.findEntryForUser(username);
+			// const entry = this.findEntryForUser(username);
 
 			// We want an exact match.
 			user = this.store.findRecord('Username', username, 0, false, false, true);

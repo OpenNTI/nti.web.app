@@ -1,20 +1,21 @@
-var Ext = require('extjs');
-var IdCache = require('../../../cache/IdCache');
-var UserRepository = require('../../../cache/UserRepository');
-var ParseUtils = require('../../../util/Parsing');
-var WindowsStateStore = require('../../windows/StateStore');
-var ComponentsHeader = require('../../windows/components/Header');
-var ComponentsLoading = require('../../windows/components/Loading');
-var WindowsActions = require('../../windows/Actions');
-var TranscriptMain = require('./Main');
-var ChatGutter = require('../Gutter');
-var ChatActions = require('../Actions');
-var ChatStateStore = require('../StateStore');
-var ModelTranscript = require('../../../model/Transcript');
-var ModelTranscriptSummary = require('../../../model/TranscriptSummary');
-var ModelMessageInfo = require('../../../model/MessageInfo');
-var UtilParsing = require('../../../util/Parsing');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
+const ParseUtils = require('legacy/util/Parsing');
+const Transcript = require('legacy/model/Transcript');
+const TranscriptSummary = require('legacy/model/TranscriptSummary');
+const {isMe} = require('legacy/util/Globals');
+
+const WindowsStateStore = require('../../windows/StateStore');
+const WindowsActions = require('../../windows/Actions');
+const ChatStateStore = require('../StateStore');
+
+require('legacy/model/MessageInfo');
+require('../../windows/components/Header');
+require('../../windows/components/Loading');
+require('../Gutter');
+require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', {
@@ -27,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.windowHeader = this.add({
 			xtype: 'window-header',
@@ -36,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 
 		this.loadingCmp = this.add({xtype: 'window-loading'});
 
-		if (this.record instanceof NextThought.model.Transcript) {
+		if (this.record instanceof Transcript) {
 			this.insertTranscript(this.record);
 			this.remove(this.loadingCmp);
 		} else {
@@ -139,9 +140,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 
 	failedToLoadTranscript: function () {
 		alert({
-				 msg: 'There was an error loading chat history for:' + (this.errorMsgSupplement || ''),
-				 width: 450
-			 });
+			msg: 'There was an error loading chat history for:' + (this.errorMsgSupplement || ''),
+			width: 450
+		});
 		this.destroy();
 	},
 
@@ -171,8 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		this.setTitleInfo(record.get('Contributors'));
 
 		var time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),
-			messages = record.get('Messages'),
-			inserted;
+			messages = record.get('Messages');
 
 		//keep all messages for later flagging:
 		if (!this.messageMap) {
@@ -183,18 +183,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 			this.messageMap[IdCache.getIdentifier(m.getId())] = m;
 		}, this);
 
-		inserted = this.add({
+		this.add({
 			xtype: 'chat-transcript',
 			time: time,
 			messages: messages
 		});
-
 	}
 }, function () {
-	NextThought.app.windows.StateStore.register(NextThought.model.TranscriptSummary.mimeType, this);
-	NextThought.app.windows.StateStore.register(NextThought.model.Transcript.mimeType, this);
-	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.TranscriptSummary.mimeType, function (id) {
-		var store = NextThought.app.chat.StateStore.getInstance();
+	WindowsStateStore.register(TranscriptSummary.mimeType, this);
+	WindowsStateStore.register(Transcript.mimeType, this);
+	WindowsStateStore.registerCustomResolver(TranscriptSummary.mimeType, function (id) {
+		var store = ChatStateStore.getInstance();
 
 		id = store.getTranscriptIdForRoomInfo(id);
 		id = id && id.toString();

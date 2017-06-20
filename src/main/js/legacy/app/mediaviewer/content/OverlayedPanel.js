@@ -1,9 +1,9 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var OverlayPanel = require('../../contentviewer/overlay/Panel');
-var UtilDom = require('../../../util/Dom');
-var ContentSlideVideo = require('./SlideVideo');
+const Ext = require('extjs');
 
+const DomUtils = require('legacy/util/Dom');
+
+require('legacy/app/contentviewer/overlay/Panel');
+require('./SlideVideo');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.OverlayedPanel', {
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 
 	constructor: function (config) {
 		if (!config || !config.contentElement) {
-			throw 'you must supply a contentElement';
+			throw new Error('you must supply a contentElement');
 		}
 
 		var dom = config.contentElement,

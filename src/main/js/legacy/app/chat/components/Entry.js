@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var ChatActions = require('../Actions');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const ChatActions = require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
@@ -37,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		this.enableBubble(['status-change']);
 		this.callParent(arguments);
 
-		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.ChatActions = ChatActions.create();
 	},
 
 	afterRender: function () {

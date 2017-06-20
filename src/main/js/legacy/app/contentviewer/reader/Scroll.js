@@ -1,8 +1,8 @@
-var Ext = require('extjs');
-var Anchors = require('../../../util/Anchors');
-var TextRangeFinderUtils = require('../../../util/TextRangeFinder');
-var SearchUtils = require('../../../util/Search');
-var UtilSearch = require('../../../util/Search');
+const Ext = require('extjs');
+
+const Anchors = require('legacy/util/Anchors');
+const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
+const SearchUtils = require('legacy/util/Search');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scroll', {
@@ -50,11 +50,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	},
 
 	isInFullScreenMode: function () {
-		var el = document.fullscreenElement ||
-				 document.webkitFullscreenElement ||
-				 document.mozFullScreenElement ||
-				 document.msFullscreenElement;
-		return Boolean(el);
+		var e = document.fullscreenElement ||
+				document.webkitFullscreenElement ||
+				document.mozFullScreenElement ||
+				document.msFullscreenElement;
+		return Boolean(e);
 	},
 
 	lock: function () {
@@ -139,13 +139,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	},
 
 	toTarget: function (target) {
-		function getNode (t) {
-			return document.getElementById(t) || de.getElementById(t) || de.getElementsByName(t)[0];
-		}
 		var de = this.reader.getDocumentElement(),
 			c = Ext.getCmp(target),
 			e = getNode(target) || getNode(decodeURIComponent(target)),
 			topMargin = 75;
+
+		function getNode (t) {
+			return document.getElementById(t) || de.getElementById(t) || de.getElementsByName(t)[0];
+		}
 
 		if (!e && c) {
 			try {
@@ -190,6 +191,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	 * @param {boolean} onlyIfNotVisible - pass true here if you want this function to decide if it should scroll or not,
 	 *							 based on its visibility on screen
 	 * @param {Number} bottomThreshold - if you want to scroll if the target is close to the bottom, specify a threshold.
+	 * @param {Number} verticalOffset -
+	 * @returns {void}
 	 */
 	toNode: function (n, onlyIfNotVisible, bottomThreshold, verticalOffset) {
 		while (n && n.nodeType === Node.TEXT_NODE) {
@@ -255,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		}
 	},
 
-	/** @private */
+	/* @private */
 	getFragmentLocation: function (fragment, phrase) {
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 			doc = this.reader.getDocumentElement(),

@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../cache/UserRepository');
-var MixinsRouter = require('../../../../../mixins/Router');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
 const {getFormattedString} = require('legacy/util/Localization');
+const UserRepository = require('legacy/cache/UserRepository');
+const {isMe} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.Activity', {
@@ -193,10 +196,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				console.error('Dropping event, no assignment found in the map for:', target);
 
 				Error.raiseForReport((function () {
-					function trim (i) { return i.substring(p.length); }
+					const keys = Object.keys(a);
+					const p = String.commonPrefix(keys);
 
-					var keys = Object.keys(a),
-						p = String.commonPrefix(keys);
+					function trim (i) { return i.substring(p.length); }
 
 					return ('Content ID change? No assignment found for: ' +
 									trim(target) +
@@ -222,7 +225,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		try {
 			return (r && s.add.apply(s, arguments)[0]) || null;
 		} catch (er) {
-			console.error(arguments, er.stack || er.message || e);
+			console.error(arguments, er.stack || er.message || er);
 		}
 	},
 

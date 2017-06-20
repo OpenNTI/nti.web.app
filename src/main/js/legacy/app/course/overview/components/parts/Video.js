@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var ModelPlaylistItem = require('../../../../../model/PlaylistItem');
-var VideoVideo = require('../../../../video/Video');
-var LibraryActions = require('../../../../library/Actions');
-var PartsCurtain = require('./Curtain');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const PlaylistItem = require('legacy/model/PlaylistItem');
+
+require('legacy/app/video/Video');
+require('./Curtain');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Video', {
@@ -61,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.setProgress(this.progress);
 		}
 
-		this.playlist = [NextThought.model.PlaylistItem.create({
+		this.playlist = [PlaylistItem.create({
 			'mediaId': this.video.title || this.video.get('title') || this.video.get('label'),
 			'sources': this.video.sources || this.video.get('sources'),
 			'NTIID': this.video.ntiid || this.video.getId(),
@@ -102,8 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		e.stopEvent();
 
 		var video = this.playlist[0],
-			slidedeck = video.get('slidedeck'),
-			slideActions;
+			slidedeck = video.get('slidedeck');
 
 		if (!Ext.isEmpty(slidedeck)) {
 			this.maybePauseCurrentVideo();
@@ -214,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.course.getVideoForId(videoItem.getId())
 			.then(function (o) {
-				var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+				var video = PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 				video.basePath = basePath;
 				me.navigate.call(null, video);
 			});

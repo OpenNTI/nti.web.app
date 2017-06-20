@@ -1,13 +1,17 @@
 const Ext = require('extjs');
-const Globals = require('legacy/util/Globals');
+const {wait} = require('nti-commons');
 const {encodeForURI, decodeFromURI} = require('nti-lib-ntiids');
-const UserRepository = require('../../../../cache/UserRepository');
-const ParseUtils = require('../../../../util/Parsing');
 
-require('legacy/app/course/assessment/Actions');
-require('../../../../model/User');
-require('../../../../common/components/NavPanel');
-require('../../../../mixins/Router');
+const Globals = require('legacy/util/Globals');
+const UserRepository = require('legacy/cache/UserRepository');
+const {getString} = require('legacy/util/Localization');
+const AssessmentActions = require('legacy/app/course/assessment/Actions');
+const User = require('legacy/model/User');
+
+require('legacy/common/components/NavPanel');
+require('legacy/mixins/Router');
+require('legacy/util/Parsing');
+
 require('./Navigation');
 require('./Body');
 require('./admin/Activity');
@@ -17,7 +21,6 @@ require('./admin/performance/View');
 require('./student/assignments/View');
 require('./student/Activity');
 require('./student/Performance');
-require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.View', {
 	extend: 'NextThought.common.components.NavPanel',
@@ -34,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.AssessmentActions = NextThought.app.course.assessment.Actions.create();
+		this.AssessmentActions = AssessmentActions.create();
 
 		this.initRouter();
 
@@ -116,8 +119,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						.then(me.alignNavigation.bind(me));
 					return;
 				}
-
-				var items = me.body.items.items || [];
 
 				me.assignmentCollection = assignments;
 				me.hasAssignments = !assignments.isEmpty();
@@ -495,7 +496,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.maybeMask();
 
 		const loaded = this.bundleLoaded || Promise.reject();
-		const student = route.params.student && NextThought.model.User.getIdFromURIPart(route.params.student);
+		const student = route.params.student && User.getIdFromURIPart(route.params.student);
 
 		UserRepository.getUser(student)
 			.then((user) => {

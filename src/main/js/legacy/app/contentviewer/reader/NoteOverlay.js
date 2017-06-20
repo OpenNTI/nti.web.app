@@ -1,14 +1,16 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var Globals = require('../../../util/Globals');
-var {isFeature} = Globals;
-var LineUtils = require('../../../util/Line');
-var SharingUtils = require('../../../util/Sharing');
-require('../../../util/Line');
-var WBUtils = require('../../whiteboard/Utils');
-require('../../../editor/Editor');
-require('../../userdata/Actions');
-const {wait} = require('legacy/util/Promise');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
+const Globals = require('legacy/util/Globals');
+const LineUtils = require('legacy/util/Line');
+const {getString} = require('legacy/util/Localization');
+const SharingUtils = require('legacy/util/Sharing');
+
+const WBUtils = require('../../whiteboard/Utils');
+const UserdataActions = require('../../userdata/Actions');
+
+require('legacy/util/Line');
+require('legacy/editor/Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
@@ -49,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 		this.reader.fireEvent('uses-page-preferences', this);
 
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.UserDataActions = UserdataActions.create();
 	},
 
 	insertOverlay: function () {
@@ -90,24 +92,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 		if (Ext.is.iPad) {
 			me.reader.on('destroy', 'destroy',
-						 me.mon(container.parent(), {
-							 scope: me,
-							 destroyable: true,
-							 click: 'trackLineAtEvent'
-						 }));
+			me.mon(container.parent(), {
+				scope: me,
+				destroyable: true,
+				click: 'trackLineAtEvent'
+			}));
 		}
 		else {
 			me.reader.on('destroy', 'destroy',
-						 me.mon(container.parent(), {
-							 scope: me,
-							 destroyable: true,
-							 mousemove: 'mouseOver',
-							 mouseover: 'mouseOver',
-							 mouseout: 'mouseOut'
-						 }));
+			me.mon(container.parent(), {
+				scope: me,
+				destroyable: true,
+				mousemove: 'mouseOver',
+				mouseover: 'mouseOver',
+				mouseout: 'mouseOut'
+			}));
 
 			me.reader.on({
-							 //no buffer
+				//no buffer
 				'iframe-mouseout': 'mouseOut',
 				'iframe-mousedown': 'suspendResolver',
 				'iframe-mouseup': 'resumeResolver',
@@ -228,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 				preventBringToFront: true,
 				listeners: {
 					'deactivated-editor': 'destroy',
-					'no-title-content': function () {return !isFeature('notepad');},//require title if notepad is a feature
+					'no-title-content': function () {return !Globals.isFeature('notepad');},//require title if notepad is a feature
 					grew: function () {
 						if (Ext.is.iPad) {
 							return;
@@ -386,11 +388,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 	contentDefinedAnnotationAction: function (dom, action) {
 		var d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
-			id = d ? d.id : null, me = this,
+			me = this,
 			img = d && d.is('img') ? d.dom : null,
 			doc = dom ? dom.ownerDocument : null,
 			readerRect = this.reader.getAnnotationOffsets().rect,
-			range, offsets, rect, top;
+			range, rect, top;
 
 		if (/mark/i.test(action)) {
 			range = doc.createRange();

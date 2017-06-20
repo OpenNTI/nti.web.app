@@ -1,11 +1,13 @@
-var Ext = require('extjs');
-var ComponentsConfirmation = require('./Confirmation');
-var ComponentsEnroll = require('./Enroll');
-var ComponentsAdmission = require('./Admission');
-var ComponentsPaymentConfirmation = require('./PaymentConfirmation');
-var ComponentsGift = require('./Gift');
-var ComponentsRedeem = require('./Redeem');
-var ComponentsGiftConfirmation = require('./GiftConfirmation');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+require('./Confirmation');
+require('./Enroll');
+require('./Admission');
+require('./PaymentConfirmation');
+require('./Gift');
+require('./Redeem');
+require('./GiftConfirmation');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Process', {
@@ -210,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 	addStep: function (step, i) {
-		var cmp, me = this,
+		var cmp,
 			tabCfg = {
 				text: step.name,
 				completed: step.completed ? 'enabled' : '',
@@ -244,6 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	/**
 	 * Set the bread crumb to show the active item note that data-index is 1 based
 	 * @param {Number} index the item to activate
+	 * @returns {void}
 	 */
 	setActiveTab: function (index) {
 		var i, btn;
@@ -271,13 +274,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	 * or stop on the last one
 	 * @param  {Number} index the step to start looking from
 	 * @param {Boolean} recursive if we are called again to activate the next step
+	 * @returns {void}
 	 */
 	activateStep: function (index, recursive) {
-		var me = this,
+		const me = this,
 			item = me.down('[index="' + index + '"]') || me.down('[name="' + index + '"]'),
 			total = me.numberOfSteps,
 			maskCmp = me.el;
-		step = me.steps[index];
+
+		let step = me.steps[index];
 
 		if (index < 0) {
 			step = me.steps[0];

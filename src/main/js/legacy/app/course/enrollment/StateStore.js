@@ -1,14 +1,19 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../../common/StateStore');
-var OpenEnrollment = require('./options/OpenEnrollment');
-var FiveminuteEnrollment = require('./options/FiveminuteEnrollment');
-var StoreEnrollment = require('./options/StoreEnrollment');
-var CoursesStateStore = require('../../library/courses/StateStore');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+const CoursesStateStore = require('../../library/courses/StateStore');
+
+const OpenEnrollment = require('./options/OpenEnrollment');
+const FiveminuteEnrollment = require('./options/FiveminuteEnrollment');
+const StoreEnrollment = require('./options/StoreEnrollment');
+
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateStore', {
 	extend: 'NextThought.common.StateStore',
-	__Option_Map: {},
+	__optionMap: {},
 	__Options: [],
 
 	constructor: function () {
@@ -17,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		this.addOption(OpenEnrollment);
 		this.addOption(FiveminuteEnrollment);
 		this.addOption(StoreEnrollment);
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.CourseStore = CoursesStateStore.getInstance();
 	},
 
 	getBasePriority: function () {
@@ -29,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	},
 
 	addOption: function (option) {
-		this.__Option_Map[option.NAME] = option;
+		this.__optionMap[option.NAME] = option;
 
 		this.__Options.push({
 			name: option.NAME,
@@ -38,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	},
 
 	getOption: function (name) {
-		return this.__Option_Map[name] || {};
+		return this.__optionMap[name] || {};
 	},
 
 	getEnrolledText: function (course) {

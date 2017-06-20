@@ -1,10 +1,11 @@
-var Ext = require('extjs');
-var IdCache = require('legacy/cache/IdCache');
-var UserRepository = require('legacy/cache/UserRepository');
-var DomUtils = require('legacy/util/Dom');
-var Globals = require('legacy/util/Globals');
-var TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
-var SearchUtils = require('legacy/util/Search');
+const Ext = require('extjs');
+
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
+const DomUtils = require('legacy/util/Dom');
+const Globals = require('legacy/util/Globals');
+const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
+const SearchUtils = require('legacy/util/Search');
 require('legacy/mixins/FlagActions');
 require('legacy/mixins/LikeFavoriteActions');
 require('legacy/mixins/ProfileLinks');
@@ -290,23 +291,19 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 	setPublishAndSharingState: function () {},
 
 	scrollCommentIntoView: function (commentId) {
-		function scrollIntoView () {
-			var cmp = Ext.get('forums') || Ext.get('course-forum');
-			if (Ext.isBoolean(commentId)) {
-				el = me.getTargetEl();
-			}
-			else {
-				el = me.el.down('[data-commentid="' + commentId + '"]');
-			}
+		const scrollIntoView = () => {
+			const cmp = Ext.get('forums') || Ext.get('course-forum');
+			const el = Ext.isBoolean(commentId)
+				? this.getTargetEl()
+				: this.el.down('[data-commentid="' + commentId + '"]');
 
 			if (el) {
 				Ext.defer(el.scrollIntoView, 500, el, [cmp.dom, false, Globals.ANIMATE_NO_FLASH]);
 			}
-		}
+		};
 
-		var el, images, me = this, f;
 		if (commentId) {
-			images = this.el.query('img');
+			const images = this.el.query('img');
 			Ext.each(images, function (img) {
 				img.onload = function () {
 					scrollIntoView();
@@ -315,7 +312,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 			scrollIntoView();
 		}
 		else {
-			f = Ext.get('forums');
+			const f = Ext.get('forums');
 			if (f) {
 				f.scrollTo('top', 0, true);
 			}
@@ -438,6 +435,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 					vid.dom.innerHTML = null;
 					vid.dom.load();
 				} catch (e) {
+					//don't care?
 				}
 			});
 		}
@@ -593,7 +591,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 
 
 	fetchNextPage: function () {
-		var s = this.store, max, me = this;
+		var s = this.store, max;
 
 		if (!s.hasOwnProperty('data')) {
 			return;
@@ -659,7 +657,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 	},
 
 	addIncomingComment: function (item) {
-		if (item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))) {
+		if (item.get('ContainerId') === this.record.getId() && Globals.isMe(this.record.get('Creator'))) {
 			this.addComments(this.store, [item]);
 
 			//Adding a comment in this way doesn't trigger updating the containerView, so we will update the record ourselves.

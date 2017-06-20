@@ -1,14 +1,15 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../util/Content');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
-var UtilContent = require('../../util/Content');
-var UtilPageSource = require('../../util/PageSource');
-var ModelTopicNode = require('../../model/TopicNode');
+const Ext = require('extjs');
+const { encodeForURI } = require('nti-lib-ntiids');
 
+const ContentUtils = require('legacy/util/Content');
+const Globals = require('legacy/util/Globals');
+const PageSource = require('legacy/util/PageSource');
+const TopicNode = require('legacy/model/TopicNode');
+const PathActions = require('legacy/app/navigation/path/Actions');
+
+require('legacy/util/Parsing');
 require('../navigation/path/Actions');
 
-const { encodeForURI } = require('nti-lib-ntiids');
 
 const EMPTY_CONTENT_PACKAGE = {
 	'title': 'Untitled Reading',
@@ -44,9 +45,9 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	},
 
 	__getContentPathFromLineage: function (ntiid, bundle, parent, rootPageId, rootRoute) {
-		var PathActions = NextThought.app.navigation.path.Actions.create();
+		const pathActions = PathActions.create();
 
-		return PathActions.getBreadCrumb(ntiid, bundle)
+		return pathActions.getBreadCrumb(ntiid, bundle)
 			.then(function (path) {
 				return path.map(function (part) {
 					var route = part.ntiid ? encodeForURI(part.ntiid) : '';
@@ -99,10 +100,10 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				// -1 we are to cut the lineage at that point.
 				if (rootIdx >= 0) {
 					leftOvers = lineage.slice(rootIdx);
-					leftOverLabels = labels.slice(rootIdx);
+					// let leftOverLabels = labels.slice(rootIdx);
 					rootIdx += 1;//slice is not inclusive, so push the index one up so that our slice gets the new root.
 					lineage = lineage.slice(0, rootIdx);
-					labels = labels.slice(0, rootIdx);
+					// labels = labels.slice(0, rootIdx);
 					//From this point on the logic should be unchanged... lineage manipulation is complete.
 				}
 
@@ -147,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 		if (!topic) {
 			console.error('NO first topic');
-			throw 'no topic';
+			throw new Error('no topic');
 		}
 
 		return topic.getAttribute('ntiid');
@@ -186,9 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		}
 
 		return Promise.all(path)
-			.then(function (path) {
-				return path.reverse();
-			});
+			.then(p => p.reverse());
 	},
 
 
@@ -292,11 +291,11 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		var me = this,
 			formatters = {
 				'a': me.toBase26SansNumbers,
-				'A': function (num) {
-					return me.toBase26SansNumbers(num).toUpperCase();
+				'A': function (n) {
+					return me.toBase26SansNumbers(n).toUpperCase();
 				},
-				'i': function (num) {
-					return me.toRomanNumeral(num).toLowerCase();
+				'i': function (n) {
+					return me.toRomanNumeral(n).toLowerCase();
 				},
 				'I': me.toRomanNumeral
 			};
@@ -349,7 +348,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			p,
 			ContentUtils.getSiblings(currentNode, bundle)
 		]).then(function (results) {
-			var outline = results[0],
+			var //outline = results[0],
 				siblings = results[1] || [],
 				visible,
 				presentation = me.__getPresentationProps(parentNode, bundle),
@@ -362,42 +361,33 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 					return Promise.resolve(null);
 				}
 
-				if (outline && false) {
-					return outline.isVisible(sibling.getAttribute('ntiid'))
-							.then(function (visible) {
-								if (!visible) {
-									return null;
-								}
-
-								return sibling;
-							});
-
-				}
+				// if (outline) {
+				// 	return outline.isVisible(sibling.getAttribute('ntiid'))
+				// 			.then(v => !v ? null : sibling);
+				//
+				// }
 
 				return Promise.resolve(sibling);
 			});
 
 			return Promise.all(visible)
-					.then(function (results) {
-						return results.filter(function (x) { return !!x; });
-					})
-					.then(function (visible) {
-						return visible.map(function (node) {
-							var label = node.getAttribute('label'), text;
+					.then(r => r.filter(Boolean))
+					.then(visibleItems => visibleItems.map(node => {
+						const label = node.getAttribute('label');
+						const text = presentation.suppress
+								? (me.styleList(num, presentation.type) + presentation.separate + label)
+								: label;
 
-							text = presentation.suppress ? (me.styleList(num, presentation.type) + presentation.separate + label) : label;
+						num += 1;
 
-							num += 1;
-
-							return {
-								label: text,
-								title: text,
-								route: Globals.trimRoute(rootRoute) + '/' + encodeForURI(node.getAttribute('ntiid')),
-								ntiid: node.getAttribute('ntiid'),
-								cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
-							};
-						});
-					});
+						return {
+							label: text,
+							title: text,
+							route: Globals.trimRoute(rootRoute) + '/' + encodeForURI(node.getAttribute('ntiid')),
+							ntiid: node.getAttribute('ntiid'),
+							cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
+						};
+					}));
 		});
 	},
 
@@ -414,7 +404,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				return ContentUtils.getNavigationInfo(ntiid, rootId, bundle);
 			})
 			.then(function (navInfo) {
-				return NextThought.util.PageSource.create(navInfo);
+				return PageSource.create(navInfo);
 			});
 	},
 
@@ -432,7 +422,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			.then(function (toc) {
 				var rec,
 					store = new Ext.data.Store({
-						model: NextThought.model.TopicNode,
+						model: TopicNode,
 						data: toc
 					});
 

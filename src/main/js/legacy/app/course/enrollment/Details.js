@@ -1,11 +1,19 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../../util/Analytics');
-var ComponentsPanel = require('../info/components/Panel');
-var EnrollmentStateStore = require('./StateStore');
-var EnrollmentActions = require('./Actions');
-var CoursesStateStore = require('../../library/courses/StateStore');
-var AccountActions = require('../../account/Actions');
-var {guidGenerator, isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
+const User = require('legacy/model/User');
+const {getString, getFormattedString} = require('legacy/util/Localization');
+const AnalyticsUtil = require('legacy/util/Analytics');
+const {guidGenerator, isFeature} = require('legacy/util/Globals');
+
+const AccountActions = require('../../account/Actions');
+const CoursesStateStore = require('../../library/courses/StateStore');
+const NavigationActions = require('../../navigation/Actions');
+
+const EnrollmentStateStore = require('./StateStore');
+const EnrollmentActions = require('./Actions');
+
+require('../info/components/Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details', {
@@ -117,10 +125,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		});
 
 		this.on('beforedeactivate', 'onBeforeDeactivate');
-		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
-		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
-		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
-		this.AccountActions = NextThought.app.account.Actions.create();
+		this.CourseEnrollmentStore = EnrollmentStateStore.getInstance();
+		this.CourseEnrollmentActions = EnrollmentActions.create();
+		this.CourseStore = CoursesStateStore.getInstance();
+		this.AccountActions = AccountActions.create();
 
 		window.EnrollInOption = this.enrollInOption.bind(this);
 	},
@@ -169,6 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * Restore to an enrollment option
 	 * @param  {String} type   name of the enrollment option
 	 * @param  {Array} config  array of configs for the option to parse
+	 * @returns {void}
 	 */
 	restoreEnrollmentOption: function (type, config) {
 		if (!this.rendered) {
@@ -339,27 +348,27 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			priority = this.CourseEnrollmentStore.getBasePriority(),
 			me = this;
 
-		function addBase (option, details) {
-			details.name = details.name || option.name;
+		function addBase (option, details2) {
+			details2.name = details2.name || option.name;
 
 			//if we are enrolled in an option it is the base
 			//and any other base is would be an add on
-			if (details.IsEnrolled) {
+			if (details2.IsEnrolled) {
 				addOns.push(base);
-				base = details;
+				base = details2;
 			//if we don't already have a base option, it is by default
 			} else if (!base) {
-				base = details;
+				base = details2;
 			//if we are enrolled in current base, we are an addon
 			} else if (base.IsEnrolled) {
-				addOns.push(details);
+				addOns.push(details2);
 			//if the current base is a higher priority, we are an addon
-			} else if (priority[base.name] > priority[details.name]) {
-				addOns.push(details);
+			} else if (priority[base.name] > priority[details2.name]) {
+				addOns.push(details2);
 			//otherwise the current base is an add on and we are the base
 			} else {
 				addOns.push(base);
-				base = details;
+				base = details2;
 			}
 		}
 
@@ -514,6 +523,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * to the user for this course
 	 *
 	 * @param {Boolean} updateFromStore update the course from the available courses store
+	 * @returns {void}
 	 */
 	updateEnrollmentCard: function (updateFromStore) {
 		if (this.isDestroyed) {
@@ -685,6 +695,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * Updates the cards and button toggling a addon
 	 * @param  {Ext.element} checkbox the addon element
 	 * @param  {Event} e		the click event
+	 * @returns {void}
 	 */
 	updateSelectedEnrollment: function (checkbox, e) {
 		//if the checkbox is full don't do anything
@@ -743,7 +754,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 */
 	linkClicked: function (link, e) {
 		var href = link.getAttribute('href'), r = true,
-			win = this.up('window'), u = $AppConfig.userObject;
+			u = $AppConfig.userObject;
 
 		if (href === 'welcome') {
 			e.stopEvent();
@@ -755,7 +766,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 				e.stopEvent();
 			}
 
-			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl('about'), {
+			NavigationActions.pushRootRoute(u.getName(), u.getProfileUrl('about'), {
 				user: u
 			});
 
@@ -774,27 +785,26 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * Handles the button being clicked for enrolling/dropping
 	 * @param  {Ext.element} button the button element
 	 * @param  {Event} e	  the click event
+	 * @returns {void}
 	 */
 	enrollmentClicked: function (button, e) {
-		var me = this, title,
+		var me = this,
 			video = me.details.getVideo(),
 			name = button.getAttribute('data-name'),
 			win = this.up('window'),
-			option = me.enrollmentOptions[name], action, course;
+			option = me.enrollmentOptions[name],
+			action;
 
 		if (!option) {
 			console.error('No enrollment option with that name', button);
 			return;
 		}
 
-		title = me.course.get('Title');
-		course = me.course.get('Title');
+		const courseTitle = me.course.get('Title');
 
-		if (title.length >= 50) {
-			title = title.substr(0, 47) + '...';
-		} else {
-			title = title + '.';
-		}
+		// const displayTitle = (courseTitle.length >= 50)
+		// 	? courseTitle.substr(0, 47) + '...'
+		// 	: courseTitle + '.';
 
 		function done (success, changed) {
 			delete me.changingEnrollment;
@@ -818,7 +828,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		if (option.Enrolled && option.undoEnrollment) {
 			me.changingEnrollment = true;
 			Ext.Msg.show({
-				msg: getFormattedString('NextThought.view.courseware.enrollment.Details.DropDetails', {course: course}),
+				msg: getFormattedString('NextThought.view.courseware.enrollment.Details.DropDetails', {course: courseTitle}),
 				title: getString('NextThought.view.courseware.enrollment.Details.AreSure'),
 				icon: 'warning-red',
 				buttons: {
@@ -831,7 +841,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 								.then(function (changed) {
 									me.fireEvent('enrolled-action', false);
 									me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
-										course: course
+										course: courseTitle
 									}));
 									if (me.onDrop) {
 										done(true, changed);
@@ -884,7 +894,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 						me.msgClickHandler = function () {
 							var c = me.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
 							Promise.resolve(c)
-								.then(function (course) {
+								.then(course => {
 									var instance = course.get('CourseInstance');
 									instance.fireNavigationEvent(me);
 
@@ -900,7 +910,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 						if (!isFeature('suggest-contacts')) {
 							me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
-								course: course
+								course: courseTitle
 							}));
 						} else {
 							me.clearMessage();
@@ -964,7 +974,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 							var a = Ext.getStore('all-contacts-store');
 							peersStore = new Ext.data.Store({
-								model: NextThought.model.User,
+								model: User,
 								proxy: 'memory',
 								data: items,
 								filters: [

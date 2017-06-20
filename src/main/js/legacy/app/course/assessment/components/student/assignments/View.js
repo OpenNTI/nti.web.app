@@ -1,16 +1,17 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+const {wait} = require('nti-commons');
+
+const {guidGenerator} = require('legacy/util/Globals');
+const {getString, getFormattedString} = require('legacy/util/Localization');
+const PathActions = require('legacy/app/navigation/path/Actions');
+
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
 require('legacy/common/ux/Grouping');
-require('legacy/app/navigation/path/Actions');
 require('legacy/app/course/assessment/Actions');
 require('./FilterBar');
 require('./List');
-
-const {guidGenerator} = require('legacy/util/Globals');
-
-const {wait} = require('legacy/util/Promise');
 
 const PUBLISHED = getString('NextThought.view.courseware.assessment.assignments.View.published');
 const SCHEDULED = getString('NextThought.view.courseware.assessment.assignments.View.scheduled');
@@ -19,7 +20,7 @@ const DRAFT = getString('NextThought.view.courseware.assessment.assignments.View
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-assignments',
-	state_key: 'course-assessment-assignments',
+	stateKey: 'course-assessment-assignments',
 
 	mixins: {
 		Router: 'NextThought.mixins.Router',
@@ -151,7 +152,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 *	->type menu is fixed to 'all' (wildcard, for now)...it will filter the set down. (just like search)
 	 *	->search filters down on name only. (for now)
 	 *
-	 * @param {Object} state
+	 * @param {Object} state -
+	 * @returns {Function} Grouper
 	 */
 	getGrouper: function (state) {
 		// prevents past goupers with stale grouperIDs from adding elements.
@@ -159,11 +161,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		var me = this,
 			bar = me.getFilterBar(),
-			search = bar && bar.getSearch(),
 			groupBy = (state && state.groupBy) || (bar && bar.getGroupBy());
 
 		return function (cmp, store) {
-			var count, groups,
+			var groups,
 				groupPromise;
 
 			const grouperID = me.activeID;
@@ -235,21 +236,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					var name = g.name,
 						proto = g.children[0],
 						node = proto.get('outlineNode'),
-						store = new Ext.data.Store({fields: me.getFields(), data: g.children, groupName: name}),
+						groupStore = new Ext.data.Store({fields: me.getFields(), data: g.children, groupName: name}),
 						group = Ext.widget(me.newGroupUIConfig({
-							store: store
+							store: groupStore
 						}));
 
 					function fill (n) {
 						if (n) {
-							store.groupName = n.getTitle();
+							groupStore.groupName = n.getTitle();
 							group.setTitle(n.get('title'));
 							group.setSubTitle(Ext.Date.format(
 									node.get('AvailableBeginning') || node.get('AvailableEnding'),
 									'F j, Y'
 								));
 						} else {
-							store.groupName = 'Other Assignments';
+							groupStore.groupName = 'Other Assignments';
 							group.setTitle('Other Assignments');
 						}
 					}
@@ -257,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 					groups.push(group);
 
-					me.activeStores.push(store);
+					me.activeStores.push(groupStore);
 
 					if (groupBy === 'lesson') {
 						fill(node);
@@ -343,7 +344,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment', 'update-assignment-view', 'close-reader']);
 
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.PathActions = PathActions.create();
 
 		this.on('filters-changed', this.updateFilters.bind(this));
 		this.on('search-changed', this.updateFilters.bind(this));
@@ -432,13 +433,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				store.addFilter([{
 					id: 'searchFilter',
 					filterFn: function (rec) {
-						var name = rec.get('name');
+						var fname = rec.get('name').toLowerCase();
 
-						name = name.toLowerCase();
 						val = val.toLowerCase();
 
 						//if the name doesn't contain the search key
-						return name.indexOf(val) >= 0;
+						return fname.indexOf(val) >= 0;
 					}
 				}], true);
 			}
@@ -486,8 +486,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 *
 	 * @param {AssignmentCollection} assignments	the assignment collection
 	 * @param {Bundle} instance	   the bundle we are in
-	 * @param {silent} Boolean to trigger early termination
-	 * @param {doNotCache} Boolean on whether we should load a fresh copy of assignments
+	 * @param {Boolean} silent to trigger early termination
+	 * @param {Boolean} doNotCache on whether we should load a fresh copy of assignments
+	 * @returns {Promise} -
 	 */
 	setAssignmentsData: function (assignments, instance, silent, doNotCache) {
 		var me = this,
@@ -510,10 +511,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			outlineInterface: outlineInterface
 		};
 
-		function finish (results) {
-			var outlineInterface = results[1];
-			me.data.assignments = results[0];
-			me.data.outline = outlineInterface.getOutline();
+		function finish ([assignmentList, outlineIface]) {
+			me.data.assignments = assignmentList;
+			me.data.outline = outlineIface.getOutline();
 			//Becasue this view has special derived fields, we must just listen for changes on the
 			// assignments collection itself and trigger a refresh. This cannot simply be a store
 			// of HistoryItems.
@@ -531,7 +531,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	applyAssignmentsData: function (silent) {
 		var me = this,
-			lesson, raw = [], waitsOn = [],
+			waitsOn = [],
 			bundle = me.data.instance,
 			outlineInterface = me.data.outlineInterface,
 			assignments = me.data.assignments;
@@ -602,8 +602,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					}
 
 					return nodes.reduce(function (acc, node, index) {
-						var node = outlineInterface.findOutlineNode(node),
-							actualId;
+						let actualId;
+
+						node = outlineInterface.findOutlineNode(node);
 
 						if (index !== 0) {
 							actualId = id;

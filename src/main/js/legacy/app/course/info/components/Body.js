@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ComponentsPanel = require('./Panel');
-var ComponentsRoster = require('./Roster');
-var ComponentsReports = require('./Reports');
+const Ext = require('extjs');
+
+require('./Panel');
+require('./Roster');
+require('./Reports');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Body', {
@@ -32,12 +33,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		var targetItem = this.down('[itemId=' + itemId + ']'),
 			activeItem = this.getLayout().getActiveItem();
 
-		 if (targetItem == activeItem) {
+		if (targetItem === activeItem) {
 			return Promise.resolve();
-		 }
+		}
 
-		 this.getLayout().setActiveItem(targetItem);
-		 return Promise.resolve();
+		this.getLayout().setActiveItem(targetItem);
+		return Promise.resolve();
 	},
 
 	scrollRosterIntoView: function (route, subRoute) {
@@ -51,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 
 	scrollInfoSectionIntoView: function (route) {
 		var infoCmp = this.getComponent('info'),
-			scrollTarget, hash, scrollTargetY, brect;
+			scrollTarget, hash, brect;
 
 		if (!infoCmp.rendered) {
 			this.mon(infoCmp, 'afterrender', this.scrollInfoSectionIntoView.bind(this, route));

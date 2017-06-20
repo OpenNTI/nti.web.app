@@ -1,12 +1,15 @@
-var Ext = require('extjs');
-var TimeUtils = require('../../../../util/Time');
-var NavigationBase = require('../Base');
-var UtilTime = require('../../../../util/Time');
-var AssessmentAssignmentStatus = require('../../../course/assessment/AssignmentStatus');
-var AccountActions = require('../../../account/Actions');
+const Ext = require('extjs');
+const {wait} = require('nti-commons');
 const {ControlBar} = require('nti-assignment-editor');
-const ReactHarness = require('legacy/overrides/ReactHarness');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const ReactHarness = require('legacy/overrides/ReactHarness');
+const TimeUtils = require('legacy/util/Time');
+
+const AssignmentStatus = require('../../../course/assessment/AssignmentStatus');
+const AccountActions = require('../../../account/Actions');
+
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
@@ -78,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		const totalPoints = this.assignment && this.assignment.get('total_points');
 		var rd = {};
 
-		this.AccountActions = NextThought.app.account.Actions.create();
+		this.AccountActions = AccountActions.create();
 
 		if (this.assignmentHistory) {
 			rd.title = this.assignment.get('title');
@@ -224,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			//add 3 seconds since the overdue animation is 3 seconds long
 			.countUp(null, time + 3000)
 			.tick(function (t) {
-				var s = NextThought.app.course.assessment.AssignmentStatus.getTimeString(t);
+				var s = AssignmentStatus.getTimeString(t);
 
 				if (s && s !== current) {
 					current = s;
@@ -254,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		me.timer
 			.countDown(0, time)
 			.tick(function (t) {
-				var s = NextThought.app.course.assessment.AssignmentStatus.getTimeString(t, true),
+				var s = AssignmentStatus.getTimeString(t, true),
 					//since we are counting down the remaining will be the max starting out
 					//so 100 - %remaining of max will give the % of time left
 					percentDone = 100 - ((t.remaining / max) * 100);
@@ -326,13 +329,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 
 		var grade = history && history.get('Grade'),
-			due = this.assignment && this.assignment.getDueDate(),
+			// due = this.assignment && this.assignment.getDueDate(),
 			historyDuration = history && history.getDuration() || {},
 			submission = history && history.get('Submission'),
 			parts = this.assignment.get('parts'),
 			hasParts = parts && parts.length > 0,
 			completed = submission && submission.get('CreatedTime'),
-			overdue, isNoSubmit = this.assignment.isNoSubmit();
+			isNoSubmit = this.assignment.isNoSubmit();
 
 		if (((!history || !submission) && hasParts) || (this.assignment.isTimed && !this.assignment.isStarted())) {
 			this.removeCls('submitted');
@@ -348,7 +351,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		if (!this.rendered) { return; }
 
-		this.turnedInEl.update(NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
+		this.turnedInEl.update(AssignmentStatus.getStatusHTML({
 			due: this.assignment.getDueDate(),
 			maxTime: this.assignment.isTimed && this.assignment.getMaxTime(),
 			duration: this.assignment.isTimed && (this.assignment.getDuration() || historyDuration),

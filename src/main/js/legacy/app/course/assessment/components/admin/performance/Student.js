@@ -4,7 +4,7 @@ var MixinsState = require('../../../../../../mixins/State');
 var PerformanceHeader = require('./Header');
 var AdminGrid = require('../Grid');
 const { encodeForURI } = require('nti-lib-ntiids');
-const {wait} = require('legacy/util/Promise');
+const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
 	extend: 'Ext.container.Container',
