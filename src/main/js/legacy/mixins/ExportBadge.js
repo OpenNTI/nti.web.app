@@ -1,5 +1,7 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
+const PromptActions = require('legacy/app/prompt/Actions');
 
 module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 
@@ -31,13 +33,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 		}
 
 		this.exportMenu.showBy(itemEl, 'tl-bl?', [0, -2]);
-		this.PromptActions = NextThought.app.prompt.Actions.create();
+		this.PromptActions = PromptActions.create();
 	},
 
 
 	downloadItemClicked: function (record, targetEl, menuItem, e) {
 		if (record.get('Locked')) {
-			this.downloadBadge(record, targetEl);			
+			this.downloadBadge(record, targetEl);
 		}
 		else {
 			if ($AppConfig.userObject.isEmailVerified()) {
@@ -127,8 +129,6 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 		if (record.get('Locked')) { return; }
 
 		var u = $AppConfig.userObject,
-			emailActionOption, 
-			me = this,
 			action;
 
 		if (!this.possibleExportActions) {

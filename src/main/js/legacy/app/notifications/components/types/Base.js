@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var NTIFormat = require('../../../../util/Format');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const NTIFormat = require('legacy/util/Format');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Base', {

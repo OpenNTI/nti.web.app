@@ -1,16 +1,18 @@
-var Ext = require('extjs');
-var User = require('../../../../../model/User');
-var AnalyticsUtil = require('../../../../../util/Analytics');
-var ParseUtils = require('../../../../../util/Parsing');
-var MixinsRouter = require('../../../../../mixins/Router');
-var PartsEmpty = require('./parts/Empty');
-var PartsAbout = require('./parts/About');
-var PartsCommunities = require('./parts/Communities');
-var PartsEducation = require('./parts/Education');
-var PartsGroups = require('./parts/Groups');
-var PartsPositions = require('./parts/Positions');
-var PartsInterests = require('./parts/Interests');
-var ComponentsSuggestedContacts = require('../../../components/SuggestedContacts');
+const Ext = require('extjs');
+
+const AnalyticsUtil = require('legacy/util/Analytics');
+const ParseUtils = require('legacy/util/Parsing');
+
+require('../../../components/SuggestedContacts');
+require('./parts/Empty');
+require('./parts/About');
+require('./parts/Communities');
+require('./parts/Education');
+require('./parts/Groups');
+require('./parts/Positions');
+require('./parts/Interests');
+
+require('legacy/mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.Index', {

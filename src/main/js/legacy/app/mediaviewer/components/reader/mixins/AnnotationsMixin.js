@@ -1,12 +1,13 @@
-var Ext = require('extjs');
-var UserdataActions = require('../../../../userdata/Actions');
+const Ext = require('extjs');
+
+const UserdataActions = require('legacy/app/userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin', {
 	isPresentationPartReady: false,
 
 	constructor: function () {
-		var UserDataStore = NextThought.app.userdata.Actions.create();
+		var UserDataStore = UserdataActions.create();
 
 		this.on('added', function () {
 			UserDataStore.setupPageStoreDelegates(this);

@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var ResolversVideoPosters = require('../../../model/resolvers/VideoPosters');
+const Ext = require('extjs');
+
+const DomUtils = require('legacy/util/Dom');
+const VideoPosters = require('legacy/model/resolvers/VideoPosters');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.cards.Launcher', {
@@ -60,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 			s = video && video.sources[0],
 			id = s && s.source,
 			type = s && s.service,
-			Resolver = NextThought.model.resolvers.VideoPosters,
+			Resolver = VideoPosters,
 			me = this;
 
 		if (id) {

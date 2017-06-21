@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../../cache/UserRepository');
-var User = require('../../../../../../../model/User');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+
+require('legacy/model/User');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Joined', {

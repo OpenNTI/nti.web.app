@@ -1,5 +1,6 @@
 const Ext = require('extjs');
-const Scrolling = require('../util/Scrolling');
+
+const Scrolling = require('legacy/util/Scrolling');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {

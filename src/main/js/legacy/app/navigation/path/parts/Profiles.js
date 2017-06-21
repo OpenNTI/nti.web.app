@@ -1,10 +1,10 @@
 const Ext = require('extjs');
-const {isFeature} = require('legacy/util/Globals');
 
-require('../../../../model/User');
-require('../../../../model/openbadges/Badge');
-require('../../../context/StateStore');
-require('legacy/model/DynamicFriendsList');
+const {isFeature} = require('legacy/util/Globals');
+const ContextStateStore = require('legacy/app/context/StateStore');
+const User = require('legacy/model/User');
+const Badge = require('legacy/model/openbadges/Badge');
+const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
 
 
 
@@ -12,13 +12,13 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Pro
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 	},
 
 	addHandlers: function (handlers) {
-		handlers[NextThought.model.User.mimeType] = this.getPathToUser.bind(this);
-		handlers[NextThought.model.openbadges.Badge.mimeType] = {doNotCache: true, fn: this.getPathToBadge.bind(this)};
-		handlers[NextThought.model.DynamicFriendsList.mimeType] = this.getPathToDynamicFriendsList.bind(this);
+		handlers[User.mimeType] = this.getPathToUser.bind(this);
+		handlers[Badge.mimeType] = {doNotCache: true, fn: this.getPathToBadge.bind(this)};
+		handlers[DynamicFriendsList.mimeType] = this.getPathToDynamicFriendsList.bind(this);
 
 		return handlers;
 	},

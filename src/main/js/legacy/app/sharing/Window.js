@@ -1,10 +1,12 @@
-var Ext = require('extjs');
-var UserRepository = require('../../cache/UserRepository');
-var SharingUtils = require('../../util/Sharing');
-var WindowWindow = require('../../common/window/Window');
-var UtilAnnotations = require('../../util/Annotations');
-var ComponentsUserTokenField = require('./components/UserTokenField');
-var UserdataActions = require('../userdata/Actions');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const SharingUtils = require('legacy/util/Sharing');
+const UserdataActions = require('legacy/app/userdata/Actions');
+
+require('legacy/common/window/Window');
+require('legacy/util/Annotations');
+require('./components/UserTokenField');
 
 
 module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
@@ -77,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 			info = this.items.first(),
 			buttons;
 
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.UserDataActions = UserdataActions.create();
 
 		if (this.record && this.record.getBodyText) {
 			content = this.record.getBodyText();
@@ -144,11 +146,13 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 	},
 
 	show: function () {
+		//eslint-disable-next-line no-undef
 		NextThought.getApplication().fireEvent('showshare', this);
 		this.callParent(arguments);
 	},
 
 	hide: function () {
+		//eslint-disable-next-line no-undef
 		NextThought.getApplication().fireEvent('hideshare', this);
 		this.callParent(arguments);
 	},

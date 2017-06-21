@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var NotificationsStateStore = require('../StateStore');
-var ComponentsGroup = require('./Group');
-var WindowsActions = require('../../windows/Actions');
-var PathActions = require('../../navigation/path/Actions');
+const Ext = require('extjs');
+
+const PathActions = require('legacy/app/navigation/path/Actions');
+
+const NotificationsStateStore = require('../StateStore');
+
+require('./Group');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.List', {
@@ -19,8 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 		this.groups = {};
 
-		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.NotificationsStore = NotificationsStateStore.getInstance();
+		this.PathActions = PathActions.create();
 
 		this.on({
 			activate: this.onActivate.bind(this),

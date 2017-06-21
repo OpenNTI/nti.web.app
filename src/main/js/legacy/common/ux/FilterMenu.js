@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var UxFilterMenuItem = require('./FilterMenuItem');
-var UxSearchItem = require('./SearchItem');
+const Ext = require('extjs');
+
+require('./FilterMenuItem');
+require('./SearchItem');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {

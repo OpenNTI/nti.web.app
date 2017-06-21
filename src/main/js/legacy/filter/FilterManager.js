@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var FilterFilter = require('./Filter');
-var FilterFilterGroup = require('./FilterGroup');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isMe} = require('legacy/util/Globals');
+
+require('./Filter');
+require('./FilterGroup');
 
 
 //TODO: find a way to generalize this and make this class responsible for all filter operations for UGD calls.
@@ -58,6 +60,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 	 * All union/intersection/include/exclude data will be dropped.
 	 *
 	 * @param {String} [scope] - id of the filter menu this filter is associated to.
+	 * @returns {Object} -
 	 */
 	getServerListParams: function (scope) {
 		var filter = this.getCurrentFilter(scope),

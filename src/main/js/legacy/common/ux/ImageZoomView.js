@@ -1,12 +1,16 @@
-var Ext = require('extjs');
-var SlideDeck = require('./SlideDeck');
-var UxSlideDeck = require('./SlideDeck');
-var lazyResolve = {
+const Ext = require('extjs');
+
+const SlideDeck = require('./SlideDeck');
+
+const lazyResolve = {
 	get ReaderPanel () {
 		delete this.ReaderPanel;
-		return this.ReaderPanel = require('../../app/contentviewer/components/Reader');
+		return this.ReaderPanel = require('legacy/app/contentviewer/components/Reader');
 	}
 };
+
+require('./SlideDeck');
+
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {

@@ -1,7 +1,7 @@
 const Ext = require('extjs');
-const UserRepository = require('../../../../../../../cache/UserRepository');
 
-require('legacy/app/blog/StateStore');
+const UserRepository = require('legacy/cache/UserRepository');
+const BlogStateStore = require('legacy/app/blog/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogged', {
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		var me = this;
 
-		me.BlogStateStore = NextThought.app.blog.StateStore.getInstance();
+		me.BlogStateStore = BlogStateStore.getInstance();
 
 		me.mon(me.BlogStateStore, {
 			'blog-deleted': function (id) {

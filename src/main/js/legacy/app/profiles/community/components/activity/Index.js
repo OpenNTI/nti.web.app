@@ -1,14 +1,18 @@
 const Ext = require('extjs');
-const AnalyticsUtil = require('../../../../../util/Analytics');
-const StoreUtils = require('legacy/util/Store');
-require('legacy/model/User');
-require('legacy/mixins/Router');
-require('legacy/app/course/dashboard/components/tiles/Note');
-require('legacy/app/course/dashboard/components/tiles/Topic');
-require('legacy/app/course/dashboard/components/tiles/Blog');
-require('./parts/NewPost');
-require('legacy/app/windows/Actions');
 const {wait} = require('nti-commons');
+
+const AnalyticsUtil = require('legacy/util/Analytics');
+const StoreUtils = require('legacy/util/Store');
+const WindowsActions = require('legacy/app/windows/Actions');
+const TilesNote = require('legacy/app/course/dashboard/components/tiles/Note');
+const TilesTopic = require('legacy/app/course/dashboard/components/tiles/Topic');
+const TilesBlog = require('legacy/app/course/dashboard/components/tiles/Blog');
+const Note = require('legacy/model/Note');
+const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
+const PersonalBlogEntry = require('legacy/model/forums/PersonalBlogEntry');
+
+require('legacy/mixins/Router');
+require('./parts/NewPost');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	extend: 'Ext.container.Container',
@@ -32,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 
 		this.addDefaultRoute('/');
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.newPostCmp = this.add({
 			xtype: 'profiles-community-newpost',
@@ -135,11 +139,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 			return;
 		}
 
-		var params = {
-			batchSize: 50,
-			batchStart: 0
-		};
-
 		this.clearEmpty();
 
 		if (this.errorCmp) {
@@ -216,12 +215,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	__loadItem: function (item) {
 		var load;
 
-		if (item instanceof NextThought.model.forums.CommunityHeadlineTopic) {
-			load = NextThought.app.course.dashboard.components.tiles.Topic.getTileConfig(item, null, 334, true);
-		} else if (item instanceof NextThought.model.Note) {
-			load = NextThought.app.course.dashboard.components.tiles.Note.getTileConfig(item, null, 334, true);
-		} else if (item instanceof NextThought.model.forums.PersonalBlogEntry) {
-			load = NextThought.app.course.dashboard.components.tiles.Blog.getTileConfig(item, null, 334, true);
+		if (item instanceof CommunityHeadlineTopic) {
+			load = TilesTopic.getTileConfig(item, null, 334, true);
+		} else if (item instanceof Note) {
+			load = TilesNote.getTileConfig(item, null, 334, true);
+		} else if (item instanceof PersonalBlogEntry) {
+			load = TilesBlog.getTileConfig(item, null, 334, true);
 		} else {
 			console.warn('Unknown item in activity: ', item);
 			load = Promise.resolve(null);
@@ -288,6 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	 * the wrong batch
 	 *
 	 * @param  {Number} page the page number to load
+	 * @returns {void}
 	 */
 	loadPage: function (page) {
 		var me = this,

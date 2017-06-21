@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../common/StateStore');
-var StoreBatchInterface = require('../../store/BatchInterface');
+const Ext = require('extjs');
+
+const BatchInterface = require('legacy/store/BatchInterface');
+
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.StateStore', {
@@ -11,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.StateStore'
 	buildStore: function (url, lastViewed) {
 		var me = this;
 
-		me.NOTABLE_STORE = NextThought.store.BatchInterface.create({
+		me.NOTABLE_STORE = BatchInterface.create({
 			url: url,
 			batchSize: me.PAGE_SIZE,
 			params: {

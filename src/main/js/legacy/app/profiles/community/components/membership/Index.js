@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../../../../../util/Analytics');
-var StoreUtils = require('../../../../../util/Store');
-var PartsMembership = require('../../../user/components/membership/parts/Membership');
-var MixinsRouter = require('../../../../../mixins/Router');
-var UtilStore = require('../../../../../util/Store');
+const Ext = require('extjs');
+
+const AnalyticsUtil = require('legacy/util/Analytics');
+const StoreUtils = require('legacy/util/Store');
+
+require('legacy/mixins/Router');
+require('../../../user/components/membership/parts/Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.components.membership.Index', {
@@ -134,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 	onBatchLoad: function (batch) {
-		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
+		// var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.removeLoading();
 		this.removeError();

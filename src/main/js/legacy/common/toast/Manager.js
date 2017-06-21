@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
 require('./Window');
 
 
@@ -6,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 
 	PADDING: 10,
 
-	/** @private */
+	/* @private */
 	constructor: function () {
 		this.callParent(arguments);
 		this.stack = [];
@@ -71,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 		return toast;
 	},
 
-	/** @private */
+	/* @private */
 	measure: function (loaf) {
 		var padding = this.PADDING,
 			sum = 0;
@@ -79,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 		return sum;
 	},
 
-	/** @private */
+	/* @private */
 	eatToast: function (toast) {
 		if (toast.hasOwnProperty('timeoutId')) {
 			clearTimeout(toast.timeoutId);
@@ -98,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 	},
 
 
-	/** @private */
+	/* @private */
 	popToast: function (toast) {
 
 		var vp = Ext.dom.Element.getViewSize(),

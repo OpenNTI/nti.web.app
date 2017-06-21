@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var NotePanel = require('../../../../../../annotations/note/Panel');
-var UtilContent = require('../../../../../../../util/Content');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isMe} = require('legacy/util/Globals');
+
+require('legacy/app/annotations/note/Panel');
+require('legacy/util/Content');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply', {

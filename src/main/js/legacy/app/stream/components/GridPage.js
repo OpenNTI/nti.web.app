@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsBasePage = require('./BasePage');
+const Ext = require('extjs');
+
+require('./BasePage');
 
 
 module.exports = exports = Ext.define('NextThought.app.stream.components.GridPage', {

@@ -1,11 +1,14 @@
-var Ext = require('extjs');
-var {isFeature} = require('legacy/util/Globals');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
-var StoreUtils = require('../../util/Store');
-var CommonActions = require('../../common/Actions');
-var SearchStateStore = require('./StateStore');
-var ContextStateStore = require('../context/StateStore');
+const Ext = require('extjs');
+
+const {isFeature} = require('legacy/util/Globals');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const StoreUtils = require('legacy/util/Store');
+const ContextStateStore = require('legacy/app/context/StateStore');
+
+const SearchStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.Actions', {
@@ -15,8 +18,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.SearchStore = NextThought.app.search.StateStore.getInstance();
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.SearchStore = SearchStateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 	},
 
 	getPageSize: function () {

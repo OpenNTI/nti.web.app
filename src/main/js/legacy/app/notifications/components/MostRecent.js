@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsList = require('./List');
+const Ext = require('extjs');
+
+require('./List');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.MostRecent', {

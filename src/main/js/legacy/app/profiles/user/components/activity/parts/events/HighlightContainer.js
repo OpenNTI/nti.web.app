@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var MixinsProfileLinks = require('../../../../../../../mixins/ProfileLinks');
-var PathActions = require('../../../../../../navigation/path/Actions');
+const Ext = require('extjs');
+
+const PathActions = require('legacy/app/navigation/path/Actions');
+
+require('legacy/mixins/ProfileLinks');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.HighlightContainer', {
@@ -60,14 +62,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	setupContainerRenderData: function () {
 		var me = this,
-			c = me.up('[user]'),
 			u = me.user || null,
 			name = u ? u.getName() : '...',
 			items = me.items,
 			waitsOn,
 			count = items.length,
 			books = {},
-			pathActions = NextThought.app.navigation.path.Actions.create(),
+			pathActions = PathActions.create(),
 			d;
 
 		if (this.rendered) { delete me.renderData; }
@@ -135,15 +136,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	 * This is intended to be a callback. No return value. We modify {data}
 	 * @param {Object} data the output
 	 * @param {Object} groupings the input
+	 * @returns {Promise} -
 	 */
 	setupBookRenderData: function (data, groupings) {
 		var toFillIn = [];
 
 		data.books = [];
 
-		Ext.Object.each(groupings, function (k, root) {
+		Ext.Object.each(groupings, function (ntiid, root) {
 			toFillIn.push(new Promise(function (fulfill, reject) {
-				var book = {pages: [], ntiid: k};
+				var book = {pages: [], ntiid};
 
 				data.books.push(book);
 
@@ -217,8 +219,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	/**
 	 * Attempts to add the record to this container.  If the date is a match it adds it. Otherwise it skips it.
 	 *
-	 * @param {NextThought.model.Highlight} record
-	 * @return {boolean} True if it was added, false otherwise.
+	 * @param {NextThought.model.Highlight} record -
+	 * @return {Boolean} True if it was added, false otherwise.
 	 */
 	collate: function (record) {
 		var d = record.get('CreatedTime'),

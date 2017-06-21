@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var SlideDeck = require('../../../common/ux/SlideDeck');
-var WebvttTranscript = require('../../../webvtt/Transcript');
-var WebvttCue = require('../../../webvtt/Cue');
+const Ext = require('extjs');
+
+const SlideDeck = require('legacy/common/ux/SlideDeck');
+
+require('legacy/webvtt/Transcript');
+require('legacy/webvtt/Cue');
 
 
 

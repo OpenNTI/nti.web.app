@@ -1,17 +1,21 @@
-var Ext = require('extjs');
-var {isFeature} = require('legacy/util/Globals');
-var Search = require('../../../nti-web-components-search');
-var ParseUtils = require('../../util/Parsing');
-var StoreUtils = require('../../util/Store');
-var MixinsRouter = require('../../mixins/Router');
-var PathActions = require('../navigation/path/Actions');
-var LibraryActions = require('../library/Actions');
-var NavigationActions = require('../navigation/Actions');
-var SearchStateStore = require('./StateStore');
-var ComponentsAdvancedOptions = require('./components/AdvancedOptions');
-var ComponentsResults = require('./components/Results');
-var ReactHarness = require('legacy/overrides/ReactHarness');
+const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+
+const Search = require('nti-web-components-search');
+const PathActions = require('legacy/app/navigation/path/Actions');
+const LibraryActions = require('legacy/app/library/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
+const {isFeature} = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const StoreUtils = require('legacy/util/Store');
+
+const SearchActions = require('./Actions');
+const SearchStateStore = require('./StateStore');
+
+require('legacy/mixins/Router');
+require('legacy/overrides/ReactHarness');
+require('./components/AdvancedOptions');
+require('./components/Results');
 
 module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	extend: 'Ext.container.Container',
@@ -96,10 +100,10 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			]);
 		}
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
-		this.NavActions = NextThought.app.navigation.Actions.create();
-		this.SearchActions = NextThought.app.search.Actions.create();
-		this.SearchStore = NextThought.app.search.StateStore.getInstance();
+		this.LibraryActions = LibraryActions.create();
+		this.NavActions = NavigationActions.create();
+		this.SearchActions = SearchActions.create();
+		this.SearchStore = SearchStateStore.getInstance();
 
 		this.initRouter();
 
@@ -198,9 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 				this.NavActions.setActiveContent(null, this.useNewSearch, this.useNewSearch);
 			} else {
 				this.LibraryActions.findBundle(bundle)
-					.then(function (bundle) {
-						navActions.setActiveContent(bundle, true);
-					});
+					.then(bundle2 => void navActions.setActiveContent(bundle2, true));
 			}
 		}
 

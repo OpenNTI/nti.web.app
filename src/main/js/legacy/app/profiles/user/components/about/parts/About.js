@@ -1,10 +1,11 @@
-var Ext = require('extjs');
-var User = require('../../../../../../model/User');
-var PartsFieldSet = require('./FieldSet');
-var MixinsModelWithBodyContent = require('../../../../../../mixins/ModelWithBodyContent');
-var AccountActions = require('../../../../../account/Actions');
-var EditorEditor = require('../../../../../../editor/Editor');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const AccountActions = require('legacy/app/account/Actions');
+const ModelWithBodyContent = require('legacy/mixins/ModelWithBodyContent');
+const {isFeature} = require('legacy/util/Globals');
+
+require('legacy/editor/Editor');
+require('./FieldSet');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
@@ -90,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.AccountActions = NextThought.app.account.Actions.create();
+		this.AccountActions = AccountActions.create();
 	},
 
 	afterRender: function () {
@@ -115,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			aboutTxt;
 
 		if (data.about && Array.isArray(data.about)) {
-			aboutTxt = NextThought.mixins.ModelWithBodyContent.unsafeSyncCompileBodyContent(data.about);
+			aboutTxt = ModelWithBodyContent.unsafeSyncCompileBodyContent(data.about);
 		} else {
 			aboutTxt = data.about;
 		}
@@ -175,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			action = 'addCls';
 
 		if (Array.isArray(about)) {
-			about = NextThought.mixins.ModelWithBodyContent.unsafeSyncCompileBodyContent(about);
+			about = ModelWithBodyContent.unsafeSyncCompileBodyContent(about);
 		}
 
 		if (!about) {

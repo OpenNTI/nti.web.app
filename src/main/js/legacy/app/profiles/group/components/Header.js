@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var User = require('../../../../model/User');
-var ComponentsHeader = require('../../components/Header');
+const Ext = require('extjs');
+
+require('legacy/model/User');
+require('../../components/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.Header', {

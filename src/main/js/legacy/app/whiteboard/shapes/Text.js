@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ShapesBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Text', {

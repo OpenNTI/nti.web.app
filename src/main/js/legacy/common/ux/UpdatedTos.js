@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var UxWelcomeGuide = require('./WelcomeGuide');
+const Ext = require('extjs');
+
+require('./WelcomeGuide');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {

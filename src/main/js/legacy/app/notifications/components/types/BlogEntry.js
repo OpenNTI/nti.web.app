@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var TypesForumTopic = require('./ForumTopic');
+const Ext = require('extjs');
+
+require('./ForumTopic');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.types.BlogEntry', {

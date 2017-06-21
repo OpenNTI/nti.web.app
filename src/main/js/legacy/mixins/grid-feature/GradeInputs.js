@@ -1,4 +1,6 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
@@ -163,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 
 	editGrade: function (record, value) {
 		var me = this,
-			view = me.__getGridView(), store = me.store,
+			view = me.__getGridView(),
 			historyItem = me.getHistoryItemFromRecord(record),
 			node = view.getNode(record);
 

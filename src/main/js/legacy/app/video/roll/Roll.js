@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var VideoservicesVimeo = require('../../../model/resolvers/videoservices/Vimeo');
+const Ext = require('extjs');
+
+const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
 
 
 module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
@@ -35,7 +36,6 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 	constructor: function (config) {
 		var store = config ? (config.store || undefined) : undefined,
 			data = config ? (config.data || undefined) : undefined,
-			Vimeo = NextThought.model.resolvers.videoservices.Vimeo,
 			me = this;
 
 		me.callParent(arguments);

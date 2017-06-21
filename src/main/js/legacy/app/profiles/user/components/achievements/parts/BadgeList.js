@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var MixinsExportBadge = require('../../../../../../mixins/ExportBadge');
-var BadgeWindow = require('../../../../../badge/Window');
-var OpenbadgesBadge = require('../../../../../../model/openbadges/Badge');
-var WindowsActions = require('../../../../../windows/Actions');
+const Ext = require('extjs');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+
+require('legacy/app/badge/Window');
+require('legacy/mixins/ExportBadge');
+require('legacy/model/openbadges/Badge');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeList', {
@@ -70,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.emptyText = Ext.DomHelper.markup({cls: 'empty-badge-text', html: this.emptyText});
 
@@ -104,10 +106,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		$AppConfig.Preferences.getPreference(me.preferencePath)
 				.then(function (preference) {
-					var checked;
-
 					me.preference = preference;
-					checked = me.preference.get(me.preferenceKey);
+					// let checked = me.preference.get(me.preferenceKey);
 
 					me.showPreference();
 					me.mon(me.preferenceEl, 'click', me.updatePreference.bind(me));
@@ -122,6 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	/**
 	 * Set the number of columns the list can fill
 	 * @param {Number} width the number of columns
+	 * @returns {void}
 	 */
 	setColumns: function (width) {
 		if (!this.rendered) {

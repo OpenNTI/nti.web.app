@@ -1,10 +1,13 @@
-var Ext = require('extjs');
-var User = require('../../../../model/User');
-var ComponentsHeader = require('../../components/Header');
-var ChatActions = require('../../../chat/Actions');
-var ChatStateStore = require('../../../chat/StateStore');
-var SettingsWindow = require('../../../account/settings/Window');
-// var EmailverifyWindow = require('./emailverify/Window');
+const Ext = require('extjs');
+
+const ChatActions = require('legacy/app/chat/Actions');
+const ChatStateStore = require('legacy/app/chat/StateStore');
+const SettingsWindow = require('legacy/app/account/settings/Window');
+
+// const EmailverifyWindow = require('./emailverify/Window');
+
+require('legacy/model/User');
+require('../../components/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.Header', {
@@ -55,8 +58,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.ChatStore = ChatStateStore.getInstance();
+		this.ChatActions = ChatActions.create();
 
 		this.mon(this.ChatStore, 'presence-changed', this.onPresenceChanged.bind(this));
 	},
@@ -322,7 +325,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			return;
 		}
 
-		var win = NextThought.app.account.settings.Window.create();
+		var win = SettingsWindow.create();
 
 		win.show();
 		win.center();

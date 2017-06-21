@@ -1,12 +1,13 @@
-var Ext = require('extjs');
-var TemplatesForNotes = require('../app/annotations/note/Templates');
+const Ext = require('extjs');
+
+const TemplatesForNotes = require('../app/annotations/note/Templates');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 
 	constructor: function () {
 		function onAfterRender () {
-			var me = this;
+			const me = this;
 
 			if (me.flagEl) {
 				me.mon(me.flagEl, 'click', me.flagActionClickHandler, me);

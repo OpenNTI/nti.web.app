@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var TypesBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.types.ForumComment', {

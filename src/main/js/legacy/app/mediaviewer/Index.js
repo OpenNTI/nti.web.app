@@ -1,13 +1,21 @@
-const Ext = require('extjs');
-require('../../util/Parsing');
-require('../../mixins/Router');
-require('../../mixins/State');
-require('../navigation/path/Actions');
-require('./components/reader/parts/Transcript');
-require('./Actions');
-require('./components/View');
 const {resolve} = require('path');
+
+const Ext = require('extjs');
 const { decodeFromURI } = require('nti-lib-ntiids');
+
+const LibraryActions = require('legacy/app/library/Actions');
+const PathActions = require('legacy/app/navigation/path/Actions');
+const TranscriptItem = require('legacy/model/transcript/TranscriptItem');
+const Slidedeck = require('legacy/model/Slidedeck');
+const PlaylistItem = require('legacy/model/PlaylistItem');
+
+const MediaviewerActions = require('./Actions');
+
+require('legacy/util/Parsing');
+require('legacy/mixins/Router');
+require('legacy/mixins/State');
+require('./components/reader/parts/Transcript');
+require('./components/View');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
@@ -26,9 +34,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 
 		this.initRouter();
 
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
-		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.PathActions = PathActions.create();
+		this.MediaActions = MediaviewerActions.create();
+		this.LibraryActions = LibraryActions.create();
 		this.addRoute('/:id', this.showMediaView.bind(this));
 		this.addDefaultRoute(this.showVideoGrid.bind(this));
 		this.__addKeyMapListeners();
@@ -117,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 				options.rec = record;
 			}
 			me.video = videoRec;
-			me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
+			me.transcript = TranscriptItem.fromVideo(me.video, basePath);
 			me.activeMediaView.setContent(me.video, me.transcript, options);
 		});
 	},
@@ -136,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			prec
 		])
 		.then(([deck, record]) => {
-			if (!(deck instanceof NextThought.model.Slidedeck)) {
+			if (!(deck instanceof Slidedeck)) {
 				return Promise.reject('Not a Slidedeck');
 			}
 
@@ -201,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			.catch(e => e ? Promise.reject(e) : null)
 			.then(o => o || Service.getObject(id))
 			.then(o =>
-				o instanceof NextThought.model.Slidedeck ? Promise.reject() : NextThought.model.PlaylistItem.create({ NTIID: o.ntiid || o.NTIID, ...(o.raw || o)})
+				o instanceof Slidedeck ? Promise.reject() : PlaylistItem.create({ NTIID: o.ntiid || o.NTIID, ...(o.raw || o)})
 			);
 	},
 

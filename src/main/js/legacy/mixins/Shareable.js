@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var SharingUtils = require('../util/Sharing');
-var UtilSharing = require('../util/Sharing');
+const Ext = require('extjs');
+
+const SharingUtils = require('legacy/util/Sharing');
+
+require('legacy/util/Sharing');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Shareable', {

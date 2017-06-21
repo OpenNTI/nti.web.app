@@ -1,4 +1,6 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
 const DatePicker = require('legacy/common/form/fields/DatePicker');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
 const ImagePicker = require('legacy/common/form/fields/ImagePicker');
@@ -7,7 +9,6 @@ const Progress = require('legacy/common/form/fields/Progress');
 const URL = require('legacy/common/form/fields/URL');
 const ErrorMessages = require('legacy/common/form/ErrorMessages');
 
-const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	extend: 'Ext.Component',

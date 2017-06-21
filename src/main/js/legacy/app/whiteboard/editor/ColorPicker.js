@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var EditorColorPalette = require('./ColorPalette');
+const Ext = require('extjs');
+
+require('./ColorPalette');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorPicker', {

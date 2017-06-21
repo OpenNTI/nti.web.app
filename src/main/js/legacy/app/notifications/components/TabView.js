@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsMostRecent = require('./MostRecent');
+const Ext = require('extjs');
+
+require('./MostRecent');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.TabView', {
@@ -86,8 +87,6 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 	addBodyListener: function () {
-		var me = this;
-
 		Ext.getBody().on('click', this.onBodyClick);
 		this.list.onActivate();
 	},

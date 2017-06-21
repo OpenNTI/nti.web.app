@@ -1,11 +1,14 @@
-var Ext = require('extjs');
-require('legacy/model/User');
-var AnalyticsUtil = require('legacy/util/Analytics');
+const Ext = require('extjs');
+
+const AnalyticsUtil = require('legacy/util/Analytics');
+const FlatPage = require('legacy/store/FlatPage');
+const UserdataActions = require('legacy/app/userdata/Actions');
+const UserSearch = require('legacy/model/UserSearch');
+
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
 require('legacy/app/profiles/user/components/activity/Body');
 require('legacy/app/profiles/user/components/activity/Sidebar');
-require('legacy/app/userdata/Actions');
 require('legacy/app/stream/util/StreamSource');
 
 
@@ -30,8 +33,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.flatPageStore = NextThought.store.FlatPage.create();
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.flatPageStore = FlatPage.create();
+		this.UserDataActions = UserdataActions.create();
 
 		this.UserDataActions.initPageStores(this);
 		this.UserDataActions.setupPageStoreDelegates(this);
@@ -84,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	getSuggestedSharing: function () {
 		var community = Service.getFakePublishCommunity();
 
-		return NextThought.model.UserSearch.create(community.getData());
+		return UserSearch.create(community.getData());
 	},
 
 

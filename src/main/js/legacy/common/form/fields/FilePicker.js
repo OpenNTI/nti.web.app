@@ -1,10 +1,11 @@
 const Ext = require('extjs');
+const {autobind} = require('nti-commons');
+const {ContentResources} = require('nti-web-commons');
+
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
-const {autobind} = require('nti-commons');
 const StateStore = require('legacy/app/context/StateStore');
 
-const {ContentResources} = require('nti-web-commons');
 
 require('legacy/model/ContentBlobFile');
 require('legacy/model/courseware/ContentFile');

@@ -1,16 +1,18 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
 const LocationMeta = require('legacy/cache/LocationMeta');
 const ContentUtils = require('legacy/util/Content');
 const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
 const RangeUtils = require('legacy/util/Ranges');
 const SharingUtils = require('legacy/util/Sharing');
+const UserDataActions = require('legacy/app/userdata/Actions');
+const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
+
 require('legacy/util/Line');
 require('legacy/app/whiteboard/Utils');
 require('legacy/editor/Editor');
-const UserDataActions = require('legacy/app/userdata/Actions');
-const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
-const {wait} = require('nti-commons');
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 	mixins: {

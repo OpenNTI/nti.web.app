@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var ShapesBase = require('./Base');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Url', {

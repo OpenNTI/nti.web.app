@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ParseUtils = require('../util/Parsing');
+const Ext = require('extjs');
+
+const ParseUtils = require('../util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.BundleLike', {

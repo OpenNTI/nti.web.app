@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ModeSmallVideo = require('./SmallVideo');
+const Ext = require('extjs');
+
+const Video = require('legacy/app/video/Video');
+
+require('./SmallVideo');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mode.Split', {
@@ -18,8 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			var screenHeight = Ext.Element.getViewportHeight(),
 				screenWidth = Ext.Element.getViewportWidth(),
 				tWidth = Math.floor(screenWidth * transcriptRatio),
-				ratio = NextThought.app.video.Video.ASPECT_RATIO,
-				chatGutterWidth = 60,
+				ratio = Video.ASPECT_RATIO,
 				defaultWidth = Ext.Element.getViewportWidth() - tWidth,
 				defaultHeight = Math.round(defaultWidth * ratio),
 				y = 80,

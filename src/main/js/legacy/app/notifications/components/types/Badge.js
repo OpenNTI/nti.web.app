@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var NTIFormat = require('../../../../util/Format');
-var TypesBase = require('./Base');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const NTIFormat = require('legacy/util/Format');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Badge', {

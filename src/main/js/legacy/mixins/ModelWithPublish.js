@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ParseUtils = require('../util/Parsing');
-var SharingUtils = require('../util/Sharing');
+const Ext = require('extjs');
+
+const ParseUtils = require('../util/Parsing');
+const SharingUtils = require('../util/Sharing');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {

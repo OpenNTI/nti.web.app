@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var DomUtils = require('legacy/util/Dom');
+const Ext = require('extjs');
+
+const Launcher = require('legacy/common/components/cards/Launcher');
+const DomUtils = require('legacy/util/Dom');
+
 require('legacy/app/contentviewer/overlay/Panel');
-require('legacy/common/components/cards/Launcher');
 require('./Roll');
 
 
@@ -14,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.OverlayedPanel
 	statics: {
 		getData: function (dom, reader) {
 			var videos = DomUtils.getVideosFromDom(dom);
-			return NextThought.common.components.cards.Launcher.getData(dom, reader, videos, function () {
+			return Launcher.getData(dom, reader, videos, function () {
 				var thumb = videos[0];
 				thumb = thumb && thumb.sources && thumb.sources[0];
 				return thumb && thumb.thumbnail;

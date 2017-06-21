@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ComponentsTabView = require('./components/TabView');
-var NotificationsStateStore = require('./StateStore');
+const Ext = require('extjs');
+
+const NotificationsStateStore = require('./StateStore');
+
+require('./components/TabView');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
@@ -20,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 			navigateToObject: this.doNavigateToObject.bind(this)
 		});
 
-		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
+		this.NotificationsStore = NotificationsStateStore.getInstance();
 		this.mon(this.NotificationsStore, 'update-unseen-count', this.updateBadge.bind(this));
 
 		this.on('destroy', 'destroy', this.listComponent);

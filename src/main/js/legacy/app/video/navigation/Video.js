@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var VideoVideo = require('../Video');
+const Ext = require('extjs');
+
+require('../Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', {

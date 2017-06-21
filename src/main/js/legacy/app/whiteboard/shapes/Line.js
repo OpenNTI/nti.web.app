@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ShapesBase = require('./Base');
-var NTMatrix = require('../Matrix');
-var WBUtils = require('../Utils');
+const Ext = require('extjs');
+
+const NTMatrix = require('../Matrix');
+const WBUtils = require('../Utils');
+
+require('./Base');
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Line', {
 	extend: 'NextThought.app.whiteboard.shapes.Base',
@@ -69,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Line', 
 
 		ctx.save();
 
-		var m = new NTMatrix(this.transform), xy, drawMatrix = new NTMatrix(), t, scale, rot;
+		var m = new NTMatrix(this.transform), drawMatrix = new NTMatrix(), t, scale, rot;
 
 		m.scaleAll(ctx.canvas.width);
 

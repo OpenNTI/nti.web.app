@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const moment = require('moment');
+
 const {isFeature} = require('legacy/util/Globals');
 
 require('legacy/app/stream/components/Filter');

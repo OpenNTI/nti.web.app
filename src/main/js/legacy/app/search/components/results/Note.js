@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ResultsBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.Note', {
@@ -8,7 +9,6 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 
 	clicked: function (e) {
 		var me = this,
-			hit = me.hit,
 			fragEl = e.getTarget('[ordinal]'),
 			fragIndex = fragEl && fragEl.getAttribute('ordinal');
 

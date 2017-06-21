@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var FieldsComboBox = require('../../../common/form/fields/ComboBox');
+const Ext = require('extjs');
+
+require('legacy/common/form/fields/ComboBox');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.StrokeWidthSelector', {

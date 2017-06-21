@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var FieldsComboBox = require('../../../common/form/fields/ComboBox');
-var EditorColorPickerButton = require('./ColorPickerButton');
+const Ext = require('extjs');
+
+require('legacy/common/form/fields/ComboBox');
+require('./ColorPickerButton');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.TextOptions', {

@@ -1,7 +1,9 @@
 const Ext = require('extjs');
 const {toCSSClassName} = require('nti-lib-dom');
 const cx = require('classnames');
+
 const NTIFormat = require('legacy/util/Format');
+const UserSearch = require('legacy/model/UserSearch');
 
 
 module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareSearchList', {
@@ -72,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 		},
 
 		getType (modelData) {
-			return NextThought.model.UserSearch.getType(modelData);
+			return UserSearch.getType(modelData);
 		},
 
 		getDisplayName (modelData) {

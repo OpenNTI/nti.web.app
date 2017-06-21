@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../common/StateStore');
-var StoreHit = require('../../store/Hit');
+const Ext = require('extjs');
+
+require('legacy/common/StateStore');
+require('legacy/store/Hit');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.StateStore', {

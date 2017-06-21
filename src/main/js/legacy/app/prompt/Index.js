@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var PromptStateStore = require('./StateStore');
-var ComponentsContainer = require('./components/Container');
+const Ext = require('extjs');
+
+const PromptStateStore = require('./StateStore');
+
+require('./components/Container');
 
 
 module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
@@ -17,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 
 		this.promptStack = [];
 
-		this.PromptStateStore = NextThought.app.prompt.StateStore.getInstance();
+		this.PromptStateStore = PromptStateStore.getInstance();
 
 		this.mon(this.PromptStateStore, {
 			'open-prompt': this.openPrompt.bind(this)

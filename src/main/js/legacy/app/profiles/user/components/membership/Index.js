@@ -1,9 +1,10 @@
 const Ext = require('extjs');
-const AnalyticsUtil = require('../../../../../util/Analytics');
 
+const AnalyticsUtil = require('legacy/util/Analytics');
+
+require('legacy/mixins/Router');
 require('./parts/Communities');
 require('./parts/Groups');
-require('../../../../../mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.Index', {

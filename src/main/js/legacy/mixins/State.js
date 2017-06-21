@@ -38,6 +38,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 	/**
 	 * Store the state in local storage
 	 * @param {Object} state state to store
+	 * @returns {void}
 	 */
 	setState: function (state) {
 		var actions = this.__getStateActions(),

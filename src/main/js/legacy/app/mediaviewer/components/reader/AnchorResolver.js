@@ -1,4 +1,9 @@
 const Ext = require('extjs');
+
+const TimeContentPointer = require('legacy/model/anchorables/TimeContentPointer');
+const TimeRangeDescription = require('legacy/model/anchorables/TimeRangeDescription');
+const TranscriptContentPointer = require('legacy/model/anchorables/TranscriptContentPointer');
+const TranscriptRangeDescription = require('legacy/model/anchorables/TranscriptRangeDescription');
 const lazy = require('legacy/util/lazy-require')
 				.get('Anchors', () => require('legacy/util/Anchors'));
 
@@ -10,10 +15,6 @@ require('legacy/model/anchorables/ElementDomContentPointer');
 require('legacy/model/anchorables/TextContext');
 require('legacy/model/anchorables/TextDomContentPointer');
 
-const TimeContentPointer = require('legacy/model/anchorables/TimeContentPointer');
-const TimeRangeDescription = require('legacy/model/anchorables/TimeRangeDescription');
-const TranscriptContentPointer = require('legacy/model/anchorables/TranscriptContentPointer');
-const TranscriptRangeDescription = require('legacy/model/anchorables/TranscriptRangeDescription');
 
 const AnchorResolver =
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
@@ -53,12 +54,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 
 		var start = description.getStart() && description.getStart().seconds,
-			end = description.getEnd() && description.getEnd().seconds, range, targetEl,
+			// end = description.getEnd() && description.getEnd().seconds,
+			range, targetEl,
 			utils = AnchorResolver;
 
 		//Conversions.
 		start = utils.fromMillSecondToSecond(start);
-		end = utils.fromMillSecondToSecond(end);
+		// end = utils.fromMillSecondToSecond(end);
 
 		if (cleanRoot) {
 			// Since we're anchoring to specific exact cue, we can find the node but checking the cue with the same start as ours.

@@ -1,11 +1,13 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
-var {guidGenerator} = Globals;
-const Mime = require('mime-types');
+const Ext = require('extjs');
 
-require('../app/video/Video');
-require('legacy/model/RelatedWork');
+const WhiteboardCanvas = require('legacy/app/whiteboard/Canvas');
+const Video = require('legacy/app/video/Video');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+const RelatedWork = require('legacy/model/RelatedWork');
+const Globals = require('legacy/util/Globals');
 
+
+const ModelWithBodyContent =
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	statics: {
 		/**
@@ -156,9 +158,9 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 
 	whiteboardRenderer: function (o, clickHandlerMaker, size, callback, scope) {
-		var id = guidGenerator(),
+		var id = Globals.guidGenerator(),
 			me = this,
-			Canvas = NextThought.app.whiteboard.Canvas;
+			Canvas = WhiteboardCanvas;
 		Canvas.getThumbnail(o, function (thumbnail) {
 			var t = me.WHITEBOARD_THUMBNAIL_TPL.apply([
 				id,
@@ -186,9 +188,8 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 	},
 
 	__embeddedVideoWithPlaceholder: function (o, clickHandlerMaker, size, callback, scope) {
-		var id = guidGenerator(),
-			me = this,
-			Video = NextThought.app.video.Video;
+		var id = Globals.guidGenerator(),
+			me = this;
 
 		Video.resolvePosterFromEmbedded(o)
 			.then(function (poster) {
@@ -224,7 +225,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			p;
 
 		if (!isNaN(parseFloat(o.size))) {
-			o.size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(o.size), 1);
+			o.size = FilePicker.getHumanReadableFileSize(parseFloat(o.size), 1);
 		}
 
 		o.type = type.split('/').last() || '';
@@ -236,14 +237,14 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 	getIconDataForAttachment: function (data) {
 		let type = data.contentType || data.FileMimeType,
-			isImage = NextThought.mixins.ModelWithBodyContent.isImageFile(type),
+			isImage = ModelWithBodyContent.isImageFile(type),
 			obj = {iconCls: ''};
 
 		if (isImage) {
 			obj.url = data.url || data.href || data.value;
 		}
 		else {
-			obj = NextThought.model.RelatedWork.getIconForMimeType(type);
+			obj = RelatedWork.getIconForMimeType(type);
 		}
 
 		return obj;
@@ -252,8 +253,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 	renderVideoComponent: function (node, owner, config) {
 		var p, width = node.getAttribute('data-width'),
-			url = node.getAttribute('data-url'),
-			type = node.getAttribute('data-type');
+			url = node.getAttribute('data-url');
 
 		p = Ext.widget({
 			xtype: 'content-video',
@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		clickHandlerMaker = clickHandlerMaker || function () {return '';};
 
 		function render (i) {
-			var o = body[i], fn;
+			var o = body[i];
 
 			if (i < 0) {
 				// TODO: We should change this to allow component to render themselves rather than only treating text/templates
@@ -303,7 +303,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 				render(i - 1);
 			}
 			else {
-				fn = me[me.rendererForPart[o.MimeType] || ''];
+				const fn = me[me.rendererForPart[o.MimeType] || ''];
 				if (Ext.isFunction(fn)) {
 					fn.call(me, o, Ext.bind(clickHandlerMaker, scope),
 							Ext.isObject(size) ? size[o.MimeType] : size,
@@ -366,7 +366,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 	},
 
 
-	/**
+	/*
 	 * @private
 	 * Builds and retuns a FormData object
 	 */

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var DndDraggable = require('./Draggable');
+const Ext = require('extjs');
+
+const DndOrderingItem = require('./OrderingItem');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
@@ -81,9 +82,9 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 		var midpoint = this.getVerticalMidpoint(), side;
 
 		if (y < midpoint) {
-			side = NextThought.mixins.dnd.OrderingItem.SIDES.TOP;
+			side = DndOrderingItem.SIDES.TOP;
 		} else {
-			side = NextThought.mixins.dnd.OrderingItem.SIDES.BOTTOM;
+			side = DndOrderingItem.SIDES.BOTTOM;
 		}
 
 		return side;
@@ -94,9 +95,9 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 		var midpoint = this.getHorizontalMidpoint(), side;
 
 		if (x < midpoint) {
-			side = NextThought.mixins.dnd.OrderingItem.SIDES.LEFT;
+			side = DndOrderingItem.SIDES.LEFT;
 		} else {
-			side = NextThought.mixins.dnd.OrderingItem.SIDES.RIGHT;
+			side = DndOrderingItem.SIDES.RIGHT;
 		}
 
 		return side;
@@ -134,28 +135,28 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	isPointAbove: function (x, y) {
 		var side = this.__getTopOrBottom(x, y);
 
-		return side === NextThought.mixins.dnd.OrderingItem.SIDES.TOP;
+		return side === DndOrderingItem.SIDES.TOP;
 	},
 
 
 	isPointBelow: function (x, y) {
 		var side = this.__getTopOrBottom(x, y);
 
-		return side === NextThought.mixins.dnd.OrderingItem.SIDES.BOTTOM;
+		return side === DndOrderingItem.SIDES.BOTTOM;
 	},
 
 
 	isPointLeft: function (x, y) {
 		var side = this.__getLeftOrRight(x, y);
 
-		return side === NextThought.mixins.dnd.OrderingItem.SIDES.LEFT && this.isPointContainedVertically(x, y);
+		return side === DndOrderingItem.SIDES.LEFT && this.isPointContainedVertically(x, y);
 	},
 
 
 	isPointRight: function (x, y) {
 		var side = this.__getLeftOrRight(x, y);
 
-		return side === NextThought.mixins.dnd.OrderingItem.SIDES.RIGHT && this.isPointContainedVertically(x, y);
+		return side === DndOrderingItem.SIDES.RIGHT && this.isPointContainedVertically(x, y);
 	},
 
 

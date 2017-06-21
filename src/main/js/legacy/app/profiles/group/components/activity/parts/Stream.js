@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var PartsStream = require('../../../../user/components/activity/parts/Stream');
-var EventsCreated = require('./events/Created');
+const Ext = require('extjs');
+
+require('../../../../user/components/activity/parts/Stream');
+require('./events/Created');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.parts.Stream', {
@@ -14,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		if (this.hasInitialWidget() && this.rendered) {
 			created = this.down('created-event');
 			if (created && created.setEntity) {
-				created.setEntity(this.user);	
+				created.setEntity(this.user);
 			}
 		}
 	},

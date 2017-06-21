@@ -1,6 +1,8 @@
 const Ext = require('extjs');
+
 const RectUtils = require('legacy/util/Rects');
 const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
+
 require('legacy/util/Search');
 
 

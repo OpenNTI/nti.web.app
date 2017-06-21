@@ -1,15 +1,17 @@
-var Ext = require('extjs');
-var ResultsBlogResult = require('./results/BlogResult');
-var ResultsChatResult = require('./results/ChatResult');
-var ResultsForumResult = require('./results/ForumResult');
-var ResultsTranscriptResult = require('./results/TranscriptResult');
-var ResultsHighlightResult = require('./results/HighlightResult');
-var ResultsVideo = require('./results/Video');
-var ResultsNote = require('./results/Note');
-var Transcripts = require('./results/Timeline');
-var RelatedWorkRef = require('./results/RelatedWorkRef');
-var PathActions = require('../../navigation/path/Actions');
-var WindowsActions = require('../../windows/Actions');
+const Ext = require('extjs');
+
+const PathActions = require('legacy/app/navigation/path/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+
+require('./results/BlogResult');
+require('./results/ChatResult');
+require('./results/ForumResult');
+require('./results/TranscriptResult');
+require('./results/HighlightResult');
+require('./results/Video');
+require('./results/Note');
+require('./results/Timeline');
+require('./results/RelatedWorkRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.Results', {
@@ -52,8 +54,8 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.PathActions = PathActions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.hitContainer = this.down('[hitContainer]');
 		this.actionContainer = this.down('[actionContainer]');

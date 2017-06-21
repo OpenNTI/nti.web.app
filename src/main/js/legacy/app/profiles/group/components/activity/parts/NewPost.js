@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PartsNewPost = require('../../../../community/components/activity/parts/NewPost');
+const Ext = require('extjs');
+
+require('../../../../community/components/activity/parts/NewPost');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.parts.NewPost', {

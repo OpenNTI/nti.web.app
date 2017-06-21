@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var WindowWindow = require('../window/Window');
+const Ext = require('extjs');
+
+require('../window/Window');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {

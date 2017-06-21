@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var B64 = require('../util/Base64');
+const Ext = require('extjs');
+
+const B64 = require('../util/Base64');
 
 module.exports = exports = Ext.define('NextThought.cache.IdCache', {
 

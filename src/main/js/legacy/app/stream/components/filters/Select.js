@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const Select = require('legacy/common/form/fields/select');
 
 module.exports = exports = Ext.define('NextThought.app.stream.components.filters.Select', {

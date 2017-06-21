@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var User = require('../../../../../../model/User');
-var PartsEntrySet = require('./EntrySet');
+const Ext = require('extjs');
+
+require('legacy/model/User');
+require('./EntrySet');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {

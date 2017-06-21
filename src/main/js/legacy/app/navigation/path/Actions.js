@@ -1,14 +1,24 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
 const ContextStateStore = require('legacy/app/context/StateStore');
+
 const PathStateStore = require('./StateStore');
-const {wait} = require('nti-commons');
+const PartsAssignment = require('./parts/Assignment');
+const PartsContent = require('./parts/Content');
+const PartsForums = require('./parts/Forums');
+const PartsProfiles = require('./parts/Profiles');
+
 require('legacy/common/Actions');
-require('./parts/Assignment');
-require('./parts/Content');
-require('./parts/Forums');
-require('./parts/Profiles');
+
+const PARTS = [
+	PartsAssignment,
+	PartsContent,
+	PartsForums,
+	PartsProfiles,
+];
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions', {
@@ -28,16 +38,15 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	},
 
 	buildHandlerMap: function () {
-		var parts = NextThought.app.navigation.path.parts,
-			keys = Object.keys(parts), handlers = {};
+		var handlers = {};
 
-		keys.forEach(function (key) {
-			var part = parts[key].create();
+		for (let partClass of PARTS) {
+			var part = partClass.create();
 
 			if (part.addHandlers) {
 				handlers = part.addHandlers(handlers);
 			}
-		});
+		}
 
 		this.mimeToHandlers = handlers;
 	},

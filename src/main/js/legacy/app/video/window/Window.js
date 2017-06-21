@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../../common/window/Window');
-var VideoVideo = require('../Video');
+const Ext = require('extjs');
+
+require('legacy/common/window/Window');
+require('../Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.video.window.Window', {

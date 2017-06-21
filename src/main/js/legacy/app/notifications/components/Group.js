@@ -1,15 +1,15 @@
-var Ext = require('extjs');
-var TypesBadge = require('./types/Badge');
-var TypesBase = require('./types/Base');
-var TypesBlogComment = require('./types/BlogComment');
-var TypesBlogEntry = require('./types/BlogEntry');
-var TypesBlogEntryPost = require('./types/BlogEntryPost');
-var TypesContact = require('./types/Contact');
-var TypesFeedback = require('./types/Feedback');
-var TypesForumComment = require('./types/ForumComment');
-var TypesForumTopic = require('./types/ForumTopic');
-var TypesGrade = require('./types/Grade');
-var TypesNote = require('./types/Note');
+const Ext = require('extjs');
+
+const TypesBadge = require('./types/Badge');
+const TypesBlogComment = require('./types/BlogComment');
+const TypesBlogEntry = require('./types/BlogEntry');
+const TypesBlogEntryPost = require('./types/BlogEntryPost');
+const TypesContact = require('./types/Contact');
+const TypesFeedback = require('./types/Feedback');
+const TypesForumComment = require('./types/ForumComment');
+const TypesForumTopic = require('./types/ForumTopic');
+const TypesGrade = require('./types/Grade');
+const TypesNote = require('./types/Note');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.Group', {
@@ -23,8 +23,6 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		MIME_TO_COMPONENT: {},
 
 		fillInMimeTypeComponent: function (cmps) {
-			var map = {};
-
 			this.MIME_TO_COMPONENT = cmps.reduce(function (acc, cmp) {
 				var mimeType = cmp.mimeType;
 
@@ -48,20 +46,19 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	initComponent: function () {
 		this.callParent(arguments);
 
-		var groupLabel = this.group && Ext.data.Types.GROUPBYTIME.groupTitle(this.group, 'Today'),
-			Types = NextThought.app.notifications.components.types;
+		var groupLabel = this.group && Ext.data.Types.GROUPBYTIME.groupTitle(this.group, 'Today');
 
 		this.self.fillInMimeTypeComponent([
-			Types.Note,
-			Types.ForumTopic,
-			Types.BlogEntry,
-			Types.Grade,
-			Types.Feedback,
-			Types.ForumComment,
-			Types.BlogComment,
-			Types.BlogEntryPost,
-			Types.Contact,
-			Types.Badge
+			TypesNote,
+			TypesForumTopic,
+			TypesBlogEntry,
+			TypesGrade,
+			TypesFeedback,
+			TypesForumComment,
+			TypesBlogComment,
+			TypesBlogEntryPost,
+			TypesContact,
+			TypesBadge
 		]);
 
 		if (this.showLabel) {

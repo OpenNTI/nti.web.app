@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var UserRepository = require('../cache/UserRepository');
-var CoderetrievalWindow = require('../app/contacts/components/coderetrieval/Window');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const GroupsActions = require('legacy/app/groups/Actions');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
+
+require('legacy/app/contacts/components/coderetrieval/Window');
 
 
 /**
@@ -18,8 +21,8 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 	constructor: function () {
 		this.on('presence-changed', this.presenceOfComponentChanged, this);
 		this.on('beforeRender', this.onCmpRendered, this);
-		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.GroupStore = GroupsStateStore.getInstance();
+		this.GroupActions = GroupsActions.create();
 	},
 
 	setupActions: function (group, ignoreChatOption) {
@@ -182,8 +185,6 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 	presenceOfComponentChanged: function (cmp) {
-		var users;
-
 		if (this.reactToChildPresenceChanged === false) {
 			return;
 		}
@@ -279,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 			bPresence = b.getPresence().toString() || '',
 			aName = a.get('displayName') || '',
 			bName = b.get('displayName') || '',
-			presenceResult, nameResult;
+			presenceResult;
 
 		presenceResult = bPresence.localeCompare(aPresence);
 		if (presenceResult !== 0) {
