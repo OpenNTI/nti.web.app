@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AssessmentSolution = require('./Solution');
+const Ext = require('extjs');
+
+require('./Solution');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.OrderingSolution', {

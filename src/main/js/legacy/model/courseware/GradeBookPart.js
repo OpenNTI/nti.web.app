@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
+const Ext = require('extjs');
+
+const GradeBookEntry = require('./GradeBookEntry');
+
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.courseware.GradeBookPart', {
@@ -32,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBookPar
 
 	buildEntry: function (name, id) {
 		var items = this.get('Items'),
-			entry = NextThought.model.courseware.GradeBookEntry.create({AssignmentId: id, Items: {}, Name: name}),
+			entry = GradeBookEntry.create({AssignmentId: id, Items: {}, Name: name}),
 			key = items.length;
 
 		if (Ext.isEmpty(name)) {

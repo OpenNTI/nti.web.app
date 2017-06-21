@@ -1,11 +1,13 @@
 const Ext = require('extjs');
+
 const User = require('legacy/model/User');
 const ContentUtils = require('legacy/util/Content');
+const PageItem = require('legacy/store/PageItem');
 
 require('legacy/mixins/ModelWithBodyContent');
-require('legacy/model/Base');
-require('legacy/model/anchorables/DomContentRangeDescription');
-require('legacy/model/anchorables/TranscriptRangeDescription');
+require('./anchorables/DomContentRangeDescription');
+require('./anchorables/TranscriptRangeDescription');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.Note', {
@@ -111,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	 * with that stuff.
 	 */
 	getDescendants: function (callback, scope) {
-		var resultStore = NextThought.store.PageItem.create(),
+		var resultStore = PageItem.create(),
 			outstandingChildren = 0, me = this;
 
 
@@ -153,10 +155,13 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	/**
 	 * Asynchronously loads replies using the "replies" link type
 	 *
-	 * @param {Function} callback
-	 * @param {Object} scope
+	 * @param {Function} callback -
+	 * @param {Object} scope -
 	 * @param {Object} additionalParams An optional object describing params to send to the server.
-	 *		  Ext: { sortOn: 'lastModified', sortOrder: 'descending' }
+	 *
+	 *     Ex: { sortOn: 'lastModified', sortOrder: 'descending' }
+	 *
+	 * @returns {void}
 	 */
 	loadReplies: function (callback, scope, additionalParams) {
 		var me = this,
@@ -165,11 +170,11 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			params;
 
 		if (!link) {
-			Ext.callback(callback, scope, [NextThought.store.PageItem.create()]);
+			Ext.callback(callback, scope, [PageItem.create()]);
 			return;
 		}
 
-		store = NextThought.store.PageItem.make(link, undefined, true);
+		store = PageItem.make(link, undefined, true);
 		params = store.proxy.extraParams || {};
 
 		if (additionalParams) {
@@ -183,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 	/**
 	 * From a note, build its reply
-	 * @return {NextThought.model.Note}
+	 * @return {NextThought.model.Note} -
 	 */
 	makeReply: function () {
 		var note = this,

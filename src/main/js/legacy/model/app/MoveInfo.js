@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var DndDataTransferSource = require('../../mixins/dnd/DataTransferSource');
+const Ext = require('extjs');
+
+require('legacy/mixins/dnd/DataTransferSource');
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.app.MoveInfo', {

@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 require('legacy/mixins/ModelWithBodyContent');
 require('legacy/model/Base');
 require('legacy/model/Highlight');

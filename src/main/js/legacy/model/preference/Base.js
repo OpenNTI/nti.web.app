@@ -1,5 +1,7 @@
 const Ext = require('extjs');
+
 const Base = require('legacy/model/Base');
+
 require('legacy/proxy/Preference');
 
 

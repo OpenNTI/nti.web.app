@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ModelRelatedWork = require('./RelatedWork');
+const Ext = require('extjs');
+
+require('./RelatedWork');
 
 
 module.exports = exports = Ext.define('NextThought.model.DiscussionRef', {

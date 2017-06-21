@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var StorePurchasable = require('./Purchasable');
+const Ext = require('extjs');
+
+require('./Purchasable');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.PurchasableCourse', {

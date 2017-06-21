@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ForumsForum = require('./Forum');
+const Ext = require('extjs');
+
+require('./Forum');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.CommunityForum', {

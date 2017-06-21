@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var AnchorablesContentRangeDescription = require('./ContentRangeDescription');
+const Ext = require('extjs');
 
+const TimeContentPointer = require('./TimeContentPointer');
 
+require('./ContentRangeDescription');
+
+const TimeRangeDescription =
 module.exports = exports = Ext.define('NextThought.model.anchorables.TimeRangeDescription', {
 	extend: 'NextThought.model.anchorables.ContentRangeDescription',
 
@@ -18,8 +21,8 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TimeRangeDe
 
 	statics: {
 		createFromObject: function (o) {
-			var cp = NextThought.model.anchorables.TimeContentPointer;
-			return NextThought.model.anchorables.TimeRangeDescription.create({
+			var cp = TimeContentPointer;
+			return TimeRangeDescription.create({
 				seriesId: o.seriesId,
 				start: cp.createFromObject(o.start),
 				end: cp.createFromObject(o.end)
@@ -40,6 +43,6 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TimeRangeDe
 
 
 	isTimeContentPointer: function (o) {
-		return Boolean(o instanceof NextThought.model.anchorables.TimeContentPointer);
+		return Boolean(o instanceof TimeContentPointer);
 	}
 });

@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isMe} = require('legacy/util/Globals');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.RoomInfo', {

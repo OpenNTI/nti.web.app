@@ -1,11 +1,11 @@
 const Ext = require('extjs');
-const ParseUtils = require('legacy/util/Parsing');
+
 const {getURL} = require('legacy/util/Globals');
-const TimeUtils = require('../../util/Time');
+const ParseUtils = require('legacy/util/Parsing');
+const TimeUtils = require('legacy/util/Time');
+const ModelWithPublish = require('legacy/mixins/ModelWithPublish');
 
-require('legacy/mixins/ModelWithPublish');
-
-require('legacy/model/Base');
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Assignment', {
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	],
 
 	mixins: {
-		ModelWithPublish: NextThought.mixins.ModelWithPublish
+		ModelWithPublish
 	},
 
 	fields: [

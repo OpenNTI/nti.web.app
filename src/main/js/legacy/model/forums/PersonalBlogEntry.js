@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ForumsHeadlineTopic = require('./HeadlineTopic');
-var MixinsModelWithPublish = require('../../mixins/ModelWithPublish');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isMe} = require('legacy/util/Globals');
+
+require('./HeadlineTopic');
+require('legacy/mixins/ModelWithPublish');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogEntry', {
@@ -28,4 +30,3 @@ module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogEntr
 	}
 
 });
-

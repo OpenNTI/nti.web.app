@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var StoreStripePurchaseItem = require('./StripePurchaseItem');
+const Ext = require('extjs');
+
+require('../Base');
+require('./StripePurchaseItem');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.StripePurchaseOrder', {

@@ -1,4 +1,4 @@
-var rangy = require('rangy');
+const rangy = require('rangy');
 require('rangy/lib/rangy-textrange');
 
 rangy.init();

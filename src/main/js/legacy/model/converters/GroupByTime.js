@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime', {}, function () {
@@ -69,10 +69,10 @@ module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime'
 			var d = (forceNow || new Date()).setHours(0, 0, 0, 0), c, now = new Date(d),
 				tollerance = 0.0099;
 
-			function under (c, i) {
-				var d = (i - c);
-				d = d > 0 && d < tollerance;//account for DST shifts
-				return c < i && !d;
+			function under (x, i) {
+				var dx = (i - x);
+				dx = dx > 0 && dx < tollerance;//account for DST shifts
+				return x < i && !dx;
 			}
 
 			if (!groupValue) {

@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 global.ObjectUtils =
 module.exports = exports = Ext.define('NextThought.util.Object', {

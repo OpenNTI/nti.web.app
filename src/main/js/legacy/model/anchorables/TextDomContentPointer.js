@@ -1,11 +1,13 @@
 const Ext = require('extjs');
 
+const lazy = require('legacy/util/lazy-require')
+	.get('Anchors', () => require('legacy/util/Anchors'));
+
+const ContentPointer = require('./ContentPointer');
 const DomContentPointer = require('./DomContentPointer');
 const ElementDomContentPointer = require('./ElementDomContentPointer');
 const TextContext = require('./TextContext');
 
-const lazy = require('legacy/util/lazy-require')
-			.get('Anchors', () => require('legacy/util/Anchors'));
 
 const TextDomContentPointer =
 module.exports = exports =
@@ -20,7 +22,7 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 
 	statics: {
 		createFromObject: function (o) {
-			var cp = NextThought.model.anchorables.ContentPointer;
+			var cp = ContentPointer;
 			return TextDomContentPointer.create({
 				role: o.role,
 				contexts: TextContext.createFromObjects(o.contexts),

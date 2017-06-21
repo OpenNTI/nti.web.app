@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AssessmentQuestionSubmission = require('./QuestionSubmission');
+const Ext = require('extjs');
+
+require('./QuestionSubmission');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.PollSubmission', {

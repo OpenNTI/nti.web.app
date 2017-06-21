@@ -1,6 +1,6 @@
-var Ext = require('extjs');
-var ObjectUtils = require('../../util/Object');
-var UtilObject = require('../../util/Object');
+const Ext = require('extjs');
+
+const ObjectUtils = require('legacy/util/Object');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Synthetic', {
@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Synthetic', 
 				config = {},
 				fn = this.fn,
 				sn = this.fnSet,
-				sfn = function (v) { return sn.call(record, record, v); };
+				sfn = function (val) { return sn.call(record, record, val); };
 
 			config[this.name] = {
 				getter: function () { return fn.call(record, record);},

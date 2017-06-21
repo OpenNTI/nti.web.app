@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 require('legacy/model/Base');
 
 

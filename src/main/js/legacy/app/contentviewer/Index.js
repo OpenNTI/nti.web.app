@@ -4,7 +4,7 @@ const {wait} = require('nti-commons');
 const {isMe} = require('legacy/util/Globals');
 const ContentviewerActions = require('legacy/app/contentviewer/Actions');
 
-require('../../mixins/Searchable');
+require('legacy/mixins/Searchable');
 require('./Actions');
 require('./panels/Reader');
 require('./panels/assignment/Admin');

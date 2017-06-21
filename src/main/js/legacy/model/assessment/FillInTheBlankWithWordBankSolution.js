@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var AssessmentSolution = require('./Solution');
-var AssessmentWordBank = require('./WordBank');
+const Ext = require('extjs');
+
+require('./Solution');
+require('./WordBank');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.FillInTheBlankWithWordBankSolution', {

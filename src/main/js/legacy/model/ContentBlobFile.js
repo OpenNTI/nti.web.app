@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const Globals = require('legacy/util/Globals');
 
 require('./Base');

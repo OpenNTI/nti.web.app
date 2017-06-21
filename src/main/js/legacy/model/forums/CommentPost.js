@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ForumsPost = require('./Post');
+const Ext = require('extjs');
+
+require('./Post');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
@@ -44,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 
 	/**
 	 *	Make a reply to this comment
-	 *	@return {NextThought.model.forums.CommentPost}
+	 *	@return {NextThought.model.forums.CommentPost} -
 	 */
 	makeReply: function () {
 		var comment = this,

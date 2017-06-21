@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var AnalyticsUtil = require('../util/Analytics');
-var ModelBase = require('./Base');
+const Ext = require('extjs');
+
+const AnalyticsUtil = require('../util/Analytics');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.BaseProgress', {

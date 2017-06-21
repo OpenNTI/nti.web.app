@@ -1,13 +1,18 @@
-var Ext = require('extjs');
-var Globals = require('legacy/util/Globals');
-var {guidGenerator, getURL} = Globals;
-// var ObjectUtils = require('legacy/util/Object');
-var ParseUtils = require('legacy/util/Parsing');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('UserDataActions', () => require('legacy/app/userdata/Actions'));
+
+const Community = require('./Community');
+
 require('legacy/model/Base');
 require('legacy/model/PageInfo');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('UserDataActions', () => require('legacy/app/userdata/Actions'));
+const {guidGenerator, getURL} = Globals;
+
 
 
 module.exports = exports = Ext.define('NextThought.model.Service', {
@@ -433,7 +438,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 	getFakePublishCommunity: function () {
 		if (!this.__fakePublishCommunity) {
-			this.__fakePublishCommunity = NextThought.model.Community.create({
+			this.__fakePublishCommunity = Community.create({
 				Username: this.FAKE_PUBLISH_COMMUNITY_NAME,
 				alias: 'Public'
 			});

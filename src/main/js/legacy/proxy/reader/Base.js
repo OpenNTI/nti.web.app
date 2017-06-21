@@ -1,6 +1,6 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
-var lazy = require('legacy/util/lazy-require')
+const lazy = require('legacy/util/lazy-require')
 			.get('UserRepository', () => require('legacy/cache/UserRepository'));
 
 

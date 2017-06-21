@@ -1,12 +1,12 @@
 const Ext = require('extjs');
+
 const ContentUtils = require('legacy/util/Content');
 const ParseUtils = require('legacy/util/Parsing');
 
-require('legacy/util/Parsing');
-require('legacy/model/Base');
-require('legacy/model/assessment/Question');
+const Assignment = require('./assessment/Assignment');
 
-const Assignment = require('legacy/model/assessment/Assignment');
+require('./assessment/Question');
+require('./Base');
 
 const ContentPackageMimeType = 'application/vnd.nextthought.renderablecontentpackage';
 

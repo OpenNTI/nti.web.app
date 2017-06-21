@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
-var ModelQuizQuestionResponse = require('./QuizQuestionResponse');
+const Ext = require('extjs');
+
+require('./Base');
+require('./QuizQuestionResponse');
 
 
 module.exports = exports = Ext.define('NextThought.model.QuizResult', {

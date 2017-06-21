@@ -1,6 +1,8 @@
 const Ext = require('extjs');
-const User = require('../../User');
+
 const ParseUtils = require('legacy/util/Parsing');
+
+const User = require('../../User');
 
 require('../../Base');
 require('../../User');

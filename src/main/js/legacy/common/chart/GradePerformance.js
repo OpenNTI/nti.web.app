@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 //See http://jsfiddle.net/jsg2021/6yfw8/ for a demo

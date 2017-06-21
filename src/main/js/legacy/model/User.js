@@ -1,13 +1,14 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
-const PresenceInfo = require('legacy/model/PresenceInfo');
-
-const Community = require('legacy/model/Community');
-const FriendsList = require('legacy/model/FriendsList');
 const Avatar = require('legacy/mixins/Avatar');
+
+const Community = require('./Community');
+const FriendsList = require('./FriendsList');
+const PresenceInfo = require('./PresenceInfo');
 
 require('./Base');
 

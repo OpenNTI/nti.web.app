@@ -1,11 +1,12 @@
 const Ext = require('extjs');
-const DomUtils = require('../util/Dom');
-const Globals = require('../util/Globals');
-const {getURL} = Globals;
 const Mime = require('mime-types');
+
+const DomUtils = require('legacy/util/Dom');
+const Globals = require('legacy/util/Globals');
+
+require('legacy/mixins/AuditLog');
+require('legacy/mixins/AuditLog');
 require('./Base');
-require('../mixins/AuditLog');
-require('../mixins/AuditLog');
 
 
 module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
@@ -239,12 +240,12 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 			data = {};
 
 		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
-			data.url = getURL(icon);
+			data.url = Globals.getURL(icon);
 		} else if (icon) {
-			data.url = getURL(icon, root || '');
+			data.url = Globals.getURL(icon, root || '');
 		}
 		else if (!icon && this.self.isImageFile(targetMimeType)) {
-			data.url = getURL(this.get('thumbnail'));
+			data.url = Globals.getURL(this.get('thumbnail'));
 		}
 
 		if (!data.url) {

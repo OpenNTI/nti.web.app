@@ -1,8 +1,9 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
+const LibraryActions = require('legacy/app/library/Actions');
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
-const {wait} = require('nti-commons');
 
 require('legacy/model/Base');
 require('legacy/mixins/PresentationResources');
@@ -56,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 			//pre resolve which image assets to use
 			.then(this.__setImage.bind(this));
 
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 	},
 
 	getTitle: function () {

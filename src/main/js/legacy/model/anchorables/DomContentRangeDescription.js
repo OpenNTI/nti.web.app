@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var AnchorablesContentRangeDescription = require('./ContentRangeDescription');
-var AnchorablesDomContentPointer = require('./DomContentPointer');
+const Ext = require('extjs');
+
+const ContentPointer = require('./ContentPointer');
+const DomContentPointer = require('./DomContentPointer');
+require('./ContentRangeDescription');
 
 
+const DomContentRangeDescription =
 module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 	extend: 'NextThought.model.anchorables.ContentRangeDescription',
 
@@ -17,8 +20,8 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentR
 
 	statics: {
 		createFromObject: function (o) {
-			var cp = NextThought.model.anchorables.ContentPointer;
-			return NextThought.model.anchorables.DomContentRangeDescription.create({
+			var cp = ContentPointer;
+			return DomContentRangeDescription.create({
 				start: cp.createFromObject(o.start),
 				end: cp.createFromObject(o.end),
 				ancestor: cp.createFromObject(o.ancestor)
@@ -50,6 +53,6 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentR
 	},
 
 	isDomContentPointer: function (o) {
-		return (o instanceof NextThought.model.anchorables.DomContentPointer);
+		return (o instanceof DomContentPointer);
 	}
 });

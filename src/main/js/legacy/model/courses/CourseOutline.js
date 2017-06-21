@@ -10,9 +10,9 @@ const CourseOutlineNode = require('./navigation/CourseOutlineNode');
 require('./navigation/CourseOutlineContentNode');
 require('./navigation/CourseOutlineCalendarNode');
 require('../../store/courseware/OutlineInterface');
-require('../../mixins/DurationCache');
-require('../../mixins/MovingRoot');
-require('../../mixins/OrderedContents');
+require('legacy/mixins/DurationCache');
+require('legacy/mixins/MovingRoot');
+require('legacy/mixins/OrderedContents');
 require('../Base');
 
 

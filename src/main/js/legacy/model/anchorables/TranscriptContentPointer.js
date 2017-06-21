@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var AnchorablesTimeContentPointer = require('./TimeContentPointer');
+const Ext = require('extjs');
 
+require('./TimeContentPointer');
 
+const TranscriptContentPointer =
 module.exports = exports = Ext.define('NextThought.model.anchorables.TranscriptContentPointer', {
 	extend: 'NextThought.model.anchorables.TimeContentPointer',
 
@@ -14,9 +15,12 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TranscriptC
 
 	statics: {
 		createFromObject: function (o) {
+			//This should be rewritten to create an array at the top of the file instead
+			//Tof using the "Magic" ExtJS class namespace object...
+			//eslint-disable-next-line no-undef
 			var cp = NextThought.model.anchorables[o.pointer.Class];
 
-			return NextThought.model.anchorables.TranscriptContentPointer.create({
+			return TranscriptContentPointer.create({
 				pointer: cp.createFromObject(o.pointer),
 				cueid: o.cueid,
 				role: o.role,

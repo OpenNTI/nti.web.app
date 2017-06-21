@@ -6,7 +6,7 @@ const CoursesActions = require('legacy/app/library/courses/Actions');
 const User = require('legacy/model/User');
 const {isFeature} = require('legacy/util/Globals');
 const {getString, getFormattedString} = require('legacy/util/Localization');
-var ParseUtils = require('legacy/util/Parsing');
+const ParseUtils = require('legacy/util/Parsing');
 
 require('../Page');
 require('legacy/app/redeem/Redeem');

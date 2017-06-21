@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AssessmentPart = require('./Part');
+const Ext = require('extjs');
+
+require('./Part');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.FillInTheBlankShortAnswerPart', {
