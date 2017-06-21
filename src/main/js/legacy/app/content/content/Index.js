@@ -196,10 +196,14 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					return;
 				}
 
-				const navigateToPublished = this.handleContentNavigation.bind(
-					this,
-					'',
-					encodeForURI(contentPackage.NTIID));
+				// determine where to go after publishing completes
+				// if coming from a lesson, handleContentNavigation handles a
+				// route with the lesson included.  if not coming from a lesson
+				// (the resources screen instead), handles a route with just the
+				// content
+				const navigateToPublished = this.handleContentNavigation
+					? this.handleContentNavigation.bind(this, '', encodeForURI(contentPackage.NTIID))
+					: this.pushRoute.bind(this, '', encodeForURI(contentPackage.NTIID));
 
 				const onDelete = () => {
 					this.currentBundle.updateFromServer()
