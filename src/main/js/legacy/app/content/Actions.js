@@ -10,6 +10,13 @@ require('../navigation/path/Actions');
 
 const { encodeForURI } = require('nti-lib-ntiids');
 
+const EMPTY_CONTENT_PACKAGE = {
+	'title': 'Untitled Reading',
+	'Class': 'RenderableContentPackage',
+	'MimeType': 'application/vnd.nextthought.renderablecontentpackage',
+	'content': ''
+};
+
 module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	levelLabels: {
 		'NaN': '&sect;',
@@ -18,6 +25,10 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	},
 
 	MAX_PATH_LENGTH: 2,
+
+	getEmptyContentPackage: function () {
+		return EMPTY_CONTENT_PACKAGE;
+	},
 
 	getContentPath: function (ntiid, bundle, parent, rootPageId, rootRoute) {
 		var me = this;
@@ -438,5 +449,32 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 				return store;
 			});
+	},
+
+	/**
+	 * Create a content package and return a promise with the created package
+	 *
+	 * @param  {Object}   bundle   			content bundle used to create content package
+	 * @param  {Object}   defaultPackage	(optional) default values used when creating new package
+	 * @return	{Promise}					promise created after package creation
+	 */
+	createContent: function (bundle, defaultPackage) {
+		const link = bundle.getLink('Library');
+
+		let req = null;
+
+		if(link) {
+			req = Service.post(link, defaultPackage || EMPTY_CONTENT_PACKAGE)
+				.then((contentPackage) => {
+					const pack = ParseUtils.parseItems(JSON.parse(contentPackage))[0];
+
+					return bundle.updateFromServer().then(() => pack);
+				});
+		}
+		else {
+			req = Promise.reject('No link');
+		}
+
+		return req;
 	}
 });
