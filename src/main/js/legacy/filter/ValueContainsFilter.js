@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var FilterFilter = require('./Filter');
+const Ext = require('extjs');
+
+require('./Filter');
 
 
 module.exports = exports = Ext.define('NextThought.filter.ValueContainsFilter', {

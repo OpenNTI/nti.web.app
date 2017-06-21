@@ -1,8 +1,11 @@
 const Ext = require('extjs');
+const {AssetIcon} = require('nti-web-commons');
+
+const NavigationActions = require('legacy/app/navigation/Actions');
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
-const {AssetIcon} = require('nti-web-commons');
 const RelatedWork = require('legacy/model/RelatedWork');
+
 require('legacy/mixins/EllipsisText');
 
 
@@ -111,10 +114,10 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 			bundle = container && container.currentBundle;
 
 		if (ParseUtils.isNTIID(this.target)) {
-			status = NextThought.app.navigation.Actions.navigateToHref(this.target);
+			status = NavigationActions.navigateToHref(this.target);
 		}
 		else {
-			status = NextThought.app.navigation.Actions.navigateToCardTarget(this.data, !e, function () {}, bundle);
+			status = NavigationActions.navigateToCardTarget(this.data, !e, function () {}, bundle);
 		}
 		return status;
 	},

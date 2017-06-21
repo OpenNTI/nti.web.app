@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var RangeUtils = require('../../util/Ranges');
-var UtilRanges = require('../../util/Ranges');
-var WindowHeader = require('./Header');
-var WindowsStateStore = require('../../app/windows/StateStore');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const RangeUtils = require('legacy/util/Ranges');
+const WindowsStateStore = require('legacy/app/windows/StateStore');
+
+require('legacy/util/Ranges');
+require('./Header');
 
 
 module.exports = exports = Ext.define('NextThought.common.window.Window', {
@@ -30,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		{xtype: 'container', flex: 1, windowContentWrapper: true}
 	],
 
-	onClassExtended: function (cls, data, hooks) {
+	onClassExtended: function (_, __, hooks) {
 		var onBeforeClassCreated = hooks.onBeforeCreated;
 
 		hooks.onBeforeCreated = function (cls, data) {
@@ -105,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 
 		this.titleBar = this.down('nti-window-header');
 
-		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.WindowStore = WindowsStateStore.getInstance();
 		windowStore = this.WindowStore;
 
 		// NOTE: most windows are currently treated as an overlay.
@@ -162,12 +164,12 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 			target = 'targetEl',
 			c = me.down('container[windowContentWrapper]');
 
-		function getEl (c, sub) {
-			return Ext.get(c.getId() + '-' + sub);
+		function getEl (cmp, sub) {
+			return Ext.get(cmp.getId() + '-' + sub);
 		}
 
-		function fixIt (c, sub) {
-			var el = getEl(c, sub);
+		function fixIt (cmp, sub) {
+			var el = getEl(cmp, sub);
 			if (el) {
 				el.setStyle({ position: 'fixed', top: 'initial', left: 'initial' });
 			}

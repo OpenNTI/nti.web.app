@@ -1,11 +1,12 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var NTIFormat = require('../../../../util/Format');
-var ParseUtils = require('../../../../util/Parsing');
-var ResultsBase = require('./Base');
-var ChatActions = require('../../../chat/Actions');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const NTIFormat = require('legacy/util/Format');
+const ChatActions = require('legacy/app/chat/Actions');
+const {isMe} = require('legacy/util/Globals');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.ChatResult', {
@@ -15,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.ChatActions = ChatActions.create();
 	},
 
 	setCreator: function (user) {

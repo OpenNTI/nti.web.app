@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.PresentationResources', {

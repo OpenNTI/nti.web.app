@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var WindowWindow = require('../../common/window/Window');
-var WhiteboardEditor = require('./Editor');
+const Ext = require('extjs');
+
+require('../../common/window/Window');
+require('./Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {

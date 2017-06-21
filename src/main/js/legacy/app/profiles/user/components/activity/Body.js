@@ -1,11 +1,12 @@
 const Ext = require('extjs');
-const ParseUtils = require('../../../../../util/Parsing');
+
+const WindowsActions = require('legacy/app/windows/Actions');
+const ParseUtils = require('legacy/util/Parsing');
 const {isMe} = require('legacy/util/Globals');
 
+require('legacy/app/blog/Window');
 require('./parts/Stream');
 require('./parts/NewPost');
-require('../../../../windows/Actions');
-require('../../../../blog/Window');
 
 
 
@@ -25,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.setUpComponents();
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.activityCmp.navigateToObject = this.navigateToActivityItem.bind(this);
 		this.newPostCmp.onNewPost = this.onNewPost.bind(this);

@@ -1,11 +1,12 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var LibraryActions = require('../../../library/Actions');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const LibraryActions = require('legacy/app/library/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Forums', {
 	constructor: function () {
-		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.LibraryActions = LibraryActions.create();
 	},
 
 	addHandlers: function (handlers) {

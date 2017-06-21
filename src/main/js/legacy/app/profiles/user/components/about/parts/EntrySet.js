@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PartsFieldSet = require('./FieldSet');
+const Ext = require('extjs');
+
+require('./FieldSet');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
@@ -181,8 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	getValues: function () {
-		var entries = this.entriesEl.dom.querySelectorAll('.entry') || [],
-			values = [];
+		var entries = this.entriesEl.dom.querySelectorAll('.entry') || [];
 
 		if (this.isReadOnly()) {
 			return [];

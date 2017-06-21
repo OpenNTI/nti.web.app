@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ComponentsList = require('./List');
-var MixinsRouter = require('../../../mixins/Router');
-var ComponentsHeader = require('./Header');
+const Ext = require('extjs');
+
+require('../../../mixins/Router');
+require('./List');
+require('./Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.Stream', {

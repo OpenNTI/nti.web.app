@@ -1,8 +1,11 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var WindowsStateStore = require('./StateStore');
+const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+
+const ParseUtils = require('../../util/Parsing');
+
+const WindowsStateStore = require('./StateStore');
+
+require('../../common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
@@ -11,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.WindowStore = WindowsStateStore.getInstance();
 	},
 
 	__resolveBeforeShow: function (ntiid) {
@@ -43,12 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		return '/object/' + id;
 	},
 
-	/**
-	 * Push a window to the state
-	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
-	 * @param  {Array} path			 the path to show for the model
-	 * @param  {Element} el			  element to show the note opening from
-	 */
+
 	pushWindow: function (objectOrNTIID, state, el, monitors, precache) {
 		var id = objectOrNTIID,
 			mimeType;
@@ -78,13 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		this.WindowStore.fireCloseWindow();
 	},
 
-	/**
-	 * Given an object or NTIID show a modal for it, without pushing or replacing state
-	 *
-	 *
-	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
-	 * @return {Promise}		  fulfills when the window is open
-	 */
+
 	showWindow: function (objectOrNTIID, state, el, monitors, precache) {
 		var me = this, id, cache,
 			fetchObject;

@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var AnnotationUtils = require('../../util/Annotations');
-var ComponentsCollection = require('../../common/components/Collection');
+const Ext = require('extjs');
+
+const AnnotationUtils = require('legacy/util/Annotations');
+
+require('legacy/common/components/Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.store.Collection', {
@@ -58,12 +60,12 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 	},
 
 	collectData: function (records, index) {
-		var rows = this.rowSpan,
-			data = this.callParent(arguments),
+		const rows = this.rowSpan;
+		const data = this.callParent(arguments);
 		//Unspoken gotcha: index is the index of the updated record, since we set the first to be featrued by
 		// default, 0 is false, so it still gets set as featured.  If we ever change this logic, this check
 		// will no longer be sufficiant.
-			updating = !!index;
+		// const updating = !!index;
 
 		Ext.each(data.items, function (i, x) {
 			var cols = 2;

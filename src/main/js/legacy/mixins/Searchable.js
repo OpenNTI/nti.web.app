@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var MixinsSearchHitHighlighting = require('./SearchHitHighlighting');
-var SearchStateStore = require('../app/search/StateStore');
+const Ext = require('extjs');
+
+const SearchStateStore = require('legacy/app/search/StateStore');
+
+require('./SearchHitHighlighting');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
@@ -9,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 	},
 
 	initSearch: function () {
-		this.SearchStore = NextThought.app.search.StateStore.getInstance();
+		this.SearchStore = SearchStateStore.getInstance();
 		this.searchId = this.getContainerIdForSearch();
 
 		var search = this.SearchStore.getHitForContainer(this.searchId);
@@ -31,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 	 * Return a promise that fulfills when then cmp is ready
 	 * for the search results to be applied
 	 * @override
-	 * @return {Promise}
+	 * @return {Promise} -
 	 */
 	onceReadyForSearch: function () {
 		return Promise.resolve();

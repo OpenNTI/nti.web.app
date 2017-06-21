@@ -1,7 +1,12 @@
 const Ext = require('extjs');
+
+const ContextStateStore = require('legacy/app/context/StateStore');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
+const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 // const LocationMeta = require('legacy/cache/LocationMeta');
 const UserRepository = require('legacy/cache/UserRepository');
 const FilterManager = require('legacy/filter/FilterManager');
+const LoginStateStore = require('legacy/login/StateStore');
 const Anchors = require('legacy/util/Anchors');
 // const AnnotationUtils = require('legacy/util/Annotations');
 const ContentUtils = require('legacy/util/Content');
@@ -10,22 +15,17 @@ const ObjectUtils = require('legacy/util/Object');
 const ParseUtils = require('legacy/util/Parsing');
 const SharingUtils = require('legacy/util/Sharing');
 const StoreUtils = require('legacy/util/Store');
-
-require('legacy/common/Actions');
-const LoginStateStore = require('legacy/login/StateStore');
-const UserdataStateStore = require('./StateStore');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
-const StorePageItem = require('legacy/store/PageItem');
-
 const Bookmark = require('legacy/model/Bookmark');
+const StorePageItem = require('legacy/store/PageItem');
 const Note = require('legacy/model/Note');
 const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDescription');
-const ContextStateStore = require('legacy/app/context/StateStore');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
 
+const UserdataStateStore = require('./StateStore');
+
+require('legacy/common/Actions');
 require('legacy/app/contentviewer/components/definition/Window');
-require('legacy/common/form/fields/FilePicker');
 
-const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 
 
 module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
@@ -740,8 +740,8 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 							err = JSON.parse(err.responseText);
 						}
 
-						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+						let maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
+							currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
 						if (err.code === 'MaxFileSizeUploadLimitError') {
 							err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 						}
@@ -858,10 +858,10 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 
 	/**
-	 * @param record - Note Record to edit
-	 * @param body - update body
-	 * @param - updated title
-	 * @return
+	 * @param {Object} record - Note Record to edit
+	 * @param {String|Array} body - update body
+	 * @param {String} title - updated title
+	 * @returns {Promise} -
 	 *
 	 * TODO: Combine this together with the saveNewNote Code.
 	 */
@@ -902,8 +902,8 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 
 		if (err.code === 'MaxFileSizeUploadLimitError') {
-			let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-				currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+			let maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
+				currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
 			err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
 		}
 		if (err.code === 'MaxAttachmentsExceeded') {

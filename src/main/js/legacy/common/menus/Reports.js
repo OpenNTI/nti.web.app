@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var MenusLabeledSeparator = require('./LabeledSeparator');
+const Ext = require('extjs');
+
+const {getString} = require('legacy/util/Localization');
+
+require('./LabeledSeparator');
 
 
 module.exports = exports = Ext.define('NextThought.common.menus.Reports', {

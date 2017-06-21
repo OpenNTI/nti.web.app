@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var NTIFormat = require('../../../../../../util/Format');
+const Ext = require('extjs');
+
+const NTIFormat = require('legacy/util/Format');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.parts.Membership', {
@@ -79,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			if (this.profileRouteRoot) {
 				parts = Ext.Array.insert(parts, 0, [this.profileRouteRoot]);
 			}
-			NextThought.app.navigation.Actions.pushRootRoute('', parts.join('/'));
+			NavigationActions.pushRootRoute('', parts.join('/'));
 		}
 	}
 });

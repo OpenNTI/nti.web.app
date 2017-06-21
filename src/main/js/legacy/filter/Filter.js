@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.filter.Filter', {
@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 		this.operation = this.clamp([this.self.OPERATION_EXCLUDE, this.self.OPERATION_INCLUDE], operation);
 	},
 
-	/**
+	/*
 	 * Limit value to the list, if the value isn't in the list, use the first option in the list.
 	 * @protected
 	 */

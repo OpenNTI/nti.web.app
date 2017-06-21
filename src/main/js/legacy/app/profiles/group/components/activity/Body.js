@@ -1,8 +1,8 @@
-var Ext = require('extjs');
-var ActivityBody = require('../../../user/components/activity/Body');
-var PartsStream = require('./parts/Stream');
-var PartsNewPost = require('./parts/NewPost');
-var WindowsActions = require('../../../../windows/Actions');
+const Ext = require('extjs');
+
+require('../../../user/components/activity/Body');
+require('./parts/Stream');
+require('./parts/NewPost');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.Body', {

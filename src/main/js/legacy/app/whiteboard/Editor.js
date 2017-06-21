@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var MixinsShapeManipulation = require('./editor/mixins/ShapeManipulation');
-var MixinsToolOptionsState = require('./editor/mixins/ToolOptionsState');
-var WhiteboardCanvas = require('./Canvas');
-var EditorTools = require('./editor/Tools');
+const Ext = require('extjs');
+
+const WhiteboardCanvas = require('./Canvas');
+
+require('./editor/mixins/ShapeManipulation');
+require('./editor/mixins/ToolOptionsState');
+require('./editor/Tools');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
@@ -68,6 +70,6 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 	},
 
 	getThumbnail: function (callback) {
-		return NextThought.app.whiteboard.Canvas.getThumbnail(this.canvas.getData(), callback);
+		return WhiteboardCanvas.getThumbnail(this.canvas.getData(), callback);
 	}
 });

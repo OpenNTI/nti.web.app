@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var EventsPostReply = require('./PostReply');
+const Ext = require('extjs');
+
+require('./PostReply');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.TopicReply', {

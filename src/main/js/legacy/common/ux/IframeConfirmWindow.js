@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var UxIframeWindow = require('./IframeWindow');
+const Ext = require('extjs');
+
+require('./IframeWindow');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow', {

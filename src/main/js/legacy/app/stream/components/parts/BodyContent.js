@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var User = require('../../../../model/User');
-var DomUtils = require('../../../../util/Dom');
-var MixinsLikeFavoriteActions = require('../../../../mixins/LikeFavoriteActions');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const DomUtils = require('legacy/util/Dom');
+require('legacy/model/User');
+require('legacy/mixins/LikeFavoriteActions');
 
 
 /**
@@ -180,9 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.parts.B
 
 		DomUtils.adjustLinks(el, window.location.href);
 
-		el.select('img.whiteboard-thumbnail').each(function (el) {
-			el.replace(el.up('.body-divider'));
-		});
+		el.select('img.whiteboard-thumbnail').each(elm => void elm.replace(elm.up('.body-divider')));
 
 		el.select('img').each(function (img) {
 			img.on('load', function () {

@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var VideoservicesKaltura = require('../../model/resolvers/videoservices/Kaltura');
-var VideoservicesVimeo = require('../../model/resolvers/videoservices/Vimeo');
-var VideoservicesYoutube = require('../../model/resolvers/videoservices/Youtube');
-var VideoservicesHTML = require('../../model/resolvers/videoservices/HTML');
+const Ext = require('extjs');
+
+const Kaltura = require('legacy/model/resolvers/videoservices/Kaltura');
+const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
+const Youtube = require('legacy/model/resolvers/videoservices/Youtube');
+const HTML = require('legacy/model/resolvers/videoservices/HTML');
 
 
 module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
@@ -48,13 +49,12 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 	getValues: function () {
 		var raw = this.down('[name=embed]').getEl().getValue(), matches,
 			iframeRegex = /<iframe.*src="(.*?)".*?><\/iframe>/i,
-			Videos = NextThought.model.resolvers.videoservices,
 			types = [
-				Videos.Kaltura,
-				Videos.Youtube,
-				Videos.Vimeo,
-				Videos.HTML
-			], i, type = null;
+				Kaltura,
+				Youtube,
+				Vimeo,
+				HTML
+			], type = null;
 
 		matches = iframeRegex.exec(raw);
 

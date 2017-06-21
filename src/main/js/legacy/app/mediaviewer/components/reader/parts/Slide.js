@@ -1,13 +1,15 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
 const SharingUtils = require('legacy/util/Sharing');
 const UserDataActions = require('legacy/app/userdata/Actions');
 const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
-require('../mixins/AnnotationsMixin');
-
 const lazy = require('legacy/util/lazy-require')
 				.get('Anchors', () => require('legacy/util/Anchors'));
 
-const {wait} = require('nti-commons');
+require('../mixins/AnnotationsMixin');
+
+
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 	extend: 'Ext.Component',

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ResultsBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.TranscriptResult', {

@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Toolbar', {
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 
 	showGridPicker: function () {
 		var el = this.gridEl,
-			cls = 'active', me = this,
+			cls = 'active',
 			action = el.hasCls(cls) ? 'hide' : 'show';
 
 		this.floatParent.showGridViewer(action)
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 
 
 	handleClick: function (item, menu) {
-		var previousType = this.currentType, me = this;
+		var me = this;
 
 		this.floatParent.switchVideoViewer(item.action)
 			.then(function () {

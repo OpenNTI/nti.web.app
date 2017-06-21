@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-
 const {wait} = require('nti-commons');
+
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
 module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.Form', {

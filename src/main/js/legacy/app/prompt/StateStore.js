@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../common/StateStore');
+const Ext = require('extjs');
+
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.prompt.StateStore', {

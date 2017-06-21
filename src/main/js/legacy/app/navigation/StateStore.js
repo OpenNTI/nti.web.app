@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 require('legacy/common/StateStore');
 

@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../cache/UserRepository');
-var StoreUtils = require('../../../../../../util/Store');
-var PartsMembership = require('../../../../user/components/membership/parts/Membership');
-var UtilStore = require('../../../../../../util/Store');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const StoreUtils = require('legacy/util/Store');
+
+require('../../../../user/components/membership/parts/Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Membership', {

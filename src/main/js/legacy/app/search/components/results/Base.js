@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const {isMe} = require('legacy/util/Globals');
 
 const noop = () => {};
 

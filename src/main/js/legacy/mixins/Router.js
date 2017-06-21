@@ -1,12 +1,14 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
 const url = require('url');
+
+const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+
+const PathActions = require('legacy/app/navigation/path/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+const Globals = require('legacy/util/Globals');
 
 require('./routing/Path');
 require('./routing/Object');
-require('../app/navigation/path/Actions');
-require('../app/windows/Actions');
 
 
 function setObjHash (route, obj) {
@@ -39,8 +41,8 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		this.mixins.Object.initRouter.call(this);
 
 		this.Router = {
-			PathActions: NextThought.app.navigation.path.Actions.create(),
-			WindowActions: NextThought.app.windows.Actions.create()
+			PathActions: PathActions.create(),
+			WindowActions: WindowsActions.create()
 		};
 	},
 

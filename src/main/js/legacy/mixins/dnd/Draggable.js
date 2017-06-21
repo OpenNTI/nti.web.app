@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var DndDraggable = require('../../app/dnd/Draggable');
+const Ext = require('extjs');
+
+const DndDraggable = require('legacy/app/dnd/Draggable');
 
 
 /**
@@ -14,12 +15,12 @@ var DndDraggable = require('../../app/dnd/Draggable');
  * It can also implement a getDragTarget method, otherwise this.el.dom will be used
  */
 module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
-	/**
+	/*
 	 * If we haven't yet, set up the draggable wrapper
 	 */
 	initDragging: function () {
 		if (!this.Draggable) {
-			this.Draggable = new NextThought.app.dnd.Draggable({
+			this.Draggable = new DndDraggable({
 				ghostImageScale: this.ghostImageScale,
 				dropPlaceholderStyles: this.dropPlaceholderStyles,
 				getDragTarget: this.getDragTarget.bind(this),
@@ -61,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 		}
 	},
 
-	/**
+	/*
 	 * Add values to be set on the dataTransfer object.
 	 */
 	setDataTransfer: function (key, value) {

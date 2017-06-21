@@ -1,8 +1,13 @@
 const Ext = require('extjs');
+
 const UserRepository = require('legacy/cache/UserRepository');
 const DomUtils = require('legacy/util/Dom');
 const {isMe} = require('legacy/util/Globals');
+const PathActions = require('legacy/app/navigation/path/Actions');
+const ForumsActions = require('legacy/app/forums/Actions');
 const ForumStore = require('legacy/app/forums/StateStore');
+const WindowsActions = require('legacy/app/windows/Actions');
+const NTI = require('legacy/store/NTI');
 
 require('legacy/mixins/FlagActions');
 require('legacy/mixins/LikeFavoriteActions');
@@ -12,10 +17,6 @@ require('legacy/mixins/LikeFavoriteActions');
 require('legacy/mixins/FlagActions');
 require('legacy/editor/Editor');
 require('legacy/layout/component/Natural');
-require('legacy/app/navigation/path/Actions');
-require('legacy/app/forums/Actions');
-require('legacy/app/windows/Actions');
-require('legacy/app/forums/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem', {
@@ -139,9 +140,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			store,
 			url = r.getLink('contents');
 
-		me.PathActions = NextThought.app.navigation.path.Actions.create();
-		me.ForumActions = NextThought.app.forums.Actions.create();
-		me.WindowActions = NextThought.app.windows.Actions.create();
+		me.PathActions = PathActions.create();
+		me.ForumActions = ForumsActions.create();
+		me.WindowActions = WindowsActions.create();
 		me.ForumStore = ForumStore.getInstance();
 
 
@@ -181,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			}
 		});
 
-		store = me.store = NextThought.store.NTI.create({
+		store = me.store = NTI.create({
 			storeId: r.get('Class') + '-' + r.get('ID') + '-activity-view',
 			url: url,
 			pageSize: 1
@@ -496,7 +497,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		this.mixins.flagActions.constructor.call(this);
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
 
-		this.ForumActions = NextThought.app.forums.Actions.create();
+		this.ForumActions = ForumsActions.create();
 	},
 
 	beforeRender: function () {

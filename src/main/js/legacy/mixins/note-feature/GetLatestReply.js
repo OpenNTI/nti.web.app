@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatest
 
 	getItemReplies: function () {
 		var me = this,
-			r = me.record,
+			record = me.record,
 			focusRecord = me.record.focusRecord;
 
 		function cb (store, records) {
@@ -49,6 +49,6 @@ module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatest
 
 		//Sigh even though in some cases we only want one reply we still fetch them all.
 		//We do this b/c what they really want is the most recently created direct reply...
-		r.loadReplies(cb, me, {sortOn: 'createdTime', sortOrder: 'descending'});
+		record.loadReplies(cb, me, {sortOn: 'createdTime', sortOrder: 'descending'});
 	}
 });

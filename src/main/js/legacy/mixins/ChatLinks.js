@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const ChatActions = require('legacy/app/chat/Actions');
+const {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
@@ -48,13 +50,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
 
 	onChatWith: function (e) {
 		e.stopEvent();
-		var ChatActions = NextThought.app.chat.Actions.create();
+		const Actions = ChatActions.create();
 		if (!this.userObject && !this.user) {
 			console.warn('No userobject to chat with');
 			return false;
 		}
 		console.debug('Clicked Chat');
-		ChatActions.startChat(this.userObject || this.user);
+		Actions.startChat(this.userObject || this.user);
 		return false;
 	}
 

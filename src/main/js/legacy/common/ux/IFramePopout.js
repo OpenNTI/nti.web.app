@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ContentProxy = require('../../proxy/JSONP');
-var WindowWindow = require('../window/Window');
+const Ext = require('extjs');
+
+const ContentProxy = require('../../proxy/JSONP');
+
+require('../window/Window');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var DndDropzone = require('../../app/dnd/Dropzone');
+const Ext = require('extjs');
+
+const DndDropzone = require('legacy/app/dnd/Dropzone');
 
 
 /**
@@ -11,12 +12,12 @@ var DndDropzone = require('../../app/dnd/Dropzone');
  * It can also implement a getDropTarget method, otherwise this.el.dom will be used
  */
 module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
-	/**
+	/*
 	 * If we haven't yet, set up the dropzone wrapper
 	 */
 	initDropzone: function () {
 		if (!this.Dropzone) {
-			this.Dropzone = new NextThought.app.dnd.Dropzone({
+			this.Dropzone = new DndDropzone({
 				getDropzoneTarget: this.getDropzoneTarget.bind(this),
 				getDropzoneBoundingClientRect: this.getDropzoneBoundingClientRect.bind(this),
 				onDragEnter: this.onDragEnter && this.onDragEnter.bind(this),
@@ -53,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		return rect;
 	},
 
-	/**
+	/*
 	 * Add all the listeners to the target
 	 */
 	enableDropzone: function () {
@@ -66,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		}
 	},
 
-	/**
+	/*
 	 * Remove all the listeners on the target
 	 */
 	disableDropzone: function () {
@@ -83,6 +84,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 	 * Set a data transfer handler on the dropzone wrapper
 	 * @param {Strins} key	   key to look up data on
 	 * @param {Object} handler the handlers, see NextThought.app.dnd.Dropzone
+	 * @returns {void}
 	 */
 	setDataTransferHandler: function (key, handler) {
 		this.initDropzone();

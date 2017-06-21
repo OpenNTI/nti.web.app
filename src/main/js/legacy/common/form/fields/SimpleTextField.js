@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleTextField', {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 				focus: 'onInputFocus',
 				keyup: 'keyPressed',
 				paste: 'onPaste',
-				contextmenu: function (e) { e.stopPropagation(); } //allow context menu
+				contextmenu: x => x.stopPropagation() //allow context menu
 			};
 
 		monitors[Ext.EventManager.getKeyEvent()] = 'keyDown';
@@ -227,4 +227,3 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 
 	isValid: function () { return this.validate(this.silentIsValid); }
 });
-

@@ -1,7 +1,10 @@
 const Ext = require('extjs');
-const UserRepository = require('legacy/cache/UserRepository');
-require('legacy/app/profiles/user/components/membership/parts/Membership');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+
+const UserRepository = require('legacy/cache/UserRepository');
+
+require('legacy/app/profiles/user/components/membership/parts/Membership');
+
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',

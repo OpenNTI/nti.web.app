@@ -1,18 +1,18 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
+
 const UserRepository = require('legacy/cache/UserRepository');
 const Socket = require('legacy/proxy/Socket');
 const ObjectUtils = require('legacy/util/Object');
-require('legacy/common/StateStore');
 const ModelService = require('legacy/model/Service');
 const PreferenceManager = require('legacy/preference/Manager');
-
+const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
+// const AccountActions = require('legacy/app/account/Actions');
 const lazy = require('legacy/util/lazy-require')
 				.get('AccountActions', ()=> require('legacy/app/account/Actions'));
 
-// const AccountActions = require('legacy/app/account/Actions');
+require('legacy/common/StateStore');
 
-const {wait} = require('nti-commons');
-const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
 module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	extend: 'NextThought.common.StateStore',

@@ -1,14 +1,14 @@
 const Ext = require('extjs');
-const RangeUtils = require('legacy/util/Ranges');
 const {wait} = require('nti-commons');
+
+const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
+const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
+const RangeUtils = require('legacy/util/Ranges');
+const Cue = require('legacy/model/transcript/Cue');
+const Transcript = require('legacy/webvtt/Transcript');
 
 require('legacy/app/mediaviewer/components/reader/mixins/AnnotationsMixin');
 
-const Transcript = require('legacy/webvtt/Transcript');
-const Cue = require('legacy/model/transcript/Cue');
-const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
-
-const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Transcript', {
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			var range = item.get('applicableRange'),
 				startAnchorTime = range.start && range.start.seconds,
 				endAnchorTime = range.end && range.end.seconds,
-				utils = NextThought.app.mediaviewer.components.AnchorResolver;
+				utils = AnchorResolver;
 
 			//Conversions
 			startAnchorTime = utils.fromMillSecondToSecond(startAnchorTime);

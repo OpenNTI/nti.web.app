@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var StoreBatchInterface = require('../store/BatchInterface');
+const Ext = require('extjs');
+
+const BatchInterface = require('legacy/store/BatchInterface');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.AuditLog', {
@@ -22,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AuditLog', {
 	},
 
 	getCurrentBatch: function (link) {
-		this.currentBatch = new NextThought.store.BatchInterface({
+		this.currentBatch = new BatchInterface({
 			url: link,
 			params: {
 				batchSize: this.BATCH_SIZE,

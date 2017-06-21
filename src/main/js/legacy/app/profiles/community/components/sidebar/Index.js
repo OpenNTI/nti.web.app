@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var PartsAbout = require('./parts/About');
-var PartsTopics = require('./parts/Topics');
-var PartsMembership = require('./parts/Membership');
+const Ext = require('extjs');
+
+require('./parts/About');
+require('./parts/Topics');
+require('./parts/Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.components.sidebar.Index', {

@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var EditorColorOption = require('./ColorOption');
-var EditorToolOption = require('./ToolOption');
-var {guidGenerator} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {guidGenerator} = require('legacy/util/Globals');
+
+require('./ColorOption');
+require('./ToolOption');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.PencilOptions', {

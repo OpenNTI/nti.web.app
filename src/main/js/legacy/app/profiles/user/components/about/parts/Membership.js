@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PartsMembership = require('../../membership/parts/Membership');
+const Ext = require('extjs');
+
+require('../../membership/parts/Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.Membership', {

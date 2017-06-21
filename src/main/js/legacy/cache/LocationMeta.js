@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ContentUtils = require('../util/Content');
-var ParseUtils = require('../util/Parsing');
+const Ext = require('extjs');
+
+const ContentUtils = require('../util/Content');
+const ParseUtils = require('../util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
@@ -87,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 
-	/**
+	/*
 	 * Load meta data for the provided ntiid.  These should be content ids here.
 	 * We can get almost all the meta data we need out of the toc (which is nice for the sample content use case)
 	 * however, we need one pesky piece of data off the pageInfo.  We need the contentRoot so we know where icons and content

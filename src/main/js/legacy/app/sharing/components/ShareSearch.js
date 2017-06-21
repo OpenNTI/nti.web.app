@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsShareSearchList = require('./ShareSearchList');
+const Ext = require('extjs');
+
+require('./ShareSearchList');
 
 
 module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareSearch', {

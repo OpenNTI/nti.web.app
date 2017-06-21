@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+
+const {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Badge', {

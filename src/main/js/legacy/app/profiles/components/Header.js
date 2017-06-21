@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var MixinsRouter = require('../../../mixins/Router');
+const Ext = require('extjs');
+
+require('legacy/mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.components.Header', {

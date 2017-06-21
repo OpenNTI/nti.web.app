@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-var PartsMembership = require('../user/components/membership/parts/Membership');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+
+require('../user/components/membership/parts/Membership');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
@@ -39,13 +41,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Sugge
 			.then(function (entities) {
 				if (entities.length) {
 					entities.slice(0, 4)
-						.map(function (entity) {
-							return {
-								entity: entity,
-								name: entity.getName(),
-								route: entity.getURLPart()
-							};
-						})
+						.map(e => ({
+							entity: e,
+							name: e.getName(),
+							route: e.getURLPart()
+						}))
 						.forEach(me.addEntry.bind(me));
 				} else {
 					me.hide();

@@ -1,6 +1,9 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../cache/UserRepository');
-var ResultsBlogResult = require('./BlogResult');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const CommunityHeadlinePost = require('legacy/model/forums/CommunityHeadlinePost');
+
+require('./BlogResult');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.ForumResult', {
@@ -9,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 
 
 	addTitle: function (record) {
-		if (record instanceof NextThought.model.forums.CommunityHeadlinePost) {
+		if (record instanceof CommunityHeadlinePost) {
 			return this.callParent(arguments);
 		}
 	},
@@ -18,9 +21,9 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	showBreadCrumb: function (path) {
 		this.callParent(arguments);
 
-		var record = this.hitRecord;
+		const record = this.hitRecord;
 
-		if (record instanceof NextThought.model.forums.CommunityHeadlinePost) {
+		if (record instanceof CommunityHeadlinePost) {
 			return;
 		}
 

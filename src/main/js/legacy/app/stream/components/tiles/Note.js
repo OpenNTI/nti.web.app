@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var ModelNote = require('../../../../model/Note');
-var PartsBodyContent = require('../parts/BodyContent');
-var PartsAddComment = require('../parts/AddComment');
-var WindowsActions = require('../../../windows/Actions');
+const Ext = require('extjs');
+
+const Note = require('legacy/model/Note');
+const WindowsActions = require('legacy/app/windows/Actions');
+
+require('../parts/BodyContent');
+require('../parts/AddComment');
 
 
 module.exports = exports = Ext.define('NextThought.app.stream.components.tiles.Note', {
@@ -11,13 +13,13 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.tiles.N
 	cls: 'item note',
 
 	inheritableStatics: {
-		mimeTypes: [NextThought.model.Note.mimeType]
+		mimeTypes: [Note.mimeType]
 	},
 
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		this.add([
 			Ext.widget('stream-parts-bodycontent', {

@@ -1,10 +1,12 @@
-var Ext = require('extjs');
-var ActivityIndex = require('../../../user/components/activity/Index');
-var MixinsRouter = require('../../../../../mixins/Router');
-var ActivityBody = require('./Body');
-var ActivitySidebar = require('./Sidebar');
-var PartsNewPost = require('./parts/NewPost');
-var UserdataActions = require('../../../../userdata/Actions');
+const Ext = require('extjs');
+
+require('legacy/app/userdata/Actions');
+require('legacy/mixins/Router');
+require('../../../user/components/activity/Index');
+require('./Body');
+require('./Sidebar');
+require('./parts/NewPost');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.Index', {

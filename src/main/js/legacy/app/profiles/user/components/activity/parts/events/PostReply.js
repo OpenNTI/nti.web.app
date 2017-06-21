@@ -1,10 +1,12 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../../cache/UserRepository');
-var ParseUtils = require('../../../../../../../util/Parsing');
-var MixinsProfileLinks = require('../../../../../../../mixins/ProfileLinks');
-var MixinsLikeFavoriteActions = require('../../../../../../../mixins/LikeFavoriteActions');
-var MixinsFlagActions = require('../../../../../../../mixins/FlagActions');
-var PathActions = require('../../../../../../navigation/path/Actions');
+const Ext = require('extjs');
+
+const UserRepository = require('legacy/cache/UserRepository');
+const ParseUtils = require('legacy/util/Parsing');
+const PathActions = require('legacy/app/navigation/path/Actions');
+
+require('legacy/mixins/ProfileLinks');
+require('legacy/mixins/LikeFavoriteActions');
+require('legacy/mixins/FlagActions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.PostReply', {
@@ -61,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.mon(record, 'destroy', 'destroy', this);
 		this.on({el: {'click': 'onClick', scope: this}});
 
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.PathActions = PathActions.create();
 	},
 
 	getRecord: function () {return this.record;},

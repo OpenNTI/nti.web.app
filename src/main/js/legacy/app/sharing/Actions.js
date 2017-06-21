@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var CommonActions = require('../../common/Actions');
-var ContextStateStore = require('../context/StateStore');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
+const ContextStateStore = require('legacy/app/context/StateStore');
+const UserSearch = require('legacy/model/UserSearch');
+
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
@@ -10,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
 	},
 
 	getSuggestionStore: function () {
@@ -39,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 				data = [];
 
 			if (suggestions && suggestions.length) {
-				data.push(NextThought.model.UserSearch.create({
+				data.push(UserSearch.create({
 					realname: 'Suggestions',
 					isLabel: true
 				}));
@@ -47,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			}
 
 			if (communities && communities.length) {
-				data.push(NextThought.model.UserSearch.create({
+				data.push(UserSearch.create({
 					realname: 'Communities',
 					isLabel: true
 				}));
@@ -55,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			}
 
 			if (groups && groups.length) {
-				data.push(NextThought.model.UserSearch.create({
+				data.push(UserSearch.create({
 					realname: 'Groups',
 					isLabel: true
 				}));
@@ -76,14 +79,13 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 				});
 
 				if (communities[0]) {
-					return NextThought.model.UserSearch.create(communities[0].getData());
+					return UserSearch.create(communities[0].getData());
 				}
 			});
 	},
 
 	getSuggestions: function () {
 		var suggestions = [this.getSiteCommunity()],
-			rootBundle = this.ContextStore.getRootBundle(),
 			context = this.ContextStore.getContext();
 
 		(context || []).forEach(function (item) {
@@ -104,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 					if (result.isModel) {
 						acc.push(result);
 					} else if (result.suggestions && result.suggestions.length) {
-						acc.push(NextThought.model.UserSearch.create({
+						acc.push(UserSearch.create({
 							realname: result.label,
 							isLabel: true
 						}));
@@ -124,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 				return communities.filter(function (community) {
 					return !community.isEveryone() && community.getId() !== siteId;
 				}).map(function (community) {
-					return NextThought.model.UserSearch.create(community.getData());
+					return UserSearch.create(community.getData());
 				});
 			});
 	},
@@ -133,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 		return Service.getGroupsList()
 			.then(function (groups) {
 				return groups.map(function (group) {
-					return NextThought.model.UserSearch.create(group.getData());
+					return UserSearch.create(group.getData());
 				});
 			});
 	}
