@@ -1,6 +1,7 @@
 /*global jQuery*/
 const Ext = require('extjs');
 
+const SymbolicMath = require('legacy/app/assessment/input/SymbolicMath');
 
 module.exports = exports = Ext.define('NextThought.common.menus.SymbolicMathMenuItem', {
 	extend: 'Ext.menu.Item',
@@ -14,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.SymbolicMathMenu
 	initComponent: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
-			displayText: NextThought.view.assessment.input.SymbolicMath.transformToMathquillInput(this.text)
+			displayText: SymbolicMath.transformToMathquillInput(this.text)
 		});
 	},
 

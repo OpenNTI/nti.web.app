@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
 require('../../Base');
-require('../../../mixins/OrderedContents');
+require('legacy/mixins/OrderedContents');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.overview.Group', {

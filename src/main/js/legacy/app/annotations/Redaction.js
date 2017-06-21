@@ -1,6 +1,8 @@
 const Ext = require('extjs');
 
+const Redaction = require('legacy/model/Redaction');
 const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
 
 require('legacy/cache/IdCache');
 require('./Highlight');
@@ -56,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		s.set({'contenteditable': 'true'}).on('keydown', this.editableSpanEditorKeyDown, this);
 		s.focus();
 
-		if (s.getHTML() === NextThought.model.Redaction.DEFAULT_TEXT) {
+		if (s.getHTML() === Redaction.DEFAULT_TEXT) {
 			s.update('***');
 		}
 

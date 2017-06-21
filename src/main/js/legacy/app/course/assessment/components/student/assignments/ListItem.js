@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('../../AssignmentStatus');
+const AssignmentStatus = require('../../AssignmentStatus');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.ListItem', {
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	addStatusCmp: function () {
 		var me = this;
 
-		me.statusCmp = new NextThought.app.course.assessment.components.AssignmentStatus({
+		me.statusCmp = new AssignmentStatus({
 			renderTo: me.statusEl,
 			assignment: me.assignment,
 			history: me.history,

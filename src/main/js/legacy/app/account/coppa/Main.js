@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
 
 require('legacy/util/Localization');
 

@@ -35,8 +35,6 @@ Object.assign(Promise, {
 	}
 });
 
-global.wait = Promise.wait;
-
 
 /**
  * Deferred promise.

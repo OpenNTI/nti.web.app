@@ -6,14 +6,16 @@ const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
 const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
 const SearchUtils = require('legacy/util/Search');
+const NTI = require('legacy/store/NTI');
+const ContentviewerActions = require('legacy/app/contentviewer/Actions');
+
+require('legacy/common/ux/SearchHits');
+require('legacy/editor/Editor');
+require('legacy/layout/component/Natural');
 require('legacy/mixins/FlagActions');
 require('legacy/mixins/LikeFavoriteActions');
 require('legacy/mixins/ProfileLinks');
-require('legacy/editor/Editor');
 require('./Comment');
-require('legacy/common/ux/SearchHits');
-require('legacy/layout/component/Natural');
-require('legacy/app/contentviewer/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 	extend: 'Ext.container.Container',
@@ -139,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 	},
 
 	buildStore: function (fulfill, reject) {
-		var s = NextThought.store.NTI.create({
+		var s = NTI.create({
 			storeId: this.getRecord().get('Class') + '-' + this.getRecord().get('NTIID'),
 			url: this.getRecord().getLink('contents'),
 			pageSize: 10
@@ -561,7 +563,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 		if (part && !e.getTarget('.download')) {
 			e.stopEvent();
 			if (!this.ContentViewerActions) {
-				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+				this.ContentViewerActions = ContentviewerActions.create();
 			}
 
 			this.ContentViewerActions.showAttachmentInPreviewMode(part, this.record);

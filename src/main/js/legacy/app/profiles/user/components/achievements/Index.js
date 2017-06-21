@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 const Globals = require('legacy/util/Globals');
 
 require('legacy/mixins/Router');

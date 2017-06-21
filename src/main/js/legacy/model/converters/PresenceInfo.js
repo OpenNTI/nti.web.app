@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const PresenceInfo = require('../PresenceInfo');
 
 module.exports = exports = Ext.define('NextThought.model.converters.PresenceInfo', {
 	override: 'Ext.data.Types',
@@ -9,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.PresenceInfo
 		sortType: 'none',
 		convert: function (v, record) {
 			if (!v.isPresenceInfo) {
-				return NextThought.model.PresenceInfo.createPresenceInfo(record.get('username'), 'unavailable');
+				return PresenceInfo.createPresenceInfo(record.get('username'), 'unavailable');
 			}
 
 			return v;

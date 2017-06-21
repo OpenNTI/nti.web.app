@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
 require('../courses/Index');
-require('../../../mixins/Router');
+require('legacy/mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {

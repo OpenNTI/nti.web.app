@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 
+const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
+
 const Anchors = require('./Anchors');
 const Globals = require('./Globals');
 const RectUtils = require('./Rects');
@@ -404,7 +406,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 * @return {Node} Context Node
 	 */
 	getContextAroundRange: function (applicableRange, doc/*, cleanRoot, containerId*/) {
-		var utils = applicableRange.isTimeRange ? NextThought.view.slidedeck.transcript.AnchorResolver : Anchors,
+		var utils = applicableRange.isTimeRange ? AnchorResolver : Anchors,
 			range = utils.toDomRange.apply(utils, arguments);
 
 		if (range) {

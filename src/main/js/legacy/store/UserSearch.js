@@ -1,8 +1,8 @@
 const Ext = require('extjs');
 
 const {isMe} = require('legacy/util/Globals');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
 
-const GroupsStateStore = require('../app/groups/StateStore');
 require('../proxy/UserSearch');
 
 

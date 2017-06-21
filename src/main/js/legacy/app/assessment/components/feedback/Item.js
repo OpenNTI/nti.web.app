@@ -1,8 +1,11 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
+const ContentviewerActions = require('legacy/app/contentviewer/Actions');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+
 require('legacy/app/whiteboard/Window');
 require('legacy/mixins/ProfileLinks');
-require('legacy/app/contentviewer/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.assessment.components.feedback.Item', {
 	extend: 'Ext.Component',
@@ -147,8 +150,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 
 					//TODO: Unify these into one place.
 					const {response: err} = reason;
-					const maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+					const maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
+						currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
 
 					if (err.code === 'MaxFileSizeUploadLimitError') {
 						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
@@ -216,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 			e.stopEvent(e);
 
 			if (!this.ContentViewerActions) {
-				this.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+				this.ContentViewerActions = ContentviewerActions.create();
 			}
 			this.ContentViewerActions.showAttachmentInPreviewMode(part, this.record);
 		}

@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
-require('../../../../../../common/form/fields/DatePicker');
-require('../Actions');
+const EditingActions = require('../Actions');
+
+require('legacy/common/form/fields/DatePicker');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu', {
@@ -43,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.EditingActions = new NextThought.app.course.overview.components.editing.Actions();
+		this.EditingActions = new EditingActions();
 
 		this.realign = this.realign.bind(this);
 

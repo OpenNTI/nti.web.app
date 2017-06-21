@@ -4,8 +4,7 @@ const {wait} = require('nti-commons');
 const LoginStore = require('legacy/login/StateStore');
 const PromptActions = require('legacy/app/prompt/Actions').create();
 const {isFeature} = require('legacy/util/Globals');
-
-const NavActions = require('../../navigation/Actions').create();
+const NavActions = require('legacy/app/navigation/Actions').create();
 
 const StateStore = require('./StateStore');
 

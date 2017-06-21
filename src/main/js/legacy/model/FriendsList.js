@@ -1,15 +1,15 @@
 const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 
-const ObjectUtils = require('../util/Object');
-const ParseUtils = require('../util/Parsing');
+const ObjectUtils = require('legacy/util/Object');
+const ParseUtils = require('legacy/util/Parsing');
 
 require('./forums/DFLBoard');
 require('./forums/DFLForum');
 
-require('../mixins/GroupLike');
-require('../mixins/ShareEntity');
-require('../mixins/Avatar');
+require('legacy/mixins/GroupLike');
+require('legacy/mixins/ShareEntity');
+require('legacy/mixins/Avatar');
 require('./Base');
 
 

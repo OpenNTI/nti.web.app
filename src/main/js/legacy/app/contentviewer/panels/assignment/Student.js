@@ -2,10 +2,10 @@ const Ext = require('extjs');
 
 const {isMe} = require('legacy/util/Globals');
 
-require('../Reader');
 require('../../navigation/assignment/Student');
 require('../../components/assignment/TimedPlaceholder');
 require('../../components/assignment/NotStartedPlaceholder');
+require('../Reader');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {

@@ -1,7 +1,10 @@
 const Ext = require('extjs');
 const Duration = require('durationjs');
 
-require('legacy/util/BatchExecution');
+const BatchExecution = require('legacy/util/BatchExecution');
+
+const Grade = require('./Grade');
+
 require('../Base');
 
 module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
@@ -12,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 	statics: {
 		getBatchExecution: function () {
-			this.batchExecution = this.batchExecution || NextThought.util.BatchExecution.create();
+			this.batchExecution = this.batchExecution || BatchExecution.create();
 
 			return this.batchExecution;
 		}
@@ -507,7 +510,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				let update;
 
 				//if the grade is a placeholder and we aren't trying to save any values
-				if (grade.isPlaceholder && NextThought.model.courseware.Grade.isEmpty(value, letter)) {
+				if (grade.isPlaceholder && Grade.isEmpty(value, letter)) {
 					update = Promise.resolve();
 
 				//If we are a placeholder create new grade

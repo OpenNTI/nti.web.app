@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Section', {
 	extend: 'Ext.container.Container',

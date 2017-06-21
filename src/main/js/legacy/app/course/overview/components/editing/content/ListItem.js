@@ -1,11 +1,14 @@
 const Ext = require('extjs');
 
-require('../../../../../../mixins/dnd/OrderingItem');
-require('../../../../../../mixins/Transition');
+const MoveInfo = require('legacy/model/app/MoveInfo');
+
+const ContentPrompt = require('./Prompt');
+
+require('legacy/mixins/dnd/OrderingItem');
+require('legacy/mixins/Transition');
 require('../controls/Edit');
 require('../controls/Synclock');
 require('../Controls');
-require('./Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
@@ -24,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.setDataTransfer(new NextThought.model.app.MoveInfo({
+		this.setDataTransfer(new MoveInfo({
 			OriginContainer: this.record.parent.getId(),
 			OriginIndex: this.record && this.record.listIndex
 		}));
@@ -114,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getControls: function (record, bundle) {
 		var controls = [];
 
-		if (NextThought.app.course.overview.components.editing.content.Prompt.canEdit(record)) {
+		if (ContentPrompt.canEdit(record)) {
 			controls.push({
 				xtype: 'overview-editing-controls-synclock',
 				record: record,

@@ -2,17 +2,17 @@ const Url = require('url');
 
 const Ext = require('extjs');
 
-const ContentUtils = require('../../util/Content');
-const ParseUtils = require('../../util/Parsing');
+const ContentUtils = require('legacy/util/Content');
+const ParseUtils = require('legacy/util/Parsing');
+const OutlineInterface = require('legacy/store/courseware/OutlineInterface');
 
 const CourseOutlineNode = require('./navigation/CourseOutlineNode');
 
-require('./navigation/CourseOutlineContentNode');
-require('./navigation/CourseOutlineCalendarNode');
-require('../../store/courseware/OutlineInterface');
 require('legacy/mixins/DurationCache');
 require('legacy/mixins/MovingRoot');
 require('legacy/mixins/OrderedContents');
+require('./navigation/CourseOutlineContentNode');
+require('./navigation/CourseOutlineCalendarNode');
 require('../Base');
 
 
@@ -230,15 +230,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 	},
 
 	onItemUpdated: function () {
-		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+		OutlineInterface.fillInDepths(this);
 	},
 
 	onItemAdded: function () {
-		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+		OutlineInterface.fillInDepths(this);
 	},
 
 	onSync: function () {
-		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+		OutlineInterface.fillInDepths(this);
 		this.fillInItems();
 	}
 });

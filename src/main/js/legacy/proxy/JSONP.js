@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
-const B64 = require('../util/Base64');
-const Globals = require('../util/Globals');
+const B64 = require('legacy/util/Base64');
+const Globals = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.JSONP', {

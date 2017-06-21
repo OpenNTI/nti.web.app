@@ -7,8 +7,7 @@ const Globals = require('legacy/util/Globals');
 const ObjectUtils = require('legacy/util/Object');
 const ParseUtils = require('legacy/util/Parsing');
 const {getString} = require('legacy/util/Localization');
-
-const NavigationActions = require('../../navigation/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('legacy/common/ux/IFramePopout');
 

@@ -1,8 +1,7 @@
 const Ext = require('extjs');
 
 const {isMe} = require('legacy/util/Globals');
-
-const GroupsActions = require('../../groups/Actions');
+const GroupsActions = require('legacy/app/groups/Actions');
 
 require('../user/Index');
 require('../user/components/membership/Index');

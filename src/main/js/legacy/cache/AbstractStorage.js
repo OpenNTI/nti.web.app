@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const B64 = require('../util/Base64');
+const B64 = require('legacy/util/Base64');
 
 function prefix (v) {
 	if (!prefix.val) {

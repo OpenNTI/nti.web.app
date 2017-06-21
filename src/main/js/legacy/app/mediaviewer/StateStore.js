@@ -2,7 +2,7 @@ const Ext = require('extjs');
 
 const UserdataActions = require('../userdata/Actions');
 
-require('../../common/StateStore');
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.StateStore', {

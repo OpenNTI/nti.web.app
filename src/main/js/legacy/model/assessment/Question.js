@@ -1,6 +1,9 @@
 const Ext = require('extjs');
-require('legacy/model/Base');
-require('legacy/model/assessment/WordBank');
+
+const Part = require('./Part');
+
+require('../Base');
+require('./WordBank');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Question', {
@@ -16,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Question', {
 	],
 
 	getVideos: function () {
-		var all = NextThought.model.assessment.Part.prototype.getVideos.call(this);
+		var all = Part.prototype.getVideos.call(this);
 		Ext.each(this.get('parts'), function (p) {
 			all.push.apply(all, p.getVideos());
 		});

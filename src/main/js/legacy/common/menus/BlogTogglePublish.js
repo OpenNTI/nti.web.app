@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.common.menus.BlogTogglePublish', {
 	extend: 'Ext.menu.Menu',

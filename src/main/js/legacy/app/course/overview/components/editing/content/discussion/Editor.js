@@ -1,9 +1,11 @@
 const Ext = require('extjs');
 const {Forums} = require('nti-web-discussions');
 
+const DiscussionRef = require('legacy/model/DiscussionRef');
+const Discussion = require('legacy/model/Discussion');
+const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
+
 require('../Editor');
-require('../../../../../../../model/DiscussionRef');
-const CommunityHeadlineTopic = require('../../../../../../../model/forums/CommunityHeadlineTopic');
 require('./ItemSelection');
 require('./DiscussionEditor');
 
@@ -14,8 +16,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.DiscussionRef.mimeType,
-				NextThought.model.Discussion.mimeType
+				DiscussionRef.mimeType,
+				Discussion.mimeType
 			];
 		},
 

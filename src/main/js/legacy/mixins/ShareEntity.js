@@ -1,14 +1,14 @@
 const Ext = require('extjs');
 
-
+const ShareEntity =
 module.exports = exports = Ext.define('NextThought.mixins.ShareEntity', {
 
 	isDynamicSharing: function () {
-		return NextThought.mixins.ShareEntity.isDynamicSharing(this.data);
+		return ShareEntity.isDynamicSharing(this.data);
 	},
 
 	getPresentationType: function () {
-		return NextThought.mixins.ShareEntity.getPresentationType(this.data);
+		return ShareEntity.getPresentationType(this.data);
 	},
 
 	statics: {

@@ -10,9 +10,9 @@ const ContextStateStore = require('../../context/StateStore');
 const WindowsActions = require('../../windows/Actions');
 
 require('legacy/common/components/NavPanel');
+require('../../annotations/Index');
 require('../components/Reader');
 require('../navigation/Content');
-require('../../annotations/Index');
 require('../notepad/View');
 
 

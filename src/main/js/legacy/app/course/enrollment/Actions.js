@@ -2,10 +2,10 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 const ParseUtils = require('legacy/util/Parsing');
+const PathActions = require('legacy/app/navigation/path/Actions');
 
 const CoursesStateStore = require('../../library/courses/StateStore');
 const CoursesActions = require('../../library/courses/Actions');
-const PathActions = require('../../navigation/path/Actions');
 
 require('legacy/common/Actions');
 

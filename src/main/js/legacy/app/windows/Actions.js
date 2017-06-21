@@ -1,11 +1,11 @@
 const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 
-const ParseUtils = require('../../util/Parsing');
+const ParseUtils = require('legacy/util/Parsing');
 
 const WindowsStateStore = require('./StateStore');
 
-require('../../common/Actions');
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.windows.Actions', {

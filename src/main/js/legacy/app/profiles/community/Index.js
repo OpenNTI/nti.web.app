@@ -2,8 +2,7 @@ const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 const ParseUtils = require('legacy/util/Parsing');
-
-const NavigationActions = require('../../navigation/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('legacy/mixins/Router');
 require('./components/activity/Index');

@@ -1,38 +1,41 @@
 const Ext = require('extjs');
 const {URL: {join: urlJoin}} = require('nti-commons');
 
-const {getURL, isFeature} = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');
+const {getURL, isFeature} = require('legacy/util/Globals');
+const ContentUtils = require('legacy/util/Content');
+const CoursewareStream = require('legacy/store/courseware/Stream');
+const Navigation = require('legacy/store/courseware/Navigation');
+const ObjectUtils = require('legacy/util/Object');
+const OutlineInterface = require('legacy/store/courseware/OutlineInterface');
+const ParseUtils = require('legacy/util/Parsing');
+const ToCBasedOutline = require('legacy/store/courseware/ToCBasedOutline');
 
-const ContentUtils = require('../../util/Content');
-const ObjectUtils = require('../../util/Object');
-const ParseUtils = require('../../util/Parsing');
+const AssignmentCollection = require('../courses/AssignmentCollection');
+const ForumsBoard = require('../forums/Board');
+const QuestionSet = require('../assessment/QuestionSet');
+const Timeline = require('../Timeline');
+const UsersCourseAssignmentSavepoint = require('../assessment/UsersCourseAssignmentSavepoint');
+const UserSearch = require('../UserSearch');
+const Video = require('../Video');
 
-require('../Base');
-require('legacy/mixins/BundleLike');
-require('legacy/mixins/PresentationResources');
-require('legacy/mixins/DurationCache');
+const CourseCatalogEntry = require('./CourseCatalogEntry');
+
 require('legacy/mixins/AuditLog');
-require('./AssignmentCollection');
-require('./CourseInstanceBoard');
-require('../assessment/UsersCourseAssignmentSavepoint');
-require('../../store/courseware/OutlineInterface');
-require('../../store/courseware/Navigation');
-require('../../store/courseware/ToCBasedOutline');
-require('../../store/courseware/Stream');
-require('./CourseVideoProgress');
-require('./CourseOutline');
-require('./CourseInstanceSharingScopes');
-require('./CourseCatalogEntry');
-require('../courseware/GradeBook');
+require('legacy/mixins/BundleLike');
+require('legacy/mixins/DurationCache');
+require('legacy/mixins/PresentationResources');
+require('../assessment/Assignment');
+require('../Base');
 require('../ContentBundle');
+require('../courseware/GradeBook');
 require('../forums/CommunityBoard');
 require('../forums/CommunityForum');
-require('../UserSearch');
-require('../Video');
-require('../assessment/Assignment');
-require('../assessment/QuestionSet');
-require('legacy/mixins/AuditLog');
+require('./AssignmentCollection');
+require('./CourseInstanceBoard');
+require('./CourseInstanceSharingScopes');
+require('./CourseOutline');
+require('./CourseVideoProgress');
 
 const flatten = arr => arr.reduce(
 	(acc, val) => acc.concat(
@@ -152,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	__precacheEntry: function () {
 		var p = this.precachePromise,
 			me = this,
-			Cls = NextThought.model.courses.CourseCatalogEntry;
+			Cls = CourseCatalogEntry;
 
 		if (!p) {
 			this.precachePromise = new Promise(function (fulfill, reject) {
@@ -262,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		json.friendlyName = friendlyName || '';
 
-		return NextThought.model.UserSearch.create(json);
+		return UserSearch.create(json);
 	},
 
 	getStudentSuggestedSharing: function () {
@@ -691,7 +694,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	getOutlineInterface: function (doNotCache) {
 		if (!this.OutlineInterface) {
-			this.OutlineInterface = new NextThought.store.courseware.OutlineInterface({
+			this.OutlineInterface = new OutlineInterface({
 				getOutlineContents: (noCache) => {
 					return this.getOutlineContents(noCache);
 				},
@@ -707,7 +710,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	getAdminOutlineInterface: function (doNotCache) {
 		if (!this.AdminOutlineInterface) {
-			this.AdminOutlineInterface = new NextThought.store.courseware.OutlineInterface({
+			this.AdminOutlineInterface = new OutlineInterface({
 				getOutlineContents: (noCache) => {
 					return this.getAdminOutlineContents(noCache);
 				},
@@ -756,7 +759,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		if (!this.tocOutline) {
 			this.tocOutline = this.getLocationInfo()
 				.then(function (location) {
-					return new NextThought.store.courseware.ToCBasedOutline({data: location.toc});
+					return new ToCBasedOutline({data: location.toc});
 				});
 		}
 
@@ -770,7 +773,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		navStore = this.getFromCache(key);
 
 		if (!navStore) {
-			navStore = new NextThought.store.courseware.Navigation({
+			navStore = new Navigation({
 				outlineContentsPromise: this.getOutlineContents(),
 				tocPromise: this.__getTocOutline()
 			});
@@ -898,7 +901,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					nonAssignments = results[2],
 					historyURL = results[3];
 
-				return NextThought.model.courses.AssignmentCollection.fromJson(assignments, nonAssignments, gradeBook, historyURL, wrapper.isAdministrative, me);
+				return AssignmentCollection.fromJson(assignments, nonAssignments, gradeBook, historyURL, wrapper.isAdministrative, me);
 			});
 
 		return me.__getAssignmentsPromise;
@@ -920,11 +923,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 								return ParseUtils.parseItems(response)[0];
 							})
 							.catch(function () {
-								return NextThought.model.assessment.UsersCourseAssignmentSavepoint.create();
+								return UsersCourseAssignmentSavepoint.create();
 							});
 					}
 
-					return Promise.resolve(NextThought.model.assessment.UsersCourseAssignmentSavepoint.create());
+					return Promise.resolve(UsersCourseAssignmentSavepoint.create());
 				});
 
 			this.getAssignmentSavePointsPromise = p;
@@ -968,7 +971,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					var nonAssignments = assignments.get('NonAssignments');
 
 					return (nonAssignments || []).filter(function (item) {
-						return item instanceof NextThought.model.assessment.QuestionSet;
+						return item instanceof QuestionSet;
 					});
 				});
 	},
@@ -1017,11 +1020,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	getVideoAssets: function () {
-		return this.__getAssets(NextThought.model.Video.mimeType);
+		return this.__getAssets(Video.mimeType);
 	},
 
 	getTimelineAssets: function () {
-		return this.__getAssets(NextThought.model.Timeline.mimeType);
+		return this.__getAssets(Timeline.mimeType);
 	},
 
 	getDiscussionAssets: function () {
@@ -1230,7 +1233,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		}
 
 		function buildStore (id, data) {
-			return NextThought.model.forums.Board.buildContentsStoreFromData(id, data);
+			return ForumsBoard.buildContentsStoreFromData(id, data);
 		}
 
 		if (!isEmpty(bin.ForCredit)) {
@@ -1479,7 +1482,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		var catalog = this.getCourseCatalogEntry(),
 			link = this.getLink('CourseRecursiveStreamByBucket');
 
-		this.__streamStore = this.__streamStore || NextThought.store.courseware.Stream.create({
+		this.__streamStore = this.__streamStore || CoursewareStream.create({
 			url: link,
 			startDate: catalog.get('StartDate')
 		});

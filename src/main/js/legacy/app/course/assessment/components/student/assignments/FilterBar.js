@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
+
 const DISCUSSION_ASSIGNMENT = 'discussion-assignment';
 const PLAIN_ASSIGNMENT = 'plain-assignment';
 

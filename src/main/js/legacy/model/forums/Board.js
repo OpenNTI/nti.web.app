@@ -1,8 +1,8 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('../../util/Parsing');
-const StoreUtils = require('../../util/Store');
-const NTI = require('../../store/NTI');
+const ParseUtils = require('legacy/util/Parsing');
+const StoreUtils = require('legacy/util/Store');
+const NTI = require('legacy/store/NTI');
 
 const Board = require('./Board');
 require('./CommentPost');

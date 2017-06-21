@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const AnalyticsUtil = require('../util/Analytics');
+const AnalyticsUtil = require('legacy/util/Analytics');
 
 require('./Base');
 

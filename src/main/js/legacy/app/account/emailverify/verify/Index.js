@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
+const {getString} = require('legacy/util/Localization');
 const ParseUtils = require('legacy/util/Parsing');
 const {isMe} = require('legacy/util/Globals');
 

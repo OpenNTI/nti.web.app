@@ -1,10 +1,10 @@
 const Ext = require('extjs');
 
-const Scrolling = require('../../util/Scrolling');
+const Scrolling = require('legacy/util/Scrolling');
 
 const DndStateStore = require('./StateStore');
 
-require('../../common/Actions');
+require('legacy/common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Actions', {

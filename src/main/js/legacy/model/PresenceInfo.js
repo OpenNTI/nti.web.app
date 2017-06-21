@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const ObjectUtils = require('../util/Object');
+const ObjectUtils = require('legacy/util/Object');
 
 require('./Base');
 

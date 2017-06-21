@@ -31,6 +31,9 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.ListPag
 	}
 }, function () {
 	var me = this,
+		//This should be rewritten to create an array at the top of the file instead
+		//Tof using the "Magic" ExtJS class namespace object...
+		//eslint-disable-next-line no-undef
 		tiles = NextThought.app.stream.components.tiles,
 		keys = Object.keys(tiles) || [];
 

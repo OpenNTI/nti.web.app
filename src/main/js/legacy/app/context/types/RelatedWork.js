@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-require('../../navigation/path/Actions');
+const PathActions = require('legacy/app/navigation/path/Actions');
+
 require('../components/cards/Content');
 require('../components/cards/Question');
 require('../components/cards/RelatedWork');
@@ -22,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.PathActions = PathActions.create();
 	},
 
 

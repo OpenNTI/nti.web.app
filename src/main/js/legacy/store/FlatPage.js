@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const Note = require('legacy/model/Note');
 const {isFeature} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.store.FlatPage', {
@@ -121,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 
 			function addMe (r) {
 				var i = me.findExact('NTIID', r.get('NTIID'));
-				if (!r || !(r instanceof NextThought.model.Note)) { return; }
+				if (!r || !(r instanceof Note)) { return; }
 
 				if (i !== -1 && r !== me.getAt(i)) {
 					console.warn('DUPLICATE NTIID', r, me.getAt(i));
@@ -156,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 
 			Ext.each(records, function (r) {
 				var i = me.find('NTIID', r.get('NTIID'), 0, false, true, true);
-				if (!r || !(r instanceof NextThought.model.Note)) { return; }
+				if (!r || !(r instanceof Note)) { return; }
 
 				if (i !== -1 && r !== me.getAt(i)) {
 					me.removeAt(i);

@@ -8,11 +8,10 @@ const Slidedeck = require('legacy/model/Slidedeck');
 const PlaylistItem = require('legacy/model/PlaylistItem');
 const TranscriptItem = require('legacy/model/transcript/TranscriptItem');
 const PageItem = require('legacy/store/PageItem');
-
-const UserdataActions = require('../userdata/Actions');
-const UserdataStateStore = require('../userdata/StateStore');
-const PathActions = require('../navigation/path/Actions');
-const LibraryActions = require('../library/Actions');
+const UserdataActions = require('legacy/app/userdata/Actions');
+const UserdataStateStore = require('legacy/app/userdata/StateStore');
+const PathActions = require('legacy/app/navigation/path/Actions');
+const LibraryActions = require('legacy/app/library/Actions');
 
 const MediaviewerStateStore = require('./StateStore');
 

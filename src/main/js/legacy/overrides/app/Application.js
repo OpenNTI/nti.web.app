@@ -1,8 +1,9 @@
-/*globals Deferred*/
+/*globals NextThought*/
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
-const Globals = require('../../util/Globals');
+const {Deferred} = require('legacy/util/Promise');
+const Globals = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.app.Application', {

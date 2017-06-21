@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const ContentRangeDescription = require('../anchorables/ContentRangeDescription');
 
 module.exports = exports = Ext.define('NextThought.model.converters.ContentRangeDescription', {
 	override: 'Ext.data.Types',
@@ -9,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.ContentRange
 		convert: function (v, record) {
 			try {
 				if (v) {
-					return NextThought.model.anchorables.ContentRangeDescription.createFromObject(v);
+					return ContentRangeDescription.createFromObject(v);
 				}
 				else {
 					return null;

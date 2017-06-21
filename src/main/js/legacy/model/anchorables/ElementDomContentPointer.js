@@ -5,6 +5,7 @@ require('./DomContentPointer');
 const lazy = require('legacy/util/lazy-require')
 			.get('Anchors', () => require('legacy/util/Anchors'));
 
+const ElementDomContentPointer =
 module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 	extend: 'NextThought.model.anchorables.DomContentPointer',
 
@@ -15,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomC
 
 	statics: {
 		createFromObject: function (o) {
-			return NextThought.model.anchorables.ElementDomContentPointer.create({
+			return ElementDomContentPointer.create({
 				role: o.role,
 				elementTagName: o.elementTagName,
 				elementId: o.elementId

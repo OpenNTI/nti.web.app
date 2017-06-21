@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('../../common/StateStore');
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.dnd.StateStore', {

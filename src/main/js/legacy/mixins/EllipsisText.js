@@ -4,6 +4,7 @@ const Ext = require('extjs');
 /**
 * Use this mixin to truncate text and add ellipsis depending on its parent node or itself
 */
+const EllipsisText =
 module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 
 	/**
@@ -131,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 		// 	}
 		// }
 
-		NextThought.mixins.EllipsisText.schedule(function () {
+		EllipsisText.schedule(function () {
 			var box = node;
 
 			if (measure === 'parent') {
@@ -145,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 					if (node[textProperty] !== '...') {
 						setToolTipOnce();
 						node[textProperty] = node[textProperty].replace(/.(\.+)?$/, '...');
-						return NextThought.mixins.EllipsisText.schedule(work);
+						return EllipsisText.schedule(work);
 					}
 				}
 			}

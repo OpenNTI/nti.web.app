@@ -1,8 +1,10 @@
 const Ext = require('extjs');
 const moment = require('moment');
 
-require('./Base');
-require('../tiles/Assignment');
+const TilesAssignment = require('../tiles/Assignment');
+
+const WidgetsBase = require('./Base');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Assignments', {
@@ -19,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		getWeight: function (record) {
 			const lorentzian = (x) => 1 / (Math.pow(x - 1, 2) + 1);
 
-			var time = NextThought.app.course.dashboard.components.widgets.Base.getTimeWeight(record.get('availableEnding'), lorentzian);
+			var time = WidgetsBase.getTimeWeight(record.get('availableEnding'), lorentzian);
 
 			return this.__BASE_WEIGHT + time;
 		},
@@ -32,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 				getWeight = this.getWeight.bind(this);
 
 			function getCmpConfig (assignment, assignments) {
-				var getConfig = NextThought.app.course.dashboard.components.tiles.Assignment.getTileConfig(assignment);
+				var getConfig = TilesAssignment.getTileConfig(assignment);
 
 				return getConfig
 						.then(function (config) {

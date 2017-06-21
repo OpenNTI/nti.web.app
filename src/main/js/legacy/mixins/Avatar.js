@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 
+const Avatar =
 module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 
 	statics: {
@@ -133,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		//assume its a bad link until we know otherwise
 		this.set('avatarURL', '');
 
-		return NextThought.mixins.Avatar.getValidAvatarURL(url);
+		return Avatar.getValidAvatarURL(url);
 	},
 
 
@@ -141,13 +142,13 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		if (this.isUnresolved()) {
 			return null;
 		} else {
-			return NextThought.mixins.Avatar.getAvatarInitials(this.raw, this.get('FirstName'), this.get('LastName'), this.getName());
+			return Avatar.getAvatarInitials(this.raw, this.get('FirstName'), this.get('LastName'), this.getName());
 		}
 	},
 
 
 	__getBGColor: function () {
-		return NextThought.mixins.Avatar.getBackgroundColorForUsername(this.get('Username'));
+		return Avatar.getBackgroundColorForUsername(this.get('Username'));
 	},
 
 
@@ -160,6 +161,6 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 			return Promise.resolve(background);
 		}
 
-		return Promise.resolve(NextThought.mixins.Avatar.getDefaultBackgroundForUsername(username));
+		return Promise.resolve(Avatar.getDefaultBackgroundForUsername(username));
 	}
 });

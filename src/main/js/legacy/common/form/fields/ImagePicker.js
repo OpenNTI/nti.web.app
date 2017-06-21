@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
+const PromptActions = require('legacy/app/prompt/Actions');
+
 require('./FilePicker');
-require('legacy/app/prompt/Actions');
 require('legacy/app/image/cropping/Prompt');
 
 
@@ -47,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.PromptActions = NextThought.app.prompt.Actions.create();
+		this.PromptActions = PromptActions.create();
 
 		this.placeholder = this.schema.placeholder;
 

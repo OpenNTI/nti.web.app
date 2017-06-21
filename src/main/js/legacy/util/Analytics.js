@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
-const ContextStateStore = require('../app/context/StateStore');
+const ContextStateStore = require('legacy/app/context/StateStore');
 
 const Globals = require('./Globals');
 const PageVisibility = require('./Visibility');

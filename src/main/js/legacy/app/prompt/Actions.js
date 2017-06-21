@@ -1,4 +1,4 @@
-require('../../common/Actions');
+require('legacy/common/Actions');
 const Ext = require('extjs');
 
 const PromptStateStore = require('./StateStore');

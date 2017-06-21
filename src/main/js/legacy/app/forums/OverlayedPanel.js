@@ -2,8 +2,7 @@ const Ext = require('extjs');
 const {Forums} = require('nti-web-discussions');
 
 const WindowActions = require('legacy/app/windows/Actions');
-
-const DomUtils = require('../../util/Dom');
+const DomUtils = require('legacy/util/Dom');
 
 require('legacy/overrides/ReactHarness');
 require('../contentviewer/overlay/Panel');

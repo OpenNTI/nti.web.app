@@ -666,9 +666,7 @@ describe.skip('All Classes Exist', function () {
 		'NextThought.app.userdata.StateStore': [],
 		'NextThought.app.video.OverlayedPanel': [],
 		'NextThought.app.video.Panel': [],
-		'NextThought.app.video.Video': [
-			'NextThought.Video'
-		],
+		'NextThought.app.video.Video': [],
 		'NextThought.app.video.Window': [],
 		'NextThought.app.video.navigation.Video': [],
 		'NextThought.app.video.roll.OverlayedPanel': [],

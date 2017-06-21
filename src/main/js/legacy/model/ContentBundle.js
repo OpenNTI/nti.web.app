@@ -5,12 +5,14 @@ const ParseUtils = require('legacy/util/Parsing');
 const {getURL} = require('legacy/util/Globals');
 const ContentUtils = require('legacy/util/Content');
 
-require('legacy/model/Base');
+const ForumsBoard = require('./forums/Board');
+
 require('legacy/mixins/BundleLike');
 require('legacy/mixins/PresentationResources');
-require('legacy/model/forums/ContentBoard');
-require('legacy/model/ContentPackage');
-require('legacy/model/RenderableContentPackage');
+require('./Base');
+require('./forums/ContentBoard');
+require('./ContentPackage');
+require('./RenderableContentPackage');
 
 
 module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
@@ -326,7 +328,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 				json = JSON.parse(json);
 				json.Items = ParseUtils.parseItems(json.Items);
 
-				var store = NextThought.model.forums.Board.buildContentsStoreFromData(me.getId() + '-board', json.Items);
+				var store = ForumsBoard.buildContentsStoreFromData(me.getId() + '-board', json.Items);
 
 				return [{
 					title: '',

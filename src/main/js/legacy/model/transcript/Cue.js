@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-
+const Cue =
 module.exports = exports = Ext.define('NextThought.model.transcript.Cue', {
 	extend: 'Ext.data.Model',
 
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.model.transcript.Cue', {
 	statics: {
 		fromParserCue: function (cue) {
 
-			return new NextThought.model.transcript.Cue({
+			return new Cue({
 				'identifier': cue.identifier,
 				'startTime': cue.startTime,
 				'endTime': cue.endTime,

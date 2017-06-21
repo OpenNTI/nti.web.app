@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const Actions = require('../app/groups/Actions');
+const Actions = require('legacy/app/groups/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {

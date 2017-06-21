@@ -1,5 +1,8 @@
 const Ext = require('extjs');
-require('../util/Globals');
+
+const {getString} = require('legacy/util/Localization');
+
+require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.XTemplate', {

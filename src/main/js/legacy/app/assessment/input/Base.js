@@ -1,7 +1,9 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
+const {getString} = require('legacy/util/Localization');
 const Globals = require('legacy/util/Globals');
+const PageItem = require('legacy/store/PageItem');
 
 require('legacy/common/menus/AnswerHistory');
 
@@ -461,7 +463,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 	},
 
 	buildAnswerHistoryStore: function (id) {
-		var s = NextThought.store.PageItem.create({containerid: id}),
+		var s = PageItem.create({containerid: id}),
 			params = 'application/vnd.nextthought.assessment.assessedquestion',
 			url, root;
 

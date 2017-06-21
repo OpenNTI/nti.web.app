@@ -1,4 +1,7 @@
 const Ext = require('extjs');
+
+const AssessedQuestion = require('./AssessedQuestion');
+
 require('legacy/model/Base');
 
 
@@ -35,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQues
 				};
 
 			set.get('questions').forEach(function (q) {
-				raw.questions.push(NextThought.model.assessment.AssessedQuestion.from(q, placeholder));
+				raw.questions.push(AssessedQuestion.from(q, placeholder));
 			});
 
 			out = this.create(raw);

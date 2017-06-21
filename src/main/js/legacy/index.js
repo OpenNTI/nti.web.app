@@ -44,6 +44,7 @@ Ext.application({
 			me.getController('Application').load(me);
 
 			// me.getController('Session').login(me);
+			//eslint-disable-next-line no-undef
 			NextThought.isReady = true;
 		}
 

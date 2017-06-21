@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('../mixins/ModelWithBodyContent');
+require('legacy/mixins/ModelWithBodyContent');
 require('./Base');
 
 

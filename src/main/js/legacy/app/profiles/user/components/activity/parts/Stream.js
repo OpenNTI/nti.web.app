@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('../../../../../../util/Globals');
+require('legacy/util/Globals');
 require('../../../../../stream/List');
 require('./Page');
 require('./events/Empty');

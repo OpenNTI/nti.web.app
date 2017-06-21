@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const Globals = require('../util/Globals');
+const Globals = require('legacy/util/Globals');
 require('../proxy/reader/Json');
 
 

@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
-const StateStore = require('../common/state/StateStore');
-const Actions = require('../common/state/Actions');
+const StateStore = require('legacy/common/state/StateStore');
+const Actions = require('legacy/common/state/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.State', {

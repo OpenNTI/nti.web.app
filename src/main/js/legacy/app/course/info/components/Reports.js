@@ -16,7 +16,7 @@ const labels = {
 	}
 };
 
-require('../../../../mixins/FillScreen');
+require('legacy/mixins/FillScreen');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Reports', {

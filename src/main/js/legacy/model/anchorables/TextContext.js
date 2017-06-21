@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-
+const TextContext =
 module.exports = exports = Ext.define('NextThought.model.anchorables.TextContext', {
 
 	config: {
@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TextContext
 			if (!Ext.isArray(o)) {o = [o];}
 
 			Ext.each(o, function (tc) {
-				result.push(NextThought.model.anchorables.TextContext.create({
+				result.push(TextContext.create({
 					contextText: tc.contextText,
 					contextOffset: tc.contextOffset
 				}));

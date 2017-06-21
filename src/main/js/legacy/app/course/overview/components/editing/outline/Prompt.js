@@ -1,12 +1,14 @@
 const Ext = require('extjs');
 
-require('./outlinenode/Editor');
-require('./calendarnode/Editor');
-require('./contentnode/Editor');
+const CourseOutline = require('legacy/model/courses/CourseOutline');
+
+const CalendarnodeEditor = require('./calendarnode/Editor');
+const ContentnodeEditor = require('./contentnode/Editor');
+const OutlinenodeEditor = require('./outlinenode/Editor');
+const OutlinenodeInlineEditor = require('./outlinenode/InlineEditor');
+const ContentnodeInlineEditor = require('./contentnode/InlineEditor');
+
 require('../creation/TypeList');
-require('../../../../../../model/courses/CourseOutline');
-require('./outlinenode/InlineEditor');
-require('./contentnode/InlineEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', {
@@ -44,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		getCreators: function () {
 			return [
-				NextThought.model.courses.CourseOutline.mimeType
+				CourseOutline.mimeType
 			];
 		},
 
@@ -55,20 +57,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 		getTypeEditors: function () {
-			var base = NextThought.app.course.overview.components.editing.outline;
-
 			return [
-				base.calendarnode.Editor,
-				base.contentnode.Editor,
-				base.outlinenode.Editor
+				CalendarnodeEditor,
+				ContentnodeEditor,
+				OutlinenodeEditor,
 			];
 		},
 
 
 		getInlineEditors: function () {
 			return [
-				NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor,
-				NextThought.app.course.overview.components.editing.outline.contentnode.InlineEditor
+				OutlinenodeInlineEditor,
+				ContentnodeInlineEditor,
 			];
 		},
 

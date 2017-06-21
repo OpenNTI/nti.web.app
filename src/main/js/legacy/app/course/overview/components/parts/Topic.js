@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const NavigationNode = require('legacy/model/courses/navigation/Node');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Topic', {
 	extend: 'Ext.Component',
@@ -23,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent(arguments);
 		var data;
 
-		this.record = this.record || (this.node && new NextThought.model.courses.navigation.Node(null, null, this.node));
+		this.record = this.record || (this.node && new NavigationNode(null, null, this.node));
 
 		if (this.record) {
 			data = this.record.getData();

@@ -12,7 +12,7 @@ const CoursesStateStore = require('./courses/StateStore');
 const ContentActions = require('./content/Actions');
 
 require('legacy/proxy/JSONP');
-require('../../common/Actions');
+require('legacy/common/Actions');
 
 module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	extend: 'NextThought.common.Actions',
