@@ -10,16 +10,14 @@
 
 	"globals": {
 		"$AppConfig": true,
-		"NextThought": true,
 		"Service": true,
-		"getString": true
 	},
 
 	"rules": {
 		"no-console": "off",
 		"no-underscore-dangle": "off",
 		"no-var": "off",
-		"strict": "off",
+		"strict": ["error", "never"],
 		"import/no-commonjs": "off",
 		"import/no-extraneous-dependencies": "off",
 	}
