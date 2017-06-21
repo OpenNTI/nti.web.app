@@ -1,3 +1,4 @@
+const {encodeForURI} = require('nti-lib-ntiids');
 const Ext = require('extjs');
 const ContentUtils = require('../../../../../../../../util/Content');
 
@@ -102,6 +103,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.bundle.getContentPackages();
 	},
 
+	createContent () {
+		// create a package to fit the reading editor's expectations
+		var contentTemplate = this.ContentActions.getEmptyContentPackage();
+		contentTemplate.children = [];
+		contentTemplate.label = contentTemplate.title;
+		contentTemplate.getAttribute = (a) => { return contentTemplate[a]; };
+		contentTemplate.get = contentTemplate.getAttribute;
+
+		// this is used to indicate that this new content should be created as
+		// there is no selection from the existing reading list
+		this.newlyCreatedContent = contentTemplate;
+
+		this.showReadingEditor();
+	},
 
 	showContentPackageList (selectedItems) {
 		if (this.contentPackageSelectionCmp) {
@@ -121,6 +136,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.maybeEnableBack(this.backText);
 		this.removeAll(true);
+
+		// reset (in case the user selected "Create Content", then came back
+		// to this step and wants to choose an existing reading)
+		this.newlyCreatedContent = null;
+
+		let me = this;
+		this.createContentBtn = this.add({
+			xtype: 'box',
+			autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: 'Create Content'},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: me.createContent.bind(me)
+				}
+			}
+		});
 
 		this.contentPackageSelectionCmp = this.add({
 			xtype: 'overview-editing-content-package-item-selection',
@@ -204,7 +235,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getContentPackageSelection () {
 		let getContentPackage;
 
-		if (this.contentPackageSelectionCmp) {
+		if (this.newlyCreatedContent) {
+			getContentPackage = Promise.resolve(this.newlyCreatedContent);
+		} else if (this.contentPackageSelectionCmp) {
 			getContentPackage = Promise.resolve(this.contentPackageSelectionCmp.getSelection()[0]);
 		} else if (this.record) {
 			getContentPackage = ContentUtils.getContentPackageContainingReading(this.record.get('href'), this.bundle);
@@ -218,7 +251,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getReadingSelection: function () {
 		var getReading;
 
-		if (this.readingSelectionCmp) {
+		if (this.newlyCreatedContent) {
+			getReading = Promise.resolve(this.newlyCreatedContent);
+		} else if (this.readingSelectionCmp) {
 			getReading = Promise.resolve(this.readingSelectionCmp.getSelection()[0]);
 		} else if (this.record) {
 			getReading = ContentUtils.getReading(this.record.get('href'), this.bundle);
@@ -342,10 +377,46 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		me.disableSubmission();
-		return me.readingEditorCmp.onSave()
-			.catch(function (reason) {
-				me.enableSubmission();
-				return Promise.reject(reason);
-			});
+
+		// two options, either we're creating a new reading from this screen, or
+		// we're adding an existing reading to a lesson
+		if(me.newlyCreatedContent) {
+			// update the new package based on form values (before creating the bundle)
+			me.newlyCreatedContent.label = me.readingEditorCmp.formCmp.getValueOf('label');
+			me.newlyCreatedContent.title = me.readingEditorCmp.formCmp.getValueOf('label');
+			me.newlyCreatedContent.byline = me.readingEditorCmp.formCmp.getValueOf('byline');
+			me.newlyCreatedContent.description = me.readingEditorCmp.formCmp.getValueOf('description');
+
+			// user has decided to create and add this new reading to a lesson
+			// so we need to actually create the empty reading, add to lesson,
+			// then navigate the user to the reading editor
+			return me.ContentActions.createContent(me.bundle, me.newlyCreatedContent)
+				.then((pack) => {
+					me.readingEditorCmp.contentPackage = pack;
+
+					me.readingEditorCmp.formCmp.setValue('href', pack.get('NTIID'));
+					me.readingEditorCmp.formCmp.setValue('target', pack.get('NTIID'));
+
+					return me.readingEditorCmp.onSave()
+						.then(() => {
+							// navigate to newly created content's editor (still unpublished at this point)
+							const route = `/course/${encodeForURI(this.bundle.getId())}/content/${encodeForURI(pack.get('NTIID'))}/edit/`;
+
+							NextThought.app.navigation.Actions.pushRootRoute(null, route, {pack});
+						})
+						.catch(function (reason) {
+							me.enableSubmission();
+							return Promise.reject(reason);
+						});
+				});
+
+		}
+		else {
+			return me.readingEditorCmp.onSave()
+				.catch(function (reason) {
+					me.enableSubmission();
+					return Promise.reject(reason);
+				});
+		}
 	}
 });

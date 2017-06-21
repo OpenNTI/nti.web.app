@@ -44,6 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 		this.addDefaultRoute('/readings');
 
 		this.SearchStore = NextThought.app.search.StateStore.getInstance();
+		this.ContentActions = NextThought.app.content.Actions.create();
 
 		this.initSearchHandler(this.SearchStore);
 	},
@@ -75,29 +76,21 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 
 
 	createReading () {
-		const link = this.currentBundle && this.currentBundle.getLink('Library');
-
 		if (this.el) {
 			this.el.mask('Loading...');
 		}
 
-		if (link) {
-			Service.post(link, EMPTY_CONTENT_PACKAGE)
-				.then((contentPackage) => {
-					const pack = ParseUtils.parseItems(JSON.parse(contentPackage))[0];
-
-					return this.currentBundle.updateFromServer()
-						.then(() => {
-							this.gotoReading(pack);
-							this.setTitle('Untitled Reading');
-						});
-				})
-				.always(() => {
-					if (this.el) {
-						this.el.unmask();
-					}
-				});
-		}
+		this.ContentActions
+			.createContent(this.currentBundle)
+			.then((pack) => {
+				this.gotoReading(pack);
+				this.setTitle('Untitled Reading');
+			})
+			.always(() => {
+				if (this.el) {
+					this.el.unmask();
+				}
+			});
 	},
 
 
