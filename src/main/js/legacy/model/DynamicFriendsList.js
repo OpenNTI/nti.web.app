@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ModelFriendsList = require('./FriendsList');
+const Ext = require('extjs');
+
+require('./FriendsList');
 
 
 module.exports = exports = Ext.define('NextThought.model.DynamicFriendsList', {

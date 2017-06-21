@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AssessmentSingleValuedSolution = require('./SingleValuedSolution');
+const Ext = require('extjs');
+
+require('./SingleValuedSolution');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.FreeResponseSolution', {

@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 require('./Part');
 const {FileType: {FileSetDescriptor: FileSet}} = require('nti-commons');
 

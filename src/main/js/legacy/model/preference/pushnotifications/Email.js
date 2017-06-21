@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var PushnotificationsBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.preference.pushnotifications.Email', {

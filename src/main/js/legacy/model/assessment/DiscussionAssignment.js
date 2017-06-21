@@ -1,7 +1,6 @@
 const Ext = require('extjs');
-const ParseUtils = require('legacy/util/Parsing');
 
-require('legacy/mixins/ModelWithPublish');
+const ParseUtils = require('legacy/util/Parsing');
 
 require('./Assignment');
 

@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 const {getFormattedString, getString} = require('legacy/util/Localization');
 

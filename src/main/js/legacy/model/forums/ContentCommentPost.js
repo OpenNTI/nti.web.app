@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ForumsCommentPost = require('./CommentPost');
+const Ext = require('extjs');
+
+require('./CommentPost');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.ContentCommentPost', {

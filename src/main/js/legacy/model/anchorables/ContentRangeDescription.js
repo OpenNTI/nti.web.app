@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var MixinsJSONValue = require('../../mixins/JSONValue');
+const Ext = require('extjs');
+
+require('legacy/mixins/JSONValue');
 
 
 module.exports = exports = Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
@@ -25,6 +26,9 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.ContentRang
 
 	statics: {
 		createFromObject: function (o) {
+			//This should be rewritten to create an array at the top of the file instead
+			//Tof using the "Magic" ExtJS class namespace object...
+			//eslint-disable-next-line no-undef
 			var cp = NextThought.model.anchorables[o.Class];
 			//special case if it's a base class
 			if (o.Class === 'ContentRangeDescription') {

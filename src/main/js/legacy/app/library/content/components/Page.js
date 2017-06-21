@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 require('legacy/app/library/courses/components/Page');
 require('legacy/app/library/components/Collection');
 

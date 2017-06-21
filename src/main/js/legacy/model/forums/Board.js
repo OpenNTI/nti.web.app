@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 				json = (json && JSON.parse(json)) || {};
 				json.Items = json.Items && ParseUtils.parseItems(json.Items);
 
-				var store = NextThought.model.forums.Board.buildContentsStoreFromData(me.getContentsStoreId(), json.Items);
+				var store = Board.buildContentsStoreFromData(me.getContentsStoreId(), json.Items);
 
 				return [{
 					title: '',

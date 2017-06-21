@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ForumsHeadlinePost = require('./HeadlinePost');
+const Ext = require('extjs');
+
+require('./HeadlinePost');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.ContentHeadlinePost', {

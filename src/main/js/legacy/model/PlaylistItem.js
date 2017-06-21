@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const DomUtils = require('legacy/util/Dom');
 const {guidGenerator} = require('legacy/util/Globals');
 

@@ -1,7 +1,10 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
+const GradeBookEntry = require('./GradeBookEntry');
+const GradeBookPart = require('./GradeBookPart');
+
 require('../Base');
-require('./GradeBookEntry');
-require('./GradeBookPart');
+
 
 module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', {
 	extend: 'NextThought.model.Base',
@@ -20,8 +23,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', 
 		try {
 			if (assignmentId && (!i || i.get('AssignmentId') !== assignmentId)) {
 				i = this.findGradeBookEntryFor(assignmentId) || [];
-				i = i.reduce(function (a, key) { return a.getFieldItem('Items', key); }, this);
-				if (!NextThought.model.courseware.GradeBookEntry.isInstanceOf(i)) {
+				i = i.reduce(function (a, c) { return a.getFieldItem('Items', c); }, this);
+				if (!GradeBookEntry.isInstanceOf(i)) {
 					i = null;
 				}
 			}
@@ -56,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', 
 
 	buildBook: function (name) {
 		var items = this.get('Items'),
-			book = NextThought.model.courseware.GradeBookPart.create({Items: {}, Name: name}),
+			book = GradeBookPart.create({Items: {}, Name: name}),
 			key = items.length;
 
 		if (Ext.isEmpty(name)) {

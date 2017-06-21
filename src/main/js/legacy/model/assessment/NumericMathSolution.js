@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AssessmentMathSolution = require('./MathSolution');
+const Ext = require('extjs');
+
+require('./MathSolution');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.NumericMathSolution', {

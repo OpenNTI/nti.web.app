@@ -9,10 +9,10 @@ const ObjectUtils = require('../../util/Object');
 const ParseUtils = require('../../util/Parsing');
 
 require('../Base');
-require('../../mixins/BundleLike');
-require('../../mixins/PresentationResources');
-require('../../mixins/DurationCache');
-require('../../mixins/AuditLog');
+require('legacy/mixins/BundleLike');
+require('legacy/mixins/PresentationResources');
+require('legacy/mixins/DurationCache');
+require('legacy/mixins/AuditLog');
 require('./AssignmentCollection');
 require('./CourseInstanceBoard');
 require('../assessment/UsersCourseAssignmentSavepoint');
@@ -32,7 +32,7 @@ require('../UserSearch');
 require('../Video');
 require('../assessment/Assignment');
 require('../assessment/QuestionSet');
-require('../../mixins/AuditLog');
+require('legacy/mixins/AuditLog');
 
 const flatten = arr => arr.reduce(
 	(acc, val) => acc.concat(

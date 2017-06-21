@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('../../mixins/Scrolling');
+require('legacy/mixins/Scrolling');
 require('./util/StreamSource');
 
 

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CoursesCourseInstance = require('./CourseInstance');
+const Ext = require('extjs');
+
+require('./CourseInstance');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.LegacyCommunityBasedCourseInstance', {

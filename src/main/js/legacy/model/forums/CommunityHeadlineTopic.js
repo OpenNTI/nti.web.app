@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ForumsHeadlineTopic = require('./HeadlineTopic');
-var MixinsModelWithPublish = require('../../mixins/ModelWithPublish');
+const Ext = require('extjs');
+
+require('legacy/mixins/ModelWithPublish');
+require('./HeadlineTopic');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.CommunityHeadlineTopic', {

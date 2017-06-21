@@ -1,5 +1,7 @@
 const Ext = require('extjs');
-const {isFeature, swallow} = require('legacy/util/Globals');
+
+const {isFeature} = require('legacy/util/Globals');
+
 require('legacy/model/Base');
 
 module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet', {

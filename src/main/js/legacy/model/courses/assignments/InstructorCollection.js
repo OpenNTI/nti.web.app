@@ -1,10 +1,16 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-var AssignmentsBaseCollection = require('./BaseCollection');
-var CacheSharedInstance = require('../../../cache/SharedInstance');
-var CoursewareGradeBookSummaries = require('../../../store/courseware/GradeBookSummaries');
-var CoursewareStudentHistoryItems = require('../../../store/courseware/StudentHistoryItems');
-var CoursewareAssignmentHistoryItems = require('../../../store/courseware/AssignmentHistoryItems');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+const SharedInstance = require('legacy/cache/SharedInstance');
+const GradeBookSummaries = require('legacy/store/courseware/GradeBookSummaries');
+const StudentHistoryItems = require('legacy/store/courseware/StudentHistoryItems');
+const AssignmentHistoryItems = require('legacy/store/courseware/AssignmentHistoryItems');
+
+const Grade = require('../../courseware/Grade');
+const UsersCourseAssignmentHistory = require('../../courseware/UsersCourseAssignmentHistory');
+const UsersCourseAssignmentHistoryItem = require('../../courseware/UsersCourseAssignmentHistoryItem');
+
+require('./BaseCollection');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
@@ -22,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	},
 
 	__createGradeCache: function () {
-		return NextThought.cache.SharedInstance.create({
+		return SharedInstance.create({
 			getKeyForRecord: function (record) {
 				var userName = record.get ? record.get('Username') : record.Username,
 					assignmentId = record.get ? record.get('AssignmentId') : record.AssignmentId;
@@ -35,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	__createHistoryItemCache: function () {
 		var me = this;
 
-		return NextThought.cache.SharedInstance.create({
+		return SharedInstance.create({
 			getKeyForRecord: function (record) {
 				var user = record.get ? record.get('Creator') : record.Creator,
 					assignment = record.get ? record.get('item') : record.item,
@@ -50,6 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	/**
 	 * Get the HistoryItem for an assignment, doesn't make sense for an instructor so reject
 	 * @param  {String} assignment NTIID of the assignment
+	 * @param  {Boolean} useCache -
 	 * @return {Promse}			   fulfills with the history item
 	 */
 	getHistoryItem: function (assignment, useCache) {
@@ -64,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	 * @return {Store}			  store proxied to load the summaries
 	 */
 	getAssignmentHistory: function (assignment) {
-		return NextThought.store.courseware.AssignmentHistoryItems.create({
+		return AssignmentHistoryItems.create({
 			url: assignment.getLink('GradeBookByAssignment'),
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
@@ -78,12 +85,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	 * returns a store that can be pages, filtered, and searched though
 	 *
 	 * @param {String} historyLink link to the assignment histories for a user
-	 * @param {User} [] [description]
-	 * @param {[String]} available the list of ntiids for the assignments this student has
+	 * @param {String} [studentId] [description]
 	 * @return {Store}		store proxied to load the summaries
 	 */
 	getStudentHistory: function (historyLink, studentId) {
-		return NextThought.store.courseware.StudentHistoryItems.create({
+		return StudentHistoryItems.create({
 			url: historyLink,
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
@@ -128,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	getGradeSummaries: function () {
 		var gradeBook = this.get('GradeBook');
 
-		return NextThought.store.courseware.GradeBookSummaries.create({
+		return GradeBookSummaries.create({
 			url: gradeBook && gradeBook.getLink('GradeBookSummary'),
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
@@ -151,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 					})
 					.catch(function (reason) {
 						if (reason && reason.status === 404) {
-							return NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty();
+							return UsersCourseAssignmentHistory.getEmpty();
 						}
 
 						return reason;
@@ -168,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 	createPlaceholderGrade: function (assignment, user) {
 		var href = this.getCreateGradeLink(),
-			grade = NextThought.model.courseware.Grade.create({
+			grade = Grade.create({
 				href: href,
 				AssignmentId: this.__getIdOf(assignment),
 				Username: this.__getIdOf(user),
@@ -186,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 	createPlaceholderHistoryItem: function (assignment, user) {
 		var grade = this.createPlaceholderGrade(assignment, user),
-			historyItem = NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
+			historyItem = UsersCourseAssignmentHistoryItem.create({
 				Creator: user,
 				item: assignment,
 				AssignmentId: assignment.getId(),

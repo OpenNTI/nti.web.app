@@ -4,7 +4,7 @@ const NavigationActions = require('../navigation/Actions');
 
 const NotificationsStateStore = require('./StateStore');
 
-require('../../mixins/Router');
+require('legacy/mixins/Router');
 require('./components/Stream');
 
 

@@ -1,7 +1,9 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var AssignmentsStudentCollection = require('./assignments/StudentCollection');
-var AssignmentsInstructorCollection = require('./assignments/InstructorCollection');
+const Ext = require('extjs');
+
+const StudentCollection = require('./assignments/StudentCollection');
+const InstructorCollection = require('./assignments/InstructorCollection');
+
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.AssignmentCollection', {
@@ -12,9 +14,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.AssignmentColle
 			var collection;
 
 			if (isAdmin) {
-				collection = NextThought.model.courses.assignments.InstructorCollection;
+				collection = InstructorCollection;
 			} else {
-				collection = NextThought.model.courses.assignments.StudentCollection;
+				collection = StudentCollection;
 			}
 
 			return collection.fromJson.apply(collection, arguments);

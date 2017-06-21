@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ModelBase = require('../../Base');
+const Ext = require('extjs');
+
+require('../../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.wordbank.WordEntry', {

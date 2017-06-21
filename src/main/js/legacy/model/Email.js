@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
-var MixinsModelWithBodyContent = require('../mixins/ModelWithBodyContent');
+const Ext = require('extjs');
+
+require('legacy/mixins/ModelWithBodyContent');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.Email', {

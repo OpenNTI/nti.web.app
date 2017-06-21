@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ForumsBoard = require('../forums/Board');
+const Ext = require('extjs');
+
+require('../forums/Board');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceBoard', {

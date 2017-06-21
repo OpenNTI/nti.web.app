@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AssessmentMathPart = require('./MathPart');
+const Ext = require('extjs');
+
+require('./MathPart');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.SymbolicMathPart', {

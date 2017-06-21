@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var AssessmentSurveySubmission = require('./SurveySubmission');
+const Ext = require('extjs');
+
+require('../Base');
+require('./SurveySubmission');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseInquiryItemResponse', {

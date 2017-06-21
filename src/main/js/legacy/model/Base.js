@@ -1,12 +1,14 @@
+// intended to allow object updates, but should be used sparingly
+// to avoid memory leaks
+const {EventEmitter} = require('events');
+
 const Ext = require('extjs');
+
 const Globals = require('legacy/util/Globals');
 const {isMe, getURL} = Globals;
 const ParseUtils = require('legacy/util/Parsing');
 const TimeUtils = require('legacy/util/Time');
 
-// intended to allow object updates, but should be used sparingly
-// to avoid memory leaks
-const {EventEmitter} = require('events');
 
 require('legacy/mixins/HasLinks');
 require('legacy/util/Time');
@@ -16,6 +18,7 @@ require('legacy/model/converters');
 
 const MODIFICATION_BUS = new EventEmitter();
 
+const Base =
 module.exports = exports = Ext.define('NextThought.model.Base', {
 	extend: 'Ext.data.Model',
 
@@ -96,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		{ name: 'href', type: 'string', persist: false, convert: function (v) {
 			if (!v) { return ''; }
 
-			var a = NextThought.model.Base.getLocationInterfaceAt(v), q;
+			var a = Base.getLocationInterfaceAt(v), q;
 
 			if (a.search) {
 				q = Ext.Object.fromQueryString(a.search);
@@ -139,6 +142,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		type = data.mimeType || cls.mimeType;
 
+		//eslint-disable-next-line no-undef
 		map = NextThought.model.MAP = NextThought.model.MAP || {};
 		if (!Array.isArray(type)) {
 			type = [type];
@@ -968,7 +972,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	},
 
 
-	/**
+	/*
 	 * options: {
 	 * 	url: '',
 	 *  method: '',

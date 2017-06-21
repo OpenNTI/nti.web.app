@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 require('../../common/window/Window');
 require('../../app/account/Header');
 require('./Main');

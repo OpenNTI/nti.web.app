@@ -1,10 +1,13 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
-var MixinsShareEntity = require('../mixins/ShareEntity');
-var MixinsAvatar = require('../mixins/Avatar');
-var ModelUser = require('./User');
-var ProxyUserSearch = require('../proxy/UserSearch');
-var ChatStateStore = require('../app/chat/StateStore');
+const Ext = require('extjs');
+
+const ShareEntity = require('legacy/mixins/ShareEntity');
+const ChatStateStore = require('legacy/app/chat/StateStore');
+
+const User = require('./User');
+
+require('legacy/mixins/Avatar');
+require('legacy/proxy/UserSearch');
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.UserSearch', {
@@ -25,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 				type = 'public';
 			}
 			else if (/friendslist$/.test(m)) {
-				type = NextThought.mixins.ShareEntity.getPresentationType(modelData);
+				type = ShareEntity.getPresentationType(modelData);
 			}
 			else {
 				type = 'person';
@@ -41,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 	fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'Presence', convert: function (v, record) {
-			var presence = NextThought.app.chat.StateStore.getInstance().getPresenceOf(record.get('Username'));
+			var presence = ChatStateStore.getInstance().getPresenceOf(record.get('Username'));
 			if (presence) {
 				console.log(presence, presence.toString());
 			} else if ($AppConfig.debug) {
@@ -80,5 +83,5 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 		return this.Unresolved === true;
 	}
 }, function () {
-	this.borrow(NextThought.model.User, ['getName', 'getProfileUrl']);
+	this.borrow(User, ['getName', 'getProfileUrl']);
 });

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var NavigationCourseOutlineNode = require('./CourseOutlineNode');
+const Ext = require('extjs');
+
+require('./CourseOutlineNode');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.navigation.CourseOutlineCalendarNode', {

@@ -1,16 +1,18 @@
-var Ext = require('extjs');
-var AnchorablesTimeRangeDescription = require('./TimeRangeDescription');
-var AnchorablesTranscriptContentPointer = require('./TranscriptContentPointer');
+const Ext = require('extjs');
 
+const TranscriptContentPointer = require('./TranscriptContentPointer');
 
+require('./TimeRangeDescription');
+
+const TranscriptRangeDescription =
 module.exports = exports = Ext.define('NextThought.model.anchorables.TranscriptRangeDescription', {
 	extend: 'NextThought.model.anchorables.TimeRangeDescription',
 
 	statics: {
 		createFromObject: function (o) {
-			var cp = NextThought.model.anchorables.TranscriptContentPointer;
+			var cp = TranscriptContentPointer;
 
-			return NextThought.model.anchorables.TranscriptRangeDescription.create({
+			return TranscriptRangeDescription.create({
 				start: cp.createFromObject(o.start),
 				end: cp.createFromObject(o.end),
 				seriesId: o.seriesId

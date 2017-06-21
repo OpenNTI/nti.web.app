@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var AnchorablesContentPointer = require('./ContentPointer');
+const Ext = require('extjs');
 
+require('./ContentPointer');
 
+const TimeContentPointer =
 module.exports = exports = Ext.define('NextThought.model.anchorables.TimeContentPointer', {
 	extend: 'NextThought.model.anchorables.ContentPointer',
 
@@ -18,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TimeContent
 
 	statics: {
 		createFromObject: function (o) {
-			return NextThought.model.anchorables.TimeContentPointer.create({
+			return TimeContentPointer.create({
 				role: o.role,
 				seconds: parseInt(o.seconds, 10)
 			});

@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
-var ResolversVideoPosters = require('./resolvers/VideoPosters');
+const Ext = require('extjs');
+
+const VideoPosters = require('./resolvers/VideoPosters');
+
+require('./Base');
 
 
 const TRANSCRIPT_PURPOSE = 'normal';
@@ -65,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 				};
 			}
 
-			return NextThought.model.resolvers.VideoPosters.resolveForSource(source);
+			return VideoPosters.resolveForSource(source);
 		}));
 	},
 
@@ -77,11 +79,7 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 		}
 
 		return this.__resolvePosterFromSource()
-			.then(function (posters) {
-				var resolved = posters[0];
-
-				return resolved.thumbnail || resolved.poster || resolved;
-			});
+			.then(([resolved]) => resolved.thumbnail || resolved.poster || resolved);
 	},
 
 	shouldBeRoot: function () {

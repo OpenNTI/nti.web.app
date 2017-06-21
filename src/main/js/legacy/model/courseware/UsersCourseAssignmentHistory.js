@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var CoursewareUsersCourseAssignmentHistoryItemFeedback = require('./UsersCourseAssignmentHistoryItemFeedback');
-var CoursewareUsersCourseAssignmentHistoryItemFeedbackContainer = require('./UsersCourseAssignmentHistoryItemFeedbackContainer');
-var CoursewareGrade = require('./Grade');
+const Ext = require('extjs');
+
+require('../Base');
+require('./Grade');
+require('./UsersCourseAssignmentHistoryItemFeedback');
+require('./UsersCourseAssignmentHistoryItemFeedbackContainer');
+
 
 
 module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistory', {

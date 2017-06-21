@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var AssessmentResponse = require('./Response');
+const Ext = require('extjs');
+
+require('./Response');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.DictResponse', {

@@ -1,9 +1,10 @@
 const Ext = require('extjs');
-const ParseUtils = require('../util/Parsing');
 
+const ParseUtils = require('legacy/util/Parsing');
+
+require('legacy/mixins/GroupLike');
+require('legacy/mixins/Avatar');
 require('./Base');
-require('../mixins/GroupLike');
-require('../mixins/Avatar');
 
 
 /**

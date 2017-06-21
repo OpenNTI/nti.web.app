@@ -1,7 +1,10 @@
-var Ext = require('extjs');
-var AnchorablesContentPointer = require('./ContentPointer');
+const Ext = require('extjs');
 
 
+require('./ContentPointer');
+
+
+const DomContentPointer =
 module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentPointer', {
 	extend: 'NextThought.model.anchorables.ContentPointer',
 
@@ -16,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentP
 
 	statics: {
 		createFromObject: function (o) {
-			return NextThought.model.anchorables.DomContentPointer.create({
+			return DomContentPointer.create({
 				role: o.role
 			});
 		}

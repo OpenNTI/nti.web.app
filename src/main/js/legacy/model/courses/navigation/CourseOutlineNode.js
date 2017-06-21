@@ -1,13 +1,16 @@
 const Ext = require('extjs');
+
 const ParseUtils = require('legacy/util/Parsing');
 const Note = require('legacy/model/Note');
+
+const CourseOutlineContentNode = require('./CourseOutlineContentNode');
 
 require('legacy/mixins/OrderedContents');
 require('legacy/mixins/DurationCache');
 
-require('legacy/model/Base');
-require('legacy/model/courses/overview/Lesson');
-require('legacy/model/courses/navigation/CourseOutlineNodeProgress');
+require('../../courses/overview/Lesson');
+require('../../Base');
+require('./CourseOutlineNodeProgress');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
@@ -116,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 		var allowed = [];
 
 		if (this._depth === 1) {
-			allowed.push(NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType);
+			allowed.push(CourseOutlineContentNode.mimeType);
 		}
 
 		return allowed;

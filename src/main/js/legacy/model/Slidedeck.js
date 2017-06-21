@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
+const Ext = require('extjs');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.Slidedeck', {
@@ -26,8 +27,8 @@ module.exports = exports = Ext.define('NextThought.model.Slidedeck', {
 			slideId = slide && slide.isModel ? slide.getId() : slide,
 			result = false;
 
-		Ext.each(slides, function (slide) {
-			if (slide.NTIID === slideId) {
+		Ext.each(slides, function (o) {
+			if (o.NTIID === slideId) {
 				result = true;
 				return false;
 			}

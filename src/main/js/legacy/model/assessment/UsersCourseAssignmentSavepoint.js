@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var AssessmentUsersCourseAssignmentSavepointItem = require('./UsersCourseAssignmentSavepointItem');
+const Ext = require('extjs');
+
+require('../Base');
+require('./UsersCourseAssignmentSavepointItem');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseAssignmentSavepoint', {

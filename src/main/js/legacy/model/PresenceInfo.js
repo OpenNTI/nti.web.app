@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ObjectUtils = require('../util/Object');
-var ModelBase = require('./Base');
+const Ext = require('extjs');
+
+const ObjectUtils = require('../util/Object');
+
+require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {

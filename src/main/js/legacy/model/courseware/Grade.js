@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
+const Ext = require('extjs');
+
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
@@ -165,8 +166,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 			return this.getPredictedValue();
 		}
 
-		var val = this.get('value') || '', parts, letter, grade,
-			correctness = this.get('Correctness');
+		var val = this.get('value') || '', parts, letter, grade;
 
 		//check if it ends in a character we recognize as a letter grade
 		//if it does use the last part of the value as the letter grade
@@ -329,7 +329,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	/**
 	 * Check if the value is empty, need to handle
 	 * "# L", "# -", " L", " " -", "#", and ""
-	 * @return {Boolean}
+	 * @return {Boolean} -
 	 */
 	isEmpty: function () {
 		var val = this.get('value') || '';

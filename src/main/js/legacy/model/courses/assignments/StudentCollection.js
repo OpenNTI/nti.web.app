@@ -1,6 +1,10 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../util/Parsing');
-var AssignmentsBaseCollection = require('./BaseCollection');
+const Ext = require('extjs');
+
+const ParseUtils = require('legacy/util/Parsing');
+
+const UsersCourseAssignmentHistory = require('../../courseware/UsersCourseAssignmentHistory');
+
+require('./BaseCollection');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.assignments.StudentCollection', {
@@ -24,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 					})
 					.catch(function (reason) {
 						if (reason && reason.status === 404) {
-							return NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty();
+							return UsersCourseAssignmentHistory.getEmpty();
 						}
 
 						return reason;
@@ -57,6 +61,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 	 * Update the history item in the cache with data
 	 * @param  {String} assignment id of the assignment to update
 	 * @param  {Object} data	   data to update with
+	 * @returns {Promise} -
 	 */
 	updateHistoryItem: function (assignment, data) {
 		return this.getHistory(true)

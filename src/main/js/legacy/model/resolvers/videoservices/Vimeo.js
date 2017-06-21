@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+
 const Globals = require('legacy/util/Globals');
 const BatchExecution = require('legacy/util/BatchExecution');
 

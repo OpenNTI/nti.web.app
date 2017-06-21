@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 require('legacy/app/assessment/components/AudioClip');
 require('legacy/app/assessment/components/Sequence');
@@ -61,7 +61,7 @@ require('legacy/model/assessment/UsersCourseAssignmentSavepointItem');
 require('legacy/model/assessment/UsersCourseInquiryItem');
 require('legacy/model/assessment/UsersCourseInquiryItemResponse');
 
-var {guidGenerator} = require('legacy/util/Globals');
+const {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {

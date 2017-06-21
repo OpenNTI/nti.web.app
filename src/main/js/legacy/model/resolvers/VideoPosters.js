@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var VideoservicesVimeo = require('./videoservices/Vimeo');
-var VideoservicesYoutube = require('./videoservices/Youtube');
+const Ext = require('extjs');
+
+const Vimeo = require('./videoservices/Vimeo');
+const Youtube = require('./videoservices/Youtube');
 
 
 /*
@@ -37,9 +38,9 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.VideoPosters'
 			var resolve;
 
 			if (type === this.YOUTUBE) {
-				resolve = NextThought.model.resolvers.videoservices.Youtube.resolvePosterForID(id);
+				resolve = Youtube.resolvePosterForID(id);
 			} else if (type === this.VIMEO) {
-				resolve = NextThought.model.resolvers.videoservices.Vimeo.resolvePosterForID(id);
+				resolve = Vimeo.resolvePosterForID(id);
 			} else {
 				resolve = Promise.reject('Unknown video type: ', type, id);
 			}

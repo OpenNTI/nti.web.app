@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var StoreUtils = require('../../util/Store');
-var SearchUtils = require('../../util/Search');
-var ModelBase = require('../Base');
-var UtilStore = require('../../util/Store');
-var UserdataStateStore = require('../../app/userdata/StateStore');
+const Ext = require('extjs');
+
+const UserdataStateStore = require('legacy/app/userdata/StateStore');
+const NTI = require('legacy/store/NTI');
+const StoreUtils = require('legacy/util/Store');
+const SearchUtils = require('legacy/util/Search');
+
+require('../Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.Base', {
@@ -25,13 +27,13 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 
 	buildContentsStore: function (idSuffix, cfg, extraParams) {
 		var store,
-			UserDataStore = NextThought.app.userdata.StateStore.getInstance(),
+			UserDataStore = UserdataStateStore.getInstance(),
 			id = this.getContentsStoreId('', idSuffix);
 
 		store = Ext.getStore(id);
 
 		if (!store) {
-			store = NextThought.store.NTI.create(Ext.apply({
+			store = NTI.create(Ext.apply({
 				storeId: id,
 				url: this.getLink('contents')
 			}, cfg || {}));

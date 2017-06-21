@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var StoreStripePurchaseError = require('./StripePurchaseError');
+const Ext = require('extjs');
+
+require('./StripePurchaseError');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.StripeOperationError', {

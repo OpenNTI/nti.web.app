@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ContentUtils = require('../util/Content');
+const Ext = require('extjs');
+
+const ContentUtils = require('../util/Content');
 
 
 module.exports = exports = Ext.define('NextThought.model.TopicNode', {
@@ -61,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.model.TopicNode', {
 
 	matches: function (substring) {
 		var re, rootId = this.get('NTIID'),
-			matchingMap = {}, keys,
+			matchingMap = {},
 			children = this.get('tocNode').querySelectorAll('topic');
 
 		try {
