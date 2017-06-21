@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('../../../../mixins/Router');
+require('legacy/mixins/Router');
 require('./EditingControls');
 require('./Lesson');
 require('./editing/Index');

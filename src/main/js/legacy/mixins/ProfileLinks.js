@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 		var profileUrl = u.getProfileUrl && u.getProfileUrl();
 
 		if (profileUrl) {
-			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), profileUrl, {
+			Actions.pushRootRoute(u.getName(), profileUrl, {
 				user: u
 			});
 		}

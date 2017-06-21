@@ -1,4 +1,4 @@
-/* globals spyOn */
+/* globals spyOn, NextThought */
 /* eslint-env jest */
 require('legacy/mixins/Router');
 

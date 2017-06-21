@@ -1,10 +1,12 @@
 const Ext = require('extjs');
 
+const SupportedVideoTypes = require('legacy/app/video/SupportedVideoTypes');
+
 const Globals = require('../Globals');
 
 const {isFeature} = Globals;
 
-
+const KalturaPlayer =
 module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	statics: {
@@ -137,8 +139,8 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.mixins.observable.constructor.call(this);
 
 		// We need to externalize these values since they relate to our Kaltura Account.  This is okay for OU since they are paying for it.
-		this.PARTNER_ID = NextThought.util.media.KalturaPlayer.PARTNER_ID;
-		this.UICONF_ID = NextThought.util.media.KalturaPlayer.UICONF_ID;
+		this.PARTNER_ID = KalturaPlayer.PARTNER_ID;
+		this.UICONF_ID = KalturaPlayer.UICONF_ID;
 
 		this.globals = {};
 		this.el = null;
@@ -294,7 +296,10 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 		}
 
 		code.push(
-			'VideoSupports = ' + Ext.encode(NextThought.Video.supports) + ';',
+			//This should be rewritten to create an array at the top of the file instead
+			//Tof using the "Magic" ExtJS class namespace object...
+			//eslint-disable-next-line no-undef
+			'VideoSupports = ' + Ext.encode(SupportedVideoTypes) + ';',
 			'var inject = ' + this.playerCode.inject.toString() + ';',
 			'window.addEventListener("load",inject,false);');
 

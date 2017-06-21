@@ -1,5 +1,10 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
+const PageInfo = require('legacy/model/PageInfo');
+
+const ContentIndex = require('../content/content/Index');
+const ForumIndex = require('../content/forum/Index');
 const ContentStateStore = require('../library/content/StateStore');
 
 const BundleStateStore = require('./StateStore');
@@ -8,8 +13,6 @@ require('legacy/mixins/Router');
 require('legacy/mixins/State');
 
 require('../content/Index');
-require('../content/content/Index');
-require('../content/forum/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
@@ -90,7 +93,6 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 	applyState: function (state) {
 		var bundle = this.activeBundle,
 			active = state.active,
-			content = NextThought.app.content,
 			tabs = [];
 
 		/**
@@ -104,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			return !index.showTab || index.showTab(bundle);
 		}
 
-		if (showTab(content.content.Index)) {
+		if (showTab(ContentIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.booktab', 'Book'),
 				route: 'content',
@@ -114,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			});
 		}
 
-		if (showTab(content.forum.Index)) {
+		if (showTab(ForumIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
 				route: 'discussions',
@@ -163,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 
 		if (root.isForum) {
 			route = this.getRouteForForum(root, subPath);
-		} else if (root instanceof NextThought.model.PageInfo) {
+		} else if (root instanceof PageInfo) {
 			route = this.getRouteForPageInfo(root, subPath);
 		} else {
 			route = {

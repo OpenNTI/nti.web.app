@@ -1,8 +1,9 @@
 const Ext = require('extjs');
 const moment = require('moment');
 
-require('./Base');
-require('../tiles/Lesson');
+const TilesLesson = require('../tiles/Lesson');
+
+const WidgetsBase = require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Lessons', {
@@ -14,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 
 		getWeight: function (record) {
-			var time = NextThought.app.course.dashboard.components.widgets.Base.getTimeWeight(record.get('AvailableBeginning'));
+			var time = WidgetsBase.getTimeWeight(record.get('AvailableBeginning'));
 
 			return this.__BASE_WEIGHT + time;
 		},
@@ -34,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			}
 
 			function getCmpConfig (record, innerWeight) {
-				var getConfig = NextThought.app.course.dashboard.components.tiles.Lesson.getTileConfig(record);
+				var getConfig = TilesLesson.getTileConfig(record);
 
 				return getConfig
 						.then(function (config) {

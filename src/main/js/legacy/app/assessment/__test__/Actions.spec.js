@@ -1,3 +1,4 @@
+/* globals NextThought */
 /* eslint-env jest */
 require('../Actions.js');
 require('legacy/model/assessment/AssignmentSubmission');

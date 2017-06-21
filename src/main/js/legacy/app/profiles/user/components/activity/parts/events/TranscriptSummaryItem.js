@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 
+const WindowsActions = require('legacy/app/windows/Actions');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
 const UserRepository = require('legacy/cache/UserRepository');
 const TimeUtils = require('legacy/util/Time');
 const {isMe} = require('legacy/util/Globals');
@@ -39,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 		//this.mon(this.record, 'destroy', this.destroy, this);
 	},
 
@@ -171,8 +173,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		//get the page info
 		//check if its cached
 
-		NextThought.app.groups.StateStore.getInstance().getFriendsList();
-		page = NextThought.app.groups.StateStore.getInstance().getFriendsList().getById(RoomInfo.get('ContainerId'));
+		GroupsStateStore.getInstance().getFriendsList();
+		page = GroupsStateStore.getInstance().getFriendsList().getById(RoomInfo.get('ContainerId'));
 
 		if (page) {
 			//its cached

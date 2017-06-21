@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 
+const AssessedPart = require('./AssessedPart');
+
 require('legacy/model/Base');
 
 
@@ -35,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQues
 			};
 
 			q.get('parts').forEach(function () {
-				raw.parts.push(new NextThought.model.assessment.AssessedPart());
+				raw.parts.push(new AssessedPart());
 			});
 
 			let out = this.create(raw);

@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.OpenCourseInfo', {
 	extend: 'Ext.Component',
@@ -59,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Op
 	showEnrollWindow: function () {
 		var me = this;
 		me.fireEvent('show-enrollment', me.getInfo());
-		
+
 		// me.getInfo().fireAcquisitionEvent(me, function(enrolled) {
 		//	if (!enrolled) {
 		//		me.fireEvent('go-to-library', me);

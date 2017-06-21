@@ -3,6 +3,7 @@ const Ext = require('extjs');
 const StateStore = require('legacy/app/chat/StateStore');
 const Actions = require('legacy/app/chat/Actions');
 const PresenceInfo = require('legacy/model/PresenceInfo');
+const {getString} = require('legacy/util/Localization');
 const {isMe} = require('legacy/util/Globals');
 
 require('legacy/cache/AbstractStorage');

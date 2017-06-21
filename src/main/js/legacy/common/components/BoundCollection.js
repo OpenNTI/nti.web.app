@@ -1,8 +1,7 @@
 const Ext = require('extjs');
 
+const Transition = require('legacy/mixins/Transition');
 const ParseUtils = require('legacy/util/Parsing');
-
-require('legacy/mixins/Transition');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.BoundCollection', {
@@ -209,20 +208,20 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 			oldItem = oldItems[oldIndex];
 
 			if (!newItem && oldItem) {
-				merge.push({record: oldItem, type: NextThought.mixins.Transition.LIST_REMOVE, oldRecord: oldItem});
+				merge.push({record: oldItem, type: Transition.LIST_REMOVE, oldRecord: oldItem});
 			} else if (newItem && !oldItem) {
-				merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_ADD, oldRecord: oldItem});
+				merge.push({record: newItem, type: Transition.LIST_ADD, oldRecord: oldItem});
 			} else if (newItem.getId() === oldItem.getId()) {
 				merge.push({record: newItem, type: '', oldRecord: oldItem});
 			} else {
 				if (oldRecords[newItem.getId()]) {
-					merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_MOVE, oldRecord: newItem});
+					merge.push({record: newItem, type: Transition.LIST_MOVE, oldRecord: newItem});
 				} else {
-					merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_ADD, oldRecord: oldItem});
+					merge.push({record: newItem, type: Transition.LIST_ADD, oldRecord: oldItem});
 				}
 
 				if (!newRecords[oldItem.getId()]) {
-					merge.push({record: oldItem, type: NextThought.mixins.Transition.LIST_REMOVE, oldRecord: oldItem});
+					merge.push({record: oldItem, type: Transition.LIST_REMOVE, oldRecord: oldItem});
 				}
 			}
 

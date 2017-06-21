@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
 
+const {getString} = require('legacy/util/Localization');
 const ContentUtils = require('legacy/util/Content');
 const Globals = require('legacy/util/Globals');
 const PageSource = require('legacy/util/PageSource');
@@ -8,7 +9,7 @@ const TopicNode = require('legacy/model/TopicNode');
 const PathActions = require('legacy/app/navigation/path/Actions');
 
 require('legacy/util/Parsing');
-require('../navigation/path/Actions');
+require('legacy/app/navigation/path/Actions');
 
 
 const EMPTY_CONTENT_PACKAGE = {

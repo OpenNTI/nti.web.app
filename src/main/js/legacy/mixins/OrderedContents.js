@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
-const Globals = require('../util/Globals');
-const ParseUtils = require('../util/Parsing');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {

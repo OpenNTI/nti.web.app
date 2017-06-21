@@ -1,6 +1,8 @@
 const Ext = require('extjs');
+
+const Cue = require('legacy/webvtt/Cue');
+
 require('legacy/model/transcript/Cue');
-require('legacy/webvtt/Cue');
 
 
 /*
@@ -252,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			}
 		}
 		// 19. Cue creation
-		scratch.cue = new NextThought.webvtt.Cue();
+		scratch.cue = new Cue();
 		// If line isn't a timing (doesn't contain "-->") then it should be a cue identifier
 		if (!regexp.reArrow.test(scratch.line)) {
 			// Attempt to collect the cue identifier

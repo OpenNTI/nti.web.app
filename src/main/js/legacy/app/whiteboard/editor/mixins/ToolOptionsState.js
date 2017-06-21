@@ -1,10 +1,10 @@
 const Ext = require('extjs');
 
-
+const ToolOptionsState =
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.ToolOptionsState', {
 
 	constructor: function () {
-		this.toolOptionsState = NextThought.app.whiteboard.editor.mixins.ToolOptionsState;
+		this.toolOptionsState = ToolOptionsState;
 		this.on('afterrender', function () {
 			this.on('wb-tool-change', this.toolChange);
 			this.on('wb-options-change', this.toolOptionsChange);

@@ -1,11 +1,12 @@
 const Ext = require('extjs');
 
+const GroupsActions = require('legacy/app/groups/Actions');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
+const NavigationActions = require('legacy/app/navigation/Actions');
 const UserRepository = require('legacy/cache/UserRepository');
+const PersonalBlog = require('legacy/model/forums/PersonalBlog');
 const {isMe, isFeature} = require('legacy/util/Globals');
-
-const GroupsActions = require('../../groups/Actions');
-const GroupsStateStore = require('../../groups/StateStore');
-const NavigationActions = require('../../navigation/Actions');
+const {getString} = require('legacy/util/Localization');
 
 require('legacy/mixins/Router');
 require('./components/Header');
@@ -345,7 +346,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		var root = path[0],
 			subPath = path.slice(1);
 
-		if (root && root instanceof NextThought.model.forums.PersonalBlog) {
+		if (root && root instanceof PersonalBlog) {
 			return this.getRouteForBlog(root, subPath);
 		}
 

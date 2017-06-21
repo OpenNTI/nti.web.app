@@ -1,5 +1,7 @@
 const Ext = require('extjs');
-require('legacy/app/blog/StateStore');
+
+const BlogStateStore = require('legacy/app/blog/StateStore');
+
 require('./PostReply');
 
 
@@ -12,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.callParent(arguments);
 
 		let me = this;
-		me.BlogStateStore = NextThought.app.blog.StateStore.getInstance();
+		me.BlogStateStore = BlogStateStore.getInstance();
 		me.mon(me.BlogStateStore, {
 			'blog-deleted': function (id) {
 				if (me.record.getId() === id || me.record.get('ContainerId') === id) {

@@ -1,8 +1,9 @@
 const Ext = require('extjs');
 
+const TimelineActions = require('./Actions');
+
 require('../Editor');
 require('./items/Items');
-require('./Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.TimelineEditor', {
@@ -12,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	showEditor: function () {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
-		this.TimelineEditorActions = NextThought.app.course.overview.components.editing.content.timeline.Actions.create();
+		this.TimelineEditorActions = TimelineActions.create();
 
 		this.addItems();
 

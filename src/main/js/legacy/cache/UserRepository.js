@@ -1,11 +1,12 @@
 const Ext = require('extjs');
+const {wait} = require('nti-commons');
 
 const User = require('legacy/model/User');
+const PresenceInfo = require('legacy/model/PresenceInfo');
 const ParseUtils = require('legacy/util/Parsing');
 const {isMe, isFeature} = require('legacy/util/Globals');
-const {wait, Deferred} = require('legacy/util/Promise');
-
-require('../app/chat/StateStore');
+const {Deferred} = require('legacy/util/Promise');
+const ChatStateStore = require('legacy/app/chat/StateStore');
 
 
 User.Repository = global.UserRepository =
@@ -53,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 		queued.on('add', 'start', task);
 
-		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+		this.ChatStore = ChatStateStore.getInstance();
 
 		this.setPresenceChangeListener(this.ChatStore);
 	},
@@ -686,7 +687,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		if (this.debug) {console.log('User repository recieved a presence change for ', username, arguments);}
 		newPresence = (presence && presence.isPresenceInfo) ?
 					presence :
-					NextThought.model.PresenceInfo.createFromPresenceString(presence, username);
+					PresenceInfo.createFromPresenceString(presence, username);
 
 		if (u) {
 			if (this.debug) {

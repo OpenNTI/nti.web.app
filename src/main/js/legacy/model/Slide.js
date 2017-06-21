@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
-const ContentUtils = require('../util/Content');
-const ParseUtils = require('../util/Parsing');
+const ContentUtils = require('legacy/util/Content');
+const ParseUtils = require('legacy/util/Parsing');
 
 const PlaylistItem = require('./PlaylistItem');
 require('./Base');

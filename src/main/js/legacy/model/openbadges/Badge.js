@@ -1,7 +1,7 @@
 /*globals OpenBadges*/
 const Ext = require('extjs');
 
-const ParseUtils = require('../../util/Parsing');
+const ParseUtils = require('legacy/util/Parsing');
 
 require('../Base');
 

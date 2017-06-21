@@ -1,9 +1,9 @@
 const Ext = require('extjs');
 
 const {getString} = require('legacy/util/Localization');
+const GroupsActions = require('legacy/app/groups/Actions');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
 
-const GroupsActions = require('../../../groups/Actions');
-const GroupsStateStore = require('../../../groups/StateStore');
 const ChatActions = require('../../../chat/Actions');
 
 require('legacy/mixins/ProfileLinks');

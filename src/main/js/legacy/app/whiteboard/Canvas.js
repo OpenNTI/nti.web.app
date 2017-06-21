@@ -2,14 +2,21 @@ const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
 
-require('./shapes/Circle');
-require('./shapes/Line');
-require('./shapes/Path');
-require('./shapes/Polygon');
-require('./shapes/Text');
-require('./shapes/Url');
+const Circle = require('./shapes/Circle');
+const Line = require('./shapes/Line');
+const Path = require('./shapes/Path');
+const Polygon = require('./shapes/Polygon');
+const Text = require('./shapes/Text');
+const Url = require('./shapes/Url');
 
-const {swallow} = Globals;
+const SHAPES = {
+	Circle,
+	Line,
+	Path,
+	Polygon,
+	Text,
+	Url,
+};
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
@@ -150,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 			if (c === 'Polygon' && data.sides <= 2) {
 				c = 'Line';
 			}
-			c = NextThought.app.whiteboard.shapes[c];
+			c = SHAPES[c];
 			return c ? c.create(data) : null;
 		},
 
@@ -199,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 			function finish () {
 				var data = Globals.CANVAS_BROKEN_IMAGE.src;
-				try { data = c.dom.toDataURL('image/png'); } catch (er) {swallow(er);}
+				try { data = c.dom.toDataURL('image/png'); } catch (er) {/*ignore*/}
 				try { c.remove(); }catch (e) { console.warn(Globals.getError(e)); }
 				resultCallback.call(window, data);
 			}

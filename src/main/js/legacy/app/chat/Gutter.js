@@ -4,10 +4,9 @@ const {wait} = require('nti-commons');
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
 const ParseUtils = require('legacy/util/Parsing');
-
-const GroupsStateStore = require('../groups/StateStore');
-const NavigationActions = require('../navigation/Actions');
-const NavigationStateStore = require('../navigation/StateStore');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
+const NavigationActions = require('legacy/app/navigation/Actions');
+const NavigationStateStore = require('legacy/app/navigation/StateStore');
 
 const ChatStateStore = require('./StateStore');
 const ChatActions = require('./Actions');

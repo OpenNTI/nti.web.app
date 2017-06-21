@@ -4,12 +4,14 @@ const {wait} = require('nti-commons');
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
 const SharingUtils = require('legacy/util/Sharing');
+const {getString} = require('legacy/util/Localization');
+const Blog = require('legacy/store/Blog');
 
-require('./old/Topic');
+const BlogActions = require('../Actions');
+
 require('legacy/mixins/Searchable');
+require('./old/Topic');
 require('./Comment');
-require('legacy/store/Blog');
-require('../Actions');
 
 const {isMe} = Globals;
 
@@ -36,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		this.threaded = false;
 		this.callParent(arguments);
 
-		this.BlogActions = NextThought.app.blog.Actions.create();
+		this.BlogActions = BlogActions.create();
 	},
 
 	beforeRender: function () {
@@ -112,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	},
 
 	buildStore: function (fulfill, reject) {
-		this.store = NextThought.store.Blog.create({
+		this.store = Blog.create({
 			storeId: this.record.get('Class') + '-' + this.record.get('NTIID')
 		});
 		this.store.proxy.url = this.getRecord().getLink('contents');

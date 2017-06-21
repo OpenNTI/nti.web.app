@@ -1,8 +1,8 @@
 const Ext = require('extjs');
 
-const Globals = require('../../util/Globals');
-require('../../model/courses/navigation/CourseOutlineNode');
-require('../../model/courses/navigation/Node');
+const Globals = require('legacy/util/Globals');
+require('legacy/model/courses/navigation/CourseOutlineNode');
+require('legacy/model/courses/navigation/Node');
 
 module.exports = exports = Ext.define('NextThought.store.courseware.Navigation', {
 	extend: 'Ext.data.Store',

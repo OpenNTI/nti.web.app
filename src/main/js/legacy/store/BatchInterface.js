@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const StoreUtils = require('../util/Store');
+const StoreUtils = require('legacy/util/Store');
 
 
 /**

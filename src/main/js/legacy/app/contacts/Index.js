@@ -2,8 +2,7 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 const ComponentsNavigation = require('legacy/common/components/Navigation');
-
-const NavigationActions = require('../navigation/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 const ContactsActions = require('./Actions');
 const ContactsStateStore = require('./StateStore');

@@ -1,22 +1,24 @@
 const Ext = require('extjs');
 
-require('../../../../../../../common/components/BoundCollection');
-require('../../../../../../../mixins/dnd/OrderingContainer');
-require('../../../../../../../mixins/dnd/OrderingItem');
-require('../../../../../../../mixins/Transition');
-require('../../../../../../../model/app/MoveInfo');
+const WindowsActions = require('legacy/app/windows/Actions');
+const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
+const MoveInfo = require('legacy/model/app/MoveInfo');
+
+const ContentlinkListItem = require('../contentlink/ListItem');
+const DiscussionListItem = require('../discussion/ListItem');
+const PollListItem = require('../poll/ListItem');
+const QuestionsetListItem = require('../questionset/ListItem');
+const SurveyListItem = require('../survey/ListItem');
+const TimelineListItem = require('../timeline/ListItem');
+const VideoListItem = require('../video/ListItem');
+const VideorollListItem = require('../videoroll/ListItem');
+
+require('legacy/common/components/BoundCollection');
+require('legacy/mixins/dnd/OrderingItem');
+require('legacy/mixins/Transition');
 require('../../controls/Add');
 require('../../controls/Edit');
 require('./Preview');
-require('../contentlink/ListItem');
-require('../discussion/ListItem');
-require('../poll/ListItem');
-require('../questionset/ListItem');
-require('../survey/ListItem');
-require('../timeline/ListItem');
-require('../video/ListItem');
-require('../videoroll/ListItem');
-require('../../../../../../windows/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem', {
@@ -36,20 +38,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowActions = WindowsActions.create();
 
 		var onDrop = this.onCardDrop.bind(this),
 			setDataTransferHandler = this.setDataTransferHandler.bind(this),
-			base = NextThought.app.course.overview.components.editing.content,
 			items = [
-				base.contentlink.ListItem,
-				base.discussion.ListItem,
-				base.poll.ListItem,
-				base.questionset.ListItem,
-				base.survey.ListItem,
-				base.timeline.ListItem,
-				base.video.ListItem,
-				base.videoroll.ListItem
+				ContentlinkListItem,
+				DiscussionListItem,
+				PollListItem,
+				QuestionsetListItem,
+				SurveyListItem,
+				TimelineListItem,
+				VideoListItem,
+				VideorollListItem
 			];
 
 		this.MIME_TO_CMP = items.reduce(function (acc, item) {
@@ -64,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return acc;
 		}, {});
 
-		this.setDataTransfer(NextThought.model.app.MoveInfo.create({
+		this.setDataTransfer(MoveInfo.create({
 			OriginContainer: this.record.parent.getId(),
 			OriginIndex: this.record.listIndex
 		}));
@@ -74,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		(Object.keys(this.MIME_TO_CMP) || []).forEach(function (key) {
 			setDataTransferHandler(key, {
 				onDrop: onDrop,
-				isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+				isValid: DndOrderingContainer.hasMoveInfo,
 				effect: 'move'
 			});
 		});

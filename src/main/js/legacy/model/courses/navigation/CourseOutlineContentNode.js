@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
 require('./CourseOutlineNode');
-require('../../../mixins/AuditLog');
+require('legacy/mixins/AuditLog');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {

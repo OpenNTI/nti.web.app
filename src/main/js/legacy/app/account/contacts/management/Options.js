@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.account.contacts.management.Options', {
 	extend: 'Ext.menu.Menu',

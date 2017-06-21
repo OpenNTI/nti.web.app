@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
-require('../../../mixins/MovingRoot');
+require('legacy/mixins/MovingRoot');
 require('../../Base');
 
 

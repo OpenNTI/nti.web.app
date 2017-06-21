@@ -6,6 +6,9 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.ContentPoin
 
 	statics: {
 		createFromObject: function (o) {
+			//This should be rewritten to create an array at the top of the file instead
+			//Tof using the "Magic" ExtJS class namespace object...
+			//eslint-disable-next-line no-undef
 			var cp = NextThought.model.anchorables[o.Class];
 			return cp.createFromObject(o);
 		}

@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('../../../store/BatchInterface');
+const BatchInterface = require('legacy/store/BatchInterface');
 
 
 /**
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 
 	getCurrentBatch: function () {
 		if (!this.currentBatch) {
-			this.currentBatch = new NextThought.store.BatchInterface({
+			this.currentBatch = new BatchInterface({
 				url: this.getURL(),
 				params: this.getParams()
 			});

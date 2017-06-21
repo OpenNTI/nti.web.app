@@ -1,10 +1,12 @@
 const Ext = require('extjs');
 
 const {getFormattedString, getString} = require('legacy/util/Localization');
+const Survey = require('legacy/model/assessment/Survey');
+const AssessedQuestionSet = require('legacy/model/assessment/AssessedQuestionSet');
 
-require('legacy/model/assessment/Survey');
+const AssessmentActions = require('./Actions');
+
 require('../contentviewer/overlay/Panel');
-require('./Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission', {
@@ -91,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		this.questionSet.setStartTime(this.startTimestamp);
 		this.questionSet.clearProgress();
 
-		this.AssessmentActions = NextThought.app.assessment.Actions.create();
+		this.AssessmentActions = AssessmentActions.create();
 	},
 
 	afterRender: function () {
@@ -198,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	isSurvey: function () {
-		return this.questionSet instanceof NextThought.model.assessment.Survey;
+		return this.questionSet instanceof Survey;
 	},
 
 	shouldAllowInstructorSubmit () {
@@ -588,7 +590,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 		if (isAssignment) {
 			this.submitAssignment(questionSet, submission);
-		} else if (questionSet instanceof NextThought.model.assessment.Survey) {
+		} else if (questionSet instanceof Survey) {
 			this.submitSurvey(questionSet, submission);
 		} else {
 			this.submitAssessment(questionSet, submission);
@@ -678,7 +680,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	setGradingResult: function (assessedQuestionSet, assessmentHistory) {
 		this.assessmentHistory = assessmentHistory;
 		try {
-			assessedQuestionSet = assessedQuestionSet || NextThought.model.assessment.AssessedQuestionSet.from(this.questionSet);
+			assessedQuestionSet = assessedQuestionSet || AssessedQuestionSet.from(this.questionSet);
 			this.questionSet.fireEvent('graded', assessedQuestionSet);
 			Ext.getBody().unmask();
 		} catch (e) {

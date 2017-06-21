@@ -1,9 +1,10 @@
 const Ext = require('extjs');
 const {DateTime} = require('nti-web-commons');
 
+const {getString} = require('legacy/util/Localization');
 const {isMe} = require('legacy/util/Globals');
-
-const User = require('../model/User');
+const FriendsList = require('legacy/model/FriendsList');
+const User = require('legacy/model/User');
 
 const NTIFormat =
 module.exports = exports = Ext.define('NextThought.util.Format', {
@@ -42,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 			bgColor = getField('avatarBGColor'),
 			initials = getField('avatarInitials'),
 			className = getField('Class'),
-			defaultAvatar = className && className !== 'User' ? NextThought.model.FriendsList.BLANK_AVATAR : NextThought.model.User.BLANK_AVATAR,
+			defaultAvatar = className && className !== 'User' ? FriendsList.BLANK_AVATAR : User.BLANK_AVATAR,
 			clsList = [cls || 'avatar', 'avatar-container'], cn = [];
 
 		function getField (name) {
@@ -75,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 		var avatar = (value && value.get && value.get('avatarURL')) || (value && value.avatarURL),
 			username = (value && value.get && value.get('Username')) || (value && value.Username),
 			clazz = (value && value.get && value.get('Class')) || (value && value.Class),
-			defaultAvatar = clazz !== 'User' ? NextThought.model.FriendsList.BLANK_AVATAR : NextThought.model.User.BLANK_AVATAR,
+			defaultAvatar = clazz !== 'User' ? FriendsList.BLANK_AVATAR : User.BLANK_AVATAR,
 			clsList = [cls || 'avatar', 'avatar-container'],
 			initials,
 			cn = [], color, idx;
@@ -93,14 +94,14 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 			initials = value.getAvatarInitials();
 		}
 		else if (value) {
-			initials = NextThought.model.User.getAvatarInitials(value);
+			initials = User.getAvatarInitials(value);
 		}
 
 		clsList = clsList.join(' ');
 		if (initials) {
-			idx = NextThought.model.User.getUsernameHash(username);
-			idx = (idx < 0 ? idx * -1 : idx) % NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS.length;
-			color = NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS[idx];
+			idx = User.getUsernameHash(username);
+			idx = (idx < 0 ? idx * -1 : idx) % NTIFormat.DEFAULT_AVATAR_BG_COLORS.length;
+			color = NTIFormat.DEFAULT_AVATAR_BG_COLORS[idx];
 			cn[0] = {cls: 'fallback avatar-pic initials', style: {'background-color': '#' + color}, cn: {cls: 'inner', html: initials}};
 		} else {
 			cn[0] = {cls: 'fallback avatar-pic', style: {backgroundImage: get(defaultAvatar)}};

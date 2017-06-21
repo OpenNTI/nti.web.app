@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
+const ModelBase = require('legacy/model/Base');
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 	extend: 'Ext.view.View',
@@ -35,11 +37,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 		this.on('beforedeactivate', 'beforeDeactivate');
 		this.on('select', 'navigateToNote');
 
-		NextThought.model.Base.addListener('deleted', this.deleteNote);
+		ModelBase.addListener('deleted', this.deleteNote);
 	},
 
 	onDestroy: function () {
-		NextThought.model.Base.removeListener('deleted', this.deleteNote);
+		ModelBase.removeListener('deleted', this.deleteNote);
 
 		this.callParent(arguments);
 	},

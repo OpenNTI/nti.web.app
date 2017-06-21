@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 const {getURL} = require('legacy/util/Globals');
 
 

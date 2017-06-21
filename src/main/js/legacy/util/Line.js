@@ -5,7 +5,7 @@ const AnnotationUtils = require('./Annotations');
 const lazyResolve = {
 	get ReaderPanel () {
 		delete this.ReaderPanel;
-		return this.ReaderPanel = require('../app/contentviewer/components/Reader');
+		return this.ReaderPanel = require('legacy/app/contentviewer/components/Reader');
 	}
 };
 

@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const TemplatesForNotes = require('../app/annotations/note/Templates');
+const TemplatesForNotes = require('legacy/app/annotations/note/Templates');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {

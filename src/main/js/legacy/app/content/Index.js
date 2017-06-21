@@ -2,8 +2,8 @@ const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
 const {wait} = require('nti-commons');
 
-const NavigationActions = require('../navigation/Actions');
-const WindowsStateStore = require('../windows/StateStore');
+const NavigationActions = require('legacy/app/navigation/Actions');
+const WindowsStateStore = require('legacy/app/windows/StateStore');
 
 const ComponentsNavigation = require('./components/Navigation');
 

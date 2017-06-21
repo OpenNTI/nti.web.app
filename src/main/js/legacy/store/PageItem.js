@@ -1,10 +1,10 @@
 const Ext = require('extjs');
 
-const Globals = require('../util/Globals');
-const ParseUtils = require('../util/Parsing');
-const UtilUserDataThreader = require('../util/UserDataThreader');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const UtilUserDataThreader = require('legacy/util/UserDataThreader');
 require('../proxy/reader/Json');
-require('../model/GenericObject');
+require('legacy/model/GenericObject');
 
 const coordinator = new Ext.util.Observable();
 

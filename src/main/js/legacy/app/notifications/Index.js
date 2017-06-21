@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const NavigationActions = require('../navigation/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 const NotificationsStateStore = require('./StateStore');
 

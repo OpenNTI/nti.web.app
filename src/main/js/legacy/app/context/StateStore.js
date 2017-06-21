@@ -1,11 +1,11 @@
 const Ext = require('extjs');
 const { decodeFromURI } = require('nti-lib-ntiids');
 
-const Globals = require('../../util/Globals');
-const ParseUtils = require('../../util/Parsing');
-const ContentIndex = require('../content/content/Index');
+const ContentIndex = require('legacy/app/content/content/Index');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
 
-require('../../common/StateStore');
+require('legacy/common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 	extend: 'NextThought.common.StateStore',

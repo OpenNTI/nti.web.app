@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const ContentUtils = require('../util/Content');
+const ContentUtils = require('legacy/util/Content');
 
 
 module.exports = exports = Ext.define('NextThought.model.TopicNode', {

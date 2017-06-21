@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('../../util/Parsing');
+const ParseUtils = require('legacy/util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Items', {

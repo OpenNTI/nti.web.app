@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
+const StreamSource = require('./util/StreamSource');
+
 require('legacy/mixins/Scrolling');
-require('./util/StreamSource');
 
 
 /**
@@ -131,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 	setStreamParams: function (params) {
 		params.url = params.url || this.StreamSource.getURL();
 
-		this.setStreamSource(new NextThought.app.stream.util.StreamSource(params));
+		this.setStreamSource(new StreamSource(params));
 	},
 
 

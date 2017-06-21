@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-require('../../common/window/Window');
+require('legacy/common/window/Window');
 require('./Editor');
 
 

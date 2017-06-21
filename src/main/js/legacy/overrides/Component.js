@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
-require('../mixins/Delegation');
-require('../util/Promise');
+const Delegation = require('legacy/mixins/Delegation');
+
+require('legacy/util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.Component', {
@@ -91,5 +92,5 @@ module.exports = exports = Ext.define('NextThought.overrides.Component', {
 		return o && o.type === type;
 	}
 },function () {
-	Ext.Component.mixin('delegation', NextThought.mixins.Delegation);
+	Ext.Component.mixin('delegation', Delegation);
 });

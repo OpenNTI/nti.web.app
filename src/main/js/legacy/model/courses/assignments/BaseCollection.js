@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
 require('../../Base');
-require('../../../mixins/DurationCache');
+require('legacy/mixins/DurationCache');
 require('../../courseware/UsersCourseAssignmentHistory');
 require('../../courseware/UsersCourseAssignmentHistoryItem');
 require('../../assessment/Assignment');

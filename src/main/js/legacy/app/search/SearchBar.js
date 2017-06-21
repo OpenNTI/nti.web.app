@@ -2,6 +2,8 @@ const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 const {wait} = require('nti-commons');
 
+const {getString} = require('legacy/util/Localization');
+
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
 

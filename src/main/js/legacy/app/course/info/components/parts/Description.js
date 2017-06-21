@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const Duration = require('durationjs');
 
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Description', {
 	extend: 'Ext.Component',

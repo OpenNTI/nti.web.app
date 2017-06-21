@@ -1,13 +1,16 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
-require('../../common/chart/Score');
+const {getString} = require('legacy/util/Localization');
+
+const QuizSubmission = require('./QuizSubmission');
+
+require('legacy/common/chart/Score');
+require('../contentviewer/overlay/Panel');
 require('./Score');
 require('./ScoreboardHeader');
 require('./ScoreboardTally');
-require('./QuizSubmission');
 
-require('../contentviewer/overlay/Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
@@ -125,5 +128,5 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
 		this.callParent(arguments);
 	}
 }, function () {
-	this.borrow(NextThought.app.assessment.QuizSubmission, ['resetBasedOnButtonClick', 'maybeDoReset']);
+	this.borrow(QuizSubmission, ['resetBasedOnButtonClick', 'maybeDoReset']);
 });

@@ -5,7 +5,7 @@ const { encodeForURI } = require('nti-lib-ntiids');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
-require('../../../common/menus/JumpTo');
+require('legacy/common/menus/JumpTo');
 require('./TableOfContents');
 
 

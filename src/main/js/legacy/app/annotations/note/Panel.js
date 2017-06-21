@@ -9,6 +9,7 @@ const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
 const SharingUtils = require('legacy/util/Sharing');
 const ParseUtils = require('legacy/util/Parsing');
+const {getString} = require('legacy/util/Localization');
 const ContentViewerActions = require('legacy/app/contentviewer/Actions');
 const UserDataActions = require('legacy/app/userdata/Actions');
 const NavigationActions = require('legacy/app/navigation/Actions');

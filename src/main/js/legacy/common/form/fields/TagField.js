@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.TagField', {
 	alternateClassName: 'NextThought.common.form.fields.TokenField',

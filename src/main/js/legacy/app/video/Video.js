@@ -8,19 +8,27 @@ const PlaylistItem = require('legacy/model/PlaylistItem');
 const VideoPosters = require('legacy/model/resolvers/VideoPosters');
 const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
 const Youtube = require('legacy/model/resolvers/videoservices/Youtube');
+const HTML5Player = require('legacy/util/media/HTML5Player');
+const HTML5VideoPlayer = require('legacy/util/media/HTML5VideoPlayer');
+const KalturaPlayer = require('legacy/util/media/KalturaPlayer');
+const VimeoPlayer = require('legacy/util/media/VimeoPlayer');
+const YouTubePlayer = require('legacy/util/media/YouTubePlayer');
 
-require('legacy/util/media/HTML5Player');
-require('legacy/util/media/HTML5VideoPlayer');
-require('legacy/util/media/KalturaPlayer');
-require('legacy/util/media/VimeoPlayer');
-require('legacy/util/media/YouTubePlayer');
+const PlayStates = require('./PlayStates');
+const SupportedVideoTypes = require('./SupportedVideoTypes');
 
 require('legacy/mixins/InstanceTracking');
 
+const MEDIA = [
+	HTML5Player,
+	HTML5VideoPlayer,
+	KalturaPlayer,
+	VimeoPlayer,
+	YouTubePlayer
+];
 
 
 module.exports = exports = Ext.define('NextThought.app.video.Video', {
-	alternateClassName: 'NextThought.Video',
 	extend: 'Ext.Component',
 	alias: 'widget.content-video',
 
@@ -79,14 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 	},
 
 	inheritableStatics: {
-		states: {
-			UNSTARTED: -1,
-			ENDED: 0,
-			PLAYING: 1,
-			PAUSED: 2,
-			BUFFERING: 3,
-			CUED: 5
-		}
+		states: PlayStates
 	},
 
 	statics: {
@@ -288,7 +289,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		var me = this,
 			blacklist = this.playerBlacklist || [];
 
-		Ext.Object.each(NextThought.util.media, function (name, cls) {
+		MEDIA.forEach(cls => {
 			if (cls.kind !== 'video') {return;}
 			if (!cls.valid() || !me.playlist.usesService(cls.type)) {
 				if (!Ext.Array.contains(blacklist, cls.type)) {
@@ -567,20 +568,11 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 	},
 
 	activeClass: function () {
-		var clazz;
-
 		if (!this.activeVideoService) {
 			return null;
 		}
 
-		Ext.Object.each(NextThought.util.media, function (name, cls) {
-			if (cls.type === this.activeVideoService) {
-				clazz = cls;
-			}
-			return !clazz;
-		}, this);
-
-		return clazz;
+		return MEDIA.find(cls => cls.type === this.activeVideoService);
 	},
 
 	openExternally: function () {
@@ -749,29 +741,5 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		playerHeight: {getter: this.prototype.playerHeight}});
 
 
-
-	//keys that exist mean "maybe" supports.  (Apparently canPlayType doesn't return a "Yes")
-	this.supports = {};
-	var video = document.createElement('video'), i, o,
-		types = [
-				{mime: 'video/ogg', key: 'ogg'},
-				{mime: 'video/ogg; codecs="theora, vorbis"', key: 'ogg'},
-				{mime: 'video/webm', key: 'webm'},
-				{mime: 'video/webm; codecs="vp8, vorbis"', key: 'webm'},
-				{mime: 'video/mp4', key: 'mp4'},
-				{mime: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"', key: 'mp4'},
-				{mime: 'application/vnd.apple.mpegURL', key: 'm3u8'},
-				{mime: 'application/x-mpegURL', key: 'm3u8'},
-				{mime: 'video/x-mpegurl', key: 'm3u8'},
-				{mime: 'audio/x-mpegurl', key: 'm3u8'},
-				{mime: 'video/mpegurl', key: 'm3u8'},
-				{mime: 'audio/mpegurl', key: 'm3u8'}
-		];
-	if (video && video.canPlayType) {
-		while ((o = types.pop()) !== undefined) {
-			i = !!video.canPlayType(o.mime);
-			this.supports[o.key] = this.supports[o.key] || i;
-			//console.debug('Browser suggests that it ' + (i ? 'might be able to' : 'cannot') + ' play ' + o.key + ' (' + o.mime + ')');
-		}
-	}
+	this.supports = SupportedVideoTypes;
 });

@@ -1,8 +1,8 @@
 const Ext = require('extjs');
 
 require('../NTI');
-const ParseUtils = require('../../util/Parsing');
-const UtilUserDataThreader = require('../../util/UserDataThreader');
+const ParseUtils = require('legacy/util/Parsing');
+const UtilUserDataThreader = require('legacy/util/UserDataThreader');
 
 const OPEN_THREADS = Symbol('Open Threads');
 const ALL = Symbol('All');

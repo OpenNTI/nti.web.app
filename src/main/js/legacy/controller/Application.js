@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 const {wait} = require('nti-commons');
 
+const {getString} = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
@@ -95,8 +96,8 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		nav.navigateToObject = body.navigateToObject.bind(body);
 		nav.attemptToNavigateToObject = body.attemptToNavigateToObject.bind(body);
 
-		NextThought.app.navigation.Actions.doPushRootRoute = body.pushRootRoute.bind(body);
-		NextThought.app.navigation.Actions.doReplaceRootRoute = body.replaceRootRoute.bind(body);
+		NavigationActions.doPushRootRoute = body.pushRootRoute.bind(body);
+		NavigationActions.doReplaceRootRoute = body.replaceRootRoute.bind(body);
 
 		this.handleCurrentState()
 			.then(Globals.removeLoaderSplash.bind(Globals));

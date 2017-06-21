@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const MixinsRouter = require('../../../mixins/Router');
+const MixinsRouter = require('legacy/mixins/Router');
 const {isFeature} = require('legacy/util/Globals');
 
 

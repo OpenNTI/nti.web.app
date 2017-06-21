@@ -5,10 +5,9 @@ const User = require('legacy/model/User');
 const {getString, getFormattedString} = require('legacy/util/Localization');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const {guidGenerator, isFeature} = require('legacy/util/Globals');
-
-const AccountActions = require('../../account/Actions');
-const CoursesStateStore = require('../../library/courses/StateStore');
-const NavigationActions = require('../../navigation/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
+const AccountActions = require('legacy/app/account/Actions');
+const CoursesStateStore = require('legacy/app/library/courses/StateStore');
 
 const EnrollmentStateStore = require('./StateStore');
 const EnrollmentActions = require('./Actions');

@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
-const Globals = require('../../util/Globals');
-
+const Globals = require('legacy/util/Globals');
+const Base = require('legacy/model/Base');
 
 /*
 	Inspired by https://github.com/chrisdavies/rlite/blob/master/rlite.js
@@ -316,7 +316,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 		//TODO: Refactor this to use the getRouteParts method so we don't duplicate logic
 
-		var location = NextThought.model.Base.getLocationInterfaceAt('/' + path),
+		var location = Base.getLocationInterfaceAt('/' + path),
 			route = this.trimRoute(location.pathname),
 			query = location.search.slice(1),
 			hash = location.hash.slice(1),

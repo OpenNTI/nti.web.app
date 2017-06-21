@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
+const LegacySearchComboBox = require('./LegacySearchComboBox');
+
 require('legacy/util/Scrolling');
-require('./LegacySearchComboBox');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeField', {
@@ -132,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 
 		var me = this;
 
-		me.yearSelect = new NextThought.common.form.fields.LegacySearchComboBox({
+		me.yearSelect = new LegacySearchComboBox({
 			editable: false,
 			onSelect: me.onYearChanged.bind(me),
 			renderTo: me.yearContainer,
@@ -144,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 			}
 		});
 
-		me.monthSelect = new NextThought.common.form.fields.LegacySearchComboBox({
+		me.monthSelect = new LegacySearchComboBox({
 			editable: false,
 			onSelect: me.onMonthChanged.bind(me),
 			renderTo: me.monthContainer,
@@ -156,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 			}
 		});
 
-		me.daySelect = new NextThought.common.form.fields.LegacySearchComboBox({
+		me.daySelect = new LegacySearchComboBox({
 			editable: false,
 			onSelect: me.onDayChanged.bind(me),
 			renderTo: me.dayContainer,
@@ -168,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 			}
 		});
 
-		me.meridiemSelect = new NextThought.common.form.fields.LegacySearchComboBox({
+		me.meridiemSelect = new LegacySearchComboBox({
 			editable: false,
 			options: [this.AM, this.PM],
 			onSelect: me.onMeridiemChanged.bind(me),

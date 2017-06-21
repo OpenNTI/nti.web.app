@@ -1,8 +1,9 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
-require('../AssignmentStatus');
-require('./editing/InlineEditor');
+const AssignmentStatus = require('../AssignmentStatus');
+
+const InlineEditor = require('./editing/InlineEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
@@ -89,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			history = me.history,
 			completed = history && history.get('completed'),
 			grade = history && history.get && history.get('Grade'),
-			status = me.status || NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
+			status = me.status || AssignmentStatus.getStatusHTML({
 				due: assignment.getDueDate(),
 				start: assignment.get('availableBeginning'),
 				completed: !assignment.getDateEditingLink() && completed,
@@ -109,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	addDueDateEditor: function () {
-		this.dueDateEditor = new NextThought.app.course.assessment.components.editing.InlineEditor({
+		this.dueDateEditor = new InlineEditor({
 			assignment: this.assignment,
 			onSave: this.closeDueDateEditor.bind(this),
 			onCancel: this.closeDueDateEditor.bind(this),

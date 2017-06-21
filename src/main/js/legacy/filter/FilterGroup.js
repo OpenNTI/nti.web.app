@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-require('./Filter');
+const Filter = require('./Filter');
+const FilterGroup = require('./FilterGroup');
 
 
 module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
@@ -99,8 +100,8 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 
 
 	addFilter: function (filter) {
-		if (filter instanceof NextThought.filter.Filter
-		&& (filter instanceof NextThought.filter.FilterGroup || !this.contains(filter))) {
+		if (filter instanceof Filter
+		&& (filter instanceof FilterGroup || !this.contains(filter))) {
 			this.value.push(filter);
 			return true;
 		}

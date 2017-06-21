@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
+const DndActions = require('legacy/app/dnd/Actions');
+
 require('./OrderedContents');
-require('../app/dnd/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
@@ -86,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 */
 	__onMoveOperation: function (record, newParent, originalParent, response) {
 		var updatedNewParent, updatedOriginalParent, updatedRecord,
-			dndActions = NextThought.app.dnd.Actions.create();
+			dndActions = DndActions.create();
 
 		if (!originalParent.isModel) {
 			originalParent = this.findOrderedContentsItem(originalParent);

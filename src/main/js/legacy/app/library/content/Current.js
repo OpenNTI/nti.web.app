@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const StoreStateStore = require('../../store/StateStore');
+const StoreStateStore = require('legacy/app/store/StateStore');
 
 const ContentStateStore = require('./StateStore');
 

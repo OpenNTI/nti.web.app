@@ -1,8 +1,10 @@
 const Ext = require('extjs');
 
-require('../../../../../model/SurveyRef');
-require('../../../../../model/assessment/Survey');
-require('../../../../../model/PageInfo');
+const {getString} = require('legacy/util/Localization');
+const PageInfo = require('legacy/model/PageInfo');
+
+require('legacy/model/SurveyRef');
+require('legacy/model/assessment/Survey');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Survey', {
@@ -81,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var ntiid = this.data.targetNTIID || this.data.ntiid;
 
 		if (!e.getTarget('.closed')) {
-			this.navigate(NextThought.model.PageInfo.fromOutlineNode({
+			this.navigate(PageInfo.fromOutlineNode({
 				href: ntiid
 			}));
 		}

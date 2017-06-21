@@ -1,8 +1,7 @@
 const Ext = require('extjs');
 
 const {getString} = require('legacy/util/Localization');
-
-const StoreActions = require('../../../../store/Actions');
+const StoreActions = require('legacy/app/store/Actions');
 
 require('legacy/common/form/fields/SimpleTextField');
 

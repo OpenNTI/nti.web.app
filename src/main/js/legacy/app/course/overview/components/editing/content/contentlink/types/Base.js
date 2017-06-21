@@ -1,11 +1,13 @@
 const Ext = require('extjs');
 
-require('../../Editor');
-require('../../../../../../../../model/RelatedWork');
-require('../../../Actions');
-require('../../ParentSelection');
+const RelatedWork = require('legacy/model/RelatedWork');
+
+const EditingActions = require('../../../Actions');
+
 require('../../../controls/Advanced');
 require('../../../settings/Window');
+require('../../Editor');
+require('../../ParentSelection');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Base', {
@@ -14,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	inheritableStatics: {
 		getHandledMimeTypes: function () {
 			return [
-				NextThought.model.RelatedWork.mimeType
+				RelatedWork.mimeType
 			];
 		}
 	},
@@ -36,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						type: 'text',
 						placeholder: 'Title',
 						required: true,
-						maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+						maxlength: EditingActions.MAX_TITLE_LENGTH
 					},
 						{name: 'byline', type: 'text', placeholder: 'Author'},
 						{name: 'description', type: 'textarea', placeholder: 'Description'}
@@ -55,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		const copy = this.copyValues;
 		const data = {
-			MimeType: NextThought.model.RelatedWork.mimeType
+			MimeType: RelatedWork.mimeType
 		};
 
 		if (copy) {

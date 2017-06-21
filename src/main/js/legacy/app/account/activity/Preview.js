@@ -3,6 +3,7 @@ const Ext = require('extjs');
 const UserRepository = require('legacy/cache/UserRepository');
 const ContentUtils = require('legacy/util/Content');
 const DomUtils = require('legacy/util/Dom');
+const {getString} = require('legacy/util/Localization');
 
 require('legacy/mixins/LikeFavoriteActions');
 require('legacy/mixins/QuestionContent');
