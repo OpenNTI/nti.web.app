@@ -1,7 +1,11 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
+const Globals = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices.Kaltura', {
+	alias: 'resolvers.videoservices.kaltura',
+
 	statics: {
 		type: 'kaltura',
 
@@ -19,6 +23,42 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 		getIdFromURL: function (raw) {
 			return raw;
+		},
+
+
+		resolvePosterForID (id) {
+			if (!id) {
+				return Promise.resolve({
+					poster: Globals.CANVAS_BROKEN_IMAGE.src,
+					thumbnail: Globals.CANVAS_BROKEN_IMAGE.src
+				});
+			}
+
+			const [partnerId, videoId] = id.split(':');
+			const w = 1280;
+
+			const poster = `//www.kaltura.com/p/${partnerId}/thumbnail/entry_id/${videoId}/width/${w}/`;
+
+			return Promise.resolve({
+				poster,
+				thumbnail: poster
+			});
 		}
+	},
+
+
+	constructor (data) {
+		this.callParent(data);
+
+		const {source} = data || {};
+
+		this.sources = source.source;
+	},
+
+
+	resolve () {
+		const id = (this.sources || [])[0];
+
+		return this.self.resolvePosterForID(id);
 	}
 });
