@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 			return reader.setPageInfo(pageInfo, bundle);
 		})
-		.then(done.bind(this));
+			.then(done.bind(this));
 	},
 
 	getAnalyticData: function () {

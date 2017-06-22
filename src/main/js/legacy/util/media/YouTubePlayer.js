@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 	playerSetup: function () {
 		this.isReady = false;
 
-	//		Inject Youtube HTML
+		//		Inject Youtube HTML
 		this.playerTpl.append(this.parentEl, {id: this.id});
 		console.log(this.id);
 
@@ -98,10 +98,10 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 			return;
 		}
 
-	//		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
-	//		interaction with the browsers built-in HTML5 player, so lets try, try again.
-	//		SAJ: We should probably also give up after X tries and just go to the next source
-	//		or playlist entry.
+		//		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
+		//		interaction with the browsers built-in HTML5 player, so lets try, try again.
+		//		SAJ: We should probably also give up after X tries and just go to the next source
+		//		or playlist entry.
 		if (error.data === 5) {
 			this.isReady = false;
 			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');

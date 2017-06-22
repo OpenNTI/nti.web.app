@@ -68,9 +68,9 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 		const request = url ? Service.request({url, headers: {Accept: ContentPackageMimeType}}) : Promise.reject('No Link');
 
 		return request
-				.then((resp) => {
-					return ParseUtils.parseItems(resp)[0];
-				});
+			.then((resp) => {
+				return ParseUtils.parseItems(resp)[0];
+			});
 	},
 
 	getPageRootID: function () {
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 		if (!l || !toc) {return false;}
 
 		return this.isPartOfCourse() && Boolean(
-				/^toc$/i.test(l.location.nodeName) ||
+			/^toc$/i.test(l.location.nodeName) ||
 				toc.querySelector('unit' + ntiid) ||
 				toc.querySelector('lesson' + ntiid.replace(/^\[/, '[topic-')));
 	},

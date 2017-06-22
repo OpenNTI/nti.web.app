@@ -16,9 +16,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		function afterReaderRenders () {
 			me.scrollingEl = Ext.isIE11p || Ext.isGecko ? Ext.get(document.documentElement) : Ext.getBody();
 			reader.on('destroy', 'destroy',
-					reader.relayEvents(me.scrollingEl, [
-						'scroll'
-					]));
+				reader.relayEvents(me.scrollingEl, [
+					'scroll'
+				]));
 
 			reader.on('destroy', function () {
 				window.removeEventListener('scroll', scroll);
@@ -270,12 +270,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 			//We are pretty tightly coupled here for assessment.  Each overlay needs to be
 			//asked to find the match
 			indexOverlayData = TextRangeFinderUtils.indexText(olDom,
-					function (node) {
-						return Ext.fly(node).parent('.indexed-content');
-					});
+				function (node) {
+					return Ext.fly(node).parent('.indexed-content');
+				});
 
 			ranges = TextRangeFinderUtils.findTextRanges(olDom, olDom.ownerDocument,
-					fragRegex.re, fragRegex.matchingGroups, indexOverlayData);
+				fragRegex.re, fragRegex.matchingGroups, indexOverlayData);
 			assessmentAdjustment = 150;
 		}
 

@@ -117,11 +117,11 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 		}
 
 		Library.getVideoIndex(title)
-				.catch(function () {return null;})
-				.then(function (data) {
-					videoIndex = data;
-					ContentUtils.spider(ids, finish, parse);
-				});
+			.catch(function () {return null;})
+			.then(function (data) {
+				videoIndex = data;
+				ContentUtils.spider(ids, finish, parse);
+			});
 	}
 
 }).create();

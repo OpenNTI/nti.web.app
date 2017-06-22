@@ -307,15 +307,15 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 			}, me.playerConfigOverrides(cls.type)));
 
 			me.on('destroy', 'destroy',
-					me.relayEvents(p, [
-						'player-ready',
-						'player-error',
-						'player-event-play',
-						'player-event-pause',
-						'player-event-ended',
-						'player-seek',
-						'unrecoverable-player-error'
-					]));
+				me.relayEvents(p, [
+					'player-ready',
+					'player-error',
+					'player-event-play',
+					'player-event-pause',
+					'player-event-ended',
+					'player-seek',
+					'unrecoverable-player-error'
+				]));
 
 			me.mon(p, 'playback-speed-changed', 'playBackSpeedChanged');
 

@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 
 				d = DomUtils.filterNodeList(d, 'isRootObject');
 
-			//TODO: ensure its a 'type=application/vnd.nextthought.*'
+				//TODO: ensure its a 'type=application/vnd.nextthought.*'
 				if (this.appendPlaceholder) {
 					insert = 'insertAfter';
 					ix = d.length - 1;
@@ -107,9 +107,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 		if (!this.contentElement) {return;}
 		var el = Ext.get(this.contentElement);
 		el.select(selector)
-				//Maybe set style display:none?
-				//.remove();
-				.setStyle({display: 'none'});
+		//Maybe set style display:none?
+		//.remove();
+			.setStyle({display: 'none'});
 	},
 
 	setupContentElement: function () {

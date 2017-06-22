@@ -129,11 +129,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 		});
 
 		return Promise.all(precache)
-				.then(function (results) {
-					return results.filter(function (r) {
-						return !!r;
-					});
+			.then(function (results) {
+				return results.filter(function (r) {
+					return !!r;
 				});
+			});
 	},
 
 

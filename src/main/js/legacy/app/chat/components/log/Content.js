@@ -11,15 +11,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Conte
 
 	renderTpl: new Ext.XTemplate(
 		'<div class="x-chat-content-log-entry">',
-			'<div class="timestamp">{time}</div>',
-			'<img src="{icon}" width=16 height=16"/>',
-			'<div>',
-				'<span class="name">{name}</span> ',
-				'<span class="body-text">sent content {body}</span> ',
-				'<img src="{locationicon}" class="contentimage" width=90%/>',
-			'</div>',
+		'<div class="timestamp">{time}</div>',
+		'<img src="{icon}" width=16 height=16"/>',
+		'<div>',
+		'<span class="name">{name}</span> ',
+		'<span class="body-text">sent content {body}</span> ',
+		'<img src="{locationicon}" class="contentimage" width=90%/>',
+		'</div>',
 		'</div>'
-		),
+	),
 
 	renderSelectors: {
 		box: 'div.x-chat-content-log-entry',

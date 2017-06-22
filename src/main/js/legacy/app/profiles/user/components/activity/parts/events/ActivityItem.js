@@ -396,7 +396,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					{
 						cls: 'reply-options',
 						cn: [
-						{ cls: 'link reply', html: 'Add a comment' }
+							{ cls: 'link reply', html: 'Add a comment' }
 						]
 					}
 				]}

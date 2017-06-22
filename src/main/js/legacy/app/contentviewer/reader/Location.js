@@ -53,18 +53,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 			ntiid = pageInfo.get('NTIID');
 
 		return ContentUtils.getLocation(ntiid, bundle)
-				.then(function (locations) {
-					var location = locations[0] || {
-						NTIID: ntiid
-					};
+			.then(function (locations) {
+				var location = locations[0] || {
+					NTIID: ntiid
+				};
 
-					location.pageInfo = pageInfo;
-					location.currentBundle = bundle;
+				location.pageInfo = pageInfo;
+				location.currentBundle = bundle;
 
-					me.currentPageInfo = pageInfo;
-					me.currentLocation = location;
-					me.fireEvent('location-set');
-				});
+				me.currentPageInfo = pageInfo;
+				me.currentLocation = location;
+				me.fireEvent('location-set');
+			});
 	},
 
 	getLocation: function () {

@@ -105,18 +105,18 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		var me = this;
 
 		$AppConfig.Preferences.getPreference(me.preferencePath)
-				.then(function (preference) {
-					me.preference = preference;
-					// let checked = me.preference.get(me.preferenceKey);
+			.then(function (preference) {
+				me.preference = preference;
+				// let checked = me.preference.get(me.preferenceKey);
 
-					me.showPreference();
-					me.mon(me.preferenceEl, 'click', me.updatePreference.bind(me));
-					me.updateUIFromPreference(me.preference);
-				})
-				.catch(function (reason) {
-					console.error('Failed to get preference: ', me.preferencePath, reason);
-					me.hidePreference();
-				});
+				me.showPreference();
+				me.mon(me.preferenceEl, 'click', me.updatePreference.bind(me));
+				me.updateUIFromPreference(me.preference);
+			})
+			.catch(function (reason) {
+				console.error('Failed to get preference: ', me.preferencePath, reason);
+				me.hidePreference();
+			});
 	},
 
 	/**

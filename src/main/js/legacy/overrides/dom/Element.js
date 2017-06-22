@@ -69,12 +69,12 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 		var me = this,
 			dom = me.dom,
 			offsets = me.getOffsetsTo(container = Ext.getDom(container) || Ext.getBody().dom),
-		// el's box
+			// el's box
 			left = offsets[0] + container.scrollLeft,
 			top = offsets[1] + container.scrollTop,
 			bottom = top + dom.offsetHeight,
 			right = left + dom.offsetWidth,
-		// ct's box
+			// ct's box
 			ctClientHeight = container.clientHeight,
 			ctScrollTop = parseInt(container.scrollTop, 10),
 			ctScrollLeft = parseInt(container.scrollLeft, 10),

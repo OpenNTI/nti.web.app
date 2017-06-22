@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Card'
 			el = e.target,
 			alignmentEl = e.target,
 			alignment = 'tl-tr?',
-		//play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getY(),
+			//play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getY(),
 			id = me.userObject.getId(),
 			open = false,
 			offsets = [10, -18], refEl;

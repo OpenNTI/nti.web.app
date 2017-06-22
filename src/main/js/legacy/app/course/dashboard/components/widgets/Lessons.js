@@ -38,13 +38,13 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 				var getConfig = TilesLesson.getTileConfig(record);
 
 				return getConfig
-						.then(function (config) {
-							config.record = record;
-							config.weight = getWeight(record) + (innerWeight * 0.01);
-							config.course = course;
+					.then(function (config) {
+						config.record = record;
+						config.weight = getWeight(record) + (innerWeight * 0.01);
+						config.course = course;
 
-							return config;
-						});
+						return config;
+					});
 			}
 
 			// Get Outlien Interface

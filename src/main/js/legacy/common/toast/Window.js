@@ -58,14 +58,14 @@ module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 	renderButton: function (button) {
 		var b = this.buttonTpl.append(this.buttonRowEl, button, true);
 		this.mon(b, 'click',
+			Ext.Function.createSequence(
 				Ext.Function.createSequence(
-						Ext.Function.createSequence(
-							this.setActedOn,
-							this.close, this),
+					this.setActedOn,
+					this.close, this),
 
-						button.callback,
-						button.scope || this),
-				this, {buttonCfg: button});
+				button.callback,
+				button.scope || this),
+			this, {buttonCfg: button});
 	},
 
 

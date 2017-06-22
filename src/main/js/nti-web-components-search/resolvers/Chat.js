@@ -41,17 +41,17 @@ export default {
 			).then(function (users) {
 				if (!Array.isArray(users)) { users = [users]; }
 
-				users = users.map(function (u) { return u.alias; });
+			users = users.map(function (u) { return u.alias; });
 
-				if (users.length === 1) {
-					return 'Chat with ' + users[0];
-				} else if (users.length === 2) {
-					return 'Chat with ' + users[0] + ' and ' + users[1];
-				} else {
-					const last = users.pop();
-					return 'Chat with ' + users.join(', ') + ' and ' + last;
-				}
-			});
+			if (users.length === 1) {
+				return 'Chat with ' + users[0];
+			} else if (users.length === 2) {
+				return 'Chat with ' + users[0] + ' and ' + users[1];
+			} else {
+				const last = users.pop();
+				return 'Chat with ' + users.join(', ') + ' and ' + last;
+			}
+		});
 
 
 		return title;

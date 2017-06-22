@@ -55,8 +55,8 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 					{cls: 'email', html: '{email}'},
 					{cls: 'sub'},
 					{cls: 'buttons', cn: [
-							{cls: 'button send-email link', html: 'Send another email'},
-							{cls: 'button link change-email', html: 'Change email address'}
+						{cls: 'button send-email link', html: 'Send another email'},
+						{cls: 'button link change-email', html: 'Change email address'}
 					]
 					}
 				]},
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 			{cls: 'face back', cn: [
 				{ cls: 'header', cn: [
 					{cls: 'buttons', cn: [
-							{cls: 'button verify-email link', html: '< Back to Email Verification'}
+						{cls: 'button verify-email link', html: '< Back to Email Verification'}
 					]
 					},
 					{cls: 'title', html: 'Update Email Address'},

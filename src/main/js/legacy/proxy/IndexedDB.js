@@ -317,13 +317,13 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 			record.commit();
 		}
 		this.addAll(records)
-				.then(function () {operation.setSuccessful();})
-				.always(function () {
-					operation.setCompleted();
-					if (typeof callback === 'function') {
-						callback.call(scope || me, operation);
-					}
-				});
+			.then(function () {operation.setSuccessful();})
+			.always(function () {
+				operation.setCompleted();
+				if (typeof callback === 'function') {
+					callback.call(scope || me, operation);
+				}
+			});
 	},
 
 
@@ -338,14 +338,14 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 		//read a single record
 		if (operation.id) {
 			me.get(operation.id)
-					.then(function (v) {operation.setSuccessful(); return v;})
-					.always(finish);
+				.then(function (v) {operation.setSuccessful(); return v;})
+				.always(finish);
 			return;
 		}
 
 		me.getRange(operation.start, operation.limit)
-				.then(function (v) {operation.setSuccessful(); return v;})
-				.always(finish);
+			.then(function (v) {operation.setSuccessful(); return v;})
+			.always(finish);
 
 
 		function finish (records) {
@@ -386,13 +386,13 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 		}
 
 		this.putAll(records)
-				.then(() => {operation.setSuccessful();})
-				.always(() => {
-					operation.setCompleted();
-					if (typeof callback === 'function') {
-						callback.call(scope || this, operation);
-					}
-				});
+			.then(() => {operation.setSuccessful();})
+			.always(() => {
+				operation.setCompleted();
+				if (typeof callback === 'function') {
+					callback.call(scope || this, operation);
+				}
+			});
 	},
 
 
@@ -403,13 +403,13 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 		operation.setStarted();
 
 		me.removeAll(records.map(function (r) {return r.getId();}))
-				.then(function () {operation.setSuccessful();})
-				.always(function () {
-					operation.setCompleted();
-					if (typeof callback === 'function') {
-						callback.call(scope || me, operation);
-					}
-				});
+			.then(function () {operation.setSuccessful();})
+			.always(function () {
+				operation.setCompleted();
+				if (typeof callback === 'function') {
+					callback.call(scope || me, operation);
+				}
+			});
 	}
 	//</editor-fold>
 });

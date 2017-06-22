@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 		}
 
 		return Promise.all(app.controllers.items
-				.map(perform) //make a new array of promises/values
-				.filter(Ext.identityFn)); //filter out falsy entries and pass that to the all()
+			.map(perform) //make a new array of promises/values
+			.filter(Ext.identityFn)); //filter out falsy entries and pass that to the all()
 	}
 });

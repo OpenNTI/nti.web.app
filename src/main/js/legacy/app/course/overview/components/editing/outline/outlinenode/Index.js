@@ -40,8 +40,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		const update = () => {
 			const findRecord = this.outlineInterface ?
-									this.outlineInterface.onceBuilt().then((x) => x.findOutlineNode(this.record.getId())) :
-									Promise.resolve(this.record);
+				this.outlineInterface.onceBuilt().then((x) => x.findOutlineNode(this.record.getId())) :
+				Promise.resolve(this.record);
 
 			if (this.rendered) {
 				this.el.mask('Updating...');

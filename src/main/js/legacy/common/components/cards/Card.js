@@ -24,10 +24,10 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail'},
-	//		{ cls: 'controls', cn: [
-	//			{ cls: 'favorite' },
-	//			{ cls: 'like' }
-	//		]},
+		//		{ cls: 'controls', cn: [
+		//			{ cls: 'favorite' },
+		//			{ cls: 'like' }
+		//		]},
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
@@ -62,9 +62,9 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 	},
 
 
-  //	getRecord: function(){
-		//TODO: we need a record to like/favorite.
-  //	},
+	//	getRecord: function(){
+	//TODO: we need a record to like/favorite.
+	//	},
 
 
 	beforeRender: function () {

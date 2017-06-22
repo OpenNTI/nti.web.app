@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	}),
 
 	wordTpl: Ext.DomHelper.createTemplate(
-			{tag: 'span', cls: 'target wordentry drag graded', html: '{0}'}
+		{tag: 'span', cls: 'target wordentry drag graded', html: '{0}'}
 	),
 
 
@@ -112,9 +112,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 			out = [], tpl = me.solTpl,
 			pillTpl = me.wordTpl,
 			line = Ext.DomHelper.createTemplate(
-					me.filterHTML(
-							me.part.get('input')
-									.replace(/<input([^>]+?)\/?>/igm, re)));
+				me.filterHTML(
+					me.part.get('input')
+						.replace(/<input([^>]+?)\/?>/igm, re)));
 
 		Ext.each(part.get('solutions'), function (sol) {
 			var x = sol.get('value');

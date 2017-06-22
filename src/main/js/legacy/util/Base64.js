@@ -20,9 +20,9 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 
 	encodeURLFriendly: function (input) {
 		return this.encode('!@' + input)//to allow us to quickly determine if the value as raw or encoded.
-				.replace(this._plusRe, '-')
-				.replace(this._slashRe, '_')
-				.replace(this._equalsRe, '');
+			.replace(this._plusRe, '-')
+			.replace(this._slashRe, '_')
+			.replace(this._equalsRe, '');
 	},
 
 

@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 	childEls: ['audioEl'],
 
 	renderTpl: Ext.DomHelper.markup({tag: 'audio', id: '{id}-audioEl', cn: {tag: 'tpl', 'for': 'sources', cn: [
-			{tag: 'source', src: '{source}', type: '{type}'}
+		{tag: 'source', src: '{source}', type: '{type}'}
 	]}
 	}),
 
@@ -47,9 +47,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 
 		Ext.apply(this.renderData, {
 			sources: this.domObject.querySelectorAll('object[type$=audiosource]').toArray()
-						.map(DomUtils.parseDomObject)
-						.map(trn)
-						.reduce(flatten, [])
+				.map(DomUtils.parseDomObject)
+				.map(trn)
+				.reduce(flatten, [])
 		});
 
 		return this.callParent(arguments);

@@ -87,9 +87,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 			try { this.mixins.shareable.afterRender.call(this); }
 			catch (e) {
 				console.warn(
-						'attempted to setup dragging on ',
-						r.$className,
-						Globals.getError(e));
+					'attempted to setup dragging on ',
+					r.$className,
+					Globals.getError(e));
 			}
 		}
 
@@ -232,8 +232,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 	render: function () {
 		console.warn(Ext.String.format(
-				'{0} does not implement render()',
-				this.$className));
+			'{0} does not implement render()',
+			this.$className));
 	},
 
 	requestRender: function () {

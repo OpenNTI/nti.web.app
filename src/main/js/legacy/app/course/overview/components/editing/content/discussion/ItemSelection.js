@@ -15,9 +15,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{ cls: 'overview-discussion', cn: [
 			{ tag: 'label', cls: 'discussion-item', cn: [
-					{tag: 'input', type: 'checkbox'},
-					{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
-					{cls: 'title', html: '{title}'}
+				{tag: 'input', type: 'checkbox'},
+				{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
+				{cls: 'title', html: '{title}'}
 			]
 			}
 		]}

@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', 
 				ctx.quadraticCurveTo(midP[0], midP[1], p1[0], p1[1]);
 			}
 		}
-	//		ctx.closePath();
+		//		ctx.closePath();
 
 		this.bbox = {
 			x: minx,	w: maxx - minx,
@@ -67,29 +67,29 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', 
 		return false;
 	}
 
-  //	nibRotate: function(m, x,y){
-  //		var c = this.getCenter(true),
-  //			t = m.getTranslation(),
-  //			rot = m.getRotation(),
-  //			newM, c1, cx, cy;
-  //
-  //		console.log('current Matrix: ', m.m);
-  //
-  //		//Inverse rotation.
-  //		m.rotate(-rot);
-  //
-  //		console.log('Initial starting point: ', t);
-  ////		cx = c[0]-t[0];
-  ////		cy = c[1]-t[1];
-  ////		m.translate( -cx, -cy);
-  //
-  //		this.transform = this.callParent(arguments);
-  //		newM = new NTMatrix(this.transform);
-  //		console.log('new starting point after rotation: ', newM.getTranslation());
-  //
-  //		c1 = this.getCenter(true);
-  //		newM.translate(	 c[0]-c1[0], c[1]-c1[1] );
-  //
-  //		return newM.toTransform();
-  //	}
+	//	nibRotate: function(m, x,y){
+	//		var c = this.getCenter(true),
+	//			t = m.getTranslation(),
+	//			rot = m.getRotation(),
+	//			newM, c1, cx, cy;
+	//
+	//		console.log('current Matrix: ', m.m);
+	//
+	//		//Inverse rotation.
+	//		m.rotate(-rot);
+	//
+	//		console.log('Initial starting point: ', t);
+	////		cx = c[0]-t[0];
+	////		cy = c[1]-t[1];
+	////		m.translate( -cx, -cy);
+	//
+	//		this.transform = this.callParent(arguments);
+	//		newM = new NTMatrix(this.transform);
+	//		console.log('new starting point after rotation: ', newM.getTranslation());
+	//
+	//		c1 = this.getCenter(true);
+	//		newM.translate(	 c[0]-c1[0], c[1]-c1[1] );
+	//
+	//		return newM.toTransform();
+	//	}
 });

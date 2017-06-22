@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 			return c.nodeType === Node.TEXT_NODE ||
 					Anchors.isNodeIgnored(c) ||
 					/^(a|b|i|u|img|li)$/i.test(c.tagName); // ||
-					//c.childNodes.length === 1;
+			//c.childNodes.length === 1;
 		}
 
 		function walkOut (node, direction) {
@@ -302,9 +302,9 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		catch (e) {
 			console.error('Could not clone range contents', Globals.getError(e));
 		}
-	//		if(!dontClone){
-	//			tempDiv = tempDiv.cloneNode(true);
-	//		}
+		//		if(!dontClone){
+		//			tempDiv = tempDiv.cloneNode(true);
+		//		}
 		return tempDiv;
 	},
 
@@ -423,10 +423,10 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 */
 	fixUpCopiedContext: function (n) {
 		var node = Ext.get(n);
-	//			firstChild = node.first();
-	//		  if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){
-	//			node.setHTML('[...][...]');
-	//		  }
+		//			firstChild = node.first();
+		//		  if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){
+		//			node.setHTML('[...][...]');
+		//		  }
 
 		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
 		node.select('a[href]:not(.skip-anchor)').set({target: '_blank'});

@@ -202,17 +202,17 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 		if (allowMenus) {
 			return this.buildContentPathPartMenu(location, parentNode, bundle, rootRoute)
-					.then((siblings) => {
-						part.siblings = siblings;
+				.then((siblings) => {
+					part.siblings = siblings;
 
-						if (!siblings.length) {
-							part.cls = 'locked';
-						} else {
-							part.cls = '';
-						}
+					if (!siblings.length) {
+						part.cls = 'locked';
+					} else {
+						part.cls = '';
+					}
 
-						return [part];
-					});
+					return [part];
+				});
 		} else {
 			part.cls = 'locked';
 		}
@@ -249,17 +249,17 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 				if (allowMenus) {
 					return me.buildContentPathPartMenu(l, parentNode, bundle, rootRoute)
-							.then(function (siblings) {
-								part.siblings = siblings;
+						.then(function (siblings) {
+							part.siblings = siblings;
 
-								if (!siblings.length) {
-									part.cls = 'locked';
-								} else {
-									part.cls = '';
-								}
+							if (!siblings.length) {
+								part.cls = 'locked';
+							} else {
+								part.cls = '';
+							}
 
-								return part;
-							});
+							return part;
+						});
 				} else {
 					part.cls = 'locked';
 				}
@@ -372,23 +372,23 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			});
 
 			return Promise.all(visible)
-					.then(r => r.filter(Boolean))
-					.then(visibleItems => visibleItems.map(node => {
-						const label = node.getAttribute('label');
-						const text = presentation.suppress
-								? (me.styleList(num, presentation.type) + presentation.separate + label)
-								: label;
+				.then(r => r.filter(Boolean))
+				.then(visibleItems => visibleItems.map(node => {
+					const label = node.getAttribute('label');
+					const text = presentation.suppress
+						? (me.styleList(num, presentation.type) + presentation.separate + label)
+						: label;
 
-						num += 1;
+					num += 1;
 
-						return {
-							label: text,
-							title: text,
-							route: Globals.trimRoute(rootRoute) + '/' + encodeForURI(node.getAttribute('ntiid')),
-							ntiid: node.getAttribute('ntiid'),
-							cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
-						};
-					}));
+					return {
+						label: text,
+						title: text,
+						route: Globals.trimRoute(rootRoute) + '/' + encodeForURI(node.getAttribute('ntiid')),
+						ntiid: node.getAttribute('ntiid'),
+						cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
+					};
+				}));
 		});
 	},
 

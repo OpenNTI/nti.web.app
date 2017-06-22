@@ -216,16 +216,16 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		}
 
 		return me.setItemBundle(active, me.activeBundle)
-				.then(me.setActiveItem.bind(me, active))
-				.then(function () {
-					var item = me.getItem(active);
+			.then(me.setActiveItem.bind(me, active))
+			.then(function () {
+				var item = me.getItem(active);
 
-					updateInactive();
-					return item;
-				})
-				.catch(function (reason) {
-					me.replaceRoute('Info', 'info');
-				});
+				updateInactive();
+				return item;
+			})
+			.catch(function (reason) {
+				me.replaceRoute('Info', 'info');
+			});
 	},
 
 	getRouteForPageInfo: function (pageInfo, path) {

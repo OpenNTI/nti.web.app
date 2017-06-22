@@ -28,8 +28,8 @@ if (!Function.prototype.bind) {
 		function FNOP () {}
 		function Bound () {
 			return fToBind.apply(
-							this instanceof FNOP && oThis ? this : oThis,
-					aArgs.concat(Array.prototype.slice.call(arguments))
+				this instanceof FNOP && oThis ? this : oThis,
+				aArgs.concat(Array.prototype.slice.call(arguments))
 			);
 		}
 
@@ -96,7 +96,7 @@ if (!Function.prototype.bind) {
 					descriptor.configurable))
 				{
 					throw new TypeError(
-									'This implementation of Object.defineProperty does not support' +
+						'This implementation of Object.defineProperty does not support' +
 									' false for configurable, enumerable, or writable.'
 					);
 				}
@@ -171,7 +171,7 @@ if (!document.documentElement.dataset &&
 	// FF is empty while IE gives empty object
 	(!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset') ||
 	!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset').get)
-		) {
+) {
 	var propDescriptor = {
 		enumerable: true,
 		get: function () {
@@ -187,7 +187,7 @@ if (!document.documentElement.dataset &&
 			function getter () { return String(this); }
 			function setter (name, value) {
 				return (typeof value !== 'undefined') ?
-						this.setAttribute(name, value) : this.removeAttribute(name); }
+					this.setAttribute(name, value) : this.removeAttribute(name); }
 
 			for (i = 0; i < attsLength; i++) {
 				attribute = attributes[i];

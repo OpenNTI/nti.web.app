@@ -130,37 +130,37 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 
 		return me.CourseStore.onceLoaded()
-				.then(function () {
-					var upcomingCourses = me.__getUpcomingCourses(),
-						currentCourses = me.__getCurrentCourses(),
-						archivedCourses = me.__getArchivedCourses();
+			.then(function () {
+				var upcomingCourses = me.__getUpcomingCourses(),
+					currentCourses = me.__getCurrentCourses(),
+					archivedCourses = me.__getArchivedCourses();
 
-					me.removeLoadingCmp();
+				me.removeLoadingCmp();
 
-					if (!upcomingCourses.length && !currentCourses.length && !archivedCourses.length) {
-						return me.showEmptyState();
+				if (!upcomingCourses.length && !currentCourses.length && !archivedCourses.length) {
+					return me.showEmptyState();
+				}
+
+				if (me.emptyText) {
+					me.remove(me.emptyText, true);
+					delete me.emptyText;
+				}
+
+				if (me.coursePage) {
+					//Only force an update if we want to, to prevent a blink
+					if (force) {
+						me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
 					}
-
-					if (me.emptyText) {
-						me.remove(me.emptyText, true);
-						delete me.emptyText;
-					}
-
-					if (me.coursePage) {
-						//Only force an update if we want to, to prevent a blink
-						if (force) {
-							me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
-						}
-					} else {
-						me.coursePage = me.add({
-							xtype: 'library-view-course-page',
-							upcoming: upcomingCourses,
-							current: currentCourses,
-							archived: archivedCourses,
-							navigate: me.navigateToCourse.bind(me)
-						});
-					}
-				});
+				} else {
+					me.coursePage = me.add({
+						xtype: 'library-view-course-page',
+						upcoming: upcomingCourses,
+						current: currentCourses,
+						archived: archivedCourses,
+						navigate: me.navigateToCourse.bind(me)
+					});
+				}
+			});
 	},
 
 

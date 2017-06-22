@@ -636,7 +636,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 		}
 
 		this.loadMoreEl.update(
-				Ext.util.Format.plural(Math.min(left, 10), 'more comment'));
+			Ext.util.Format.plural(Math.min(left, 10), 'more comment'));
 
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
 

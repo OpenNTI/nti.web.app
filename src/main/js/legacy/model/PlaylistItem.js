@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 				source = {
 					source: [youtubeId || vimeoId || url],
 					service: youtubeId ? 'youtube' :
-							vimeoId ? 'vimeo' :
+						vimeoId ? 'vimeo' :
 							'html5'
 				};
 			}
@@ -157,8 +157,8 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 
 	usesService: function (service) {
 		return Ext.Array.contains(
-				Ext.Array.pluck(this.get('sources'), 'service'),
-				service);
+			Ext.Array.pluck(this.get('sources'), 'service'),
+			service);
 	},
 
 	getSources: function (service) {

@@ -285,8 +285,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 				onNodeOver: function (target, dd, e, data) {
 					var p = Ext.dd.DropZone.prototype;
 					return (data.instanceId === id) ?
-							p.dropAllowed :
-							p.dropNotAllowed;
+						p.dropAllowed :
+						p.dropNotAllowed;
 				}
 				//</editor-fzold>
 			},
@@ -340,8 +340,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		var q = '.drag.term', termId, binId, bin,
 			bins = toMap(this.inputBox.query('.choice'), 'data-target'),
 			terms = Ext.Array.unique(
-					this.shelfEl.query(q)
-						.concat(this.inputBox.query(q)));
+				this.shelfEl.query(q)
+					.concat(this.inputBox.query(q)));
 
 
 		//console.log('set:', value);

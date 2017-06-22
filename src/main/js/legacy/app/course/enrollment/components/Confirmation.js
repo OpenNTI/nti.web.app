@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			{cls: 'transaction-id'}
 		]},
 		{cls: 'support', cn: [
-				{cls: 'support-text', html: '{{{NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport}}}'},
+			{cls: 'support-text', html: '{{{NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport}}}'},
 			{tag: 'tpl', 'if': 'phone', cn: [
 				{cls: 'help-link phone', html: '{phone}'}
 			]},

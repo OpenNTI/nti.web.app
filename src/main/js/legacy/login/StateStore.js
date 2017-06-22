@@ -9,7 +9,7 @@ const PreferenceManager = require('legacy/preference/Manager');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 // const AccountActions = require('legacy/app/account/Actions');
 const lazy = require('legacy/util/lazy-require')
-				.get('AccountActions', ()=> require('legacy/app/account/Actions'));
+	.get('AccountActions', ()=> require('legacy/app/account/Actions'));
 
 require('legacy/common/StateStore');
 

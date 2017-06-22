@@ -141,11 +141,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 
 		if (event.getTarget('.reply')) {
 			this.ChatActions.replyToWhiteboard(
-					Ext.clone(this.message.get('body')[0]), //wbData
-					this,
-					this.message.getId(),			//midReplyOf
-					this.message.get('channel'),	//channel
-					this.message.get('recipients')	//recipients
+				Ext.clone(this.message.get('body')[0]), //wbData
+				this,
+				this.message.getId(),			//midReplyOf
+				this.message.get('channel'),	//channel
+				this.message.get('recipients')	//recipients
 			);
 		}else if (a) {
 			//its a link

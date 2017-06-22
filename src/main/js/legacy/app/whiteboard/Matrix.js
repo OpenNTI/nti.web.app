@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	getRotation: function () {
 		var m = this.m, a = m[0], b = m[1];
-	//			c = m[2], d = m[3];
+		//			c = m[2], d = m[3];
 
 		return Math.atan2(b, a);
 	},

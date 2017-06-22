@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 
 	findBundle: function (id) {
 		return this.CourseActions.findCourseInstance(id)
-				.catch(this.ContentActions.findContent.bind(this.ContentActions, id));
+			.catch(this.ContentActions.findContent.bind(this.ContentActions, id));
 	},
 
 	findBundleForNTIID: function (id) {
@@ -120,71 +120,71 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			getToc,
 			contentPackage
 		])
-		.then((results) => {
-			const content = results[1];
+			.then((results) => {
+				const content = results[1];
 
-			//TODO: don't rely on closure to set these
-			toc = results[0];
-			root = content && content.get('root');
+				//TODO: don't rely on closure to set these
+				toc = results[0];
+				root = content && content.get('root');
 
-			const ref = toc && toc.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
+				const ref = toc && toc.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
 
-			if (!ref || !toc) {
-				return Promise.reject('No video index, defined, or no toc yet for ' + bundle);
-			}
+				if (!ref || !toc) {
+					return Promise.reject('No video index, defined, or no toc yet for ' + bundle);
+				}
 
-			return ContentProxy.request({
-				url: getURL(ref.getAttribute('href'), root),
-				ntiid: content.get('NTIID'),
-				contentType: 'text/json',
-				expectContentType: 'application/json'
-			});
-		})
-		.then(function (json) {
-			var vi, n, keys, keyOrder = [],
-				containers;
-
-			if (Ext.isString(json)) {
-				json = Ext.JSON.decode(json);
-			}
-
-			containers = (json && json.Containers) || {};
-			keys = Ext.Object.getKeys(containers);
-
-			try {
-				keys.sort(function (a, b) {
-					var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
-						d = toc.querySelector(query('topic', b)),
-						p = d && c.compareDocumentPosition(d);
-
-					/*jshint bitwise:false*/
-					return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
+				return ContentProxy.request({
+					url: getURL(ref.getAttribute('href'), root),
+					ntiid: content.get('NTIID'),
+					contentType: 'text/json',
+					expectContentType: 'application/json'
 				});
-			} catch (e) {
-				console.warn('Potentially unsorted:', e.stack || e.message || e);
-			}
+			})
+			.then(function (json) {
+				var vi, n, keys, keyOrder = [],
+					containers;
 
-			keys.forEach(function (k) {
-				keyOrder.push.apply(keyOrder, containers[k]);
-			});
+				if (Ext.isString(json)) {
+					json = Ext.JSON.decode(json);
+				}
 
-			vi = (json && json.Items) || json;
+				containers = (json && json.Containers) || {};
+				keys = Ext.Object.getKeys(containers);
 
-			for (n in vi) {
-				if (vi.hasOwnProperty(n)) {
-					n = vi[n];
-					if (n && !Ext.isEmpty(n.transcripts)) {
-						n.transcripts = n.transcripts.map(makeAbsolute);
+				try {
+					keys.sort(function (a, b) {
+						var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
+							d = toc.querySelector(query('topic', b)),
+							p = d && c.compareDocumentPosition(d);
+
+						/*jshint bitwise:false*/
+						return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
+					});
+				} catch (e) {
+					console.warn('Potentially unsorted:', e.stack || e.message || e);
+				}
+
+				keys.forEach(function (k) {
+					keyOrder.push.apply(keyOrder, containers[k]);
+				});
+
+				vi = (json && json.Items) || json;
+
+				for (n in vi) {
+					if (vi.hasOwnProperty(n)) {
+						n = vi[n];
+						if (n && !Ext.isEmpty(n.transcripts)) {
+							n.transcripts = n.transcripts.map(makeAbsolute);
+						}
 					}
 				}
-			}
 
-			vi._order = keyOrder;
-			vi.containers = containers;
+				vi._order = keyOrder;
+				vi.containers = containers;
 
-			return vi;
-		}).catch((reason) => {
-			console.error('Failed to load video index', reason);
-		});
+				return vi;
+			}).catch((reason) => {
+				console.error('Failed to load video index', reason);
+			});
 	}
 });

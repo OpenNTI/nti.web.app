@@ -324,12 +324,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						fragment: route.hash
 					};
 				})
-				.then(me.showReader.bind(me))
-				.then(function () {
-					if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
-						me.assignment.reader.el.unmask();
-					}
-				});
+					.then(me.showReader.bind(me))
+					.then(function () {
+						if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
+							me.assignment.reader.el.unmask();
+						}
+					});
 			});
 
 

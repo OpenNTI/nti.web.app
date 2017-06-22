@@ -33,9 +33,9 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQues
 
 		from: function (set, placeholder) {
 			var out, raw = {
-					questionSetId: set.getId(),
-					questions: []
-				};
+				questionSetId: set.getId(),
+				questions: []
+			};
 
 			set.get('questions').forEach(function (q) {
 				raw.questions.push(AssessedQuestion.from(q, placeholder));

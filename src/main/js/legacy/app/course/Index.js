@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.CourseStore = CoursesStateStore.getInstance();
 		this.ContentActions = ContentviewerActions.create();
 
-								//Get a "handled" rejected promise.
+		//Get a "handled" rejected promise.
 		this.getActiveCourse = ((x) => (x = Promise.reject(), x.catch(()=>{}), x)());
 
 		this.addRoute('/activity', this.showDashboard.bind(this));
@@ -356,7 +356,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 				item.gotoResources = () => this.gotoResources();
 
 				return item.handleRoute(subRoute, route.precache)
-						.then();
+					.then();
 			}
 		});
 	},

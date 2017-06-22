@@ -82,9 +82,9 @@
 				}
 
 				sendRequest(
-						'/dataserver2/@@send-crash-report',
-						function () {onerror.apply(me, args);},
-						message
+					'/dataserver2/@@send-crash-report',
+					function () {onerror.apply(me, args);},
+					message
 				);
 
 			} catch (e2) {

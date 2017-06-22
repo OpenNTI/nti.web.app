@@ -24,8 +24,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 				cn: [{cls: 'reset'}, '{[this.parseWord(values, parent.ownerCmp)]}']
 			}
 		]}}), {
-			parseWord: function (values, cmp) { return cmp.parseWordEntry(values.content || values.word); }
-		}),
+		parseWord: function (values, cmp) { return cmp.parseWordEntry(values.content || values.word); }
+	}),
 
 
 	audioTeplate: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -76,9 +76,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 			const o = elements[x];
 			tpl.insertAfter(o, {
 				sources: o.querySelectorAll('object[type$=audiosource]').toArray()
-							.map(DomUtils.parseDomObject)
-							.map(trn)
-							.reduce(flatten, [])});
+					.map(DomUtils.parseDomObject)
+					.map(trn)
+					.reduce(flatten, [])});
 			o.parentNode.removeChild(o);
 		}
 

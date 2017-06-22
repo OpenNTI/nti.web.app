@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		}
 
 		return Service.post(url, data)
-				.then(this.__parsePurchaseAttempt.bind(this));
+			.then(this.__parsePurchaseAttempt.bind(this));
 	},
 
 	__parsePurchaseAttempt: function (response) {
@@ -319,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			var url = attempt.getLink('get_purchase_attempt');
 
 			return Service.request(url)
-					.then(me.__parsePurchaseAttempt.bind(me));
+				.then(me.__parsePurchaseAttempt.bind(me));
 		}
 
 		return new Promise(function (fulfill, reject) {

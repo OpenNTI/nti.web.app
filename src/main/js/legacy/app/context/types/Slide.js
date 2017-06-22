@@ -45,48 +45,48 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 		var me = this;
 
 		return this.getBasePath(slide)
-				.then(function (basePath) {
-					return Promise.resolve(basePath);
-				})
-				.catch(function () {
-					console.log(arguments);
-					return Promise.resolve();
-				})
-				.then(function (root) {
-					var dom = new Ext.XTemplate(me.contextTpl).apply({image: (root || '') + slide.get('image')}),
-						cmp, config;
-					dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
+			.then(function (basePath) {
+				return Promise.resolve(basePath);
+			})
+			.catch(function () {
+				console.log(arguments);
+				return Promise.resolve();
+			})
+			.then(function (root) {
+				var dom = new Ext.XTemplate(me.contextTpl).apply({image: (root || '') + slide.get('image')}),
+					cmp, config;
+				dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 
-					if (kind === 'card' || kind === 'list') {
-						config = {
-							slide: slide,
-							contextDom: dom,
-							containerId: me.container,
-							record: me.record || me.contextRecord,
-							doNavigate: me.doNavigate,
-							type: kind
-						};
+				if (kind === 'card' || kind === 'list') {
+					config = {
+						slide: slide,
+						contextDom: dom,
+						containerId: me.container,
+						record: me.record || me.contextRecord,
+						doNavigate: me.doNavigate,
+						type: kind
+					};
 
-						if (kind === 'card') {
-							cmp = Ext.apply(config, {xtype: 'context-slide-card'});
-						}
-						else {
-							cmp = Ext.widget('context-slide-card', config);
-						}
-
-
+					if (kind === 'card') {
+						cmp = Ext.apply(config, {xtype: 'context-slide-card'});
 					}
 					else {
-						cmp = Ext.widget('context-default', {
-							snippet: dom,
-							fullContext: dom,
-							containerId: me.container,
-							record: me.record || me.contextRecord,
-							doNavigate: me.doNavigate
-						});
+						cmp = Ext.widget('context-slide-card', config);
 					}
 
-					return Promise.resolve(cmp);
-				});
+
+				}
+				else {
+					cmp = Ext.widget('context-default', {
+						snippet: dom,
+						fullContext: dom,
+						containerId: me.container,
+						record: me.record || me.contextRecord,
+						doNavigate: me.doNavigate
+					});
+				}
+
+				return Promise.resolve(cmp);
+			});
 	}
 });

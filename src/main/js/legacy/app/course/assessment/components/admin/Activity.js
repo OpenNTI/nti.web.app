@@ -25,11 +25,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.callParent(arguments);
 
 		me.activityFeedURL = Ext.urlAppend(
-				me.activityFeedURL,
-				Ext.Object.toQueryString({
-					batchSize: 20,
-					batchStart: 0
-				})
+			me.activityFeedURL,
+			Ext.Object.toQueryString({
+				batchSize: 20,
+				batchStart: 0
+			})
 		);
 
 		me.nextPageURL = me.activityFeedURL;
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					console.error(
 						'Failed associate instructor feedback activity to a students assignment.',
 						' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one, because:\n',
-							r, '\n', f.get('href'));
+						r, '\n', f.get('href'));
 				});
 		}
 

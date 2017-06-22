@@ -108,8 +108,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			s.filter([{filterFn: filter}]);
 		}
 
-	//		console.log('transcript	 expected starts to ', this.transcript.get('desired-time-start'), ', end at: ', this.transcript.get('desired-time-end'));
-	//		console.log('first cue starts at ', s.data.items[0].get('startTime'), ', and last cue ends at: ', s.data.items[s.data.items.length-1].get('endTime'));
+		//		console.log('transcript	 expected starts to ', this.transcript.get('desired-time-start'), ', end at: ', this.transcript.get('desired-time-end'));
+		//		console.log('first cue starts at ', s.data.items[0].get('startTime'), ', and last cue ends at: ', s.data.items[s.data.items.length-1].get('endTime'));
 		return s;
 	},
 

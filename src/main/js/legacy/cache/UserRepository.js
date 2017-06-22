@@ -328,24 +328,24 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 				console.debug('Resolving in bulk...', load.length);
 
 				this.makeBulkRequest(load)
-						.then(function (v) {
-							job.forEach(function (p) {
-								try {
-									p.fulfill(v);
-								} catch (e) {
-									console.error('%s: %o', e.message, e);
-								}
-							});
-						})
-						.catch(function (v) {
-							job.forEach(function (p) {
-								try {
-									p.reject(v);
-								} catch (e) {
-									console.error('%s: %o', e.message, e);
-								}
-							});
+					.then(function (v) {
+						job.forEach(function (p) {
+							try {
+								p.fulfill(v);
+							} catch (e) {
+								console.error('%s: %o', e.message, e);
+							}
 						});
+					})
+					.catch(function (v) {
+						job.forEach(function (p) {
+							try {
+								p.reject(v);
+							} catch (e) {
+								console.error('%s: %o', e.message, e);
+							}
+						});
+					});
 			}, 10);
 
 		function toWork (names, fulfill, reject) {
@@ -397,11 +397,11 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		return Promise.all(usernames.chunk(chunkSize).map(me.chunkBulkRequest.bind(me)))
-				.then(rebuild)
-				.catch(function failed (reason) {
-					console.error('Failed: %o', reason);
-					return Promise.reject(reason);
-				});
+			.then(rebuild)
+			.catch(function failed (reason) {
+				console.error('Failed: %o', reason);
+				return Promise.reject(reason);
+			});
 	},
 
 	recompose: function (names, lists) {
@@ -535,7 +535,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	foregroundRequest: function () {
 		console.log('Requesting in foreground');
 		return Service.request.apply(Service, arguments)
-				.then(function (txt) { return Ext.decode(txt, true); });
+			.then(function (txt) { return Ext.decode(txt, true); });
 	},
 
 	backgroundRequest: function (req) {
@@ -686,8 +686,8 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		var u = this.getStore().getById(username), newPresence;
 		if (this.debug) {console.log('User repository recieved a presence change for ', username, arguments);}
 		newPresence = (presence && presence.isPresenceInfo) ?
-					presence :
-					PresenceInfo.createFromPresenceString(presence, username);
+			presence :
+			PresenceInfo.createFromPresenceString(presence, username);
 
 		if (u) {
 			if (this.debug) {

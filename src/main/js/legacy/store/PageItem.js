@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			updateRef.call(this, record);
 		}
 
-	//	coordinator.fireEvent('added-item', [record]);
+		//	coordinator.fireEvent('added-item', [record]);
 
 		this.resumeEvents();
 	},

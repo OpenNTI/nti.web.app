@@ -214,8 +214,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 */
 	escapeId: function (id) {
 		return id.replace(/:/g, '\\3a ') //no colons
-				.replace(/,/g, '\\2c ')//no commas
-				.replace(/\./g, '\\2e ');//no periods
+			.replace(/,/g, '\\2c ')//no commas
+			.replace(/\./g, '\\2e ');//no periods
 	},
 
 	/**

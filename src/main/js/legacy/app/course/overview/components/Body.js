@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (!emptyState && addIfNotThere) {
 
 			var cmps = [
-					{ html: 'There is no lesson to display.'}
+				{ html: 'There is no lesson to display.'}
 			];
 
 			if (this.hasEditingControls) {

@@ -23,37 +23,37 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 				]}
 			]}
 		]},{cls: 'coppa-main-view account-info', cn: [
-			{cls: 'legend', html: 'Account Information'},
-			{cls: 'fields', cn: [
-				{cls: 'realname hidden', cn: [
-					{tag: 'input', type: 'text', 'data-required': true, placeholder: 'First Name', name: 'first', size: '4'},
-					{tag: 'input', type: 'text', placeholder: 'Last Name', name: 'last', size: '4'},
-					{tag: 'span', cls: 'validation-message', html: 'Please enter your first and last name.'}
-				]},
-				{cls: 'email hidden', cn: [
-					{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Your Email', name: 'email', size: '5'},
-					{tag: 'span', cls: 'validation-message', html: 'What\'s your email address?'}
-				]},
-				{cls: 'contact_email hidden', cn: [
-					{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Parent\'s Email', name: 'contact_email', size: '5'},
-					{tag: 'span', cls: 'validation-message long', html: 'We need your parent\'s permission to activate social features on your account.'}
-				]},
-
-
-				{cls: 'optionalContainer hidden', cn: [
-					{tag: 'h3', html: 'Optional Information'},
-
-					{tag: 'label', cn: [{ tag: 'input', type: 'checkbox', name: 'opt_in_email_communication' },{html: 'Send me updates about NextThought.'}]},
-
-					{ cls: 'what-school', html: 'What school do you attend?' },
-					{ cls: 'affiliation-container' }
-				]}
+		{cls: 'legend', html: 'Account Information'},
+		{cls: 'fields', cn: [
+			{cls: 'realname hidden', cn: [
+				{tag: 'input', type: 'text', 'data-required': true, placeholder: 'First Name', name: 'first', size: '4'},
+				{tag: 'input', type: 'text', placeholder: 'Last Name', name: 'last', size: '4'},
+				{tag: 'span', cls: 'validation-message', html: 'Please enter your first and last name.'}
 			]},
-			{ cls: 'submit', cn: [
-					{cls: 'save', html: 'Save Changes'},
-					{cls: 'policy-link hidden', html: 'View Child\'s Privacy Policy'}
+			{cls: 'email hidden', cn: [
+				{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Your Email', name: 'email', size: '5'},
+				{tag: 'span', cls: 'validation-message', html: 'What\'s your email address?'}
+			]},
+			{cls: 'contact_email hidden', cn: [
+				{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Parent\'s Email', name: 'contact_email', size: '5'},
+				{tag: 'span', cls: 'validation-message long', html: 'We need your parent\'s permission to activate social features on your account.'}
+			]},
+
+
+			{cls: 'optionalContainer hidden', cn: [
+				{tag: 'h3', html: 'Optional Information'},
+
+				{tag: 'label', cn: [{ tag: 'input', type: 'checkbox', name: 'opt_in_email_communication' },{html: 'Send me updates about NextThought.'}]},
+
+				{ cls: 'what-school', html: 'What school do you attend?' },
+				{ cls: 'affiliation-container' }
 			]}
+		]},
+		{ cls: 'submit', cn: [
+			{cls: 'save', html: 'Save Changes'},
+			{cls: 'policy-link hidden', html: 'View Child\'s Privacy Policy'}
 		]}
+	]}
 	]),
 
 	renderSelectors: {

@@ -513,14 +513,14 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 				if (ac.status === ac.UPDATEREADY) {
 					ac.swapCache();
 					Ext.MessageBox.confirm(
-											'Update Available',
-											'A new version of this site is available. Load it now?',
-											function (btn) {
-												if (btn === 'yes') { window.location.reload(); }
-											}
-										);
+						'Update Available',
+						'A new version of this site is available. Load it now?',
+						function (btn) {
+							if (btn === 'yes') { window.location.reload(); }
+						}
+					);
 				}
-									//else: Manifest didn't changed. Nothing new to do.
+				//else: Manifest didn't changed. Nothing new to do.
 			}, false);
 		}
 		catch (error) {
@@ -733,8 +733,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			if (block) { clearTimeout(me[key]); }
 
 			me[key] = setTimeout(
-					function () { delete me[key]; },
-					time);
+				function () { delete me[key]; },
+				time);
 
 			if (block) {
 				throw new Error('stop');

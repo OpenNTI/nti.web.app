@@ -33,16 +33,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		me.mixins.observable.constructor.apply(me);
 
 		reader.on('destroy', 'destroy',
-		reader.relayEvents(me, [
-			'dismiss-popover',
-			'display-popover',
-			'iframe-ready',
-			'sync-height',
-			'content-updated',
-			'content-updated-with',
-			'page-previous',
-			'page-next'
-		]));
+			reader.relayEvents(me, [
+				'dismiss-popover',
+				'display-popover',
+				'iframe-ready',
+				'sync-height',
+				'content-updated',
+				'content-updated-with',
+				'page-previous',
+				'page-next'
+			]));
 
 		Ext.apply(reader, {
 			getDocumentElement: me.getDocumentElement.bind(me),

@@ -78,34 +78,34 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 	doFilter: Ext.Function.createBuffered(
-			function () {
-				if (this.isDestroyed) {return;}
+		function () {
+			if (this.isDestroyed) {return;}
 
-				var v = this.filterEl.getValue();
-				if (this.filterValue === v) {return;}
+			var v = this.filterEl.getValue();
+			if (this.filterValue === v) {return;}
 
-				this.filterValue = v;
-				if (!v) {
-					this.store.removeFilter('search');
-				} else {
-					this.store.filter({
-						id: 'search',
-						matchingIds: {},
-						fn: function (r) {
-							//if we alread know its matching don't check again
-							if (this.matchingIds[r.get('NTIID')]) { return true; }
+			this.filterValue = v;
+			if (!v) {
+				this.store.removeFilter('search');
+			} else {
+				this.store.filter({
+					id: 'search',
+					matchingIds: {},
+					fn: function (r) {
+						//if we alread know its matching don't check again
+						if (this.matchingIds[r.get('NTIID')]) { return true; }
 
-							var matches = r.matches(v);
+						var matches = r.matches(v);
 
-							this.matchingIds = Ext.apply(this.matchingIds || {}, matches);
+						this.matchingIds = Ext.apply(this.matchingIds || {}, matches);
 
-							return Object.keys(matches).length;
-						}
-					});
-				}
-				this.showSelection();
-			},
-			100),
+						return Object.keys(matches).length;
+					}
+				});
+			}
+			this.showSelection();
+		},
+		100),
 
 	onFilter: function (e) {
 		if (e) {

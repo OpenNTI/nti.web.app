@@ -119,28 +119,28 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 		me.getXSLTProcessor()
-				.then(function (processor) {
-					return me.queryDefinition()
-							.then(function (text) {
-								return Promise.resolve()
-										.then(me._hasStandardParts)
-										.then(me._parse.bind(me, processor, text), me._ieParse.bind(me, processor, text));
-							})
-							.then(function (o) {
-								if (o.indexOf('&lt;/a&gt;') >= 0) {
-									o = Ext.String.htmlDecode(o);
-								}
-								return o;
-							});
-				})
-				.then(function (o) {
-					me.fillIn(o);
-				})
-				.catch(function (e) {
-					me.destroy();
-					alert(getString('NextThought.view.definition.Window.error'));
-					Error.raiseForReport(e);
-				});
+			.then(function (processor) {
+				return me.queryDefinition()
+					.then(function (text) {
+						return Promise.resolve()
+							.then(me._hasStandardParts)
+							.then(me._parse.bind(me, processor, text), me._ieParse.bind(me, processor, text));
+					})
+					.then(function (o) {
+						if (o.indexOf('&lt;/a&gt;') >= 0) {
+							o = Ext.String.htmlDecode(o);
+						}
+						return o;
+					});
+			})
+			.then(function (o) {
+				me.fillIn(o);
+			})
+			.catch(function (e) {
+				me.destroy();
+				alert(getString('NextThought.view.definition.Window.error'));
+				Error.raiseForReport(e);
+			});
 	},
 
 
@@ -218,19 +218,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 
 		return Service.request(me.xslUrl)
-				.then(function (text) {
-					return Promise.resolve()
-							.then(me._hasStandardParts)
-							.then(function () {
-								return me._buildProcessor(text);
-							//IE doesn't have DOMParser AND XSLTProcessor as top level objects.
-							}, function () {
-								return me._ieBuildProcessor(text);
-							});
-				})
-				.then(function (p) {
-					me.self.xsltProcessor = p;
-					return p;
-				});
+			.then(function (text) {
+				return Promise.resolve()
+					.then(me._hasStandardParts)
+					.then(function () {
+						return me._buildProcessor(text);
+						//IE doesn't have DOMParser AND XSLTProcessor as top level objects.
+					}, function () {
+						return me._ieBuildProcessor(text);
+					});
+			})
+			.then(function (p) {
+				me.self.xsltProcessor = p;
+				return p;
+			});
 	}
 });

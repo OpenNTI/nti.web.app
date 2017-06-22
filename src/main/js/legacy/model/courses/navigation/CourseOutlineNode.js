@@ -231,12 +231,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 			contents = Promise.resolve(null);
 		} else {
 			contents = Service.request(link)
-						.then(response => ParseUtils.parseItems(response)[0])
-						.then(content => (content.outlineNode = this, content))
-						.catch(error => {
-							console.error('Unable to get contents because: %o', error.stack || error.message || error);
-							return null;
-						});
+				.then(response => ParseUtils.parseItems(response)[0])
+				.then(content => (content.outlineNode = this, content))
+				.catch(error => {
+					console.error('Unable to get contents because: %o', error.stack || error.message || error);
+					return null;
+				});
 		}
 
 		return contents;

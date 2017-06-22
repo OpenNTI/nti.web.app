@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
 const lazy = require('legacy/util/lazy-require')
-			.get('UserRepository', () => require('legacy/cache/UserRepository'));
+	.get('UserRepository', () => require('legacy/cache/UserRepository'));
 
 
 module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {

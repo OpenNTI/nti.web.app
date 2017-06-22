@@ -3,7 +3,7 @@ const Ext = require('extjs');
 require('./DomContentPointer');
 
 const lazy = require('legacy/util/lazy-require')
-			.get('Anchors', () => require('legacy/util/Anchors'));
+	.get('Anchors', () => require('legacy/util/Anchors'));
 
 const ElementDomContentPointer =
 module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {

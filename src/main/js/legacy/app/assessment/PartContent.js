@@ -17,8 +17,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.PartContent', 
 
 	renderTpl: Ext.DomHelper.markup(
 		[
-				{ cls: 'ordinal', html: '{ordinal}.' },
-				{ tag: 'tpl', 'if': 'content', cn: {cls: 'content', html: '{content}', style: {verticalAlign: 'initial'}}}
+			{ cls: 'ordinal', html: '{ordinal}.' },
+			{ tag: 'tpl', 'if': 'content', cn: {cls: 'content', html: '{content}', style: {verticalAlign: 'initial'}}}
 		]
 	),
 
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.PartContent', 
 			c = this.part.get('content') || '';
 
 		c = this.buildContent(
-					ContentUtils.fixReferences(c, root));
+			ContentUtils.fixReferences(c, root));
 
 		function santatize () {
 			me.el.select('a[href]').set({target: '_blank'});

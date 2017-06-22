@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Function',
 				fNOP = function () {},
 				fBound = function () {
 					return fToBind.apply(this instanceof fNOP && oThis ? this : oThis,
-								aArgs.concat(Array.prototype.slice.call(arguments)));
+						aArgs.concat(Array.prototype.slice.call(arguments)));
 				};
 
 			fNOP.prototype = this.prototype;

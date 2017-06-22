@@ -195,7 +195,7 @@ const TemplatesForNotes = Ext.define('NextThought.app.annotations.note.Templates
 				function () {
 					more.removeCls('active');
 				}
-			,500);
+				,500);
 		}
 	},
 

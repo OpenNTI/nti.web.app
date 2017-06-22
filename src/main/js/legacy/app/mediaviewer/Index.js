@@ -120,14 +120,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			me.resolveVideo(videoId),
 			prec
 		])
-		.then(([videoRec, record]) => {
-			if(record) {
-				options.rec = record;
-			}
-			me.video = videoRec;
-			me.transcript = TranscriptItem.fromVideo(me.video, basePath);
-			me.activeMediaView.setContent(me.video, me.transcript, options);
-		});
+			.then(([videoRec, record]) => {
+				if(record) {
+					options.rec = record;
+				}
+				me.video = videoRec;
+				me.transcript = TranscriptItem.fromVideo(me.video, basePath);
+				me.activeMediaView.setContent(me.video, me.transcript, options);
+			});
 	},
 
 	__presentSlidedeck: function (slidedeckId, slidedeck, options) {
@@ -143,23 +143,23 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			p,
 			prec
 		])
-		.then(([deck, record]) => {
-			if (!(deck instanceof Slidedeck)) {
-				return Promise.reject('Not a Slidedeck');
-			}
+			.then(([deck, record]) => {
+				if (!(deck instanceof Slidedeck)) {
+					return Promise.reject('Not a Slidedeck');
+				}
 
-			if(record) { options.rec = record; }
+				if(record) { options.rec = record; }
 
-			me.slidedeck = deck;
-			me.slidedeckId = slidedeckId;
-			delete me.video;
-			delete me.videoId;
+				me.slidedeck = deck;
+				me.slidedeckId = slidedeckId;
+				delete me.video;
+				delete me.videoId;
 
-			me.MediaActions.buildSlidedeckPlaylist(deck)
-				.then((obj) => {
-					me.activeMediaView.setSlidedeckContent(deck, obj.videos, obj.items, options);
-				});
-		});
+				me.MediaActions.buildSlidedeckPlaylist(deck)
+					.then((obj) => {
+						me.activeMediaView.setSlidedeckContent(deck, obj.videos, obj.items, options);
+					});
+			});
 	},
 
 	showVideoGrid: function (route, subRoute) {
@@ -217,13 +217,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		var me = this;
 
 		return me.resolveVideo(me.mediaId)
-				.catch(function () {
-					if (me.slidedeck && me.slidedeck.getId() === me.mediaId) {
-						return me.slidedeck;
-					}
+			.catch(function () {
+				if (me.slidedeck && me.slidedeck.getId() === me.mediaId) {
+					return me.slidedeck;
+				}
 
-					return Service.getObject(me.mediaId);
-				});
+				return Service.getObject(me.mediaId);
+			});
 	},
 
 	containsId: function (contextRecord, id) {
@@ -273,17 +273,17 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			(Ext.isEmpty(this.parentLesson)
 				? Promise.reject()
 				: this.__navigateToParent(this.parentLesson))
-			.catch(() => this.pushRootRoute('Library', '/library'));
+				.catch(() => this.pushRootRoute('Library', '/library'));
 		}
 	},
 
 	__navigateToParent: function (lesson) {
 		return this.PathActions.getPathToObject(lesson)
-				.then(path => {
-					// Get rid of the pageInfo part,
-					// since we want to navigate to the CourseOutlineNode.
-					path.pop();
-					this.Router.root.attemptToNavigateToPath(path);
-				});
+			.then(path => {
+				// Get rid of the pageInfo part,
+				// since we want to navigate to the CourseOutlineNode.
+				path.pop();
+				this.Router.root.attemptToNavigateToPath(path);
+			});
 	}
 });

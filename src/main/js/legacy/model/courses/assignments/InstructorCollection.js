@@ -152,16 +152,16 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		}
 
 		this.__loadHistoryRequest = Service.request(link)
-					.then(function (response) {
-						return ParseUtils.parseItems(response)[0];
-					})
-					.catch(function (reason) {
-						if (reason && reason.status === 404) {
-							return UsersCourseAssignmentHistory.getEmpty();
-						}
+			.then(function (response) {
+				return ParseUtils.parseItems(response)[0];
+			})
+			.catch(function (reason) {
+				if (reason && reason.status === 404) {
+					return UsersCourseAssignmentHistory.getEmpty();
+				}
 
-						return reason;
-					});
+				return reason;
+			});
 
 		return this.__loadHistoryRequest;
 	},

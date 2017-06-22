@@ -64,8 +64,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 
 		//merge in subclass's input template
 		var tpl = this.prototype.renderTpl
-				.replace('{input}', data.inputTpl || '')
-				.replace('{toolbar}', data.toolbarTpl || '');
+			.replace('{input}', data.inputTpl || '')
+			.replace('{toolbar}', data.toolbarTpl || '');
 
 		if (!data.renderTpl) {
 			data.renderTpl = tpl;
@@ -86,9 +86,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		}
 
 		return html.replace(/<\/?(html|head|meta|title|link|body|p)((( |\t)[^>]*)?)>/ig, '')
-				.replace(/^\s+/, '')
-				.replace(/\s+$/, '')
-				.replace(/(src)="(.*?)"/igm, fixRef);
+			.replace(/^\s+/, '')
+			.replace(/\s+$/, '')
+			.replace(/(src)="(.*?)"/igm, fixRef);
 	},
 
 	getSolutionContent: function (part) {
@@ -342,9 +342,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		answer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		b.update(
-				this.hintActive ?
-					(shown ? this.hideHintLabel : this.showHintLabel) :
-					(shown ? this.hideSolutionLabel : this.showSolutionLabel)
+			this.hintActive ?
+				(shown ? this.hideHintLabel : this.showHintLabel) :
+				(shown ? this.hideSolutionLabel : this.showSolutionLabel)
 		);
 
 		if (this.hintActive) {

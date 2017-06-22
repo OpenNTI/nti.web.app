@@ -357,11 +357,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
-				.then(function () {
-					return raw;
-				})
-				.then(this.store.loadRawData.bind(this.store))
-				.then(this.grid.view.refresh.bind(this.grid.view));
+			.then(function () {
+				return raw;
+			})
+			.then(this.store.loadRawData.bind(this.store))
+			.then(this.grid.view.refresh.bind(this.grid.view));
 	},
 
 	maybeSetFinalGrade: function (assignment, history, grade) {

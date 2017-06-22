@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 
 			return link && link.ntiid === this.getId();
 		})
-		.catch(() => this.findCourse());
+			.catch(() => this.findCourse());
 	},
 
 	findCourse: function () {

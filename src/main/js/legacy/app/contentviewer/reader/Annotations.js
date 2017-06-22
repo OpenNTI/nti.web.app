@@ -51,17 +51,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		this.deleteNote = this.deleteNote.bind(this);
 
 		reader.on('destroy', 'destroy',
-		reader.relayEvents(me, [
-			'filter-by-line',
-			'removed-from-line',
-			'annotations-load',
-			'filter-annotations',
-			'define',
-			'save-phantom',
-			'create-note',
-			'share-with',
-			'resize'
-		]));
+			reader.relayEvents(me, [
+				'filter-by-line',
+				'removed-from-line',
+				'annotations-load',
+				'filter-annotations',
+				'define',
+				'save-phantom',
+				'create-note',
+				'share-with',
+				'resize'
+			]));
 
 		reader.on('destroy', 'onDestroy', this);
 
@@ -150,9 +150,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 	insertAnnotationGutter: function () {
 		var me = this,
 			container = Ext.DomHelper.insertAfter(
-						me.reader.getInsertionPoint().first(),
-						{ cls: 'annotation-gutter', onclick: 'void(0)', cn: {cls: 'column controls'} },
-						true);
+				me.reader.getInsertionPoint().first(),
+				{ cls: 'annotation-gutter', onclick: 'void(0)', cn: {cls: 'column controls'} },
+				true);
 
 		me.gutterEl = container;
 		me.reader.on('destroy', 'remove', container);
@@ -233,8 +233,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		});
 
 		ranges = TextRangeFinderUtils.findTextRanges(o.componentOverlayEl.dom,
-													o.componentOverlayEl.dom.ownerDocument,
-													regex, undefined, indexedOverlayData);
+			o.componentOverlayEl.dom.ownerDocument,
+			regex, undefined, indexedOverlayData);
 		result.push({
 			ranges: ranges.slice(),
 			key: 'assessment'

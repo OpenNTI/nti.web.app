@@ -41,18 +41,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	itemSelector: '.item',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ tag: 'tpl', 'if': 'this.is(values)', cn: { cls: 'item heading', cn: [
-				{ tag: 'tpl', 'if': 'this.splitNumber(values)', cn: ''},
-				{ tag: 'span', cls: 'number', html: '{number}'},
-				{ tag: 'span', cls: 'name', html: '{section}'}
+			{ tag: 'tpl', 'if': 'this.splitNumber(values)', cn: ''},
+			{ tag: 'span', cls: 'number', html: '{number}'},
+			{ tag: 'span', cls: 'name', html: '{section}'}
 		] } },
 		{ tag: 'tpl', 'if': '!this.is(values)', cn: [
 			{ cls: 'item video {progress}', cn: [
-					{ cls: 'thumbnail', style: { backgroundImage: 'url({[this.thumb(values.sources)]})'} },
+				{ cls: 'thumbnail', style: { backgroundImage: 'url({[this.thumb(values.sources)]})'} },
 				{ cls: 'meta', cn: [
-						{ cls: 'title', html: '{title}' },
+					{ cls: 'title', html: '{title}' },
 					{ cls: 'info', cn: [
-			//							{ tag: 'span', html: '{duration}'},
-			//							{ tag: 'span', html: '{comments:plural("Comment")}'}
+						//							{ tag: 'span', html: '{duration}'},
+						//							{ tag: 'span', html: '{comments:plural("Comment")}'}
 					] }
 				] }
 			] }

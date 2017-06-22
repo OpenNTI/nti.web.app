@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	selectedTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{tag: 'tpl', 'for': '.', cn: [
 			{tag: 'tpl', 'if': '.', cn: [
-					{tag: 'span', html: '{.}' }
+				{tag: 'span', html: '{.}' }
 			]}
 		]}
 	)),

@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-  //	SAJ: The HTML5 player code is part of the browser and is always ready to load a media source.
+	//	SAJ: The HTML5 player code is part of the browser and is always ready to load a media source.
 	isReady: true,
 
 	playerSetup: function () {

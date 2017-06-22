@@ -98,13 +98,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		});
 
 		var n, keyMap = new Ext.util.KeyMap({
-				target: document,
-				binding: [{
-					key: Ext.EventObject.ESC,
-					fn: this.destroy,
-					scope: this
-				}]
-			});
+			target: document,
+			binding: [{
+				key: Ext.EventObject.ESC,
+				fn: this.destroy,
+				scope: this
+			}]
+		});
 		this.on('destroy', function () {keyMap.destroy(false);});
 
 		n = Ext.query('.nav-helper').first();
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		var me = this,
 			img = me.imageCache = new Image(),
 			isSlide = Boolean(
-					Ext.fly(me.refEl).parent('object[type$=slide]', true)
+				Ext.fly(me.refEl).parent('object[type$=slide]', true)
 				|| Ext.fly(me.refEl).parent('object[type$=slidevideo]', true)
 			);
 

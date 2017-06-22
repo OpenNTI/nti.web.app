@@ -167,13 +167,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 
 			console.time('Requesting Course Outline: ' + l);
 			me.__promiseToLoadContents = Service.request(l)
-					.then(function (text) { return Ext.decode(text); })
-					.then(function (json) { return ParseUtils.parseItems(json); })
-					.then(function (items) {
-						me.set('Items', items);
-						console.timeEnd('Requesting Course Outline: ' + l);
-						return me;
-					});
+				.then(function (text) { return Ext.decode(text); })
+				.then(function (json) { return ParseUtils.parseItems(json); })
+				.then(function (items) {
+					me.set('Items', items);
+					console.timeEnd('Requesting Course Outline: ' + l);
+					return me;
+				});
 		}
 
 		return me.__promiseToLoadContents;
@@ -185,14 +185,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		}
 
 		return this.getContents()
-				.then(me => me.getNode(id))
-				.then(node => node || Promise.reject('Not found'));
+			.then(me => me.getNode(id))
+			.then(node => node || Promise.reject('Not found'));
 	},
 
 	getNode: function (id) {
 		var legacy, node = (this.get('Items') || []).reduce(function (n, o) {
-				return n || (o.findNode && o.findNode(id));
-			}, null);
+			return n || (o.findNode && o.findNode(id));
+		}, null);
 
 		//hack:
 		if (node) {

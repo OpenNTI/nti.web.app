@@ -59,16 +59,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this;
 
 		me.currentNode.getProgress()
-					.then(function (progress) {
-						me.items.each(function (item) {
-							if (item.setProgress) {
-								item.setProgress(progress);
-							}
-						});
-					})
-					.catch(function (reason) {
-						console.error('Failed to load progress:', reason);
-					});
+			.then(function (progress) {
+				me.items.each(function (item) {
+					if (item.setProgress) {
+						item.setProgress(progress);
+					}
+				});
+			})
+			.catch(function (reason) {
+				console.error('Failed to load progress:', reason);
+			});
 	},
 
 	__updateCounts: function () {
@@ -120,9 +120,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (me.currentOverview && me.currentOverview.record.getId() === record.getId() && !doNotCache) {
 			if (me.currentOverview.refresh) {
 				return me.currentOverview.refresh()
-							.then(me.__updateProgress.bind(me))
-							.then(me.__updateCounts.bind(me))
-							.always(me.maybeUnmask.bind(me));
+					.then(me.__updateProgress.bind(me))
+					.then(me.__updateCounts.bind(me))
+					.always(me.maybeUnmask.bind(me));
 			}
 
 			me.maybeUnmask();

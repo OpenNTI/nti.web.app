@@ -321,12 +321,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		var me = this;
 		return new Promise((fulfill, reject) => {
 			me.PathActions.getPathToObject(slidedeck)
-			.then(path => {
-				var last = path && path.last();
-				if (!last) { reject(); }
+				.then(path => {
+					var last = path && path.last();
+					if (!last) { reject(); }
 
-				fulfill(last.getId());
-			});
+					fulfill(last.getId());
+				});
 		});
 	},
 

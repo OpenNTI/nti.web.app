@@ -70,13 +70,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	downloadBadge: function (record, targetEl) {
 		var me = this;
 		return record.lockBadge()
-				.then(function () {
-					me.triggerFileDownload(record);
-				})
-				.catch(function () {
-					console.warn('Failed to lock badge...', arguments);
-					me.askForEmailVerification('downloadBadge', record, targetEl);
-				});
+			.then(function () {
+				me.triggerFileDownload(record);
+			})
+			.catch(function () {
+				console.warn('Failed to lock badge...', arguments);
+				me.askForEmailVerification('downloadBadge', record, targetEl);
+			});
 	},
 
 
@@ -84,20 +84,20 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 		var me = this;
 
 		return record.lockBadge()
-				.then(function () {
-					return record.pushToMozillaBackpack()
-						.then(function (successes) {
-							console.log('Congratulations, your badge was sent to backpack: ' + successes);
-						})
-						.catch(function (errors) {
-							Ext.each(errors, function (err) {
-								console.warn('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
-							});
+			.then(function () {
+				return record.pushToMozillaBackpack()
+					.then(function (successes) {
+						console.log('Congratulations, your badge was sent to backpack: ' + successes);
+					})
+					.catch(function (errors) {
+						Ext.each(errors, function (err) {
+							console.warn('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
 						});
-				})
-				.catch(function () {
-					me.askForEmailVerification('exportToBackPack', record, targetEl);
-				});
+					});
+			})
+			.catch(function () {
+				me.askForEmailVerification('exportToBackPack', record, targetEl);
+			});
 	},
 
 

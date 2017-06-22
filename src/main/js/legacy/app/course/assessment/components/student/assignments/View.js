@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	items: [
 		{xtype: 'course-assessment-assignments-filterbar'},
 		{xtype: 'container', rel: 'content'}
-			/* Exmaple items:
+		/* Exmaple items:
 				{xtype: 'grouping', title: '1. About Geology', subTitle: 'August 19', items: [
 					{ xtype: 'course-assessment-assignment-list' }
 				]}
@@ -246,9 +246,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							groupStore.groupName = n.getTitle();
 							group.setTitle(n.get('title'));
 							group.setSubTitle(Ext.Date.format(
-									node.get('AvailableBeginning') || node.get('AvailableEnding'),
-									'F j, Y'
-								));
+								node.get('AvailableBeginning') || node.get('AvailableEnding'),
+								'F j, Y'
+							));
 						} else {
 							groupStore.groupName = 'Other Assignments';
 							group.setTitle('Other Assignments');
@@ -396,9 +396,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			groupBy: groupBy,
 			search: search
 		})
-		.then(function () {
-			bar.enableGroupBy(true);
-		});
+			.then(function () {
+				bar.enableGroupBy(true);
+			});
 	},
 
 	applyState: function (state) {

@@ -272,12 +272,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 		var roster = instance && instance.getLink('CourseEnrollmentRoster'),
 			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
-					roster,
-					Ext.Object.toQueryString({
-						batchSize: 1,
-						batchStart: 0,
-						filter: 'LegacyEnrollmentStatusForCredit'
-					}));
+				roster,
+				Ext.Object.toQueryString({
+					batchSize: 1,
+					batchStart: 0,
+					filter: 'LegacyEnrollmentStatusForCredit'
+				}));
 
 		this.grid.bindStore(Ext.getStore('ext-empty-store'));
 		this.grid.getView().refresh();
@@ -297,9 +297,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.buildStore(roster);
 
 		Service.request(smallRequestURLToGetCounts)
-				.then(JSON.parse)
-				.then(this.fillCounts.bind(this))
-				.catch(this.clearCounts.bind(this));
+			.then(JSON.parse)
+			.then(this.fillCounts.bind(this))
+			.catch(this.clearCounts.bind(this));
 	},
 
 	buildStore: function (url) {

@@ -155,19 +155,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				if (item && item.assignment) {
 					accItems.push(assignments.fetchAssignment(item['target-ntiid'])
-								.then(function (newAssignment) {
-									item.assignment = newAssignment;
+						.then(function (newAssignment) {
+							item.assignment = newAssignment;
 
-									return item;
-								})
-								.catch(function (reason) {
-									console.error('Unable to update assignment: ', reason);
+							return item;
+						})
+						.catch(function (reason) {
+							console.error('Unable to update assignment: ', reason);
 
-									item.assignment = assignments.getItem(item['target-ntiid']);
+							item.assignment = assignments.getItem(item['target-ntiid']);
 
-									return item;
-								})
-							);
+							return item;
+						})
+					);
 				} else if (item) {
 					accItems.push(item);
 				}

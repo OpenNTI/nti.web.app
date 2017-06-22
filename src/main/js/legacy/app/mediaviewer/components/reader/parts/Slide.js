@@ -5,7 +5,7 @@ const SharingUtils = require('legacy/util/Sharing');
 const UserDataActions = require('legacy/app/userdata/Actions');
 const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
 const lazy = require('legacy/util/lazy-require')
-				.get('Anchors', () => require('legacy/util/Anchors'));
+	.get('Anchors', () => require('legacy/util/Anchors'));
 
 require('../mixins/AnnotationsMixin');
 

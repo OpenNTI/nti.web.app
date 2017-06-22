@@ -72,12 +72,12 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 				method: 'HEAD',
 				url: url
 			})
-			.then(function () {
-				return url;
-			})
-			.catch(function () {
-				return Promise.reject(name + ' asset not found');
-			});
+				.then(function () {
+					return url;
+				})
+				.catch(function () {
+					return Promise.reject(name + ' asset not found');
+				});
 		} else {
 			p = Promise.resolve(url);
 		}

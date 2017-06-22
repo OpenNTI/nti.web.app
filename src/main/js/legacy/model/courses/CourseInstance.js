@@ -738,11 +738,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				me = this;
 
 			this._outlinePromise = o.getContents()
-					.then(function () {
-						o.bundle = me;
-						o.navStore = me.getNavigationStore();
-						return o;
-					});
+				.then(function () {
+					o.bundle = me;
+					o.navStore = me.getNavigationStore();
+					return o;
+				});
 
 		}
 
@@ -829,9 +829,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		}
 
 		this[promiseName] = Service.request(config)
-								.then(function (response) {
-									return Ext.decode(response, true);
-								});
+			.then(function (response) {
+				return Ext.decode(response, true);
+			});
 
 		return this[promiseName];
 	},
@@ -958,22 +958,22 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	getAllAssignments: function () {
 		return this.getAssignments()
-				.then(function (assignmentsCollection) {
-					const assignments = assignmentsCollection.get('Assignments');
-					const filtered = (assignments || []).filter(x => !x.isDeleted);
-					return filtered;
-				});
+			.then(function (assignmentsCollection) {
+				const assignments = assignmentsCollection.get('Assignments');
+				const filtered = (assignments || []).filter(x => !x.isDeleted);
+				return filtered;
+			});
 	},
 
 	getAllAssessments: function () {
 		return this.getAssignments()
-				.then(function (assignments) {
-					var nonAssignments = assignments.get('NonAssignments');
+			.then(function (assignments) {
+				var nonAssignments = assignments.get('NonAssignments');
 
-					return (nonAssignments || []).filter(function (item) {
-						return item instanceof QuestionSet;
-					});
+				return (nonAssignments || []).filter(function (item) {
+					return item instanceof QuestionSet;
 				});
+			});
 	},
 
 	fireNavigationEvent: function (eventSource) {
@@ -1104,16 +1104,16 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	getVideoForId: function (vid) {
 		return this.getVideoIndex()
-				.then(function (index) {
-					var i = index[vid];
-					// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos.
-					// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility,
-					// to be a video if it has a class it has to be Video, if not, default to video.
-					if (i && (i.Class === undefined || i.Class === 'Video')) {
-						return Promise.resolve(i);
-					}
-					return Promise.reject();
-				});
+			.then(function (index) {
+				var i = index[vid];
+				// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos.
+				// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility,
+				// to be a video if it has a class it has to be Video, if not, default to video.
+				if (i && (i.Class === undefined || i.Class === 'Video')) {
+					return Promise.resolve(i);
+				}
+				return Promise.reject();
+			});
 	},
 
 	/*
@@ -1121,13 +1121,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 */
 	getSlidedeckForVideo: function (vid) {
 		return this.getVideoIndex()
-				.then(function (index) {
-					var i = index[vid];
-					if (i && i.slidedeck) {
-						return Promise.resolve(i.slidedeck);
-					}
-					return Promise.reject();
-				});
+			.then(function (index) {
+				var i = index[vid];
+				if (i && i.slidedeck) {
+					return Promise.resolve(i.slidedeck);
+				}
+				return Promise.reject();
+			});
 	},
 
 	/**
@@ -1415,8 +1415,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			cce = this.getCourseCatalogEntry();
 
 		return cce ?
-				cce.getId() === cceId :
-				this.getLink('CourseCatalogEntry') === cceHref;
+			cce.getId() === cceId :
+			this.getLink('CourseCatalogEntry') === cceHref;
 	},
 
 	containsNTIID: function (id) {
@@ -1496,12 +1496,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		if (!link) { return Promise.reject(); }
 
 		return Service.request(link)
-					.then(function (response) {
-						const json = JSON.parse(response);
-						const raw = json.IsPredicted ? json.PredictedGrade : json.FinalGrade;
+			.then(function (response) {
+				const json = JSON.parse(response);
+				const raw = json.IsPredicted ? json.PredictedGrade : json.FinalGrade;
 
-						return ParseUtils.parseItems(raw)[0];
-					});
+				return ParseUtils.parseItems(raw)[0];
+			});
 	},
 
 	getVideoProgress: function () {
@@ -1510,9 +1510,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		if (!link) { return Promise.reject(); }
 
 		return Service.request(link)
-					.then(function (response) {
-						return ParseUtils.parseItems(response)[0];
-					});
+			.then(function (response) {
+				return ParseUtils.parseItems(response)[0];
+			});
 	},
 
 	getSuggestContacts: function () {

@@ -269,8 +269,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 						roomId: IdCache.getIdentifier(roomInfo.getId()),
 						title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
 						message: isGroupChat ?
-								'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.' :
-								'<span>' + u.getName() + '</span> would like to chat.',
+							'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.' :
+							'<span>' + u.getName() + '</span> would like to chat.',
 						iconCls: 'icons-chat-32',
 						buttons: [
 							{
@@ -628,11 +628,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		if (this.isModerator(room)) {
 			console.log('leaving room but I\'m a moderator, relinquish control');
 			socket.emit('chat_makeModerated', room.getId(), false,
-					function () {
-						//unmoderate called, now exit
-						console.log('unmoderated, now exiting room');
-						socket.emit('chat_exitRoom', room.getId());
-					}
+				function () {
+					//unmoderate called, now exit
+					console.log('unmoderated, now exiting room');
+					socket.emit('chat_exitRoom', room.getId());
+				}
 			);
 		}
 		else {

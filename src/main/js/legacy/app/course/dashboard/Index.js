@@ -194,15 +194,15 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		});
 
 		return Promise.all(tiles)
-					.then(function (results) {
-						if (Ext.isEmpty(results)) {
-							return [];
-						}
+			.then(function (results) {
+				if (Ext.isEmpty(results)) {
+					return [];
+				}
 
-						return results.reduce(function (a, b) {
-							return a.concat(b);
-						}, []);
-					});
+				return results.reduce(function (a, b) {
+					return a.concat(b);
+				}, []);
+			});
 	},
 
 	addUpcoming: function (date) {
@@ -249,15 +249,15 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		});
 
 		return Promise.all(tiles)
-					.then(function (results) {
-						if (Ext.isEmpty(results)) {
-							return [];
-						}
+			.then(function (results) {
+				if (Ext.isEmpty(results)) {
+					return [];
+				}
 
-						return results.reduce(function (a, b) {
-							return a.concat(b);
-						}, []);
-					});
+				return results.reduce(function (a, b) {
+					return a.concat(b);
+				}, []);
+			});
 	},
 
 	getScrollInfo: function () {

@@ -43,9 +43,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (win === false) { return; }
 		if (win instanceof Promise) {
 			return win
-					.then(function () {
-						me.WindowActions.closeActiveWindow();
-					});
+				.then(function () {
+					me.WindowActions.closeActiveWindow();
+				});
 		}
 
 		this.WindowActions.closeActiveWindow();

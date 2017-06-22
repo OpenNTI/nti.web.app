@@ -238,13 +238,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.EditingActions.publish(me.record),
 			me.EditingActions.publish(me.contents)
 		])
-		.then(function (o) {
-			var lesson = o[1];
+			.then(function (o) {
+				var lesson = o[1];
 
-			if (me.setPublished) {
-				me.setPublished(lesson);
-			}
-		});
+				if (me.setPublished) {
+					me.setPublished(lesson);
+				}
+			});
 	},
 
 	publishOnDateSave: function () {
@@ -257,13 +257,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.EditingActions.publish(me.record),
 			me.EditingActions.publishOnDate(me.contents, dateValue)
 		])
-		.then(function (o) {
-			var lesson = o[1];
+			.then(function (o) {
+				var lesson = o[1];
 
-			if (me.setWillPublishOn) {
-				me.setWillPublishOn(lesson);
-			}
-		});
+				if (me.setWillPublishOn) {
+					me.setWillPublishOn(lesson);
+				}
+			});
 	},
 
 	unpublishSave: function () {
@@ -273,12 +273,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.EditingActions.unpublish(me.record),
 			me.EditingActions.unpublish(me.contents)
 		])
-		.then(function (o) {
-			var lesson = o[1];
-			if (me.setNotPublished) {
-				me.setNotPublished(lesson);
-			}
-		});
+			.then(function (o) {
+				var lesson = o[1];
+				if (me.setNotPublished) {
+					me.setNotPublished(lesson);
+				}
+			});
 	},
 
 	createDatePicker: function (dateContainer) {

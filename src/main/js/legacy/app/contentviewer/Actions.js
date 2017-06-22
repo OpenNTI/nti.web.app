@@ -175,38 +175,38 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		return this.getContentsForAssignment(assignment, bundle)
 			.then((contents) => {
 				return assignment.resolveTopic(student)
-						.then((topic) => {
-							const ntiid = topic.getId();
+					.then((topic) => {
+						const ntiid = topic.getId();
 
-							contents.push({
-								tag: 'object',
-								data: ntiid,
-								'data-canindividual': true,
-								'data-ntiid': ntiid,
-								type: TOPIC_EMBED,
-								cn: [
-									{tag: 'param', name: 'canindividual', value: true},
-									{tag: 'param', name: 'ntiid', value: ntiid}
-								]
-							});
-
-							return contents;
-						})
-						.catch(() => {
-							const ntiid = guidGenerator();
-
-							contents.push({
-								tag: 'object',
-								'data-canindividual': true,
-								'data-ntiid': ntiid,
-								type: TOPIC_EMBED,
-								cn: [
-									{tag: 'param', name: 'canindividual', value: true}
-								]
-							});
-
-							return contents;
+						contents.push({
+							tag: 'object',
+							data: ntiid,
+							'data-canindividual': true,
+							'data-ntiid': ntiid,
+							type: TOPIC_EMBED,
+							cn: [
+								{tag: 'param', name: 'canindividual', value: true},
+								{tag: 'param', name: 'ntiid', value: ntiid}
+							]
 						});
+
+						return contents;
+					})
+					.catch(() => {
+						const ntiid = guidGenerator();
+
+						contents.push({
+							tag: 'object',
+							'data-canindividual': true,
+							'data-ntiid': ntiid,
+							type: TOPIC_EMBED,
+							cn: [
+								{tag: 'param', name: 'canindividual', value: true}
+							]
+						});
+
+						return contents;
+					});
 			});
 	},
 
@@ -223,8 +223,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 	getAssignmentPageInfo (assignment, bundle, student) {
 		return assignment.isDiscussion ?
-					this.getDiscussionAssignmentPageInfo(assignment, bundle, student) :
-					this.getRegularAssignmentPageInfo(assignment, bundle);
+			this.getDiscussionAssignmentPageInfo(assignment, bundle, student) :
+			this.getRegularAssignmentPageInfo(assignment, bundle);
 	},
 
 

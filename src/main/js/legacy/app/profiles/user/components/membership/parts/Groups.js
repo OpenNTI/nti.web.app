@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 							route: isNTIID(id) ? encodeForURI(id) : encodeURIComponent(id)
 						};
 					})
-					.forEach(c => this.addEntry(c));
+						.forEach(c => this.addEntry(c));
 				} else if (isMe) {
 					//TODO: change this text
 					this.showEmptyText('You have no public groups.');

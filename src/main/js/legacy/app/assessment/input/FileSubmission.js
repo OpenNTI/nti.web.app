@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	beforeRender: function () {
 		if (this.question.tallyParts() === 1) {
 			this.up('assessment-question')
-					.addCls('file-submission');
+				.addCls('file-submission');
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -476,7 +476,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 		else {
 			this.up('assessment-question')
-					.addCls('no-data');
+				.addCls('no-data');
 		}
 	},
 
@@ -561,7 +561,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	instructorReset: function () {
 		this.reset();
 		this.up('assessment-question')
-				.addCls('no-data');
+			.addCls('no-data');
 	},
 
 

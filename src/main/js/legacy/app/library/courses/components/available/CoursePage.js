@@ -170,53 +170,53 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			archivedTab && archivedTab.onceRendered,
 			redeem && redeem.onceRendered
 		])
-		.then(() => {
+			.then(() => {
 			//Since the components are Ext.views, wait an event pump for the items
 			//to get rendered
-			return wait();
-		})
-		.then(() => {
-			const get = (category) => Array.from(this.el.dom.querySelectorAll(`.available-catalog[data-category="${category}"]`));
-			let upcoming = get('upcoming');
-			let current = get('current');
-			let archived = get('archived');
+				return wait();
+			})
+			.then(() => {
+				const get = (category) => Array.from(this.el.dom.querySelectorAll(`.available-catalog[data-category="${category}"]`));
+				let upcoming = get('upcoming');
+				let current = get('current');
+				let archived = get('archived');
 
-			const copy = (x, ...props) => props.reduce((o, prop) => (o[prop] = x[prop], o), {});
+				const copy = (x, ...props) => props.reduce((o, prop) => (o[prop] = x[prop], o), {});
 
-			const wrap = list => ({
-				getBoundingClientRect () {
-					const els = [
-						list[0], //first element in list
-						list[list.length - 1] //last element in list
-					]
+				const wrap = list => ({
+					getBoundingClientRect () {
+						const els = [
+							list[0], //first element in list
+							list[list.length - 1] //last element in list
+						]
 						//filter out undefined
-						.filter(x => x)
-						//swap elements with their bounding rects.
-						.map(x => copy(x.getBoundingClientRect(), 'top', 'bottom'));
+							.filter(x => x)
+							//swap elements with their bounding rects.
+							.map(x => copy(x.getBoundingClientRect(), 'top', 'bottom'));
 
-					return els.length === 0
-						? null
-						: els.reduce((acc, rect) => (acc.bottom = rect.bottom, acc)); //merge rects into one.
+						return els.length === 0
+							? null
+							: els.reduce((acc, rect) => (acc.bottom = rect.bottom, acc)); //merge rects into one.
+					}
+				});
+
+				this.scrollTops = {};
+
+				if (upcomingTab) {
+					this.scrollTops['upcoming'] = wrap(upcoming);
 				}
+				if (currentTab) {
+					this.scrollTops['current'] = wrap(current);
+				}
+				if (archivedTab) {
+					this.scrollTops['archived'] = wrap(archived);
+				}
+				if(redeem) {
+					this.scrollTops['redeem'] = redeem.el.dom;
+				}
+
+				this.setPageHeight();
 			});
-
-			this.scrollTops = {};
-
-			if (upcomingTab) {
-				this.scrollTops['upcoming'] = wrap(upcoming);
-			}
-			if (currentTab) {
-				this.scrollTops['current'] = wrap(current);
-			}
-			if (archivedTab) {
-				this.scrollTops['archived'] = wrap(archived);
-			}
-			if(redeem) {
-				this.scrollTops['redeem'] = redeem.el.dom;
-			}
-
-			this.setPageHeight();
-		});
 	},
 
 

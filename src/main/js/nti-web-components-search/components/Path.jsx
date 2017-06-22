@@ -11,18 +11,18 @@ export default class Path extends React.PureComponent {
 
 		return pathObject ? (
 			<div className="hit-path">
-					{
-						pathObject.map((path, index) => {
-							if (index === 0) {
-								return <span key={index}>{path.label}</span>;
-							} else if(index !== pathObject.length - 1) {
-								return <span key={index}> &#8226; {path.label}</span>;
-							}
-						})
-					}
+				{
+					pathObject.map((path, index) => {
+						if (index === 0) {
+							return <span key={index}>{path.label}</span>;
+						} else if(index !== pathObject.length - 1) {
+							return <span key={index}> &#8226; {path.label}</span>;
+						}
+					})
+				}
 			</div>
 		)
-		: null;
+			: null;
 	}
 
 }

@@ -37,58 +37,58 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 				var getConfig = TilesAssignment.getTileConfig(assignment);
 
 				return getConfig
-						.then(function (config) {
-							config.record = assignment;
-							config.weight = getWeight(assignment);
-							config.course = course;
-							//TODO: get rid of getAssignmentHistory
-							config.getAssignmentHistory = assignments.getHistoryItem(assignment.getId(), true);
+					.then(function (config) {
+						config.record = assignment;
+						config.weight = getWeight(assignment);
+						config.course = course;
+						//TODO: get rid of getAssignmentHistory
+						config.getAssignmentHistory = assignments.getHistoryItem(assignment.getId(), true);
 
-							return config;
-						});
+						return config;
+					});
 			}
 
 			return course.getAssignments()
-						.then(function (assignmentCollection) {
-							return assignmentCollection.updateAssignments();
-						})
-						.then(function (assignmentCollection) {
-							var assignments = [];
+				.then(function (assignmentCollection) {
+					return assignmentCollection.updateAssignments();
+				})
+				.then(function (assignmentCollection) {
+					var assignments = [];
 
-							assignmentCollection.each(function (assignment) {
-								var assignmentStart = assignment.get('availableBeginning'),
-									assignmentEnd = assignment.get('availableEnding');
+					assignmentCollection.each(function (assignment) {
+						var assignmentStart = assignment.get('availableBeginning'),
+							assignmentEnd = assignment.get('availableEnding');
 
-								//don't show the final grade assignment
-								if (assignmentCollection.isFinalGradeAssignment(assignment)) { return; }
+						//don't show the final grade assignment
+						if (assignmentCollection.isFinalGradeAssignment(assignment)) { return; }
 
-								//if we are building for the current week
-								if (isNow) {
-									//if the assignment starts before the end of the week
-									//and the assignment hasn't ended before the start of the week
-									if (end.isAfter(assignmentStart) && start.isBefore(assignmentEnd)) {
-										assignments.push(getCmpConfig(assignment, assignmentCollection));
-									}
-								//else if the assignment has ended this week
-								} else if (end.isAfter(assignmentEnd) && start.isBefore(assignmentEnd)) {
-									assignments.push(getCmpConfig(assignment, assignmentCollection));
-								}
-							});
+						//if we are building for the current week
+						if (isNow) {
+							//if the assignment starts before the end of the week
+							//and the assignment hasn't ended before the start of the week
+							if (end.isAfter(assignmentStart) && start.isBefore(assignmentEnd)) {
+								assignments.push(getCmpConfig(assignment, assignmentCollection));
+							}
+							//else if the assignment has ended this week
+						} else if (end.isAfter(assignmentEnd) && start.isBefore(assignmentEnd)) {
+							assignments.push(getCmpConfig(assignment, assignmentCollection));
+						}
+					});
 
-							return Promise.all(assignments);
-						})
-						.then(function (tiles) {
-							if (!isNow) { return tiles.reverse(); }
+					return Promise.all(assignments);
+				})
+				.then(function (tiles) {
+					if (!isNow) { return tiles.reverse(); }
 
-							tiles.sort(function (a, b) {
-								var wA = a.record.get('availableEnding'),
-									wB = b.record.get('availableEnding');
+					tiles.sort(function (a, b) {
+						var wA = a.record.get('availableEnding'),
+							wB = b.record.get('availableEnding');
 
-								return wA < wB ? -1 : wA === wB ? 0 : 1;
-							});
+						return wA < wB ? -1 : wA === wB ? 0 : 1;
+					});
 
-							return tiles.slice(0, maxNotDue).reverse();
-						});
+					return tiles.slice(0, maxNotDue).reverse();
+				});
 		},
 
 
@@ -102,31 +102,31 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			console.log(upcomingCutoff);
 
 			load = course.getAssignments()
-						.then(function (assignmentCollection) {
-							var items = Ext.clone(assignmentCollection.get('Items')),
-								notPastDue;
+				.then(function (assignmentCollection) {
+					var items = Ext.clone(assignmentCollection.get('Items')),
+						notPastDue;
 
-							items = items || [];
+					items = items || [];
 
-							notPastDue = items.filter(function (item) {
-								var due = item.get('availableEnding'),
-									start = item.get('availableBeginning');
+					notPastDue = items.filter(function (item) {
+						var due = item.get('availableEnding'),
+							start = item.get('availableBeginning');
 
-								console.log(start);
+						console.log(start);
 
-								//if we don't have due date or due is before now
-								return due ? now.isAfter(due) : false;
-							});
+						//if we don't have due date or due is before now
+						return due ? now.isAfter(due) : false;
+					});
 
-							notPastDue.sort(function (a, b) {
-								var dA = a.get('availableEnding'),
-									dB = b.get('availableEnding');
+					notPastDue.sort(function (a, b) {
+						var dA = a.get('availableEnding'),
+							dB = b.get('availableEnding');
 
-								return dA < dB ? -1 : dA === dB ? 0 : 1;
-							});
+						return dA < dB ? -1 : dA === dB ? 0 : 1;
+					});
 
-							return notPastDue.slice(0, 3);
-						});
+					return notPastDue.slice(0, 3);
+				});
 
 			return Promise.resolve([
 				{

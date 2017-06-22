@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		return range;
 	},
 
-/*
+	/*
 	isMath: function isMath(n){
 		return n && n.nodeType === 1
 				? Ext.fly(n).hasCls('math') || isMath(n.parentNode)

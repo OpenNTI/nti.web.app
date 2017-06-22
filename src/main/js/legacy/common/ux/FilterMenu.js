@@ -39,9 +39,9 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 		}
 
 		this.add([].concat(
-				{ xtype: 'label', text: 'Display' },
-				this.filters,
-				{ xtype: 'search-menu-item', placeholder: this.searchPlaceHolderText }
+			{ xtype: 'label', text: 'Display' },
+			this.filters,
+			{ xtype: 'search-menu-item', placeholder: this.searchPlaceHolderText }
 		));
 
 		this.search = this.down('search-menu-item');

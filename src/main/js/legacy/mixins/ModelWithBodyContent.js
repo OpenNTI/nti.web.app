@@ -306,11 +306,11 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 				const fn = me[me.rendererForPart[o.MimeType] || ''];
 				if (Ext.isFunction(fn)) {
 					fn.call(me, o, Ext.bind(clickHandlerMaker, scope),
-							Ext.isObject(size) ? size[o.MimeType] : size,
-							function (t) {
-								text.push(t);
-								render(i - 1);
-							}, me, config);
+						Ext.isObject(size) ? size[o.MimeType] : size,
+						function (t) {
+							text.push(t);
+							render(i - 1);
+						}, me, config);
 				}
 				else {
 					console.error('Not rendering part we don\'t understand', o);

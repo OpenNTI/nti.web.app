@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			}
 
 			UserRepository.getUser(users)
-					.then(fillIn, failed);
+				.then(fillIn, failed);
 		}
 
 		function fillIn (users) {
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 
 		Service.request(postRef)
-				.then(resolve, failed);
+			.then(resolve, failed);
 	},
 
 	redraw: function (data) {

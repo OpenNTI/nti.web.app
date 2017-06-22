@@ -37,9 +37,9 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		return Service.request({
 			url: url
 		})
-				.then(this.__parseResponse.bind(this))
-				.then(this.__parseContext.bind(this, type))
-				.catch(this.__handle403Response.bind(this));
+			.then(this.__parseResponse.bind(this))
+			.then(this.__parseContext.bind(this, type))
+			.catch(this.__handle403Response.bind(this));
 	},
 
 	__parseResponse: function (response) {
@@ -49,15 +49,15 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 			parse = ParseUtils.parseItems(response)[0];
 			fulfill(parse || Ext.decode(response, true));
 		})
-		.catch(function () {
-			var xml = (new DOMParser()).parseFromString(response, 'text/xml');
+			.catch(function () {
+				var xml = (new DOMParser()).parseFromString(response, 'text/xml');
 
-			if (xml.querySelector('parsererror')) {
-				return Promise.resolve('');
-			}
+				if (xml.querySelector('parsererror')) {
+					return Promise.resolve('');
+				}
 
-			return xml;
-		});
+				return xml;
+			});
 	},
 
 	__parseContext: function (contextType, obj) {
@@ -112,17 +112,17 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		url = url + '/@@forbidden_related_context';
 
 		return Service.request(url)
-					.then(function (resp) {
-						let p = Ext.decode(resp, true);
-						let catalogEntry = p.Items && ParseUtils.parseItems(p.Items)[0];
+			.then(function (resp) {
+				let p = Ext.decode(resp, true);
+				let catalogEntry = p.Items && ParseUtils.parseItems(p.Items)[0];
 
-						if (catalogEntry) {
-							let cmp = Ext.widget('context-authorization', {
-								catalogEntry: catalogEntry
-							});
-
-							return cmp;
-						}
+				if (catalogEntry) {
+					let cmp = Ext.widget('context-authorization', {
+						catalogEntry: catalogEntry
 					});
+
+					return cmp;
+				}
+			});
 	}
 });

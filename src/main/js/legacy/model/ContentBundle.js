@@ -107,9 +107,9 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 	getDefaultAssetRoot: function () {
 		var root = ([this].concat(this.get('ContentPackages')))
-				.reduce(function (agg, o) {
-					return agg || o.get('root');
-				}, null);
+			.reduce(function (agg, o) {
+				return agg || o.get('root');
+			}, null);
 
 		if (!root) {
 			console.error('No root for content bundle: ', this);
@@ -343,14 +343,14 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			link = me.getLink('DiscussionBoard'),
 			//get the cached request, or make a new one.
 			p = me.__BoardResolver || (((link && Service.request(link)) || Promise.reject('No Discussion Board Link'))
-					//parse
+				//parse
 				.then(ParseUtils.parseItems.bind(ParseUtils))
-					//unwrap from the array
+				//unwrap from the array
 				.then(function (items) {
 					if (items.length > 1) {console.warn('Too many items found.');}
 					return items[0];
 				})
-					//if we fail, delete the cached promise, and resume failure. :P
+				//if we fail, delete the cached promise, and resume failure. :P
 				.catch(function (reason) {
 					delete me.__BoardResolver;
 					return Promise.reject(reason);

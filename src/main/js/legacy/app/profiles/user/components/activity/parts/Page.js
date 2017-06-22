@@ -38,9 +38,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		function getDate (rec) {
 			var d = rec.get('CreatedTime') || new Date(0);
 			return new Date(
-					d.getFullYear(),
-					d.getMonth(),
-					d.getDate());
+				d.getFullYear(),
+				d.getMonth(),
+				d.getDate());
 		}
 
 		function newContainer (rec) {

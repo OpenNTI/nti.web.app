@@ -58,10 +58,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	onSave (value) {
 		const action = this.PUBLISH_ACTIONS[value];
 		let work = action
-					? action()
-					: (value instanceof Date)
-						? this.saveSchedule(value)
-						: null;
+			? action()
+			: (value instanceof Date)
+				? this.saveSchedule(value)
+				: null;
 
 		if (work) {
 			work = work

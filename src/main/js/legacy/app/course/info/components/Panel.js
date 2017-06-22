@@ -25,10 +25,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		if (!Ext.isObject(content)) {
 			if (Ext.isString(content)) {
 				Service.getPageInfo(
-						content,
-						this.loadPage,
-						this.loadPageFailed,
-						this);
+					content,
+					this.loadPage,
+					this.loadPageFailed,
+					this);
 			}
 			return;
 		}

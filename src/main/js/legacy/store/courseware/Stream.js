@@ -61,17 +61,17 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		}
 
 		me.loadingPromise = StoreUtils.loadRawItems(me.url, me.params)
-				.then(function (response) {
-					me.loading = false;
-					return Ext.decode(response, true);
-				})
-				.then(function (json) {
-					me.__binItems(json.Items);
-				})
-				.catch(function (reason) {
-					console.log('Failed to load stream: ', reason);
-					return Promise.reject();
-				});
+			.then(function (response) {
+				me.loading = false;
+				return Ext.decode(response, true);
+			})
+			.then(function (json) {
+				me.__binItems(json.Items);
+			})
+			.catch(function (reason) {
+				console.log('Failed to load stream: ', reason);
+				return Promise.reject();
+			});
 
 		return me.loadingPromise;
 	},
@@ -144,8 +144,8 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		date = moment.utc(date);
 
 		return this.__getOrLoadBin(date)
-					.then(function (bin) {
-						return bin.Items;
-					});
+			.then(function (bin) {
+				return bin.Items;
+			});
 	}
 });

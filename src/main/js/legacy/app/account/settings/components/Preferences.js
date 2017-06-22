@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		]},
 		{tag: 'tpl', 'if': 'isFeature(\'notifications\')', cn:
 		{ tag: 'fieldset', cn: [
-				{ tag: 'legend', html: 'Communications' },
+			{ tag: 'legend', html: 'Communications' },
 			{
 				tag: 'span',
 				cls: 'not-ready nti-checkbox email',
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		},
 		{tag: 'tpl', 'if': 'isFeature(\'badges\')', cn:
 		{tag: 'fieldset', cn: [
-				{tag: 'legend', html: 'Badges'},
+			{tag: 'legend', html: 'Badges'},
 			{
 				tag: 'span',
 				cls: 'not-ready nti-checkbox course-badges',

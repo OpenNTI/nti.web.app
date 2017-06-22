@@ -209,9 +209,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return this.getNodes(ntiid, bundleOrToc)
-				.then(function (nodes) {
-					return (nodes || []).map(mapNode);
-				});
+			.then(function (nodes) {
+				return (nodes || []).map(mapNode);
+			});
 	},
 
 	/**
@@ -338,14 +338,14 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				},
 				getPathLabel: function () {
 					return me.getLineageLabels(this.NTIID, bundleOrToc)
-							.then(function (lineages) {
-								var lineage = lineages[0],
-									sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
-									base = lineage.last() || '',
-									leaf = lineage.first();
+						.then(function (lineages) {
+							var lineage = lineages[0],
+								sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
+								base = lineage.last() || '',
+								leaf = lineage.first();
 
-								return lineage.length <= 1 ? base : base + sep + leaf;
-							});
+							return lineage.length <= 1 ? base : base + sep + leaf;
+						});
 				}
 			}, node);
 		}
@@ -356,9 +356,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 		if (!result) {
 			result = this.getNodes(ntiid, bundleOrToc)
-						.then(function (nodes) {
-							return (nodes || []).map(mapNode);
-						});
+				.then(function (nodes) {
+					return (nodes || []).map(mapNode);
+				});
 
 			me.cache[ntiid] = result;
 		}
@@ -578,28 +578,28 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return me.getNodes(ntiid, bundleOrToc)
-				.then(function (info) {
-					info = info && info[0];
+			.then(function (info) {
+				info = info && info[0];
 
-					if (!info) { return null; }
+				if (!info) { return null; }
 
-					var node;
+				var node;
 
 
-					node = info.location;
+				node = info.location;
 
-					while (node && node.parentNode) {
-						if (node.parentNode === node.ownerDocument.firstChild || node.parentNode === node.ownerDocument) { break; }
+				while (node && node.parentNode) {
+					if (node.parentNode === node.ownerDocument.firstChild || node.parentNode === node.ownerDocument) { break; }
 
-						node = node.parentNode;
+					node = node.parentNode;
 
-						if (/\.blocker/i.test(node.getAttribute && node.getAttribute('ntiid'))) {
-							console.error('\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n');
-						}
+					if (/\.blocker/i.test(node.getAttribute && node.getAttribute('ntiid'))) {
+						console.error('\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n');
 					}
+				}
 
-					return (node && node.getAttribute && node.getAttribute('ntiid')) || null;
-				});
+				return (node && node.getAttribute && node.getAttribute('ntiid')) || null;
+			});
 	},
 
 	getFirstTopic: function (node) {
@@ -670,13 +670,13 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return this.getNodes(ntiid, bundleOrToc)
-				.then(function (infos) {
-					infos = (infos || []).map(getSiblings);
+			.then(function (infos) {
+				infos = (infos || []).map(getSiblings);
 
-					infos.filter(function (x) { return !!x; });
+				infos.filter(function (x) { return !!x; });
 
-					return infos[0];
-				});
+				return infos[0];
+			});
 	},
 
 
@@ -963,6 +963,6 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return new Promise((fulfill, reject) => {
 			checkNext(fulfill, reject);
 		})
-		.catch(() => null);
+			.catch(() => null);
 	}
 }).create();

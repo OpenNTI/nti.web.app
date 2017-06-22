@@ -309,8 +309,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		var colorSpec = AnnotationUtils.colorsForName(this.highlightColorName);
 
 		boundingTop = AnnotationUtils.drawCanvas(me.canvas,
-												me.content, fakeRectRange, colorSpec || me.self.bgcolor[me.record.get('Class')][state],
-												[leftOffset, topOffset]);
+			me.content, fakeRectRange, colorSpec || me.self.bgcolor[me.record.get('Class')][state],
+			[leftOffset, topOffset]);
 
 
 		me.range = range;
@@ -332,8 +332,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		}
 
 		return this.createElement(
-				'canvas', cnt,
-				'highlight-canvas');
+			'canvas', cnt,
+			'highlight-canvas');
 	},
 
 	createCounter: function (after) {
@@ -376,7 +376,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			}
 
 			if (node.className.indexOf && (
-					node.className.indexOf('mathjax') >= 0 ||
+				node.className.indexOf('mathjax') >= 0 ||
 					node.className.indexOf('mathquill') >= 0) &&
 					node.className.indexOf('link-button') < 0) {
 				return true;

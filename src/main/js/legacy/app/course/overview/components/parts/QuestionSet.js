@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			json = Ext.decode(r.responseText, true) || {};
 
 		json = (json.Items || [])[0];
-	//		console.debug('Loaded:', r.status, r.responseText);
+		//		console.debug('Loaded:', r.status, r.responseText);
 
 		if (!json) {
 			this.setAsNotStarted();
