@@ -202,8 +202,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				// (the resources screen instead), handles a route with just the
 				// content
 				const navigateToPublished = this.handleContentNavigation
-					? this.handleContentNavigation.bind(this, '', encodeForURI(contentPackage.NTIID))
-					: this.pushRoute.bind(this, '', encodeForURI(contentPackage.NTIID));
+					? this.handleContentNavigation.bind(this, '', encodeForURI(contentPackage.getID()))
+					: this.pushRoute.bind(this, '', encodeForURI(contentPackage.getID()));
 
 				const onDelete = () => {
 					this.currentBundle.updateFromServer()
