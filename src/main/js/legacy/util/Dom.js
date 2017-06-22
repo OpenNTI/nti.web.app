@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			Ext.Error.raise('Apply this to a simple object not a ext class');
 		}
 
-		var r = /^attribute\-(.*)$/,
+		var r = /^attribute-(.*)$/,
 			o = {
 				tag: 'object',
 				cn: []

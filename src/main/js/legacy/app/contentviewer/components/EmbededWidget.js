@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	resolveSplashURL: function (url) {
 		//ensure ends with a slash.
 		var base = this.basePath.replace(/\/$/, '') + '/';
-		var ABSOLUTE_URL = /^(([a-z]+\:)|\/\/|\/)/i;
+		var ABSOLUTE_URL = /^(([a-z]+:)|\/\/|\/)/i;
 
 		if (ABSOLUTE_URL.test(url)) {
 			return url;

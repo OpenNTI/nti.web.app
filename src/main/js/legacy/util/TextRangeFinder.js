@@ -198,7 +198,7 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 		if (Ext.isString(searchFor)) {
 			// rhill 2012-01-29: escape regex chars first
 			// http://stackoverflow.com/questions/280793/case-insensitive-string-replacement-in-javascript
-			searchFor = new RegExp(searchFor.replace(/[.*+?|()\[\]{}\\$\^]/g, '\\$&'), 'ig');
+			searchFor = new RegExp(searchFor.replace(/[.*+?|()[\]{}\\$^]/g, '\\$&'), 'ig');
 		}
 		which = which || 0;
 		if (!Ext.isArray(which)) {

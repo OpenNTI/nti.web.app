@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 
 			//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
 			function parseYoutubeIdOut (uri) {
-				var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
+				var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/,
 					match = uri.match(regExp);
 				if (match && match[2].length === 11) {
 					return match[2];
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 			}
 
 			function parseVimeoId (uri) {
-				var regExp = /^.*vimeo(\:\/\/|\.com\/)(.+)/i,
+				var regExp = /^.*vimeo(:\/\/|\.com\/)(.+)/i,
 					match = uri.match(regExp);
 				if (match && match[2]) {
 					return match[2];
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 
 
 			function parseKalturaInformation (uri) {
-				var kalturaRegex = /^kaltura:\/\/([^\/]+)\/([^\/]+)\/{0,1}/i,
+				var kalturaRegex = /^kaltura:\/\/([^/]+)\/([^/]+)\/{0,1}/i,
 					match = uri.match(kalturaRegex);
 
 				return match ? match[1] + ':' + match[2] : null;

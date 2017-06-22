@@ -1,8 +1,8 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
-
 const {getLink, Server, Service: ServiceSymbol} = require('nti-lib-interfaces');
 const {EmbedInput, Editor, createMediaSourceFromUrl, getCanonicalUrlFrom} = require('nti-web-video');
+
 const ParseUtils = require('legacy/util/Parsing');
 const PromptStateStore = require('legacy/app/prompt/StateStore');
 const Video = require('legacy/model/Video');

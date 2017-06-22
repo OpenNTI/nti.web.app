@@ -2,19 +2,12 @@ const Ext = require('extjs');
 const {getService} = require('nti-web-client');
 
 const Resources = require('nti-web-course-resources');
-const ParseUtils = require('legacy/util/Parsing');
 const SearchStateStore = require('legacy/app/search/StateStore');
+const ContentActions = require('legacy/app/content/Actions');
 
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 
-
-const EMPTY_CONTENT_PACKAGE = {
-	'title': 'Untitled Reading',
-	'Class': 'RenderableContentPackage',
-	'MimeType': 'application/vnd.nextthought.renderablecontentpackage',
-	'content': ''
-};
 
 module.exports = exports = Ext.define('NextThought.app.course.resources.Index', {
 	extend: 'Ext.container.Container',
@@ -46,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 		this.addDefaultRoute('/readings');
 
 		this.SearchStore = SearchStateStore.getInstance();
-		this.ContentActions = NextThought.app.content.Actions.create();
+		this.ContentActions = ContentActions.create();
 
 		this.initSearchHandler(this.SearchStore);
 	},

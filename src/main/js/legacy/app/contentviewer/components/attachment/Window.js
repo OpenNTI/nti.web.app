@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		},
 
 		isImage: function (type) {
-			return (/[\/\.](gif|jpg|jpeg|tiff|png)$/i).test(type);
+			return (/[/.](gif|jpg|jpeg|tiff|png)$/i).test(type);
 		}
 	},
 

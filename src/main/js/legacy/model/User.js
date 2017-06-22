@@ -357,7 +357,7 @@ exports = Ext.define('NextThought.model.User', {
 		},
 
 		getProfileStateFromFragment: function (fragment) {
-			var re = /^#!profile\/([^\/]+)\/?(.*)$/i, o = re.exec(fragment);
+			var re = /^#!profile\/([^/]+)\/?(.*)$/i, o = re.exec(fragment);
 
 			function filter (u) {
 				if ($AppConfig.obscureUsernames) {

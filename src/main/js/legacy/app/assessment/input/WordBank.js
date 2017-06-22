@@ -446,7 +446,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 		function re (original, attrs) {
 			attrs = (attrs || '').trim().split(/\s/);
 
-			if (/type=(\"|\')?blankfield/i.test(attrs)) {
+			if (/type=("|')?blankfield/i.test(attrs)) {
 				attrs = ((/name=\W?(\w+)\W?/).exec(attrs) || [])[1];
 				if (attrs) {
 					return '{' + attrs + '} ';//the inputs don't have a space between them and the following words. :/

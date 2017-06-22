@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 	statics: {
 		type: 'kaltura',
 
-		URL_MATCHES: /kaltura:\/\/[^\/]+\/[^\/]+\/{0,1}/i,
+		URL_MATCHES: /kaltura:\/\/[^/]+\/[^/]+\/{0,1}/i,
 
 		urlIsFor: function (url) {
 			return this.URL_MATCHES.exec(url);

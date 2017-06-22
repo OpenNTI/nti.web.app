@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		}
 
 		function metaObj (m) {
-			return toObj(m, /(name|http\-equiv)="([^"]+)"/i, /content="([^"]*)"/i);
+			return toObj(m, /(name|http-equiv)="([^"]+)"/i, /content="([^"]*)"/i);
 		}
 
 		function cssObj (m) {
@@ -308,7 +308,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 				//make any url adjustments:
 				if (key === 'background-image') {
 					val = val.replace(/['|"]/g , '').replace('"', '');
-					url = val.match(/url\(([^\)]*)/i)[1];
+					url = val.match(/url\(([^)]*)/i)[1];
 					val = 'url(' + basePath + url + ')';
 				}
 

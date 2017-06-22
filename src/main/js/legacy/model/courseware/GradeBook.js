@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', 
 
 	add: function (grade, assignmentId) {
 		var path = grade.get('href')
-				.replace(this.get('href').split(/[\?#]/)[0], '')//remove the prefix
+				.replace(this.get('href').split(/[?#]/)[0], '')//remove the prefix
 				.replace(/^\//, '')//remove the initial separator
 				.split('/')//make into a list
 				.map(decodeURIComponent),//decode back into normal value
