@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	MAX_PATH_LENGTH: 2,
 
 	getEmptyContentPackage: function () {
-		return EMPTY_CONTENT_PACKAGE;
+		return { ...EMPTY_CONTENT_PACKAGE };
 	},
 
 	getContentPath: function (ntiid, bundle, parent, rootPageId, rootRoute) {
