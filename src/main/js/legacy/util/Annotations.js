@@ -4,8 +4,8 @@ const User = require('legacy/model/User');
 const Highlight = require('legacy/model/Highlight');
 const Note = require('legacy/model/Note');
 const lazy = require('legacy/util/lazy-require')
-			.get('Anchors', () => require('legacy/util/Anchors'))
-			.get('RectUtils', () => require('legacy/util/Rects'));
+	.get('Anchors', () => require('legacy/util/Anchors'))
+	.get('RectUtils', () => require('legacy/util/Rects'));
 
 require('legacy/app/whiteboard/Canvas');
 
@@ -31,8 +31,8 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		var holder = new Note(),
 			creator,
 			refs = (note.get('references') || []).slice(),
-		//Make sure we create a new date object so we don't mutate the
-		//the field in the child record.
+			//Make sure we create a new date object so we don't mutate the
+			//the field in the child record.
 			ct = new Date(note.get('CreatedTime').getTime()), lm;
 
 		if (refs.length) {
@@ -245,8 +245,8 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 
 			x = i === 0 || small ? left : 0;
 			w = last || small
-					? (r.width + (x ? 0 : left) + (padding * 2))
-					: ((width - x) + (x ? (padding * 2) : 0));
+				? (r.width + (x ? 0 : left) + (padding * 2))
+				: ((width - x) + (x ? (padding * 2) : 0));
 
 			h = r.height + (padding * 2);
 			if (!last && (Math.abs(y - lastY) < lineHeight || y > lastY)) {
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 			}
 
 			if (last) {
-//				w -= 4;
+				//				w -= 4;
 				ctx.beginPath();
 				ctx.moveTo(x + w, y);
 				ctx.lineTo(x + w, y + h);

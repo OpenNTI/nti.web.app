@@ -28,10 +28,10 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 		blue = blue.toFixed(0);
 
 		return Ext.String.format('rgba({0},{1},{2},{3})',
-				red,
-				green,
-				blue,
-				typeof alpha === 'number' ? alpha : 1
+			red,
+			green,
+			blue,
+			typeof alpha === 'number' ? alpha : 1
 		);
 	},
 

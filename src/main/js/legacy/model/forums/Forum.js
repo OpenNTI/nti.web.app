@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 				sortOn: 'NewestDescendantCreatedTime',
 				sortOrder: 'DESC'
 			},extraParams
-		)]);
+			)]);
 	},
 
 

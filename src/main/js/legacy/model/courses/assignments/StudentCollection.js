@@ -23,16 +23,16 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 		}
 
 		this.__getHistoriesRequest = Service.request(link)
-					.then(function (response) {
-						return ParseUtils.parseItems(response)[0];
-					})
-					.catch(function (reason) {
-						if (reason && reason.status === 404) {
-							return UsersCourseAssignmentHistory.getEmpty();
-						}
+			.then(function (response) {
+				return ParseUtils.parseItems(response)[0];
+			})
+			.catch(function (reason) {
+				if (reason && reason.status === 404) {
+					return UsersCourseAssignmentHistory.getEmpty();
+				}
 
-						return reason;
-					});
+				return reason;
+			});
 
 		return this.__getHistoriesRequest;
 	},
@@ -45,15 +45,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 	 */
 	getHistoryItem: function (assignment, useCache) {
 		return this.getHistory(useCache)
-				.then(function (history) {
-					var item = history.getItem(assignment);
+			.then(function (history) {
+				var item = history.getItem(assignment);
 
-					if (item) {
-						return Promise.resolve(item);
-					}
+				if (item) {
+					return Promise.resolve(item);
+				}
 
-					return Promise.reject();
-				});
+				return Promise.reject();
+			});
 	},
 
 

@@ -119,23 +119,23 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 		// me.listenToLibrary();
 
 		return Service.getPageInfo(ntiid)
-				.then(function (info) {
-					return Promise.resolve(info)
-							.then(function (pi) {
-								var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
-								return meta || Promise.reject(['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
-							})
-							.then(function (infos) {
-								return Ext.isArray(infos) ? infos[0] : infos;
-							});
-				})
-				.catch(function (reason) {
-					if (reason && reason.status === 403) {
-						console.log('Unauthorized when requesting page info', ntiid);
-						return me.handleUnauthorized(ntiid, reason);
-					}
-					return Promise.reject(reason);
-				});
+			.then(function (info) {
+				return Promise.resolve(info)
+					.then(function (pi) {
+						var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
+						return meta || Promise.reject(['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
+					})
+					.then(function (infos) {
+						return Ext.isArray(infos) ? infos[0] : infos;
+					});
+			})
+			.catch(function (reason) {
+				if (reason && reason.status === 403) {
+					console.log('Unauthorized when requesting page info', ntiid);
+					return me.handleUnauthorized(ntiid, reason);
+				}
+				return Promise.reject(reason);
+			});
 	},
 
 
@@ -166,14 +166,14 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 
 		if (meta) {
 			return Service.getPageInfo(meta.ContentNTIID)
-					.then(function (pageInfo) {
-						if (pageInfo.isPageInfo) {
-							me.attachContentRootToMeta(meta, pageInfo);
-							me.cacheMeta(meta, ntiid, ntiid);
-							return meta;
-						}
-						return Promise.reject('No Meta');
-					});
+				.then(function (pageInfo) {
+					if (pageInfo.isPageInfo) {
+						me.attachContentRootToMeta(meta, pageInfo);
+						me.cacheMeta(meta, ntiid, ntiid);
+						return meta;
+					}
+					return Promise.reject('No Meta');
+				});
 		}
 
 		bookPrefix = me.bookPrefixIfQuestion(ntiid);

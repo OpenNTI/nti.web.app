@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {}
 			// native implementation of Array.prototype.reduce. For instance, IE8
 			// does not support strict mode, so this check is actually useless.
 			throw new TypeError(
-					'Array.prototype.reduce called on null or undefined');
+				'Array.prototype.reduce called on null or undefined');
 		}
 		if ('function' !== typeof callback) {
 			throw new TypeError(callback + ' is not a function');

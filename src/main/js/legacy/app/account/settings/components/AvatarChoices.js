@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		me.mon(me.up('window').down('picture-editor'), 'saved', function () {
 			const avatarUrl = u.get('avatarURL');
-				//const background = u.get('backgroundURL');
+			//const background = u.get('backgroundURL');
 
 			me.avatarWrapper.dom.innerHTML = Ext.util.Format.avatar(u);
 			// me.backgroundURL.dom.innerHTML = Ext.util.Format.background(u);

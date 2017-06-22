@@ -22,7 +22,7 @@ if (window['MathJax']) {
 		}
 	};
 
-//config MathJax
+	//config MathJax
 	MathJax.Hub.Config({
 		showProcessingMessages : false,
 		messageStyle : 'none',

@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 	fields: [
 		{ name: 'src', type: 'string', mapping: '@src'},
 
-			//id
+		//id
 		{ name: 'NTIID', type: 'string', mapping: '@topic-ntiid',
 			convert: function (v, m) {
 				//no topic ntiid? ok, use the actual ntiid... (why we cant use an "or" in the mapping query, i donno)
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 			}
 		},
 
-			//sort order
+		//sort order
 		{ name: 'position', type: 'string',
 			convert: function (v, m) {
 				function toPostionString (n) {
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 			}
 		},
 
-			//(nti)id of parent
+		//(nti)id of parent
 		{ name: 'parent', type: 'string', mapping: '@parentNode',
 			convert: function (v) {return v && (v.getAttribute('topic-ntiid') || v.getAttribute('ntiid'));} },
 
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 			}
 		},
 
-			//string displayed in the UI
+		//string displayed in the UI
 		{ name: 'label', type: 'string', mapping: '@label',
 			convert: function (v, m) {
 				var n = !v && m.getAssociatedNode();
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 		//unit, lesson
 		{ name: 'type', type: 'string', mapping: '@nodeName', convert: function (v) {return v && v.toLowerCase(); } },
 
-			//due date
+		//due date
 		{ name: 'date', type: 'date', mapping: '@date', dateFormat: 'c', exampleValue: '2013-10-16T00:00:00+00:00',
 			convert: function (v, m) {
 				if (Ext.isEmpty(v)) {return null;}
@@ -119,8 +119,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 		if (!this.associatedNode) {
 			ntiid = n.getAttribute('topic-ntiid') || '';
 			this.associatedNode = /topic/i.test(n.nodeName) ? n : Ext.DomQuery.selectNode(
-					'topic[ntiid="' + ParseUtils.escapeId(ntiid) + '"]',
-					n.ownerDocument);
+				'topic[ntiid="' + ParseUtils.escapeId(ntiid) + '"]',
+				n.ownerDocument);
 			if (!this.associatedNode) {
 				console.warn('Could not find associated topic', n);
 			}

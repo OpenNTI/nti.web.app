@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 							thumbnail: Globals.CANVAS_BROKEN_IMAGE.src
 						};
 					})
-				);
+			);
 
 			cache[id] = promise;
 

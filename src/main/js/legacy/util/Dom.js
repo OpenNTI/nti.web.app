@@ -42,8 +42,8 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			addValue(obj, p.getAttribute('name'), p.getAttribute('value'));
 		});
 
-	//		SAJ: Does not work as intent and just wastes CPU cycles.
-	//		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
+		//		SAJ: Does not work as intent and just wastes CPU cycles.
+		//		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
 
 		obj.asDomSpec = this.asDomSpec;
 
@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			el = tw.nextNode();
 			if (!el) {continue;}
 
-				//Remove comments
+			//Remove comments
 			if ((el.nodeType === Node.COMMENT_NODE) ||
 				//remove nodes we deem bad
 				(BAD_NODES[el.tagName]) ||

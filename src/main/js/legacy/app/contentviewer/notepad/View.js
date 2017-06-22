@@ -168,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 			if (reader) {
 				rangeInfo = reader.getNoteOverlay().rangeForLineInfo(editor.lineInfo, style);
 				reader.fireEvent('save-new-note', null, note, rangeInfo.range,
-						rangeInfo.container || reader.getLocation().NTIID, null, style, afterSave);
+					rangeInfo.container || reader.getLocation().NTIID, null, style, afterSave);
 			}
 		}
 		catch (error) {

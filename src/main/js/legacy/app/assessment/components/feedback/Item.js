@@ -137,40 +137,40 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 		var originalBody = record.get('body');
 		record.set('body', value.body);
 		record.saveData()
-				.then(function () {
-					editor.deactivate();
-					editor.setValue('');
-					editor.unmask();
-					me.update();
-				})
-				.catch(function (reason) {
-					console.error('Failled to update feedback: ', reason);
-					record.set('body', originalBody);
-					editor.unmask();
+			.then(function () {
+				editor.deactivate();
+				editor.setValue('');
+				editor.unmask();
+				me.update();
+			})
+			.catch(function (reason) {
+				console.error('Failled to update feedback: ', reason);
+				record.set('body', originalBody);
+				editor.unmask();
 
-					//TODO: Unify these into one place.
-					const {response: err} = reason;
-					const maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
-						currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
+				//TODO: Unify these into one place.
+				const {response: err} = reason;
+				const maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
+					currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
 
-					if (err.code === 'MaxFileSizeUploadLimitError') {
-						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
-					}
-					if (err.code === 'MaxAttachmentsExceeded') {
-						err.message += ' Max Number of files: ' + err.constraint;
-					}
+				if (err.code === 'MaxFileSizeUploadLimitError') {
+					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+				}
+				if (err.code === 'MaxAttachmentsExceeded') {
+					err.message += ' Max Number of files: ' + err.constraint;
+				}
 
-					let msg = err && err.message || 'Could not save reply';
-					alert({title: 'Attention', msg: msg, icon: 'warning-red'});
-				})
-				//This catch will only fire if the above catch throws something
-				.catch(function (reason) {
-					console.error('Failed:', reason);
-					alert({
-						title: getString('NextThought.view.assessment.AssignmentFeedback.error-title'),
-						msg: getString('NextThought.view.assessment.AssignmentFeedback.error-msg')
-					});
+				let msg = err && err.message || 'Could not save reply';
+				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+			})
+		//This catch will only fire if the above catch throws something
+			.catch(function (reason) {
+				console.error('Failed:', reason);
+				alert({
+					title: getString('NextThought.view.assessment.AssignmentFeedback.error-title'),
+					msg: getString('NextThought.view.assessment.AssignmentFeedback.error-msg')
 				});
+			});
 	},
 
 

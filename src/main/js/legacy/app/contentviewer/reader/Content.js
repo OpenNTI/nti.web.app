@@ -207,8 +207,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 		//apply any styles that may be on the content's body, to the NTIContent div:
 		this.applyBodyStyles(
-				resp.responseText.match(/<body([^>]*)>/i),
-				this.buildPath(resp.request.options.url));
+			resp.responseText.match(/<body([^>]*)>/i),
+			this.buildPath(resp.request.options.url));
 
 		ntiid = reader.getLocation().NTIID;
 

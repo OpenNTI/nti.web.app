@@ -501,7 +501,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 
 		store.on('cleanup', 'destroy',
-				events.relayEvents(store, ['add', 'bulkremove', 'remove']));
+			events.relayEvents(store, ['add', 'bulkremove', 'remove']));
 	},
 
 	onAnnotationsLineFilter: function (cmp, line) {
@@ -605,7 +605,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 			Ext.each(containers, function (id) {
 				me.addPageStore(id, (containerId === id) ?//ensure we don't duplicate the root store
-									pageStore : Store.make(pageInfo.getSubContainerURL(rel, id), id));
+				pageStore : Store.make(pageInfo.getSubContainerURL(rel, id), id));
 			});
 
 			this.onAnnotationsFilter(cmp);
@@ -729,31 +729,31 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			url = this.__getPagesURL();
 
 		return noteRecord.saveData({url: url})
-					.then(function (response) {
-						var rec = ParseUtils.parseItems(response)[0];
-						me.incomingCreatedChange({}, rec, {});
-						return rec;
-					})
-					.catch(function (err) {
-						console.error('Something went terribly wrong...', err.stack || err.message);
-						if (err && err.responseText) {
-							err = JSON.parse(err.responseText);
-						}
+			.then(function (response) {
+				var rec = ParseUtils.parseItems(response)[0];
+				me.incomingCreatedChange({}, rec, {});
+				return rec;
+			})
+			.catch(function (err) {
+				console.error('Something went terribly wrong...', err.stack || err.message);
+				if (err && err.responseText) {
+					err = JSON.parse(err.responseText);
+				}
 
-						let maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
-							currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
-						if (err.code === 'MaxFileSizeUploadLimitError') {
-							err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
-						}
-						if (err.code === 'MaxAttachmentsExceeded') {
-							err.message += ' Max Number of files: ' + err.constraint;
-						}
+				let maxSize = FilePicker.getHumanReadableFileSize(err.max_bytes),
+					currentSize = FilePicker.getHumanReadableFileSize(err.provided_bytes);
+				if (err.code === 'MaxFileSizeUploadLimitError') {
+					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+				}
+				if (err.code === 'MaxAttachmentsExceeded') {
+					err.message += ' Max Number of files: ' + err.constraint;
+				}
 
-						let msg = err && err.message || 'Could not save reply';
-						alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+				let msg = err && err.message || 'Could not save reply';
+				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
 
-						return Promise.reject(err);
-					});
+				return Promise.reject(err);
+			});
 
 
 	},
@@ -841,19 +841,19 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
 
 		return replyRecord.saveData({url: url})
-				.then(function (response) {
-					var rec = ParseUtils.parseItems(response)[0];
-					me.incomingCreatedChange({}, rec, {});
-					recordRepliedTo.fireEvent('child-added', rec);
-					return rec;
-				})
-				.catch(function (err) {
-					console.error('Something went terribly wrong...', err.stack || err.message);
+			.then(function (response) {
+				var rec = ParseUtils.parseItems(response)[0];
+				me.incomingCreatedChange({}, rec, {});
+				recordRepliedTo.fireEvent('child-added', rec);
+				return rec;
+			})
+			.catch(function (err) {
+				console.error('Something went terribly wrong...', err.stack || err.message);
 
-					let def = 'Could not save reply';
-					me.onNoteSaveFailure(err, def);
-					return Promise.reject(err);
-				});
+				let def = 'Could not save reply';
+				me.onNoteSaveFailure(err, def);
+				return Promise.reject(err);
+			});
 	},
 
 
@@ -880,19 +880,19 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		r.set('title', title);
 
 		return r.saveData()
-					.then(function (response) {
-						let rec = ParseUtils.parseItems(response)[0];
-						r.fireEvent('updated', rec);
-						return rec;
-					})
-					.catch(function (err) {
-						console.error('Something went terribly wrong...', err.stack || err.message);
-						let def = 'Could not save note';
+			.then(function (response) {
+				let rec = ParseUtils.parseItems(response)[0];
+				r.fireEvent('updated', rec);
+				return rec;
+			})
+			.catch(function (err) {
+				console.error('Something went terribly wrong...', err.stack || err.message);
+				let def = 'Could not save note';
 
-						r.set(original);
-						me.onNoteSaveFailure(err, def);
-						return Promise.reject(err);
-					});
+				r.set(original);
+				me.onNoteSaveFailure(err, def);
+				return Promise.reject(err);
+			});
 	},
 
 

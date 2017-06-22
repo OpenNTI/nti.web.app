@@ -2,7 +2,7 @@ const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
-  //Mixin assumptions: Mixed into a Container, with a property "record" that has implemented "loadReplies"
+	//Mixin assumptions: Mixed into a Container, with a property "record" that has implemented "loadReplies"
 
 	getItemReplies: function () {
 		var me = this,
@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatest
 			//Set comments count
 			if (me.commentsEl) {
 				me.commentsEl.update(Ext.util.Format.plural(count,
-						me.commentsEl.getAttribute('data-label')));
+					me.commentsEl.getAttribute('data-label')));
 				if (count === 0 || count === 1) {
 					delete me.commentsEl;
 				}

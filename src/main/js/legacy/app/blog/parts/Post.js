@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		}
 
 		return this.initialLoad
-				.then(Promise.minWait(Globals.WAIT_TIMES.SHORT));
+			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT));
 	},
 
 	closeView: function () {

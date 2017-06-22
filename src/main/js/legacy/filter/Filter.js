@@ -29,12 +29,12 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 
 	toString: function () {
 		return Ext.String.format('{"{0}":"{1}", "operation": "{2}"}',
-				this.fieldName, this.value,
-				this.operation === this.self.OPERATION_EXCLUDE
-						? 'exclude'
-						: this.operation === this.self.OPERATION_INCLUDE
-							? 'include'
-							: 'unknown');
+			this.fieldName, this.value,
+			this.operation === this.self.OPERATION_EXCLUDE
+				? 'exclude'
+				: this.operation === this.self.OPERATION_INCLUDE
+					? 'include'
+					: 'unknown');
 	},
 
 	equals: function (o) {
@@ -59,20 +59,20 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 
 		t = obj[f];
 		t = (Ext.isFunction(t)
-				? t.call(obj)
-				: t === undefined && obj.get
-					? obj.get(f)
-					: t);
+			? t.call(obj)
+			: t === undefined && obj.get
+				? obj.get(f)
+				: t);
 
 		t = (v === 'Everyone' && f === 'Creator') || this.compareValue(v, t);
 
-	//		console.debug(t,this.toString());
+		//		console.debug(t,this.toString());
 
 		return o === this.self.OPERATION_EXCLUDE
-				? !t
-				: o === this.self.OPERATION_INCLUDE
-					? t
-					: Ext.Error.raise('Invalid filter operation');
+			? !t
+			: o === this.self.OPERATION_INCLUDE
+				? t
+				: Ext.Error.raise('Invalid filter operation');
 	},
 
 

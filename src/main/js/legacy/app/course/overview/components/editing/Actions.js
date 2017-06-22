@@ -138,12 +138,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return Service.put(link, values)
-				.then(function (response) {
-					var rec = ParseUtils.parseItems(response)[0];
+			.then(function (response) {
+				var rec = ParseUtils.parseItems(response)[0];
 
-					record.syncWith(rec);
-					return record;
-				});
+				record.syncWith(rec);
+				return record;
+			});
 	},
 
 
@@ -172,9 +172,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return Service.request(url)
-				.then(function (response) {
-					return JSON.parse(response);
-				});
+			.then(function (response) {
+				return JSON.parse(response);
+			});
 	},
 
 
@@ -214,11 +214,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (record) {
 			return this.__updateRecord(form, record, originalPosition, newPosition, root)
-					.then(visibilityPromise);
+				.then(visibilityPromise);
 		}
 
 		return this.__createRecord(form, newPosition)
-				.then(visibilityPromise);
+			.then(visibilityPromise);
 	},
 
 

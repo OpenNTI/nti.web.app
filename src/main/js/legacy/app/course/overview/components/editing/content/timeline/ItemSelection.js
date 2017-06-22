@@ -13,11 +13,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{ cls: 'overview-timeline', cn: [
 			{ tag: 'label', cls: 'timeline-item', cn: [
-					{tag: 'input', type: 'checkbox'},
-					{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
+				{tag: 'input', type: 'checkbox'},
+				{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
 				{cls: 'meta', cn: [
-						{cls: 'title', html: '{title}'},
-						{cls: 'description', html: '{description}'}
+					{cls: 'title', html: '{title}'},
+					{cls: 'description', html: '{description}'}
 				]}
 			]
 			}

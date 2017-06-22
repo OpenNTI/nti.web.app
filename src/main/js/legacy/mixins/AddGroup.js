@@ -14,11 +14,11 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 				cls: 'add-group-action selection-list-item',
 				role: 'button',
 				children: [
-						{ tag: 'a', href: '#', html: 'Create New List' },
+					{ tag: 'a', href: '#', html: 'Create New List' },
 					{ cls: 'input-wrap empty', style: {display: 'none'}, cn: [
-							{ cls: 'clear' },
-							{ tag: 'input', type: 'text', cls: 'new-group-input' },
-							{ cls: 'save-button save-button-disabled', html: 'Add' }
+						{ cls: 'clear' },
+						{ tag: 'input', type: 'text', cls: 'new-group-input' },
+						{ cls: 'save-button save-button-disabled', html: 'Add' }
 					]}
 				]
 			}, true);

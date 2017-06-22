@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 					height: me.reader.getIframe().get().getHeight()
 				},
 				cn: [
-						{ cls: 'note-here-control-box', onclick: 'void(0)' }
+					{ cls: 'note-here-control-box', onclick: 'void(0)' }
 				]
 			};
 
@@ -92,21 +92,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 		if (Ext.is.iPad) {
 			me.reader.on('destroy', 'destroy',
-			me.mon(container.parent(), {
-				scope: me,
-				destroyable: true,
-				click: 'trackLineAtEvent'
-			}));
+				me.mon(container.parent(), {
+					scope: me,
+					destroyable: true,
+					click: 'trackLineAtEvent'
+				}));
 		}
 		else {
 			me.reader.on('destroy', 'destroy',
-			me.mon(container.parent(), {
-				scope: me,
-				destroyable: true,
-				mousemove: 'mouseOver',
-				mouseover: 'mouseOver',
-				mouseout: 'mouseOut'
-			}));
+				me.mon(container.parent(), {
+					scope: me,
+					destroyable: true,
+					mousemove: 'mouseOver',
+					mouseover: 'mouseOver',
+					mouseout: 'mouseOut'
+				}));
 
 			me.reader.on({
 				//no buffer
@@ -366,8 +366,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 	noteHereEvent: function (range, rect, style, top) {
 		this.data.box.activeLineInfo = Ext.apply(
-				{style: style},
-				this.lineInfoForRangeAndRect(range, rect));
+			{style: style},
+			this.lineInfoForRangeAndRect(range, rect));
 
 		var readerRect = this.reader.getAnnotationOffsets().rect;
 
@@ -531,8 +531,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			box = Ext.get(o.box),
 			oldY = box.getY() - offset.top,
 			newY = 0,
-		// occ,
-		//activeY = oldY,
+			// occ,
+			//activeY = oldY,
 			line = lineInfo || o.lastLine;
 
 		if (line && line.rect) {

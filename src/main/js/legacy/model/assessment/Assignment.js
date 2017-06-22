@@ -272,12 +272,12 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		}
 
 		return Service.request(link)
-		.then(function (response) {
-			var json = JSON.parse(response);
+			.then(function (response) {
+				var json = JSON.parse(response);
 
-			return json.TimeRemaining * 1000;
-		})
-		.catch(fail);
+				return json.TimeRemaining * 1000;
+			})
+			.catch(fail);
 	},
 
 

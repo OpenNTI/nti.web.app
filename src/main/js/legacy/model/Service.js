@@ -627,9 +627,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		// }
 
 		return this.getObjectRaw({url: url, ntiid: ntiid}, mime + '+json', true)
-				// .then(cacheWrapper)
-				.then(onSuccess)
-				.catch(onFailure);
+		// .then(cacheWrapper)
+			.then(onSuccess)
+			.catch(onFailure);
 	},
 
 
@@ -674,28 +674,28 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		url = this.getObjectURL(ntiid);
 
 		result = this.getObjectRaw(url, null, false, targetBundle)
-				.then(function (resp) {
-					try {
-						return ParseUtils.parseItems(resp.responseText)[0];
-					}catch (e) {
-						if (!safe) {
-							throw e;
-						}
+			.then(function (resp) {
+				try {
+					return ParseUtils.parseItems(resp.responseText)[0];
+				}catch (e) {
+					if (!safe) {
+						throw e;
 					}
-				});
+				}
+			});
 
 
 		//for backwards compat. Deprecate the callbacks.
 		result
-				.then(function (o) {
-					Ext.callback(success, scope, [o]);
-				})
-				.catch(function (reason) {
-					if (!Ext.isArray(reason)) {
-						reason = [reason];
-					}
-					Ext.callback(failure, scope, reason);
-				});
+			.then(function (o) {
+				Ext.callback(success, scope, [o]);
+			})
+			.catch(function (reason) {
+				if (!Ext.isArray(reason)) {
+					reason = [reason];
+				}
+				Ext.callback(failure, scope, reason);
+			});
 
 		return result;
 	},
@@ -719,12 +719,12 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return Promise.all(ntiids.map(function (n) {
 			return me.getObject(n, null, null, null, safe);
 		}))
-				.always(function (results) {
-					if (!Ext.isArray(results)) {results = [results];}
-					results = results.map(model);
-					Ext.callback(success, scope, [results]);
-					return results;
-				});
+			.always(function (results) {
+				if (!Ext.isArray(results)) {results = [results];}
+				results = results.map(model);
+				Ext.callback(success, scope, [results]);
+				return results;
+			});
 
 	},
 
@@ -751,24 +751,24 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 	__resolveBoards: function (link, community) {
 		return Service.request(link)
-				.then(ParseUtils.parseItems.bind(ParseUtils))
-				.then(function (objs) {
-					//if we have a community go ahead and set it as the creator of the board it created
-					//otherwise just return the boards as is
-					if (!community) {
-						return objs;
+			.then(ParseUtils.parseItems.bind(ParseUtils))
+			.then(function (objs) {
+				//if we have a community go ahead and set it as the creator of the board it created
+				//otherwise just return the boards as is
+				if (!community) {
+					return objs;
+				}
+
+				return objs.map(function (o) {
+					o.communityUsername = community.getId();
+
+					if (o.get('Creator') === community.getId()) {
+						o.set('Creator', community);
 					}
 
-					return objs.map(function (o) {
-						o.communityUsername = community.getId();
-
-						if (o.get('Creator') === community.getId()) {
-							o.set('Creator', community);
-						}
-
-						return o;
-					});
+					return o;
 				});
+			});
 	},
 
 

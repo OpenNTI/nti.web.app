@@ -46,7 +46,7 @@ const TextRangeFinder = Ext.define('NextThought.util.TextRangeFinder', {
 	//be called with each node before it is indexed.  nodes returning
 	//true will be indexed
 	indexText: function (node, nodeFilterFn) {
-			// initialize root loop
+		// initialize root loop
 		var indices = [],
 			text = [], // will be morphed into a string later
 			iNode = 0,

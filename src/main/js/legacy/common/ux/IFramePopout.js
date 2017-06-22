@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 		});
 
 		ContentProxy.get(this.src)
-				.then(this.setContent.bind(this), this.noContent.bind(this));
+			.then(this.setContent.bind(this), this.noContent.bind(this));
 
 		me.task = {
 			scope: me,
@@ -60,12 +60,12 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 
 	noContent: function () {
 		this.getComponent('content')
-				.addCls('empty-state')
-				.removeCls('loading')
-				.update(Ext.DomHelper.markup([
-					'Oops! There was an error.',
-					{ cls: 'sub', html: 'Try again at a later time.'}
-				]));
+			.addCls('empty-state')
+			.removeCls('loading')
+			.update(Ext.DomHelper.markup([
+				'Oops! There was an error.',
+				{ cls: 'sub', html: 'Try again at a later time.'}
+			]));
 	},
 
 	setContent: function (content) {
@@ -93,8 +93,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 
 	syncSize: function () {
 		this.setSize(
-				Math.floor(Ext.Element.getViewportWidth() * (this.widthRatio || 0.5)),
-				Math.floor(Ext.Element.getViewportHeight() * (this.heightRatio || 0.5)));
+			Math.floor(Ext.Element.getViewportWidth() * (this.widthRatio || 0.5)),
+			Math.floor(Ext.Element.getViewportHeight() * (this.heightRatio || 0.5)));
 		this.center();
 	},
 

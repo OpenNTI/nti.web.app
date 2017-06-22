@@ -39,8 +39,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Sum
 				const json = JSON.parse(resp);
 				const grade = ParseUtils.parseItems(json.PredictedGrade)[0];
 				const predicted = grade.isPredicted() ?
-									{Correctness: grade.get('Correctness'), Grade: grade.get('Grade'), RawValue: grade.get('RawValue')} :
-									null;
+					{Correctness: grade.get('Correctness'), Grade: grade.get('Grade'), RawValue: grade.get('RawValue')} :
+					null;
 
 				//Dirty hack to cover up extjs' mess
 				this.suspendEvents();

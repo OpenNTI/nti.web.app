@@ -10,8 +10,8 @@ const DomContentRangeDescription = require('legacy/model/anchorables/DomContentR
 const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDescription');
 require('legacy/model/anchorables/DomContentPointer');
 const lazy = require('legacy/util/lazy-require')
-			.get('RangeUtils', () => require('./Ranges'))
-			.get('AnnotationUtils', () => require('./Annotations'));
+	.get('RangeUtils', () => require('./Ranges'))
+	.get('AnnotationUtils', () => require('./Annotations'));
 
 module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	containerSelectors: ['object[type$=naquestion][data-ntiid]', 'object[type$=ntivideo][data-ntiid]'],
@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		});
 
 		console[locatorsFound === contentRangeDescriptions.length ?
-				'log' : 'warn']('Preresolved ' + locatorsFound + '/' + contentRangeDescriptions.length + ' range descriptions');
+			'log' : 'warn']('Preresolved ' + locatorsFound + '/' + contentRangeDescriptions.length + ' range descriptions');
 	},
 
 	toDomRange: function (contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {

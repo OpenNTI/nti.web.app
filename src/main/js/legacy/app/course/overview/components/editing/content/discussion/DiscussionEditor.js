@@ -16,8 +16,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getFormSchema: function () {
 		var schema = [
-				{name: 'MimeType', type: 'hidden'},
-				{name: 'target', type: 'hidden'},
+			{name: 'MimeType', type: 'hidden'},
+			{name: 'target', type: 'hidden'},
 			{type: 'group', name: 'card', inputs: [
 				{
 					name: 'icon',
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						}
 					]
 				},
-					{type: 'saveprogress'}
+				{type: 'saveprogress'}
 			]}
 		];
 

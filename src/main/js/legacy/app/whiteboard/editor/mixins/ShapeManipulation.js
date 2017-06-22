@@ -273,14 +273,14 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 		}
 
 		Ext.each(
-				c.drawData.shapeList,
-				function (o) {
-					if (!s && o.isPointInShape(sp[0], sp[1])) {
-						s = o; o.selected = this.currentTool || true;
-					}
-					else { delete o.selected; }
-				},
-				this);
+			c.drawData.shapeList,
+			function (o) {
+				if (!s && o.isPointInShape(sp[0], sp[1])) {
+					s = o; o.selected = this.currentTool || true;
+				}
+				else { delete o.selected; }
+			},
+			this);
 
 		this.selected = s;
 

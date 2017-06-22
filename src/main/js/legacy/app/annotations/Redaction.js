@@ -340,11 +340,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 
 	var p = this.prototype,
 		tpl = {tag: 'span', 'data-non-anchorable': 'true', 'data-no-anchors-within': 'true', cls: 'redactionAction {style}', cn: [
-					{tag: 'span', 'data-non-anchorable': 'true', cls: 'editableSpan', html: '{replacementContent}'},
+			{tag: 'span', 'data-non-anchorable': 'true', cls: 'editableSpan', html: '{replacementContent}'},
 			{tag: 'span', 'data-non-anchorable': 'true', cls: 'controls', cn: [
-						{tag: 'span', 'data-non-anchorable': 'true', cls: 'edit', 'data-qtip': '{{{NextThought.view.annotations.Redaction.edit}}}'},
-						{tag: 'span', 'data-non-anchorable': 'true', cls: 'share', 'data-qtip': '{{{NextThought.view.annotations.Redaction.share}}}'},
-						{tag: 'span', 'data-non-anchorable': 'true', cls: 'delete', 'data-qtip': '{{{NextThought.view.annotations.Redaction.delete}}}'}
+				{tag: 'span', 'data-non-anchorable': 'true', cls: 'edit', 'data-qtip': '{{{NextThought.view.annotations.Redaction.edit}}}'},
+				{tag: 'span', 'data-non-anchorable': 'true', cls: 'share', 'data-qtip': '{{{NextThought.view.annotations.Redaction.share}}}'},
+				{tag: 'span', 'data-non-anchorable': 'true', cls: 'delete', 'data-qtip': '{{{NextThought.view.annotations.Redaction.delete}}}'}
 			]}
 		]};
 

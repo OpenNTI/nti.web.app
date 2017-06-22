@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}
 				}
 
-					// node be firstContent, next sibling, previous sibling,
+				// node be firstContent, next sibling, previous sibling,
 				if (node) {
 					id = node && node.getId();
 				}
@@ -324,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	__getRecord: function (id, record, editing, doNotCache) {
 		var outline = editing || doNotCache ? this.updateOutline(editing, doNotCache) :
-								this.activeOutlineInterface || this.updateOutline(editing, doNotCache);
+			this.activeOutlineInterface || this.updateOutline(editing, doNotCache);
 
 		return outline.onceBuilt()
 			.then(builtOutline => {

@@ -39,9 +39,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 			return a.get('completed') ? b.get('completed') ? naturalSortComparator((a.name || '').toUpperCase(), (b.name || '').toUpperCase()) : 1 :
 				b.get('completed') ? -1 :
-				a.get('due') instanceof Date ? b.get('due') instanceof Date ? dueComparator(a, b) : -1 :
-				b.get('due') ? 1 :
-				naturalSortComparator((a.name || '').toUpperCase(), (b.name || '').toUpperCase());
+					a.get('due') instanceof Date ? b.get('due') instanceof Date ? dueComparator(a, b) : -1 :
+						b.get('due') ? 1 :
+							naturalSortComparator((a.name || '').toUpperCase(), (b.name || '').toUpperCase());
 		};
 
 

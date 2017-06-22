@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				autoEl: {
 					cls: 'bubble',
 					cn: [
-							{cls: 'text', html: this.text}
+						{cls: 'text', html: this.text}
 					]
 				}
 			});

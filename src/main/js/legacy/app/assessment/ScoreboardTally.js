@@ -135,8 +135,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTall
 			percent = Math.ceil(100 * correct / total) || 0,
 			//clamp the bucket id to be an integer between 0-10 inclusive.
 			bucketId = Math.min(
-					10,
-					Math.max(Math.ceil(percent / 10), 0)),
+				10,
+				Math.max(Math.ceil(percent / 10), 0)),
 			messageBucket = bucketId || 0,
 			msg = '';
 

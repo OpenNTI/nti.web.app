@@ -288,7 +288,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			ap = ad.up('.ordinal'),
 			bp = bd.up('.ordinal');
 
-	//		console.log('Will swap draggable parts of index: ', a, ' ', b);
+		//		console.log('Will swap draggable parts of index: ', a, ' ', b);
 		ap.select('.draggable-area').remove();
 		bp.select('.draggable-area').remove();
 		ap.dom.appendChild(bd.dom);

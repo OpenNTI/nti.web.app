@@ -64,8 +64,8 @@ module.exports = exports = Ext.define('NextThought.proxy.Rest', {
 		if (request.operation.url || request.url) {
 			if ($AppConfig.debug) {
 				console.debug('Using a set url. Will not look up URL from service.',
-						'\n\tOperation URL:', ((this.operation && this.operation.url) || undefined),
-						'\n\tRequested URL:', request.url);
+					'\n\tOperation URL:', ((this.operation && this.operation.url) || undefined),
+					'\n\tRequested URL:', request.url);
 			}
 			return request.operation.url || request.url;
 		}

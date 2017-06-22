@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 			width: size.width,
 			height: size.height
 		},
-			this, 'poster,start,loopstart,loopend,playcount,autobuffer,loop');
+		this, 'poster,start,loopstart,loopend,playcount,autobuffer,loop');
 
 		/* just having the params exist enables them */
 		if (this.autoplay) { cfg.autoplay = 1; }

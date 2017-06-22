@@ -11,10 +11,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	renderTpl: Ext.DomHelper.markup(
 		{ cls: 'overview-timeline', cn: [
 			{ cls: 'timeline-item', cn: [
-					{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
+				{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
 				{cls: 'meta', cn: [
-						{cls: 'title', html: '{title}'},
-						{cls: 'description', html: '{description}'}
+					{cls: 'title', html: '{title}'},
+					{cls: 'description', html: '{description}'}
 				]}
 			]
 			}

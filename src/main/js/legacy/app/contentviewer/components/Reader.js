@@ -87,10 +87,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		items.add(
-				(this.pageWidgets = Ext.widget({xtype: 'content-page-widgets', renderTo: this.el, reader: this})));
+			(this.pageWidgets = Ext.widget({xtype: 'content-page-widgets', renderTo: this.el, reader: this})));
 
 		items.add(
-				(this.notfound = Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true})));
+			(this.notfound = Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true})));
 	},
 
 	hidePageWidgets: function () {
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			scrollStatics = cache.scrollStatics || {},
 			currentWindowSize = Ext.dom.Element.getViewSize(),
 			f = this.getIframe().get(),
-				//since the body is scrolling now get its scroll top
+			//since the body is scrolling now get its scroll top
 			scrollPosition = Ext.getBody().getScroll().top;
 
 		//Other things are based on the windowSize. left and height
@@ -435,7 +435,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 						status: 200,
 						statusText: 'OK',
 						request: {options: Ext.apply({url: ''}, req)},
-							//hack: ---v (getting dynamic content from the pageInfo)
+						//hack: ---v (getting dynamic content from the pageInfo)
 						responseText: pageInfo.get('content') || ''
 					};
 

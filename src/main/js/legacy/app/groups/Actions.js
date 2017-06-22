@@ -406,34 +406,34 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 		return new Promise(function (fulfill, reject) {
 			me.createDFLUnguarded(displayName, username)
-					.then(function (record) {
-						return me.fetchGroupCode(record, displayName);
-					})
-					.then(function (code) {
-						fulfill(code);
-					})
-					.catch(function (rec, operation, response) {
-						var msg = response && response.message,
-							field = response && response.field,
-							code = response && response.code;
+				.then(function (record) {
+					return me.fetchGroupCode(record, displayName);
+				})
+				.then(function (code) {
+					fulfill(code);
+				})
+				.catch(function (rec, operation, response) {
+					var msg = response && response.message,
+						field = response && response.field,
+						code = response && response.code;
 
-						if (msg) {
-							//get the error from the error util
-							if (field) {
-								msg = msg.replace(field, 'Group Name');
-							}
+					if (msg) {
+						//get the error from the error util
+						if (field) {
+							msg = msg.replace(field, 'Group Name');
 						}
+					}
 
-						msg = NTIError.getError(code, {'name': 'Group name'}, msg);
+					msg = NTIError.getError(code, {'name': 'Group name'}, msg);
 
-						if (!msg && operation.error && operation.error === 422) {
-							//Well a field was wrong, in this case the user only put one thing
-							//in so tell him that is invalid
-							msg = 'Invalid group name ' + displayName;
-						}
+					if (!msg && operation.error && operation.error === 422) {
+						//Well a field was wrong, in this case the user only put one thing
+						//in so tell him that is invalid
+						msg = 'Invalid group name ' + displayName;
+					}
 
-						reject(msg);
-					});
+					reject(msg);
+				});
 		});
 	},
 

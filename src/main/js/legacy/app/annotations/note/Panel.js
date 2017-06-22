@@ -420,14 +420,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			let p;
 			if (me.editMode) {
 				p = me.UserDataActions.saveUpdatedNote(r, v.body || [], v.title)
-						.then(function (response) {
-							let rec = ParseUtils.parseItems(response)[0];
-							r.fireEvent('updated', rec);
-							callback(true, rec);
-						})
-						.catch(reason => {
-							me.onReplySaveFailure(reason);
-						});
+					.then(function (response) {
+						let rec = ParseUtils.parseItems(response)[0];
+						r.fireEvent('updated', rec);
+						callback(true, rec);
+					})
+					.catch(reason => {
+						me.onReplySaveFailure(reason);
+					});
 			}
 			else {
 				p = me.UserDataActions.saveNewReply(r, v.body, [])
@@ -675,19 +675,19 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		//we can. Also getting this onto the next event pump
 		//helps the app not seem like it is hanging
 		return wait()
-				.then(function () {
-					if (me.isDestroyed) {
-						return Promise.reject();
-					}
+			.then(function () {
+				if (me.isDestroyed) {
+					return Promise.reject();
+				}
 
-					if (!r.hasOwnProperty('parent') && r.getLink('replies')) {
-						return me.loadReplies(r);
-					}
+				if (!r.hasOwnProperty('parent') && r.getLink('replies')) {
+					return me.loadReplies(r);
+				}
 
-					// Adding replies is synchronous.
-					me.addReplies(r.children);
-					return Promise.resolve();
-				});
+				// Adding replies is synchronous.
+				me.addReplies(r.children);
+				return Promise.resolve();
+			});
 	},
 
 	maybeOpenReplyEditor: function () {
@@ -760,30 +760,30 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		var t, me = this;
 
 		return me.onceRendered
-				.then(function () {
-					me.context.setHTML('');
-					if (!Ext.isEmpty(contextCmp)) {
-						//We have seen a case where we try and render a component twice.  That is a no no and causes
-						//terrible crashes
-						if (contextCmp.rendered) {
-							console.error('Attempting to rerender a context cmp');
-							return Promise.reject();
-						}
-						contextCmp.render(me.context);
-
-						if (me.resizeMathJax && (Ext.isGecko || Ext.isIE9)) {
-							me.resizeMathJax(me.context);
-						}
+			.then(function () {
+				me.context.setHTML('');
+				if (!Ext.isEmpty(contextCmp)) {
+					//We have seen a case where we try and render a component twice.  That is a no no and causes
+					//terrible crashes
+					if (contextCmp.rendered) {
+						console.error('Attempting to rerender a context cmp');
+						return Promise.reject();
 					}
-					else {
-						t = me.context.up('.context') || me.context;
-						// for no context, hide it.
-						t.setVisibilityMode(Ext.dom.Element.DISPLAY);
-						t.hide();
-					}
+					contextCmp.render(me.context);
 
-					return Promise.resolve();
-				});
+					if (me.resizeMathJax && (Ext.isGecko || Ext.isIE9)) {
+						me.resizeMathJax(me.context);
+					}
+				}
+				else {
+					t = me.context.up('.context') || me.context;
+					// for no context, hide it.
+					t.setVisibilityMode(Ext.dom.Element.DISPLAY);
+					t.hide();
+				}
+
+				return Promise.resolve();
+			});
 	},
 
 	//for subclasses
@@ -1030,12 +1030,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			children = this.query('note-panel') || [],
 			pluck = Ext.Array.pluck,
 			contains = Ext.Array.contains,
-		//do any have the deleting flag?
+			//do any have the deleting flag?
 			anyDeleting = contains(pluck(children, 'deleting'), true),
-		//are any of the remaining panels not placeholders? If so, then we cannot safely remove this panel.
-		//safeToCleanMe means all the panels below this one are only placeholder panels.
+			//are any of the remaining panels not placeholders? If so, then we cannot safely remove this panel.
+			//safeToCleanMe means all the panels below this one are only placeholder panels.
 			safeToCleanMe = !contains(Ext.Array.map(pluck(pluck(children, 'record'), 'placeholder'), Boolean), false),
-		//if the component that was removed from this panel was deleting, or any panel below this was deleting.
+			//if the component that was removed from this panel was deleting, or any panel below this was deleting.
 			deleting = cmp.deleting || anyDeleting;
 
 		console.debug('removed child, it was deleting: ', cmp.deleting,

@@ -430,15 +430,15 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			});
 
 			this.annotationView.on('destroy', 'destroy',
-					this.on({
-						destroyable: true,
-						scope: this.annotationView,
-						resize: function () {
-							if (this.isVisible()) {
-								this.toFront();
-							}
+				this.on({
+					destroyable: true,
+					scope: this.annotationView,
+					resize: function () {
+						if (this.isVisible()) {
+							this.toFront();
 						}
-					}));
+					}
+				}));
 
 			this.annotationView.show().hide();
 			this.on('destroy', 'destroy', this.annotationView);

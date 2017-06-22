@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 							modelName = record.get('Class');
 							if (record.modelName.substr(-modelName.length) !== modelName) {
 								result.records[i] = this.__rebuildRecordAsType(
-										this.findModel(record.raw), record.getId(), record.raw);
+									this.findModel(record.raw), record.getId(), record.raw);
 								delete record.raw;
 							}
 						}

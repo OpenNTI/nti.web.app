@@ -429,12 +429,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 				store.loadPage(1);
 			}
 		})
-		.then(Promise.minWait(WAIT_TIMES.SHORT))
-		.then(() => {
-			if (me.el) {
-				me.el.unmask();
-			}
-		});
+			.then(Promise.minWait(WAIT_TIMES.SHORT))
+			.then(() => {
+				if (me.el) {
+					me.el.unmask();
+				}
+			});
 	},
 
 

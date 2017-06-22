@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	renderTpl: Ext.DomHelper.markup([
 		{
 			tag: 'h2', cls: '{type}', cn: [
-			{tag: 'span', html: '{title}', style: '{[(values.color && ("background-color: #" + values.color)) || "" ]}'}
+				{tag: 'span', html: '{title}', style: '{[(values.color && ("background-color: #" + values.color)) || "" ]}'}
 			]
 		},
 		{

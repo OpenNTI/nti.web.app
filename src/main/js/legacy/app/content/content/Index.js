@@ -383,12 +383,12 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				.then(page => {
 					me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 					var p = video ? Promise.resolve(video) :
-									Service.getObject(vid).then(function (v) {
-										var o = v.isModel ? v.raw : v;
-										return Promise.resolve(
-											PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o))
-										);
-									});
+						Service.getObject(vid).then(function (v) {
+							var o = v.isModel ? v.raw : v;
+							return Promise.resolve(
+								PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o))
+							);
+						});
 
 					p.then(v => {
 						route.precache.video = v;

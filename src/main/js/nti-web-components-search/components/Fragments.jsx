@@ -32,18 +32,18 @@ export default class Fragments extends React.Component {
 
 		return (
 			<div className="hit-fragments">
-					{
-						fragments.map((fragment, index) => {
-							function navigate () {
-								navigateToFragment(fragment);
-							}
-							if(index === 0) {
-								return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createFragment(fragment.text)} onClick={navigate} />;
-							} else {
-								return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createAnotherFragment(fragment.text)} onClick={navigate} />;
-							}
-						})
-					}
+				{
+					fragments.map((fragment, index) => {
+						function navigate () {
+							navigateToFragment(fragment);
+						}
+						if(index === 0) {
+							return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createFragment(fragment.text)} onClick={navigate} />;
+						} else {
+							return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createAnotherFragment(fragment.text)} onClick={navigate} />;
+						}
+					})
+				}
 			</div>
 		);
 	}

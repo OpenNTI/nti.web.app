@@ -76,14 +76,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 
 		return new Promise(function (fulfill, reject) {
 			Promise.all(toAdd)
-			.then(function (results) {
-				var allMessages = [];
-				Ext.each(results, function (msgs) {
-					allMessages = allMessages.concat(msgs);
-				});
+				.then(function (results) {
+					var allMessages = [];
+					Ext.each(results, function (msgs) {
+						allMessages = allMessages.concat(msgs);
+					});
 
-				fulfill(allMessages);
-			});
+					fulfill(allMessages);
+				});
 		});
 	},
 
@@ -91,10 +91,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 		var me = this;
 
 		return me.ChatActions.loadTranscript(transcript.get('RoomInfo'))
-				.then(function (t) {
-					var messages = t && t.get('Messages') || [];
-					return Promise.resolve(messages);
-				});
+			.then(function (t) {
+				var messages = t && t.get('Messages') || [];
+				return Promise.resolve(messages);
+			});
 	},
 
 	sortMessages: function (messages) {

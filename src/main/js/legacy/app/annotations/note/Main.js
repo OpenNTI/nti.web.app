@@ -69,8 +69,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 				{ cls: 'clear' },
 				{
 					cls: 'context', cn: [
-					{tag: 'canvas'},
-					{tag: 'span', cls: 'text'}
+						{tag: 'canvas'},
+						{tag: 'span', cls: 'text'}
 					]
 				},
 				{ cls: 'body' },
@@ -144,18 +144,18 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		this.removeAll(true);
 
 		return wait()
-				.then(function () {
-					if (me.isDestroyed) {
-						return Promise.reject();
-					}
+			.then(function () {
+				if (me.isDestroyed) {
+					return Promise.reject();
+				}
 
-					me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
-					return me.loadReplies(r)
-							.then(function () {
-								me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
-								return Promise.resolve();
-							});
-				});
+				me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
+				return me.loadReplies(r)
+					.then(function () {
+						me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
+						return Promise.resolve();
+					});
+			});
 	},
 
 	disable: function () {
@@ -274,9 +274,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 
 		if (me.readerContext) {
 			me.contextLoad = me.readerContext.load()
-								.then(function (context) {
-									me.setContext(context);
-								});
+				.then(function (context) {
+					me.setContext(context);
+				});
 		}
 
 		me.callParent(arguments);
@@ -424,9 +424,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 
 		// Wait for context and all replies to be loaded before doing search.
 		return Promise.all(ps)
-					.then(function () {
-						return wait();
-					});
+			.then(function () {
+				return wait();
+			});
 	},
 
 	getSearchScrollTarget: function () {

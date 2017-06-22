@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 					{
 						cls: 'text-wrap',
 						cn: [
-								{cls: 'name', html: '{name}'},
+							{cls: 'name', html: '{name}'},
 							{tag: 'tpl', 'if': '!disableProfiles', cn: [
 								{cls: 'meta-role', cn: [
 									{tag: 'tpl', 'if': 'role', cn: [

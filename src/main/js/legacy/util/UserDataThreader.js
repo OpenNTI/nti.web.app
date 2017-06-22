@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 
 	buildItemTree: function (rawList, tree) {
 		var me = this, threadables = {}, list;
-	//	console.group("Build Tree");
+		//	console.group("Build Tree");
 		//console.log('Using list of objects', rawList);
 
 		//Flatten an preexisting relationships of list into the array ignoring
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 
 		list = Ext.Object.getValues(threadables);
 
-	//	console.log('Flattened list is ', list);
+		//	console.log('Flattened list is ', list);
 
 		console.log('Flattened rawList of size ', rawList.length, 'to flattened list of size', list.length);
 
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 		function getID (id) {
 			var r = null,
 				f = function (o)
-					{
+				{
 					if (o && o.get && o.getId() === id) {
 						r = o;
 						return false;

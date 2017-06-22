@@ -284,8 +284,8 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			if (e.browserEvent.timeStamp - this.touchStartTime <= 500) {
 				clickEvent = document.createEvent('MouseEvents');
 				clickEvent.initMouseEvent('click', true, true, window,
-						1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-						false, false, false, false, 0, null);
+					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+					false, false, false, false, 0, null);
 				touch.target.dispatchEvent(clickEvent);
 			}
 		}

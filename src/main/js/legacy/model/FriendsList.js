@@ -102,8 +102,8 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 				row = Math.floor(idx / grid) * offset;
 			i.onload = function () {
 				ctx.drawImage(i,
-						0,	0,	i.width, i.height,	//source x,y,w,h
-						col, row, imgSize, imgSize		//dest	 x,y,w,h
+					0,	0,	i.width, i.height,	//source x,y,w,h
+					col, row, imgSize, imgSize		//dest	 x,y,w,h
 				);
 			};
 			i.src = url;

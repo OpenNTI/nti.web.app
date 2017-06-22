@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		{tag: 'tpl', 'for': 'messages', cn: [
 
 			{cls: 'message {me} {moderatedCls}', 'data-guid': '{guid}', cn: [
-		{cls: 'control', tag: 'span'},
+				{cls: 'control', tag: 'span'},
 				{cls: 'time', html: '{time:date("g:i:s A")}'},
 				{ cls: 'wrap', cn: [
 					{cls: 'name {me}', html: '{name:ellipsis(50)}'},
@@ -82,10 +82,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 				creator = msg.get('Creator'),
 				o = {
 					moderatedCls: msg.hasBeenModerated()
-							? 'moderated'
-							: msg.hasBeenFlagged()
-								? 'confirmFlagged'
-								: '',
+						? 'moderated'
+						: msg.hasBeenFlagged()
+							? 'confirmFlagged'
+							: '',
 					guid: guid,
 					me: isMe(creator) ? 'me' : undefined,
 					name: creator,

@@ -109,13 +109,13 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 			//do we ever want fragments in the model href??
 			//if (a.hash) {
-				//a.hash = '';
+			//a.hash = '';
 			//}
 
 			//if the value wasn't absolute, it is now.
 			return a.href
-					//trim empty search & fragment tokens
-					.replace(/[\?&#]+$/, '');
+			//trim empty search & fragment tokens
+				.replace(/[\?&#]+$/, '');
 		} },
 		{ name: 'tags', type: 'auto', defaultValue: [] },
 		{ name: 'editied', type: 'bool', persist: false, convert: function (v, r) {
@@ -557,7 +557,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		options = Ext.apply(options || {},{
 			success: Ext.Function.createSequence(clearFlag,
-					Ext.Function.createSequence(announce, successCallback, null), null),
+				Ext.Function.createSequence(announce, successCallback, null), null),
 			failure: Ext.Function.createSequence(clearFlag, failureCallback, null)
 		});
 
@@ -739,7 +739,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		var f = Ext.String.format('/++fields++{0}', field);
 
 		return getURL(Ext.String.format('{0}{1}',
-				editLink, f));
+			editLink, f));
 	},
 
 	/**
@@ -894,16 +894,16 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		}
 
 		a.fields.each(
-				function (f) {
-					var fa = a.get(f.name),
-						fb = b.get(f.name);
+			function (f) {
+				var fa = a.get(f.name),
+					fb = b.get(f.name);
 
-					if (!a.isEqual(fa, fb)) {
-						r = false;
-						return false;//break
-					}
-					return true;
+				if (!a.isEqual(fa, fb)) {
+					r = false;
+					return false;//break
 				}
+				return true;
+			}
 		);
 
 		return r;
@@ -918,24 +918,24 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			me = this;
 
 		this.fields.each(
-				function (f) {
-					if (!f.persist) {return;}
-					var x = me.get(f.name);
-					if (Ext.isDate(x)) {
-						x = x.getTime() / 1000;
-					}
-					else if (x && x.asJSON) {
-						x = x.asJSON();
-					}
-					else if (x && Ext.isArray(x)) {
-						x = x.slice();
-						Ext.each(x, function (o, i) {
-							x[i] = o && o.asJSON ? o.asJSON() : o;
-						});
-					}
-
-					data[f.name] = Ext.clone(x);
+			function (f) {
+				if (!f.persist) {return;}
+				var x = me.get(f.name);
+				if (Ext.isDate(x)) {
+					x = x.getTime() / 1000;
 				}
+				else if (x && x.asJSON) {
+					x = x.asJSON();
+				}
+				else if (x && Ext.isArray(x)) {
+					x = x.slice();
+					Ext.each(x, function (o, i) {
+						x[i] = o && o.asJSON ? o.asJSON() : o;
+					});
+				}
+
+				data[f.name] = Ext.clone(x);
+			}
 		);
 		return data;
 	},

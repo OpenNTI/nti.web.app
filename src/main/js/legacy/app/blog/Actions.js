@@ -166,19 +166,19 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		commentPost.set('body', valueObject.body);
 
 		return commentPost.saveData({url: isEdit ? undefined : blogPost && blogPost.getLink('add')})
-				.then(function (response) {
-					var rec = isEdit ? commentPost : ParseUtils.parseItems(response)[0];
-					if (!isEdit) {
-						blogPost.set('PostCount', blogPost.get('PostCount') + 1);
-					}
+			.then(function (response) {
+				var rec = isEdit ? commentPost : ParseUtils.parseItems(response)[0];
+				if (!isEdit) {
+					blogPost.set('PostCount', blogPost.get('PostCount') + 1);
+				}
 
-					return rec;
-				})
-				.catch(reason => {
-					commentPost.set('body', originalBody);
-					this.onSaveFailure(reason);
-					return Promise.reject(reason);
-				});
+				return rec;
+			})
+			.catch(reason => {
+				commentPost.set('body', originalBody);
+				this.onSaveFailure(reason);
+				return Promise.reject(reason);
+			});
 	},
 
 

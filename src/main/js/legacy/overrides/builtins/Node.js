@@ -2,7 +2,7 @@ const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {});
-	//Patch-in features that might be missing.
+//Patch-in features that might be missing.
 (function () {
 
 	var EP = Element.prototype;
@@ -43,10 +43,10 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {})
 			}
 			var EA = Ext.Array;
 			return EA.filter(
-					EA.toArray(this.childNodes, 0, this.childNodes.length),
-						function (i) {
-							return i && i.nodeType !== Node.TEXT_NODE;
-						});
+				EA.toArray(this.childNodes, 0, this.childNodes.length),
+				function (i) {
+					return i && i.nodeType !== Node.TEXT_NODE;
+				});
 		}
 	});
 

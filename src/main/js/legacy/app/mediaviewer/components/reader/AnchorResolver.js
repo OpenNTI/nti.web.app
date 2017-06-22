@@ -5,7 +5,7 @@ const TimeRangeDescription = require('legacy/model/anchorables/TimeRangeDescript
 const TranscriptContentPointer = require('legacy/model/anchorables/TranscriptContentPointer');
 const TranscriptRangeDescription = require('legacy/model/anchorables/TranscriptRangeDescription');
 const lazy = require('legacy/util/lazy-require')
-				.get('Anchors', () => require('legacy/util/Anchors'));
+	.get('Anchors', () => require('legacy/util/Anchors'));
 
 require('legacy/model/anchorables/ContentPointer');
 require('legacy/model/anchorables/ContentRangeDescription');

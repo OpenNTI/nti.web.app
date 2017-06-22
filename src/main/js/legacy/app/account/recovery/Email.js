@@ -14,8 +14,8 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 		]},
 		{xtype: 'box', hidden: true, name: 'error', autoEl:
 		{cls: 'error-box', tag: 'div', cn: [
-				{cls: 'error-field'},
-				{cls: 'error-desc'}
+			{cls: 'error-field'},
+			{cls: 'error-desc'}
 		]}
 		},
 		{xtype: 'container', cls: 'submit', name: 'buttons', layout: 'none', items: [

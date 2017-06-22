@@ -274,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 		this.inputEl[readOnly ? 'hide' : 'show']();
 	},
 
- //This MUST be reimplemented if the subclass redfines the value format
+	//This MUST be reimplemented if the subclass redfines the value format
 	setValue: function (value) {
 		if (value && !Ext.isArray(value)) {
 			value = [value];

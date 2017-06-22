@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		{ name: 'PresentationProperties', type: 'auto'},
 		{ name: 'path', type: 'string', defaultValue: ''},
 		{ name: 'sample', type: 'bool', defaultValue: false, persist: false},
-			//for filtering
+		//for filtering
 		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false},
 
 		{ name: 'toc', type: 'auto', persist: false},
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	__cacheContentPreferences: function () {
 		var c = console;
 		Service.getPageInfo(this.get('NTIID'))
-				.then(undefined, c.error.bind(c));
+			.then(undefined, c.error.bind(c));
 	},
 
 	__setImage: function () {
@@ -207,23 +207,23 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 
 		if (!load) {
 			load = this.getToc()
-					.then(function (toc) {
-						var reference = toc.querySelector(selector);
-						var link = reference && reference.getAttribute('href');
+				.then(function (toc) {
+					var reference = toc.querySelector(selector);
+					var link = reference && reference.getAttribute('href');
 
-						if (!link) {
-							return Promise.reject('No link');
-						}
+					if (!link) {
+						return Promise.reject('No link');
+					}
 
-						link = Globals.getURL(link, root || '');
+					link = Globals.getURL(link, root || '');
 
-						return Service.request(link);
-					})
-					.then(function (response) {
-						var json = Globals.parseJSON(response, true);
+					return Service.request(link);
+				})
+				.then(function (response) {
+					var json = Globals.parseJSON(response, true);
 
-						return json || response;
-					});
+					return json || response;
+				});
 
 			this.cacheForever(key, load);
 		}

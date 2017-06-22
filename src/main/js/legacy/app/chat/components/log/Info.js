@@ -9,12 +9,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Info'
 
 	renderTpl: new Ext.XTemplate(
 		'<div class="x-chat-info-log-entry">',
-			'<div class="timestamp">{time}</div>',
-			'<img src="{icon}" width=16 height=16"/>',
-			'<div>',
-				'<span class="name">{name}</span> ',
-				'<span class="body-text">{body}</span> ',
-			'</div>',
+		'<div class="timestamp">{time}</div>',
+		'<img src="{icon}" width=16 height=16"/>',
+		'<div>',
+		'<span class="name">{name}</span> ',
+		'<span class="body-text">{body}</span> ',
+		'</div>',
 		'</div>'
 	),
 

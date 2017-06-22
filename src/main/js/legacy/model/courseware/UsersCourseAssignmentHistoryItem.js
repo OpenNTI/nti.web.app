@@ -69,9 +69,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 			f = (f && f.get('Items')) || [];
 			return f.length || r.raw.FeedbackCount;
 		}, convert: function () {
-			this.sortType = Ext.data.SortTypes.asInt;
-			return this.type.convert.apply(this, arguments);
-		}},
+				this.sortType = Ext.data.SortTypes.asInt;
+				return this.type.convert.apply(this, arguments);
+			}},
 
 		{name: 'correct', type: 'int', persist: false, affectedBy: 'pendingAssessment', convert: function (v, r) {
 			var a = r.get('pendingAssessment');
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 			.then(() => {
 				if (link && this.isSummary) {
 					return  Service.request(link)
-								.then(resp => this.syncWithResponse(resp));
+						.then(resp => this.syncWithResponse(resp));
 				}
 
 				return this.updateFromServer();
@@ -319,46 +319,46 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 						Service.request({
 							url: record.getLink('UsersCourseAssignmentHistoryItem') || record.get('href'),
 							method: 'DELETE'})
-								.catch(function () {
-									alert('Sorry, I could not do that.');
-									reject();
-									console.error(arguments);
-								})
-								.then(function () {
-									var user = record.get('Creator'),
-										item = record.get('item'),
-										grade = null;
+							.catch(function () {
+								alert('Sorry, I could not do that.');
+								reject();
+								console.error(arguments);
+							})
+							.then(function () {
+								var user = record.get('Creator'),
+									item = record.get('item'),
+									grade = null;
 
-									delete record.isSummary;
-									delete record.raw.SubmissionCreatedTime;
-									delete record.raw.Submission;
-									delete record.raw.FeedbackCount;
-									delete record.raw.Grade;
-									delete record.raw.Feedback;
-									delete record.raw.Metadata;
+								delete record.isSummary;
+								delete record.raw.SubmissionCreatedTime;
+								delete record.raw.Submission;
+								delete record.raw.FeedbackCount;
+								delete record.raw.Grade;
+								delete record.raw.Feedback;
+								delete record.raw.Metadata;
 
-									if (record.collection && record.collection.createPlaceholderGrade) {
-										grade = record.collection.createPlaceholderGrade(item, user);
+								if (record.collection && record.collection.createPlaceholderGrade) {
+									grade = record.collection.createPlaceholderGrade(item, user);
 
-										record.raw.Grade = grade;
-									}
+									record.raw.Grade = grade;
+								}
 
-									record.set({
-										Submission: null,
-										Grade: grade,
-										Feedback: null,
-										Metadata: null,
-										completed: null,
-										SubmissionCreatedTime: null,
-										submission: null,
-										pendingAssessment: null
-									});
-
-									record.isPlaceholder = true;
-									record.fireEvent('reset-assignment');
-									record.fireEvent('was-destroyed');
-									fulfill();
+								record.set({
+									Submission: null,
+									Grade: grade,
+									Feedback: null,
+									Metadata: null,
+									completed: null,
+									SubmissionCreatedTime: null,
+									submission: null,
+									pendingAssessment: null
 								});
+
+								record.isPlaceholder = true;
+								record.fireEvent('reset-assignment');
+								record.fireEvent('was-destroyed');
+								fulfill();
+							});
 
 					}
 				}
@@ -472,8 +472,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		const grade = this.get('Grade');
 
 		return !grade || grade.isPlaceholder ?
-					batcher.schedule(() => this.updateFromServer()) :
-					Promise.resolve();
+			batcher.schedule(() => this.updateFromServer()) :
+			Promise.resolve();
 	},
 
 

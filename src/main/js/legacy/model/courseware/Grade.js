@@ -129,16 +129,16 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 				url: url,
 				method: 'POST'
 			})
-			.catch(function () {
-				console.error('Failed to excuse grade: ', arguments);
-				reject('Request Failed');
-			})
-			.then(function (responseText) {
-				var o = Ext.JSON.decode(responseText, true);
+				.catch(function () {
+					console.error('Failed to excuse grade: ', arguments);
+					reject('Request Failed');
+				})
+				.then(function (responseText) {
+					var o = Ext.JSON.decode(responseText, true);
 
-				record.set(o);
-				fulfill(record);
-			});
+					record.set(o);
+					fulfill(record);
+				});
 		});
 	},
 
@@ -303,26 +303,26 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 			AssignmentId: me.get('AssignmentId'),
 			value: me.get('value')
 		})
-		.then(function (response) {
-			me.fireEvent('value-change');
+			.then(function (response) {
+				me.fireEvent('value-change');
 
-			return response;
-		})
-		.catch(function (reason) {
-			me.set('value', null);
+				return response;
+			})
+			.catch(function (reason) {
+				me.set('value', null);
 
-			Ext.MessageBox.alert({
-				title: 'Error',
-				msg: 'There was an error saving the grade value.',
-				icon: 'warning-red',
-				buttonText: true,
-				buttons: {
-					primary: 'Ok'
-				}
+				Ext.MessageBox.alert({
+					title: 'Error',
+					msg: 'There was an error saving the grade value.',
+					icon: 'warning-red',
+					buttonText: true,
+					buttons: {
+						primary: 'Ok'
+					}
+				});
+
+				return Promise.reject(reason);
 			});
-
-			return Promise.reject(reason);
-		});
 	},
 
 
@@ -361,22 +361,22 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		}
 
 		return update
-				.then(
-					resp => resp,
-					(reason) => {
-						Ext.MessageBox.alert({
-							title: 'Error',
-							msg: 'There was an error saving the grade value.',
-							icon: 'warning-red',
-							buttonText: true,
-							buttons: {
-								primary: 'Ok'
-							}
-						});
+			.then(
+				resp => resp,
+				(reason) => {
+					Ext.MessageBox.alert({
+						title: 'Error',
+						msg: 'There was an error saving the grade value.',
+						icon: 'warning-red',
+						buttonText: true,
+						buttons: {
+							primary: 'Ok'
+						}
+					});
 
-						return Promise.reject(reason);
-					}
-				);
+					return Promise.reject(reason);
+				}
+			);
 	},
 
 

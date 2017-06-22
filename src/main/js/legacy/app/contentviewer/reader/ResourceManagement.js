@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 	AUDIO_SNIPPET_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ tag: 'button', id: '{id}', cls: 'x-component-assessment audio-clip', cn: { tag: 'audio',
 			cn: { tag: 'tpl', 'for': 'sources', cn: [
-					{ tag: 'source', src: '{source}', type: '{type}'}]}}}
+				{ tag: 'source', src: '{source}', type: '{type}'}]}}}
 	])),
 
 	AUDIO_SNIPPET_CODE_TEMPLATES: {
@@ -102,10 +102,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 
 			function play () {
 				Array.prototype.forEach.call(
-						document.querySelectorAll('audio'),
-						function (a) {
-							if (a !== audio) {a.load();}
-						});
+					document.querySelectorAll('audio'),
+					function (a) {
+						if (a !== audio) {a.load();}
+					});
 			}
 
 			function noplay () {
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		Ext.apply(this, config);
 
 		this.reader.on('set-content', 'manage', this);//We can't defer this handler, otherwise the fireEvent completes before
-												// we update the dom with container flags
+		// we update the dom with container flags
 	},
 
 	manage: function (reader) {
@@ -236,9 +236,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 				obj = Ext.apply(DomUtils.parseDomObject(snip), {
 					id: id,
 					sources: Array.prototype
-									.map.call(snip.querySelectorAll('object[type$=audiosource]'), DomUtils.parseDomObject)
-									.map(trn)
-									.reduce(flatten, [])
+						.map.call(snip.querySelectorAll('object[type$=audiosource]'), DomUtils.parseDomObject)
+						.map(trn)
+						.reduce(flatten, [])
 				});
 
 			tpl.insertBefore(snip, obj);

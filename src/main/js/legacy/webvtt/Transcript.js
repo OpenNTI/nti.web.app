@@ -625,13 +625,13 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 			//position = 0,
 		// To remember how many span tags to close
 			spanCount = 0,
-		// TO remember how many misformed V tags were encountered
+			// TO remember how many misformed V tags were encountered
 			// badVCount = 0,
-		// RegExp for matching <v> tags
+			// RegExp for matching <v> tags
 			reV = /<v[^>]*>/gi,
-		// RegExp for matching </v> tags
+			// RegExp for matching </v> tags
 			reEndV = /<\/(v)>/i,
-		// RegExp for proper form of a <v> tag: remembers ".<classname>"* and "<speakername>"
+			// RegExp for proper form of a <v> tag: remembers ".<classname>"* and "<speakername>"
 			reGoodV = /<v((?:\u002e[^\u002e\s]+)*)\s+([^\u000a\u000d\u0026\u003c]+)>/i,
 			scratch = this.scratch;
 			//regexp = this.regexp;

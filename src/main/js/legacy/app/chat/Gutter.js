@@ -307,10 +307,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 				win.on({
 					show: function () {
 						wait()
-								.then(function () {
-									me.adjustToExpandedChat(win);
-									me.selectActiveUser(user);
-								});
+							.then(function () {
+								me.adjustToExpandedChat(win);
+								me.selectActiveUser(user);
+							});
 					},
 					hide: function () {
 						wait()

@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		'</div>',
 		'</div>',
 		'<div class="x-chat-replies"></div>',
-	//		'<div class="{errorMsgCls}" style="display:none"></div>',
+		//		'<div class="{errorMsgCls}" style="display:none"></div>',
 		'<div id="{id}-errorEl" class="{errorMsgCls} errorEl" style="display:none"></div>',
 		'<div class="{clearCls}" role="presentation"><!-- --></div>',
 		{

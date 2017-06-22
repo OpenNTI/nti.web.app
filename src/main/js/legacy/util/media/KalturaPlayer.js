@@ -29,11 +29,11 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 				cn: {
 					tag: 'script',
 					src: Ext.String.format(
-							'https://cdnapisec.kaltura.com/p/{0}/sp/150010100/embedIframeJs/uiconf_id/{1}/partner_id/{2}?autoembed=true&entry_id={3}&playerId=kaltura_player_1377036702&cache_st=1377036702&width=1024&height=606&flashvars[akamaiHD.loadingPolicy]=preInitialize&flashvars[akamaiHD.asyncInit]=true&flashvars[twoPhaseManifest]=true&flashvars[streamerType]=hdnetworkmanifest&flashvars[autoPlay]=true',
-							this.PARTNER_ID,
-							this.UICONF_ID,
-							this.PARTNER_ID,
-							vid[1])
+						'https://cdnapisec.kaltura.com/p/{0}/sp/150010100/embedIframeJs/uiconf_id/{1}/partner_id/{2}?autoembed=true&entry_id={3}&playerId=kaltura_player_1377036702&cache_st=1377036702&width=1024&height=606&flashvars[akamaiHD.loadingPolicy]=preInitialize&flashvars[akamaiHD.asyncInit]=true&flashvars[twoPhaseManifest]=true&flashvars[streamerType]=hdnetworkmanifest&flashvars[autoPlay]=true',
+						this.PARTNER_ID,
+						this.UICONF_ID,
+						this.PARTNER_ID,
+						vid[1])
 				}
 			});
 		},
@@ -70,8 +70,8 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 				webkitallowfullscreen: 'yes',
 				'data-is-ie11-set': (Ext.isIE11p !== undefined),
 				src: (Ext.isIE || Ext.isIE11p) ?
-						Ext.SSL_SECURE_URL :
-						Globals.EMPTY_WRITABLE_IFRAME_SRC,
+					Ext.SSL_SECURE_URL :
+					Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
 				scrolling: 'no',
 				width: '{width}',
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		//		Inject Kaltura Player HTML
 		this.el = this.PLAYER_TPL.append(
-				this.parentEl, data, true);
+			this.parentEl, data, true);
 		this.iframe = this.el.down('iframe');
 
 		iframeId = this.iframe.id;
@@ -651,12 +651,12 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		Error.raiseForReport({
 			msg: Ext.String.format('Kaltura Playback Error: PartnerID: {0}, UIConf: {1}, LEAD_HTML5: {3}, Mode: {4}, Current Source: {2}',
-					me.PARTNER_ID,
-					me.UICONF_ID,
-					me.currentSource,
-					me.LEAD_HTML5,
-					playerMode
-				)
+				me.PARTNER_ID,
+				me.UICONF_ID,
+				me.currentSource,
+				me.LEAD_HTML5,
+				playerMode
+			)
 		});
 	},
 

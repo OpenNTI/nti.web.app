@@ -153,8 +153,8 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 
 	block: function (username) {
 		this.blocked = Ext.Array.merge(
-				this.blocked || [],
-				Ext.isArray(username) ? username : [username]);
+			this.blocked || [],
+			Ext.isArray(username) ? username : [username]);
 		this.refresh();
 	},
 

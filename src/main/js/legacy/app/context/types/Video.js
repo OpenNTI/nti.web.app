@@ -101,63 +101,63 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 			context, cmp, me = this, store, t;
 
 		return this.__getBasePath(obj)
-				.then(function (basePath) {
-					t = TranscriptItem.fromVideo(video, basePath);
-					return Promise.resolve(t);
-				})
-				.catch(function () {
-					t = TranscriptItem.fromVideo(video);
-					return Promise.resolve(t);
-				})
-				.then(function (transcript) {
-					if (kind === 'card') {
-						cmp = {
-							xtype: 'context-video-card',
-							type: me.self.type,
-							video: video,
-							transcript: transcript
-						};
-						return cmp;
-					}
+			.then(function (basePath) {
+				t = TranscriptItem.fromVideo(video, basePath);
+				return Promise.resolve(t);
+			})
+			.catch(function () {
+				t = TranscriptItem.fromVideo(video);
+				return Promise.resolve(t);
+			})
+			.then(function (transcript) {
+				if (kind === 'card') {
+					cmp = {
+						xtype: 'context-video-card',
+						type: me.self.type,
+						video: video,
+						transcript: transcript
+					};
+					return cmp;
+				}
 
-					if (kind === 'list') {
-						return Ext.widget('context-video-list', {
+				if (kind === 'list') {
+					return Ext.widget('context-video-list', {
+						type: me.self.type,
+						video: video,
+						transcript: transcript,
+						record: me.contextRecord
+					});
+				}
+
+				return me.MediaActions.loadTranscript(transcript)
+					.then(function (cueList) {
+						store = me.__buildTranscriptStore(cueList);
+						context = Resolver.getDomElementForTranscriptTimeRange(me.range, store, video);
+
+						cmp = Ext.widget('context-video', {
 							type: me.self.type,
+							snippet: context,
+							containerId: me.container,
 							video: video,
-							transcript: transcript,
-							record: me.contextRecord
+							range: me.range,
+							record: me.contextRecord,
+							doNavigate: me.doNavigate.bind(me)
 						});
-					}
 
-					return me.MediaActions.loadTranscript(transcript)
-							.then(function (cueList) {
-								store = me.__buildTranscriptStore(cueList);
-								context = Resolver.getDomElementForTranscriptTimeRange(me.range, store, video);
+						return Promise.resolve(cmp);
+					})
+					.catch(function (/*reason*/) {
+						cmp = Ext.widget('context-video', {
+							type: me.self.type,
+							containerId: me.container,
+							video: video,
+							range: me.range,
+							record: me.contextRecord,
+							doNavigate: me.doNavigate.bind(me)
+						});
 
-								cmp = Ext.widget('context-video', {
-									type: me.self.type,
-									snippet: context,
-									containerId: me.container,
-									video: video,
-									range: me.range,
-									record: me.contextRecord,
-									doNavigate: me.doNavigate.bind(me)
-								});
-
-								return Promise.resolve(cmp);
-							})
-							.catch(function (/*reason*/) {
-								cmp = Ext.widget('context-video', {
-									type: me.self.type,
-									containerId: me.container,
-									video: video,
-									range: me.range,
-									record: me.contextRecord,
-									doNavigate: me.doNavigate.bind(me)
-								});
-
-								return cmp;
-							});
-				});
+						return cmp;
+					});
+			});
 	}
 });

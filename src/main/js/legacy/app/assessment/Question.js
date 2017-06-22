@@ -42,11 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 		this.questionContainer = this.down('[questionContainer]');
 
 		this.down('question-parts').setQuestionAndPart(
-				this.question,
-				this.questionSet,
-				this.canSubmitIndividually(),
-				this.tabIndexTracker,
-				this.retrieveAnswerLabel());
+			this.question,
+			this.questionSet,
+			this.canSubmitIndividually(),
+			this.tabIndexTracker,
+			this.retrieveAnswerLabel());
 
 		if (this.questionSet) {
 			this.mon(this.questionSet, {

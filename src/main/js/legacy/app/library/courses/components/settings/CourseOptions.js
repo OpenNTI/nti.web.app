@@ -104,19 +104,19 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 					handler: function () {
 						me.addMask();
 						undoEnrollment(me)
-										.catch(function (reason) {
-											var msg;
+							.catch(function (reason) {
+								var msg;
 
-											if (reason === 404) {
-												msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
-											} else {
-												msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
-											}
+								if (reason === 404) {
+									msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
+								} else {
+									msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
+								}
 
-											console.error('failed to drop course', reason);
-											//already dropped?? -- double check the string to make sure it's correct
-											alert(msg);
-										});
+								console.error('failed to drop course', reason);
+								//already dropped?? -- double check the string to make sure it's correct
+								alert(msg);
+							});
 					}
 				},
 				secondary: {

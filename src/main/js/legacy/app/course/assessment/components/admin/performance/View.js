@@ -183,21 +183,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var roster = this.currentBundle && this.currentBundle.getLink('CourseEnrollmentRoster'),
 			username = studentRecord && studentRecord.get('Username'),
 			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
-					roster,
-					Ext.Object.toQueryString({
-						batchSize: 1,
-						batchStart: 0,
-						usernameSearchTerm: username
-					}));
+				roster,
+				Ext.Object.toQueryString({
+					batchSize: 1,
+					batchStart: 0,
+					usernameSearchTerm: username
+				}));
 
 		if (!isFeature('instructor-email') || !username) { return Promise.reject(); }
 
 		return Service.request(smallRequestURLToGetCounts)
-					.then(JSON.parse)
-					.then(function (obj) {
-						var enrollment = obj.Items && obj.Items[0];
-						return Promise.resolve(ParseUtils.parseItems(enrollment)[0]);
-					});
+			.then(JSON.parse)
+			.then(function (obj) {
+				var enrollment = obj.Items && obj.Items[0];
+				return Promise.resolve(ParseUtils.parseItems(enrollment)[0]);
+			});
 	},
 
 	showAssignmentsForStudent: function (student) {

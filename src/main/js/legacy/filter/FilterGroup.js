@@ -51,12 +51,12 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 		}
 
 		return Ext.String.format('{"operation":"{0}", "filters":[{1}]}',
-				(this.operation === this.self.OPERATION_UNION
-						? 'union'
-						: this.operation === this.self.OPERATION_INTERSECTION
-							? 'intersection'
-							: 'unknown'),
-				this.value);
+			(this.operation === this.self.OPERATION_UNION
+				? 'union'
+				: this.operation === this.self.OPERATION_INTERSECTION
+					? 'intersection'
+					: 'unknown'),
+			this.value);
 	},
 
 

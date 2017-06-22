@@ -82,14 +82,14 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 				v = Ext.BLANK_IMAGE_URL;//stop iteration on caller and let the async resolver replace this value as soon as it resolves.
 
 				resolver.resolveForSource(source)
-						.then(function (data) {
-							r.set(name, data[name]);
-							if (name === 'poster') {
-								wait(1).then(function () {
-									r.fireEvent('resolved-poster', r);
-								});
-							}
-						});
+					.then(function (data) {
+						r.set(name, data[name]);
+						if (name === 'poster') {
+							wait(1).then(function () {
+								r.fireEvent('resolved-poster', r);
+							});
+						}
+					});
 			} else {
 				wait().then(r.fireEvent.bind(r, 'resolved-poster', r));
 			}
