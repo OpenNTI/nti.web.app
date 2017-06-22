@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			//if the value wasn't absolute, it is now.
 			return a.href
 			//trim empty search & fragment tokens
-				.replace(/[\?&#]+$/, '');
+				.replace(/[?&#]+$/, '');
 		} },
 		{ name: 'tags', type: 'auto', defaultValue: [] },
 		{ name: 'editied', type: 'bool', persist: false, convert: function (v, r) {

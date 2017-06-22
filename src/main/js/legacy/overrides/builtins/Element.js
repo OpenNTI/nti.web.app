@@ -194,7 +194,7 @@ if (!document.documentElement.dataset &&
 				// Fix: This test really should allow any XML Name without
 				//			colons (and non-uppercase for XHTML)
 				if (attribute && attribute.name &&
-					(/^data-\w[\w\-]*$/).test(attribute.name)) {
+					(/^data-\w[\w-]*$/).test(attribute.name)) {
 					attrVal = attribute.value;
 					attrName = attribute.name;
 					// Change to CamelCase

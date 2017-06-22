@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	},
 
 	/** @private */
-	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
+	externalUriRegex: /^((\/\/)|([a-z][a-z0-9+-.]*):)/i,
 
 
 	/**
@@ -693,7 +693,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		//TODO Processing html with a regex is stupid
 		//consider parsing and using selectors here instead.  Note
 		//we omit things that contain query strings here
-		var regex = /(\S+)\s*=\s*"(((\/[^"\/]+\/)||\/)resources\/[^?"]*?)"/igm;
+		var regex = /(\S+)\s*=\s*"(((\/[^"/]+\/)||\/)resources\/[^?"]*?)"/igm;
 
 		function cleanup (original, attr, url) {
 			return attr + '="' + url + '?' + name + '=' + value + '"';
@@ -748,7 +748,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @return {String} html
 	 */
 	getHTMLSnippet: function (html, max) {
-		var i = /[^\.\?!]+[\.\?!]?/,
+		var i = /[^.?!]+[.?!]?/,
 			spaces = /(\s{2,})/,
 			df = document.createDocumentFragment(),
 			d = document.createElement('div'),

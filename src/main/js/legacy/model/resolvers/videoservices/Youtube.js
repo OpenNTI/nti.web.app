@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
 		getIdFromURL: function (url) {
-			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
+			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/,
 				match = url.match(regExp);
 
 			if (match && match[2].length === 11) {

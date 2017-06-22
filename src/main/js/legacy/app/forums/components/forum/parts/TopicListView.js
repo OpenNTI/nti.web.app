@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 				{ cls: 'topic-list-item', cn: [
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite {favoriteState}' },
-						{ cls: 'like {likeState} {[values.LikeCount==0?\"\":"keep"]}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' },
+						{ cls: 'like {likeState} {[values.LikeCount==0?"":"keep"]}', html: '{[values.LikeCount==0?"":values.LikeCount]}' },
 						{ tag: 'tpl', 'if': 'this.showReport(values)', cn: { cls: 'reports off', 'data-qtip': '{{{NextThought.view.forums.forum.parts.TopicListView.reports}}}'} }
 					]},
 					'{Creator:avatar()}',

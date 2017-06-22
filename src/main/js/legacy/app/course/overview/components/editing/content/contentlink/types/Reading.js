@@ -3,6 +3,7 @@ const Ext = require('extjs');
 
 const ContentUtils = require('legacy/util/Content');
 const ContentActions = require('legacy/app/content/Actions');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('../ContentPackageSelection');
 require('../ReadingEditor');
@@ -407,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 								(me.outlineNode ? `/lessons/${encodeForURI(me.outlineNode.get('NTIID'))}` : '') +
 								`/content/${encodeForURI(pack.get('NTIID'))}/edit/`;
 
-							NextThought.app.navigation.Actions.pushRootRoute(null, route, {pack});
+							NavigationActions.pushRootRoute(null, route, {pack});
 						})
 						.catch(function (reason) {
 							me.enableSubmission();

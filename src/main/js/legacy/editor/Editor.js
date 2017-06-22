@@ -788,7 +788,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	isImage: function (type) {
-		return (/[\/\.](gif|jpg|jpeg|tiff|png)$/i).test(type);
+		return (/[/.](gif|jpg|jpeg|tiff|png)$/i).test(type);
 	},
 
 

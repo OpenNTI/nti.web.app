@@ -9,7 +9,7 @@ const Ext = require('extjs');
 global.B64 =
 module.exports = exports = Ext.define('NextThought.util.Base64', {
 
-	_isBase64Re: /^([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==)$/,
+	_isBase64Re: /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$/,
 
 	// private property
 	_keyStr: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 			enc1, enc2, enc3, enc4,
 			i = 0;
 
-		input = input.replace(/[^A-Za-z0-9\+\/=]/g, '');
+		input = input.replace(/[^A-Za-z0-9+/=]/g, '');
 
 		while (i < input.length) {
 

@@ -6,7 +6,7 @@ require('../Base');
 module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	extend: 'NextThought.model.Base',
 
-	ENDS_IN_LETTER_REGEX: /\s[a-zA-Z|\-]$/,
+	ENDS_IN_LETTER_REGEX: /\s[a-zA-Z|-]$/,
 
 	statics: {
 		//see the instance isEmpty method below

@@ -486,7 +486,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		//look for these things and yank them out.	This was happening
 		//when manipulating the list by the object url (say for deletion).
 		name = name.replace(/@@|@\(/ig, '');
-		return name.replace(/[^0-9A-Z\-@\+\._]/ig, '');
+		return name.replace(/[^0-9A-Z\-@+._]/ig, '');
 	},
 
 

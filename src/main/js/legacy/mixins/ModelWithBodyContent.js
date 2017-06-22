@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		},
 
 		isImageFile: function (type) {
-			return (/[\.\/](gif|jpg|jpeg|tiff|png)$/i).test(type);
+			return (/[./](gif|jpg|jpeg|tiff|png)$/i).test(type);
 		}
 	},
 

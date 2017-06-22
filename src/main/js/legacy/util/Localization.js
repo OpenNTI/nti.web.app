@@ -3,7 +3,7 @@ const Ext = require('extjs');
 var Localization =
 module.exports = exports = Ext.define('NextThought.util.Localization', {
 
-	formatRe: /\{([^\{]+)\}/g,
+	formatRe: /\{([^{]+)\}/g,
 
 	constructor: function () {
 		this.callParent(arguments);

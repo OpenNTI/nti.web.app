@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 		},
 
 
-		ID_REGEX: /(?:https?:)?\/\/(?:(www|player)\.)?vimeo.com\/(?:(channels|video)\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/,
+		ID_REGEX: /(?:https?:)?\/\/(?:(www|player)\.)?vimeo.com\/(?:(channels|video)\/(?:\w+\/)?|groups\/([^/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/,
 
 		//http://stackoverflow.com/questions/13286785/get-video-id-from-vimeo-url
 		getIdFromURL: function (url) {

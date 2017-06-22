@@ -26,8 +26,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	ROOT_URL_PATTERN: /^\//,//starts with a slash
 	HOST_PREFIX_PATTERN: HOST_PREFIX_PATTERN,
 	FILE_EXTENSION_PATTERN: /\..+$/,
-	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
-	ESCAPE_REGEX_PATTERN: /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
+	INVALID_CHARACTERS_PATTERN: /^[^/\\";=?<>#%'{}|^[\]-]+$/,
+	ESCAPE_REGEX_PATTERN: /[-[]\/{}()*+?.\\^$|]/g,
 
 
 	CANVAS_URL_SHAPE_BROKEN_IMAGE: 'whiteboard-error-image',
@@ -593,7 +593,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		var re = naturalSort.re = (naturalSort.re || /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi),
 			sre = naturalSort.sre = (naturalSort.sre || /(^[ ]*|[ ]*$)/g),
 			dre = naturalSort.dre =
-				(naturalSort.dre || /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/),
+				(naturalSort.dre || /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[/-]\d{1,4}[/-]\d{1,4}|^\w+, \w+ \d+, \d{4})/),
 			hre = naturalSort.hre = (naturalSort.hre || /^0x[0-9a-f]+$/i),
 			ore = naturalSort.ore = (naturalSort.ore || /^0/),
 			// convert all to strings strip whitespace
@@ -805,7 +805,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			document.body.appendChild(d);
 			url = Ext.fly(d).getStyle('background-image');
 			document.body.removeChild(d);
-			return (/^url\("?([^"\)]+)"?\)$/).exec(url)[1];
+			return (/^url\("?([^")]+)"?\)$/).exec(url)[1];
 		}
 		catch (e) {
 			return null;

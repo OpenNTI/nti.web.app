@@ -7,6 +7,7 @@ const Globals = require('legacy/util/Globals');
 const PageSource = require('legacy/util/PageSource');
 const TopicNode = require('legacy/model/TopicNode');
 const PathActions = require('legacy/app/navigation/path/Actions');
+const ParseUtils = require('legacy/util/Parsing');
 
 require('legacy/util/Parsing');
 require('legacy/app/navigation/path/Actions');
