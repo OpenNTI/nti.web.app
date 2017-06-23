@@ -115,6 +115,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		// there is no selection from the existing reading list
 		this.newlyCreatedContent = contentTemplate;
 
+		// must call this to maintain component workflow like selection
+		this.showReadingList();
 		this.showReadingEditor();
 	},
 
@@ -400,7 +402,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					return me.readingEditorCmp.onSave()
 						.then(() => {
 							// navigate to newly created content's editor (still unpublished at this point)
-							const route = `/course/${encodeForURI(this.bundle.getId())}/content/${encodeForURI(pack.get('NTIID'))}/edit/`;
+							const route = `/course/${encodeForURI(this.bundle.getId())}` +
+								(me.outlineNode ? `/lessons/${encodeForURI(me.outlineNode.get('NTIID'))}` : '') +
+								`/content/${encodeForURI(pack.get('NTIID'))}/edit/`;
 
 							NextThought.app.navigation.Actions.pushRootRoute(null, route, {pack});
 						})

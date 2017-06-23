@@ -92,6 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.editCmp = Ext.widget('overview-editing-controls-edit', {
 			record: this.record,
+			outlineNode: this.record,
 			parentRecord: this.parentRecord,
 			onDelete: this.onDelete.bind(this),
 			root: this.root,
