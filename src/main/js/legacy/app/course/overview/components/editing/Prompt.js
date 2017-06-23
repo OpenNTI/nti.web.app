@@ -17,13 +17,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var record = this.Prompt.data.record,
 			parentRecord = this.Prompt.data.parent || (this.record && this.record.parent),
 			rootRecord = this.Prompt.data.root,
-			bundle = this.Prompt.data.bundle;
+			bundle = this.Prompt.data.bundle,
+			outlineNode = this.Prompt.data.outlineNode;
 
 
 		if (this.Prompt.type === 'overview-editing') {
-			this.editRecord(record, parentRecord, rootRecord, bundle);
+			this.editRecord(record, parentRecord, rootRecord, bundle, outlineNode);
 		} else if (this.Prompt.type === 'overview-creation') {
-			this.addRecord(parentRecord, rootRecord, bundle);
+			this.addRecord(parentRecord, rootRecord, bundle, outlineNode);
 		}
 	},
 
@@ -31,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		//TODO: fill this out
 	},
 
-	editRecord: function (record, parentRecord, rootRecord, bundle) {
+	editRecord: function (record, parentRecord, rootRecord, bundle, outlineNode) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {
@@ -39,6 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				parentRecord: parentRecord,
 				rootRecord: rootRecord,
 				bundle: bundle,
+				outlineNode: outlineNode,
 				Prompt: this.Prompt
 			};
 
@@ -53,13 +55,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	addRecord: function (parentRecord, rootRecord, bundle) {
+	addRecord: function (parentRecord, rootRecord, bundle, outlineNode) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {
 				parentRecord: parentRecord,
 				rootRecord: rootRecord,
 				bundle: bundle,
+				outlineNode: outlineNode,
 				Prompt: this.Prompt
 			};
 

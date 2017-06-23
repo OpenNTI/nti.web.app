@@ -194,7 +194,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					record: collection,
 					parentRecord: this.lessonOverview,
 					root: this.lessonOverview,
-					bundle: this.bundle
+					bundle: this.bundle,
+					outlineNode: this.outlineNode
 				}
 			]
 		};
@@ -213,6 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					parentRecord: this.record,
 					root: this.lessonOverview,
 					bundle: this.bundle,
+					outlineNode: this.outlineNode,
 					onPromptOpen: this.suspendUpdates.bind(this),
 					onPromptClose: this.resumeUpdates.bind(this)
 				}

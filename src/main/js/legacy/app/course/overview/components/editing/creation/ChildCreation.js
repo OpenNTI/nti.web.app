@@ -139,6 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			lockedPosition: this.lockedPosition,
 			rootRecord: this.rootRecord,
 			bundle: this.bundle,
+			outlineNode: this.outlineNode,
 			scrollingParent: this.scrollingParent,
 			enableBack: this.enableBack.bind(this),
 			enableSave: this.enableSave.bind(this),

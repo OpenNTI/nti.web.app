@@ -164,18 +164,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent(arguments);
 
 		if (this.record) {
-			this.editRecord(this.record, this.parentRecord, this.rootRecord, this.bundle);
+			this.editRecord(this.record, this.parentRecord, this.rootRecord, this.bundle, this.outlineNode);
 		} else if (this.parentRecord) {
-			this.addRecord(this.parentRecord, this.rootRecord, this.bundle);
+			this.addRecord(this.parentRecord, this.rootRecord, this.bundle, this.outlineNode);
 		}
 	},
 
-	getConfig: function (record, parentRecord, rootRecord, bundle, group, values, visibility) {
+	getConfig: function (record, parentRecord, rootRecord, bundle, outlineNode, group, values, visibility) {
 		return {
 			record: record,
 			parentRecord: parentRecord,
 			rootRecord: rootRecord,
 			bundle: bundle,
+			outlineNode: outlineNode,
 			switchRecordType: (g, v, vis) => this.switchRecordType(g, v, record, parentRecord, rootRecord, bundle, vis),
 			group: group,
 			copyValues: values,
@@ -195,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	editRecord: function (record, parentRecord, rootRecord, bundle) {
+	editRecord: function (record, parentRecord, rootRecord, bundle, outlineNode) {
 		var editor = this.self.getEditor(record.mimeType),
 			cmp = editor && editor.getEditorForRecord(record);
 
@@ -204,10 +205,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		this.activeEditor = this.add(cmp.create(this.getConfig(record, parentRecord, rootRecord, bundle)));
+		this.activeEditor = this.add(cmp.create(this.getConfig(record, parentRecord, rootRecord, bundle, outlineNode)));
 	},
 
-	addRecord: function (parentRecord, rootRecord, bundle) {
+	addRecord: function (parentRecord, rootRecord, bundle, outlineNode) {
 		var editor = this.self.getChildCreator(parentRecord.mimeType),
 			cmp = editor && editor.getChildCreatorForRecord(parentRecord);
 
@@ -216,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		this.activeEditor = this.add(cmp.create(this.getConfig(null, parentRecord, rootRecord, bundle)));
+		this.activeEditor = this.add(cmp.create(this.getConfig(null, parentRecord, rootRecord, bundle, outlineNode)));
 	},
 
 	switchRecordType: function (group, values, record, parentRecord, rootRecord, bundle, visibility) {

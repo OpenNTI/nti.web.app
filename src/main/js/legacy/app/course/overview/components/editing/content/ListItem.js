@@ -128,6 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				parentRecord: this.parentRecord,
 				root: this.lessonOverview,
 				bundle: bundle,
+				outlineNode: this.outlineNode,
 				onPromptOpen: function () {},
 				onPromptClose: function () {}
 			});
