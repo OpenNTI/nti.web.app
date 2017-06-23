@@ -26,6 +26,10 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
+		this.PAGE_TO_HREF = {};
+		this.currentPage = 0;
+		this.knownPages = 0;
+
 		this.useNewSearch = isFeature('use-new-search');
 
 		this.PathActions = PathActions.create();
@@ -291,8 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	showNext: function () {
 		if(this.useNewSearch) {
 			this.Results.setProps({
-				showMoreButton: true,
-				numPages: this.Results.getProps().numPages + 1
+				showMoreButton: true
 			});
 		} else {
 			this.Results.showNext(this.loadNextPage.bind(this));
@@ -325,65 +328,61 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	loadSearchPage: function (page) {
-		if(this.useNewSearch) {
-			if(this.Results.getProps().numPages !== 1 && this.Results.getProps().numPages !== page) {
-				this.Results.setProps({
-					currentPage: page,
-					// quick fix for the extra page that gets added when load finishes
-					numPages: this.Results.getProps().numPages - 1
-				});
-			} else {
-				this.Results.setProps({
-					currentPage: page
-				});
-			}
-		}
-
 		var search = this.currentSearch,
 			accepts = this.getAcceptFilter(search.filter);
-
-		this.showLoading();
-
-		this.lock = Date.now();
-
-		this.SearchActions.loadSearchPage(search.term, accepts, search.bundle, search.page, page)
-			.then(this.onLoadResults.bind(this, this.lock))
-			.catch(this.onLoadFail.bind(this, this.lock));
-	},
-
-	loadNextPage: function () {
-		if (!this.nextPageLink) {
-			return this.loadSearchPage(1);
-		}
-
-		if(this.useNewSearch) {
-			if(this.Results.getProps().numPages !== this.Results.getProps().currentPage + 1) {
-				this.Results.setProps({
-					currentPage: this.Results.getProps().currentPage + 1,
-					// quick fix for the extra page that gets added when load finishes
-					numPages: this.Results.getProps().numPages - 1
-				});
-			} else {
-				this.Results.setProps({
-					currentPage: this.Results.getProps().currentPage + 1
-				});
-			}
-		}
 
 		this.removeNext();
 		this.showLoading();
 
 		this.lock = Date.now();
 
-		StoreUtils.loadBatch(this.nextPageLink, null, null, null, this.useNewSearch)
-			.then(this.onLoadResults.bind(this, this.lock))
+		const cachedHref = this.PAGE_TO_HREF[page];
+		const load = cachedHref ?
+						StoreUtils.loadBatch(cachedHref, null, null, null, this.useNewSearch) :
+						this.SearchActions.loadSearchPage(search.term, accepts, search.bundle, search.page, page);
+
+		load
+			.then(this.onLoadResults.bind(this, this.lock, page))
 			.catch(this.onLoadFail.bind(this, this.lock));
 	},
 
-	onLoadResults: function (lock, batch) {
+	loadNextPage: function () {
+		const nextPage = this.knownPages + 1;
+
+		if (!this.PAGE_TO_HREF[nextPage]) {
+			return this.loadSearchPage(1);
+		}
+
+		this.loadSearchPage(nextPage);
+
+		// this.removeNext();
+		// this.showLoading();
+
+		// this.lock = Date.now();
+
+		// StoreUtils.loadBatch(this.nextPageLink, null, null, null, this.useNewSearch)
+		// 	.then(this.onLoadResults.bind(this, this.lock))
+		// 	.catch(this.onLoadFail.bind(this, this.lock));
+	},
+
+	onLoadResults: function (lock, page, batch) {
 		if (lock !== this.lock) { return; }
 
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
+
+		this.knownPages = Math.max(this.currentPage, page);
+		this.currentPage = page;
+
+
+		//If we've already loaded this page we don't want to
+		//override what hrefs we are caching
+		if (!this.PAGE_TO_HREF[page]) {
+			this.PAGE_TO_HREF[page] = batch.href;
+		}
+
+		if (!this.PAGE_TO_HREF[page + 1]) {
+			this.PAGE_TO_HREF[page + 1] = nextLink;
+		}
 
 		this.removeLoading();
 
@@ -392,7 +391,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 				this.Results.setProps({
 					hits: batch.Items,
 					errorLoadingText: undefined,
-					emptyText: undefined
+					emptyText: undefined,
+					currentPage: this.currentPage,
+					numPages: this.knownPages + 1
 				});
 			} else {
 				this.Results.addResults(batch.Items);
@@ -400,11 +401,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		} else {
 			this.showEmpty();
 		}
-		if (nextLink) {
-			this.nextPageLink = nextLink;
+		if (this.PAGE_TO_HREF[this.knownPages + 1]) {
 			this.showNext();
 		} else {
-			delete this.nextPageLink;
 			this.removeNext();
 		}
 
