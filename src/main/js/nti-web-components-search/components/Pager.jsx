@@ -72,7 +72,7 @@ export default function Pager ({pagesToShow, currentPage, showNext, loadPage, sh
 				})
 			}
 			{showMoreButton &&
-				<li className="next-results-page" onClick={showNext}><a className="next-results-page-button">Next</a></li>
+				<li className="next-results-page" onClick={showNext}><a className="next-results-page-button"><span>More Pages</span><i className="icon-chevron-right" /></a></li>
 			}
 		</ul>
 	);

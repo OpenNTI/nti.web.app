@@ -139,6 +139,20 @@
 	color: #3FB3F6;
 	font-size: 14px;
 	font-weight: bold;
+	white-space: nowrap;
+
+	span {
+		display: inline-block;
+		vertical-align: middle;
+		white-space: nowrap;
+		line-height: 1;
+	}
+
+	i {
+		display: inlien-block;
+		vertical-align: middle;
+		font-size: 0.875rem;
+	}
 }
 
 .prev-results-page {
