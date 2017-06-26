@@ -1,10 +1,12 @@
 var Ext = require('extjs');
+
 var User = require('../model/User');
 var Globals = require('../util/Globals');
 var ParseUtils = require('../util/Parsing');
 var MixinsRouter = require('../mixins/Router');
 var MixinsState = require('../mixins/State');
 var MixinsScrolling = require('../mixins/Scrolling');
+
 var LibraryIndex = require('./library/Index');
 var LibraryStateStore = require('./library/StateStore');
 var BundleIndex = require('./bundle/Index');
@@ -15,6 +17,7 @@ var UserIndex = require('./profiles/user/Index');
 var GroupIndex = require('./profiles/group/Index');
 var CommunityIndex = require('./profiles/community/Index');
 var NotificationsIndex = require('./notifications/Index');
+
 var UtilParsing = require('../util/Parsing');
 var NavigationStateStore = require('./navigation/StateStore');
 var PathActions = require('./navigation/path/Actions');
@@ -23,6 +26,8 @@ var WindowsStateStore = require('./windows/StateStore');
 var WindowsActions = require('./windows/Actions');
 var ContextStateStore = require('./context/StateStore');
 var ContactsIndex = require('./contacts/Index');
+var AdminIndex = require('./siteadmin/Index');
+
 const { isNTIID, encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 module.exports = exports = Ext.define('NextThought.app.Body', {
@@ -72,6 +77,11 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		this.addRoute('/search/', this.setSearchActive.bind(this));
 		this.addRoute('/contacts/', this.setContactsActive.bind(this));
 		this.addRoute('/id/:id', this.setObjectActive.bind(this));
+
+		if(Service.getWorkspace('SiteAdmin')) {
+			// only available if user has the admin workspace
+			this.addRoute('/siteadmin', this.setAdminActive.bind(this));
+		}
 
 		this.addDefaultRoute('/library');
 
@@ -316,6 +326,13 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			notableView = me.setActiveCmp('notifications-index');
 
 		return notableView.handleRoute(subRoute, route.precache);
+	},
+
+	setAdminActive: function (route, subRoute) {
+		var me = this,
+			view = me.setActiveCmp('site-admin-index');
+
+		return view.handleRoute(subRoute, route.precache);
 	},
 
 	setSearchActive: function (route, subRoute) {
