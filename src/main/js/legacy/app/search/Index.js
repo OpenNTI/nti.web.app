@@ -228,9 +228,6 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.currentSearch.filter = filter;
 
-		// clear cache on filter change since this alters the URL composition
-		this.PAGE_TO_HREF = {};
-
 		this.updateRoute();
 	},
 
@@ -244,6 +241,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 				numPages: 1
 			});
 		}
+
+		// clear cache on filter/search change since this alters the URL composition
+		this.PAGE_TO_HREF = {};
 
 		this.loadSearchPage(1);
 	},
