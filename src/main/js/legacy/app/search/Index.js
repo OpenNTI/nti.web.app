@@ -394,6 +394,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			this.PAGE_TO_HREF[page + 1] = nextLink;
 		}
 
+		//If we are on the first page and don't have a next link, don't show the pager
+		const numPages = page === 1 && this.knownPages === 1 && !nextLink ? 0 : this.knownPages + 1;
+
 		this.removeLoading();
 
 		if (batch.Items && batch.Items.length) {
@@ -403,7 +406,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					errorLoadingText: undefined,
 					emptyText: undefined,
 					currentPage: this.currentPage,
-					numPages: this.knownPages + 1
+					numPages
 				});
 			} else {
 				this.Results.addResults(batch.Items);
