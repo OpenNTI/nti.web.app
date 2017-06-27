@@ -17,14 +17,13 @@ function loadHitData (hit, getBreadCrumb) {
 
 	return Promise.all([
 		resolveTitle(hit, getBreadCrumb),
-		resolveFragments(hit),
-		resolvePath(hit, getBreadCrumb)
+		resolveFragments(hit)
 	]).then((results) => {
 		return {
 			hit,
 			title: results[0],
 			fragments: results[1],
-			path: results[2]
+			resolvePath: () => { return resolvePath(hit, getBreadCrumb); }
 		};
 	});
 }
@@ -70,15 +69,17 @@ export default class SearchResults extends React.Component {
 	}
 
 	render () {
-		const {loaded, hits} = this.state;
+		const {loaded, navigating, hits} = this.state;
 		const {showLoading, errorLoadingText, emptyText, numPages} = this.props;
 		const cls = cx('search-results', {loaded});
 
-		if(showLoading || !loaded) {
+		const loadingMessage = navigating ? 'Navigating...' : 'Loading...';
+
+		if(navigating || showLoading || !loaded) {
 			return (
 				<div className="search-results">
 					<div className="loading-container control-item">
-						<div className="loading">Loading...</div>
+						<div className="loading">{loadingMessage}</div>
 					</div>
 				</div>
 			);
@@ -101,10 +102,16 @@ export default class SearchResults extends React.Component {
 	}
 
 	renderHit = (hit, index) => {
-		const {navigateToSearchHit} = this.props;
+		const me = this;
+
+		const onNavigation = (obj, h, fragIndex, containerId) => {
+			me.setState({ navigating: true });
+
+			me.props.navigateToSearchHit(obj, h, fragIndex, containerId);
+		}
 
 		return (
-			<Hit hit={hit.hit} title={hit.title} key={index} fragments={hit.fragments} path={hit.path} navigateToSearchHit={navigateToSearchHit}/>
+			<Hit hit={hit.hit} title={hit.title} key={index} fragments={hit.fragments} resolvePath={hit.resolvePath} navigateToSearchHit={onNavigation}/>
 		);
 	}
 
