@@ -26,9 +26,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.PAGE_TO_HREF = {};
-		this.currentPage = 0;
-		this.knownPages = 0;
+		//Init the page caches
+		this.clearPages();
 
 		this.useNewSearch = isFeature('use-new-search');
 
@@ -242,13 +241,21 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			});
 		}
 
-		// clear cache on filter/search change since this alters the URL composition
-		this.PAGE_TO_HREF = {};
-
 		this.loadSearchPage(1);
 	},
 
+
+	clearPages () {
+		// clear cache on filter/search change since this alters the URL composition
+		this.PAGE_TO_HREF = {};
+		this.currentPage = 0;
+		this.knownPages = 0;
+	},
+
+
 	clearResults: function () {
+		this.clearPages();
+
 		if(this.useNewSearch) {
 			this.Results.setProps({
 				hits: []
