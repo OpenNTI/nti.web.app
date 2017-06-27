@@ -16,7 +16,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "npm test",
+    "test": "make test",
     "start": "make styles && web-service --config ./src/server/config/env.json.example",
     "prepublish": "not-in-install && make || in-install"
   },
