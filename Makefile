@@ -27,7 +27,7 @@ styles: clean-styles
 	@node-sass $(SRC)main/resources/scss -o $(SRC)main/resources/css
 	@postcss --use autoprefixer -r $(SRC)main/resources/css/*.css
 
-build: compile
+build: check test compile
 	@echo "Done."
 
 compile: clean styles
