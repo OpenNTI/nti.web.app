@@ -17,6 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.readingHasChanged()) {
 			this.formCmp.setValue('label', this.selectedItem.getAttribute('label'));
 			this.formCmp.setValue('href', this.selectedItem.getAttribute('ntiid'));
+			this.formCmp.setValue('target', this.selectedItem.getAttribute('ntiid'));
 		}
 	},
 
