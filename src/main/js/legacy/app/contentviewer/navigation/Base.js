@@ -6,6 +6,28 @@ const { encodeForURI } = require('nti-lib-ntiids');
 require('../../../common/menus/JumpTo');
 require('./TableOfContents');
 
+const flatten = arr => arr.reduce(
+	(acc, val) => acc.concat(
+		Array.isArray(val) ? flatten(val) : val
+	),
+	[]
+);
+
+const getPropertyIn = (obj, property) => Array.isArray(obj)
+	? obj
+	: obj && obj.get && getPropertyIn(obj.get(property), property);
+
+const flattenOutlineIn = bundle => {
+	const outline = bundle && bundle.get && bundle.get('Outline');
+	const nodes = outline && outline.OutlineContents && outline.OutlineContents.get('Items');
+	if (!(outline && nodes)) {
+		return [];
+	}
+
+	const items = getPropertyIn(nodes, 'Items');
+
+	return flatten(items);
+};
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	extend: 'Ext.Component',
@@ -229,13 +251,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 	onPathHover: function (e) {
-		var part = e.getTarget('.part'), path;
-
+		const part = e.getTarget('.part')
 		if (e.getTarget('.locked') || !part) { return; }
 
-		path = this.__getPathPart(part);
+		const flatOutline = flattenOutlineIn(this.bundle);
+		const isInOutline = path => path && path.ntiid && flatOutline.indexOf(path.ntiid) > -1;
+		const path = this.__getPathPart(part);
+		const parentPath = part.previousSibling && this.__getPathPart(part.previousSibling);
+		const allowHoverMenu = flatOutline.length === 0 || isInOutline(path) || isInOutline(parentPath);
 
-		if (path && path.siblings && path.siblings.length) {
+		if (path && path.siblings && path.siblings.length && allowHoverMenu) {
 			this.startShowingPathMenu(part, path);
 		}
 	},
