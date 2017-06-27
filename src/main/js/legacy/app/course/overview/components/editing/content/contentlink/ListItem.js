@@ -34,8 +34,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				}
 			});
 		}
-		
+
 		config.items = items;
 		return config;
+	},
+
+
+	doNavigation (config) {
+		if (this.navigate) {
+			this.navigate(config, null, this.record.hasLink('edit'));
+		}
 	}
 });

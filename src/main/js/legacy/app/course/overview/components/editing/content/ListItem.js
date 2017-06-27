@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			record: record,
 			'target-ntiid': item['Target-NTIID'],
 			ntiid: item.NTIID,
-			navigate: this.navigate,
+			navigate: this.doNavigation.bind(this),
 			inEditMode: true
 		}, item);
 	},
@@ -140,5 +140,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			layout: 'none',
 			items: controls
 		};
+	},
+
+
+	doNavigation (config) {
+		if (this.navigate) {
+			this.navigate(config);
+		}
 	}
 });

@@ -49,5 +49,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getPreviewType: function () {
 		return this.IsAssignment ? 'course-overview-assignment' : 'course-overview-naquestionset';
+	},
+
+
+	doNavigation (config) {
+		if (this.navigate) {
+			this.navigate(config, null, this.IsAssignment);
+		}
 	}
 });

@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	},
 
 
-	__handleObjectNav: function (fragment, result) {
+	__handleObjectNav: function (fragment, edit, result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
@@ -77,6 +77,10 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 
 		if (fragment) {
 			result.route = Globals.trimRoute(result.route) + '#' + fragment;
+		}
+
+		if (edit) {
+			result.route = Globals.trimRoute(result.route) + '/edit';
 		}
 
 		this.pushRoute(result.title || '', result.route, result.precache);
@@ -96,17 +100,17 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	},
 
 
-	__handleNoObjectNavigation: function (object, fragment) {
+	__handleNoObjectNavigation: function (object, fragment, edit) {
 		if (this.__parentRouter) {
-			return this.__parentRouter.navigateToObject(object, fragment);
+			return this.__parentRouter.navigateToObject(object, fragment, edit);
 		}
 	},
 
 
-	navigateToObject: function (object, fragment) {
+	navigateToObject: function (object, fragment, edit) {
 		return this.mixins.Object.handleObject.call(this, object)
-			.then(this.__handleObjectNav.bind(this, fragment))
-			.catch(this.__handleNoObjectNavigation.bind(this, object, fragment));
+			.then(this.__handleObjectNav.bind(this, fragment, edit))
+			.catch(this.__handleNoObjectNavigation.bind(this, object, fragment, edit));
 	},
 
 
