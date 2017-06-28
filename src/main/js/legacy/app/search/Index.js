@@ -35,43 +35,52 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.PathActions = PathActions.create();
 
 		if(this.useNewSearch) {
-			this.add([
-				{
-					xtype: 'search-advanced-menu',
-					changeFilter: this.changeFilter.bind(this)
+			this.filtersWidget = this.add({
+				xtype: 'search-advanced-menu',
+				changeFilter: this.changeFilter.bind(this)
+			});
+
+			this.resultsWidget = this.add({
+				xtype: 'react',
+				component: Search,
+				getBreadCrumb: (obj) => {
+					let rec;
+					if(typeof obj.toJSON === 'function') {
+						rec = ParseUtils.parseItems(obj.toJSON())[0];
+					} else {
+						rec = ParseUtils.parseItems(obj)[0];
+					}
+
+					return this.PathActions.getBreadCrumb(rec)
+					.then((path) => {
+						return path;
+					});
 				},
-				{
-					xtype: 'react',
-					component: Search,
-					getBreadCrumb: (obj) => {
-						let rec;
-						if(typeof obj.toJSON === 'function') {
-							rec = ParseUtils.parseItems(obj.toJSON())[0];
-						} else {
-							rec = ParseUtils.parseItems(obj)[0];
-						}
+				navigateToSearchHit: (record, hit, frag, containerId) => {
+					record = ParseUtils.parseItems(record)[0];
+					hit = ParseUtils.parseItems(hit)[0];
+					this.SearchStore.setHitForContainer(containerId, hit, frag);
 
-						return this.PathActions.getBreadCrumb(rec)
-						.then((path) => {
-							return path;
-						});
-					},
-					navigateToSearchHit: (record, hit, frag, containerId) => {
-						record = ParseUtils.parseItems(record)[0];
-						hit = ParseUtils.parseItems(hit)[0];
-						this.SearchStore.setHitForContainer(containerId, hit, frag);
+					const failedNavigate = () => {
+						alert('Could not navigate to search result.');
+						this.resultsWidget.setState({ navigating: false });
+						this.removeLoading();
+					};
 
-						this.Router.root.attemptToNavigateToObject(record);
-					},
-					showNext: () => {
-						this.loadNextPage();
-					},
-					loadPage: (page) => {
-						this.loadSearchPage(page);
-					},
-					numPages: 1
-				}
-			]);
+					this.Router.root.attemptToNavigateToObject(record, {
+						onFailedToGetFullPath: failedNavigate
+					});
+
+					this.filtersWidget.hide();
+				},
+				showNext: () => {
+					this.loadNextPage();
+				},
+				loadPage: (page) => {
+					this.loadSearchPage(page);
+				},
+				numPages: 1
+			});
 		} else {
 			this.add([
 				{
@@ -264,6 +273,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 	showLoading: function () {
 		if(this.useNewSearch) {
+			this.filtersWidget.hide();
+
 			this.Results.setProps({
 				showLoading: true
 			});
@@ -277,6 +288,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			this.Results.setProps({
 				showLoading: false
 			});
+
+			this.filtersWidget.show();
 		} else {
 			this.Results.removeLoading();
 		}
