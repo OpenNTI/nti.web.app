@@ -77,6 +77,10 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
+	allowPathSiblings: function () {
+		return true;
+	},
+
 	onceAssetsLoadedPromise: function () {
 		if (!this.onceAssetsLoaded) {
 			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));

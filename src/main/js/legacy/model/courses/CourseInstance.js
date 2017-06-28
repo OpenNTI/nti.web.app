@@ -33,6 +33,28 @@ require('../assessment/Assignment');
 require('../assessment/QuestionSet');
 require('../../mixins/AuditLog');
 
+const flatten = arr => arr.reduce(
+	(acc, val) => acc.concat(
+		Array.isArray(val) ? flatten(val) : val
+	),
+	[]
+);
+
+const getPropertyIn = (obj, property) => Array.isArray(obj)
+	? obj
+	: obj && obj.get && getPropertyIn(obj.get(property), property);
+
+const flattenOutlineIn = bundle => {
+	const outline = bundle && bundle.get && bundle.get('Outline');
+	const nodes = outline && outline.OutlineContents && outline.OutlineContents.get('Items');
+	if (!(outline && nodes)) {
+		return [];
+	}
+
+	const items = getPropertyIn(nodes, 'Items');
+
+	return flatten(items);
+};
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance', {
 	extend: 'NextThought.model.Base',
@@ -93,6 +115,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			icon: e && e.get('icon'),
 			thumb: e && e.get('thumb')
 		});
+	},
+
+	allowPathSiblings: function (ntiid) {
+		const outline = flattenOutlineIn(this);
+		return outline.indexOf(ntiid) > -1;
 	},
 
 	getDefaultAssetRoot: function () {
