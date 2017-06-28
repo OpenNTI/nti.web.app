@@ -251,16 +251,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 	onPathHover: function (e) {
-		const part = e.getTarget('.part')
+		const part = e.getTarget('.part');
 		if (e.getTarget('.locked') || !part) { return; }
 
-		const flatOutline = flattenOutlineIn(this.bundle);
-		const isInOutline = path => path && path.ntiid && flatOutline.indexOf(path.ntiid) > -1;
 		const path = this.__getPathPart(part);
-		const parentPath = part.previousSibling && this.__getPathPart(part.previousSibling);
-		const allowHoverMenu = flatOutline.length === 0 || isInOutline(path) || isInOutline(parentPath);
 
-		if (path && path.siblings && path.siblings.length && allowHoverMenu) {
+		if (path && path.siblings && path.siblings.length) {
 			this.startShowingPathMenu(part, path);
 		}
 	},
