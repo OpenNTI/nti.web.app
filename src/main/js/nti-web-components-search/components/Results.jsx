@@ -40,7 +40,8 @@ export default class SearchResults extends React.Component {
 		showMoreButton: React.PropTypes.bool,
 		showLoading: React.PropTypes.bool,
 		currentPage: React.PropTypes.number,
-		numPages: React.PropTypes.number
+		numPages: React.PropTypes.number,
+		onResultsLoaded: React.PropTypes.func
 	}
 
 	constructor (props) {
@@ -65,6 +66,10 @@ export default class SearchResults extends React.Component {
 		Promise.all(hits.map(hit => loadHitData(hit, getBreadCrumb)))
 		.then(results => {
 			this.setState({loaded: true, hits: results});
+
+			if(!this.props.showLoading) {
+				this.props.onResultsLoaded();
+			}
 		});
 	}
 

@@ -55,6 +55,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 						return path;
 					});
 				},
+				onResultsLoaded: () => {
+					this.filtersWidget.show();
+				},
 				navigateToSearchHit: (record, hit, frag, containerId) => {
 					record = ParseUtils.parseItems(record)[0];
 					hit = ParseUtils.parseItems(hit)[0];
@@ -295,8 +298,6 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			this.Results.setProps({
 				showLoading: false
 			});
-
-			this.filtersWidget.show();
 		} else {
 			this.Results.removeLoading();
 		}
@@ -414,6 +415,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		if (batch.Items && batch.Items.length) {
 			if(this.useNewSearch) {
+				// if there are results with the new search, the onResultsLoaded
+				// handler will unhide the filters widget when those results
+				// have been loaded
 				this.Results.setProps({
 					hits: batch.Items,
 					errorLoadingText: undefined,
@@ -425,6 +429,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 				this.Results.addResults(batch.Items);
 			}
 		} else {
+			// need to make sure to unhide the filters widget if there
+			// are no results
+			this.filtersWidget.show();
 			this.showEmpty();
 		}
 		if (this.PAGE_TO_HREF[this.knownPages + 1]) {
