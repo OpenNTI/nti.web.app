@@ -6,28 +6,6 @@ const { encodeForURI } = require('nti-lib-ntiids');
 require('../../../common/menus/JumpTo');
 require('./TableOfContents');
 
-const flatten = arr => arr.reduce(
-	(acc, val) => acc.concat(
-		Array.isArray(val) ? flatten(val) : val
-	),
-	[]
-);
-
-const getPropertyIn = (obj, property) => Array.isArray(obj)
-	? obj
-	: obj && obj.get && getPropertyIn(obj.get(property), property);
-
-const flattenOutlineIn = bundle => {
-	const outline = bundle && bundle.get && bundle.get('Outline');
-	const nodes = outline && outline.OutlineContents && outline.OutlineContents.get('Items');
-	if (!(outline && nodes)) {
-		return [];
-	}
-
-	const items = getPropertyIn(nodes, 'Items');
-
-	return flatten(items);
-};
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	extend: 'Ext.Component',
