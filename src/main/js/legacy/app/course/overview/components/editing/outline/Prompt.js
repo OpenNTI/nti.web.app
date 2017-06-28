@@ -232,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.activeEditor.destroy();
 		}
 
-		this.activeEditor = this.add(typeSwitcher.create(this.getConfig(record, parentRecord, rootRecord, bundle, group, values, visibility)));
+		this.activeEditor = this.add(typeSwitcher.create(this.getConfig(record, parentRecord, rootRecord, bundle, null, group, values, visibility)));
 	},
 
 	setSaveText: function (text) {
