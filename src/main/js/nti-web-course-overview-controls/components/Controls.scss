@@ -11,10 +11,13 @@
 	}
 
 	.message {
+		display: flex;
+		align-items: center;
+
 		i,
 		span {
 			display: inline-block;
-			vertical-align: middle;
+			flex: 0 0 auto;
 			color: #757474;
 		}
 
@@ -30,9 +33,21 @@
 	.resources {
 		color: $primary-blue;
 		cursor: pointer;
+		display: flex;
+		align-items: center;
+
+		i,
+		span {
+			display: inline-block;
+			flex: 0 0 auto;
+		}
 
 		i {
 			margin-right: 0.3125rem;
+		}
+
+		span {
+			font-size: 0.875rem;
 		}
 	}
 
