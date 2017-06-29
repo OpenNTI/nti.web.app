@@ -1,3 +1,5 @@
+import UserModel from '../../legacy/model/User';
+
 const { User } = require('nti-web-client');
 
 export default {
@@ -21,6 +23,10 @@ export default {
 				User.resolve({entityId: hit.Creator})
 					.then(function (user) {
 						return user.alias + ' Commented';
+					})
+					.catch(() => {
+						const u = UserModel.getUnresolved(hit.Creator);
+						return u.get('alias') + ' Commented';
 					})
 			]).then((results) => {
 				const path = results[0];
