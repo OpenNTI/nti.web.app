@@ -1,6 +1,8 @@
 var Ext = require('extjs');
-var User = require('../../../../../model/User');
 
+var User = require('../../../../../model/User');
+var {Manager} = require('nti-web-course-instructors');
+const {getService} = require('nti-web-client');
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Instructors', {
 	extend: 'Ext.view.View',
@@ -11,21 +13,28 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	itemSelector: '.instructor',
 
 	config: {
-		info: null
+		info: null,
+		bundle: null
 	},
 
 	constructor: function (config) {
 		var me = this;
-		config.tpl = new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-			{ cls: 'instructor', cn: [
-				{ cls: 'photo', style: {backgroundImage: 'url({photo})'}},
-				{ cls: 'wrap', cn: [
-					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Instructors.instructors}}}' },
-					{ cls: 'name', html: '{Name}' },
-					{ cls: 'title', html: '{JobTitle}'}
-				] }
-			]}
-		]}), {
+		config.tpl = new Ext.XTemplate(Ext.DomHelper.markup([
+			{ tag: 'tpl', 'for': '.', cn: [
+				{ cls: 'instructor', cn: [
+					{ cls: 'photo', style: {backgroundImage: 'url({photo})'}},
+					{ cls: 'wrap', cn: [
+						{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Instructors.instructors}}}' },
+						{ cls: 'name', html: '{Name}' },
+						{ cls: 'title', html: '{JobTitle}'}
+					] }
+				]}
+			]},
+			{
+				cls: 'manage-button',
+				html: 'Manage Instructors'
+			}
+		]), {
 		//template functions
 		});
 
@@ -57,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 			data: data
 		});
 	},
-	
+
 	afterRender: function () {
 		this.callParent(arguments);
 		//Our parent doesn't participate in ext layout so if our store is
@@ -65,5 +74,29 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		//(assuming a later layout pass will trigger the rendering).  Therefore force
 		//view view to render here.
 		this.refresh();
+
+		const bundle = this.getBundle();
+
+		this.manageEl = this.el.down('.manage-button');
+
+		if (!bundle.hasLink('Instructors')) {
+			this.manageEl.hide();
+		}
+
+		this.mon(this.manageEl, 'click', (e) => this.onManageInstructors(e));
+	},
+
+
+	getCourse () {
+		const bundle = this.getBundle();
+
+		return getService()
+			.then(service => service.getObject(bundle.getId()));
+	},
+
+
+	onManageInstructors () {
+		return this.getCourse()
+			.then(course => Manager.show(course));
 	}
 });

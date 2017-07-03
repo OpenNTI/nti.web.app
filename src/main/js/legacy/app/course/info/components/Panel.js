@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 	ui: 'course',
 	layout: 'none',
 
-	setContent: function (content, status) {
+	setContent: function (content, status, bundle) {
 		this.removeAll(true);
 
 		var toAdd = [],
@@ -53,7 +53,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 			enrollmentStatus: status
 		},{
 			xtype: 'course-info-instructors',
-			info: content
+			info: content,
+			bundle
 		},{
 			xtype: 'course-info-support'
 		});

@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		var me = this;
 		//always reset
 		me.setActiveItem('info');
-		me.getComponent('info').setContent(info, status);
+		me.getComponent('info').setContent(info, status, bundle);
 		me.getComponent('roster').setContent(showRoster && bundle);
 		me.getComponent('report').setContent(showRoster && bundle);
 	},
