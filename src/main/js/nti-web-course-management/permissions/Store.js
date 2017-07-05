@@ -1,16 +1,23 @@
 import StorePrototype from 'nti-lib-store';
 
-import {INSTRUCTORS_LOADED, EDITORS_LOADED} from './Constants';
+import {
+	INSTRUCTORS_LOADED,
+	EDITORS_LOADED,
+	LOADED,
+	RESET_STORE
+} from './Constants';
 
 const Protected = Symbol('Protected');
 
 const InstructorsLoaded = Symbol('Instructors Loaded');
 const EditorsLoaded = Symbol('Editors Loaded');
+const ResetStore = Symbol('Reset Store');
 
 function init (store) {
 	store[Protected] = {
 		instructors: null,
-		editors: null
+		editors: null,
+		permissions: null
 	};
 }
 
@@ -22,8 +29,13 @@ class Store extends StorePrototype {
 
 		this.registerHandlers({
 			[INSTRUCTORS_LOADED]: InstructorsLoaded,
-			[EDITORS_LOADED]: EditorsLoaded
+			[EDITORS_LOADED]: EditorsLoaded,
+			[RESET_STORE]: ResetStore
 		});
+	}
+
+	[ResetStore] () {
+		init(this);
 	}
 
 
@@ -33,6 +45,10 @@ class Store extends StorePrototype {
 		this[Protected].instructors = response;
 
 		this.emitChange({type: INSTRUCTORS_LOADED});
+
+		if (this.editors) {
+			this.emitChange({type: LOADED});
+		}
 	}
 
 
@@ -42,6 +58,10 @@ class Store extends StorePrototype {
 		this[Protected].editors = response;
 
 		this.emitChange({type: EDITORS_LOADED});
+
+		if (this.instructors) {
+			this.emitChange({type: LOADED});
+		}
 	}
 
 

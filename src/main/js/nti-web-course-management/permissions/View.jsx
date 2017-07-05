@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import {Prompt} from 'nti-web-commons';
 
 import Store from './Store';
-import {loadInstructors} from './Actions';
-import {INSTRUCTORS_LOADED} from './Constants';
+import {loadInstructors, resetStore} from './Actions';
+import {LOADED} from './Constants';
 
 export default class InstructorManager extends React.Component {
 	static show (course) {
@@ -36,10 +36,11 @@ export default class InstructorManager extends React.Component {
 
 	componentWillUnmount () {
 		Store.removeChangeListener(this.onStoreChange);
+		resetStore();
 	}
 
 	onStoreChange = (data) => {
-		if (data.type === INSTRUCTORS_LOADED) {
+		if (data.type === LOADED) {
 			this.onInstructorsLoaded();
 		}
 	}
