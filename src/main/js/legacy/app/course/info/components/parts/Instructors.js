@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-
-var User = require('../../../../../model/User');
-var {Manager} = require('nti-web-course-instructors');
+const Ext = require('extjs');
 const {getService} = require('nti-web-client');
+
+const {Permissions:CoursePermissions} = require('nti-web-course-management');
+
+const User = require('../../../../../model/User');
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Instructors', {
 	extend: 'Ext.view.View',
@@ -97,6 +98,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 
 	onManageInstructors () {
 		return this.getCourse()
-			.then(course => Manager.show(course));
+			.then(course => CoursePermissions.show(course));
 	}
 });
