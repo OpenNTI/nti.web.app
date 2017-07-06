@@ -101,13 +101,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getDefaultValues: function () {
-		var values = this.callParent(arguments),
-			selectedItem = this.selectedItem;
+		const values = this.callParent(arguments);
+		const {selectedItem, contentPackage} = this;
 
 		if (!this.record && selectedItem) {
 			values.label = values.label || selectedItem.getAttribute('label') || selectedItem.getAttribute('title');
 			values.href = selectedItem.getAttribute('ntiid');
 			values.target = values.href;
+			values.description = contentPackage ? contentPackage.get('description') : '';
 		}
 
 		values.type = NextThought.model.RelatedWork.CONTENT_TYPE;
