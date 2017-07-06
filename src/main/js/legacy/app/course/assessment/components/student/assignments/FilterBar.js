@@ -235,11 +235,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	createAssignment () {
-		if (!Service.canDoAdvancedEditing()) {
-			this.fireEvent('create-assignment');
-			return;
-		}
-
 		this.assignmentTypeMenu = this.assignmentTypeMenu || Ext.widget('menu', {
 			cls: 'assignment-types',
 			ownerCmp: this,
