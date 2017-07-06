@@ -1,23 +1,28 @@
 import StorePrototype from 'nti-lib-store';
 
 import {
+	LOADING,
+	LOADED,
 	INSTRUCTORS_LOADED,
 	EDITORS_LOADED,
-	LOADED,
-	RESET_STORE
+	STUDENTS_LOADED
 } from './Constants';
 
 const Protected = Symbol('Protected');
 
+const Loading = Symbol('Loading');
+const Loaded = Symbol('Loaded');
+
 const InstructorsLoaded = Symbol('Instructors Loaded');
 const EditorsLoaded = Symbol('Editors Loaded');
-const ResetStore = Symbol('Reset Store');
+const StudentsLoaded = Symbol('Students Loaded');
 
 function init (store) {
 	store[Protected] = {
+		loading: false,
 		instructors: null,
 		editors: null,
-		permissions: null
+		students: null
 	};
 }
 
@@ -28,14 +33,25 @@ class Store extends StorePrototype {
 		init(this);
 
 		this.registerHandlers({
+			[LOADING]: Loading,
 			[INSTRUCTORS_LOADED]: InstructorsLoaded,
 			[EDITORS_LOADED]: EditorsLoaded,
-			[RESET_STORE]: ResetStore
+			[STUDENTS_LOADED]: StudentsLoaded
 		});
 	}
 
-	[ResetStore] () {
-		init(this);
+
+	[Loading] () {
+		this[Protected].loading = true;
+
+		this.emitChange({type: LOADING});
+	}
+
+
+	[Loaded] () {
+		this[Protected].loading = false;
+
+		this.emitChange({type: LOADED});
 	}
 
 
@@ -44,11 +60,7 @@ class Store extends StorePrototype {
 
 		this[Protected].instructors = response;
 
-		this.emitChange({type: INSTRUCTORS_LOADED});
-
-		if (this.editors) {
-			this.emitChange({type: LOADED});
-		}
+		this[Loaded]();
 	}
 
 
@@ -57,21 +69,33 @@ class Store extends StorePrototype {
 
 		this[Protected].editors = response;
 
-		this.emitChange({type: EDITORS_LOADED});
-
-		if (this.instructors) {
-			this.emitChange({type: LOADED});
-		}
+		this[Loaded]();
 	}
 
+
+	[StudentsLoaded] (e) {
+		const {response} = e.action;
+
+		this[Protected].students = response;
+
+		this[Loaded]();
+	}
+
+
+	get loading () {
+		return this[Protected].loading;
+	}
 
 	get instructors () {
 		return this[Protected].instructors;
 	}
 
-
 	get editors () {
 		return this[Protected].editors;
+	}
+
+	get students () {
+		return this[Protected].students;
 	}
 }
 
