@@ -1,10 +1,11 @@
 const Ext = require('extjs');
+const {Forums} = require('nti-web-discussions');
 
 require('../Editor');
 require('../../../../../../../model/DiscussionRef');
+const CommunityHeadlineTopic = require('../../../../../../../model/forums/CommunityHeadlineTopic');
 require('./ItemSelection');
 require('./DiscussionEditor');
-
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -37,12 +38,40 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	addFormCmp: function () {},
 
+	onDiscussionTopicSelect: function (selectedTopics) {
+		var length = selectedTopics.length;
+
+		if (length === 0) {
+			this.disableSave();
+		} else {
+			this.record = new CommunityHeadlineTopic(selectedTopics[0]);
+
+			// need to alter the record a bit just to fit what the generic
+			// Editor expects (for example, Editor relies on the 'edit' link
+			// to determine Delete button presence.  new records shouldn't
+			// have that)
+			this.record.set('ID', this.record.getId());
+			this.record.hasLink = (prop) => false;
+			this.record.getLink = (prop) => null;
+
+			this.enableSave();
+		}
+	},
 
 	showEditor: function () {
 		if (this.record) {
 			this.showDiscussionEditor();
 		} else {
-			this.showDiscussionList();
+			//this.showDiscussionList();
+
+			const me = this;
+
+			this.selectionCmp = this.add({
+				xtype: 'react',
+				component: Forums.DiscussionSelectionEditor,
+				bundle: this.bundle,
+				onDiscussionTopicSelect: (selectedTopics) => { me.onDiscussionTopicSelect(selectedTopics); }
+			});
 		}
 	},
 
