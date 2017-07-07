@@ -9,10 +9,11 @@ import Timeline from './Timeline';
 import TranscriptResult from './TranscriptResult';
 import Poll from './Poll';
 import AssignmentQuestion from './AssignmentQuestion';
+import Highlight from './Highlight';
 
 const OBJECT = new WeakMap();
 
-const HANDLERS = [Note, Video, Blog, Chat, Forum, RelatedWorkRef, Timeline, TranscriptResult, Poll, AssignmentQuestion];
+const HANDLERS = [Note, Video, Blog, Chat, Forum, RelatedWorkRef, Timeline, TranscriptResult, Poll, AssignmentQuestion, Highlight];
 
 function getTargetForHit (hit) {
 	const {TargetMimeType:targetMimeType} = hit;
