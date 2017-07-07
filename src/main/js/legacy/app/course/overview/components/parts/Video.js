@@ -1,3 +1,4 @@
+<<<<<<< master
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
@@ -5,6 +6,13 @@ const PlaylistItem = require('legacy/model/PlaylistItem');
 
 require('legacy/app/video/Video');
 require('./Curtain');
+=======
+var Ext = require('extjs');
+var ModelPlaylistItem = require('../../../../../model/PlaylistItem');
+var VideoVideo = require('../../../../video/VideoPlayer');
+var LibraryActions = require('../../../../library/Actions');
+var PartsCurtain = require('./Curtain');
+>>>>>>> Checkpoint for using the react video player
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Video', {
@@ -160,12 +168,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.showCurtain();
 
 		var p = this.player = Ext.widget({
-			xtype: 'content-video',
-			playlist: this.playlist,
-			renderTo: this.screenEl,
+			xtype: 'content-video-player',
+			video: this.video,
 			playerWidth: this.playerWidth,
-			floatParent: this,
-			playlistIndex: 0
+			renderTo: this.screenEl,
+			floatParent: this
 		});
 
 		this.on({
