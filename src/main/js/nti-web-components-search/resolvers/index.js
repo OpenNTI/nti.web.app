@@ -7,10 +7,11 @@ import Forum from './Forum';
 import RelatedWorkRef from './RelatedWorkRef';
 import Timeline from './Timeline';
 import TranscriptResult from './TranscriptResult';
+import Poll from './Poll';
 
 const OBJECT = new WeakMap();
 
-const HANDLERS = [Note, Video, Blog, Chat, Forum, RelatedWorkRef, Timeline, TranscriptResult];
+const HANDLERS = [Note, Video, Blog, Chat, Forum, RelatedWorkRef, Timeline, TranscriptResult, Poll];
 
 function getTargetForHit (hit) {
 	const {TargetMimeType:targetMimeType} = hit;
