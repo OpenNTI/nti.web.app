@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 					return;
 				}
 
-				this.currentVideoId = video.getId();
+				this.currentVideoId = video.getID();
 
 				this.videoPlayer = this.videoWrapper.add({
 					xtype: 'react',
