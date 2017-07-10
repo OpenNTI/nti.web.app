@@ -10,6 +10,18 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.content-video-player',
 
+
+	inheritableStatics: {
+		states: {
+			UNSTARTED: -1,
+			ENDED: 0,
+			PLAYING: 1,
+			PAUSED: 2,
+			BUFFERING: 3,
+			CUED: 5
+		}
+	},
+
 	mixins: {
 		instanceTracking: 'NextThought.mixins.InstanceTracking'
 	},
@@ -44,6 +56,20 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 		this.playerHeight = this.getPlayerHeight();
 
 		this.trackThis();
+
+		this.taskMediaHeartBeat = {
+			interval: 1000,
+			scope: this,
+			run: () => this.fireEvent('media-heart-beat'),
+			onError: (err) => console.error(err)
+		};
+
+		Ext.TaskManager.start(this.taskMediaHeartBeat);
+
+		this.on({
+			destroy: () => Ext.TaskManager.stop(this.taskMediaHeartBeat),
+			beforedestroy: () => this.stopPlayback()
+		});
 	},
 
 
@@ -107,6 +133,8 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 					this.resumePlayback();
 					return;
 				}
+
+				this.currentVideoId = video.getId();
 
 				this.videoPlayer = this.videoWrapper.add({
 					xtype: 'react',
@@ -176,32 +204,45 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	},
 
 
+	queryPlayer () {
+		if (!this.videoPlayer) { return null; }
+
+		const state = this.videoPlayer.getPlayerState();
+
+		return {video: this.currentVideoId, ...state};
+	},
+
+
 	onTimeUpdate (e) {
 
 	},
 
 
 	onSeeked (e) {
-
+		//TODO: set up analytics
+		this.fireEvent('player-event-seeked');
 	},
 
 
-	onPlaying (e) {
-
+	onPlaying () {
+		//TODO: set up analytics
+		this.fireEvent('player-event-play');
 	},
 
 
-	onPause (e) {
-
+	onPause () {
+		//TODO: set up analytics
+		this.fireEvent('player-event-paused')
 	},
 
 
-	onEnded (e) {
-
+	onEnded () {
+		//TODO: set up analytics
+		this.fireEvent('player-event-ended');
 	},
 
 
 	onError (e) {
-
+		this.fireEvent('player-error', e);
 	}
 });
