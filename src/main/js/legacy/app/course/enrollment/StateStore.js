@@ -110,11 +110,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	 */
 	getEnrollmentDetails: function (course) {
 		var p, catalogData = {
-			StartDate: course.get('StartDate'),
-			EndDate: course.get('EndDate'),
-			Enrolled: course.isActive(),
-			Options: {}
-		}, c;
+				StartDate: course.get('StartDate'),
+				EndDate: course.get('EndDate'),
+				Enrolled: course.isActive(),
+				Options: {}
+			}, c;
 
 		if (catalogData.Enrolled) {
 			c = this.CourseStore.findCourseBy(course.findByMyCourseInstance());

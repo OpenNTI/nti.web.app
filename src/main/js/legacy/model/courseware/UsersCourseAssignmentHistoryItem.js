@@ -69,9 +69,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 			f = (f && f.get('Items')) || [];
 			return f.length || r.raw.FeedbackCount;
 		}, convert: function () {
-				this.sortType = Ext.data.SortTypes.asInt;
-				return this.type.convert.apply(this, arguments);
-			}},
+			this.sortType = Ext.data.SortTypes.asInt;
+			return this.type.convert.apply(this, arguments);
+		}},
 
 		{name: 'correct', type: 'int', persist: false, affectedBy: 'pendingAssessment', convert: function (v, r) {
 			var a = r.get('pendingAssessment');

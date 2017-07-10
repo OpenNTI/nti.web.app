@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
 	rangesForSearchHits: function (hit) {
 		var phrase = hit.get('PhraseSearch'),
-		//fragments = hit.get('Fragments'),
+			//fragments = hit.get('Fragments'),
 			regex, ranges,
 			o = this.reader.getComponentOverlay(),
 			contentDoc = this.getDocumentElement(), indexedOverlayData, result = [];
