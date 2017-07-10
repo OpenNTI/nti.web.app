@@ -1026,7 +1026,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 	onRemove: function (cmp) {
 		//direct children count:
 		var c = this.items.getCount(),
-		//panels below this panel:
+			//panels below this panel:
 			children = this.query('note-panel') || [],
 			pluck = Ext.Array.pluck,
 			contains = Ext.Array.contains,

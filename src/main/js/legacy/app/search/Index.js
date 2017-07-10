@@ -55,9 +55,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					}
 
 					return this.PathActions.getBreadCrumb(rec)
-					.then((path) => {
-						return path;
-					});
+						.then((path) => {
+							return path;
+						});
 				},
 				onResultsLoaded: () => {
 					this.filtersWidget.show();
@@ -364,8 +364,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		const cachedHref = this.PAGE_TO_HREF[page];
 		const load = cachedHref ?
-						StoreUtils.loadBatch(cachedHref, null, null, null, this.useNewSearch) :
-						this.SearchActions.loadSearchPage(search.term, accepts, search.bundle, search.page, page);
+			StoreUtils.loadBatch(cachedHref, null, null, null, this.useNewSearch) :
+			this.SearchActions.loadSearchPage(search.term, accepts, search.bundle, search.page, page);
 
 		load
 			.then(this.onLoadResults.bind(this, this.lock, page))

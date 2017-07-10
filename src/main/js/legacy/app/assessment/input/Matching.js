@@ -324,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.el.select('.choice').each(function (blank) {
 			//this iterates the drop zones (blanks) and looks for the drag element (the "answer")
 			var answer = blank.down('.term'),
-			//Get the index off the answer...
+				//Get the index off the answer...
 				answerKey = asInt(answer, 'data-match');
 
 			if (answer) {

@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Date', {
 			}
 
 			var fmt = 'Y-m-d\\TH:i:sP',
-			//we know most of the time the date will be a timezone-less sting... so concat the GMT zone and parse strict.
+				//we know most of the time the date will be a timezone-less sting... so concat the GMT zone and parse strict.
 				d = Ext.Date.parse(v + '-00:00', fmt, true);
 
 			//if the parse strict fails, d will be undefined, and we will parse again without the concat.

@@ -621,9 +621,9 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 	processCueText: function (input) {
 		// The return string
 		var output = input,
-		// Pointer into input (the cue text)
+			// Pointer into input (the cue text)
 			//position = 0,
-		// To remember how many span tags to close
+			// To remember how many span tags to close
 			spanCount = 0,
 			// TO remember how many misformed V tags were encountered
 			// badVCount = 0,

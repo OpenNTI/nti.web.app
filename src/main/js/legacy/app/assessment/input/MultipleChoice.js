@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 
 		Ext.each(this.getEl().query('.control.checked'), function (e) {
 			var x = parseInt(e.getAttribute('data-index'), 10),
-			//if we do not have the solutions, use the whole question's correctness as the marker.
+				//if we do not have the solutions, use the whole question's correctness as the marker.
 				cls = (c.hasOwnProperty(x) ? c[x] === true : correctnessOfQuestion) ?
 					'correct' : 'incorrect';
 

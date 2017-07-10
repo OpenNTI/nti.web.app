@@ -65,13 +65,13 @@ export default class SearchResults extends React.Component {
 
 	getHitData (hits, getBreadCrumb) {
 		Promise.all(hits.map(hit => loadHitData(hit, getBreadCrumb)))
-		.then(results => {
-			this.setState({loaded: true, hits: results});
+			.then(results => {
+				this.setState({loaded: true, hits: results});
 
-			if(!this.props.showLoading) {
-				this.props.onResultsLoaded();
-			}
-		});
+				if(!this.props.showLoading) {
+					this.props.onResultsLoaded();
+				}
+			});
 	}
 
 	render () {
@@ -114,7 +114,7 @@ export default class SearchResults extends React.Component {
 			me.setState({ navigating: true });
 
 			me.props.navigateToSearchHit(obj, h, fragIndex, containerId);
-		}
+		};
 
 		return (
 			<Hit hit={hit.hit} title={hit.title} key={index} fragments={hit.fragments} resolvePath={hit.resolvePath} navigateToSearchHit={onNavigation}/>

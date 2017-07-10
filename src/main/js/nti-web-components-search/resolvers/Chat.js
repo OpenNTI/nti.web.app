@@ -31,15 +31,15 @@ export default {
 		});
 
 		let title = Promise.all(
-				sharedWith.map(u =>
-					User.resolve({entityId : u})
+			sharedWith.map(u =>
+				User.resolve({entityId : u})
 					.catch(() => {
 						const user = UserModel.getUnresolved(u);
 						return {...user, alias: user.get('alias') };
 					})
-				)
-			).then(function (users) {
-				if (!Array.isArray(users)) { users = [users]; }
+			)
+		).then(function (users) {
+			if (!Array.isArray(users)) { users = [users]; }
 
 			users = users.map(function (u) { return u.alias; });
 
