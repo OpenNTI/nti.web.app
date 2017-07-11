@@ -1,0 +1,19 @@
+@import "~nti-style-common";
+
+.course-roster-instructors {
+	background: white;
+
+	.permissions-list-container {
+		max-height: 80vh;
+		overflow: auto;
+		min-height: 200px;
+		width: 100vw;
+		max-width: 768px;
+	}
+}
+
+.course-roster-instructors-container {
+	.icon-close {
+		display: none;
+	}
+}
