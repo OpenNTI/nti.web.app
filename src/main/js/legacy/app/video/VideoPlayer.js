@@ -65,7 +65,7 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 						'video_end_time': time
 					});
 
-					AnalyticsUtil.stopResource(id, 'video-skip');
+					AnalyticsUtil.stopResourceTimer(id, 'video-skip');
 				}
 			}
 
