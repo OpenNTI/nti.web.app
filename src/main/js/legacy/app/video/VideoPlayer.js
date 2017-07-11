@@ -1,9 +1,78 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
 
-const {default: Video} = require('nti-web-video');
+const {default: Video, UNSTARTED, ENDED, PLAYING, PAUSED, BUFFERING, CUED} = require('nti-web-video');
+
+const AnalyticsUtil = require('../../util/Analytics');
+const PageVisibility = require('../../util/Visibility');
 
 require('legacy/overrides/ReactHarness');
+
+const TIME_CHANGE_THRESHOLD = 5;
+
+function getAnalyticMethods (doNotAllow, hasTranscript) {
+	let hasWatch = false;
+	let lastTime;
+
+	return {
+		start (state) {
+			if (doNotAllow || hasWatch || !state) { return; }
+
+			const {id, time, duration, speed} = state;
+
+			AnalyticsUtil.getResourceTimer(id, {
+				type: 'video-watch',
+				'with_transcript': hasTranscript,
+				'video_start_time': time,
+				MaxDuration: duration / 1000,
+				PlaySpeed: speed
+			});
+
+			hasWatch = true;
+			PageVisibility.lockActive();
+		},
+
+		stop (state) {
+			if (doNotAllow || !hasWatch || !state) { return; }
+
+			const {id, time, duration} = state;
+
+			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
+				'video_end_time': time,
+				MaxDuration: duration / 1000
+			});
+
+			hasWatch = false;
+			PageVisibility.unlockActive();
+		},
+
+
+		onHeartBeat (state) {
+			if (doNotAllow || !hasWatch || !state) { return; }
+
+			const {id, time, state:playerState} = state;
+			const diff = lastTime ? (time - lastTime) : 0;
+
+			if (diff > TIME_CHANGE_THRESHOLD || diff < 0) {
+				this.stop(state);
+				this.start(state);
+
+				if (playerState !== UNSTARTED) {
+					AnalyticsUtil.getResourceTimer(id, {
+						type: 'video-skip',
+						'with_transcript': hasTranscript,
+						'video_start_time': lastTime,
+						'video_end_time': time
+					});
+
+					AnalyticsUtil.stopResource(id, 'video-skip');
+				}
+			}
+
+			lastTime = time;
+		}
+	};
+}
 
 
 module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
@@ -13,12 +82,12 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 	inheritableStatics: {
 		states: {
-			UNSTARTED: -1,
-			ENDED: 0,
-			PLAYING: 1,
-			PAUSED: 2,
-			BUFFERING: 3,
-			CUED: 5
+			UNSTARTED,
+			ENDED,
+			PLAYING,
+			PAUSED,
+			BUFFERING,
+			CUED
 		}
 	},
 
@@ -57,10 +126,15 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 		this.trackThis();
 
+		this.analytics = getAnalyticMethods(this.doNotCaptureAnalytics, !!this.up('media-view'));
+
 		this.taskMediaHeartBeat = {
 			interval: 1000,
 			scope: this,
-			run: () => this.fireEvent('media-heart-beat'),
+			run: () => {
+				this.analytics.onHeartBeat(this.queryPlayer());
+				this.fireEvent('media-heart-beat');
+			},
 			onError: (err) => console.error(err)
 		};
 
@@ -70,6 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 			destroy: () => Ext.TaskManager.stop(this.taskMediaHeartBeat),
 			beforedestroy: () => this.stopPlayback()
 		});
+
 	},
 
 
@@ -143,7 +218,6 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 					autoPlay: true,
 					width: this.playerWidth,
 					height: this.playerHeight,
-					onTimeUpdate: (e) => this.onTimeUpdate(e),
 					onSeeked: (e) => this.onSeeked(e),
 					onPlaying: (e) => this.onPlaying(e),
 					onPause: (e) => this.onPause(e),
@@ -207,37 +281,34 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	queryPlayer () {
 		if (!this.videoPlayer) { return null; }
 
-		const state = this.videoPlayer.getPlayerState();
+		const state = this.videoPlayer.componentInstance.getPlayerState();
 
 		return {video: this.currentVideoId, ...state};
 	},
 
 
-	onTimeUpdate (e) {
-
-	},
-
-
 	onSeeked (e) {
-		//TODO: set up analytics
 		this.fireEvent('player-event-seeked');
 	},
 
 
 	onPlaying () {
-		//TODO: set up analytics
+		this.analytics.start(this.queryPlayer());
+
 		this.fireEvent('player-event-play');
 	},
 
 
 	onPause () {
-		//TODO: set up analytics
-		this.fireEvent('player-event-paused')
+		this.analytics.stop(this.queryPlayer());
+
+		this.fireEvent('player-event-paused');
 	},
 
 
 	onEnded () {
-		//TODO: set up analytics
+		this.analytics.stop(this.queryPlayer());
+
 		this.fireEvent('player-event-ended');
 	},
 
