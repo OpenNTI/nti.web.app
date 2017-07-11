@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Prompt} from 'nti-web-commons';
+import {Prompt, Loading, DialogButtons} from 'nti-web-commons';
+import {scoped} from 'nti-lib-locale';
 
 import {
 	LOADING,
@@ -8,6 +9,13 @@ import {
 } from './Constants';
 import {loadManagers} from './Actions';
 import Store from './Store';
+import PermissionsList from './components/PermissionsList';
+
+const DEFAULT_TEXT = {
+	done: 'Done'
+};
+
+const t = scoped('nti-course-roster.instructors.view', DEFAULT_TEXT);
 
 
 export default class CourseRoster extends React.Component {
@@ -19,13 +27,14 @@ export default class CourseRoster extends React.Component {
 					onSelect={fulfill}
 					onCancel={reject}
 				/>,
-				'course-roster-instructor-container'
+				'course-roster-instructors-container'
 			);
 		});
 	}
 
 	static propTypes = {
-		course: PropTypes.object
+		course: PropTypes.object,
+		onDismiss: PropTypes.func
 	}
 
 
@@ -54,22 +63,33 @@ export default class CourseRoster extends React.Component {
 	onPermissionsUpdated () {
 		this.setState({
 			loading: false,
-			permissions: Store.permissions
+			permissionsList: Store.permissions
 		});
 	}
 
 
-	render () {
-		const {loading, permissions} = this.state;
+	onDismiss = () => {
+		const {onDismiss} = this.props;
 
-		if (permissions) {
-			debugger;
+		if (onDismiss) {
+			onDismiss();
 		}
+	}
+
+
+	render () {
+		const {loading, permissionsList} = this.state;
+		const buttons = [
+			{label: t('done'), onClick: this.onDismiss}
+		];
 
 		return (
-			<div>
-				{loading && (<span>Loading</span>)}
-				{(permissions || []).map((x, key) => (<span key={key}>{x.user.alias}</span>))}
+			<div className="course-roster-instructors">
+				<div className="permissions-list-container">
+					{loading && (<Loading.Mask />)}
+					{permissionsList && !loading && (<PermissionsList permissionsList={permissionsList} />)}
+				</div>
+				<DialogButtons buttons={buttons} />
 			</div>
 		);
 	}
