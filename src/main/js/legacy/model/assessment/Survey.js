@@ -10,7 +10,8 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Survey', {
 
 	fields: [
 		{name: 'isClosed', type: 'Boolean'},
-		{name: 'submissions', type: 'Number'}
+		{name: 'submissions', type: 'Number'},
+		{name: 'version', type: 'string'},
 	],
 
 

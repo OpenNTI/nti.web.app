@@ -7,6 +7,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.SurveySubmis
 	mimeType: 'application/vnd.nextthought.assessment.surveysubmission',
 
 	fields: [
-		{name: 'surveyId', type: 'String'}
+		{name: 'surveyId', type: 'String'},
+		{name: 'version', type: 'string'}
 	]
 });

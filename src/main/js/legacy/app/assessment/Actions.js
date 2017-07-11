@@ -65,16 +65,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 	__getDataForSurveySubmission: function (survey, submissionData, containerId, startTime) {
 		var data = this.__getDataForSubmission(
-				survey,
-				submissionData,
-				containerId,
-				startTime,
-				'PollSubmission',
-				'application/vnd.nextthought.assessment.pollsubmission',
-				'pollId'
-			);
+			survey,
+			submissionData,
+			containerId,
+			startTime,
+			'PollSubmission',
+			'application/vnd.nextthought.assessment.pollsubmission',
+			'pollId'
+		);
 
 		data.surveyId = data.questionSetId;
+		data.version = survey.get('version');
 
 		delete data.questionSetId;
 
@@ -392,7 +393,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				pollId: poll.getId(),
 				questionId: poll.getId(),
 				parts: answerValues,
-				CreatorRecordedEffortDuration: duration
+				CreatorRecordedEffortDuration: duration,
+				version: poll.get('version')
 			});
 
 		return new Promise((fulfill, reject) => {

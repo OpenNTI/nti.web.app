@@ -8,6 +8,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.PollSubmissi
 
 
 	fields: [
-		{name: 'pollId', type: 'String'}
+		{name: 'pollId', type: 'String'},
+		{name: 'version', type: 'string'}
 	]
 });
