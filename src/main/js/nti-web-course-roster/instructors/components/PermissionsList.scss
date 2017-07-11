@@ -1,7 +1,28 @@
 @import "~nti-style-common";
 
 .course-instructor-permission-list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
+
+	.header {
+		display: flex;
+		align-items: center;
+
+		.spacer {
+			flex: 1 1 auto;
+		}
+
+		.instructor-label, .editor-label {
+			flex: 0 0 60px;
+			font-size: 0.625rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			text-align: center;
+			color: $secondary-grey;
+		}
+	}
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
 }
