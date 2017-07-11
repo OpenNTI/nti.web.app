@@ -62,8 +62,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.record) {
 			this.showDiscussionEditor();
 		} else {
-			//this.showDiscussionList();
-
 			const me = this;
 
 			this.selectionCmp = this.add({
@@ -74,16 +72,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 		}
 	},
-
-
-	onBack: function () {
-		if (this.discussionEditorCmp) {
-			this.showDiscussionList();
-		} else if (this.doBack) {
-			this.doBack();
-		}
-	},
-
 
 	maybeEnableBack: function (text) {
 		if (!this.record && this.enableBack) {
@@ -113,54 +101,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 
 		this.maybeEnableBack('Discussions');
-	},
-
-
-	showDiscussionList: function (selectedItems) {
-		var me = this;
-
-		if (this.discussionsListCmp) {
-			this.discussionsListCmp.destroy();
-			delete this.discussionsListCmp;
-		}
-
-		if (this.discussionEditorCmp) {
-			this.discussionEditorCmp.destroy();
-			delete this.discussionEditorCmp;
-		}
-
-		this.maybeEnableBack(this.backText);
-		this.removeAll(true);
-
-		this.discussionsListCmp = this.add({
-			xtype: 'overview-editing-discussion-item-selection',
-			selectedItems: selectedItems,
-			basePath: this.bundle && this.bundle.getContentRoots()[0],
-			onSelectionChanged: this.onDiscussionSelectionChange.bind(this)
-		});
-
-		me.bundle.getDiscussionAssets()
-			.then(me.__sortDiscussions.bind(me))
-			.then(function (discussions) {
-				me.discussionsListCmp.setSelectionItems(discussions);
-			});
-	},
-
-
-	__sortDiscussions: function (discussions) {
-		return discussions;
-	},
-
-
-	onDiscussionSelectionChange: function (selection) {
-		var length = selection.length;
-
-		if (length === 0) {
-			this.disableSave();
-		} else {
-			this.record = selection[0];
-			this.enableSave();
-		}
 	},
 
 
