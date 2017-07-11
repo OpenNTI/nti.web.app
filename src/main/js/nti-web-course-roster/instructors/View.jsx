@@ -4,9 +4,9 @@ import {Prompt} from 'nti-web-commons';
 
 import {
 	LOADING,
-	LOADED
+	PERMISSIONS_UPDATED
 } from './Constants';
-import {loadInstructors} from './Actions';
+import {loadManagers} from './Actions';
 import Store from './Store';
 
 
@@ -19,7 +19,7 @@ export default class CourseRoster extends React.Component {
 					onSelect={fulfill}
 					onCancel={reject}
 				/>,
-				'course-roster-container'
+				'course-roster-instructor-container'
 			);
 		});
 	}
@@ -35,7 +35,7 @@ export default class CourseRoster extends React.Component {
 		const {course} = this.props;
 
 		Store.addChangeListener(this.onStoreChange);
-		loadInstructors(course);
+		loadManagers(course);
 	}
 
 	componentWillUnmount () {
@@ -45,29 +45,31 @@ export default class CourseRoster extends React.Component {
 	onStoreChange = (data) => {
 		if (data.type === LOADING) {
 			this.setState({loading: true});
-		} else if (data.type === LOADED) {
-			this.onStoreLoaded();
+		} else if (data.type === PERMISSIONS_UPDATED) {
+			this.onPermissionsUpdated();
 		}
 	}
 
 
-	onStoreLoaded () {
-		//TODO: read whatever the active tab is from the store
+	onPermissionsUpdated () {
 		this.setState({
 			loading: false,
-			batch: Store.instructors
+			permissions: Store.permissions
 		});
 	}
 
 
 	render () {
-		const {loading, batch} = this.state;
-		const {Items:items} = batch || {Items: []};
+		const {loading, permissions} = this.state;
+
+		if (permissions) {
+			debugger;
+		}
 
 		return (
 			<div>
 				{loading && (<span>Loading</span>)}
-				{items.map((x, key) => (<span key={key}>{x.alias}</span>))}
+				{(permissions || []).map((x, key) => (<span key={key}>{x.user.alias}</span>))}
 			</div>
 		);
 	}
