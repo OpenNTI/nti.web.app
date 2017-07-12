@@ -2,19 +2,39 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, DisplayName, Checkbox} from 'nti-web-commons';
 
+import {
+	addInstructor,
+	removeInstructor,
+	addEditor,
+	removeEditor
+} from '../Actions';
+
 export default class PermissionsListItem extends React.Component {
 	static propTypes = {
-		permissions: PropTypes.object
+		permissions: PropTypes.object,
+		course: PropTypes.object
 	}
 
 
-	toggleInstructor = () => {
+	toggleInstructor = (e) => {
+		const {permissions, course} = this.props;
 
+		if (e.target.checked) {
+			addInstructor(permissions, course);
+		} else {
+			removeInstructor(permissions, course);
+		}
 	}
 
 
-	toggleEditor = () => {
+	toggleEditor = (e) => {
+		const {permissions, course} = this.props;
 
+		if (e.target.checked) {
+			addEditor(permissions, course);
+		} else {
+			removeEditor(permissions, course);
+		}
 	}
 
 
@@ -29,10 +49,10 @@ export default class PermissionsListItem extends React.Component {
 					<DisplayName className="display" entity={user} />
 				</div>
 				<div className="instructor-container">
-					<Checkbox checked={isInstructor} />
+					<Checkbox checked={isInstructor} onChange={this.toggleInstructor} />
 				</div>
 				<div className="editor-container">
-					<Checkbox checked={isEditor} />
+					<Checkbox checked={isEditor} onChange={this.toggleEditor} />
 				</div>
 			</div>
 		);

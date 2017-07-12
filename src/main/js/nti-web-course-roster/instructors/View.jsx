@@ -6,6 +6,7 @@ import {scoped} from 'nti-lib-locale';
 import {
 	LOADING,
 	SEARCHING,
+	ERROR,
 	LIST_UPDATED
 } from './Constants';
 import {loadManagers, searchUsers} from './Actions';
@@ -14,7 +15,8 @@ import PermissionsList from './components/PermissionsList';
 
 const DEFAULT_TEXT = {
 	done: 'Done',
-	searching: 'Searching'
+	searching: 'Searching',
+	error: 'Unable to update permissions'
 };
 
 const t = scoped('nti-course-roster.instructors.view', DEFAULT_TEXT);
@@ -58,6 +60,8 @@ export default class CourseRoster extends React.Component {
 			this.setState({loading: true});
 		} else if (data.type === SEARCHING) {
 			this.setState({searching: true});
+		} else if (data.type === ERROR) {
+			this.setState({error: Store.error});
 		} else if (data.type === LIST_UPDATED) {
 			this.onListUpdated();
 		}
@@ -88,18 +92,20 @@ export default class CourseRoster extends React.Component {
 
 
 	render () {
-		const {loading, searching, permissionsList} = this.state;
+		const {course} = this.props;
+		const {loading, searching, permissionsList, error} = this.state;
 		const buttons = [
 			{label: t('done'), onClick: this.onDismiss}
 		];
 
 		return (
 			<div className="course-roster-instructors">
+				{error && (<div className="error">{error.message || t('error')}</div>)}
 				{!loading && (<div className="search-container"><Search onChange={this.onSearchChange} /></div>)}
 				<div className="permissions-list-container">
 					{loading && (<Loading.Mask />)}
 					{searching && (<Loading.Mask message={t('searching')}/>)}
-					{permissionsList && !searching && !loading && (<PermissionsList permissionsList={permissionsList} />)}
+					{permissionsList && !searching && !loading && (<PermissionsList permissionsList={permissionsList} course={course} />)}
 				</div>
 				<DialogButtons buttons={buttons} />
 			</div>

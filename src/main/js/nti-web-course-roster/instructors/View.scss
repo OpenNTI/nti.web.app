@@ -3,6 +3,13 @@
 .course-roster-instructors {
 	background: white;
 
+	.error {
+		background: $primary-red;
+		color: white;
+		line-height: 1.25rem;
+		text-align: center;
+	}
+
 	.search-container {
 		padding: 1rem 0 0 2rem;
 		width: 50%;
