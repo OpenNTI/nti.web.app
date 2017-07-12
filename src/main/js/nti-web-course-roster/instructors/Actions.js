@@ -3,28 +3,41 @@ import {getService} from 'nti-web-client';
 
 import {
 	LOADING,
-	MANAGERS_LOADED
+	INSTRUCTORS_LOADED,
+	EDITORS_LOADED,
+	USERS_LOADED
 } from './Constants';
 
 const EMPTY_BATCH = {Items: []};
 
-export function loadManagers (course) {
-	const instructorsLink = course.getLink('Instructors');
-	const editorsLink = course.getLink('Editors');
+function loadBatch (link) {
+	return link ?
+		getService().then(s => s.getBatch(link)).catch(() => EMPTY_BATCH) :
+		Promise.resolve(EMPTY_BATCH);
+}
 
+function loadInstructors (course) {
+	return loadBatch(course.getLink('Instructors'))
+		.then((batch) => {
+			dispatch(INSTRUCTORS_LOADED, batch.Items);
+		});
+}
+
+function loadEditors (course) {
+	return loadBatch(course.getLink('Editors'))
+		.then((batch) => {
+			dispatch(EDITORS_LOADED, batch.Items);
+		});
+}
+
+export function loadManagers (course) {
 	dispatch(LOADING);
 
-	return getService()
-		.then((service) => {
-			return Promise.all([
-				instructorsLink ? service.getBatch(instructorsLink) : EMPTY_BATCH,
-				editorsLink ? service.getBatch(editorsLink) : EMPTY_BATCH
-			]);
-		})
-		.then((results) => {
-			dispatch(MANAGERS_LOADED, {
-				instructors: results[0].Items,
-				editors: results[1].Items
-			});
+	Promise.all([
+		loadInstructors(course),
+		loadEditors(course)
+	])
+		.then(() => {
+			dispatch(USERS_LOADED, null);
 		});
 }

@@ -5,7 +5,7 @@ import {scoped} from 'nti-lib-locale';
 
 import {
 	LOADING,
-	PERMISSIONS_UPDATED
+	LIST_UPDATED
 } from './Constants';
 import {loadManagers} from './Actions';
 import Store from './Store';
@@ -54,16 +54,17 @@ export default class CourseRoster extends React.Component {
 	onStoreChange = (data) => {
 		if (data.type === LOADING) {
 			this.setState({loading: true});
-		} else if (data.type === PERMISSIONS_UPDATED) {
-			this.onPermissionsUpdated();
+		} else if (data.type === LIST_UPDATED) {
+			this.onListUpdated();
 		}
 	}
 
 
-	onPermissionsUpdated () {
+	onListUpdated () {
 		this.setState({
 			loading: false,
-			permissionsList: Store.permissions
+			searching: false,
+			permissionsList: Store.permissionsList
 		});
 	}
 
