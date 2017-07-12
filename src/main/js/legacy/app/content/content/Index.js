@@ -192,8 +192,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				const contentPackage = course.getPackage(packageId);
 
 				if (!contentPackage) {
-					this.__onFail();
-					return;
+					return this.showReader(page, parent);
+
 				}
 
 				const onDelete = () => {
