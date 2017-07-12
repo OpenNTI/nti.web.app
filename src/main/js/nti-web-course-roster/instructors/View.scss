@@ -3,13 +3,22 @@
 .course-roster-instructors {
 	background: white;
 
+	.search-container {
+		padding: 1rem 0 0 2rem;
+		width: 50%;
+
+		form {
+			margin: 0;
+		}
+	}
+
 	.permissions-list-container {
 		max-height: 80vh;
 		overflow: auto;
 		min-height: 200px;
 		width: 100vw;
 		max-width: 768px;
-		padding: 2rem;
+		padding: 1rem 2rem 2rem;
 	}
 }
 
