@@ -5,6 +5,9 @@
 	.header {
 		display: flex;
 		align-items: center;
+		border-bottom: 1px solid $border-grey-light;
+		margin-bottom: 5px;
+		padding-bottom: 5px;
 
 		.spacer {
 			flex: 1 1 auto;
