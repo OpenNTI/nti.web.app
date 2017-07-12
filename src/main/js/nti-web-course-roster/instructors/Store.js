@@ -3,24 +3,38 @@ import StorePrototype from 'nti-lib-store';
 import Permissions from './Permissions';
 import {
 	LOADING,
-	LOADED,
-	MANAGERS_LOADED,
-	PERMISSIONS_UPDATED
+	SEARCHING,
+	INSTRUCTORS_LOADED,
+	EDITORS_LOADED,
+	USERS_LOADED,
+	LIST_UPDATED
 } from './Constants';
 
 const Protected = Symbol('Protected');
 
 const Loading = Symbol('Loading');
-const Loaded = Symbol('Loaded');
+const Searching = Symbol('Searching');
+const InstructorsLoaded = Symbol('Instructors Loaded');
+const EditorsLoaded = Symbol('Editors Loaded');
+const UsersLoaded = Symbol('Users Loaded');
 
-const ManagersLoaded = Symbol('Instructors Loaded');
-const SetPermissions = Symbol('SetPermissions');
+const GetManagers = Symbol('Get Manager');
+const SetList = Symbol('Set List');
+
+function getUserMap (users) {
+	return users.reduce((acc, user) => {
+		acc[user.getID()] = true;
+
+		return acc;
+	}, {});
+}
 
 function init (store) {
 	store[Protected] = {
 		loading: false,
-		instructors: null,
-		editors: null,
+		searching: false,
+		instructors: [],
+		editors: [],
 		permissionsList: []
 	};
 }
@@ -34,7 +48,10 @@ class Store extends StorePrototype {
 
 		this.registerHandlers({
 			[LOADING]: Loading,
-			[MANAGERS_LOADED]: ManagersLoaded
+			[SEARCHING]: Searching,
+			[INSTRUCTORS_LOADED]: InstructorsLoaded,
+			[EDITORS_LOADED]: EditorsLoaded,
+			[USERS_LOADED]: UsersLoaded
 		});
 	}
 
@@ -46,48 +63,98 @@ class Store extends StorePrototype {
 	}
 
 
-	[Loaded] () {
-		this[Protected].loading = false;
+	[Searching] () {
+		this[Protected].searching = true;
 
-		this.emitChange({type: LOADED});
+		this.emitChange({type: SEARCHING});
 	}
 
 
-	[ManagersLoaded] (e) {
+	[InstructorsLoaded] (e) {
+		const {response:instructors} = e.action;
+		const {permissionsList} = this;
+
+		this[Protected].instructors = instructors;
+
+		//If we don't have any active permissions there's nothing to update
+		if (!permissionsList.length) { return; }
+
+		const instructorMap = getUserMap(instructors);
+
+		const newList = permissionsList.map((permissions) => {
+			const {user} = permissions;
+
+			return instructorMap[user.getID()] ?
+				Permissions.setIsInstructor(permissions, true) :
+				Permissions.setIsInstructor(permissions, false);
+		});
+
+		this[SetList](newList);
+	}
+
+
+	[EditorsLoaded] (e) {
+		const {response:editors} = e.action;
+		const {permissionsList} = this;
+
+		this[Protected].editors = editors;
+
+		//If we don't have any active permissions there's nothing to update
+		if (!permissionsList.length) { return; }
+
+		const editorMap = getUserMap(editors);
+
+		const newList = permissionsList.map((permissions) => {
+			const {user} = permissions;
+
+			return editorMap[user.getID()] ?
+				Permissions.setIsEditor(permissions, true) :
+				Permissions.setIsInstructor(permissions, false);
+		});
+
+		this[SetList](newList);
+	}
+
+
+	[UsersLoaded] (e) {
 		const {response} = e.action;
-		const {instructors, editors} = response;
+		//If a falsy response is passed for the users show the managers
+		const users = response || this[GetManagers]();
 
-		let instructorMap = {};
-		let editorMap = {};
-		let users = [];
+		const {instructors, editors} = this[Protected];
+		const instructorMap = getUserMap(instructors);
+		const editorMap = getUserMap(editors);
 
-		for (let instructor of instructors) {
-			instructorMap[instructor.getID()] = true;
+		const list = users.map((u) => new Permissions(u, instructorMap[u.getID()], editorMap[u.getID()]));
 
-			users.push(instructor);
-		}
+		this[SetList](list);
+	}
+
+
+	[GetManagers] () {
+		const {instructors, editors} = this[Protected];
+
+		const instructorMap = getUserMap(instructors);
+
+		let users = [...instructors];
 
 		for (let editor of editors) {
-			editorMap[editor.getID()] = true;
-
 			if (!instructorMap[editor.getID()]) {
 				users.push(editor);
 			}
 		}
 
-		this[SetPermissions](users.map(u => new Permissions(u, instructorMap[u.getID()], editorMap[u.getID()])));
-
-		if (this.loading) {
-			this[Loaded]();
-		}
+		return users;
 	}
 
 
-	[SetPermissions] (permissions) {
-		//TODO: sort permissions;
-		this[Protected].permissionList = permissions;
+	[SetList] (permissions) {
+		this[Protected].permissionsList = permissions;
 
-		this.emitChange({type: PERMISSIONS_UPDATED});
+		this[Protected].loading = false;
+		this[Protected].searching = false;
+
+		this.emitChange({type: LIST_UPDATED});
 	}
 
 
@@ -96,8 +163,8 @@ class Store extends StorePrototype {
 	}
 
 
-	get permissions () {
-		return this[Protected].permissionList;
+	get permissionsList () {
+		return this[Protected].permissionsList;
 	}
 }
 
