@@ -1,11 +1,18 @@
+import path from 'path';
+
 import {dispatch} from 'nti-lib-dispatcher';
 import {getService} from 'nti-web-client';
 
 import {
 	LOADING,
 	SEARCHING,
+	ERROR,
 	INSTRUCTORS_LOADED,
+	INSTRUCTOR_ADDED,
+	INSTRUCTOR_REMOVED,
 	EDITORS_LOADED,
+	EDITOR_ADDED,
+	EDITOR_REMOVED,
 	USERS_LOADED
 } from './Constants';
 
@@ -33,6 +40,10 @@ function loadEditors (course) {
 		});
 }
 
+function clearErrors () {
+	dispatch(ERROR, null);
+}
+
 export function loadManagers (course) {
 	dispatch(LOADING);
 
@@ -54,6 +65,7 @@ export function searchUsers (term) {
 		return dispatch(USERS_LOADED, null);
 	}
 
+	clearErrors();
 	dispatch(SEARCHING);
 
 	getService()
@@ -70,4 +82,56 @@ export function searchUsers (term) {
 					dispatch(USERS_LOADED, users);
 				});
 		});
+}
+
+
+export function addInstructor (permissions, course) {
+	if (permissions.isInstructor) { return; }
+
+	clearErrors();
+	const link = course.getLink('Instructors');
+
+	getService()
+		.then(service => service.post(link, {user: permissions.id}))
+		.then(() => dispatch(INSTRUCTOR_ADDED, permissions.user))
+		.catch((err) => dispatch(ERROR, err));
+}
+
+
+export function removeInstructor (permissions, course) {
+	if (!permissions.isInstructor) { return; }
+
+	clearErrors();
+	const link = course.getLink('Instructors');
+
+	getService()
+		.then((service) => service.delete(path.join(link, permissions.user.getID())))
+		.then(() => dispatch(INSTRUCTOR_REMOVED, permissions.user))
+		.catch((err) => dispatch(ERROR, err));
+}
+
+
+export function addEditor (permissions, course) {
+	if (permissions.isEditor) { return; }
+
+	clearErrors();
+	const link = course.getLink('Editors');
+
+	getService()
+		.then(service => service.post(link, {user: permissions.id}))
+		.then(() => dispatch(EDITOR_ADDED, permissions.user))
+		.catch((err) => dispatch(ERROR, err));
+}
+
+
+export function removeEditor (permissions, course) {
+	if (!permissions.isEditor) { return; }
+
+	clearErrors();
+	const link = course.getLink('Editors');
+
+	getService()
+		.then((service) => service.delete(path.join(link, permissions.user.getID())))
+		.then(() => dispatch(EDITOR_REMOVED, permissions.user))
+		.catch((err) => dispatch(ERROR, err));
 }
