@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Prompt, Loading, DialogButtons, Search} from 'nti-web-commons';
 import {scoped} from 'nti-lib-locale';
+
+import {Prompt, Loading, DialogButtons, Search, Panels} from 'nti-web-commons';
 
 import {
 	LOADING,
@@ -16,7 +17,8 @@ import PermissionsList from './components/PermissionsList';
 const DEFAULT_TEXT = {
 	done: 'Done',
 	searching: 'Searching',
-	error: 'Unable to update permissions'
+	error: 'Unable to update permissions',
+	title: 'Manage Instructors'
 };
 
 const t = scoped('nti-course-roster.instructors.view', DEFAULT_TEXT);
@@ -92,7 +94,7 @@ export default class CourseRoster extends React.Component {
 
 
 	render () {
-		const {course} = this.props;
+		const {course, onDismiss} = this.props;
 		const {loading, searching, permissionsList, error} = this.state;
 		const buttons = [
 			{label: t('done'), onClick: this.onDismiss}
@@ -100,11 +102,14 @@ export default class CourseRoster extends React.Component {
 
 		return (
 			<div className="course-roster-instructors">
+				<div className="title">
+					<Panels.TitleBar title={t('title')} iconAction={onDismiss} />
+				</div>
 				{error && (<div className="error">{error.message || t('error')}</div>)}
-				{!loading && (<div className="search-container"><Search onChange={this.onSearchChange} /></div>)}
 				<div className="permissions-list-container">
 					{loading && (<Loading.Mask />)}
 					{searching && (<Loading.Mask message={t('searching')}/>)}
+					{!loading && (<div className="search-container"><Search onChange={this.onSearchChange} /></div>)}
 					{permissionsList && !searching && !loading && (<PermissionsList permissionsList={permissionsList} course={course} />)}
 				</div>
 				<DialogButtons buttons={buttons} />
