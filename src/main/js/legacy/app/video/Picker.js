@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
 
+const {getLink, Server, Service} = require('nti-lib-interfaces');
 const {EmbedInput, Editor, createMediaSourceFromUrl, getCanonicalUrlFrom} = require('nti-web-video');
 const ParseUtils = require('legacy/util/Parsing');
 const PromptStateStore = require('legacy/app/prompt/StateStore');
@@ -43,12 +44,28 @@ function createVideo (link, raw) {
 	if (!link) { return Promise.reject(); }
 
 	return getService()
-			.then((service) => service.postParseResponse(link, raw));
+		.then((service) => service.postParseResponse(link, raw));
 }
 
 
-function getVideo (/*video*/) {
-	//TODO: resolve the lib interfaces model
+function getVideo (video) {
+	return getService()
+		.then(service => service.getObject(video instanceof Object && video.get ? video.get('ntiid') : video))
+		.then(v => {
+			v.save = v.save || function ({title}) {
+				v.title = title;
+				const link = getLink(v, 'edit');
+				const service = v[Service];
+				const server = service && service[Server];
+				if (!server) {
+					Promise.reject();
+				}
+
+				return server.put(link, v).then(o => Promise.resolve(o));
+			};
+
+			return v;
+		});
 }
 
 
@@ -74,8 +91,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 		const {video} = this.Prompt.data;
 
-		if (video) {
-			getVideo()
+		if (video && !(video instanceof Object)) {
+			getVideo(video)
 				.then(v => {
 					this.video = v;
 					this.editVideo(v);

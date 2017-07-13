@@ -20,10 +20,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{tag: 'tpl', 'for': 'providers', cn: [
 					{tag: 'span', cls: 'provider', html: '{label}'}
 				]}
-			]}
+			]},
+			{tag: 'span', cls: 'edit-link nt-button edit', 'data-ntiid': '{ntiid}', html: 'Edit'}
 		]
 	})),
 
+	// editItem: function (ntiid) {...defined elsewhere},
 
 	getItemData: function (item) {
 		return item.resolveThumbnail()
@@ -33,7 +35,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return {
 					thumbnail: thumbnail,
 					title: item.get('title'),
-					providers: sources.map(function (source) { return {label: source.service}; })
+					providers: sources.map(function (source) { return {label: source.service}; }),
+					ntiid: item.get('ntiid')
 				};
 			})
 			.catch(() => {
@@ -43,7 +46,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return {
 					title: item.get('title'),
-					providers: sources.map(source => {label: source.service})
+					providers: sources.map(source => ({label: source.service})),
+					ntiid: item.get('ntiid')
 				};
 			});
 	},
