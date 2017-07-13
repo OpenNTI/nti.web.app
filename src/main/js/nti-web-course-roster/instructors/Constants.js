@@ -14,6 +14,8 @@ export const EDITOR_ADDED = 'course-roster:instructors:editor-added';
 export const EDITOR_REMOVED = 'course-roster:instructors:editors-removed';
 
 export const USERS_LOADED = 'course-roster:instructors:users-updated';
+export const USER_UPDATING = 'course-roster:instructors:user-updating';
+export const USER_UPDATED = 'course-roster:instructors:user-updated';
 
 export const LIST_UPDATED = 'course-roster:instructors:list-updated';
 

@@ -8,7 +8,8 @@ import {
 	LOADING,
 	SEARCHING,
 	ERROR,
-	LIST_UPDATED
+	LIST_UPDATED,
+	USER_UPDATING
 } from './Constants';
 import {loadManagers, searchUsers} from './Actions';
 import Store from './Store';
@@ -64,6 +65,8 @@ export default class CourseRoster extends React.Component {
 			this.setState({searching: true});
 		} else if (data.type === ERROR) {
 			this.setState({error: Store.error});
+		} else if (data.type === USER_UPDATING) {
+			this.setState({updatingUsers: Store.updatingUsers});
 		} else if (data.type === LIST_UPDATED) {
 			this.onListUpdated();
 		}
@@ -95,7 +98,7 @@ export default class CourseRoster extends React.Component {
 
 	render () {
 		const {course, onDismiss} = this.props;
-		const {loading, searching, permissionsList, error} = this.state;
+		const {loading, searching, permissionsList, error, updatingUsers} = this.state;
 		const buttons = [
 			{label: t('done'), onClick: this.onDismiss}
 		];
@@ -110,7 +113,7 @@ export default class CourseRoster extends React.Component {
 					{loading && (<Loading.Mask />)}
 					{searching && (<Loading.Mask message={t('searching')}/>)}
 					{!loading && (<div className="search-container"><Search onChange={this.onSearchChange} /></div>)}
-					{permissionsList && !searching && !loading && (<PermissionsList permissionsList={permissionsList} course={course} />)}
+					{permissionsList && !searching && !loading && (<PermissionsList permissionsList={permissionsList} course={course} updatingUsers={updatingUsers} />)}
 				</div>
 				<DialogButtons buttons={buttons} />
 			</div>

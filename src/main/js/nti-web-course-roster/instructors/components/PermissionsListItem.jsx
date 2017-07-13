@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+
 import {Avatar, DisplayName, Checkbox} from 'nti-web-commons';
 
 import {
@@ -12,7 +14,8 @@ import {
 export default class PermissionsListItem extends React.Component {
 	static propTypes = {
 		permissions: PropTypes.object,
-		course: PropTypes.object
+		course: PropTypes.object,
+		updating: PropTypes.bool
 	}
 
 
@@ -39,11 +42,12 @@ export default class PermissionsListItem extends React.Component {
 
 
 	render () {
-		const {permissions} = this.props;
+		const {permissions, updating} = this.props;
 		const {user, isInstructor, isEditor} = permissions;
+		const cls = cx('course-instructors-permission-list-item', {updating});
 
 		return (
-			<div className="course-instructors-permission-list-item">
+			<div className={cls}>
 				<div className="user">
 					<Avatar className="avatar" entity={user} />
 					<DisplayName className="display" entity={user} />

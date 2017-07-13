@@ -7,6 +7,11 @@
 	padding-bottom: 5px;
 	border-bottom: 1px solid $border-grey-light;
 
+	&.updating {
+		opacity: 0.3;
+		poinrter-events: none;
+	}
+
 	.user {
 		flex: 1 1 auto;
 		display: flex;

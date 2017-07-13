@@ -12,6 +12,8 @@ import {
 	EDITOR_ADDED,
 	EDITOR_REMOVED,
 	USERS_LOADED,
+	USER_UPDATING,
+	USER_UPDATED,
 	LIST_UPDATED
 } from './Constants';
 
@@ -29,6 +31,8 @@ const UpdateEditors = Symbol('Update Editors');
 const AddEditor = Symbol('Add Editor');
 const RemoveEditor = Symbol('Remove Editor');
 const UsersLoaded = Symbol('Users Loaded');
+const UserUpdating = Symbol('User updating');
+const UserUpdated = Symbol('User updated');
 
 const GetManagers = Symbol('Get Manager');
 const SetList = Symbol('Set List');
@@ -47,7 +51,8 @@ function init (store) {
 		searching: false,
 		instructors: [],
 		editors: [],
-		permissionsList: []
+		permissionsList: [],
+		updatingUsers: {}
 	};
 }
 
@@ -68,7 +73,9 @@ class Store extends StorePrototype {
 			[EDITORS_LOADED]: EditorsLoaded,
 			[EDITOR_ADDED]: AddEditor,
 			[EDITOR_REMOVED]: RemoveEditor,
-			[USERS_LOADED]: UsersLoaded
+			[USERS_LOADED]: UsersLoaded,
+			[USER_UPDATING]: UserUpdating,
+			[USER_UPDATED]: UserUpdated
 		});
 	}
 
@@ -159,7 +166,7 @@ class Store extends StorePrototype {
 
 		const oldMap = getUserMap(oldInstructors);
 
-		const newInstructors = !oldMap[instructor.getID()] ? [...oldInstructors] : [...oldInstructors, instructor];
+		const newInstructors = oldMap[instructor.getID()] ? [...oldInstructors] : [...oldInstructors, instructor];
 
 		this[UpdateInstructors](newInstructors);
 	}
@@ -171,7 +178,7 @@ class Store extends StorePrototype {
 
 		const oldMap = getUserMap(oldEditors);
 
-		const newEditors = !oldMap[editor.getID()] ? [...oldEditors] : [...oldEditors, editor];
+		const newEditors = oldMap[editor.getID()] ? [...oldEditors] : [...oldEditors, editor];
 
 		this[UpdateEditors](newEditors);
 	}
@@ -212,6 +219,26 @@ class Store extends StorePrototype {
 	}
 
 
+	[UserUpdating] (e) {
+		const {response:user} = e.action;
+		const {updatingUsers} = this[Protected];
+
+		this[Protected].updatingUsers = {...updatingUsers, [user.getID()]: true };
+
+		this.emitChange({type: USER_UPDATING});
+	}
+
+
+	[UserUpdated] (e) {
+		const {response:user} = e.action;
+		const {updatingUsers} = this[Protected];
+
+		this[Protected].updatingUsers = {...updatingUsers, [user.getID()]: void 0};
+
+		this.emitChange({type: USER_UPDATING});
+	}
+
+
 	[GetManagers] () {
 		const {instructors, editors} = this[Protected];
 
@@ -239,6 +266,11 @@ class Store extends StorePrototype {
 	}
 
 
+	isUserUpdating (user) {
+		return this[Protected].updatingUsers[user.getID()];
+	}
+
+
 	get loading () {
 		return this[Protected].loading;
 	}
@@ -251,6 +283,11 @@ class Store extends StorePrototype {
 
 	get permissionsList () {
 		return this[Protected].permissionsList;
+	}
+
+
+	get updatingUsers () {
+		return this[Protected].updatingUsers;
 	}
 }
 
