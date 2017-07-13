@@ -22,6 +22,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		 * @return {String}		   [escription]
 		 */
 		getDisplay: function (values) {
+			if (values.DisplayableGrade) { return values.DisplayableGrade; }
+
 			const value = values.value || values.Correctness;
 			const letter = values.letter || values.Grade;
 			const display = [];
