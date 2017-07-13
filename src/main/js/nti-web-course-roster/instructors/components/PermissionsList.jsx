@@ -13,9 +13,10 @@ const t = scoped('nti-course-roster.permissions-list', DEFAULT_TEXT);
 
 PermissionsList.propTypes = {
 	permissionsList: PropTypes.array,
-	course: PropTypes.object
+	course: PropTypes.object,
+	updatingUsers: PropTypes.object
 };
-export default function PermissionsList ({permissionsList = [], course}) {
+export default function PermissionsList ({permissionsList = [], course, updatingUsers = {}}) {
 	return (
 		<div className="course-instructor-permission-list">
 			<div className="header">
@@ -27,7 +28,7 @@ export default function PermissionsList ({permissionsList = [], course}) {
 				{permissionsList.map((p) => {
 					return (
 						<li key={p.id}>
-							<PermissionsListItem permissions={p} course={course} />
+							<PermissionsListItem permissions={p} course={course} updating={updatingUsers[p.id]} />
 						</li>
 					);
 				})}
