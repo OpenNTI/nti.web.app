@@ -172,6 +172,17 @@
 					margin-right: 0.5em;
 				}
 			}
+
+			.edit-link {
+				position: absolute;
+				bottom: 15px;
+				right: 8px;
+				visibility: hidden;
+
+				&.show {
+					visibility: visible;
+				}
+			}
 		}
 	}
 }
