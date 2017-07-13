@@ -63,6 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 				Ext.EventManager.removeResizeListener(me.onWindowResize, me);
 			}
 		});
+
 	},
 
 	onActivate: function () {
@@ -156,7 +157,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 				'filter-by-line': 'selectDiscussion',
 				'assignment-submitted': this.fireEvent.bind(this, 'assignment-submitted'),
 				'assessment-graded': this.fireEvent.bind(this, 'assessment-graded'),
-				'sync-height': this.alignNavigation.bind(this)
+				'sync-height': this.alignNavigation.bind(this),
+				'refresh-reader': this.showReader.bind(this)
 			});
 			this.down('annotation-view').anchorComponent = readerContent;
 		}
