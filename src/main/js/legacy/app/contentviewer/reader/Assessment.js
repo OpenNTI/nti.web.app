@@ -94,6 +94,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			me.makeAssessmentPoll(poll, survey);
 		});
 
+		survey.on('refresh', function () {
+			me.reader.fireEvent('refresh-reader');
+		});
+
 		if (!historyLink && !survey.get('isClosed')) {
 			this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 				reader: r, renderTo: c, questionSet: survey,

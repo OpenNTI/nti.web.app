@@ -53,14 +53,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 	__getDataForQuestionSubmission: function (questionSet, submissionData, containerId, startTime) {
 		return this.__getDataForSubmission(
-				questionSet,
-				submissionData,
-				containerId,
-				startTime,
-				'QuestionSubmission',
-				'application/vnd.nextthought.assessment.questionsubmission',
-				'questionId'
-			);
+			questionSet,
+			submissionData,
+			containerId,
+			startTime,
+			'QuestionSubmission',
+			'application/vnd.nextthought.assessment.questionsubmission',
+			'questionId'
+		);
 	},
 
 	__getDataForSurveySubmission: function (survey, submissionData, containerId, startTime) {
@@ -134,10 +134,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 					fulfill(result);
 				},
-				failure: function () {
-					console.error('Failed to submit survey: ', arguments);
-					alert('There was a problem submitting your survey.');
-					reject();
+				failure: function (rec, resp) {
+					let err = resp && resp.error;
+					if (err && err.status === 409) {
+						me.handleSurveyConflictError(survey);
+					}  else {
+						console.error('Failed to submit survey: ', arguments);
+						alert('There was a problem submitting your survey.');
+					}
+					reject(err);
 				}
 			});
 		});
@@ -278,6 +283,30 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					assignment.updateFromServer()
 						.then(function () {
 							assignment.fireEvent('refresh');
+						});
+				}
+			}
+		});
+	},
+
+
+	handleSurveyConflictError: function (survey) {
+		Ext.MessageBox.alert({
+			title: 'This survey has changed',
+			msg: 'Clicking OK will reload the survey',
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: 'OK'
+				}
+			},
+			fn: function (button) {
+				if (button === 'yes' && survey) {
+					survey.updateFromServer()
+						.then(function () {
+							survey.fireEvent('refresh');
 						});
 				}
 			}
