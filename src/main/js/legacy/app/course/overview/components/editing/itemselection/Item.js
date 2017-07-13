@@ -1,4 +1,4 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.itemselection.Item', {
@@ -21,6 +21,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				click: {
 					element: 'el',
 					fn: this.onItemClick.bind(this)
+				},
+				mouseover: {
+					element: 'el',
+					fn: this.onItemHover.bind(this)
+				},
+				mouseout: {
+					element: 'el',
+					fn: this.onItemMouseOut.bind(this)
 				}
 			}
 		});
@@ -127,6 +135,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onItemClick: function (e) {
+		const editLink = e.getTarget('.edit-link');
+
 		if (this.isItemDisabled && this.isItemDisabled(this.selectionItem, e)) {
 			return;
 		}
@@ -142,16 +152,44 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (!e.getTarget('.excluded')) {
-			if (this.isSelected) {
-				this.unselectItem(this.selectionItem);
+			if (!editLink) {
+				if (this.isSelected) {
+					this.unselectItem(this.selectionItem);
+				} else {
+					this.selectItem(this.selectionItem);
+				}
 			} else {
-				this.selectItem(this.selectionItem);
+				const ntiid = editLink.getAttribute('data-ntiid');
+				const container = this.up('overview-editing-video-item-selection');
+				if (container && container.editItem) {
+					container.editItem(ntiid);
+				}
 			}
 		}
 
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
+	},
+
+
+	onItemMouseOut: function (e) {
+		const editLink = this.el.down('.edit-link');
+		if (!editLink) {
+			return;
+		}
+
+		editLink.removeCls('show');
+	},
+
+
+	onItemHover: function () {
+		const editLink = this.el.down('.edit-link');
+		if (!editLink) {
+			return;
+		}
+
+		editLink.addCls('show');
 	},
 
 
