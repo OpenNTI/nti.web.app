@@ -73,6 +73,46 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.request(config);
 	},
 
+	postMultiPartData (url, data, onProgress) {
+		const me = this;
+
+		return new Promise(function (fulfill, reject) {
+			let xhr = me.__buildXHR(url, 'POST', onProgress, fulfill, reject);
+
+			xhr.send(data);
+		});
+	},
+
+
+	__buildXHR (url, method, onProgress, success, failure) {
+		let xhr = new XMLHttpRequest(),
+			progress = onProgress ? onProgress.bind(this) : () => {};
+
+		xhr.open(method || 'POST', url, true);
+		xhr.setRequestHeader('accept', 'application/json');
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+		xhr.upload.addEventListener('progress', progress);
+		xhr.upload.addEventListener('load', progress);
+
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4) {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					success(xhr.responseText);
+				} else {
+					failure({
+						status: xhr.status,
+						responseText: xhr.responseText
+					});
+				}
+			}
+		};
+
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+		return xhr;
+	},
+
 
 	postAndExit: function (url, data) {
 		var id = guidGenerator(),

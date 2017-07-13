@@ -94,9 +94,28 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 
 	createPlaceholderVideo (raw) {
-		this.placeholderVideo = {...raw, save: (...args) => this.onPlaceholderSaved(raw, ...args)};
+		this.placeholderVideo = {...raw, save: (...args) => this.onPlaceholderSaved(raw, ...args),
+			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile)};
 
 		return this.placeholderVideo;
+	},
+
+	applyCaptions (video, captionsFile) {
+		if(captionsFile) {
+			const transcriptLinks = video.Links.filter((l) => l.rel === 'transcript');
+
+			if(transcriptLinks.length === 1) {
+				const url = transcriptLinks[0].href;
+
+				const formdata = new FormData();
+
+				formdata.append(captionsFile.name, captionsFile);
+
+				return Service.postMultiPartData(url, formdata);
+			}
+
+			return Promise.reject('No transcript link');
+		}
 	},
 
 
@@ -104,6 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 		return createVideo(this.getAssetLink(), {...raw, ...data})
 			.then((v) => {
 				this.placeholderVideo = v;
+				return v;
 			});
 	},
 
