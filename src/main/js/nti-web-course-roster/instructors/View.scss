@@ -3,6 +3,10 @@
 .course-roster-instructors {
 	background: white;
 
+	.title {
+		border-bottom: 1px solid $border-grey-light;
+	}
+
 	.error {
 		background: $primary-red;
 		color: white;
@@ -11,11 +15,12 @@
 	}
 
 	.search-container {
-		padding: 1rem 0 0 2rem;
 		width: 50%;
+		margin-bottom: 1rem;
 
 		form {
 			margin: 0;
+			background: white;
 		}
 	}
 
@@ -26,6 +31,7 @@
 		width: 100vw;
 		max-width: 768px;
 		padding: 1rem 2rem 2rem;
+		background: $panel-background;
 	}
 }
 
