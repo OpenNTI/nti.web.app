@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 
 		this.manageEl = this.el.down('.manage-button');
 
-		if (!bundle.hasLink('Instructors')) {
+		if (!bundle || !bundle.hasLink('Instructors')) {
 			this.manageEl.hide();
 		}
 
