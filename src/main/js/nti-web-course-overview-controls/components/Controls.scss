@@ -19,14 +19,11 @@
 			display: inline-block;
 			flex: 0 0 auto;
 			color: #757474;
+			font-size: 0.875rem;
 		}
 
 		i {
 			margin-right: 0.3125rem;
-		}
-
-		span {
-			font-size: 0.875rem;
 		}
 	}
 
@@ -59,7 +56,8 @@
 		flex: 0 0 auto;
 
 		.nti-button {
-			padding: 0.5rem 1.25rem;
+			font-weight: normal;
+			padding: 0.5rem rem-calc(15px);
 		}
 
 		.audit-logs,
