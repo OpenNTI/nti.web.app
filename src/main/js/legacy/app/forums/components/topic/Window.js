@@ -229,11 +229,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		var me = this,
 			topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
+			controlCmp = this.down('forums-topic-comment-controls'),
 			editor;
 
 		if (topicCmp) {
 			Ext.destroy(topicCmp);
 			Ext.destroy(commentCmp);
+			Ext.destroy(controlCmp);
 		}
 
 		editor = me.add({xtype: 'forums-topic-editor', record: topic, forum: forum});
