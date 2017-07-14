@@ -164,6 +164,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	updateSelectionItem (updatedItem) {
+		const updatedItemId = updatedItem.ntiid || updatedItem.NTIID;
+
+		this.setSelectionItems(this.selectionItems.filter(x => {
+			const id = x.ntiid || x.NTIID || x.internalId;
+			return id !== updatedItemId;
+		}));
+
+		return this.addSelectionItem(updatedItem, false);
+	},
+
+
 	excludeItems: function (exclude) {
 		if (!Array.isArray(exclude)) {
 			exclude = [exclude];
@@ -238,7 +250,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getSelectionItemId: function (item) {
-		return item.getId();
+		return item.getId
+			? item.getId()
+			: item.get
+				? item.get('ntiid') || item.get('NTIID')
+				: item.ntiid || item.NTIID;
 	},
 
 	selectItem: function (selectionItem) {
