@@ -77,10 +77,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		this.refresh();
 
 		const bundle = this.getBundle();
+		const canManage = bundle && (bundle.hasLink('Instructors') || bundle.hasLink('Editors'));
 
 		this.manageEl = this.el.down('.manage-button');
 
-		if (!bundle || !bundle.hasLink('Instructors')) {
+		if (!canManage) {
 			this.manageEl.hide();
 		}
 

@@ -15,7 +15,9 @@ export default class PermissionsListItem extends React.Component {
 	static propTypes = {
 		permissions: PropTypes.object,
 		course: PropTypes.object,
-		updating: PropTypes.bool
+		updating: PropTypes.bool,
+		showInstructor: PropTypes.bool,
+		showEditor: PropTypes.bool
 	}
 
 
@@ -42,8 +44,8 @@ export default class PermissionsListItem extends React.Component {
 
 
 	render () {
-		const {permissions, updating} = this.props;
-		const {user, isInstructor, isEditor} = permissions;
+		const {permissions, updating, showEditor, showInstructor} = this.props;
+		const {user} = permissions;
 		const cls = cx('course-instructors-permission-list-item', {updating});
 
 		return (
@@ -52,12 +54,29 @@ export default class PermissionsListItem extends React.Component {
 					<Avatar className="avatar" entity={user} />
 					<DisplayName className="display" entity={user} />
 				</div>
-				<div className="instructor-container">
-					<Checkbox checked={isInstructor} onChange={this.toggleInstructor} />
-				</div>
-				<div className="editor-container">
-					<Checkbox checked={isEditor} onChange={this.toggleEditor} />
-				</div>
+				{showInstructor && this.renderInstructor(permissions)}
+				{showEditor && this.renderEditor(permissions)}
+			</div>
+		);
+	}
+
+	renderInstructor = (permissions) => {
+		const {isInstructor} = permissions;
+
+		return (
+			<div className="instructor-container">
+				<Checkbox checked={isInstructor} onChange={this.toggleInstructor} />
+			</div>
+		);
+	}
+
+
+	renderEditor = (permissions) => {
+		const {isEditor} = permissions;
+
+		return (
+			<div className="editor-container">
+				<Checkbox checked={isEditor} onChange={this.toggleEditor} />
 			</div>
 		);
 	}

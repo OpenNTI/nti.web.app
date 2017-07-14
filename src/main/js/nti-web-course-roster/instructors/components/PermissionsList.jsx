@@ -17,18 +17,21 @@ PermissionsList.propTypes = {
 	updatingUsers: PropTypes.object
 };
 export default function PermissionsList ({permissionsList = [], course, updatingUsers = {}}) {
+	const showInstructors = course.hasLink('Instructors');
+	const showEditors = course.hasLink('Editors');
+
 	return (
 		<div className="course-instructor-permission-list">
 			<div className="header">
 				<div className="spacer" />
-				<div className="instructor-label">{t('instructor')}</div>
-				<div className="editor-label">{t('editor')}</div>
+				{showInstructors && (<div className="instructor-label">{t('instructor')}</div>)}
+				{showEditors && (<div className="editor-label">{t('editor')}</div>)}
 			</div>
 			<ul>
 				{permissionsList.map((p) => {
 					return (
 						<li key={p.id}>
-							<PermissionsListItem permissions={p} course={course} updating={updatingUsers[p.id]} />
+							<PermissionsListItem permissions={p} course={course} updating={updatingUsers[p.id]} showInstructor={showInstructors} showEditor={showEditors}/>
 						</li>
 					);
 				})}
