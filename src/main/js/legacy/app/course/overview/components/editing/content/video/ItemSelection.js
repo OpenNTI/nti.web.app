@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var ItemselectionIndex = require('../../itemselection/Index');
+const VideoModel = require('legacy/model/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.ItemSelection', {
@@ -20,12 +21,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{tag: 'tpl', 'for': 'providers', cn: [
 					{tag: 'span', cls: 'provider', html: '{label}'}
 				]}
-			]}
+			]},
+			{tag: 'span', cls: 'edit-link nt-button edit', 'data-ntiid': '{ntiid}', html: 'Edit'}
 		]
 	})),
 
+	// editItem: function (ntiid) {...defined elsewhere},
 
 	getItemData: function (item) {
+		if (!(item instanceof VideoModel)) {
+			item = NextThought.model.Video.create({
+				label: item.title,
+				title: item.title,
+				sources: item.sources || [],
+				NTIID: item.ntiid
+			}, item.ntiid, item);
+		}
+
 		return item.resolveThumbnail()
 			.then(function (thumbnail) {
 				var sources = item.get('sources');
@@ -33,7 +45,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return {
 					thumbnail: thumbnail,
 					title: item.get('title'),
-					providers: sources.map(function (source) { return {label: source.service}; })
+					providers: sources.map(function (source) { return {label: source.service}; }),
+					ntiid: item.get('ntiid')
 				};
 			})
 			.catch(() => {
@@ -43,7 +56,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return {
 					title: item.get('title'),
-					providers: sources.map(source => {label: source.service})
+					providers: sources.map(source => ({label: source.service})),
+					ntiid: item.get('ntiid')
 				};
 			});
 	},

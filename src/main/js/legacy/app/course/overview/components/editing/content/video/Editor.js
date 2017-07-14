@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			listeners: {
 				click: {
 					element: 'el',
-					fn: me.createVideo.bind(me)
+					fn: me.pickVideo.bind(me)
 				}
 			}
 		});
@@ -140,7 +140,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.videoSelectionCmp = me.add({
 			xtype: 'overview-editing-video-item-selection',
 			onSelectionChanged: this.onVideoListSelectionChange.bind(this),
-			selectedItems: selectedItems
+			selectedItems: selectedItems,
+			editItem: this.pickVideo.bind(this)
 		});
 
 		me.bundle.getVideoAssets()
@@ -152,11 +153,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	createVideo () {
-		this.PromptActions.prompt('video-picker', {bundle: this.bundle})
+	pickVideo (record) {
+		this.PromptActions.prompt('video-picker', {bundle: this.bundle, video: record})
 			.then((video) => {
 				if (this.videoSelectionCmp) {
-					this.videoSelectionCmp.addSelectionItem(video, true);
+					if (!record) {
+						this.videoSelectionCmp.addSelectionItem(video, true);
+					} else {
+						this.videoSelectionCmp.updateSelectionItem(video);
+					}
 				}
 			});
 	},
