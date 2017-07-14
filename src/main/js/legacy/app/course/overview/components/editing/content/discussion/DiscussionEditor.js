@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			data = Ext.apply(data, {
 				'icon': this.getThumbnailURL(),
-				'target': this.record.get('ID') || this.record.getId(),
+				'target': this.record.get('Target-NTIID') || this.record.get('ID') || this.record.getId(),
 				MimeType: NextThought.model.DiscussionRef.mimeType
 			});
 
