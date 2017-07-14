@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import {getAppUsername} from 'nti-web-client';
 
 import {Avatar, DisplayName, Checkbox} from 'nti-web-commons';
 
@@ -46,6 +47,7 @@ export default class PermissionsListItem extends React.Component {
 	render () {
 		const {permissions, updating, showEditor, showInstructor} = this.props;
 		const {user} = permissions;
+		const isMe = getAppUsername() === user.getID();
 		const cls = cx('course-instructors-permission-list-item', {updating});
 
 		return (
@@ -54,29 +56,29 @@ export default class PermissionsListItem extends React.Component {
 					<Avatar className="avatar" entity={user} />
 					<DisplayName className="display" entity={user} />
 				</div>
-				{showInstructor && this.renderInstructor(permissions)}
-				{showEditor && this.renderEditor(permissions)}
+				{showInstructor && this.renderInstructor(permissions, isMe)}
+				{showEditor && this.renderEditor(permissions, isMe)}
 			</div>
 		);
 	}
 
-	renderInstructor = (permissions) => {
+	renderInstructor = (permissions, isMe) => {
 		const {isInstructor} = permissions;
 
 		return (
 			<div className="instructor-container">
-				<Checkbox checked={isInstructor} onChange={this.toggleInstructor} />
+				<Checkbox checked={isInstructor} onChange={this.toggleInstructor} disabled={isMe} />
 			</div>
 		);
 	}
 
 
-	renderEditor = (permissions) => {
+	renderEditor = (permissions, isMe) => {
 		const {isEditor} = permissions;
 
 		return (
 			<div className="editor-container">
-				<Checkbox checked={isEditor} onChange={this.toggleEditor} />
+				<Checkbox checked={isEditor} onChange={this.toggleEditor} disabled={isMe} />
 			</div>
 		);
 	}
