@@ -167,12 +167,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	updateSelectionItem (updatedItem) {
 		const updatedItemId = updatedItem.ntiid || updatedItem.NTIID;
 
-		this.setSelectionItems(this.selectionItems.filter(x => {
+		this.setSelectionItems(this.selectionItems.map(x => {
 			const id = x.ntiid || x.NTIID || x.internalId;
-			return id !== updatedItemId;
-		}));
-
-		return this.addSelectionItem(updatedItem, false);
+			return id === updatedItemId
+				? Object.assign(x, {data: updatedItem, raw: updatedItem})
+				: x;
+		}))
 	},
 
 
