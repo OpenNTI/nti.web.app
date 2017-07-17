@@ -21,14 +21,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				click: {
 					element: 'el',
 					fn: this.onItemClick.bind(this)
-				},
-				mouseover: {
-					element: 'el',
-					fn: this.onItemHover.bind(this)
-				},
-				mouseout: {
-					element: 'el',
-					fn: this.onItemMouseOut.bind(this)
 				}
 			}
 		});
@@ -170,26 +162,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
-	},
-
-
-	onItemMouseOut: function (e) {
-		const editLink = this.el.down('.edit-link');
-		if (!editLink) {
-			return;
-		}
-
-		editLink.removeCls('show');
-	},
-
-
-	onItemHover: function () {
-		const editLink = this.el.down('.edit-link');
-		if (!editLink) {
-			return;
-		}
-
-		editLink.addCls('show');
 	},
 
 
