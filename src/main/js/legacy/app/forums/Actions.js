@@ -42,43 +42,47 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		}
 
 		return comment.saveData({url: postLink})
-				.then(function (response) {
-					var rec = isEdit ? comment : ParseUtils.parseItems(response)[0];
+			.then(function (response) {
+				var rec = isEdit ? comment : ParseUtils.parseItems(response)[0];
 
-					//TODO: increment PostCount in topic the same way we increment reply count in notes.
-					if (!isEdit) {
-						topic.set('PostCount', topic.get('PostCount') + 1);
-					}
-					else {
-						// Note: reset the depth, since editing shouldn't affect it
-						// and it's non-persistent field.
-						rec.set('depth', depth);
-					}
+				//TODO: increment PostCount in topic the same way we increment reply count in notes.
+				if (!isEdit) {
+					topic.set('PostCount', topic.get('PostCount') + 1);
+				}
+				else {
+					// Note: reset the depth, since editing shouldn't affect it
+					// and it's non-persistent field.
+					rec.set('depth', depth);
+				}
 
-					return rec;
-				})
-				.catch(function (err) {
-					comment.set('body', originalBody);
+				return rec;
+			})
+			.catch(function (err) {
+				comment.set('body', originalBody);
 
-					console.error('Failed to save topic comment:', arguments);
-					if (err && err.responseText) {
+				console.error('Failed to save topic comment:', arguments);
+				if (err && err.responseText) {
+					try {
 						err = JSON.parse(err.responseText);
+					} catch (e) {
+						console.error(e);
 					}
+				}
 
-					if (err.code === 'MaxFileSizeUploadLimitError') {
-						let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
-							currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
-						err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
-					}
-					if (err.code === 'MaxAttachmentsExceeded') {
-						err.message += ' Max Number of files: ' + err.constraint;
-					}
+				if (err.code === 'MaxFileSizeUploadLimitError') {
+					let maxSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.max_bytes),
+						currentSize = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(err.provided_bytes);
+					err.message += ' Max File Size: ' + maxSize + '. Your uploaded file size: ' + currentSize;
+				}
+				if (err.code === 'MaxAttachmentsExceeded') {
+					err.message += ' Max Number of files: ' + err.constraint;
+				}
 
-					let msg = err && err.message || 'Failed to save topic comment';
-					alert({title: 'Attention', msg: msg, icon: 'warning-red'});
+				let msg = err && err.message || 'Failed to save topic comment';
+				alert({title: 'Attention', msg: msg, icon: 'warning-red'});
 
-					return Promise.reject(err);
-				});
+				return Promise.reject(err);
+			});
 	},
 
 
