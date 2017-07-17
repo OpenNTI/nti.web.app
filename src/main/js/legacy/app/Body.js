@@ -396,9 +396,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			return;
 		}
 
-		//What for the library to load so we don't unmask too soon
-		return me.LibraryStore.onceLoaded()
-			.then(Service.getObject.bind(Service, id))
+		return Service.getObject(id)
 			.then(function (obj) {
 				if (me.ISCHANGE.test(obj.mimeType)) {
 					obj = obj.getItem();
