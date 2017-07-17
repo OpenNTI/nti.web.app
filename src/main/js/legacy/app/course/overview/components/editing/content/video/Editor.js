@@ -153,11 +153,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	pickVideo (record) {
-		this.PromptActions.prompt('video-picker', {bundle: this.bundle, video: record})
+	pickVideo (ntiid) {
+		ntiid = ntiid instanceof Object ? null : ntiid;
+		this.PromptActions.prompt('video-picker', {bundle: this.bundle, video: ntiid})
 			.then((video) => {
 				if (this.videoSelectionCmp) {
-					if (!record) {
+					if (!ntiid) {
 						this.videoSelectionCmp.addSelectionItem(video, true);
 					} else {
 						this.videoSelectionCmp.updateSelectionItem(video);
