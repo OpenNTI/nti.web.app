@@ -44,15 +44,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (length === 0) {
 			this.disableSave();
 		} else {
-			this.record = new CommunityHeadlineTopic(selectedTopics[0]);
+			if(selectedTopics[0].get && selectedTopics[0].get('ID')) {
+				this.record = selectedTopics[0];
+			}
+			else {
+				this.record = new CommunityHeadlineTopic(selectedTopics[0]);
 
-			// need to alter the record a bit just to fit what the generic
-			// Editor expects (for example, Editor relies on the 'edit' link
-			// to determine Delete button presence.  new records shouldn't
-			// have that)
-			this.record.set('ID', this.record.getId());
-			this.record.hasLink = (prop) => false;
-			this.record.getLink = (prop) => null;
+				// need to alter the record a bit just to fit what the generic
+				// Editor expects (for example, Editor relies on the 'edit' link
+				// to determine Delete button presence.  new records shouldn't
+				// have that)
+				this.record.set('ID', this.record.getId());
+				this.record.hasLink = (prop) => false;
+				this.record.getLink = (prop) => null;
+			}
 
 			this.enableSave();
 		}
