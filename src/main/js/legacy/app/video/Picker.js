@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
 
-const {getLink, Server, Service} = require('nti-lib-interfaces');
+const {getLink, Server, Service: ServiceSymbol} = require('nti-lib-interfaces');
 const {EmbedInput, Editor, createMediaSourceFromUrl, getCanonicalUrlFrom} = require('nti-web-video');
 const ParseUtils = require('legacy/util/Parsing');
 const PromptStateStore = require('legacy/app/prompt/StateStore');
@@ -47,25 +47,21 @@ function createVideo (link, raw) {
 		.then((service) => service.postParseResponse(link, raw));
 }
 
+function saveVideo (video, {title}) {
+	video.title = title;
+	const link = getLink(video, 'edit');
+	const service = video[ServiceSymbol];
+	const server = service && service[Server];
+	if (!server) {
+		Promise.reject();
+	}
+
+	return server.put(link, video).then(o => Promise.resolve(o));
+}
 
 function getVideo (video) {
 	return getService()
-		.then(service => service.getObject(video instanceof Object && video.get ? video.get('ntiid') : video))
-		.then(v => {
-			v.save = v.save || function ({title}) {
-				v.title = title;
-				const link = getLink(v, 'edit');
-				const service = v[Service];
-				const server = service && service[Server];
-				if (!server) {
-					Promise.reject();
-				}
-
-				return server.put(link, v).then(o => Promise.resolve(o));
-			};
-
-			return v;
-		});
+		.then(service => service.getObject(video instanceof Object && video.get ? video.get('ntiid') : video));
 }
 
 
@@ -94,8 +90,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 		if (video && !(video instanceof Object)) {
 			getVideo(video)
 				.then(v => {
-					this.video = v;
-					this.editVideo(v);
+					this.video = this.createVideoForEdit(v);
+					this.editVideo(this.video);
 				});
 		} else {
 			this.createVideo();
@@ -109,6 +105,15 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 		return data && data.bundle && data.bundle.getLink('assets');
 	},
 
+	createVideoForEdit (raw) {
+		this.placeholderVideo = null;
+
+		return {
+			...raw,
+			save: (...args) => saveVideo(raw, ...args),
+			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile)
+		};
+	},
 
 	createPlaceholderVideo (raw) {
 		this.placeholderVideo = {...raw, save: (...args) => this.onPlaceholderSaved(raw, ...args),
@@ -120,17 +125,12 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 	applyCaptions (video, captionsFile) {
 		if(captionsFile) {
 			const transcriptLinks = video.Links.filter((l) => l.rel === 'transcript');
-
 			if(transcriptLinks.length === 1) {
 				const url = transcriptLinks[0].href;
-
 				const formdata = new FormData();
-
 				formdata.append(captionsFile.name, captionsFile);
-
 				return Service.postMultiPartData(url, formdata);
 			}
-
 			return Promise.reject('No transcript link');
 		}
 	},
@@ -183,9 +183,9 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 
 	onVideoSave () {
-		const video = this.placeholderVideo ?
-							parseVideo(this.placeholderVideo) :
-							this.video;
+		const video = this.placeholderVideo
+			? parseVideo(this.placeholderVideo)
+			: this.video;
 
 		this.Prompt.doImmediateSave(video);
 	},
