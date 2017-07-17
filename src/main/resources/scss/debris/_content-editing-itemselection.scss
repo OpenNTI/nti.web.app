@@ -173,15 +173,15 @@
 				}
 			}
 
+			&:hover > .edit-link {
+				opacity: 1;
+			}
+
 			.edit-link {
 				position: absolute;
 				bottom: 15px;
 				right: 8px;
-				visibility: hidden;
-
-				&.show {
-					visibility: visible;
-				}
+				opacity: 0;
 			}
 		}
 	}
