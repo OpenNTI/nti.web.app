@@ -172,7 +172,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return id === updatedItemId
 				? Object.assign(x, {data: updatedItem, raw: updatedItem})
 				: x;
-		}))
+		}));
+
+		this.excludeItems(this.getExcludedVideos() || []);
 	},
 
 

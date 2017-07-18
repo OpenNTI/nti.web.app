@@ -12,8 +12,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'video-item-selection item-selection',
 
 
-	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		tag: 'label', cls: 'video-item', cn: [
+	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({tag: 'div', cls: 'video-item-container', cn: [
+		{tag: 'label', cls: 'video-item', cn: [
 			{tag: 'input', type: 'checkbox'},
 			{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
 			{cls: 'title', html: '{title}'},
@@ -21,12 +21,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{tag: 'tpl', 'for': 'providers', cn: [
 					{tag: 'span', cls: 'provider', html: '{label}'}
 				]}
-			]},
-			{tag: 'span', cls: 'edit-link nt-button edit', 'data-ntiid': '{ntiid}', html: 'Edit'}
-		]
-	})),
+			]}
+		]},
+		{tag: 'span', cls: 'edit-link nt-button edit', 'data-ntiid': '{ntiid}', html: 'Edit'}
+	]})),
 
 	// editItem: function (ntiid) {...defined elsewhere},
+	// getExcludedVideos: function (videos) {...defined elsewhere},
 
 	getItemData: function (item) {
 		if (!(item instanceof VideoModel)) {

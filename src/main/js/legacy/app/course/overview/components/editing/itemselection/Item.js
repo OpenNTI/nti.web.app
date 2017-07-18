@@ -150,12 +150,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				} else {
 					this.selectItem(this.selectionItem);
 				}
-			} else {
-				const ntiid = editLink.getAttribute('data-ntiid');
-				const container = this.up('overview-editing-video-item-selection');
-				if (container && container.editItem) {
-					container.editItem(ntiid);
-				}
+			}
+		}
+
+		if (editLink) {
+			const ntiid = editLink.getAttribute('data-ntiid');
+			const container = this.up('overview-editing-video-item-selection');
+			if (container && container.editItem) {
+				container.editItem(ntiid);
 			}
 		}
 
