@@ -56,7 +56,7 @@ function saveVideo (video, {title}) {
 		Promise.reject();
 	}
 
-	return server.put(link, video).then(o => Promise.resolve(o));
+	return server.put(link, video);
 }
 
 function getVideo (video) {
@@ -110,7 +110,10 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 		return {
 			...raw,
-			save: (...args) => saveVideo(raw, ...args),
+			save: (...args) => saveVideo(raw, ...args).then(video => {
+				this.video = video;
+				Promise.resolve(video);
+			}),
 			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile)
 		};
 	},
