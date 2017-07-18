@@ -151,11 +151,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 					var parser = new NextThought.webvtt.Transcript({ input: c, ignoreLFs: true }),
 						cueList = parser.parseWebVTT();
 
-					// cache content and so we don't have to load it again.
-					if (!me.MediaUserDataStore.getTranscriptObject(transcript.get('associatedVideoId'))) {
-						me.MediaUserDataStore.cacheTranscriptObject(transcript.get('associatedVideoId'), c);
-					}
-
 					fulfill(cueList);
 				})
 				.catch(function () {
@@ -166,9 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 	},
 
 	loadRawTranscript: function (transcript) {
-		var me = this,
-			content = me.MediaUserDataStore.getTranscriptObject(transcript && transcript.get('associatedVideoId')),
-			base = transcript.get('basePath'),
+		var base = transcript.get('basePath'),
 			jsonpUrl = transcript.get('jsonpUrl'),
 			url = transcript.get('url');
 
@@ -188,11 +181,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		if (!transcript) {
 			return Promise.reject();
 		}
-
-		if (content) {
-			return Promise.resolve(content);
-		}
-
 
 		return new Promise(function (fulfill, reject) {
 			ContentProxy.request({

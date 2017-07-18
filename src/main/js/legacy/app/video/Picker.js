@@ -153,10 +153,13 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			this.videoCreator.destroy();
 		}
 
+		const transcript = video && video.transcripts && video.transcripts[0];
+
 		this.videoEditor = this.add({
 			xtype: 'react',
 			component: Editor,
 			video,
+			transcript,
 			onSave: v => this.onVideoSave(v),
 			onCancel: () => this.doClose()
 		});
