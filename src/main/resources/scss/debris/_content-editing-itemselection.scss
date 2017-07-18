@@ -116,10 +116,8 @@
 			cursor: pointer;
 
 			&.excluded {
-				opacity: 0.4;
-				cursor: default;
-
 				.video-item, .discussion-item {
+					opacity: 0.4;
 					cursor: default;
 				}
 			}
@@ -172,7 +170,9 @@
 					margin-right: 0.5em;
 				}
 			}
+		}
 
+		.video-item-container {
 			&:hover > .edit-link {
 				opacity: 1;
 			}

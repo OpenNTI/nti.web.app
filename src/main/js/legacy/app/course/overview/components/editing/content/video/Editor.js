@@ -141,7 +141,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			xtype: 'overview-editing-video-item-selection',
 			onSelectionChanged: this.onVideoListSelectionChange.bind(this),
 			selectedItems: selectedItems,
-			editItem: this.pickVideo.bind(this)
+			editItem: (...args) => this.pickVideo(...args),
+			getExcludedVideos: (...args) => this.__getExcludedVideos(...args)
 		});
 
 		me.bundle.getVideoAssets()
