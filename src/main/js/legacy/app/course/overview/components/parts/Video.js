@@ -65,7 +65,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			'mediaId': this.video.title || this.video.get('title') || this.video.get('label'),
 			'sources': this.video.sources || this.video.get('sources'),
 			'NTIID': this.video.ntiid || this.video.getId(),
-			'slidedeck': this.video.slidedeck || (this.video.get && this.video.get('slidedeck')) || ''
+			'slidedeck': this.video.slidedeck || (this.video.get && this.video.get('slidedeck')) || '',
+			'transcripts': this.video.transcripts || this.video.get('transcripts')
 		})];
 
 		this.curtain.removeAll(true);

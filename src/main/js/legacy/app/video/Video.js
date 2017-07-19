@@ -592,6 +592,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 
 	setVideoAndPosition: function (videoId, startAt) {
 		var compareSources = NextThought.model.PlaylistItem.compareSources;
+		const playlistItem = this.playlist[this.playlistIndex];
 
 		this.maybeActivatePlayer();
 
@@ -605,7 +606,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		else {
 			this.currentVideoId = videoId;
 			if (videoId) {
-				this.issueCommand(this.activeVideoService, 'load', [videoId, startAt, 'medium']);
+				this.issueCommand(this.activeVideoService, 'load', [videoId, startAt, 'medium', playlistItem.getCaptions()]);
 			}
 			else {
 				this.log('stopping');

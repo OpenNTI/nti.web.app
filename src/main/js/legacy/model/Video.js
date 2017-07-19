@@ -3,13 +3,26 @@ var ModelBase = require('./Base');
 var ResolversVideoPosters = require('./resolvers/VideoPosters');
 
 
+const TRANSCRIPT_PURPOSE = 'normal';
+const CAPTION_PURPOSE = 'captions';
+
 module.exports = exports = Ext.define('NextThought.model.Video', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.ntivideo',
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.ntivideo',
-		refMimeType: 'application/vnd.nextthought.ntivideoref'
+		refMimeType: 'application/vnd.nextthought.ntivideoref',
+
+
+		getTranscripts (transcripts) {
+			return (transcripts || []).filter(x => x.purpose === TRANSCRIPT_PURPOSE);
+		},
+
+
+		getCaptions (transcripts) {
+			return (transcripts || []).filter(x => x.purpose === CAPTION_PURPOSE);
+		}
 	},
 
 	idProperty: 'ntiid',
@@ -73,5 +86,19 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 
 	shouldBeRoot: function () {
 		return true;
+	},
+
+
+	getTranscripts () {
+		const transcripts = this.get('transcripts');
+
+		return transcripts.filter(x => x.purpose === TRANSCRIPT_PURPOSE);
+	},
+
+
+	getCaptions () {
+		const transcripts = this.get('transcripts');
+
+		return transcripts.filter(x => x.purpose === CAPTION_PURPOSE);
 	}
 });

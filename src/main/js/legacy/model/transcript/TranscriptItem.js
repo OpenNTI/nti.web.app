@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.model.transcript.TranscriptIt
 
 
 		fromVideo: function (v, basePath) {
-			var o = v.get('transcripts');
+			var o = v.getTranscripts();
 
 			//For now, since we only assume there is one transcript per video, we can do this:
 			o = o && o[0];

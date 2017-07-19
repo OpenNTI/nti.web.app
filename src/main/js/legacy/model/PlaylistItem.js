@@ -2,6 +2,8 @@ const Ext = require('extjs');
 const DomUtils = require('legacy/util/Dom');
 const {guidGenerator} = require('legacy/util/Globals');
 
+const Video = require('./Video');
+
 
 module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 	extend: 'Ext.data.Model',
@@ -11,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'mediaId', type: 'string'},
 		{name: 'start', type: 'float', defaultValue: 0.0},
 		{name: 'end', type: 'float', defaultValue: -1.0},
-		{name: 'sourceIndex', type: 'int', defaultValue: 0},
+		{name: 'sourceIndex', type: 'int', defaultValue: 1},
 		{name: 'sources', type: 'VideoSources'},
 		{name: 'dom-clone', type: 'auto'},
 		{name: 'NTIID', type: 'string'},
@@ -187,5 +189,15 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 			video = (frag && frag.querySelector('object[type$=ntivideo]')) || this.get('NTIID');
 
 		return (video && video.getAttribute && video.getAttribute('data-ntiid')) || video;
+	},
+
+
+	getTranscripts () {
+		return Video.getTranscripts(this.get('transcripts'));
+	},
+
+
+	getCaptions () {
+		return Video.getCaptions(this.get('transcripts'));
 	}
 });

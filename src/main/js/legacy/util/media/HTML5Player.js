@@ -123,7 +123,8 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-	load: function (source, offset) {
+	load: function (source, offset, size, captions) {
+		const trackTpl = Ext.DomHelper.createTemplate({tag: 'track', src: '{src}', srclang: '{srclng}', label: '{label}', kind:'kind'});
 		var sourceTpl = Ext.DomHelper.createTemplate({tag: 'source', src: '{src}', type: '{type}'}),
 			player = this.player,
 			i = 0,
@@ -139,6 +140,15 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 			src = source[i].source;
 			src = /^\/\//i.test(src) ? (location.protocol + src) : src;
 			sourceTpl.append(player, {src: src, type: source[i].type}, false);
+		}
+
+		for (let caption of captions) {
+			trackTpl.append(player, {
+				src: caption.src,
+				srclang: caption.lang,
+				kind: caption.purpose,
+				label: `Captions:${caption.lang}`
+			});
 		}
 
 		player.load();
