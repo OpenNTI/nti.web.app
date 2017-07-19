@@ -1,3 +1,5 @@
+/*eslint no-undef:1*/
+
 const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 const {wait} = require('nti-commons');

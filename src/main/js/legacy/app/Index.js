@@ -184,9 +184,12 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		// Scroll scrollable element on two-finger scrolling
 		if (e.browserEvent.changedTouches[1]) {
 			scrollableElement = Ext.get(touch.target);
+
+			let cont = true;
 			//while true?? ugly.
-			while (true) {
+			while (cont) {
 				if (scrollableElement.isScrollable()) {
+					cont = false;
 					break;
 				}
 				else {

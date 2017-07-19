@@ -3,6 +3,7 @@ const Ext = require('extjs');
 const {getString} = require('legacy/util/Localization');
 
 
+
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.PaymentConfirmation', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-paymentconfirmation',
@@ -130,13 +131,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.submitButton.disabled = false;
 		this.fireEvent('update-buttons');
 
-		if (this.enrollmentOption.AllowVendorUpdates && false) {
-			this.subscribeLabelEl.update(getString('SubscribeToVendor') || 'Subscribe to updates.');
-			this.subscribeLegalEl.update(getString('SubscribeToVendorLegal'));
-			this.subscribeContainerEl.show();
-		} else {
-			this.subscribeContainerEl.hide();
-		}
+		//This is always hitting the else so there's no need for the condition
+		// if (this.enrollmentOption.AllowVendorUpdates && false) {
+		// 	this.subscribeLabelEl.update(getString('SubscribeToVendor') || 'Subscribe to updates.');
+		// 	this.subscribeLegalEl.update(getString('SubscribeToVendorLegal'));
+		// 	this.subscribeContainerEl.show();
+		// } else {
+		this.subscribeContainerEl.hide();
+		// }
 
 		if (purchaseDesc.from) {
 			this.giftEl.show();

@@ -370,15 +370,15 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				})
 				.catch(function (record, operation, response) {
 					var msg = response.message,
-						field = response.field,
-						code = response.code;
+						field = response.field;
+						// code = response.code;
 
 					if (msg) {
 						if (field) {
 							msg = msg.replace(field, 'List name');
 						}
 					}
-					msg = NTIError.getError(code, {'name': 'List name'}, msg);
+					// msg = NTIError.getError(code, {'name': 'List name'}, msg);
 					if (!msg && operation.error && operation.error === 422) {
 						//Well a field was wrong, in this case the user only put one thing
 						//in so tell him that is invalid
@@ -414,8 +414,8 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				})
 				.catch(function (rec, operation, response) {
 					var msg = response && response.message,
-						field = response && response.field,
-						code = response && response.code;
+						field = response && response.field;
+						// code = response && response.code;
 
 					if (msg) {
 						//get the error from the error util
@@ -424,7 +424,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 						}
 					}
 
-					msg = NTIError.getError(code, {'name': 'Group name'}, msg);
+					// msg = NTIError.getError(code, {'name': 'Group name'}, msg);
 
 					if (!msg && operation.error && operation.error === 422) {
 						//Well a field was wrong, in this case the user only put one thing

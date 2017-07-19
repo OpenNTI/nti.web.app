@@ -297,9 +297,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 
 	getLocationInfo: function () {
 		var me = this;
+		const bundle = this.ownerCt && this.ownerCt.currentBundle;
 
 		return new Promise(function (fulfill, reject) {
-			ContentUtils.getLineage(me.video.get('NTIID'), this.ownerCt && this.ownerCt.currentBundle)
+			ContentUtils.getLineage(me.video.get('NTIID'), bundle)
 				.then(function (lineages) {
 					var lineage = lineages[0];
 					ContentUtils.getLocation(lineage.last(), bundle)

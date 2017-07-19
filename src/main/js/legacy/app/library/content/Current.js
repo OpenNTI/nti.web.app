@@ -42,11 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Current',
 		this.PurchaseStore = StoreStateStore.getInstance();
 
 		//for now force the books to not have an add button
-		if (this.PurchaseStore.getPurchasables().length && false) {
-			this.showAdd();
-		} else {
-			this.hideAdd();
-		}
+		// if (this.PurchaseStore.getPurchasables().length && false) {
+		// 	this.showAdd();
+		// } else {
+		this.hideAdd();
+		// }
 
 		this.ContentStore.onceLoaded()
 			.then(this.showCurrentItems.bind(this));

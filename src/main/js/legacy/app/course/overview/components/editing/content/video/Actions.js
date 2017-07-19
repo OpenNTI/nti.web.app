@@ -148,15 +148,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (samePosition && sameRecord) {
 			save = Promise.resolve();
 		//The move api is causing trouble with videos for now, so skip this optimization
-		} else if (sameRecord && false) {
-			if (newParent) {
-				save = newParent.moveToFromContainer(record, newPosition.index, originalPosition.index, oldParent, root);
-			} else {
-				save = Promise.reject({
-					msg: 'Unable to update record',
-					err: 'No new parent'
-				});
-			}
+		// } else if (sameRecord && false) {
+		// 	if (newParent) {
+		// 		save = newParent.moveToFromContainer(record, newPosition.index, originalPosition.index, oldParent, root);
+		// 	} else {
+		// 		save = Promise.reject({
+		// 			msg: 'Unable to update record',
+		// 			err: 'No new parent'
+		// 		});
+		// 	}
 		} else {
 			newVideo = this.__getVideoData(newVideo);
 
