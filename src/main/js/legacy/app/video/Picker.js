@@ -181,7 +181,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 				xtype: 'react',
 				component: Editor,
 				video,
-				error: 'Transcript conflict',
+				error: true,
+				errorMsg: 'Transcript conflict',
 				onSave: v => this.onVideoSave(v),
 				onCancel: () => this.doClose()
 			});
