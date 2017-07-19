@@ -1,7 +1,19 @@
 var Ext = require('extjs');
-var UserRepository = require('../../../../../../cache/UserRepository');
 const {DateTime} = require('nti-web-commons');
 const {Parsing} = require('nti-commons');
+
+var UserRepository = require('../../../../../../cache/UserRepository');
+
+function getTitle (r) {
+	let title = '';
+	if (r.Title) {
+		title = r.Title;
+	} else if (r.MimeType === NextThought.model.VideoRoll.mimeType) {
+		title = 'Video Roll';
+	}
+
+	return title;
+}
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 	extend: 'Ext.Component',
@@ -50,17 +62,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		var me = this,
-			record = me.item,
-			attributes = record.get('attributes') || [],
-			changeType = record.get('type'),
-			type = changeType && (me.TYPES[changeType] || changeType),
-			recordable = record.get('Recordable'),
-			title = recordable && recordable.Title || '',
-			isChild = recordable.NTIID !== this.parentRecord.getId(),
-			externalValues = record && record.get('ExternalValue') || {};
+		const me = this;
+		const record = me.item;
+		const attributes = record.get('attributes') || [];
+		const changeType = record.get('type');
+		const recordable = record.get('Recordable');
+		const title = recordable && getTitle(recordable);
+		const isChild = recordable.NTIID !== this.parentRecord.getId();
+		const externalValues = record && record.get('ExternalValue') || {};
+		let type = changeType && (me.TYPES[changeType] || changeType);
+		let msg = '';
 
-		let fields = attributes.map(function (attr) {
+		let fields = attributes.map(attr => {
 			if(externalValues[attr]) {
 				if (attr.substr(0,9) === 'Available') {
 					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${DateTime.format(Parsing.parseDate(externalValues[attr]), 'MMMM D LT')}"`;
@@ -74,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		// Message will be: {user} created {title of item}.
 		if (type === 'created' && fields.length === 0 && title) {
-			fields.push('"' + title + '"');
+			fields.push(`"${title}"`);
 		}
 
 		// Change the type if it's an item being added
@@ -82,9 +95,29 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			type = 'added an';
 		}
 
+		if (title === 'Videos' || title === 'Video Roll') {
+			switch (type) {
+			case this.TYPES.create:
+				msg = 'A video roll was created.';
+				break;
+			case this.TYPES.update:
+				msg = 'Videos in the video roll were updated.';
+				break;
+			case this.TYPES.assetremovedfromitemcontainer:
+				msg = 'A video was removed from the video roll.';
+				break;
+			default:
+				msg = 'Videos in the video roll changed.';
+			}
+		} else if (isChild) {
+			msg = `${type} ${fields.join(', ')} ${getMsgContext(type, title)}.`;
+		} else {
+			msg = `${type} ${fields.join(', ')}.`;
+		}
+
 		me.renderData = Ext.apply(me.renderData || {}, {
 			date: Ext.Date.format(record.get('CreatedTime'), 'F j, Y \\a\\t g:i A') || '',
-			msg: isChild ? `${type} ${fields.join(', ')} ${getMsgContext(type, title)}.` : `${type} ${fields.join(', ')}.`
+			msg
 		});
 
 
