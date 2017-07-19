@@ -116,8 +116,12 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 	},
 
 	createPlaceholderVideo (raw) {
-		this.placeholderVideo = {...raw, save: (...args) => this.onPlaceholderSaved(raw, ...args),
-			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile)};
+		this.placeholderVideo = {
+			...raw,
+			save: (...args) => this.onPlaceholderSaved(raw, ...args),
+			update: (r, ...args) => saveVideo(r, ...args),
+			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile)
+		};
 
 		return this.placeholderVideo;
 	},
