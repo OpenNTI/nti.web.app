@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}, []);
 	},
 
-	showVideoList: function (selectedItems) {
+	showVideoList: function (selectedItems, onEdit) {
 		var me = this,
 			exclude = me.__getExcludedVideos();
 
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			xtype: 'overview-editing-video-item-selection',
 			onSelectionChanged: this.onVideoListSelectionChange.bind(this),
 			selectedItems: selectedItems,
-			editItem: (...args) => this.pickVideo(...args),
+			editItem: (...args) => this.pickVideo(...args, onEdit),
 			getExcludedVideos: (...args) => this.__getExcludedVideos(...args)
 		});
 
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	pickVideo (ntiid) {
+	pickVideo (ntiid, onEdit) {
 		ntiid = ntiid instanceof Object ? null : ntiid;
 		this.PromptActions.prompt('video-picker', {bundle: this.bundle, video: ntiid})
 			.then((video) => {
@@ -163,6 +163,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						this.videoSelectionCmp.addSelectionItem(video, true);
 					} else {
 						this.videoSelectionCmp.updateSelectionItem(video);
+
+						if (onEdit) {
+							onEdit(video);
+						}
 					}
 				}
 			});
