@@ -34,9 +34,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			listeners: {
 				click: {
 					element: 'el',
-					fn: function (e) {
-						if (e.getTarget('.add') && me.onAddVideos) {
-							me.onAddVideos(me.selectedItems);
+					fn: e => {
+						if (e.getTarget('.add') && this.onAddVideos) {
+							this.onAddVideos(this.selectedItems, (...args) => this.updateItem(...args));
 						}
 					}
 				}
@@ -61,6 +61,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
 			effect: 'move'
 		});
+	},
+
+	updateItem (item) {
+		const itemId = item.ntiid || item.NTIID;
+		const newItems = this.selectedItems.map(x => {
+			const id = x.ntiid || x.NTIID || x.internalId;
+
+			if (id === itemId) {
+				const links = x.get('Links');
+				item.Links = links;
+				Object.assign(x, {data: item, raw: item.Links.links});
+			}
+
+			return x;
+		});
+
+		this.selectedItems = newItems;
 	},
 
 	getDropzoneTarget: function () {
