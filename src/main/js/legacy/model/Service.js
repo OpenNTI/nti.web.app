@@ -73,11 +73,23 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.request(config);
 	},
 
+
 	postMultiPartData (url, data, onProgress) {
 		const me = this;
 
 		return new Promise(function (fulfill, reject) {
 			let xhr = me.__buildXHR(url, 'POST', onProgress, fulfill, reject);
+
+			xhr.send(data);
+		});
+	},
+
+
+	putMultiPartData (url, data, onProgress) {
+		const me = this;
+
+		return new Promise(function (fulfill, reject) {
+			let xhr = me.__buildXHR(url, 'PUT', onProgress, fulfill, reject);
 
 			xhr.send(data);
 		});
