@@ -114,7 +114,9 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 				this.video = video;
 				Promise.resolve(video);
 			}),
-			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile)
+			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile),
+			replaceTranscript: (transcript, newFile) => this.replaceTranscript(transcript, newFile),
+			removeTranscript: (transcript) => this.removeTranscript(transcript)
 		};
 	},
 
@@ -138,6 +140,20 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 		}
 	},
 
+	replaceTranscript (transcript, newFile) {
+		if(transcript) {
+			const url = transcript.href;
+			const formdata = new FormData();
+			formdata.append(newFile.name, newFile);
+			return Service.putMultiPartData(url, formdata);
+		}
+	},
+
+	removeTranscript (transcript) {
+		if(transcript) {
+			return Service.requestDelete(transcript.href);
+		}
+	},
 
 	onPlaceholderSaved (raw, data) {
 		return createVideo(this.getAssetLink(), {...raw, ...data})
@@ -153,16 +169,44 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			this.videoCreator.destroy();
 		}
 
-		const transcript = video && video.transcripts && video.transcripts[0];
+		const normalTranscripts = video && video.transcripts && video.transcripts.filter((t) => t.purpose === 'normal');
 
-		this.videoEditor = this.add({
-			xtype: 'react',
-			component: Editor,
-			video,
-			transcript,
-			onSave: v => this.onVideoSave(v),
-			onCancel: () => this.doClose()
-		});
+		if(normalTranscripts && normalTranscripts.length > 1) {
+			// no transcript case
+			this.videoEditor = this.add({
+				xtype: 'react',
+				component: Editor,
+				video,
+				error: 'Transcript conflict',
+				onSave: v => this.onVideoSave(v),
+				onCancel: () => this.doClose()
+			});
+		}
+		else if(normalTranscripts && normalTranscripts.length === 1) {
+			// existing transcript case
+			getService()
+				.then(service => service.getObjectRaw(normalTranscripts[0].NTIID)
+				.then((transcript) => {
+					this.videoEditor = this.add({
+						xtype: 'react',
+						component: Editor,
+						video,
+						transcript,
+						onSave: v => this.onVideoSave(v),
+						onCancel: () => this.doClose()
+					});
+				}));
+		}
+		else {
+			// no transcript case
+			this.videoEditor = this.add({
+				xtype: 'react',
+				component: Editor,
+				video,
+				onSave: v => this.onVideoSave(v),
+				onCancel: () => this.doClose()
+			});
+		}
 	},
 
 
