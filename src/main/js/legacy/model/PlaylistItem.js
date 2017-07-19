@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'mediaId', type: 'string'},
 		{name: 'start', type: 'float', defaultValue: 0.0},
 		{name: 'end', type: 'float', defaultValue: -1.0},
-		{name: 'sourceIndex', type: 'int', defaultValue: 1},
+		{name: 'sourceIndex', type: 'int', defaultValue: 0},
 		{name: 'sources', type: 'VideoSources'},
 		{name: 'dom-clone', type: 'auto'},
 		{name: 'NTIID', type: 'string'},
