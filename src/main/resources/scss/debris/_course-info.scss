@@ -306,10 +306,17 @@
 		padding: 15px 5px;
 	}
 
+	&.can-manage {
+		.manage-button {
+			display: block;
+		}
+	}
+
 	.manage-button {
 		color: $primary-blue;
 		text-align: center;
 		cursor: pointer;
+		display: none;
 	}
 }
 

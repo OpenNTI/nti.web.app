@@ -81,8 +81,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 
 		this.manageEl = this.el.down('.manage-button');
 
-		if (!canManage) {
-			this.manageEl.hide();
+		if (canManage) {
+			this.el.addCls('can-manage');
+		} else {
+			this.el.removeCls('can-manage');
 		}
 
 		this.mon(this.el, 'click', e => this.onClick(e));
