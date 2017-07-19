@@ -267,20 +267,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 	},
 
 	__goBackToAssignment: function (assignment) {
-		var me = this;
+		//It doesn't look like anything was calling this, it would've been blowing up anyway
+		console.error('__goBackToAssignment is no longer used, don\'t use it.');
 
-		CourseWareUtils.findCourseBy(assignment.findMyCourse())
-			.then(function (instance) {
-				instance = instance.get('CourseInstance') || instance;
+		// var me = this;
 
-				return instance.fireNavigationEvent(me.reader);
-			})
-			.then(function () {
-				me.reader.fireEvent('navigate-to-assignment', assignment.getId());
-			})
-			.catch(function (reason) {
-				console.error('Failed to go back to assignment', reason);
-			});
+		// CourseWareUtils.findCourseBy(assignment.findMyCourse())
+		// 	.then(function (instance) {
+		// 		instance = instance.get('CourseInstance') || instance;
+
+		// 		return instance.fireNavigationEvent(me.reader);
+		// 	})
+		// 	.then(function () {
+		// 		me.reader.fireEvent('navigate-to-assignment', assignment.getId());
+		// 	})
+		// 	.catch(function (reason) {
+		// 		console.error('Failed to go back to assignment', reason);
+		// 	});
 	},
 
 	notSubmittedTimed: function () {

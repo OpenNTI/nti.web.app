@@ -330,37 +330,39 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 	},
 
 	setPurchasableContext: function (ntiid) {
-		var me = this, el,
-			course = CourseWareUtils.courseForNtiid(ntiid),
-			content = ContentUtils.purchasableForContentNTIID(ntiid);
+		//It doesn't look like anything was calling this, it would've been blowing up anyway
+		console.error('setPurchasableContext is no longer used, don\'t use it.');
+		// var me = this, el,
+		// 	course = CourseWareUtils.courseForNtiid(ntiid),
+		// 	content = ContentUtils.purchasableForContentNTIID(ntiid);
 
-		//empty the current context;
-		me.contextContainer.update('');
-		me.contextContainer.addCls('purchasable');
+		// //empty the current context;
+		// me.contextContainer.update('');
+		// me.contextContainer.addCls('purchasable');
 
-		if (course) {
-			el = me.purchasableTpl.append(this.contextContainer, {
-				img: course.get('thumb'),
-				title: course.get('Title'),
-				number: course.get('ProviderUniqueID'),
-				target: 'Enroll Now'
-			}, true);
-		} else if (content) {
-			el = me.purchasableTpl.append(me.contextContainer, {
-				img: content.get('Icon'),
-				title: content.get('Title'),
-				number: content.get('Name'),
-				target: 'Purchase'
-			}, true);
-		} else {
-			el = me.noAccessTpl.append(me.contextContainer, null, true);
-		}
+		// if (course) {
+		// 	el = me.purchasableTpl.append(this.contextContainer, {
+		// 		img: course.get('thumb'),
+		// 		title: course.get('Title'),
+		// 		number: course.get('ProviderUniqueID'),
+		// 		target: 'Enroll Now'
+		// 	}, true);
+		// } else if (content) {
+		// 	el = me.purchasableTpl.append(me.contextContainer, {
+		// 		img: content.get('Icon'),
+		// 		title: content.get('Title'),
+		// 		number: content.get('Name'),
+		// 		target: 'Purchase'
+		// 	}, true);
+		// } else {
+		// 	el = me.noAccessTpl.append(me.contextContainer, null, true);
+		// }
 
-		me.mon(el, 'click', function (e) {
-			if (e.getTarget('.target')) {
-				me.fireEvent('unauthorized-navigation', me, ntiid);
-			}
-		});
+		// me.mon(el, 'click', function (e) {
+		// 	if (e.getTarget('.target')) {
+		// 		me.fireEvent('unauthorized-navigation', me, ntiid);
+		// 	}
+		// });
 	},
 
 	contextAnnotationActions: function (e, dom) {

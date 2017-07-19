@@ -140,16 +140,18 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 
 
 	listenToLibrary: function () {
-		var me = this;
+		//It doesn't look like this is being called
+		console.error('listenToLibrary doesn\'t look like its being called, don`t call it');
+		// var me = this;
 
-		if (me.libraryMon) {
-			return;
-		}
+		// if (me.libraryMon) {
+		// 	return;
+		// }
 
-		me.libraryMon = me.mon(Library, {
-			'destroyable': true,
-			'loaded': 'clearCache'
-		});
+		// me.libraryMon = me.mon(Library, {
+		// 	'destroyable': true,
+		// 	'loaded': 'clearCache'
+		// });
 	},
 
 
@@ -184,7 +186,10 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 
 
 	findTitleWithPrefix: function (prefix) {
-		return Library.findTitleWithPrefix(prefix);
+		//It doesn`t look like this is getting called.
+		console.error('findTitleWithPrefix doesn`t look like its getting called, don`t call it.');
+		return null;
+		// return Library.findTitleWithPrefix(prefix);
 	},
 
 	bookPrefixIfQuestion: function (id) {
