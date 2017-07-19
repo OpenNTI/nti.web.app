@@ -73,7 +73,7 @@ export function searchUsers (term) {
 	getService()
 		.then(s => s.getContacts())
 		.then((contacts) => {
-			return contacts.search(term)
+			return contacts.search(term, false, true)
 				.then((results) => {
 					if (lock !== SEARCH_LOCK) {
 						return;
