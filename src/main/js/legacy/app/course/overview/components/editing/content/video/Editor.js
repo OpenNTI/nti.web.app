@@ -75,8 +75,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	__sortVideos: function (videos) {
 		return videos.sort(function (a, b) {
-			var vA = a.get('title'),
-				vB = b.get('title');
+			var vA = a.get('title') || '',
+				vB = b.get('title') || '';
 
 			return vA.localeCompare(vB);
 		});
