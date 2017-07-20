@@ -56,7 +56,10 @@ export function resolveTitle (hit, getBreadCrumb) {
 		} else {
 			return target && target.resolveTitle ? target.resolveTitle(obj, hit) : Base.resolveTitle(obj, hit);
 		}
-	});
+	})
+		.catch(() => {
+			return '';
+		});
 }
 
 export function resolveFragments (hit) {
@@ -64,7 +67,10 @@ export function resolveFragments (hit) {
 
 	return getObject(hit).then((obj) => {
 		return target && target.resolveFragments ? target.resolveFragments(obj, hit) : Base.resolveFragments(obj, hit);
-	});
+	})
+		.catch(() => {
+			return [];
+		});
 }
 
 export function resolvePath (hit, getBreadCrumb) {
@@ -72,7 +78,10 @@ export function resolvePath (hit, getBreadCrumb) {
 
 	return getObject(hit).then((obj) => {
 		return target && target.resolvePath ? target.resolvePath(obj, hit, getBreadCrumb) : Base.resolvePath(obj, hit, getBreadCrumb);
-	});
+	})
+		.catch(() => {
+			return [];
+		});
 }
 
 export function resolveContainerID (hit) {
@@ -80,7 +89,10 @@ export function resolveContainerID (hit) {
 
 	return getObject(hit).then((obj) => {
 		return target && target.resolveContainerID ? target.resolveContainerID(obj, hit) : Base.resolveContainerID(obj, hit);
-	});
+	})
+		.catch(() => {
+			return '';
+		});
 }
 
 export function resolveNavigateToSearchHit (hit, fragment) {
