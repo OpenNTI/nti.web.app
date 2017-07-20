@@ -91,13 +91,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 		this.maybeShowAllowedTime();
 		this.assignment.on('refresh', () => {
-			if (this.pageInfo && this.pageInfo.regenerate) {
-				// Pass the updated assignment
-				this.pageInfo = this.pageInfo.regenerate(this.assignment);
-			}
-			this.showReader();
-			this.maybeShowAllowedTime();
+			const regenerate = this.pageInfo && this.pageInfo.regenerate ? this.pageInfo.regenerate(this.assignment) : Promise.resolve(this.pageInfo);
+
+			regenerate
+				.then((pageInfo) => {
+					this.pageInfo = pageInfo;
+
+					this.showReader();
+					this.maybeShowAllowedTime();
+				});
 		});
+
 		this.assignment.on('deleted', () => {
 			me.showReader();
 			me.bundle.getAssignments()
