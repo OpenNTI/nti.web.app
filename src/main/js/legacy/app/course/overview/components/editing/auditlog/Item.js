@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			if (NextThought.model.VideoRoll === recordable.MimeType) {
 				type = 'updated';
 			} else {
-				type = 'added an';
+				type = 'added a';
 			}
 		}
 
