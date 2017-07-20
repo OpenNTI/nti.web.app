@@ -13,7 +13,15 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 		RESOLVED: {},
 
 		//URL: '//vimeo.com/api/v2/video/{0}.json',
-		URL: '//vimeo.com/api/oembed.json?url=http%3A//vimeo.com/{0}',
+		URL: 'https://vimeo.com/api/oembed.json?url=http%3A//vimeo.com/{0}',
+
+		getVideo (id) {
+			const url = Ext.String.format(this.URL, id);
+
+
+			return Service.request({url, withCredentials: false});
+		},
+
 
 		resolvePosterForID: function (id) {
 			var cache = this.RESOLVED, url, promise;

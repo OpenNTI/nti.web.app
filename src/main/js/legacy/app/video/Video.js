@@ -183,6 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 
 		this.activeVideoService = 'none';
 		this.currentVideoId = null;
+		this.playerBlacklist.push('none');
 
 		this.taskMediaHeartBeat = {
 			interval: 1000,
@@ -307,7 +308,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 						'player-event-play',
 						'player-event-pause',
 						'player-event-ended',
-						'player-seek'
+						'player-seek',
+						'unrecoverable-player-error'
 					]));
 
 			me.mon(p, 'playback-speed-changed', 'playBackSpeedChanged');
@@ -321,7 +323,15 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 
 	unrecoverablePlayerError: function (player) {
 		this.playerBlacklist.push(player);
-		this.playlistSeek(this.playlistIndex);
+
+		const newIndex = this.playlistIndex + 1;
+
+		if (newIndex < this.players.length) {
+			this.playlistSeek(newIndex);
+		} else {
+			this.activeVideoService = 'none';
+			this.playlistSeek(this.playlistIndex)
+		}
 	},
 
 	playerError: function () {
@@ -675,8 +685,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 				this.playlistIndex = newIndex;
 				item = this.playlist[this.playlistIndex];
 				service = item && item.activeSource().service;
-				this.log('Playlist seek setting active service to ', this.activeVideoService);
-				while (item && Ext.Array.contains(this.playerBlacklist, this.activeVideoService)) {
+				this.log('Playlist seek setting active service to ', service);
+				while (item && Ext.Array.contains(this.playerBlacklist, service)) {
 					if (!item.useNextSource()) {
 						service = 'none';
 						this.log('Active service is none');
@@ -684,8 +694,10 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 						this.maybeSwitchPlayers(service);
 						return false;
 					}
-					this.activeVideoService = item.activeSource().service;
+
+					service = item.activeSource().service;
 				}
+
 				source = item && item.activeSource().source;
 				this.maybeSwitchPlayers(service);
 				this.setVideoAndPosition(source, item && item.get('start'));

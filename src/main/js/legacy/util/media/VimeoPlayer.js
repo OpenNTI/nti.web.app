@@ -1,5 +1,7 @@
 var Ext = require('extjs');
 
+const VimeoResolver = require('legacy/model/resolvers/videoservices/Vimeo');
+
 
 module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 
@@ -143,6 +145,13 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 		this.player = Ext.getDom(this.playerId) || o;
 		this.playerSourceURL = this.player.getAttribute('src').split('?')[0];
 		this.seekWhenReady = offset;
+
+		//If we can't do a head request for the source, assume that vimeo is blocked
+		//and treat it as an error
+		VimeoResolver.getVideo(source)
+			.catch(() => {
+				this.fireEvent('unrecoverable-player-error', 'vimeo');
+			});
 	},
 
 
