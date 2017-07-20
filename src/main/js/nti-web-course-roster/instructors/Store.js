@@ -246,7 +246,7 @@ class Store extends StorePrototype {
 
 		let users = [...instructors];
 
-		for (let editor of editors) {
+		for (let editor of editors || []) {
 			if (!instructorMap[editor.getID()]) {
 				users.push(editor);
 			}
