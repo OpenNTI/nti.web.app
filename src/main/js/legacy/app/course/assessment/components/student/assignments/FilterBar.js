@@ -256,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			},
 			items: [
 				{cls: 'discussion', text: 'Discussion Assignment', assignmentType: DISCUSSION_ASSIGNMENT},
-				{cls: 'plain', text: 'Plain Assignment', assignmentType: PLAIN_ASSIGNMENT}
+				{cls: 'plain', text: 'Assignment', assignmentType: PLAIN_ASSIGNMENT}
 			]
 		});
 
