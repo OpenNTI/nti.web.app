@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		// Change the type if it's an item being added
 		if(changeType === 'update' && fields.length === 1 && fields[0] === 'item') {
-			if (NextThought.model.VideoRoll === recordable.MimeType) {
+			if (NextThought.model.VideoRoll.mimeType === recordable.MimeType) {
 				type = 'updated';
 			} else {
 				type = 'added a';
