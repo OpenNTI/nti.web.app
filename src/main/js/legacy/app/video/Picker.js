@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			...raw,
 			save: (...args) => saveVideo(raw, ...args).then(video => {
 				this.video = video;
-				Promise.resolve(video);
+				return video;
 			}),
 			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile),
 			replaceTranscript: (transcript, newFile) => this.replaceTranscript(transcript, newFile),
