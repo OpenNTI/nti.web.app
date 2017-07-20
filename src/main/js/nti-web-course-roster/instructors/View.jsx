@@ -16,7 +16,6 @@ import Store from './Store';
 import PermissionsList from './components/PermissionsList';
 
 const DEFAULT_TEXT = {
-	done: 'Done',
 	searching: 'Searching',
 	error: 'Unable to update permissions',
 	title: 'Manage Instructors'
@@ -99,9 +98,6 @@ export default class CourseRoster extends React.Component {
 	render () {
 		const {course, onDismiss} = this.props;
 		const {loading, searching, permissionsList, error, updatingUsers} = this.state;
-		const buttons = [
-			{label: t('done'), onClick: this.onDismiss}
-		];
 
 		return (
 			<div className="course-roster-instructors">
@@ -115,7 +111,6 @@ export default class CourseRoster extends React.Component {
 					{!loading && (<div className="search-container"><Search onChange={this.onSearchChange} /></div>)}
 					{permissionsList && !searching && !loading && (<PermissionsList permissionsList={permissionsList} course={course} updatingUsers={updatingUsers} />)}
 				</div>
-				<DialogButtons buttons={buttons} />
 			</div>
 		);
 	}
