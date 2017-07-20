@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	TYPES: {
 		create: 'created',
-		update: 'changed the',
+		update: 'updated',
 		overviewgroupmoved: 'moved',
 		outlinenodemove: 'moved',
 		assetremovedfromitemcontainer: 'removed',
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			if(externalValues[attr]) {
 				if (attr.substr(0,9) === 'Available') {
 					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${DateTime.format(Parsing.parseDate(externalValues[attr]), 'MMMM D LT')}"`;
-				} else {
+				} else if (typeof externalValues[attr] !== 'object') {
 					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${externalValues[attr]}"`;
 				}
 			}
@@ -92,23 +92,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		// Change the type if it's an item being added
 		if(changeType === 'update' && fields.length === 1 && fields[0] === 'item') {
-			type = 'added an';
+			if (NextThought.model.VideoRoll === recordable.MimeType) {
+				type = 'updated';
+			} else {
+				type = 'added an';
+			}
 		}
 
-		if (title === 'Videos' || title === 'Video Roll') {
-			switch (type) {
-			case this.TYPES.create:
-				msg = 'A video roll was created.';
-				break;
-			case this.TYPES.update:
-				msg = 'Videos in the video roll were updated.';
-				break;
-			case this.TYPES.assetremovedfromitemcontainer:
-				msg = 'A video was removed from the video roll.';
-				break;
-			default:
-				msg = 'Videos in the video roll changed.';
-			}
+		if ([NextThought.model.VideoRoll.mimeType, NextThought.model.Video.mimeType].includes(recordable.MimeType)) {
+			msg = `${type} ${title}.`;
 		} else if (isChild) {
 			msg = `${type} ${fields.join(', ')} ${getMsgContext(type, title)}.`;
 		} else {
@@ -160,7 +152,7 @@ function getMsgContext (type, title) {
 		result = title;
 	} else if (type === 'added an') {
 		result = 'in ' + title;
-	} else {
+	} else if (type !== 'created') {
 		result = 'for ' + title;
 	}
 
