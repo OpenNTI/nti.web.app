@@ -1,7 +1,7 @@
 const Ext = require('extjs');
 
 const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/model/Base'));
+	.get('Base', ()=> require('legacy/model/Base'));
 
 require('./Base');
 
