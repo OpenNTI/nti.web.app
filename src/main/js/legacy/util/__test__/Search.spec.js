@@ -85,7 +85,7 @@ describe ('Search utils', () => {
 
 		test ('Will pull multiple matches from one fragment', () => {
 			const hit = hitWithFragments({
-				Matches: ['T<em>he</em> quick <em>brown fox</em>']
+				Matches: ['T<hit>he</hit> quick <hit>brown fox</hit>']
 			});
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 
@@ -96,9 +96,9 @@ describe ('Search utils', () => {
 
 		test ('Pulls from multiple fragments', () => {
 			const hit = hitWithFragments([{
-				Matches: ['T<em>he</em> quick <em>brown fox</em>']
+				Matches: ['T<hit>he</hit> quick <hit>brown fox</hit>']
 			},{
-				Matches: ['See <em>spot</em> run']
+				Matches: ['See <hit>spot</hit> run']
 			}]);
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 
@@ -110,9 +110,9 @@ describe ('Search utils', () => {
 
 		test ('Returns unique terms', () => {
 			const hit = hitWithFragments([{
-				Matches: ['The <em>quick</em> <em>quick</em> fox']
+				Matches: ['The <hit>quick</hit> <hit>quick</hit> fox']
 			},{
-				Matches: ['See quick <em>spot</em> run']
+				Matches: ['See quick <hit>spot</hit> run']
 			}]);
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 
