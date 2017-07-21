@@ -2,8 +2,8 @@ const Ext = require('extjs');
 
 const ParseUtils = require('legacy/util/Parsing');
 const Note = require('legacy/model/Note');
-
-const CourseOutlineContentNode = require('./CourseOutlineContentNode');
+const lazy = require('legacy/util/lazy-require')
+	.get('CourseOutlineContentNode', ()=> require('./CourseOutlineContentNode'));
 
 require('legacy/mixins/OrderedContents');
 require('legacy/mixins/DurationCache');
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 		var allowed = [];
 
 		if (this._depth === 1) {
-			allowed.push(CourseOutlineContentNode.mimeType);
+			allowed.push(lazy.CourseOutlineContentNode.mimeType);
 		}
 
 		return allowed;
