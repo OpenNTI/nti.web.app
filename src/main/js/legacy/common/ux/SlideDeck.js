@@ -1,3 +1,4 @@
+/*eslint no-undef:1*/
 const Ext = require('extjs');
 
 const ContentUtils = require('legacy/util/Content');
