@@ -190,16 +190,17 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			// existing transcript case
 			getService()
 				.then(service => service.getObjectRaw(normalTranscripts[0].NTIID)
-				.then((transcript) => {
-					this.videoEditor = this.add({
-						xtype: 'react',
-						component: Editor,
-						video,
-						transcript,
-						onSave: v => this.onVideoSave(v),
-						onCancel: () => this.doClose()
-					});
-				}));
+					.then((transcript) => {
+						this.videoEditor = this.add({
+							xtype: 'react',
+							component: Editor,
+							video,
+							transcript,
+							onSave: v => this.onVideoSave(v),
+							onCancel: () => this.doClose()
+						});
+					})
+				);
 		}
 		else {
 			// no transcript case

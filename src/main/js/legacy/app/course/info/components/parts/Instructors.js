@@ -1,5 +1,4 @@
 const Ext = require('extjs');
-
 const {getService} = require('nti-web-client');
 
 const {Instructors} = require('nti-web-course-roster');

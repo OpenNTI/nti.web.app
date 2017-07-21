@@ -335,7 +335,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 			this.playlistSeek(newIndex);
 		} else {
 			this.activeVideoService = 'none';
-			this.playlistSeek(this.playlistIndex)
+			this.playlistSeek(this.playlistIndex);
 		}
 	},
 
