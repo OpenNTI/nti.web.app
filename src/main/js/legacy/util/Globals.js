@@ -710,11 +710,12 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 
 	isMe: function (user) {
+		const {username = ''} = (global.$AppConfig || {});
 		var id = user;
 		if (typeof user !== 'string' && user && user.getId) {
 			id = user.getId();
 		}
-		return $AppConfig.username === id;
+		return username === id;
 	},
 
 
