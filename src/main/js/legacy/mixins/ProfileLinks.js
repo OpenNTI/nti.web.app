@@ -2,10 +2,10 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 // const {isMe} = require('legacy/util/Globals');
-
-const Actions = require('legacy/app/navigation/Actions');
-const Popout = require('legacy/app/account/contacts/management/Popout');
-const MenuItem = require('legacy/app/account/identity/components/MenuItem');
+const lazy = require('legacy/util/lazy-require')
+	.get('Actions', ()=> require('legacy/app/navigation/Actions'))
+	.get('Popout', ()=> require('legacy/app/account/contacts/management/Popout'))
+	.get('MenuItem', ()=> require('legacy/app/account/identity/components/MenuItem'));
 
 // let contactCardPopout;
 // let showCardTimer;
@@ -21,15 +21,15 @@ function onUserNameClick (e) {
 		profileUrl = u.getProfileUrl && u.getProfileUrl();
 
 	if (profileUrl) {
-		if (this instanceof Popout) {
+		if (this instanceof lazy.Popout) {
 			wait()
 				.then(this.destroy.bind(this));
-		} else if (this instanceof MenuItem) {
+		} else if (this instanceof lazy.MenuItem) {
 			wait()
 				.then(this.setMenuClosed.bind(this));
 		}
 
-		Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
+		lazy.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
 			user: u
 		});
 
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 		var profileUrl = u.getProfileUrl && u.getProfileUrl();
 
 		if (profileUrl) {
-			Actions.pushRootRoute(u.getName(), profileUrl, {
+			lazy.Actions.pushRootRoute(u.getName(), profileUrl, {
 				user: u
 			});
 		}
