@@ -48,12 +48,18 @@ export default class PermissionsListItem extends React.Component {
 		const {user} = permissions;
 		const isMe = getAppUsername() === user.getID();
 		const cls = cx('course-instructors-permission-list-item', {updating});
+		const userID = user.getID && user.getID() || user.ID;
+		const userEmail = user.email;
+		const metaIDCmp = userID ? (<div className="display meta">{userID}</div>) : null;
+		const metaEmailCmp = userEmail ? (<div className="display meta">{userEmail}</div>) : null;
 
 		return (
 			<div className={cls}>
 				<div className="user">
 					<Avatar className="avatar" entity={user} />
 					<DisplayName className="display" entity={user} />
+					{metaIDCmp}
+					{metaEmailCmp}
 				</div>
 				{showInstructor && this.renderInstructor(permissions, isMe)}
 				{showEditor && this.renderEditor(permissions, isMe)}
