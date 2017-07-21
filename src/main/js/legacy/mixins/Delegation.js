@@ -38,7 +38,7 @@ var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
  * component that will be delegated to. (It can also be an array if different components care about different aspects)
  */
 module.exports = exports = Ext.define('NextThought.mixins.Delegation', function () {
-	var debug = $AppConfig.debugDelegation;
+	var debug = (global.$AppConfig || {}).debugDelegation;
 
 	/* @private */
 	function getInheritedDelegates (cmp) {

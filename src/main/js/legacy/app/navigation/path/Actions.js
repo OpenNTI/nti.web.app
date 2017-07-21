@@ -3,9 +3,10 @@ const {wait} = require('nti-commons');
 
 const Globals = require('legacy/util/Globals');
 const ParseUtils = require('legacy/util/Parsing');
-const ContextStateStore = require('legacy/app/context/StateStore');
+const lazy = require('legacy/util/lazy-require')
+	.get('ContextStateStore', ()=> require('legacy/app/context/StateStore'))
+	.get('PathStateStore', ()=> require('./StateStore'));
 
-const PathStateStore = require('./StateStore');
 const PartsAssignment = require('./parts/Assignment');
 const PartsContent = require('./parts/Content');
 const PartsForums = require('./parts/Forums');
@@ -27,8 +28,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.PathStore = PathStateStore.getInstance();
-		this.ContextStore = ContextStateStore.getInstance();
+		this.PathStore = lazy.PathStateStore.getInstance();
+		this.ContextStore = lazy.ContextStateStore.getInstance();
 
 		this.buildHandlerMap();
 	},

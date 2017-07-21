@@ -1,10 +1,11 @@
 const Ext = require('extjs');
 
 const {isFeature} = require('legacy/util/Globals');
-const ContextStateStore = require('legacy/app/context/StateStore');
 const User = require('legacy/model/User');
 const Badge = require('legacy/model/openbadges/Badge');
 const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
+const lazy = require('legacy/util/lazy-require')
+	.get('ContextStateStore', ()=> require('legacy/app/context/StateStore'));
 
 
 
@@ -12,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Pro
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.ContextStore = ContextStateStore.getInstance();
+		this.ContextStore = lazy.ContextStateStore.getInstance();
 	},
 
 	addHandlers: function (handlers) {

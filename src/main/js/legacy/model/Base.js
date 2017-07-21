@@ -5,7 +5,6 @@ const {EventEmitter} = require('events');
 const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
-const {isMe, getURL} = Globals;
 const ParseUtils = require('legacy/util/Parsing');
 const TimeUtils = require('legacy/util/Time');
 
@@ -727,7 +726,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	},
 
 	isMine: function () {
-		return isMe(this.get('Creator'));
+		return Globals.isMe(this.get('Creator'));
 	},
 
 	getFieldEditURL: function (editLink, field) {
@@ -738,7 +737,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		var f = Ext.String.format('/++fields++{0}', field);
 
-		return getURL(Ext.String.format('{0}{1}',
+		return Globals.getURL(Ext.String.format('{0}{1}',
 			editLink, f));
 	},
 
@@ -832,7 +831,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		}
 
 		req = {
-			url: getURL(href),
+			url: Globals.getURL(href),
 			async: false,
 			callback: function (_, success, resp) {
 				if (!success) {

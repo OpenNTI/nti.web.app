@@ -2,6 +2,7 @@ const Ext = require('extjs');
 
 const DndOrderingItem = require('./OrderingItem');
 
+require('legacy/mixins/dnd/Draggable');
 
 module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	statics: {

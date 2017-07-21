@@ -4,12 +4,14 @@ const ParseUtils = require('legacy/util/Parsing');
 const ContentProxy = require('legacy/proxy/JSONP');
 const {getURL} = require('legacy/util/Globals');
 const LoginStateStore = require('legacy/login/StateStore');
+const lazy = require('legacy/util/lazy-require')
+	.get('ContentStateStore', ()=> require('./content/StateStore'))
+	.get('LibraryStateStore', ()=> require('./StateStore'))
+	.get('CoursesActions', ()=> require('./courses/Actions'))
+	.get('CoursesStateStore', ()=> require('./courses/StateStore'))
+	.get('ContentActions', ()=> require('./content/Actions'));
 
-const ContentStateStore = require('./content/StateStore');
-const LibraryStateStore = require('./StateStore');
-const CoursesActions = require('./courses/Actions');
-const CoursesStateStore = require('./courses/StateStore');
-const ContentActions = require('./content/Actions');
+
 
 require('legacy/proxy/JSONP');
 require('legacy/common/Actions');
@@ -20,13 +22,13 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.CourseActions = CoursesActions.create();
-		this.ContentActions = ContentActions.create();
+		this.CourseActions = lazy.CoursesActions.create();
+		this.ContentActions = lazy.ContentActions.create();
 
-		this.CourseStore = CoursesStateStore.getInstance();
-		this.ContentStore = ContentStateStore.getInstance();
+		this.CourseStore = lazy.CoursesStateStore.getInstance();
+		this.ContentStore = lazy.ContentStateStore.getInstance();
 
-		this.LibraryStore = LibraryStateStore.getInstance();
+		this.LibraryStore = lazy.LibraryStateStore.getInstance();
 		this.LoginStore = LoginStateStore.getInstance();
 	},
 

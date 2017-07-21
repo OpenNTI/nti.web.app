@@ -43,7 +43,7 @@
     "moment": "^2.12.0",
     "node-natural-sort": "^0.8.6",
     "nti-app-scripts": "^1.0.6",
-    "nti-assignment-editor": "^1.2.4",
+    "nti-assignment-editor": "^1.4.2",
     "nti-commons": "^2.0.0",
     "nti-content": "^1.4.1",
     "nti-lib-dispatcher": "^1.0.0",

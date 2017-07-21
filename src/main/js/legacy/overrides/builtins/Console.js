@@ -3,7 +3,7 @@ const Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', function () {
 
-	$AppConfig.maxLogCapture = $AppConfig.maxLogCapture || 20;
+	// $AppConfig.maxLogCapture = $AppConfig.maxLogCapture || 20;
 
 	//make sure console exists
 	Ext.applyIf(window, {
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 		console.enable = enableLogging;
 		console.disable = disableLogging;
 
-		if (!$AppConfig.enableLogging) {
+		if (!(global.$AppConfig || {}).enableLogging) {
 			console.disable();
 		}
 	} catch (e) {
