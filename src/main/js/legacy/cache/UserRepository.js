@@ -8,6 +8,7 @@ const {isMe, isFeature} = require('legacy/util/Globals');
 const {Deferred} = require('legacy/util/Promise');
 const ChatStateStore = require('legacy/app/chat/StateStore');
 
+const {$AppConfig = {}} = global;
 
 User.Repository = global.UserRepository =
 module.exports = exports = Ext.define('NextThought.cache.UserRepository', {

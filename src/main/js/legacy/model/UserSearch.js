@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 
+const B64 = require('legacy/util/Base64');
+const Globals = require('legacy/util/Globals');
 const ShareEntity = require('legacy/mixins/ShareEntity');
 const ChatStateStore = require('legacy/app/chat/StateStore');
 
@@ -81,7 +83,26 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 
 	isUnresolved: function () {
 		return this.Unresolved === true;
-	}
-}, function () {
-	this.borrow(User, ['getName', 'getProfileUrl']);
+	},
+
+	getName: function () {
+		return this.get('alias') ||
+			this.get('realname') ||
+
+			User.getUsername(this.get('Username'));
+	},
+
+	getProfileUrl: function (tab) {
+		if (!this.getLink('Activity')) {
+			return null;
+		}
+
+		var id = this.get('Username');
+
+		if ($AppConfig.obscureUsernames) {
+			id = B64.encodeURLFriendly(id);
+		}
+
+		return tab ? '/user/' + id + '/' + Globals.trimRoute(tab) + '/' : '/user/' + id;
+	},
 });

@@ -3,6 +3,7 @@ const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
 
+const {$AppConfig = {}} = global;
 
 global.Socket =
 module.exports = exports = Ext.define('NextThought.proxy.Socket', {

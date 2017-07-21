@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	statics: {
 		PARTNER_ID: '1500101',
-		UICONF_ID: $AppConfig.kalturaUIID || '15491291',
+		UICONF_ID: (global.$AppConfig || {}).kalturaUIID || '15491291',
 		kind: 'video',
 		type: 'kaltura',
 

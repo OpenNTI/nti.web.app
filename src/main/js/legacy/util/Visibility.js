@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 
 		if (isFeature('no-analytic-end')) { return; }
 
-		const timeouts = $AppConfig.activity_timeouts || {};
+		const timeouts = (global.$AppConfig || {}).activity_timeouts || {};
 
 		this.BLUR_TIMEOUT = {
 			warn: (timeouts.blur_warn || 0) * 1000,
