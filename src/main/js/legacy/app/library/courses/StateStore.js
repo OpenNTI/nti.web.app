@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const CourseInstanceAdministrativeRole = require('legacy/model/courses/CourseInstanceAdministrativeRole');
 
 
@@ -377,7 +378,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		rec.getContentPackages().every(function (contentPackage) {
 			var id = contentPackage.get('NTIID');
 
-			match = match || (prefix && prefix === ParseUtils.ntiidPrefix(id));
+			match = match || (prefix && prefix === lazy.ParseUtils.ntiidPrefix(id));
 		});
 
 		return match;
@@ -386,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 	findForNTIID: function (id) {
 		var me = this,
-			prefix = ParseUtils.ntiidPrefix(id),
+			prefix = lazy.ParseUtils.ntiidPrefix(id),
 			course;
 
 		function fn (rec) {

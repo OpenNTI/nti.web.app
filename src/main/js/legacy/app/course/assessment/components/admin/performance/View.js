@@ -2,7 +2,8 @@ const Ext = require('extjs');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const PagedPageSource = require('legacy/util/PagedPageSource');
 const {isFeature} = require('legacy/util/Globals');
 
@@ -196,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(JSON.parse)
 			.then(function (obj) {
 				var enrollment = obj.Items && obj.Items[0];
-				return Promise.resolve(ParseUtils.parseItems(enrollment)[0]);
+				return Promise.resolve(lazy.ParseUtils.parseItems(enrollment)[0]);
 			});
 	},
 

@@ -1,15 +1,19 @@
 Object.assign(exports, {
-	get (name, packageRequire) {
+	get (name, packageRequire, cache = {}) {
 
-		if (!exports.hasOwnProperty(name)) {
-			Object.defineProperty(exports, name, {
+		if (!cache.hasOwnProperty(name)) {
+			Object.defineProperty(cache, name, {
 				get () {
-					delete exports[name];
-					return exports[name] = packageRequire();
+					delete cache[name];
+					return cache[name] = packageRequire();
 				}
 			});
 		}
 
-		return exports;
+		if (!cache.get) {
+			cache.get = (n, cb) => exports.get(n, cb, cache);
+		}
+
+		return cache;
 	}
 });

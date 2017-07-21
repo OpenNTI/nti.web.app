@@ -2,7 +2,8 @@ const Ext = require('extjs');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const DiscussionRef = require('legacy/model/DiscussionRef');
 
 require('legacy/mixins/EllipsisText');
@@ -102,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	loadTopic: function (ntiid) {
-		var parsedId = ParseUtils.parseNTIID(ntiid),
+		var parsedId = lazy.ParseUtils.parseNTIID(ntiid),
 			bundle = this.getBundle(),
 			e;
 		/*

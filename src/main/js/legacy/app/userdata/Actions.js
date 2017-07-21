@@ -12,7 +12,8 @@ const Anchors = require('legacy/util/Anchors');
 const ContentUtils = require('legacy/util/Content');
 const Globals = require('legacy/util/Globals');
 const ObjectUtils = require('legacy/util/Object');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const SharingUtils = require('legacy/util/Sharing');
 const StoreUtils = require('legacy/util/Store');
 const Bookmark = require('legacy/model/Bookmark');
@@ -89,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 		//if this is the raw json from the event, parse it.
 		if (!change.isModel) {
-			change = ParseUtils.parseItems([change])[0];
+			change = lazy.ParseUtils.parseItems([change])[0];
 		}
 
 		var item = change.getItem(),
@@ -138,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				if (!recordForStore) {
 					//Each store gets its own copy of the record. A null value indicates we already added one to a store
 					//so we need a new instance. Read it out of the original raw value.
-					recordForStore = ParseUtils.parseItems([item.raw])[0];
+					recordForStore = lazy.ParseUtils.parseItems([item.raw])[0];
 				}
 
 				//The store will handle making all the threading/placement, etc
@@ -682,7 +683,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			var success = operation.success, rec;
 
 			try {
-				rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
+				rec = success ? lazy.ParseUtils.parseItems(operation.response.responseText)[0] : null;
 
 				if (success) {
 					me.incomingCreatedChange({}, rec, {});
@@ -730,7 +731,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 		return noteRecord.saveData({url: url})
 			.then(function (response) {
-				var rec = ParseUtils.parseItems(response)[0];
+				var rec = lazy.ParseUtils.parseItems(response)[0];
 				me.incomingCreatedChange({}, rec, {});
 				return rec;
 			})
@@ -842,7 +843,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 		return replyRecord.saveData({url: url})
 			.then(function (response) {
-				var rec = ParseUtils.parseItems(response)[0];
+				var rec = lazy.ParseUtils.parseItems(response)[0];
 				me.incomingCreatedChange({}, rec, {});
 				recordRepliedTo.fireEvent('child-added', rec);
 				return rec;
@@ -881,7 +882,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 		return r.saveData()
 			.then(function (response) {
-				let rec = ParseUtils.parseItems(response)[0];
+				let rec = lazy.ParseUtils.parseItems(response)[0];
 				r.fireEvent('updated', rec);
 				return rec;
 			})

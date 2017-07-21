@@ -3,7 +3,8 @@ const { extname } = require('path');
 const Ext = require('extjs');
 
 const UserCourseInvitations = require('legacy/model/courses/UserCourseInvitations');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/common/form/Form');
 require('legacy/app/invite/EmailTokens');
@@ -147,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 		submit
 			.then( results => {
-				const courseInvitations = ParseUtils.parseItems(results)[0],
+				const courseInvitations = lazy.ParseUtils.parseItems(results)[0],
 					emails = courseInvitations && courseInvitations.get('Items').map(item => item.email),
 					warnings = courseInvitations.get('Warnings'),
 					invalidEmails = courseInvitations.get('InvalidEmails') && courseInvitations.get('InvalidEmails').Items;

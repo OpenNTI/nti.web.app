@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 /**
@@ -144,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 		if (!cachedRecord) {
 			if (!record.isModel) {
-				record = ParseUtils.parseItems(record)[0];
+				record = lazy.ParseUtils.parseItems(record)[0];
 			}
 
 			this.__storeRecordAtKey(key, record);

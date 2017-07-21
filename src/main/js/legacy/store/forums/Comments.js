@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 require('../NTI');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const UtilUserDataThreader = require('legacy/util/UserDataThreader');
 
 const OPEN_THREADS = Symbol('Open Threads');
@@ -135,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 				}
 
 				var flatList, json = Ext.decode(r.responseText, true),
-					items = json && ParseUtils.parseItems(json), tree;
+					items = json && lazy.ParseUtils.parseItems(json), tree;
 
 				items.push(comment);
 				tree = items && UtilUserDataThreader.threadUserData(items);

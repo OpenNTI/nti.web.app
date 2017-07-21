@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Items', {
@@ -11,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 		type: 'singleItem',
 		convert: function (v, r) {
 			if (v instanceof Object) {
-				v = !v ? null : ParseUtils.parseItems([v])[0];
+				v = !v ? null : lazy.ParseUtils.parseItems([v])[0];
 				if (v) {
 					v.stores.push(r);//make store updates bubble up to this owner record.
 				}
@@ -29,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 		convert: function (v, r) {
 			var result = null;
 			if (Ext.isArray(v)) {
-				result = ParseUtils.parseItems(v);
+				result = lazy.ParseUtils.parseItems(v);
 				if (this.limit !== undefined && result.length > this.limit) {
 					console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
 					result = result.slice(0, this.limit);
@@ -61,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 						}
 					}
 				}
-				result = ParseUtils.parseItems(values);
+				result = lazy.ParseUtils.parseItems(values);
 				result.forEach(function (a) {if (a) {a.stores.push(r);}});
 				result.INDEX_KEYMAP = keys;
 				return result;

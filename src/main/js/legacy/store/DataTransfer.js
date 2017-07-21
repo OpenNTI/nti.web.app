@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 /**
@@ -128,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	getModel: function (key) {
 		var data = this.getData(key);
 
-		return ParseUtils.parseItems(data)[0];
+		return lazy.ParseUtils.parseItems(data)[0];
 	},
 
 

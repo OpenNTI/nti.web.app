@@ -2,7 +2,8 @@ const Ext = require('extjs');
 
 const StoreActions = require('legacy/app/store/Actions');
 const PurchasableCourse = require('legacy/model/store/PurchasableCourse');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {getString} = require('legacy/util/Localization');
 
 const EnrollmentActions = require('../Actions');
@@ -266,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 					return new Promise(function (fulfill, reject) {
 						Service.request(courseInstance.getLink('CourseCatalogEntry'))
 							.then(function (catalogEntry) {
-								catalogEntry = ParseUtils.parseItems(catalogEntry)[0];
+								catalogEntry = lazy.ParseUtils.parseItems(catalogEntry)[0];
 								course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
 								me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
 							})

@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const Transition = require('legacy/mixins/Transition');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 module.exports = exports = Ext.define('NextThought.common.components.BoundCollection', {
@@ -54,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 	},
 
 	parseCollection: function (response) {
-		var obj = ParseUtils.parseItems(response)[0];
+		var obj = lazy.ParseUtils.parseItems(response)[0];
 
 		return obj || JSON.parse(response);
 	},

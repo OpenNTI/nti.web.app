@@ -5,7 +5,8 @@ const {wait} = require('nti-commons');
 const {getString} = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const LoginStore = require('legacy/login/StateStore');
 const LoginActions = require('legacy/login/Actions');
 const LibraryActions = require('legacy/app/library/Actions');
@@ -158,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			path = '/notifications';
 		} else if (this.HTML_FRAG_ROUTE.test(fragment)) {
 			path = '/id/';
-			id = ParseUtils.parseNtiFragment(fragment);
+			id = lazy.ParseUtils.parseNtiFragment(fragment);
 		} else {
 			console.error('Fragement route we dont know how to handle.', fragment);
 		}

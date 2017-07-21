@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const {getURL} = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const TimeUtils = require('legacy/util/Time');
 const ModelWithPublish = require('legacy/mixins/ModelWithPublish');
 
@@ -107,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 		return Service.request(url)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			})
 			.catch(function (reason) {
 				console.error('Failed to get the assignment save point: ', reason);
@@ -125,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 		return Service.request(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			});
 	},
 

@@ -3,7 +3,8 @@ const { encodeForURI } = require('nti-lib-ntiids');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const {isMe} = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {getFormattedString} = require('legacy/util/Localization');
 
 require('legacy/model/courseware/CourseActivity');
@@ -69,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 			json.Class = 'CourseActivity'; //doesn't have a class?
 
-			var activity = ParseUtils.parseItems([json])[0],
+			var activity = lazy.ParseUtils.parseItems([json])[0],
 				links = Ext.data.Types.LINKS.convert(json.Links);
 
 			me.nextPageURL = links.getRelHref('batch-next');
@@ -105,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (rec) {
 			const creator = UserRepository.getUser(f.get('Creator'));
 			const student = Service.request(path).then(function (submission) {
-				submission = ParseUtils.parseItems(submission)[0];
+				submission = lazy.ParseUtils.parseItems(submission)[0];
 				var user = submission.get('Creator');
 				rec.set('user', user);
 

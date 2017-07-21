@@ -4,7 +4,8 @@ const UserdataActions = require('legacy/app/userdata/Actions');
 const UserdataStateStore = require('legacy/app/userdata/StateStore');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
 const Post = require('legacy/model/forums/Post');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {isMe} = require('legacy/util/Globals');
 
 const ForumStore = require('./StateStore');
@@ -47,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 
 		return comment.saveData({url: postLink})
 			.then(function (response) {
-				var rec = isEdit ? comment : ParseUtils.parseItems(response)[0];
+				var rec = isEdit ? comment : lazy.ParseUtils.parseItems(response)[0];
 
 				//TODO: increment PostCount in topic the same way we increment reply count in notes.
 				if (!isEdit) {
@@ -120,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				return Promise.reject(resason);
 			})
 			.then (function (response) {
-				var entry = isEdit ? record : ParseUtils.parseItems(response)[0];
+				var entry = isEdit ? record : lazy.ParseUtils.parseItems(response)[0];
 
 				if (autoPublish !== undefined) {
 					if (autoPublish !== entry.isPublished()) {
@@ -222,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 					if (!recordForStore) {
 						//Each store gets its own copy of the record. A null value indicates we already added one to a
 						//store, so we need a new instance. Read it out of the original raw value.
-						recordForStore = ParseUtils.parseItems([topic.raw])[0];
+						recordForStore = lazy.ParseUtils.parseItems([topic.raw])[0];
 					}
 
 					//The store will handle making all the threading/placement, etc

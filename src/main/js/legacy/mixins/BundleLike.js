@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 module.exports = exports = Ext.define('NextThought.mixins.BundleLike', {
@@ -8,10 +9,10 @@ module.exports = exports = Ext.define('NextThought.mixins.BundleLike', {
 
 	containsNTIID: function (id) {
 		var packs = this.get('ContentPackages') || [],
-			prefix = ParseUtils.ntiidPrefix(id);
+			prefix = lazy.ParseUtils.ntiidPrefix(id);
 
 		var matches = packs.filter(function (p) {
-			return ParseUtils.ntiidPrefix(p.get('NTIID')) === prefix;
+			return lazy.ParseUtils.ntiidPrefix(p.get('NTIID')) === prefix;
 		});
 
 		return matches.length > 0;

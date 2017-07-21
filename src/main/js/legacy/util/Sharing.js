@@ -1,10 +1,11 @@
 const Ext = require('extjs');
 
 const {isMe} = require('legacy/util/Globals');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('./Parsing'));
 
 const UserRepository = require('../cache/UserRepository');
 
-const ParseUtils = require('./Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.util.Sharing', {
@@ -59,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		result = result.slice();
 
 		Ext.each(result, function (r, i, a) {
-			if (ParseUtils.isNTIID(r)) {
+			if (lazy.ParseUtils.isNTIID(r)) {
 				a[i] = UserRepository.getStore().findRecord('NTIID', r, 0, false, true, true) || r; //HACK!!
 				if (!Ext.isString(a[i])) {
 					a[i] = a[i].get('Username');
@@ -114,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		//if the post is public add the ntiids to the tags
 		if (isPublic) {
 			Ext.each(explicitNtiids, function (u) {
-				if (ParseUtils.isNTIID(u)) {
+				if (lazy.ParseUtils.isNTIID(u)) {
 					result.tags.push(u);
 				}
 			});
@@ -184,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	//get the sharedInfo from the sharedWith and the tags
 	tagShareToSharedInfo: function (sharedWith, tags, published) {
 		var nts = Ext.Array.filter(tags, function (t) {
-			return ParseUtils.isNTIID(t);
+			return lazy.ParseUtils.isNTIID(t);
 		});
 
 		//if its not published use the default sharedInfo

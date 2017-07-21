@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const LoginStateStore = require('legacy/login/StateStore');
 
 const UserdataStateStore = require('../userdata/StateStore');
@@ -66,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 		this.NotificationsStore.getStore().then(function (store) {
 			if (!store) { return; }
 			if (!change.isModel) {
-				change = ParseUtils.parseItems([change])[0];
+				change = lazy.ParseUtils.parseItems([change])[0];
 			}
 
 			if (change.isNotable()) {

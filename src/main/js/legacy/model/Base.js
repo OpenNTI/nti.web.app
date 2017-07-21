@@ -5,7 +5,8 @@ const {EventEmitter} = require('events');
 const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const TimeUtils = require('legacy/util/Time');
 
 
@@ -274,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		json = {...this.getRaw(), ...json};
 
-		newRecord = ParseUtils.parseItems([json])[0];
+		newRecord = lazy.ParseUtils.parseItems([json])[0];
 
 		return this.syncWith(newRecord, silent);
 	},
@@ -793,7 +794,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 				Ext.callback(failCallback, this, arguments);
 			},
 			success: function (resp) {
-				var newMe = ParseUtils.parseItems(Ext.decode(resp.responseText))[0],
+				var newMe = lazy.ParseUtils.parseItems(Ext.decode(resp.responseText))[0],
 					sanitizedValue = newMe && newMe.get(fieldName);
 				if (!newMe) {
 					console.warn('Could not parse response... %o', resp.responseText);
@@ -873,7 +874,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 					console.error('Resolving parent model failed');
 					return;
 				}
-				callback.call(scope || window, ParseUtils.parseItems(Ext.JSON.decode(resp.responseText))[0]);
+				callback.call(scope || window, lazy.ParseUtils.parseItems(Ext.JSON.decode(resp.responseText))[0]);
 			}
 		};
 

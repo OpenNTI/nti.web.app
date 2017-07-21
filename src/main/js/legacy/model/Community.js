@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/mixins/GroupLike');
 require('legacy/mixins/Avatar');
@@ -108,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 
 		this.loadForumList = Service.request(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			})
 			.then(function (board) {
 				var content = board && board.getLink('contents');
@@ -118,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 			.then(function (response) {
 				var json = JSON.parse(response);
 
-				return ParseUtils.parseItems(json.Items);
+				return lazy.ParseUtils.parseItems(json.Items);
 			})
 			.catch(function (reason) {
 				console.error('Failed to load forum list for community:', reason);

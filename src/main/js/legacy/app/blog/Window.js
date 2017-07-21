@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const PersonalBlogEntry = require('legacy/model/forums/PersonalBlogEntry');
 const PersonalBlogComment = require('legacy/model/forums/PersonalBlogComment');
 const PersonalBlogEntryPost = require('legacy/model/forums/PersonalBlogEntryPost');
@@ -65,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 
 		return Service.request(href)
 			.then(function (resp) {
-				return ParseUtils.parseItems(resp)[0];
+				return lazy.ParseUtils.parseItems(resp)[0];
 			});
 	},
 

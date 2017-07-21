@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const ContentUtils = require('legacy/util/Content');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
@@ -193,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 	bookPrefixIfQuestion: function (id) {
-		return ParseUtils.ntiidPrefix(id);
+		return lazy.ParseUtils.ntiidPrefix(id);
 	}
 
 }).create();

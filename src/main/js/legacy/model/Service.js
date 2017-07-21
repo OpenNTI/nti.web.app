@@ -2,9 +2,9 @@ const Ext = require('extjs');
 
 const {getString} = require('legacy/util/Localization');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
 const lazy = require('legacy/util/lazy-require')
-	.get('UserDataActions', () => require('legacy/app/userdata/Actions'));
+	.get('UserDataActions', () => require('legacy/app/userdata/Actions'))
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 const Community = require('./Community');
 
@@ -472,7 +472,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 					keys = Object.keys(items) || [];
 
 				keys.forEach(function (key) {
-					items[key] = ParseUtils.parseItems(items[key])[0];
+					items[key] = lazy.ParseUtils.parseItems(items[key])[0];
 				});
 
 				return json.Items;
@@ -499,7 +499,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 					keys = Object.keys(items) || [];
 
 				keys.forEach(function (key) {
-					items[key] = ParseUtils.parseItems(items[key])[0];
+					items[key] = lazy.ParseUtils.parseItems(items[key])[0];
 				});
 
 				return items;
@@ -539,7 +539,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			params = targetBundle ? { course: targetBundle.getId() } : {},
 			mime = 'application/vnd.nextthought.pageinfo';
 
-		if (!ParseUtils.isNTIID(ntiid)) {
+		if (!lazy.ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
 			return Promise.reject('Bad NTIID');
 		}
@@ -576,7 +576,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 
 		function onSuccess (resp) {
-			var pageInfos = ParseUtils.parseItems(resp.responseText),
+			var pageInfos = lazy.ParseUtils.parseItems(resp.responseText),
 				//We claim success but the damn browsers like to give the wrong object
 				//type from cache.	They don't seem to listen to Vary: Accept or any
 				//of the other myriad of caching headers supplied by the server
@@ -655,7 +655,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return this.getObjectRaw(url, mime, forceMime, targetBundle)
 			.then((resp) => {
-				return ParseUtils.parseItems(resp.responseText)[0];
+				return lazy.ParseUtils.parseItems(resp.responseText)[0];
 			})
 			.catch(() => {
 				return;
@@ -666,7 +666,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 	getObject: function (ntiid, success, failure, scope, safe, targetBundle) {
 		var url, result;
 
-		if (!ParseUtils.isNTIID(ntiid)) {
+		if (!lazy.ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
 			return Promise.reject('Bad NTIID');
 		}
@@ -676,7 +676,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		result = this.getObjectRaw(url, null, false, targetBundle)
 			.then(function (resp) {
 				try {
-					return ParseUtils.parseItems(resp.responseText)[0];
+					return lazy.ParseUtils.parseItems(resp.responseText)[0];
 				}catch (e) {
 					if (!safe) {
 						throw e;
@@ -751,7 +751,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 	__resolveBoards: function (link, community) {
 		return Service.request(link)
-			.then(ParseUtils.parseItems.bind(ParseUtils))
+			.then(lazy.ParseUtils.parseItems.bind(lazy.ParseUtils))
 			.then(function (objs) {
 				//if we have a community go ahead and set it as the creator of the board it created
 				//otherwise just return the boards as is

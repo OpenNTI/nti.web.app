@@ -2,7 +2,8 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 const {getString} = require('legacy/util/Localization');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {isMe} = require('legacy/util/Globals');
 
 
@@ -243,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 			me.user.save({
 				success: function (resp) {
 					var o = resp.responseText,
-						newUser = ParseUtils.parseItems(o)[0];
+						newUser = lazy.ParseUtils.parseItems(o)[0];
 
 					//NOTE: Update the links that way in case the email changed, we request verification.
 					me.user.set('Links', newUser.get('Links'));

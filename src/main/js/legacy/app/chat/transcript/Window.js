@@ -2,7 +2,8 @@ const Ext = require('extjs');
 
 const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const Transcript = require('legacy/model/Transcript');
 const TranscriptSummary = require('legacy/model/TranscriptSummary');
 const {isMe} = require('legacy/util/Globals');
@@ -43,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		} else {
 			Service.request(this.record.getLink('transcript'))
 				.then(function (value) {
-					return ParseUtils.parseItems(value)[0];
+					return lazy.ParseUtils.parseItems(value)[0];
 				})
 				.then(this.insertTranscript.bind(this))
 				.then(this.remove.bind(this, this.loadingCmp));

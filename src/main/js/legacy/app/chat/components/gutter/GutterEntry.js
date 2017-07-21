@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {isMe} = require('legacy/util/Globals');
 
 
@@ -86,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Gu
 
 		// Check if we don't have this message yet
 		var skip = false, i, count;
-		msg = msg && msg.isModel ? msg : ParseUtils.parseItems(msg)[0];
+		msg = msg && msg.isModel ? msg : lazy.ParseUtils.parseItems(msg)[0];
 		for (i = 0; i < this.unreadMessageIds.length; i++) {
 			if(this.unreadMessageIds[i] === msg.getId()) {
 				skip = true;

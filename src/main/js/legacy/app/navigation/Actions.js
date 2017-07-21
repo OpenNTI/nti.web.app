@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const PageInfo = require('legacy/model/PageInfo');
 
 const ContextStateStore = require('../context/StateStore');
@@ -44,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 
 			//If we are an NTIID find a component in the context
 			//that can handle showing it
-			if (ParseUtils.isNTIID(newBase)) {
+			if (lazy.ParseUtils.isNTIID(newBase)) {
 				//TODO: figure this out
 				Ext.getBody().el.mask('Loading...');
 				Service.getObject(newBase)

@@ -3,7 +3,8 @@ const Ext = require('extjs');
 const {getString, getFormattedString} = require('legacy/util/Localization');
 const ContentUtils = require('legacy/util/Content');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const AssessedQuestionSet = require('legacy/model/assessment/AssessedQuestionSet');
 const PageInfo = require('legacy/model/PageInfo');
 
@@ -286,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.setAsNotStarted();
 		}
 		else {
-			json = ParseUtils.parseItems(json)[0];
+			json = lazy.ParseUtils.parseItems(json)[0];
 			correct = json.getCorrectCount();
 			total = json.getTotalCount();
 		}

@@ -4,7 +4,8 @@ const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 const UserRepository = require('legacy/cache/UserRepository');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const PageSource = require('legacy/util/PageSource');
 const PagedPageSource = require('legacy/util/PagedPageSource');
 const User = require('legacy/model/User');
@@ -221,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 					})
 					.then(function (history) {
 						var reader = me.assignment,
-							item = ParseUtils.parseItems(history)[0];
+							item = lazy.ParseUtils.parseItems(history)[0];
 
 						if (reader && reader.updateHistory) {
 							reader.updateHistory(item);

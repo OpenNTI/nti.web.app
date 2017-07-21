@@ -4,7 +4,8 @@ const {wait} = require('nti-commons');
 
 const AnnotationUtils = require('legacy/util/Annotations');
 const DomUtils = require('legacy/util/Dom');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const RangeUtils = require('legacy/util/Ranges');
 const SharingUtils = require('legacy/util/Sharing');
 const {guidGenerator: guidFn} = require('legacy/util/Globals');
@@ -2168,7 +2169,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 	setTags: function (tags) {
 		tags = Ext.Array.filter(tags || [], function (t) {
-			return !ParseUtils.isNTIID(t);
+			return !lazy.ParseUtils.isNTIID(t);
 		});
 
 		if (this.tags) {

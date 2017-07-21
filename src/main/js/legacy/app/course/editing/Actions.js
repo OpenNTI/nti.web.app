@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 const ConflictActions = require('../../conflict/Actions');
 
@@ -94,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 
 				return assignment;
 			}).catch((response) => {
-				var conflict = response && response.status === 409 && response.responseText && ParseUtils.parseItems(response.responseText)[0];
+				var conflict = response && response.status === 409 && response.responseText && lazy.ParseUtils.parseItems(response.responseText)[0];
 
 				if (conflict) {
 					return this.__resolveConflict(conflict, data)

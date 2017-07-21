@@ -5,7 +5,8 @@ const SlideDeck = require('legacy/common/ux/SlideDeck');
 const ContentUtils = require('legacy/util/Content');
 const Globals = require('legacy/util/Globals');
 const ObjectUtils = require('legacy/util/Object');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {getString} = require('legacy/util/Localization');
 const NavigationActions = require('legacy/app/navigation/Actions');
 
@@ -329,7 +330,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 		Ext.Array.each(links, function (l) {
 			var link = Ext.fly(l),
-				ntiid = ParseUtils.parseNTIID(link.getAttribute('href') || ''),
+				ntiid = lazy.ParseUtils.parseNTIID(link.getAttribute('href') || ''),
 				type, provider, typeSpecific, externalLink;
 
 			if (ntiid) {

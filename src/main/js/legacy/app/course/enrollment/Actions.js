@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const PathActions = require('legacy/app/navigation/path/Actions');
 
 const CoursesStateStore = require('../../library/courses/StateStore');
@@ -110,14 +111,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 		me.__toggleEnrollmentStatus(course)
 			.then(function (response) {
 				var updateCatalog, updateEnrolled,
-					courseEnrollment = ParseUtils.parseItems(response)[0],
+					courseEnrollment = lazy.ParseUtils.parseItems(response)[0],
 					courseInstance = courseEnrollment.get('CourseInstance');
 
 				course.setEnrolled(true);
 
 				updateCatalog = Service.request(courseInstance.getLink('CourseCatalogEntry'))
 					.then(function (catalogEntry) {
-						catalogEntry = ParseUtils.parseItems(catalogEntry)[0];
+						catalogEntry = lazy.ParseUtils.parseItems(catalogEntry)[0];
 
 						course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
 						// me.CourseStore.updatedAvailableCourses();

@@ -2,7 +2,8 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const SharingUtils = require('legacy/util/Sharing');
 const {getString} = require('legacy/util/Localization');
 const Blog = require('legacy/store/Blog');
@@ -64,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 
 		r.headline = headline.getData();
 		r.headline.tags = Ext.Array.filter(r.headline.tags, function (t) {
-			return !ParseUtils.isNTIID(t);
+			return !lazy.ParseUtils.isNTIID(t);
 		});
 	},
 
@@ -101,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 			if (Ext.isArray(value) && key === 'tags') {
 				len = value.length;
 
-				value = Ext.Array.filter(value, function (v) { return !ParseUtils.isNTIID(v); });
+				value = Ext.Array.filter(value, function (v) { return !lazy.ParseUtils.isNTIID(v); });
 				if (len !== value.length) {
 					this.setPublishAndSharingState();
 				}

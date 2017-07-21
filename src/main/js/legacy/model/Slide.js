@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const ContentUtils = require('legacy/util/Content');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 const PlaylistItem = require('./PlaylistItem');
 require('./Base');
@@ -64,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 					'dom-clone': frag
 				};
 
-			query = Ext.String.format(query, ParseUtils.escapeId(vid));
+			query = Ext.String.format(query, lazy.ParseUtils.escapeId(vid));
 			nodes = el.select(query);
 
 			if (!nodes.first()) {
@@ -93,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 
 			frag.appendChild(dom.cloneNode(true));
 
-			return ParseUtils.parseItems(o)[0];
+			return lazy.ParseUtils.parseItems(o)[0];
 
 
 			function getParam (name) {

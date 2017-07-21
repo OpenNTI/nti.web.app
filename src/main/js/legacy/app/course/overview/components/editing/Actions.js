@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/common/Actions');
 
@@ -139,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return Service.put(link, values)
 			.then(function (response) {
-				var rec = ParseUtils.parseItems(response)[0];
+				var rec = lazy.ParseUtils.parseItems(response)[0];
 
 				record.syncWith(rec);
 				return record;
@@ -250,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return Service.post(link, {'publishBeginning': date})
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			})
 			.then(function (rec) {
 				record.syncWith(rec, true);
@@ -267,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return Service.post(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			})
 			.then(function (rec) {
 				record.syncWith(rec, true);
@@ -291,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return Service.post(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			})
 			.then(function (rec) {
 				record.syncWith(rec, true);

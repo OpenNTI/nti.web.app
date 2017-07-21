@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {getURL} = require('legacy/util/Globals');
 const ContentUtils = require('legacy/util/Content');
 
@@ -66,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	statics: {
 		fromPackage: function (contentPackage) {
 			var id = contentPackage.get('NTIID') + '-auto-bundle',
-				reader = ParseUtils.getReaderFor({MimeType: 'application/vnd.nextthought.contentbundle'}),
+				reader = lazy.ParseUtils.getReaderFor({MimeType: 'application/vnd.nextthought.contentbundle'}),
 				data = Ext.applyIf({ ContentPackages: [contentPackage], href: '/' }, contentPackage.raw),
 				convertedValues,
 				record = this.create(undefined, id, data, convertedValues = {});
@@ -326,7 +327,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			})
 			.then(function (json) {
 				json = JSON.parse(json);
-				json.Items = ParseUtils.parseItems(json.Items);
+				json.Items = lazy.ParseUtils.parseItems(json.Items);
 
 				var store = ForumsBoard.buildContentsStoreFromData(me.getId() + '-board', json.Items);
 
@@ -344,7 +345,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			//get the cached request, or make a new one.
 			p = me.__BoardResolver || (((link && Service.request(link)) || Promise.reject('No Discussion Board Link'))
 				//parse
-				.then(ParseUtils.parseItems.bind(ParseUtils))
+				.then(lazy.ParseUtils.parseItems.bind(lazy.ParseUtils))
 				//unwrap from the array
 				.then(function (items) {
 					if (items.length > 1) {console.warn('Too many items found.');}

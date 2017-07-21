@@ -1,7 +1,8 @@
 /*eslint no-undef:1*/
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const StoreUtils = require('legacy/util/Store');
 const NTI = require('legacy/store/NTI');
 
@@ -121,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 		return Service.request(content)
 			.then(function (json) {
 				json = (json && JSON.parse(json)) || {};
-				json.Items = json.Items && ParseUtils.parseItems(json.Items);
+				json.Items = json.Items && lazy.ParseUtils.parseItems(json.Items);
 
 				var store = Board.buildContentsStoreFromData(me.getContentsStoreId(), json.Items);
 

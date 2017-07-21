@@ -3,7 +3,8 @@ const {wait} = require('nti-commons');
 
 const User = require('legacy/model/User');
 const PresenceInfo = require('legacy/model/PresenceInfo');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {isMe, isFeature} = require('legacy/util/Globals');
 const {Deferred} = require('legacy/util/Promise');
 const ChatStateStore = require('legacy/app/chat/StateStore');
@@ -83,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		var s = this.getStore(), uid, u;
 
 		if (refreshedUser.getId === undefined) {
-			refreshedUser = ParseUtils.parseItems(refreshedUser)[0];
+			refreshedUser = lazy.ParseUtils.parseItems(refreshedUser)[0];
 		}
 
 		uid = refreshedUser.getId();
@@ -238,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 				}
 				else {
 					//JSON representation of User
-					r = ParseUtils.parseItems(o)[0];
+					r = lazy.ParseUtils.parseItems(o)[0];
 					if (!r || !r.getModelName) {
 						Ext.Error.raise({message: 'Unknown result', object: r});
 					}
@@ -252,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 					return;
 				}
 
-				if (ParseUtils.isNTIID(name)) {
+				if (lazy.ParseUtils.isNTIID(name)) {
 					Service.getObject(name)
 						.then(function (u) {
 							maybeFinish(name, me.cacheUser(u, true));
@@ -485,7 +486,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 						o = User.create(o, n);
 					} else {
 						console.warn('Parsing a non-user: "%s" %o', n, o);
-						o = ParseUtils.parseItems(o)[0];
+						o = lazy.ParseUtils.parseItems(o)[0];
 					}
 					o.summaryObject = true;
 					me.cacheUser(o, true);
@@ -622,7 +623,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			}
 
 			var json = Ext.decode(r.responseText),
-				list = ParseUtils.parseItems(json.Items);
+				list = lazy.ParseUtils.parseItems(json.Items);
 
 			if (list && list.length > 1) {
 				console.warn('many matching users: "', username, '"', list);

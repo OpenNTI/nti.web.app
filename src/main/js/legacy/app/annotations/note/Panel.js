@@ -8,7 +8,8 @@ const AnnotationUtils = require('legacy/util/Annotations');
 const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
 const SharingUtils = require('legacy/util/Sharing');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {getString} = require('legacy/util/Localization');
 const ContentViewerActions = require('legacy/app/contentviewer/Actions');
 const UserDataActions = require('legacy/app/userdata/Actions');
@@ -421,7 +422,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			if (me.editMode) {
 				p = me.UserDataActions.saveUpdatedNote(r, v.body || [], v.title)
 					.then(function (response) {
-						let rec = ParseUtils.parseItems(response)[0];
+						let rec = lazy.ParseUtils.parseItems(response)[0];
 						r.fireEvent('updated', rec);
 						callback(true, rec);
 					})

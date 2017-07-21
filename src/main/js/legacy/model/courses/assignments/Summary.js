@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 const User = require('../../User');
 
@@ -37,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Sum
 		return Service.request(link)
 			.then((resp) => {
 				const json = JSON.parse(resp);
-				const grade = ParseUtils.parseItems(json.PredictedGrade)[0];
+				const grade = lazy.ParseUtils.parseItems(json.PredictedGrade)[0];
 				const predicted = grade.isPredicted() ?
 					{Correctness: grade.get('Correctness'), Grade: grade.get('Grade'), RawValue: grade.get('RawValue')} :
 					null;

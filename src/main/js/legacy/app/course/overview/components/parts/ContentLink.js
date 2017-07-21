@@ -9,7 +9,8 @@ const PageInfo = require('legacy/model/PageInfo');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/mixins/EllipsisText');
 require('legacy/common/components/cards/Card');
@@ -79,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (Globals.ROOT_URL_PATTERN.test(href)) {
 			href = Globals.getURL(href);
-		} else if (!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
+		} else if (!lazy.ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
 			href = Globals.getURL((root || '') + href);
 		}
 
@@ -130,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var ntiid = this.data.href,
 			req;
 
-		if (!ParseUtils.isNTIID(ntiid)) {
+		if (!lazy.ParseUtils.isNTIID(ntiid)) {
 			ntiid = this.data.ntiid;
 			if (!ntiid) {
 				return;
@@ -186,7 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		var config;
 
-		if (ParseUtils.isNTIID(this.target)) {
+		if (lazy.ParseUtils.isNTIID(this.target)) {
 			config = PageInfo.fromOutlineNode(this.data);
 		} else {
 			config = RelatedWork.fromOutlineNode(this.data);

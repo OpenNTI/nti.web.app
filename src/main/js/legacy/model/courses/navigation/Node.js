@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node', {
@@ -119,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 		if (!this.associatedNode) {
 			ntiid = n.getAttribute('topic-ntiid') || '';
 			this.associatedNode = /topic/i.test(n.nodeName) ? n : Ext.DomQuery.selectNode(
-				'topic[ntiid="' + ParseUtils.escapeId(ntiid) + '"]',
+				'topic[ntiid="' + lazy.ParseUtils.escapeId(ntiid) + '"]',
 				n.ownerDocument);
 			if (!this.associatedNode) {
 				console.warn('Could not find associated topic', n);

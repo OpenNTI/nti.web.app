@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('../user/components/membership/parts/Membership');
 
@@ -36,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Sugge
 			.then(function (responseBody) {
 				var json = JSON.parse(responseBody) || {},
 					items = json.Items;
-				return ParseUtils.parseItems(items);
+				return lazy.ParseUtils.parseItems(items);
 			})
 			.then(function (entities) {
 				if (entities.length) {

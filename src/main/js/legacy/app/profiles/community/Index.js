@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('legacy/mixins/Router');
@@ -102,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			.then(function (response) {
 				var json = JSON.parse(response) || {};
 
-				return ParseUtils.parseItems(json.Items)[0];
+				return lazy.ParseUtils.parseItems(json.Items)[0];
 			})
 			.then(function (community) {
 				me.activeCommunity = community;
@@ -273,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 		join
 			.then(function (response) {
-				me.activeCommunity = ParseUtils.parseItems(response)[0];
+				me.activeCommunity = lazy.ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 				me.replaceRoute('Activity', '/');
 			})
@@ -296,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 		leave
 			.then(function (response) {
-				me.activeCommunity = ParseUtils.parseItems(response)[0];
+				me.activeCommunity = lazy.ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 				me.replaceRoute('Activity', '/');
 			})
@@ -318,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 		show
 			.then(function (response) {
-				me.activeCommunity = ParseUtils.parseItems(response)[0];
+				me.activeCommunity = lazy.ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
 			.catch(function (reason) {
@@ -339,7 +340,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 		hide
 			.then(function (response) {
-				me.activeCommunity = ParseUtils.parseItems(response)[0];
+				me.activeCommunity = lazy.ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
 			.catch(function (reason) {

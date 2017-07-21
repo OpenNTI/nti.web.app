@@ -3,7 +3,8 @@ const {wait} = require('nti-commons');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const GroupsStateStore = require('legacy/app/groups/StateStore');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const NavigationStateStore = require('legacy/app/navigation/StateStore');
@@ -109,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			occupantsKeys = this.ChatStore.getAllOccupantsKeyAccepted() || [];
 
 		occupantsKeys.forEach(function (occupantsKey) {
-			var isNTIID = ParseUtils.isNTIID(occupantsKey),
+			var isNTIID = lazy.ParseUtils.isNTIID(occupantsKey),
 				users = isNTIID === false ? occupantsKey.split('_') : [],
 				o = Ext.Array.remove(users.slice(), $AppConfig.username);
 
@@ -180,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			isActiveChat = false;
 
 		occupantsKeys.forEach(function (occupantsKey) {
-			var isNTIID = ParseUtils.isNTIID(occupantsKey),
+			var isNTIID = lazy.ParseUtils.isNTIID(occupantsKey),
 				users = isNTIID === false ? occupantsKey.split('_') : [],
 				o = Ext.Array.remove(users.slice(), $AppConfig.username);
 

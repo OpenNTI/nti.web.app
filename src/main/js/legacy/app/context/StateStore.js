@@ -3,7 +3,8 @@ const { decodeFromURI } = require('nti-lib-ntiids');
 
 const ContentIndex = require('legacy/app/content/content/Index');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/common/StateStore');
 
@@ -117,11 +118,11 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 			last = parts.last(),
 			part = {};
 
-		if (ParseUtils.isEncodedNTIID(first)) {
+		if (lazy.ParseUtils.isEncodedNTIID(first)) {
 			part.id = decodeFromURI(first);
 			part.rawId = first;
 			part.state = decodeURIComponent(last);
-		} else if (ParseUtils.isEncodedNTIID(last)) {
+		} else if (lazy.ParseUtils.isEncodedNTIID(last)) {
 			part.id = decodeFromURI(last);
 			part.rawId = last;
 			part.mimeType = decodeURIComponent(first);

@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const UtilUserDataThreader = require('legacy/util/UserDataThreader');
 require('../proxy/reader/Json');
 require('legacy/model/GenericObject');
@@ -310,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 
 				if (!current) {
 					//create a new one since the record we were given was already added somewhere
-					newRecord = ParseUtils.parseItems([rec.raw])[0];
+					newRecord = lazy.ParseUtils.parseItems([rec.raw])[0];
 					if (newRecord) {
 						me.add(newRecord);
 					}

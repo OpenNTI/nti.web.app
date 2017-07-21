@@ -3,7 +3,8 @@ const Ext = require('extjs');
 const PromptActions = require('legacy/app/prompt/Actions');
 const PageInfo = require('legacy/model/PageInfo');
 const ContentUtils = require('legacy/util/Content');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {guidGenerator} = require('legacy/util/Globals');
 
 const AttachmentWindow = require('./components/attachment/Window');
@@ -51,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 			DH = Ext.DomHelper;
 
 		return new Promise((fulfill, reject) => {
-			if (ParseUtils.isNTIID(href)) {
+			if (lazy.ParseUtils.isNTIID(href)) {
 				Service.getPageInfo(href, void 0, void 0, void 0, bundle)
 					.then(x => fulfill(x))
 					.catch(() => reject());
@@ -229,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 
 	showAttachmentInPreviewMode: function (contentFile, parentRecord) {
-		var rec = ParseUtils.parseItems(contentFile)[0],
+		var rec = lazy.ParseUtils.parseItems(contentFile)[0],
 			type = contentFile && (contentFile.fileMimeType || contentFile.contentType);
 
 		if (!AttachmentWindow.canShowFile(type)) {

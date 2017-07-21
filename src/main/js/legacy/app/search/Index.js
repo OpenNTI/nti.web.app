@@ -6,7 +6,8 @@ const PathActions = require('legacy/app/navigation/path/Actions');
 const LibraryActions = require('legacy/app/library/Actions');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const {isFeature} = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const StoreUtils = require('legacy/util/Store');
 
 const SearchActions = require('./Actions');
@@ -49,9 +50,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 				getBreadCrumb: (obj) => {
 					let rec;
 					if(typeof obj.toJSON === 'function') {
-						rec = ParseUtils.parseItems(obj.toJSON())[0];
+						rec = lazy.ParseUtils.parseItems(obj.toJSON())[0];
 					} else {
-						rec = ParseUtils.parseItems(obj)[0];
+						rec = lazy.ParseUtils.parseItems(obj)[0];
 					}
 
 					return this.PathActions.getBreadCrumb(rec)
@@ -63,8 +64,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					this.filtersWidget.show();
 				},
 				navigateToSearchHit: (record, hit, frag, containerId) => {
-					record = ParseUtils.parseItems(record)[0];
-					hit = ParseUtils.parseItems(hit)[0];
+					record = lazy.ParseUtils.parseItems(record)[0];
+					hit = lazy.ParseUtils.parseItems(hit)[0];
 					this.SearchStore.setHitForContainer(containerId, hit, frag);
 
 					const failedNavigate = () => {
@@ -456,8 +457,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 	navigateToSearchHit: function (record, hit, frag, containerId) {
 		containerId  = containerId || (hit.get('Containers') || [])[0];
-		record = ParseUtils.parseItems(record)[0];
-		hit = ParseUtils.parseItems(hit)[0];
+		record = lazy.ParseUtils.parseItems(record)[0];
+		hit = lazy.ParseUtils.parseItems(hit)[0];
 		this.SearchStore.setHitForContainer(containerId, hit, frag);
 
 		this.Router.root.attemptToNavigateToObject(record);

@@ -2,7 +2,8 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 const Toaster = require('legacy/common/toast/Manager');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const Socket = require('legacy/proxy/Socket');
 const RoomInfo = require('legacy/model/RoomInfo');
 const {isMe} = require('legacy/util/Globals');
@@ -364,7 +365,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 	buildTranscriptId: function (roomInfoId, uname, type) {
-		var id = ParseUtils.parseNTIID(roomInfoId);
+		var id = lazy.ParseUtils.parseNTIID(roomInfoId);
 
 		if (!id) {
 			return null;

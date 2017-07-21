@@ -2,7 +2,8 @@ const Ext = require('extjs');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {getString} = require('legacy/util/Localization');
 const UserdataActions = require('legacy/app/userdata/Actions');
 const PersonalBlogEntryPost = require('legacy/model/forums/PersonalBlogEntryPost');
@@ -72,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 		return post.saveData({url: isEdit ? undefined : blog && blog.getLink('add')})
 			.then (response => {
-				var entry = isEdit ? record : ParseUtils.parseItems(response)[0];
+				var entry = isEdit ? record : lazy.ParseUtils.parseItems(response)[0];
 
 				//the first argument is the record...problem is, it was a post, and the response from the server is
 				// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
@@ -167,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 		return commentPost.saveData({url: isEdit ? undefined : blogPost && blogPost.getLink('add')})
 			.then(function (response) {
-				var rec = isEdit ? commentPost : ParseUtils.parseItems(response)[0];
+				var rec = isEdit ? commentPost : lazy.ParseUtils.parseItems(response)[0];
 				if (!isEdit) {
 					blogPost.set('PostCount', blogPost.get('PostCount') + 1);
 				}

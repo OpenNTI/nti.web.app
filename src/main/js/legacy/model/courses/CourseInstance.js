@@ -8,7 +8,8 @@ const CoursewareStream = require('legacy/store/courseware/Stream');
 const Navigation = require('legacy/store/courseware/Navigation');
 const ObjectUtils = require('legacy/util/Object');
 const OutlineInterface = require('legacy/store/courseware/OutlineInterface');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const ToCBasedOutline = require('legacy/store/courseware/ToCBasedOutline');
 
 const AssignmentCollection = require('../courses/AssignmentCollection');
@@ -649,7 +650,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				} else if (this.hasLink('UserCoursePreferredAccess')) {
 					Service.request(me.getLink('UserCoursePreferredAccess'))
 						.then((resp) => {
-							fulfill(ParseUtils.parseItems(JSON.parse(resp))[0]);
+							fulfill(lazy.ParseUtils.parseItems(JSON.parse(resp))[0]);
 						});
 				} else {
 					me.stores.forEach(function (obj) {
@@ -856,7 +857,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			url: link,
 			timeout: 120000 //2 minutes
 		})
-			.then(function (json) { return ParseUtils.parseItems(json)[0]; });
+			.then(function (json) { return lazy.ParseUtils.parseItems(json)[0]; });
 
 		return this.__getGradeBookPromise;
 	},
@@ -920,7 +921,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					if (link) {
 						return Service.request(link)
 							.then(function (response) {
-								return ParseUtils.parseItems(response)[0];
+								return lazy.ParseUtils.parseItems(response)[0];
 							})
 							.catch(function () {
 								return UsersCourseAssignmentSavepoint.create();
@@ -947,7 +948,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					let json = JSON.parse(response);
 					let surveys = [];
 					json.Items.forEach(function (item) {
-						surveys.push(ParseUtils.parseItems(item)[0]);
+						surveys.push(lazy.ParseUtils.parseItems(item)[0]);
 					});
 					return surveys;
 				});
@@ -1010,7 +1011,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			.then(function (resp) {
 				var json = JSON.parse(resp);
 
-				return ParseUtils.parseItems(json.Items);
+				return lazy.ParseUtils.parseItems(json.Items);
 			})
 			.catch(function (reason) {
 				console.error('Failed to load assets: ', reason, type);
@@ -1048,7 +1049,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				}
 			}
 
-			return ParseUtils.parseItems(items);
+			return lazy.ParseUtils.parseItems(items);
 		}).catch(function (reason) {
 			console.error('Failed to load Discussions: ', reason);
 
@@ -1359,7 +1360,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				try {
 					section = JSON.parse(response);
 
-					sectionContents = ParseUtils.parseItems(section.Items);
+					sectionContents = lazy.ParseUtils.parseItems(section.Items);
 				} catch (e) {
 					console.error('Failed to pares section, ', e);
 
@@ -1380,7 +1381,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				try {
 					parent = JSON.parse(response);
 
-					parentContents = ParseUtils.parseItems(parent.Items);
+					parentContents = lazy.ParseUtils.parseItems(parent.Items);
 				} catch (e) {
 					console.error('Failed to parse parent, ', e);
 
@@ -1433,7 +1434,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			forums = [];
 
 		keys.forEach(function (key) {
-			var forum = ParseUtils.parseItems(items[key] || {})[0];
+			var forum = lazy.ParseUtils.parseItems(items[key] || {})[0];
 
 			if (!Ext.isEmpty(forum)) {
 				forums.sharingScope = key;
@@ -1500,7 +1501,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				const json = JSON.parse(response);
 				const raw = json.IsPredicted ? json.PredictedGrade : json.FinalGrade;
 
-				return ParseUtils.parseItems(raw)[0];
+				return lazy.ParseUtils.parseItems(raw)[0];
 			});
 	},
 
@@ -1511,7 +1512,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		return Service.request(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			});
 	},
 
@@ -1523,7 +1524,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return Service.request(link)
 			.then(function (response) {
 				var parent = JSON.parse(response);
-				return ParseUtils.parseItems(parent.Items);
+				return lazy.ParseUtils.parseItems(parent.Items);
 			});
 	}
 });

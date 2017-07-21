@@ -1,9 +1,9 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
 const Note = require('legacy/model/Note');
 const lazy = require('legacy/util/lazy-require')
-	.get('CourseOutlineContentNode', ()=> require('./CourseOutlineContentNode'));
+	.get('CourseOutlineContentNode', ()=> require('./CourseOutlineContentNode'))
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/mixins/OrderedContents');
 require('legacy/mixins/DurationCache');
@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 
 		return Service.request(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			});
 	},
 
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 			contents = Promise.resolve(null);
 		} else {
 			contents = Service.request(link)
-				.then(response => ParseUtils.parseItems(response)[0])
+				.then(response => lazy.ParseUtils.parseItems(response)[0])
 				.then(content => (content.outlineNode = this, content))
 				.catch(error => {
 					console.error('Unable to get contents because: %o', error.stack || error.message || error);

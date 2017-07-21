@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 const moment = require('moment');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const StoreUtils = require('legacy/util/Store');
 
 
@@ -89,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 				key: key
 			});
 
-			bins[i].Items = ParseUtils.parseItems(bins[i]);
+			bins[i].Items = lazy.ParseUtils.parseItems(bins[i]);
 
 			this.WEEK_MAP[key] = bins[i];
 		}

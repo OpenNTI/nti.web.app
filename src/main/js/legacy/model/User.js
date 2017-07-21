@@ -3,7 +3,8 @@ const Ext = require('extjs');
 const {getString} = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const Avatar = require('legacy/mixins/Avatar');
 
 const Community = require('./Community');
@@ -124,7 +125,7 @@ exports = Ext.define('NextThought.model.User', {
 			}
 
 			//DFLs come back in communities but their usernames are ntiids.
-			if (ParseUtils.isNTIID(c)) {
+			if (lazy.ParseUtils.isNTIID(c)) {
 				field = 'NTIID';
 			}
 
@@ -284,7 +285,7 @@ exports = Ext.define('NextThought.model.User', {
 				.then(function (response) {
 					var json = JSON.parse(response);
 
-					return ParseUtils.parseItems(json);
+					return lazy.ParseUtils.parseItems(json);
 				});
 		} else {
 			this.loadMemberships = Promise.reject();
@@ -402,7 +403,7 @@ exports = Ext.define('NextThought.model.User', {
 					return;
 				}
 
-				var u = ParseUtils.parseItems(r.responseText);
+				var u = lazy.ParseUtils.parseItems(r.responseText);
 				User.Repository.precacheUser(u.first());
 			}
 		};
@@ -454,7 +455,7 @@ exports = Ext.define('NextThought.model.User', {
 		return Service.request(link)
 			.then(function (response) {
 				var parent = JSON.parse(response);
-				return ParseUtils.parseItems(parent.Items);
+				return lazy.ParseUtils.parseItems(parent.Items);
 			});
 	},
 

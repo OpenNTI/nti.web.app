@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('./Assignment');
 
@@ -30,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.DiscussionAs
 			url,
 			params
 		}).then((resp) => {
-			return ParseUtils.parseItems([resp])[0];
+			return lazy.ParseUtils.parseItems([resp])[0];
 		});
 	}
 });

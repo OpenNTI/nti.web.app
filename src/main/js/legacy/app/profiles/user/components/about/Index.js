@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('../../../components/SuggestedContacts');
 require('./parts/Empty');
@@ -284,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			user.save({
 				success: function (resp) {
 					var o = resp.responseText,
-						newUser = ParseUtils.parseItems(o)[0];
+						newUser = lazy.ParseUtils.parseItems(o)[0];
 
 					me.successfulEdit = true;
 

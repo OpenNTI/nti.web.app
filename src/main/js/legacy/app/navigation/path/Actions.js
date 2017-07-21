@@ -2,10 +2,10 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
 const lazy = require('legacy/util/lazy-require')
 	.get('ContextStateStore', ()=> require('legacy/app/context/StateStore'))
-	.get('PathStateStore', ()=> require('./StateStore'));
+	.get('PathStateStore', ()=> require('./StateStore'))
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 const PartsAssignment = require('./parts/Assignment');
 const PartsContent = require('./parts/Content');
@@ -114,10 +114,10 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 					const path = json.find((item) => {
 						return item[0] && item[0].NTIID === bundle.getId();
 					});
-					return ParseUtils.parseItems(path || json[0]);
+					return lazy.ParseUtils.parseItems(path || json[0]);
 				}
 				else {
-					return ParseUtils.parseItems(json[0]);
+					return lazy.ParseUtils.parseItems(json[0]);
 				}
 			});
 
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 			items = json && json.Items,
 			obj = items && items[0];
 
-		obj = obj && ParseUtils.parseItems(obj)[0];
+		obj = obj && lazy.ParseUtils.parseItems(obj)[0];
 
 		if (obj && obj.getTitle) {
 			return [{

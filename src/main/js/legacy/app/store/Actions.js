@@ -3,7 +3,8 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const StoreUtils = require('legacy/util/Store');
 const LoginStateStore = require('legacy/login/StateStore');
 
@@ -189,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 					delete sender.lockPurchaseAction;
 
 					if (result) {
-						result = ParseUtils.parseItems(result)[0];
+						result = lazy.ParseUtils.parseItems(result)[0];
 					}
 
 					if (!result || !result.isPricedPurchase) {
@@ -297,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		var result = Ext.JSON.decode(response, true);
 
 		if (result) {
-			result = ParseUtils.parseItems(result.Items || result)[0];
+			result = lazy.ParseUtils.parseItems(result.Items || result)[0];
 		}
 
 		if (!result || !result.isPurchaseAttempt) {
@@ -500,7 +501,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			NTIID: ntiid
 		})
 			.then(function (response) {
-				var courseInstance = ParseUtils.parseItems(response)[0];
+				var courseInstance = lazy.ParseUtils.parseItems(response)[0];
 
 				done();
 				success.call(null, courseInstance);

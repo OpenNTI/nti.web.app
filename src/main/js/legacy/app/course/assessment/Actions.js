@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/model/assessment/Assignment');
 require('legacy/model/assessment/DiscussionAssignment');
@@ -27,7 +28,7 @@ function createAssignmentWithData (link, data) {
 
 	return Service.post(link, data)
 		.then((resp) => {
-			return ParseUtils.parseItems(resp)[0];
+			return lazy.ParseUtils.parseItems(resp)[0];
 		})
 		.catch((reason) => {
 			console.error('Failed to create assignment: ', reason);

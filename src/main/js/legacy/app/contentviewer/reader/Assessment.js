@@ -3,7 +3,8 @@ const {wait} = require('nti-commons');
 
 const {guidGenerator, isMe, swallow} = require('legacy/util/Globals');
 const DomUtils = require('legacy/util/Dom');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const TimeUtils = require('legacy/util/Time');
 const AssignmentStatus = require('legacy/app/course/assessment/AssignmentStatus');
 const AssessedQuestionSet = require('legacy/model/assessment/AssessedQuestionSet');
@@ -113,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		} else {
 			Service.request(historyLink)
 				.then(function (response) {
-					return ParseUtils.parseItems(response)[0];
+					return lazy.ParseUtils.parseItems(response)[0];
 				})
 				.then(function (history) {
 					survey.fireEvent('graded', history.get('Submission'));

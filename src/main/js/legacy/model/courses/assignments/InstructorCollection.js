@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const SharedInstance = require('legacy/cache/SharedInstance');
 const GradeBookSummaries = require('legacy/store/courseware/GradeBookSummaries');
 const StudentHistoryItems = require('legacy/store/courseware/StudentHistoryItems');
@@ -153,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 		this.__loadHistoryRequest = Service.request(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			})
 			.catch(function (reason) {
 				if (reason && reason.status === 404) {

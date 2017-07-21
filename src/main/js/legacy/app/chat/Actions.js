@@ -4,7 +4,8 @@ const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');
 const Toaster = require('legacy/common/toast/Manager');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const LoginStateStore = require('legacy/login/StateStore');
 const PresenceInfo = require('legacy/model/PresenceInfo');
 
@@ -78,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 		for (key in msg) {
 			if (msg.hasOwnProperty(key)) {
-				value = ParseUtils.parseItems([msg[key]])[0];
+				value = lazy.ParseUtils.parseItems([msg[key]])[0];
 				store.setPresenceOf(key, value, this.changePresence.bind(this));
 			}
 		}
@@ -150,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	shouldShowRoom: function (options, msg) {
 		// This is mainly used as a callback to the socket to determine showing chat rooms that we created.
-		var rInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0];
+		var rInfo = msg && msg.isModel ? msg : lazy.ParseUtils.parseItems([msg])[0];
 		if (rInfo) {
 			if ((options || {}).silent === true) {
 				this.onEnteredRoom(rInfo);
@@ -165,11 +166,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	onEnteredRoom: function (msg) {
 		var me = this, w,
-			roomInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0],
+			roomInfo = msg && msg.isModel ? msg : lazy.ParseUtils.parseItems([msg])[0],
 			occupants = roomInfo.get('Occupants'),
 			isGroupChat = (occupants.length > 2);
 
-		roomInfo = roomInfo && roomInfo.isModel ? roomInfo : ParseUtils.parseItems([roomInfo])[0];
+		roomInfo = roomInfo && roomInfo.isModel ? roomInfo : lazy.ParseUtils.parseItems([roomInfo])[0];
 		roomInfo.setOriginalOccupants(occupants.slice());
 		w = me.openChatWindow(roomInfo);
 
@@ -335,7 +336,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		}
 
 		if (ack) {
-			messageRecord = ParseUtils.parseItems([m]);
+			messageRecord = lazy.ParseUtils.parseItems([m]);
 			messageRecord = messageRecord && messageRecord.length > 0 ? messageRecord[0] : null;
 			ack = Ext.bind(ack, null, [messageRecord], true);
 		}
@@ -358,7 +359,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	onMessage: function (msg, opts) {
 		var me = this,
-			m = ParseUtils.parseItems([msg])[0],
+			m = lazy.ParseUtils.parseItems([msg])[0],
 			channel = m && m.get('channel'),
 			cid = m && m.get('ContainerId'),
 			w = this.ChatStore.getChatWindow(cid),
@@ -537,7 +538,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	onMembershipOrModerationChanged: function (msg) {
-		var newRoomInfo = ParseUtils.parseItems([msg])[0],
+		var newRoomInfo = lazy.ParseUtils.parseItems([msg])[0],
 			oldRoomInfo = newRoomInfo && this.ChatStore.getRoomInfoFromSession(newRoomInfo.getId()),
 			occupants = newRoomInfo && newRoomInfo.get('Occupants'),
 			toast;

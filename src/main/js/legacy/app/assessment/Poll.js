@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/model/assessment/UsersCourseInquiryItem');
 require('legacy/model/assessment/UsersCourseInquiryItemResponse');
@@ -25,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 			this.hasSubmission = true;
 			Service.request(historyLink)
 				.then(function (response) {
-					return ParseUtils.parseItems(response)[0];
+					return lazy.ParseUtils.parseItems(response)[0];
 				})
 				.then(function (history) {
 					var submission = history && history.get('Submission');

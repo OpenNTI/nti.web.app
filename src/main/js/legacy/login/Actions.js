@@ -7,7 +7,8 @@ const Socket = require('legacy/proxy/Socket');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const B64 = require('legacy/util/Base64');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const LoginStateStore = require('legacy/login/StateStore');
 const ModelService = require('legacy/model/Service');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
@@ -327,7 +328,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				Accept: 'application/json'
 			}
 		})
-			.then(function (r) { return ParseUtils.parseItems(Globals.parseJSON(r))[0]; })
+			.then(function (r) { return lazy.ParseUtils.parseItems(Globals.parseJSON(r))[0]; })
 			.then(function (user) {
 				if (user && user.get('Username') === workspace.Title) {
 					return user;

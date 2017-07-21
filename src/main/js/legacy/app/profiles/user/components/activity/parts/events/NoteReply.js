@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const UserRepository = require('legacy/cache/UserRepository');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 require('./ActivityItem');
 
 
@@ -67,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	fillIn: function () {
 		var me = this,
 			replyTo = me.record.get('inReplyTo'),
-			parsed = ParseUtils.parseNTIID(replyTo),
+			parsed = lazy.ParseUtils.parseNTIID(replyTo),
 			el = me.repliedToEl;
 
 		if (/^missing$/i.test(parsed.specific.type)) {

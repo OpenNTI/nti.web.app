@@ -3,7 +3,8 @@ const Url = require('url');
 const Ext = require('extjs');
 
 const ContentUtils = require('legacy/util/Content');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const OutlineInterface = require('legacy/store/courseware/OutlineInterface');
 
 const CourseOutlineNode = require('./navigation/CourseOutlineNode');
@@ -94,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		if (!load || doNotCache) {
 			load = Service.request(link)
 				.then((text) => Ext.decode(text))
-				.then((json) => ParseUtils.parseItems(json))
+				.then((json) => lazy.ParseUtils.parseItems(json))
 				.then((items) => {
 					//create a clone of this model
 					this[outline] = this[outline] || this.self.create(this.getData());
@@ -168,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 			console.time('Requesting Course Outline: ' + l);
 			me.__promiseToLoadContents = Service.request(l)
 				.then(function (text) { return Ext.decode(text); })
-				.then(function (json) { return ParseUtils.parseItems(json); })
+				.then(function (json) { return lazy.ParseUtils.parseItems(json); })
 				.then(function (items) {
 					me.set('Items', items);
 					console.timeEnd('Requesting Course Outline: ' + l);

@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 module.exports = exports = Ext.define('NextThought.common.components.BoundPanel', {
@@ -45,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 			return null;
 		}
 
-		return {record: rec, recordId: id && ParseUtils.escapeId(id)};
+		return {record: rec, recordId: id && lazy.ParseUtils.escapeId(id)};
 	},
 
 
@@ -152,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 		var me = this;
 
 		function itr (i) {
-			if (i.recordId === ParseUtils.escapeId(record.getId())) {
+			if (i.recordId === lazy.ParseUtils.escapeId(record.getId())) {
 				me.removeItem(i, true);
 				return false;
 			}

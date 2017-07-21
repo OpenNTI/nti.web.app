@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const Badge = require('legacy/model/openbadges/Badge');
 
 const StateStore = require('../windows/StateStore');
@@ -82,13 +83,13 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 						}
 					}
 
-					return record ? ParseUtils.parseItems(record)[0] : Promise.reject();
+					return record ? lazy.ParseUtils.parseItems(record)[0] : Promise.reject();
 				});
 		}
 
 		return Service.request('/' + Globals.trimRoute(link) + '/' + raw)
 			.then(function (badge) {
-				return ParseUtils.parseItems(badge)[0];
+				return lazy.ParseUtils.parseItems(badge)[0];
 			});
 	});
 });

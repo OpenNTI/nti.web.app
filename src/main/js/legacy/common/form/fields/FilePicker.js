@@ -3,7 +3,8 @@ const {autobind} = require('nti-commons');
 const {ContentResources} = require('nti-web-commons');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const StateStore = require('legacy/app/context/StateStore');
 
 
@@ -351,7 +352,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 
 	setPreviewFromValue: function (value) {
-		if (!ParseUtils.isNTIID(value)) { return; }
+		if (!lazy.ParseUtils.isNTIID(value)) { return; }
 
 		Service.getObject(value)
 			.then((m) => (m.get('ContentFile') || m))

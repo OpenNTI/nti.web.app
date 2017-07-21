@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
@@ -168,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 
 		return Service.post(link, content)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			});
 	},
 
@@ -211,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 
 		return form.submitTo(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			});
 	},
 

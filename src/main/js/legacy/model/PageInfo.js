@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const ContentUtils = require('legacy/util/Content');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 const Assignment = require('./assessment/Assignment');
 
@@ -69,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 
 		return request
 			.then((resp) => {
-				return ParseUtils.parseItems(resp)[0];
+				return lazy.ParseUtils.parseItems(resp)[0];
 			});
 	},
 
@@ -112,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 			toc = l && l.toc,
 			ntiid = (l && l.NTIID) || '--';
 
-		ntiid = '[ntiid="' + ParseUtils.escapeId(ntiid) + '"]';
+		ntiid = '[ntiid="' + lazy.ParseUtils.escapeId(ntiid) + '"]';
 
 		if (!l || !toc) {return false;}
 

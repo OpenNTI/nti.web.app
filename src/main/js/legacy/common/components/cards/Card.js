@@ -3,7 +3,8 @@ const {AssetIcon} = require('nti-web-commons');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const RelatedWork = require('legacy/model/RelatedWork');
 
 require('legacy/mixins/EllipsisText');
@@ -113,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 			container = this.up('content-view-container'),
 			bundle = container && container.currentBundle;
 
-		if (ParseUtils.isNTIID(this.target)) {
+		if (lazy.ParseUtils.isNTIID(this.target)) {
 			status = NavigationActions.navigateToHref(this.target);
 		}
 		else {

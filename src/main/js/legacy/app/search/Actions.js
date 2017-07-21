@@ -2,7 +2,8 @@ const Ext = require('extjs');
 
 const {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const StoreUtils = require('legacy/util/Store');
 const ContextStateStore = require('legacy/app/context/StateStore');
 
@@ -32,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			currentNode = location && location.location;
 
 		function isValidSearchNTIID (ntiid) {
-			var data = ParseUtils.parseNTIID(ntiid);
+			var data = lazy.ParseUtils.parseNTIID(ntiid);
 
 			if (!data || (data.specific && data.specific.type === 'RelatedWorkRef')) { return false; }
 

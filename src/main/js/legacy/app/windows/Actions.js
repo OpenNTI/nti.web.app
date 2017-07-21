@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 const WindowsStateStore = require('./StateStore');
 
@@ -96,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 			precache = precache || cache.precache;
 		}
 
-		if (typeof objectOrNTIID === 'string' && ParseUtils.isNTIID(objectOrNTIID)) {
+		if (typeof objectOrNTIID === 'string' && lazy.ParseUtils.isNTIID(objectOrNTIID)) {
 			fetchObject = this.__resolveBeforeShow(objectOrNTIID);
 		} else {
 			fetchObject = Promise.resolve(objectOrNTIID);

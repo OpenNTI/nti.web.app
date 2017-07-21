@@ -2,10 +2,8 @@ const Ext = require('extjs');
 
 const {getURL} = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
-	.get('UserRepository', () => require('legacy/cache/UserRepository'));
-
-const ParseUtils = require('./Parsing');
-
+	.get('UserRepository', () => require('legacy/cache/UserRepository'))
+	.get('ParseUtils', ()=> require('./Parsing'));
 
 module.exports = exports = Ext.define('NextThought.util.Store', {
 
@@ -112,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 				if (model && model.create) {
 					items = items.map(function (item) { return model.create(item); });
 				} else if (!doNotParseItems) {
-					items = ParseUtils.parseItems(items);
+					items = lazy.ParseUtils.parseItems(items);
 				}
 
 				json[itemProp] = items;

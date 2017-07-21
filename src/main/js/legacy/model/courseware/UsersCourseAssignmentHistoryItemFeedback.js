@@ -1,7 +1,8 @@
 /*eslint no-undef:1*/
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('../Base');
 require('legacy/mixins/ModelWithBodyContent');
@@ -49,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 		this.containerPromise = Service.request(url)
 			.then(function (resp) {
-				return ParseUtils.parseItems(resp)[0];
+				return lazy.ParseUtils.parseItems(resp)[0];
 			});
 
 		return this.containerPromise;
@@ -66,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 		me.submissionPromise = Service.request(url)
 			.then(function (resp) {
-				var submission = ParseUtils.parseItems(resp)[0];
+				var submission = lazy.ParseUtils.parseItems(resp)[0];
 
 				if (!me.containerPromise) {
 					me.containerPromise = Promise.resolve(submission.get('Feedback'));

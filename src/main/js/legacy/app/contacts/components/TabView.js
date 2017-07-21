@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const User = require('legacy/model/User');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/common/components/NavPanel');
 require('legacy/common/components/BoundPanel');
@@ -30,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.TabVi
 	},
 
 	scrollIntoView: function (rec) {
-		var query = Ext.String.format('[recordId="{0}"]', ParseUtils.escapeId(rec.getId())),
+		var query = Ext.String.format('[recordId="{0}"]', lazy.ParseUtils.escapeId(rec.getId())),
 			cmp = this.body.down(query);
 
 		if (cmp) {

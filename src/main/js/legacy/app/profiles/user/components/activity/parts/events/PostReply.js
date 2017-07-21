@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const UserRepository = require('legacy/cache/UserRepository');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const PathActions = require('legacy/app/navigation/path/Actions');
 
 require('legacy/mixins/ProfileLinks');
@@ -82,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		rd.thisthing = me.description;
 
 		function resolve (json) {
-			var post = me.post = ParseUtils.parseItems(json)[0],
+			var post = me.post = lazy.ParseUtils.parseItems(json)[0],
 				other = post.get('Creator'),
 				users = [username];
 

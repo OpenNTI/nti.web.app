@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {isFeature} = require('legacy/util/Globals');
 
 require('./types/Content');
@@ -46,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		var parse;
 
 		return new Promise(function (fulfill) {
-			parse = ParseUtils.parseItems(response)[0];
+			parse = lazy.ParseUtils.parseItems(response)[0];
 			fulfill(parse || Ext.decode(response, true));
 		})
 			.catch(function () {
@@ -114,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		return Service.request(url)
 			.then(function (resp) {
 				let p = Ext.decode(resp, true);
-				let catalogEntry = p.Items && ParseUtils.parseItems(p.Items)[0];
+				let catalogEntry = p.Items && lazy.ParseUtils.parseItems(p.Items)[0];
 
 				if (catalogEntry) {
 					let cmp = Ext.widget('context-authorization', {

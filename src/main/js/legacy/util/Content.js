@@ -2,12 +2,12 @@ const Ext = require('extjs');
 
 const LibraryStateStore = require('legacy/app/library/StateStore');
 const lazy = require('legacy/util/lazy-require')
-	.get('AnnotationUtils', () => require('legacy/util/Annotations'));
+	.get('AnnotationUtils', () => require('legacy/util/Annotations'))
+	.get('ParseUtils', ()=> require('./Parsing'));
 
 require('legacy/overrides/builtins/RegExp');
 
 const Globals = require('./Globals');
-const ParseUtils = require('./Parsing');
 
 const {getURL} = Globals;
 
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return getNode(toc.documentElement);
 		}
 
-		var escaped = ParseUtils.escapeId(ntiid),
+		var escaped = lazy.ParseUtils.escapeId(ntiid),
 			selectors = [
 				'related[ntiid="' + escaped + '"]',
 				'object[ntiid="' + escaped + '"]',
@@ -429,7 +429,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 		//If we have a rootId, lets make that what we consider the root.
 		if (rootId) {
-			root = toc.querySelector('[ntiid="' + ParseUtils.escapeId(rootId) + '"]') || root;
+			root = toc.querySelector('[ntiid="' + lazy.ParseUtils.escapeId(rootId) + '"]') || root;
 		}
 
 		if (node.hasAttribute('suppressed')) {
@@ -655,7 +655,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 					return;
 				}
 
-				if (!ParseUtils.isNTIID(childId)) {
+				if (!lazy.ParseUtils.isNTIID(childId)) {
 					console.warn('bad ntiid in content!!');
 					return;
 				}
@@ -846,7 +846,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	getReading: function (ntiid, bundle) {
 		function findReading (toc) {
-			var escaped = ParseUtils.escapeId(ntiid),
+			var escaped = lazy.ParseUtils.escapeId(ntiid),
 				query = 'toc[ntiid="' + escaped + '"],topic[ntiid="' + escaped + '"]';
 
 			return toc.querySelector(query);
@@ -927,7 +927,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		let toCheck = [...contentPackages];
 
 		function findReading (toc) {
-			var escaped = ParseUtils.escapeId(ntiid),
+			var escaped = lazy.ParseUtils.escapeId(ntiid),
 				query = 'toc[ntiid="' + escaped + '"],topic[ntiid="' + escaped + '"]';
 
 			return toc.querySelector(query);

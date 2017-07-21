@@ -6,7 +6,8 @@ const CoursesActions = require('legacy/app/library/courses/Actions');
 const User = require('legacy/model/User');
 const {isFeature} = require('legacy/util/Globals');
 const {getString, getFormattedString} = require('legacy/util/Localization');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('../Page');
 require('legacy/app/redeem/Redeem');
@@ -111,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 
 	onRedeemSuccess (results) {
-		let newCourse = ParseUtils.parseItems(results)[0];
+		let newCourse = lazy.ParseUtils.parseItems(results)[0];
 
 		this.LibraryActions.reload()
 			.then( () => {

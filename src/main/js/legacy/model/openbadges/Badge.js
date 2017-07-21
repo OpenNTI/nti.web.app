@@ -1,7 +1,8 @@
 /*globals OpenBadges*/
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('../Base');
 
@@ -53,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {
 		var me = this;
 		return Service.post(this.getLink('lock'))
 			.then(function (resp) {
-				var rec = ParseUtils.parseItems(resp)[0];
+				var rec = lazy.ParseUtils.parseItems(resp)[0];
 				me.set('Links', rec.get('Links'));
 				me.set('Locked', rec.get('Locked'));
 				Promise.resolve();

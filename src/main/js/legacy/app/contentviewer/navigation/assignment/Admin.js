@@ -10,7 +10,8 @@ const Email = require('legacy/model/Email');
 const ReactHarness = require('legacy/overrides/ReactHarness');
 const {isFeature} = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const TimeUtils = require('legacy/util/Time');
 
 require('legacy/mixins/ProfileLinks');
@@ -240,7 +241,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			.then(JSON.parse)
 			.then(function (obj) {
 				var enrollment = obj.Items && obj.Items[0];
-				return Promise.resolve(ParseUtils.parseItems(enrollment)[0]);
+				return Promise.resolve(lazy.ParseUtils.parseItems(enrollment)[0]);
 			});
 	},
 

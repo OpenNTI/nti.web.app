@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const NavigationActions = require('legacy/app/navigation/Actions');
 
 
@@ -47,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	onClick: function (e) {
 		var target = e.getTarget('a[href]'),
 			id = target && (target.href || '').split('#')[0];
-		if (!target || !ParseUtils.isNTIID(id)) {return;}
+		if (!target || !lazy.ParseUtils.isNTIID(id)) {return;}
 		e.stopEvent();
 
 		NavigationActions.navigateToHref(target.href);

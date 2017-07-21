@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const OverviewGroup = require('legacy/model/courses/overview/Group');
 const LegacyCommunityBasedCourseInstance = require('legacy/model/courses/LegacyCommunityBasedCourseInstance');
 
@@ -109,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			json.Items = items.map(this.__collapseGroup);
 		}
 
-		return ParseUtils.parseItems([json])[0];
+		return lazy.ParseUtils.parseItems([json])[0];
 	},
 
 	buildHeader: function (collection) {

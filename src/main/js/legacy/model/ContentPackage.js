@@ -3,7 +3,8 @@ const {wait} = require('nti-commons');
 
 const LibraryActions = require('legacy/app/library/Actions');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/model/Base');
 require('legacy/mixins/PresentationResources');
@@ -192,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 	represents: function () {return false;},
 
 	getReferenceSelector: function (type) {
-		type = ParseUtils.escapeId(type);
+		type = lazy.ParseUtils.escapeId(type);
 
 		return 'reference[type="' + type + '"]';
 	},
@@ -240,7 +241,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 				return keys.map(function (key) {
 					var item = items[key];
 
-					return ParseUtils.parseItems(item)[0];
+					return lazy.ParseUtils.parseItems(item)[0];
 				});
 			})
 			.catch(function (reason) {

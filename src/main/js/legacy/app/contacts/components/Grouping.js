@@ -1,7 +1,8 @@
 const Ext = require('extjs');
 
 const {getString} = require('legacy/util/Localization');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/common/components/BoundPanel');
 require('legacy/mixins/UserContainer');
@@ -223,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		this.remove(o, autoDestroy);
 
 		Ext.each(list, function (item, i) {
-			if (ParseUtils.escapeId(item.getId()) === o.recordId) {
+			if (lazy.ParseUtils.escapeId(item.getId()) === o.recordId) {
 				removed = list.splice(i, 1)[0];
 			}
 			return !removed;

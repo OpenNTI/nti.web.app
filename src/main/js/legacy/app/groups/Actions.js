@@ -3,7 +3,8 @@ const {wait} = require('nti-commons');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const Globals = require('legacy/util/Globals');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const LoginStateStore = require('legacy/login/StateStore');
 const FriendsList = require('legacy/model/FriendsList');
 const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
@@ -579,7 +580,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 					if (s) {
 						result = Ext.decode(r.responseText, true);
-						result = ParseUtils.parseItems(result);
+						result = lazy.ParseUtils.parseItems(result);
 					}
 
 					if (Ext.isEmpty(result)) {

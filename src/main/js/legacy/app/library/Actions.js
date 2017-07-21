@@ -1,6 +1,5 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
 const ContentProxy = require('legacy/proxy/JSONP');
 const {getURL} = require('legacy/util/Globals');
 const LoginStateStore = require('legacy/login/StateStore');
@@ -9,7 +8,8 @@ const lazy = require('legacy/util/lazy-require')
 	.get('LibraryStateStore', ()=> require('./StateStore'))
 	.get('CoursesActions', ()=> require('./courses/Actions'))
 	.get('CoursesStateStore', ()=> require('./courses/StateStore'))
-	.get('ContentActions', ()=> require('./content/Actions'));
+	.get('ContentActions', ()=> require('./content/Actions'))
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 
 
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		var toc, root;
 
 		function query (tag, id) {
-			return tag + '[ntiid="' + ParseUtils.escapeId(id) + '"]';
+			return tag + '[ntiid="' + lazy.ParseUtils.escapeId(id) + '"]';
 		}
 
 		function makeAbsolute (o) {

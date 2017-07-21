@@ -2,7 +2,8 @@ const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 
 const ObjectUtils = require('legacy/util/Object');
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('./forums/DFLBoard');
 require('./forums/DFLForum');
@@ -134,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 
 		this.loadForumList = Service.request(link)
 			.then(function (response) {
-				return ParseUtils.parseItems(response)[0];
+				return lazy.ParseUtils.parseItems(response)[0];
 			})
 			.then(function (board) {
 				var content = board && board.getLink('contents');
@@ -144,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 			.then(function (response) {
 				var json = JSON.parse(response);
 
-				return ParseUtils.parseItems(json.Items);
+				return lazy.ParseUtils.parseItems(json.Items);
 			})
 			.catch(function (reason) {
 				console.error('Faild to load forum list for group, ', reason);

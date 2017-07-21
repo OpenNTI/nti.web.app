@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const SharingUtils = require('legacy/util/Sharing');
 
 
@@ -66,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 	getSharingInfo: function () {
 		var sharingInfo,
 			entities = Ext.Array.filter(this.get('headline').get('tags'), function (t) {
-				return ParseUtils.isNTIID(t);
+				return lazy.ParseUtils.isNTIID(t);
 			});
 
 		if (this.isExplicit()) {

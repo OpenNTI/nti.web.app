@@ -3,7 +3,8 @@ const {getService} = require('nti-web-client');
 const {getLink, Server, Service: ServiceSymbol} = require('nti-lib-interfaces');
 const {EmbedInput, Editor, createMediaSourceFromUrl, getCanonicalUrlFrom} = require('nti-web-video');
 
-const ParseUtils = require('legacy/util/Parsing');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const PromptStateStore = require('legacy/app/prompt/StateStore');
 const Video = require('legacy/model/Video');
 
@@ -66,7 +67,7 @@ function getVideo (video) {
 
 
 function parseVideo (video) {
-	return ParseUtils.parseItems(video)[0];
+	return lazy.ParseUtils.parseItems(video)[0];
 }
 
 module.exports = exports = Ext.define('NextThought.app.video.Picker', {
