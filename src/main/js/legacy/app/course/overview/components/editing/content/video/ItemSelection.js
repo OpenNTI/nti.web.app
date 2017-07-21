@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const VideoModel = require('legacy/model/Video');
+const Video = require('legacy/model/Video');
 
 require('../../itemselection/Index');
 
@@ -32,8 +32,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	// getExcludedVideos: function (videos) {...defined elsewhere},
 
 	getItemData: function (item) {
-		if (!(item instanceof VideoModel)) {
-			item = NextThought.model.Video.create({
+		if (!(item instanceof Video)) {
+			item = Video.create({
 				label: item.title,
 				title: item.title,
 				sources: item.sources || [],

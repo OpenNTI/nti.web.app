@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import {getAppUsername} from 'nti-web-client';
-
 import {Avatar, DisplayName, Checkbox} from 'nti-web-commons';
 
 import {

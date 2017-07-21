@@ -4,7 +4,6 @@ const {wait} = require('nti-commons');
 const UserRepository = require('legacy/cache/UserRepository');
 const ImageZoomView = require('legacy/common/ux/ImageZoomView');
 const SlideDeck = require('legacy/common/ux/SlideDeck');
-const ContentUtils = require('legacy/util/Content');
 const Globals = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');
 const CommonOverlayedPanel = require('legacy/common/components/cards/OverlayedPanel');

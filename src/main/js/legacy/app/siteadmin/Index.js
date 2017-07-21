@@ -1,9 +1,9 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
-var AdminBody = require('../../../nti-web-site-admin');
-var ReactHarness = require('legacy/overrides/ReactHarness');
+const AdminBody = require('nti-web-site-admin');
 
-require('legacy/login/StateStore')
+require('legacy/overrides/ReactHarness');
+require('legacy/login/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 	extend: 'Ext.container.Container',

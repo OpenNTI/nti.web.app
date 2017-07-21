@@ -3,12 +3,14 @@ const {DateTime} = require('nti-web-commons');
 const {Parsing} = require('nti-commons');
 
 const UserRepository = require('legacy/cache/UserRepository');
+const Video = require('legacy/model/Video');
+const VideoRoll = require('legacy/model/VideoRoll');
 
 function getTitle (r) {
 	let title = '';
 	if (r.Title) {
 		title = r.Title;
-	} else if (r.MimeType === NextThought.model.VideoRoll.mimeType) {
+	} else if (r.MimeType .mimeType) {
 		title = 'Video Roll';
 	}
 
@@ -92,14 +94,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		// Change the type if it's an item being added
 		if(changeType === 'update' && fields.length === 1 && fields[0] === 'item') {
-			if (NextThought.model.VideoRoll.mimeType === recordable.MimeType) {
+			if (VideoRoll.mimeType === recordable.MimeType) {
 				type = 'updated';
 			} else {
 				type = 'added a';
 			}
 		}
 
-		if ([NextThought.model.VideoRoll.mimeType, NextThought.model.Video.mimeType].includes(recordable.MimeType)) {
+		if ([VideoRoll.mimeType, Video.mimeType].includes(recordable.MimeType)) {
 			msg = `${type} ${title}.`;
 		} else if (isChild) {
 			msg = `${type} ${fields.join(', ')} ${getMsgContext(type, title)}.`;
