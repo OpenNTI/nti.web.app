@@ -24,8 +24,18 @@
 		}
 
 		.display {
-			flex: 1 1 auto;
+			flex: 0 0 auto;
 			margin-left: 1rem;
+			margin-right: 0;
+		}
+
+		.meta {
+			color: $primary-grey;
+			flex: 0 0 auto;
+			font-size: .75rem;
+			text-overflow: ellipsis;
+			max-width: 150px;
+			overflow: hidden;
 		}
 	}
 
