@@ -90,8 +90,8 @@ describe ('Search utils', () => {
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 
 			expect(terms.length).toBe(2);
-			expect(Ext.Array.contains(terms, 'he')).toBeTruthy();
-			expect(Ext.Array.contains(terms, 'brown fox')).toBeTruthy();
+			expect(terms.includes('he')).toBeTruthy();
+			expect(terms.includes('brown fox')).toBeTruthy();
 		});
 
 		test ('Pulls from multiple fragments', () => {
@@ -103,9 +103,9 @@ describe ('Search utils', () => {
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 
 			expect(terms.length).toBe(3);
-			expect(Ext.Array.contains(terms, 'he')).toBeTruthy();
-			expect(Ext.Array.contains(terms, 'brown fox')).toBeTruthy();
-			expect(Ext.Array.contains(terms, 'spot')).toBeTruthy();
+			expect(terms.includes('he')).toBeTruthy();
+			expect(terms.includes('brown fox')).toBeTruthy();
+			expect(terms.includes('spot')).toBeTruthy();
 		});
 
 		test ('Returns unique terms', () => {
@@ -117,8 +117,8 @@ describe ('Search utils', () => {
 			const terms = SearchUtils.contentRegexPartsForHit(hit);
 
 			expect(terms.length).toBe(2);
-			expect(Ext.Array.contains(terms, 'quick')).toBeTruthy();
-			expect(Ext.Array.contains(terms, 'spot')).toBeTruthy();
+			expect(terms.includes('quick')).toBeTruthy();
+			expect(terms.includes('spot')).toBeTruthy();
 		});
 	});
 
@@ -154,19 +154,19 @@ describe ('Search utils', () => {
 			expect(MockSearchUtils.contentRegexForSearchHit(null, true)).toBeTruthy();
 			spy = MockSearchUtils.contentRegexFromSearchTerm;
 			expect(spy.calls.length).toBe(MockTerms.length);
-			Ext.each(MockTerms, (term) => {
+			for(let term of MockTerms) {
 				expect(spy).toHaveBeenCalledWith(term, true);
-			});
+			}
 		});
 
 		test ('ORs the terms', () => {
 			let re = MockSearchUtils.contentRegexForSearchHit(null, true);
 			expect(re).toBeTruthy();
 
-			Ext.each(MockTerms, (term) => {
+			for (let term of MockTerms) {
 				expect(re.test(term)).toBeTruthy();
 				re.lastIndex = 0; //reset it
-			});
+			}
 
 			expect(re.test('monkey')).toBeFalsy();
 		});
