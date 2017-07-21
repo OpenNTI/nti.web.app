@@ -29,11 +29,22 @@ function getTargetForHit (hit) {
 	return target;
 }
 
+function resolveObject (target, hit) {
+	const resolve = target && target.resolveObject ? target.resolveObject : Base.resolveObject;
+
+	return resolve(hit).catch(() => Object.assign({}, hit, {
+		title: '[deleted]',
+		hit,
+		MimeType: hit.mimeType,
+		preventNavigation: true
+	}));
+}
+
 function getObject (hit) {
 	const target = getTargetForHit(hit);
 
 	if (!OBJECT.has(hit)) {
-		OBJECT.set(hit, target && target.resolveObject ? target.resolveObject(hit) : Base.resolveObject(hit));
+		OBJECT.set(hit, resolveObject(target, hit));
 	}
 
 	return OBJECT.get(hit);
@@ -98,7 +109,7 @@ export function resolveContainerID (hit) {
 export function resolveNavigateToSearchHit (hit, fragment) {
 	const target = getTargetForHit(hit);
 
-	return getObject(hit).then((obj) => {
+	return hit.preventNavigation || getObject(hit).then((obj) => {
 		return target && target.navigateToSearchHit ? target.resolveNavigateToSearchHit(obj, hit) : Base.resolveNavigateToSearchHit(obj, hit, fragment);
 	});
 }
