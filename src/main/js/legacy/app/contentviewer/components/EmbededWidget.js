@@ -92,8 +92,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		const {origin: currentOrigin} = global.location || {};
 		// See sandbox docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-sandbox
 		// We want the same behavior the browser provides for content on remote-domains to be applied to local content.
-		// The sandbox flag provides this... Would be nice to only add the sandbox flag for same-origin URI's,
-		// but ExtJS's template format doesn't have a way to do conditional attributes cleanly.
+		// The sandbox flag provides this...
+		//
+		// allow-same-origin combined with allow-scripts when the origin of the iframe is the same as ours,
+		// negates the sandbox...never add it
 		const sandboxFlags = [
 			'allow-forms',
 			'allow-modals',
@@ -104,13 +106,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			'allow-presentation',
 			'allow-scripts'
 		];
-		if (srcOrigin !== currentOrigin) {
-			//allow-same-origin combined with allow-scripts when the origin of the iframe is the same as ours,
-			//negates the sandbox...so only add it when the embeded content is NOT in the contentPackage.
-			sandboxFlags.push('allow-same-origin');
-		}
 
-		if (!data['no-sandboxing']) {
+		//Only add the sandbox flag for same-origin URI's (and when the content does not explicitly request no-sandboxing)
+		if (!data['no-sandboxing'] && srcOrigin === currentOrigin) {
 			rd.sandbox = sandboxFlags.join(' ');
 		} else {
 			rd.sandbox = false;
