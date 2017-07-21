@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	HOST_PREFIX_PATTERN: HOST_PREFIX_PATTERN,
 	FILE_EXTENSION_PATTERN: /\..+$/,
 	INVALID_CHARACTERS_PATTERN: /^[^/\\";=?<>#%'{}|^[\]-]+$/,
-	ESCAPE_REGEX_PATTERN: /[-[]\/{}()*+?.\\^$|]/g,
+	ESCAPE_REGEX_PATTERN: /[-[\]/{}()*+?.\\^$|]/g,
 
 
 	CANVAS_URL_SHAPE_BROKEN_IMAGE: 'whiteboard-error-image',
