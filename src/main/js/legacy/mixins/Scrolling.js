@@ -33,10 +33,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 			//if the node is scrollable and the overflow allows it to scroll
 			return el
 				&& el.scrollHeight > el.clientHeight
-				&& (
-				computed['overflow-y'] === 'auto'
-					|| computed['overflow-y'] === 'scroll'
-			);
+				&& (computed['overflow-y'] === 'auto' || computed['overflow-y'] === 'scroll');
 		};
 
 		while (node && node !== this.Scrolling.scrollingEl && node !== document && !isScrollable(node)) {
