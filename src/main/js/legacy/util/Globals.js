@@ -838,7 +838,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 
 	isFeature: function (name) {
-		var f = $AppConfig.features || {};
+		var f = (global.$AppConfig || {}).features || {};
 		return Boolean(f[name]);
 	},
 
