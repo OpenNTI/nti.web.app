@@ -2,9 +2,7 @@
 const Url = require('url');
 
 const Ext = require('extjs');
-
-const ParseUtils = require('./Parsing');
-
+const {isNTIID} = require('nti-lib-ntiids');
 
 const HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
 
@@ -133,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @return {Boolean}			   if we can show this in the app
 	 */
 	shouldOpenInApp: function (ntiid, url, basePath, targetMimeType) {
-		const isTargetAnNTIID = ParseUtils.isNTIID(url);
+		const isTargetAnNTIID = isNTIID(url);
 		const canHandleTypeInternally = this.INTERNAL_MIMETYPES[targetMimeType] || (/\.pdf$/i).test((url || '').split('?')[0]);
 		const parts = this.getURLParts(url);
 		const {location} = global;
