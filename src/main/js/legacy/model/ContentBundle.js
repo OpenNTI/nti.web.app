@@ -2,9 +2,9 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
 const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'))
+	.get('ContentUtils', ()=> require('legacy/util/Content'));
 const {getURL} = require('legacy/util/Globals');
-const ContentUtils = require('legacy/util/Content');
 
 const ForumsBoard = require('./forums/Board');
 
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 
 
 	getContentPackageContaining (id) {
-		return ContentUtils.getContentPackageContainingReading(id, this);
+		return lazy.ContentUtils.getContentPackageContainingReading(id, this);
 	},
 
 

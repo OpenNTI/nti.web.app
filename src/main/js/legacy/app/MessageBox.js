@@ -402,7 +402,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	}
 }, function () {
 	//This needs to be come lazy! create on first use, not at define time. (the current constructor seems to trigger an early Ext.isReady)
-	Ext.MessageBox = Ext.Msg = MessageBox;
+	Ext.MessageBox = Ext.Msg = this;
 
 	window.alert = function (cfg, fn) {
 		Globals.removeLoaderSplash();

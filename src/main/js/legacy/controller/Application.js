@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 
 	onLogin: function () {
-		// const masterView = Ext.widget('master-view');
+		Ext.widget('master-view');
 		const nav = this.getNav();
 		const body = this.getBody();
 

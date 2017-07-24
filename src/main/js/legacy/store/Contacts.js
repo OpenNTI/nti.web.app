@@ -3,7 +3,8 @@ const Ext = require('extjs');
 const UserRepository = require('legacy/cache/UserRepository');
 const {isMe} = require('legacy/util/Globals');
 const ChatStateStore = require('legacy/app/chat/StateStore');
-const GroupsStateStore = require('legacy/app/groups/StateStore');
+const lazy = require('legacy/util/lazy-require')
+	.get('GroupsStateStore', ()=> require('legacy/app/groups/StateStore'));
 
 
 module.exports = exports = Ext.define('NextThought.store.Contacts', {
@@ -28,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.GroupStore = GroupsStateStore.getInstance();
+		this.GroupStore = lazy.GroupsStateStore.getInstance();
 		this.ChatStore = ChatStateStore.getInstance();
 
 		this.mon(this.GroupStore.getFriendsList(), {
