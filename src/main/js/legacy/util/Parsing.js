@@ -6,7 +6,6 @@ const JSONProxy = require('../proxy/reader/Json');
 
 const ObjectUtils = require('./Object');
 
-require('legacy/model');
 
 module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
