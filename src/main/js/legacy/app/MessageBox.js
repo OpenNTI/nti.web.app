@@ -7,7 +7,6 @@ const Globals = require('legacy/util/Globals');
 require('legacy/common/window/Window');
 require('legacy/mixins/State');
 
-const MessageBox =
 module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	extend: 'NextThought.common.window.Window',
 
