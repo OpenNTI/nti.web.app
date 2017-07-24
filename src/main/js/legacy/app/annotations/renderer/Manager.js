@@ -1,12 +1,12 @@
 const Ext = require('extjs');
 
-const AnnotationsBase = require('legacy/app/annotations/Base');
 const Anchors = require('legacy/util/Anchors');
 const Globals = require('legacy/util/Globals');
-const {guidGenerator} = Globals;
-
+const lazy = require('legacy/util/lazy-require')
+	.get('AnnotationsBase', () => require('legacy/app/annotations/Base'));
 require('legacy/util/Line');
 
+const {guidGenerator} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Manager', {
@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 					}
 
 					y = o.render();
-					if (y !== AnnotationsBase.HIDDEN) {
+					if (y !== lazy.AnnotationsBase.HIDDEN) {
 						b = me.getBucket(Math.ceil(y));
 						if (b) {
 							o.getRecord().set('line', b.line);

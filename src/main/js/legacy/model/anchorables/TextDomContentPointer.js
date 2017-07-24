@@ -5,7 +5,6 @@ const lazy = require('legacy/util/lazy-require')
 
 const ContentPointer = require('./ContentPointer');
 const DomContentPointer = require('./DomContentPointer');
-const ElementDomContentPointer = require('./ElementDomContentPointer');
 const TextContext = require('./TextContext');
 
 
@@ -51,7 +50,7 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 		if (!a || !(a instanceof DomContentPointer)) {
 			Ext.Error.raise('Ancestor must be supplied');
 		}
-		else if (a instanceof ElementDomContentPointer && a.getRole() !== 'ancestor') {
+		else if (a.isElementDomContentPointer && a.getRole() !== 'ancestor') {
 			Ext.Error.raise('If ancestor is an ElementDomContentPointer, role must be of value ancestor');
 		}
 	},

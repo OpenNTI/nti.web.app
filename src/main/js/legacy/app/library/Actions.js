@@ -2,14 +2,14 @@ const Ext = require('extjs');
 
 const ContentProxy = require('legacy/proxy/JSONP');
 const {getURL} = require('legacy/util/Globals');
-const LoginStateStore = require('legacy/login/StateStore');
 const lazy = require('legacy/util/lazy-require')
 	.get('ContentStateStore', ()=> require('./content/StateStore'))
 	.get('LibraryStateStore', ()=> require('./StateStore'))
 	.get('CoursesActions', ()=> require('./courses/Actions'))
 	.get('CoursesStateStore', ()=> require('./courses/StateStore'))
 	.get('ContentActions', ()=> require('./content/Actions'))
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'))
+	.get('LoginStateStore', () => require('legacy/login/StateStore'));
 
 
 
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		this.ContentStore = lazy.ContentStateStore.getInstance();
 
 		this.LibraryStore = lazy.LibraryStateStore.getInstance();
-		this.LoginStore = LoginStateStore.getInstance();
+		this.LoginStore = lazy.LoginStateStore.getInstance();
 	},
 
 

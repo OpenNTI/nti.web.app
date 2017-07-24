@@ -1,9 +1,9 @@
 const Ext = require('extjs');
 
-const LibraryStateStore = require('legacy/app/library/StateStore');
 const lazy = require('legacy/util/lazy-require')
 	.get('AnnotationUtils', () => require('legacy/util/Annotations'))
-	.get('ParseUtils', ()=> require('./Parsing'));
+	.get('ParseUtils', ()=> require('./Parsing'))
+	.get('LibraryStateStore', () => require('legacy/app/library/StateStore'));
 
 require('legacy/overrides/builtins/RegExp');
 
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.LibraryStore = LibraryStateStore.getInstance();
+		this.LibraryStore = lazy.LibraryStateStore.getInstance();
 		this.clearCache();
 	},
 

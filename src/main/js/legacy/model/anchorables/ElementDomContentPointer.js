@@ -24,6 +24,8 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomC
 		}
 	},
 
+	isElementDomContentPointer: true,
+
 	constructor: function (o) {
 		//If we are given a dom element as input, pull the necessary parts and
 		//create a config we can use to create this.

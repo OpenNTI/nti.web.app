@@ -1,7 +1,6 @@
 /*global jQuery*/
 const Ext = require('extjs');
 
-require('legacy/common/menus/SymbolicMathMenuItem');
 require('./FreeResponse');
 
 
