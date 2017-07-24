@@ -1,11 +1,11 @@
 const Ext = require('extjs');
 
 const User = require('legacy/model/User');
-const Highlight = require('legacy/model/Highlight');
-const Note = require('legacy/model/Note');
 const lazy = require('legacy/util/lazy-require')
 	.get('Anchors', () => require('legacy/util/Anchors'))
-	.get('RectUtils', () => require('legacy/util/Rects'));
+	.get('RectUtils', () => require('legacy/util/Rects'))
+	.get('Note', () => require('legacy/model/Note'))
+	.get('Highlight', () => require('legacy/model/Highlight'));
 
 require('legacy/app/whiteboard/Canvas');
 
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 	 * @return {NextThought.model.Note} placeholder
 	 */
 	replyToPlaceHolder: function (note) {
-		var holder = new Note(),
+		var holder = new lazy.Note(),
 			creator,
 			refs = (note.get('references') || []).slice(),
 			//Make sure we create a new date object so we don't mutate the
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		//generate the range description
 		var contentRangeDescription = lazy.Anchors.createRangeDescriptionFromRange(range, documentElement);
 
-		return new Note({
+		return new lazy.Note({
 			applicableRange: contentRangeDescription.description,
 			selectedText: range.toString(),
 			ContainerId: contentRangeDescription.container
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		var text = range.toString(),
 			contentRangeDescription = lazy.Anchors.createRangeDescriptionFromRange(range, root);
 
-		return Highlight.create(
+		return lazy.Highlight.create(
 			{
 				style: style,
 				applicableRange: contentRangeDescription.description,
