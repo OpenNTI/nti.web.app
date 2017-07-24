@@ -1,6 +1,7 @@
 import { encodeForURI } from 'nti-lib-ntiids';
 import { User, getAppUsername} from 'nti-web-client';
 
+//FIXME: do not import legacy code outside the legacy folder!
 import UserModel from 'legacy/model/User';
 
 export default {
