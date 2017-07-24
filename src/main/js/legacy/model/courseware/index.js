@@ -1,0 +1,11 @@
+require('./ContentFile');
+require('./CourseActivity');
+require('./CourseInstanceEnrollment');
+require('./Grade');
+require('./GradeBook');
+require('./GradeBookEntry');
+require('./GradeBookPart');
+require('./UsersCourseAssignmentHistory');
+require('./UsersCourseAssignmentHistoryItem');
+require('./UsersCourseAssignmentHistoryItemFeedback');
+require('./UsersCourseAssignmentHistoryItemFeedbackContainer');

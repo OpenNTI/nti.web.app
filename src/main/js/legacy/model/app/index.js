@@ -1,0 +1,2 @@
+require('./DndInfo');
+require('./MoveInfo');

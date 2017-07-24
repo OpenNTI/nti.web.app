@@ -5,6 +5,8 @@ const {getURL, validateConfig, loadScript} = require('./util/Globals');
 
 require('./util/Localization');
 require('./overrides');
+require('./model');
+require('./model/converters');
 require('./controller/Application');
 
 // DO NOT DELETE - this directive is required for Sencha Cmd packages to work.

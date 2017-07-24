@@ -6,7 +6,7 @@ const JSONProxy = require('../proxy/reader/Json');
 
 const ObjectUtils = require('./Object');
 
-
+require('legacy/model');
 
 module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
@@ -36,7 +36,9 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 				reader = this.getReaderFor(item);
 				if (!reader) {
-					console.debug('No reader for item: ', item);
+					if (typeof console !== 'undefined' && console.debug) {
+						console.debug('No reader for item: ', item);
+					}
 					continue;
 				}
 

@@ -1,0 +1,11 @@
+require('./ContentPointer');
+require('./ContentRangeDescription');
+require('./DomContentPointer');
+require('./DomContentRangeDescription');
+require('./ElementDomContentPointer');
+require('./TextContext');
+require('./TextDomContentPointer');
+require('./TimeContentPointer');
+require('./TimeRangeDescription');
+require('./TranscriptContentPointer');
+require('./TranscriptRangeDescription');
