@@ -25,6 +25,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+	isBundleContent: true,
+
 	layout: 'none',
 	cls: 'bundle-content',
 

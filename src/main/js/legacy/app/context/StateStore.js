@@ -1,7 +1,6 @@
 const Ext = require('extjs');
 const { decodeFromURI } = require('nti-lib-ntiids');
 
-const ContentIndex = require('legacy/app/content/content/Index');
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
@@ -70,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 		var root = this.getRootContext(),
 			cmp = root && root.cmp;
 
-		if (cmp && cmp instanceof ContentIndex && cmp.hasReader()) {
+		if (cmp && cmp.isBundleContent && cmp.hasReader()) {
 			return cmp.getLocation();
 		}
 
