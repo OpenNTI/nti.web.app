@@ -1,6 +1,7 @@
 const Ext = require('extjs');
-const MixinsRouter = require('legacy/mixins/Router');
 const {isFeature} = require('legacy/util/Globals');
+
+require('legacy/mixins/Router');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.reports.Index', {
