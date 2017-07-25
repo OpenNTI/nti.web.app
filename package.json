@@ -12,6 +12,9 @@
     "dist"
   ],
   "homepage": "proxy://localhost:8083/app/",
+  "build": {
+    "ignoreWarnings": true
+  },
   "scripts": {
     "test": "nti-app-scripts test",
     "start": "nti-app-scripts start",
