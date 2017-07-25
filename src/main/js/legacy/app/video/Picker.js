@@ -115,8 +115,9 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 				this.video = video;
 				return video;
 			}),
-			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile),
+			applyCaptions: (video, captionsFile, purpose) => this.applyCaptions(video, captionsFile, purpose),
 			replaceTranscript: (transcript, newFile) => this.replaceTranscript(transcript, newFile),
+			updateTranscript: (transcript, purpose, lang) => this.updateTranscript(transcript, purpose, lang),
 			removeTranscript: (transcript) => this.removeTranscript(transcript)
 		};
 	},
@@ -126,23 +127,28 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			...raw,
 			save: (...args) => this.onPlaceholderSaved(raw, ...args),
 			update: (r, ...args) => saveVideo(r, ...args),
-			applyCaptions: (video, captionsFile) => this.applyCaptions(video, captionsFile)
+			applyCaptions: (video, captionsFile, purpose) => this.applyCaptions(video, captionsFile, purpose)
 		};
 
 		return this.placeholderVideo;
 	},
 
-	applyCaptions (video, captionsFile) {
+	applyCaptions (video, captionsFile, purpose) {
 		if(captionsFile) {
 			const transcriptLinks = video.Links.filter((l) => l.rel === 'transcript');
 			if(transcriptLinks.length === 1) {
 				const url = transcriptLinks[0].href;
 				const formdata = new FormData();
 				formdata.append(captionsFile.name, captionsFile);
+				if(purpose) {
+					formdata.append('purpose', purpose);
+				}
 				return Service.postMultiPartData(url, formdata);
 			}
 			return Promise.reject('No transcript link');
 		}
+
+		return Promise.reject('No transcript file');
 	},
 
 	replaceTranscript (transcript, newFile) {
@@ -152,6 +158,20 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			formdata.append(newFile.name, newFile);
 			return Service.putMultiPartData(url, formdata);
 		}
+	},
+
+	updateTranscript (transcript, purpose, lang) {
+		let jsonData = {};
+
+		if(purpose) {
+			jsonData.purpose = purpose;
+		}
+
+		if(lang) {
+			jsonData.lang = lang;
+		}
+
+		return Service.put(transcript.href, jsonData);
 	},
 
 	removeTranscript (transcript) {
@@ -174,45 +194,22 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			this.videoCreator.destroy();
 		}
 
-		const normalTranscripts = video && video.transcripts && video.transcripts.filter((t) => t.purpose === 'normal');
-
-		if(normalTranscripts && normalTranscripts.length > 1) {
-			// no transcript case
-			this.videoEditor = this.add({
-				xtype: 'react',
-				component: Editor,
-				video,
-				badTranscriptState: true,
-				onSave: v => this.onVideoSave(v),
-				onCancel: () => this.doClose()
-			});
-		}
-		else if(normalTranscripts && normalTranscripts.length === 1) {
-			// existing transcript case
-			getService()
-				.then(service => service.getObjectRaw(normalTranscripts[0].NTIID)
-					.then((transcript) => {
+		getService()
+			.then(service => {
+				Promise.all(video.transcripts
+					? video.transcripts.map((transcript) => service.getObjectRaw(transcript.NTIID))
+					: [])
+					.then((transcripts) => {
 						this.videoEditor = this.add({
 							xtype: 'react',
 							component: Editor,
 							video,
-							transcript,
+							transcripts,
 							onSave: v => this.onVideoSave(v),
 							onCancel: () => this.doClose()
 						});
-					})
-				);
-		}
-		else {
-			// no transcript case
-			this.videoEditor = this.add({
-				xtype: 'react',
-				component: Editor,
-				video,
-				onSave: v => this.onVideoSave(v),
-				onCancel: () => this.doClose()
+					});
 			});
-		}
 	},
 
 
