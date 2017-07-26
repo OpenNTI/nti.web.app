@@ -1526,5 +1526,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				var parent = JSON.parse(response);
 				return lazy.ParseUtils.parseItems(parent.Items);
 			});
+	},
+
+	getCatalogFamilies: function () {
+		const link = this.getLink('CourseCatalogFamilies');
+
+		if (!link) { return Promise.reject(); }
+
+		return Service.request(link)
+			.then(response => lazy.ParseUtils.parseItems(JSON.parse(response).Items));
 	}
 });

@@ -4,6 +4,8 @@ const {wait} = require('nti-commons');
 
 const {getString} = require('legacy/util/Localization');
 const {getURL} = require('legacy/util/Globals');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/mixins/PresentationResources');
 require('legacy/model/Base');
@@ -427,5 +429,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		a.search = query;
 
 		return a.href;
+	},
+
+	getCourseInstance () {
+		const link = this.getLink('CourseInstance');
+
+		if(!link) {return Promise.reject('No CourseInstance link found.');}
+
+		return Service.request(link)
+			.then(response => lazy.ParseUtils.parseItems(response)[0]);
 	}
 });
