@@ -175,6 +175,16 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 					fulfill(course);
 				} else {
 					Service.getObject(ntiid)
+						.then(item => {
+							if (item.isCourse) {
+								return item;
+							}
+							return item.getCourseInstance ? item.getCourseInstance() : Promise.reject('getCourseInstance is not found.');
+						})
+						.then(courseInstance => {
+							me.replaceRootRoute(courseInstance.getTitle() || '', `/course/${encodeForURI(courseInstance.getId())}`);
+							return courseInstance;
+						})
 						.then(c => c.prepareData())
 						.then(fulfill)
 						.catch(() => fulfill(null));

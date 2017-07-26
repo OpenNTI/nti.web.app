@@ -158,26 +158,33 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		const me = this;
 		const id = family.get('CatalogFamilyID');
 
-		let courses = this.LibraryCourseStateStore.findForCatalogFamily(id);
+		let courses = !bundle.isCourse ? Promise.Resolve([]) : bundle.getCatalogFamilies().then(entries => {
+			if (entries.length === 1) {
+				return this.getCourseData(bundle, route);
+			}
 
-		if (courses.length === 1) {
-			return this.getCourseData(bundle, route);
-		}
+			return entries.map(function (courseCatalogEntry) {
+				if (courseCatalogEntry.isInFamily(id)) {
+					const entry = bundle.getCourseCatalogEntry();
+					const isCurrent = courseCatalogEntry.getId() === entry.getId();
+					const uiData = {
+						id: courseCatalogEntry.getId(),
+						title: courseCatalogEntry.get('ProviderUniqueID'),
+						thumb: courseCatalogEntry.get('thumb')
+					};
 
-		courses = courses.map(function (course) {
-			const instance = course.get('CourseInstance');
-			const isCurrent = instance.getId() === bundle.getId();
-			const uiData = instance.asUIData();
-
-			return {
-				id: uiData.id,
-				title: uiData.label,
-				thumb: uiData.thumb,
-				cls: isCurrent ? 'current' : null,
-				rootRoute: me.CourseActions.getRootRouteForId(uiData.id),
-				activeRoute: isCurrent ? route : me.CourseStateStore.getRouteFor(uiData.id)
-			};
+					return {
+						id: uiData.id,
+						title: uiData.title,
+						thumb: uiData.thumb,
+						cls: isCurrent ? 'current' : null,
+						rootRoute: me.CourseActions.getRootRouteForId(uiData.id),
+						activeRoute: isCurrent ? route : me.CourseStateStore.getRouteFor(uiData.id)
+					};
+				}
+			});
 		});
+
 
 		const uiData = family.asUIData();
 
