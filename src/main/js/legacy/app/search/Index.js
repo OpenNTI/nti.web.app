@@ -431,7 +431,25 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			} else {
 				this.Results.addResults(batch.Items);
 			}
-		} else {
+		} else if(this.knownPages > 1) {
+			// no items but there are known pages, so we don't want to just hide
+			// everything (page controls, etc)
+			this.filtersWidget.show();
+
+			if(this.useNewSearch) {
+				this.Results.setProps({
+					hits: batch.Items,
+					errorLoadingText: undefined,
+					emptyText: 'End of search results',
+					currentPage: this.currentPage,
+					numPages: numPages
+				});
+			}
+			else {
+				this.showEmpty();
+			}
+		}
+		else {
 			// need to make sure to unhide the filters widget if there
 			// are no results
 			this.filtersWidget.show();
