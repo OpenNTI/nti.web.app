@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 
 	statics: {
 		showTab: function (bundle) {
-			return bundle && bundle.hasForumList && bundle.hasForumList() && bundle.get('Preview') !== true;
+			return bundle && bundle.hasForumList && bundle.hasForumList();
 		}
 	},
 
