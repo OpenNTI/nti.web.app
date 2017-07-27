@@ -138,6 +138,14 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	},
 
 	doNavigation: function () {
+		var val = this.getValue();
+
+		// no point in starting up the search process if there is nothing
+		// to search on
+		if(!val) {
+			return;
+		}
+
 		if (this.noRouteOnSearch) { return this.doSearch(); }
 
 		this.doSearch(true);
@@ -147,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 			page = this.SearchStore.getPageLocation(),
 			bundle = this.SearchStore.getBundleLocation();
 
-		params.q = encodeURIComponent(this.getValue());
+		params.q = encodeURIComponent(val);
 
 		if (bundle && isNTIID(bundle)) {
 			params.s = encodeForURI(bundle);
