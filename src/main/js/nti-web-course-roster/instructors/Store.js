@@ -39,7 +39,9 @@ const SetList = Symbol('Set List');
 
 function getUserMap (users) {
 	return users.reduce((acc, user) => {
-		acc[user.getID()] = true;
+		if(user && user.getID) {
+			acc[user.getID()] = true;
+		}
 
 		return acc;
 	}, {});
