@@ -37,6 +37,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	]),
 
+	tabbedComponents: {},
+
 
 	renderSelectors: {
 		tabsEl: '.tabs',
@@ -77,33 +79,52 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 
-	setItems: function (upcoming, current, archived) {
+	setItems: function (upcoming, current, archived, archivedLoader) {
 		this.removeAll(true);
 		this.clearTabs();
+		this.archivedLoader = archivedLoader;
 
 		var me = this;
 		if (upcoming && upcoming.length) {
-			this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming'});
+			this.tabbedComponents['upcoming'] = this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming'});
 			this.addTab({label: 'Upcoming', category: 'upcoming', active: true && !this.code});
 		}
 
 		if (current && current.length) {
-			this.addCourses(current, 'Current Courses', null, {category: 'current'});
+			this.tabbedComponents['current'] = this.addCourses(current, 'Current Courses', null, {category: 'current'});
 			this.addTab({label: 'Current', category: 'current', active: Ext.isEmpty(upcoming)});
+			if(!Ext.isEmpty(upcoming)) {
+				this.tabbedComponents['current'].hide();
+			}
 		}
 
 		if (archived && archived.length) {
-			this.addBinnedCourses(this.binCourses(archived), 'Archived Courses', {category: 'archived'});
+			var container = {
+				xtype: 'container',
+				layout: 'none',
+				items: []
+			};
+
+			var containerCmp = this.add(container);
+
+			this.tabbedComponents['archived'] = this.addBinnedCourses(containerCmp, this.binCourses(archived), 'Archived Courses', {category: 'archived', xtype: 'course-catalog-collection'});
+			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming)});
+			if(!Ext.isEmpty(current) || !Ext.isEmpty(upcoming)) {
+				this.tabbedComponents['archived'].hide();
+			}
+		}
+		else if(archivedLoader) {
 			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming)});
 		}
 
 		if (this.rendered) {
-			this.add({xtype: 'library-redemption', redeemLink: 'link', code: this.code, onSuccess: this.onRedeemSuccess.bind(this) });
+			this.redeemWidget = this.add({xtype: 'library-redemption', redeemLink: 'link', code: this.code, onSuccess: this.onRedeemSuccess.bind(this) });
+			this.tabbedComponents['redeem'] = this.redeemWidget;
+			if(!Ext.isEmpty(current) || !Ext.isEmpty(upcoming) || !Ext.isEmpty(archived)) {
+				this.tabbedComponents['redeem'].hide();
+			}
 			this.addTab({label: 'Redeem', category: 'redeem', active: (Ext.isEmpty(current) && Ext.isEmpty(upcoming) && Ext.isEmpty(archived) || !!this.code)});
 		}
-
-		this.onceRendered
-			.then(this.setTops.bind(this));
 
 		this.query('course-catalog-collection').forEach(function (cmp) {
 			me.relayEvents(cmp, ['show-course-detail']);
@@ -159,137 +180,57 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 
-	setTops () {
-		const redeem = this.down('library-redemption');
-		const upcomingTab = this.down('[category=upcoming]');
-		const currentTab = this.down('[category=current]');
-		const archivedTab = this.down('[category=archived]');
-
-		Promise.all([
-			upcomingTab && upcomingTab.onceRendered,
-			currentTab && currentTab.onceRendered,
-			archivedTab && archivedTab.onceRendered,
-			redeem && redeem.onceRendered
-		])
-			.then(() => {
-			//Since the components are Ext.views, wait an event pump for the items
-			//to get rendered
-				return wait();
-			})
-			.then(() => {
-				const get = (category) => Array.from(this.el.dom.querySelectorAll(`.available-catalog[data-category="${category}"]`));
-				let upcoming = get('upcoming');
-				let current = get('current');
-				let archived = get('archived');
-
-				const copy = (x, ...props) => props.reduce((o, prop) => (o[prop] = x[prop], o), {});
-
-				const wrap = list => ({
-					getBoundingClientRect () {
-						const els = [
-							list[0], //first element in list
-							list[list.length - 1] //last element in list
-						]
-						//filter out undefined
-							.filter(x => x)
-							//swap elements with their bounding rects.
-							.map(x => copy(x.getBoundingClientRect(), 'top', 'bottom'));
-
-						return els.length === 0
-							? null
-							: els.reduce((acc, rect) => (acc.bottom = rect.bottom, acc)); //merge rects into one.
-					}
-				});
-
-				this.scrollTops = {};
-
-				if (upcomingTab) {
-					this.scrollTops['upcoming'] = wrap(upcoming);
-				}
-				if (currentTab) {
-					this.scrollTops['current'] = wrap(current);
-				}
-				if (archivedTab) {
-					this.scrollTops['archived'] = wrap(archived);
-				}
-				if(redeem) {
-					this.scrollTops['redeem'] = redeem.el.dom;
-				}
-
-				this.setPageHeight();
-			});
-	},
-
-
-	onScroll: function (/*e*/) {
-		var target = this.getTargetEl().dom,
-			targetTop = target.getBoundingClientRect().top,
-			activeTabEl = this.tabsEl.down('.active'),
-			select = false,
-			last,
-			selectTab;
-
-		if (!this.scrollTops) {
-			this.scrollTops = {};
-		}
-
-		for (let element of Object.keys(this.scrollTops)) {
-			let clientRect = this.scrollTops[element].getBoundingClientRect(),
-				bottom = clientRect && clientRect.bottom;
-
-			if(!selectTab || select) {
-				selectTab = element;
-				select = false;
-			}
-
-			if(bottom <= targetTop) {
-				select = true;
-			}
-
-			last = element;
-		}
-
-		if(target.clientHeight + target.scrollTop === target.scrollHeight) {
-			selectTab = last;
-		}
-
-		if (selectTab) {
-			selectTab = this.tabsEl.down('[data-category=' + selectTab + ']');
-
-			if (selectTab && activeTabEl !== selectTab) {
-				activeTabEl.removeCls('active');
-				selectTab.addCls('active');
-			}
-		}
-	},
-
-
 	onTabClick: function (e) {
 		var target = Ext.get(e.getTarget()),
 			isTab = target && target.hasCls('tab'),
 			category = target && target.getAttribute('data-category'),
-			activeTab = this.tabsEl.down('.active'), me = this,
-			container = this.getTargetEl(),
-			containerTop = container && container.dom.getBoundingClientRect().top;
+			activeTab = this.tabsEl.down('.active'), me = this;
 
 		if (!isTab || target.hasCls('active')) {
 			return;
-		}
-
-		if (this.scrollTops[category]) {
-			let tabTop = this.scrollTops[category].getBoundingClientRect().top,
-				scrollValue = (tabTop - containerTop) + container.dom.scrollTop;
-
-			this.getTargetEl().scrollTo('top', scrollValue, true);
 		}
 
 		wait()
 			.then(function () {
 				var selectTab = me.tabsEl.down('[data-category=' + category + ']');
 
+				for(var prop in me.tabbedComponents) {
+					if(prop === category) {
+						me.tabbedComponents[prop].show();
+					}
+					else {
+						me.tabbedComponents[prop].hide();
+					}
+				}
+
 				if (selectTab && activeTab !== selectTab) {
 					activeTab.removeCls('active');
 					selectTab.addCls('active');
+				}
+
+				if(category === 'archived' && !me.archivedLoaded && !me.archivedLoading) {
+					me.archivedLoading = true;
+					me.el.mask('Loading Archived...');
+					me.archivedLoader().then((items) => {
+						var container = {
+							xtype: 'container',
+							layout: 'none',
+							items: []
+						};
+
+						var containerCmp = me.add(container);
+
+						// save items for later use
+						me.loadedArchivedItems = items;
+
+						me.tabbedComponents['archived'] = me.addBinnedCourses(containerCmp, me.binCourses(items), 'Archived Courses', {category: 'archived', xtype: 'course-catalog-collection'});
+						me.archivedLoaded = true;
+						me.archivedLoading = false;
+						me.el.unmask();
+						me.query('course-catalog-collection').forEach(function (cmp) {
+							me.relayEvents(cmp, ['show-course-detail']);
+						});
+					});
 				}
 			});
 	},

@@ -4,6 +4,7 @@ const Globals = require('legacy/util/Globals');
 
 const CourseActions = require('../../course/Actions');
 
+const CoursesActions = require('./Actions');
 const CoursesStateStore = require('./StateStore');
 
 require('legacy/mixins/Router');
@@ -41,6 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 		me.CourseStore = CoursesStateStore.getInstance();
 		me.CourseViewActions = CourseActions.create();
+		me.Actions = CoursesActions.create();
 
 		me.addRoute('/', me.showCourses.bind(me));
 		me.addRoute('/available', me.showAvailableCourses.bind(me));
@@ -132,14 +134,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		return me.CourseStore.onceLoaded()
 			.then(function () {
 				var upcomingCourses = me.__getUpcomingCourses(),
-					currentCourses = me.__getCurrentCourses(),
-					archivedCourses = me.__getArchivedCourses();
+					currentCourses = me.__getCurrentCourses();
 
 				me.removeLoadingCmp();
-
-				if (!upcomingCourses.length && !currentCourses.length && !archivedCourses.length) {
-					return me.showEmptyState();
-				}
 
 				if (me.emptyText) {
 					me.remove(me.emptyText, true);
@@ -149,14 +146,27 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 				if (me.coursePage) {
 					//Only force an update if we want to, to prevent a blink
 					if (force) {
-						me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
+						me.coursePage.setItems(upcomingCourses, currentCourses, []);
 					}
 				} else {
 					me.coursePage = me.add({
 						xtype: 'library-view-course-page',
 						upcoming: upcomingCourses,
 						current: currentCourses,
-						archived: archivedCourses,
+						archived: [],	// defer loading of archived for performance reasons
+						archivedLoader: () => {
+							const archived = me.__getArchivedCourses();
+							if(!archived) {
+								// need to lazy load
+								return me.Actions.loadItemsAndPrecache('AdministeredCourses', 'Courses', 'Archived').then((items) => {
+									me.CourseStore.setAdminArchivedCourses(items);
+
+									return items;
+								});
+							}
+
+							return Promise.resolve(archived);
+						},
 						navigate: me.navigateToCourse.bind(me)
 					});
 				}

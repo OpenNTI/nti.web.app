@@ -210,8 +210,16 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		return this.__getCurrentCourses(this.ALL_COURSES);
 	},
 
+	setAllArchivedCourses: function (courses) {
+		this.ALL_ADMIN_COURSES = courses;
+	},
+
 	getAllArchivedCourses: function () {
-		return this.__getArchivedCourses(this.ALL_COURSES);
+		const archived = this.__getArchivedCourses(this.ALL_COURSES);
+
+		if(!archived || archived.length === 0) {
+			return this.ALL_ADMIN_COURSES;
+		}
 	},
 
 	getAllUpcomingCourses: function () {
@@ -234,8 +242,16 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		return this.__getCurrentCourses(this.ADMIN_COURSES);
 	},
 
+	setAdminArchivedCourses: function (courses) {
+		this.ARCHIVED_ADMIN_COURSES = courses;
+	},
+
 	getArchivedAdminCourses: function () {
-		return this.__getArchivedCourses(this.ADMIN_COURSES);
+		const archived = this.__getArchivedCourses(this.ENROLLED_COURSES);
+
+		if(!archived || archived.length === 0) {
+			return this.ARCHIVED_ADMIN_COURSES;
+		}
 	},
 
 	getUpcomingAdminCourses: function () {

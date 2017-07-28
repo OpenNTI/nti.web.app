@@ -66,15 +66,16 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 					return;
 				}
 
+				const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+
 				return Promise.all([
-					this.setUpAdministeredCourses((service.getCollection('AdministeredCourses', 'Courses') || {}).href),
+					this.setUpAdministeredCourses(service.getLinkFrom(adminCollection.Links, 'Upcoming'), service.getLinkFrom(adminCollection.Links, 'Current')),
 					this.setUpAllCourses((service.getCollection('AllCourses', 'Courses') || {}).href),
 					this.setUpEnrolledCourses((service.getCollection('EnrolledCourses', 'Courses') || {}).href)
 				]);
 			})
 			.then(() => store.setLoaded());
 	},
-
 
 	loadFavorites () {
 		var store = this.CourseStore;
@@ -173,18 +174,42 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	},
 
 
-	setUpAdministeredCourses: function (link) {
-		if (!link) {
+	setUpAdministeredCourses: function (upcomingLink, currentLink) {
+		if (!upcomingLink && !currentLink) {
 			this.CourseStore.setAdministeredCourses([]);
 
 			return Promise.resolve();
 		}
 
-		return StoreUtils.loadItems(getURL(link))
-			.then(this.__precacheItems.bind(this))
+		return Promise.all([
+			StoreUtils.loadItems(getURL(upcomingLink)),
+			StoreUtils.loadItems(getURL(currentLink))
+		]).then((results) => {
+			// aggregate results.  we're only showing upcoming and current courses
+			// at first by default, deferring admin loading on request
+			return results[0].concat(results[1]);
+		}).then(this.__precacheItems.bind(this))
 			.then(this.CourseStore.setAdministeredCourses.bind(this.CourseStore));
 	},
 
+	loadItems: function (collectionName, subName, type) {
+		return this.LoginStore.getService()
+			.then((service) => {
+				if (!service) {
+					console.error('No Service document defined');
+					return;
+				}
+
+				const courseCollection = service.getCollection(collectionName, subName);
+
+				return StoreUtils.loadItems(getURL(service.getLinkFrom(courseCollection.Links, type)));
+			});
+	},
+
+	loadItemsAndPrecache: function (collectionName, subName, type) {
+		return this.loadItems(collectionName, subName, type)
+			.then(this.__precacheItems.bind(this));
+	},
 
 	setUpEnrolledCourses: function (link) {
 		if (!link) {
