@@ -190,12 +190,25 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.mon(this.CourseStore, 'update-available-courses', this.updateCourses.bind(this));
 	},
 
-	setupCourses: function (courses) {
-		const current = this.CourseStore.getAllCurrentCourses();
-		const archived = this.CourseStore.getAllArchivedCourses();
-		const upcoming = this.CourseStore.getAllUpcomingCourses();
+	setupCourses: function (current, upcoming) {
+		const me = this;
+		const archivedLoader = () => {
+			const archived = me.CourseStore.getAllArchivedCourses();
+			if(!archived) {
+				// need to lazy load
+				return me.CourseActions.loadItems('AllCourses', 'Courses', 'Archived').then((items) => {
+					me.CourseStore.setAdminArchivedCourses(items);
 
-		this.updateAvailableCourses(current, upcoming, archived);
+					return items;
+				});
+			}
+
+			return Promise.resolve(archived);
+
+		};
+
+		// if the tab panel component has already done the deferred archived item loading once, just re-use those items
+		this.updateAvailableCourses(current, upcoming, this.tabpanel.loadedArchivedItems || [], archivedLoader);
 		if (!this.tabpanel || this.tabpanel.activeTab) {
 			this.removeMask();
 			return;
@@ -277,10 +290,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-	updateAvailableCourses: function (current, upcoming, archived) {
+	updateAvailableCourses: function (current, upcoming, archived, archivedLoader) {
 		if (!this.tabpanel) { return; }
 
-		this.tabpanel.setItems(upcoming, current, archived);
+		this.tabpanel.setItems(upcoming, current, archived, archivedLoader);
 	},
 
 	allowNavigation: function () {
@@ -430,10 +443,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	updateCourses: function () {
 		var me = this,
 			current = me.CourseStore.getAllCurrentCourses(),
-			archived = me.CourseStore.getAllArchivedCourses(),
 			upcoming = me.CourseStore.getAllUpcomingCourses();
 
-		me.updateAvailableCourses(current, upcoming, archived);
+		me.updateAvailableCourses(current, upcoming, []);
 	},
 
 	showTabpanel: function (code) {
@@ -479,10 +491,18 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	showCourses: function (route, subRoute) {
 		let code = route.params.code;
 
-		this.mun(this.CourseStore, 'all-courses-set');
-		this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
 		this.addMask();
-		this.CourseActions.loadAllCourses();
+
+		const me = this;
+
+		Promise.all([
+			this.CourseActions.loadItems('AllCourses', 'Courses', 'Current'),
+			this.CourseActions.loadItems('AllCourses', 'Courses', 'Upcoming')
+		]).then((results) => {
+			me.setupCourses(results[0], results[1]);
+		});
+
+		this.addMask();
 		this.showTabpanel(code);
 	},
 

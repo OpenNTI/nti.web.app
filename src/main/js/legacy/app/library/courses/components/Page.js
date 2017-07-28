@@ -30,7 +30,47 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 
 		if (archived && archived.length) {
-			this.addBinnedCourses(this.binCourses(archived), 'Archived Courses');
+			this.addBinnedCourses(this, this.binCourses(archived), 'Archived Courses');
+		}
+		else {
+			// deferred archived loading
+			const me = this;
+			const loadArchived = () => {
+				if(me.loadArchivedButton) {
+					me.loadArchivedButton.el.mask('Loading...');
+				}
+
+				if(me.archived && me.archived.length) {
+					return;
+				}
+
+				me.archivedLoader().then((items) => {
+					if(me.loadArchivedButton) {
+						me.loadArchivedButton.destroy();
+					}
+
+					me.archived = items;
+					me.addBinnedCourses(this, me.binCourses(me.archived), 'Archived Courses');
+				});
+			};
+
+			this.loadArchivedButton = this.add({
+				xtype: 'component',
+				cls: 'load-archived-button',
+				autoEl: {
+					tag: 'div',
+					html: 'Load Archived'
+				},
+				listeners: {
+					render: function (el) {
+						el.getEl().on({
+							click: function () {
+								loadArchived();
+							}
+						});
+					}
+				}
+			});
 		}
 	},
 
@@ -82,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		};
 	},
 
-	addBinnedCourses: function (binObj, label, options) {
+	addBinnedCourses: function (containerCmp, binObj, label, options) {
 		var me = this,
 			bins = binObj.bins || {},
 			years = binObj.years || [],
@@ -94,19 +134,24 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		//show the ongoing courses by last semester first (it will be the current)
 		semesters = ((semesters && Ext.Array.unique(semesters)) || []).reverse();
 
-
 		years.forEach(function (year) {
 			var bin = bins[year];
 
 			semesters.forEach(function (semester) {
 				if (bin[semester] && bin[semester].length) {
-					me.addCourses(bin[semester], label, semester + ' ' + year, options);
+					me.addCoursesToContainer(containerCmp, bin[semester], label, semester + ' ' + year, options);
 				}
 			});
 		});
+
+		return containerCmp;
 	},
 
 	addCourses: function (courses, label, group, options) {
+		return this.addCoursesToContainer(this, courses, label, group, options);
+	},
+
+	addCoursesToContainer: function (container, courses, label, group, options) {
 		var o = {
 			label: label,
 			group: group || '',
@@ -115,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		};
 
 		o = Ext.applyIf(o, options || {});
-		this.add(o);
+		return container.add(o);
 	},
 
 	getCourseStore: function (data) {
