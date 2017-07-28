@@ -31,14 +31,14 @@ function loadBatch (link) {
 function loadInstructors (course) {
 	return loadBatch(course.getLink('Instructors'))
 		.then((batch) => {
-			dispatch(INSTRUCTORS_LOADED, batch.Items);
+			dispatch(INSTRUCTORS_LOADED, batch.Items.filter(x => x));
 		});
 }
 
 function loadEditors (course) {
 	return loadBatch(course.getLink('Editors'))
 		.then((batch) => {
-			dispatch(EDITORS_LOADED, batch.Items);
+			dispatch(EDITORS_LOADED, batch.Items.filter(x => x));
 		});
 }
 
