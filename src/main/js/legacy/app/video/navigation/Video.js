@@ -1,10 +1,10 @@
 const Ext = require('extjs');
 
-require('../Video');
+require('../VideoPlayer');
 
 
 module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', {
-	extend: 'NextThought.app.video.Video',
+	extend: 'NextThought.app.video.VideoPlayer',
 	alias: 'widget.content-video-navigation',
 
 	cls: 'content-video-navigation',
@@ -23,6 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', 
 			]
 		}
 	}),
+
 
 	afterRender: function () {
 		this.callParent(arguments);

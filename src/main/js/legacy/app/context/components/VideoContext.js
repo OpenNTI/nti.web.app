@@ -86,7 +86,8 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 			me.videoEl.hide();
 		} else {
 			me.videoplayer = Ext.widget('content-video-navigation', {
-				playlist: [me.video],
+				// playlist: [me.video],
+				video: me.video,
 				renderTo: me.videoEl,
 				playerWidth: me.WIDTH,
 				width: me.WIDTH,

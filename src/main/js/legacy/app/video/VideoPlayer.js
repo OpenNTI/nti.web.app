@@ -1,6 +1,5 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
-
 const {default: Video, UNSTARTED, ENDED, PLAYING, PAUSED, BUFFERING, CUED} = require('nti-web-video');
 
 const AnalyticsUtil = require('../../util/Analytics');

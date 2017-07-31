@@ -152,8 +152,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		var width = this.self.getTargetVideoWidth(this.getEl(), this.transcriptRatio),
 			startTimeSeconds = (this.startAtMillis || 0) / 1000;
 
+		debugger;
+
 		this.videoplayer = Ext.widget('content-video-navigation', {
-			playlist: [this.video],
+			// playlist: [this.video],
+			video: this.video,
 			renderTo: this.videoPlayerEl,
 			playerWidth: width,
 			width: width,
