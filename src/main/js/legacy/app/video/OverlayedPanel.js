@@ -79,14 +79,19 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 				]}
 			},{
 				width: size.width,
-				xtype: 'content-video',
+				xtype: 'content-video-player',
 				data: data,
 				playlist: playlist,
+				video: playlist[0],
+				doNotAutoPlay: true,
 				contentElement: dom,
 				listeners: {
-					'height-change': 'refreshHeight',
+					'height-change': () => {
+						this.syncElementHeight();
+						this.syncTop();
+					},
 					'player-command-activate': function () {
-						var video = me.down('content-video');
+						var video = me.down('content-video-player');
 
 						if (!me.fromClick) {
 							delete me.fromClick;
@@ -180,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			return;
 		}
 
-		this.down('content-video').getEl().setStyle({cursor: 'pointer'});
+		this.down('content-video-player').getEl().setStyle({cursor: 'pointer'});
 
 		this.down('box').getEl().setStyle({
 			backgroundImage: 'url(' + src + ')',
@@ -202,7 +207,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		if (e.getTarget('.launch-player')) {
 			this.fromClick = true;
 			this.addCls('playing');
-			this.down('content-video').resumePlayback(true);
+			this.down('content-video-player').resumePlayback(true);
 		}
 		else {
 			this.openMediaViewer();
