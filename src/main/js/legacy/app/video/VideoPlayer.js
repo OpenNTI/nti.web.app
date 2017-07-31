@@ -133,6 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 			run: () => {
 				this.analytics.onHeartBeat(this.queryPlayer());
 				this.fireEvent('media-heart-beat');
+				this.maybeSyncHeight();
 			},
 			onError: (err) => console.error(err)
 		};
@@ -153,6 +154,17 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 		this.maybeActivatePlayer();
 
 		this.monitorCardChange();
+	},
+
+
+	maybeSyncHeight () {
+		const height = this.getHeight();
+
+		if (height !== this.lastHeight) {
+			this.fireEvent('height-change');
+		}
+
+		this.lastHeight = height;
 	},
 
 
@@ -214,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 					xtype: 'react',
 					component: Video,
 					src: video,
-					autoPlay: true,
+					autoPlay: !this.doNotAutoPlay,
 					width: this.playerWidth,
 					height: this.playerHeight,
 					onSeeked: (e) => this.onSeeked(e),
@@ -227,6 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 				this.commandQueue.forEach(command => command());
 
 				this.fireEvent('player-command-activate');
+				this.maybeSyncHeight();
 			});
 	},
 
