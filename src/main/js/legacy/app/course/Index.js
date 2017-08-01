@@ -182,7 +182,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 							return item.getCourseInstance ? item.getCourseInstance() : Promise.reject('getCourseInstance is not found.');
 						})
 						.then(courseInstance => {
-							me.replaceRootRoute(courseInstance.getTitle() || '', `/course/${encodeForURI(courseInstance.getId())}`);
+							//If we got a different route than the course instance, replace the route
+							if (courseInstance.getId() !== ntiid) {
+								me.replaceRootRoute(courseInstance.getTitle() || '', `/course/${encodeForURI(courseInstance.getId())}`);
+							}
+
 							return courseInstance;
 						})
 						.then(c => c.prepareData())
