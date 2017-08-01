@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 
 		let courses = !bundle.isCourse ? Promise.Resolve([]) : bundle.getCatalogFamilies().then(entries => {
 			if (entries.length === 1) {
-				return this.getCourseData(bundle, route);
+				return null;//this.getCourseData(bundle, route);
 			}
 
 			return entries.map(function (courseCatalogEntry) {
@@ -192,8 +192,10 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			courses,
 			family.getThumbnail()
 		]).then(function (results) {
-			uiData.cls = 'has-sub-items';
-			uiData.subItems = results[0];
+			const subItems = results[0];
+
+			uiData.cls = subItems ? 'has-sub-items' : '';
+			uiData.subItems = subItems;
 			uiData.thumb = results[1];
 			uiData.rootRoute = me.CourseActions.getRootRouteForId(bundle.getId());
 			uiData.activeRoute = me.CourseStateStore.getRouteFor(bundle.id);
