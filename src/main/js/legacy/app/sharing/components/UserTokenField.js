@@ -3,7 +3,9 @@ const {wait} = require('nti-commons');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const SearchUtils = require('legacy/util/Search');
-const UserSearch = require('legacy/store/UserSearch');
+const UserSearchStore = require('legacy/store/UserSearch');
+const UserSearch = require('legacy/model/UserSearch');
+
 
 const SharingActions = require('../Actions');
 
@@ -122,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.UserTo
 	},
 
 	buildSearchStore: function () {
-		return new UserSearch();
+		return new UserSearchStore();
 	},
 
 	buildSuggestionStore: function () {
