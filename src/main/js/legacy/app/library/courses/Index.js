@@ -134,9 +134,14 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		return me.CourseStore.onceLoaded()
 			.then(function () {
 				var upcomingCourses = me.__getUpcomingCourses(),
-					currentCourses = me.__getCurrentCourses();
+					currentCourses = me.__getCurrentCourses(),
+					archivedCourses = me.__getArchivedCourses();
 
 				me.removeLoadingCmp();
+
+				if (!upcomingCourses.length && !currentCourses.length && !archivedCourses.length) {
+					return me.showEmptyState();
+				}
 
 				if (me.emptyText) {
 					me.remove(me.emptyText, true);
@@ -146,27 +151,14 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 				if (me.coursePage) {
 					//Only force an update if we want to, to prevent a blink
 					if (force) {
-						me.coursePage.setItems(upcomingCourses, currentCourses, []);
+						me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
 					}
 				} else {
 					me.coursePage = me.add({
 						xtype: 'library-view-course-page',
 						upcoming: upcomingCourses,
 						current: currentCourses,
-						archived: [],	// defer loading of archived for performance reasons
-						archivedLoader: () => {
-							const archived = me.__getArchivedCourses();
-							if(!archived) {
-								// need to lazy load
-								return me.Actions.loadItemsAndPrecache('AdministeredCourses', 'Courses', 'Archived').then((items) => {
-									me.CourseStore.setAdminArchivedCourses(items);
-
-									return items;
-								});
-							}
-
-							return Promise.resolve(archived);
-						},
+						archived: archivedCourses,
 						navigate: me.navigateToCourse.bind(me)
 					});
 				}
