@@ -1,3 +1,4 @@
+
 const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
 
@@ -278,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 						node = outlineInterface && outlineInterface.findOutlineNode(cid);
 
 					if (node && videoIds && videoIds.length) {
-						videos.push(PlaylistItem({
+						videos.push(PlaylistItem.create({
 							section: node.get('label'),
 							sources: []
 						}));
@@ -289,9 +290,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 
 						// Filter Videos only
 						if (v && (v.Class === undefined || v.Class === 'Video')) {
-							v = PlaylistItem(v);
-							v.NTIID = v.ntiid;
-							v.section = cid;
+							v = PlaylistItem.create(v);
+
+							v.set('section', cid);
+
 							videos.push(v);
 						}
 					});
