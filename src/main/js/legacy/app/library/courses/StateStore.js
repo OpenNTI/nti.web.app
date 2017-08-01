@@ -4,27 +4,34 @@ const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const CourseInstanceAdministrativeRole = require('legacy/model/courses/CourseInstanceAdministrativeRole');
 
+const ALL_COURSES = 'AllCourses';
+const ENROLLED_COURSES = 'EnrolledCourses';
+const ADMINISTERED_COURSES = 'AdministeredCourses';
+
+const CURRENT = 'Current';
+const UPCOMING = 'Upcoming';
+const ARCHIVED = 'Archived';
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
-	ADMIN_COURSES: [],
-	ENROLLED_COURSES: [],
-	ALL_COURSES: [],
-
 	FAVORITE_ENROLLED_COURSES: [],
 	FAVORITE_ADMIN_COURSES: [],
+
+	COURSE_ITEMS: {},
+	COURSE_LOADING_MAP: {},
+	COURSE_LOADED_MAP: {},
 
 	TOTAL_ADMIN: 0,
 	TOTAL_ENROLLED: 0,
 
-	getEnrolledCourses: function () { return this.ENROLLED_COURSES; },
+	getEnrolledCourses: function () { return this.__getAllForLevel(ENROLLED_COURSES); },
 
 
-	getAdminCourses: function () { return this.ADMIN_COURSES; },
+	getAdminCourses: function () { return this.__getAllForLevel(ADMINISTERED_COURSES); },
 
 
-	getAllCourses: function () { return this.ALL_COURSES; },
+	getAllCourses: function () { return this.__getAllForLevel(ALL_COURSES); },
 
 
 	getFavoriteAdminCourses () {
@@ -37,6 +44,23 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
+	__getAllForLevel (courseLevel) {
+		if(!this.COURSE_ITEMS && !this.COURSE_ITEMS[courseLevel]) {
+			return [];
+		}
+
+		let total = [];
+
+		for(var key in this.COURSE_ITEMS[courseLevel]) {
+			if(this.COURSE_ITEMS[courseLevel][key]) {
+				total = total.concat(this.COURSE_ITEMS[courseLevel][key]);
+			}
+		}
+
+		return total;
+	},
+
+
 	getTotalEnrolledCourses () {
 		return this.TOTAL_ENROLLED;
 	},
@@ -46,21 +70,15 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		return this.TOTAL_ADMIN;
 	},
 
-	addCourse (course) {
-		const courseKey = course.isAdministrative ? 'ADMIN_COURSES' : 'ENROLLED_COURSES';
-		const courses = this[courseKey];
-		const included = courses.every(x => x.getId() !== course.getId());
 
-		if (!included) {
-			courses.push(course);
-			this[courseKey] = courses;
-		}
+	addCourse (course) {
+		// TODO: Add courses. How do we get the course end date to put in the correct partition?
 	},
 
 	__updateCoursesEnrollmentState: function (courses) {
 		var me = this;
 
-		courses.forEach(function (course) {
+		(courses || []).forEach(function (course) {
 			var precached = course.getCourseCatalogEntry(),
 				ntiid = precached.getId(),
 				catalog = me.findCourseForNtiid(ntiid),
@@ -94,27 +112,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	setEnrolledCourses: function (courses) {
-		this.ENROLLED_COURSES = courses;
-		this.__updateCoursesEnrollmentState(courses);
-		this.fireEvent('enrolled-courses-set', this.ENROLLED_COURSES);
-	},
-
-
-	setAdministeredCourses: function (courses) {
-		this.ADMIN_COURSES = courses;
-		this.__updateCoursesEnrollmentState(courses);
-		this.fireEvent('admin-courses-set', this.ADMIN_COURSES);
-	},
-
 	setAllCourses: function (courses) {
-		this.ALL_COURSES = courses;
-
-		//Update catalog entries for enrolled and admin courses.
-		this.__updateCoursesEnrollmentState(this.ENROLLED_COURSES);
-		this.__updateCoursesEnrollmentState(this.ADMIN_COURSES);
-
-		this.fireEvent('all-courses-set', this.ALL_COURSES);
+		this.fireEvent('all-courses-set', courses);
 	},
 
 
@@ -148,114 +147,44 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	/**
-	 * Filter the courses down to the ones that haven't expired yet
-	 * @param  {Array} courses list of courses
-	 * @return {Array}		   courses in the list that haven't expired
-	 */
-	__getCurrentCourses: function (courses) {
-		var current = [];
-
-		courses.forEach(function (course) {
-			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
-
-			if (catalog && catalog.isCurrent()) {
-				current.push(course);
-			}
-		});
-
-		return current;
-	},
-
-	/**
-	 * Filter the courses down to ones that have expired
-	 * @param  {Array} courses list of courses
-	 * @return {Array}		   courses in the list that are expired
-	 */
-	__getArchivedCourses: function (courses) {
-		var archived = [];
-
-		courses.forEach(function (course) {
-			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
-
-			if (!catalog || catalog.isArchived()) {
-				archived.push(course);
-			}
-		});
-
-		return archived;
-	},
-
-
-	/**
-	 * Filter courses down to ones that haven't started yet
-	 * @param  {Array} courses list of courses
-	 * @return {Array} courses that haven't started
-	 */
-	__getUpcomingCourses: function (courses) {
-		var upcoming = [];
-
-		courses.forEach(function (course) {
-			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
-
-			if (catalog && catalog.isUpcoming()) {
-				upcoming.push(course);
-			}
-		});
-
-		return upcoming;
+	__getCoursesOfType: function (courseLevel, courseType) {
+		return this.COURSE_ITEMS[courseLevel] && this.COURSE_ITEMS[courseLevel][courseType];
 	},
 
 	getAllCurrentCourses: function () {
-		return this.__getCurrentCourses(this.ALL_COURSES);
-	},
-
-	setAllArchivedCourses: function (courses) {
-		this.ALL_ADMIN_COURSES = courses;
+		return this.__getCoursesOfType(ALL_COURSES, CURRENT);
 	},
 
 	getAllArchivedCourses: function () {
-		const archived = this.__getArchivedCourses(this.ALL_COURSES);
-
-		if(!archived || archived.length === 0) {
-			return this.ALL_ADMIN_COURSES;
-		}
+		return this.__getCoursesOfType(ALL_COURSES, ARCHIVED);
 	},
 
 	getAllUpcomingCourses: function () {
-		return this.__getUpcomingCourses(this.ALL_COURSES);
+		return this.__getCoursesOfType(ALL_COURSES, UPCOMING);
 	},
 
 	getCurrentEnrolledCourses: function () {
-		return this.__getCurrentCourses(this.ENROLLED_COURSES);
+		return this.__getCoursesOfType(ENROLLED_COURSES, CURRENT);
 	},
 
 	getArchivedEnrolledCourses: function () {
-		return this.__getArchivedCourses(this.ENROLLED_COURSES);
+		return this.__getCoursesOfType(ENROLLED_COURSES, ARCHIVED);
 	},
 
 	getUpcomingEnrolledCourses: function () {
-		return this.__getUpcomingCourses(this.ENROLLED_COURSES);
+		return this.__getCoursesOfType(ENROLLED_COURSES, UPCOMING);
 	},
 
 	getCurrentAdminCourses: function () {
-		return this.__getCurrentCourses(this.ADMIN_COURSES);
-	},
-
-	setAdminArchivedCourses: function (courses) {
-		this.ARCHIVED_ADMIN_COURSES = courses;
+		return this.__getCoursesOfType(ADMINISTERED_COURSES, CURRENT);
 	},
 
 	getArchivedAdminCourses: function () {
-		const archived = this.__getArchivedCourses(this.ENROLLED_COURSES);
-
-		if(!archived || archived.length === 0) {
-			return this.ARCHIVED_ADMIN_COURSES;
-		}
+		return this.__getCoursesOfType(ADMINISTERED_COURSES, ARCHIVED);
 	},
 
 	getUpcomingAdminCourses: function () {
-		return this.__getUpcomingCourses(this.ADMIN_COURSES);
+		return this.__getCoursesOfType(ADMINISTERED_COURSES, UPCOMING);
 	},
 
 	__findIn: function (list, fn) {
@@ -284,8 +213,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 
 	findCourseBy: function (fn) {
-		var enrolled = this.ENROLLED_COURSES || [],
-			admin = this.ADMIN_COURSES || [],
+		var enrolled = this.__getAllForLevel(ENROLLED_COURSES) || [],
+			admin = this.__getAllForLevel(ADMINISTERED_COURSES) || [],
 			course;
 
 		course = this.__findIn(admin, fn);
@@ -299,8 +228,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 
 	findCoursesBy: function (fn) {
-		var enrolled = this.__findAllIn(this.ENROLLED_COURSES || [], fn),
-			admin = this.__findAllIn(this.ADMIN_COURSES || [], fn);
+		var enrolled = this.__findAllIn(this.__getAllForLevel(ENROLLED_COURSES) || [], fn),
+			admin = this.__findAllIn(this.__getAllForLevel(ADMINISTERED_COURSES) || [], fn);
 
 		return admin.concat(enrolled);
 	},
@@ -318,7 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			return match;
 		}
 
-		const enrolled = me.__findIn(me.ENROLLED_COURSES, fn);
+		const enrolled = me.__findIn(this.__getAllForLevel(ENROLLED_COURSES), fn);
 
 		return enrolled ? enrolled : me.__findIn(me.FAVORITE_ENROLLED_COURSES, fn);
 	},
@@ -332,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			return match;
 		}
 
-		return this.__findIn(this.ALL_COURSES, fn);
+		return this.__findIn(this.__getAllForLevel(ALL_COURSES), fn);
 	},
 
 
@@ -343,10 +272,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			return instance.get('NTIID') === ntiid || rec.get('NTIID') === ntiid;
 		}
 
-		var enrollment = this.__findIn(this.ENROLLED_COURSES, fn);
+		var enrollment = this.__findIn(this.__getAllForLevel(ENROLLED_COURSES), fn);
 
 		if (!enrollment) {
-			enrollment = this.__findIn(this.ADMIN_COURSES, fn);
+			enrollment = this.__findIn(this.__getAllForLevel(ADMINISTERED_COURSES), fn);
 		}
 
 		return enrollment && enrollment.get('CourseInstance');
@@ -375,8 +304,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		}
 
 
-		this.__findIn(this.ENROLLED_COURSES, find);
-		this.__findIn(this.ADMIN_COURSES, find);
+		this.__findIn(this.__getAllForLevel(ENROLLED_COURSES), find);
+		this.__findIn(this.__getAllForLevel(ADMINISTERED_COURSES), find);
 
 		keys.sort();
 
@@ -420,10 +349,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			return match || me.__containsNTIID(rec, prefix);
 		}
 
-		course = me.__findIn(me.ENROLLED_COURSES, fn);
+		course = me.__findIn(this.__getAllForLevel(ENROLLED_COURSES), fn);
 
 		if (!course) {
-			course = me.__findIn(me.ADMIN_COURSES, fn);
+			course = me.__findIn(this.__getAllForLevel(ADMINISTERED_COURSES), fn);
 		}
 
 		if (course) {
@@ -473,6 +402,76 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 			return instance.isInFamily(familyId);
 		});
+	},
+
+
+	isTypeLoading (courseLevel, courseType) {
+		return(this.COURSE_LOADING_MAP[courseLevel] && this.COURSE_LOADING_MAP[courseLevel][courseType]);
+	},
+
+
+	setTypeLoading (courseLevel, courseType) {
+		if(!this.COURSE_LOADING_MAP[courseLevel]) {
+			this.COURSE_LOADING_MAP[courseLevel] = {};
+		}
+
+		this.COURSE_LOADING_MAP[courseLevel][courseType] = true;
+	},
+
+
+	setTypeLoaded (courseLevel, courseType) {
+		if(!this.COURSE_LOADED_MAP[courseLevel]) {
+			this.COURSE_LOADED_MAP[courseLevel] = {};
+		}
+
+		this.COURSE_LOADED_MAP[courseLevel][courseType] = true;
+
+		delete this.COURSE_LOADING_MAP[courseLevel][courseType];
+		this.fireEvent(courseLevel.toLowerCase() + '-' + courseType.toLowerCase() + '-loaded');
+	},
+
+
+	onceTypeLoaded (courseLevel, courseType, force) {
+		if (this.COURSE_LOADED_MAP[courseLevel] && this.COURSE_LOADED_MAP[courseLevel][courseType] && !force) {
+			return Promise.resolve(this);
+		}
+
+		delete this.COURSE_LOADED_MAP[courseLevel][courseType];
+
+		this.fireEvent('load-' + courseLevel + '-' + courseType);
+
+		const event = courseLevel.toLowerCase() + '-' + courseType.toLowerCase() + '-loaded';
+
+		return new Promise((fulfill) => {
+			this.on({
+				single: true,
+				[event]: () => fulfill(this)
+			});
+		});
+	},
+
+	__updateEnrollment (items) {
+		items.forEach((item) => {
+			const openEnrollment = item.get('EnrollmentOptions') && item.get('EnrollmentOptions').get('Items')
+				&& item.get('EnrollmentOptions').get('Items').OpenEnrollment;
+
+			const enrolled = openEnrollment && openEnrollment.IsEnrolled;
+			const isOpen = openEnrollment && openEnrollment.IsAvailable;
+			const isAdmin = item.get('isAdmin');
+
+			item.set('enrolled', enrolled || isAdmin);
+			item.set('isOpen', isOpen);
+		});
+	},
+
+	setCoursesByType (courseLevel, courseType, items) {
+		if(!this.COURSE_ITEMS[courseLevel]) {
+			this.COURSE_ITEMS[courseLevel] = {};
+		}
+
+		this.__updateEnrollment(items);
+
+		this.COURSE_ITEMS[courseLevel][courseType] = items;
 	},
 
 

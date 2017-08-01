@@ -86,12 +86,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		var me = this;
 		if (upcoming && upcoming.length) {
-			this.tabbedComponents['upcoming'] = this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming'});
+			this.tabbedComponents['upcoming'] = this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming', xtype: 'course-catalog-collection'});
 			this.addTab({label: 'Upcoming', category: 'upcoming', active: true && !this.code});
 		}
 
 		if (current && current.length) {
-			this.tabbedComponents['current'] = this.addCourses(current, 'Current Courses', null, {category: 'current'});
+			this.tabbedComponents['current'] = this.addCourses(current, 'Current Courses', null, {category: 'current', xtype: 'course-catalog-collection'});
 			this.addTab({label: 'Current', category: 'current', active: Ext.isEmpty(upcoming)});
 			if(!Ext.isEmpty(upcoming)) {
 				this.tabbedComponents['current'].hide();

@@ -51,11 +51,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 
 		me.__toggleEnrollmentStatus(course, enrollment)
 			.then(function () {
-				var updateCatalog, updateEnrolled;
+				var updateEnrolled;
 
 				course.setEnrolled(false);
 				wait(500).then(() =>  course.fireEvent('dropped'));
-				updateCatalog = me.CourseActions.loadAllCourses();
 
 				updateEnrolled = new Promise(function (fulfill, reject) {
 					me.refreshEnrolledCourses(fulfill.bind(null, true), fulfill.bind(null, false));
@@ -65,10 +64,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 				me.PathActions.clearCache();
 
 				Promise.all([
-					updateCatalog,
+					me.CourseActions.loadAllUpcomingCourses(),
+					me.CourseActions.loadAllCurrentCourses(),
+					me.CourseActions.loadAllArchivedCourses(),
 					updateEnrolled
 				]).then(function (results) {
-					var success = results[1];
+					var success = results[3];
 
 					if (success) {
 						const loadedCourse = me.CourseStore.findCourseForNtiid(course.getId());

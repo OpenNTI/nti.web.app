@@ -131,38 +131,41 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		var me = this;
 
 
-		return me.CourseStore.onceLoaded()
-			.then(function () {
-				var upcomingCourses = me.__getUpcomingCourses(),
-					currentCourses = me.__getCurrentCourses(),
-					archivedCourses = me.__getArchivedCourses();
+		return Promise.all([
+			me.Actions.loadEnrolledUpcomingCourses(),
+			me.Actions.loadEnrolledCurrentCourses(),
+			me.Actions.loadEnrolledArchivedCourses()
+		]).then(function (results) {
+			var upcomingCourses = me.__getUpcomingCourses(),
+				currentCourses = me.__getCurrentCourses(),
+				archivedCourses = me.__getArchivedCourses();
 
-				me.removeLoadingCmp();
+			me.removeLoadingCmp();
 
-				if (!upcomingCourses.length && !currentCourses.length && !archivedCourses.length) {
-					return me.showEmptyState();
+			if (!upcomingCourses.length && !currentCourses.length && !archivedCourses.length) {
+				return me.showEmptyState();
+			}
+
+			if (me.emptyText) {
+				me.remove(me.emptyText, true);
+				delete me.emptyText;
+			}
+
+			if (me.coursePage) {
+				//Only force an update if we want to, to prevent a blink
+				if (force) {
+					me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
 				}
-
-				if (me.emptyText) {
-					me.remove(me.emptyText, true);
-					delete me.emptyText;
-				}
-
-				if (me.coursePage) {
-					//Only force an update if we want to, to prevent a blink
-					if (force) {
-						me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
-					}
-				} else {
-					me.coursePage = me.add({
-						xtype: 'library-view-course-page',
-						upcoming: upcomingCourses,
-						current: currentCourses,
-						archived: archivedCourses,
-						navigate: me.navigateToCourse.bind(me)
-					});
-				}
-			});
+			} else {
+				me.coursePage = me.add({
+					xtype: 'library-view-course-page',
+					upcoming: upcomingCourses,
+					current: currentCourses,
+					archived: archivedCourses,
+					navigate: me.navigateToCourse.bind(me)
+				});
+			}
+		});
 	},
 
 
@@ -181,30 +184,31 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 	showAvailableCourses: function (route, subRoute) {
 		var me = this;
 
-
-		return me.CourseStore.onceLoaded()
-			.then(function () {
-				if (!me.availableWin) {
-					me.availableWin = Ext.widget('library-available-courses-window', {
-						doClose: function () {
-							if (route.precache.closeURL) {
-								me.pushRootRoute('', route.precache.closeURL);
-							} else {
-								me.pushRoute('', '/');
-							}
+		return Promise.all([
+			me.Actions.loadAllUpcomingCourses(),
+			me.Actions.loadAllCurrentCourses()
+		]).then(function () {
+			if (!me.availableWin) {
+				me.availableWin = Ext.widget('library-available-courses-window', {
+					doClose: function () {
+						if (route.precache.closeURL) {
+							me.pushRootRoute('', route.precache.closeURL);
+						} else {
+							me.pushRoute('', '/');
 						}
-					});
-				}
+					}
+				});
+			}
 
-				me.loadCourses();
-				me.availableWin.show();
-				me.setTitle('All Courses');
+			me.loadCourses();
+			me.availableWin.show();
+			me.setTitle('All Courses');
 
-				me.addChildRouter(me.availableWin);
-				if (me.availableWin && me.availableWin.handleRoute) {
-					return me.availableWin.handleRoute(subRoute, route.precache);
-				}
-			});
+			me.addChildRouter(me.availableWin);
+			if (me.availableWin && me.availableWin.handleRoute) {
+				return me.availableWin.handleRoute(subRoute, route.precache);
+			}
+		});
 	},
 
 
