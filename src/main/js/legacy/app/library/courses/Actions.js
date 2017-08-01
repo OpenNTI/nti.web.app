@@ -66,15 +66,105 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 					return;
 				}
 
-				const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
-
 				return Promise.all([
-					this.setUpAdministeredCourses(service.getLinkFrom(adminCollection.Links, 'Upcoming'), service.getLinkFrom(adminCollection.Links, 'Current')),
+					this.setUpAdministeredCourses(),
 					this.setUpAllCourses((service.getCollection('AllCourses', 'Courses') || {}).href),
-					this.setUpEnrolledCourses((service.getCollection('EnrolledCourses', 'Courses') || {}).href)
+					this.setUpEnrolledCourses()
 				]);
 			})
 			.then(() => store.setLoaded());
+	},
+
+	loadAdminUpcomingCourses () {
+		return this.__loadCoursesOfType('AdministeredCourses', 'Upcoming');
+	},
+
+	loadAdminCurrentCourses () {
+		return this.__loadCoursesOfType('AdministeredCourses', 'Current');
+	},
+
+	loadAdminArchivedCourses () {
+		return this.__loadCoursesOfType('AdministeredCourses', 'Archived');
+	},
+
+	loadEnrolledUpcomingCourses () {
+		return this.__loadCoursesOfType('EnrolledCourses', 'Upcoming');
+	},
+
+	loadEnrolledCurrentCourses () {
+		return this.__loadCoursesOfType('EnrolledCourses', 'Current');
+	},
+
+	loadEnrolledArchivedCourses () {
+		return this.__loadCoursesOfType('EnrolledCourses', 'Archived');
+	},
+
+	loadAllUpcomingCourses () {
+		return this.__loadCoursesOfType('AllCourses', 'Upcoming').then((items) => {
+			this.CourseStore.setAllCourses(items);
+
+			return items;
+		});
+	},
+
+	loadAllCurrentCourses () {
+		return this.__loadCoursesOfType('AllCourses', 'Current').then((items) => {
+			this.CourseStore.setAllCourses(items);
+
+			return items;
+		});
+	},
+
+	loadAllArchivedCourses () {
+		return this.__loadCoursesOfType('AllCourses', 'Archived').then((items) => {
+			this.CourseStore.setAllCourses(items);
+
+			return items;
+		});
+	},
+
+	__loadCoursesOfType (courseLevel, courseType) {
+		var store = this.CourseStore;
+
+		if (store.isTypeLoading(courseLevel, courseType)) {
+			return;
+		}
+
+		store.setTypeLoading(courseLevel, courseType);
+
+		return this.LoginStore.getService()
+			.then((service) => {
+				if (!service) {
+					console.error('No Service document defined');
+					return;
+				}
+
+				const courseCollection = service.getCollection(courseLevel, 'Courses');
+
+				return this.__setupCourseByType(service.getLinkFrom(courseCollection.Links, courseType), courseLevel, courseType);
+			})
+			.then(() => {
+				store.setTypeLoaded(courseLevel, courseType);
+			});
+	},
+
+	__setupCourseByType (link, courseLevel, courseType) {
+		if (!link) {
+			this.CourseStore.setCoursesByType(courseLevel, courseType, []);
+
+			return Promise.resolve();
+		}
+
+		return StoreUtils.loadBatch(getURL(link))
+			.then(batch => {
+				return batch.Items;
+			})
+			.then(items => {
+				return courseLevel === 'AdministeredCourses' || courseLevel === 'EnrolledCourses'
+					? this.__precacheItems(items)
+					: items;
+			})
+			.then(items => this.CourseStore.setCoursesByType(courseLevel, courseType, items));
 	},
 
 	loadFavorites () {
@@ -174,22 +264,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	},
 
 
-	setUpAdministeredCourses: function (upcomingLink, currentLink) {
-		if (!upcomingLink && !currentLink) {
-			this.CourseStore.setAdministeredCourses([]);
-
-			return Promise.resolve();
-		}
-
+	setUpAdministeredCourses: function () {
 		return Promise.all([
-			StoreUtils.loadItems(getURL(upcomingLink)),
-			StoreUtils.loadItems(getURL(currentLink))
-		]).then((results) => {
-			// aggregate results.  we're only showing upcoming and current courses
-			// at first by default, deferring admin loading on request
-			return results[0].concat(results[1]);
-		}).then(this.__precacheItems.bind(this))
-			.then(this.CourseStore.setAdministeredCourses.bind(this.CourseStore));
+			this.loadAdminUpcomingCourses(),
+			this.loadAdminCurrentCourses(),
+			this.loadAdminArchivedCourses()
+		]);
 	},
 
 	loadItems: function (collectionName, subName, type) {
@@ -211,16 +291,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 			.then(this.__precacheItems.bind(this));
 	},
 
-	setUpEnrolledCourses: function (link) {
-		if (!link) {
-			this.CourseStore.setEnrolledCourses([]);
-
-			return Promise.resolve();
-		}
-
-		return StoreUtils.loadItems(getURL(link))
-			.then(this.__precacheItems.bind(this))
-			.then(this.CourseStore.setEnrolledCourses.bind(this.CourseStore));
+	setUpEnrolledCourses: function () {
+		return Promise.all([
+			this.loadEnrolledUpcomingCourses(),
+			this.loadEnrolledCurrentCourses(),
+			this.loadEnrolledArchivedCourses()
+		]);
 	},
 
 

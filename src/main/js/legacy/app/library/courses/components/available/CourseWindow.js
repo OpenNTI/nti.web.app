@@ -196,15 +196,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			const archived = me.CourseStore.getAllArchivedCourses();
 			if(!archived) {
 				// need to lazy load
-				return me.CourseActions.loadItems('AllCourses', 'Courses', 'Archived').then((items) => {
-					me.CourseStore.setAdminArchivedCourses(items);
-
-					return items;
-				});
+				return me.CourseActions.loadAllArchivedCourses()
+					.then(() => {
+						return me.CourseStore.getAllArchivedCourses();
+					});
 			}
 
 			return Promise.resolve(archived);
-
 		};
 
 		// if the tab panel component has already done the deferred archived item loading once, just re-use those items
@@ -496,10 +494,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		const me = this;
 
 		Promise.all([
-			this.CourseActions.loadItems('AllCourses', 'Courses', 'Current'),
-			this.CourseActions.loadItems('AllCourses', 'Courses', 'Upcoming')
-		]).then((results) => {
-			me.setupCourses(results[0], results[1]);
+			this.CourseActions.loadAllCurrentCourses(),
+			this.CourseActions.loadAllUpcomingCourses()
+		]).then(() => {
+			me.setupCourses(me.CourseStore.getAllCurrentCourses(), me.CourseStore.getAllUpcomingCourses());
 		});
 
 		this.addMask();
