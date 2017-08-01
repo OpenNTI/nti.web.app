@@ -143,6 +143,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	},
 
 	setForumList: function (forumList) {
+		this.buildStore(forumList);
+
 		this.refresh();
 	},
 
