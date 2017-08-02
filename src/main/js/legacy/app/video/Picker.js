@@ -4,6 +4,8 @@ const {EmbedInput, Editor, createMediaSourceFromUrl, getCanonicalUrlFrom} = requ
 
 const PromptStateStore = require('legacy/app/prompt/StateStore');
 const Video = require('legacy/model/Video');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 const SourceMimeType = 'application/vnd.nextthought.ntivideosource';
 
@@ -120,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 
 	onVideoSave (video) {
-		this.Prompt.doImmediateSave(video);
+		this.Prompt.doImmediateSave(lazy.ParseUtils.parseItems(video)[0]);
 	},
 
 
