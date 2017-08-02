@@ -170,6 +170,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						}
 					}
 				}
+			})
+			.catch(reason => {
+				if (reason === 'delete-video' && this.videoSelectionCmp) {
+					this.videoSelectionCmp.deleteSelectionItem(ntiid);
+				}
 			});
 	},
 

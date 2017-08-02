@@ -177,6 +177,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	deleteSelectionItem (deletedItemId) {
+		this.setSelectionItems(this.selectionItems.filter(x => {
+			const id = x.ntiid || x.NTIID || x.internalId;
+			return deletedItemId !== id;
+		}));
+
+		this.excludeItems(this.getExcludedVideos() || []);
+	},
+
+
 	excludeItems: function (exclude) {
 		if (!Array.isArray(exclude)) {
 			exclude = [exclude];
