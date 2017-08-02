@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getItemsFromRecord: function (record) {
 		if (record instanceof VideoRoll) {
-			return record.get('Items');
+			return [...record.get('Items')];
 		}
 
 		return [record];
