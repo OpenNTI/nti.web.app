@@ -1,10 +1,7 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
-const {getLink, Server, Service: ServiceSymbol} = require('nti-lib-interfaces');
 const {EmbedInput, Editor, createMediaSourceFromUrl, getCanonicalUrlFrom} = require('nti-web-video');
 
-const lazy = require('legacy/util/lazy-require')
-	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const PromptStateStore = require('legacy/app/prompt/StateStore');
 const Video = require('legacy/model/Video');
 
@@ -41,33 +38,9 @@ function createVideoJSON (media) {
 	});
 }
 
-function createVideo (link, raw) {
-	if (!link) { return Promise.reject(); }
-
-	return getService()
-		.then((service) => service.postParseResponse(link, raw));
-}
-
-function saveVideo (video, {title}) {
-	video.title = title;
-	const link = getLink(video, 'edit');
-	const service = video[ServiceSymbol];
-	const server = service && service[Server];
-	if (!server) {
-		Promise.reject();
-	}
-
-	return server.put(link, video);
-}
-
 function getVideo (video) {
 	return getService()
 		.then(service => service.getObject(video instanceof Object && video.get ? video.get('ntiid') : video));
-}
-
-
-function parseVideo (video) {
-	return lazy.ParseUtils.parseItems(video)[0];
 }
 
 module.exports = exports = Ext.define('NextThought.app.video.Picker', {
@@ -90,102 +63,10 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 		if (video && !(video instanceof Object)) {
 			getVideo(video)
-				.then(v => {
-					this.video = this.createVideoForEdit(v);
-					this.editVideo(this.video);
-				});
+				.then(v => this.editVideo(v));
 		} else {
 			this.createVideo();
 		}
-	},
-
-
-	getAssetLink () {
-		const {data} = this.Prompt;
-
-		return data && data.bundle && data.bundle.getLink('assets');
-	},
-
-	createVideoForEdit (raw) {
-		this.placeholderVideo = null;
-
-		return {
-			...raw,
-			save: (...args) => saveVideo(raw, ...args).then(video => {
-				this.video = video;
-				return video;
-			}),
-			applyCaptions: (video, captionsFile, purpose) => this.applyCaptions(video, captionsFile, purpose),
-			replaceTranscript: (transcript, newFile) => this.replaceTranscript(transcript, newFile),
-			updateTranscript: (transcript, purpose, lang) => this.updateTranscript(transcript, purpose, lang),
-			removeTranscript: (transcript) => this.removeTranscript(transcript)
-		};
-	},
-
-	createPlaceholderVideo (raw) {
-		this.placeholderVideo = {
-			...raw,
-			save: (...args) => this.onPlaceholderSaved(raw, ...args),
-			update: (r, ...args) => saveVideo(r, ...args),
-			applyCaptions: (video, captionsFile, purpose) => this.applyCaptions(video, captionsFile, purpose)
-		};
-
-		return this.placeholderVideo;
-	},
-
-	applyCaptions (video, captionsFile, purpose) {
-		if(captionsFile) {
-			const transcriptLinks = video.Links.filter((l) => l.rel === 'transcript');
-			if(transcriptLinks.length === 1) {
-				const url = transcriptLinks[0].href;
-				const formdata = new FormData();
-				formdata.append(captionsFile.name, captionsFile);
-				if(purpose) {
-					formdata.append('purpose', purpose);
-				}
-				return Service.postMultiPartData(url, formdata);
-			}
-			return Promise.reject('No transcript link');
-		}
-
-		return Promise.reject('No transcript file');
-	},
-
-	replaceTranscript (transcript, newFile) {
-		if(transcript) {
-			const url = transcript.href;
-			const formdata = new FormData();
-			formdata.append(newFile.name, newFile);
-			return Service.putMultiPartData(url, formdata);
-		}
-	},
-
-	updateTranscript (transcript, purpose, lang) {
-		let jsonData = {};
-
-		if(purpose) {
-			jsonData.purpose = purpose;
-		}
-
-		if(lang) {
-			jsonData.lang = lang;
-		}
-
-		return Service.put(transcript.href, jsonData);
-	},
-
-	removeTranscript (transcript) {
-		if(transcript) {
-			return Service.requestDelete(transcript.href);
-		}
-	},
-
-	onPlaceholderSaved (raw, data) {
-		return createVideo(this.getAssetLink(), {...raw, ...data})
-			.then((v) => {
-				this.placeholderVideo = v;
-				return v;
-			});
 	},
 
 
@@ -206,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 							video,
 							transcripts,
 							onSave: v => this.onVideoSave(v),
-							onCancel: () => this.doClose()
+							onCancel: reason => this.doClose(reason)
 						});
 					});
 			});
@@ -228,25 +109,23 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 
 
 	onNewVideoSelect (source) {
+		const { data } = this.Prompt;
+		const link = data && data.bundle && data.bundle.getLink('assets');
+
 		createMediaSourceFromUrl(getCanonicalUrlFrom(source))
 			.then(media => createVideoJSON(media))
-			.then(raw => this.createPlaceholderVideo(raw))
-			.then((placeholder) => this.editVideo(placeholder));
+			.then((video) => getService().then((service) => service.postParseResponse(link, video)))
+			.then((video) => this.editVideo(video));
 	},
 
 
-	onVideoSave () {
-		const video = this.placeholderVideo
-			? parseVideo(this.placeholderVideo)
-			: this.video;
-
+	onVideoSave (video) {
 		this.Prompt.doImmediateSave(video);
 	},
 
 
-
-	doClose () {
-		this.Prompt.doClose();
+	doClose (reason) {
+		this.Prompt.doClose(reason);
 	}
 }, function () {
 	PromptStateStore.register('video-picker', this);
