@@ -509,7 +509,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 			if (lineInfo && (lineInfo !== o.lastLine || !o.lastLine)) {
 				o.lastLine = lineInfo;
-				e.stopEvent();
+
+				// don't stop events when mousing over videos, or else the
+				// mouse events on videos won't be invoked
+				if(e.target && !e.target.matches('.video-controls-overlay')) {
+					e.stopEvent();
+				}
 
 				if (!lineInfo.range) {
 					box.hide();
