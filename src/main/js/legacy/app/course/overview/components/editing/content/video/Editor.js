@@ -176,7 +176,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	onVideoDelete (ntiid) {
 		this.videoSelectionCmp.deleteSelectionItem(ntiid);
-		this.record.updateFromServer();
+		if (this.record) {
+			this.record.updateFromServer();
+		}
 	},
 
 
