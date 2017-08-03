@@ -77,6 +77,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 			this.videoCreator.destroy();
 		}
 
+		const {onVideoDelete} = this.Prompt.data;
+
 		getService()
 			.then(service => {
 				Promise.all(video.transcripts
@@ -89,7 +91,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 							video,
 							transcripts,
 							onSave: v => this.onVideoSave(v),
-							onCancel: reason => this.doClose(reason)
+							onCancel: reason => this.doClose(reason),
+							onVideoDelete
 						});
 					});
 			});

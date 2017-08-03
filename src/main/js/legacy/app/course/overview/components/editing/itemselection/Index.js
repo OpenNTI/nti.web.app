@@ -178,8 +178,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	deleteSelectionItem (deletedItemId) {
-		this.setSelectionItems(this.selectionItems.filter(x => {
-			const id = x.ntiid || x.NTIID || x.internalId;
+		this.setSelectionItems(this.selectionItems.filter(selectionItem => {
+			const id = selectionItem.ntiid || selectionItem.NTIID || selectionItem.internalId;
+			if (deletedItemId === id) {
+				this.unselectItem(selectionItem);
+			}
 			return deletedItemId !== id;
 		}));
 

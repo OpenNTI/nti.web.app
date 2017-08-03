@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	pickVideo (ntiid, onEdit) {
 		ntiid = ntiid instanceof Object ? null : ntiid;
-		this.PromptActions.prompt('video-picker', {bundle: this.bundle, video: ntiid})
+		this.PromptActions.prompt('video-picker', {bundle: this.bundle, video: ntiid, onVideoDelete: this.onVideoDelete.bind(this)})
 			.then((video) => {
 				if (this.videoSelectionCmp) {
 					if (!ntiid) {
@@ -170,12 +170,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						}
 					}
 				}
-			})
-			.catch(reason => {
-				if (reason === 'delete-video' && this.videoSelectionCmp) {
-					this.videoSelectionCmp.deleteSelectionItem(ntiid);
-				}
 			});
+	},
+
+
+	onVideoDelete (ntiid) {
+		this.videoSelectionCmp.deleteSelectionItem(ntiid);
+		this.record.updateFromServer();
 	},
 
 
