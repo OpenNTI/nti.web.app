@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 			callback: (record, operation) => {
 				success = operation.success;//if we're synchronous
 				if (callback) {
-					Ext.callback(callback, null, arguments);
+					Ext.callback(callback, null, [record, operation]);
 				}
 			}
 		});
