@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 	loadUserData: function (cmps, reader) {
 		var cid, me = this, loaded;
-
+		const unregisteredNoteContainer = cmps.filter(c => c.unregisteredNoteContainer === true)[0];
 		loaded = Ext.Array.map(cmps, function (cmp) {
 			var p;
 
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 						var o = reader && reader.noteOverlay;
 
 						if (o && o.registerGutterRecords) {
-							o.registerGutterRecords(store, store.getRange(), cmp);
+							o.registerGutterRecords(store, store.getRange(), cmp, unregisteredNoteContainer);
 							return Promise.resolve();
 						}
 
