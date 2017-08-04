@@ -341,11 +341,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			});
 	},
 
-	registerGutterRecords: function (noteStore, records, view) {
+	registerGutterRecords: function (noteStore, records, view, container) {
 		if (Ext.isEmpty(noteStore)) { return;}
 
 		let me = this;
 		let reader = me.reader;
+		const unregisteredNotes = [];
 
 		if (!reader.rendered) {
 			reader.onceRendered
@@ -359,8 +360,47 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		Ext.each(records, function (n) {
 			if (n.isTopLevel && n.isTopLevel()) {
-				me.registerNoteRecord(n, view, noteStore);
+				const isRegistered = me.registerNoteRecord(n, view, noteStore);
+				if (!isRegistered) {
+					unregisteredNotes.push(n);
+				}
 			}
+		});
+
+		if (container && container.unregisteredNoteContainer) {
+			unregisteredNotes.forEach(note => {
+				this.registerOrphanedNote(note, container, noteStore);
+			});
+		} else if (view.unregisteredNoteContainer) {
+			unregisteredNotes.forEach(note => this.registerOrphanedNote(note, view, noteStore));
+		}
+	},
+
+
+	registerOrphanedNote: function (note, unregisteredNoteContainer, store) {
+
+		if (this.isRecordAlreadyAdded(note)) {return;}
+
+		const range = unregisteredNoteContainer.domRangeForRecord();
+
+		if (Ext.isEmpty(range)) {
+			return;
+		}
+
+		const rect = RangeUtils.safeBoundingBoxForRange(range);
+
+		//Get the scroll target.
+		const readerTop = this.reader.el.getTop();
+		const line = rect ? rect.top - readerTop : 0;
+		note.set('pline', line);
+
+		this.annotationManager.add({
+			id: note.getId(),
+			rect,
+			range,
+			record: note,
+			store,
+			line
 		});
 	},
 
@@ -385,7 +425,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		let domRange = this.rangeForDescription(rec, cmp, recStore);
 
 		if (Ext.isEmpty(domRange)) {
-			return;
+			return false;
 		}
 
 		let rect = RangeUtils.safeBoundingBoxForRange(domRange);
@@ -403,6 +443,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			store: recStore,
 			line: line
 		});
+
+		return true;
 	},
 
 	unRegisterGutterRecords: function (store, records/*, view*/) {

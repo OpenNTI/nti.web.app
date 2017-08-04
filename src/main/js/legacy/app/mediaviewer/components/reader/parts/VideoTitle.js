@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	}),
 
 	ui: 'video-title',
-
+	unregisteredNoteContainer: true,
 	renderSelectors: {
 		title: '.title'
 	},
