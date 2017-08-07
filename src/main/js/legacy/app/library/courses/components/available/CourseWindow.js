@@ -291,7 +291,29 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	updateAvailableCourses: function (current, upcoming, archived, archivedLoader) {
 		if (!this.tabpanel) { return; }
 
-		this.tabpanel.setItems(upcoming, current, archived, archivedLoader);
+		let needToPreloadArchived = false;
+
+		if(this.previouslySelectedCourse) {
+			const matching = (current || []).concat(upcoming || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
+
+			needToPreloadArchived = matching.length === 0;
+		}
+
+		if(needToPreloadArchived) {
+			archivedLoader().then((items) => {
+				const upcomingMatches = (upcoming || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
+				const currentMatches = (current || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
+
+				this.tabpanel.setItems(upcoming, current, items, archivedLoader,
+					upcomingMatches.length > 0
+						? 'Upcoming' : (
+							currentMatches.length > 0
+								? 'Current' : 'Archived'));
+			});
+		}
+		else {
+			this.tabpanel.setItems(upcoming, current, archived, archivedLoader);
+		}
 	},
 
 	allowNavigation: function () {
@@ -331,9 +353,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		if (current.is('course-enrollment-details')) {
 			if (!this.courseDetail.changingEnrollment) {
+				course = current.course;
+
 				this.courseDetail.destroy();
 				delete this.courseDetail;
-				this.pushRoute(null, '/');
+				this.pushRoute(null, '/', {course: course});
 			}
 		}
 
@@ -488,6 +512,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	showCourses: function (route, subRoute) {
 		let code = route.params.code;
+
+		this.previouslySelectedCourse = route.precache.course;
 
 		this.addMask();
 

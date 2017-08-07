@@ -49,8 +49,14 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		me.addDefaultRoute('/');
 
 		me.mon(me.CourseStore, {
-			'loading': () => {
+			'dropping-course': () => {
 				me.addLoadingCmp();
+			},
+			'dropped-course': () => {
+				me.loadCourses(true);
+			},
+			'added-course': () => {
+				me.loadCourses(true);
 			},
 			'enrolled-courses-set': function () {
 				if (me.isVisible) {
