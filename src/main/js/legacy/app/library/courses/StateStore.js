@@ -452,12 +452,15 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 	__updateEnrollment (items) {
 		items.forEach((item) => {
-			const openEnrollment = item.get('EnrollmentOptions') && item.get('EnrollmentOptions').get('Items')
-				&& item.get('EnrollmentOptions').get('Items').OpenEnrollment;
+			const enrollmentStatus = item.get('LegacyEnrollmentStatus');
 
-			const enrolled = openEnrollment && openEnrollment.IsEnrolled;
-			const isOpen = openEnrollment && openEnrollment.IsAvailable;
+			const enrolled = enrollmentStatus ? true : false;
+			const isOpen = enrollmentStatus && enrollmentStatus === 'Open';
 			const isAdmin = item.get('isAdmin');
+
+			if(item.updateEnrollmentState) {
+				item.updateEnrollmentState(item.get('RealEnrollmentStatus') || item.get('Status'), isOpen, isAdmin);
+			}
 
 			item.set('enrolled', enrolled || isAdmin);
 			item.set('isOpen', isOpen);
