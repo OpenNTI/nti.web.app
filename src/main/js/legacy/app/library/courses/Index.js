@@ -136,7 +136,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 	loadCourses: function (force) {
 		var me = this;
 
-		me.addLoadingCmp();
+		if(me.coursePage) {
+			me.coursePage.removeAll(true);
+		}
 
 		return Promise.all([
 			me.Actions.loadEnrolledUpcomingCourses(),
@@ -184,7 +186,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 			delete this.availableWin;
 		}
 
-		return this.loadCourses();
+		this.addLoadingCmp();
+
+		return this.loadCourses(true);
 	},
 
 
