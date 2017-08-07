@@ -204,6 +204,11 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	},
 
 	play: function (e) {
+		const playing = this.hasCls('playing');
+
+		//If we are already playing don't stomp on the player
+		if (playing) { return; }
+
 		if (e.getTarget('.launch-player')) {
 			this.fromClick = true;
 			this.addCls('playing');
@@ -231,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			v.page = location.NTIID;
 			path = bundleContent.getVideoRouteForObject(v);
 
-			if (path && path.route) {
+			if (path && path.route && bundleContent.handleContentNavigation) {
 				bundleContent.handleContentNavigation(path.title, path.route, path.precache);
 			}
 		}
