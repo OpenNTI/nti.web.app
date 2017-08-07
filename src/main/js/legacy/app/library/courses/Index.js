@@ -136,6 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 	loadCourses: function (force) {
 		var me = this;
 
+		me.addLoadingCmp();
 
 		return Promise.all([
 			me.Actions.loadEnrolledUpcomingCourses(),
