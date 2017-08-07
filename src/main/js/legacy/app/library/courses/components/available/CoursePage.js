@@ -79,21 +79,26 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 
-	setItems: function (upcoming, current, archived, archivedLoader) {
+	setItems: function (upcoming, current, archived, archivedLoader, activeTab) {
 		this.removeAll(true);
 		this.clearTabs();
 		this.archivedLoader = archivedLoader;
 
 		var me = this;
 		if (upcoming && upcoming.length) {
+			const activeState = !this.code && (!activeTab || activeTab === 'Upcoming');
 			this.tabbedComponents['upcoming'] = this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming', xtype: 'course-catalog-collection'});
-			this.addTab({label: 'Upcoming', category: 'upcoming', active: true && !this.code});
+			this.addTab({label: 'Upcoming', category: 'upcoming', active: activeState});
+			if(!activeState) {
+				this.tabbedComponents['upcoming'].hide();
+			}
 		}
 
 		if (current && current.length) {
+			const activeState = (Ext.isEmpty(upcoming) && !activeTab) || activeTab === 'Current';
 			this.tabbedComponents['current'] = this.addCourses(current, 'Current Courses', null, {category: 'current', xtype: 'course-catalog-collection'});
-			this.addTab({label: 'Current', category: 'current', active: Ext.isEmpty(upcoming)});
-			if(!Ext.isEmpty(upcoming)) {
+			this.addTab({label: 'Current', category: 'current', active: activeState});
+			if(!activeState) {
 				this.tabbedComponents['current'].hide();
 			}
 		}
@@ -107,9 +112,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 			var containerCmp = this.add(container);
 
+			const activeState = (Ext.isEmpty(current) && Ext.isEmpty(upcoming) && !activeTab) || activeTab === 'Archived';
 			this.tabbedComponents['archived'] = this.addBinnedCourses(containerCmp, this.binCourses(archived), 'Archived Courses', {category: 'archived', xtype: 'course-catalog-collection'});
-			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming)});
-			if(!Ext.isEmpty(current) || !Ext.isEmpty(upcoming)) {
+			this.addTab({label: 'Archived', category: 'archived', active: activeState});
+			if(!activeState) {
 				this.tabbedComponents['archived'].hide();
 			}
 		}
