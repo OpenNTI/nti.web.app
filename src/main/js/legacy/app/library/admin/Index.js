@@ -39,10 +39,10 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 		return this.CourseStore.getArchivedAdminCourses();
 	},
 
-
 	loadCourses: function (force) {
 		var me = this;
 
+		me.addLoadingCmp();
 
 		return Promise.all([
 			me.Actions.loadAdminUpcomingCourses(),
