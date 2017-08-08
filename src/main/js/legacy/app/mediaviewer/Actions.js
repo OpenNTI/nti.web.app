@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			const id = note && note.getId();
 
 			if (id && !seen[id]) {
-				this.registerOrphanedRecord(store, note, unregisteredCmp);
+				overlay.registerOrphanedRecord(store, note, unregisteredCmp);
 				seen[id] = true;
 			}
 		}
