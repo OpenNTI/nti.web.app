@@ -42,8 +42,6 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 	loadCourses: function (force) {
 		var me = this;
 
-		me.addLoadingCmp();
-
 		return Promise.all([
 			me.Actions.loadAdminUpcomingCourses(),
 			me.Actions.loadAdminCurrentCourses()
