@@ -115,11 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 
 	addLoadingCmp () {
-		if (this.coursePage) {
-			this.el.mask('Loading...');
-		} else {
-			this.loadingCmp = this.loadingCmp || this.add(Globals.getContainerLoadingMask());
-		}
+		this.loadingCmp = this.loadingCmp || this.add(Globals.getContainerLoadingMask());
 	},
 
 
