@@ -169,7 +169,11 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 
 	getVideo () {
-		this.videoPromise = this.videoPromise || getService().then(service => service.getObject(this.video.getId()));
+		if (!this.videoPromise) {
+			this.videoPromise = this.video ?
+				getService().then(service => service.getObject(this.vidoe.getId())) :
+				Promise.resolve(this.src);
+		}
 
 		return this.videoPromise;
 	},
@@ -220,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 					return;
 				}
 
-				this.currentVideoId = video.getID();
+				this.currentVideoId = video.getID ? video.getID() : video;
 
 				this.videoPlayer = this.videoWrapper.add({
 					xtype: 'react',

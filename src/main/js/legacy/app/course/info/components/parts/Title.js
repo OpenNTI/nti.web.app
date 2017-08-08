@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
+require('legacy/app/video/VideoPlayer');
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Title', {
 	extend: 'Ext.Component',
@@ -65,9 +66,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 
 		if (!Ext.isEmpty(this.videoUrl)) {
 			this.video = Ext.widget({
-				xtype: 'content-video',
-				url: this.videoUrl,
+				xtype: 'content-video-player',
+				src: this.videoUrl,
 				width: this.videoWidth,
+				doNotAutoPlay: true,
 				playerWidth: this.videoWidth,//video initializes early enough it can't read the dom just yet...so lets JUST GET IT DONE...
 				renderTo: this.videoEl,
 				floatParent: this,
