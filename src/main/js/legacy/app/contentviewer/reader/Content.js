@@ -260,12 +260,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 		function cssObj (m) {
 			const key = /href="([^"]*)"/i;
+			const css = {};
 
 			for (let i = 0; i < m.length; i++) {
 				const o = key.test(m[i]) ? basePath + key.exec(m[i])[1] : m[i];
-				c[o] = {};
+				css[o] = {};
 				if (!rc[o]) {
-					rc[o] = c[o] = Globals.loadStyleSheet({
+					rc[o] = css[o] = Globals.loadStyleSheet({
 						url: o,
 						document: me.getDocumentElement()
 					});
@@ -274,13 +275,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 			//remove resources not used anymore...
 			Ext.Object.each(rc, (k, v, o) => {
-				if (!c[k]) {
+				if (!css[k]) {
 					Ext.fly(v).remove();
 					delete o[k];
 				}
 			});
 
-			return c;
+			return css;
 		}
 
 		me.basePath = basePath;
