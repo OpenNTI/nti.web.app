@@ -60,7 +60,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 	loadUserData: function (cmps, reader) {
 		var cid, me = this, loaded;
-		const unregisteredNoteContainer = cmps.filter(c => c.unregisteredNoteContainer === true)[0];
+		const unregisteredCmp = cmps.filter(c => c.unregisteredNoteContainer === true)[0];
+		const unregisteredNotes = [];
+
 		loaded = Ext.Array.map(cmps, function (cmp) {
 			var p;
 
@@ -74,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 						var o = reader && reader.noteOverlay;
 
 						if (o && o.registerGutterRecords) {
-							o.registerGutterRecords(store, store.getRange(), cmp, unregisteredNoteContainer);
+							o.registerGutterRecords(store, store.getRange(), cmp, (note) => unregisteredNotes.push({note, store}));
 							return Promise.resolve();
 						}
 
@@ -88,7 +90,50 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			return p || Promise.reject();
 		});
 
+		Promise.all(loaded)
+			.then(() => {
+				const o = reader && reader.noteOverlay;
+				const seen = {};
+
+				if (!unregisteredCmp || !o || !o.registerOrphanedRecord) { return; }
+
+				for (let unregistered of unregisteredNotes) {
+					const {note, store} = unregistered;
+					const id = note && note.getId();
+
+					if (id && !seen[id]) {
+						o.registerOrphanedRecord(store, note, unregisteredCmp);
+						seen[id] = true;
+					}
+				}
+			});
+
+
 		return loaded;
+	},
+
+	realignNotes (cmps, overlay) {
+		const unregisteredCmp = cmps.filter(c => c.unregisteredNoteContainer)[0];
+		const unregisteredNotes = [];
+		const seen = {};
+
+		for (let cmp of cmps) {
+			const store = cmp.userDataStore;
+
+			overlay.registerGutterRecords(store, store.getRange(), cmp, (note) => unregisteredNotes.push({note, store}));
+		}
+
+		if (!unregisteredCmp) { return; }
+
+		for (let unregistered of unregisteredNotes) {
+			const {note, store} = unregistered;
+			const id = note && note.getId();
+
+			if (id && !seen[id]) {
+				this.registerOrphanedRecord(store, note, unregisteredCmp);
+				seen[id] = true;
+			}
+		}
 	},
 
 	loadAnnotations: function (cmp, containerId) {

@@ -8,7 +8,9 @@ const Globals = require('legacy/util/Globals');
 const RangeUtils = require('legacy/util/Ranges');
 const SharingUtils = require('legacy/util/Sharing');
 const UserDataActions = require('legacy/app/userdata/Actions');
+const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
 const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
+
 
 require('legacy/util/Line');
 require('legacy/app/whiteboard/Utils');
@@ -32,6 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		let me = this;
 
 		this.UserDataActions = UserDataActions.create();
+		this.MediaViewerActions = MediaViewerActions.create();
 		this.MediaViewerStore = MediaViewerStateStore.getInstance();
 
 		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
@@ -202,11 +205,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		let cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
 		let visibleCmps = Ext.Array.filter(cmps, function (c) {return Ext.isFunction(c.registerAnnotations) && c.isVisible(true);});
 
-		if(visibleCmps.length) {
-			this.annotationManager.removeAll();
-			Ext.each(visibleCmps, function (cmp) {
-				cmp.registerAnnotations();
-			});
+		if (visibleCmps.length) {
+			this.MediaViewerActions.realignNotes(visibleCmps, this);
 		}
 	},
 
@@ -341,12 +341,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			});
 	},
 
-	registerGutterRecords: function (noteStore, records, view, container) {
+	registerGutterRecords: function (noteStore, records, view, onUnregistered) {
 		if (Ext.isEmpty(noteStore)) { return;}
 
 		let me = this;
 		let reader = me.reader;
-		const unregisteredNotes = [];
 
 		if (!reader.rendered) {
 			reader.onceRendered
@@ -361,27 +360,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		Ext.each(records, function (n) {
 			if (n.isTopLevel && n.isTopLevel()) {
 				const isRegistered = me.registerNoteRecord(n, view, noteStore);
-				if (!isRegistered) {
-					unregisteredNotes.push(n);
+
+				if (!isRegistered && typeof onUnregistered === 'function') {
+					onUnregistered(n);
 				}
 			}
 		});
-
-		if (container && container.unregisteredNoteContainer) {
-			unregisteredNotes.forEach(note => {
-				this.registerOrphanedNote(note, container, noteStore);
-			});
-		} else if (view.unregisteredNoteContainer) {
-			unregisteredNotes.forEach(note => this.registerOrphanedNote(note, view, noteStore));
-		}
 	},
 
 
-	registerOrphanedNote: function (note, unregisteredNoteContainer, store) {
+	registerOrphanedRecord: function (store, note, view) {
 
 		if (this.isRecordAlreadyAdded(note)) {return;}
 
-		const range = unregisteredNoteContainer.domRangeForRecord();
+		const range = view.domRangeForRecord();
 
 		if (Ext.isEmpty(range)) {
 			return;
@@ -392,6 +384,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		//Get the scroll target.
 		const readerTop = this.reader.el.getTop();
 		const line = rect ? rect.top - readerTop : 0;
+
 		note.set('pline', line);
 
 		this.annotationManager.add({

@@ -10,6 +10,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	flex: 1,
 
+	unregisteredNoteContainer: true,
+
 	layout: {
 		type: 'vbox',
 		align: 'stretch'

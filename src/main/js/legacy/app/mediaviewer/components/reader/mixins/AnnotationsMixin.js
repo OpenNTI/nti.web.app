@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	registerAnnotations: function () {
 		if (this.userDataStore) {
-			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
+			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this, null);
 		}
 	}
 });
