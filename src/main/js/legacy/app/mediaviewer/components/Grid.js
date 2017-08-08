@@ -290,11 +290,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 
 						// Filter Videos only
 						if (v && (v.Class === undefined || v.Class === 'Video')) {
-							v = PlaylistItem.create(v);
+							let playlistItem = PlaylistItem.create(v);
 
-							v.set('section', cid);
+							playlistItem.set('section', cid);
+							playlistItem.set('NTIID', v.NTIID || v.ntiid);
 
-							videos.push(v);
+							videos.push(playlistItem);
 						}
 					});
 				}
