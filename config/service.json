@@ -1,5 +1,6 @@
 {
 	"development": {
+		"public": true,
 		"apps": [
 			{
 				"package": "nti-web-login",
