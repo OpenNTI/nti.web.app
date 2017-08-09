@@ -97,9 +97,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		{ name: 'thumb', type: 'string', persist: false, defaultValue: 'missing.png'}
 	],
 
+	getBundle () {
+		return this.get('Bundle') || {};
+	},
+
 	asUIData: function () {
 		var e = this.getCourseCatalogEntry(),
-			bundle = this.get('Bundle').asUIData(),
+			bundle = (this.getBundle().asUIData && this.getBundle().asUIData()) || {},
 			data = {
 				id: this.getId(),
 				isCourse: true,
@@ -214,9 +218,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	getFirstPage: function () {
-		var bundle = this.get('Bundle');
+		var bundle = this.getBundle();
 
-		return bundle.getFirstPage();
+		return bundle.getFirstPage && bundle.getFirstPage();
 	},
 
 	SCOPE_SUGGESTIONS: {
@@ -388,50 +392,50 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 
 	getTocFor (contentPackageID) {
-		const bundle = this.get('Bundle');
+		const bundle = this.getBundle();
 
 		return this.getWrapper()
 			.then((enrollment) => {
-				return bundle.getTocFor(contentPackageID, enrollment.get('Status'));
+				return bundle.getTocFor && bundle.getTocFor(contentPackageID, enrollment.get('Status'));
 			});
 	},
 
 
 	getTocs: function () {
-		var bundle = this.get('Bundle');
+		var bundle = this.getBundle();
 
 		return this.getWrapper()
 			.then(function (enrollment) {
-				return bundle.getTocs(enrollment.get('Status'));
+				return bundle.getTocs && bundle.getTocs(enrollment.get('Status'));
 			});
 	},
 
 
 	hasContentPackage (id) {
-		const bundle = this.get('Bundle');
+		const bundle = this.getBundle();
 
-		return bundle.getContentPackage(id);
+		return bundle.getContentPackage && bundle.getContentPackage(id);
 	},
 
 
 	getContentPackage (id) {
-		const bundle = this.get('Bundle');
+		const bundle = this.getBundle();
 
-		return bundle.getContentPackage(id);
+		return bundle.getContentPackage && bundle.getContentPackage(id);
 	},
 
 
 	getContentPackageContaining (id) {
-		const bundle = this.get('Bundle');
+		const bundle = this.getBundle();
 
-		return bundle.getContentPackageContaining(id);
+		return bundle.getContentPackageContaining && bundle.getContentPackageContaining(id);
 	},
 
 
 	syncContentPackage (contentPackage) {
-		const bundle = this.get('Bundle');
+		const bundle = this.getBundle();
 
-		return bundle.syncContentPackage(contentPackage);
+		return bundle.syncContentPackage && bundle.syncContentPackage(contentPackage);
 	},
 
 
@@ -443,33 +447,33 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 
 	getContentPackages: function () {
-		var bundle = this.get('Bundle');
+		var bundle = this.getBundle();
 
-		return bundle.getContentPackages();
+		return bundle.getContentPackages && bundle.getContentPackages();
 	},
 
 	getContentRoots: function () {
-		var bundle = this.get('Bundle');
+		var bundle = this.getBundle();
 
-		return bundle.getContentRoots();
+		return bundle.getContentRoots && bundle.getContentRoots();
 	},
 
 	getContentIds: function () {
-		var bundle = this.get('Bundle');
+		var bundle = this.getBundle();
 
-		return bundle.getContentIds();
+		return bundle.getContentIds && bundle.getContentIds();
 	},
 
 	getTitle: function () {
-		var bundle = this.get('Bundle');
+		var bundle = this.getBundle();
 
-		return bundle.getTitle();
+		return bundle.getTitle && bundle.getTitle();
 	},
 
 	getIcon: function () {
-		var bundle = this.get('Bundle');
+		var bundle = this.getBundle();
 
-		return bundle.getIcon();
+		return bundle.getIcon && bundle.getIcon();
 	},
 
 	canGetToContent: function (ntiid, rootId) {
@@ -565,11 +569,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	getPresentationProperties: function (id) {
-		return this.get('Bundle').getPresentationProperties(id);
+		return this.getBundle().getPresentationProperties && this.getBundle().getPresentationProperties(id);
 	},
 
 	getAssetRoot: function () {
-		return this.get('Bundle').getAssetRoot();
+		return this.getBundle().getAssetRoot && this.getBundle().getAssetRoot();
 	},
 
 	/**
@@ -578,19 +582,19 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 * @return {Promise} fulfills with url
 	 */
 	getBackgroundImage: function () {
-		return this.get('Bundle').getBackgroundImage();
+		return this.getBundle().getBackgroundImage && this.getBundle().getBackgroundImage();
 	},
 
 	getIconImage: function () {
-		return this.get('Bundle').getIconImage();
+		return this.getBundle().getIconImage && this.getBundle().getIconImage();
 	},
 
 	getThumbnail: function () {
-		return this.get('Bundle').getThumbnail();
+		return this.getBundle().getThumbnail && this.getBundle().getThumbnail();
 	},
 
 	getVendorIconImage: function () {
-		return this.get('Bundle').getVendorIcon();
+		return this.getBundle().getVendorIcon && this.getBundle().getVendorIcon();
 	},
 
 	getPublicScope: function () { return this.getScope('Public'); },
@@ -1058,7 +1062,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	getVideosByContentPackage: function () {
-		return this.get('Bundle').getVideosByContentPackage();
+		return this.getBundle().getVideosByContentPackage && this.getBundle().getVideosByContentPackage();
 	},
 
 	getMediaByOutline: function (force) {
@@ -1421,7 +1425,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	containsNTIID: function (id) {
-		return this.get('Bundle').containsNTIID(id);
+		return this.getBundle().containsNTIID && this.getBundle().containsNTIID(id);
 	},
 
 	/**
