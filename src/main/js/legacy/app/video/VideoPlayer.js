@@ -171,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	getVideo () {
 		if (!this.videoPromise) {
 			this.videoPromise = this.video ?
-				getService().then(service => service.getObject(this.vidoe.getId())) :
+				getService().then(service => service.getObject(this.video.getId())) :
 				Promise.resolve(this.src);
 		}
 
