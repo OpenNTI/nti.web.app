@@ -168,6 +168,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	insertOverlay: function () {
+		this.annotationManager.removeAll();
+
 		this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
 
 		this.mon(this.annotationOverlay, 'click', 'showAnnotationsAtLine', this);
