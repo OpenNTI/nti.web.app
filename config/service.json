@@ -1,0 +1,10 @@
+{
+	"development": {
+		"apps": [
+			{
+				"package": "nti-web-login",
+				"basepath": "/login/"
+			}
+		]
+	}
+}
