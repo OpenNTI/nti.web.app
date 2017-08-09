@@ -347,15 +347,14 @@ li.library-grid-item {
 .load-archived-button {
 	background-color: #3fb3f6;
 	color: white;
-	font-size: 14px;
-	display: inline-block;
+	font-size: 16px;
 	font-family: "Open Sans", sans-serif;
 	font-weight: 500;
 	border-radius: 2px;
 	cursor: pointer;
-	height: 39px;
-	width: 120px;
 	padding: 10px;
+	text-align: center;
+	line-height: 30px;
 
 	&.indented {
 		margin-left: 34px;

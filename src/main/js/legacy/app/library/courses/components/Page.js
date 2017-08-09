@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		if (archived && archived.length) {
 			this.addBinnedCourses(this, this.binCourses(archived), 'Archived Courses');
 		}
-		else {
+		else if(this.archivedLoader) {
 			// deferred archived loading
 			const me = this;
 			const loadArchived = () => {
