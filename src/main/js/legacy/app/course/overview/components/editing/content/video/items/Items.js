@@ -67,14 +67,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	updateItem (item) {
-		const itemId = item.ntiid || item.NTIID;
+		const updatedItem = item.isModel ? item.getData() : item;
+		const itemId = updatedItem.ntiid || updatedItem.NTIID;
 		const newItems = this.selectedItems.map(x => {
 			const id = x.ntiid || x.NTIID || x.internalId;
 
 			if (id === itemId) {
 				const links = x.get('Links');
-				item.Links = links;
-				Object.assign(x, {data: item, raw: item.Links.links});
+				updatedItem.Links = links;
+				Object.assign(x, {data: updatedItem, raw: updatedItem.Links.links});
 			}
 
 			return x;
