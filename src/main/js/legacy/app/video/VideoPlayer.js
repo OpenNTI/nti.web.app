@@ -286,7 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 
 	jumpToVideoLocation (startAt) {
-		if (this.videoPlayer && this.videoPLayer.componentInstance) {
+		if (this.videoPlayer && this.videoPlayer.componentInstance) {
 			this.videoPlayer.componentInstance.setCurrentTime(startAt);
 		} else {
 			this.commandQueue.push(() => this.jumpToVideoLocation(startAt));

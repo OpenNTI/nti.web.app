@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 
 		console.debug('Should scroll cmps to time: ', startTimeSeconds);
 		if (this.videoplayer) {
-			this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
+			this.videoplayer.jumpToVideoLocation(startTimeSeconds);
 		}
 
 		if (this.resourceView) {
