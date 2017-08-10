@@ -278,7 +278,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						return;
 					}
 
-					values = grade.getValues();
+					// DisplayableGrade takes precedent if present
+					values = grade.get('DisplayableGrade')
+						? { value: grade.get('DisplayableGrade') }
+						: grade.getValues();
 
 					addGrade(values);
 
