@@ -22,7 +22,8 @@
     "build": "nti-app-scripts build",
     "clean": "nti-app-scripts clean",
     "check": "nti-app-scripts check",
-    "release": "nti-app-scripts release"
+    "release": "nti-app-scripts release",
+    "install-snapshots": "nti-app-scripts install-snapshots"
   },
   "main": "./dist/server/index.js",
   "publishConfig": {
@@ -45,7 +46,7 @@
     "imports-loader": "0.x.x",
     "moment": "^2.12.0",
     "node-natural-sort": "^0.8.6",
-    "nti-app-scripts": "^1.0.30",
+    "nti-app-scripts": "^1.0.47",
     "nti-assignment-editor": "^1.4.2",
     "nti-commons": "^2.0.0",
     "nti-content": "^1.4.1",
@@ -60,7 +61,6 @@
     "nti-web-commons": "0.x.x",
     "nti-web-discussions": "0.x.x",
     "nti-web-login": "^2017.1.1",
-    "nti-web-service": "^1.5.2",
     "nti-web-video": "^1.0.0",
     "postcss-cli": "^4.0.0",
     "prop-types": "^15.5.8",
