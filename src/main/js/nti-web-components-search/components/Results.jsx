@@ -58,7 +58,7 @@ export default class SearchResults extends React.Component {
 	componentDidUpdate (prevProps) {
 		if(prevProps.hits !== this.props.hits) {
 			const {hits = [], getBreadCrumb} = this.props;
-			this.setState({loaded: false, hits: []});
+			this.setState({loaded: false, navigating: false, hits: []});
 			this.getHitData(hits, getBreadCrumb);
 		}
 	}
