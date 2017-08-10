@@ -15,6 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	cls: 'submission-panel',
 	ui: 'assessment',
 	appendPlaceholder: true,
+	appendToEnd: true,
 	hidden: true,
 	shouldShow: true,
 

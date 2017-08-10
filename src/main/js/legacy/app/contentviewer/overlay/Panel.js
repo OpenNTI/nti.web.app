@@ -61,6 +61,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 					el = this.reader.getDocumentElement().querySelector('#NTIContent .page-contents');
 				}
 
+				if (this.appendToEnd) {
+					insert = 'append';
+					el = this.reader.getDocumentElement().querySelector('#NTIContent .page-contents');
+				}
+
 				this.contentElement = this.placementHolderTpl[insert](el);
 			} catch (e) {
 				this.insertedElement = false;
