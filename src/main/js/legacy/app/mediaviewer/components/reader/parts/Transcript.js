@@ -273,11 +273,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			return;
 		}
 
-		var start = record.get('startTime'),
-			videoId = this.transcript.get('associatedVideoId');
+		var start = record.get('startTime');
 
-		console.log('Jump to video ', videoId, ' to : ', start);
-		this.fireEvent('jump-video-to', videoId, start);
+		this.fireEvent('jump-video-to', start);
 	},
 
 	openEditor: function (view, record, item) {

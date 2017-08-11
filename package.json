@@ -62,7 +62,7 @@
     "nti-web-discussions": "0.x.x",
     "nti-web-login": "^2017.1.1",
     "nti-web-service": "^1.5.2",
-    "nti-web-video": "^1.7.4",
+    "nti-web-video": "^1.7.5",
     "postcss-cli": "^4.0.0",
     "prop-types": "^15.5.8",
     "rangy": "^1.3.0",
