@@ -185,7 +185,6 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 			if (card) {
 				this.mon(card, {
-					activate: () => this.maybeActivatePlayer(),
 					deactivate: () => this.deactivatePlayer()
 				});
 
@@ -197,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	},
 
 
-	maybeActivatePlayer () {
+	maybeActivatePlayer (e) {
 		if (!this.isVisible(true)) { return; }
 
 		const otherInstances = this.getInstances();
@@ -217,13 +216,13 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	activatePlayer () {
 		this.isActive = true;
 
+		if (this.videoPlayer) {
+			this.resumePlayback();
+			return;
+		}
+
 		this.getVideo()
 			.then((video) => {
-				if (this.videoPlayer) {
-					this.resumePlayback();
-					return;
-				}
-
 				this.currentVideoId = video.getID ? video.getID() : video;
 
 				this.videoPlayer = this.videoWrapper.add({
