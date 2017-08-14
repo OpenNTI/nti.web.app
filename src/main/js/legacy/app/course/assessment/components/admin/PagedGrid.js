@@ -352,9 +352,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		delete this.HIDDEN_INDEX[name];
 
-		this.columnOrder.splice(index, 0, name);
-
-		items = this.__getColumnConfigs(this.columnOrder, this.extraColumns, this.columnOverrides);
+		items = this.__getColumnConfigs(this.columnOrder.filter((cName) => !this.HIDDEN_INDEX[cName]), this.extraColumns, this.columnOverrides);
 
 		this.reconfigure(this.store, items);
 	},
@@ -370,9 +368,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.HIDDEN_INDEX[name] = index;
 
-		this.columnOrder.splice(index, 1);
-
-		items = this.__getColumnConfigs(this.columnOrder, this.extraColumns, this.columnOverrides);
+		items = this.__getColumnConfigs(this.columnOrder.filter((cName) => !this.HIDDEN_INDEX[cName]), this.extraColumns, this.columnOverrides);
 
 		this.reconfigure(this.store, items);
 	},
