@@ -124,12 +124,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 
 		if (this.rendered) {
+			const activeState = activeTab === 'Redeem' || (Ext.isEmpty(current) && Ext.isEmpty(upcoming) && Ext.isEmpty(archived) || !!this.code);
 			this.redeemWidget = this.add({xtype: 'library-redemption', redeemLink: 'link', code: this.code, onSuccess: this.onRedeemSuccess.bind(this) });
 			this.tabbedComponents['redeem'] = this.redeemWidget;
-			if(!Ext.isEmpty(current) || !Ext.isEmpty(upcoming) || !Ext.isEmpty(archived)) {
+			if(!activeState) {
 				this.tabbedComponents['redeem'].hide();
 			}
-			this.addTab({label: 'Redeem', category: 'redeem', active: (Ext.isEmpty(current) && Ext.isEmpty(upcoming) && Ext.isEmpty(archived) || !!this.code)});
+			this.addTab({label: 'Redeem', category: 'redeem', active: activeState});
 		}
 
 		this.query('course-catalog-collection').forEach(function (cmp) {
