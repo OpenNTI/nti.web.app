@@ -339,7 +339,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				target = evt.getTarget(),
 				anchor = evt.getTarget('A');
 
-			if (anchor && !Element.matches(target, '.application-highlight,.application-highlight ' + target.tagName)) {
+			if (anchor && !Element.matches(target, '.application-highlight,.application-highlight ' + target.tagName)
+					&& !Element.matches(anchor, '.ntiglossaryentry')) {
 				me.reader.getContent().onClick(evt, anchor);
 				return;
 			}
