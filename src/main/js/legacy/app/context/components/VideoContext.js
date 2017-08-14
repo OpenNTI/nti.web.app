@@ -5,7 +5,7 @@ const PageInfo = require('legacy/model/PageInfo');
 
 const ContextStateStore = require('../StateStore');
 
-require('legacy/app/video/Video');
+require('legacy/app/video/VideoPlayer');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.VideoContext', {
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 			me.videoEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 			me.videoEl.hide();
 		} else {
-			me.videoplayer = Ext.widget('content-video-navigation', {
+			me.videoplayer = Ext.widget('content-video-player', {
 				// playlist: [me.video],
 				video: me.video,
 				renderTo: me.videoEl,
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 				startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
 			}
 			if (startTimeSeconds > 0) {
-				me.videoplayer.setVideoAndPosition(me.videoplayer.currentVideoId, startTimeSeconds);
+				me.videoplayer.jumpToVideoLocation(startTimeSeconds);
 			}
 
 			if (me.doNavigate) {

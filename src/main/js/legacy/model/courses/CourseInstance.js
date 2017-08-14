@@ -1499,7 +1499,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return Service.request(link)
 			.then(function (response) {
 				const json = JSON.parse(response);
-				const raw = json.IsPredicted ? json.PredictedGrade : json.FinalGrade;
+
+				// if there is a FinalGrade, always use that, otherwise
+				// defer to PredictedGrade
+				const raw = json.FinalGrade || json.PredictedGrade;
 
 				return lazy.ParseUtils.parseItems(raw)[0];
 			});

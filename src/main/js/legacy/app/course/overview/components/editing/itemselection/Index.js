@@ -163,7 +163,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	updateSelectionItem (updatedItem) {
+	updateSelectionItem (item) {
+		const updatedItem = item.isModel ? item.getData() : item;
 		const updatedItemId = updatedItem.ntiid || updatedItem.NTIID;
 
 		this.setSelectionItems(this.selectionItems.map(x => {
