@@ -207,6 +207,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		// if the tab panel component has already done the deferred archived item loading once, just re-use those items
 		this.updateAvailableCourses(current, upcoming, this.tabpanel.loadedArchivedItems || [], archivedLoader);
+
+		if(this.loadingArchived) {
+			// still loading, don't remove mask
+			return;
+		}
+
 		if (!this.tabpanel || this.tabpanel.activeTab) {
 			this.removeMask();
 			return;
@@ -293,18 +299,32 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		let needToPreloadArchived = false;
 
+		let upcomingMatches = [];
+		let currentMatches = [];
+
 		if(this.previouslySelectedCourse) {
+			// handle remembering which tab the previously selected course was on.  if it's determined that it was
+			// on the Archived tab, we'll have to pre-load the archived data up front
 			const matching = (current || []).concat(upcoming || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
 
+			upcomingMatches = (upcoming || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
+			currentMatches = (current || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
+
 			needToPreloadArchived = matching.length === 0;
+		} else {
+			// if we know current and upcoming are empty, we are going to need to load
+			// archived up front
+			needToPreloadArchived = (current || []).length === 0 && (upcoming || []).length === 0;
 		}
 
 		if(needToPreloadArchived) {
-			archivedLoader().then((items) => {
-				const upcomingMatches = (upcoming || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
-				const currentMatches = (current || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
+			this.loadingArchived = true;
 
-				this.tabpanel.setItems(upcoming, current, items, archivedLoader,
+			archivedLoader().then((items) => {
+				this.loadingArchived = false;
+				this.removeMask();
+
+				this.tabpanel.setItems(upcoming, current, items, null,
 					upcomingMatches.length > 0
 						? 'Upcoming' : (
 							currentMatches.length > 0
