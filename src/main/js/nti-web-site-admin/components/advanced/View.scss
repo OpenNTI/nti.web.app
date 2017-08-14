@@ -1,0 +1,18 @@
+@import "~nti-style-common/all.scss";
+
+.site-admin-advanced {
+	color: #444;
+	background-color: white;
+	border-radius: 2px;
+	padding: 30px 30px 15px;
+	text-align: center;
+
+	.advanced-item {
+		border: solid 1px #eaeaea;
+		border-radius: 2px;
+		padding: 10px;
+		text-align: left;
+		box-shadow: inset 0 -1px 0 0 #e2e2e2;
+		margin-bottom: 15px;
+	}
+}

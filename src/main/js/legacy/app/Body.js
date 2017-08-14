@@ -31,6 +31,7 @@ require('./profiles/community/Index');
 require('./notifications/Index');
 require('./windows/Index');
 require('./contacts/Index');
+require('./siteadmin/Index');
 
 module.exports = exports = Ext.define('NextThought.app.Body', {
 	extend: 'Ext.container.Container',

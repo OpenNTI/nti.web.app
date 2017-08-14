@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
 const AdminBody = require('nti-web-site-admin');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
@@ -15,15 +16,19 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	items: [{
-		xtype: 'react',
-		component: AdminBody
-	}],
-
 	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
+
+		this.NavigationActions = NavigationActions.create();
+		this.NavigationActions.updateNavBar({ darkStyle: true });
+
+		this.add({
+			xtype: 'react',
+			component: AdminBody,
+			workspace: Service.getWorkspace('SiteAdmin')
+		});
 	},
 
 	onRouteActivate: function () {

@@ -4,4 +4,20 @@
 	color: white;
 	font: normal 300 1.25em/2em "Open Sans", sans-serif;
 	margin-right: 0.8em;
+
+	.admin-menu {
+		display: flex;
+		margin-top: 20px;
+		margin-bottom: 10px;
+	}
+
+	.admin-menu-item {
+		padding: 5px;
+		margin-right: 20px;
+		cursor: pointer;
+
+		&.active {
+			border-bottom: solid 3px #3fb3f6;
+		}
+	}
 }
