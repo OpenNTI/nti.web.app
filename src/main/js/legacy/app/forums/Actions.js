@@ -139,6 +139,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 					record.afterEdit('headline');
 				}
 
+				me.applyTopicToStores(entry);
+
 				return entry;
 			})
 			.then(function (entry) {
