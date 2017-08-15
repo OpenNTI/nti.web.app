@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 
 		this.feedItems = this.feedItems || [];
-		items = items.filter(x => !this.feedItems.find( i => i.getId() === x.getId() ));
+		items = items.filter(x => !this.feedItems.find( i => i.getId && i.getId() === x.getId() ));
 		this.feedItems = this.feedItems.concat(items);
 
 		return this.__renderItems(items, feedUrl);
