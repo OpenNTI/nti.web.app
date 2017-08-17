@@ -29,7 +29,9 @@
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
-  "dependencies": {},
+  "dependencies": {
+    "nti-web-course": "^1.0.0-alpha.201708071720"
+  },
   "devDependencies": {
     "appcache-webpack-plugin": "^1.2.1",
     "clamp-js": "^0.7.0",
