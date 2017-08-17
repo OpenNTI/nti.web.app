@@ -1,0 +1,28 @@
+@import "~nti-style-common/all.scss";
+
+.course-admin {
+	.course-item-list {
+		.course-item {
+			.course-title {
+				margin-top: 0;
+				font-size: 18px;
+			}
+
+			.course-id {
+				height: 30px;
+			}
+		}
+	}
+
+	.create-course-button {
+		background-color: #3fb3f6;
+		width: 150px;
+		text-align: center;
+		padding: 10px;
+		border-radius: 3px;
+		font-size: 14px;
+		line-height: 22px;
+		margin-bottom: 10px;
+		cursor: pointer;
+	}
+}

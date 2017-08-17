@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch } from 'nti-web-course';
+import { Switch } from 'nti-web-commons';
 
 import Advanced from './advanced';
+import CourseAdmin from './course';
 
 export default class AdminBody extends React.Component {
 	static propTypes = {
@@ -26,7 +27,7 @@ export default class AdminBody extends React.Component {
 					<Switch.Trigger className="admin-menu-item" item="Advanced">Advanced</Switch.Trigger>
 				</Switch.Controls>
 				<Switch.Container>
-					<Switch.Item className="admin-component" name="Course" component="div">Course stuff goes here</Switch.Item>
+					<Switch.Item className="admin-component" name="Course" component={CourseAdmin}/>
 					<Switch.Item className="admin-component" name="Advanced" component={Advanced} workspace={this.props.workspace}/>
 				</Switch.Container>
 			</Switch.Panel>
