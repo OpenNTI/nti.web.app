@@ -1,7 +1,3 @@
-src/main/resources/css
-src/main/resources/images/sprite.png
-src/main/resources/scss/utils/_icons.scss
-
 dist/
 node_modules/
 reports/
