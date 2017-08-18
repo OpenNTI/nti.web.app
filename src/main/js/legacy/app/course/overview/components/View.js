@@ -276,6 +276,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.currentBundle === bundle) { return; }
 
 		var me = this;
+		const hadBundle = !!this.currentBundle;
 
 		me.clear();
 		me.currentBundle = bundle;
@@ -287,9 +288,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.body.setActiveBundle(bundle);
 
-		// Update the outline but first make sure we preserve the editing state.
-		const isEditingBundle = this.editingMap && this.editingMap[bundle.getId()];
-		me.updateOutline(isEditingBundle, true);
+		// Update the outline if the course changed but first make sure we preserve the editing state.
+		if (hadBundle) {
+			const isEditingBundle = this.editingMap && this.editingMap[bundle.getId()];
+			me.updateOutline(isEditingBundle, true);
+		}
 	},
 
 	clear: function () {
