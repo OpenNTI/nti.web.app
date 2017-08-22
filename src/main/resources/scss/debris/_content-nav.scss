@@ -152,7 +152,10 @@
 .nav-outline.toc-flyout {
 	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 	min-width: 360px;
-	.outline-list {top: 61px;}
+	.outline-list {
+		top: 60px; height: 2000px;
+	}
+
 	.header {
 		font-size: 0.8em;
 		background: #fff;

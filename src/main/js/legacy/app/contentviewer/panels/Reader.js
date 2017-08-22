@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const { StickyToolbar } = require('nti-content');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const FlatPage = require('legacy/store/FlatPage');
@@ -109,19 +110,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		this.navigation.removeAll(true);
 		this.body.removeAll(true);
 
-		var toolbarConfig = this.getToolbarConfig(),
-			readerConfig = this.getReaderConfig(),
+		var readerConfig = this.getReaderConfig(),
 			readerContent;
 
 		this.flatPageStore = this.flatPageStore || FlatPage.create({ storeId: 'FlatPage-' + this.id });
 		this.UserDataActions.initPageStores(this);
 
-		//since the toolbar can be a bunch of different xtypes
-		//add a flag to it so we can find it easily
-		toolbarConfig.isReaderToolBar = true;
-
 		this.body.add([
-			toolbarConfig,
+			this.getNewToolbarConfig(),
 			readerConfig
 		]);
 
@@ -199,17 +195,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		});
 	},
 
-	getToolbarConfig: function () {
+	getNewToolbarConfig: function () {
 		return {
-			xtype: 'content-toolbar',
-			bundle: this.bundle,
+			xtype: 'react',
+			component: StickyToolbar,
 			path: this.path,
 			pageSource: this.pageSource,
-			hideControls: this.pageInfo.hideControls,
-			doNavigation: this.doNavigation.bind(this),
 			toc: this.toc,
+			hideControls: this.pageInfo.hideControls,
 			hideHeader: this.hideHeader,
-			rootRoute: this.rootRoute
+			doNavigation: (title, route, precache) => { return this.doNavigation(title, route, precache); }
 		};
 	},
 
