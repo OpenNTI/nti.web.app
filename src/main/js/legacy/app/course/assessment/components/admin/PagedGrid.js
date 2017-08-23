@@ -358,13 +358,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	hideColumn: function (name) {
+		this.HIDDEN_INDEX = this.HIDDEN_INDEX || {};
+
 		var index = this.columnOrder.indexOf(name),
 			items;
 
 		//if the column is already hidden
-		if (index < 0) { return; }
-
-		this.HIDDEN_INDEX = this.HIDDEN_INDEX || {};
+		if (this.HIDDEN_INDEX[name] >= 0) { return; }
 
 		this.HIDDEN_INDEX[name] = index;
 

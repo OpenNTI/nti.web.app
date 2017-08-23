@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		previous = this.store.getAt(current - 1);
 
 		//if we already have a view for this assignment no need to create a new one
-		if (oldView && oldView.assignment === assignment) {
+		if (oldView && oldView.assignment.getId() === assignment.getId()) {
 			view = oldView;
 			same = true;
 		} else {
