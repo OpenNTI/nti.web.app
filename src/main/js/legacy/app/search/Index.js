@@ -72,6 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 						alert('Could not navigate to search result.');
 						this.resultsWidget.setState({ navigating: false });
 						this.removeLoading();
+						this.filtersWidget.show();
 					};
 
 					this.Router.root.attemptToNavigateToObject(record, {
