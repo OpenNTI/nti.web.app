@@ -110,14 +110,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		this.navigation.removeAll(true);
 		this.body.removeAll(true);
 
-		var readerConfig = this.getReaderConfig(),
+		var toolbarConfig = this.getToolbarConfig(),
+			readerConfig = this.getReaderConfig(),
 			readerContent;
 
 		this.flatPageStore = this.flatPageStore || FlatPage.create({ storeId: 'FlatPage-' + this.id });
 		this.UserDataActions.initPageStores(this);
 
+		toolbarConfig.isReaderToolBar = true;
+
 		this.body.add([
-			this.getNewToolbarConfig(),
+			toolbarConfig,
 			readerConfig
 		]);
 
@@ -195,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		});
 	},
 
-	getNewToolbarConfig: function () {
+	getToolbarConfig: function () {
 		return {
 			xtype: 'react',
 			component: StickyToolbar,
@@ -265,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		var reader = this.getReaderContent(),
 			toolbar = this.getToolbar();
 
-		if (toolbar) {
+		if (toolbar && toolbar.setPageInfo) {
 			toolbar.setPageInfo(pageInfo, bundle);
 		}
 
