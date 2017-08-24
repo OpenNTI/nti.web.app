@@ -1,23 +1,44 @@
-#course-overview .reader-container.navigation-panel > .body-view > .x-component {
+.reader-container.navigation-panel > .body-view > .x-component {
 	height: 100%;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
 
-	& > div {
+	.toolbar-container {
 		height: 100%;
 
-		& > div {
-			height: 100%;
-			width: 766px;
-			margin-top: 20px;
+		.header {
+			margin-top: 61px;
+			margin-bottom: -61px;
+		}
 
-			& > div.sticky {
-				z-index: 9001;
-				background: white;
-				border-top: solid 1px #ededed;
+		& > .toolbar {
+			height: 100%;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+			& > div.x-component {
+				height: 100%;
+				width: 766px;
+				margin-top: 20px;
+
+				& > div {
+					height: 100%;
+
+					& > div {
+						height: 100%;
+
+						& > div.sticky {
+							z-index: 9001;
+							background: white;
+							border-top: solid 1px #ededed;
+
+							& > .content-toolbar {
+								height: 60px;
+							}
+						}
+					}
+				}
 			}
 		}
 	}
