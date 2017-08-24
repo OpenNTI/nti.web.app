@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const {wait} = require('nti-commons');
 const {ControlBar} = require('nti-content');
 const { encodeForURI } = require('nti-lib-ntiids');
+const { StickyToolbar } = require('nti-content');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
@@ -13,38 +14,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	extend: 'Ext.Component',
 	cls: 'content-toolbar',
 
-	pagingTpl: Ext.DomHelper.markup(
-		{tag: 'tpl', 'if': 'showPaging', cn: [
-			{cls: 'page', cn: [
-				{tag: 'span', cls: 'currentPage', html: '{page}'},
-				' of ',
-				{tag: 'span', cls: 'total', html: '{total}'}
-			]},
-			{cls: 'prev {noPrev:boolStr("disabled")}', title: '{prevTitle}'},
-			{cls: 'next {noNext:boolStr("disabled")}', title: '{nextTitle}'}
-		]}
-	),
-
-	pathTpl: Ext.DomHelper.markup([
-		{cls: 'toc {tocCls}', cn: [
-			{cls: 'icon'},
-			{cls: 'label', html: '{{{NextThought.view.content.Navigation.toc}}}'}
-		]},
-		{cls: 'breadcrumb', cn: [
-			{tag: 'tpl', 'for': 'path', cn: [
-				{
-					tag: 'span',
-					cls: 'path part{[xindex === xcount?	 \' current\' : xindex === 1 ? \' root\' : \'\']}{[values.cls ? \' \' + values.cls : \'\']}{[values.ntiid ? \' link\' : \'\']}',
-					'data-index': '{#}',
-					html: '{label}'
-				}
-			]}
-		]}
-	]),
-
 	toolbarTpl: Ext.DomHelper.markup([
-		{cls: 'right controls', html: '{pagingContent}'},
-		{cls: 'path-items', html: '{pathContent}'}
+		// {cls: 'right controls', html: '{pagingContent}'},
+		// {cls: 'path-items', html: '{pathContent}'}
+		{cls: 'toolbar', html: '<div/>'}
 	]),
 
 	headerTpl: Ext.DomHelper.markup([
@@ -52,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	]),
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'toolbar', html: '{toolbarContents}'},
+		{cls: 'toolbar-container', html: '{toolbarContents}'},
 		{cls: 'header', html: '{headerContents}'}
 	]),
 
@@ -64,7 +37,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		nextEl: '.right.controls .next',
 		previousEl: '.right.controls .prev',
 		tocEl: '.toc',
-		controlBarEl: '.control-bar-container'
+		controlBarEl: '.control-bar-container',
+		toolbarCmpEl: '.toolbar'
 	},
 
 	onClassExtended: function (cls, data) {
@@ -168,6 +142,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			},
 			previousEl: {click: 'onPrevious'},
 			nextEl: {click: 'onNext'}
+		});
+	},
+
+
+	afterRender: function () {
+		this.toolbarCmp = ReactHarness.create({
+			component: StickyToolbar,
+			path: this.path,
+			pageSource: this.pageSource,
+			toc: this.toc,
+			hideControls: this.hideControls,
+			hideHeader: this.hideHeader,
+			doNavigation: this.doNavigation,
+			renderTo: this.toolbarCmpEl
 		});
 	},
 
@@ -289,6 +277,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	onPagerUpdate: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.onPagerUpdate.bind(this));
+			return;
+		}
+
+		if(!this.currentPageEl) {
 			return;
 		}
 
@@ -421,32 +413,5 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			});
 		}
 
-	},
-
-
-
-	buildTocComponent: function (store) {
-		this.tocComponent = Ext.widget({
-			xtype: 'table-of-contents-flyout',
-			store: store,
-			doNavigation: this.doNavigation.bind(this)
-		});
-
-		if (this.activeNTIID) {
-			this.tocComponent.selectId(this.activeNTIID);
-		}
-
-		if (this.hasTocOpen) {
-			this.onShowToc();
-		}
-	},
-
-	onShowToc: function () {
-		if (!this.tocComponent) {
-			this.hasTocOpen = true;
-			return;
-		}
-
-		this.tocComponent.showBy(this.el, 'tl-tl', [0, 0]);
 	}
 });
