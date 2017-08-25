@@ -17,9 +17,9 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 		start (state) {
 			if (doNotAllow || hasWatch || !state) { return; }
 
-			const {id, time, duration, speed} = state;
+			const {video, time, duration, speed} = state;
 
-			AnalyticsUtil.getResourceTimer(id, {
+			AnalyticsUtil.getResourceTimer(video, {
 				type: 'video-watch',
 				'with_transcript': hasTranscript,
 				'video_start_time': time,
@@ -34,9 +34,9 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 		stop (state) {
 			if (doNotAllow || !hasWatch || !state) { return; }
 
-			const {id, time, duration} = state;
+			const {video, time, duration} = state;
 
-			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
+			AnalyticsUtil.stopResourceTimer(video, 'video-watch', {
 				'video_end_time': time,
 				MaxDuration: duration / 1000
 			});
@@ -49,7 +49,7 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 		onHeartBeat (state) {
 			if (doNotAllow || !hasWatch || !state) { return; }
 
-			const {id, time, state:playerState} = state;
+			const {video, time, state:playerState} = state;
 			const diff = lastTime ? (time - lastTime) : 0;
 
 			if (diff > TIME_CHANGE_THRESHOLD || diff < 0) {
@@ -57,14 +57,14 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 				this.start(state);
 
 				if (playerState !== UNSTARTED) {
-					AnalyticsUtil.getResourceTimer(id, {
+					AnalyticsUtil.getResourceTimer(video, {
 						type: 'video-skip',
 						'with_transcript': hasTranscript,
 						'video_start_time': lastTime,
 						'video_end_time': time
 					});
 
-					AnalyticsUtil.stopResourceTimer(id, 'video-skip');
+					AnalyticsUtil.stopResourceTimer(video, 'video-skip');
 				}
 			}
 
