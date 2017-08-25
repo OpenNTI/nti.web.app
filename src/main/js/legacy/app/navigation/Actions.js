@@ -1,5 +1,4 @@
 const Ext = require('extjs');
-const { getEmitter } = require('nti-web-commons');
 
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
@@ -202,7 +201,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 					htmlEl = Ext.query('.x-viewport')[0];
 					if (htmlEl) {
 						Ext.fly(htmlEl).addCls('msg-bar-open');
-						getEmitter().emit('msg-bar-closed');
+						messageCmp.fireOpenedEvent();
 					}
 
 					// if (id) {

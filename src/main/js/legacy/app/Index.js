@@ -39,8 +39,6 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		this.renderTo = this.el;
 
 		window['nti-sticky-top-offset'] = () => {
-			let c = 1;
-
 			return document.documentElement.className.indexOf('msg-bar-open') >= 0
 				? 110
 				: 70;
