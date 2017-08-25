@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 
 		this.pendingSaveValue = newVal;
 
-		this.__setAndSaveValue(newVal)
+		return this.__setAndSaveValue(newVal)
 			.then((resp) => {
 				try {
 					if (resp) {
