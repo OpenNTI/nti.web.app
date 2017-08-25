@@ -315,7 +315,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		var me = this;
 
 		me.ForumActions.deleteObject(me.record,me,function (cmp) {
-			me.fireEvent('record-deleted');
+			me.fireEvent('record-deleted', null);
 			me.destroy();
 		});
 	},
