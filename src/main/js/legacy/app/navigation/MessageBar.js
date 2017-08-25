@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-
+const { getEmitter } = require('nti-web-commons');
 
 module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 	extend: 'Ext.Component',
@@ -96,6 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 
 		if (vel) {
 			Ext.fly(vel).removeCls('msg-bar-open');
+			getEmitter().emit('msg-bar-closed');
 		}
 
 		this.clear();

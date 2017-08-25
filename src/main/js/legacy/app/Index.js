@@ -11,8 +11,6 @@ require('./chat/Index');
 require('./prompt/Index');
 require('../layout/container/None');
 
-
-
 module.exports = exports = Ext.define('NextThought.app.Index', {
 	extend: 'Ext.container.Viewport',
 	alias: 'widget.master-view',
@@ -40,7 +38,13 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
 
-		window['nti-sticky-top-offset'] = 70;
+		window['nti-sticky-top-offset'] = () => {
+			let c = 1;
+
+			return document.documentElement.className.indexOf('msg-bar-open') >= 0
+				? 110
+				: 70;
+		};
 	},
 
 	constructor: function () {
