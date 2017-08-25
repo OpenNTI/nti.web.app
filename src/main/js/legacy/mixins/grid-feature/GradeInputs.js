@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
-	editGrade: function (record, value) {
+	editGrade: async function (record, value) {
 		var me = this,
 			view = me.__getGridView(),
 			historyItem = me.getHistoryItemFromRecord(record),
@@ -184,7 +184,10 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 			me.beforeEdit();
 		}
 
-		this.save.always(function () {
+		try {
+			await this.save;
+		}
+		finally {
 			var n = view.getNode(record);//get the node fresh since it may have changed
 
 			console.log(node);
@@ -199,9 +202,6 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 			me.fireEvent('grade-updated', record);
 
 			delete me.save;
-		});
-
-
-
+		}
 	}
 });
