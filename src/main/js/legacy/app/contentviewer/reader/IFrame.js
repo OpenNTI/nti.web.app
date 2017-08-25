@@ -477,7 +477,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				Ext.each(Ext.fly(clonedFn).query('a'),
 					function (d) {
 						let href3 = d.getAttribute ? d.getAttribute('href') : '';
-						if (href3 && href.indexOf('#m') >= 0) {
+						if (href3 && href3.indexOf('#m') >= 0) {
 							clonedFn.removeChild(d);
 						}
 					}
