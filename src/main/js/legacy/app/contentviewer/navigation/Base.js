@@ -111,6 +111,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		});
 	},
 
+	onDestroy: function () {
+		if(this.toolbarCmp) {
+			this.toolbarCmp.destroy();
+			delete this.toolbarCmp;
+		}
+
+		this.callParent(arguments);
+	},
+
 	onPageSourceLoad: function (pageSource) {
 		if (!this.rendered) {
 			this.on('afterrender', this.onPageSourceLoad.bind(this, pageSource));

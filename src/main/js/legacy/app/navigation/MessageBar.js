@@ -1,5 +1,7 @@
 const Ext = require('extjs');
-const { getEmitter } = require('nti-web-commons');
+
+const MSG_BAR_CLOSED = 'msg-bar-closed';
+const MSG_BAR_OPENED = 'msg-bar-opened';
 
 module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 	extend: 'Ext.Component',
@@ -30,6 +32,12 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 			{cls: 'button {cls}', 'data-action': '{action}', html: '{label}'}
 		]}
 	])),
+
+	initComponent: function () {
+		this.callParent(arguments);
+
+		this.enableBubble([MSG_BAR_OPENED, MSG_BAR_CLOSED]);
+	},
 
 
 	beforeRender: function () {
@@ -96,9 +104,19 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 
 		if (vel) {
 			Ext.fly(vel).removeCls('msg-bar-open');
-			getEmitter().emit('msg-bar-closed');
+			this.fireClosedEvent();
 		}
 
 		this.clear();
+	},
+
+
+	fireOpenedEvent: function () {
+		this.fireEvent(MSG_BAR_OPENED);
+	},
+
+
+	fireClosedEvent: function () {
+		this.fireEvent(MSG_BAR_CLOSED);
 	}
 });

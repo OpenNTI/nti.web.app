@@ -23,7 +23,8 @@ const Bridge = createReactClass({
 		defaultEnvironment: PropTypes.object,
 		routerLinkComponent: PropTypes.func,
 		router: PropTypes.object,
-		course: PropTypes.object
+		course: PropTypes.object,
+		stickyTopOffset: PropTypes.number
 	},
 
 	getChildContext () {
@@ -52,7 +53,8 @@ const Bridge = createReactClass({
 								});
 						});
 				}
-			}
+			},
+			stickyTopOffset: window['nti-sticky-top-offset'] && window['nti-sticky-top-offset']()
 		};
 	},
 
@@ -88,6 +90,19 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	/**
 	 * @cfg {React.Component} component
 	 */
+
+	onMsgBarUpdated () {
+		this.bridgeInstance && this.bridgeInstance.forceUpdate();
+	},
+
+
+	initComponent () {
+		this.callParent(arguments);
+
+		Ext.getCmp('viewport').on('msg-bar-opened', () => this.onMsgBarUpdated());
+		Ext.getCmp('viewport').on('msg-bar-closed', () => this.onMsgBarUpdated());
+	},
+
 
 	/**
 	 * @cfg {...} ...  Any additional config properties will be pased as props to the component.
@@ -144,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 		ReactDOM.render(
-			React.createElement(Bridge, {bundle: this.bundle},
+			React.createElement(Bridge, {bundle: this.bundle, ref: x => this.bridgeInstance = x},
 				//The ref will be called on mount with the instance of the component.
 				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
 				//mounted. Calling doRender is the primary way to update the component with new props.
