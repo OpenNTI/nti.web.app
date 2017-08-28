@@ -207,19 +207,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 			hideControls: this.pageInfo.hideControls,
 			toc: this.toc,
 			hideHeader: this.hideHeader,
-			doNavigation: (title, route, precache) => { return this.doNavigation(title, route, precache); }
-		};
-	},
-
-	getToolbarConfig2: function () {
-		return {
-			xtype: 'react',
-			component: StickyToolbar,
-			path: this.path,
-			pageSource: this.pageSource,
-			toc: this.toc,
-			hideControls: this.pageInfo.hideControls,
-			hideHeader: this.hideHeader,
+			rootRoute: this.rootRoute,
 			doNavigation: (title, route, precache) => { return this.doNavigation(title, route, precache); }
 		};
 	},

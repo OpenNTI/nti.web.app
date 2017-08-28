@@ -1708,10 +1708,14 @@ canvas.x-component-course-assessment {
 
 		.toolbar {
 			padding: 0 17px 0 0;
-			font: normal normal 0.75em/49px $font;
+			font: normal normal 12px $font;
 			color: $primary-grey;
 			height: 50px;
 			white-space: nowrap;
+
+			.sticky .toolbar {
+				padding-left: 17px;
+			}
 
 			&.disabled {
 				opacity: 0.6;
