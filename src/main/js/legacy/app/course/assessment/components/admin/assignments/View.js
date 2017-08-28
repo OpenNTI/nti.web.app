@@ -111,10 +111,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.getLayout().setActiveItem(view);
 
-		if (oldView && same) {
-			oldView.refresh();
-		}
-
 		return view.restoreState(this.getRouteState(), student);
 	},
 
