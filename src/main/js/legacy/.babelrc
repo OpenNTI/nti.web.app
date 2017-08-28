@@ -2,6 +2,7 @@
 	"compact": false,
 	"plugins": [
 		"check-es2015-constants",
+		"syntax-trailing-function-commas",
 		"transform-es2015-arrow-functions",
 		"transform-es2015-block-scoped-functions",
 		"transform-es2015-block-scoping",
@@ -19,6 +20,10 @@
 		"transform-es2015-template-literals",
 		"transform-es2015-typeof-symbol",
 		"transform-es2015-unicode-regex",
-		"transform-object-rest-spread"
+		"transform-flow-strip-types",
+		"transform-object-rest-spread",
+		"transform-async-to-generator",
+		"transform-exponentiation-operator",
+		"transform-regenerator"
 	]
 }
