@@ -728,6 +728,10 @@
 	margin: 0 auto;
 	overflow-y: hidden;
 
+	.video-placeholder:not(.nti-video) {
+		height: 100%;
+	}
+
 	& > .activity {
 		width: 75%;
 		float: left;
