@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				xtype: 'course-assignment-status',
 				assignment: this.assignment,
 				onEditorOpen: this.disableButton.bind(this),
-				onEditorClose: this.enableButton.bind(this)
+				onEditorClose: this.enableButtonIfAvailable.bind(this)
 			}
 		]);
 
@@ -164,6 +164,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (button) {
 			button.disable();
 		}
+	},
+
+	enableButtonIfAvailable: function () {
+		this.isAvailable && this.enableButton();
 	},
 
 	enableButton: function () {
@@ -220,9 +224,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			} else {
 				this.addCls('late');
 			}
+		} else if (opens && opens <= now) {
+			if(button) {
+				this.enableButton();
+				button.show();
+
+				this.isAvailable = true;
+			}
 		} else if (opens && opens > now) {
 			if (button) {
-				button.destroy();
+				button.hide();
+				this.disableButton();
+
+				this.isAvailable = false;
 			}
 
 			if (status) {
