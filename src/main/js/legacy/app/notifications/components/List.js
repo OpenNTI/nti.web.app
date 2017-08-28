@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 	addRecord: function (prepend, record) {
-		var groupValue = record.get('GroupingField'),
+		var groupValue = record.get('NotificationGroupingField'),
 			groupName = groupValue.getTime(),
 			group = this.groups[groupName];
 
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 	deleteRecord: function (record) {
-		var groupValue = record.get('GroupingField'),
+		var groupValue = record.get('NotificationGroupingField'),
 			groupName = groupValue.getTime(),
 			group = this.groups[groupName];
 

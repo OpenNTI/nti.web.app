@@ -108,11 +108,11 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		var time = this.record.get('EventTime');
 
 		if (!time || time.getTime() === 0) {
-			time = this.record.get('Last Modified');
+			time = this.record.get('CreatedTime');
 		}
 
 		if (!time || time.getTime() === 0) {
-			time = this.record.get('CreatedTime');
+			time = this.record.get('Last Modified');
 		}
 
 		return time;
