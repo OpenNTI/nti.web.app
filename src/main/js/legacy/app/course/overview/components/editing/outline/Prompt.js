@@ -192,7 +192,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			showWarning: this.showWarning.bind(this),
 			showMessage: this.showMessage.bind(this),
 			doClose: this.doClose.bind(this),
-			doSave: this.doSave.bind(this)
+			doSave: this.doSave.bind(this),
+			lockBodyHeight: this.lockBodyHeight.bind(this),
+			unlockBodyHeight: this.unlockBodyHeight.bind(this)
 		};
 	},
 
@@ -282,6 +284,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	doSave: function () {
 		return this.Prompt.doSave();
 	},
+
+
+	lockBodyHeight () {
+		return this.Prompt.lockBodyHeight();
+	},
+
+
+	unlockBodyHeight () {
+		return this.Prompt.unlockBodyHeight();
+	},
+
 
 	onBack: function () {
 		if (this.activeEditor && this.activeEditor.onBack) {

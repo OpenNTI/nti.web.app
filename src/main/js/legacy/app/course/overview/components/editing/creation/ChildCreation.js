@@ -152,7 +152,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			doClose: this.doClose.bind(this),
 			doSave: this.doSave.bind(this),
 			backText: this.backText || this.title,
-			doBack: this.switchToTypeList.bind(this)
+			doBack: this.switchToTypeList.bind(this),
+			lockBodyHeight: this.lockBodyHeight,
+			unlockBodyHeight: this.unlockBodyHeight
 		}));
 
 	},

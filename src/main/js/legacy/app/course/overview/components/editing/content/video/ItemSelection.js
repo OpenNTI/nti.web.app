@@ -128,5 +128,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (el) {
 			el.classList.remove('selected');
 		}
+	},
+
+
+	setMinHeight () {
+		if (this.lockBodyHeight) {
+			this.lockBodyHeight();
+		}
 	}
 });

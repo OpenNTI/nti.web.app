@@ -143,7 +143,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			onSelectionChanged: this.onVideoListSelectionChange.bind(this),
 			selectedItems: selectedItems,
 			editItem: (...args) => this.pickVideo(...args, onEdit),
-			getExcludedVideos: (...args) => this.__getExcludedVideos(...args)
+			getExcludedVideos: (...args) => this.__getExcludedVideos(...args),
+			lockBodyHeight: this.lockBodyHeight
 		});
 
 		me.bundle.getVideoAssets()
@@ -217,6 +218,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.enableSave();
 		this.setSaveText(this.record ? 'Save' : 'Add to Lesson');
 		this.maybeEnableBack('Videos');
+
+		if (this.unlockBodyHeight) {
+			this.unlockBodyHeight();
+		}
 	},
 
 	onVideoListSelectionChange: function (selection) {

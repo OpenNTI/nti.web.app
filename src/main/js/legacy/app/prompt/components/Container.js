@@ -78,6 +78,8 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 				allowFullScreen: this.allowFullScreen.bind(this),
 				addCls: this.addCls.bind(this),
 				removeCls: this.removeCls.bind(this),
+				lockBodyHeight: () => this.lockBodyHeight(),
+				unlockBodyHeight: () => this.unlockBodyHeight(),
 				Header: {
 					hide: this.header.hide.bind(this.header),
 					show: this.header.show.bind(this.header),
@@ -102,6 +104,25 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 			}
 		};
 
+	},
+
+
+	lockBodyHeight () {
+		const body = this.bodyContainer;
+		const height = body && body.getHeight();
+
+		if (body && body.el && body.el.dom) {
+			body.el.dom.style.minHeight = `${height}px`;
+		}
+	},
+
+
+	unlockBodyHeight () {
+		const body = this.bodyContainer;
+
+		if (body && body.el && body.el.dom) {
+			body.el.dom.style.minHeight = null;
+		}
 	},
 
 
