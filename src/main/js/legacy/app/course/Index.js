@@ -596,18 +596,29 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	getRouteForPath: function (path, course) {
 		var root = path[0] || {},
 			subPath = path.slice(1),
-			page, i,
+			page, assignment, i,
 			route;
 
 		for (i = 0; i < subPath.length; i++) {
-			if (subPath[i] instanceof PageInfo) {
-				page = subPath[i];
+			let item = subPath[i];
+
+			if (item && item instanceof PageInfo) {
+				page = item;
+				break;
+			}
+
+			if (item && item.isAssignment) {
+				assignment = item;
 				break;
 			}
 		}
 
 		if (page && page.getAssignment()) {
 			root = page.getAssignment();
+		}
+
+		if (assignment) {
+			root = assignment;
 		}
 
 		if (root.isBoard) {
