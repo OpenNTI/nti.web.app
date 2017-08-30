@@ -201,7 +201,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	realignNotes: function () {
-
 		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
 		//the overlay needs component specific data to render a note.
 		let cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
@@ -209,6 +208,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		if (visibleCmps.length) {
 			this.MediaViewerActions.realignNotes(visibleCmps, this);
+		}
+	},
+
+	removeAndRealignNotes () {
+		if (this.annotationManager) {
+			this.annotationManager.removeAll();
+			this.realignNotes();
 		}
 	},
 
@@ -414,7 +420,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	registerNoteRecord: function (rec, cmp, recStore) {
-
 		if (this.isRecordAlreadyAdded(rec)) {return;}
 
 		let domRange = this.rangeForDescription(rec, cmp, recStore);

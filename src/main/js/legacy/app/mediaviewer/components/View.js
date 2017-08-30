@@ -300,6 +300,16 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		}
 	},
 
+
+	realignNotes () {
+		const activeItem = this.getLayout().getActiveItem();
+
+		if (activeItem && activeItem.realignNotes) {
+			activeItem.realignNotes();
+		}
+	},
+
+
 	beforeClose: function () {
 		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
 		this.removeCls('ready');
@@ -416,6 +426,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 					me.viewerIdMap[viewerXType] = me.viewer.getId();
 					me.getLayout().setActiveItem(me.viewer);
 				}
+
+				me.realignNotes();
 
 				wait(1000)
 					.then(me.fireEvent.bind(me, 'animation-end'));

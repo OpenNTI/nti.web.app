@@ -217,7 +217,19 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		this.videoPlayerEl.setStyle('flex-basis', videoWidth + 'px');
 		this.videoPlayerEl.setStyle('-webkit-flex-basis', videoWidth + 'px');
 		this.videoPlayerEl.setStyle('-ms-flex-basis', videoWidth + 'px');
+
+		if (this.resourceView.adjustOnResize) {
+			this.resourceView.adjustOnResize();
+		}
 	},
+
+
+	realignNotes () {
+		if (this.resourceView && this.resourceView.realignNotes) {
+			this.resourceView.realignNotes();
+		}
+	},
+
 
 	alignResourceViewNextToVideo: function (left, top) {
 		var padding = 20,

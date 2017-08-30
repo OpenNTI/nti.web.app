@@ -120,7 +120,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		for (let cmp of cmps) {
 			const store = cmp.userDataStore;
 
-			overlay.registerGutterRecords(store, store.getRange(), cmp, (note) => unregisteredNotes.push({note, store}));
+			if (store) {
+				overlay.registerGutterRecords(store, store.getRange(), cmp, (note) => unregisteredNotes.push({note, store}));
+			}
+
 		}
 
 		if (!unregisteredCmp) { return; }

@@ -569,5 +569,17 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	showNote: function (record, el, monitors) {
 		this.WindowActions.pushWindow(record, null, el, monitors);
+	},
+
+
+	adjustOnResize () {
+		this.realignNotes();
+	},
+
+
+	realignNotes () {
+		if (this.noteOverlay && this.noteOverlay.removeAndRealignNotes) {
+			this.noteOverlay.removeAndRealignNotes();
+		}
 	}
 });
