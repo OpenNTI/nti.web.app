@@ -258,6 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	stopPlayback () {
 		if (this.videoPlayer && this.videoPlayer.componentInstance) {
 			this.videoPlayer.componentInstance.stop();
+			this.analytics.stop(this.queryPlayer());
 		} else {
 			this.commandQueue.push(() => this.stopPlayback());
 		}
