@@ -69,10 +69,9 @@
 	}
 
 	.breadcrumb {
-		flex: 1 1 auto;
 		display: -ms-flexbox;
 		-ms-box-orient: horizontal;
-		display: inline-flex;
+		display: flex;
 		flex-wrap: nowrap;
 		max-width: 500px;
 

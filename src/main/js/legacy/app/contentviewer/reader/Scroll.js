@@ -4,6 +4,8 @@ const Anchors = require('legacy/util/Anchors');
 const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
 const SearchUtils = require('legacy/util/Search');
 
+const MENU_HIDE_THRESHOLD = 10;
+const MENU_HIDE_TIME_MS = 500;
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 	alias: 'reader.scroll',
@@ -37,8 +39,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	menuHideOnScroll: function () {
 		var scrollPosition = Math.abs(this.top());
 
-		Ext.menu.Manager.hideAll();
-		Ext.tip.QuickTipManager.getQuickTip().hide();
+		if(this.startScrollPosition == null) {
+			// first scroll event of a potential sequence, set the start scroll value
+			this.startScrollPosition = scrollPosition;
+		}
+		else {
+			// already a start scroll value, so this must be a scroll event in the current
+			// sequence of scroll events, check to see if we've scrolled past the threshold
+			if(Math.abs(this.startScrollPosition - scrollPosition) > MENU_HIDE_THRESHOLD) {
+				// if passed, then hide menus, reset start scroll position and clear the scroll timeout
+				Ext.menu.Manager.hideAll();
+				Ext.tip.QuickTipManager.getQuickTip().hide();
+
+				this.startScrollPosition = null;
+				clearTimeout(this.scrollTimeout);
+			}
+		}
+
+		// if the threshold wasn't passed after MENU_HIDE_TIME_MS milliseconds, then assume the
+		// scroll event has completed, reset the start value and assume the next event is the start
+		// of a new scroll sequence
+		this.scrollTimeout = setTimeout(() => { this.startScrollPosition = null; }, MENU_HIDE_TIME_MS);
 
 		// Track and cache the last scroll position prior to going into fullscreen mode.
 		if (!this.isInFullScreenMode()) {
