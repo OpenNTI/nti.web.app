@@ -136,6 +136,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.query('course-catalog-collection').forEach(function (cmp) {
 			me.relayEvents(cmp, ['show-course-detail']);
 		});
+
+		// recalculate page height after setting items
+		this.setPageHeight();
 	},
 
 
