@@ -1,5 +1,4 @@
 const Ext = require('extjs');
-const { StickyToolbar } = require('nti-content');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const FlatPage = require('legacy/store/FlatPage');
