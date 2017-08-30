@@ -111,11 +111,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.getLayout().setActiveItem(view);
 
-		if (oldView && same) {
-			oldView.refresh();
-		}
+		return view.restoreState(this.getRouteState(), student).then((result) => {
+			if (oldView && same) {
+				oldView.refresh();
+			}
 
-		return view.restoreState(this.getRouteState(), student);
+			return result;
+		});
 	},
 
 	showStudentsForAssignment: function (rec) {
