@@ -224,6 +224,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 * @return {Promise}		 fulfills once the store is loaded with the student
 	 */
 	restoreStudent: function (state, student) {
+		this.refresh();
+
 		if (!this.initialLoad) {
 			this.student = student;
 
