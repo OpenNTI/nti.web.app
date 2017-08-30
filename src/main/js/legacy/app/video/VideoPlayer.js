@@ -23,7 +23,7 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 				type: 'video-watch',
 				'with_transcript': hasTranscript,
 				'video_start_time': time,
-				MaxDuration: duration / 1000,
+				MaxDuration: duration,
 				PlaySpeed: speed
 			});
 
@@ -38,7 +38,7 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 
 			AnalyticsUtil.stopResourceTimer(video, 'video-watch', {
 				'video_end_time': time,
-				MaxDuration: duration / 1000
+				MaxDuration: duration
 			});
 
 			hasWatch = false;
