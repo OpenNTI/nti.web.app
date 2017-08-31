@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 
-const {naturalSortComparator} = require('legacy/util/Globals');
+// const {naturalSortComparator} = require('legacy/util/Globals');
 
 require('./ListItem');
 
