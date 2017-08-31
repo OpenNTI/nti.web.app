@@ -243,6 +243,8 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 				this.fireEvent('player-command-activate');
 				this.maybeSyncHeight();
+
+				this.analytics.start(this.queryPlayer());
 			});
 	},
 
