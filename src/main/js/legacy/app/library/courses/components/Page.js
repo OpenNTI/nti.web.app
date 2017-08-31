@@ -29,19 +29,16 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			this.addCourses(current, 'Current Courses');
 		}
 
-		if (archived && archived.length) {
-			this.addBinnedCourses(this, this.binCourses(archived), 'Archived Courses');
-		}
-		else if(this.archivedLoader) {
+		if (archived) {
+			if (archived.length) {
+				this.addBinnedCourses(this, this.binCourses(archived), 'Archived Courses');
+			}
+		} else if (this.archivedLoader) {
 			// deferred archived loading
 			const me = this;
 			const loadArchived = () => {
 				if(me.loadArchivedButton) {
 					me.loadArchivedButton.el.mask('Loading...');
-				}
-
-				if(me.archived && me.archived.length) {
-					return;
 				}
 
 				me.archivedLoader().then((items) => {

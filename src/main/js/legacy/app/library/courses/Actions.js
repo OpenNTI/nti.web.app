@@ -83,8 +83,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 		return this.__loadCoursesOfType('AdministeredCourses', 'Current');
 	},
 
-	loadAdminArchivedCourses () {
-		return this.__loadCoursesOfType('AdministeredCourses', 'Archived');
+	loadAdminArchivedCourses (force) {
+		return this.__loadCoursesOfType('AdministeredCourses', 'Archived', !force);
 	},
 
 	loadEnrolledUpcomingCourses () {
@@ -123,12 +123,16 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 		});
 	},
 
-	__loadCoursesOfType (courseLevel, courseType) {
+	__loadCoursesOfType (courseLevel, courseType, doNotLoad) {
 		var store = this.CourseStore;
 
 		if (store.isTypeLoading(courseLevel, courseType)) {
-			return;
+			return Promise.resolve();
 		}
+
+		const items = store.getCoursesByType(courseLevel, courseType);
+
+		if (items || doNotLoad) { return Promise.resolve(items); }
 
 		store.setTypeLoading(courseLevel, courseType);
 

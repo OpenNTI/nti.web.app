@@ -44,10 +44,12 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 
 		return Promise.all([
 			me.Actions.loadAdminUpcomingCourses(),
-			me.Actions.loadAdminCurrentCourses()
+			me.Actions.loadAdminCurrentCourses(),
+			me.Actions.loadAdminArchivedCourses()
 		]).then(function () {
 			var upcomingCourses = me.__getUpcomingCourses(),
-				currentCourses = me.__getCurrentCourses();
+				currentCourses = me.__getCurrentCourses(),
+				archivedCourses = me.__getArchivedCourses();
 
 			me.removeLoadingCmp();
 
@@ -59,19 +61,19 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 			if (me.coursePage) {
 				//Only force an update if we want to, to prevent a blink
 				if (force) {
-					me.coursePage.setItems(upcomingCourses, currentCourses, []);
+					me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
 				}
 			} else {
 				me.coursePage = me.add({
 					xtype: 'library-view-course-page',
 					upcoming: upcomingCourses,
 					current: currentCourses,
-					archived: [],	// defer loading of archived for performance reasons
+					archived: archivedCourses,	// defer loading of archived for performance reasons
 					archivedLoader: () => {
 						const archived = me.__getArchivedCourses();
 						if(!archived) {
 							// need to lazy load
-							return me.Actions.loadAdminArchivedCourses().then(() => {
+							return me.Actions.loadAdminArchivedCourses(true).then(() => {
 								return me.__getArchivedCourses();
 							});
 						}

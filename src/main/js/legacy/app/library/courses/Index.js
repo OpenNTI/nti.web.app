@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 			me.removeLoadingCmp();
 
-			if (!upcomingCourses.length && !currentCourses.length && !archivedCourses.length) {
+			if ((!upcomingCourses || !upcomingCourses.length) && (!currentCourses || !currentCourses.length) && (!archivedCourses || !archivedCourses.length)) {
 				return me.showEmptyState();
 			}
 

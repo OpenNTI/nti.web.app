@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 
 	__getCoursesOfType: function (courseLevel, courseType) {
-		return this.COURSE_ITEMS[courseLevel] && this.COURSE_ITEMS[courseLevel][courseType];
+		return (this.COURSE_ITEMS[courseLevel] && this.COURSE_ITEMS[courseLevel][courseType]) || null;
 	},
 
 	getAllCurrentCourses: function () {
@@ -478,6 +478,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
+	getCoursesByType (courseLevel, courseType) {
+		return this.__getCoursesOfType(courseLevel, courseType);
+	},
+
+
 	isFavoritesLoading () {
 		return this.favoritesLoading;
 	},
@@ -515,6 +520,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 	beforeDropCourse () {
 		this.fireEvent('dropping-course');
+		delete this.COURSE_ITEMS[ENROLLED_COURSES];
+		delete this.COURSE_ITEMS[ALL_COURSES];
 	},
 
 
@@ -525,6 +532,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 	beforeAddCourse () {
 		this.fireEvent('adding-course');
+		delete this.COURSE_ITEMS[ENROLLED_COURSES];
+		delete this.COURSE_ITEMS[ALL_COURSES];
 	},
 
 

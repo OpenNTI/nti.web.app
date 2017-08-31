@@ -53,7 +53,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 			.then(function () {
 				var updateEnrolled;
 
-				course.setEnrolled(false);
 				wait(500).then(() =>  course.fireEvent('dropped'));
 
 				updateEnrolled = new Promise(function (fulfill, reject) {
@@ -64,6 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 				me.PathActions.clearCache();
 
 				Promise.all([
+					course.updateFromServer(),
 					me.CourseActions.loadAllUpcomingCourses(),
 					me.CourseActions.loadAllCurrentCourses(),
 					me.CourseActions.loadAllArchivedCourses(),
