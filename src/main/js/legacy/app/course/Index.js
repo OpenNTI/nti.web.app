@@ -607,7 +607,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 				break;
 			}
 
-			if (item && item.isAssignment) {
+			if (item && (item.isAssignment || item.isAssignmentRef)) {
 				assignment = item;
 				break;
 			}
@@ -630,7 +630,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route = this.getCourseMediaRoute(path);
 		} else if (root.isForum) {
 			route = this.getRouteForForum(root, subPath);
-		} else if (root instanceof Assignment) {
+		} else if (root instanceof Assignment || root.isAssignmentRef) {
 			route = this.getRouteForAssignment(root, subPath);
 		} else if (root instanceof CourseOutlineContentNode) {
 			route = this.getRouteForLesson(root, subPath);

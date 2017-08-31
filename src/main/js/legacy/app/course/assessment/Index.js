@@ -760,7 +760,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 
 	getRouteForPath: function (path, assignment) {
-		var assignmentId = assignment.getId(),
+		var assignmentId = assignment.getAssignmentId ? assignment.getAssignmentId() : assignment.getId(),
 			route;
 
 		assignmentId = encodeForURI(assignmentId);
