@@ -475,7 +475,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		loaded
 			.then(() => {
 				if (!assignment || assignment.getId() !== id) {
-					assignment = this.assignmentCollection.getItem(id);
+					assignment = this.assignmentCollection.getItem(id.split('#')[0]);
 				}
 
 				if (this.assignmentsView) {
@@ -485,7 +485,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 			})
 			.then(() => {
-				this.assignmentsView.showAssignment(assignment, student);
+				const idx = id.indexOf('#') && id.split('#')[1];
+
+				this.assignmentsView.showAssignment(assignment, student, idx);
 			})
 			.then(() => { this.setTitle(assignment.get('title')); })
 			.then(this.maybeUnmask.bind(this))

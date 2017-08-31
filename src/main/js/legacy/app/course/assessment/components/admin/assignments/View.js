@@ -66,14 +66,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	showAssignment: function (assignment, student) {
+	showAssignment: function (assignment, student, idx) {
 		if (!assignment) {
 			console.error('No assignment passed, showing root');
 			this.showRoot();
 			return;
 		}
 
-		var current = this.store.find('id', assignment.getId()),
+		var current = this.store.find('id', assignment.getId() + (idx ? '#' + idx : '')),
 			oldView = this.down('course-assessment-admin-assignments-item'),
 			next, previous, view, same = false;
 
