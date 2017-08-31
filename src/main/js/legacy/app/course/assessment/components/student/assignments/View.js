@@ -4,6 +4,7 @@ const {wait} = require('nti-commons');
 
 const {guidGenerator} = require('legacy/util/Globals');
 const {getString, getFormattedString} = require('legacy/util/Localization');
+const {naturalSortComparator} = require('legacy/util/Globals');
 const PathActions = require('legacy/app/navigation/path/Actions');
 
 require('legacy/mixins/Router');
@@ -60,7 +61,22 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					bVal = Infinity;
 				}
 
-				return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
+				if(aVal !== bVal) {
+					return aVal < bVal ? -1 : 1;
+				}
+
+				const dueComparator = (c, d) => {
+					const cDate = c.get('due'),
+						dDate = d.get('due');
+
+					return cDate < dDate ? -1 : cDate === dDate ? naturalSortComparator((c.name || '').toUpperCase(), (d.name || '').toUpperCase()) : 1;
+				};
+
+				return a.get('completed') ? b.get('completed') ? naturalSortComparator((a.name || '').toUpperCase(), (b.name || '').toUpperCase()) : 1 :
+					b.get('completed') ? -1 :
+						a.get('due') instanceof Date ? b.get('due') instanceof Date ? dueComparator(a, b) : -1 :
+							b.get('due') ? 1 :
+								naturalSortComparator((a.name || '').toUpperCase(), (b.name || '').toUpperCase());
 			}
 		},
 		'completion': {
