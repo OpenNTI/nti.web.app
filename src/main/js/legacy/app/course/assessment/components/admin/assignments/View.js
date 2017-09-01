@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return;
 		}
 
-		var current = this.store.find('id', assignment.getId() + (idx ? '#' + idx : '')),
+		var current = this.store.findBy(item => item.getId() === assignment.getId() + (idx ? '#' + idx : '')),
 			oldView = this.down('course-assessment-admin-assignments-item'),
 			next, previous, view, same = false;
 
