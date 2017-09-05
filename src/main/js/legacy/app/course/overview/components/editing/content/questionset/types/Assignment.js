@@ -8,6 +8,7 @@ const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('../../Editor');
 require('../AssignmentSelection');
+require('legacy/app/course/assessment/components/CreateMenu');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.Assignment', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -125,14 +126,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-
 	createAssignment () {
+		this.assignmentTypeMenu = this.assignmentTypeMenu || Ext.widget('create-assignment-menu', {
+			ownerCmp: this,
+			onDiscussionAssignmentCreate: (item) => { this.doCreation(true); },
+			onPlainAssignmentCreate: (item) => { this.doCreation(); }
+		});
+
+		this.assignmentTypeMenu.showBy(this.createAssignmentBtn, 'tr-br');
+	},
+
+	doCreation (isDiscussion) {
 		if (this.AssessmentActions) {
 			if (this.el) {
 				this.el.mask('Loading...');
 			}
 
-			this.AssessmentActions.createAssignmentIn(this.bundle)
+			const create = isDiscussion
+				? this.AssessmentActions.createDiscussionAssignmentIn(this.bundle)
+				: this.AssessmentActions.createAssignmentIn(this.bundle);
+
+			create
 				.then((assignment) => {
 					const {rootRecord, parentRecord} = this;
 					const values =  {

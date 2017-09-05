@@ -342,12 +342,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		const id = decodeFromURI(route.params.assignment);
 		const view = this.getView();
 
+		// if the route already has an assignment, mask the assignment listing to
+		// avoid confusion for long-loading assignment lists (if unmasked, Create assignment
+		// button is available and it isn't clear that the assignment is eventually being loaded)
+		if(route.params && route.params.assignment) {
+			view.mask('Loading...');
+		}
+
 		return view.getAssignmentList()
 			.then((assignments) => {
 				let index = 0;
 				let prev = 0;
 				let next = 0;
 				let assignment;
+
+				view.unmask();
 
 				for (index; index < assignments.length; index++) {
 					let item = assignments[index];

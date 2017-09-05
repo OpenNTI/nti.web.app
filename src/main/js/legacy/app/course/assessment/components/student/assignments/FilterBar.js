@@ -2,8 +2,7 @@ const Ext = require('extjs');
 
 const {getString} = require('legacy/util/Localization');
 
-const DISCUSSION_ASSIGNMENT = 'discussion-assignment';
-const PLAIN_ASSIGNMENT = 'plain-assignment';
+require('legacy/app/course/assessment/components/CreateMenu');
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.FilterBar', {
 	extend: 'Ext.Component',
@@ -237,29 +236,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	createAssignment () {
-		this.assignmentTypeMenu = this.assignmentTypeMenu || Ext.widget('menu', {
-			cls: 'assignment-types',
+		this.assignmentTypeMenu = this.assignmentTypeMenu || Ext.widget('create-assignment-menu', {
 			ownerCmp: this,
-			defaults: {
-				ui: 'nt-menuitem',
-				xtype: 'menuitem',
-				height: 50,
-				plain: true,
-				listeners: {
-					scope: this,
-					'click': (item) => {
-						if (item.assignmentType === DISCUSSION_ASSIGNMENT) {
-							this.fireEvent('create-discussion-assignment');
-						} else {
-							this.fireEvent('create-assignment');
-						}
-					}
-				}
-			},
-			items: [
-				{cls: 'discussion', text: 'Discussion Assignment', assignmentType: DISCUSSION_ASSIGNMENT},
-				{cls: 'plain', text: 'Assignment', assignmentType: PLAIN_ASSIGNMENT}
-			]
+			onDiscussionAssignmentCreate: (item) => { this.fireEvent('create-discussion-assignment'); },
+			onPlainAssignmentCreate: (item) => { this.fireEvent('create-assignment'); }
 		});
 
 		this.assignmentTypeMenu.showBy(this.createEl, 'tr-br');
