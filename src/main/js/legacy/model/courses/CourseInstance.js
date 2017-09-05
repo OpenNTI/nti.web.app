@@ -555,7 +555,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		return me.getWrapper()
 			.then(function (enrollment) {
-				return bundle.getLocationInfo(enrollment.get('Status'));
+				return bundle && bundle.getLocationInfo(enrollment.get('Status'));
 			})
 			.then(function (locationInfo) {
 				if (locationInfo) {
@@ -590,11 +590,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	getThumbnail: function () {
-		return this.getBundle().getThumbnail && this.getBundle().getThumbnail();
+		return (this.getBundle().getThumbnail && this.getBundle().getThumbnail()) || Promise.resolve('');
 	},
 
 	getVendorIconImage: function () {
-		return this.getBundle().getVendorIcon && this.getBundle().getVendorIcon();
+		return (this.getBundle().getVendorIcon && this.getBundle().getVendorIcon()) || Promise.resolve('');
 	},
 
 	getPublicScope: function () { return this.getScope('Public'); },
@@ -764,7 +764,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		if (!this.tocOutline) {
 			this.tocOutline = this.getLocationInfo()
 				.then(function (location) {
-					return new ToCBasedOutline({data: location.toc});
+					return new ToCBasedOutline({data: location && location.toc});
 				});
 		}
 
