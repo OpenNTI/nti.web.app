@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 		//App Identifier headers
 		...(typeof BUILD_PACKAGE_NAME === 'undefined' ? {} : {'X-NTI-Client-App': BUILD_PACKAGE_NAME}),
 		...(typeof BUILD_PACKAGE_VERSION === 'undefined' ? {} : {'X-NTI-Client-Version': BUILD_PACKAGE_VERSION}),
-	});
+	};
 	Ext.Ajax.on('beforerequest', function (connection, options) {
 
 		if (Ext.Ajax.logRequests) {
