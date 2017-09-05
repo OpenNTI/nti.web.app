@@ -1,3 +1,4 @@
+/*globals BUILD_PACKAGE_NAME, BUILD_PACKAGE_VERSION*/
 const Ext = require('extjs');
 
 const {getURL} = require('legacy/util/Globals');
@@ -54,8 +55,13 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 
 	Ext.Ajax.disableCaching = Ext.isGecko === true;
 	Ext.Ajax.useDefaultXhrHeader = true;
-	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
-	Ext.Ajax.defaultHeaders.Accept = 'application/json';
+	Ext.Ajax.defaultHeaders = {
+		...(Ext.Ajax.defaultHeaders || {}),
+		Accept: 'application/json',
+		//App Identifier headers
+		...(typeof BUILD_PACKAGE_NAME === 'undefined' ? {} : {'X-NTI-Client-App': BUILD_PACKAGE_NAME}),
+		...(typeof BUILD_PACKAGE_VERSION === 'undefined' ? {} : {'X-NTI-Client-Version': BUILD_PACKAGE_VERSION}),
+	});
 	Ext.Ajax.on('beforerequest', function (connection, options) {
 
 		if (Ext.Ajax.logRequests) {
