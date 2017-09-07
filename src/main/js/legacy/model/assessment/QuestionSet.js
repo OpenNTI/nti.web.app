@@ -52,40 +52,15 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 		return this.previousEffortDuration || 0;
 	},
 
-	clearProgress: function (save) {
-		this.progress = {};
-
-		if (save) {
-			this.saveProgress();
-		}
-	},
+	clearProgress: function (save) {},
 
 	setPreviousEffortDuration: function (duration) {
 		this.previousEffortDuration = duration;
 	},
 
-	setProgress: function (question, input) {
-		if (input.isDestroyed) {
-			return;
-		}
-
-		var id = question.getId(),
-			values = this.progress[id] || [],
-			value = input.getValue();
-
-		if (value === undefined) {
-			value = null;
-		}
-
-		values[input.getOrdinal()] = value;
-		this.progress[id] = values;
-	},
+	setProgress: function (question, input) {},
 
 	saveProgress: function (question, input) {
-		if (question && input) {
-			this.setProgress(question, input);
-		}
-
 		if (this.doNotSaveProgress) {
 			if (input && input.reapplyProgress && input.updateWithValue) {
 				const updatedQ = this.progress[question.getId()];
@@ -110,11 +85,11 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 				this.pendingProgress = this.pendingProgress || [];
 				this.pendingProgress.push({question, input});
 			} else {
-				this.inflightSavepoint = this.saveProgressHandler(this.progress)
+				this.inflightSavepoint = this.saveProgressHandler()
 					.then((result) => {
 						const pending = this.pendingProgress;
 						const toUpdate = [...(pending || []), {input, question}];
-						const resolvePending = pending ? this.saveProgressHandler(this.progress) : Promise.resolve(result);
+						const resolvePending = pending ? this.saveProgressHandler() : Promise.resolve(result);
 
 						delete this.inflightSavepoint;
 						delete this.pendingProgress;
@@ -131,7 +106,6 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 		}
 	},
 
-
 	applyProgressTo (inputs, result) {
 		const submission = result && result.getQuestionSetSubmission();
 		const questionSubmissions = (submission && submission.get('questions')) || [];
@@ -143,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 			if (cmp.reapplyProgress) {
 				for (let q of questionSubmissions) {
 					if (q.get('questionId') === qID) {
-						input.updateWithProgress(q);
+						cmp.updateWithProgress(q);
 						break;
 					}
 				}
