@@ -1762,10 +1762,12 @@ canvas.x-component-course-assessment {
 					position: absolute;
 					bottom: 13px;
 					font-weight: 600;
+					padding: 8px;
 					color: #fa8700;
 					line-height: 1.2em;
 					opacity: 0;
-					@include experimental(transition, opacity 0.25s);
+					transition-property: opacity;
+					transition-duration: 0.25s;
 
 					&.saving {
 						@include loadingEllipse($animation-delay: 0.2s);

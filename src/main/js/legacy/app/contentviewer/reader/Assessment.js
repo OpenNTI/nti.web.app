@@ -419,7 +419,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 	},
 
 	showSavingProgress: function () {
-		if (this.progressToast && !this.progressToast.el.isDestroyed) {
+		if (this.progressToast && (this.progressToast.el && !this.progressToast.el.isDestroyed)) {
 			console.warn('Toast already open');
 		} else {
 			this.progressToast = this.reader.showHeaderToast({
@@ -431,7 +431,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 	},
 
 	showProgressSaved: function () {
-		var toast = this.progressToast;
+		var toast = this.progressToast,
+			me = this;
 
 		if (!toast) { return; }
 
@@ -442,17 +443,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 					return;
 				}
 
-				toast.el.addCls('saved');
-				toast.el.removeCls('saving');
-				toast.el.update('Progress Saved');
+				if(toast.updateMessage) {
+					toast.updateMessage({ cls: 'saved', text: 'Progress Saved' });
+				}
+				else {
+					toast.el.addCls('saved');
+					toast.el.removeCls('saving');
+					toast.el.update('Progress Saved');
+				}
+
+				delete me.progressToast.el;
 
 				toast.close(1500);
-
 			});
 	},
 
 	showProgressFailed: function () {
-		var toast = this.progressToast;
+		var toast = this.progressToast,
+			me = this;
 
 		if (!toast) { return; }
 
@@ -463,11 +471,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 					return;
 				}
 
-				toast.el.addCls('error');
-				toast.el.removeCls('saving');
-				toast.el.update('Failed to Save Progress');
+				if(toast.updateMessage) {
+					toast.updateMessage({ cls: 'error', text: 'Failed to Save Progress' });
+				}
+				else {
+					toast.el.addCls('error');
+					toast.el.removeCls('saving');
+					toast.el.update('Failed to Save Progress');
+				}
 
 				toast.close(3000);
+
+				delete me.progressToast.el;
+
 				return wait(5000);
 			});
 	},

@@ -3,6 +3,7 @@ const Ext = require('extjs');
 const {ControlBar} = require('nti-content');
 const { encodeForURI } = require('nti-lib-ntiids');
 const { StickyToolbar } = require('nti-content');
+const {wait} = require('nti-commons');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
@@ -118,6 +119,41 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 
 		this.callParent(arguments);
+	},
+
+	showToast: function (msgOrConfig) {
+		const config = Ext.isString(msgOrConfig) ? { text: msgOrConfig } : msgOrConfig;
+
+		this.toolbarCmp.setProps({message: config});
+
+		this.safeToCloseToast = false;
+
+		let returnConfig = {
+			el: 1 // just give it some non-empty value
+		};
+
+		if (config.minTime) {
+			returnConfig.openLongEnough = wait(config.minTime);
+		}
+
+		returnConfig.close = (time) => {
+			this.safeToCloseToast = true;
+
+			wait(time || 0)
+				.then(() => {
+					// don't close if another showToast request came in while
+					// waiting to close this one
+					if(this.safeToCloseToast) {
+						this.toolbarCmp.setProps({message: null});
+					}
+				});
+		};
+
+		returnConfig.updateMessage = (newMsgCfg) => {
+			this.toolbarCmp.setProps({message: newMsgCfg});
+		};
+
+		return returnConfig;
 	},
 
 	onPageSourceLoad: function (pageSource) {
