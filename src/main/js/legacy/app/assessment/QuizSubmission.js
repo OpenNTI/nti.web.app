@@ -500,10 +500,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		const submission = progress || {};
 
 		if (!progress) {
-			this.questionSet.fireEvent('beforesubmit', this.questionSet, submission);
+			this.questionSet.fireEvent('beforesaveprogress', this.questionSet, submission);
 		}
 
-		return this.AssessmentActions.saveProgress(this.questionSet, submission, this.startTimestamp);
+		if(!this.isDestroyed || progress) {
+			return this.AssessmentActions.saveProgress(this.questionSet, submission, this.startTimestamp);
+		}
 	},
 
 	beforeRouteChange: function () {
