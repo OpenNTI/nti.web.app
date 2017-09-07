@@ -52,40 +52,15 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 		return this.previousEffortDuration || 0;
 	},
 
-	clearProgress: function (save) {
-		this.progress = {};
-
-		if (save) {
-			this.saveProgress();
-		}
-	},
+	clearProgress: function (save) {},
 
 	setPreviousEffortDuration: function (duration) {
 		this.previousEffortDuration = duration;
 	},
 
-	setProgress: function (question, input) {
-		if (input.isDestroyed) {
-			return;
-		}
-
-		var id = question.getId(),
-			values = this.progress[id] || [],
-			value = input.getValue();
-
-		if (value === undefined) {
-			value = null;
-		}
-
-		values[input.getOrdinal()] = value;
-		this.progress[id] = values;
-	},
+	setProgress: function (question, input) {},
 
 	saveProgress: function (question, input) {
-		if (question && input) {
-			this.setProgress(question, input);
-		}
-
 		if (this.doNotSaveProgress) {
 			if (input && input.reapplyProgress && input.updateWithValue) {
 				const updatedQ = this.progress[question.getId()];
@@ -106,32 +81,54 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 				this.beforeSaveProgress.call();
 			}
 
-			this.saveProgressHandler(this.progress)
-				.then(this.onSaveProgress.bind(this, question, input));
+			if (this.inflightSavepoint) {
+				this.pendingProgress = this.pendingProgress || [];
+				this.pendingProgress.push({question, input});
+			} else {
+				this.inflightSavepoint = this.saveProgressHandler()
+					.then((result) => {
+						const pending = this.pendingProgress;
+						const toUpdate = [...(pending || []), {input, question}];
+						const resolvePending = pending ? this.saveProgressHandler() : Promise.resolve(result);
+
+						delete this.inflightSavepoint;
+						delete this.pendingProgress;
+
+						return resolvePending
+							.then((pendingResult) => {
+								this.applyProgressTo(toUpdate, pendingResult);
+
+								return pendingResult;
+							});
+					})
+					.then(this.onSaveProgress.bind(this));
+			}
 		}
 	},
 
-	onSaveProgress: function (question, input, result) {
+	applyProgressTo (inputs, result) {
+		const submission = result && result.getQuestionSetSubmission();
+		const questionSubmissions = (submission && submission.get('questions')) || [];
+
+		for (let input of inputs) {
+			let {input:cmp, question} = input;
+			let qID = question && question.getId();
+
+			if (cmp.reapplyProgress) {
+				for (let q of questionSubmissions) {
+					if (q.get('questionId') === qID) {
+						cmp.updateWithProgress(q);
+						break;
+					}
+				}
+			}
+		}
+	},
+
+	onSaveProgress: function (result) {
 		if (!result || result.status === 409 || result.status === 404) {
 			this.afterSaveProgress.call(null, false);
 			return;
-		}
-
-		var submission = result && result.getQuestionSetSubmission(),
-			qId = question && question.getId(),
-			questions = (submission && submission.get('questions')) || [];
-
-		//if the input wants to reapply the progress after an upload
-		//find the question in the result and update it
-		if (input && input.reapplyProgress) {
-			questions.every(function (q) {
-				if (q.get('questionId') === qId) {
-					input.updateWithProgress(q);
-					return false;
-				}
-
-				return true;
-			});
 		}
 
 		if (this.afterSaveProgress) {
