@@ -13,6 +13,14 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 		return this.getXhrInstance();
 	},
 
+	request () {
+		const req = this.callParent(arguments);
+
+		this.clearTimeout(req);
+
+		return req;
+	},
+
 	setOptions: function (options, scope) {
 		var i, badParams = ['id', 'page', 'start', 'limit', 'group', 'sort'],//'_dc'
 			params = options.params || {};

@@ -92,7 +92,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 
 		this.questionSet.setStartTime(this.startTimestamp);
-		this.questionSet.clearProgress();
 
 		this.AssessmentActions = AssessmentActions.create();
 	},
@@ -383,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			try {
 				if (q.fireEvent('beforereset')) {
 					q.fireEvent('reset', keepAnswers);
-					q.clearProgress(true);
+					me.saveProgress({});
 					console.log('fired reset');
 					return Promise.resolve();
 				}
@@ -498,7 +497,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			return Promise.reject();
 		}
 
-		return this.AssessmentActions.saveProgress(this.questionSet, progress, this.startTimestamp);
+		const submission = progress || {};
+
+		if (!progress) {
+			this.questionSet.fireEvent('beforesaveprogress', this.questionSet, submission);
+		}
+
+		if(!this.isDestroyed || progress) {
+			return this.AssessmentActions.saveProgress(this.questionSet, submission, this.startTimestamp);
+		}
 	},
 
 	beforeRouteChange: function () {
