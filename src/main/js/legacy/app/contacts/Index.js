@@ -139,6 +139,8 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 			active: tab || active
 		});
 
+		me.navigation.updateTitle('Contacts');
+
 		return new Promise(function (fulfill, reject) {
 			item = me.setActiveItem(active);
 			fulfill(item);

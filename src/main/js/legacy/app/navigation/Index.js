@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			me.resizeNavCmp();
 		}
 
-		if (this.navCmp && this.navCmp.xtype === cmp.xtype) {
+		if (this.navCmp && this.navCmp.xtype === cmp.xtype && this.navCmp.getId() === cmp.getId()) {
 			return;
 		}
 

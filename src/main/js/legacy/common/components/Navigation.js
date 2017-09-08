@@ -87,8 +87,21 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 			this.setTabs(this.tabs, true);
 		}
 
+		if (this.title) {
+			this.updateTitle(this.title);
+		}
+
 		wait()
 			.then(this.maybeCollapse.bind(this));
+	},
+
+	updateTitle: function (newTitle) {
+		if(!this.rendered) {
+			this.title = newTitle;
+			return;
+		}
+
+		this.titleEl.update(newTitle);
 	},
 
 	onMouseEnterTitle: function () {
