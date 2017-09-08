@@ -3,6 +3,7 @@ const Ext = require('extjs');
 const BundleActions = require('../bundle/Actions');
 const CourseActions = require('../course/Actions');
 
+const AdminToolbar = require('./admin/Toolbar');
 const AdminCurrent = require('./admin/Current');
 const CommunitiesCurrent = require('./communities/Current');
 const ContentCurrent = require('./content/Current');
@@ -34,6 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 		var me = this,
 			loadingCmp = me.down('[loadingCmp]'),
 			cmps = [
+				AdminToolbar,
 				CommunitiesCurrent,
 				CoursesCurrent,
 				AdminCurrent,
@@ -52,6 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 							xtype: cmp.xtype,
 							navigateToAllCourses: me.navigateToAllCourses.bind(me),
 							pushRoute: me.pushRoute.bind(me),
+							pushRootRoute: me.pushRootRoute.bind(me),
 							navigateToBundle: me.navigateToBundle.bind(me),
 							navigateToCourse: me.navigateToCourse.bind(me),
 							navigateToCommunity: me.navigateToCommunity.bind(me)

@@ -2,6 +2,8 @@
 
 .course-admin {
 	.course-item-list {
+		background-color: rgba(0, 0, 0, 0);
+
 		.course-item {
 			.course-title {
 				margin-top: 0;
@@ -16,13 +18,14 @@
 
 	.create-course-button {
 		background-color: #3fb3f6;
+		color: white;
 		width: 150px;
 		text-align: center;
 		padding: 10px;
 		border-radius: 3px;
 		font-size: 14px;
 		line-height: 22px;
-		margin-bottom: 10px;
 		cursor: pointer;
+		margin: 20px;
 	}
 }

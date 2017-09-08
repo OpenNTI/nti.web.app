@@ -93,3 +93,9 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 	font-weight: 600;
 	color: $primary-red;
 }
+
+.admin-toolbar {
+	.admin-nav {
+		@include icon($topic, $top:11px, $left: 11px);
+	}
+}

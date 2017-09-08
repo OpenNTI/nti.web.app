@@ -55,6 +55,14 @@
 		position: relative;
 		left: 0;
 		min-width: 0;
+
+		.label {
+			min-height: 15px;
+		}
+
+		.title {
+			min-height: 20px;
+		}
 	}
 
 	.search-container {
@@ -222,7 +230,7 @@
 
 			& + .msg {
 				margin-left: 40px;
-			}	
+			}
 		}
 	}
 

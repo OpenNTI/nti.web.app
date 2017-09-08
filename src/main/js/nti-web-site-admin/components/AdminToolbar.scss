@@ -1,0 +1,78 @@
+@import "~nti-style-common/all.scss";
+
+.admin-create-options {
+	.flyout-inner {
+		margin-top: 10px;
+		border-radius: 10px;
+		width: 200px;
+		cursor: pointer;
+
+		.create-item {
+			padding: 12px;
+			border-bottom: solid 1px #eee;
+
+			&:last-of-type {
+				border: none;
+			}
+		}
+	}
+}
+
+.admin-toolbar {
+	margin-bottom: 30px;
+	display: flex;
+
+	.title {
+		font: normal 300 1.25em/2em "Open Sans", sans-serif;
+		color: white;
+		margin-right: 0.8em;
+		flex: 0 0 auto;
+	}
+
+	.space {
+		flex: 1 1 auto;
+	}
+
+	.controls {
+		flex: 0 0 auto;
+		display: flex;
+
+		.gear-button, .admin-nav {
+			width: 40px;
+			background-color: #555;
+			height: 40px;
+			border-radius: 30px;
+			margin-right: 10px;
+			font-size: 26px;
+			padding: 4px 4px 4px 7px;
+			color: white;
+			cursor: pointer;
+		}
+
+		.create-button {
+			height: 40px;
+			width: 115px;
+			background-color: #3fb3f6;
+			border-radius: 30px;
+			color: white;
+			padding: 4px 4px 4px 7px;
+			display: flex;
+			cursor: pointer;
+
+			.add-container {
+				background-color: white;
+				border-radius: 12px;
+				width: 24px;
+				height: 24px;
+				color: #3fb3f6;
+				padding: 1px 0 0 3px;
+				margin: 4px 10px 0 3px;
+				font-size: 18px;
+			}
+
+			.create-label {
+				margin-top: 4px;
+			}
+		}
+	}
+}
