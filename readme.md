@@ -11,7 +11,6 @@ You'll need to have the following items installed before continuing.
           ```
           nvm alias default stable
           ```
-  * [Karma](http://karma-runner.github.io): Run `npm install -g karma-cli`
 
 Optional:
   * Node Inspector: `npm install -g node-inspector`
@@ -40,7 +39,7 @@ npm start
 
 ##### Building:
 ```bash
-$ make
+$ npm run build
 ```
 
 ##### Running Tests:
@@ -48,11 +47,7 @@ $ make
 #for continuous integration (calls karma with extra reports, see package.json)
 $ npm test
 
-# for dev (single run, basic report)
-$ karma start
-
-# for dev (watch mode)
-$ karma start --auto-watch --no-single-run --reporters dots
+The test run using jest, you can pass the same arguments to npm test as jest
 ```
 
 ---
