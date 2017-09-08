@@ -12,9 +12,6 @@ You'll need to have the following items installed before continuing.
           nvm alias default stable
           ```
 
-Optional:
-  * Node Inspector: `npm install -g node-inspector`
-
 #### private npm
 All internal projects at NextThought are published into a private npm instance. You will need to configure npm to point to it before you can continue. It is located at https://npm.nextthought.com. For read-only access use the support credentials. When/if you need publishing (write) permissions, we can create a unique user for you.
 
