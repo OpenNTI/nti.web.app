@@ -7,6 +7,7 @@ require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
 require('./course');
+require('./users');
 require('./advanced');
 
 module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
@@ -25,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 		this.initRouter();
 
 		this.addRoute('/course', this.setAdminCourseActive.bind(this));
+		this.addRoute('/users', this.setAdminUsersActive.bind(this));
 		this.addRoute('/advanced', this.setAdminAdvancedActive.bind(this));
 		this.addDefaultRoute('/course');
 
@@ -70,6 +72,11 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				active: this.activeCmp === 'site-admin-course'
 			},
 			{
+				text: 'Users',
+				route: '/users',
+				active: this.activeCmp === 'site-admin-users'
+			},
+			{
 				text: 'Advanced',
 				route: '/advanced',
 				active: this.activeCmp === 'site-admin-advanced'
@@ -83,6 +90,12 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 
 	setAdminCourseActive: function (route, subRoute) {
 		var cmp = this.setActiveView('site-admin-course');
+
+		return cmp.handleRoute(subRoute, route.precache);
+	},
+
+	setAdminUsersActive: function (route, subRoute) {
+		var cmp = this.setActiveView('site-admin-users');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},
