@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 		getVideo (id) {
 			const url = Ext.String.format(this.URL, id);
 
-			return fetch(url);
+			return fetch(url).then(r => r.ok ? r.json() : Promise.reject(r));
 		},
 
 
@@ -34,6 +34,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 			promise = schedular.schedule(() =>
 				fetch(url)
+					.then(r => r.ok ? r.json() : Promise.reject(r))
 					.then(Ext.decode)
 					.then(function (o) { return o[0] || o;})
 					.then(function (json) {
