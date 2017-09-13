@@ -69,6 +69,19 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 			}
 
 			lastTime = time;
+		},
+
+		playbackRateChange (oldRate, newRate, state) {
+			if (doNotAllow || !state) { return; }
+
+			const {video, time} = state;
+
+			AnalyticsUtil.addResource(video, {
+				type: 'video-speed-change',
+				OldPlaySpeed: oldRate,
+				NewPlaySpeed: newRate,
+				VideoTime: time
+			});
 		}
 	};
 }
@@ -236,7 +249,8 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 					onPlaying: (e) => this.onPlaying(e),
 					onPause: (e) => this.onPause(e),
 					onEnded: (e) => this.onEnded(e),
-					onError: (e) => this.onError(e)
+					onError: (e) => this.onError(e),
+					onRateChange: (...args) => this.onRateChange(...args)
 				});
 
 				this.commandQueue.forEach(command => command());
@@ -333,5 +347,12 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 	onError (e) {
 		this.fireEvent('player-error', e);
+	},
+
+
+	onRateChange (oldRate, newRate) {
+		this.analytics.playbackRateChange(oldRate, newRate, this.queryPlayer());
+
+		this.fireEvent('player-playback-rate-change');
 	}
 });
