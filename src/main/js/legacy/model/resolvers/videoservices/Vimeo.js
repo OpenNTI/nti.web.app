@@ -19,8 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 		getVideo (id) {
 			const url = Ext.String.format(this.URL, id);
 
-
-			return Service.request({url, withCredentials: false});
+			return fetch(url, { withCredentials: false });
 		},
 
 
@@ -34,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 			url = Ext.String.format(this.URL, id);
 
 			promise = schedular.schedule(() =>
-				Service.request({url: url, withCredentials: false})
+				fetch(url, { withCredentials: false })
 					.then(Ext.decode)
 					.then(function (o) { return o[0] || o;})
 					.then(function (json) {
