@@ -53,7 +53,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			'dropping-course': mask,
 			'adding-course': mask,
 			'dropped-course': update,
-			'added-course': update
+			'added-course': update,
+			'modified-course': update
 		});
 	},
 

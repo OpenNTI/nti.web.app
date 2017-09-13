@@ -2,6 +2,7 @@ const Ext = require('extjs');
 
 require('../../components/Collection');
 require('./settings/CourseWindow');
+require('./settings/CourseMenu');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.Collection', {
@@ -72,18 +73,36 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	onItemClick: function (record, node, index, e) {
-		var win;
+		var settingsTarget = e.getTarget('.settings');
 
-		if (e.getTarget('.settings')) {
-			win = Ext.widget('library-course-settings', {
-				course: record,
-				renderTo: node
+		if (settingsTarget) {
+			var menuWidth = 310,
+				course = record.get('CourseInstance');
+
+			// TODO: newly created courses don't have a title field, why is that?
+			if(!course.title) {
+				course.title = course.asUIData().title;
+			}
+
+			this.menu = Ext.widget('course-menu',
+				{
+					width: menuWidth,
+					course
+				});
+			this.menu.showBy(settingsTarget, 'tr-br');
+
+			// avoid having hidden menus build up in the dom
+			this.menu.on('hide', () => {
+				this.menu && !this.menu.isDestroyed && this.menu.destroy();
+			});
+
+			// don't have menu linger after scrolling
+			window.addEventListener('scroll', () => {
+				this.menu.hide();
 			});
 
 			this.on('destroy', () => {
-				if (win.destroy && !win.isDestroyed) {
-					win.destroy();
-				}
+				this.menu && !this.menu.isDestroyed && this.menu.destroy();
 			});
 
 			e.stopPropagation();

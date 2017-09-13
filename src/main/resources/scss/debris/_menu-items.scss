@@ -24,7 +24,9 @@
 
 }
 
-
+.user-course-menu.x-panel-nt .x-menu-body {
+	padding: 0;
+}
 
 .x-menu-nt { //the combobox drop list uses this class,
 //don't combine with x-panel-nt to reduce css size.
