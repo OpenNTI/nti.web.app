@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Flyout, Prompt} from 'nti-web-commons';
+import { Flyout } from 'nti-web-commons';
 import { Editor } from 'nti-web-course';
 
 export default class AdminToolbar extends React.Component {
