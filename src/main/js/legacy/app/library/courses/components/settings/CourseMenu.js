@@ -22,6 +22,27 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		plain: true
 	},
 
+	afterRender: function () {
+		this.callParent(arguments);
+
+		const catalog = this.course && this.course.getCourseCatalogEntry();
+		if (catalog) {
+			catalog.on('dropped', this.onDrop.bind(this, catalog));
+		}
+	},
+
+	onDrop (catalog) {
+		const courseTitle = catalog && catalog.get('Title');
+
+		Ext.Msg.show({
+			msg: (getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
+				course: courseTitle
+			})),
+			title: 'Done',
+			icon: 'success'
+		});
+	},
+
 	onScroll: function () {
 		console.log('scrooooll train');
 	},
