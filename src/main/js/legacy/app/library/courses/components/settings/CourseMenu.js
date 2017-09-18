@@ -43,10 +43,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-	onScroll: function () {
-		console.log('scrooooll train');
-	},
-
 	resolveCatalogEntry: function () {
 		return getService().then((service) => {
 			return service.getObject(this.course.getCourseCatalogEntry().get('NTIID'));
@@ -62,14 +58,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	deleteCourse: function () {
+		var me = this;
+
 		Prompt.areYouSure('').then(() => {
 			return getService();
 		}).then((service) => {
-			return service.getObject(this.course.getId());
+			return service.getObject(me.course.getId());
 		}).then((courseInstance) => {
+			me.collectionEl.mask('Deleting...');
 			return courseInstance.delete('delete');
 		}).then(() => {
-			this.updateStore();
+			me.updateStore();
 		});
 	},
 
@@ -81,6 +80,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			}
 		} catch (e) {
 			console.warn('Error masking. %o', e);
+		}
+	},
+
+	removeMask: function () {
+		try {
+			var maskEl = this.el && this.el.up('.body-container');
+			if (maskEl) {
+				maskEl.unmask();
+			}
+		} catch (e) {
+			console.warn('Error unmasking. %o', e);
 		}
 	},
 
