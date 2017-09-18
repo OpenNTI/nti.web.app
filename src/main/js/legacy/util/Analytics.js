@@ -272,6 +272,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;
 		data.ResourceId = resourceId;
+		data.RootContextID = data.RootContextId || data['context_path'][0] || '';
 
 		this.maybePush(data);
 		this.__maybeStartBatchTimer();
