@@ -86,6 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 			this.menu = Ext.widget('course-menu',
 				{
+					collectionEl: this.el,
 					width: menuWidth,
 					course,
 					record
