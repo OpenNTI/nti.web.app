@@ -87,7 +87,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			this.menu = Ext.widget('course-menu',
 				{
 					width: menuWidth,
-					course
+					course,
+					record
 				});
 			this.menu.showBy(settingsTarget, 'tr-br');
 
