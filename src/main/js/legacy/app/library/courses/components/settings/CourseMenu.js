@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		function undoEnrollment (cmp) {
 			return new Promise(function (fulfill, reject) {
-				cmp.CourseEnrollmentActions.dropEnrollment(catalog, me.course, function (success, changed, status) {
+				cmp.CourseEnrollmentActions.dropEnrollment(catalog, me.record, function (success, changed, status) {
 					if (success) {
 						fulfill(changed);
 					} else {
