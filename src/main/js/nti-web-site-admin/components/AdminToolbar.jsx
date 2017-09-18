@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Flyout, Prompt} from 'nti-web-commons';
-import { CourseWizard } from 'nti-web-course';
+import { Editor } from 'nti-web-course';
 
 export default class AdminToolbar extends React.Component {
 	static propTypes = {
@@ -32,23 +32,10 @@ export default class AdminToolbar extends React.Component {
 		);
 	}
 
-	onCancel = () => {
-		this.modalDialog && this.modalDialog.dismiss && this.modalDialog.dismiss();
-
-		delete this.modalDialog;
-	}
-
-	onFinish = () => {
-		this.modalDialog && this.modalDialog.dismiss && this.modalDialog.dismiss();
-
-		delete this.modalDialog;
-	}
-
 	launchCourseWizard = () => {
 		this.flyout && this.flyout.dismiss();
 
-		this.modalDialog = Prompt.modal(<CourseWizard title="Create a New Course" onCancel={this.onCancel} onFinish={this.onFinish}/>,
-			'course-panel-wizard');
+		Editor.createCourse();
 	}
 
 	// these endpoints aren't available yet
