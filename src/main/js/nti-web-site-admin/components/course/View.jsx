@@ -1,6 +1,5 @@
 import React from 'react';
-import { Prompt } from 'nti-web-commons';
-import { CourseWizard, CourseListing } from 'nti-web-course';
+import { Editor, CourseListing } from 'nti-web-course';
 
 export default class View extends React.Component {
 	constructor (props) {
@@ -10,25 +9,14 @@ export default class View extends React.Component {
 
 	onCancel = () => {
 		this.setState({ createInProgress: false });
-
-		this.modalDialog && this.modalDialog.dismiss && this.modalDialog.dismiss();
-
-		delete this.modalDialog;
 	};
 
 	onFinish = () => {
 		this.setState({ createInProgress: false });
-
-		this.modalDialog && this.modalDialog.dismiss && this.modalDialog.dismiss();
-
-		delete this.modalDialog;
 	};
 
 	launch = () => {
-		this.setState({ createInProgress: true });
-
-		this.modalDialog = Prompt.modal(<CourseWizard title="Create a New Course" onCancel={this.onCancel} onFinish={this.onFinish}/>,
-			'course-panel-wizard');
+		Editor.createCourse();
 	};
 
 	renderCreateButton () {
