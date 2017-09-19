@@ -58,20 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	showEditor: function (catalogEntry) {
-		var me = this;
-
-		Editor.editCourse(
-			catalogEntry,
-			() => {
-				// on cancel, close and delete window
-				me.editorWindow && me.editorWindow.dismiss();
-
-				delete me.editorWindow;
-			},
-			() => {
-				// don't worry about trying to refresh for now, but may need
-				// to figure out a solution in the future
-			});
+		Editor.editCourse(catalogEntry);
 	},
 
 	deleteCourse: function () {
