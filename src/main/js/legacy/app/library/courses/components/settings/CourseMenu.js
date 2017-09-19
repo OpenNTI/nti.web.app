@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const { CourseMenu, CourseEditor } = require('nti-web-course');
+const { CourseMenu, Editor } = require('nti-web-course');
 const { Prompt } = require('nti-web-commons');
 const { getService } = require('nti-web-client');
 
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	showEditor: function (catalogEntry) {
 		var me = this;
 
-		me.editorWindow = CourseEditor.showEditor(
+		Editor.editCourse(
 			catalogEntry,
 			() => {
 				// on cancel, close and delete window
