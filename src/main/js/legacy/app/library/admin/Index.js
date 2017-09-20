@@ -67,9 +67,9 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 					upcoming: upcomingCourses,
 					current: currentCourses,
 					archived: [],	// defer loading of archived for performance reasons
-					archivedLoader: () => {
+					archivedLoader: (forceReload) => {
 						const archived = me.__getArchivedCourses();
-						if(!archived) {
+						if(!archived || forceReload) {
 							// need to lazy load
 							return me.Actions.loadAdminArchivedCourses().then(() => {
 								return me.__getArchivedCourses();

@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	updateStore: function () {
-		this.CourseStore.fireEvent('modified-course');
+		this.CourseStore.fireEvent('modified-course', this.collectionEl);
 	},
 
 	showEditor: function (catalogEntry) {
@@ -68,6 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			me.collectionEl.mask('Deleting...');
 			return courseInstance.delete('delete');
 		}).then(() => {
+			me.collectionEl.unmask();
 			me.updateStore();
 		});
 	},

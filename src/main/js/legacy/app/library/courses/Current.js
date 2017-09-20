@@ -45,8 +45,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			}
 		};
 
-		const update = () => this.updateCurrentItems();
-
+		const update = (el) => {
+			this.updateCurrentItems(el);
+		};
 
 		//update the list every time you enroll or drop a course in a course
 		this.mon(this.CourseStore, {
@@ -78,12 +79,14 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		}
 	},
 
-	updateCurrentItems () {
-		this.CourseStore.onceFavoritesLoaded(true)
-			.then(() => this.showCurrentItems());
+	updateCurrentItems (maskedEl) {
+		maskedEl && maskedEl.mask && maskedEl.mask('Loading');
+
+		return this.CourseStore.onceFavoritesLoaded(true)
+			.then(() => this.showCurrentItems(maskedEl));
 	},
 
-	showCurrentItems: function () {
+	showCurrentItems: function (maskedEl) {
 		const current = this.CourseStore.getFavoriteEnrolledCourses();
 		const total = this.CourseStore.getTotalEnrolledCourses();
 
@@ -96,6 +99,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		if (this.el) {
 			this.el.unmask();
 		}
+
+		maskedEl && maskedEl.unmask && maskedEl.unmask();
 
 		return this.showItems(current);
 	},
