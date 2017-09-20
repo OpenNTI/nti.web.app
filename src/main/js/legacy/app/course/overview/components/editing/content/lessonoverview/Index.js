@@ -109,7 +109,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					xtype: 'overview-editing-controls-add',
 					name: 'Add Section',
 					parentRecord: this.lessonOverview,
-					root: this.lessonOverview
+					root: this.lessonOverview,
+					onPromptClose: () => this.updateLessonOverview()
 				}
 			]
 		};
@@ -129,7 +130,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				addCardToGroup: this.addCardToGroup.bind(this),
 				initialState: initialState,
 				transition: transition,
-				navigate: this.navigate
+				navigate: this.navigate,
+				updateLessonOverview: () => this.updateLessonOverview()
 			});
 		}
 
@@ -150,5 +152,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return group.moveToFromContainer(card, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.contents)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then(this.resumeUpdates.bind(this));
+	},
+
+
+	updateLessonOverview () {
+		if (this.el) {
+			this.el.mask('Loading...');
+		}
+
+		const unmask = () => {
+			if (this.el) {
+				this.el.unmask();
+			}
+		};
+
+		this.contents.updateFromServer()
+			.then(() => unmask())
+			.catch(() => unmask());
 	}
 });

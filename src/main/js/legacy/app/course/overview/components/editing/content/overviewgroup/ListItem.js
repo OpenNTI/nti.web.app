@@ -217,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					bundle: this.bundle,
 					outlineNode: this.outlineNode,
 					onPromptOpen: this.suspendUpdates.bind(this),
-					onPromptClose: this.resumeUpdates.bind(this)
+					onPromptClose: (...args) => this.onPromptClose(...args)
 				}
 			]
 		};
@@ -248,7 +248,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			course: this.course,
 			transition: transition,
 			initialState: initialState,
-			navigate: this.navigate
+			navigate: this.navigate,
+			updateLessonOverview: this.updateLessonOverview
 		});
 
 	},
@@ -258,5 +259,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.movedCard = card;
 
 		return this.addCardToGroup(this.record, card, newIndex, moveInfo);
+	},
+
+	onPromptClose (...args) {
+		this.resumeUpdates(...args);
+
+		if (this.updateLessonOverview) {
+			this.updateLessonOverview();
+		}
 	}
 });

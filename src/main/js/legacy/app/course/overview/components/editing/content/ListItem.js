@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				bundle: bundle,
 				outlineNode: this.outlineNode,
 				onPromptOpen: function () {},
-				onPromptClose: function () {}
+				onPromptClose: () => this.onPromptClose()
 			});
 		}
 
@@ -149,6 +149,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	doNavigation (config) {
 		if (this.navigate) {
 			this.navigate(config);
+		}
+	},
+
+
+	onPromptClose () {
+		if (this.updateLessonOverview) {
+			this.updateLessonOverview();
 		}
 	}
 });
