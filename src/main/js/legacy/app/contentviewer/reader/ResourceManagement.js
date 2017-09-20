@@ -144,6 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		'object[type$=ntislidedeck]': 'overlay-slidedeck',
 		'object[type$=ntislidevideo][itemprop=presentation-card]': 'overlay-slidevideo',
 		'object[type$=ntivideo][itemprop=presentation-video]': 'overlay-video',
+		'object[class=ntivideo]': 'overlay-video',
 		'object[type$=videoroll]': 'overlay-video-roll',
 		'object[type$=image-collection]': 'overlay-image-roll',
 

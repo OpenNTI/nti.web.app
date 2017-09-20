@@ -116,9 +116,24 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.callParent([config]);
 
-		//TODO: figure out how to not need the video index
-		this.LibraryActions.getVideoIndex(bundle, content)
-			.then(this.fillVideo.bind(this));
+		if(data['ntiid']) {
+			// new videos (by ref) will have an ntiid property
+			// can't rely on video index, so just load the object
+			const id = data['ntiid'];
+
+			Service.getObject(id).then((video) => {
+				return this.fillVideo({
+					[id]: video.data
+				});
+			});
+		}
+		else {
+			// legacy videos (not by ref), use the old logic
+			// for compatibility
+			//TODO: figure out how to not need the video index
+			this.LibraryActions.getVideoIndex(bundle, content)
+				.then(this.fillVideo.bind(this));
+		}
 	},
 
 	afterRender: function () {
