@@ -3,6 +3,7 @@ const naturalSort = require('node-natural-sort');
 
 const {getString} = require('legacy/util/Localization');
 const CourseCatalogEntry = require('legacy/model/courses/CourseCatalogEntry');
+const CoursesStateStore = require('legacy/app/library/courses/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.Page', {
 	extend: 'Ext.container.Container',
@@ -14,6 +15,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.CoursesStore = CoursesStateStore.getInstance();
+		this.archivedBins = [];
 
 		this.setItems(this.upcoming, this.current, this.archived);
 	},
@@ -35,24 +39,41 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		else if(this.archivedLoader) {
 			// deferred archived loading
 			const me = this;
-			const loadArchived = () => {
-				if(me.loadArchivedButton) {
+			const loadArchived = (forceReload) => {
+				if(me.loadArchivedButton && me.loadArchivedButton.el) {
 					me.loadArchivedButton.el.mask('Loading...');
+				}
+				else {
+					me.el.mask('Loading...');
 				}
 
 				if(me.archived && me.archived.length) {
 					return;
 				}
 
-				me.archivedLoader().then((items) => {
+				me.archivedLoader(forceReload).then((items) => {
 					if(me.loadArchivedButton) {
 						me.loadArchivedButton.destroy();
 					}
+
+					me.el.unmask();
 
 					me.archived = items;
 					me.addBinnedCourses(this, me.binCourses(me.archived), 'Archived Courses');
 				});
 			};
+
+			this.CoursesStore.on('modified-course', () => {
+				me.archived = null;
+
+				me.archivedBins && me.archivedBins.forEach((b) => {
+					b && b.destroy && b.destroy();
+				});
+
+				me.archivedBins = [];
+
+				loadArchived(true);
+			});
 
 			this.loadArchivedButton = this.add({
 				xtype: 'component',
@@ -139,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 			semesters.forEach(function (semester) {
 				if (bin[semester] && bin[semester].length) {
-					me.addCoursesToContainer(containerCmp, bin[semester], label, semester + ' ' + year, options);
+					me.archivedBins.push(me.addCoursesToContainer(containerCmp, bin[semester], label, semester + ' ' + year, options));
 				}
 			});
 		});
