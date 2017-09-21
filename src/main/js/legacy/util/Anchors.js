@@ -1327,7 +1327,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		endNode = this.walkDownToLastNode(endNode);
 
-		function recurse (n) {
+		const recurse = (n) => {
 			if (!n) {
 				return null;
 			}
@@ -1347,7 +1347,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			recurseOn = this.walkDownToLastNode(recurseOn);
 
 			return this.searchFromRangeEndInwardForAnchorableNode(recurseOn);
-		}
+		};
 
 		return recurse(endNode);
 	},
