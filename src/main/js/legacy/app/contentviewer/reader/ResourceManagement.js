@@ -11,6 +11,7 @@ require('legacy/common/components/cards/OverlayedPanel');
 require('../../mediaviewer/content/deck/OverlayedPanel');
 require('../../mediaviewer/content/OverlayedPanel');
 require('../../video/OverlayedPanel');
+require('../../video/OverlayedPanelRef');
 require('../../video/roll/OverlayedPanel');
 require('../../image/OverlayedPanel');
 require('../../forums/OverlayedPanel');
@@ -144,6 +145,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		'object[type$=ntislidedeck]': 'overlay-slidedeck',
 		'object[type$=ntislidevideo][itemprop=presentation-card]': 'overlay-slidevideo',
 		'object[type$=ntivideo][itemprop=presentation-video]': 'overlay-video',
+		'object[type$=ntivideoref]': 'overlay-video-ref',
 		'object[type$=videoroll]': 'overlay-video-roll',
 		'object[type$=image-collection]': 'overlay-image-roll',
 
@@ -199,7 +201,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		els = DomUtils.filterNodeList(els, 'isRootObject');
 
 		Ext.each(els, function (el) {
-			o.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget(widgetXType, {
+			var id = el.getAttribute('data-ntiid');
+
+			if(!id) {
+				let param = el.querySelector('param[name=ntiid]');
+				id = param && param.value;
+			}
+
+			o.registerOverlayedPanel(id, Ext.widget(widgetXType, {
 				reader: me,
 				renderTo: o.componentOverlayEl,
 				tabIndexTracker: o.tabIndexer,

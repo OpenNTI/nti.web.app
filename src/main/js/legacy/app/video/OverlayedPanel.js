@@ -52,88 +52,103 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			playlist = [],
 			size = this.getSize(dom, 640);
 
-		playlist.push(PlaylistItem.fromDom(dom));
-
 		Ext.applyIf(data, {
 			basePath: reader && reader.basePath,
 			description: (description && description.getHTML()) || ''
 		});
 
 		this.size = size;
+		this.dom = dom;
 
 		this.LibraryActions = LibraryActions.create();
 
 		Ext.apply(config, {
-			layout: 'fit',
-			items: [{
-				width: size.width,
-				xtype: 'box',
-				autoEl: { cls: 'curtain content-video-curtain', cn: [
-					{ cls: 'ctr', cn: [
-						{ cls: 'play', cn: [
-							{cls: 'blur-clip', cn: {cls: 'blur'}},
-							{ cls: 'label', 'data-qtip': 'Play' },
-							{cls: 'launch-player', 'data-qtip': 'Play with transcript'}
-						] }
-					] }
-				]}
-			},{
-				width: size.width,
-				xtype: 'content-video-player',
-				data: data,
-				playlist: playlist,
-				video: playlist[0],
-				doNotAutoPlay: true,
-				contentElement: dom,
-				listeners: {
-					'height-change': () => {
-						this.syncElementHeight();
-						this.syncTop();
-					},
-					'player-command-activate': function () {
-						var video = me.down('content-video-player');
-
-						if (!me.fromClick) {
-							delete me.fromClick;
-							Ext.defer(video.deactivatePlayer, 1, video);
-						}
-						//console.log(me);
-					},
-					'player-deactivated': () => {
-						me.onPlayerDeactivated();
-					}
-				},
-				xhooks: {
-					playerConfigOverrides: function (type) {
-						return {reserveControlSpace: true};
-					}
-				}
-			}]
+			layout: 'fit'
 		});
 
 		this.data = data;
-		this.playlist = playlist;
 
 		this.callParent([config]);
 
-		if(data['ntiid']) {
-			// new videos (by ref) will have an ntiid property
-			// can't rely on video index, so just load the object
-			const id = data['ntiid'];
+		this.getVideo(bundle, content)
+			.then((index) => {
+				playlist.push(this.createPlaylistItem(index));
 
-			Service.getObject(id).then((video) => {
-				return this.fillVideo({
-					[id]: video.data
+				this.playlist = playlist;
+
+				this.curtain = this.add({
+					width: size.width,
+					xtype: 'box',
+					autoEl: { cls: 'curtain content-video-curtain', cn: [
+						{ cls: 'ctr', cn: [
+							{ cls: 'play', cn: [
+								{cls: 'blur-clip', cn: {cls: 'blur'}},
+								{ cls: 'label', 'data-qtip': 'Play' },
+								{cls: 'launch-player', 'data-qtip': 'Play with transcript'}
+							] }
+						] }
+					]}
 				});
+
+				this.player = this.add({
+					width: size.width,
+					xtype: 'content-video-player',
+					data: data,
+					playlist: playlist,
+					video: playlist[0],
+					doNotAutoPlay: true,
+					contentElement: dom,
+					listeners: {
+						'height-change': () => {
+							this.syncElementHeight();
+							this.syncTop();
+						},
+						'player-command-activate': function () {
+							var video = me.down('content-video-player');
+
+							if (!me.fromClick) {
+								delete me.fromClick;
+								Ext.defer(video.deactivatePlayer, 1, video);
+							}
+							//console.log(me);
+						},
+						'player-deactivated': () => {
+							me.onPlayerDeactivated();
+						}
+					},
+					xhooks: {
+						playerConfigOverrides: function (type) {
+							return {reserveControlSpace: true};
+						}
+					}
+				});
+
+				return index;
+			})
+			.then(this.fillVideo.bind(this))
+			.catch((error) => {
+				this.error = this.add({
+					width: size.width,
+					xtype: 'box',
+					autoEl: { cls: 'curtain error content-video-curtain', cn: [
+						{ cls: 'ctr', cn: [
+							{ cls: 'play', cn: [
+								{ cls: 'error'}
+							] }
+						] }
+					]}
+				});
+
+				this.setError(error);
 			});
-		}
-		else {
-			// legacy videos (not by ref), use the old logic
-			// for compatibility
-			//TODO: figure out how to not need the video index
-			this.LibraryActions.getVideoIndex(bundle, content)
-				.then(this.fillVideo.bind(this));
-		}
+	},
+
+	createPlaylistItem: function () {
+		return PlaylistItem.fromDom(this.dom);
+	},
+
+	getVideo: function (bundle, content) {
+		return this.LibraryActions.getVideoIndex(bundle, content);
 	},
 
 	afterRender: function () {
@@ -192,6 +207,21 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 					me.setBackground(imgs.poster, label);
 				});
 		}
+	},
+
+	setError: function (error) {
+		if (!this.el) {
+			this.on('afterrender', this.setError.bind(this, error), this, {single: true});
+			return;
+		}
+
+		this.down('box').getEl().setStyle({
+			backgroundSize: 'contain',
+			backgroundColor: 'black',
+			backgroundPosition: 'center center'
+		});
+
+		this.down('box').getEl().down('.error').update(error);
 	},
 
 	setBackground: function (src, label) {
