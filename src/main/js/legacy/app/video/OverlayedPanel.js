@@ -123,6 +123,9 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 					}
 				});
 
+				this.syncElementHeight();
+				this.syncTop();
+
 				return index;
 			})
 			.then(this.fillVideo.bind(this))
@@ -139,6 +142,8 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 					]}
 				});
 
+				this.syncElementHeight();
+				this.syncTop();
 				this.setError(error);
 			});
 	},
