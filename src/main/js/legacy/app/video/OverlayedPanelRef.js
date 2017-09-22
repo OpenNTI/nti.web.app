@@ -52,4 +52,21 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanelRef',
 				});
 		}
 	},
+
+	findLine () {
+		var doc = this.contentElement.ownerDocument,
+			range = doc.createRange();
+
+		const p = this.contentElement.parentNode;
+
+		if (p.tagName !== 'P' || p.children.length !== 1) {
+			console.warn('INVALID VIDEO REF, WILL NOT BE ABLE TO ANCHOR NOTES');
+			return null;
+
+		}
+
+		range.selectNode(p);
+
+		return {range, rect: this.el.dom.getBoundingClientRect()};
+	}
 });
