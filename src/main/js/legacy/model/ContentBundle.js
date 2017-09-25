@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	getTocFor (contentPackageID, status) {
 		const p = this.getContentPackage(contentPackageID);
 
-		return Promise.resolve(p.getToc(status));
+		return Promise.resolve(p && p.getToc(status));
 	},
 
 	getTocs: function (status) {
@@ -255,7 +255,9 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			firstPage = this.getFirstPage(),
 			uiData = this.asUIData();
 
-		return firstPackage.getToc(status)
+		const tocRequest = firstPackage ? firstPackage.getToc(status) : Promise.resolve();
+
+		return tocRequest
 			.then(function (toc) {
 				if (!toc) { return null; }
 
