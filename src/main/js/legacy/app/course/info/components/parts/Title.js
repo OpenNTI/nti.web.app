@@ -33,7 +33,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.buildVideo();
+		wait()
+			.then(() => this.buildVideo());
 
 		if (!Ext.isEmpty(this.videoUrl)) {
 			this.videoEl.setStyle({

@@ -149,15 +149,11 @@
 		}
 
 		.curtain{
+			display: none;
 			top: 0;
 			bottom: 0;
 			left: 0;
 			right: 0;
-			@include icon($play,$position: absolute, $top: 50%, $left: 50%);
-			&::after {
-				margin-left: -22px;
-				margin-top: -21px;
-			}
 		}
 
 		&.no-video {
@@ -166,9 +162,14 @@
 				line-height: 40px;
 			}
 
-			.curtain::after {
-				display: none;
+			.curtain {
+				display: block;
+
+				&::after {
+					display: none;
+				}
 			}
+
 		}
 
 		&.no-video.has-image {
