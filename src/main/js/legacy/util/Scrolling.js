@@ -6,7 +6,7 @@ const AnimationFrame = require('./AnimationFrame');
 module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 	statics: {
 		getPageScrollingEl () {
-			return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
+			return document.scrollingElement || document.documentElement;
 		},
 
 
