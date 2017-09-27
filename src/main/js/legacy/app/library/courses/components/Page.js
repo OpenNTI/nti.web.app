@@ -60,6 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 					me.el.unmask();
 
 					me.archived = items;
+					me.archivedLoaded = true;
 					me.addBinnedCourses(me, me.binCourses(me.archived), 'Archived Courses');
 				});
 			};
@@ -73,7 +74,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 				me.archivedBins = [];
 
-				loadArchived(true);
+				if(me.archivedLoaded) {
+					loadArchived(true);
+				}
 			});
 
 			this.loadArchivedButton = this.add({
