@@ -34,10 +34,15 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 
 		if (archived && archived.length) {
+			// if specifically providing a list of archived to this method, use those
 			this.addBinnedCourses(this, this.binCourses(archived), 'Archived Courses');
 		}
+		else if (this.archived && this.archived.length) {
+			// if we've already loaded archived, use those
+			this.addBinnedCourses(this, this.binCourses(this.archived), 'Archived Courses');
+		}
 		else if(this.archivedLoader) {
-			// deferred archived loading
+			// otherwise, defer archived loading using a load button
 			const me = this;
 			const loadArchived = (forceReload) => {
 				if(me.loadArchivedButton && me.loadArchivedButton.el) {
@@ -45,10 +50,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				}
 				else {
 					me.el.mask('Loading...');
-				}
-
-				if(me.archived && me.archived.length) {
-					return;
 				}
 
 				me.archivedLoader(forceReload).then((items) => {
@@ -59,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 					me.el.unmask();
 
 					me.archived = items;
-					me.addBinnedCourses(this, me.binCourses(me.archived), 'Archived Courses');
+					me.addBinnedCourses(me, me.binCourses(me.archived), 'Archived Courses');
 				});
 			};
 
