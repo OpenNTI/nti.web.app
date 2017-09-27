@@ -54,7 +54,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	showEditor: function (catalogEntry) {
-		Editor.editCourse(catalogEntry);
+		Editor.editCourse(catalogEntry).then(() => {
+			this.updateStore();
+		}).catch(() => {
+			// do anything on cancel with no saves?
+		});
 	},
 
 	deleteCourse: function () {
