@@ -91,7 +91,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 					course,
 					record
 				});
-			this.menu.showBy(settingsTarget, 'tr-br');
+
+			// show menu at settingsTarget, positioned mostly to the left of and under the settingsTarget element
+			// this will keep the popup within the bounds of the window
+			this.menu.showAt(settingsTarget.getBoundingClientRect().left + 32 - menuWidth, settingsTarget.getBoundingClientRect().top + 30);
 
 			// avoid having hidden menus build up in the dom
 			this.menu.on('hide', () => {
