@@ -59,6 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 				me.loadCourses(true);
 			},
 			'modified-course': () => {
+				me.el.mask('Loading...');
 				me.addLoadingCmp();
 				me.loadCourses(true);
 			},
@@ -119,8 +120,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 
 	addLoadingCmp () {
-		this.el.mask('Loading...');
-
 		this.loadingCmp = this.loadingCmp || this.add(Globals.getContainerLoadingMask());
 	},
 
