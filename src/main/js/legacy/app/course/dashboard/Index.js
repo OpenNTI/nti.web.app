@@ -4,6 +4,7 @@ const {wait} = require('nti-commons');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const {getString} = require('legacy/util/Localization');
 const TimeUtils = require('legacy/util/Time');
+const Scrolling = require('legacy/util/Scrolling');
 require('legacy/mixins/Router');
 
 require('./components/tiles/Assignment');
@@ -137,8 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 	},
 
 	getScrollTarget: function () {
-		//TODO: figure out how to not have to do a user agent check for this
-		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
+		return Scrolling.getPageScrollingEl();
 	},
 
 	bundleChanged: function (bundle) {
