@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	setCommentCounts: function (commentCounts) {
-		var summary = commentCounts[this.record.getId()],
+		var summary = commentCounts[this.record.getId()] || commentCounts[this.record.get('target-NTIID')],
 			count = summary ? summary.ItemCount : 0;
 
 		this.appendTotal(count);
