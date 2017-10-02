@@ -114,6 +114,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				return bundle.getAssignments();
 			})
 			.then(function (assignments) {
+				me.hasAssignments = !assignments.isEmpty();
+
+				// check for empty assignments first (before the isSync block might
+				// short circuit)
+				if (!me.hasAssignments) {
+					console.debug('The assignments call returned no assignments...');
+					resetView(false);
+				}
+
 				if (isSync) {
 					wait()
 						.then(me.alignNavigation.bind(me));
@@ -121,13 +130,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 
 				me.assignmentCollection = assignments;
-				me.hasAssignments = !assignments.isEmpty();
-
-				if (!me.hasAssignments) {
-					console.debug('The assignments call returned no assignments...');
-					resetView(false);
-					return;
-				}
 
 				//prime
 				assignments.getHistory(true);
