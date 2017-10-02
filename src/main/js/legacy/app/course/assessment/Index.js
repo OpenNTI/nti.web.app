@@ -347,6 +347,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		// button is available and it isn't clear that the assignment is eventually being loaded)
 		if(route.params && route.params.assignment) {
 			view.mask('Loading...');
+
+			if(!view.assignmentsView) {
+				// if creating the first assignment in a course, we need to make
+				// sure the necessary views are created
+				view.addContentEditorViews();
+			}
 		}
 
 		return view.getAssignmentList()
