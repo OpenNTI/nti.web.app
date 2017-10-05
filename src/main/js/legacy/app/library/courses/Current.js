@@ -80,7 +80,14 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 	},
 
 	updateCurrentItems (maskedEl) {
-		maskedEl && maskedEl.mask && maskedEl.mask('Loading');
+		// if there's a specified element to mask, mask it, otherwise
+		// just mask this component's el
+		if(maskedEl && maskedEl.mask) {
+			maskedEl.mask('Loading');
+		}
+		else {
+			this.el.mask && this.el.mask('Loading');
+		}
 
 		return this.CourseStore.onceFavoritesLoaded(true)
 			.then(() => this.showCurrentItems(maskedEl));
