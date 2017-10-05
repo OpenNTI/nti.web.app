@@ -5,7 +5,8 @@ import { Editor } from 'nti-web-course';
 
 export default class AdminToolbar extends React.Component {
 	static propTypes = {
-		handleNav: PropTypes.func.isRequired
+		handleNav: PropTypes.func.isRequired,
+		onCourseCreated: PropTypes.func
 	}
 
 	attachFlyoutRef = x => this.flyout = x
@@ -33,9 +34,14 @@ export default class AdminToolbar extends React.Component {
 	}
 
 	launchCourseWizard = () => {
+		const { onCourseCreated } = this.props;
+
 		this.flyout && this.flyout.dismiss();
 
-		Editor.createCourse();
+		Editor.createCourse().then(() => {
+			// course was created, do post processing
+			onCourseCreated && onCourseCreated();
+		});
 	}
 
 	// these endpoints aren't available yet

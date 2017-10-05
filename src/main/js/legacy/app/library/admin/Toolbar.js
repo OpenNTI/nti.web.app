@@ -3,6 +3,8 @@ const Ext = require('extjs');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const { AdminToolbar } = require('nti-web-site-admin');
 
+const CoursesStateStore = require('../courses/StateStore');
+
 module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.administrative-toolbar',
@@ -16,6 +18,8 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 	initComponent () {
 		this.callParent(arguments);
 
+		this.CourseStore = CoursesStateStore.getInstance();
+
 		const handleNav = (title, route) => {
 			this.NavigationActions = NavigationActions.create();
 			this.NavigationActions.updateNavBar({ noLibraryLink: false });
@@ -23,10 +27,15 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 			this.pushRootRoute(title, route);
 		};
 
+		const onCourseCreated = () => {
+			this.CourseStore.fireEvent('added-course');
+		};
+
 		this.add({
 			xtype: 'react',
 			component: AdminToolbar,
-			handleNav: handleNav
+			handleNav: handleNav,
+			onCourseCreated: onCourseCreated
 		});
 	}
 });
