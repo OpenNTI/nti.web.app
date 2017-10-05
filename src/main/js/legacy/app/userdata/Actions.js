@@ -1017,7 +1017,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 					fulfill();
 				} else {
 					console.error('Failed to save object');
-					alert('Opps!\nCould not save');
+					alert('Oops!\nCould not save');
 					reject();
 				}
 			});
