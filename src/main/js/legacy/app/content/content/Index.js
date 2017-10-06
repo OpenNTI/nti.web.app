@@ -310,7 +310,9 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		this.reader = ContentviewerIndex.create({
 			pageInfo: page instanceof PageInfo ? page : null,
 			relatedWork: page instanceof RelatedWork ? page : null,
-			toc: !this.currentBundle.isCourse ? this.ContentActions.getTocStore(this.currentBundle) : null,
+			// toc: !this.currentBundle.isCourse ? this.ContentActions.getTocStore(this.currentBundle, this.root) : null,
+			showToc: !this.currentBundle.isCourse,
+			contentPackage: this.ContentActions.getContentPackage(this.currentBundle, this.root),
 			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle, parent, this.root, rootRoute),
 			rootRoute: rootRoute,
 			pageSource: pageSource,

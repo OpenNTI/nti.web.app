@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const { encodeForURI } = require('nti-lib-ntiids');
+const { getService } = require('nti-web-client');
 
 const {getString} = require('legacy/util/Localization');
 const ContentUtils = require('legacy/util/Content');
@@ -446,6 +447,22 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				return store;
 			});
 	},
+
+
+	/**
+	 * Get a lib interfaces content package from a bundle
+	 *
+	 * @param  {Object} bundleModel bundle to look in
+	 * @param  {String} root        the id of the content package to look for
+	 * @return {Promise}            fulfills with the content package
+	 */
+	async getContentPackage (bundleModel, root) {
+		const service = await getService();
+		const bundle = await service.getObject(bundleModel.raw);
+
+		return bundle.getPackage(root);
+	},
+
 
 	/**
 	 * Create a content package and return a promise with the created package

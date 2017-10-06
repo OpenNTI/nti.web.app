@@ -11,6 +11,9 @@ require('legacy/common/menus/JumpTo');
 require('./TableOfContents');
 
 
+const HASH_REGEX = /#/;
+
+
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	extend: 'Ext.Component',
 	cls: 'content-toolbar',
@@ -104,10 +107,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			component: StickyToolbar,
 			path: this.path,
 			pageSource: this.pageSource,
-			toc: this.toc,
+			// toc: this.toc,
+			showToc: this.showToc,
+			contentPackage: this.contentPackage,
 			hideControls: this.hideControls,
 			hideHeader: this.hideHeader,
 			doNavigation: this.doNavigation,
+			selectTocNode: (node) => this.selectTocNode(node),
 			renderTo: this.toolbarCmpEl
 		});
 	},
@@ -208,5 +214,36 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			});
 		}
 
+	},
+
+
+	findPageNode (node) {
+		if (!node || node.tag === 'toc') {
+			return node;
+		}
+
+		const href = node && node.getAttribute('href');
+
+		if (HASH_REGEX.test(href)) {
+			return this.findPageNode(node.parent);
+		}
+
+		return node;
+	},
+
+
+	selectTocNode (node) {
+		const href = node.getAttribute('href');
+		const page = this.findPageNode(node);
+
+		let pageId = page && page.id;
+
+		pageId = pageId && encodeForURI(pageId);
+
+		if (node !== page && HASH_REGEX.test(href)) {
+			pageId += `#${href.split('#')[1]}`;
+		}
+
+		this.doNavigation(node.title, pageId, {pageNumber: node.page});
 	}
 });

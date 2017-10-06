@@ -3,6 +3,7 @@ const Ext = require('extjs');
 const Anchors = require('legacy/util/Anchors');
 const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');
 const SearchUtils = require('legacy/util/Search');
+const ScrollingUtils = require('legacy/util/Scrolling');
 
 const MENU_HIDE_THRESHOLD = 10;
 const MENU_HIDE_TIME_MS = 500;
@@ -16,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 			scroll = me.menuHideOnScroll.bind(me);
 
 		function afterReaderRenders () {
-			me.scrollingEl = Ext.isIE11p || Ext.isGecko ? Ext.get(document.documentElement) : Ext.getBody();
+			me.scrollingEl = Ext.get(ScrollingUtils.getPageScrollingEl());
 			reader.on('destroy', 'destroy',
 				reader.relayEvents(me.scrollingEl, [
 					'scroll'
