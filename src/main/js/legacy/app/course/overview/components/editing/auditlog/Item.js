@@ -6,11 +6,13 @@ const UserRepository = require('legacy/cache/UserRepository');
 const Video = require('legacy/model/Video');
 const VideoRoll = require('legacy/model/VideoRoll');
 
-function getTitle (r) {
+function getTitle (externalValues, recordable) {
 	let title = '';
-	if (r.Title) {
-		title = r.Title;
-	} else if (r.MimeType .mimeType) {
+	if (recordable.Title) {
+		title = recordable.Title;
+	} else if (externalValues.label) {
+		title = externalValues.label;
+	} else if (recordable.MimeType === VideoRoll.mimeType) {
 		title = 'Video Roll';
 	}
 
@@ -69,9 +71,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const attributes = record.get('attributes') || [];
 		const changeType = record.get('type');
 		const recordable = record.get('Recordable');
-		const title = recordable && getTitle(recordable);
-		const isChild = recordable.NTIID !== this.parentRecord.getId();
 		const externalValues = record && record.get('ExternalValue') || {};
+		const title = getTitle(externalValues, recordable);
+		const isChild = recordable.NTIID !== this.parentRecord.getId();
 		let type = changeType && (me.TYPES[changeType] || changeType);
 		let msg = '';
 
@@ -88,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 
 		// Message will be: {user} created {title of item}.
-		if (type === 'created' && fields.length === 0 && title) {
+		if (type === 'created' && fields.length === 0 && title !== '') {
 			fields.push(`"${title}"`);
 		}
 
@@ -103,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if ([VideoRoll.mimeType, Video.mimeType].includes(recordable.MimeType)) {
 			msg = `${type} ${title}.`;
-		} else if (isChild) {
+		} else if (isChild && title !== '') {
 			msg = `${type} ${fields.join(', ')} ${getMsgContext(type, title)}.`;
 		} else {
 			msg = `${type} ${fields.join(', ')}.`;
@@ -150,12 +152,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 function getMsgContext (type, title) {
 	let result = '';
 
+	if (title === '') { return ''; }
+
 	if (type === 'moved') {
-		result = title;
+		result = ' ' + title;
 	} else if (type === 'added an') {
-		result = 'in ' + title;
+		result = ' in ' + title;
 	} else if (type !== 'created') {
-		result = 'for ' + title;
+		result = ' for ' + title;
 	}
 
 	return result;
