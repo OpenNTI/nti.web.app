@@ -135,6 +135,17 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		], this.getTopicRoute.bind(this));
 
 		this.addDefaultRoute('/lessons');
+
+		// if a course is modified, we should force a reload of the active bundle
+		// so that things like the updated course ID/name are reflected
+		this.mon(this.CourseStore, {
+			'modified-course': (catalogEntry) => {
+				// only mark dirty if the active course is the one that was just modified
+				if(catalogEntry.CourseNTIID === this.activeBundle.getId()) {
+					this.isCourseDirty = true;
+				}
+			}
+		});
 	},
 
 	onQuickLinkNav: function (title, route) {
@@ -165,10 +176,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		var me = this;
 
 		//if we are setting my current course no need to do anything
-		if (me.activeBundle && (me.activeBundle.getId() || '') === ntiid) {
+		if (!me.isCourseDirty && me.activeBundle && (me.activeBundle.getId() || '') === ntiid) {
 			me.getActiveCourse = Promise.resolve(me.activeBundle);
 		} else {
 			me.clearRouteStates();
+			me.isCourseDirty = false;
 
 			me.getActiveCourse = new Promise((fulfill) => {
 				if (course) {
