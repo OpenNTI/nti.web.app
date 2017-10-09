@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			}
 		};
 
-		const update = (el) => {
+		const update = (updatedCatalogEntry, el) => {
 			this.updateCurrentItems(el);
 		};
 

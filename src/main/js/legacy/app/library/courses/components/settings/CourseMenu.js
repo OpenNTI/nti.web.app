@@ -49,13 +49,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-	updateStore: function () {
-		this.CourseStore.fireEvent('modified-course', this.collectionEl);
+	updateStore: function (updatedCatalogEntry) {
+		this.CourseStore.fireEvent('modified-course', updatedCatalogEntry, this.collectionEl);
 	},
 
 	showEditor: function (catalogEntry) {
-		Editor.editCourse(catalogEntry).then(() => {
-			this.updateStore();
+		Editor.editCourse(catalogEntry).then((updatedCatalogEntry) => {
+			this.updateStore(updatedCatalogEntry);
 		}).catch(() => {
 			// do anything on cancel with no saves?
 		});
