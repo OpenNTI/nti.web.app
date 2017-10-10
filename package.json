@@ -39,7 +39,7 @@
     "enzyme": "^2.8.2",
     "extjs": "4.2.0-nti",
     "formatter.js": "^0.1.5",
-    "moment": "^2.12.0",
+    "moment": "~2.18.1",
     "node-natural-sort": "^0.8.6",
     "nti-app-scripts": "^1.0.50",
     "nti-assignment-editor": "^1.6.0",
