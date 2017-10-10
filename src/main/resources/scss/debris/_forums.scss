@@ -656,6 +656,10 @@
 			padding-left: 0;
 		}
 
+		.video-placeholder:not(.nti-video) {
+			height: 100%;
+		}
+
 		&.expanded{
 
 			&::before{
