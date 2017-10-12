@@ -3,6 +3,7 @@ const {wait} = require('nti-commons');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const StoreUtils = require('legacy/util/Store');
+const ScrollingUtil = require('legacy/util/Scrolling');
 const WindowsActions = require('legacy/app/windows/Actions');
 const TilesNote = require('legacy/app/course/dashboard/components/tiles/Note');
 const TilesTopic = require('legacy/app/course/dashboard/components/tiles/Topic');
@@ -382,8 +383,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 	getScrollEl: function () {
-		//TODO: figure out how to not have to do a user agent check for this
-		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
+		return ScrollingUtil.getPageScrollingEl();
 	},
 
 	onScroll: function () {
