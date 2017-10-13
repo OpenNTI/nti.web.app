@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			} else {
 				this.addCls('late');
 			}
-		} else if (opens && opens <= now) {
+		} else if (!opens || opens <= now) {
 			if(button) {
 				this.enableButton();
 				button.show();
