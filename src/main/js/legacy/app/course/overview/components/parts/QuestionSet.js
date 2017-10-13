@@ -247,6 +247,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		} else if (parts.length === 0 && !assignment.isTimed && !isNoSubmit) {
 			this.down('button').setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
 		}
+
+		this.isAvailable = this.isAvailable || assignment.hasLink('PracticeSubmission');
 	},
 
 
