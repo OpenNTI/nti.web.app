@@ -67,6 +67,8 @@
     "react-test-renderer": "^15.5.4",
     "spritesmith-cli": "^1.1.2",
     "whatwg-fetch": "^2.0.0",
-    "xregexp": "^3.1.0"
+    "xregexp": "^3.1.0",
+    "react-addons-css-transition-group": "^15.6.2",
+    "nti-lib-store-connector": "0.x.x"
   }
 }
