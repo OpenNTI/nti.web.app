@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		}
 
 
-		return creator || (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
+		return (instructors && instructors.filter(notTA).map(makeName).join(', ')) || creator || '';
 	},
 
 	__setImage: function () {
