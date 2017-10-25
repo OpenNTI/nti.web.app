@@ -7,6 +7,7 @@ const NavigationActions = require('legacy/app/navigation/Actions');
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.catalog-component',
+	id: 'catalog-component',
 
 	mixins: {
 		Route: 'NextThought.mixins.Router'
@@ -21,6 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		me.callParent(arguments);
 		this.removeCls('make-white');
+		this.addCls('catalog-body');
 
 		this.initRouter();
 

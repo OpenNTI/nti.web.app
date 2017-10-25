@@ -112,13 +112,12 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 	getCmp: function (xtype, cmpQuery) {
 		var cmp = this.down(cmpQuery || xtype);
+
 		if (!cmp) {
 			cmp = this.add(Ext.widget(xtype));
 			this.addChildRouter(cmp);
 		}
-		if (xtype === 'catalog-component') {
-			cmp.id = 'catalog-component';
-		}
+
 		return cmp;
 	},
 
@@ -318,6 +317,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			community = route.precache.community;
 
 		id = decodeURIComponent(id);
+
 		return communityView.setActiveEntity(id, community)
 			.then(communityView.handleRoute.bind(communityView, subRoute, route.precache))
 			.catch(function () {
