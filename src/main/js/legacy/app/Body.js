@@ -350,7 +350,6 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		var body = Ext.getBody();
 		body.removeCls("x-body");
 		this.addCls('fullwidth');
-		console.log(searchView);
 		return searchView.handleRoute(subRoute, route.precache);
 
 	},
