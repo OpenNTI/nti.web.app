@@ -74,6 +74,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}).then(() => {
 			me.collectionEl.unmask();
 			me.updateStore();
+		}).catch(() => {
+			alert('You don\'t have permission to delete this course');
 		});
 	},
 
