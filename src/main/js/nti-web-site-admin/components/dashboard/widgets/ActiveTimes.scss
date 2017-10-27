@@ -1,0 +1,65 @@
+@import "~nti-style-common/all.scss";
+
+.active-times-widget {
+	width: 500px;
+	height: 650px;
+	margin: 5px;
+	padding: 25px;
+	box-shadow: 0 1px 2px 1px #ccc;
+	color: #555;
+
+	.active-times-header {
+		font-size: 24px;
+		margin-bottom: 30px;
+	}
+
+	.active-times-chart {
+		height: 455px;
+
+		.active-blocks {
+			display: flex;
+
+			.active-block {
+				width: 48px;
+				height: 24px;
+				background-color: #eee;
+				margin-right: 10px;
+				margin-bottom: 10px;
+			}
+
+			.time-label {
+				width: 48px;
+				height: 24px;
+				font-size: 12px;
+				text-align: right;
+			}
+		}
+
+		.days-of-week {
+			display: flex;
+
+			.day {
+				width: 48px;
+				height: 24px;
+				margin-right: 10px;
+				margin-bottom: 10px;
+				font-size: 12px;
+				text-align: center;
+			}
+		}
+	}
+
+	.active-times-popular {
+		border-top: solid 1px #ccc;
+
+		.active-times-popular-header {
+			color: #999;
+			margin-top: 20px;
+			margin-bottom: 4px;
+		}
+
+		.active-times-popular-content {
+			font-size: 32px;
+		}
+	}
+}
