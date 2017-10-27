@@ -54,7 +54,7 @@
     "nti-style-common": "^1.1.6",
     "nti-util-logger": "^1.0.2",
     "nti-web-client": "^1.1.1",
-    "nti-web-commons": "^0.11.1",
+    "nti-web-commons": "0.x.x",
     "nti-web-course": "^1.2.0",
     "nti-web-discussions": "0.x.x",
     "nti-web-login": "^2017.1.1",
