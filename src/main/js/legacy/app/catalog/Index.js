@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		me.callParent(arguments);
 		this.removeCls('make-white');
-		this.addCls('catalog-body');
+		this.addCls('course-catalog-body');
 
 		this.initRouter();
 
