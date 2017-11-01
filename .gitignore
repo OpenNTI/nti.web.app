@@ -1,6 +1,6 @@
 dist/
 node_modules/
-reports/
+/reports/
 src/main/resources/css
 src/main/resources/images/sprite.png
 src/main/resources/scss/utils/_icons.scss
