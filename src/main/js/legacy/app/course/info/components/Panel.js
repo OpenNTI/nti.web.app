@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const { Editor } = require('nti-web-course');
+const { Info } = require('nti-web-course');
 const { getService } = require('nti-web-client');
 
 const ContentProxy = require('legacy/proxy/JSONP');
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 			toAdd.push({
 				xtype: 'react',
 				id: 'about_target',
-				component: Editor.Inline,
+				component: Info,
 				catalogEntry: catalogEntry,
 				editable: catalogEntry.hasLink('edit')
 			},
