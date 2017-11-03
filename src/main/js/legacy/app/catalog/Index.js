@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const catalog = require('nti-web-catalog');
+const catalog = require('nti.web.component.catalog');
 
 const ComponentsNavigation = require('legacy/common/components/Navigation');
 const NavigationActions = require('legacy/app/navigation/Actions');
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		me.callParent(arguments);
 		this.removeCls('make-white');
-		this.addCls('catalog-body');
+		this.addCls('course-catalog-body');
 
 		this.initRouter();
 
