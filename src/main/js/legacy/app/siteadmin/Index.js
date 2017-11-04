@@ -9,6 +9,8 @@ require('legacy/login/StateStore');
 require('./course');
 require('./users');
 require('./advanced');
+require('./dashboard');
+require('./reports');
 
 module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 	extend: 'Ext.container.Container',
@@ -28,6 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 		this.addRoute('/course', this.setAdminCourseActive.bind(this));
 		this.addRoute('/users', this.setAdminUsersActive.bind(this));
 		this.addRoute('/advanced', this.setAdminAdvancedActive.bind(this));
+		this.addRoute('/dashboard', this.setAdminDashboardActive.bind(this));
+		this.addRoute('/reports', this.setAdminReportsActive.bind(this));
 		this.addDefaultRoute('/course');
 
 		this.NavigationActions = NavigationActions.create();
@@ -77,6 +81,16 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				active: this.activeCmp === 'site-admin-users'
 			},
 			{
+				text: 'Dashboard',
+				route: '/dashboard',
+				active: this.activeCmp === 'site-admin-dashboard'
+			},
+			{
+				text: 'Reports',
+				route: '/reports',
+				active: this.activeCmp === 'site-admin-reports'
+			},
+			{
 				text: 'Advanced',
 				route: '/advanced',
 				active: this.activeCmp === 'site-admin-advanced'
@@ -102,6 +116,18 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 
 	setAdminAdvancedActive: function (route, subRoute) {
 		var cmp = this.setActiveView('site-admin-advanced');
+
+		return cmp.handleRoute(subRoute, route.precache);
+	},
+
+	setAdminDashboardActive: function (route, subRoute) {
+		var cmp = this.setActiveView('site-admin-dashboard');
+
+		return cmp.handleRoute(subRoute, route.precache);
+	},
+
+	setAdminReportsActive: function (route, subRoute) {
+		var cmp = this.setActiveView('site-admin-reports');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},

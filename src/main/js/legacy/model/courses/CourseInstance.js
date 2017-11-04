@@ -458,6 +458,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return bundle.getContentRoots && bundle.getContentRoots();
 	},
 
+
+	getNonRenderableContentRoots () {
+		const bundle = this.getBundle();
+
+		return bundle.getNonRenderableContentRoots && bundle.getNonRenderableContentRoots();
+	},
+
 	getContentIds: function () {
 		var bundle = this.getBundle();
 
