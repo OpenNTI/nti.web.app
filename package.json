@@ -71,6 +71,7 @@
     "xregexp": "^3.1.0"
   },
   "dependencies": {
+    "nti-web-catalog": "0.1.0-alpha.201711010939",
     "nti-web-commons": "^0.15.0",
     "nti-web-search": "0.1.0-alpha.201711010941"
   }
