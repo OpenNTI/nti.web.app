@@ -1,13 +1,15 @@
 const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 const {wait} = require('nti-commons');
-
-const {getString} = require('legacy/util/Localization');
+const {Store, Input} = require('nti-web-search');
 
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
 
+require('legacy/overrides/ReactHarness');
 require('./components/AdvancedOptions');
+
+const SearchStore = Store.getGlobal();
 
 
 module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
@@ -31,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 			{
 				cls: 'search-field',
 				cn: [
-					{tag: 'input', type: 'text', placeholder: getString('NextThought.view.form.fields.SearchField.placeholder')},
+					{cls: 'input-container'},
 					{tag: 'a', href: '#', cls: 'trigger'},
 					{cls: 'search-icon'}
 				]
@@ -42,6 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	renderSelectors: {
 		wrapEl: '.search-field-wrap',
 		boxEl: '.search-field',
+		inputContainerEl: '.input-container',
 		inputEl: 'input',
 		triggerEl: '.trigger',
 		searchIconEl: '.search-icon'
@@ -60,16 +63,22 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.mon(this.inputEl, {
-			// focus: this.onInputFocus.bind(this),
-			blur: this.onInputBlur.bind(this),
-			keypress: this.keyPressed.bind(this),
-			keydown: this.keyDown.bind(this)
+		this.input = Ext.widget({
+			xtype: 'react',
+			renderTo: this.inputContainerEl,
+			component: Input,
+			store: SearchStore,
+			onBlur: (...args) => this.onInputBlur(...args),
+			onKeyPress: (...args) => this.keyPressed(...args),
+			onKeyDown: (...args) => this.keyDown(...args)
 		});
+
+		this.on('destroy', () => this.input.destroy());
 
 		this.mon(this.searchIconEl, {
 			click: this.searchClicked.bind(this)
 		});
+
 	},
 
 	syncTerm: function (term) {
@@ -78,13 +87,13 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 			return;
 		}
 
-		if (this.inputEl.dom.value !== term) {
-			this.inputEl.dom.value = term;
-		}
+		SearchStore.setTerm(term);
 	},
 
 	focusInput: function () {
-		this.inputEl.focus();
+		if (this.input.componentInstance) {
+			this.input.componentInstance.focus();
+		}
 	},
 
 	onInputFocus: function () {
@@ -105,11 +114,11 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	},
 
 	keyDown: function (e) {
-		var k = e.getKey();
+		var k = e.key || e.charCode;
 
 		if (this.specialKeys[k]) {
-			if (k === e.ESC) {
-				this.inputEl.dom.value = '';
+			if (k === Ext.EventObject.ESC) {
+				this.syncTerm('');
 			}
 
 			e.stopPropagation();
@@ -119,11 +128,12 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	keyPressed: function (e) {
 		e.stopPropagation();
 
-		var k = e.getKey();
+		//taken from the guts of Ext's getKey
+		var k = e.keyCode || e.charCode;
 
-		if (k === e.ENTER) {
+		if (k === Ext.EventObject.ENTER) {
 			this.doNavigation();
-		} else if (k === e.ESC) {
+		} else if (k === Ext.EventObject.ESC) {
 			this.doSearch();
 		} else {
 			this.doSearchBuffered();
@@ -193,6 +203,6 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	},
 
 	getValue: function () {
-		return this.inputEl.getValue();
+		return SearchStore.searchTerm;
 	}
 });
