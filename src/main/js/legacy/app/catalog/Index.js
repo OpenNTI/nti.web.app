@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const catalog = require('nti.web.component.catalog');
+const catalog = require('nti-web-catalog');
 
 const ComponentsNavigation = require('legacy/common/components/Navigation');
 const NavigationActions = require('legacy/app/navigation/Actions');

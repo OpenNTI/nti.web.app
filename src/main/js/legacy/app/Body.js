@@ -347,8 +347,6 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 	setCatalogActive: function (route, subRoute) {
 		var searchView = this.setActiveCmp('catalog-component');
-		var body = Ext.getBody();
-		body.removeCls("x-body");
 		this.addCls('fullwidth');
 		return searchView.handleRoute(subRoute, route.precache);
 
