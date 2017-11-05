@@ -32,6 +32,7 @@ require('./notifications/Index');
 require('./windows/Index');
 require('./contacts/Index');
 require('./siteadmin/Index');
+require('./catalog/Index');
 
 module.exports = exports = Ext.define('NextThought.app.Body', {
 	extend: 'Ext.container.Container',
@@ -80,6 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		this.addRoute('/search/', this.setSearchActive.bind(this));
 		this.addRoute('/contacts/', this.setContactsActive.bind(this));
 		this.addRoute('/id/:id', this.setObjectActive.bind(this));
+		this.addRoute('/catalog', this.setCatalogActive.bind(this));
 
 		if(Service.getWorkspace('SiteAdmin')) {
 			// only available if user has the admin workspace
@@ -113,7 +115,6 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		if (!cmp) {
 			cmp = this.add(Ext.widget(xtype));
-
 			this.addChildRouter(cmp);
 		}
 
@@ -342,6 +343,13 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		var searchView = this.setActiveCmp('search-index');
 
 		return searchView.handleRoute(subRoute, route.precache);
+	},
+
+	setCatalogActive: function (route, subRoute) {
+		var searchView = this.setActiveCmp('catalog-component');
+		this.addCls('fullwidth');
+		return searchView.handleRoute(subRoute, route.precache);
+
 	},
 
 	setContactsActive: function (route, subRoute) {
