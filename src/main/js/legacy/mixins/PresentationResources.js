@@ -6,23 +6,25 @@ const {getURL} = require('legacy/util/Globals');
 module.exports = exports = Ext.define('NextThought.mixins.PresentationResources', {
 	ASSET_MAP: {
 		thumb: {
-			check: false,
+			check: true,
 			name: 'contentpackage-thumb-60x60.png'
 		},
 		landing: {
-			check: false,
+			check: true,
 			name: 'contentpackage-landing-232x170.png'
 		},
 		background: {
-			check: false,
+			check: true,
 			name: 'background.png'
 		},
 		vendorIcon: {
 			check: true,
+			errorOnNotFound: true,
 			name: 'vendoroverrideicon.png'
 		},
 		promoImage: {
 			check: true,
+			errorOnNotFound: true,
 			name: 'course-promo-large-16x9.png'
 		}
 	},
@@ -76,7 +78,12 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 					return url;
 				})
 				.catch(function () {
-					return Promise.reject(name + ' asset not found');
+					if(assetPath.errorOnNotFound) {
+						return Promise.reject(name + ' asset not found');
+					}
+
+					// use default landing/background/thumb for courses that don't have images
+					return '/app/resources/images/default-course/' + assetPath.name;
 				});
 		} else {
 			p = Promise.resolve(url);

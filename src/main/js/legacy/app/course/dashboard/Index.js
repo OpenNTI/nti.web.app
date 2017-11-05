@@ -202,7 +202,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 				return results.reduce(function (a, b) {
 					return a.concat(b);
 				}, []);
-			});
+			})
+			.catch(() => []);
 	},
 
 	addUpcoming: function (date) {
@@ -257,7 +258,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 				return results.reduce(function (a, b) {
 					return a.concat(b);
 				}, []);
-			});
+			})
+			.catch(() => []);
 	},
 
 	getScrollInfo: function () {

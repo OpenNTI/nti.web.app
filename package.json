@@ -1,6 +1,6 @@
 {
   "name": "nti-web-app",
-  "version": "2017.12.0-alpha",
+  "version": "2017.13.0-alpha",
   "description": "NextThought web application",
   "author": "nextthought",
   "license": "UNLICENSED",
@@ -58,6 +58,7 @@
     "nti-web-course": "^1.2.0",
     "nti-web-discussions": "0.x.x",
     "nti-web-login": "^2017.1.1",
+    "nti-web-search": "0.1.0-alpha.201711010941",
     "nti-web-video": "^1.8.1",
     "postcss-cli": "^4.0.0",
     "prop-types": "^15.5.8",

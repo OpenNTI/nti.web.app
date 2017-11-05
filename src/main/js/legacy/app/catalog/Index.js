@@ -1,5 +1,6 @@
 const Ext = require('extjs');
-const catalog = require('nti.web.component.catalog');
+const catalog = require('nti-web-catalog');
+const {getService} = require('nti-web-client');
 
 const ComponentsNavigation = require('legacy/common/components/Navigation');
 const NavigationActions = require('legacy/app/navigation/Actions');
@@ -37,34 +38,29 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		var active = state.active,
 			tabs = [];
 
-		tabs.push({
-			text: 'Catalog',
-			route: '/',
-			subRoute: this.catalogRoute,
-			active: active === 'catalog'
-		});
+		let me = this;
 
-		tabs.push({
-			text: 'Communities',
-			route: '/communities',
-			subRoute: this.groupsRoute,
-			active: active === 'communities'
-		});
+		getService().then((service) => service.get('service'))
+			.then(function (data) {
+				let collection = null;
+				for (let i = 0; i < data.Items.length; i++) {
+					if (data.Items[i].Title === 'Catalog') {
+						collection = data.Items[i].Items;
+						break;
+					}
+				}
 
-		tabs.push({
-			text: 'Books',
-			route: '/books',
-			subRoute: this.listsRoute,
-			active: active === 'books'
-		});
-		tabs.push({
-			text: 'Purchased',
-			route: '/purchased',
-			subRoute: this.listsRoute,
-			active: active === 'purchased'
-		});
-
-		this.navigation.setTabs(tabs);
+				for (let i = 0; i < collection.length; i++) {
+					tabs.push ({
+						text: collection[i].Title,
+						route: '/' + collection[i].Title,
+						subRoute: me.catalogRoute,
+						active: active === collection[i].Title
+					});
+				}
+				me.navigation.setTabs(tabs);
+				return;
+			});
 	},
 
 	setActiveView: function (active, inactive, tab) {

@@ -231,6 +231,12 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		});
 	},
 
+	getNonRenderableContentRoots () {
+		return (this.get('ContentPackages') || [])
+			.filter(content => !content.isRenderableContentPackage)
+			.map(content => content && content.get('root'));
+	},
+
 	getContentIds: function () {
 		return (this.get('ContentPackages') || []).map(function (content) {
 			return content && content.get('NTIID');

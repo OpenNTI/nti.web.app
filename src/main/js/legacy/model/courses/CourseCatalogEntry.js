@@ -107,7 +107,6 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 	getAuthorLine: function () {
 		var taRe = (/Teaching Assistant/i);
 		var instructors = this.get('Instructors');
-		var creator = this.get('author');
 
 		function makeName (instructor) {
 			return instructor.get('Name');
@@ -119,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		}
 
 
-		return creator || (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
+		return (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
 	},
 
 	__setImage: function () {
