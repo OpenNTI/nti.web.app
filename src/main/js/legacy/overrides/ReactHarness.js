@@ -16,7 +16,14 @@ const Bridge = createReactClass({
 
 	propTypes: {
 		bundle: PropTypes.object,
+		baseroute: PropTypes.string,
 		children: PropTypes.any
+	},
+
+	getInitialState () {
+		return {
+			baseroute: this.props.baseroute
+		};
 	},
 
 	childContextTypes: {
@@ -37,7 +44,8 @@ const Bridge = createReactClass({
 			},
 			routerLinkComponent: () => {},
 			router: {
-				makeHref: (x) => x
+				makeHref: (x) => x,
+				baseroute: this.state.baseroute
 			},
 			course: bundle && {
 				getAssignment (ntiid) {
@@ -58,10 +66,15 @@ const Bridge = createReactClass({
 		};
 	},
 
+
+	setBaseRoute (baseroute) {
+		this.setState({baseroute});
+	},
+
+
 	render () {
 		return React.Children.only(this.props.children);
 	}
-
 });
 
 /*
@@ -110,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 	getProps () {
 		const {initialConfig: config} = this;
-		return {...config, component: void 0, cls: void 0};
+		return {...config, component: void 0, cls: void 0, renderTo: void 0, xtype: void 0, baseroute: void 0};
 	},
 
 
@@ -159,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 		ReactDOM.render(
-			React.createElement(Bridge, {bundle: this.bundle, ref: x => this.bridgeInstance = x},
+			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, ref: x => this.bridgeInstance = x},
 				//The ref will be called on mount with the instance of the component.
 				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
 				//mounted. Calling doRender is the primary way to update the component with new props.
@@ -197,6 +210,11 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 		this.onceRendered.catch(()=>{});
 
 		this.unmount();
+	},
+
+
+	setBaseRoute (baseroute) {
+		this.bridgeInstance.setBaseRoute(baseroute);
 	},
 
 
