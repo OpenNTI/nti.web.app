@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
 const {wait} = require('nti-commons');
+const {getHistory} = require('nti-web-routing');
 
 const {getString} = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');
@@ -19,6 +20,8 @@ const StateActions = require('legacy/common/state/Actions');
 const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('legacy/app/Index');
+
+const history = getHistory();
 
 module.exports = exports = Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
@@ -325,7 +328,11 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			allow = body.allowNavigation();
 
 		function finish () {
-			window.history[fn](state || window.history.state, myTitle, myRoute);
+			history[fn](myRoute, state || window.history.state);
+			//Yuck! The history library doesn't allow us to set the title
+			//so immediately replace the current state with one with the title
+			window.history.replaceState(window.history.state, myTitle, myRoute);
+			// history[fn](state || window.history.state, myTitle, myRoute);
 			document.title = title;
 			me.handleRoute(title, route, precache);
 		}
@@ -347,12 +354,12 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 
 	pushRoute: function (title, route, precache) {
-		this.__doRoute('pushState', null, title, route, precache);
+		this.__doRoute('push', null, title, route, precache);
 	},
 
 
 	replaceRoute: function (title, route, precache, fragment) {
-		this.__doRoute('replaceState', null, title, route, precache);
+		this.__doRoute('replace', null, title, route, precache);
 	},
 
 
@@ -362,7 +369,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 		historyState[body.stateKey] = state;
 
-		this.__doRoute('pushState', historyState, title, route, precache);
+		this.__doRoute('push', historyState, title, route, precache);
 	},
 
 
@@ -372,7 +379,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 		historyState[body.stateKey] = state;
 
-		this.__doRoute('replaceState', historyState, title, route, precache);
+		this.__doRoute('replace', historyState, title, route, precache);
 	},
 
 
