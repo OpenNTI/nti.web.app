@@ -69,11 +69,8 @@
     "react-test-renderer": "^15.5.4",
     "spritesmith-cli": "^1.1.2",
     "whatwg-fetch": "^2.0.0",
-    "xregexp": "^3.1.0"
-  },
-  "dependencies": {
+    "xregexp": "^3.1.0",
     "nti-web-catalog": "0.1.0-alpha.201711010939",
-    "nti-web-commons": "^0.15.0",
-    "nti-web-search": "0.1.0-alpha.201711010941"
+    "nti-web-commons": "^0.15.0"
   }
 }
