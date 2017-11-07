@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 		}},
 
 		{ name: 'type', type: 'Synthetic', persist: false, fn: function (r) {
-			var d = r._max_depth || 2,
+			var d = Math.max(2, r._max_depth || 2), // default max depth to 2
 				myDepth = r._depth,
 				unit = 'unit heading';
 
