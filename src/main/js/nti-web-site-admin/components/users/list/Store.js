@@ -1,6 +1,6 @@
-import EventEmitter from 'events';
-
 import {getService, User} from 'nti-web-client';
+
+import BasicStore from '../../BasicStore';
 
 const INITIAL_LOAD_CACHE = Symbol('Initial Load Cache');
 
@@ -21,7 +21,7 @@ function convertBatch (batch) {
 	};
 }
 
-export default class UserListStore extends EventEmitter {
+export default class UserListStore extends BasicStore {
 	constructor () {
 		super();
 
@@ -58,10 +58,6 @@ export default class UserListStore extends EventEmitter {
 
 	get hasNextPage () {
 		return !!this._loadNextPage;
-	}
-
-	get (key) {
-		return this[key];
 	}
 
 	async load () {
@@ -161,19 +157,5 @@ export default class UserListStore extends EventEmitter {
 			}, 300);
 		}
 
-	}
-
-	emitChange (type) {
-		this.emit('change', {type});
-	}
-
-
-	addChangeListener (fn) {
-		this.addListener('change', fn);
-	}
-
-
-	removeChangeListener (fn) {
-		this.removeListener('change', fn);
 	}
 }
