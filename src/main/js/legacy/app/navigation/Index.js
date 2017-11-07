@@ -109,7 +109,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			this.removeCls('no-nav');
 			this.addCls('has-nav');
 			this.searchCmp.isActive = true;
-			this.searchEl.addCls('collapsed');
+
+			if (!this.searchHasContext) {
+				this.searchEl.addCls('collapsed');
+			}
+
 			this.hasNavCmp = true;
 		} else if (config && config.hideNavCmp && this.hasNavCmp) {
 			this.addCls('removing-nav');
@@ -248,6 +252,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this),
 			onSearchFocus: this.onSearchFocus.bind(this),
 			onSearchBlur: this.onSearchBlur.bind(this),
+			onSearchAddContext: this.onSearchAddContext.bind(this),
+			onSearchRemoveContext: this.onSearchRemoveContext.bind(this),
 			noRouteOnSearch: this.noRouteOnSearch,
 			containerCmp: this.searchEl
 		});
@@ -329,9 +335,24 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	onSearchBlur: function () {
 		this.removeCls('search-focused');
 
-		if (!this.noRouteOnSearch && this.navCmp) {
+		if (!this.noRouteOnSearch && this.navCmp && !this.searchHasContext) {
 			this.searchEl.addCls('collapsed');
 		}
+	},
+
+
+	onSearchAddContext () {
+		this.searchEl.removeCls('collapsed');
+
+		wait()
+			.then(this.resizeNavCmp.bind(this));
+
+		this.searchHasContext = true;
+	},
+
+
+	onSearchRemoveContext () {
+		this.searchHasContext = false;
 	},
 
 	/**

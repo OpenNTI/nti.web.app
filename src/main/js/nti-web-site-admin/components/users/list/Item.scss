@@ -33,6 +33,7 @@
 			font-size: 0.75rem;
 			font-weight: 300;
 
+
 			.joined {
 				flex: 0 0 auto;
 				color: $primary-grey;
@@ -42,13 +43,18 @@
 					padding-right: 0.2rem;
 				}
 
-				&:not:last-child:after {
+				&::after {
 					content: '\a0\b7\a0';
+				}
+
+				&:last-child::after {
+					content: '';
 				}
 			}
 
 			.email {
 				flex: 0 0 auto;
+				color: $primary-blue;
 			}
 		}
 
