@@ -1,0 +1,73 @@
+@import '~nti-style-common';
+
+.site-admin-user-item {
+	display: flex;
+	align-items: center;
+	padding: 1rem 0;
+
+	.avatar {
+		width: 60px;
+		height: 60px;
+		flex: 0 0 auto;
+	}
+
+	.info {
+		display: flex;
+		flex-direction: column;
+		margin-left: 0.5rem;
+		flex: 1 1 auto;
+
+		.display-name {
+			text-decoration: none;
+			flex: 1 1 auto;
+			color: $primary-blue;
+			font-size: 1.25rem;
+		}
+
+
+		.meta {
+			margin-top: 0.3rem;
+			flex: 0 0 1.125rem;
+			display: flex;
+			flex-direction: row;
+			font-size: 0.75rem;
+			font-weight: 300;
+
+			.joined {
+				flex: 0 0 auto;
+				color: $primary-grey;
+
+				.label {
+					font-weight: 700;
+					padding-right: 0.2rem;
+				}
+
+				&:not:last-child:after {
+					content: '\a0\b7\a0';
+				}
+			}
+
+			.email {
+				flex: 0 0 auto;
+			}
+		}
+
+		.email {
+			flex: 0 0 1rem;
+		}
+	}
+
+	.last-seen {
+		flex: 0 0 auto;
+		font-size: 0.875rem;
+		font-weight: 400;
+		color: $primary-grey;
+
+		margin-left: 0.5rem;
+
+		.label {
+			font-weight: 700;
+			padding-right: 0.3rem;
+		}
+	}
+}

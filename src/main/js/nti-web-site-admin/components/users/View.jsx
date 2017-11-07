@@ -1,18 +1,19 @@
-import React from 'react';
+import {Router, Route} from 'nti-web-routing';// eslint-disable-line
 
-export default class View extends React.Component {
-	constructor (props) {
-		super(props);
-		this.state = {};
-	}
+import List from './list';
+import User from './user';
 
-	renderContent () {
-		return (<div/>);
-	}
+export default Router.for(
+	Route({
+		path: '/:id',
+		component: User,
+		getRouteFor: (obj) => {
+			if (obj.MimeType === 'application/vnd.nextthought.user') {
+				return `/${(obj.getID())}`;
+			}
 
-	render () {
-		return (<div className="course-users">
-			{this.renderContent()}
-		</div>);
-	}
-}
+			return null;
+		}
+	}),
+	Route({path: '/', component: List, name: 'site-admin.users'})
+);
