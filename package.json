@@ -17,7 +17,6 @@
   },
   "scripts": {
     "test": "nti-app-scripts test",
-    "prestart": "npm link nti-web-catalog",
     "start": "nti-app-scripts start",
     "prepack": "nti-app-scripts build",
     "build": "nti-app-scripts build",
