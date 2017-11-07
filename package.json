@@ -70,7 +70,7 @@
     "spritesmith-cli": "^1.1.2",
     "whatwg-fetch": "^2.0.0",
     "xregexp": "^3.1.0",
-    "nti-web-catalog": "0.1.0-alpha.201711010939",
+    "nti-web-catalog": "*",
     "nti-web-commons": "^0.15.0"
   }
 }
