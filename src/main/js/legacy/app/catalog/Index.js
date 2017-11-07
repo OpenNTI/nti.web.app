@@ -40,27 +40,19 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		let me = this;
 
-		getService().then((service) => service.get('service'))
-			.then(function (data) {
-				let collection = null;
-				for (let i = 0; i < data.Items.length; i++) {
-					if (data.Items[i].Title === 'Catalog') {
-						collection = data.Items[i].Items;
-						break;
-					}
-				}
-
-				for (let i = 0; i < collection.length; i++) {
-					tabs.push ({
-						text: collection[i].Title,
-						route: '/' + collection[i].Title,
-						subRoute: me.catalogRoute,
-						active: active === collection[i].Title
-					});
-				}
-				me.navigation.setTabs(tabs);
-				return;
-			});
+		getService ().then ((service) => {
+			const collection = service.getWorkspace ('Catalog').Items;
+			for (let i = 0; i < collection.length; i++) {
+				let item = {
+					text: collection[i].Title,
+					route: '/',
+					subRoute: me.catalogRoute,
+					active: active === collection[i].Title
+				};
+				tabs.push (item);
+			}
+			me.navigation.setTabs (tabs);
+		});
 	},
 
 	setActiveView: function (active, inactive, tab) {
@@ -87,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		this.setTitle('Catalog');
 		this.setActiveView('catalog-tab-view',
 			['groups-tab-view', 'lists-tab-view'],
-			'catalog'
+			'Courses'
 		).then(function (item) {
 			if (item && item.handleRoute) {
 				item.handleRoute(subRoute);
