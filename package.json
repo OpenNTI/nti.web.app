@@ -51,10 +51,10 @@
     "nti-lib-locale": "^1.0.5",
     "nti-lib-ntiids": "^1.0.2",
     "nti-lib-store": "^1.0.1",
+    "nti-lib-store-connector": "^0.4.0",
     "nti-style-common": "^1.1.6",
     "nti-util-logger": "^1.0.2",
     "nti-web-client": "^1.1.1",
-    "nti-web-commons": "0.x.x",
     "nti-web-course": "^1.2.0",
     "nti-web-discussions": "0.x.x",
     "nti-web-login": "^2017.1.1",
@@ -70,8 +70,8 @@
     "react-test-renderer": "^15.5.4",
     "spritesmith-cli": "^1.1.2",
     "whatwg-fetch": "^2.0.0",
-    "xregexp": "^3.1.0"
-  },
-  "dependencies": {
+    "xregexp": "^3.1.0",
+    "nti-web-catalog": "*",
+    "nti-web-commons": "^0.15.0"
   }
 }
