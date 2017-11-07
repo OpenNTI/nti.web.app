@@ -1,0 +1,35 @@
+@import '~nti-style-common';
+
+.site-admin-user-list {
+	padding: 0 rem-calc(128px);
+
+	.loading-mask {
+		min-height: 200px;
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		li {
+			border-bottom: 1px solid $border-grey-light;
+
+			a {
+				text-decoration: none;
+			}
+		}
+	}
+
+	.load-next-page {
+		text-align: center;
+		cursor: pointer;
+		border-radius: 5px;
+		margin-top: 0.5rem;
+		background-color: $primary-blue;
+		color: white;
+		font-size: 0.875rem;
+		line-height: rem-calc(40px);
+		min-height: rem-calc(40px);
+	}
+}
