@@ -2,7 +2,7 @@ import EventEmitter from 'events';
 
 import {getService, User} from 'nti-web-client';
 
-const INITIAL_LOAD_CACHE = new WeakMap();
+const INITIAL_LOAD_CACHE = Symbol('Initial Load Cache');
 
 function convertBatch (batch) {
 	const nextLink = batch.getLink('batch-next');
@@ -112,15 +112,26 @@ export default class UserListStore extends EventEmitter {
 
 
 	async _loadSearchTerm () {
+		const term = this._searchTerm;
 
+		if (term.length < 3) {
+			return {items: []};
+		}
+
+		const service = await getService();
+		const link = service.getUserSearchURL(term);
+
+		const batch = await service.getBatch(link);
+
+		delete this[INITIAL_LOAD_CACHE];
+
+		return convertBatch(batch);
 	}
 
 
 	async _loadInitial () {
-		const cache = INITIAL_LOAD_CACHE.get(this);
-
-		if (cache) {
-			return cache;
+		if (this[INITIAL_LOAD_CACHE]) {
+			return this[INITIAL_LOAD_CACHE];
 		}
 
 		const service = await getService();
@@ -130,16 +141,26 @@ export default class UserListStore extends EventEmitter {
 		const batch = await service.getBatch(membersLink);
 		const result = convertBatch(batch);
 
-		INITIAL_LOAD_CACHE.set(this, result);
+		this[INITIAL_LOAD_CACHE] = result;
 
 		return result;
 	}
 
 	updateSearchTerm (term) {
+		this._loading = true;
 		this._searchTerm = term;
-		this.emitChange('searchTerm');
+		this.emitChange('loading', 'searchTerm');
 
-		this.load();
+		clearTimeout(this.doSearchTimeout);
+
+		if (!term) {
+			this.load();
+		} else {
+			this.doSearchTimeout = setTimeout(() => {
+				this.load();
+			}, 300);
+		}
+
 	}
 
 	emitChange (type) {

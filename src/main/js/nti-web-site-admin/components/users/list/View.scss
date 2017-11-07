@@ -5,6 +5,7 @@
 
 	.loading-mask {
 		min-height: 200px;
+		position: relative;
 	}
 
 	ul {
@@ -31,5 +32,12 @@
 		font-size: 0.875rem;
 		line-height: rem-calc(40px);
 		min-height: rem-calc(40px);
+	}
+
+	.error {
+		margin-top: 0.5rem;
+		color: $primary-red;
+		font-size: 0.875;
+		line-height: rem-calc(40px);
 	}
 }

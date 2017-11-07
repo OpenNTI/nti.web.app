@@ -2,15 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import {scoped} from 'nti-lib-locale';
-import {searchable} from 'nti-web-search';
-import {Loading} from 'nti-web-commons';
+import {searchable, contextual, ContextIndicator} from 'nti-web-search';
+import {Loading, EmptyState} from 'nti-web-commons';
 import {LinkTo} from 'nti-web-routing';// eslint-disable-line
 
 import Store from './Store';
 import Item from './Item';
 
 const DEFAULT_TEXT = {
-	loadNextPage: 'Load More'
+	loadNextPage: 'Load More',
+	users: 'Users',
+	empty: 'No Users',
+	emptySearch: 'No Users found. Please refine your search.',
+	shortSearch: 'Too many results. Please refine your search.',
+	backLabel: 'View All Users',
+	error: 'Unable to load Users.'
 };
 const t = scoped('nti-site-admin.users.list', DEFAULT_TEXT);
 
@@ -20,9 +26,11 @@ const propMap = {
 	searchTerm: 'searchTerm',
 	loading: 'loading',
 	hasNextPage: 'hasNextPage',
-	loadingNextPage: 'loadingNextPage'
+	loadingNextPage: 'loadingNextPage',
+	error: 'error'
 };
 
+@contextual(t('users'))
 @searchable(store, propMap)
 export default class UserListView extends React.Component {
 	static propTypes = {
@@ -30,7 +38,8 @@ export default class UserListView extends React.Component {
 		searchTerm: PropTypes.string,
 		loading: PropTypes.bool,
 		hasNextPage: PropTypes.bool,
-		loadingNextPage: PropTypes.bool
+		loadingNextPage: PropTypes.bool,
+		error: PropTypes.any
 	}
 
 
@@ -49,14 +58,15 @@ export default class UserListView extends React.Component {
 
 
 	render () {
-		const {searchTerm, loading} = this.props;
+		const {loading, error} = this.props;
 
 		return (
 			<div className="site-admin-user-list">
-				{searchTerm && (this.renderSearchTerm())}
+				<ContextIndicator className="context-indicator" backLabel={t('backLabel')} />
 				{loading && (<div className="loading-mask"><Loading.Mask /></div>)}
 				{!loading && (this.renderItems())}
 				{!loading && (this.renderLoadNext())}
+				{error && (this.renderError())}
 			</div>
 		);
 	}
@@ -64,6 +74,10 @@ export default class UserListView extends React.Component {
 
 	renderItems () {
 		const {items} = this.props;
+
+		if (!items.length) {
+			return this.renderEmptyState();
+		}
 
 		return (
 			<ul>
@@ -92,6 +106,27 @@ export default class UserListView extends React.Component {
 					{loadingNextPage && (<Loading.Spinner white />)}
 					{hasNextPage && !loadingNextPage && t('loadNextPage')}
 				</span>
+			</div>
+		);
+	}
+
+
+	renderEmptyState () {
+		const {searchTerm} = this.props;
+		const header = searchTerm ?
+			(searchTerm.length < 3 ? t('shortSearch') : t('emptySearch')) :
+			t('empty');
+
+		return (
+			<EmptyState header={header} />
+		);
+	}
+
+
+	renderError () {
+		return (
+			<div className="error">
+				{t('error')}
 			</div>
 		);
 	}
