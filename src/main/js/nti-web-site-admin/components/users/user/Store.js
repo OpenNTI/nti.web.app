@@ -1,4 +1,4 @@
-import {getService, User} from 'nti-web-client';
+import {User} from 'nti-web-client';
 
 import BasicStore from '../../BasicStore';
 
@@ -23,28 +23,37 @@ export default class UserStore extends BasicStore {
 
 
 	get error () {
-		return this._error
+		return this._error;
 	}
 
 
 	async loadUser (user) {
-		if (user === this.user.getID()) { return; }
+		if (this.user && user === this.user.getID()) { return; }
 
 		this._user = null;
 		this._loading = true;
-		this.onChange('loading');
+		this.emitChange('loading');
 
 		try {
-			const resolved = await User.resolve(user);
+			const resolved = await User.resolve({entity: user});
 
 			this._user = resolved;
-			this.onChange('user');
+			this.emitChange('user');
 		} catch (e) {
 			this._error = e;
-			this.onChange('error');
+			this.emitChange('error');
 		} finally {
 			this._loading = false;
-			this.onChange('loading');
+			this.emitChange('loading');
 		}
+	}
+
+
+	unloadUser (user) {
+		if (user !== this.user.getID()) { return; }
+
+
+		this._user = null;
+		this.onChange('user');
 	}
 }
