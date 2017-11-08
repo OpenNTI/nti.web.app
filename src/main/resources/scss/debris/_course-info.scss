@@ -508,13 +508,20 @@
 	.x-grid-body .x-grid-row .x-grid-cell.x-grid-cell-first { cursor: default; }
 }
 
-
 .course-details {
 	overflow: auto;
 	padding: 7px 15px 15px 20px;
 	background-color: #efefef;
 	color: $primary-grey;
 	max-height: 100%;
+
+	.course-inline-editor {
+		width: 642px;
+
+		.course-info-editor-section .contents .columned .content-column, .edit-course-info.indented {
+			margin-left: 340px;
+		}
+	}
 
 	.header {
 		background: none;
