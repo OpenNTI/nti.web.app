@@ -30,8 +30,12 @@
 			.time-label {
 				width: 48px;
 				height: 24px;
+				line-height: 24px;
 				font-size: 12px;
 				text-align: right;
+				font-weight: 600;
+				text-transform: uppercase;
+				color: $secondary-grey;
 			}
 		}
 
@@ -45,6 +49,9 @@
 				margin-bottom: 10px;
 				font-size: 12px;
 				text-align: center;
+				text-transform: uppercase;
+				font-weight: 600;
+				color: $secondary-grey;
 			}
 		}
 	}

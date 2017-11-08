@@ -2,23 +2,13 @@
 
 .active-sessions-widget {
 	color: white;
+	margin: 5px;
 	background-color: $primary-blue;
 	width: 230px;
 	height: 300px;
-	margin: 5px;
-	padding: 25px;
 	box-shadow: 0 1px 2px 1px #ccc;
 
-	.active-sessions-header {
-		font-size: 11px;
-	}
-
-	.active-sessions-active {
-		font-size: 72px;
-		height: 190px;
-	}
-
-	.active-sessions-meta {
-		font-size: 24px;
+	.numeric-value {
+		height: 100%;
 	}
 }
