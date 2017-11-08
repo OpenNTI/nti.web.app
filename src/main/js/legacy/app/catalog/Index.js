@@ -34,6 +34,25 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			component: catalog
 		});
 	},
+
+	afterRender () {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', this.onClick.bind(this));
+	},
+
+
+	onClick (e) {
+		const a = e.getTarget('a[href]');
+		const path = a && a.pathname;
+		const route = path && path.replace(/^\/?app\/?/, '');
+
+		if (route) {
+			this.pushRootRoute({}, route, '');
+			e.stopEvent();
+		}
+	},
+
 	applyState: function (state) {
 		var active = state.active,
 			tabs = [];
