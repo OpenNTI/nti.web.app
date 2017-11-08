@@ -122,8 +122,4 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		return this.navigation;
 	},
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 66282ead77c6bbd82f22d1f96ee925b6563f4be3
