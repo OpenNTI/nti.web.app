@@ -104,6 +104,15 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	setActiveItem: function (xtype) {
 
 	},
+	showCollection () {
+		var me = this;
+		return getService ()
+			.then ((service) => {
+				const collection = 'collection';
+
+				me.catalog.setProps ({collection});
+			});
+	},
 	showCatalog: function (route, subRoute) {
 		this.catalogRoute = subRoute;
 
