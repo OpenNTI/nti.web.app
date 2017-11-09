@@ -77,6 +77,12 @@
 		x: hidden;
 		y: auto; //scroll;
 	}
+
+	.course-inline-editor {
+		figure.loading {
+			top: 20%;
+		}
+	}
 }
 
 .x-component-course-info {
@@ -507,6 +513,8 @@
 
 	.x-grid-body .x-grid-row .x-grid-cell.x-grid-cell-first { cursor: default; }
 }
+
+
 
 .course-details {
 	overflow: auto;
