@@ -44,34 +44,32 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		}
 
 		const addComponents = (catalogEntry) => {
-			toAdd.push({
-				xtype: 'react',
-				id: 'about_target',
-				component: Info,
-				catalogEntry: catalogEntry,
-				editable: catalogEntry.hasLink('edit')
-			},
-			// {
-			// 	xtype: 'course-info-title',
-			// 	title: content.get('Title'),
-			// 	course: content,
-			// 	videoUrl: content.get('Video'),
-			// 	videoWidth: this.videoWidth || 764,
-			// 	videoHeight: this.videoHeight
-			// },{
-			// 	xtype: 'course-info-description',
-			// 	info: content,
-			// 	enrollmentStatus: status
-			// },
-			{
-				xtype: 'course-info-instructors',
-				id: 'instructors_target',
-				info: content,
-				bundle
-			},{
-				xtype: 'course-info-support',
-				id: 'support_target'
-			});
+			toAdd.push(
+				{
+					xtype: 'react',
+					id: 'about_target',
+					component: Info,
+					catalogEntry: catalogEntry,
+					editable: catalogEntry.hasLink('edit')
+				},
+				{
+					xtype: 'course-info-title',
+					title: content.get('Title'),
+					course: content,
+					videoUrl: content.get('Video'),
+					videoWidth: this.videoWidth || 764,
+					videoHeight: this.videoHeight
+				},{
+					xtype: 'course-info-description',
+					info: content,
+					enrollmentStatus: status
+				},{
+					xtype: 'course-info-instructors',
+					info: content,
+					bundle
+				},{
+					xtype: 'course-info-support'
+				});
 
 
 			this.add(toAdd);
