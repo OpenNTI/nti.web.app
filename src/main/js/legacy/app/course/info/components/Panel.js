@@ -53,21 +53,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					editable: catalogEntry.hasLink('edit')
 				},
 				{
-					xtype: 'course-info-title',
-					title: content.get('Title'),
-					course: content,
-					videoUrl: content.get('Video'),
-					videoWidth: this.videoWidth || 764,
-					videoHeight: this.videoHeight
-				},{
-					xtype: 'course-info-description',
-					info: content,
-					enrollmentStatus: status
-				},{
-					xtype: 'course-info-instructors',
-					info: content,
-					bundle
-				},{
 					xtype: 'course-info-support'
 				});
 
