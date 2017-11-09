@@ -1,6 +1,5 @@
 const Ext = require('extjs');
 const { Info } = require('nti-web-course');
-const { getService } = require('nti-web-client');
 
 const ContentProxy = require('legacy/proxy/JSONP');
 
@@ -43,31 +42,20 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 			});
 		}
 
-		const addComponents = (catalogEntry) => {
-			toAdd.push(
-				{
-					xtype: 'react',
-					id: 'about_target',
-					component: Info,
-					catalogEntry: catalogEntry,
-					editable: catalogEntry.hasLink('edit')
-				},
-				{
-					xtype: 'course-info-support'
-				});
-
-
-			this.add(toAdd);
-		};
-
-		getService().then(service => {
-			// load a lib-interfaces CatalogEntry model
-			service.getObject(content.get('NTIID')).then((entry) => {
-				this.catalogEntry = entry;
-
-				addComponents(this.catalogEntry);
+		toAdd.push(
+			{
+				xtype: 'react',
+				id: 'about_target',
+				component: Info,
+				catalogEntry: content.get('NTIID'),
+				editable: content.hasLink('edit')
+			},
+			{
+				xtype: 'course-info-support'
 			});
-		});
+
+
+		this.add(toAdd);
 	},
 
 	getVideo: function () {
