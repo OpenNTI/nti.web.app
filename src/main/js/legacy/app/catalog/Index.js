@@ -27,10 +27,10 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		this.initRouter ();
 
-		this.addRoute ('/:collection', this.showCollection.bind (this));
 		this.addRoute ('/', this.showCatalog.bind (this));
 		this.addRoute ('/Featured', this.showFeature.bind (this));
 		this.addRoute ('/Purchased', this.showPurchased.bind (this));
+		this.addRoute ('/Redeem', this.showRedeem.bind (this));
 
 		this.catalog = this.add ({
 			xtype: 'react',
@@ -76,6 +76,12 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				}
 				tabs.push (item);
 			}
+			tabs.push ({
+				text: 'Redeem',
+				route: '/Redeem',
+				subRoute: me.catalogRoute,
+				active: active === 'Redeem'
+			});
 			me.navigation.setTabs (tabs);
 		});
 	},
@@ -98,15 +104,6 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	setActiveItem: function (xtype) {
 
 	},
-	showCollection () {
-		var me = this;
-		return getService ()
-			.then ((service) => {
-				const collection = 'collection';
-
-				me.catalog.setProps ({collection});
-			});
-	},
 	showCatalog: function (route, subRoute) {
 		this.catalogRoute = subRoute;
 
@@ -125,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			const {href} = service.getCollection ('Courses', 'Catalog');
 			service.get(href).then((data) =>{
 				const collection = data;
-				me.catalog.setProps({collection:collection});
+				me.catalog.setProps ({collection: collection, redeem: false});
 			});
 
 		});
@@ -147,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			const {href} = service.getCollection ('Featured', 'Catalog');
 			service.get(href).then((data) =>{
 				const collection = data;
-				me.catalog.setProps({collection:collection});
+				me.catalog.setProps ({collection: collection, redeem: false});
 			});
 
 		});
@@ -170,10 +167,26 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			const {href} = service.getCollection ('Purchased', 'Catalog');
 			service.get(href).then((data) =>{
 				const collection = data;
-				me.catalog.setProps({collection:collection});
+				me.catalog.setProps ({collection: collection, redeem: false});
 			});
 
 		});
+	},
+	showRedeem: function (route, subRoute) {
+		this.catalogRoute = subRoute;
+
+		this.setTitle ('Redeem');
+		this.setActiveView ('catalog-tab-view',
+			['groups-tab-view', 'lists-tab-view'],
+			'Redeem'
+		).then (function (item) {
+			if (item && item.handleRoute) {
+				item.handleRoute (subRoute);
+			}
+		});
+		const collection = Service.getCollection('Invitations', 'Invitations');
+		const invite = collection && Service.getLinkFrom(collection.Links, 'accept-course-invitations');
+		this.catalog.setProps ({redeem:true, collection: null, invite: invite});
 	},
 	prepareNavigation: function () {
 		this.NavigationActions.updateNavBar ({
