@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 				id: 'about_target',
 				component: Info,
 				catalogEntry: content.get('NTIID'),
-				editable: content.hasLink('edit')
+				editable: !this.viewOnly && content.hasLink('edit')
 			},
 			{
 				xtype: 'course-info-support'
