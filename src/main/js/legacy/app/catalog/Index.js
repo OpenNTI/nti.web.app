@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	showPurchased: function (route, subRoute) {
 		this.catalogRoute = subRoute;
 
-		this.setTitle('Featured');
+		this.setTitle('Purchased');
 		this.setActiveView('catalog-tab-view',
 			['groups-tab-view', 'lists-tab-view'],
 			'Purchased'
