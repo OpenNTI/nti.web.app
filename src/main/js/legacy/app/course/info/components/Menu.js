@@ -151,10 +151,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		var target;
 
+		var infoPanel = document.getElementsByClassName('course-info-panel');
+
+		infoPanel = (infoPanel && infoPanel[0]) || {};
+
 		if(qtip === 'About') {
 			target = document.getElementsByClassName('course-info-editor-section');
 
-			if(target && target[0]) {
+			if(target && target[0] && infoPanel.style.display !== 'none') {
 				window.scrollTo(0, target[0].offsetTop);
 				this.updateClasses(qtip);
 			}
@@ -165,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		else if(qtip === 'Course Instructor') {
 			target = document.getElementsByClassName('facilitators-section');
 
-			if(target && target[0]) {
+			if(target && target[0] && infoPanel.style.display !== 'none') {
 				window.scrollTo(0, target[0].offsetTop);
 				this.updateClasses(qtip);
 			}
@@ -176,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		else if(qtip === 'Tech Support') {
 			target = document.getElementsByClassName('course-info-support');
 
-			if(target && target[0]) {
+			if(target && target[0] && infoPanel.style.display !== 'none') {
 				window.scrollTo(0, target[0].offsetTop);
 				this.updateClasses(qtip);
 			}
