@@ -185,8 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			}
 		});
 		const collection = Service.getCollection('Invitations', 'Invitations');
-		const invite = collection && Service.getLinkFrom(collection.Links, 'accept-course-invitations');
-		this.catalog.setProps({redeem: true, collection: null, invite: invite});
+		this.catalog.setProps({redeem: true, collection: null, redeemCollection: collection});
 	},
 	prepareNavigation: function () {
 		this.NavigationActions.updateNavBar({
