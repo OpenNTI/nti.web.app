@@ -141,6 +141,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		activeItem.addCls('x-item-selected');
 	},
 
+	QTIP_TO_CLASS_MAP: {
+		'About': 'course-info-editor-section',
+		'Course Instructors': 'facilitators-section',
+		'Tech Support': 'course-info-support'
+	},
 
 	onClick: function (e) {
 		var item = e.getTarget('.outline-row');
@@ -155,36 +160,21 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		infoPanel = (infoPanel && infoPanel[0]) || {};
 
-		if(qtip === 'About') {
-			target = document.getElementsByClassName('course-info-editor-section');
+		if(this.QTIP_TO_CLASS_MAP[qtip]) {
+			target = document.getElementsByClassName(this.QTIP_TO_CLASS_MAP[qtip]);
 
-			if(target && target[0] && infoPanel.style.display !== 'none') {
+			// prefer to just show the old panel if it exists
+			if(infoPanel.style.display === 'none') {
+				infoPanel.style.display = '';
+			}
+
+			// scroll to target if it exists
+			if(target && target[0]) {
 				window.scrollTo(0, target[0].offsetTop);
 				this.updateClasses(qtip);
 			}
 			else {
-				this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
-			}
-		}
-		else if(qtip === 'Course Instructor') {
-			target = document.getElementsByClassName('facilitators-section');
-
-			if(target && target[0] && infoPanel.style.display !== 'none') {
-				window.scrollTo(0, target[0].offsetTop);
-				this.updateClasses(qtip);
-			}
-			else {
-				this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
-			}
-		}
-		else if(qtip === 'Tech Support') {
-			target = document.getElementsByClassName('course-info-support');
-
-			if(target && target[0] && infoPanel.style.display !== 'none') {
-				window.scrollTo(0, target[0].offsetTop);
-				this.updateClasses(qtip);
-			}
-			else {
+				// if all else fails, nothing to do but go to route and reload some components
 				this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 			}
 		}
