@@ -80,7 +80,8 @@
 
 	.course-inline-editor {
 		figure.loading {
-			top: 20%;
+			position: relative;
+			margin-top: 0;
 		}
 	}
 }

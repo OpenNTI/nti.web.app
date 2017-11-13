@@ -66,8 +66,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
 
-			me.body.setContent(info, status, showRoster, bundle);
-			me.navigation.setContent(info, status, showRoster, me.infoOnly, inviteCodeLink);
+			if(me.currId !== bundle.getId()) {
+				me.body.setContent(info, status, showRoster, bundle);
+				me.navigation.setContent(info, status, showRoster, me.infoOnly, inviteCodeLink);
+			}
+
+			me.currId = bundle.getId();
 		}
 
 

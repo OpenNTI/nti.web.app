@@ -144,6 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	QTIP_TO_CLASS_MAP: {
 		'About': 'course-info-editor-section',
 		'Course Instructors': 'facilitators-section',
+		'Course Instructor': 'facilitators-section',
 		'Tech Support': 'course-info-support'
 	},
 
