@@ -4,6 +4,10 @@
 	.course-item-list {
 		background-color: rgba(0, 0, 0, 0);
 
+		a {
+			text-decoration: none;
+		}
+
 		.course-item {
 			.course-title {
 				margin-top: 0;
@@ -12,6 +16,34 @@
 
 			.course-id {
 				height: 30px;
+			}
+		}
+
+		&.admin {
+			width: 1024px;
+
+			.course-item {
+				display: flex;
+				height: 172px;
+				width: 1024px;
+
+				.course-meta {
+					width: 756px;
+				}
+
+				.course-controls:hover, .course-item:hover + .course-controls {
+					opacity: 1;
+				}
+
+				.cover {
+					min-width: 232px;
+					height: 170px;
+					margin: 0 10px 0 0;
+
+					.course-image {
+						height: 170px;
+					}
+				}
 			}
 		}
 	}
