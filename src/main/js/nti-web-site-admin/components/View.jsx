@@ -7,14 +7,14 @@ import Dashboard from './dashboard';
 import Reports from './reports';
 import Users from './users';
 
-export default Router.for(
+export default Router.for([
 	Route({path: '/dashboard', component: Dashboard}),
 	Route({path: '/course', component: Course}),
 	Route({path: '/users', component: Users}),
 	Route({path: '/reports', component: Reports}),
 	Route({path: '/advanced', component: Advanced}),
 	Route({path: '/', component: Dashboard})
-);
+]);
 
 
 // import React from 'react';
