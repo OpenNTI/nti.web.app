@@ -1,0 +1,31 @@
+@import "~nti-style-common";
+
+.course-admin-view {
+	color: #444;
+	background-color: white;
+
+	.header {
+		font-size: 30px;
+		margin-bottom: 10px;
+		display: flex;
+
+		.course-image {
+			height: 60px;
+			width: 60px;
+		}
+
+		.title {
+			margin-left: 10px;
+			padding-top: 10px;
+		}
+	}
+
+	.course-menu-item {
+		padding: 10px;
+		font-size: 18px;
+	}
+
+	.course-admin-content {
+		padding: 10px;
+	}
+}

@@ -1,45 +1,19 @@
-import React from 'react';
-import { Editor, CourseListing } from 'nti-web-course';
-import {scoped} from 'nti-lib-locale';
+import {Router, Route} from 'nti-web-routing';// eslint-disable-line
 
-const DEFAULT_TEXT = {
-	createSuccess: 'Course was successfully created'
-};
+import List from './list';
+import Info from './info';
 
-const t = scoped('ADMIN_COURSES', DEFAULT_TEXT);
+export default Router.for([
+	Route({
+		path: '/:id',
+		component: Info,
+		getRouteFor: (obj) => {
+			if (obj.MimeType === 'application/vnd.nextthought.courses.coursecataloglegacyentry') {
+				return `/${(obj.getID())}`;
+			}
 
-export default class View extends React.Component {
-	constructor (props) {
-		super(props);
-		this.state = {};
-	}
-
-	launch = () => {
-		Editor.createCourse()
-			.then(() => {
-				// course created
-				this.setState({createInProgress: true});
-
-				setTimeout(() => { this.setState({createInProgress: false}); }, 1500);
-			});
-	};
-
-	renderCreateButton () {
-		return (<div className="create-course-button" onClick={this.launch}>Create New Course</div>);
-	}
-
-	renderCreateMessage () {
-		return (<div className="course-create-message">{t('createSuccess')}</div>);
-	}
-
-	renderListing () {
-		return this.state.createInProgress ? this.renderCreateMessage() : (<CourseListing/>);
-	}
-
-	render () {
-		return (<div className="course-admin">
-			{this.renderCreateButton()}
-			{this.renderListing()}
-		</div>);
-	}
-}
+			return null;
+		}
+	}),
+	Route({path: '/', component: List, name: 'site-admin.courses'})
+]);
