@@ -250,7 +250,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 	onClick: function (e) {
 		if (e.getTarget('.add-more-link')) {
-			this.pushRoute('Available', '/available');
+			this.pushRootRoute('Catalog', '/catalog');
 		} else if (e.getTarget('.home')) {
 			this.pushRootRoute('', '/');
 		}
