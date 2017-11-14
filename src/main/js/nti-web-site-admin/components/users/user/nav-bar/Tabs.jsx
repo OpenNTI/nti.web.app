@@ -16,16 +16,16 @@ SiteAdminUserTabs.propTypes = {
 };
 export default function SiteAdminUserTabs ({id}) {
 	return (
-		<div className="site-admin-user-tabs">
-			<LinkTo.Path to={`${id}/`}>
-				{t('overview')}
-			</LinkTo.Path>
-			<LinkTo.Path to={`${id}/transcript`}>
-				{t('transcript')}
-			</LinkTo.Path>
-			<LinkTo.Path to={`${id}/reports`}>
-				{t('reports')}
-			</LinkTo.Path>
-		</div>
+		<ul className="site-admin-user-tabs">
+			<li>
+				<LinkTo.Path to={`${id}/`} activeClassName="active" exact>{t('overview')}</LinkTo.Path>
+			</li>
+			<li>
+				<LinkTo.Path to={`${id}/transcript`} activeClassName="active">{t('transcript')}</LinkTo.Path>
+			</li>
+			<li>
+				<LinkTo.Path to={`${id}/reports`} activeClassName="active">{t('reports')}</LinkTo.Path>
+			</li>
+		</ul>
 	);
 }
