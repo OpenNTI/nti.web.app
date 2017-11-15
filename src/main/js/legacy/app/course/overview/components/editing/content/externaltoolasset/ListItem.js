@@ -16,6 +16,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getPreviewType: function () {
-		return 'widget.course-overview-externaltoolassetref';
+		return 'widget.course-overview-lticonfiguredtool';
 	}
 });
