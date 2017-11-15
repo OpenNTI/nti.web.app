@@ -21,23 +21,4 @@
 			}
 		}
 	}
-
-	.load-next-page {
-		text-align: center;
-		cursor: pointer;
-		border-radius: 5px;
-		margin-top: 0.5rem;
-		background-color: $primary-blue;
-		color: white;
-		font-size: 0.875rem;
-		line-height: rem-calc(40px);
-		min-height: rem-calc(40px);
-	}
-
-	.error {
-		margin-top: 0.5rem;
-		color: $primary-red;
-		font-size: 0.875;
-		line-height: rem-calc(40px);
-	}
 }

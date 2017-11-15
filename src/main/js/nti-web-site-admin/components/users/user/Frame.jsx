@@ -13,7 +13,7 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.user.Frame', DEFAULT_TEXT);
 
-@Store.connect({user: 'user'})
+@Store.connect({user: 'user', loading: 'loading'})
 export default class SiteAdminUserView extends React.Component {
 	static propTypes = {
 		match: PropTypes.object,

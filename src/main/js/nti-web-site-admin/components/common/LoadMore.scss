@@ -1,0 +1,13 @@
+@import '~nti-style-common';
+
+.site-admin-load-more {
+	text-align: center;
+	cursor: pointer;
+	border-radius: 5px;
+	margin-top: 0.5rem;
+	background-color: $primary-blue;
+	color: white;
+	font-size: 0.875rem;
+	line-height: rem-calc(40px);
+	min-height: rem-calc(40px);
+}

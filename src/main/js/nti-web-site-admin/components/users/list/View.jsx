@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import {scoped} from 'nti-lib-locale';
 import {searchable, contextual, ContextIndicator} from 'nti-web-search';
 import {Loading, EmptyState} from 'nti-web-commons';
 import {LinkTo} from 'nti-web-routing';// eslint-disable-line
+
+import LoadMore from '../../common/LoadMore';
+import ErrorMessage from '../../common/ErrorMessage';
 
 import Store from './Store';
 import Item from './Item';
@@ -65,7 +67,7 @@ export default class UserListView extends React.Component {
 				<ContextIndicator className="context-indicator" backLabel={t('backLabel')} />
 				{loading && (<div className="loading-mask"><Loading.Mask /></div>)}
 				{!loading && (this.renderItems())}
-				{!loading && (this.renderLoadNext())}
+				{!loading && !error && (this.renderLoadNext())}
 				{error && (this.renderError())}
 			</div>
 		);
@@ -98,15 +100,8 @@ export default class UserListView extends React.Component {
 	renderLoadNext () {
 		const {hasNextPage, loadingNextPage} = this.props;
 
-		if (!hasNextPage && !loadingNextPage) { return null; }
-
 		return (
-			<div className={cx('load-next-page', {loading: loadingNextPage})} onClick={this.onLoadNextPage}>
-				<span>
-					{loadingNextPage && (<Loading.Spinner white />)}
-					{hasNextPage && !loadingNextPage && t('loadNextPage')}
-				</span>
-			</div>
+			<LoadMore hasMore={hasNextPage} loading={loadingNextPage} onLoadMore={this.onLoadNextPage} />
 		);
 	}
 
@@ -125,9 +120,9 @@ export default class UserListView extends React.Component {
 
 	renderError () {
 		return (
-			<div className="error">
+			<ErrorMessage>
 				{t('error')}
-			</div>
+			</ErrorMessage>
 		);
 	}
 }
