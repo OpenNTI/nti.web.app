@@ -2,9 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {LinkTo} from 'nti-web-routing';// eslint-disable-line
 import {Loading, Layouts} from 'nti-web-commons';
+import {scoped} from 'nti-lib-locale';
 
 import Store from './Store';
 import NavBar from './nav-bar';
+
+const DEFAULT_TEXT = {
+	back: 'Back to Users'
+};
+
+const t = scoped('nti-site-admin.users.user.Frame', DEFAULT_TEXT);
 
 @Store.connect({user: 'user'})
 export default class SiteAdminUserView extends React.Component {
@@ -59,11 +66,7 @@ export default class SiteAdminUserView extends React.Component {
 
 		return (
 			<div className="site-admin-user-view">
-				<div className="header">
-					<LinkTo.Name name="site-admin.users">
-						Back To Users
-					</LinkTo.Name>
-				</div>
+				{loading && this.renderHeader()}
 				{loading && (<Loading.Mask />)}
 				{!loading && this.renderUser()}
 			</div>
@@ -72,18 +75,37 @@ export default class SiteAdminUserView extends React.Component {
 	}
 
 	renderUser () {
-		const {user} = this.props;
+		const {user, children} = this.props;
 		const id = this.getUserID();
+
+		if (!user) {
+			return null;
+		}
 
 		return (
 			<Layouts.NavContent.Container>
 				<Layouts.NavContent.Nav className="nav-bar">
+					{this.renderHeader()}
 					<NavBar user={user} id={id} />
 				</Layouts.NavContent.Nav>
-				<Layouts.NavContent.Content>
-					{React.Children.only(this.props.children)}
+				<Layouts.NavContent.Content className="content">
+					{React.Children.map(children, (item) => {
+						return React.cloneElement(item, {routeProps: {user}});
+					})}
 				</Layouts.NavContent.Content>
 			</Layouts.NavContent.Container>
+		);
+	}
+
+
+	renderHeader () {
+		return (
+			<div className="header">
+				<LinkTo.Name name="site-admin.users">
+					<i className="icon-chevron-left" />
+					<span>{t('back')}</span>
+				</LinkTo.Name>
+			</div>
 		);
 	}
 }

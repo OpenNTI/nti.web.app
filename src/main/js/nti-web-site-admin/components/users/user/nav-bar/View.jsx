@@ -7,7 +7,7 @@ import Tabs from './Tabs';
 
 export default function SiteAdminUserIdentity (props) {
 	return (
-		<Card clasName="site-admin-user-nav-bar">
+		<Card className="site-admin-user-nav-bar">
 			<Identity {...props} />
 			<Tabs {...props} />
 		</Card>

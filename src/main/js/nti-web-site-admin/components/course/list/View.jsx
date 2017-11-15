@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Editor, CourseCard } from 'nti-web-course';
+// import { Editor, CourseCard } from 'nti-web-course';
 import { Loading } from 'nti-web-commons';
 // import { getService}  from 'nti-web-client';
 import { scoped } from 'nti-lib-locale';
@@ -32,13 +32,13 @@ export default class View extends React.Component {
 	}
 
 	launch = () => {
-		Editor.createCourse()
-			.then(() => {
-				// course created
-				this.setState({createInProgress: true});
+		// Editor.createCourse()
+		// 	.then(() => {
+		// 		// course created
+		// 		this.setState({createInProgress: true});
 
-				setTimeout(() => { this.setState({createInProgress: false}); }, 1500);
-			});
+		// 		setTimeout(() => { this.setState({createInProgress: false}); }, 1500);
+		// 	});
 	};
 
 	renderCreateButton () {
@@ -50,13 +50,13 @@ export default class View extends React.Component {
 	}
 
 	renderCourse = (course) => {
-		const showEditor = () => {
-			Editor.editCourse(course);
-		};
+		// const showEditor = () => {
+		// 	// Editor.editCourse(course);
+		// };
 
 		return (
 			<LinkTo.Path to={`${course.getID()}/`}>
-				<CourseCard key={course.ProviderUniqueID} course={course} onEdit={showEditor} isAdministrative/>
+				{/*<CourseCard key={course.ProviderUniqueID} course={course} onEdit={showEditor} isAdministrative/>*/}
 			</LinkTo.Path>
 		);
 	}

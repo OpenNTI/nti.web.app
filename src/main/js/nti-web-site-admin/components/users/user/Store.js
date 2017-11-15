@@ -52,7 +52,6 @@ export default class UserStore extends BasicStore {
 	unloadUser (user) {
 		if (user !== this.user.getID()) { return; }
 
-
 		this._user = null;
 		this.onChange('user');
 	}
