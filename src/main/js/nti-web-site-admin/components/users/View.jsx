@@ -7,7 +7,7 @@ export default Router.for([
 	Route({
 		path: '/:id',
 		component: User,
-		getRouteFor: (obj) => {
+		getRouteFor (obj) {
 			if (obj.MimeType === 'application/vnd.nextthought.user') {
 				return `/${(obj.getID())}`;
 			}

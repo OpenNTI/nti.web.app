@@ -1,0 +1,23 @@
+@import '~nti-style-common';
+
+.site-admin-user-overview {
+	@include clearfix;
+
+	& > * {
+		float: left;
+		padding: 0 0.3rem 0.3rem 0;
+	}
+
+	.joined {
+		width: 50%;
+
+		.site-admin-date-value {
+			background-color: $primary-green;
+			color: white;
+		}
+	}
+
+	.last-login {
+		width: 50%;
+	}
+}
