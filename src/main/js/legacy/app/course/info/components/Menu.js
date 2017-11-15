@@ -142,10 +142,54 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	},
 
 	QTIP_TO_CLASS_MAP: {
-		'About': 'course-info-editor-section',
-		'Course Instructors': 'facilitators-section',
-		'Course Instructor': 'facilitators-section',
-		'Tech Support': 'course-info-support'
+		'About': {
+			cls: 'course-info-panel',
+			targetCls: 'course-info-editor-section',
+			doLocalNav: true
+		},
+		'Course Instructors': {
+			cls: 'course-info-panel',
+			targetCls: 'facilitators-section',
+			doLocalNav: true
+		},
+		'Course Instructor': {
+			cls: 'course-info-panel',
+			targetCls: 'facilitators-section',
+			doLocalNav: true
+		},
+		'Tech Support': {
+			cls: 'course-info-panel',
+			targetCls: 'course-info-support',
+			doLocalNav: true
+		},
+		'Roster': {
+			cls: 'course-info-roster'
+		},
+		'Report': {
+			cls: 'course-reports'
+		}
+	},
+
+	showSection: function (cls) {
+		var section = document.getElementsByClassName(cls);
+
+		if(section && section[0]) {
+			section[0].style.display = '';
+		}
+	},
+
+	hideOtherSections: function (cls) {
+		Object.keys(this.QTIP_TO_CLASS_MAP).forEach(k => {
+			var curr = this.QTIP_TO_CLASS_MAP[k];
+
+			if(curr.cls !== cls) {
+				var section = document.getElementsByClassName(curr.cls);
+
+				if(section && section[0]) {
+					section[0].style.display = 'none';
+				}
+			}
+		});
 	},
 
 	onClick: function (e) {
@@ -155,23 +199,24 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		var qtip = item.getAttribute('data-qtip');
 
-		var target;
-
 		var infoPanel = document.getElementsByClassName('course-info-panel');
 
 		infoPanel = (infoPanel && infoPanel[0]) || {};
 
 		if(this.QTIP_TO_CLASS_MAP[qtip]) {
-			target = document.getElementsByClassName(this.QTIP_TO_CLASS_MAP[qtip]);
+			var { cls, targetCls, doLocalNav } = this.QTIP_TO_CLASS_MAP[qtip];
 
-			// prefer to just show the old panel if it exists
-			if(infoPanel.style.display === 'none') {
-				infoPanel.style.display = '';
-			}
+			var target = document.getElementsByClassName(targetCls);
+			var containerPanel = document.getElementsByClassName(cls);
 
-			// scroll to target if it exists
-			if(target && target[0]) {
-				window.scrollTo(0, target[0].offsetTop);
+			if(containerPanel && containerPanel[0]) {
+				this.showSection(cls);
+				this.hideOtherSections(cls);
+
+				if(doLocalNav && target && target[0]) {
+					window.scrollTo(0, target[0].offsetTop);
+				}
+
 				this.updateClasses(qtip);
 			}
 			else {
@@ -180,6 +225,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 			}
 		}
 		else {
+			if(infoPanel) {
+				infoPanel.style.display = 'none';
+			}
+
 			this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 		}
 	}
