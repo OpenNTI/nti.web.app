@@ -348,6 +348,8 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 	setCatalogActive: function (route, subRoute) {
 		var searchView = this.setActiveCmp('catalog-component');
 		this.addCls('fullwidth');
+		var body = Ext.getBody();
+		body.setStyle({backgroundColor: '#fff'});
 		return searchView.handleRoute(subRoute, route.precache);
 
 	},
