@@ -8,6 +8,11 @@ require('legacy/common/components/cards/Card');
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.ExternalToolAsset', {
 	extend: 'NextThought.common.components.cards.Card',
 
+	alias: [
+		'widget.course-overview-lticonfiguredtool',
+		'widget.course-overview-externaltoolasset'
+	],
+
 	doNotRenderIcon: true,
 
 	renderTpl: Ext.DomHelper.markup([
