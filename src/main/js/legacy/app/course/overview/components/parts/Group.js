@@ -7,6 +7,7 @@ require('legacy/util/Content');
 
 require('./ContentLink');
 require('./Discussion');
+require('./ExternalToolAsset');
 require('./Header');
 require('./IframeWindow');
 require('./Poll');
