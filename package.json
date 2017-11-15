@@ -61,6 +61,7 @@
     "nti-web-search": "*",
     "nti-web-video": "^1.8.1",
     "nti-web-charts": "*",
+    "nti-web-routing": "*",
     "nti-web-storage": "^1.0.0",
     "postcss-cli": "^4.0.0",
     "prop-types": "^15.5.8",
