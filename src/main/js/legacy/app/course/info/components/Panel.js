@@ -1,6 +1,5 @@
 const Ext = require('extjs');
 const { Info } = require('nti-web-course');
-const { getService } = require('nti-web-client');
 
 const ContentProxy = require('legacy/proxy/JSONP');
 
@@ -43,48 +42,20 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 			});
 		}
 
-		const addComponents = (catalogEntry) => {
-			toAdd.push({
+		toAdd.push(
+			{
 				xtype: 'react',
 				id: 'about_target',
 				component: Info,
-				catalogEntry: catalogEntry,
-				editable: catalogEntry.hasLink('edit')
+				catalogEntry: content.get('NTIID'),
+				editable: !this.viewOnly && content.hasLink('edit')
 			},
-			// {
-			// 	xtype: 'course-info-title',
-			// 	title: content.get('Title'),
-			// 	course: content,
-			// 	videoUrl: content.get('Video'),
-			// 	videoWidth: this.videoWidth || 764,
-			// 	videoHeight: this.videoHeight
-			// },{
-			// 	xtype: 'course-info-description',
-			// 	info: content,
-			// 	enrollmentStatus: status
-			// },
 			{
-				xtype: 'course-info-instructors',
-				id: 'instructors_target',
-				info: content,
-				bundle
-			},{
-				xtype: 'course-info-support',
-				id: 'support_target'
+				xtype: 'course-info-support'
 			});
 
 
-			this.add(toAdd);
-		};
-
-		getService().then(service => {
-			// load a lib-interfaces CatalogEntry model
-			service.getObject(content.get('NTIID')).then((entry) => {
-				this.catalogEntry = entry;
-
-				addComponents(this.catalogEntry);
-			});
-		});
+		this.add(toAdd);
 	},
 
 	getVideo: function () {

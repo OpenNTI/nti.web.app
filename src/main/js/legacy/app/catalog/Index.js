@@ -4,6 +4,7 @@ const {getService} = require('nti-web-client');
 
 const ComponentsNavigation = require('legacy/common/components/Navigation');
 const NavigationActions = require('legacy/app/navigation/Actions');
+let me = this;
 
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
@@ -17,8 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	layout: 'none',
 
 	initComponent: function () {
-
-		var me = this;
+		me = this;
 		this.NavigationActions = NavigationActions.create();
 
 		me.callParent(arguments);
@@ -38,14 +38,14 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		});
 	},
 
-	afterRender() {
+	afterRender () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
 
-	onClick(e) {
+	onClick (e) {
 		const a = e.getTarget('a[href]');
 		const path = a && a.pathname;
 		const route = path && path.replace(/^\/?app\/?/, '');
@@ -57,10 +57,8 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 	applyState: function (state) {
-		var active = state.active,
-			tabs = [];
-
-		let me = this;
+		const active = state.active;
+		let tabs = [];
 
 		getService().then((service) => {
 			const collection = service.getWorkspace('Catalog').Items;
@@ -87,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 	setActiveView: function (active, inactive, tab) {
-		var me = this, item;
+		let item;
 
 		me.prepareNavigation();
 		me.applyState({
@@ -104,6 +102,14 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	setActiveItem: function (xtype) {
 
 	},
+	showCollection () {
+		return getService ()
+			.then ((service) => {
+				const collection = 'collection';
+
+				me.catalog.setProps ({collection});
+			});
+	},
 	showCatalog: function (route, subRoute) {
 		this.catalogRoute = subRoute;
 
@@ -117,7 +123,6 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			}
 		});
 
-		var me = this;
 		getService().then((service) => {
 			const {href} = service.getCollection('Courses', 'Catalog');
 			service.get(href).then((data) => {
@@ -139,7 +144,6 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				item.handleRoute(subRoute);
 			}
 		});
-		var me = this;
 		getService().then((service) => {
 			const {href} = service.getCollection('Featured', 'Catalog');
 			service.get(href).then((data) => {
@@ -162,7 +166,6 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			}
 		});
 
-		var me = this;
 		getService().then((service) => {
 			const {href} = service.getCollection('Purchased', 'Catalog');
 			service.get(href).then((data) => {

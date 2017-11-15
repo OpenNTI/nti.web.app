@@ -133,6 +133,15 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	},
 
 
+	updateClasses: function (qtip) {
+		var activeItem = this.el && this.el.down('.x-item-selected');
+
+		activeItem && activeItem.removeCls('x-item-selected');
+		activeItem = this.el.down('[data-qtip=' + qtip + ']');
+		activeItem.addCls('x-item-selected');
+	},
+
+
 	onClick: function (e) {
 		var item = e.getTarget('.outline-row');
 
@@ -144,23 +153,39 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		if(qtip === 'About') {
 			target = document.getElementsByClassName('course-info-editor-section');
-			window.scrollTo(0, target[0].offsetTop);
+
+			if(target && target[0]) {
+				window.scrollTo(0, target[0].offsetTop);
+				this.updateClasses(qtip);
+			}
+			else {
+				this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
+			}
 		}
 		else if(qtip === 'Course Instructor') {
 			target = document.getElementsByClassName('facilitators-section');
-			window.scrollTo(0, target[0].offsetTop);
+
+			if(target && target[0]) {
+				window.scrollTo(0, target[0].offsetTop);
+				this.updateClasses(qtip);
+			}
+			else {
+				this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
+			}
 		}
 		else if(qtip === 'Tech Support') {
 			target = document.getElementsByClassName('course-info-support');
-			window.scrollTo(0, target[0].offsetTop);
+
+			if(target && target[0]) {
+				window.scrollTo(0, target[0].offsetTop);
+				this.updateClasses(qtip);
+			}
+			else {
+				this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
+			}
 		}
-
-		var activeItem = this.el && this.el.down('.x-item-selected');
-
-		activeItem.removeCls('x-item-selected');
-		activeItem = this.el.down('[data-qtip=' + qtip + ']');
-		activeItem.addCls('x-item-selected');
-
-		//this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
+		else {
+			this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
+		}
 	}
 });

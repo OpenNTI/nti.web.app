@@ -153,6 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		me.details = Ext.widget('course-info-panel', {
 			videoWidth: 642,
 			videoHeight: 360,
+			viewOnly: true,
 			renderTo: this.detailsEl
 		});
 

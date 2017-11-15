@@ -77,6 +77,12 @@
 		x: hidden;
 		y: auto; //scroll;
 	}
+
+	.course-inline-editor {
+		figure.loading {
+			top: 20%;
+		}
+	}
 }
 
 .x-component-course-info {
@@ -509,12 +515,21 @@
 }
 
 
+
 .course-details {
 	overflow: auto;
 	padding: 7px 15px 15px 20px;
 	background-color: #efefef;
 	color: $primary-grey;
 	max-height: 100%;
+
+	.course-inline-editor {
+		width: 642px;
+
+		.course-info-editor-section .contents .columned .content-column, .edit-course-info.indented {
+			margin-left: 340px;
+		}
+	}
 
 	.header {
 		background: none;
