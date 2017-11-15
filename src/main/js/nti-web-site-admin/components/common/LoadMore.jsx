@@ -13,7 +13,7 @@ export default class SiteAdminLoadMore extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
 		hasMore: PropTypes.bool,
-		onLoadMore: PropTypes.bool,
+		onLoadMore: PropTypes.func,
 		label: PropTypes.string
 	}
 
