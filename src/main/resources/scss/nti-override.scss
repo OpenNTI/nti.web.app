@@ -336,6 +336,19 @@ body.x-body {margin:0;}
 		position: relative;
 		line-height: 2.2em;
 
+		blockquote.ntiblockquote {
+			margin: 0px;
+			p {
+				font-size: 18px;
+				font-style: italic;
+				line-height: 1.67;
+				color: #757474;
+				border-left: 3px solid #757474;
+				margin: 20px 0px;
+				padding: 0px 20px;
+			}
+		}
+
 		&.no-padding {
 			margin-top:0;
 		}
