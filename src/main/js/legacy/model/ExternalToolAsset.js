@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.model.ExternalToolAsset', {
 	extend: 'NextThought.model.Base',
 
 	statics: {
-		mimeType: 'application/vnd.nextthought.contenttypes.presentation.lticonfiguredtool',
+		mimeType: 'application/vnd.nextthought.externaltoolasset',
 	},
 
 	fields: [

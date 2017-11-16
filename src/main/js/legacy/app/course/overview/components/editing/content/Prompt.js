@@ -8,6 +8,7 @@ const OverviewgroupEditor = require('./overviewgroup/Editor');
 const ContentlinkEditor = require('./contentlink/Editor');
 const VideoEditor = require('./video/Editor');
 const DiscussionEditor = require('./discussion/Editor');
+const ExternalToolAssetEditor = require('./externaltoolasset/Editor');
 const PollEditor = require('./poll/Editor');
 const QuestionsetEditor = require('./questionset/Editor');
 const SurveyEditor = require('./survey/Editor');
@@ -37,6 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				OverviewgroupEditor,
 				VideoEditor,
 				DiscussionEditor,
+				ExternalToolAssetEditor,
 				PollEditor,
 				QuestionsetEditor,
 				SurveyEditor,
