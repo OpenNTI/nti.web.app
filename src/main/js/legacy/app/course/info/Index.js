@@ -54,6 +54,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		this.alignNavigation();
 	},
 
+	onRouteDeactivate: function () {
+		this.body && this.body.onRouteDeactivate && this.body.onRouteDeactivate();
+
+		this.routeDeactivated = true;
+	},
+
 	bundleChanged: function (bundle) {
 		var me = this,
 			catalogEntry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
@@ -66,7 +72,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
 
-			if(me.currId !== bundle.getId()) {
+			if(me.routeDeactivated || me.currId !== bundle.getId()) {
+				me.routeDeactivated = false;
 				me.body.setContent(info, status, showRoster, bundle);
 				me.navigation.setContent(info, status, showRoster, me.infoOnly, inviteCodeLink);
 			}

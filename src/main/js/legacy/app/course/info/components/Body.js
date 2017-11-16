@@ -41,6 +41,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		return Promise.resolve();
 	},
 
+	onRouteDeactivate: function () {
+		var infoCmp = this.getComponent('info');
+
+		infoCmp && infoCmp.onRouteDeactivate();
+	},
+
 	scrollRosterIntoView: function (route, subRoute) {
 		// Set scroll to top. Maybe change scroll based on route and subroute??
 		window.scrollTo(0, 0);
