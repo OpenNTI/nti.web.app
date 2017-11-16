@@ -15,9 +15,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	cls: 'overview-editing-listitem externaltoolasset',
-	
 	getPreviewType: function () {
-		return 'widget.course-overview-externaltoolasset';
-	}
+		return 'course-overview-externaltoolasset';
+	},
+
 });

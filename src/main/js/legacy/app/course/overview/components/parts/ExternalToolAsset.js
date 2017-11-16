@@ -31,7 +31,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	doNotRenderIcon: true,
 
-
 	constructor: function (config) {
 		var n = config.node || {getAttribute: function (a) { return config[a];} },
 			i = config.locationInfo || {
