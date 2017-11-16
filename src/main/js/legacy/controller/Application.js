@@ -68,6 +68,8 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		window.addEventListener('popstate', function (e) {
 			me.handleCurrentState();
 		});
+
+		history.listen(this.maybeSyncToHistory.bind(this));
 	},
 
 
@@ -105,6 +107,20 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 		this.handleCurrentState()
 			.then(Globals.removeLoaderSplash.bind(Globals));
+	},
+
+
+
+	maybeSyncToHistory () {
+		if (!this.currentRoute) { return; }
+
+		const {pathname} = history.location;
+		const oldPathname = `/${Globals.trimRoute(this.APP_ROOT)}/${Globals.trimRoute(this.currentRoute)}/`;
+
+		//if the history changes to a new path that doesn't match our current route, handle it
+		if (pathname !== oldPathname) {
+			this.handleCurrentState();
+		}
 	},
 
 
@@ -328,13 +344,14 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			allow = body.allowNavigation();
 
 		function finish () {
+			me.handleRoute(title, route, precache);
+
 			history[fn](myRoute, state || window.history.state);
 			//Yuck! The history library doesn't allow us to set the title
 			//so immediately replace the current state with one with the title
 			window.history.replaceState(window.history.state, myTitle, myRoute);
 			// history[fn](state || window.history.state, myTitle, myRoute);
 			document.title = title;
-			me.handleRoute(title, route, precache);
 		}
 
 		function stopNav () {
