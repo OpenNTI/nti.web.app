@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			//if we enrolled before the course was archived
 			} else if (details.EndDate > details.EnrollStartDate) {
 				state = this.getWording('archivedEnrolled');
-				state.butonText = 'Drop the Open Course';
+				state.buttonText = 'Drop the Open Course';
 			} else { //if we enrolled after the course was archived
 				state = this.getWording('archivedEnrolled');
 				state.buttonText = 'Drop the Archived Course';

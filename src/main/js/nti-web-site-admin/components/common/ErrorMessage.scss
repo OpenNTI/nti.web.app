@@ -1,0 +1,8 @@
+@import '~nti-style-common';
+
+.site-admin-error-message {
+	margin-top: 0.5rem;
+	color: $primary-red;
+	font-size: 0.875;
+	line-height: rem-calc(40px);
+}

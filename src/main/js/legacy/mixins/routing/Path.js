@@ -470,6 +470,16 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	},
 
 
+	getBaseRoute () {
+		const route = this.currentFullRoute;
+		const parts = Globals.getURLParts(route);
+		const base = window.location.pathname;
+		const regex = new RegExp(`${parts.pathname}/?$`);
+
+		return base.replace(regex, '');
+	},
+
+
 	addChildRouter: function (cmp) {
 		if (!cmp.pushRoute) {
 			console.error('Cant set a non route cmp as a child router router');

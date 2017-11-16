@@ -58,6 +58,22 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		this.SearchStore = SearchStateStore.getInstance();
 
 		this.mon(this.SearchStore, 'sync-term', this.syncTerm.bind(this));
+
+		const onSearchChange = ({type}) => {
+			if (type === 'context') {
+				if (SearchStore.context) {
+					this.onSearchAddContext();
+				} else {
+					this.onSearchRemoveContext();
+				}
+			}
+		};
+
+		SearchStore.addChangeListener(onSearchChange);
+
+		this.on('destroy', () => {
+			SearchStore.removeChangeListener(onSearchChange);
+		});
 	},
 
 	afterRender: function () {
