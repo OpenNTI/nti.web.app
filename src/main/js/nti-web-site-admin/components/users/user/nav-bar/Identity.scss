@@ -17,4 +17,15 @@
 		margin-top: 0.5rem;
 		color: $primary-grey;
 	}
+
+	.actions {
+		margin-top: 1rem;
+		display: flex;
+		justify-content: space-between;
+
+		a {
+			text-decoration: none;
+			color: $primary-blue;
+		}
+	}
 }
