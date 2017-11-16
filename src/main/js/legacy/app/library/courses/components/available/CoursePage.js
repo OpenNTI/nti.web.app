@@ -150,8 +150,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				return this.CourseActions.findCourseInstance(newCourse.get('NTIID'));
 			})
 			.then( course => {
+				var courseTitle = course.getTitle();
+				if(!courseTitle || courseTitle === '') {
+					courseTitle = course.getCourseCatalogEntry() && course.getCourseCatalogEntry().get('title');
+				}
+
 				this.fireEvent('show-course-detail', course.getCourseCatalogEntry());
-				this.showMessage(getFormattedString('NextThought.view.library.available.CourseWindow.InvitationAcceptance', {courseTitle: course.getTitle()}), false);
+				this.showMessage(getFormattedString('NextThought.view.library.available.CourseWindow.InvitationAcceptance', {courseTitle}), false);
 			});
 	},
 
