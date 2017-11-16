@@ -1,9 +1,11 @@
 const Ext = require('extjs');
 
-const EditingActions = require('../../Actions');
 const ExternalToolAsset = require('legacy/model/ExternalToolAsset');
+const Globals = require('legacy/util/Globals');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('../Editor');
+
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.externaltoolasset.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -32,27 +34,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	cls: 'content-editor externaltoolasset',
 
-	getFormSchema: function () {
-		var schema = [
-			{name: 'MimeType', type: 'hidden'},
-			{type: 'group', name: 'card', inputs: [
-				{name: 'icon', type: 'image', height: 125, width: 100},
-				{type: 'group', name: 'meta', inputs: [
-					{
-						name: 'label',
-						type: 'text',
-						placeholder: 'Title',
-						required: true,
-						maxlength: EditingActions.MAX_TITLE_LENGTH
-					},
-					{name: 'byline', type: 'text', placeholder: 'Author'},
-					{name: 'description', type: 'textarea', placeholder: 'Description'}
-				]},
-				{type: 'saveprogress'}
-			]}
-		];
-
-		return schema;
-	},
+	showEditor: function () {
+		var href = this.parentRecord.data.href + '/@@create_external_tool';
+		NavigationActions.navigateToHref(href);
+		this.doClose();
+	}
 
 });
