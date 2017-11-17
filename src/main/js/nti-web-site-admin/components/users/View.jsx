@@ -7,8 +7,8 @@ export default Router.for([
 	Route({
 		path: '/:id',
 		component: User,
-		getRouteFor (obj) {
-			if (obj.MimeType === 'application/vnd.nextthought.user') {
+		getRouteFor (obj, context) {
+			if (obj.MimeType === 'application/vnd.nextthought.user' && context === 'site-admin.users-list-item') {
 				return `/${(obj.getID())}`;
 			}
 

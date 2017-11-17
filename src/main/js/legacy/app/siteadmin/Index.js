@@ -81,8 +81,8 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				active: USERS_ACTIVE.test(path)
 			},
 			{
-				text: 'Course',
-				route: '/course',
+				text: 'Courses',
+				route: '/courses',
 				active: COURSE_ACTIVE.test(path)
 			},
 			{

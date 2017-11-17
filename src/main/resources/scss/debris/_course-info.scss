@@ -75,7 +75,6 @@
 .course-info-panel {
 	overflow: {
 		x: hidden;
-		y: auto; //scroll;
 	}
 
 	.course-inline-editor {
@@ -528,7 +527,7 @@
 		width: 642px;
 
 		.course-info-editor-section .contents .columned .content-column, .edit-course-info.indented {
-			margin-left: 340px;
+			margin-left: 320px;
 		}
 	}
 

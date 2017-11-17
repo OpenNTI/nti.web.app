@@ -156,6 +156,5 @@ export default class UserListStore extends BasicStore {
 				this.load();
 			}, 300);
 		}
-
 	}
 }

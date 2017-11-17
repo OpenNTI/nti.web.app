@@ -70,13 +70,18 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			return service.getObject(me.course.getId());
 		}).then((courseInstance) => {
 			me.collectionEl.mask('Deleting...');
-			return courseInstance.delete('delete');
-		}).then(() => {
+			return courseInstance.delete('delete').then(() => {
+				return true;
+			}).catch(() => {
+				alert('You don\'t have permission to delete this course');
+				return false;
+			});
+		}).then((success) => {
 			me.collectionEl.unmask();
-			me.updateStore();
-		}).catch(() => {
-			me.collectionEl.unmask();
-			alert('You don\'t have permission to delete this course');
+
+			if(success) {
+				me.updateStore();
+			}
 		});
 	},
 

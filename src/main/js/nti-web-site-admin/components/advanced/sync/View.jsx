@@ -5,7 +5,7 @@ import { DateTime, Flyout, Prompt } from 'nti-web-commons';
 
 export default class View extends React.Component {
 	static propTypes = {
-		workspace: PropTypes.object.isRequired
+		workspace: PropTypes.object
 	}
 
 	attachFlyoutRef = x => this.flyout = x
@@ -21,8 +21,14 @@ export default class View extends React.Component {
 	}
 
 	__refreshSyncStatus () {
+		const syncLink = this.__getLink('SyncMetadata');
+
+		if(!syncLink) {
+			return;
+		}
+
 		return getService().then((service) => {
-			return service.get(this.__getLink ('SyncMetadata')).then((resp) => {
+			return service.get(syncLink).then((resp) => {
 				if(!resp.is_locked && this.refreshInterval) {
 					clearInterval(this.refreshInterval);
 				}
@@ -38,7 +44,13 @@ export default class View extends React.Component {
 	}
 
 	__getLink (name) {
-		const matches = this.props.workspace.Links.filter((x) => x.rel === name);
+		const { workspace } = this.props;
+
+		if(!workspace || !workspace.Links) {
+			return null;
+		}
+
+		const matches = workspace.Links.filter((x) => x.rel === name);
 
 		return matches.length > 0 ? matches[0].href : null;
 	}
@@ -184,6 +196,18 @@ export default class View extends React.Component {
 	}
 
 	render () {
+		if(!this.props.workspace) {
+			return null;
+		}
+
+		const metaDataLink = this.__getLink('SyncMetadata');
+		const syncAllLink = this.__getLink('SyncAllLibraries');
+		const removeLink = this.__getLink('RemoveSyncLock');
+
+		if(!metaDataLink || !syncAllLink || !removeLink) {
+			return null;
+		}
+
 		if(this.state.loadingMeta) {
 			return (<div>{this.state.loadingMsg || 'Loading sync data...'}</div>);
 		}

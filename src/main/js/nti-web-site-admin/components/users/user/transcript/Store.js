@@ -30,10 +30,17 @@ export default class UserTranscriptStore extends BasicStore {
 
 		try {
 			const link = user.getLink('UserEnrollments');
-			const service = await getService();
-			const batch = await service.getBatch(link);
 
-			this._items = batch.Items;
+			if(link) {
+				const service = await getService();
+				const batch = await service.getBatch(link);
+
+				this._items = batch.Items;
+			}
+			else {
+				this._items = [];
+			}
+
 			this.emitChange('items');
 		} catch (e) {
 			this._error = e;

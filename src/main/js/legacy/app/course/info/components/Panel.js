@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const { Info } = require('nti-web-course');
+const { getService } = require('nti-web-client');
 
 const ContentProxy = require('legacy/proxy/JSONP');
 
@@ -17,44 +18,51 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 	ui: 'course',
 	layout: 'none',
 
+	onRouteDeactivate: function () {
+		this.InfoCmp && this.InfoCmp.onRouteDeactivate();
+	},
+
 	setContent: function (content, status, bundle) {
 		this.removeAll(true);
 
-		var toAdd = [],
-			infoCmp = this.up('course-info');
+		getService()
+			.then((service) => {
+				return service.getObject(content.raw);
+			})
+			.then((catalogEntry) => {
+				var infoCmp = this.up('course-info');
 
-		if (!Ext.isObject(content)) {
-			if (Ext.isString(content)) {
-				Service.getPageInfo(
-					content,
-					this.loadPage,
-					this.loadPageFailed,
-					this);
-			}
-			return;
-		}
+				if (!Ext.isObject(content)) {
+					if (Ext.isString(content)) {
+						Service.getPageInfo(
+							content,
+							this.loadPage,
+							this.loadPageFailed,
+							this);
+					}
+					return;
+				}
 
-		if (infoCmp && infoCmp.infoOnly) {
-			toAdd.push({
-				xtype: 'course-info-not-started',
-				info: content,
-				enrollmentStatus: status
+				if (infoCmp && infoCmp.infoOnly) {
+					this.add({
+						xtype: 'course-info-not-started',
+						info: content,
+						enrollmentStatus: status
+					});
+				}
+
+				this.InfoCmp = this.add({
+					xtype: 'react',
+					component: Info,
+					catalogEntry,
+					editable: !this.viewOnly && content.hasLink('edit')
+				});
+
+				this.add({
+					xtype: 'course-info-support'
+				});
 			});
-		}
 
-		toAdd.push(
-			{
-				xtype: 'react',
-				component: Info,
-				catalogEntry: content.get('NTIID'),
-				editable: !this.viewOnly && content.hasLink('edit')
-			},
-			{
-				xtype: 'course-info-support'
-			});
-
-
-		this.add(toAdd);
 	},
 
 	getVideo: function () {

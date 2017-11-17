@@ -86,7 +86,7 @@ export default class UserListView extends React.Component {
 				{items.map((user) => {
 					return (
 						<li key={user.NTIID}>
-							<LinkTo.Object object={user}>
+							<LinkTo.Object object={user} context="site-admin.users-list-item">
 								<Item item={user} />
 							</LinkTo.Object>
 						</li>

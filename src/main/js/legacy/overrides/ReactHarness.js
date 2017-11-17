@@ -5,9 +5,16 @@ const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService} = require('nti-web-client');
 
+const User = require('legacy/model/User');
 const ContextStore = require('legacy/app/context/StateStore');
 
 const unwrap = x => (x && x.default) ? x.default : x;
+
+function getRouteFor (obj) {
+	if (obj.isUser) {
+		return `/app/user/${User.getUsernameForURL(obj.Username)}`;
+	}
+}
 
 /*
  * Bridge React Component so we can pass environment contexts down to components in React.
@@ -45,7 +52,8 @@ const Bridge = createReactClass({
 			routerLinkComponent: () => {},
 			router: {
 				makeHref: (x) => x,
-				baseroute: this.state.baseroute
+				baseroute: this.state.baseroute,
+				getRouteFor: getRouteFor
 			},
 			course: bundle && {
 				getAssignment (ntiid) {

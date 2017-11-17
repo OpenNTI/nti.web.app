@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {getService} from 'nti-web-client';
 
 import SyncControls from './sync';
 
@@ -8,8 +9,20 @@ export default class View extends React.Component {
 		workspace: PropTypes.object.isRequired
 	}
 
+	constructor (props) {
+		super(props);
+
+		this.state = {};
+	}
+
+	componentDidMount () {
+		getService().then(service => {
+			this.setState({ workspace: service.getWorkspace('SiteAdmin') });
+		});
+	}
+
 	renderSyncControls () {
-		return (<SyncControls workspace={this.props.workspace}/>);
+		return (<SyncControls workspace={this.state.workspace}/>);
 	}
 
 	renderItem (itemFn) {
@@ -17,6 +30,10 @@ export default class View extends React.Component {
 	}
 
 	render () {
+		if(!this.state.workspace) {
+			return null;
+		}
+
 		return (<div className="site-admin-advanced">
 			{this.renderItem(() => { return this.renderSyncControls(); })}
 		</div>);
