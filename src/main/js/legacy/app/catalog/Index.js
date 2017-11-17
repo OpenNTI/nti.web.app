@@ -124,10 +124,11 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		});
 
 		getService().then((service) => {
+			me.catalog.setProps({loading: true});
 			const {href} = service.getCollection('Courses', 'Catalog');
 			service.get(href).then((data) => {
 				const collection = data;
-				me.catalog.setProps({collection, redeem: false});
+				me.catalog.setProps({collection, redeem: false, loading: false});
 			});
 
 		});
@@ -145,10 +146,11 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			}
 		});
 		getService().then((service) => {
+			me.catalog.setProps({loading: true});
 			const {href} = service.getCollection('Featured', 'Catalog');
 			service.get(href).then((data) => {
 				const collection = data;
-				me.catalog.setProps({collection, redeem: false});
+				me.catalog.setProps({collection, redeem: false, loading: false});
 			});
 
 		});
@@ -167,10 +169,11 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		});
 
 		getService().then((service) => {
+			me.catalog.setProps({loading: true});
 			const {href} = service.getCollection('Purchased', 'Catalog');
 			service.get(href).then((data) => {
 				const collection = data;
-				me.catalog.setProps({collection, redeem: false});
+				me.catalog.setProps({collection, redeem: false, loading: false});
 			});
 
 		});
