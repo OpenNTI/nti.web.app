@@ -347,7 +347,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		function finish () {
 			me.currentMyRoute = myRoute;
 
-			history[fn](myRoute, state || window.history.state.state || window.history.state);
+			history[fn](myRoute, state || (window.history.state && window.history.state.state) || window.history.state);
 			//Yuck! The history library doesn't allow us to set the title
 			//so immediately replace the current state with one with the title
 			window.history.replaceState(window.history.state, myTitle, myRoute);
