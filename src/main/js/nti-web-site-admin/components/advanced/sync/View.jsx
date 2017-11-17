@@ -46,7 +46,7 @@ export default class View extends React.Component {
 	__getLink (name) {
 		const { workspace } = this.props;
 
-		if(!workspace) {
+		if(!workspace || !workspace.Links) {
 			return null;
 		}
 
