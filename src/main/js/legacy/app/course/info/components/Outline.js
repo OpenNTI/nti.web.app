@@ -15,6 +15,18 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		this.callParent(arguments);
 	},
 
+	updateCatalogEntry: function (catalogEntry) {
+		this.updateStartDate(catalogEntry.StartDate ? new Date(catalogEntry.StartDate) : null);
+	},
+
+	updateStartDate: function (newDate) {
+		this.startDateLabel.update(Ext.util.Format.date(newDate, 'F j, Y') : '');
+	},
+
+	renderSelectors: {
+		startDateLabel: '.course-info-header-bar .date'
+	},
+
 	setContent: function (info, status, showRoster, courseMode, inviteCodeLink) {
 		var startDate = Ext.util.Format.date(info.get('StartDate'), 'F j, Y');
 

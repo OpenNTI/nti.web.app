@@ -14,11 +14,25 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		deferredRender: true
 	},
 
-	items: [
-		{ xtype: 'course-info-panel', itemId: 'info' },
-		{ xtype: 'course-info-roster', itemId: 'roster' },
-		{ xtype: 'course-info-reports', itemId: 'report'}
-	],
+	initComponent: function () {
+		this.callParent(arguments);
+
+		var me = this;
+
+		var items = [
+			{
+				xtype: 'course-info-panel',
+				itemId: 'info',
+				onSave: (catalogEntry) => {
+					me.onSave && me.onSave(catalogEntry);
+				}
+			},
+			{ xtype: 'course-info-roster', itemId: 'roster' },
+			{ xtype: 'course-info-reports', itemId: 'report'}
+		];
+
+		me.add(items);
+	},
 
 	setContent: function (info, status, showRoster, bundle) {
 		this.onceContentSet = Promise.all([
