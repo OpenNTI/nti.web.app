@@ -19,13 +19,22 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 	layout: 'none',
 
 	onRouteDeactivate: function () {
-		this.InfoCmp && this.InfoCmp.onRouteDeactivate();
+		if (!this.rendered) { return; }
+
+		var videos = this.el.dom.getElementsByTagName('video');
+
+		for(let v of (videos || [])) {
+			v.pause && v.pause();
+		}
 	},
 
 	setContent: function (content, status, bundle) {
+		if (this.activeContent === content) { return Promise.resolve(); }
+
+		this.activeContent = content;
 		this.removeAll(true);
 
-		getService()
+		return getService()
 			.then((service) => {
 				return service.getObject(content.raw);
 			})
