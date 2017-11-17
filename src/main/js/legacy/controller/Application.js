@@ -112,16 +112,16 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 
 	maybeSyncToHistory () {
-		// if (!this.currentRoute) { return; }
+		if (!this.currentRoute) { return; }
 
-		// const {pathname} = history.location;
-		// const route = `/${Globals.trimRoute(this.APP_ROOT)}/${Globals.trimRoute(this.currentRoute)}/`;
-		// const parts = Globals.getURLParts(route);
+		const {pathname} = history.location;
+		const route = `/${Globals.trimRoute(this.APP_ROOT)}/${Globals.trimRoute(this.currentRoute)}/`;
+		const parts = Globals.getURLParts(route);
 
-		// //if the history changes to a new path that doesn't match our current route, handle it
-		// if (pathname !== parts.pathname) {
-		// 	this.handleCurrentState();
-		// }
+		//if the history changes to a new path that doesn't match our current route, handle it
+		if (Globals.trimRoute(pathname) !== Globals.trimRoute(parts.pathname)) {
+			this.handleCurrentState();
+		}
 	},
 
 
