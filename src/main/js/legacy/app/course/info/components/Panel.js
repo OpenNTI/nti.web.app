@@ -64,6 +64,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					xtype: 'react',
 					component: Info,
 					catalogEntry,
+					onSave: (savedEntry) => {
+						this.onSave && this.onSave(savedEntry);
+					},
 					editable: !this.viewOnly && content.hasLink('edit')
 				});
 
