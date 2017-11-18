@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.mon(p, {
 			'player-event-ended': 'showCurtain',
-			'player-error': 'onPlayerError'
+			// 'player-error': 'onPlayerError'
 		});
 
 		this.relayEvents(p, [
