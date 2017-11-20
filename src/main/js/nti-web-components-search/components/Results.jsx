@@ -107,17 +107,15 @@ export default class SearchResults extends React.Component {
 		}
 	}
 
+	onNavigation = (obj, h, fragIndex, containerId) => {
+		this.setState({ navigating: true });
+
+		this.props.navigateToSearchHit(obj, h, fragIndex, containerId);
+	}
+
 	renderHit = (hit, index) => {
-		const me = this;
-
-		const onNavigation = (obj, h, fragIndex, containerId) => {
-			me.setState({ navigating: true });
-
-			me.props.navigateToSearchHit(obj, h, fragIndex, containerId);
-		};
-
 		return (
-			<Hit hit={hit.hit} title={hit.title} key={index} fragments={hit.fragments} resolvePath={hit.resolvePath} navigateToSearchHit={onNavigation}/>
+			<Hit hit={hit.hit} title={hit.title} key={index} fragments={hit.fragments} resolvePath={hit.resolvePath} navigateToSearchHit={this.onNavigation}/>
 		);
 	}
 

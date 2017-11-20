@@ -80,33 +80,35 @@ export default class View extends React.Component {
 		return (<span className="refresh-meta"><i className="icon-settings"/></span>);
 	}
 
-	renderOptions () {
-		const doRefresh = () => {
-			this.flyout && this.flyout.dismiss();
+	doRefresh = () => {
+		this.flyout && this.flyout.dismiss();
 
-			this.setState({ loadingMeta: true }, () => {
-				this.__refreshSyncStatus();
-			});
-		};
+		this.setState({ loadingMeta: true }, () => {
+			this.__refreshSyncStatus();
+		});
+	}
 
-		const doResync = this.state.isLocked
-			? () => {}
-			: () => {
-				this.flyout && this.flyout.dismiss();
+	doResync = () => {
+		if(this.state.isLocked) {
+			return;
+		}
 
-				Prompt.areYouSure('Re-syncing may take a while.').then(() => {
-					getService().then((service) => {
-						service.get(this.__getLink('SyncAllLibraries'));
+		this.flyout && this.flyout.dismiss();
 
-						this.setState({ errorMsg: null, loadingMsg: 'Starting sync...', loadingMeta: true }, () => {
-							this.refreshInterval = setInterval(() => { this.__refreshSyncStatus(); }, 5000);
-						});
-					}).catch((resp) => {
-						this.onError(resp.message || 'Could not re-sync');
-					});
+		Prompt.areYouSure('Re-syncing may take a while.').then(() => {
+			getService().then((service) => {
+				service.get(this.__getLink('SyncAllLibraries'));
+
+				this.setState({ errorMsg: null, loadingMsg: 'Starting sync...', loadingMeta: true }, () => {
+					this.refreshInterval = setInterval(() => { this.__refreshSyncStatus(); }, 5000);
 				});
-			};
+			}).catch((resp) => {
+				this.onError(resp.message || 'Could not re-sync');
+			});
+		});
+	}
 
+	renderOptions () {
 		return (<Flyout.Triggered
 			className="sync-options"
 			trigger={this.renderOptionsTrigger()}
@@ -115,8 +117,8 @@ export default class View extends React.Component {
 			ref={this.attachFlyoutRef}
 		>
 			<div>
-				<div onClick={doRefresh}>Refresh Status</div>
-				<div className={this.state.isLocked ? 'disabled' : ''} onClick={doResync}>Re-sync</div>
+				<div onClick={this.doRefresh}>Refresh Status</div>
+				<div className={this.state.isLocked ? 'disabled' : ''} onClick={this.doResync}>Re-sync</div>
 			</div>
 		</Flyout.Triggered>);
 	}
@@ -126,7 +128,7 @@ export default class View extends React.Component {
 			<div className="label">Status</div>
 			<div className="control">
 				{this.renderLockedStatus()}
-				{this.renderRemoveSyncLock(this.__getLink('RemoveSyncLock'))}
+				{this.renderRemoveSyncLock()}
 			</div>
 		</div>);
 	}
@@ -167,21 +169,23 @@ export default class View extends React.Component {
 		return null;
 	}
 
-	renderRemoveSyncLock (removeSyncLock) {
-		if(this.state.isLocked && removeSyncLock) {
-			const onClick = () => {
-				getService().then((service) => {
-					this.setState({errorMsg: null}, () => {
-						service.post(removeSyncLock).then(() => {
-							this.__refreshSyncStatus();
-						}).catch((resp) => {
-							this.onError(resp.message || 'Could not remove lock');
-						});
-					});
-				});
-			};
+	onRemoveSyncLock = () => {
+		const removeSyncLock = this.__getLink('RemoveSyncLock');
 
-			return (<span className="remove-lock" onClick={onClick}>Remove Sync Lock</span>);
+		getService().then((service) => {
+			this.setState({errorMsg: null}, () => {
+				service.post(removeSyncLock).then(() => {
+					this.__refreshSyncStatus();
+				}).catch((resp) => {
+					this.onError(resp.message || 'Could not remove lock');
+				});
+			});
+		});
+	}
+
+	renderRemoveSyncLock () {
+		if(this.state.isLocked && this.__getLink('RemoveSyncLock')) {
+			return (<span className="remove-lock" onClick={this.onRemoveSyncLock}>Remove Sync Lock</span>);
 		}
 
 		return null;

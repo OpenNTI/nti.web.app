@@ -41,69 +41,72 @@ function getReadings (course) {
 	return (ContentPackages || []).filter(x => x.isRenderable);
 }
 
+export default class Readings extends React.Component {
+	static propTypes = {
+		course: PropTypes.object,
+		filter: PropTypes.func,
+		gotoResource: PropTypes.func
+	}
 
-Readings.propTypes = {
-	course: PropTypes.object,
-	filter: PropTypes.func,
-	gotoResource: PropTypes.func
-};
-
-export default function Readings ({course, filter, gotoResource}) {
-	const loading = !course;
-	const readings = getReadings(course).filter((x) => filter(x.title));
-
-	const renderItem = (item, cols) => {
+	renderItem = (item, cols) => {
 		return (
-			<ListItem reading={item} gotoResource={gotoResource} columns={cols} />
+			<ListItem reading={item} gotoResource={this.props.gotoResource} columns={cols} />
 		);
-	};
+	}
 
-	const columns = [
-		{
-			name: 'name',
-			classes: Object.assign({
-				name: 'name'
-			}, columnClasses),
-			display: t('name'),
-			sortFn: sortOnTitle
-		},
-		{
-			name: 'publish',
-			classes: Object.assign({
-				name: 'publish'
-			}, columnClasses),
-			display: t('publish'),
-			sortFn: (a, b) => {
-				const {isPublished:aPublished} = a;
-				const {isPublished:bPublished} = b;
+	render () {
+		const { course, filter } = this.props;
 
-				return aPublished && !bPublished ? 1 : aPublished === bPublished ? sortOnTitle(a, b) : -1;
-			}
-		},
-		{
-			name: 'modified',
-			classes: Object.assign({
-				name: 'last-modified'
-			}, columnClasses),
-			display: t('lastModified'),
-			sortFn: (a, b) => {
-				const aModified = a.getLastModified();
-				const bModified = b.getLastModified();
+		const loading = !course;
+		const readings = getReadings(course).filter((x) => filter(x.title));
 
-				return aModified < bModified ? -1 : aModified === bModified ? 0 : 1;
-			}
-		}
-	];
-
-	return (
-		<div className="nti-web-course-resources">
+		const columns = [
 			{
-				readings.length !== 0 ?
-					(<Table.ListTable classes={tableClasses} items={readings} columns={columns} renderItem={renderItem}	/>) :
-					loading ?
-						(<Loading.Mask message={t('loading')} />) :
-						(<EmptyState header={t('emptyHeader')} subHeader={t('emptyMessage')}/>)
+				name: 'name',
+				classes: Object.assign({
+					name: 'name'
+				}, columnClasses),
+				display: t('name'),
+				sortFn: sortOnTitle
+			},
+			{
+				name: 'publish',
+				classes: Object.assign({
+					name: 'publish'
+				}, columnClasses),
+				display: t('publish'),
+				sortFn: (a, b) => {
+					const {isPublished:aPublished} = a;
+					const {isPublished:bPublished} = b;
+
+					return aPublished && !bPublished ? 1 : aPublished === bPublished ? sortOnTitle(a, b) : -1;
+				}
+			},
+			{
+				name: 'modified',
+				classes: Object.assign({
+					name: 'last-modified'
+				}, columnClasses),
+				display: t('lastModified'),
+				sortFn: (a, b) => {
+					const aModified = a.getLastModified();
+					const bModified = b.getLastModified();
+
+					return aModified < bModified ? -1 : aModified === bModified ? 0 : 1;
+				}
 			}
-		</div>
-	);
+		];
+
+		return (
+			<div className="nti-web-course-resources">
+				{
+					readings.length !== 0 ?
+						(<Table.ListTable classes={tableClasses} items={readings} columns={columns} renderItem={this.renderItem}	/>) :
+						loading ?
+							(<Loading.Mask message={t('loading')} />) :
+							(<EmptyState header={t('emptyHeader')} subHeader={t('emptyMessage')}/>)
+				}
+			</div>
+		);
+	}
 }
