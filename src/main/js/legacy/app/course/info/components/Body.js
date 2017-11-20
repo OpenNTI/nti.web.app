@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 			{
 				xtype: 'course-info-panel',
 				itemId: 'info',
-				onSave: (catalogEntry) => {
+				onSave: function (catalogEntry) {
 					me.onSave && me.onSave(catalogEntry);
 				}
 			},
