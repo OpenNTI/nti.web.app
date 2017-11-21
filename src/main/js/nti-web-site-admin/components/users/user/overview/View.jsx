@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import DateValue from '../../../common/DateValue';
 
+import ActiveTimes from './ActiveTimes';
+
 SiteAdminUserOverview.propTypes = {
 	user: PropTypes.object
 };
@@ -14,6 +16,9 @@ export default function SiteAdminUserOverview ({user}) {
 			</div>
 			<div className="last-login">
 				<DateValue date={user.getLastLoginTime()} label="Last Login" format="lll" />
+			</div>
+			<div className="active-times">
+				<ActiveTimes user={user}/>
 			</div>
 		</div>
 	);
