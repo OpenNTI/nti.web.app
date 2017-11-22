@@ -7,8 +7,8 @@ export default Router.for([
 	Route({
 		path: '/:id',
 		component: Info,
-		getRouteFor: (obj) => {
-			if (obj.MimeType === 'application/vnd.nextthought.courses.coursecataloglegacyentry') {
+		getRouteFor: (obj, context) => {
+			if (obj.MimeType === 'application/vnd.nextthought.courseware.courseinstanceadministrativerole' && context === 'site-admin.course-list-item') {
 				return `/${(obj.getID())}`;
 			}
 

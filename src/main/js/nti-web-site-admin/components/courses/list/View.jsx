@@ -2,11 +2,12 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
 import {searchable, contextual} from 'nti-web-search';
-// import {LinkTo} from 'nti-web-routing';
+import {LinkTo} from 'nti-web-routing';
 
 import SearchablePagedView from '../../common/SearchablePagedView';
 
 import Store from './Store';
+import Item from './Item';
 
 const DEFAULT_TEXT = {
 	courses: 'Courses',
@@ -44,22 +45,24 @@ export default class View extends React.Component {
 
 	render () {
 		return (
-			<SearchablePagedView
-				{...this.props}
-				className="site-admin-course-list"
-				renderItem={this.renderItem}
-				loadNextPage={this.onLoadNextPage}
-				getString={t}
-			/>
+			<div className="site-admin-course">
+				<SearchablePagedView
+					{...this.props}
+					className="site-admin-course-list"
+					renderItem={this.renderItem}
+					loadNextPage={this.onLoadNextPage}
+					getString={t}
+				/>
+			</div>
 		);
 	}
 
 
 	renderItem = (item) => {
-		const {title} = item.getPresentationProperties();
-
 		return (
-			<span>{title}</span>
+			<LinkTo.Object object={item} context="site-admin.course-list-item">
+				<Item item={item} />
+			</LinkTo.Object>
 		);
 	}
 
