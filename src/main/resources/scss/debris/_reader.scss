@@ -41,3 +41,9 @@
 .native-content-editor {
 	padding: 20px 0;
 }
+
+html.is-edge, html.is-ie {
+	.reader-container.navigation-panel .center .x-reader-pane {
+		overflow-y: initial;
+	}
+}

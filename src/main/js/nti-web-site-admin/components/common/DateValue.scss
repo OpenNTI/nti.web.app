@@ -1,6 +1,5 @@
 @import '~nti-style-common';
 
-
 .site-admin-date-value {
 	padding: 0.5rem;
 	color: $primary-grey;
@@ -10,10 +9,14 @@
 		font: normal 700 0.625rem/1 $body-font-family;
 	}
 
-	time {
+	time, .no-date {
 		display: block;
 		text-align: right;
 		font: normal 300 2rem/1.2 $body-font-family;
 		padding-top: 2rem;
+	}
+
+	.no-date {
+		color: #b8b8b8;
 	}
 }

@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const { Info } = require('nti-web-course');
-const { getService } = require('nti-web-client');
+const { getService, getAppUsername } = require('nti-web-client');
 
 const ContentProxy = require('legacy/proxy/JSONP');
 
@@ -19,13 +19,22 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 	layout: 'none',
 
 	onRouteDeactivate: function () {
-		this.InfoCmp && this.InfoCmp.onRouteDeactivate();
+		if (!this.rendered) { return; }
+
+		var videos = this.el.dom.getElementsByTagName('video');
+
+		for(let v of (videos || [])) {
+			v.pause && v.pause();
+		}
 	},
 
 	setContent: function (content, status, bundle) {
+		if (this.activeContent === content) { return Promise.resolve(); }
+
+		this.activeContent = content;
 		this.removeAll(true);
 
-		getService()
+		return getService()
 			.then((service) => {
 				return service.getObject(content.raw);
 			})
@@ -43,7 +52,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					return;
 				}
 
-				if (infoCmp && infoCmp.infoOnly) {
+				// don't show registered message bar if the active user is the one who created the course
+				if (infoCmp && infoCmp.infoOnly && getAppUsername() !== catalogEntry.creator) {
 					this.add({
 						xtype: 'course-info-not-started',
 						info: content,
@@ -55,6 +65,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					xtype: 'react',
 					component: Info,
 					catalogEntry,
+					onSave: (savedEntry) => {
+						this.onSave && this.onSave(savedEntry);
+					},
 					editable: !this.viewOnly && content.hasLink('edit')
 				});
 

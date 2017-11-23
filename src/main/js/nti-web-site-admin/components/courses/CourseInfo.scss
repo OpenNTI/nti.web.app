@@ -1,0 +1,60 @@
+@import '~nti-style-common';
+
+.site-admin-course-info {
+	display: flex;
+	min-height: rem-calc(117px);
+
+	.course-icon {
+		width: rem-calc(160px);
+		flex: 0 0 auto;
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+
+	.info {
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		padding: 0.3rem;
+
+		& > .label {
+			font: normal 700 0.75rem/1.25 $body-font-family;
+			color: $tertiary-grey;
+			text-transform: uppercase;
+			flex: 0 0 auto;
+		}
+
+		.title {
+			font: normal 400 1.25rem/1.25 $body-font-family;
+			color: $primary-grey;
+			flex: 1 1 auto;
+		}
+
+		.meta {
+			flex: 0 0 auto;
+			display: flex;
+			flex-direction: row;
+			font-size: 0.75rem;
+			font-weight: 400;
+
+			.start {
+				&::after {
+					content: '\a0\b7\a0';
+				}
+
+				&:last-child::after {
+					content: '';
+				}
+			}
+
+			.date {
+				color: $primary-grey;
+
+				.label {
+					font-weight: 700;
+					padding-right: 0.2rem;
+				}
+			}
+		}
+	}
+}

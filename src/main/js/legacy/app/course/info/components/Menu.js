@@ -213,23 +213,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 				this.showSection(cls);
 				this.hideOtherSections(cls);
 
-				if(cls !== 'course-info-panel' && infoPanel) {
-					// stop any info videos
-					var videos = infoPanel.getElementsByTagName('video');
-					for(let v of (videos || [])) {
-						v.pause && v.pause();
-					}
-				}
-
 				if(doLocalNav && target && target[0]) {
 					window.scrollTo(0, target[0].offsetTop);
 				}
 
 				this.updateClasses(qtip);
-			}
-			else {
-				// if all else fails, nothing to do but go to route and reload some components
-				this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 			}
 		}
 		else {
@@ -237,7 +225,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 				infoPanel.style.display = 'none';
 			}
 
-			this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 		}
+
+		this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 	}
 });

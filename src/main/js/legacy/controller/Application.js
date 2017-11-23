@@ -112,16 +112,15 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 
 	maybeSyncToHistory () {
-		// if (!this.currentRoute) { return; }
+		if (!this.currentMyRoute) { return; }
 
-		// const {pathname} = history.location;
-		// const route = `/${Globals.trimRoute(this.APP_ROOT)}/${Globals.trimRoute(this.currentRoute)}/`;
-		// const parts = Globals.getURLParts(route);
+		const {pathname} = history.location;
+		const parts = Globals.getURLParts(this.currentMyRoute);
 
-		// //if the history changes to a new path that doesn't match our current route, handle it
-		// if (pathname !== parts.pathname) {
-		// 	this.handleCurrentState();
-		// }
+		//if the history changes to a new path that doesn't match our current route, handle it
+		if (Globals.trimRoute(pathname) !== Globals.trimRoute(parts.pathname)) {
+			this.handleCurrentState();
+		}
 	},
 
 
@@ -344,15 +343,18 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			myRoute = me.__mergeRoute(route),
 			allow = body.allowNavigation();
 
-		function finish () {
-			me.handleRoute(title, route, precache);
 
-			history[fn](myRoute, state || window.history.state);
+		function finish () {
+			me.currentMyRoute = myRoute;
+
+			history[fn](myRoute, state || (window.history.state && window.history.state.state) || window.history.state);
 			//Yuck! The history library doesn't allow us to set the title
 			//so immediately replace the current state with one with the title
 			window.history.replaceState(window.history.state, myTitle, myRoute);
 			// history[fn](state || window.history.state, myTitle, myRoute);
 			document.title = title;
+
+			me.handleRoute(title, route, precache);
 		}
 
 		function stopNav () {

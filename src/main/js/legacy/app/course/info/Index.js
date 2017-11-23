@@ -44,6 +44,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 			}
 		);
 
+		me.body.onSave = (catalogEntry) => {
+			me.navigation.updateCatalogEntry && me.navigation.updateCatalogEntry(catalogEntry);
+		};
+
 		me.on('show-enrollment', me.showEnrollment.bind(me));
 	},
 
@@ -107,6 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		me.navigation.setActiveItem(route);
 		me.body.setActiveItem('info').then(function () {
 			me.body.scrollInfoSectionIntoView(route);
+			me.alignNavigation();
 		});
 	},
 
@@ -116,6 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		me.navigation.setActiveItem(route);
 		me.body.setActiveItem('info').then(function () {
 			me.body.scrollInfoSectionIntoView(route);
+			me.alignNavigation();
 		});
 	},
 
@@ -125,6 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		me.navigation.setActiveItem(route);
 		me.body.setActiveItem('info').then(function () {
 			me.body.scrollInfoSectionIntoView(route);
+			me.alignNavigation();
 		});
 	},
 

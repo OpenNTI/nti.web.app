@@ -102,8 +102,8 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 	},
 
 	navigateToAllCourses: function () {
-		// this.pushRootRoute('Catalog', '/catalog', {
-		this.pushRoute('All Courses', '/courses/available', {
+		this.pushRootRoute('Catalog', '/catalog', {
+		// this.pushRoute('All Courses', '/courses/available', {
 			closeURL: '/'
 		});
 	}

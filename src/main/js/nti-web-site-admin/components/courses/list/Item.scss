@@ -1,0 +1,28 @@
+@import '~nti-style-common';
+
+.site-admin-course-item {
+	padding: 1rem 0;
+	box-shadow: 0 1px 0 0 $border-grey-light;
+	display: flex;
+
+	.course-info {
+		flex: 1 1 auto;
+	}
+
+	.total-enrollments {
+		flex: 0 0 auto;
+		padding-top: 0.3rem;
+
+		.label {
+			font: normal 700 0.75rem/1.25 $body-font-family;
+			color: $secondary-grey;
+			text-transform: uppercase;
+		}
+
+		.value {
+			font: normal 300 1.25rem/2 $body-font-family;
+			color: $primary-grey;
+			text-align: center;
+		}
+	}
+}

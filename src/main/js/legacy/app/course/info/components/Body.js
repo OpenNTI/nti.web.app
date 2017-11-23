@@ -14,19 +14,32 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		deferredRender: true
 	},
 
-	items: [
-		{ xtype: 'course-info-panel', itemId: 'info' },
-		{ xtype: 'course-info-roster', itemId: 'roster' },
-		{ xtype: 'course-info-reports', itemId: 'report'}
-	],
+	initComponent: function () {
+		this.callParent(arguments);
+
+		var me = this;
+
+		var items = [
+			{
+				xtype: 'course-info-panel',
+				itemId: 'info',
+				onSave: function (catalogEntry) {
+					me.onSave && me.onSave(catalogEntry);
+				}
+			},
+			{ xtype: 'course-info-roster', itemId: 'roster' },
+			{ xtype: 'course-info-reports', itemId: 'report'}
+		];
+
+		me.add(items);
+	},
 
 	setContent: function (info, status, showRoster, bundle) {
-		var me = this;
-		//always reset
-		me.setActiveItem('info');
-		me.getComponent('info').setContent(info, status, bundle);
-		me.getComponent('roster').setContent(showRoster && bundle);
-		me.getComponent('report').setContent(showRoster && bundle);
+		this.onceContentSet = Promise.all([
+			this.getComponent('info').setContent(info, status, bundle),
+			this.getComponent('roster').setContent(showRoster && bundle),
+			this.getComponent('report').setContent(showRoster && bundle)
+		]);
 	},
 
 	setActiveItem: function (itemId) {
@@ -34,12 +47,13 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 			activeItem = this.getLayout().getActiveItem();
 
 		if (targetItem === activeItem) {
-			return Promise.resolve();
+			return this.onceContentSet;
 		}
 
 		this.getLayout().setActiveItem(targetItem);
-		return Promise.resolve();
+		return this.onceContentSet;
 	},
+
 
 	onRouteDeactivate: function () {
 		var infoCmp = this.getComponent('info');
