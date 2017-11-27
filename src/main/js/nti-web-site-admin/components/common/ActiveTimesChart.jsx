@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {DateTime} from 'nti-web-commons';
-import {getService} from 'nti-web-client';
-import {getLink} from 'nti-lib-interfaces';
-
-const ANALYTICS = 'Analytics';
-const ACTIVE_TIMES_LINK = 'active_times_summary';
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const SHORT_WEEKDAYS = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
