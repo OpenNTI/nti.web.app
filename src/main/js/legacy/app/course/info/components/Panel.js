@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 
 		return getService()
 			.then((service) => {
-				return service.getObject(content.raw);
+				return service.getObject(content.getRaw());
 			})
 			.then((catalogEntry) => {
 				var infoCmp = this.up('course-info');
