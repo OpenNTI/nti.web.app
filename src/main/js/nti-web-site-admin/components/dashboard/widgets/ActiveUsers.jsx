@@ -6,7 +6,7 @@ import {getService, User} from 'nti-web-client';
 import cx from 'classnames';
 
 const LABELS = {
-	title: 'Certificate Earners',
+	title: 'Top Learners',
 	name: 'Name',
 	value: ''
 };
