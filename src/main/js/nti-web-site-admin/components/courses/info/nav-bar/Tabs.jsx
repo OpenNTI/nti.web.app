@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
+import {encodeForURI} from 'nti-lib-ntiids';
 import {LinkTo} from 'nti-web-routing';
 
 import Tabs from '../../../common/Tabs';
@@ -18,9 +19,9 @@ SiteAdminCourseTabs.propTypes = {
 export default function SiteAdminCourseTabs ({id}) {
 	return (
 		<Tabs>
-			<LinkTo.Path to={`${id}/`} activeClassName="active" exact>{t('overview')}</LinkTo.Path>
-			<LinkTo.Path to={`${id}/roster`} activeClassName="active">{t('roster')}</LinkTo.Path>
-			<LinkTo.Path to={`${id}/reports`} activeClassName="active">{t('reports')}</LinkTo.Path>
+			<LinkTo.Path to={`${encodeForURI(id)}/`} activeClassName="active" exact>{t('overview')}</LinkTo.Path>
+			<LinkTo.Path to={`${encodeForURI(id)}/roster`} activeClassName="active">{t('roster')}</LinkTo.Path>
+			<LinkTo.Path to={`${encodeForURI(id)}/reports`} activeClassName="active">{t('reports')}</LinkTo.Path>
 		</Tabs>
 	);
 }
