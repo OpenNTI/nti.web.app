@@ -59,11 +59,7 @@ class Day extends React.Component {
 			return (this.renderBlock());
 		}
 
-		let infoStr = DateTime.format(day.date, 'LL') + ' - ' + day.value + ' event';
-
-		if(day.value !== 1) {
-			infoStr += 's';
-		}
+		let infoStr = DateTime.format(day.date, 'LL');
 
 		return (<Flyout.Triggered
 			className="activity-day-trigger"
