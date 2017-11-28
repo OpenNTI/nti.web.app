@@ -1,6 +1,4 @@
 const Ext = require('extjs');
-const {getService} = require('nti-web-client');
-let me = this;
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
