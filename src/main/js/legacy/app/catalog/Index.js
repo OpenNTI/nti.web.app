@@ -1,10 +1,17 @@
 const Ext = require('extjs');
-const catalog = require('nti-web-catalog');
 const {getService} = require('nti-web-client');
-
-const ComponentsNavigation = require('legacy/common/components/Navigation');
-const NavigationActions = require('legacy/app/navigation/Actions');
 let me = this;
+
+const NavigationActions = require('legacy/app/navigation/Actions');
+const ComponentsNavigation = require('legacy/common/components/Navigation');
+const CatalogView = require('nti-web-catalog');
+
+require('legacy/common/components/Navigation');
+require('legacy/overrides/ReactHarness');
+require('legacy/login/StateStore');
+
+const PURCHASED_ACTIVE = /^\/purchased/;
+const REDEEM_ACTIVE = /^\/redeem/;
 
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
@@ -16,26 +23,17 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 	layout: 'none',
-
 	initComponent: function () {
-		me = this;
-		this.NavigationActions = NavigationActions.create();
+		this.callParent(arguments);
 
-		me.callParent(arguments);
 		this.removeCls('make-white');
 		this.addCls('course-catalog-body');
 
 		this.initRouter();
 
-		this.addRoute('/', this.showCatalog.bind(this));
-		this.addRoute('/Featured', this.showFeature.bind(this));
-		this.addRoute('/Purchased', this.showPurchased.bind(this));
-		this.addRoute('/Redeem', this.showRedeem.bind(this));
+		this.addDefaultRoute(this.showCatalog.bind(this));
 
-		this.catalog = this.add({
-			xtype: 'react',
-			component: catalog
-		});
+		this.NavigationActions = NavigationActions.create();
 	},
 
 	afterRender () {
@@ -56,151 +54,63 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		}
 	},
 
-	applyState: function (state) {
-		const active = state.active;
-		let tabs = [];
+	showCatalog (route) {
+		const baseroute = this.getBaseRoute();
 
-		getService().then((service) => {
-			const collection = service.getWorkspace('Catalog').Items;
-			for (let i = 0; i < collection.length; i++) {
-				let item = {
-					text: collection[i].Title,
-					route: '',
-					subRoute: me.catalogRoute,
-					active: active === collection[i].Title
-				};
-				if (collection[i].Title !== 'Courses') {
-					item.route = '/' + collection[i].Title;
-				}
-				tabs.push(item);
-			}
-			tabs.push({
+		if (this.catalog) {
+			this.catalog.setBaseRoute(baseroute);
+		} else {
+			this.catalog = this.add({
+				xtype: 'react',
+				component: CatalogView,
+				baseroute: baseroute
+			});
+		}
+
+		this.setUpNavigation(baseroute, route.path);
+	},
+
+
+	setUpNavigation (baseroute, path) {
+		const navigation = this.getNavigation();
+
+
+		navigation.updateTitle('Catalog');
+
+
+		const tabs = [
+			{
+				text: 'Courses',
+				route: '/',
+				active: path.length === 1
+			},
+			{
+				text: 'Purchased',
+				route: '/purchased',
+				active: PURCHASED_ACTIVE.test(path) && path.length !== 1
+			},
+			{
 				text: 'Redeem',
-				route: '/Redeem',
-				subRoute: me.catalogRoute,
-				active: active === 'Redeem'
-			});
-			me.navigation.setTabs(tabs);
-		});
-	},
-
-	setActiveView: function (active, inactive, tab) {
-		let item;
-
-		me.prepareNavigation();
-		me.applyState({
-			active: tab || active
-		});
-
-		me.navigation.updateTitle('Catalog');
-
-		return new Promise(function (fulfill, reject) {
-			item = me.setActiveItem(active);
-			fulfill(item);
-		});
-	},
-	setActiveItem: function (xtype) {
-
-	},
-	showCollection () {
-		return getService ()
-			.then ((service) => {
-				const collection = 'collection';
-
-				me.catalog.setProps ({collection});
-			});
-	},
-	showCatalog: function (route, subRoute) {
-		this.catalogRoute = subRoute;
-
-		this.setTitle('Catalog');
-		this.setActiveView('catalog-tab-view',
-			['groups-tab-view', 'lists-tab-view'],
-			'Courses'
-		).then(function (item) {
-			if (item && item.handleRoute) {
-				item.handleRoute(subRoute);
+				route: '/redeem',
+				active: REDEEM_ACTIVE.test(path) && path.length !== 1
 			}
-		});
 
-		getService().then((service) => {
-			me.catalog.setProps({loading: true});
-			const {href} = service.getCollection('Courses', 'Catalog');
-			service.get(href).then((data) => {
-				const collection = data;
-				me.catalog.setProps({collection, redeem: false, loading: false});
-			});
+		];
 
-		});
-	},
-	showFeature: function (route, subRoute) {
-		this.catalogRoute = subRoute;
+		navigation.setTabs(tabs);
 
-		this.setTitle('Featured');
-		this.setActiveView('catalog-tab-view',
-			['groups-tab-view', 'lists-tab-view'],
-			'Featured'
-		).then(function (item) {
-			if (item && item.handleRoute) {
-				item.handleRoute(subRoute);
-			}
-		});
-		getService().then((service) => {
-			me.catalog.setProps({loading: true});
-			const {href} = service.getCollection('Featured', 'Catalog');
-			service.get(href).then((data) => {
-				const collection = data;
-				me.catalog.setProps({collection, redeem: false, loading: false});
-			});
-
-		});
-	},
-	showPurchased: function (route, subRoute) {
-		this.catalogRoute = subRoute;
-
-		this.setTitle('Purchased');
-		this.setActiveView('catalog-tab-view',
-			['groups-tab-view', 'lists-tab-view'],
-			'Purchased'
-		).then(function (item) {
-			if (item && item.handleRoute) {
-				item.handleRoute(subRoute);
-			}
-		});
-
-		getService().then((service) => {
-			me.catalog.setProps({loading: true});
-			const {href} = service.getCollection('Purchased', 'Catalog');
-			service.get(href).then((data) => {
-				const collection = data;
-				me.catalog.setProps({collection, redeem: false, loading: false});
-			});
-
-		});
-	},
-	showRedeem: function (route, subRoute) {
-		this.catalogRoute = subRoute;
-
-		this.setTitle('Redeem');
-		this.setActiveView('catalog-tab-view',
-			['groups-tab-view', 'lists-tab-view'],
-			'Redeem'
-		).then(function (item) {
-			if (item && item.handleRoute) {
-				item.handleRoute(subRoute);
-			}
-		});
-		const collection = Service.getCollection('Invitations', 'Invitations');
-		this.catalog.setProps({redeem: true, collection: null, redeemCollection: collection});
-	},
-	prepareNavigation: function () {
+		this.NavigationActions.setActiveContent(null, true, true);
 		this.NavigationActions.updateNavBar({
-			cmp: this.getNavigation(),
-			hideBranding: true
+			cmp: navigation,
+			noLibraryLink: false,
+			hideBranding: true,
+			onBack: () => {
+				this.pushRootRoute('Library', '/library');
+			}
 		});
-
-		this.NavigationActions.setActiveContent(null);
 	},
+
+
 	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = ComponentsNavigation.create({
@@ -210,7 +120,9 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		return this.navigation;
 	},
+
 	onTabChange: function (title, route, subroute, tab) {
 		this.pushRoute(title, route, subroute);
 	}
 });
+
