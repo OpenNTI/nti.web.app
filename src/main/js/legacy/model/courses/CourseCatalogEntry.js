@@ -36,6 +36,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 			convert: function (v) { return [v]; } },
 		{ name: 'CatalogFamilies', type: 'singleItem', persist: false},
 		{ name: 'CourseEntryNTIID', type: 'string', persist: false},
+		{ name: 'CourseNTIID', type: 'string', persist: false, useInRaw: true },
 		{ name: 'Credit', type: 'arrayItem', persist: false, useInRaw: true },
 		{ name: 'Description', type: 'string', persist: false, useInRaw: true },
 		{ name: 'RichDescription', type: 'string', persist: false, useInRaw: true },
