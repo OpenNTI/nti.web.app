@@ -1,19 +1,8 @@
 @import '~nti-style-common';
 
 .site-admin-date-value {
-	padding: 0.5rem;
-	color: $primary-grey;
-
-	.label {
-		text-transform: uppercase;
-		font: normal 700 0.625rem/1 $body-font-family;
-	}
-
 	time, .no-date {
 		display: block;
-		text-align: right;
-		font: normal 300 2rem/1.2 $body-font-family;
-		padding-top: 2rem;
 	}
 
 	.no-date {

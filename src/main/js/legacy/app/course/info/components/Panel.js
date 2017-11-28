@@ -36,10 +36,15 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 
 		return getService()
 			.then((service) => {
-				return service.getObject(content.raw);
+				return service.getObject(content.getRaw());
 			})
 			.then((catalogEntry) => {
 				var infoCmp = this.up('course-info');
+
+				// get catalogEntry Links into the expected flat list format
+				if(catalogEntry.Links.links) {
+					catalogEntry.Links = catalogEntry.Links.links;
+				}
 
 				if (!Ext.isObject(content)) {
 					if (Ext.isString(content)) {
