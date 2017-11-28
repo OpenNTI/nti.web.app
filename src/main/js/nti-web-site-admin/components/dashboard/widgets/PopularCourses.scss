@@ -1,0 +1,111 @@
+@import "~nti-style-common/all.scss";
+
+.dashboard-list-widget {
+	margin: 5px;
+	width: 450px;
+	height: 300px;
+	box-shadow: 0 1px 2px 1px #ccc;
+	color: #555;
+	font-weight: 300;
+
+	figure.loading {
+		position: relative;
+		top: 20%;
+	}
+
+	.header {
+		display: flex;
+		position: relative;
+		margin: 15px 10px 20px 15px;
+
+		.title {
+			font-size: 22px;
+		}
+
+		.pager {
+			display: flex;
+			position: absolute;
+			right: 0;
+
+			.page-control {
+				border: solid 1px #e5e5e5;
+				width: 34px;
+				height: 30px;
+				padding-left: 10px;
+				padding-top: 4px;
+				color: #888;
+				cursor: pointer;
+
+				&.disabled {
+					color: #ccc;
+				}
+
+				&.previous {
+					border-radius: 30px 0 0 30px;
+				}
+
+				&.next {
+					border-radius: 0 30px 30px 0;
+				}
+			}
+		}
+	}
+
+	.items-container {
+		margin: 15px;
+
+		.items-header {
+			display: flex;
+			position: relative;
+			color: #b8b8b8;
+			font-size: 14px;
+			margin-bottom: 10px;
+
+			.column-header.value {
+				position: absolute;
+				right: 0;
+			}
+		}
+
+		.item {
+			display: flex;
+			position: relative;
+			margin-bottom: 10px;
+
+			.rank {
+				font-size: 12px;
+				color: #b8b8b8;
+				padding-top: 10px;
+				margin-right: 10px;
+				min-width: 20px;
+			}
+
+			.item-image {
+				width: 40px;
+				height: 40px;
+				margin-right: 15px;
+				background-size: cover;
+			}
+
+			.info {
+				padding-top: 3px;
+				font-weight: 400;
+
+				.name {
+					font-size: 14px;
+				}
+
+				.description {
+					font-size: 12px;
+					color: #b8b8b8;
+				}
+			}
+
+			.value {
+				position: absolute;
+				right: 0;
+				font-size: 20px;
+			}
+		}
+	}
+}

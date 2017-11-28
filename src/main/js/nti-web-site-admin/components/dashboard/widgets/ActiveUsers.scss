@@ -1,0 +1,19 @@
+@import "~nti-style-common/all.scss";
+
+.dashboard-list-widget.active-users {
+	width: 500px;
+
+	.total {
+		padding-top: 3px;
+		margin-left: 15px;
+		border-radius: 20px;
+		border: solid 1px #e5e5e5;
+		width: 60px;
+		color: #b8b8b8;
+		text-align: center;
+	}
+
+	.item-image {
+		border-radius: 40px;
+	}
+}
