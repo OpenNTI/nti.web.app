@@ -31,11 +31,15 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 			this.CourseStore.fireEvent('added-course');
 		};
 
+		// if Courses collection is missing, we won't show the Create option
+		const canCreate = Service.getCollection('Courses', 'Catalog');
+
 		this.add({
 			xtype: 'react',
 			component: AdminToolbar,
 			handleNav: handleNav,
-			onCourseCreated: onCourseCreated
+			onCourseCreated: onCourseCreated,
+			canCreate: canCreate
 		});
 	}
 });
