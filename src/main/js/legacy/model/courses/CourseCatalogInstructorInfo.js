@@ -14,8 +14,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogIn
 		{ name: 'JobTitle', type: 'string' },
 		{ name: 'MimeType', type: 'string' },
 		{ name: 'Name', type: 'string' },
-		{ name: 'Sufix', type: 'string' },
+		{ name: 'Suffix', type: 'string' },
 		{ name: 'Title', type: 'string' },
+		{ name: 'username', type: 'string' },
+		{ name: 'Biography', type: 'string' },
 
 		{ name: 'photo', type: 'string', mapping: 'defaultphoto', persist: false }
 	]

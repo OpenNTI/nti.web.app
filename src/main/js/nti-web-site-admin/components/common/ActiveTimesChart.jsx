@@ -2,21 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {DateTime} from 'nti-web-commons';
 
+import {determineBlockColor} from './utils';
+
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const SHORT_WEEKDAYS = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
-
-const COLORS = [
-	'#efefef',
-	'#efefef',
-	'#9ecae1',
-	'#9ecae1',
-	'#6baed6',
-	'#6baed6',
-	'#3182bd',
-	'#3182bd',
-	'#08306b',
-	'#08306b'
-];
 
 function shiftForTZOffset (daysMap, offset) {
 	/*
@@ -117,15 +106,6 @@ function processData (daysMap) {
 		}
 	};
 	return data;
-}
-
-function determineBlockColor (value, minValue = 0, maxValue) {
-	if ( value === 0 || maxValue === 0 ) {
-		return COLORS[0];
-	}
-	const normalized = (value - minValue) / (maxValue - minValue);
-	const bucket = (parseFloat(normalized.toFixed(1)) * 10);
-	return COLORS[Math.min(bucket, COLORS.length - 1)];
 }
 
 function timeString (hour) {

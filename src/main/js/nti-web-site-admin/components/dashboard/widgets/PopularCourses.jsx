@@ -8,7 +8,8 @@ import cx from 'classnames';
 const LABELS = {
 	title: 'Popular Courses',
 	name: 'Course Rank',
-	value: 'Students'
+	value: 'Students',
+	noItems: 'No courses found'
 };
 
 const t = scoped('nti-web-site-admins.components.dashboard.widgets.popularcourses', LABELS);
@@ -92,9 +93,9 @@ export default class PopularCourses extends React.Component {
 			const collection = service.getCollection('Courses', 'Catalog');
 			const popularLink = collection && collection.Links && collection.Links.filter(x => x.rel === 'Popular')[0];
 
-			const getBatchLink = link ? link : popularLink.href + '?batchSize=' + PAGE_SIZE + '&batchStart=' + batchStart;
-
 			if(popularLink) {
+				const getBatchLink = link ? link : popularLink.href + '?batchSize=' + PAGE_SIZE + '&batchStart=' + batchStart;
+
 				service.get(getBatchLink).then((results) => {
 					this.setState({
 						loading: false,
@@ -111,6 +112,18 @@ export default class PopularCourses extends React.Component {
 							};
 						})
 					});
+				}).catch(resp => {
+					this.setState({
+						loading: false,
+						items: []
+					});
+				});
+			}
+			else {
+				// no popular link, set items to empty
+				this.setState({
+					loading: false,
+					items: []
 				});
 			}
 		});
@@ -175,6 +188,9 @@ export default class PopularCourses extends React.Component {
 
 		if(loading) {
 			return <Loading.Mask/>;
+		}
+		else if(items && items.length === 0) {
+			return <div className="no-items">{t('noItems')}</div>;
 		}
 
 		return (
