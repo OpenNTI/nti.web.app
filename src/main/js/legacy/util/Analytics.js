@@ -75,7 +75,6 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	},
 
 
-
 	startEvent (resourceId, data) {
 		if (typeof data === 'string') {
 			data = {
@@ -123,6 +122,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			Event.start(resourceId, data);
 		}
 	},
+
 
 	stopEvent (resourceId, type, data) {
 		const Event = this.manager[type];
