@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 							title.set('sample', !p.get('Activated'));
 						}
 						else {
-							console.warn('This purchasable item is not in the library:', itemId);
+							console.debug('This purchasable item is not in the library:', itemId);
 						}
 					});
 				});
