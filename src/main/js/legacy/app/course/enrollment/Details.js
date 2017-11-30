@@ -118,9 +118,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
 
-		AnalyticsUtil.getResourceTimer(this.course.getId(), {
-			type: 'course-catalog-viewed',
-			RootContextId: this.course.getId()
+		AnalyticsUtil.startEvent(this.course.getId(), {
+			type: 'CourseCatalogView',
+			RootContextID: this.course.getId()
 		});
 
 		this.on('beforedeactivate', 'onBeforeDeactivate');
@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	onDestroy: function () {
 		this.callParent(arguments);
 
-		AnalyticsUtil.stopResourceTimer(this.course.getId(), 'course-catalog-viewed');
+		AnalyticsUtil.stopEvent(this.course.getId(), 'CourseCatalogView');
 	},
 
 	onBeforeDeactivate: function () {

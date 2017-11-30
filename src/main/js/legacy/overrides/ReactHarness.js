@@ -5,6 +5,7 @@ const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService} = require('nti-web-client');
 
+const AnalyticsUtil = require('legacy/util/Analytics');
 const User = require('legacy/model/User');
 const ContextStore = require('legacy/app/context/StateStore');
 
@@ -38,13 +39,15 @@ const Bridge = createReactClass({
 		routerLinkComponent: PropTypes.func,
 		router: PropTypes.object,
 		course: PropTypes.object,
-		stickyTopOffset: PropTypes.number
+		stickyTopOffset: PropTypes.number,
+		analyticsManager: PropTypes.object,
 	},
 
 	getChildContext () {
 		const bundle = this.props.bundle || ContextStore.getInstance().getRootBundle();
 
 		return {
+			analyticsManager: AnalyticsUtil.getManager(),
 			defaultEnvironment: {
 				getPath: () => '',
 				setPath: () => {}

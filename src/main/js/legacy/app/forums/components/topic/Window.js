@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		function stopTimer () {
 			if (me.currentAnalyticId && me.hasCurrentTimer) {
 				delete me.hasCurrentTimer;
-				AnalyticsUtil.stopResourceTimer(me.currentAnalyticId, 'discussion-viewed');
+				AnalyticsUtil.stopEvent(me.currentAnalyticId, 'TopicView');
 			}
 		}
 
@@ -154,10 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			if (!me.hasCurrentTimer) {
 				me.hasCurrentTimer = true;
 
-				AnalyticsUtil.getResourceTimer(me.currentAnalyticId, {
-					type: 'discussion-viewed',
-					'topic_id': me.currentAnalyticId
-				});
+				AnalyticsUtil.startEvent(me.currentAnalyticId, 'TopicView');
 			}
 		}
 

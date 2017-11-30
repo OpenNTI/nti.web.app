@@ -68,11 +68,11 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 			height: this.timelineHeight
 		});
 
-		AnalyticsUtil.getResourceTimer(this.record.get('NTIID'), {type: 'resource-viewed'});
+		AnalyticsUtil.startEvent(this.record.get('NTIID'), 'ResourceView');
 	},
 
 	handleClose: function () {
-		AnalyticsUtil.stopResourceTimer(this.record.get('NTIID'), 'resource-viewed');
+		AnalyticsUtil.stopEvent(this.record.get('NTIID'), 'ResourceView');
 
 		this.doClose();
 	},

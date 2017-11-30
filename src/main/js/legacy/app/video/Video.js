@@ -458,11 +458,11 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		//or we don't have a resource id don't send any events
 		if (!state || this.doNotCaptureAnalytics || !id) { return; }
 
-		AnalyticsUtil.addResource(id, {
-			type: 'video-speed-change',
-			OldPlaySpeed: oldSpeed,
-			NewPlaySpeed: newSpeed,
-			VideoTime: time
+		AnalyticsUtil.sendEvent(id, {
+			type: 'VideoSpeedChange',
+			oldPlaySpeed: oldSpeed,
+			newPlaySpeed: newSpeed,
+			videoTime: time
 		});
 	},
 
@@ -483,42 +483,40 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		//stop the watch event
 		if (this.hasWatchEvent && (diff > threshold || diff < 0)) {
 			delete this.hasWatchEvent;
-			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
-				'video_end_time': this.lasttime,
-				MaxDuration: state.duration / 1000
+			AnalyticsUtil.stopEvent(id, 'VideoWatch', {
+				videoEndTime: this.lasttime,
+				duration: state.duration / 1000
 			});
 
 			//send a seek event saying the skipped over this part of the video
 			//if the player is still ready and not reset
 			if (state.state !== this.self.states.UNSTARTED) {
-				AnalyticsUtil.getResourceTimer(id, {
-					type: 'video-skip',
-					'with_transcript': hasTranscript,
-					'video_start_time': this.lasttime,
-					'video_end_time': time
+				AnalyticsUtil.sendEvent(id, {
+					type: 'VideoSkip',
+					withTranscript: hasTranscript,
+					videoStartTime: this.lasttime,
+					videoEndTime: time
 				});
-
-				AnalyticsUtil.stopResourceTimer(id, 'video-skip');
 			}
 		}
 
 		// If we were playing and just paused the video, end the previous watch event.
 		if (this.hasWatchEvent && (state.state === this.self.states.PAUSED)) {
 			delete this.hasWatchEvent;
-			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
-				'video_end_time': this.lasttime,
-				MaxDuration: state.duration / 1000
+			AnalyticsUtil.stopEvent(id, 'VideoWatch', {
+				videoEndTime: this.lasttime,
+				duration: state.duration / 1000
 			});
 		}
 
 		//Not an else if so a new timer will start when the other one ends
 		if (!this.hasWatchEvent && ((state.state === this.self.states.PLAYING) || (state.state === this.self.states.BUFFERING))) {
-			AnalyticsUtil.getResourceTimer(id, {
-				type: 'video-watch',
-				'with_transcript': hasTranscript,
-				'video_start_time': time,
-				MaxDuration: state.duration / 1000,
-				PlaySpeed: state.speed
+			AnalyticsUtil.startEvent(id, {
+				type: 'VideoWatch',
+				withTranscript: hasTranscript,
+				videoStartTime: time,
+				duration: state.duration / 1000,
+				playSpeed: state.speed
 			});
 			this.hasWatchEvent = true;
 
@@ -534,8 +532,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 		if (this.hasWatchEvent && !this.doNotCaptureAnalytics) {
 			current = this.playlist[this.playlistIndex];
 			delete this.hasWatchEvent;
-			AnalyticsUtil.stopResourceTimer(current.getId(), 'video-watch', {
-				'video_end_time': state && state.time
+			AnalyticsUtil.stopEvent(current.getId(), 'VideoWatch', {
+				videoEndTime: state && state.time
 			});
 		}
 

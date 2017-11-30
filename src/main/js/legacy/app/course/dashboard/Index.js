@@ -1,7 +1,6 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
-const AnalyticsUtil = require('legacy/util/Analytics');
 const {getString} = require('legacy/util/Localization');
 const TimeUtils = require('legacy/util/Time');
 const Scrolling = require('legacy/util/Scrolling');
@@ -71,14 +70,6 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		me.emptiesToRemove = [];
 
 		me.onScroll = me.onScroll.bind(me);
-
-		me.on({
-			'visibility-changed': function (visible) {
-				if (visible) {
-					AnalyticsUtil.addContext('dashboard', true);
-				}
-			}
-		});
 	},
 
 	afterRender: function () {
