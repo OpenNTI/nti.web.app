@@ -131,7 +131,21 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 	getProps () {
 		const {initialConfig: config} = this;
-		return {...config, component: void 0, cls: void 0, renderTo: void 0, xtype: void 0, baseroute: void 0};
+		const props = {...config};
+
+		const blacklist = [
+			'component',
+			'cls',
+			'renderTo',
+			'xtype',
+			'baseroute',
+		];
+
+		for ( let prop of blacklist ) {
+			delete props[prop];
+		}
+
+		return props;
 	},
 
 
