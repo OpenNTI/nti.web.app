@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	},
 
 
-	sentEvent (resourceId, data) {
+	sendEvent (resourceId, data) {
 		this.startEvent(resourceId, data);
 	},
 
