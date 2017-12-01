@@ -1,0 +1,95 @@
+@import "~nti-style-common/all.scss";
+
+.recent-sessions {
+	width: 504px;
+	height: 369px;
+
+	.title {
+		margin-top: 10px;
+	}
+
+	.items-container {
+		display: flex;
+
+		.overall-stats {
+			margin: 0 auto;
+		}
+
+		.items {
+			width: 100%;
+
+			.item {
+				.info {
+					padding-top: 0;
+
+					.main-info {
+						display: flex;
+
+						.duration {
+							margin: 2px 0 0 16px;
+						}
+					}
+				}
+
+				.item-image {
+					border-radius: 30px;
+					min-width: 40px;
+				}
+
+				.start-time, .duration {
+					font-size: 12px;
+					color: #b8b8b8;
+				}
+
+				.value {
+					right: 16px;
+
+					.app-icon {
+						.screen {
+							width: 22px;
+							height: 18px;
+							border-radius: 4px;
+							border: solid 2px #ccc;
+							text-align: center;
+						}
+
+						.base {
+							width: 22px;
+							height: 8px;
+							background-color: #ccc;
+							border-radius: 2px;
+							text-align: center;
+						}
+					}
+
+					.mobile-icon {
+						margin-right: 2px;
+
+						.top {
+							width: 18px;
+							height: 4px;
+							border-radius: 4px 4px 0 0;
+							background-color: #ccc;
+							text-align: center;
+						}
+
+						.screen {
+							width: 18px;
+							height: 24px;
+							border: solid 1px #ccc;
+							text-align: center;
+						}
+
+						.base {
+							width: 18px;
+							height: 6px;
+							background-color: #ccc;
+							border-radius: 0 0 4px 4px;
+							text-align: center;
+						}
+					}
+				}
+			}
+		}
+	}
+}
