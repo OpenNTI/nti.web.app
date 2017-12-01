@@ -360,12 +360,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 			data = {};
 
 		if (questionSet) {
-			data.type = 'assessment-viewed';
-			data['resource_id'] = questionSet.getId();
-			data.ContentId = this.pageInfo.getId();
+			data = {
+				type: 'AssessmentView',
+				resourceId: questionSet.getId(),
+				ContentID: this.pageInfo.getId(),
+			};
 		} else {
-			data.type = 'resource-viewed';
-			data['resource_id'] = this.pageInfo.getId();
+			data = {
+				type: 'ResourceView',
+				resourceId: this.pageInfo.getId()
+			};
 		}
 
 		return data;
@@ -374,10 +378,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 	beginViewedAnalytics: function () {
 		var data = this.getAnalyticData();
 		//if we don't have a resource id for some reason, we can't send a valid event
-		if (!data['resource_id']) { return; }
+		if (!data.resourceId) { return; }
 
 		//if we are trying to start an event for the one we already have going
-		if (this.__lastAnalyticEvent && this.__lastAnalyticEvent['resource_id'] === data['resource_id']) {
+		if (this.__lastAnalyticEvent && this.__lastAnalyticEvent.resourceId === data.resourceId) {
 			return;
 		}
 
@@ -387,7 +391,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		this.__lastAnalyticEvent = data;
 
-		AnalyticsUtil.getResourceTimer(data['resource_id'], data);
+		AnalyticsUtil.startEvent(data.resourceId, data);
 	},
 
 	endViewedAnalytics: function () {
@@ -395,6 +399,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		if (!data) { return; }
 
-		AnalyticsUtil.stopResourceTimer(data['resource_id'], data.type, data);
+		AnalyticsUtil.stopEvent(data.resourceId, data.type, data);
 	}
 });

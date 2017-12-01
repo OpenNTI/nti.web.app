@@ -72,8 +72,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			me.collectionEl.mask('Deleting...');
 			return courseInstance.delete('delete').then(() => {
 				return true;
-			}).catch(() => {
-				alert('You don\'t have permission to delete this course');
+			}).catch((resp) => {
+				if(resp && resp.message) {
+					alert(resp.message);
+				}
+				else {
+					alert('You don\'t have permission to delete this course');
+				}
 				return false;
 			});
 		}).then((success) => {

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
 
 import LabeledValue from '../../../common/LabeledValue';
+import ActiveDays from '../../../common/ActiveDays';
+
+import ActiveTimes from './ActiveTimes';
 
 const DEFAULT_TEXT = {
 	totalEnrollments: 'Total Enrollments'
@@ -15,8 +18,16 @@ SiteAdminCourseOverview.propTypes = {
 };
 export default function SiteAdminCourseOverview ({course}) {
 	return (
-		<LabeledValue label={t('totalEnrollments')}>
-			{course.enrolledTotalCount || 0}
-		</LabeledValue>
+		<div className="site-admin-course-overview">
+			<LabeledValue label={t('totalEnrollments')}>
+				{course.enrolledTotalCount || 0}
+			</LabeledValue>
+			<div className="active-days">
+				<ActiveDays entity={course}/>
+			</div>
+			<div className="active-times">
+				<ActiveTimes course={course}/>
+			</div>
+		</div>
 	);
 }

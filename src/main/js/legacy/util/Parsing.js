@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 		var o = this.findModel(item);
 		if (!o) {
-			console.error('no model found for ', item);
+			console.debug('no model found for ', item);
 			return;
 		}
 

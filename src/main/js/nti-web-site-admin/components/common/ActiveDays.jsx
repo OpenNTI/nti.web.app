@@ -5,7 +5,7 @@ import {DateTime, Loading, Flyout} from 'nti-web-commons';
 import {scoped} from 'nti-lib-locale';
 import cx from 'classnames';
 
-import {determineBlockColor} from '../../../common/utils';
+import {determineBlockColor} from './utils';
 
 const ANALYTICS_LINK = 'analytics';
 
@@ -20,7 +20,7 @@ const SHORT_WEEKDAYS = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
 const SHORT_MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 const INCREMENT = 24 * 60 * 60 * 1000;
 
-const t = scoped('nti-web-site-admins.components.users.user.overview.recentsessions', LABELS);
+const t = scoped('nti-web-site-admins.components.common.activedays', LABELS);
 
 class Day extends React.Component {
 	static propTypes = {
@@ -76,7 +76,7 @@ class Day extends React.Component {
 
 export default class ActiveDays extends React.Component {
 	static propTypes = {
-		user: PropTypes.object.isRequired
+		entity: PropTypes.object.isRequired
 	}
 
 	constructor (props) {
@@ -178,14 +178,14 @@ export default class ActiveDays extends React.Component {
 	}
 
 	async loadData () {
-		const { user } = this.props;
+		const { entity } = this.props;
 
 		const now = new Date();
 		const earliestDate = new Date('1/1/' + now.getFullYear());
 		const params = '?notBefore=' + Math.floor(earliestDate.getTime() / 1000);
 
 		const service = await getService();
-		const analyticsLink = user.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
+		const analyticsLink = entity.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
 		const results = await service.get(analyticsLink.href) || {};
 		const activityByDateSummary = (results.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
 		const summaryData = await service.get(activityByDateSummary.href + params) || {};
@@ -193,17 +193,17 @@ export default class ActiveDays extends React.Component {
 		this.processData(summaryData || {});
 	}
 
-	renderDay = (day) => {
+	renderDay = (day, i) => {
 		const { min, max } = this.state;
 
-		return (<Day day={day} min={min} max={max}/>);
+		return (<Day key={day.date || i} day={day} min={min} max={max}/>);
 	}
 
 	renderDayRow = (weekday, i) => {
 		const { data } = this.state;
 
 		return (
-			<div className="activity-day-row">
+			<div key={SHORT_WEEKDAYS[i]} className="activity-day-row">
 				<div className="weekday">
 					{i % 2 === 1 ? SHORT_WEEKDAYS[i] : ''}
 				</div>
@@ -234,7 +234,7 @@ export default class ActiveDays extends React.Component {
 
 	render () {
 		return (
-			<div className="user-active-days">
+			<div className="site-admin-active-days">
 				{this.renderHeader()}
 				{this.renderContent()}
 			</div>

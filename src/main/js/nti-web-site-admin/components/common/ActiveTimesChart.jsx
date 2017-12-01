@@ -156,9 +156,9 @@ export default class ActiveTimesChart extends React.Component {
 
 	renderRow = (row, i) => {
 		return (
-			<div className="active-blocks">
+			<div key={i + '-' + SHORT_WEEKDAYS[i]} className="active-blocks">
 				{row.map(this.renderBlock)}
-				<div key={i} className="time-label">{timeString(i * 2)}</div>
+				<div className="time-label">{timeString(i * 2)}</div>
 			</div>
 		);
 	}

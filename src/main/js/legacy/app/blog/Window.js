@@ -123,17 +123,14 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 			if (!me.hasCurrentTimer) {
 				me.hasCurrentTimer = true;
 
-				AnalyticsUtil.getResourceTimer(me.currentAnalyticId, {
-					type: 'thought-viewed',
-					'topic_id': me.currentAnalyticId
-				});
+				AnalyticsUtil.startEvent(me.currentAnalyticId, 'ThoughtView');
 			}
 		}
 
 		function stopTimer () {
 			if (me.currentAnalyticId && me.hasCurrentTimer) {
 				delete me.hasCurrentTimer;
-				AnalyticsUtil.stopResourceTimer(me.currentAnalyticId, 'thought-viewed');
+				AnalyticsUtil.stopEvent(me.currentAnalyticId, 'ThoughtView');
 			}
 		}
 

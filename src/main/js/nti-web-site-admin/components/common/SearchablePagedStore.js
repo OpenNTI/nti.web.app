@@ -16,7 +16,8 @@ export default class SearchablePagedStore extends BasicStore {
 
 		return {
 			items: batch.Items,
-			loadNext
+			loadNext,
+			total: batch.Total
 		};
 	}
 
@@ -42,6 +43,10 @@ export default class SearchablePagedStore extends BasicStore {
 		return this._searchTerm;
 	}
 
+	get total () {
+		return this._total;
+	}
+
 	get items () {
 		return this._items;
 	}
@@ -58,7 +63,6 @@ export default class SearchablePagedStore extends BasicStore {
 		return !!this._loadNextPage;
 	}
 
-
 	async load () {
 		this._loading = true;
 		this.emitChange('loading');
@@ -67,11 +71,12 @@ export default class SearchablePagedStore extends BasicStore {
 		this._loadNextPage = null;
 
 		try {
-			const {items, loadNext} = await (this.searchTerm ? this.loadSearchTerm(this.searchTerm) : this.loadInitial());
+			const {items, total, loadNext} = await (this.searchTerm ? this.loadSearchTerm(this.searchTerm) : this.loadInitial());
 
 			this._items = items;
 			this._loadNextPage = loadNext;
-			this.emitChange('items', 'loadNextPage');
+			this._total = total;
+			this.emitChange('items', 'loadNextPage', 'total');
 		} catch (e) {
 			this._error = e;
 			this.emitChange('error');

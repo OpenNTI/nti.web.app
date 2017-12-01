@@ -62,7 +62,7 @@ export default class RecentSessions extends React.Component {
 		}
 
 		return (
-			<div className="item">
+			<div key={item.SessionStartTime} className="item">
 				<div className="time">{DateTime.format(itemDate, 'lll')}</div>
 				<div className="day">{dayLabel}</div>
 			</div>

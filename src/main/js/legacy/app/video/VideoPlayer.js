@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
+//TODO: Use the Component named export of nti-web-video to get analytics by default...
 const {default: Video, UNSTARTED, ENDED, PLAYING, PAUSED, BUFFERING, CUED} = require('nti-web-video');
 
 const AnalyticsUtil = require('../../util/Analytics');
@@ -9,6 +10,7 @@ require('legacy/overrides/ReactHarness');
 
 const TIME_CHANGE_THRESHOLD = 5;
 
+//TODO: throw this away and use the analytics from the video player
 function getAnalyticMethods (doNotAllow, hasTranscript) {
 	let hasWatch = false;
 	let lastTime;
@@ -19,12 +21,12 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 
 			const {video, time, duration, speed} = state;
 
-			AnalyticsUtil.getResourceTimer(video, {
-				type: 'video-watch',
-				'with_transcript': hasTranscript,
-				'video_start_time': time,
-				MaxDuration: duration,
-				PlaySpeed: speed
+			AnalyticsUtil.startEvent(video, {
+				type: 'VideoWatch',
+				withTranscript: hasTranscript,
+				videoStartTime: time,
+				duration: duration,
+				playSpeed: speed
 			});
 
 			hasWatch = true;
@@ -36,9 +38,9 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 
 			const {video, time, duration} = state;
 
-			AnalyticsUtil.stopResourceTimer(video, 'video-watch', {
-				'video_end_time': time,
-				MaxDuration: duration
+			AnalyticsUtil.stopEvent(video, 'VideoWatch', {
+				videoEndTime: time,
+				duration: duration
 			});
 
 			hasWatch = false;
@@ -57,14 +59,12 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 				this.start(state);
 
 				if (playerState !== UNSTARTED) {
-					AnalyticsUtil.getResourceTimer(video, {
-						type: 'video-skip',
-						'with_transcript': hasTranscript,
-						'video_start_time': lastTime,
-						'video_end_time': time
+					AnalyticsUtil.sendEvent(video, {
+						type: 'VideoSkip',
+						withTranscript: hasTranscript,
+						videoStartTime: lastTime,
+						videoEndTime: time
 					});
-
-					AnalyticsUtil.stopResourceTimer(video, 'video-skip');
 				}
 			}
 
@@ -76,11 +76,11 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 
 			const {video, time} = state;
 
-			AnalyticsUtil.addResource(video, {
-				type: 'video-speed-change',
-				OldPlaySpeed: oldRate,
-				NewPlaySpeed: newRate,
-				VideoTime: time
+			AnalyticsUtil.sendEvent(video, {
+				type: 'VideoSpeedChange',
+				oldPlaySpeed: oldRate,
+				newPlaySpeed: newRate,
+				videoTime: time
 			});
 		}
 	};

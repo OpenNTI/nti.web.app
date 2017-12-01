@@ -7,22 +7,39 @@
 		}
 	}
 
-	.create-course-button {
-		background-color: #3fb3f6;
-		color: white;
-		width: 150px;
-		text-align: center;
-		padding: 10px;
-		border-radius: 3px;
-		font-size: 14px;
-		line-height: 22px;
-		cursor: pointer;
-		margin: 20px;
-	}
+	.course-list {
+		.header {
+			height: 60px;
+			background-color: #fbfbfb;
+			padding: 10px;
+			box-shadow: 0 1px 0 0 #e2e2e2;
+			display: flex;
 
-	.course-create-message {
-		text-align: center;
-		font-size: 20px;
-		color: #5c7;
+			.total {
+				font-size: 30px;
+				font-weight: 100;
+			}
+		}
+
+		.create-course-button {
+			background-color: #3fb3f6;
+			color: white;
+			width: 150px;
+			text-align: center;
+			padding: 10px;
+			border-radius: 3px;
+			font-size: 14px;
+			line-height: 22px;
+			cursor: pointer;
+			margin: 0;
+			position: absolute;
+			right: 0;
+		}
+
+		.course-create-message {
+			text-align: center;
+			font-size: 20px;
+			color: #5c7;
+		}
 	}
 }
