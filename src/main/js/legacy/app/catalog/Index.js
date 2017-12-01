@@ -64,10 +64,18 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				baseroute: baseroute
 			});
 		}
+		this.setTitle(this.getTitle(route.path));
 
 		this.setUpNavigation(baseroute, route.path);
 	},
 
+	getTitle (title) {
+		if(title === '/'){
+			return 'Catalog';
+		}
+		const result = title.substr(1);
+		return result[0].toUpperCase() + result.substr(1);
+	},
 
 	setUpNavigation (baseroute, path) {
 		const navigation = this.getNavigation();
