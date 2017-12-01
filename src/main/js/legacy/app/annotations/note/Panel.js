@@ -1058,10 +1058,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 	startResourceTimer: function () {
 		if (!this.triggerAnalyticsViews || !this.record) { return; }
 
-		AnalyticsUtil.getResourceTimer(this.record.getId(), {
-			type: 'note-viewed',
-			'note_id': this.record.getId()
-		});
+		AnalyticsUtil.startEvent(this.record.getId(), 'NoteView');
 	},
 
 	onDestroy: function () {
@@ -1071,7 +1068,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 
 		if (this.triggerAnalyticsViews) {
-			AnalyticsUtil.stopResourceTimer(this.record.getId(), 'note-viewed');
+			AnalyticsUtil.stopEvent(this.record.getId(), 'NoteView');
 		}
 		this.callParent(arguments);
 	},

@@ -6,7 +6,8 @@ import { Editor } from 'nti-web-course';
 export default class AdminToolbar extends React.Component {
 	static propTypes = {
 		handleNav: PropTypes.func.isRequired,
-		onCourseCreated: PropTypes.func
+		onCourseCreated: PropTypes.func,
+		canCreate: PropTypes.bool
 	}
 
 	attachFlyoutRef = x => this.flyout = x
@@ -55,6 +56,12 @@ export default class AdminToolbar extends React.Component {
 	// }
 
 	renderCreateButton () {
+		const { canCreate } = this.props;
+
+		if(!canCreate) {
+			return null;
+		}
+
 		return (<Flyout.Triggered
 			className="admin-create-options"
 			trigger={this.renderCreateTrigger()}

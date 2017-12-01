@@ -203,9 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (this.bypassEvent) {
-			AnalyticsUtil.getResourceTimer(this.ntiid, {
-				type: 'resource-viewed'
-			});
+			AnalyticsUtil.startEvent(this.ntiid, 'ResourceView');//??? where is the close?
 
 			this.setProgress();
 		}

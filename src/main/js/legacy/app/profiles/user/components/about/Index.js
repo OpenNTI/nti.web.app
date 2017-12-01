@@ -100,10 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
-			AnalyticsUtil.getResourceTimer(id, {
-				type: 'profile-about-viewed',
-				ProfileEntity: id
-			});
+			AnalyticsUtil.startEvent(id, 'ProfileAboutView');
 
 			this.hasCurrentTimer = true;
 		}
@@ -113,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
-			AnalyticsUtil.stopResourceTimer(id, 'profile-about-viewed');
+			AnalyticsUtil.stopEvent(id, 'ProfileAboutView');
 			delete this.hasCurrentTimer;
 		}
 	},

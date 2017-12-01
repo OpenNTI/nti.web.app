@@ -1,8 +1,10 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
 import {searchable, contextual} from 'nti-web-search';
 import {LinkTo} from 'nti-web-routing';
+import {StickyElement, StickyContainer} from 'nti-web-commons';
+import {Editor} from 'nti-web-course';
 
 import SearchablePagedView from '../../common/SearchablePagedView';
 
@@ -22,6 +24,7 @@ const t = scoped('siteadmin.components.course.view', DEFAULT_TEXT);
 const store = new Store();
 const propMap = {
 	items: 'items',
+	total: 'total',
 	searchTerm: 'searchTerm',
 	loading: 'loading',
 	hasNextPage: 'hasNextPage',
@@ -32,6 +35,10 @@ const propMap = {
 @contextual(t('courses'))
 @searchable(store, propMap)
 export default class View extends React.Component {
+	static propTypes = {
+		total: PropTypes.number,
+		loading: PropTypes.bool
+	}
 
 	componentDidMount () {
 		store.load();
@@ -42,17 +49,40 @@ export default class View extends React.Component {
 		store.loadNextPage();
 	}
 
+	renderTotal () {
+		if(this.props.loading) {
+			return null;
+		}
+
+		return <div className="total">Total: {this.props.total}</div>;
+	}
+
+	renderHeader () {
+		return (
+			<div className="header">
+				<div className="info">
+					{this.renderTotal()}
+				</div>
+				{this.renderCreateButton()}
+			</div>
+		);
+	}
 
 	render () {
 		return (
 			<div className="site-admin-course">
-				<SearchablePagedView
-					{...this.props}
-					className="site-admin-course-list"
-					renderItem={this.renderItem}
-					loadNextPage={this.onLoadNextPage}
-					getString={t}
-				/>
+				<StickyContainer className="course-list">
+					<StickyElement>
+						{this.renderHeader()}
+					</StickyElement>
+					<SearchablePagedView
+						{...this.props}
+						className="site-admin-course-list"
+						renderItem={this.renderItem}
+						loadNextPage={this.onLoadNextPage}
+						getString={t}
+					/>
+				</StickyContainer>
 			</div>
 		);
 	}
@@ -70,19 +100,19 @@ export default class View extends React.Component {
 
 
 
-	// launch = () => {
-	// 	// Editor.createCourse()
-	// 	// 	.then(() => {
-	// 	// 		// course created
-	// 	// 		this.setState({createInProgress: true});
+	launch = () => {
+		Editor.createCourse()
+			.then(() => {
+				// course created
+				this.setState({createInProgress: true});
 
-	// 	// 		setTimeout(() => { this.setState({createInProgress: false}); }, 1500);
-	// 	// 	});
-	// };
+				setTimeout(() => { this.setState({createInProgress: false}); }, 1500);
+			});
+	};
 
-	// renderCreateButton () {
-	// 	return (<div className="create-course-button" onClick={this.launch}>Create New Course</div>);
-	// }
+	renderCreateButton () {
+		return (<div className="create-course-button" onClick={this.launch}>Create New Course</div>);
+	}
 
 	// renderCreateMessage () {
 	// 	return (<div className="course-create-message">{t('createSuccess')}</div>);

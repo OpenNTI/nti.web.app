@@ -14,7 +14,7 @@ export default Router.for([
 	Route({path: '/reports', component: Reports}),
 	Route({path: '/advanced', component: Advanced}),
 	Route({path: '/', component: Dashboard})
-]);
+], null, 'Site Administration');
 
 
 // import React from 'react';
