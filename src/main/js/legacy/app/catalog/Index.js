@@ -1,8 +1,8 @@
 const Ext = require('extjs');
+const CatalogView = require('nti-web-catalog');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
-const CatalogView = require('nti-web-catalog');
 
 require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
@@ -131,4 +131,3 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		this.pushRoute(title, route, subroute);
 	}
 });
-
