@@ -116,10 +116,14 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 		this.VIEWED_MAP[resourceId] = true;
 
-		if (Event.send) {
-			Event.send(resourceId, data);
-		} else {
-			Event.start(resourceId, data);
+		try {
+			if (Event.send) {
+				Event.send(resourceId, data);
+			} else {
+				Event.start(resourceId, data);
+			}
+		} catch (e) {
+			console.warn(e.stack || e.message || e);
 		}
 	},
 
@@ -135,7 +139,11 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			return;
 		}
 
-		Event.stop(resourceId, data);
+		try {
+			Event.stop(resourceId, data);
+		} catch (e) {
+			console.warn(e.stack || e.message || e);
+		}
 	},
 
 
