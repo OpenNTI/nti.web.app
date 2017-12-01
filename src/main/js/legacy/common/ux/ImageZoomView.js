@@ -9,9 +9,6 @@ const lazyResolve = {
 	}
 };
 
-require('./SlideDeck');
-
-
 
 module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 	alias: 'widget.image-zoom-view',
