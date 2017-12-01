@@ -526,8 +526,14 @@
 	.course-inline-editor {
 		width: 642px;
 
-		.course-info-editor-section .contents .columned .content-column, .edit-course-info.indented {
-			margin-left: 320px;
+		.course-info-editor-section .contents .columned {
+			.field-info {
+				width: 300px;
+			}
+
+			.enrollment {
+				margin-left: 0;
+			}
 		}
 	}
 
