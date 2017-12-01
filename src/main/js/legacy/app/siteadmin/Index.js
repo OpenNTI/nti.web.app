@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				xtype: 'react',
 				component: SiteAdminView,
 				baseroute: baseroute,
-				setTitle: (title) => {debugger; this.setTitle(title); }
+				setTitle: (title) => {this.setTitle(title); }
 			});
 		}
 
