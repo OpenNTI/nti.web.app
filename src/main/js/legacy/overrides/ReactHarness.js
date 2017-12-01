@@ -25,7 +25,8 @@ const Bridge = createReactClass({
 	propTypes: {
 		bundle: PropTypes.object,
 		baseroute: PropTypes.string,
-		children: PropTypes.any
+		children: PropTypes.any,
+		setRouteViewTitle: PropTypes.func,
 	},
 
 	getInitialState () {
@@ -41,6 +42,7 @@ const Bridge = createReactClass({
 		course: PropTypes.object,
 		stickyTopOffset: PropTypes.number,
 		analyticsManager: PropTypes.object,
+		setRouteViewTitle: PropTypes.func
 	},
 
 	getChildContext () {
@@ -58,6 +60,7 @@ const Bridge = createReactClass({
 				baseroute: this.state.baseroute,
 				getRouteFor: getRouteFor
 			},
+			setRouteViewTitle: this.props.setRouteViewTitle,
 			course: bundle && {
 				getAssignment (ntiid) {
 					return getService()
@@ -125,6 +128,8 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 		Ext.getCmp('viewport').on('msg-bar-opened', () => this.onMsgBarUpdated());
 		Ext.getCmp('viewport').on('msg-bar-closed', () => this.onMsgBarUpdated());
+
+		this.setRouteViewTitle = this.setRouteViewTitle.bind(this);
 	},
 
 
@@ -197,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 		ReactDOM.render(
-			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, ref: x => this.bridgeInstance = x},
+			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, setRouteViewTitle: this.setRouteViewTitle, ref: x => this.bridgeInstance = x},
 				//The ref will be called on mount with the instance of the component.
 				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
 				//mounted. Calling doRender is the primary way to update the component with new props.
@@ -270,5 +275,12 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 		console.warn('Use setProps(), not setState().  The state-manipulations are internal to the react component. Props are external.');
 		this.onceRendered.then(() =>
 			this.componentInstance.replaceState(state));
+	},
+
+
+	setRouteViewTitle (title) {
+		if (this.setTitle) {
+			this.setTitle(title);
+		}
 	}
 });
