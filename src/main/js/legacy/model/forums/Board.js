@@ -60,55 +60,6 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 		return this.get('title');
 	},
 
-	findBundle: function () {
-		return ContentManagementUtils.findBundleBy(bundle => {
-			const links = bundle.get('Links'),
-				link = links && links.getRelLink('DiscussionBoard');
-
-			return link && link.ntiid === this.getId();
-		})
-			.catch(() => this.findCourse());
-	},
-
-	findCourse: function () {
-		var me = this,
-			id = me.getId();
-
-		if (me.course || me.course === false) {
-			return Promise.resolve(me.course);
-		}
-
-		return CourseWareUtils.getCoursesByPriority(function (course) {
-			var instance = course.get('CourseInstance'),
-				section = instance.get('Discussions'),
-				parent = instance.get('ParentDiscussions');
-
-			if (section && section.getId() === id) {
-				return 2;
-			}
-
-			if (parent && parent.getId() === id) {
-				return 1;
-			}
-
-			return 0;
-		}).then(function (courses) {
-			var course = courses.last();
-
-			if (!course) {
-				return Promise.reject('No Course found');
-			}
-
-			course = course.get('CourseInstance');
-			me.course = course;
-			return course;
-		}).catch(function (reason) {
-			console.error(reason);
-			me.course = false;
-			return false;
-		});
-	},
-
 	hasForumList: function () { return true; },
 
 	/**
