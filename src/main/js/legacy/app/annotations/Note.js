@@ -1,7 +1,5 @@
 const Ext = require('extjs');
 
-const {isFeature} = require('legacy/util/Globals');
-
 require('./Highlight');
 
 
@@ -15,11 +13,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 	constructor: function (config) {
 		this.callParent(arguments);
 		this.hasSpecificRange = this.getRecordField('style') !== 'suppressed';
-
-		var r = this.getRecord();
-		this.privateNote = isFeature('notepad')
-							&& r.get('sharedWith').length === 0
-							&& Ext.isEmpty(r.get('title'));
 	},
 
 
