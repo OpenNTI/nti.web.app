@@ -13,4 +13,4 @@ overrideConfigAndForceCurrentHost();
 //once the all the app is react... this can just be a child of the root component... but for now, we'll mount it to a dummy div.
 ReactDOM.render(
 	<ConflictResolutionHandler/>,
-	document.body.appendChild(document.createElement('div')));
+	document.createElement('div'));
