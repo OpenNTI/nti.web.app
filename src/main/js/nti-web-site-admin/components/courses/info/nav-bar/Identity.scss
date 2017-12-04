@@ -13,5 +13,12 @@
 			text-transform: uppercase;
 			color: $tertiary-grey;
 		}
+
+		.title {
+			font: normal 700 1rem/1.1 $header-font-family;
+			color: $secondary-grey;
+			text-transform: uppercase;
+			@include limit-lines($line-height: 1.1);
+		}
 	}
 }
