@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 	},
 
 	maybeShowAdd: function () {
-		if (this.CourseStore.hasAllCoursesLink()) {
+		if (Service.getCollection('Courses', 'Catalog') && this.CourseStore.hasAllCoursesLink()) {
 			this.showAdd();
 		} else {
 			this.hideAdd();
