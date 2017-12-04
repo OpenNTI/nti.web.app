@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		const route = path && path.replace(/^\/?app\/?/, '');
 
 		if (route) {
-			this.pushRootRoute({}, '', route);
+			this.pushRootRoute('', route, {});
 			e.stopEvent();
 		}
 	},
