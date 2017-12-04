@@ -94,10 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Curren
 			return;
 		}
 
-		// don't show Add link if Courses collection doesn't exist
-		if(Service.getCollection('Courses', 'Catalog')) {
-			this.addEl.removeCls('hidden');
-		}
+		this.addEl.removeCls('hidden');
 	},
 
 
