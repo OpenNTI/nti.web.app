@@ -1,3 +1,5 @@
+const path = require('path');
+
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
 
@@ -26,30 +28,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 	 * @returns {void}
 	 */
 	dropCourse: function (course, callback) {
-		var me = this,
-			enrollment = me.CourseStore.findEnrollmentForCourse(course.getId());
-
-		if (!enrollment) {
-			callback.call(null, true, false);
-			return;
-		}
-
-		this.dropEnrollment(course, enrollment, callback);
+		this.dropEnrollment(course, callback);
 	},
 
 	/**
 	 * Drops a course
 	 * @param  {CourseCatalogEntry} course the course to enroll or drop
-	 * @param  {Object} enrollment course enrollement object
 	 * @param  {Function} callback what to do when its done, takes two arguments success,changed\
 	 * @returns {void}
 	 */
-	dropEnrollment: function (course, enrollment, callback) {
+	dropEnrollment: function (course, callback) {
 		var me = this;
 
 		me.CourseStore.beforeDropCourse();
 
-		me.__toggleEnrollmentStatus(course, enrollment)
+		me.__toggleEnrollmentStatus(course, true)
 			.then(function () {
 				var updateEnrolled;
 
@@ -151,15 +144,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 			});
 	},
 
-	__toggleEnrollmentStatus: function (catelogEntry, enrollement) {
+	__toggleEnrollmentStatus: function (catalogEntry, drop) {
 		var collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 
-		if (enrollement) {
-			return Service.requestDelete(enrollement.get('href'));
+		if (drop) {
+			return Service.requestDelete(path.join(collection, encodeURIComponent(catalogEntry.get('NTIID'))));
 		}
 
 		return Service.post(collection, {
-			NTIID: catelogEntry.get('NTIID')
+			NTIID: catalogEntry.get('NTIID')
 		});
 	},
 
