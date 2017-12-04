@@ -349,7 +349,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		if (questionSet) {
 			data = {
-				type: 'AssessmentView',
+				type: questionSet.isSurvey ? 'SurveyView' : 'AssessmentView',
 				resourceId: questionSet.getId(),
 				ContentID: this.pageInfo.getId(),
 			};
