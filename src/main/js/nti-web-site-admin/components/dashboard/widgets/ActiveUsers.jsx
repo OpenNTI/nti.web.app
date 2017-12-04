@@ -11,7 +11,7 @@ const LABELS = {
 	value: ''
 };
 
-const t = scoped('nti-web-site-admins.components.dashboard.widgets.popularcourses', LABELS);
+const t = scoped('nti-web-site-admins.components.dashboard.widgets.activeusers', LABELS);
 const PAGE_SIZE = 4;
 
 class Item extends React.Component {

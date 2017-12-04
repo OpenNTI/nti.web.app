@@ -4,6 +4,8 @@ import ActiveSessions from './widgets/ActiveSessions';
 import ActiveTimes from './widgets/ActiveTimes';
 import PopularCourses from './widgets/PopularCourses';
 import ActiveUsers from './widgets/ActiveUsers';
+import RecentlyCreatedUsers from './widgets/RecentlyCreatedUsers';
+import RecentSessions from './widgets/RecentSessions';
 
 export default class View extends React.Component {
 	constructor (props) {
@@ -20,6 +22,10 @@ export default class View extends React.Component {
 			</div>
 			<div className="widget-row">
 				<ActiveTimes/>
+				<div>
+					<RecentlyCreatedUsers/>
+					<RecentSessions/>
+				</div>
 			</div>
 		</div>);
 	}
