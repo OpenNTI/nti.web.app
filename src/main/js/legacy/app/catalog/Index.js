@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 	getTitle (title) {
-		if(title === '/'){
+		if (title === '/') {
 			return 'Catalog';
 		}
 		const result = title.substr(1);
