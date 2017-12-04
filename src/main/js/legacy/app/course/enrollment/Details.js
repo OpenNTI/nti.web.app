@@ -825,6 +825,36 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			video.stopPlayback();
 		}
 
+		const performDrop = () => {
+			option.undoEnrollment(me)
+				.then(function (changed) {
+					me.fireEvent('enrolled-action', false);
+					me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
+						course: courseTitle
+					}));
+					if (me.onDrop) {
+						done(true, changed);
+						me.onDrop();
+					} else {
+						done(true, changed);
+					}
+				})
+				.catch(function (reason) {
+					var msg;
+
+					if (reason === 404) {
+						msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
+					} else {
+						msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
+					}
+
+					console.error('failed to drop course', reason);
+					//already dropped?? -- double check the string to make sure it's correct
+					me.showMessage(msg, true);
+					done(false);
+				});
+		};
+
 		if (option.Enrolled && option.undoEnrollment) {
 			me.changingEnrollment = true;
 			Ext.Msg.show({
@@ -837,33 +867,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 						cls: 'caution',
 						handler: function () {
 							me.addMask();
-							option.undoEnrollment(me)
-								.then(function (changed) {
-									me.fireEvent('enrolled-action', false);
-									me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
-										course: courseTitle
-									}));
-									if (me.onDrop) {
-										done(true, changed);
-										me.onDrop();
-									} else {
-										done(true, changed);
-									}
-								})
-								.catch(function (reason) {
-									var msg;
-
-									if (reason === 404) {
-										msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
-									} else {
-										msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
-									}
-
-									console.error('failed to drop course', reason);
-									//already dropped?? -- double check the string to make sure it's correct
-									me.showMessage(msg, true);
-									done(false);
-								});
+							me.CourseEnrollmentActions.refreshEnrolledCourses(performDrop);
 						}
 					},
 					secondary: {
