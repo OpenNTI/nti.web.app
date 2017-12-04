@@ -40,7 +40,7 @@ export default class RecentSessions extends React.Component {
 			const historicalSessions = user.Links.filter(x => x.rel === HISTORICAL_SESSIONS_LINK)[0] || {};
 
 			service.get(historicalSessions.href).then(results => {
-				const items = (results.Items || []).reverse().slice(0, NUM_SESSIONS_TO_SHOW);
+				const items = (results.Items || []).slice(0, NUM_SESSIONS_TO_SHOW);
 
 				this.setState({loading: false, items});
 			});
