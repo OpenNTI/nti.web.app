@@ -76,7 +76,7 @@ class Day extends React.Component {
 
 export default class ActiveDays extends React.Component {
 	static propTypes = {
-		entity: PropTypes.object.isRequired
+		entity: PropTypes.object
 	}
 
 	constructor (props) {
@@ -185,10 +185,20 @@ export default class ActiveDays extends React.Component {
 		const params = '?notBefore=' + Math.floor(earliestDate.getTime() / 1000);
 
 		const service = await getService();
-		const analyticsLink = entity.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
-		const results = await service.get(analyticsLink.href) || {};
-		const activityByDateSummary = (results.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
-		const summaryData = await service.get(activityByDateSummary.href + params) || {};
+		let summaryData;
+
+		if(entity) {
+			const analyticsLink = entity.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
+			const results = await service.get(analyticsLink.href) || {};
+			const activityByDateSummary = (results.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
+			summaryData = await service.get(activityByDateSummary.href + params) || {};
+		}
+		else {
+			// default to global if no entity specified
+			const analyticsWorkspace = service.getWorkspace('Analytics');
+			const activityByDateSummary = (analyticsWorkspace.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
+			summaryData = await service.get(activityByDateSummary.href + params) || {};
+		}
 
 		this.processData(summaryData || {});
 	}

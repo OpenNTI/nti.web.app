@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ActiveDays from '../common/ActiveDays';
+
 import ActiveSessions from './widgets/ActiveSessions';
 import ActiveTimes from './widgets/ActiveTimes';
 import PopularCourses from './widgets/PopularCourses';
@@ -26,6 +28,9 @@ export default class View extends React.Component {
 					<RecentlyCreatedUsers/>
 					<RecentSessions/>
 				</div>
+			</div>
+			<div className="widget-row">
+				<ActiveDays/>
 			</div>
 		</div>);
 	}
