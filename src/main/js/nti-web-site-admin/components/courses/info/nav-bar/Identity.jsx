@@ -10,7 +10,7 @@ export default function SiteAdminCourseIdentity ({course}) {
 
 	return (
 		<div className="site-admin-course-identity">
-			<Presentation.Asset contentPackage={course} type="landing">
+			<Presentation.Asset contentPackage={course.CatalogEntry} type="landing">
 				<img className="course-icon" />
 			</Presentation.Asset>
 			<div className="info">
