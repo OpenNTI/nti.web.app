@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import {Roster} from 'nti-web-course';
 import {Loading} from 'nti-web-commons';
 import {scoped} from 'nti-lib-locale';
+import {LinkTo} from 'nti-web-routing';
 
 import ErrorMessage from '../../../common/ErrorMessage';
+
+import Item from './Item';
 
 const DEFAULT_TEXT = {
 	error: 'Unable to load roster.'
@@ -44,7 +47,9 @@ export default class SiteAdminCourseRoster extends React.Component {
 				{items.map((item, index) => {
 					return (
 						<li key={index}>
-							{item.Username}
+							<LinkTo.Path to="./">
+								<Item item={item} />
+							</LinkTo.Path>
 						</li>
 					);
 				})}
