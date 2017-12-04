@@ -20,9 +20,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			return CourseStore.onceFavoritesLoaded()
 				.then(function () {
 					var enrolledCourses = CourseStore.getFavoriteEnrolledCourses() || [],
-						hasAvailable = CourseStore.hasAllCoursesLink();
+						hasCatalog = !!Service.getCollection('Courses', 'Catalog');
 
-					return enrolledCourses.length || hasAvailable;
+					return enrolledCourses.length || hasCatalog;
 				});
 		}
 	},
