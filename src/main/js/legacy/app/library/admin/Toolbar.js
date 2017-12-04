@@ -31,8 +31,12 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 			this.CourseStore.fireEvent('added-course');
 		};
 
-		// if Courses collection is missing, we won't show the Create option
-		const canCreate = Service.getCollection('Courses', 'Catalog');
+		// if AdminLevels link is missing, we won't be able to create a course anyway,
+		// so drive create button by this link
+		const canCreate =
+			Service.getWorkspace('Courses')
+			&& Service.getWorkspace('Courses').Links
+			&& Service.getWorkspace('Courses').Links.some(x => x.rel === 'AdminLevels');
 
 		this.add({
 			xtype: 'react',
