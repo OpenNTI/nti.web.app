@@ -67,9 +67,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 		var bundle = this.ContextStore.getRootBundle(),
 			data = {
-				type: 'assignment-viewed',
-				'resource_id': this.assignment.getId(),
-				ContentId: this.pageInfo.getId(),
+				type: 'AssignmentView',
+				resourceId: this.assignment.getId(),
+				ContentID: this.pageInfo.getId(),
 				course: bundle && bundle.getId()
 			};
 
