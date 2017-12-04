@@ -81,6 +81,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		{ name: 'subjects', type: 'auto' },
 		{ name: 'title', type: 'string' },
 
+		{name: 'IsAdmin', type: 'bool', persist: false},
+		{name: 'IsEnrolled', type: 'bool', persist: false},
+
 		//ui data
 		{ name: 'isOpen', type: 'bool', persist: false},
 		{ name: 'isAdmin', type: 'bool', persist: false},
@@ -270,8 +273,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 	},
 
 	getEnrollmentType: function () {
-		var isEnrolled = this.get('enrolled'),
-			isAdmin = this.get('isAdmin'),
+		var isEnrolled = this.get('IsEnrolled'),
+			isAdmin = this.get('IsAdmin'),
 			isOpen = this.get('isOpen'),
 			enrollment;
 
