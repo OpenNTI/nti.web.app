@@ -7,6 +7,14 @@ const lazy = require('legacy/util/lazy-require')
 
 require('legacy/common/StateStore');
 
+function decodeObjectPart (part) {
+	const decoded = decodeURIComponent(part);
+
+	return decoded.indexOf('uri:') === 0 ?
+		decoded.replace('uri:', '') :
+		decodeFromURI(part);
+}
+
 module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
@@ -106,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 
 	__parseTwoObjectParts: function (parts) {
 		return {
-			id: decodeFromURI(parts.last()),
+			id: decodeObjectPart(parts.last()),
 			rawId: parts.last()
 		};
 	},
@@ -118,11 +126,11 @@ module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 			part = {};
 
 		if (lazy.ParseUtils.isEncodedNTIID(first)) {
-			part.id = decodeFromURI(first);
+			part.id = decodeObjectPart(first);
 			part.rawId = first;
 			part.state = decodeURIComponent(last);
 		} else if (lazy.ParseUtils.isEncodedNTIID(last)) {
-			part.id = decodeFromURI(last);
+			part.id = decodeObjectPart(last);
 			part.rawId = last;
 			part.mimeType = decodeURIComponent(first);
 		}

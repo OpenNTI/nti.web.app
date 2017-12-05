@@ -19,7 +19,9 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 	},
 
 	__resolveBeforeShow: function (ntiid) {
-		return Service.getObject(ntiid);
+		return lazy.ParseUtils.isNTIID(ntiid) ?
+			Service.getObject(ntiid) :
+			Service.request(ntiid).then(resp => lazy.ParseUtils.parseItems(resp)[0] );
 	},
 
 	hasWindow: function (obj) {
@@ -97,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 			precache = precache || cache.precache;
 		}
 
-		if (typeof objectOrNTIID === 'string' && lazy.ParseUtils.isNTIID(objectOrNTIID)) {
+		if (typeof objectOrNTIID === 'string') {
 			fetchObject = this.__resolveBeforeShow(objectOrNTIID);
 		} else {
 			fetchObject = Promise.resolve(objectOrNTIID);
