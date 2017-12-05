@@ -33,6 +33,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				{href: 'profile', text: 'Complete Your Profile'}
 			]
 		},
+		enrolledWithNoStartDate: {
+			title: 'You are enrolled in the Open Course',
+			cls: 'enrolled',
+			information: 'Class will be conducted fully online.',
+			links: [
+				{href: 'welcome', text: ''},
+				{href: 'profile', text: 'Complete Your Profile'}
+			]
+		},
 		archivedEnrolled: {
 			title: 'You took the Open Course!',
 			cls: 'enrolled',
@@ -68,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		} else {//if the course is current or upcoming
 			//if we are enrolled
 			if (details.Enrolled) {
-				state = this.getWording('enrolled', {
+				state = this.getWording(details.StartDate ? 'enrolled' : 'enrolledWithNoStartDate', {
 					date: Ext.Date.format(details.StartDate, this.DateFormat)
 				});
 				state.buttonText = 'Drop the Open Course';
@@ -90,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		return {
 			name: me.NAME,
 			loaded: new Promise(function (fulfill, reject) {
-				var state = me.getWording('enrolled', {
+				var state = me.getWording(details.StartDate ? 'enrolled' : 'enrolledWithNoStartDate', {
 					date: Ext.Date.format(details.StartDate, me.DateFormat),
 					drop: ''
 				});
