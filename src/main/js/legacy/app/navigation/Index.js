@@ -84,7 +84,10 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 					.then(cmp.removeCls.bind(cmp, 'showing'));
 			}
 
-			cmp.render(me.navContainerEl);
+			if (!cmp.rendered && !cmp.rendering) {
+				cmp.render(me.navContainerEl);
+			}
+
 
 			me.navCmp = cmp;
 			me.resizeNavCmp();
