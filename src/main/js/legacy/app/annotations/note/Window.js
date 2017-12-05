@@ -14,6 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 	alias: 'widget.note-panel-window',
 	layout: 'none',
 	cls: 'note-window',
+	isWindow: true,
 
 	initComponent: function () {
 		this.callParent(arguments);

@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 					me.fireEvent('editorActivated');
 					me.reader.suspendMoveEvents = true;
 				},
-				'no-title-content': function () {return !Globals.isFeature('notepad');},//require title if notepad is a feature
+				'no-title-content': function () {return true;},//require title if notepad is a feature
 				grew: function () {
 					let h = this.getHeight();
 					let b = h + this.getY();

@@ -456,7 +456,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 			const enrolled = enrollmentStatus ? true : false;
 			const isOpen = enrollmentStatus && enrollmentStatus === 'Open';
-			const isAdmin = item.get('isAdmin');
+			const isAdmin = item.get('IsAdmin');
 
 			if(item.updateEnrollmentState) {
 				item.updateEnrollmentState(item.get('RealEnrollmentStatus') || enrollmentStatus, isOpen, isAdmin);

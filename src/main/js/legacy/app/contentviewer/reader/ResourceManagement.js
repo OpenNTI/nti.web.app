@@ -5,7 +5,6 @@ const {guidGenerator} = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');
 
 require('legacy/common/ux/ImageZoomView');
-require('legacy/common/ux/SlideDeck');
 require('legacy/common/components/cards/CardTarget');
 require('legacy/common/components/cards/OverlayedPanel');
 require('../../mediaviewer/content/deck/OverlayedPanel');

@@ -67,7 +67,32 @@
 </head>
 <body><div id="loading-mask"><div id="loading" title="Loading..."><div></div></div></div>
 <svg height="0" id="svg-image-blur"><filter id="blur-effect"><feGaussianBlur stdDeviation="8"></feGaussianBlur></filter></svg>
+	<!--html:server-values-->
 	<script type="text/javascript">
+		if( false ){
+			window.onerror = function(msg,url,line){
+				//strange, spec says we get a file url, ff seems to have given a stacktrace of sorts
+				var urls = url.split(/([\r\n]+)|(\s*-\>\s*)/);
+				//did it come from us?
+				var basePrefix = new RegExp("^" + location.protocol + '//' + location.host, "i");
+				if (basePrefix.test(urls[0])) {
+					if((window.NextThought || {}).isInitialized){
+						return;
+					}
+					window.location.replace($AppConfig.unsupported);
+				}
+			};
+
+		}
+
+		//frame buster
+		//use weak comparison on purpose.
+		if( top != window ){
+			top.location.href = location.href;
+			//If the frame busting code is blocked, tell them embedding is not supported.
+			location.replace('resources/iframe.html');
+		}
+
 		window.NTIStrings = {};
 	</script>
 
@@ -86,7 +111,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
 
-	<script src="/config.js"></script>
 	<script src="/error.reporter.js"></script>
 
 	<script src="/resources/strings/strings.js"></script>

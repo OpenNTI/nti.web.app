@@ -77,12 +77,5 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 			});
 
 		return me.submissionPromise;
-	},
-
-
-	getCourse: function () {
-		var catalogEntry = CourseWareUtils.courseForNtiid(this.get('AssignmentId'));
-
-		return CourseWareUtils.findCourseBy(catalogEntry.findByMyCourseInstance());
 	}
 });

@@ -283,6 +283,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 			});
 		} else if (this.defaultRoutePath) {
 			val = this.handleRoute(this.defaultRoutePath, precache);
+			this.replaceRoute('', this.defaultRoutePath); //Force the URL to update to the defaulted route
 		} else {
 			console.warn('No Handler for route', route);
 		}

@@ -1,0 +1,22 @@
+@import '~nti-style-common';
+
+.site-admin-course-roster-item {
+	display: flex;
+	align-items: center;
+
+
+	.user-avatar {
+		width: 60px;
+		height: 60px;
+		flex: 0 0 auto;
+	}
+
+	.info {
+		flex: 1 1 auto;
+		margin-left: 0.5rem;
+
+		.username {
+			color: $primary-grey;
+		}
+	}
+}

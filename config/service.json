@@ -6,6 +6,48 @@
 				"package": "nti-web-login",
 				"basepath": "/login/"
 			}
-		]
+		],
+
+		"debug": false,
+		"debugDelegation": false,
+		"debugSocket": false,
+		"debugSocketVerbosely": false,
+
+		"enableLogging": true,
+
+		"obscureUsernames": false,
+		"openExternalPDFsInNewWindow": false,
+
+		"features": {
+			"analytic-reports":true,
+			"badges":true,
+			"bulk-resolve-users": true,
+			"course-reports": false,
+			"disable-context-in-activity": false,
+			"do-not-save-progress": false,
+			"email-verification":true,
+			"file-upload":true,
+			"forum-comment-expand-collapse":true,
+			"instructor-email":true,
+			"kaltura.progressive": true,
+			"mathcounts-question-number-hack": false,
+			"notifications": true,
+			"profile-activity-filters":true,
+			"request-alias-change": true,
+			"show-open-students-first":false,
+			"suggest-contacts": false,
+			"transcript-follow-video": true,
+			"use-new-search":true
+		},
+
+		"server-host": "",
+		"server-path": "/dataserver2/",
+		"login": "/login/",
+		"unsupported": "/login/unsupported.html",
+
+		"corsSalt": "localhost",
+
+		"disableProfiles": false,
+		"kalturaUIID": ""
 	}
 }

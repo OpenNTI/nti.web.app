@@ -81,6 +81,14 @@ body.x-body {margin:0;}
 		padding-bottom: 5px;
 		font-family: Monaco, "Courier New", Courier, fixed;
 		padding-left: 4ex;
+		&.code .ln { color: grey; } /* line numbers */
+		&.code, code { background-color: #eeeeee }
+		&.code .comment, code .comment { color: #5C6576 }
+		&.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+		&.code .literal.string, code .literal.string { color: #0C5404 }
+		&.code .name.builtin, code .name.builtin { color: #352B84 }
+		&.code .deleted, code .deleted { background-color: #DEB0A1}
+		&.code .inserted, code .inserted { background-color: #A3D289}
 	}
 
 	sup {

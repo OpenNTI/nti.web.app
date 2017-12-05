@@ -1,0 +1,15 @@
+@import "~nti-style-common/all.scss";
+
+.recently-created-users {
+	width: 504px;
+	height: 266px;
+	margin-top: -10px;
+
+	.title {
+		margin-top: 10px;
+	}
+
+	.item-image {
+		border-radius: 30px;
+	}
+}

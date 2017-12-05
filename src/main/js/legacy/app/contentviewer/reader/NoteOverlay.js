@@ -230,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 				preventBringToFront: true,
 				listeners: {
 					'deactivated-editor': 'destroy',
-					'no-title-content': function () {return !Globals.isFeature('notepad');},//require title if notepad is a feature
+					'no-title-content': function () {return true;},//require title if notepad is a feature
 					grew: function () {
 						if (Ext.is.iPad) {
 							return;

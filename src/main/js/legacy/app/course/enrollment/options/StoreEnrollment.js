@@ -361,7 +361,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			loadDetails;
 
 		//if there is an option, and its either enrolled or available
-		if (!option || (!option.IsEnrolled && !option.IsAvailable) || course.get('isAdmin')) {
+		if (!option || (!option.IsEnrolled && !option.IsAvailable) || course.get('IsAdmin')) {
 			return {
 				name: this.NAME,
 				loaded: Promise.reject(),

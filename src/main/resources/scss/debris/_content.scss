@@ -280,7 +280,7 @@
 			transition: opacity 0.5s, left 0.5s, background-color 0.2s 0.2s, box-shadow 0.4s;
 			min-width: 490px;
 			max-width: 100%;
-			padding: 5px 5px 0;
+			padding: 2px 5px 0;
 			margin-left: -5px;
 			cursor: pointer;
 			min-height: 20px;
@@ -325,7 +325,7 @@
 			}
 
 			.title {
-				font: 600 1.375em/1.2em $font;
+				font: 600 1.375em/1.4em $font;
 				display: inline-block;
 				max-width: 100%;
 				overflow: hidden;

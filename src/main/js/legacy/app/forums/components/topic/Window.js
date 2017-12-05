@@ -25,6 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 	alias: 'widget.topic-window',
 	layout: 'none',
 	cls: 'topic-window',
+	isWindow: true,
 
 	initComponent: function () {
 		this.callParent(arguments);

@@ -3,7 +3,6 @@ const Ext = require('extjs');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const Globals = require('legacy/util/Globals');
 const ObjectUtils = require('legacy/util/Object');
-const PageVisibility = require('legacy/util/Visibility');
 const PlaylistItem = require('legacy/model/PlaylistItem');
 const VideoPosters = require('legacy/model/resolvers/VideoPosters');
 const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
@@ -519,8 +518,6 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 				playSpeed: state.speed
 			});
 			this.hasWatchEvent = true;
-
-			PageVisibility.lockActive();
 		}
 
 		this.lasttime = time;
@@ -536,8 +533,6 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 				videoEndTime: state && state.time
 			});
 		}
-
-		PageVisibility.unlockActive();
 
 		this.currentVideoId = null;
 

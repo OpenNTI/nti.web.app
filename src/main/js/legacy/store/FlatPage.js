@@ -1,7 +1,6 @@
 const Ext = require('extjs');
 
 const Note = require('legacy/model/Note');
-const {isFeature} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	extend: 'Ext.data.Store',
@@ -31,11 +30,7 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	filters: [
 		{ id: 'nochildren', filterFn: function (r) { return !r.parent;}},
 		{ id: 'no-private-notes', filterFn: function (r) {
-			return !isFeature('notepad') ||
-					r.placeholder ||
-					r.get('Class') !== 'Note' ||
-					(r.get('sharedWith').length ||
-					!Ext.isEmpty(r.get('title')));
+			return true;
 		}}
 	],
 

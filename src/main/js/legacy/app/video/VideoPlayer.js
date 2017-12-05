@@ -4,8 +4,6 @@ const {getService} = require('nti-web-client');
 const {default: Video, UNSTARTED, ENDED, PLAYING, PAUSED, BUFFERING, CUED} = require('nti-web-video');
 
 const AnalyticsUtil = require('../../util/Analytics');
-const PageVisibility = require('../../util/Visibility');
-
 require('legacy/overrides/ReactHarness');
 
 const TIME_CHANGE_THRESHOLD = 5;
@@ -30,7 +28,6 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 			});
 
 			hasWatch = true;
-			PageVisibility.lockActive();
 		},
 
 		stop (state) {
@@ -44,7 +41,6 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 			});
 
 			hasWatch = false;
-			PageVisibility.unlockActive();
 		},
 
 

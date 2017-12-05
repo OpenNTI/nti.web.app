@@ -37,10 +37,10 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 
 		slidedeckId = getParam('slidedeckid');
 
-		this.open(ntiid, slidedeckId, startingVideo, startingSlide);
+		this.__open(ntiid, slidedeckId, startingVideo, startingSlide);
 	},
 
-	open: function (ntiidInContent, slidedeckId, startingVideo, startingSlide) {
+	__open: function (ntiidInContent, slidedeckId, startingVideo, startingSlide) {
 		slidedeckId = slidedeckId || 'default';
 
 		var root = ContentUtils.getLineage(ntiidInContent).last(),

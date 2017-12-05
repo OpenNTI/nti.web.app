@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	},
 
 	canCreateForums: function (record) {
-		return record;// && isFeautre('mutable-forums') && record.getLink('add');
+		return record;
 	},
 
 	buildStore: function (forumList) {

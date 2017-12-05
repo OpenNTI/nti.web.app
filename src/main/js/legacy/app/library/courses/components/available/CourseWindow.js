@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		return new Promise(function (fulfill) {
 			if (state.paymentcomplete) {
-				CourseWareUtils.getMostRecentEnrollment()
+				Promise.resolve(me.CourseStore.getMostRecentEnrollmentCourse())
 					.then(function (course) {
 						if (!course) {
 							console.error('No Course to restore state to');
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 						if (!state.cce) {
 							return Promise.reject('No most recent enrollment, or cce to return to');
 						} else {
-							return CourseWareUtils.courseForNtiid(state.cce);
+							return me.CourseStore.findForNTIID(state.cce);
 						}
 					})
 					.then(function (entry) {

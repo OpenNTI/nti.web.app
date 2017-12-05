@@ -2,7 +2,6 @@ const Ext = require('extjs');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const FlatPage = require('legacy/store/FlatPage');
-const {isFeature} = require('legacy/util/Globals');
 const QuestionSet = require('legacy/model/assessment/QuestionSet');
 
 const UserdataActions = require('../../userdata/Actions');
@@ -42,7 +41,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 			border: false,
 			plain: true
 		},
-		stateFul: isFeature('notepade'),
 		stateId: 'notes-and-discussions',
 		items: []
 	},
@@ -124,16 +122,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		]);
 
 		this.navigation.setActiveTab(this.navigation.add(
-			// {
-			//	title: 'Notepad',
-			//	iconCls: 'notepad',
-			//	xtype: 'content-notepad',
-			//	refs: [
-			//		{ref: 'readerRed', selector: '#' + this.id + ' reader-content'}
-			//	],
-			//	disabled: !isFeature('notepad'),
-			//	hidden: !isFeature('notepad')
-			// },
 			{
 				title: 'Discussion',
 				iconCls: 'discuss',
@@ -361,7 +349,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 
 		if (questionSet) {
 			data = {
-				type: 'AssessmentView',
+				type: questionSet.isSurvey ? 'SurveyView' : 'AssessmentView',
 				resourceId: questionSet.getId(),
 				ContentID: this.pageInfo.getId(),
 			};
