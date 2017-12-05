@@ -8,7 +8,8 @@ import cx from 'classnames';
 const LABELS = {
 	title: 'Top Learners',
 	name: 'Name',
-	value: ''
+	value: '',
+	noItems: 'No users found'
 };
 
 const t = scoped('nti-web-site-admins.components.dashboard.widgets.activeusers', LABELS);
@@ -101,6 +102,12 @@ export default class PopularCourses extends React.Component {
 						};
 					})
 				});
+			}).catch((resp) => {
+				// can't get active users data, set items to empty
+				this.setState({
+					loading: false,
+					items: []
+				});
 			});
 		});
 	}
@@ -180,6 +187,9 @@ export default class PopularCourses extends React.Component {
 
 		if(loading) {
 			return <Loading.Mask/>;
+		}
+		else if(items && items.length === 0) {
+			return <div className="no-items">{t('noItems')}</div>;
 		}
 
 		return (
