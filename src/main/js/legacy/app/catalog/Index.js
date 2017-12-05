@@ -70,8 +70,11 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 	getTitle (title) {
-		if(title === '/') {
+		if (title === '/') {
 			return 'Catalog';
+		}
+		else if (title === '/.nti_other') {
+			return 'Others';
 		}
 		const result = title.substr(1);
 		return result[0].toUpperCase() + result.substr(1);
