@@ -115,10 +115,10 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		if (!this.currentMyRoute) { return; }
 
 		const {pathname} = history.location;
-		const parts = Globals.getURLParts(decodeURI(this.currentMyRoute));
+		const partsPathname = decodeURI(Globals.getURLParts(this.currentMyRoute).pathname);
 
 		//if the history changes to a new path that doesn't match our current route, handle it
-		if (Globals.trimRoute(pathname) !== Globals.trimRoute(parts.pathname)) {
+		if (Globals.trimRoute(pathname) !== Globals.trimRoute(partsPathname)) {
 			this.handleCurrentState();
 		}
 	},
