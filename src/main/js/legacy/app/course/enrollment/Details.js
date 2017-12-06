@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const {wait} = require('nti-commons');
+const {Presentation} = require('nti-web-commons');
 
 const User = require('legacy/model/User');
 const {getString, getFormattedString} = require('legacy/util/Localization');
@@ -167,8 +168,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		me.course.getBackgroundImage()
 			.then(function (img) {
+				const resolved = img ? img : Presentation.Asset.getDefaultURLForType('background');
+
 				me.el.setStyle({
-					backgroundImage: 'url(' + img + ')'
+					backgroundImage: 'url(' + resolved + ')'
 				});
 			});
 	},
