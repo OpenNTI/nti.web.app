@@ -551,6 +551,8 @@
 			font-weight: 300;
 			text-transform: none;
 			color: white;
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 
 		.sub {
