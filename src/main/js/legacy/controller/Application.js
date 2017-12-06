@@ -65,9 +65,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		me.NotificationActions = NotificationActions.create();
 		me.NavigationActions = NavigationActions.create();
 
-		window.addEventListener('popstate', function (e) {
-			me.handleCurrentState();
-		});
+		// window.addEventListener('popstate', function (e) {
+		// 	me.handleCurrentState();
+		// });
 
 		history.listen(this.maybeSyncToHistory.bind(this));
 	},
