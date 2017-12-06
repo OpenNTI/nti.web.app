@@ -76,7 +76,9 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		else if (title === '/.nti_other') {
 			return 'Others';
 		}
-		const result = title.substr(1);
+
+		const decodeTitle = decodeURIComponent(title);
+		const result = decodeTitle.substr(1);
 		return result[0].toUpperCase() + result.substr(1);
 	},
 
