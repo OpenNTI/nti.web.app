@@ -81,6 +81,11 @@ body.x-body {margin:0;}
 		padding-bottom: 5px;
 		font-family: Monaco, "Courier New", Courier, fixed;
 		padding-left: 4ex;
+
+		&.code {
+			overflow: scroll;
+		}
+		
 		&.code .ln { color: grey; } /* line numbers */
 		&.code, code { background-color: #eeeeee }
 		&.code .comment, code .comment { color: #5C6576 }
