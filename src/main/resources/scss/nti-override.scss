@@ -84,8 +84,9 @@ body.x-body {margin:0;}
 
 		&.code {
 			overflow: scroll;
+			line-height: 1em;
 		}
-		
+
 		&.code .ln { color: grey; } /* line numbers */
 		&.code, code { background-color: #eeeeee }
 		&.code .comment, code .comment { color: #5C6576 }
