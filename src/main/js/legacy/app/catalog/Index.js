@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const CatalogView = require('nti-web-catalog');
 
+const Globals = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
 
@@ -10,6 +11,19 @@ require('legacy/login/StateStore');
 
 const PURCHASED_ACTIVE = /^\/purchased/;
 const REDEEM_ACTIVE = /^\/redeem/;
+
+function getPathname (a) {
+	const pathname = a.pathname;
+
+	if (pathname.charAt(0) !== '/') {
+		const href = a.toString();
+		const parts = Globals.getURLParts(href);
+
+		return parts.pathname;
+	}
+
+	return pathname;
+}
 
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
@@ -43,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 	onClick (e) {
 		const a = e.getTarget('a[href]');
-		const path = a && a.pathname;
+		const path = a && getPathname(a);
 		const route = path && path.replace(/^\/?app\/?/, '');
 
 		if (route) {

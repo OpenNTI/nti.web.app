@@ -10,30 +10,30 @@
 			display: flex;
 		}
 	}
-}
 
-.site-admin-active-days {
-	width: 100%;
-	margin: 0 5px 100px;
-	height: auto;
+	.site-admin-active-days {
+		width: 100%;
+		margin: 0 5px 100px;
+		height: auto;
 
-	.daily-activity-body .activity-day-row {
-		.activity-day-wrapper.first-of-week::before {
+		.daily-activity-body .activity-day-row {
+			.activity-day-wrapper.first-of-week::before {
+				font-size: 12px;
+			}
+
+			.weekday {
+				width: 32px;
+				font-size: 10px;
+			}
+
+			.activity-day-wrapper .activity-day {
+				height: 15px;
+				width: 15px;
+			}
+		}
+
+		.activity-day-row .activity-day-wrapper.first-of-week::before {
 			font-size: 12px;
 		}
-
-		.weekday {
-			width: 32px;
-			font-size: 10px;
-		}
-
-		.activity-day-wrapper .activity-day {
-			height: 15px;
-			width: 15px;
-		}
-	}
-
-	.activity-day-row .activity-day-wrapper.first-of-week::before {
-		font-size: 12px;
 	}
 }

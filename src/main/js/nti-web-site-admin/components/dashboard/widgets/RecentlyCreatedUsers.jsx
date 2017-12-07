@@ -7,7 +7,8 @@ import {getService, User} from 'nti-web-client';
 const LABELS = {
 	title: 'Recently Created Users',
 	name: 'Name',
-	value: ''
+	value: '',
+	noItems: 'No users found'
 };
 
 const t = scoped('nti-web-site-admins.components.dashboard.widgets.recentlycreatedusers', LABELS);
@@ -110,6 +111,12 @@ export default class RecentlyCreatedUsers extends React.Component {
 						};
 					})
 				});
+			}).catch((resp) => {
+				// can't get recent users data, set items to empty
+				this.setState({
+					loading: false,
+					items: []
+				});
 			});
 		});
 	}
@@ -133,6 +140,9 @@ export default class RecentlyCreatedUsers extends React.Component {
 
 		if(loading) {
 			return <Loading.Mask/>;
+		}
+		else if(items && items.length === 0) {
+			return <div className="no-items">{t('noItems')}</div>;
 		}
 
 		return (

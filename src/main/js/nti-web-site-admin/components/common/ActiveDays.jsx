@@ -12,7 +12,8 @@ const ANALYTICS_LINK = 'analytics';
 const ACTIVITY_BY_DATE_SUMMARY_LINK = 'activity_by_date_summary';
 
 const LABELS = {
-	title: 'Daily Activity'
+	title: 'Daily Activity',
+	noData: 'No activity found'
 };
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -187,20 +188,35 @@ export default class ActiveDays extends React.Component {
 		const service = await getService();
 		let summaryData;
 
-		if(entity) {
-			const analyticsLink = entity.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
-			const results = await service.get(analyticsLink.href) || {};
-			const activityByDateSummary = (results.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
-			summaryData = await service.get(activityByDateSummary.href + params) || {};
+		try {
+			if(entity) {
+				const analyticsLink = entity.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
+				const results = await service.get(analyticsLink.href) || {};
+				const activityByDateSummary = (results.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
+				summaryData = await service.get(activityByDateSummary.href + params) || {};
+			}
+			else {
+				// default to global if no entity specified
+				const analyticsWorkspace = service.getWorkspace('Analytics');
+				const activityByDateSummary = (analyticsWorkspace.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
+				summaryData = await service.get(activityByDateSummary.href + params) || {};
+			}
 		}
-		else {
-			// default to global if no entity specified
-			const analyticsWorkspace = service.getWorkspace('Analytics');
-			const activityByDateSummary = (analyticsWorkspace.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
-			summaryData = await service.get(activityByDateSummary.href + params) || {};
+		catch (e) {
+			summaryData = null;
 		}
 
-		this.processData(summaryData || {});
+		if(!summaryData) {
+			this.setState({
+				loading: false,
+				data: null
+			});
+
+			return;
+		}
+
+
+		this.processData(summaryData);
 	}
 
 	renderDay = (day, i) => {
@@ -231,6 +247,9 @@ export default class ActiveDays extends React.Component {
 
 		if(loading) {
 			return <Loading.Mask/>;
+		}
+		else if(!data) {
+			return <div className="no-data">{t('noData')}</div>;
 		}
 
 		if(data) {

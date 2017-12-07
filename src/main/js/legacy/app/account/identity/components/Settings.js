@@ -83,6 +83,13 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 			});
 		}
 
+		const helpSiteLabel = getString('NextThought.view.menus.Setting.helpSiteLabel', 'Help Site');
+		const helpSiteHref = getString('NextThought.view.menus.Setting.helpSiteHref', 'https://help.nextthought.com/');
+
+		if (helpSiteHref && helpSiteLabel) {
+			items.push({handler: this.showHelpSite.bind(this), text: helpSiteLabel, href: helpSiteHref, cls: 'setting-help-site-menu-item'});
+		}
+
 		items.push({xtype: 'menuseparator'});
 
 		//Currently the impersonation link comes back even if we cannot impersonate... so lets add a gate above and beyond the presence of the link...
@@ -149,5 +156,9 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 
 	logout: function () {
 		this.LoginActions.handleLogout();
+	},
+
+	showHelpSite (item) {
+		window.open(item.href, '_blank');
 	}
 });

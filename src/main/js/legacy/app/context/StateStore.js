@@ -11,7 +11,7 @@ function decodeObjectPart (part) {
 	const decoded = decodeURIComponent(part);
 
 	return decoded.indexOf('uri:') === 0 ?
-		decoded.replace('uri:', '') :
+		decoded :
 		decodeFromURI(part);
 }
 

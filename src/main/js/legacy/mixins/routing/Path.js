@@ -1,7 +1,9 @@
 const Ext = require('extjs');
+const {String} = require('nti-commons');
 
 const Globals = require('legacy/util/Globals');
 const Base = require('legacy/model/Base');
+
 
 /*
 	Inspired by https://github.com/chrisdavies/rlite/blob/master/rlite.js
@@ -475,7 +477,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		const route = this.currentFullRoute;
 		const parts = Globals.getURLParts(route);
 		const base = window.location.pathname;
-		const regex = new RegExp(`${parts.pathname}/?$`);
+		const regex = new RegExp(`${String.escapeForRegExp(parts.pathname)}/?$`);
 
 		return base.replace(regex, '');
 	},

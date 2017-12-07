@@ -65,9 +65,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		me.NotificationActions = NotificationActions.create();
 		me.NavigationActions = NavigationActions.create();
 
-		window.addEventListener('popstate', function (e) {
-			me.handleCurrentState();
-		});
+		// window.addEventListener('popstate', function (e) {
+		// 	me.handleCurrentState();
+		// });
 
 		history.listen(this.maybeSyncToHistory.bind(this));
 	},
@@ -115,10 +115,10 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		if (!this.currentMyRoute) { return; }
 
 		const {pathname} = history.location;
-		const parts = Globals.getURLParts(this.currentMyRoute);
+		const partsPathname = decodeURI(Globals.getURLParts(this.currentMyRoute).pathname);
 
 		//if the history changes to a new path that doesn't match our current route, handle it
-		if (Globals.trimRoute(pathname) !== Globals.trimRoute(parts.pathname)) {
+		if (Globals.trimRoute(pathname) !== Globals.trimRoute(partsPathname)) {
 			this.handleCurrentState();
 		}
 	},
@@ -348,8 +348,10 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			me.currentMyRoute = myRoute;
 
 			history[fn](myRoute, state || (window.history.state && window.history.state.state) || window.history.state);
-			//Yuck! The history library doesn't allow us to set the title
+			//Yuck!^2 The history library doesn't allow us to set the title
 			//so immediately replace the current state with one with the title
+			//also the history library is decodeURIing the so for a uri encoded
+			//uri part we still need to replaceState to make sure that encoding is correct
 			window.history.replaceState(window.history.state, myTitle, myRoute);
 			// history[fn](state || window.history.state, myTitle, myRoute);
 			document.title = title;
