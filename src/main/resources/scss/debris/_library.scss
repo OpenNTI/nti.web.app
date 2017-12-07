@@ -884,6 +884,17 @@ li.library-grid-item {
 	position: fixed !important;
 }
 
+.available-courses {
+	.header {
+		padding-top: 6px !important;
+
+		.name {
+			font-size: 20px !important;
+			color: #494949;
+		}
+	}
+}
+
 .course-settings-window, .available-courses, .available-books {
 	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
 	background-color: white;
@@ -913,6 +924,12 @@ li.library-grid-item {
 			&:hover {
 				@include icon($note-window-x_hover, $top: 0, $right: 0, $position: absolute);
 			}
+		}
+
+		.identifier {
+			font-size: 10px;
+			color: #b8b8b8;
+			font-weight: 400;
 		}
 
 		.label {
