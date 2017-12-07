@@ -16,6 +16,7 @@
     "ignoreWarnings": true
   },
   "scripts": {
+    "fix": "nti-app-scripts fix",
     "test": "nti-app-scripts test",
     "start": "nti-app-scripts start",
     "prepack": "nti-app-scripts build",

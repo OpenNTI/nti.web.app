@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
-import {DateTime, Loading, Avatar} from 'nti-web-commons';
-import {getService, User} from 'nti-web-client';
+import {/*DateTime,*/ Loading, Avatar} from 'nti-web-commons';
+// import {getService, User} from 'nti-web-client';
 import cx from 'classnames';
 
 const LABELS = {
 	title: 'Top Learners',
 	name: 'Name',
 	value: '',
-	noItems: 'No users found'
+	noItems: 'No top learners found'
 };
 
 const t = scoped('nti-web-site-admins.components.dashboard.widgets.activeusers', LABELS);
-const PAGE_SIZE = 4;
+// const PAGE_SIZE = 4;
 
 class Item extends React.Component {
 	static propTypes = {
@@ -78,38 +78,43 @@ export default class PopularCourses extends React.Component {
 	}
 
 	loadData (link) {
+		this.setState({
+			loading: false,
+			items: []
+		});
+
 		// TODO: This is only a temporary call to load user data.  When there is an actual active users
 		// api to hit, switch over to that.  This is just for prototyping
 		// Also, maybe move to store?
-		getService().then(service => {
-			User.resolve({entity: service.SiteCommunity}).then(community => {
-				const membersLink = community.getLink('members');
-
-				const getBatchLink = link ? link : membersLink + '?batchSize=' + PAGE_SIZE + '&batchStart=0';
-
-				return service.getBatch(getBatchLink);
-			}).then((users) => {
-				this.setState({
-					loading: false,
-					totalCount: users.Total,
-					prevLink: (users.Links.filter(x => x.rel === 'batch-prev')[0] || {}).href,
-					nextLink: (users.Links.filter(x => x.rel === 'batch-next')[0] || {}).href,
-					items: users.Items.map(x => {
-						return {
-							...x,
-							name: x.alias,
-							description: 'Created ' + DateTime.format(new Date(x.CreatedTime  * 1000), 'LLLL')
-						};
-					})
-				});
-			}).catch((resp) => {
-				// can't get active users data, set items to empty
-				this.setState({
-					loading: false,
-					items: []
-				});
-			});
-		});
+		// getService().then(service => {
+		// 	User.resolve({entity: service.SiteCommunity}).then(community => {
+		// 		const membersLink = community.getLink('members');
+		//
+		// 		const getBatchLink = link ? link : membersLink + '?batchSize=' + PAGE_SIZE + '&batchStart=0';
+		//
+		// 		return service.getBatch(getBatchLink);
+		// 	}).then((users) => {
+		// 		this.setState({
+		// 			loading: false,
+		// 			totalCount: users.Total,
+		// 			prevLink: (users.Links.filter(x => x.rel === 'batch-prev')[0] || {}).href,
+		// 			nextLink: (users.Links.filter(x => x.rel === 'batch-next')[0] || {}).href,
+		// 			items: users.Items.map(x => {
+		// 				return {
+		// 					...x,
+		// 					name: x.alias,
+		// 					description: 'Created ' + DateTime.format(new Date(x.CreatedTime  * 1000), 'LLLL')
+		// 				};
+		// 			})
+		// 		});
+		// 	}).catch((resp) => {
+		// 		// can't get active users data, set items to empty
+		// 		this.setState({
+		// 			loading: false,
+		// 			items: []
+		// 		});
+		// 	});
+		// });
 	}
 
 	onPrevious = () => {
