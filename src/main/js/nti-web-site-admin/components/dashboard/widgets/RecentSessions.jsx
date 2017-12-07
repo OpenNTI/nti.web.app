@@ -15,8 +15,7 @@ const LABELS = {
 	title: 'Recent Sessions',
 	name: 'Name',
 	value: '',
-	duration: 'Duration',
-	stats: 'Session Stats'
+	noItems: 'No sessions found'
 };
 
 const t = scoped('nti-web-site-admins.components.dashboard.widgets.recentsessions', LABELS);
@@ -117,11 +116,21 @@ export default class RecentSessions extends React.Component {
 		});
 	}
 
+	resolveUser (userName) {
+		return User.resolve({entity: userName})
+			.then(user => user)
+			.catch(() => {
+				return {
+					alias: userName
+				};
+			});
+	}
+
 	getDataWithUsers (items) {
 		let requests = [];
 
 		items.forEach(u => {
-			requests.push(User.resolve({entity: u.Username}));
+			requests.push(this.resolveUser(u.Username));
 		});
 
 		return Promise.all(requests).then(results => {
@@ -165,7 +174,7 @@ export default class RecentSessions extends React.Component {
 			});
 		}
 		catch (e) {
-			this.setState({error: e});
+			this.setState({loading: false, items: [], error: e});
 		}
 	}
 
@@ -188,6 +197,9 @@ export default class RecentSessions extends React.Component {
 
 		if(loading) {
 			return <Loading.Mask/>;
+		}
+		else if(items && items.length === 0) {
+			return <div className="no-items">{t('noItems')}</div>;
 		}
 
 		return (

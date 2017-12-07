@@ -71,6 +71,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				state = this.getWording('enrolled', {
 					date: Ext.Date.format(details.StartDate, this.DateFormat)
 				});
+
+				if(!details.StartDate) {
+					state.information = 'Course will be conducted fully online.';
+				}
+
 				state.buttonText = 'Drop the Open Course';
 			} else { //if we aren't enrolled
 				state = this.getWording('notEnrolled');
@@ -94,6 +99,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 					date: Ext.Date.format(details.StartDate, me.DateFormat),
 					drop: ''
 				});
+
+				if(!details.StartDate) {
+					state.information = 'Course will be conducted fully online.';
+				}
 
 				state.cls = '';
 				state.price = null;

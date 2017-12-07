@@ -1,6 +1,6 @@
 {
   "name": "nti-web-app",
-  "version": "2017.14.0-alpha",
+  "version": "2017.15.0-alpha",
   "description": "NextThought web application",
   "author": "nextthought",
   "license": "UNLICENSED",
@@ -55,7 +55,7 @@
     "nti-lib-store-connector": "0.x.x",
     "nti-style-common": "^1.1.6",
     "nti-util-logger": "^1.0.2",
-    "nti-web-catalog": "^0.1.1",
+    "nti-web-catalog": "0.x.x",
     "nti-web-charts": "0.x.x",
     "nti-web-client": "^1.1.1",
     "nti-web-commons": "0.x.x",
