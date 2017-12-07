@@ -77,6 +77,7 @@ body.x-body {margin:0;}
 		&.code {
 			overflow: scroll;
 			line-height: 1em;
+			word-wrap: normal;
 
 			* {
 				word-wrap: normal;
