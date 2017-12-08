@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 
 		this.mon(this.menu, 'select-route', this.changeRoute.bind(this));
 
-		if (!showRoster) {
+		if (!showRoster && info.get('IsEnrolled')) {
 			this.openCourseInfo = this.add({
 				xtype: 'course-info-outline-open-course',
 				info: info,
