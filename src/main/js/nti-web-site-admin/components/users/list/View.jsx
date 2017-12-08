@@ -20,7 +20,7 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.users.list', DEFAULT_TEXT);
 
-const store = new Store();
+const store = new Store();//FIXME: I would prefer if the store could be constructed on first use/mount... instead of statically.
 const propMap = {
 	items: 'items',
 	searchTerm: 'searchTerm',

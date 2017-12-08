@@ -33,18 +33,19 @@ export default class RecentSessions extends React.Component {
 		this.loadData();
 	}
 
-	loadData () {
+	async loadData () {
 		const { user } = this.props;
 
-		getService().then(service => {
+		try {
+			const service = await getService();
 			const historicalSessions = user.Links.filter(x => x.rel === HISTORICAL_SESSIONS_LINK)[0] || {};
+			const results = historicalSessions ? await service.get(historicalSessions.href) : {};
+			const items = (results.Items || []).slice(0, NUM_SESSIONS_TO_SHOW);
 
-			service.get(historicalSessions.href).then(results => {
-				const items = (results.Items || []).slice(0, NUM_SESSIONS_TO_SHOW);
-
-				this.setState({loading: false, items});
-			});
-		});
+			this.setState({loading: false, items});
+		} catch (e) {
+			this.setState({loading: false, items: []});
+		}
 	}
 
 	renderHeader () {

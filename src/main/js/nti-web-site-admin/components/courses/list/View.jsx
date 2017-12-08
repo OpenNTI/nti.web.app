@@ -21,7 +21,7 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('siteadmin.components.course.view', DEFAULT_TEXT);
 
-const store = new Store();
+const store = new Store();//FIXME: I would prefer if the store could be constructed on first use/mount... instead of statically.
 const propMap = {
 	items: 'items',
 	total: 'total',

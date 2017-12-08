@@ -23,15 +23,20 @@ export default class ActiveTimes extends React.Component {
 	}
 
 	async loadData () {
-		const { user } = this.props;
+		try {
+			const { user } = this.props;
 
-		const service = await getService();
-		const analyticsLink = user.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
-		const results = await service.get(analyticsLink.href) || {};
-		const activeTimesSummaryLink = (results.Links || []).filter(x => x.rel === ACTIVE_TIMES_SUMMARY_LINK)[0];
-		const summaryData = await service.get(activeTimesSummaryLink.href) || {};
+			const service = await getService();
+			const analyticsLink = user.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
+			const results = await service.get(analyticsLink.href) || {};
+			const activeTimesSummaryLink = (results.Links || []).filter(x => x.rel === ACTIVE_TIMES_SUMMARY_LINK)[0];
+			const summaryData = await service.get(activeTimesSummaryLink.href) || {};
 
-		this.setState({data: summaryData.WeekDays});
+			this.setState({data: summaryData.WeekDays});
+		}
+		catch (e) {
+			this.setState({error: e});
+		}
 	}
 
 	render () {

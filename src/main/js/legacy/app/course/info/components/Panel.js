@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const { Info } = require('nti-web-course');
-const { getService, getAppUsername } = require('nti-web-client');
+const { getService } = require('nti-web-client');
 
 const ContentProxy = require('legacy/proxy/JSONP');
 
@@ -52,8 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					return;
 				}
 
-				// don't show registered message bar if the active user is the one who created the course
-				if (infoCmp && infoCmp.infoOnly && getAppUsername() !== catalogEntry.creator) {
+				if (infoCmp && infoCmp.infoOnly && catalogEntry.IsEnrolled) {
 					this.add({
 						xtype: 'course-info-not-started',
 						info: content,
