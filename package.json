@@ -46,7 +46,7 @@
     "nti-app-scripts": "^1.0.50",
     "nti-assignment-editor": "^1.9.1",
     "nti-commons": "^2.0.0",
-    "nti-content": "^1.13.3",
+    "nti-content": "^1.13.6",
     "nti-lib-dispatcher": "^1.0.0",
     "nti-lib-dom": "^1.2.3",
     "nti-lib-interfaces": "^1.66.0",
