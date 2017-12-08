@@ -98,10 +98,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	])),
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'header', cn: [
-			{cls: 'sub', html: '{number}'},
-			{cls: 'title', html: '{title}'}
-		]},
 		{cls: 'left'},
 		{cls: 'right enrollment', cn: [
 			{cls: 'enrollment-container'}

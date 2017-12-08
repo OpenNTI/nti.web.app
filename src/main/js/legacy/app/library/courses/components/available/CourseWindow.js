@@ -88,6 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
+			{cls: 'identifier', html: '{identifier}'},
 			{cls: 'name', html: '{label}'},
 			{cls: 'close'}
 		]},
@@ -104,6 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	renderSelectors: {
 		labelEl: '.header .name',
+		identifierEl: '.header .identifier',
 		msgContainerEl: '.msg-container',
 		msgEl: '.msg-container .msg',
 		bodyEl: '.body-container',
@@ -633,6 +635,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				me.labelEl.update(activeTab.title + ' Courses');
 			} else {
 				me.labelEl.update(course.get('Title'));
+				me.identifierEl.update(course.get('ProviderUniqueID'));
 			}
 
 			me.footerEl.removeCls(['enroll', 'admission']);
