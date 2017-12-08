@@ -78,7 +78,8 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				baseroute: baseroute
 			});
 		}
-		this.setTitle(this.getTitle(route.path));
+		const title = this.getTitle(route.path);
+		this.setTitle(title);
 
 		this.setUpNavigation(baseroute, route.path);
 	},
@@ -92,8 +93,8 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		}
 
 		const decodeTitle = decodeURIComponent(title);
-		const result = decodeTitle.substr(1);
-		return result[0].toUpperCase() + result.substr(1);
+		const result = decodeTitle.substr(2);
+		return decodeTitle[1].toUpperCase() + result;
 	},
 
 	setUpNavigation (baseroute, path) {
