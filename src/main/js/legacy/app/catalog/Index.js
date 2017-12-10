@@ -78,21 +78,21 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				baseroute: baseroute
 			});
 		}
-		const title = this.getTitle(route.path);
+		const title = this.getTitleFromRoute(route.path);
 		this.setTitle(title);
 
 		this.setUpNavigation(baseroute, route.path);
 	},
 
-	getTitle (title) {
-		if (title === '/') {
+	getTitleFromRoute (route) {
+		if (route === '/') {
 			return 'Catalog';
 		}
-		else if (title === '/.nti_other') {
+		else if (route === '/.nti_other') {
 			return 'Others';
 		}
 
-		const decodeTitle = decodeURIComponent(title);
+		const decodeTitle = decodeURIComponent(route);
 		const result = decodeTitle.substr(2);
 		return decodeTitle[1].toUpperCase() + result;
 	},
