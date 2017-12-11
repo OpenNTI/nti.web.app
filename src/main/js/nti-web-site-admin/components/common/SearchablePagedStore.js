@@ -86,7 +86,6 @@ export default class SearchablePagedStore extends BasicStore {
 		}
 	}
 
-
 	async loadNextPage () {
 		if (!this._loadNextPage) { return; }
 
@@ -111,6 +110,14 @@ export default class SearchablePagedStore extends BasicStore {
 		}
 	}
 
+	// inserts item at the beginning of the list
+	insert (item) {
+		if(item) {
+			this._items = [item, ...this._items];
+			this._total += 1;
+			this.emitChange('items', 'total');
+		}
+	}
 
 	updateSearchTerm (term) {
 		this._loading = true;

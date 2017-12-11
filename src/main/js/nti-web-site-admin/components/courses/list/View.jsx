@@ -5,6 +5,7 @@ import {searchable, contextual} from 'nti-web-search';
 import {LinkTo} from 'nti-web-routing';
 import {StickyElement, StickyContainer} from 'nti-web-commons';
 import {Editor} from 'nti-web-course';
+import {getService} from 'nti-web-client';
 
 import SearchablePagedView from '../../common/SearchablePagedView';
 
@@ -98,15 +99,23 @@ export default class View extends React.Component {
 		);
 	}
 
+	async onCourseCreated (catalogEntry) {
+		const accessLink = catalogEntry.getLink('UserCoursePreferredAccess');
 
+		if(accessLink) {
+			const service = await getService();
+			const storeObject = await service.get(accessLink);
+			const parsed = await service.getObject(storeObject);
+
+			store.insert(parsed);
+		}
+	}
 
 	launch = () => {
 		Editor.createCourse()
-			.then(() => {
+			.then((createdEntry) => {
 				// course created
-				this.setState({createInProgress: true});
-
-				setTimeout(() => { this.setState({createInProgress: false}); }, 1500);
+				this.onCourseCreated(createdEntry);
 			});
 	};
 
