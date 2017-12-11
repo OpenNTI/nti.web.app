@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getService} from 'nti-web-client';
 import {DateTime, Loading, Flyout} from 'nti-web-commons';
 import {scoped} from 'nti-lib-locale';
 import cx from 'classnames';
 
-import {determineBlockColor} from './utils';
-
-const ANALYTICS_LINK = 'analytics';
-
-const ACTIVITY_BY_DATE_SUMMARY_LINK = 'activity_by_date_summary';
+import {determineBlockColor, loadDailyActivity} from './utils';
 
 const LABELS = {
 	title: 'Daily Activity',
@@ -18,8 +13,6 @@ const LABELS = {
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const SHORT_WEEKDAYS = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
-const SHORT_MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-const INCREMENT = 24 * 60 * 60 * 1000;
 
 const t = scoped('nti-web-site-admins.components.common.activedays', LABELS);
 
@@ -77,7 +70,9 @@ class Day extends React.Component {
 
 export default class ActiveDays extends React.Component {
 	static propTypes = {
-		entity: PropTypes.object
+		entity: PropTypes.object,
+		startDate: PropTypes.object,
+		endDate: PropTypes.object
 	}
 
 	constructor (props) {
@@ -92,121 +87,12 @@ export default class ActiveDays extends React.Component {
 		this.loadData();
 	}
 
-	processData (rawData) {
-		const dates = rawData.Dates || {};
-		const rawStartDate = new Date(rawData.StartTime);
-
-		// start at the beginning of the year
-		const startDate = new Date('1/1/' + rawStartDate.getFullYear());
-		const start = startDate.getTime();
-
-		// go to the end of the year
-		const endDate = new Date('12/31/' + rawStartDate.getFullYear()).getTime();
-
-		// initialize by filling out any days before the day of the week for the start time
-		// (for example, if start date is a tuesday, initialize sunday and monday to 0)
-		let initialData = {
-			'Sunday': startDate.getDay() > 0 ? [{}] : [],
-			'Monday': startDate.getDay() > 1 ? [{}] : [],
-			'Tuesday': startDate.getDay() > 2 ? [{}] : [],
-			'Wednesday': startDate.getDay() > 3 ? [{}] : [],
-			'Thursday': startDate.getDay() > 4 ? [{}] : [],
-			'Friday': startDate.getDay() > 5 ? [{}] : [],
-			'Saturday': startDate.getDay() > 6 ? [{}] : [],
-		};
-
-		let max = 0;
-
-		// iterate over every day from the start date to the end date, filling in
-		// values from the raw data as we go
-		for(let i = start; i <= endDate; i += INCREMENT) {
-			const curr = new Date(i);
-			const dateStr = DateTime.format(curr, 'YYYY-MM-DD');
-			const day = WEEKDAYS[curr.getDay()];
-			const value = dates[dateStr];
-
-			if(value && value > max) {
-				max = value;
-			}
-
-			const block = {
-				value: value || 0,
-				date: curr
-			};
-
-			const dayArray = initialData[day];
-
-			const currLatestForDay = dayArray[dayArray.length - 1] || {};
-
-			if(currLatestForDay && !currLatestForDay.date || currLatestForDay.date.getMonth() !== curr.getMonth()) {
-				block.firstDayTypeOfMonth = true;
-
-				if(curr.getDay() === 0) {
-					block.firstOfFullWeek = SHORT_MONTHS[curr.getMonth()];
-				}
-			}
-
-			if(curr.getDate() === 1 && curr.getDay() !== 0) {
-				block.firstOfMonth = true;
-			}
-
-			if(curr.getMonth() % 2 === 1) {
-				block.oddMonth = true;
-			}
-
-			initialData[day].push(block);
-		}
-
-		let numCols;
-
-		// fill out last week of year
-		for(let i = 0; i < WEEKDAYS.length; i++) {
-			const day = WEEKDAYS[i];
-
-			if(numCols && initialData[day].length < numCols) {
-				initialData[day].push({});
-			}
-
-			numCols = initialData[day].length;
-		}
-
-		this.setState({
-			min: 0,
-			max,
-			loading: false,
-			data: initialData
-		});
-	}
-
 	async loadData () {
-		const { entity } = this.props;
+		const { entity, startDate, endDate } = this.props;
 
-		const now = new Date();
-		const earliestDate = new Date('1/1/' + now.getFullYear());
-		const params = '?notBefore=' + Math.floor(earliestDate.getTime() / 1000);
+		const data = await loadDailyActivity(entity, startDate, endDate);
 
-		const service = await getService();
-		let summaryData;
-
-		try {
-			if(entity) {
-				const analyticsLink = entity.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
-				const results = await service.get(analyticsLink.href) || {};
-				const activityByDateSummary = (results.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
-				summaryData = await service.get(activityByDateSummary.href + params) || {};
-			}
-			else {
-				// default to global if no entity specified
-				const analyticsWorkspace = service.getWorkspace('Analytics');
-				const activityByDateSummary = (analyticsWorkspace.Links || []).filter(x => x.rel === ACTIVITY_BY_DATE_SUMMARY_LINK)[0];
-				summaryData = await service.get(activityByDateSummary.href + params) || {};
-			}
-		}
-		catch (e) {
-			summaryData = null;
-		}
-
-		if(!summaryData) {
+		if(!data) {
 			this.setState({
 				loading: false,
 				data: null
@@ -215,8 +101,10 @@ export default class ActiveDays extends React.Component {
 			return;
 		}
 
-
-		this.processData(summaryData);
+		this.setState({
+			...data,
+			loading: false
+		});
 	}
 
 	renderDay = (day, i) => {
