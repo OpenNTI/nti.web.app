@@ -88,13 +88,15 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		if (route === '/') {
 			return 'Catalog';
 		}
+		else if(route === '/purchased' || route === '/redeem'){
+			return route[1].toUpperCase() + route.substr(2);
+		}
 		else if (route === '/.nti_other') {
-			return 'Others';
+			return 'OTHERS';
 		}
 
 		const decodeTitle = decodeURIComponent(route);
-		const result = decodeTitle.substr(2);
-		return decodeTitle[1].toUpperCase() + result;
+		return decodeTitle.substr(1).toUpperCase();
 	},
 
 	setUpNavigation (baseroute, path) {
