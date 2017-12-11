@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		if (route === '/') {
 			return 'Catalog';
 		}
-		else if(route === '/purchased' || route === '/redeem'){
+		else if (route === '/purchased' || route === '/redeem') {
 			return route[1].toUpperCase() + route.substr(2);
 		}
 		else if (route === '/.nti_other') {
