@@ -11,13 +11,17 @@ SiteAdminUserOverview.propTypes = {
 	user: PropTypes.object
 };
 export default function SiteAdminUserOverview ({user}) {
+	const { MostRecentSession } = user;
+
+	const sessionDate = (MostRecentSession && MostRecentSession.getSessionStartTime()) || user.getLastLoginTime();
+
 	return (
 		<div className="site-admin-user-overview">
 			<div className="joined">
 				<DateValue date={user.getCreatedTime()} label="Joined" />
 			</div>
 			<div className="last-login">
-				<DateValue date={user.getLastLoginTime()} label="Last Login" format="lll" />
+				<DateValue date={sessionDate} label="Last Login" format="lll" />
 			</div>
 			<div className="activity-by-day">
 				<ActiveDays entity={user}/>

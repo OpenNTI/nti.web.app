@@ -16,12 +16,11 @@ UserItem.propTypes = {
 	item: PropTypes.object
 };
 export default function UserItem ({item}) {
-	const {email} = item;
+	const {email, MostRecentSession} = item;
 
 	const createdTime = item.getCreatedTime();
 	const lastLoginTime = item.getLastLoginTime();
-	const mostRecentSession = item.getMostRecentSession && item.getMostRecentSession();
-	const lastSeen = mostRecentSession || lastLoginTime;
+	const lastSeen = (MostRecentSession && MostRecentSession.getSessionStartTime()) || lastLoginTime;
 
 	return (
 		<div className="site-admin-user-item">
