@@ -9,4 +9,4 @@ export default Router.for([
 	Route({path: '/transcript', component: Transcript, name: 'site-admin.users.user-transcript'}),
 	Route({path: '/reports', component: Reports, name: 'site-admin.users.user-overview'}),
 	Route({path: '/', component: Overview, name: 'site-admin.users.user-overview'})
-], Frame);
+], {frame: Frame});

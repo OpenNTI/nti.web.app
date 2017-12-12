@@ -6,7 +6,7 @@ import Info from './info';
 
 export default Router.for([
 	Route({
-		path: '/:id',
+		path: '/:courseID',
 		component: Info,
 		getRouteFor: (obj, context) => {
 			if (obj.MimeType === 'application/vnd.nextthought.courses.courseinstance' && context === 'site-admin.course-list-item') {

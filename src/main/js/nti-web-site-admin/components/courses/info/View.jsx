@@ -9,5 +9,5 @@ export default Router.for([
 	Route({path: '/roster', component: Roster, name: 'site-admin.courses.course-roster'}),
 	Route({path: '/reports', component: Reports, name: 'site-admin.courses.course-rerpots'}),
 	Route({path: '/', component: Overview, name: 'site-admin.courses.course-overview'})
-], Frame);
+], {frame: Frame});
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
 import {encodeForURI} from 'nti-lib-ntiids';
 import {LinkTo} from 'nti-web-routing';
@@ -13,15 +12,12 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.courses.info.nav-bar.Tabs', DEFAULT_TEXT);
 
-SiteAdminCourseTabs.propTypes = {
-	id: PropTypes.string
-};
-export default function SiteAdminCourseTabs ({id}) {
+export default function SiteAdminCourseTabs () {
 	return (
 		<Tabs>
-			<LinkTo.Path to={`${encodeForURI(id)}/`} activeClassName="active" exact>{t('overview')}</LinkTo.Path>
-			<LinkTo.Path to={`${encodeForURI(id)}/roster`} activeClassName="active">{t('roster')}</LinkTo.Path>
-			<LinkTo.Path to={`${encodeForURI(id)}/reports`} activeClassName="active">{t('reports')}</LinkTo.Path>
+			<LinkTo.Path to="./" activeClassName="active" exact>{t('overview')}</LinkTo.Path>
+			<LinkTo.Path to="./roster" activeClassName="active">{t('roster')}</LinkTo.Path>
+			<LinkTo.Path to="./reports" activeClassName="active">{t('reports')}</LinkTo.Path>
 		</Tabs>
 	);
 }

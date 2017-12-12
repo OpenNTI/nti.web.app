@@ -16,7 +16,8 @@ const t = scoped('nti-site-admin.users.user.Frame', DEFAULT_TEXT);
 @Store.connect({user: 'user', loading: 'loading'})
 export default class SiteAdminUserView extends React.Component {
 	static propTypes = {
-		match: PropTypes.object,
+		userID: PropTypes.string,
+
 		user: PropTypes.object,
 		loading: PropTypes.bool,
 		store: PropTypes.object,
@@ -29,18 +30,10 @@ export default class SiteAdminUserView extends React.Component {
 		return this.props.store;
 	}
 
-	getUserID (props = this.props) {
-		const {match} = props;
-		const {params} = match || {};
-		const {id} = params || {};
-
-		return id;
-	}
-
 
 	componentWillReceiveProps (nextProps) {
-		const newID = this.getUserID(nextProps);
-		const oldID = this.getUserID(this.props);
+		const {userID: newID} = nextProps;
+		const {userID: oldID} = this.props;
 
 		if (newID !== oldID) {
 			this.store.loadUser(newID);
@@ -49,9 +42,9 @@ export default class SiteAdminUserView extends React.Component {
 
 
 	componentDidMount () {
-		const id = this.getUserID();
+		const {userID} = this.props;
 
-		this.store.loadUser(id);
+		this.store.loadUser(userID);
 	}
 
 
@@ -76,7 +69,6 @@ export default class SiteAdminUserView extends React.Component {
 
 	renderUser () {
 		const {user, children} = this.props;
-		const id = this.getUserID();
 
 		if (!user) {
 			return null;
@@ -86,11 +78,11 @@ export default class SiteAdminUserView extends React.Component {
 			<Layouts.NavContent.Container>
 				<Layouts.NavContent.Nav className="nav-bar">
 					{this.renderHeader()}
-					<NavBar user={user} id={id} />
+					<NavBar user={user} />
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
 					{React.Children.map(children, (item) => {
-						return React.cloneElement(item, {routeProps: {user}});
+						return React.cloneElement(item, {user});
 					})}
 				</Layouts.NavContent.Content>
 			</Layouts.NavContent.Container>

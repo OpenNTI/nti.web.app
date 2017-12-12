@@ -16,7 +16,7 @@ const t = scoped('nti-site-admin.courses.info.Frame', DEFAULT_TEXT);
 @Store.connect({course: 'course', loading: 'loading'})
 export default class SiteAdminCourseView extends React.Component {
 	static propTypes = {
-		match: PropTypes.object,
+		courseID: PropTypes.string.isRequired,
 
 		course: PropTypes.object,
 		loading: PropTypes.bool,
@@ -31,11 +31,9 @@ export default class SiteAdminCourseView extends React.Component {
 
 
 	getCourseID (props = this.props) {
-		const {match} = props;
-		const {params} = match || {};
-		const {id} = params || {};
+		const {courseID} = props;
 
-		return decodeFromURI(id);
+		return decodeFromURI(courseID);
 	}
 
 
@@ -50,9 +48,7 @@ export default class SiteAdminCourseView extends React.Component {
 
 
 	componentDidMount () {
-		const id = this.getCourseID();
-
-		this.store.loadCourse(id);
+		this.store.loadCourse(this.getCourseID());
 	}
 
 
@@ -71,7 +67,6 @@ export default class SiteAdminCourseView extends React.Component {
 
 	renderCourse () {
 		const {course, children} = this.props;
-		const id = this.getCourseID();
 
 		if (!course) {
 			return null;
@@ -81,11 +76,11 @@ export default class SiteAdminCourseView extends React.Component {
 			<Layouts.NavContent.Container>
 				<Layouts.NavContent.Nav className="nav-bar">
 					{this.renderHeader()}
-					<NavBar course={course} id={id} />
+					<NavBar course={course} />
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
 					{React.Children.map(children, (item) => {
-						return React.cloneElement(item, {routeProps: {course}});
+						return React.cloneElement(item, {course});
 					})}
 				</Layouts.NavContent.Content>
 			</Layouts.NavContent.Container>
