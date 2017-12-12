@@ -40,7 +40,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
+	onEnroll: function () {
+		if(this.record) {
+			this.record.set('IsEnrolled', true);
+		}
+	},
+
 	onDrop: function () {
+		if(this.record) {
+			this.record.set('IsEnrolled', false);
+		}
+
 		// close window on drop or not?  for now, leave it open
 	},
 

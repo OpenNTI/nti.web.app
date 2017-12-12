@@ -162,9 +162,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 	},
 
 	onWindowClose: function (catalogEntry) {
-		var catalogEntryID = catalogEntry.getId();
+		var isEnrolled = catalogEntry && catalogEntry.get('IsEnrolled');
 
-		if (catalogEntryID && !this.CourseStore.findEnrollmentForCourse(catalogEntryID)) {
+		if (!isEnrolled) {
 			wait()
 				.then(this.pushRootRoute.bind(this, 'Library', '/library'));
 		}
