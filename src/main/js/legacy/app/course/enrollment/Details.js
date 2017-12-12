@@ -914,7 +914,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 						} else {
 							me.clearMessage();
 						}
-						done(true, changed);
+
+						if (me.onEnroll) {
+							done(true, changed);
+							me.onEnroll();
+						} else {
+							done(true, changed);
+						}
 					})
 					.catch(function (reason) {
 						if (reason === 409) {
