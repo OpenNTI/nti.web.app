@@ -154,6 +154,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			renderTo: this.detailsEl
 		});
 
+		// a little gross but the window pushing logic doesn't provide a route, so this is the easiest way to
+		// check whether we are opening this window from a redemption
+		if(window.location.href.indexOf('redeem=1') > 0) {
+			me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
+				course: me.course.get('Title')
+			}));
+		}
+
 		me.details.setContent(me.course);
 
 		me.on('destroy', 'destroy', me.details);
