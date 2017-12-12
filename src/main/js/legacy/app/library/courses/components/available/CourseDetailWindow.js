@@ -40,13 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-	onEnroll: function () {
-		this.record && this.record.updateFromServer();
-	},
-
 	onDrop: function () {
-		this.record && this.record.updateFromServer();
-
 		// close window on drop or not?  for now, leave it open
 	},
 

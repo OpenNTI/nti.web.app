@@ -531,11 +531,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		var me = this, c;
 
-		c = this.CourseStore.findCourseForNtiid(me.course.getId());
-		if (c) {
-			me.course = c;
+		if(updateFromStore) {
+			c = this.CourseStore.findCourseForNtiid(me.course.getId());
+			if (c) {
+				c = me.course;
+			}
 		}
-
 
 		me.cardsContainerEl.addCls('loading');
 		me.cardsContainerEl.dom.innerHTML = '';
@@ -808,12 +809,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		function done (success, changed) {
 			delete me.changingEnrollment;
 
-			var c = me.CourseStore.findCourseForNtiid(me.course.getId());
 			if (success && changed) {
-				if (c) {
-					me.course = c;
-				}
-
 				me.updateEnrollmentCard();
 			}
 
@@ -842,12 +838,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 									me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
 										course: courseTitle
 									}));
-									if (me.onDrop) {
-										done(true, changed);
-										me.onDrop();
-									} else {
-										done(true, changed);
-									}
+
+									me.course.updateFromServer().then(() => {
+										if (me.onDrop) {
+											done(true, changed);
+											me.onDrop();
+										} else {
+											done(true, changed);
+										}
+									});
 								})
 								.catch(function (reason) {
 									var msg;
@@ -915,12 +914,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 							me.clearMessage();
 						}
 
-						if (me.onEnroll) {
-							done(true, changed);
-							me.onEnroll();
-						} else {
-							done(true, changed);
-						}
+						me.course.updateFromServer().then(() => {
+							if (me.onEnroll) {
+								done(true, changed);
+								me.onEnroll();
+							} else {
+								done(true, changed);
+							}
+						});
 					})
 					.catch(function (reason) {
 						if (reason === 409) {

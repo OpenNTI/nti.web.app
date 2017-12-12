@@ -606,8 +606,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		// this.pushRoute('', '/');
 	},
 
-	onEnroll: function () {},
-
 	showCourse: function (course) {
 		var me = this;
 
@@ -616,8 +614,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				xtype: 'course-enrollment-details',
 				course: course,
 				ownerCt: me,
-				onDrop: me.onDrop.bind(me),
-				onEnroll: me.onEnroll.bind(me)
+				onDrop: me.onDrop.bind(me)
 			});
 		}
 
