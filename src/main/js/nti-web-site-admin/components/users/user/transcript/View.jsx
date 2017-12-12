@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Loading} from 'nti-web-commons';
 import {scoped} from 'nti-lib-locale';
+import {LinkTo} from 'nti-web-routing';
 
 import ErrorMessage from '../../../common/ErrorMessage';
 
@@ -81,7 +82,9 @@ export default class SiteAdminUserTranscript extends React.Component {
 				{items.map((item, index) => {
 					return (
 						<li key={index}>
-							<Item item={item} />
+							<LinkTo.Object object={item} context="site-admin.users.user-transcipt.list">
+								<Item item={item} />
+							</LinkTo.Object>
 						</li>
 					);
 				})}

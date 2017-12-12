@@ -21,6 +21,7 @@ export default class SiteAdminUserView extends React.Component {
 		user: PropTypes.object,
 		loading: PropTypes.bool,
 		store: PropTypes.object,
+		frameless: PropTypes.bool,
 
 		children: PropTypes.node
 	}
@@ -55,7 +56,11 @@ export default class SiteAdminUserView extends React.Component {
 	}
 
 	render () {
-		const {loading} = this.props;
+		const {loading, frameless, children} = this.props;
+
+		if (frameless) {
+			return children;
+		}
 
 		return (
 			<div className="site-admin-user-view">
