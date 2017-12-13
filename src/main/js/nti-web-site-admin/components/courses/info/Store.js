@@ -1,59 +1,48 @@
 import {getService} from 'nti-web-client';
+import {Stores} from 'nti-lib-store';
 
-import BasicStore from '../../BasicStore';
-
-export default class CourseInfoStore extends BasicStore {
+export default class CourseInfoStore extends Stores.SimpleStore {
 	constructor () {
 		super();
 
-		this._loading = false;
-		this._course = null;
-		this._error = null;
-	}
-
-
-	get loading () {
-		return this._loading;
+		this.set('loading', false);
+		this.set('course', null);
+		this.set('error', null);
 	}
 
 
 	get course () {
-		return this._course;
-	}
-
-
-	get error () {
-		return this._error;
+		return this.get('course');
 	}
 
 
 	async loadCourse (course) {
 		if (this.course && course === this.course.getID()) { return; }
 
-		this._course = null;
-		this._loading = true;
+		this.set('course', null);
+		this.set('loading', true);
 		this.emitChange('loading');
 
 		try {
 			const service = await getService();
 			const resolved = await service.getObject(course);
 
-			this._course = resolved;
+			this.set('course', resolved);
 			this.emitChange('course');
 		} catch (e) {
-			this._error = e;
+			this.set('error', e);
 			this.emitChange('error');
 		} finally {
-			this._loading = false;
+			this.set('loading', false);
 			this.emitChange('loading');
 		}
 	}
 
 
 	unloadCourse (course) {
-		if (course !== this.course.getID()) { return; }
+		if (this.course && course !== this.course.getID()) { return; }
 
-		this._course = null;
+		this.set('course', null);
 		this.onChange('course');
 	}
 }

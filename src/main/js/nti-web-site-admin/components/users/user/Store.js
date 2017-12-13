@@ -1,49 +1,39 @@
 import {User} from 'nti-web-client';
+import {Stores} from 'nti-lib-store';
 
-import BasicStore from '../../BasicStore';
-
-export default class UserStore extends BasicStore {
+export default class UserStore extends Stores.SimpleStore {
 	constructor () {
 		super();
 
-		this._loading = false;
-		this._user = null;
-		this._error = null;
-	}
-
-
-	get loading () {
-		return this._loading;
+		this.set('loading', false);
+		this.set('user', null);
+		this.set('error', null);
 	}
 
 
 	get user () {
-		return this._user;
+		return this.get('user');
 	}
 
-
-	get error () {
-		return this._error;
-	}
 
 
 	async loadUser (user) {
 		if (this.user && user === this.user.getID()) { return; }
 
-		this._user = null;
-		this._loading = true;
+		this.set('user', null);
+		this.set('loading', true);
 		this.emitChange('loading');
 
 		try {
 			const resolved = await User.resolve({entity: user});
 
-			this._user = resolved;
+			this.set('user', resolved);
 			this.emitChange('user');
 		} catch (e) {
-			this._error = e;
+			this.set('error', e);
 			this.emitChange('error');
 		} finally {
-			this._loading = false;
+			this.set('loading', false);
 			this.emitChange('loading');
 		}
 	}
@@ -52,7 +42,7 @@ export default class UserStore extends BasicStore {
 	unloadUser (user) {
 		if (user !== this.user.getID()) { return; }
 
-		this._user = null;
+		this.set('user', null);
 		this.onChange('user');
 	}
 }

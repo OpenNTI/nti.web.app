@@ -1,14 +1,13 @@
 import {getService} from 'nti-web-client';
+import {Stores} from 'nti-lib-store';
 
-import BasicStore from '../../../BasicStore';
-
-export default class UserTranscriptStore extends BasicStore {
+export default class UserTranscriptStore extends Stores.SimpleStore {
 	constructor () {
 		super();
 
-		this._items = [];
-		this._loading = false;
-		this._error = null;
+		this.set('items', []);
+		this.set('loading', false);
+		this.set('error', null);
 	}
 
 	get error () {
@@ -24,36 +23,35 @@ export default class UserTranscriptStore extends BasicStore {
 	}
 
 	async loadTranscript (user) {
-		this._items = [];
-		this._loading = true;
+		this.set('items', []);
+		this.set('loading', true);
 		this.emitChange('loading', 'items');
 
 		try {
 			const link = user.getLink('UserEnrollments');
 
-			if(link) {
+			if (link) {
 				const service = await getService();
 				const batch = await service.getBatch(link);
 
-				this._items = batch.Items;
-			}
-			else {
-				this._items = [];
+				this.set('items', batch.Items);
+			} else {
+				this.set('items', []);
 			}
 
 			this.emitChange('items');
 		} catch (e) {
-			this._error = e;
+			this.set('error', e);
 			this.emitChange('error');
 		} finally {
-			this._loading = false;
+			this.set('loading', false);
 			this.emitChange('loading');
 		}
 	}
 
 
 	unloadTranscript () {
-		this._items = [];
+		this.set('items', []);
 		this.emitChange('items');
 	}
 }
