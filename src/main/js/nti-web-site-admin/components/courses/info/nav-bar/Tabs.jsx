@@ -1,6 +1,5 @@
 import React from 'react';
 import {scoped} from 'nti-lib-locale';
-import {encodeForURI} from 'nti-lib-ntiids';
 import {LinkTo} from 'nti-web-routing';
 
 import Tabs from '../../../common/Tabs';

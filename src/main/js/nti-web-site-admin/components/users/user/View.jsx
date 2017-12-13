@@ -13,7 +13,6 @@ export default Router.for([
 		component: Enrollment,
 		frameless: true,
 		getRouteFor (obj, context) {
-			debugger;
 			if (obj.MimeType === 'application/vnd.nextthought.courseware.courseinstanceenrollment' && context === 'site-admin.users.user-transcipt.list') {
 				return `/transcript/${encodeForURI(obj.getID())}`;
 			}
