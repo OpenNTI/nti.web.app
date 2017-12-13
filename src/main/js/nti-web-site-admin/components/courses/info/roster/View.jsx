@@ -47,9 +47,9 @@ export default class SiteAdminCourseRoster extends React.Component {
 				{items.map((item, index) => {
 					return (
 						<li key={index}>
-							<LinkTo.Path to="./">
+							<LinkTo.Object object={item} context="site-admin.courses.course-roster.list">
 								<Item item={item} />
-							</LinkTo.Path>
+							</LinkTo.Object>
 						</li>
 					);
 				})}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function UserEnrollment () {
+export default function UserCourseEnrollment () {
 	return (
 		<div>
 			User Enrollment
