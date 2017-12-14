@@ -1,0 +1,55 @@
+@import '~nti-style-common';
+
+.site-admin-user-enrollment-identity {
+	padding: 0;
+
+	.profile-image {
+		position: relative;
+
+		.enrollment-course-image {
+			width: 100%;
+		}
+
+		.user-avatar {
+			position: absolute;
+			bottom: -14px;
+			right: 20px;
+
+			.avatar {
+				width: 40px;
+				display: block;
+				margin: 0 auto;
+				border-radius: 40px;
+				border: solid 1px white;
+			}
+		}
+	}
+
+	.enrollment-info {
+		padding: 1em;
+		font-size: 0.9em;
+		color: $primary-grey;
+
+		.course-title {
+			word-wrap: break-word;
+			max-width: 220px;
+		}
+
+		.plain-text {
+			font-size: 0.625rem;
+			text-transform: uppercase;
+			color: #888;
+		}
+
+		.actions {
+			margin-top: 1rem;
+			display: flex;
+			justify-content: space-between;
+
+			a {
+				text-decoration: none;
+				color: $primary-blue;
+			}
+		}
+	}
+}
