@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		} else if (this.LIBRARY_FRAG_ROUTE.test(fragment)) {
 			id = parts[2];//#!library, available courses, id
 			id = B64.decodeURLFriendly(id);
-			path = '/library/courses/available/';
+			path = '/catalog/object/';
 
 			if (parts[3] === 'redeem') {
 				subRoute = 'redeem/' + parts[4];
