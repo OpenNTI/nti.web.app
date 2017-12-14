@@ -25,7 +25,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'back-container', cn: [
 			{cls: 'branding'},
-			{cls: 'back'}
+			{cls: 'back', cn: [
+				{ cls: 'icon-remove' }
+			]}
 		]},
 		{cls: 'nav-container'},
 		{cls: 'search-container collapsed'},
