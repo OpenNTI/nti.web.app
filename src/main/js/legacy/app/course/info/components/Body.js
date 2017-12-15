@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 
 	scrollInfoSectionIntoView: function (route) {
 		var infoCmp = this.getComponent('info'),
-			scrollTarget, hash, brect;
+			scrollTarget, hash;
 
 		if (!infoCmp.rendered) {
 			this.mon(infoCmp, 'afterrender', this.scrollInfoSectionIntoView.bind(this, route));
@@ -85,16 +85,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		}
 
 		if (route === '/instructors') {
-			hash = 'course-info-instructors';
+			hash = 'facilitators-section';
 		}
 		else if (route === '/support') {
 			hash = 'course-info-support';
 		}
 
-		scrollTarget = infoCmp.down(hash);
-		scrollTarget = scrollTarget && scrollTarget.getEl();
-		brect = scrollTarget && scrollTarget.dom.getBoundingClientRect();
-		window.scrollTo(0, brect.top);
+		scrollTarget = infoCmp.getEl().dom.getElementsByClassName(hash)[0];
+		window.scrollTo(0, scrollTarget.offsetTop);
 	},
 
 
