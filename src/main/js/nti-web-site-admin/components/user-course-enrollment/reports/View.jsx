@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import {List} from 'nti-web-reports';
+
 SiteAdminUserEnrollmentReports.propTypes = {
-	user: PropTypes.object
+	enrollment: PropTypes.object
 };
-export default function SiteAdminUserEnrollmentReports ({user}) {
-	return (
-		<div className="site-admin-user-enrollment-reports">
-			<div>Report info goes here</div>
-		</div>
-	);
+export default function SiteAdminUserEnrollmentReports ({enrollment}) {
+	return enrollment ?
+		(<List object={enrollment} />) :
+		null;
 }
