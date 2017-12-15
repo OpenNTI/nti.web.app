@@ -5,14 +5,15 @@ import {scoped} from 'nti-lib-locale';
 
 const DEFAULT_TEXT = {
 	download: 'Download',
-	loading: 'Generating Report',
+	loading: 'Generating',
 	done: 'Done'
 };
 const t = scoped('nti-web-reports.viewer.View', DEFAULT_TEXT);
 
 export default class ReportViewer extends React.Component {
 	static propTypes = {
-		report: PropTypes.object.isRequired
+		report: PropTypes.object.isRequired,
+		onDismiss: PropTypes.func
 	}
 
 	static show (report) {
@@ -55,28 +56,47 @@ export default class ReportViewer extends React.Component {
 
 	onError = () => {}
 
+	onDismiss = () => {
+		const {onDismiss} = this.props;
+
+		if (onDismiss) {
+			onDismiss();
+		}
+	}
+
 
 	render () {
 		const {report} = this.props;
 		const {loading} = this.state;
 		const buttons = [
-			{label: t('done'), action: this.onDismiss}
+			{label: t('done'), onClick: this.onDismiss}
 		];
 
 		return (
 			<div className="report-viewer">
 				<div className="header">
-					<div className="name">
+					<div className="title">
 						{report.title}
 					</div>
-					<a className="download" href={this.getDownloadLink} Download>
-						<i className="icon-download" />
+					<a className="download" href={this.getDownloadLink()} download>
+						<i className="icon-upload" />
 						<span>{t('download')}</span>
 					</a>
+					<i className="icon-light-x" onClick={this.onDismiss}/>
 				</div>
 				<div className="content">
 					{loading && (<Loading.Mask message={t('loading')} />)}
-					<iframe src={this.getEmbedLink()} onLoad={this.onLoad} onError={this.onError}/>
+					<iframe
+						src={this.getEmbedLink()}
+						onLoad={this.onLoad}
+						onError={this.onError}
+						frameBorder="0"
+						marginWidth="0"
+						marginHeight="0"
+						seamless="true"
+						transparent="true"
+						allowTransparency="true"
+					/>
 				</div>
 				<DialogButtons buttons={buttons} />
 			</div>
