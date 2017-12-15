@@ -147,20 +147,35 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		var me = this;
 
+		// a little gross but the window pushing logic doesn't provide a route, so this is the easiest way to
+		// check whether we are opening this window from a redemption
+		if(window.location.href.indexOf('redeem=1') > 0) {
+			me.addMask();
+
+			var fulfill = () => {
+				me.removeMask();
+				me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
+					course: me.course.get('Title')
+				}));
+			};
+
+			var reject = () => {
+				// enrollment was still successful but updating the store wasn't.. should we do anything here?
+				me.removeMask();
+				me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
+					course: me.course.get('Title')
+				}));
+			};
+
+			this.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
+		}
+
 		me.details = Ext.widget('course-info-panel', {
 			videoWidth: 642,
 			videoHeight: 360,
 			viewOnly: true,
 			renderTo: this.detailsEl
 		});
-
-		// a little gross but the window pushing logic doesn't provide a route, so this is the easiest way to
-		// check whether we are opening this window from a redemption
-		if(window.location.href.indexOf('redeem=1') > 0) {
-			me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
-				course: me.course.get('Title')
-			}));
-		}
 
 		me.details.setContent(me.course);
 
