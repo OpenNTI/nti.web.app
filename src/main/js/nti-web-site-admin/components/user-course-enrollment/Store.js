@@ -36,7 +36,6 @@ export default class EnrollmentStore extends Stores.SimpleStore {
 
 		try {
 			const service = await getService();
-
 			const resolved = await this.getEnrollment(service, enrollmentID);
 
 			this.set('enrollment', resolved);

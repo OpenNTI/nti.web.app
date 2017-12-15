@@ -1,23 +1,25 @@
 @import '~nti-style-common';
 
-.site-admin-user-overview {
-	@include clearfix;
+.site-admin-user-enrollment-overview {
+	.date-info {
+		display: flex;
 
-	& > * {
-		float: left;
-		padding: 0 0.5rem 0.5rem 0;
-	}
+		.joined {
+			margin: 0 10px 10px 0;
+			width: 370px;
 
-	.joined {
-		width: 50%;
+			.site-admin-card {
+				background-color: #3fb34f;
+				color: white;
+			}
+		}
 
-		.site-admin-date-value {
-			background-color: $primary-green;
-			color: white;
+		.last-activity {
+			width: 370px;
 		}
 	}
 
-	.last-login {
-		width: 50%;
+	.active-times-widget {
+		margin: 10px 0 0;
 	}
 }
