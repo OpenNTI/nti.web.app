@@ -370,6 +370,13 @@ body.dragging * {
 				min-height: 28px;
 
 				&:empty {display: none;}
+
+				& > pre {
+					padding: 6px 20px;
+					background-color: rgba(0, 0, 0, 0.05);
+					overflow-x: auto;
+					line-height: 0.8em;
+				}
 			}
 			.question-number-container {
 				top: 21px;
