@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			},
 			root = i && i.root,
 			ntiid = n.getAttribute('ntiid'),
-			href = Globals.getURL('') + "/dataserver2/Objects/" + ntiid + '/@@launch';
+			href = Globals.getURL('') + '/dataserver2/Objects/' + ntiid + '/@@launch';
 
 
 		resolveIcon(config, n, root)
