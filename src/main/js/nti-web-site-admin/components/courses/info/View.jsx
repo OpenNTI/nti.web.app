@@ -23,7 +23,7 @@ export default Router.for([
 		}
 	}),
 	Route({path: '/roster', component: Roster, name: 'site-admin.courses.course-roster'}),
-	Route({path: '/reports', component: Reports, name: 'site-admin.courses.course-rerpots'}),
+	Route({path: '/reports', component: Reports, name: 'site-admin.courses.course-reports'}),
 	Route({path: '/', component: Overview, name: 'site-admin.courses.course-overview'})
 ], {frame: Frame});
 

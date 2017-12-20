@@ -8,7 +8,8 @@ import Store from './Store';
 import NavBar from './nav-bar';
 
 const DEFAULT_TEXT = {
-	back: 'Back to User'
+	backToUser: 'Back to User',
+	backToCourse: 'Back to Course'
 };
 
 const t = scoped('nti-site-admin.users.user.user-course-enrollment.Frame', DEFAULT_TEXT);
@@ -17,9 +18,11 @@ const t = scoped('nti-site-admin.users.user.user-course-enrollment.Frame', DEFAU
 export default class SiteAdminUserEnrollmentView extends React.Component {
 	static propTypes = {
 		enrollmentID: PropTypes.string,
+		courseContext: PropTypes.bool,
+		userContext: PropTypes.bool,
+
 		loading: PropTypes.bool,
 		store: PropTypes.object,
-
 		enrollment: PropTypes.object,
 
 		children: PropTypes.node
@@ -80,11 +83,15 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 
 
 	renderHeader () {
+		const {courseContext} = this.props;
+		const linkName = courseContext ? 'site-admin.courses.course-roster' : 'site-admin.users.user-overview';
+		const label = courseContext ? t('backToCourse') : t('backToUser');
+
 		return (
 			<div className="header">
-				<LinkTo.Name name="site-admin.users.user-overview">
+				<LinkTo.Name name={linkName}>
 					<i className="icon-chevron-left" />
-					<span>{t('back')}</span>
+					<span>{label}</span>
 				</LinkTo.Name>
 			</div>
 		);
