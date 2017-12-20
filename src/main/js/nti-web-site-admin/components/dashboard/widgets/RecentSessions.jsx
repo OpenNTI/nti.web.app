@@ -7,7 +7,6 @@ import {getLink} from 'nti-lib-interfaces';
 
 const ANALYTICS = 'Analytics';
 const SESSIONS_LINK = 'sessions';
-const NUM_DAYS = 7;
 const LIMIT = 10;
 const PAGE_SIZE = 6;
 
@@ -157,8 +156,7 @@ export default class RecentSessions extends React.Component {
 			const service = await getService();
 			const sessionsCollection = service.getWorkspace(ANALYTICS);
 			const link = getLink(sessionsCollection, SESSIONS_LINK);
-			const xDaysAgo = Math.floor((new Date().getTime() / 1000) - (24 * 60 * 60 * NUM_DAYS));
-			const sessions = await service.get(link + '?notBefore=' + xDaysAgo + '&limit=' + LIMIT);
+			const sessions = await service.get(link + '?limit=' + LIMIT);
 
 			const resolvedItems = await this.getDataWithUsers(sessions.Items.slice(0, PAGE_SIZE));
 
