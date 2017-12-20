@@ -1,20 +1,19 @@
 const Ext = require('extjs');
 
-const ExternalToolAsset = require('legacy/model/ExternalToolAsset');
-const Globals = require('legacy/util/Globals');
+const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('../Editor');
 
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.externaltoolasset.Editor', {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ltiexternaltoolasset.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-externaltoolasset',
+	alias: 'widget.overview-editing-ltiexternaltoolasset',
 
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				ExternalToolAsset.mimeType
+				LTIExternalToolAsset.mimeType
 			];
 		},
 
@@ -23,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{
 					title: 'Add an LTI Tool',
 					advanced: false,
-					category: 'externaltoolasset',
+					category: 'ltiexternaltoolasset',
 					iconCls: 'link',
 					description: '',
 					editor: this
@@ -32,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	cls: 'content-editor externaltoolasset',
+	cls: 'content-editor ltiexternaltoolasset',
 
 	showEditor: function () {
 		var href = this.parentRecord.data.href + '/@@create_external_tool';

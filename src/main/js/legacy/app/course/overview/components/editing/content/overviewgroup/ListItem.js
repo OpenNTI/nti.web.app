@@ -6,7 +6,7 @@ const MoveInfo = require('legacy/model/app/MoveInfo');
 
 const ContentlinkListItem = require('../contentlink/ListItem');
 const DiscussionListItem = require('../discussion/ListItem');
-const ExternalToolAssetItem = require('../externaltoolasset/ListItem');
+const LTIExternalToolAssetItem = require('../ltiexternaltoolasset/ListItem');
 const PollListItem = require('../poll/ListItem');
 const QuestionsetListItem = require('../questionset/ListItem');
 const SurveyListItem = require('../survey/ListItem');
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			items = [
 				ContentlinkListItem,
 				DiscussionListItem,
-				ExternalToolAssetItem,
+				LTIExternalToolAssetItem,
 				PollListItem,
 				QuestionsetListItem,
 				SurveyListItem,
