@@ -6,7 +6,7 @@ const {getString} = require('legacy/util/Localization');
 
 require('../parts/ContentLink');
 require('../parts/Discussion');
-require('../parts/ExternalToolAsset');
+require('../parts/LTIExternalToolAsset');
 require('../parts/Header');
 require('../parts/IframeWindow');
 require('../parts/Poll');

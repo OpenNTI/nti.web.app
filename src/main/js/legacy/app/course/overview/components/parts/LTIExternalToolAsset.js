@@ -2,7 +2,7 @@ const Ext = require('extjs');
 
 const Globals = require('legacy/util/Globals');
 
-require('legacy/model/ExternalToolAsset');
+require('legacy/model/LTIExternalToolAsset');
 require('legacy/common/components/cards/Card');
 
 function resolveIcon (config, n, root) {
@@ -21,12 +21,11 @@ function resolveIcon (config, n, root) {
 }
 
 
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.ExternalToolAsset', {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.LTIExternalToolAsset', {
 	extend: 'NextThought.common.components.cards.Card',
 
 	alias: [
-		'widget.course-overview-externaltoolasset',
-		'widget.course-overview-lticonfiguredtool',
+		'widget.course-overview-ltiexternaltoolasset',
 	],
 
 	doNotRenderIcon: true,
@@ -37,8 +36,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				root: config.course && config.course.getContentRoots() && config.course.getContentRoots()[0]
 			},
 			root = i && i.root,
+			links = n.getAttribute('Links'),
+			link = Service.getLinkFrom(links, 'Launch'),
 			ntiid = n.getAttribute('ntiid'),
-			href = Globals.getURL('') + '/dataserver2/Objects/' + ntiid + '/@@launch';
+			href = Globals.getURL(link);
 
 
 		resolveIcon(config, n, root)
