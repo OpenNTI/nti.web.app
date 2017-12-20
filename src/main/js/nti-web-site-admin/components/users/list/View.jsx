@@ -56,7 +56,7 @@ export default class UserListView extends React.Component {
 				{...this.props}
 				className="site-admin-user-list"
 				renderEmptyState={this.renderEmptyState}
-				loadNextPage={this.loadNextPage}
+				loadNextPage={this.onLoadNextPage}
 				renderItem={this.renderItem}
 				getString={t}
 			/>
