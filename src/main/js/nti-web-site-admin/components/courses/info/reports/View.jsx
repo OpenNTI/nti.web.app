@@ -1,7 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function SiteAdminCourseReports () {
-	return (
-		<span>Reports</span>
-	);
+import {List} from 'nti-web-reports';
+
+import Card from '../../../common/Card';
+
+
+SiteAdminCourseReports.propTypes = {
+	course: PropTypes.object
+};
+export default function SiteAdminCourseReports ({course}) {
+	return course ?
+		(<Card><List object={course} /></Card>) :
+		null;
 }
