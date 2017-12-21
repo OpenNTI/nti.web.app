@@ -44,7 +44,7 @@
     "node-natural-sort": "^0.8.6",
     "nti-analytics": "^2.0.9",
     "nti-app-scripts": "^1.0.50",
-    "nti-assignment-editor": "^1.10.0",
+    "nti-assignment-editor": "^1.10.2",
     "nti-commons": "^2.0.0",
     "nti-content": "^1.14.1",
     "nti-lib-dispatcher": "^1.0.0",
