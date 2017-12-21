@@ -104,8 +104,8 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				return wait();
 			})
 			.then(function () {
-				me.store.onLogin();
 				AnalyticsUtil.beginSession();
+				me.store.onLogin();
 
 				return wait();
 			})
