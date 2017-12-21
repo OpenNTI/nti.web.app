@@ -132,6 +132,8 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		//Don't handle the state until we are logged in
 		if (!this.loggedIn) { return; }
 
+		this.currentMyRoute = path;
+
 		//Get the first part of the path and use that as the path root for all the routes
 		this.APP_ROOT = parts[0];
 
