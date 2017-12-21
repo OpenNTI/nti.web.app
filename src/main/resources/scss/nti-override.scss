@@ -69,15 +69,24 @@ body.x-body {margin:0;}
 		width: 100%;
 		font-size: 90%;
 		background-color: #f0f0f0;
-		padding-top: 5px;
-		padding-bottom: 5px;
+		padding-top: 16px;
+		padding-bottom: 16px;
 		font-family: Monaco, "Courier New", Courier, fixed;
 		padding-left: 4ex;
+		overflow: scroll;
+		line-height: 1em;
+		word-wrap: normal;
+
+		* {
+			word-wrap: normal;
+		}
 
 		&.code {
 			overflow: scroll;
 			line-height: 1em;
 			word-wrap: normal;
+			padding-top: 5px;
+			padding-bottom: 5px;
 
 			* {
 				word-wrap: normal;
