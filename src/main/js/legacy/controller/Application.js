@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	handleRoute: function (title, route, precache) {
+	handleRoute: function (title, route, precache, afterRoute) {
 		var me = this, location;
 
 		function handleRoute (r, p) {
@@ -280,11 +280,11 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		this.currentRoute = location.pathname + (location.search || '') + (location.hash || '');
 
 		return handleRoute(this.currentRoute, precache)
-			.then(this.onRoute.bind(this, title, route));
+			.then(this.onRoute.bind(this, title, route, afterRoute));
 	},
 
 
-	onRoute: function (title, route) {
+	onRoute: function (title, route, afterRoute) {
 		var body = this.getBody(),
 			store = this.ContextStore;
 
@@ -296,6 +296,10 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			.then(function (context) {
 				store.setContext(context, title || document.title, route);
 			});
+
+		if (afterRoute) {
+			afterRoute();
+		}
 	},
 
 
@@ -336,7 +340,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	__doRoute: function (fn, state, title, route, precache) {
+	__doRoute: function (fn, state, title, route, precache, afterRoute) {
 		var me = this,
 			body = me.getBody(),
 			myTitle = me.__mergeTitle(title),
@@ -356,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			// history[fn](state || window.history.state, myTitle, myRoute);
 			document.title = title;
 
-			me.handleRoute(title, route, precache);
+			me.handleRoute(title, route, precache, afterRoute);
 		}
 
 		function stopNav () {
@@ -376,7 +380,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 
 	pushRoute: function (title, route, precache) {
-		this.__doRoute('push', null, title, route, precache);
+		this.__doRoute('push', null, title, route, precache, () => {
+			window.scroll(0, 0);
+		});
 	},
 
 
