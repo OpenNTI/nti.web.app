@@ -1,6 +1,6 @@
 {
   "name": "nti-web-app",
-  "version": "2017.15.0-alpha",
+  "version": "2017.15.0",
   "description": "NextThought web application",
   "author": "nextthought",
   "license": "UNLICENSED",
@@ -79,6 +79,5 @@
     "whatwg-fetch": "^2.0.0",
     "xregexp": "^3.1.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
