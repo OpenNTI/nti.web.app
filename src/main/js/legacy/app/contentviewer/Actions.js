@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		}
 
 		if (description) {
-			contents.push({cls: 'sidebar', html: description});
+			contents.push({cls: 'sidebar assignment-description', html: description});
 		}
 
 		return Promise.resolve(contents);
