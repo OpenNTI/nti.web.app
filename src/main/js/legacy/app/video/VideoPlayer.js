@@ -1,86 +1,10 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
-//TODO: Use the Component named export of nti-web-video to get analytics by default...
-const {default: Video, UNSTARTED, ENDED, PLAYING, PAUSED, BUFFERING, CUED} = require('nti-web-video');
+const {Component: Video, UNSTARTED, ENDED, PLAYING, PAUSED, BUFFERING, CUED} = require('nti-web-video');
 
 const AnalyticsUtil = require('../../util/Analytics');
+
 require('legacy/overrides/ReactHarness');
-
-const TIME_CHANGE_THRESHOLD = 5;
-
-//TODO: throw this away and use the analytics from the video player
-function getAnalyticMethods (doNotAllow, hasTranscript) {
-	let hasWatch = false;
-	let lastTime;
-
-	return {
-		start (state) {
-			if (doNotAllow || hasWatch || !state) { return; }
-
-			const {video, time, duration, speed} = state;
-
-			AnalyticsUtil.startEvent(video, {
-				type: 'VideoWatch',
-				withTranscript: hasTranscript,
-				videoStartTime: time,
-				duration: duration,
-				playSpeed: speed
-			});
-
-			hasWatch = true;
-		},
-
-		stop (state) {
-			if (doNotAllow || !hasWatch || !state) { return; }
-
-			const {video, time, duration} = state;
-
-			AnalyticsUtil.stopEvent(video, 'VideoWatch', {
-				videoEndTime: time,
-				duration: duration
-			});
-
-			hasWatch = false;
-		},
-
-
-		onHeartBeat (state) {
-			if (doNotAllow || !hasWatch || !state) { return; }
-
-			const {video, time, state:playerState} = state;
-			const diff = lastTime ? (time - lastTime) : 0;
-
-			if (diff > TIME_CHANGE_THRESHOLD || diff < 0) {
-				this.stop(state);
-				this.start(state);
-
-				if (playerState !== UNSTARTED) {
-					AnalyticsUtil.sendEvent(video, {
-						type: 'VideoSkip',
-						withTranscript: hasTranscript,
-						videoStartTime: lastTime,
-						videoEndTime: time
-					});
-				}
-			}
-
-			lastTime = time;
-		},
-
-		playbackRateChange (oldRate, newRate, state) {
-			if (doNotAllow || !state) { return; }
-
-			const {video, time} = state;
-
-			AnalyticsUtil.sendEvent(video, {
-				type: 'VideoSpeedChange',
-				oldPlaySpeed: oldRate,
-				newPlaySpeed: newRate,
-				videoTime: time
-			});
-		}
-	};
-}
 
 
 module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
@@ -134,13 +58,12 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 		this.trackThis();
 
-		this.analytics = getAnalyticMethods(this.doNotCaptureAnalytics, !!this.up('media-view'));
+		this.withTranscripts = !!this.up('media-view');
 
 		this.taskMediaHeartBeat = {
 			interval: 1000,
 			scope: this,
 			run: () => {
-				this.analytics.onHeartBeat(this.queryPlayer());
 				this.fireEvent('media-heart-beat');
 				this.maybeSyncHeight();
 			},
@@ -241,6 +164,11 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 					autoPlay: !this.doNotAutoPlay,
 					width: this.playerWidth,
 					height: this.playerHeight,
+					analyticsData: {
+						context: AnalyticsUtil.getContext(),
+						resourceId: this.currentVideoId,
+						withTranscripts: this.withTranscripts,
+					},
 					onSeeked: (e) => this.onSeeked(e),
 					onPlaying: (e) => this.onPlaying(e),
 					onPause: (e) => this.onPause(e),
@@ -253,10 +181,6 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 				this.fireEvent('player-command-activate');
 				this.maybeSyncHeight();
-
-				if (!this.doNotAutoPlay) {
-					this.analytics.start(this.queryPlayer());
-				}
 			});
 	},
 
@@ -272,7 +196,6 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 	stopPlayback () {
 		if (this.videoPlayer && this.videoPlayer.componentInstance) {
 			this.videoPlayer.componentInstance.stop();
-			this.analytics.stop(this.queryPlayer());
 		} else {
 			this.commandQueue.push(() => this.stopPlayback());
 		}
@@ -323,22 +246,16 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 
 	onPlaying () {
-		this.analytics.start(this.queryPlayer());
-
 		this.fireEvent('player-event-play');
 	},
 
 
 	onPause () {
-		this.analytics.stop(this.queryPlayer());
-
 		this.fireEvent('player-event-paused');
 	},
 
 
 	onEnded () {
-		this.analytics.stop(this.queryPlayer());
-
 		this.fireEvent('player-event-ended');
 	},
 
@@ -349,8 +266,6 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 
 	onRateChange (oldRate, newRate) {
-		this.analytics.playbackRateChange(oldRate, newRate, this.queryPlayer());
-
 		this.fireEvent('player-playback-rate-change');
 	}
 });
