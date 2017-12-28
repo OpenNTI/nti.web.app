@@ -30,7 +30,7 @@ NTIStrings['forums.empty_boards_header'] = 'Oh no! It\'s empty!';
 NTIStrings['forums.empty_boards_sub'] = 'There are no forum boards yet.';
 
 NTIStrings['contact_us_title'] = 'Contact Us...';
-NTIStrings['contact_us_message'] = 'Please use the form below to share your comments, report an issue, or suggest new features.  If you need help or have a question about the features, please take a look at the NextThought Help Center.  We may already have content there to help you.';
+NTIStrings['contact_us_message'] = 'Please use the form below to share your comments, report an issue, or suggest new features.  If you need help or have a question about the features, please take a look at the <a class="link" target="_blank" href="http://help.nextthought.com">NextThought Help Site</a>.  We may already have content there to help you.';
 
 NTIStrings['alias_request_title'] = 'Request Name Change';
 NTIStrings['alias_request_message'] = 'Please use the form below to request a change in the way your name is displayed. Submit the name you would like to use and the reason for making this change.';
@@ -830,7 +830,7 @@ NTIStrings['contacts_all_contact'] = 'All Contacts';
 NTIStrings['contacts_all_list'] = 'All Lists';
 NTIStrings['contacts_all_group'] = 'All Groups';
 NTIStrings['contact_us_title'] = 'Contact Us...';
-NTIStrings['contact_us_message'] = 'Please use the form below to share your comments, report an issue, or suggest new features.  If you need help or have a question about the features, please take a look at the NextThought Help Center.  We may already have content there to help you.';
+NTIStrings['contact_us_message'] = 'Please use the form below to share your comments, report an issue, or suggest new features.  If you need help or have a question about the features, please take a look at the <a class="link" target="_blank" href="http://help.nextthought.com">NextThought Help Site</a>.  We may already have content there to help you.';
 NTIStrings['Apologies'] = 'Our Apologies!';
 NTIStrings['Cannot load page.'] = 'Cannot load page. Please try again later.';
 NTIStrings['UnresolvedUsernamePattern'] = 'Anonymous ####';
