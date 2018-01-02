@@ -272,7 +272,7 @@ describe ('Router mixin tests', () => {
 		});
 
 		test ('Navigate to Object calls parent', function (done) {
-			var obj = {parent: () => { console.log('Parent'); }, child: () => { console.log('Child'); }},
+			var obj = {parent: () => {}, child: () => {}},
 				// first = false, second = false,
 				note = NextThought.model.Note.create(),
 				page = NextThought.model.PageInfo.create(),

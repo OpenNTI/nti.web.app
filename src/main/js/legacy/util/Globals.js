@@ -894,7 +894,7 @@ function makeImage (prop) {
 	src = exports.getResourceURL(src);
 
 	if (!src) {
-		console.warn('No Image for: ' + prop);
+		// console.warn('No Image for: ' + prop);
 		return;
 	}
 

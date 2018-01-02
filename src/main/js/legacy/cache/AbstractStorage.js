@@ -142,7 +142,7 @@ Object.assign(AbstractStorage.prototype, {
 const fallback = {
 	data: {},
 	removeItem (k) {delete this.data[k];},
-	setItem (k, v) {this.data[k] = v; console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');},
+	setItem (k, v) {this.data[k] = v; /*console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');*/},
 	getItem (k) {return this.data[k];},
 	clear () {this.data = {};}
 };

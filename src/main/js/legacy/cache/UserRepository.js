@@ -809,5 +809,5 @@ try {
 		console.error('No Worker for bulk resolve');
 	};
 } catch (e) {
-	console.error('No Worker for bulk resolve');
+	//console.error('No Worker for bulk resolve');
 }
