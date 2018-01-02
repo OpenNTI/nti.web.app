@@ -41,6 +41,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 				},{
 					Label: getString('course-info.course-supoprt.link3.Label', null, true),
 					URL: getString('course-info.course-supoprt.link3.URL', null, true)
+				},
+				{
+					Label: getString('course-info.course-support.help-site.Label', null, true),
+					URL: getString('course-info.course-support.help-site.URL', null, true)
 				}
 			].filter(clean)
 		});
