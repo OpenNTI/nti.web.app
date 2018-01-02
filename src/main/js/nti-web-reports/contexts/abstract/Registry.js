@@ -11,8 +11,10 @@ function getTypeMap (types) {
 
 export default class Registry {
 	static register (types) {
+		const registry = this;
+
 		return function decorator (item) {
-			this.registerItem(types, item);
+			registry.registerItem(types, item);
 		};
 	}
 
@@ -20,6 +22,8 @@ export default class Registry {
 		const Register = this;
 
 		this[INSTANCE] = this[INSTANCE] || new Register;
+
+		return this[INSTANCE];
 	}
 
 	static registerItem (types, item) {

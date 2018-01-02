@@ -1,3 +1,5 @@
+import ReportStore from './ReportStore';
+
 export default class ReportContext {
 	constructor (object) {
 		this.context = object;
@@ -11,7 +13,8 @@ export default class ReportContext {
 	 * {
 	 * 	rel: String,
 	 * 	name: String,
-	 * 	description: String
+	 * 	description: String,
+	 * 	supported_types: []
 	 * }
 	 *
 	 * @type {Array}
@@ -25,7 +28,8 @@ export default class ReportContext {
 	 *
 	 * {
 	 * 	name: String,
-	 * 	context: ReportContext (instance of this class)
+	 * 	context: ReportContext (instance of this class),
+	 * 	store: Store to load the items for this context
 	 * }
 	 *
 	 * @type {Array}
@@ -34,13 +38,13 @@ export default class ReportContext {
 
 
 	/**
-	 * How to group the reports
+	 * How to group/order reports the reports
 	 *
 	 * Items should look like :
 	 *
 	 * {
 	 * 	name: String,
-	 * 	rels: [String]
+	 * 	rels: [String] //in the order they should appear
 	 * }
 	 *
 	 * @type {Array}
@@ -54,13 +58,48 @@ export default class ReportContext {
 	}
 
 
-	getReports () {
+	getReportGroups () {
 		if (!this.canAccessReports()) { return []; }
 
-		const {reports} = this;
+		const {groups} = this;
+		const reports = this.getContextReports();
 		const subReports = this.getSubContextReports();
 
-		return [...reports, ...subReports];
+		const reportMap = ([...reports, ...subReports]).reduce((acc, report) => {
+			acc[report.rel] = report;
+			return acc;
+		}, {});
+
+		let groupedReports = [];
+
+		for (let group of groups) {
+			groupedReports.push({
+				name: group.name,
+				reports: group.rels.map(rel => reportMap[rel])
+			});
+		}
+
+		return groupedReports;
+	}
+
+
+	getContextReports () {
+		const {reports, context} = this;
+		const contextReports = context.Reports.reduce((acc, report) => {
+			acc[report.rel] = report;
+			return acc;
+		}, {});
+
+		return reports.map((report) => {
+			const contextReport = contextReports[report.rel];
+
+			return {
+				name: report.name,
+				description: report.description,
+				'supported_types': report.supported_types,
+				store: new ReportStore(contextReport)
+			};
+		});
 	}
 
 	getSubContextReports () {
@@ -71,7 +110,7 @@ export default class ReportContext {
 		for (let subContext of subContexts) {
 			const subReports = subContext.reports;
 
-			reports = reports.concat(subReports.map(subReport => ({...subReport, context: subContext.name})));
+			reports = reports.concat(subReports.map(subReport => ({...subReport, context: subContext})));
 		}
 
 		return reports;

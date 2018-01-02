@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import Item from './Item';
+import {getContext} from '../contexts';
+
+import Group from './Group';
 
 export default class ReportsList extends React.Component {
 	static propTypes = {
@@ -13,13 +15,14 @@ export default class ReportsList extends React.Component {
 
 	render () {
 		const {object, className} = this.props;
-		const {Reports: reports} = object || {};
-		const hasReports = reports && !!reports.length;
+		const context = getContext(object);
+		const hasReports = context.canAccessReports();
+		const groups = context.getReportGroups();
 
 		return (
 			<div className={cx('reports-list-view', className)}>
 				{!hasReports && this.renderEmpty()}
-				{hasReports && this.renderReports(reports)}
+				{hasReports && this.renderReportGroups(groups)}
 			</div>
 		);
 	}
@@ -32,13 +35,13 @@ export default class ReportsList extends React.Component {
 	}
 
 
-	renderReports (reports) {
+	renderReportGroups (groups) {
 		return (
-			<ul>
-				{reports.map((report, index) => {
+			<ul className="groups">
+				{groups.map((group, index) => {
 					return (
 						<li key={index}>
-							<Item report={report} />
+							<Group group={group} />
 						</li>
 					);
 				})}
