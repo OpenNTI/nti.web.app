@@ -3,6 +3,7 @@
 .site-admin-course-info {
 	display: flex;
 	min-height: rem-calc(117px);
+	overflow: hidden;
 
 	.course-icon {
 		width: rem-calc(160px);
@@ -16,6 +17,7 @@
 		display: flex;
 		flex-direction: column;
 		padding: 0.3rem;
+		max-width: calc(100% - 10rem);
 
 		& > .label {
 			font: normal 700 0.75rem/1.25 $body-font-family;
@@ -28,6 +30,8 @@
 			font: normal 400 1.25rem/1.25 $body-font-family;
 			color: $primary-grey;
 			flex: 1 1 auto;
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 
 		.meta {
