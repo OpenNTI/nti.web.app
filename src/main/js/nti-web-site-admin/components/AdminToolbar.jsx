@@ -7,6 +7,7 @@ export default class AdminToolbar extends React.Component {
 	static propTypes = {
 		handleNav: PropTypes.func.isRequired,
 		onCourseCreated: PropTypes.func,
+		onCourseModified: PropTypes.func,
 		canCreate: PropTypes.bool
 	}
 
@@ -35,11 +36,11 @@ export default class AdminToolbar extends React.Component {
 	}
 
 	launchCourseWizard = () => {
-		const { onCourseCreated } = this.props;
+		const { onCourseCreated, onCourseModified } = this.props;
 
 		this.flyout && this.flyout.dismiss();
 
-		Editor.createCourse().then(() => {
+		Editor.createCourse(onCourseModified).then(() => {
 			// course was created, do post processing
 			onCourseCreated && onCourseCreated();
 		});

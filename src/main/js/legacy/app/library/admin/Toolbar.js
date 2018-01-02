@@ -31,6 +31,10 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 			this.CourseStore.fireEvent('added-course');
 		};
 
+		const onCourseModified = () => {
+			this.CourseStore.fireEvent('modified-course');
+		};
+
 		// if AdminLevels link is missing, we won't be able to create a course anyway,
 		// so drive create button by this link
 		const canCreate =
@@ -43,6 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Toolbar', {
 			component: AdminToolbar,
 			handleNav: handleNav,
 			onCourseCreated: onCourseCreated,
+			onCourseModified: onCourseModified,
 			canCreate: canCreate
 		});
 	}
