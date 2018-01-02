@@ -282,7 +282,12 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			toRemove, i;
 
 		if (typeof html === 'string') {
-			offScreenBuffer.innerHTML = html.replace(/[\n\r]+/ig, ' ').replace(/[\x00-\x08\x0B\x0E-\x1F]/g, '');
+			offScreenBuffer.innerHTML = html
+				.replace(/[\n\r]+/ig, ' ')
+				// We explicitly need to remove control characters from the string...
+				// so this lint error needs to be surpassed here.
+				//eslint-disable-next-line no-control-regex
+				.replace(/[\x00-\x08\x0B\x0E-\x1F]/g, '');
 		} else {
 			offScreenBuffer.appendChild(html.cloneNode(true));
 		}
