@@ -16,6 +16,17 @@ const SHORT_WEEKDAYS = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
 
 const t = scoped('nti-web-site-admins.components.common.activedays', LABELS);
 
+function makeMonthLabel (day) {
+	// if we want to show the last two digits of the year for each Jan label
+	// then use the logic below (so the chart might look like Nov   Dec    Jan '18    Feb   etc...)
+	//
+	// if(day.firstOfFullWeek === 'jan') {
+	// 	return 'jan \'' + day.date.getFullYear().toString().substr(2,2);
+	// }
+
+	return day.firstOfFullWeek;
+}
+
 class Day extends React.Component {
 	static propTypes = {
 		day: PropTypes.object.isRequired,
@@ -38,7 +49,7 @@ class Day extends React.Component {
 		});
 
 		return (
-			<div className={className} data-month={day.firstOfFullWeek}>
+			<div className={className} data-month={makeMonthLabel(day)}>
 				<div className="activity-day" style={{
 					backgroundColor: determineBlockColor(day.value, min, max)
 				}}/>

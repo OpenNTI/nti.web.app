@@ -16,6 +16,10 @@
 		margin: 0 5px 100px;
 		height: auto;
 
+		.no-data {
+			margin-left: 17px;
+		}
+
 		.daily-activity-body .activity-day-row {
 			.activity-day-wrapper.first-of-week::before {
 				font-size: 12px;

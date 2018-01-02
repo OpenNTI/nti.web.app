@@ -75,7 +75,13 @@ function processData (rawData, rangeStart, rangeEnd) {
 		const dayArray = initialData[day];
 		const currLatestForDay = dayArray[dayArray.length - 1] || {};
 
-		if(currLatestForDay && !currLatestForDay.date || currLatestForDay.date.getMonth() !== curr.getMonth()) {
+		const nextWeek = new Date(curr.getTime() + (7 * 24 * 60 * 60 * 1000));
+
+		const isLastWeekADifferentMonth = currLatestForDay && !currLatestForDay.date || currLatestForDay.date.getMonth() !== curr.getMonth();
+
+		const isNextWeekADifferentMonth = nextWeek.getMonth() !== curr.getMonth();
+
+		if(isLastWeekADifferentMonth && !isNextWeekADifferentMonth) {
 			block.firstDayTypeOfMonth = true;
 
 			if(curr.getDay() === 0) {
@@ -114,6 +120,16 @@ function processData (rawData, rangeStart, rangeEnd) {
 	};
 }
 
+function today () {
+	return new Date();
+}
+
+function oneYearBeforeNow () {
+	const now = today();
+
+	return new Date((now.getMonth() + 1) + '/' + now.getDate() + '/' + (now.getFullYear() - 1));
+}
+
 /**
  * For a given entity (or global if no entity is specified), load activity data, structured as a list of daily activity,
  * partitioned by day of the week.
@@ -124,10 +140,8 @@ function processData (rawData, rangeStart, rangeEnd) {
  * @return {Promise}          Promise wrapping a data block with the daily data, plus min/max values
  */
 export async function loadDailyActivity (entity, startDate, endDate) {
-	const now = new Date();
-
-	// default to beginning of current year if no startDate given
-	const earliestDate = startDate || new Date('1/1/' + now.getFullYear());
+	// default to one year ago if no start date provided
+	const earliestDate = startDate || oneYearBeforeNow();
 
 	let params = ['notBefore=' + Math.floor(earliestDate.getTime() / 1000)];
 	if(endDate) {
@@ -161,6 +175,6 @@ export async function loadDailyActivity (entity, startDate, endDate) {
 		return null;
 	}
 
-	// default to end of current year if no endDate given
-	return processData(summaryData, earliestDate, endDate || new Date('12/31/' + earliestDate.getFullYear()));
+	// default to today if no end date given
+	return processData(summaryData, earliestDate, endDate || today());
 }

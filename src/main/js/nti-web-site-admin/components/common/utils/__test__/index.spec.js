@@ -62,6 +62,20 @@ describe('loadDailyActivity test', () => {
 		return results.data[dayOfWeek].filter(x => getDateStr(x.date) === dateStr)[0];
 	};
 
+	const findDateInAnyList = (results, dateStr) => {
+		let match;
+
+		Object.keys(results.data).forEach(d => {
+			const possibleMatch = results.data[d].filter(x => getDateStr(x.date) === dateStr)[0];
+
+			if(possibleMatch) {
+				match = possibleMatch;
+			}
+		});
+
+		return match;
+	};
+
 	const verifyDate = (results, dateStr, dayOfWeek, value, firstOfFullWeek, firstOfMonth, firstDayTypeOfMonth) => {
 		const dateObj = getValueForDate(results, dayOfWeek, dateStr);
 
@@ -138,13 +152,12 @@ describe('loadDailyActivity test', () => {
 
 	test('Test global data with no date range', (done) => {
 		loadDailyActivity().then(results => {
-			// no date range specified so, by default, all dates for the year should be returned
-			verifyDateExistence(results, '1/1/2017', 'Sunday', true);
-			verifyDateExistence(results, '12/31/2017', 'Sunday', true);
+			const now = new Date();
 
-			// still, no date outside of 2017 should be returned
-			verifyDateExistence(results, '12/31/2016', 'Saturday', false);
-			verifyDateExistence(results, '1/1/2018', 'Monday', false);
+			const oneYearAgo = (now.getMonth() + 1) + '/' + now.getDate() + '/' + (now.getFullYear() - 1);
+
+			// should stretch back a year from now
+			expect(findDateInAnyList(results, oneYearAgo)).toBeDefined();
 
 			done();
 		});
