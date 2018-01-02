@@ -2,6 +2,8 @@
 /* eslint-env jest */
 require('legacy/mixins/Router');
 
+const stub = (a, b, c) => jest.spyOn(a, b).mockImplementation(c || (() => {}));
+
 describe ('Router mixin tests', () => {
 	describe ('Path Router Tests', () => {
 		var router;
@@ -81,6 +83,7 @@ describe ('Router mixin tests', () => {
 					b = '/root/path1';
 
 				try {
+					stub(console, 'error');
 					router.addRoute(a, () => {});
 					router.addRoute(b, () => {});
 				} catch (e) {

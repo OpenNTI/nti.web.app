@@ -9,6 +9,7 @@ require('legacy/model/assessment/UsersCourseAssignmentSavepointItem');
 require('legacy/model/assessment/AssignmentSubmission');
 
 // const { guidGenerator } = require('legacy/util/Globals');
+const stub = (a, b, c) => jest.spyOn(a, b).mockImplementation(c || (() => {}));
 
 describe ('Assessment Actions tests', () => {
 	describe ('Assignment version tests', () => {
@@ -56,6 +57,7 @@ describe ('Assessment Actions tests', () => {
 		});
 
 		function mockSaveProgress (options) {
+			stub(console, 'error');
 			let id = this.get('assignmentId');
 			let assignment = null;
 			if (id === Assignment.getId()) {
