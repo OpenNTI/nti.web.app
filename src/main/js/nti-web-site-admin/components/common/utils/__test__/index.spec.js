@@ -125,41 +125,38 @@ describe('loadDailyActivity test', () => {
 		verifyDate(results, '7/8/2017', 'Saturday', 2, undefined, undefined, undefined);
 	};
 
-	test('Test global data with date range', (done) => {
-		loadDailyActivity(null, new Date('07/01/2017'), new Date('07/15/2017')).then(results => {
-			verifyJulyData(results);
+	test('Test global data with date range', () => {
+		return loadDailyActivity(null, new Date('07/01/2017'), new Date('07/15/2017'))
+			.then(results => {
+				verifyJulyData(results);
 
-			// date range should return only date data within that range, so there should be no first/end of year
-			verifyDateExistence(results, '1/1/2017', 'Sunday', false);
-			verifyDateExistence(results, '12/31/2017', 'Sunday', false);
-
-			done();
-		});
+				// date range should return only date data within that range, so there should be no first/end of year
+				verifyDateExistence(results, '1/1/2017', 'Sunday', false);
+				verifyDateExistence(results, '12/31/2017', 'Sunday', false);
+			});
 	});
 
-	test('Test entity data with date range', (done) => {
+	test('Test entity data with date range', () => {
 		const entity = {
 			Links: [{ rel: 'analytics', href: 'getAnalytics'}]
 		};
 
-		loadDailyActivity(entity, new Date('07/01/2017'), new Date('07/15/2017')).then(results => {
-			// same data as the global case
-			verifyJulyData(results);
-
-			done();
-		});
+		return loadDailyActivity(entity, new Date('07/01/2017'), new Date('07/15/2017'))
+			.then(results => {
+				// same data as the global case
+				verifyJulyData(results);
+			});
 	});
 
-	test('Test global data with no date range', (done) => {
-		loadDailyActivity().then(results => {
-			const now = new Date();
+	test('Test global data with no date range', () => {
+		return loadDailyActivity()
+			.then(results => {
+				const now = new Date();
 
-			const oneYearAgo = (now.getMonth() + 1) + '/' + now.getDate() + '/' + (now.getFullYear() - 1);
+				const oneYearAgo = (now.getMonth() + 1) + '/' + now.getDate() + '/' + (now.getFullYear() - 1);
 
-			// should stretch back a year from now
-			expect(findDateInAnyList(results, oneYearAgo)).toBeDefined();
-
-			done();
-		});
+				// should stretch back a year from now
+				expect(findDateInAnyList(results, oneYearAgo)).toBeDefined();
+			});
 	});
 });
