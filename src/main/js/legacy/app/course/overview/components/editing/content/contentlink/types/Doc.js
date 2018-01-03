@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getTypes: function () {
 			return [
 				{
-					title: 'Upload a File',
+					title: 'From Computer',
 					category: 'content',
 					iconCls: 'document',
 					description: '',
