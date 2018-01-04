@@ -1,8 +1,75 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Prompt, DialogButtons, Loading} from 'nti-web-commons';
-import {scoped} from 'nti-lib-locale';
+import {Prompt, Switch} from 'nti-web-commons';
 
+import Report from './report';
+
+export default class ReportViewer extends React.Component {
+	static show (report) {
+		return new Promise(fulfill => {
+			Prompt.modal(
+				(<ReportViewer
+					report={report}
+					onDismiss={fulfill}
+				/>),
+				'report-viewer-container'
+			);
+		});
+	}
+
+	static propTypes = {
+		report: PropTypes.object.isRequired,
+		onDismiss: PropTypes.func
+	}
+
+
+	constructor (props) {
+		super(props);
+
+		this.state = this.getStateFor(props);
+	}
+
+
+	componentWillReceiveProps (nextProps) {
+		const {report:newReport} = nextProps;
+		const {report:oldReport} = this.props;
+
+		if (newReport !== oldReport) {
+			this.setState(this.getStateFor(nextProps));
+		}
+	}
+
+
+	getStateFor (props = this.props) {
+		const {report} = props;
+		const isContext = !report.href;
+
+		return {
+			report: isContext ? null : report,
+			context: isContext ? report : null
+		};
+	}
+
+
+	render () {
+		const {report, context} = this.state;
+		const active = report ?
+			'report' :
+			context ?
+				'context' :
+				'empty';
+
+		return (
+			<div className="report-viewer">
+				<Switch.Container className="report-body" active={active}>
+					<Switch.Item name="report" component={Report} report={report} context={context} />
+				</Switch.Container>
+			</div>
+		);
+	}
+}
+
+{/*
 const DEFAULT_TEXT = {
 	download: 'Download',
 	loading: 'Generating',
@@ -10,7 +77,7 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-web-reports.viewer.View', DEFAULT_TEXT);
 
-export default class ReportViewer extends React.Component {
+class xReportViewer extends React.Component {
 	static propTypes = {
 		report: PropTypes.object.isRequired,
 		onDismiss: PropTypes.func
@@ -102,4 +169,4 @@ export default class ReportViewer extends React.Component {
 		);
 	}
 
-}
+}*/}

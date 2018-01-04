@@ -100,10 +100,12 @@ export default class ReportContext {
 				const reportInfo = await getReportInfo(rel);
 
 				reports.push({
-					...reportInfo,
+					title: reportInfo.title,
+					description: reportInfo.description,
+					'supported_types': reportInfo.supported_types,
 					contextName,
 					contextID,
-					store: new Store(context, rel)
+					contextStore: new Store(context)
 				});
 			} catch (e) {
 				continue;
