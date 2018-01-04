@@ -17,12 +17,11 @@ export default class ReportViewer extends React.Component {
 	}
 
 	static show (report) {
-		return new Promise((fulfill, reject) => {
+		return new Promise((fulfill) => {
 			Prompt.modal(
 				<ReportViewer
 					report={report}
-					onSelect={fulfill}
-					onCancel={reject}
+					onDismiss={fulfill}
 				/>,
 				'report-viewer-container'
 			);

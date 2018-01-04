@@ -1,9 +1,10 @@
 import {Stores} from 'nti-lib-store';
 
 export default class ReportStore extends Stores.SimpleStore {
-	constructor (report) {
+	constructor (rel, context) {
 		super();
 
-		this.set('items', [report]);
+		this.set('rel', rel);
+		this.set('items', [context]);
 	}
 }

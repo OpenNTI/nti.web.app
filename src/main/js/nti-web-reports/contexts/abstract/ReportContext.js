@@ -1,4 +1,12 @@
+import {getReportInfo} from '../../utils';
+
 import ReportStore from './ReportStore';
+
+
+function getReportKey (rel, contextID) {
+	return `${rel}-${contextID || ''}`;
+}
+
 
 export default class ReportContext {
 	constructor (object) {
@@ -6,30 +14,15 @@ export default class ReportContext {
 	}
 
 	/**
-	 * The list of known reports on this context
-	 *
-	 * Items should look like:
-	 *
-	 * {
-	 * 	rel: String,
-	 * 	name: String,
-	 * 	description: String,
-	 * 	supported_types: []
-	 * }
-	 *
-	 * @type {Array}
-	 */
-	reports = []
-
-	/**
 	 * The list of subContext under this context
 	 *
 	 * Items should look like:
 	 *
 	 * {
-	 * 	name: String,
-	 * 	context: ReportContext (instance of this class),
-	 * 	store: Store to load the items for this context
+	 * 	name: String, //displayable name
+	 * 	id: String, //unique name for the context
+	 * 	rel: String,
+	 * 	store: Store to load the items for this context (class, that takes the context and rel in the constructor)
 	 * }
 	 *
 	 * @type {Array}
@@ -44,7 +37,13 @@ export default class ReportContext {
 	 *
 	 * {
 	 * 	name: String,
-	 * 	rels: [String] //in the order they should appear
+	 * 	description: String,
+	 * 	reports: [ //the reports in the order they should show in
+	 * 		{
+	 * 			rel: String, //the rel of the report
+	 * 			contextID: String, //the context the report should come from, if falsy the context is the same as this.context
+	 * 		}
+	 * 	]
 	 * }
 	 *
 	 * @type {Array}
@@ -58,7 +57,65 @@ export default class ReportContext {
 	}
 
 
-	getReportGroups () {
+	async getReportGroups () {
+		if (!this.canAccessReports()) { return []; }
+
+		const {groups} = this;
+
+		const contextReports = await this.getContextReports();
+		const subContextReports = await this.getSubContextReports();
+
+		const reportMap = ([...contextReports, ...subContextReports]).reduce((acc, report) => {
+			acc[getReportKey(report.rel, report.contextID)] = report;
+
+			return acc;
+		}, {});
+
+		return groups.map((group) => {
+			return {
+				name: group.name,
+				description: group.description,
+				reports: group.reports.map(report => reportMap[getReportKey(report.rel, report.contextID)])
+			};
+		});
+	}
+
+
+	getContextReports () {
+		const {context} = this;
+
+		return context.Reports;
+	}
+
+
+	async getSubContextReports () {
+		const {subContexts, context} = this;
+
+		let reports = [];
+
+		for (let subContext of subContexts) {
+			const {rel, name:contextName, id: contextID, store:Store} = subContext;
+
+			try {
+				const reportInfo = await getReportInfo(rel);
+
+				reports.push({
+					...reportInfo,
+					contextName,
+					contextID,
+					store: new Store(context, rel)
+				});
+			} catch (e) {
+				continue;
+			}
+		}
+
+		return reports;
+	}
+
+
+	xgetReportGroups () {
+
 		if (!this.canAccessReports()) { return []; }
 
 		const {groups} = this;
@@ -83,26 +140,20 @@ export default class ReportContext {
 	}
 
 
-	getContextReports () {
+	xgetContextReports () {
 		const {reports, context} = this;
-		const contextReports = context.Reports.reduce((acc, report) => {
-			acc[report.rel] = report;
-			return acc;
-		}, {});
 
 		return reports.map((report) => {
-			const contextReport = contextReports[report.rel];
-
 			return {
 				name: report.name,
 				description: report.description,
 				'supported_types': report.supported_types,
-				store: new ReportStore(contextReport)
+				store: new ReportStore(report.rel, context)
 			};
 		});
 	}
 
-	getSubContextReports () {
+	xgetSubContextReports () {
 		const {subContexts} = this;
 
 		let reports = [];

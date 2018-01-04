@@ -11,6 +11,6 @@ SiteAdminCourseReports.propTypes = {
 };
 export default function SiteAdminCourseReports ({course}) {
 	return course ?
-		(<Card><List object={course} /></Card>) :
+		(<Card><List context={course} /></Card>) :
 		null;
 }
