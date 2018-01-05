@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		var els = reader.isAssignment() ? [] : doc.querySelectorAll('[itemprop*=nti-data-markup],[itemprop~=nti-slide-video]'),
 			tpl = this.IMAGE_TEMPLATE,
 			activators = {
-				'nti-data-resizeable': Ext.bind(this.activateZoomBox, this)
+				'nti-data-markupenabled': Ext.bind(this.activateZoomBox, this)
 			};
 		function get (el, attr) { return el ? el.getAttribute(attr) : null; }
 
@@ -337,7 +337,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 			Ext.fly(bar).unselectable();
 
 			//move the targeted element into a wrapper
-			if (Ext.fly(target).is('iframe') || !Ext.Array.contains(p, 'nti-data-resizeable')) {
+			if (Ext.fly(target).is('iframe') || !Ext.Array.contains(p, 'nti-data-markupenabled')) {
 				Ext.fly(el.querySelector('.wrapper a')).remove();
 			}
 			el.querySelector('.wrapper').appendChild(target);
