@@ -11,9 +11,20 @@ const ContextStore = require('legacy/app/context/StateStore');
 
 const unwrap = x => (x && x.default) ? x.default : x;
 
+const CATALOG_MIME_TYPES = {
+	'application/vnd.nextthought.courses.catalogentry': true,
+	'application/vnd.nextthought.courses.coursecataloglegacyentry': true,
+	'application/vnd.nextthought.courseware.coursecataloglegacyentry': true
+};
+
 function getRouteFor (obj) {
 	if (obj.isUser) {
 		return `/app/user/${User.getUsernameForURL(obj.Username)}`;
+	}
+
+	if (CATALOG_MIME_TYPES[obj.MimeType]) {
+		const href = `uri:${obj.href}`;
+		return `./object/${encodeURIComponent(href)}`;
 	}
 }
 
