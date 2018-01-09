@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Prompt, Switch} from 'nti-web-commons';
 
 import Report from './report';
+import Header from './Header';
 
 export default class ReportViewer extends React.Component {
 	static show (report) {
@@ -51,6 +52,15 @@ export default class ReportViewer extends React.Component {
 	}
 
 
+	onDismiss = () => {
+		const {onDismiss} = this.props;
+
+		if (onDismiss) {
+			onDismiss();
+		}
+	}
+
+
 	render () {
 		const {report, context} = this.state;
 		const active = report ?
@@ -61,6 +71,7 @@ export default class ReportViewer extends React.Component {
 
 		return (
 			<div className="report-viewer">
+				<Header report={report} context={context} onDismiss={this.onDismiss} />
 				<Switch.Container className="report-body" active={active}>
 					<Switch.Item name="report" component={Report} report={report} context={context} />
 				</Switch.Container>
@@ -69,7 +80,7 @@ export default class ReportViewer extends React.Component {
 	}
 }
 
-{/*
+/*
 const DEFAULT_TEXT = {
 	download: 'Download',
 	loading: 'Generating',
@@ -169,4 +180,4 @@ class xReportViewer extends React.Component {
 		);
 	}
 
-}*/}
+}*/

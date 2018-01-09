@@ -59,7 +59,7 @@ export default class ReportView extends React.Component {
 		const {loading, embedLink} = this.state;
 
 		return (
-			<div className="report-content">
+			<div className="report-viewer-report">
 				{loading && <Loading.Mask message={t('loading')} />}
 				<iframe
 					src={embedLink}

@@ -4,64 +4,68 @@
 	& > i.icon-close { display: none; }
 }
 
-
 .report-viewer {
-	background: white;
-
-	.header {
-		padding: 0.5625rem 1.25rem;
-		display: flex;
-		align-items: center;
-		border-bottom: 1px solid $border-grey-light;
-
-		.title {
-			flex: 1 1 auto;
-			font: normal 300 1.5rem/1.25 $body-font-family;
-			color: $primary-grey;
-		}
-
-		.download {
-			flex: 0 0 auto;
-			text-decoration: none;
-			color: $primary-blue;
-			display: block;
-			margin-right: 1rem;
-
-			i {
-				font-size: 0.875rem;
-				vertical-align: middle;
-			}
-
-			span {
-				font-size: 0.625rem;
-				font-weight: 700;
-				text-transform: uppercase;
-				vertical-align: middle;
-			}
-		}
-
-		& > i {
-			flex: 0 0 auto;
-			font-size: 1.5rem;
-			line-height: 2rem;
-			color: $tertiary-grey;
-			cursor: pointer;
-			opacity: 0.8;
-
-			&:hover {
-				opacity: 1;
-			}
-		}
-	}
-
-
-	.content {
-		width: 98vw;
-		height: calc(98vh - 100px);//account for header and footer
-
-		iframe {
-			width: 100%;
-			height: 100%;
-		}
-	}
+	width: rem-calc(875px);
+	max-width: 98vx;
 }
+
+// .report-viewer {
+// 	background: white;
+
+// 	.header {
+// 		padding: 0.5625rem 1.25rem;
+// 		display: flex;
+// 		align-items: center;
+// 		border-bottom: 1px solid $border-grey-light;
+
+// 		.title {
+// 			flex: 1 1 auto;
+// 			font: normal 300 1.5rem/1.25 $body-font-family;
+// 			color: $primary-grey;
+// 		}
+
+// 		.download {
+// 			flex: 0 0 auto;
+// 			text-decoration: none;
+// 			color: $primary-blue;
+// 			display: block;
+// 			margin-right: 1rem;
+
+// 			i {
+// 				font-size: 0.875rem;
+// 				vertical-align: middle;
+// 			}
+
+// 			span {
+// 				font-size: 0.625rem;
+// 				font-weight: 700;
+// 				text-transform: uppercase;
+// 				vertical-align: middle;
+// 			}
+// 		}
+
+// 		& > i {
+// 			flex: 0 0 auto;
+// 			font-size: 1.5rem;
+// 			line-height: 2rem;
+// 			color: $tertiary-grey;
+// 			cursor: pointer;
+// 			opacity: 0.8;
+
+// 			&:hover {
+// 				opacity: 1;
+// 			}
+// 		}
+// 	}
+
+
+// 	.content {
+// 		width: 98vw;
+// 		height: calc(98vh - 100px);//account for header and footer
+
+// 		iframe {
+// 			width: 100%;
+// 			height: 100%;
+// 		}
+// 	}
+// }
