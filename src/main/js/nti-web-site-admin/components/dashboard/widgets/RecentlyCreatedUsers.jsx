@@ -83,27 +83,15 @@ export default class RecentlyCreatedUsers extends React.Component {
 			User.resolve({entity: service.SiteCommunity}).then(community => {
 				const membersLink = community.getLink('members');
 
-				return service.getBatch(membersLink);
+				return service.getBatch(membersLink + '?sortOn=createdTime&sortOrder=descending&batchSize=4');
 			}).then((users) => {
-				const sorted = [...users.Items];
-				sorted.sort(function (a, b) {
-					// sort by CreatedTime in descending order
-					if(a.getCreatedTime() < b.getCreatedTime()) {
-						return 1;
-					}
-
-					if(a.getCreatedTime() > b.getCreatedTime()) {
-						return -1;
-					}
-
-					return 0;
-				});
-
 				this.setState({
 					loading: false,
 					totalCount: users.Total,
-					allItems: sorted,
-					items: sorted.slice(0, PAGE_SIZE).map(x => {
+					allItems: users.Items,
+					items: users.Items.slice(0, PAGE_SIZE).map(x => {
+						console.log(DateTime.format(new Date(x.getCreatedTime()), 'MMM Do YYYY, H:mm:ss'));
+
 						return {
 							...x,
 							name: x.alias,
