@@ -1,6 +1,33 @@
+@import '~nti-style-common';
+
 .site-admin-course-overview {
+	@include clearfix;
+
 	.site-admin-active-days {
 		width: 100%;
 		margin-top: 5px;
+	}
+
+	.site-admin-row {
+		display: flex;
+
+		.site-admin-card {
+			width: 250px;
+			height: 320px;
+
+			.value {
+				padding-top: 1rem;
+			}
+		}
+
+		.active-users {
+			margin: 0 0 0 4px;
+			height: 320px;
+
+			.header {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+		}
 	}
 }
