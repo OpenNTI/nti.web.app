@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
-import {/*DateTime,*/ Loading, Avatar} from 'nti-web-commons';
-// import {getService, User} from 'nti-web-client';
+import {DateTime, Loading, Avatar} from 'nti-web-commons';
+import {getService} from 'nti-web-client';
 import cx from 'classnames';
 
 const LABELS = {
@@ -12,8 +12,8 @@ const LABELS = {
 	noItems: 'No top learners found'
 };
 
-const t = scoped('nti-web-site-admins.components.dashboard.widgets.activeusers', LABELS);
-// const PAGE_SIZE = 4;
+const t = scoped('nti-web-site-admins.components.common.activeusers', LABELS);
+const BATCH_SIZE = 4;
 
 class Item extends React.Component {
 	static propTypes = {
@@ -62,7 +62,11 @@ class Item extends React.Component {
 	}
 }
 
-export default class PopularCourses extends React.Component {
+export default class ActiveUsers extends React.Component {
+	static propTypes = {
+		entity: PropTypes.object
+	}
+
 	constructor (props) {
 		super(props);
 		this.state = {
@@ -77,44 +81,46 @@ export default class PopularCourses extends React.Component {
 		});
 	}
 
-	loadData (link) {
+	async getLink (service, link) {
+		// if given a specific link, default to that
+		if(link) {
+			return link;
+		}
+
+		const {entity} = this.props;
+
+		// if provided an entity with analytics, pull that link
+		if(entity) {
+			const entityAnalyticsLink = entity.getLink('analytics');
+			const entityAnalytics = await service.get(entityAnalyticsLink);
+
+			return entityAnalytics && entityAnalytics.Links
+				&& entityAnalytics.Links.filter(x => x.rel === 'active_users')[0].href + '?batchSize=' + BATCH_SIZE + '&batchPage=0';
+		}
+
+		// if no other link or entity is provided, use the global workspace
+		const analyticsWorkspace = service.getWorkspace('Analytics');
+		return analyticsWorkspace && analyticsWorkspace.getLink('active_users') + '?batchSize=' + BATCH_SIZE + '&batchPage=0';
+	}
+
+	async loadData (link) {
+		const service = await getService();
+		const activeUsersLink = await this.getLink(service, link);
+		const activeUsers = activeUsersLink ? await service.get(activeUsersLink) : {};
+
 		this.setState({
 			loading: false,
-			items: []
+			totalCount: activeUsers.ItemCount,
+			prevLink: activeUsers && activeUsers.Links && (activeUsers.Links.filter(x => x.rel === 'batch-prev')[0] || {}).href,
+			nextLink: activeUsers && activeUsers.Links && (activeUsers.Links.filter(x => x.rel === 'batch-next')[0] || {}).href,
+			items: activeUsers.Items.map(x => {
+				return {
+					...x,
+					name: x.Username,
+					description: 'Created ' + DateTime.format(new Date(x.CreatedTime  * 1000), 'LLLL')
+				};
+			})
 		});
-
-		// TODO: This is only a temporary call to load user data.  When there is an actual active users
-		// api to hit, switch over to that.  This is just for prototyping
-		// Also, maybe move to store?
-		// getService().then(service => {
-		// 	User.resolve({entity: service.SiteCommunity}).then(community => {
-		// 		const membersLink = community.getLink('members');
-		//
-		// 		const getBatchLink = link ? link : membersLink + '?batchSize=' + PAGE_SIZE + '&batchStart=0';
-		//
-		// 		return service.getBatch(getBatchLink);
-		// 	}).then((users) => {
-		// 		this.setState({
-		// 			loading: false,
-		// 			totalCount: users.Total,
-		// 			prevLink: (users.Links.filter(x => x.rel === 'batch-prev')[0] || {}).href,
-		// 			nextLink: (users.Links.filter(x => x.rel === 'batch-next')[0] || {}).href,
-		// 			items: users.Items.map(x => {
-		// 				return {
-		// 					...x,
-		// 					name: x.alias,
-		// 					description: 'Created ' + DateTime.format(new Date(x.CreatedTime  * 1000), 'LLLL')
-		// 				};
-		// 			})
-		// 		});
-		// 	}).catch((resp) => {
-		// 		// can't get active users data, set items to empty
-		// 		this.setState({
-		// 			loading: false,
-		// 			items: []
-		// 		});
-		// 	});
-		// });
 	}
 
 	onPrevious = () => {
