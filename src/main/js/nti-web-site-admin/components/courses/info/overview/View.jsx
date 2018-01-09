@@ -4,7 +4,6 @@ import {scoped} from 'nti-lib-locale';
 
 import LabeledValue from '../../../common/LabeledValue';
 import ActiveDays from '../../../common/ActiveDays';
-import ActiveUsers from '../../../common/ActiveUsers';
 
 import ActiveTimes from './ActiveTimes';
 
