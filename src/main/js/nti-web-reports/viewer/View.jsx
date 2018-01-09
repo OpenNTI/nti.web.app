@@ -4,6 +4,7 @@ import {Prompt, Switch} from 'nti-web-commons';
 
 import Report from './report';
 import Header from './Header';
+import Footer from './Footer';
 
 export default class ReportViewer extends React.Component {
 	static show (report) {
@@ -75,6 +76,7 @@ export default class ReportViewer extends React.Component {
 				<Switch.Container className="report-body" active={active}>
 					<Switch.Item name="report" component={Report} report={report} context={context} />
 				</Switch.Container>
+				<Footer onDismiss={this.onDismiss} />
 			</div>
 		);
 	}
