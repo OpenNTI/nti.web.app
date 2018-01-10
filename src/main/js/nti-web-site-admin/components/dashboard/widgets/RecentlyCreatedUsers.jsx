@@ -90,8 +90,6 @@ export default class RecentlyCreatedUsers extends React.Component {
 					totalCount: users.Total,
 					allItems: users.Items,
 					items: users.Items.slice(0, PAGE_SIZE).map(x => {
-						console.log(DateTime.format(new Date(x.getCreatedTime()), 'MMM Do YYYY, H:mm:ss'));
-
 						return {
 							...x,
 							name: x.alias,
