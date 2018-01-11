@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 		const total = value && value.reduce && value.reduce(sum, 0);
 		const colors = this.colors;
 
-		const percent = (v) => v.value / total;
+		const percent = (v) => total === 0 ? 0 : v.value / total;
 
 		function str (p, i) {
 			return {
