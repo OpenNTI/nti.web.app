@@ -27,4 +27,12 @@
 			}
 		}
 	}
+
+	.controls {
+		span {
+			color: $primary-blue;
+			margin-right: 10px;
+			cursor: pointer;
+		}
+	}
 }
