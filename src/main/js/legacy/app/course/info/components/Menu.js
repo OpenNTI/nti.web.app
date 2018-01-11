@@ -57,6 +57,27 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		this.mon(this.menuEl, 'click', this.onClick.bind(this));
 	},
 
+	adjustScroll: function (el) {
+		if(!el) {
+			return;
+		}
+
+		var qtip = el.getAttribute('data-qtip');
+
+		if(this.QTIP_TO_CLASS_MAP[qtip]) {
+			var { cls, targetCls, doLocalNav } = this.QTIP_TO_CLASS_MAP[qtip];
+
+			var target = document.getElementsByClassName(targetCls);
+			var containerPanel = document.getElementsByClassName(cls);
+
+			if(containerPanel && containerPanel[0]) {
+				if(doLocalNav && target && target[0]) {
+					window.scrollTo(0, target[0].offsetTop);
+				}
+			}
+		}
+	},
+
 	addMenuItems: function () {
 		var me = this,
 			i = ( this.info && this.info.get('Instructors')) || [] ;
@@ -130,6 +151,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		if (activeItem) {
 			activeItem.addCls('x-item-selected');
 		}
+
+		this.adjustScroll(activeItem);
 	},
 
 
