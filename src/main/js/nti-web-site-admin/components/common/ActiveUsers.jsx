@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
-import {DateTime, Loading, Avatar} from 'nti-web-commons';
+import {DateTime, Loading, DisplayName, Avatar} from 'nti-web-commons';
 import {getService} from 'nti-web-client';
 import cx from 'classnames';
 
@@ -31,9 +31,7 @@ class Item extends React.Component {
 
 		return (
 			<div className="info">
-				<div className="name">
-					{item.name}
-				</div>
+				<DisplayName className="name" entityId={item.name}/>
 				<div className="description">
 					{item.description}
 				</div>
