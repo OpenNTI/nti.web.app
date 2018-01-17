@@ -1,0 +1,26 @@
+@import '~nti-style-common';
+
+.toolbar-actions {
+	padding: 10px 0 0 12px;
+	width: 40px;
+	cursor: pointer;
+
+	&.disabled {
+		color: $tertiary-grey;
+		cursor: default;
+
+		i {
+			color: $tertiary-grey;
+		}
+	}
+
+	i {
+		color: $primary-grey;
+		font-size: 22px;
+	}
+}
+
+.toolbar-action-item {
+	padding: 1rem;
+	cursor: pointer;
+}

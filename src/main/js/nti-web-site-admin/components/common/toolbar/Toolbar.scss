@@ -1,0 +1,9 @@
+@import '~nti-style-common';
+
+.site-admin-list-toolbar {
+	margin: 2rem 8rem 1rem;
+	padding-bottom: 10px;
+	border-bottom: solid 1px $tertiary-grey;
+	display: flex;
+	position: relative;
+}

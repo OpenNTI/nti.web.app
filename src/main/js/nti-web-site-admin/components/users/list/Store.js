@@ -20,7 +20,6 @@ export default class UserListStore extends SearchablePagedStore {
 		return SearchablePagedStore.convertBatch(batch);
 	}
 
-
 	async loadInitial () {
 		if (this[INITIAL_LOAD_CACHE]) {
 			return this[INITIAL_LOAD_CACHE];

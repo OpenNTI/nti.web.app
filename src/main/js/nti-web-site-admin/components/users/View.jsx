@@ -1,6 +1,6 @@
 import {Router, Route} from 'nti-web-routing';// eslint-disable-line
 
-import List from './list';
+import FiterableUserList from './list';
 import User from './user';
 
 export default Router.for([
@@ -15,5 +15,5 @@ export default Router.for([
 			return null;
 		}
 	}),
-	Route({path: '/', component: List, name: 'site-admin.users'})
+	Route({path: '/', component: FiterableUserList, name: 'site-admin.users'})
 ]);

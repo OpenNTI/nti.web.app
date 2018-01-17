@@ -3,7 +3,11 @@
 .site-admin-user-item {
 	display: flex;
 	align-items: center;
-	padding: 1rem 0;
+	padding: 1rem;
+
+	&.selected {
+		background-color: #f7f2d6;
+	}
 
 	.avatar {
 		width: 60px;
