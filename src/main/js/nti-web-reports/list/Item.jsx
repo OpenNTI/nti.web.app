@@ -27,7 +27,7 @@ export default class ReportListItem extends React.Component {
 							{report.title}
 						</div>
 						<div className="supports">
-							{report.supported_types.map((type, index) => {
+							{report.supportedTypes.map((type, index) => {
 								return (
 									<span key={index} className="type">
 										{type}

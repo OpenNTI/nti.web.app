@@ -1,1 +1,1 @@
-export getReportInfo from './get-report-info';
+export getReports from './get-reports';

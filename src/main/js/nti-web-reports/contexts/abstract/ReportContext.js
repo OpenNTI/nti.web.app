@@ -1,7 +1,4 @@
-import {getReportInfo} from '../../utils';
-
-import ReportStore from './ReportStore';
-
+import {getReports} from '../../utils';
 
 function getReportKey (rel, contextID) {
 	return `${rel}-${contextID || ''}`;
@@ -13,21 +10,20 @@ export default class ReportContext {
 		this.context = object;
 	}
 
+
 	/**
-	 * The list of subContext under this context
+	 * A map of contexts that can be loaded underneath this context
 	 *
 	 * Items should look like:
 	 *
 	 * {
 	 * 	name: String, //displayable name
-	 * 	id: String, //unique name for the context
-	 * 	rel: String,
-	 * 	store: Store to load the items for this context (class, that takes the context and rel in the constructor)
+	 * 	id: String //unique name for the sub context in this context (used to look up the view to load them)
 	 * }
 	 *
-	 * @type {Array}
+	 * @type {Object}
 	 */
-	subContexts = []
+	subContexts = {}
 
 
 	/**
@@ -91,81 +87,33 @@ export default class ReportContext {
 	async getSubContextReports () {
 		const {subContexts, context} = this;
 
-		let reports = [];
+		try {
+			const reports = await getReports();
 
-		for (let subContext of subContexts) {
-			const {rel, name:contextName, id: contextID, store:Store} = subContext;
+			return reports.reduce((acc, report) => {
+				const {contexts} = report;
+				const {Items:reportContexts} = contexts || {};
 
-			try {
-				const reportInfo = await getReportInfo(rel);
+				for (let reportContext of reportContexts) {
+					const subContext = subContexts[reportContext];
 
-				reports.push({
-					title: reportInfo.title,
-					description: reportInfo.description,
-					'supported_types': reportInfo.supported_types,
-					contextName,
-					contextID,
-					contextStore: new Store(context)
-				});
-			} catch (e) {
-				continue;
-			}
+					if (subContexts[reportContext]) {
+						acc.push({
+							title: report.title,
+							description: report.description,
+							supportedTypes: report.supportedTypes,
+							rel: report.rel,
+							context,
+							contextName: subContext.name,
+							contextID: subContext.id
+						});
+					}
+				}
+
+				return acc;
+			}, []);
+		} catch (e) {
+			return [];
 		}
-
-		return reports;
-	}
-
-
-	xgetReportGroups () {
-
-		if (!this.canAccessReports()) { return []; }
-
-		const {groups} = this;
-		const reports = this.getContextReports();
-		const subReports = this.getSubContextReports();
-
-		const reportMap = ([...reports, ...subReports]).reduce((acc, report) => {
-			acc[report.rel] = report;
-			return acc;
-		}, {});
-
-		let groupedReports = [];
-
-		for (let group of groups) {
-			groupedReports.push({
-				name: group.name,
-				reports: group.rels.map(rel => reportMap[rel])
-			});
-		}
-
-		return groupedReports;
-	}
-
-
-	xgetContextReports () {
-		const {reports, context} = this;
-
-		return reports.map((report) => {
-			return {
-				name: report.name,
-				description: report.description,
-				'supported_types': report.supported_types,
-				store: new ReportStore(report.rel, context)
-			};
-		});
-	}
-
-	xgetSubContextReports () {
-		const {subContexts} = this;
-
-		let reports = [];
-
-		for (let subContext of subContexts) {
-			const subReports = subContext.reports;
-
-			reports = reports.concat(subReports.map(subReport => ({...subReport, context: subContext})));
-		}
-
-		return reports;
 	}
 }

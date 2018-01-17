@@ -7,9 +7,15 @@ export default class CourseInstanceContext extends ReportContext {
 		{
 			reports: [
 				{rel: 'report-CourseSummaryReport.pdf'},
-				{rel: 'report-SelfAssessmentSummaryReport.pdf'}
+				{rel: 'report-SelfAssessmentSummaryReport.pdf'},
+				{rel: 'report-AssignmentSummaryReport.pdf', contextID: 'course-assignments'}
 			]
 		}
 	]
+
+
+	subContexts = {
+		'IQAssignment': {name: 'Assignments', id: 'course-assignments'}
+	}
 
 }

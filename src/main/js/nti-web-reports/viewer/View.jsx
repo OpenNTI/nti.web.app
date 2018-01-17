@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Prompt, Switch} from 'nti-web-commons';
 
+import Context from './context';
 import Report from './report';
 import Header from './Header';
 import Footer from './Footer';
@@ -75,6 +76,7 @@ export default class ReportViewer extends React.Component {
 				<Header report={report} context={context} onDismiss={this.onDismiss} />
 				<Switch.Container className="report-body" active={active}>
 					<Switch.Item name="report" component={Report} report={report} context={context} />
+					<Switch.Item name="context" component={Context} report={report} context={context} />
 				</Switch.Container>
 				<Footer onDismiss={this.onDismiss} />
 			</div>
