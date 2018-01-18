@@ -19,25 +19,4 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return 'course-overview-ltiexternaltoolasset';
 	},
 
-	getPreview: function (record) {
-		var item = record.getRaw(),
-			type = this.getPreviewType(record);
-
-		if (!type) {
-			return null;
-		}
-
-		return Ext.applyIf({
-			xtype: type,
-			locationInfo: this.locationInfo,
-			courseRecord: this.outlineNode,
-			assignment: this.assignment,
-			course: this.course,
-			record: record,
-			ntiid: item.NTIID,
-			navigate: this.doNavigation.bind(this),
-			inEditMode: true
-		}, item);
-	},
-
 });

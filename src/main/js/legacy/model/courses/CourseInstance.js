@@ -867,6 +867,17 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return baseLink && urlJoin(baseLink, encodeURIComponent(ntiid));
 	},
 
+	getLTIConfiguredTools: function () {
+		if (this.__getLTIConfiguredToolsPromise) { return this.__getLTIConfiguredToolsPromise; }
+
+		this.__getLTIConfiguredToolsPromise = this.__getList('LTI Configured Tools')
+			.catch(() => {
+				return {};
+			});
+
+		return this.__getLTIConfiguredToolsPromise;
+	},
+
 	/**
 	 * Return an assignment collection for this course
 	 * @return {AssignmentCollection} the assignment collection
