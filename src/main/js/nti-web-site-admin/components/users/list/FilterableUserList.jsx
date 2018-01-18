@@ -11,7 +11,7 @@ import AdminStore from './AdminStore';
 const USERS = 'users';
 const ADMINS = 'admins';
 
-const OPTIONS = ['Users', 'Site Admins'];
+const OPTIONS = {[USERS] : 'Users', [ADMINS]: 'Site Admins'};
 const SORTERS = {
 	[USERS]: ['createdTime'],
 	[ADMINS]: ['createdTime']
@@ -24,19 +24,21 @@ export default class FiterableUserList extends React.Component {
 		super(props);
 
 		this.state = {
-			type: USERS,
+			type: localStorage.getItem('admin-user-type') || USERS,
 			selectedItems: new Set()
 		};
 	}
 
 	onTypeToggle = (val) => {
-		if(val === 'Site Admins') {
+		if(val === OPTIONS[ADMINS]) {
 			if(this.state.type !== ADMINS) {
+				localStorage.setItem('admin-user-type', ADMINS);
 				this.setState({selectedItems: new Set(), type: ADMINS});
 			}
 		}
-		else if(val === 'Users') {
+		else if(val === OPTIONS[USERS]) {
 			if(this.state.type !== USERS) {
+				localStorage.setItem('admin-user-type', USERS);
 				this.setState({selectedItems: new Set(), type: USERS});
 			}
 		}
@@ -76,11 +78,7 @@ export default class FiterableUserList extends React.Component {
 	renderToolbar () {
 		const {type, selectedItems} = this.state;
 
-		let selectedType = OPTIONS[0];
-
-		if(type === ADMINS) {
-			selectedType = OPTIONS[1];
-		}
+		let selectedType = OPTIONS[type];
 
 		const actions = this.actionMap[type];
 		const sorters = SORTERS[type];
@@ -89,7 +87,7 @@ export default class FiterableUserList extends React.Component {
 			<Toolbar
 				onTypeToggle={this.onTypeToggle}
 				selectedType={selectedType}
-				options={OPTIONS}
+				options={Object.values(OPTIONS)}
 				sorters={sorters} // sorters not supported yet
 				selectedItems={selectedItems}
 				actions={actions}
