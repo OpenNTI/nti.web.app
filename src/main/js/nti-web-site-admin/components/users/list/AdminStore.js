@@ -10,7 +10,19 @@ export default class UserListStore extends SearchablePagedStore {
 			return {items: []};
 		}
 
-		return this.loadInitial(); // is search supported for SiteAdmins?
+		// search is not currently supported for SiteAdmins link, so we'll do some simple client-side filtering
+		const all = await this.loadInitial();
+
+		const filtered = all.items.filter(user => {
+			const {alias, realName, Username} = user;
+			const lowerTerm = term.toLowerCase();
+
+			return (alias || '').toLowerCase().indexOf(lowerTerm) >= 0
+				|| (realName || '').toLowerCase().indexOf(lowerTerm) >= 0
+				|| (Username || '').toLowerCase().indexOf(lowerTerm) >= 0;
+		});
+
+		return {...all, total: filtered.length, items: filtered};
 	}
 
 	async loadInitial () {

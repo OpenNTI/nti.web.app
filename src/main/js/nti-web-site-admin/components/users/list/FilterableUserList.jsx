@@ -31,10 +31,14 @@ export default class FiterableUserList extends React.Component {
 
 	onTypeToggle = (val) => {
 		if(val === 'Site Admins') {
-			this.setState({type: ADMINS});
+			if(this.state.type !== ADMINS) {
+				this.setState({selectedItems: new Set(), type: ADMINS});
+			}
 		}
 		else if(val === 'Users') {
-			this.setState({type: USERS});
+			if(this.state.type !== USERS) {
+				this.setState({selectedItems: new Set(), type: USERS});
+			}
 		}
 	}
 
