@@ -63,6 +63,13 @@ export default class ReportViewer extends React.Component {
 	}
 
 
+	selectReport = (report) => {
+		this.setState({
+			report
+		});
+	}
+
+
 	render () {
 		const {report, context} = this.state;
 		const active = report ?
@@ -76,7 +83,7 @@ export default class ReportViewer extends React.Component {
 				<Header report={report} context={context} onDismiss={this.onDismiss} />
 				<Switch.Container className="report-body" active={active}>
 					<Switch.Item name="report" component={Report} report={report} context={context} />
-					<Switch.Item name="context" component={Context} report={report} context={context} />
+					<Switch.Item name="context" component={Context} report={report} context={context} selectReport={this.selectReport}/>
 				</Switch.Container>
 				<Footer onDismiss={this.onDismiss} />
 			</div>

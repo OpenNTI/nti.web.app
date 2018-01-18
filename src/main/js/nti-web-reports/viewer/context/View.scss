@@ -1,0 +1,8 @@
+@import '~nti-style-common';
+
+.report-viewer-context{
+	background: $panel-background;
+	width: 100%;
+	max-height: calc(98vh - 100px);//account for header and footer
+	overflow: auto;
+}
