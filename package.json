@@ -79,5 +79,7 @@
     "whatwg-fetch": "^2.0.0",
     "xregexp": "^3.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "nti-web-reports": "0.0.0-alpha"
+  }
 }
