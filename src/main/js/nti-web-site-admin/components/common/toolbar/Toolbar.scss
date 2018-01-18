@@ -6,4 +6,14 @@
 	border-bottom: solid 1px $tertiary-grey;
 	display: flex;
 	position: relative;
+
+	.toolbar-create {
+		position: absolute;
+		right: 10px;
+		border-radius: 2px;
+		color: white;
+		padding: 10px;
+		background-color: $primary-blue;
+		cursor: pointer;
+	}
 }

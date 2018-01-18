@@ -90,7 +90,7 @@ export default class FiterableUserList extends React.Component {
 				onTypeToggle={this.onTypeToggle}
 				selectedType={selectedType}
 				options={OPTIONS}
-				sorters={sorters}
+				sorters={sorters} // sorters not supported yet
 				selectedItems={selectedItems}
 				actions={actions}
 			/>
