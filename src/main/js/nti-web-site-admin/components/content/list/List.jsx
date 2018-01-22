@@ -1,81 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
-import {searchable, contextual} from 'nti-web-search';
+import {contextual} from 'nti-web-search';
 import {LinkTo} from 'nti-web-routing';
-import {StickyElement, StickyContainer} from 'nti-web-commons';
-import {Editor} from 'nti-web-course';
-import {getService} from 'nti-web-client';
 
 import SearchablePagedView from '../../common/SearchablePagedView';
 
-import Store from './Store';
 import Item from './Item';
 
 const DEFAULT_TEXT = {
 	courses: 'Courses',
 	createSuccess: 'Course was successfully created',
 	empty: 'No Courses',
-	emptySearch: 'No Courses found. Please refine your search.',
+	emptySearch: 'No courses found. Please refine your search.',
 	backLabel: 'View all Courses',
-	error: 'Unable to load Users.'
+	error: 'Unable to load curses.'
 };
 const t = scoped('siteadmin.components.course.view', DEFAULT_TEXT);
 
-const store = new Store();//FIXME: I would prefer if the store could be constructed on first use/mount... instead of statically.
-const propMap = {
-	items: 'items',
-	total: 'total',
-	searchTerm: 'searchTerm',
-	loading: 'loading',
-	hasNextPage: 'hasNextPage',
-	loadingNextPage: 'loadingNextPage',
-	error: 'error'
-};
-
 @contextual(t('courses'))
-@searchable(store, propMap)
 export default class View extends React.Component {
 	static propTypes = {
+		selectedItems: PropTypes.object,
+		loadNextPage: PropTypes.func,
+		searchTerm: PropTypes.string,
+		addCmp: PropTypes.func,
+		removeCmp: PropTypes.func,
+		onSelectionChange: PropTypes.func,
 		total: PropTypes.number,
-		loading: PropTypes.bool
+		loading: PropTypes.bool,
+		isSelectable: PropTypes.bool
 	}
-
-	componentDidMount () {
-		store.load();
-	}
-
 
 	onLoadNextPage = () => {
-		store.loadNextPage();
-	}
-
-	renderTotal () {
-		if(this.props.loading) {
-			return null;
-		}
-
-		return <div className="total">Total: {this.props.total}</div>;
-	}
-
-	renderHeader () {
-		return (
-			<div className="header">
-				<div className="info">
-					{this.renderTotal()}
-				</div>
-				{this.renderCreateButton()}
-			</div>
-		);
+		this.props.loadNextPage();
 	}
 
 	render () {
 		return (
 			<div className="site-admin-course">
-				<StickyContainer className="course-list">
-					<StickyElement>
-						{this.renderHeader()}
-					</StickyElement>
+				<div className="course-list">
 					<SearchablePagedView
 						{...this.props}
 						className="site-admin-course-list"
@@ -83,7 +47,7 @@ export default class View extends React.Component {
 						loadNextPage={this.onLoadNextPage}
 						getString={t}
 					/>
-				</StickyContainer>
+				</div>
 			</div>
 		);
 	}
@@ -97,30 +61,6 @@ export default class View extends React.Component {
 				<Item item={course} />
 			</LinkTo.Object>
 		);
-	}
-
-	async onCourseCreated (catalogEntry) {
-		const accessLink = catalogEntry.getLink('UserCoursePreferredAccess');
-
-		if(accessLink) {
-			const service = await getService();
-			const storeObject = await service.get(accessLink);
-			const parsed = await service.getObject(storeObject);
-
-			store.insert(parsed);
-		}
-	}
-
-	launch = () => {
-		Editor.createCourse()
-			.then((createdEntry) => {
-				// course created
-				this.onCourseCreated(createdEntry);
-			});
-	};
-
-	renderCreateButton () {
-		return (<div className="create-course-button" onClick={this.launch}>Create New Course</div>);
 	}
 
 	// renderCreateMessage () {

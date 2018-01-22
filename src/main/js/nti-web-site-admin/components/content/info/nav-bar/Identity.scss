@@ -1,0 +1,26 @@
+@import '~nti-style-common';
+
+.site-admin-course-identity {
+	.course-icon {
+		width: 100%;
+	}
+
+	.info {
+		padding: 0.5rem 1rem 1rem;
+
+		.label {
+			font: normal 700 0.75rem/1.25 $body-font-family;
+			text-transform: uppercase;
+			color: $tertiary-grey;
+		}
+
+		.title {
+			font: normal 700 1rem/1.1 $header-font-family;
+			color: $secondary-grey;
+			text-transform: uppercase;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			max-width: 200px;
+		}
+	}
+}

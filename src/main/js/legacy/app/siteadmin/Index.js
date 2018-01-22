@@ -8,7 +8,7 @@ require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
 
-const COURSE_ACTIVE = /^\/course/;
+const CONTENT_ACTIVE = /^\/content/;
 const USERS_ACTIVE = /^\/users/;
 const DASHBOARD_ACTIVE = /^\/dashboard/;
 const REPORTS_ACTIVE = /^\/reports/;
@@ -82,9 +82,9 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				active: USERS_ACTIVE.test(path)
 			},
 			{
-				text: 'Courses',
-				route: '/courses',
-				active: COURSE_ACTIVE.test(path)
+				text: 'Content',
+				route: '/content',
+				active: CONTENT_ACTIVE.test(path)
 			},
 			{
 				text: 'Reports',
