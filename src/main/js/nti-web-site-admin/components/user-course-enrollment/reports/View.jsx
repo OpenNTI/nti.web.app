@@ -10,6 +10,6 @@ SiteAdminUserEnrollmentReports.propTypes = {
 };
 export default function SiteAdminUserEnrollmentReports ({enrollment}) {
 	return enrollment ?
-		(<Card><List object={enrollment} /></Card>) :
+		(<Card><List context={enrollment} /></Card>) :
 		null;
 }
