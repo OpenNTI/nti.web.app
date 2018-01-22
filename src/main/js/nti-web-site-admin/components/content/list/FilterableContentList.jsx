@@ -25,7 +25,7 @@ export default class FiterableContentList extends React.Component {
 		super(props);
 
 		this.state = {
-			type: localStorage.getItem('admin-content-type') || BOOKS,
+			type: localStorage.getItem('admin-content-type') || COURSES,
 			selectedItems: new Set()
 		};
 	}
