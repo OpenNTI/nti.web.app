@@ -1,0 +1,48 @@
+@import '~nti-style-common';
+
+.site-admin-book-overview {
+	@include clearfix;
+
+	.site-admin-active-days {
+		width: 100%;
+		margin-top: 5px;
+	}
+
+	.active-users {
+		width: 100%;
+
+		.dashboard-list-widget {
+			margin: 0 0 10px;
+		}
+	}
+
+	.active-times-widget {
+		margin: 0 0 10px;
+	}
+
+	.site-admin-active-days {
+		margin: 10px 0;
+	}
+
+	.site-admin-row {
+		display: flex;
+
+		.site-admin-card {
+			width: 250px;
+			height: 320px;
+
+			.value {
+				padding-top: 1rem;
+			}
+		}
+
+		.active-users {
+			height: 320px;
+
+			.header {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+		}
+	}
+}
