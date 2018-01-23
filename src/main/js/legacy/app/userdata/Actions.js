@@ -931,11 +931,14 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			p = Promise.resolve(null);
 		}
 
+
+		const url = this.__getPagesURL();
+
 		return p.then(function (share) {
 			record.set('SharedWith', share);
 
 			return new Promise(function (fulfill, reject) {
-				record.save({scope: me, callback: me.getSaveCallback(fulfill, reject)});
+				record.save({url, scope: me, callback: me.getSaveCallback(fulfill, reject)});
 			});
 		});
 	},
