@@ -661,8 +661,11 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			applicableRange: ContentRangeDescription.create()
 		});
 
+		const url = this.__getPagesURL();
+
 		return new Promise(function (fulfill/*, reject*/) {
 			bm.save({
+				url,
 				callback: function (record, operation) {
 					try {
 						if (operation.success) {
