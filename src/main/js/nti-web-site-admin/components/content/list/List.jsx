@@ -14,7 +14,7 @@ const DEFAULT_TEXT = {
 	empty: 'No Courses',
 	emptySearch: 'No courses found. Please refine your search.',
 	backLabel: 'View all Courses',
-	error: 'Unable to load curses.'
+	error: 'Unable to load courses.'
 };
 const t = scoped('siteadmin.components.course.view', DEFAULT_TEXT);
 
