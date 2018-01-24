@@ -216,12 +216,6 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 					return Promise.reject('No Course found for: ', ntiid);
 				}
 
-				if (current instanceof CourseInstanceAdministrativeRole) {
-					this.isAdmin = true;
-				} else {
-					this.isAdmin = false;
-				}
-
 				this.activeBundle = current;
 
 				return current.getWrapper()
@@ -230,6 +224,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 						if(enrollment.isAdministrative) {
 							this.isAdmin = true;
+						} else {
+							this.isAdmin = false;
 						}
 
 						return current;
