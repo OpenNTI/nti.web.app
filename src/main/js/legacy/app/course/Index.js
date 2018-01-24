@@ -7,7 +7,6 @@ const UsersCourseAssignmentHistoryItem = require('legacy/model/courseware/UsersC
 const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
 const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
 const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic');
-const CourseInstanceAdministrativeRole = require('legacy/model/courses/CourseInstanceAdministrativeRole');
 const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
 const DiscussionAssignment = require('legacy/model/assessment/DiscussionAssignment');
 const Globals = require('legacy/util/Globals');
