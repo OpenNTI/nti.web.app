@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Widgets } from 'nti-web-reports';
 
-import ActiveDays from '../../../common/ActiveDays';
-import ActiveUsers from '../../../common/ActiveUsers';
-import ActiveTimes from '../../info/overview/ActiveTimes';
+const { ActiveDays, ActiveUsers, ActiveTimes } = Widgets;
 
 SiteAdminBookOverview.propTypes = {
 	course: PropTypes.object

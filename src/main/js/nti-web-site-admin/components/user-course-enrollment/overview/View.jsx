@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Loading} from 'nti-web-commons';
+import { Widgets } from 'nti-web-reports';
 
-import ActiveDays from '../../common/ActiveDays';
 import DateValue from '../../common/DateValue';
 
 import ActiveTimes from './ActiveTimes';
 import LastActivity from './LastActivity';
+
+const { ActiveDays } = Widgets;
 
 export default class SiteAdminUserEnrollmentView extends React.Component {
 	static propTypes = {

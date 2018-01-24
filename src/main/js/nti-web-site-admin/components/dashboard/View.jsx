@@ -1,13 +1,13 @@
 import React from 'react';
-
-import ActiveDays from '../common/ActiveDays';
-import ActiveUsers from '../common/ActiveUsers';
+import { Widgets } from 'nti-web-reports';
 
 import ActiveSessions from './widgets/ActiveSessions';
 import ActiveTimes from './widgets/ActiveTimes';
 import PopularCourses from './widgets/PopularCourses';
 import RecentlyCreatedUsers from './widgets/RecentlyCreatedUsers';
 import RecentSessions from './widgets/RecentSessions';
+
+const { ActiveDays, ActiveUsers } = Widgets;
 
 export default class View extends React.Component {
 	constructor (props) {
