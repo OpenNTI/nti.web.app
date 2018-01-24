@@ -1,9 +1,9 @@
 const Ext = require('extjs');
 const { getService } = require('nti-web-client');
+const {AdminTools} = require('nti-web-course');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
-const {AdminTools} = require('nti-web-course');
 
 require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
