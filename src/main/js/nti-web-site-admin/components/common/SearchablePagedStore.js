@@ -3,15 +3,15 @@ import {getService} from 'nti-web-client';
 import BasicStore from '../BasicStore';
 
 export default class SearchablePagedStore extends BasicStore {
-	static convertBatch (batch) {
+	static convertBatch (batch, requestedSize) {
 		const nextLink = batch.getLink('batch-next');
-		const loadNext = !nextLink ?
+		const loadNext = !nextLink || (requestedSize && requestedSize > batch.Items.length) ?
 			null :
 			async () => {
 				const service = await getService();
 				const nextBatch = await service.getBatch(nextLink);
 
-				return SearchablePagedStore.convertBatch(nextBatch);
+				return SearchablePagedStore.convertBatch(nextBatch, requestedSize);
 			};
 
 		return {

@@ -11,7 +11,7 @@ export default class CourseListStore extends SearchablePagedStore {
 		const collection = service.getCollection('AdministeredCourses', 'Courses');
 		const batch = await service.getBatch(collection.href, {batchSize: DEFAULT_SIZE, batchStart: 0, filter: term});
 
-		return SearchablePagedStore.convertBatch(batch);
+		return SearchablePagedStore.convertBatch(batch, DEFAULT_SIZE);
 	}
 
 
@@ -24,7 +24,7 @@ export default class CourseListStore extends SearchablePagedStore {
 		const collection = service.getCollection('AdministeredCourses', 'Courses');
 
 		const batch = await service.getBatch(collection.href, {batchSize: DEFAULT_SIZE, batchStart: 0});
-		const result = SearchablePagedStore.convertBatch(batch);
+		const result = SearchablePagedStore.convertBatch(batch, DEFAULT_SIZE);
 
 		this[INITIAL_LOAD_CACHE] = result;
 
