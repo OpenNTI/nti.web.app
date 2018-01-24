@@ -38,6 +38,7 @@ require('../content/content/Index');
 require('../contentviewer/Index');
 require('../content/timeline/Window');
 require('./resources/index');
+require('./admin/Index');
 
 const DASHBOARD = 'course-dashboard';
 const OVERVIEW = 'course-overview';
@@ -121,6 +122,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		//TODO: add a /video route to show the grid view
 		this.addRoute('/videos/:id', this.showVideos.bind(this));
 		this.addRoute('/resources', this.showResources.bind(this));
+
+		if(Globals.isFeature('course-administration')) {
+			this.addRoute('/admin', this.setCourseAdminActive.bind(this));
+		}
+		
 
 		this.addObjectHandler(Assignment.mimeType, this.getAssignmentRoute.bind(this));
 		this.addObjectHandler(DiscussionAssignment.mimeType, this.getAssignmentRoute.bind(this));
@@ -218,12 +224,17 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 				this.activeBundle = current;
 
-				current.getWrapper()
+				return current.getWrapper()
 					.then((enrollment) => {
 						this.CourseStore.addCourse(enrollment);
+
+						if(enrollment.isAdministrative) {
+							this.isAdmin = true;
+						}
+
+						return current;
 					});
 
-				return current;
 			});
 		}
 
@@ -349,6 +360,22 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		}
 
 		return this.callParent([active, inactive, tab, navBarConfig, whiteMask]);
+	},
+
+	setCourseAdminActive: function (route, subRoute) {
+		var me = this;
+		if (me.isAdmin) {
+			var old = this.getLayout().getActiveItem();
+			var cmp = this.getCmp('course-admin-index');
+
+			this.getLayout().setActiveItem(cmp);
+
+			if (!old) {
+				cmp.fireEvent('activate');
+			}
+			cmp.setBundle(me.activeBundle);
+			return cmp.handleRoute(subRoute, route.precache);
+		}
 	},
 
 	showDashboard: function (route, subRoute) {
@@ -508,6 +535,18 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		]).then((item) => {
 			return item.showCourseMedia(id);
 		});
+	},
+
+
+	getCmp: function (xtype, cmpQuery) {
+		var cmp = this.down(cmpQuery || xtype);
+
+		if (!cmp) {
+			cmp = this.add(Ext.widget(xtype));
+			this.addChildRouter(cmp);
+		}
+
+		return cmp;
 	},
 
 
