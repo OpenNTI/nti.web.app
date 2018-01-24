@@ -24,6 +24,9 @@
 		.title {
 			font: normal 400 1.25rem/1.25 $body-font-family;
 			color: $primary-grey;
+			max-width: 550px;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
 }
