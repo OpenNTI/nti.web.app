@@ -3,6 +3,7 @@ const { Info } = require('nti-web-course');
 const { getService } = require('nti-web-client');
 
 const ContentProxy = require('legacy/proxy/JSONP');
+const CoursesStateStore = require('legacy/app/library/courses/StateStore');
 
 require('./parts/Description');
 require('./parts/Instructors');
@@ -17,6 +18,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 	cls: 'course-info-panel scrollable',
 	ui: 'course',
 	layout: 'none',
+
+	initComponent: function () {
+		this.callParent(arguments);
+
+		this.CourseStore = CoursesStateStore.getInstance();
+	},
 
 	onRouteDeactivate: function () {
 		if (!this.rendered) { return; }
@@ -65,6 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					component: Info,
 					catalogEntry,
 					onSave: (savedEntry) => {
+						this.CourseStore.fireEvent('modified-course', savedEntry);
 						this.onSave && this.onSave(savedEntry);
 					},
 					editable: !this.viewOnly && content.hasLink('edit')
