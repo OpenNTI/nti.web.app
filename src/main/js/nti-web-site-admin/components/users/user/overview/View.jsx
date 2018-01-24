@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Widgets } from 'nti-web-reports';
 
 import DateValue from '../../../common/DateValue';
-import ActiveDays from '../../../common/ActiveDays';
 
 import ActiveTimes from './ActiveTimes';
 import RecentSessions from './RecentSessions';
+
+const { ActiveDays } = Widgets;
 
 SiteAdminUserOverview.propTypes = {
 	user: PropTypes.object

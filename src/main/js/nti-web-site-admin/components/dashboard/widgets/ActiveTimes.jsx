@@ -1,8 +1,9 @@
 import React from 'react';
 import {getService} from 'nti-web-client';
 import {getLink} from 'nti-lib-interfaces';
+import { Widgets } from 'nti-web-reports';
 
-import ActiveTimesChart from '../../common/ActiveTimesChart';
+const { ActiveTimesChart } = Widgets;
 
 const ANALYTICS = 'Analytics';
 const ACTIVE_TIMES_LINK = 'active_times_summary';
