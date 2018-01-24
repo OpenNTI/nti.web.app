@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from 'nti-lib-locale';
-import {contextual} from 'nti-web-search';
 import {EmptyState} from 'nti-web-commons';
 import {LinkTo} from 'nti-web-routing';
 
@@ -19,7 +18,6 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.users.list', DEFAULT_TEXT);
 
-@contextual(t('users'))
 export default class ListView extends React.Component {
 	static propTypes = {
 		selectedItems: PropTypes.object,

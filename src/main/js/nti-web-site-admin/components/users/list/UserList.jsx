@@ -1,5 +1,6 @@
 import React from 'react';
-import {searchable} from 'nti-web-search';
+import {searchable, contextual} from 'nti-web-search';
+import {scoped} from 'nti-lib-locale';
 
 import List from './List';
 import Store from './Store';
@@ -15,7 +16,13 @@ const propMap = {
 	error: 'error'
 };
 
+const DEFAULT_TEXT = {
+	users: 'Users'
+};
+const t = scoped('nti-site-admin.users.adminlist', DEFAULT_TEXT);
+
 @searchable(store, propMap)
+@contextual(t('users'))
 export default class UserListView extends React.Component {
 	componentDidMount () {
 		store.load();

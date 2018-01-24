@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {searchable} from 'nti-web-search';
+import {searchable, contextual} from 'nti-web-search';
 import {Prompt} from 'nti-web-commons';
+import {scoped} from 'nti-lib-locale';
 
 import List from './List';
 import Store from './AdminStore';
@@ -16,6 +17,11 @@ const propMap = {
 	loadNextPage: 'loadNextPage',
 	error: 'error'
 };
+
+const DEFAULT_TEXT = {
+	users: 'Admin'
+};
+const t = scoped('nti-site-admin.users.adminlist', DEFAULT_TEXT);
 
 RemoveButton.propTypes = {
 	item: PropTypes.object
@@ -40,6 +46,7 @@ function RemoveButton ({item}) {
 }
 
 @searchable(store, propMap)
+@contextual(t('users'))
 export default class AdminListView extends React.Component {
 	static propTypes = {
 		searchTerm: PropTypes.string,
