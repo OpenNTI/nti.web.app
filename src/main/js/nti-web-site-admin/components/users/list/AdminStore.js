@@ -40,13 +40,18 @@ export default class UserListStore extends SearchablePagedStore {
 		return result;
 	}
 
+	refresh () {
+		delete this[INITIAL_LOAD_CACHE];
+
+		this.load();
+	}
+
 	async addAdmin (userName) {
 		const service = await getService();
 		const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
 		await service.post(siteAdminsLink + '/' + userName);
 
-		this[INITIAL_LOAD_CACHE] = null;
-		this.load();
+		this.refresh();
 	}
 
 	async removeAdmin (userName) {
@@ -54,7 +59,6 @@ export default class UserListStore extends SearchablePagedStore {
 		const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
 		await service.delete(siteAdminsLink + '/' + userName);
 
-		this[INITIAL_LOAD_CACHE] = null;
-		this.load();
+		this.refresh();
 	}
 }

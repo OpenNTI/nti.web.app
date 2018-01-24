@@ -17,7 +17,7 @@ const SORTERS = {
 	[ADMINS]: ['createdTime']
 };
 
-const adminStore = new AdminStore();
+const adminStore = AdminStore.getInstance();
 
 export default class FiterableUserList extends React.Component {
 	constructor (props) {
@@ -56,11 +56,11 @@ export default class FiterableUserList extends React.Component {
 		}).then(() => {
 			dialog && dialog.dismiss();
 
-			Array.from(selectedItems).forEach(item => {
-				adminStore.addAdmin(item.Username);
-			});
+			const requests = Array.from(selectedItems).map(x => adminStore.addAdmin(x.Username));
 
-			this.setState({selectedItems: new Set()});
+			Promise.all(requests).then(() => {
+				this.setState({selectedItems: new Set()});
+			});
 		}).catch(() => {
 			dialog && dialog.dismiss();
 		});
