@@ -52,7 +52,7 @@
     "nti-lib-interfaces": "^1.72.0",
     "nti-lib-locale": "^1.0.5",
     "nti-lib-ntiids": "^1.0.2",
-    "nti-lib-store": "^1.1.0",
+    "nti-lib-store": "^1.2.0",
     "nti-lib-store-connector": "0.x.x",
     "nti-style-common": "^1.4.0",
     "nti-util-logger": "^1.0.2",
@@ -64,7 +64,7 @@
     "nti-web-discussions": "0.x.x",
     "nti-web-editor": "0.x.x",
     "nti-web-login": "^2017.1.1",
-    "nti-web-reports": "0.0.0-alpha",
+    "nti-web-reports": "0.0.0",
     "nti-web-routing": "0.x.x",
     "nti-web-search": "0.x.x",
     "nti-web-session": "^1.0.0",
@@ -80,6 +80,5 @@
     "whatwg-fetch": "^2.0.0",
     "xregexp": "^3.1.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
