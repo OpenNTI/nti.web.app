@@ -56,7 +56,7 @@
     "nti-lib-store-connector": "0.x.x",
     "nti-style-common": "^1.4.0",
     "nti-util-logger": "^1.0.2",
-    "nti-web-catalog": "0.x.x",
+    "nti-web-catalog": "^0.7.2",
     "nti-web-charts": "0.x.x",
     "nti-web-client": "^1.1.1",
     "nti-web-commons": "0.x.x",
