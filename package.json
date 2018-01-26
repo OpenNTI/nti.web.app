@@ -64,7 +64,7 @@
     "nti-web-discussions": "0.x.x",
     "nti-web-editor": "0.x.x",
     "nti-web-login": "^2017.1.1",
-    "nti-web-reports": "0.0.1",
+    "nti-web-reports": "0.0.2",
     "nti-web-routing": "0.x.x",
     "nti-web-search": "0.x.x",
     "nti-web-session": "^1.0.0",
