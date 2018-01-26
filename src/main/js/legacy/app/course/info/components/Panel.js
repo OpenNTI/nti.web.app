@@ -1,6 +1,7 @@
 const Ext = require('extjs');
-const { Info } = require('nti-web-course');
+const { Info, AdminTools } = require('nti-web-course');
 const { getService } = require('nti-web-client');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 const ContentProxy = require('legacy/proxy/JSONP');
 const CoursesStateStore = require('legacy/app/library/courses/StateStore');
@@ -81,6 +82,22 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 				this.add({
 					xtype: 'course-info-support'
 				});
+
+				this.AdminTools = this.add({
+					xtype: 'react',
+					component: AdminTools.InfoPanel,
+					getRouteFor: function (name) {
+						if (name === 'admin-info-dashboard') {
+							return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/dashboard`;
+						} else if (name === 'admin-info-reports') {
+							return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/reports`;
+						} else if (name === 'admin-info-roster') {
+							return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/roster`;
+						}
+					},
+				});
+
+				this.AdminTools.setProps({ totalLearners: catalogEntry && catalogEntry.TotalEnrolledCount });
 			});
 
 	},
