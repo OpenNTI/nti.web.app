@@ -103,19 +103,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 			route: '/support'
 		});
 
-		if (this.showRoster) {
-			me.itemTpl.append(me.menuEl, {
-				title: getString('NextThought.view.courseware.info.outline.Menu.roster'),
-				route: '/roster'
-			});
-
-			if (isFeature('analytic-reports')) {
-				me.itemTpl.append(me.menuEl, {
-					title: 'Report',
-					route: '/report'
-				});
-			}
-		}
+		me.itemTpl.append(me.menuEl, {
+			title: 'Admin Tools',
+			route: '/admintools'
+		});
 	},
 
 	addStaticInviteCode () {
@@ -185,11 +176,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 			targetCls: 'course-info-support',
 			doLocalNav: true
 		},
-		'Roster': {
-			cls: 'course-info-roster'
-		},
-		'Report': {
-			cls: 'course-reports'
+		'Admin Tools': {
+			cls: 'course-info-panel',
+			targetCls: 'course-admin-panel',
+			doLocalNav: true
 		}
 	},
 

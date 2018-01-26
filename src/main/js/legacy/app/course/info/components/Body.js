@@ -89,6 +89,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		}
 		else if (route === '/support') {
 			hash = 'course-info-support';
+		} else if (route === '/admintools') {
+			hash = 'course-admin-panel';
 		}
 
 		scrollTarget = infoCmp.getEl().dom.getElementsByClassName(hash)[0];
