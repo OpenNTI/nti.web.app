@@ -1,10 +1,6 @@
 {
   "name": "nti-web-app",
-<<<<<<< HEAD
   "version": "2018.2.0-alpha",
-=======
-  "version": "2018.1.10",
->>>>>>> maint-2018.1
   "description": "NextThought web application",
   "author": "nextthought",
   "license": "UNLICENSED",
