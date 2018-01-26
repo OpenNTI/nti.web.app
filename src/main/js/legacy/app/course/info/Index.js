@@ -91,12 +91,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		me.bundle = bundle;
 
 		if (bundle && bundle.getWrapper) {
-			return Promise.all([bundle.getWrapper(), catalogEntry.getCourseInstance()])
-				.then(function (results) {
-					var e = results[0];
-					var course = results[1];
-
-					var showRoster = course.hasLink('CourseEnrollmentRoster');
+			return bundle.getWrapper()
+				.then(function (e) {
+					var showRoster = bundle.hasLink('CourseEnrollmentRoster');
 
 					update(catalogEntry, e.get('Status'), showRoster, me.infoOnly);
 				})
