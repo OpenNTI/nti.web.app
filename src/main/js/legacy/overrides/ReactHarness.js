@@ -38,6 +38,7 @@ const Bridge = createReactClass({
 		baseroute: PropTypes.string,
 		children: PropTypes.any,
 		setRouteViewTitle: PropTypes.func,
+		getRouteFor: PropTypes.func
 	},
 
 	getInitialState () {
@@ -69,7 +70,7 @@ const Bridge = createReactClass({
 			router: {
 				makeHref: (x) => x,
 				baseroute: this.state.baseroute,
-				getRouteFor: getRouteFor
+				getRouteFor: this.props.getRouteFor
 			},
 			setRouteViewTitle: this.props.setRouteViewTitle,
 			course: bundle && {
@@ -213,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 		ReactDOM.render(
-			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, setRouteViewTitle: this.setRouteViewTitle, ref: x => this.bridgeInstance = x},
+			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, setRouteViewTitle: this.setRouteViewTitle, ref: x => this.bridgeInstance = x, getRouteFor: config.getRouteFor || getRouteFor },
 				//The ref will be called on mount with the instance of the component.
 				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
 				//mounted. Calling doRender is the primary way to update the component with new props.

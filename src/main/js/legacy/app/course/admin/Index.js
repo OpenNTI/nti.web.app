@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const { getService } = require('nti-web-client');
 const {AdminTools} = require('nti-web-course');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
@@ -12,6 +13,11 @@ require('legacy/login/StateStore');
 
 const DASHBOARD_ACTIVE = /^\/dashboard/;
 const REPORTS_ACTIVE = /^\/reports/;
+const ROSTER_ACTIVE = /^\/roster/;
+const ROSTER_ID = 'course.admin.roster';
+const ADMIN_TOOLS_ID = 'course.admin.tools';
+
+const maybeHide = x => x && x.hide();
 
 module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	extend: 'Ext.container.Container',
@@ -41,55 +47,90 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		this.courseId = courseId;
 	},
 
-
 	showSiteAdmin (route) {
 		const baseroute = this.getBaseRoute();
+		if (this.siteAdminTools && !ROSTER_ACTIVE.test(route.path)) {
+			maybeHide(this.siteAdminRoster);
 
-		if (this.siteAdmin) {
-			this.siteAdmin.setBaseRoute(baseroute);
-		} else {
-			this.siteAdmin = this.add({
-				xtype: 'react',
-				component: AdminTools.View,
-				baseroute: baseroute,
-				loading: true,
-				setTitle: (title) => {this.setTitle(title); }
-			});
+			this.siteAdminTools.show();
+			this.siteAdminTools.setBaseRoute(baseroute);	
+		} else if (this.siteAdminRoster && ROSTER_ACTIVE.test(route.path)) {
+			maybeHide(this.siteAdminTools.hide());
+
+			this.siteAdminRoster.show();
+		} else if (!this.siteAdminTools && !ROSTER_ACTIVE.test(route.path)) {
+			maybeHide(this.siteAdminRoster);
+
+			this.setupAdminTools();
+		} else if (!this.siteAdminRoster && ROSTER_ACTIVE.test(route.path)) {
+			maybeHide(this.siteAdminTools);
+
+			this.setupRoster();
 		}
 
 		this.setUpNavigation(baseroute, route.path);
+	},
+
+
+	setupAdminTools () {
+		const baseroute = this.getBaseRoute();
+
+		this.siteAdminTools = this.add({
+			xtype: 'react',
+			itemId: ADMIN_TOOLS_ID,
+			component: AdminTools.View,
+			baseroute: baseroute,
+			loading: true,
+			setTitle: (title) => { this.setTitle(title); }
+		});
+
+	},
+
+
+	setupRoster () {
+		this.siteAdminRoster = this.add({
+			xtype: 'course-info-roster',
+			itemId: ROSTER_ID
+		});
 	},
 
 	async setBundle (activeBundle) {
 		this.activeBundle = activeBundle;
 		const service = await getService();
 		const course = await service.getObject(activeBundle.rawData);
-		
-		if (this.siteAdmin) {
-			this.siteAdmin.setProps({ course, loading: false });
-		}
-	},
 
-	setActiveBundle (activeBundle) {
-		
+		if (this.siteAdminRoster && this.siteAdminRoster.isVisible()) {
+			this.siteAdminRoster.setContent(activeBundle);
+		} else if (this.siteAdminTools && this.siteAdminTools.isVisible()) {
+			this.siteAdminTools.setProps({ course, loading: false });
+		}
 	},
 
 	setUpNavigation (baseroute, path) {
 		const navigation = this.getNavigation();
+		const me = this;
+		const onBack = () => {
+			me.pushRootRoute('', `/course/${encodeForURI(me.activeBundle.getId())}/info`);
+		};
 
 
 		navigation.updateTitle('Course Administration');
 
 		const tabs = [
-			{
-				text: 'Dashboard',
-				route: '/dashboard',
-				active: DASHBOARD_ACTIVE.test(path)
-			},
+			// {
+			// 	text: 'Dashboard',
+			// 	route: '/dashboard',
+			// 	active: DASHBOARD_ACTIVE.test(path) || path === '/'
+			// },
 			{
 				text: 'Reports',
 				route: '/reports',
 				active: REPORTS_ACTIVE.test(path)
+			},
+			{
+				text: 'Roster',
+				route: '/roster',
+				active: ROSTER_ACTIVE.test(path)
 			}
 		];
 
@@ -100,9 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			cmp: navigation,
 			noLibraryLink: false,
 			hideBranding: true,
-			onBack: () => {
-				this.pushRootRoute('Library', '/library');
-			}
+			onBack
 		});
 	},
 
