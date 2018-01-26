@@ -1,6 +1,10 @@
 {
   "name": "nti-web-app",
+<<<<<<< HEAD
   "version": "2018.2.0-alpha",
+=======
+  "version": "2018.1.10",
+>>>>>>> maint-2018.1
   "description": "NextThought web application",
   "author": "nextthought",
   "license": "UNLICENSED",
@@ -56,15 +60,15 @@
     "nti-lib-store-connector": "0.x.x",
     "nti-style-common": "^1.4.0",
     "nti-util-logger": "^1.0.2",
-    "nti-web-catalog": "0.x.x",
+    "nti-web-catalog": "^0.7.2",
     "nti-web-charts": "0.x.x",
     "nti-web-client": "^1.1.1",
     "nti-web-commons": "0.x.x",
-    "nti-web-course": "^1.7.3",
+    "nti-web-course": "^1.8.4",
     "nti-web-discussions": "0.x.x",
     "nti-web-editor": "0.x.x",
     "nti-web-login": "^2017.1.1",
-    "nti-web-reports": "0.0.0",
+    "nti-web-reports": "0.0.2",
     "nti-web-routing": "0.x.x",
     "nti-web-search": "0.x.x",
     "nti-web-session": "^1.0.0",
