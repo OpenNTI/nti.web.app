@@ -250,6 +250,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		}
 
-		this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
+		//this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 	}
 });
