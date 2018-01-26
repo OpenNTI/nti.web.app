@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const { getService } = require('nti-web-client');
 const {AdminTools} = require('nti-web-course');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
@@ -15,6 +16,8 @@ const REPORTS_ACTIVE = /^\/reports/;
 const ROSTER_ACTIVE = /^\/roster/;
 const ROSTER_ID = 'course.admin.roster';
 const ADMIN_TOOLS_ID = 'course.admin.tools';
+
+const maybeHide = x => x && x.hide();
 
 module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	extend: 'Ext.container.Container',
@@ -44,26 +47,24 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		this.courseId = courseId;
 	},
 
-
 	showSiteAdmin (route) {
 		const baseroute = this.getBaseRoute();
-
 		if (this.siteAdminTools && !ROSTER_ACTIVE.test(route.path)) {
-			this.siteAdminRoster.hide();
+			maybeHide(this.siteAdminRoster);
+
 			this.siteAdminTools.show();
 			this.siteAdminTools.setBaseRoute(baseroute);	
 		} else if (this.siteAdminRoster && ROSTER_ACTIVE.test(route.path)) {
-			this.siteAdminTools.hide();
+			maybeHide(this.siteAdminTools.hide());
+
 			this.siteAdminRoster.show();
 		} else if (!this.siteAdminTools && !ROSTER_ACTIVE.test(route.path)) {
-			if(this.siteAdminRoster) {
-				this.siteAdminRoster.hide();
-			}
+			maybeHide(this.siteAdminRoster);
+
 			this.setupAdminTools();
 		} else if (!this.siteAdminRoster && ROSTER_ACTIVE.test(route.path)) {
-			if(this.siteAdminTools) {
-				this.siteAdminTools.hide();
-			}
+			maybeHide(this.siteAdminTools);
+
 			this.setupRoster();
 		}
 
@@ -107,6 +108,10 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 
 	setUpNavigation (baseroute, path) {
 		const navigation = this.getNavigation();
+		const me = this;
+		const onBack = () => {
+			me.pushRootRoute('', `/course/${encodeForURI(me.activeBundle.getId())}/info`);
+		};
 
 
 		navigation.updateTitle('Course Administration');
@@ -136,9 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			cmp: navigation,
 			noLibraryLink: false,
 			hideBranding: true,
-			onBack: () => {
-				this.pushRootRoute(baseroute, '/');
-			}
+			onBack
 		});
 	},
 

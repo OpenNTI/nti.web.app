@@ -31,8 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		me.addRoute('/', this.showInfo.bind(me));
 		me.addRoute('/instructors', me.showInstructors.bind(me));
 		me.addRoute('/support', me.showSupport.bind(me));
-		me.addRoute('/roster', me.showRoster.bind(me));
-		me.addRoute('/report', me.showReports.bind(me));
+		me.addRoute('/admintools', me.showAdminTools.bind(me));
 		me.on('activate', this.onActivate.bind(me));
 
 		me.WindowActions = WindowsActions.create();
@@ -135,21 +134,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		});
 	},
 
-	showRoster: function (route, subRoute) {
+	showAdminTools: function (route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-
-		return me.body.showRoster(route, subRoute);
-	},
-
-	showReports: function (route, subRoute) {
-		var me = this;
-
 		me.navigation.setActiveItem(route);
-
-		me.body.setActiveItem('report').then(function () {
-			me.body.scrollReportsIntoView(route, subRoute);
+		me.body.setActiveItem('info').then(function () {
+			me.body.scrollInfoSectionIntoView(route);
+			me.alignNavigation();
 		});
 	},
 
