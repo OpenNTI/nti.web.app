@@ -117,11 +117,11 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		navigation.updateTitle('Course Administration');
 
 		const tabs = [
-			{
-				text: 'Dashboard',
-				route: '/dashboard',
-				active: DASHBOARD_ACTIVE.test(path) || path === '/'
-			},
+			// {
+			// 	text: 'Dashboard',
+			// 	route: '/dashboard',
+			// 	active: DASHBOARD_ACTIVE.test(path) || path === '/'
+			// },
 			{
 				text: 'Reports',
 				route: '/reports',
