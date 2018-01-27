@@ -11,7 +11,7 @@ require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
 
 
-const DASHBOARD_ACTIVE = /^\/dashboard/;
+// const DASHBOARD_ACTIVE = /^\/dashboard/;
 const REPORTS_ACTIVE = /^\/reports/;
 const ROSTER_ACTIVE = /^\/roster/;
 const ROSTER_ID = 'course.admin.roster';
@@ -112,27 +112,34 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		const onBack = () => {
 			me.pushRootRoute('', `/course/${encodeForURI(me.activeBundle.getId())}/info`);
 		};
-
+		const showRoster = this.activeBundle && this.activeBundle.hasLink('CourseEnrollmentRoster');
+		const showReports = this.activeBundle && this.activeBundle.getReportLinks().length > 0 ? true : false;
 
 		navigation.updateTitle('Course Administration');
 
-		const tabs = [
-			// {
-			// 	text: 'Dashboard',
-			// 	route: '/dashboard',
-			// 	active: DASHBOARD_ACTIVE.test(path) || path === '/'
-			// },
-			{
+		const tabs = [];
+
+		// {
+		// 	text: 'Dashboard',
+		// 	route: '/dashboard',
+		// 	active: DASHBOARD_ACTIVE.test(path) || path === '/'
+		// },
+
+		if (showReports) {
+			tabs.push({
 				text: 'Reports',
 				route: '/reports',
 				active: REPORTS_ACTIVE.test(path)
-			},
-			{
+			});
+		}
+
+		if (showRoster) {
+			tabs.push({
 				text: 'Roster',
 				route: '/roster',
 				active: ROSTER_ACTIVE.test(path)
-			}
-		];
+			});
+		}
 
 		navigation.setTabs(tabs);
 

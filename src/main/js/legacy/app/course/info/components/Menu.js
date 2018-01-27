@@ -103,10 +103,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 			route: '/support'
 		});
 
-		me.itemTpl.append(me.menuEl, {
-			title: 'Admin Tools',
-			route: '/admintools'
-		});
+		if (isFeature('course-administration') && (this.showRoster || this.showReports)) {
+			me.itemTpl.append(me.menuEl, {
+				title: 'Admin Tools',
+				route: '/admintools'
+			});
+		}
 	},
 
 	addStaticInviteCode () {

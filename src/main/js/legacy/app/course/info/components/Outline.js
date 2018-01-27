@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		startDateLabel: '.course-info-header-bar .date'
 	},
 
-	setContent: function (info, status, showRoster, courseMode, inviteCodeLink) {
+	setContent: function (info, status, showRoster, courseMode, inviteCodeLink, showReports) {
 		var startDate = Ext.util.Format.date(info.get('StartDate'), 'F j, Y');
 
 		this.removeAll(true);
@@ -54,6 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 			xtype: 'course-info-outline-menu',
 			info: info,
 			showRoster: showRoster,
+			showReports: showReports,
 			inviteCodeLink: inviteCodeLink
 		});
 
