@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		var me = this,
 			catalogEntry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
-		function update (info, status, showRoster) {
+		function update (info, status, showRoster, showReports) {
 			let showInviteCode = me.bundle.hasLink('SendCourseInvitations'),
 				inviteCodeLink = showInviteCode && me.bundle.getLink('CourseAccessTokens');
 
@@ -77,8 +77,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 
 			if(me.routeDeactivated || me.currId !== bundle.getId()) {
 				me.routeDeactivated = false;
-				me.body.setContent(info, status, showRoster, bundle);
-				me.navigation.setContent(info, status, showRoster, me.infoOnly, inviteCodeLink);
+				me.body.setContent(info, status, showRoster, bundle, showReports);
+				me.navigation.setContent(info, status, showRoster, me.infoOnly, inviteCodeLink, showReports);
 			}
 
 			me.currId = bundle.getId();
@@ -93,8 +93,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 			return bundle.getWrapper()
 				.then(function (e) {
 					var showRoster = bundle.hasLink('CourseEnrollmentRoster');
-
-					update(catalogEntry, e.get('Status'), showRoster, me.infoOnly);
+					const showReports = bundle.getReportLinks().length > 0 ? true : false;
+					update(catalogEntry, e.get('Status'), showRoster, showReports);
 				})
 				.catch(function () {
 					//hide tab?
