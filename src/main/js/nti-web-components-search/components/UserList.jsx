@@ -9,8 +9,40 @@ export default class UserList extends React.Component {
 		currentTab: PropTypes.string
 	}
 
+	constructor (props) {
+		super(props);
+
+		this.state = {
+			showNext: false,
+			showPre: false
+		};
+	}
+
+
+	componentDidMount () {
+		const {userList} = this.props;
+		if (userList.length < 4) {
+			this.setState({showNext: false, showPre: false});
+		}
+		else {
+			this.setState({showNext: true, showPre: false});
+		}
+	}
+
+	componentWillReceiveProps (prevProps) {
+		if(prevProps.userList !== this.props.userList) {
+			if (prevProps.userList.length < 4) {
+				this.setState({showNext: false, showPre: false});
+			}
+			else {
+				this.setState({showNext: true, showPre: false});
+			}
+		}
+	}
+
 	render () {
 		const {currentTab, userList} = this.props;
+		const {showNext, showPre} = this.state;
 		if(userList.length === 0){
 			return null;
 		}
@@ -46,16 +78,25 @@ export default class UserList extends React.Component {
 							<p>{info}</p>
 							<a className="learn-more">Learn More</a>
 						</div>
-						<div className="bg-control left"/>
-						<a className="left carousel-control" role="button" data-slide="prev">
-							<i className="fa fa-arrow-left" aria-hidden="true"/>
-							<span className="sr-only">Previous</span>
-						</a>
-						<div className="bg-control right"/>
-						<a className="right carousel-control" role="button" data-slide="next">
-							<i className="fa fa-arrow-right" aria-hidden="true"/>
-							<span className="sr-only">Next</span>
-						</a>
+						{showPre && (
+							<div>
+								<div className="bg-control left"/>
+								<a className="left carousel-control" role="button" data-slide="prev">
+									<i className="fa fa-arrow-left" aria-hidden="true"/>
+									<span className="sr-only">Previous</span>
+								</a>
+							</div>
+						)}
+
+						{showNext && (
+							<div>
+								<div className="bg-control right"/>
+								<a className="right carousel-control" role="button" data-slide="next">
+									<i className="fa fa-arrow-right" aria-hidden="true"/>
+									<span className="sr-only">Next</span>
+								</a>
+							</div>
+						)}
 					</section>
 				</div>
 			);
