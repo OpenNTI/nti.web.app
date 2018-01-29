@@ -1,0 +1,265 @@
+@import "~nti-style-common/all.scss";
+//colors
+$white: #fff;
+$black_19: rgba(0, 0, 0, 0.19);
+$black_30: rgba(0, 0, 0, 0.3);
+$color_chateau_green_approx: #3fb34f;
+$color_bon_jour_50_approx: rgba(226, 226, 226, 0.5);
+$black_50: rgba(0, 0, 0, 0.5);
+
+//@extend-elements
+//original selectors
+//.user-lookup-search .result-block .user-info .user-name, .user-lookup-search .result-block .user-info .user-name span
+%extend_1 {
+	color: $primary-grey;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 22px;
+	text-align: center;
+	display: block;
+	margin-bottom: 10px;
+}
+
+.user-lookup-search {
+	position: relative;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 2px;
+	background-color: $white;
+	//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+	box-shadow: 0 2px 2px 0 $black_19, 0 0 3px 0 $black_30;
+
+	&.all-user {
+		max-width: 740px;
+
+		.title-block-lookup {
+			display: flex;
+			align-items: baseline;
+			margin-bottom: 25px;
+
+			p {
+				color: $primary-blue;
+				font-size: 18px;
+				line-height: 24px;
+			}
+
+			.view-all {
+				color: $secondary-grey;
+				font-size: 14px;
+				line-height: 19px;
+				margin-left: 15px;
+				cursor: pointer;
+			}
+		}
+
+		.result-block {
+			margin-bottom: 20px;
+
+			ul {
+				overflow-x: auto;
+				white-space: nowrap;
+				overflow-y: hidden;
+				padding-left: 18px;
+
+				li {
+					display: inline-block;
+					width: 200px;
+					margin-right: 15px;
+					height: 227px;
+				}
+			}
+		}
+
+		.bottom-info {
+			//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+			border-radius: 0 0 2px 2px;
+			background-color: $panel-background;
+			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+			box-shadow: inset 0 1px 0 0 $color_bon_jour_50_approx;
+			padding: 5px 18px;
+			display: flex;
+			align-items: baseline;
+
+			p {
+				color: $secondary-grey;
+				font-size: 14px;
+				line-height: 19px;
+			}
+
+			.learn-more {
+				color: $tertiary-grey;
+				font-size: 14px;
+				line-height: 19px;
+				margin-left: 15px;
+				cursor: pointer;
+			}
+		}
+
+		.bg-control {
+			position: absolute;
+			max-height: 328px;
+			height: 100%;
+			top: 50%;
+			//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+			transform: translateY(-50%);
+			min-width: 74px;
+			max-width: 74px;
+			background: linear-gradient(270deg, $white 0, rgba(255, 255, 255, 0) 100%);
+			z-index: 1;
+
+			&.left {
+				left: 0;
+			}
+
+			&.right {
+				right: 0;
+			}
+		}
+
+		.carousel-control {
+			width: 50px;
+			height: 50px;
+			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+			box-shadow: 0 0 4px 0 $black_50;
+			//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+			border-radius: 100%;
+			position: absolute;
+			top: 50%;
+			//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+			transform: translateY(-50%);
+			background: linear-gradient(270deg, $white 0, rgba(255, 255, 255, 0) 100%);
+			z-index: 999;
+			cursor: pointer;
+
+			i {
+				color: $primary-blue;
+				font-size: 25px;
+				text-align: center;
+				line-height: 2;
+				display: block;
+			}
+		}
+
+		.left.carousel-control {
+			left: 20px;
+		}
+
+		.right.carousel-control {
+			right: 20px;
+		}
+	}
+
+	.result-block {
+		.user-info {
+			//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+			box-shadow: 0 2px 2px 0 $black_19, 0 0 3px 0 $black_30;
+			margin-top: 10px;
+			//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+			border-radius: 4px;
+			padding: 25px;
+
+			.user-name {
+				@extend %extend_1;
+
+				span {
+					@extend %extend_1;
+				}
+			}
+
+			.friend-stt {
+				color: $tertiary-grey;
+				font-size: 10px;
+				font-weight: bold;
+				line-height: 14px;
+				text-align: center;
+				display: block;
+			}
+		}
+
+		.img-user {
+			width: 100px;
+			height: 100px;
+			//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+			border-radius: 100%;
+			margin: 0 auto 14px;
+
+			img {
+				width: 100%;
+				height: 100%;
+				//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+				border-radius: 100%;
+			}
+		}
+
+		.follow-btn {
+			//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+			border-radius: 0 0 4px 4px;
+			background-color: $color_chateau_green_approx;
+			width: 100%;
+			display: block;
+			padding: 10px 0;
+			text-align: center;
+			color: $white;
+			font-size: 14px;
+			font-weight: 600;
+			line-height: 19px;
+		}
+	}
+
+	&.people {
+		width: 100%;
+		max-width: 452px;
+		text-align: center;
+
+		.result-block {
+			overflow: hidden;
+			padding: 10px 0;
+
+			li {
+				max-width: 100px;
+				margin-right: 5px;
+				display: inline-block;
+			}
+
+			.img-user {
+				width: 50px;
+				height: 50px;
+			}
+
+			.user-info {
+				padding: 25px 10px;
+				margin-top: 0;
+
+				.user-name {
+					margin-bottom: 10px;
+					font-size: 12px;
+					line-height: 16px;
+
+					span {
+						font-size: 12px;
+						line-height: 16px;
+					}
+				}
+
+				.friend-stt {
+					font-size: 8px;
+				}
+			}
+		}
+
+		.title-block-lookup {
+			display: none;
+		}
+
+		.bottom-info {
+			display: none;
+		}
+
+		.bg-control {
+			display: none;
+
+			.carousel-control {
+				display: none;
+			}
+		}
+	}
+}

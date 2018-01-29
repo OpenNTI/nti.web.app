@@ -394,9 +394,11 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	onLoadResults: function (lock, page, batch) {
+		const globalSearch = batch[0];
+		const userSearch = batch[1];
 		if (lock !== this.lock) { return; }
 
-		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
+		var nextLink = globalSearch.Links && Service.getLinkFrom(globalSearch.Links, 'batch-next');
 
 		this.knownPages = Math.max(this.currentPage, page);
 		this.currentPage = page;
@@ -405,7 +407,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		//If we've already loaded this page we don't want to
 		//override what hrefs we are caching
 		if (!this.PAGE_TO_HREF[page]) {
-			this.PAGE_TO_HREF[page] = batch.href;
+			this.PAGE_TO_HREF[page] = globalSearch.href;
 		}
 
 		if (!this.PAGE_TO_HREF[page + 1]) {
@@ -417,20 +419,27 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 
-		if (batch.Items && batch.Items.length) {
+		if(userSearch && userSearch.Items){
+			this.Results.setProps({
+				currentTab: this.currentSearch.filter,
+				userSearch: userSearch.Items
+			});
+		}
+
+		if (globalSearch.Items && globalSearch.Items.length) {
 			if(this.useNewSearch) {
 				// if there are results with the new search, the onResultsLoaded
 				// handler will unhide the filters widget when those results
 				// have been loaded
 				this.Results.setProps({
-					hits: batch.Items,
+					hits: globalSearch.Items,
 					errorLoadingText: undefined,
 					emptyText: undefined,
 					currentPage: this.currentPage,
 					numPages
 				});
 			} else {
-				this.Results.addResults(batch.Items);
+				this.Results.addResults(globalSearch.Items);
 			}
 		} else if(this.knownPages > 1) {
 			// no items but there are known pages, so we don't want to just hide
@@ -439,7 +448,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 			if(this.useNewSearch) {
 				this.Results.setProps({
-					hits: batch.Items,
+					hits: globalSearch.Items,
 					errorLoadingText: undefined,
 					emptyText: 'End of search results',
 					currentPage: this.currentPage,
