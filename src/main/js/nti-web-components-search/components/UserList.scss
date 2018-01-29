@@ -158,6 +158,9 @@ $black_50: rgba(0, 0, 0, 0.5);
 			padding: 25px;
 
 			.user-name {
+				word-spacing: 100vw;
+				white-space: pre-line;
+
 				@extend %extend_1;
 
 				span {
