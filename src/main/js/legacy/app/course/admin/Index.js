@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			this.siteAdminTools.show();
 			this.siteAdminTools.setBaseRoute(baseroute);	
 		} else if (this.siteAdminRoster && ROSTER_ACTIVE.test(route.path)) {
-			maybeHide(this.siteAdminTools.hide());
+			maybeHide(this.siteAdminTools);
 
 			this.siteAdminRoster.show();
 		} else if (!this.siteAdminTools && !ROSTER_ACTIVE.test(route.path)) {
