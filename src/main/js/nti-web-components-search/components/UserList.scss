@@ -34,7 +34,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 		.title-block-lookup {
 			display: flex;
 			align-items: baseline;
-			margin-bottom: 25px;
+			padding-left: 18px;
 
 			p {
 				color: $primary-blue;
@@ -52,6 +52,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 		}
 
 		.result-block {
+			margin-top: -30px;
 			margin-bottom: 20px;
 
 			ul {
@@ -259,10 +260,10 @@ $black_50: rgba(0, 0, 0, 0.5);
 
 		.bg-control {
 			display: none;
+		}
 
-			.carousel-control {
-				display: none;
-			}
+		.carousel-control {
+			display: none;
 		}
 	}
 }
