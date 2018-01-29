@@ -97,7 +97,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 
 		.bg-control {
 			position: absolute;
-			max-height: 328px;
+			max-height: 290px;
 			height: 100%;
 			top: 50%;
 			//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
