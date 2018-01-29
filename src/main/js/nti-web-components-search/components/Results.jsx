@@ -11,6 +11,7 @@ import {
 
 import Hit from './Hit';
 import Pager from './Pager';
+import UserList from "./UserList";
 
 function loadHitData (hit, getBreadCrumb) {
 
@@ -42,7 +43,9 @@ export default class SearchResults extends React.Component {
 		showLoading: PropTypes.bool,
 		currentPage: PropTypes.number,
 		numPages: PropTypes.number,
-		onResultsLoaded: PropTypes.func
+		onResultsLoaded: PropTypes.func,
+		currentTab: PropTypes.string,
+		userSearch: PropTypes.array
 	}
 
 	constructor (props) {
@@ -76,10 +79,18 @@ export default class SearchResults extends React.Component {
 
 	render () {
 		const {loaded, navigating, hits} = this.state;
-		const {showLoading, errorLoadingText, emptyText, numPages} = this.props;
+		const {showLoading, errorLoadingText, emptyText, numPages, currentTab, userSearch} = this.props;
 		const cls = cx('search-results', {loaded});
 
 		const loadingMessage = navigating ? 'Navigating...' : 'Loading...';
+
+		let showEmpty = hits.length === 0;
+
+		if(currentTab === 'all' || currentTab === 'people'){
+			if(userSearch && userSearch.length > 0){
+				showEmpty = false;
+			}
+		}
 
 		if(navigating || showLoading || !loaded) {
 			return (
@@ -92,6 +103,9 @@ export default class SearchResults extends React.Component {
 		} else {
 			return (
 				<div className={cls}>
+					{userSearch && (
+						<UserList currentTab={currentTab} userList={userSearch}/>
+					)}
 					{hits.map(this.renderHit)}
 					{loaded && !errorLoadingText && numPages > 1 &&
 						this.renderPages(numPages)
@@ -99,7 +113,7 @@ export default class SearchResults extends React.Component {
 					{errorLoadingText &&
 						<div className="error control-item">{errorLoadingText}</div>
 					}
-					{emptyText &&
+					{showEmpty &&
 						<div className="empty control-item">{emptyText}</div>
 					}
 				</div>

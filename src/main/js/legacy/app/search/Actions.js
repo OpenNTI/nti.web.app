@@ -70,6 +70,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			return 'application/vnd.nextthought.' + mime;
 		});
 
+		accepts.push('application/vnd.nextthought.user');
+
 		params = {
 			sortOn: 'relevance',
 			sortOrder: 'descending',
@@ -86,7 +88,12 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			params.course = bundle;
 		}
 
-		return StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search'));
+		const userSearchUrl = Service.getUserSearchURL(term);
+
+		return Promise.all([
+			StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search')),
+			StoreUtils.loadBatch(userSearchUrl, params, null, null, isFeature('use-new-search'))
+		]);
 	},
 
 	setSearchContext: function (term, silent) {
