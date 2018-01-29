@@ -18,7 +18,6 @@ export default class UserList extends React.Component {
 		};
 	}
 
-
 	componentDidMount () {
 		const {userList} = this.props;
 		if (userList.length < 4) {
@@ -30,7 +29,7 @@ export default class UserList extends React.Component {
 	}
 
 	componentWillReceiveProps (prevProps) {
-		if(prevProps.userList !== this.props.userList) {
+		if (prevProps.userList !== this.props.userList) {
 			if (prevProps.userList.length < 4) {
 				this.setState({showNext: false, showPre: false});
 			}
@@ -40,15 +39,57 @@ export default class UserList extends React.Component {
 		}
 	}
 
+	attachRef = el => this.el = el
+
+	nextItems = () => {
+		if (this.el.scrollLeft > this.el.scrollLeftMax - (215 * 3)) {
+			this.setState({showNext: false});
+			this.el.scrollLeft = this.el.scrollLeftMax;
+			return;
+		}
+
+		if (!this.state.showPre) {
+			this.setState({showPre: true});
+		}
+		const currentPos = parseInt((this.el.scrollLeft / 215), 10);
+		this.el.scrollLeft = (currentPos * 215) + (215 * 3);
+	}
+
+	preItems = () => {
+		if (this.el.scrollLeft < (215 * 3)) {
+			this.setState({showPre: false});
+			this.el.scrollLeft = 0;
+			return;
+		}
+
+		if (!this.state.showNext) {
+			this.setState({showNext: true});
+		}
+		const currentPos = parseInt((this.el.scrollLeft / 215), 10);
+		this.el.scrollLeft = (currentPos * 215) - (215 * 3);
+	}
+
+	scrollItems = () => {
+		if (this.el.scrollLeft === 0) {
+			this.setState({showPre: false});
+		}
+		else if (this.el.scrollLeft === this.el.scrollLeftMax) {
+			this.setState({showNext: false});
+		}
+		else {
+			this.setState({showNext: true, showPre: true});
+		}
+	}
+
 	render () {
 		const {currentTab, userList} = this.props;
 		const {showNext, showPre} = this.state;
-		if(userList.length === 0){
+		if (userList.length === 0) {
 			return null;
 		}
-		if(currentTab === 'all' || currentTab === 'people'){
+		if (currentTab === 'all' || currentTab === 'people') {
 			const userClass = currentTab === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix';
-			return(
+			return (
 				<div className="container">
 					<section className={userClass}>
 						<div className="title-block-lookup">
@@ -56,8 +97,8 @@ export default class UserList extends React.Component {
 							<a className="view-all">View All</a>
 						</div>
 						<div className="result-block">
-							<ul>
-								{userList.map ((user, index) => {
+							<ul ref={this.attachRef} onScroll={this.scrollItems}>
+								{userList.map((user, index) => {
 									return (
 										<li className="block-info" key={index}>
 											<div className="user-info">
@@ -81,7 +122,7 @@ export default class UserList extends React.Component {
 						{showPre && (
 							<div>
 								<div className="bg-control left"/>
-								<a className="left carousel-control" role="button" data-slide="prev">
+								<a className="left carousel-control" role="button" data-slide="prev" onClick={this.preItems}>
 									<i className="fa fa-arrow-left" aria-hidden="true"/>
 									<span className="sr-only">Previous</span>
 								</a>
@@ -91,7 +132,7 @@ export default class UserList extends React.Component {
 						{showNext && (
 							<div>
 								<div className="bg-control right"/>
-								<a className="right carousel-control" role="button" data-slide="next">
+								<a className="right carousel-control" role="button" data-slide="next" onClick={this.nextItems}>
 									<i className="fa fa-arrow-right" aria-hidden="true"/>
 									<span className="sr-only">Next</span>
 								</a>
