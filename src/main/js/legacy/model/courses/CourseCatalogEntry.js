@@ -153,6 +153,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		return this.getAsset('promoImage');
 	},
 
+	getEffectiveDate: function () {
+		// if there is no start date, but we have an end date, consider that end date
+		// as the 'effective' date for the course.  So when determining which semester an archived
+		// course occurred, basing it on the EndDate is our only option without a StartDate
+		return this.get('StartDate') || this.get('EndDate');
+	},
+
 	/*
 	 * Get the catalog family for this catalog entry
 	 * @return {CatalogFamily}
@@ -377,7 +384,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 	},
 
 	getSemester: function () {
-		var start = this.get('StartDate'),
+		var start = this.getEffectiveDate(),
 			month = start && start.getMonth(),
 			s = start && getString('months')[month + 1];
 
@@ -385,7 +392,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 	},
 
 	getSemesterBadge: function () {
-		var start = this.get('StartDate'),
+		var start = this.getEffectiveDate(),
 			year = start && start.getFullYear(),
 			semester = this.getSemester();
 

@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		(courses || []).forEach(function (course) {
 			var isCatalogEntry = course instanceof CourseCatalogEntry,
 				catalog = isCatalogEntry ? course : course.getCourseCatalogEntry(),
-				start = catalog.get('StartDate'),
+				start = catalog.getEffectiveDate(),
 				year = start.getFullYear(),
 				semester = catalog.getSemester(),
 				yearBin = bins[year], list = years, bin = bins,
