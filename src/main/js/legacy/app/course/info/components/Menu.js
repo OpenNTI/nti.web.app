@@ -88,25 +88,21 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		me.itemTpl.append(me.menuEl, {
 			title: 'About',
-			route: '/',
 			active: true
 		});
 
 		me.itemTpl.append(me.menuEl, {
 			title: getFormattedString('NextThought.view.courseware.info.outline.Menu.courseinstructors', {
 				instructor: Ext.util.Format.plural(i.length, 'Instructor', true)}),
-			route: '/instructors'
 		});
 
 		me.itemTpl.append(me.menuEl, {
 			title: getString('NextThought.view.courseware.info.outline.Menu.support'),
-			route: '/support'
 		});
 
 		if (isFeature('course-administration') && (this.showRoster || this.showReports)) {
 			me.itemTpl.append(me.menuEl, {
 				title: 'Admin Tools',
-				route: '/admintools'
 			});
 		}
 	},
@@ -139,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		if (activeItemRoute === route || !this.rendered) { return; }
 
 		activeItem.removeCls('x-item-selected');
-		activeItem = this.el.down('[data-route=' + route + ']');
+		activeItem = this.el.down('[data-qtip=About]');
 
 		if (activeItem) {
 			activeItem.addCls('x-item-selected');
@@ -239,9 +235,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 			if(infoPanel) {
 				infoPanel.style.display = 'none';
 			}
-
 		}
-
-		this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 	}
 });
