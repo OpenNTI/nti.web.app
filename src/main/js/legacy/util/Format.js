@@ -1,10 +1,26 @@
 const Ext = require('extjs');
-const {DateTime} = require('nti-web-commons');
+const {DateTime, Avatar} = require('nti-web-commons');
 
 const {getString} = require('legacy/util/Localization');
 const {isMe} = require('legacy/util/Globals');
 const FriendsList = require('legacy/model/FriendsList');
 const User = require('legacy/model/User');
+
+const AVATAR_COLORS = [
+	'#5E35B1',
+	'#3949AB',
+	'#1E88E5',
+	'#039BE5',
+	'#00ACC1',
+	'#00897B',
+	'#43A047',
+	'#7CB342',
+	'#C0CA33',
+	'#FDD835',
+	'#FFB300',
+	'#FB8C00',
+	'#F4511E',
+];
 
 const NTIFormat =
 module.exports = exports = Ext.define('NextThought.util.Format', {
@@ -60,10 +76,18 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 
 		clsList = clsList.join(' ');
 
+		// attempt to pull avatar color through the Avatar component color class logic
+		// If we get a color class, extract the index, subtract one to zero index and pull
+		// from the AVATAR_COLORS constant.  If we can't get that for some reason, use
+		// whatever is defined as the background color by default
+		var colorClass = Avatar.getColorClass(getField('Username'));
+		var colorIndex = colorClass && colorClass.substring(colorClass.lastIndexOf('-') + 1);
+		var colorToUse = colorIndex ? AVATAR_COLORS[parseInt(colorIndex, 10) - 1] : '#' + bgColor;
+
 		if (avatar) {
 			cn.push({cls: 'profile avatar-pic', style: {backgroundImage: getURL(avatar)}});
 		} else if (initials) {
-			cn.push({cls: 'fallback avatar-pic initials', style: {'background-color': '#' + bgColor}, cn: {cls: 'inner', html: initials}});
+			cn.push({cls: 'fallback avatar-pic initials', style: {'background-color': colorToUse}, cn: {cls: 'inner', html: initials}});
 		} else {
 			cn.push({cls: 'fallback avatar-pic', style: {backgroundImage: getURL(defaultAvatar)}});
 		}
