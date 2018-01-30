@@ -101,6 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 
 		if (this.siteAdminRoster && this.siteAdminRoster.isVisible()) {
 			this.siteAdminRoster.setContent(activeBundle);
+			this.siteAdminRoster.onRouteActivate();
 		} else if (this.siteAdminTools && this.siteAdminTools.isVisible()) {
 			this.siteAdminTools.setProps({ course, loading: false });
 		}
