@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Avatar} from 'nti-web-commons';
+import Ext from 'extjs';
+
+import GroupsActions from '../../legacy/app/groups/Actions';
+import GroupsStateStore from '../../legacy/app/groups/StateStore';
 
 const info = 'Visible because your search contained someone\'s name.';
+const groupStore = GroupsStateStore.getInstance();
 export default class UserList extends React.Component {
 	static propTypes = {
 		userList: PropTypes.array,
@@ -14,12 +19,20 @@ export default class UserList extends React.Component {
 
 		this.state = {
 			showNext: false,
-			showPre: false
+			showPre: false,
+			isFollow: []
 		};
 	}
 
 	componentDidMount () {
 		const {userList} = this.props;
+		let isFollow = [];
+		userList.map((user, index) =>{
+			const isContact = groupStore.isContact(user.Username);
+			isFollow[index] = isContact;
+		});
+
+		this.setState({isFollow: isFollow});
 		if (userList.length < 4) {
 			this.setState({showNext: false, showPre: false});
 		}
@@ -30,6 +43,13 @@ export default class UserList extends React.Component {
 
 	componentWillReceiveProps (prevProps) {
 		if (prevProps.userList !== this.props.userList) {
+			let isFollow = [];
+			prevProps.userList.map((user, index) =>{
+				const isContact = groupStore.isContact(user.Username);
+				isFollow[index] = isContact;
+			});
+
+			this.setState({isFollow: isFollow});
 			if (prevProps.userList.length < 4) {
 				this.setState({showNext: false, showPre: false});
 			}
@@ -81,9 +101,54 @@ export default class UserList extends React.Component {
 		}
 	}
 
+
+	followUser = (userName, index) => () => {
+		const actions = GroupsActions.create();
+		actions.addContact(userName)
+			.then((something) =>{
+				let isFollow = this.state.isFollow;
+				isFollow[index] = true;
+				this.setState({isFollow: isFollow});
+			})
+			.catch(function () {
+				alert('There was trouble adding your contact.');
+			});
+	}
+
+	unFollowUser = (userName, index) => () => {
+		const actions = GroupsActions.create();
+		const me = this;
+
+		Ext.Msg.show({
+			title: 'Are you sure?',
+			msg: 'The following action will remove this contact',
+			icon: 'warning-red',
+			buttons: {
+				primary: {
+					text: 'Remove',
+					cls: 'caution',
+					handler: function () {
+						actions.deleteContact(userName)
+							.then((something) =>{
+								let isFollow = me.state.isFollow;
+								isFollow[index] = false;
+								me.setState({isFollow: isFollow});
+							})
+							.catch(function () {
+								alert('There was trouble remove your contact.');
+							});
+					}
+				},
+				secondary: {
+					text: 'Cancel'
+				}
+			}
+		});
+	}
+
 	render () {
 		const {currentTab, userList} = this.props;
-		const {showNext, showPre} = this.state;
+		const {showNext, showPre, isFollow} = this.state;
 		if (userList.length === 0) {
 			return null;
 		}
@@ -106,9 +171,17 @@ export default class UserList extends React.Component {
 													<Avatar className="img-user" entityId={user.Username}/>
 												</div>
 												<h3 className="user-name">{user.realname}</h3>
-												<span className="friend-stt">23 MUTUAL FRIENDS</span>
 											</div>
-											<a className="follow-btn">Follow</a>
+											{!isFollow[index] && (
+												<a className="follow-btn" onClick={this.followUser(user.Username, index)}>
+													<span className="icon-remove-user"/>
+													Follow</a>
+											)}
+											{isFollow[index] && (
+												<a className="follow-btn incorrect" onClick={this.unFollowUser(user.Username, index)}>
+													<span className="icon-remove-user"/>
+													Unfollow</a>
+											)}
 										</li>
 									);
 								})}
@@ -117,14 +190,12 @@ export default class UserList extends React.Component {
 						</div>
 						<div className="bottom-info">
 							<p>{info}</p>
-							<a className="learn-more">Learn More</a>
 						</div>
 						{showPre && (
 							<div>
 								<div className="bg-control left"/>
 								<a className="left carousel-control" role="button" data-slide="prev" onClick={this.preItems}>
-									<i className="fa fa-arrow-left" aria-hidden="true"/>
-									<span className="sr-only">Previous</span>
+									<i className="icon-chevron-left" aria-hidden="true"/>
 								</a>
 							</div>
 						)}
@@ -133,8 +204,7 @@ export default class UserList extends React.Component {
 							<div>
 								<div className="bg-control right"/>
 								<a className="right carousel-control" role="button" data-slide="next" onClick={this.nextItems}>
-									<i className="fa fa-arrow-right" aria-hidden="true"/>
-									<span className="sr-only">Next</span>
+									<i className="icon-chevron-right" aria-hidden="true"/>
 								</a>
 							</div>
 						)}
