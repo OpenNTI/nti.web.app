@@ -80,10 +80,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					editable: !this.viewOnly && content.hasLink('edit')
 				});
 
-				this.add({
-					xtype: 'course-info-support'
-				});
-
 				if (isFeature('course-administration') && (showRoster || showReports)) {
 					this.AdminTools = this.add({
 						xtype: 'react',
