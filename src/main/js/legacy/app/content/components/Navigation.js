@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 
+const CoursesStateStore = require('../../library/courses/StateStore');
+
 require('legacy/common/components/Navigation');
 require('./ContentSwitcher');
 
@@ -14,7 +16,16 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 
 		this.ContentSwitcher = Ext.widget('content-switcher', {
 			ownerCt: this,
-			switchContent: this.switchContent.bind(this)
+			switchContent: this.switchContent.bind(this),
+			onVisibilityChanged: this.onVisibilityChanged.bind(this)
+		});
+
+		this.LibraryCourseStateStore = CoursesStateStore.getInstance();
+
+		this.mon(this.LibraryCourseStateStore, {
+			'modified-course': (catalogEntry) => {
+				this.updateEls(this.currentBundle.asUIData(), catalogEntry);
+			}
 		});
 	},
 
@@ -25,6 +36,32 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 
 		if (this.bundle) {
 			this.bundleChanged(this.bundle);
+		}
+	},
+
+	onVisibilityChanged: function (catalogEntry) {
+		this.updateEls(this.currentBundle.asUIData(), catalogEntry);
+	},
+
+	updateEls: function (data, catalogEntry) {
+		var isPreview = catalogEntry && (catalogEntry.get && catalogEntry.get('Preview')) || (catalogEntry.Preview);
+
+		this.titleEl.update(data.title);
+
+		if (data.label) {
+			this.labelEl.update(data.label);
+			this.labelEl.removeCls('hidden');
+		} else {
+			this.labelEl.update('');
+			this.labelEl.addCls('hidden');
+		}
+		if (isPreview) {
+			data.preview = 'in preview';
+			if (data.startDate) {
+				// use catalog entry's start date if there is one, fallback to bundle data's start date
+				data.preview += '&mdash;Course starts on ' + Ext.Date.format((catalogEntry.StartDate && new Date(catalogEntry.StartDate)) || data.startDate, 'l, F j');
+			}
+			this.previewTagTpl.append(this.labelEl, {'preview': data.preview});
 		}
 	},
 
@@ -44,25 +81,9 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		this.ContentSwitcher.addBundle(bundle, activeRoute);
 
 		var data = bundle.asUIData(),
-			catalog = bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry(),
-			isPreview = catalog && catalog.get('Preview');
+			catalog = bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
-		this.titleEl.update(data.title);
-
-		if (data.label) {
-			this.labelEl.update(data.label);
-			this.labelEl.removeCls('hidden');
-		} else {
-			this.labelEl.update('');
-			this.labelEl.addCls('hidden');
-		}
-		if (isPreview) {
-			data.preview = 'in preview';
-			if (data.startDate) {
-				data.preview += '&mdash;Course starts on ' + Ext.Date.format(data.startDate, 'l, F j');
-			}
-			this.previewTagTpl.append(this.labelEl, {'preview': data.preview});
-		}
+		this.updateEls(data, catalog);
 	},
 
 	switchContent: function (route) {

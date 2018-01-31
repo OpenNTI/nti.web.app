@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const {Navigation} = require('nti-web-course');
 
 const Globals = require('legacy/util/Globals');
 
@@ -9,10 +10,11 @@ const CourseStateStore = require('../../course/StateStore');
 const CoursesStateStore = require('../../library/courses/StateStore');
 
 require('legacy/mixins/State');
+require('legacy/overrides/ReactHarness');
 
 
 module.exports = exports = Ext.define('NextThought.app.content.components.ContentSwitcher', {
-	extend: 'Ext.Component',
+	extend: 'Ext.container.Container',
 	alias: 'widget.content-switcher',
 	stateKey: 'content-switcher',
 
@@ -23,59 +25,6 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 	floating: true,
 	cls: 'content-switcher',
 
-	listTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		tag: 'ul', cn: [
-			{tag: 'tpl', 'for': 'recent', cn: [
-				{
-					tag: 'li',
-					cls: 'item{[values.cls ? " " + values.cls : ""]}',
-					'data-root-route': '{rootRoute}',
-					'data-id': '{id}',
-					'data-route': '{activeRoute}',
-					cn: [
-						{cls: 'meta', cn: [
-							{tag: 'img', src: '{thumb}'},
-							{tag: 'span', cls: 'title', html: '{title}'}
-						]},
-						{tag: 'tpl', 'if': 'subItems', cn: [
-							{tag: 'ul', cls: 'sub-sections', cn: [
-								{tag: 'tpl', 'for': 'subItems', cn: [
-									{
-										tag: 'li',
-										cls: 'sub-item{[values.cls ? " " + values.cls : ""]}',
-										'data-root-route': '{rootRoute}',
-										'data-id': '{id}',
-										'data-route': '{activeRoute}',
-										html: '{title}'
-									}
-								]}
-							]},
-							{cls: 'arrow', html: 'sections'}
-						]}
-					]
-				}
-			]},
-			{
-				tag: 'li',
-				cls: 'item library meta',
-				'data-root-route': '/',
-				'data-id': 'library',
-				'data-route': '',
-				html: 'See All'
-			}
-		]
-	})),
-
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'pointer'},
-		{cls: 'list'}
-	]),
-
-	renderSelectors: {
-		pointerEl: '.pointer',
-		listEl: '.list'
-	},
-
 	initComponent: function () {
 		this.callParent(arguments);
 
@@ -84,6 +33,53 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.CourseActions = CourseActions.create();
 		this.CourseStateStore = CourseStateStore.getInstance();
 		this.LibraryCourseStateStore = CoursesStateStore.getInstance();
+
+		var me = this;
+
+		function onItemClick (item) {
+			me.hide();
+
+			if(item) {
+				me.switchContent(item.rootRoute);
+			}
+		}
+
+		function goToEditor (item) {
+			me.hide();
+
+			if(item) {
+				me.switchContent(item.rootRoute + '/info');
+			}
+		}
+
+		function onVisibilityChanged (catalogEntry) {
+			me.onVisibilityChanged && me.onVisibilityChanged(catalogEntry);
+
+			me.LibraryCourseStateStore.fireEvent('modified-course', catalogEntry);
+		}
+
+		function onDelete () {
+			me.LibraryCourseStateStore.fireEvent('modified-course');
+
+			me.switchContent('/library');
+		}
+
+		this.add({
+			xtype: 'component',
+			autoEl: {
+				tag: 'div',
+				cls: 'course-nav-arrow'
+			}
+		});
+
+		this.navMenu = this.add({
+			xtype: 'react',
+			component: Navigation.CourseNavMenu,
+			onItemClick,
+			goToEditor,
+			onVisibilityChanged,
+			onDelete
+		});
 	},
 
 	afterRender: function () {
@@ -98,9 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.show();
 
 		var myWidth = this.getWidth(),
-			pointerHeight = this.pointerEl.getHeight(),
 			viewWidth = Ext.Element.getViewportWidth(),
-			viewHeight = Ext.Element.getViewportHeight(),
 			top, left;
 
 		top = y;
@@ -112,12 +106,8 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			left = left - ((left + myWidth) - (viewWidth + 5));
 		}
 
-		this.listEl.dom.style.maxHeight = (viewHeight - (top + pointerHeight) - 5) + 'px';
-
 		this.el.dom.style.left = left + 'px';
 		this.el.dom.style.top = top + 'px';
-
-		this.pointerEl.dom.style.left = (x - left) + 'px';
 	},
 
 	getBundleData: function (bundle, route, cls) {
@@ -215,6 +205,8 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			recent = state.recent || [],
 			getData = bundle.isCourse ? this.getCourseOrFamilyData(bundle, route) : this.getBundleData(bundle, route);
 
+		state.isAdmin = bundle.hasLink('delete');
+
 		state.recent.forEach(function (item) {
 			if (item.subItems) {
 				item.subItems.forEach(function (subItem) {
@@ -274,9 +266,11 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 	applyState: function (state) {
 		if (!this.rendered) { return; }
 
-		this.listEl.dom.innerHTML = '';
-
-		this.listTpl.append(this.listEl, state);
+		this.navMenu.setProps({
+			activeCourse: state.recent[0],
+			recentCourses: state.recent.slice(1),
+			isAdministrator: state.isAdmin
+		});
 	},
 
 	onItemClicked: function (e) {
