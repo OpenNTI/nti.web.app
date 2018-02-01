@@ -76,15 +76,16 @@ export default class UserList extends React.Component {
 	}
 
 	preItems = () => {
+		if (!this.state.showNext) {
+			this.setState({showNext: true});
+		}
+
 		if (this.el.scrollLeft < (215 * 3)) {
 			this.setState({showPre: false});
 			this.el.scrollLeft = 0;
 			return;
 		}
 
-		if (!this.state.showNext) {
-			this.setState({showNext: true});
-		}
 		const currentPos = parseInt((this.el.scrollLeft / 215), 10);
 		this.el.scrollLeft = (currentPos * 215) - (215 * 3);
 	}
