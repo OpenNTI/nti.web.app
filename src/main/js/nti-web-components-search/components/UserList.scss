@@ -165,6 +165,8 @@ $black_50: rgba(0, 0, 0, 0.5);
 				word-spacing: 100vw;
 				white-space: pre-line;
 
+				@include limit-lines(2);
+
 				@extend %extend_1;
 
 				span {
