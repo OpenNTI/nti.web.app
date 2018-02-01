@@ -26,6 +26,9 @@
 			flex: 1 1 auto;
 			color: $primary-blue;
 			font-size: 1.25rem;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 500px;
 		}
 
 

@@ -29,10 +29,15 @@
 		padding: 1em;
 		font-size: 0.9em;
 		color: $primary-grey;
+		max-width: 240px;
 
 		.course-title {
 			word-wrap: break-word;
 			max-width: 220px;
+		}
+
+		.username {
+			word-wrap: break-word;
 		}
 
 		.plain-text {
