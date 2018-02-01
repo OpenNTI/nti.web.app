@@ -3,7 +3,6 @@ const { Info, AdminTools } = require('nti-web-course');
 const { getService } = require('nti-web-client');
 const { encodeForURI } = require('nti-lib-ntiids');
 
-const {isFeature} = require('legacy/util/Globals');
 const ContentProxy = require('legacy/proxy/JSONP');
 const CoursesStateStore = require('legacy/app/library/courses/StateStore');
 
@@ -80,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					editable: !this.viewOnly && content.hasLink('edit')
 				});
 
-				if (isFeature('course-administration') && (showRoster || showReports)) {
+				if (showRoster || showReports) {
 					this.AdminTools = this.add({
 						xtype: 'react',
 						component: AdminTools.InfoPanel,
