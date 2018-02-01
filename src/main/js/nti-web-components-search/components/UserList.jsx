@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Avatar} from 'nti-web-commons';
+import {getHistory} from 'nti-web-routing';
 import Ext from 'extjs';
 
 import GroupsActions from '../../legacy/app/groups/Actions';
@@ -147,9 +148,14 @@ export default class UserList extends React.Component {
 		});
 	}
 
+	navigateToUserProfile = (user) =>() => {
+		const profileLink = '/app/user/' + user;
+		getHistory().replace(profileLink);
+	}
+
 	render () {
 		const {currentTab, userList} = this.props;
-		const {showNext, showPre, isFollow} = this.state;
+		const {showNext, showPre} = this.state;
 		if (userList.length === 0) {
 			return null;
 		}
@@ -167,22 +173,12 @@ export default class UserList extends React.Component {
 								{userList.map((user, index) => {
 									return (
 										<li className="block-info" key={index}>
-											<div className="user-info">
+											<div className="user-info" onClick={this.navigateToUserProfile(user.Username)}>
 												<div className="img-user">
 													<Avatar className="img-user" entityId={user.Username}/>
 												</div>
 												<h3 className="user-name">{user.realname}</h3>
 											</div>
-											{!isFollow[index] && (
-												<a className="follow-btn" onClick={this.followUser(user.Username, index)}>
-													<span className="icon-remove-user"/>
-													Follow</a>
-											)}
-											{isFollow[index] && (
-												<a className="follow-btn incorrect" onClick={this.unFollowUser(user.Username, index)}>
-													<span className="icon-remove-user"/>
-													Unfollow</a>
-											)}
 										</li>
 									);
 								})}

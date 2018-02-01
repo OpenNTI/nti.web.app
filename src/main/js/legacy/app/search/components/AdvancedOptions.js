@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 		},
 		'people': {
 			label: 'People',
-			accepts: []
+			accepts: ['user']
 		},
 		'social': {
 			label: 'Social',
