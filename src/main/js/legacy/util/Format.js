@@ -7,6 +7,7 @@ const FriendsList = require('legacy/model/FriendsList');
 const User = require('legacy/model/User');
 
 const AVATAR_COLORS = [
+	'#B8B8B8',
 	'#5E35B1',
 	'#3949AB',
 	'#1E88E5',
@@ -82,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 		// whatever is defined as the background color by default
 		var colorClass = Avatar.getColorClass(getField('Username'));
 		var colorIndex = colorClass && colorClass.substring(colorClass.lastIndexOf('-') + 1);
-		var colorToUse = colorIndex ? AVATAR_COLORS[parseInt(colorIndex, 10) - 1] : '#' + bgColor;
+		var colorToUse = colorIndex ? AVATAR_COLORS[parseInt(colorIndex, 10)] : '#' + bgColor;
 
 		if (avatar) {
 			cn.push({cls: 'profile avatar-pic', style: {backgroundImage: getURL(avatar)}});
