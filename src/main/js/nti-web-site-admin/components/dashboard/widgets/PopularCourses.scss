@@ -99,6 +99,8 @@
 				.name {
 					font-size: 14px;
 					margin-right: 50px;
+					max-width: 280px;
+					white-space: nowrap;
 
 					@include limit-lines($lines: 1, $line-height: 1.4);
 				}
