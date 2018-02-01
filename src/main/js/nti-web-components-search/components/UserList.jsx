@@ -62,14 +62,14 @@ export default class UserList extends React.Component {
 	attachRef = el => this.el = el
 
 	nextItems = () => {
+		if (!this.state.showPre) {
+			this.setState({showPre: true});
+		}
+
 		if (this.el.scrollLeft > this.el.scrollLeftMax - (215 * 3)) {
 			this.setState({showNext: false});
 			this.el.scrollLeft = this.el.scrollLeftMax;
 			return;
-		}
-
-		if (!this.state.showPre) {
-			this.setState({showPre: true});
 		}
 		const currentPos = parseInt((this.el.scrollLeft / 215), 10);
 		this.el.scrollLeft = (currentPos * 215) + (215 * 3);
