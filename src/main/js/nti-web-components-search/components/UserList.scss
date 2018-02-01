@@ -39,19 +39,17 @@ $black_50: rgba(0, 0, 0, 0.5);
 			display: flex;
 			align-items: baseline;
 			padding-left: 18px;
+			font-size: 18px;
+			line-height: 24px;
+			cursor: pointer;
 
 			p {
 				color: $primary-blue;
-				font-size: 18px;
-				line-height: 24px;
+				padding-right: 10px;
 			}
 
 			.view-all {
 				color: $secondary-grey;
-				font-size: 14px;
-				line-height: 19px;
-				margin-left: 15px;
-				cursor: pointer;
 			}
 		}
 
@@ -228,6 +226,70 @@ $black_50: rgba(0, 0, 0, 0.5);
 			.icon-remove-user {
 				padding-right: 5px;
 			}
+		}
+	}
+
+	&.view-all {
+		box-shadow: 0 2px 2px 0 $black_19, 0 0 3px 0 $black_30;
+		border-radius: 2px;
+		width: 100%;
+		max-width: 880px;
+		background-color: $white;
+
+		.result-block {
+			padding: 10px 0;
+			margin-left: 18px;
+
+			ul {
+				padding: 0;
+			}
+
+			li {
+				display: inline-block;
+			}
+
+			.user-info {
+				padding: 25px 10px;
+				margin-top: 0;
+
+				.friend-stt {
+					font-size: 8px;
+				}
+			}
+
+			.block-info {
+				cursor: pointer;
+			}
+		}
+
+		.title-block-lookup {
+			display: flex;
+			align-items: baseline;
+			padding-left: 18px;
+			font-size: 18px;
+			line-height: 24px;
+			cursor: pointer;
+
+			p {
+				color: $secondary-grey;
+				padding-right: 10px;
+			}
+
+			.view-all {
+				color: $primary-blue;
+			}
+		}
+
+		.bottom-info {
+			display: none;
+		}
+
+		.bg-control {
+			display: none;
+		}
+
+		.carousel-control {
+			display: none;
 		}
 	}
 
