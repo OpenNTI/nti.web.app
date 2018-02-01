@@ -53,14 +53,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.CourseStore.fireEvent('modified-course', updatedCatalogEntry, this.collectionEl);
 	},
 
-	showEditor: function (catalogEntry) {
-		Editor.editCourse(catalogEntry).then((updatedCatalogEntry) => {
-			this.updateStore(updatedCatalogEntry);
-		}).catch(() => {
-			// do anything on cancel with no saves?
-		});
-	},
-
 	deleteCourse: function () {
 		var me = this;
 
@@ -191,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		if(this.course.hasLink('delete')) {
 			menuCfg.doEdit = () => {
 				me.hide();
-				me.resolveCatalogEntry().then((entry) => me.showEditor(entry));
+				me.goToRecord && me.goToRecord(me.record, 'info');
 			};
 		}
 

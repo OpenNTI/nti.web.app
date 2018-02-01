@@ -83,13 +83,13 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 			});
 	},
 
-	navigateToCourse: function (enrollment, el) {
+	navigateToCourse: function (enrollment, el, subRoute) {
 		var me = this,
 			instance = enrollment.get('CourseInstance');
 
 		me.CourseViewActions.transitionToCourse(instance, el)
 			.then(function (route) {
-				me.pushRootRoute(null, route, {course: instance});
+				me.pushRootRoute(null, route + (subRoute ? '/' + subRoute : ''), {course: instance});
 			});
 	},
 

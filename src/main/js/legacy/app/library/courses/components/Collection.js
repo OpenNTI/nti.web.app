@@ -89,7 +89,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 					collectionEl: this.el,
 					width: menuWidth,
 					course,
-					record
+					record,
+					goToRecord: this.goToRecord.bind(this)
 				});
 
 			// showBy settings icon
@@ -121,13 +122,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-	handleSelect: function (selModel, record) {
-		selModel.deselect(record);
-
+	goToRecord: function (record, subRoute) {
 		var node = this.getNodeByRecord(record);
 
 		if (this.navigate) {
-			this.navigate.call(this, record, node);
+			this.navigate.call(this, record, node, subRoute);
 		}
+	},
+
+	handleSelect: function (selModel, record) {
+		selModel.deselect(record);
+
+		this.goToRecord(record);
 	}
 });

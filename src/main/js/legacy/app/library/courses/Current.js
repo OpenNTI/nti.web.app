@@ -155,9 +155,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		}
 	},
 
-	navigate: function (course, el) {
+	navigate: function (course, el, subRoute) {
 		if (this.navigateToCourse) {
-			this.navigateToCourse(course, el);
+			this.navigateToCourse(course, el, subRoute);
 		}
 	},
 
