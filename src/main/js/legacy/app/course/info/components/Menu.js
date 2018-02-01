@@ -1,6 +1,5 @@
 const Ext = require('extjs');
 
-const {isFeature} = require('legacy/util/Globals');
 const {getString, getFormattedString} = require('legacy/util/Localization');
 
 
@@ -100,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 			title: getString('NextThought.view.courseware.info.outline.Menu.support'),
 		});
 
-		if (isFeature('course-administration') && (this.showRoster || this.showReports)) {
+		if (this.showRoster || this.showReports) {
 			me.itemTpl.append(me.menuEl, {
 				title: 'Admin Tools',
 			});

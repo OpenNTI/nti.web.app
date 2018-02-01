@@ -122,10 +122,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/videos/:id', this.showVideos.bind(this));
 		this.addRoute('/resources', this.showResources.bind(this));
 
-		if(Globals.isFeature('course-administration')) {
-			this.addRoute('/admin', this.setCourseAdminActive.bind(this));
-		}
-		
+		this.addRoute('/admin', this.setCourseAdminActive.bind(this));
+
 
 		this.addObjectHandler(Assignment.mimeType, this.getAssignmentRoute.bind(this));
 		this.addObjectHandler(DiscussionAssignment.mimeType, this.getAssignmentRoute.bind(this));
@@ -370,6 +368,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			}
 			cmp.setBundle(me.activeBundle);
 			return cmp.handleRoute(subRoute, route.precache);
+		} else {
+			throw new Error('Not an admin.');
 		}
 	},
 
