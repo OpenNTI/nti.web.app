@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Avatar} from 'nti-web-commons';
 import {getHistory} from 'nti-web-routing';
-import Ext from 'extjs';
 
-import GroupsActions from '../../legacy/app/groups/Actions';
 import GroupsStateStore from '../../legacy/app/groups/StateStore';
 
 const info = 'Visible because your search contained someone\'s name.';
@@ -21,19 +19,21 @@ export default class UserList extends React.Component {
 		this.state = {
 			showNext: false,
 			showPre: false,
-			isFollow: []
+			isFollow: [],
+			userClass: 'user-lookup-search all-user clearfix'
 		};
 	}
 
 	componentDidMount () {
-		const {userList} = this.props;
+		const {userList, currentTab} = this.props;
+		const userClass = currentTab === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix';
 		let isFollow = [];
 		userList.map((user, index) =>{
 			const isContact = groupStore.isContact(user.Username);
 			isFollow[index] = isContact;
 		});
 
-		this.setState({isFollow: isFollow});
+		this.setState({isFollow: isFollow, userClass: userClass});
 		if (userList.length < 4) {
 			this.setState({showNext: false, showPre: false});
 		}
@@ -43,6 +43,10 @@ export default class UserList extends React.Component {
 	}
 
 	componentWillReceiveProps (prevProps) {
+		if(prevProps.currentTab !== this.props.currentTab){
+			const userClass = prevProps === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix';
+			this.setState({userClass: userClass});
+		}
 		if (prevProps.userList !== this.props.userList) {
 			let isFollow = [];
 			prevProps.userList.map((user, index) =>{
@@ -103,70 +107,32 @@ export default class UserList extends React.Component {
 		}
 	}
 
-
-	followUser = (userName, index) => () => {
-		const actions = GroupsActions.create();
-		actions.addContact(userName)
-			.then((something) =>{
-				let isFollow = this.state.isFollow;
-				isFollow[index] = true;
-				this.setState({isFollow: isFollow});
-			})
-			.catch(function () {
-				alert('There was trouble adding your contact.');
-			});
-	}
-
-	unFollowUser = (userName, index) => () => {
-		const actions = GroupsActions.create();
-		const me = this;
-
-		Ext.Msg.show({
-			title: 'Are you sure?',
-			msg: 'The following action will remove this contact',
-			icon: 'warning-red',
-			buttons: {
-				primary: {
-					text: 'Remove',
-					cls: 'caution',
-					handler: function () {
-						actions.deleteContact(userName)
-							.then((something) =>{
-								let isFollow = me.state.isFollow;
-								isFollow[index] = false;
-								me.setState({isFollow: isFollow});
-							})
-							.catch(function () {
-								alert('There was trouble remove your contact.');
-							});
-					}
-				},
-				secondary: {
-					text: 'Cancel'
-				}
-			}
-		});
-	}
-
 	navigateToUserProfile = (user) =>() => {
 		const profileLink = '/app/user/' + user;
 		getHistory().replace(profileLink);
 	}
 
+	viewAll = () => {
+		this.setState({userClass: 'user-lookup-search view-all clearfix'});
+	}
+
+	viewPeople = () => {
+		this.setState({userClass: 'user-lookup-search all-user clearfix'});
+	}
+
 	render () {
 		const {currentTab, userList} = this.props;
-		const {showNext, showPre} = this.state;
+		const {showNext, showPre, userClass} = this.state;
 		if (userList.length === 0) {
 			return null;
 		}
 		if (currentTab === 'all' || currentTab === 'people') {
-			const userClass = currentTab === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix';
 			return (
 				<div className="container">
 					<section className={userClass}>
 						<div className="title-block-lookup">
-							<p>People</p>
-							<a className="view-all">View All</a>
+							<p onClick={this.viewPeople}>People</p>
+							<a className="view-all" onClick={this.viewAll}>View All</a>
 						</div>
 						<div className="result-block">
 							<ul ref={this.attachRef} onScroll={this.scrollItems}>
