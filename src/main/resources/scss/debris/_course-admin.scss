@@ -2,5 +2,13 @@
 	.course-info-roster {
 		margin-top: 2em !important;
 		overflow: hidden;
+
+		&.no-email {
+			.user-cell {
+				.link.email {
+					display: none;
+				}
+			}
+		}
 	}
 }

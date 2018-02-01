@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-info-roster',
 	ui: 'course-assessment',
-	cls: 'course-info-roster course-performance make-white',
+	cls: 'course-info-roster course-performance make-white no-email',
 	layout: 'anchor',
 	margin: '0 0 10 0',
 
@@ -332,6 +332,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 					me.emailListenerSet = true;
 					me.mon(me.emailEl, 'click', 'showEmailEditor');
 				}
+
+				if(me.shouldAllowInstructorEmail()) {
+					me.removeCls('no-email');
+				}
+
 				me.maybeShowEmailButton();
 			});
 	},
