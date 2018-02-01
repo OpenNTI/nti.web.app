@@ -44,7 +44,7 @@ export default class UserList extends React.Component {
 
 	componentWillReceiveProps (prevProps) {
 		if(prevProps.currentTab !== this.props.currentTab){
-			const userClass = prevProps === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix';
+			const userClass = prevProps.currentTab === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix';
 			this.setState({userClass: userClass});
 		}
 		if (prevProps.userList !== this.props.userList) {
