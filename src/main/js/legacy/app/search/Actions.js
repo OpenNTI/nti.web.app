@@ -70,8 +70,6 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			return 'application/vnd.nextthought.' + mime;
 		});
 
-		accepts.push('application/vnd.nextthought.user');
-
 		params = {
 			sortOn: 'relevance',
 			sortOrder: 'descending',
