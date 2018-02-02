@@ -98,9 +98,11 @@
 
 				.name {
 					font-size: 14px;
-					margin-right: 50px;
-					max-width: 280px;
+					max-width: 220px;
 					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: block !important;
 
 					@include limit-lines($lines: 1, $line-height: 1.4);
 				}

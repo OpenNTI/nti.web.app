@@ -11,6 +11,14 @@
 		}
 	}
 
+	.active-users.dashboard-list-widget .items-container .item .info .name {
+		max-width: 300px;
+	}
+
+	.recently-created-users.dashboard-list-widget .items-container .item .info .name {
+		max-width: 350px;
+	}
+
 	.admin-active-days {
 		width: 100%;
 		margin: 0 5px 100px;
