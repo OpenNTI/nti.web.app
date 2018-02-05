@@ -14,7 +14,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 	line-height: 22px;
 	text-align: center;
 	display: block;
-	padding-bottom: 10px;
+	padding-bottom: 3px;
 }
 
 .user-lookup-search {
@@ -169,12 +169,9 @@ $black_50: rgba(0, 0, 0, 0.5);
 			min-height: 227px;
 
 			.user-name {
-				word-spacing: 100vw;
-				white-space: pre-line;
-				display: block!important;
-				min-height: 2.3em;
-
-				@include limit-lines(2);
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 
 				@extend %extend_1;
 
