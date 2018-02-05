@@ -14,7 +14,7 @@ const DEFAULT_TEXT = {
 	emptyMessage: 'Click the button above to create a new reading.'
 };
 
-const t = scoped('COURSE_RESOURCES_READINGS', DEFAULT_TEXT);
+const t = scoped('nti-course-resources.readings.View', DEFAULT_TEXT);
 
 function sortOnTitle (a, b) {
 	return (a.title || '').localeCompare(b.title);

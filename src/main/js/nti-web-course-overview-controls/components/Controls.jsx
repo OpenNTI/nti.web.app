@@ -15,7 +15,7 @@ const DEFAULT_TEXT = {
 	resources: 'Resources'
 };
 
-const t = scoped('COURSE_OVERVIEW_CONTOLRS', DEFAULT_TEXT);
+const t = scoped('nti-course-overview-controls.Controls', DEFAULT_TEXT);
 
 export default class CourseOverviewControls extends React.Component {
 	static PREVIEW = PREVIEW

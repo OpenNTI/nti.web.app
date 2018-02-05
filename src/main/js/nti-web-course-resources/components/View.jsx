@@ -9,7 +9,7 @@ const DEFAULT_STRINGS = {
 	'readings': 'Readings'
 };
 
-const t = scoped('COURSE_RESOURCES_VIEWS', DEFAULT_STRINGS);
+const t = scoped('nti-course-resources.View', DEFAULT_STRINGS);
 
 export default class CourseResources extends React.Component {
 	static READINGS = READINGS

@@ -9,7 +9,7 @@ const DEFAULT_TEXT = {
 	edit: 'Edit'
 };
 
-const t = scoped('READING_LIST_ITEM', DEFAULT_TEXT);
+const t = scoped('nti-course-resources.readings.ListItem', DEFAULT_TEXT);
 
 export default class ReadingListItem extends React.Component {
 	static propTypes = {
