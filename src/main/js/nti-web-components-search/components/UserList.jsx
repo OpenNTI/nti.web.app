@@ -10,7 +10,8 @@ const groupStore = GroupsStateStore.getInstance();
 export default class UserList extends React.Component {
 	static propTypes = {
 		userList: PropTypes.array,
-		currentTab: PropTypes.string
+		currentTab: PropTypes.string,
+		updateRoute: PropTypes.func
 	}
 
 	constructor (props) {
@@ -113,11 +114,7 @@ export default class UserList extends React.Component {
 	}
 
 	viewAll = () => {
-		this.setState({userClass: 'user-lookup-search view-all clearfix'});
-	}
-
-	viewPeople = () => {
-		this.setState({userClass: 'user-lookup-search all-user clearfix'});
+		this.props.updateRoute('people');
 	}
 
 	render () {
@@ -131,7 +128,7 @@ export default class UserList extends React.Component {
 				<div className="container">
 					<section className={userClass}>
 						<div className="title-block-lookup">
-							<p onClick={this.viewPeople}>People</p>
+							<p>People</p>
 							<a className="view-all" onClick={this.viewAll}>View All</a>
 						</div>
 						<div className="result-block">

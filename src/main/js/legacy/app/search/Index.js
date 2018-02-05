@@ -422,7 +422,11 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		if(userSearch && userSearch.Items){
 			this.Results.setProps({
 				currentTab: this.currentSearch.filter,
-				userSearch: userSearch.Items
+				userSearch: userSearch.Items,
+				updateRoute: (filter) => {
+					this.currentSearch.filter = filter;
+					this.updateRoute();
+				}
 			});
 		}
 

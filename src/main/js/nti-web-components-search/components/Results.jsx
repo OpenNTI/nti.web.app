@@ -45,7 +45,8 @@ export default class SearchResults extends React.Component {
 		numPages: PropTypes.number,
 		onResultsLoaded: PropTypes.func,
 		currentTab: PropTypes.string,
-		userSearch: PropTypes.array
+		userSearch: PropTypes.array,
+		updateRoute: PropTypes.func
 	}
 
 	constructor (props) {
@@ -79,7 +80,7 @@ export default class SearchResults extends React.Component {
 
 	render () {
 		const {loaded, navigating, hits} = this.state;
-		const {showLoading, errorLoadingText, emptyText, numPages, currentTab, userSearch} = this.props;
+		const {showLoading, errorLoadingText, emptyText, numPages, currentTab, userSearch, updateRoute} = this.props;
 		const cls = cx('search-results', {loaded});
 
 		const loadingMessage = navigating ? 'Navigating...' : 'Loading...';
@@ -104,7 +105,7 @@ export default class SearchResults extends React.Component {
 			return (
 				<div className={cls}>
 					{userSearch && (
-						<UserList currentTab={currentTab} userList={userSearch}/>
+						<UserList currentTab={currentTab} userList={userSearch} updateRoute={updateRoute}/>
 					)}
 					{hits.map(this.renderHit)}
 					{loaded && !errorLoadingText && numPages > 1 &&
