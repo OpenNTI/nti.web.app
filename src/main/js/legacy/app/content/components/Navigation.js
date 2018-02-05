@@ -27,6 +27,12 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 				this.updateEls(this.currentBundle.asUIData(), catalogEntry);
 			}
 		});
+
+		this.on('beforedestroy', this.onBeforeDestroy, this);
+	},
+
+	onBeforeDestroy: function () {
+		this.ContentSwitcher && this.ContentSwitcher.destroy();
 	},
 
 	afterRender: function () {
@@ -44,8 +50,6 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 	},
 
 	updateEls: function (data, catalogEntry) {
-		var isPreview = catalogEntry && (catalogEntry.get && catalogEntry.get('Preview')) || (catalogEntry.Preview);
-
 		this.titleEl.update(data.title);
 
 		if (data.label) {
@@ -55,6 +59,13 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 			this.labelEl.update('');
 			this.labelEl.addCls('hidden');
 		}
+
+		if(!catalogEntry) {
+			return;
+		}
+
+		var isPreview = catalogEntry && (catalogEntry.get && catalogEntry.get('Preview')) || (catalogEntry.Preview);
+
 		if (isPreview) {
 			data.preview = 'in preview';
 			if (data.startDate) {
