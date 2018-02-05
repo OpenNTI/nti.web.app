@@ -134,13 +134,17 @@ export default class UserList extends React.Component {
 						<div className="result-block">
 							<ul ref={this.attachRef} onScroll={this.scrollItems}>
 								{userList.map((user, index) => {
+									const userName = user.realname.split(' ');
+									const firstName = userName[0];
+									const lastName = userName[2] ? userName[1] + '...' : userName[1];
 									return (
 										<li className="block-info" key={index}>
 											<div className="user-info" onClick={this.navigateToUserProfile(user.Username)}>
 												<div className="img-user">
 													<Avatar className="img-user" entityId={user.Username}/>
 												</div>
-												<h3 className="user-name">{user.realname}</h3>
+												{firstName && (<span className="user-name first-name">{firstName}</span>)}
+												{lastName && (<span className="user-name last-name">{lastName}</span>)}
 											</div>
 										</li>
 									);
