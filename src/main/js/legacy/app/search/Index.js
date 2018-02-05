@@ -274,7 +274,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		if(this.useNewSearch) {
 			this.Results.setProps({
-				hits: []
+				hits: [],
+				userSearch: []
 			});
 		} else {
 			this.Results.removeResults();
