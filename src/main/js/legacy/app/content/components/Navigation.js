@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const { getService } = require('nti-web-client');
 
 const CoursesStateStore = require('../../library/courses/StateStore');
 
@@ -49,6 +50,9 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		this.updateEls(this.currentBundle.asUIData(), catalogEntry);
 	},
 
+	/*
+	 * catalogEntry always assumed to be lib-interfaces model, not webapp model
+	 */
 	updateEls: function (data, catalogEntry) {
 		this.titleEl.update(data.title);
 
@@ -64,13 +68,15 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 			return;
 		}
 
-		var isPreview = catalogEntry && (catalogEntry.get && catalogEntry.get('Preview')) || (catalogEntry.Preview);
+		var isPreview = catalogEntry && catalogEntry.Preview;
 
 		if (isPreview) {
 			data.preview = 'in preview';
-			if (data.startDate) {
-				// use catalog entry's start date if there is one, fallback to bundle data's start date
-				data.preview += '&mdash;Course starts on ' + Ext.Date.format((catalogEntry.StartDate && new Date(catalogEntry.StartDate)) || data.startDate, 'l, F j');
+			if (catalogEntry.StartDate) {
+				data.preview += '&mdash;Course starts on '
+					+ Ext.Date.format(
+						catalogEntry.StartDate && new Date(catalogEntry.StartDate),
+						'l, F j');
 			}
 			this.previewTagTpl.append(this.labelEl, {'preview': data.preview});
 		}
@@ -94,7 +100,11 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		var data = bundle.asUIData(),
 			catalog = bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
-		this.updateEls(data, catalog);
+		getService().then(service => {
+			service.getObject(catalog.rawData).then(parsed => {
+				this.updateEls(data, parsed);
+			});
+		});
 	},
 
 	switchContent: function (route) {
