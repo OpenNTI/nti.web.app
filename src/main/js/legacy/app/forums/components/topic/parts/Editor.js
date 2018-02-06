@@ -288,8 +288,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			msg = getString('NextThought.view.forums.topic.parts.Editor.longtitle');
 			alert({title: getString('NextThought.view.forums.topic.parts.Editor.error'), msg: msg, icon: 'warning-red'});
 		}
+		else if (error.code === 'ImpossibleToMakeSpecificPartSafe') {
+			msg = error.message;
+			alert({title: getString('NextThought.view.forums.topic.parts.Editor.error'), msg: msg, icon: 'warning-red'});
+		}
 		else {
-			alert('There was trouble saving the discussion');
+			alert('There was a problem saving the discussion');
 		}
 	},
 
