@@ -20,7 +20,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 	},
 
 	updateStartDate: function (newDate) {
-		this.startDateLabel.update(Ext.util.Format.date(newDate, 'F j, Y') : '');
+		if(newDate) {
+			this.startDateLabel.update(Ext.util.Format.date(newDate, 'F j, Y') : '');
+		}
+		else {
+			this.startDateLabel.update('No start date');
+		}
 	},
 
 	renderSelectors: {
@@ -28,7 +33,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 	},
 
 	setContent: function (info, status, showRoster, courseMode, inviteCodeLink, showReports) {
-		var startDate = Ext.util.Format.date(info.get('StartDate'), 'F j, Y');
+		var startDateValue = info.get('StartDate');
+
+		var startDate = startDateValue ? Ext.util.Format.date(startDateValue, 'F j, Y') : null;
 
 		this.removeAll(true);
 
@@ -42,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 							cls: 'col-left',
 							cn: [
 								{cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts')},
-								{cls: 'date', html: startDate}
+								{cls: 'date', html: startDate || 'No start date'}
 							]
 						}
 					]
