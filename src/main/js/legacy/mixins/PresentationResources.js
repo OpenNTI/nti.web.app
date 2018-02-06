@@ -38,21 +38,34 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	getDefaultAssetRoot: function () {},
 
 
+	getPresentationResource () {
+		const resources = (this.get && this.get('PlatformPresentationResources')) || [];
+
+		for (let resource of resources) {
+			if (resource.PlatformName === 'webapp') {
+				return resource;
+			}
+		}
+
+		return null;
+	},
+
+
 	getAssetRoot: function () {
 		if (this.presentationroot) { return this.presentationroot; }
 
-		var presResources = (this.get && this.get('PlatformPresentationResources')) || [],
-			root;
+		const resource = this.getPresentationResource();
 
-		presResources.forEach(function (resource) {
-			if (resource.PlatformName === 'webapp') {
-				root = resource.href;
-			}
-		});
-
-		this.presentationroot = root ? getURL(root) : this.getDefaultAssetRoot();
+		this.presentationroot = resource.root ? getURL(resource.root) : this.getDefaultAssetRoot();
 
 		return this.presentationroot;
+	},
+
+
+	getLastModified () {
+		const resource = this.getPresentationResource();
+
+		return resource ? resource['Last Modified'] : 0;
 	},
 
 
@@ -64,7 +77,8 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	getImgAsset: function (name) {
 		var assetPath = this.ASSET_MAP[name] || {name: ('missing-' + name + '-asset.png')},
 			root = this.getAssetRoot(),
-			url = root && root.concatPath(assetPath.name),
+			lastMod = this.getLastModified(),
+			url = `${root && root.concatPath(assetPath.name)}?t=${lastMod}`,
 			p;
 
 		if (Ext.isEmpty(root)) {
