@@ -79,6 +79,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					editable: !this.viewOnly && content.hasLink('edit')
 				});
 
+				this.CourseStore.on('modified-course', (newEntry) => {
+					this.InfoCmp.setProps({catalogEntry: newEntry});
+				});
+
 				if (showRoster || showReports) {
 					this.AdminTools = this.add({
 						xtype: 'react',
