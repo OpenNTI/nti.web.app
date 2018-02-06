@@ -46,14 +46,19 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 	beginSession () {
 		if (this.mountPoint) {
-			return;
+			return this.sessionPromise;
 		}
 
 		this.mountPoint = createDOM({'data-analytics-session': true}/*, document.body*/);
-		ReactDOM.render(
-			React.createElement(Session, {ref: x => this.setSession(x) }),
-			this.mountPoint
-		);
+
+		this.sessionPromise = new Promise(fulfill => {
+			ReactDOM.render(
+				React.createElement(Session, {ref: x => this.setSession(x, fulfill) }),
+				this.mountPoint
+			);
+		});
+
+		return this.sessionPromise;
 	},
 
 
@@ -62,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	},
 
 
-	async setSession (session) {
+	async setSession (session, fulfill) {
 		if (!session) {
 			return;
 		}
@@ -72,6 +77,8 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 
 		this.manager = session.state.manager;
+
+		fulfill && fulfill();
 	},
 
 
