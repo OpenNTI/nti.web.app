@@ -110,7 +110,6 @@ export default class UserList extends React.Component {
 	}
 
 	navigateToUserProfile = (user) =>() => {
-		console.log('test user link', user);
 		const profileLink = '/app/user/' + user;
 		getHistory().replace(profileLink);
 	}
