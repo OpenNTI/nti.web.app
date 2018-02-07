@@ -56,7 +56,9 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 
 		const resource = this.getPresentationResource();
 
-		this.presentationroot = resource && resource.root ? getURL(resource.root) : this.getDefaultAssetRoot();
+		const rootPath = resource && (resource.root || resource.href);
+
+		this.presentationroot = rootPath ? getURL(rootPath) : this.getDefaultAssetRoot();
 
 		return this.presentationroot;
 	},
