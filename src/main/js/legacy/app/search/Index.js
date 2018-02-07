@@ -274,8 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		if(this.useNewSearch) {
 			this.Results.setProps({
-				hits: [],
-				userSearch: []
+				hits: []
 			});
 		} else {
 			this.Results.removeResults();
@@ -395,11 +394,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	onLoadResults: function (lock, page, batch) {
-		const globalSearch = batch[0];
-		const userSearch = batch[1];
 		if (lock !== this.lock) { return; }
 
-		var nextLink = globalSearch.Links && Service.getLinkFrom(globalSearch.Links, 'batch-next');
+		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.knownPages = Math.max(this.currentPage, page);
 		this.currentPage = page;
@@ -408,7 +405,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		//If we've already loaded this page we don't want to
 		//override what hrefs we are caching
 		if (!this.PAGE_TO_HREF[page]) {
-			this.PAGE_TO_HREF[page] = globalSearch.href;
+			this.PAGE_TO_HREF[page] = batch.href;
 		}
 
 		if (!this.PAGE_TO_HREF[page + 1]) {
@@ -420,31 +417,25 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 
-		if(userSearch && userSearch.Items){
-			this.Results.setProps({
-				currentTab: this.currentSearch.filter,
-				userSearch: userSearch.Items,
-				updateRoute: (filter) => {
-					this.currentSearch.filter = filter;
-					this.updateRoute();
-				}
-			});
-		}
-
-		if (globalSearch.Items && globalSearch.Items.length) {
+		if (batch.Items && batch.Items.length) {
 			if(this.useNewSearch) {
 				// if there are results with the new search, the onResultsLoaded
 				// handler will unhide the filters widget when those results
 				// have been loaded
 				this.Results.setProps({
-					hits: globalSearch.Items,
+					hits: batch.Items,
 					errorLoadingText: undefined,
 					emptyText: undefined,
 					currentPage: this.currentPage,
+					currentTab: this.currentSearch.filter,
+					updateRoute: (filter) => {
+						this.currentSearch.filter = filter;
+						this.updateRoute();
+					},
 					numPages
 				});
 			} else {
-				this.Results.addResults(globalSearch.Items);
+				this.Results.addResults(batch.Items);
 			}
 		} else if(this.knownPages > 1) {
 			// no items but there are known pages, so we don't want to just hide
@@ -453,10 +444,15 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 			if(this.useNewSearch) {
 				this.Results.setProps({
-					hits: globalSearch.Items,
+					hits: batch.Items,
 					errorLoadingText: undefined,
 					emptyText: 'End of search results',
 					currentPage: this.currentPage,
+					currentTab: this.currentSearch.filter,
+					updateRoute: (filter) => {
+						this.currentSearch.filter = filter;
+						this.updateRoute();
+					},
 					numPages: numPages
 				});
 			}

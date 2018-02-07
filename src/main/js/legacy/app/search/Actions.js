@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		return NTIID;
 	},
 
-	loadSearchPage: function (term, accepts, bundle, location, page) {
+	async loadSearchPage (term, accepts, bundle, location, page) {
 		var rootUrl = Service.getUserUnifiedSearchURL(),
 			url, params;
 
@@ -87,11 +87,18 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		}
 
 		const userSearchUrl = Service.getUserSearchURL(term);
+		const users = await StoreUtils.loadRawItems(userSearchUrl).then(function (result) {
+			return JSON.parse(result);
+		});
 
-		return Promise.all([
-			StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search')),
-			StoreUtils.loadBatch(userSearchUrl, params, null, null, isFeature('use-new-search'))
-		]);
+		const userList = {
+			TargetMimeType: 'application/vnd.nextthought.app.userlist',
+			Class: 'User',
+			Items: users.Items ? users.Items : []
+		};
+
+		return StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search'), userList);
+
 	},
 
 	setSearchContext: function (term, silent) {

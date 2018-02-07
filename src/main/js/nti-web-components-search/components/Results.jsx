@@ -11,7 +11,7 @@ import {
 
 import Hit from './Hit';
 import Pager from './Pager';
-import UserList from "./UserList";
+import UserList from './UserList';
 
 function loadHitData (hit, getBreadCrumb) {
 
@@ -45,7 +45,6 @@ export default class SearchResults extends React.Component {
 		numPages: PropTypes.number,
 		onResultsLoaded: PropTypes.func,
 		currentTab: PropTypes.string,
-		userSearch: PropTypes.array,
 		updateRoute: PropTypes.func
 	}
 
@@ -80,12 +79,22 @@ export default class SearchResults extends React.Component {
 
 	render () {
 		const {loaded, navigating, hits} = this.state;
-		const {showLoading, errorLoadingText, emptyText, numPages, currentTab, userSearch, updateRoute} = this.props;
+		const {showLoading, errorLoadingText, emptyText, numPages, currentTab, updateRoute} = this.props;
 		const cls = cx('search-results', {loaded});
+		let hitItems = [], userSearch;
 
 		const loadingMessage = navigating ? 'Navigating...' : 'Loading...';
 
-		let showEmpty = hits.length === 0;
+		hits.map((item) => {
+			if (item.hit && item.hit.Class === 'User') {
+				userSearch = item.hit.Items ? item.hit.Items : [];
+			}
+			else {
+				hitItems.push(item);
+			}
+		});
+
+		let showEmpty = hitItems.length === 0;
 
 		if(currentTab === 'all' || currentTab === 'people'){
 			if(userSearch && userSearch.length > 0){
@@ -107,7 +116,7 @@ export default class SearchResults extends React.Component {
 					{userSearch && (
 						<UserList currentTab={currentTab} userList={userSearch} updateRoute={updateRoute}/>
 					)}
-					{hits.map(this.renderHit)}
+					{hitItems.map(this.renderHit)}
 					{loaded && !errorLoadingText && numPages > 1 &&
 						this.renderPages(numPages)
 					}
