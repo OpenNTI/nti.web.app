@@ -72,7 +72,8 @@ export default class UserList extends React.Component {
 			this.setState({showPre: true});
 		}
 
-		if (this.el.scrollLeft > this.el.scrollLeftMax - (215 * 3)) {
+		const scrollLeftMax = this.el.scrollWidth - this.el.clientWidth;
+		if (this.el.scrollLeft >= scrollLeftMax) {
 			this.setState({showNext: false});
 			this.el.scrollLeft = this.el.scrollLeftMax;
 			return;
@@ -109,6 +110,7 @@ export default class UserList extends React.Component {
 	}
 
 	navigateToUserProfile = (user) =>() => {
+		console.log('test user link', user);
 		const profileLink = '/app/user/' + user;
 		getHistory().replace(profileLink);
 	}
