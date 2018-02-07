@@ -72,10 +72,10 @@ export default class UserList extends React.Component {
 			this.setState({showPre: true});
 		}
 
-		const scrollLeftMax = this.el.scrollWidth - this.el.clientWidth - (215 * 3);
-		if (this.el.scrollLeft >= scrollLeftMax) {
+		const scrollLeftMax = this.el.scrollWidth - this.el.clientWidth;
+		if (this.el.scrollLeft >= (scrollLeftMax - (215 * 3))) {
 			this.setState({showNext: false});
-			this.el.scrollLeft = this.el.scrollLeftMax;
+			this.el.scrollLeft = scrollLeftMax;
 			return;
 		}
 		const currentPos = parseInt((this.el.scrollLeft / 215), 10);
