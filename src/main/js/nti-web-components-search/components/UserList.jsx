@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Avatar} from 'nti-web-commons';
+import {Avatar, DisplayName} from 'nti-web-commons';
 import {getHistory} from 'nti-web-routing';
 
 import GroupsStateStore from '../../legacy/app/groups/StateStore';
@@ -134,17 +134,13 @@ export default class UserList extends React.Component {
 						<div className="result-block">
 							<ul ref={this.attachRef} onScroll={this.scrollItems}>
 								{userList.map((user, index) => {
-									const userName = user.realname.split(' ');
-									const firstName = userName[0];
-									const lastName = userName[2] ? userName[1] + '...' : userName[1];
 									return (
 										<li className="block-info" key={index}>
 											<div className="user-info" onClick={this.navigateToUserProfile(user.Username)}>
 												<div className="img-user">
 													<Avatar className="img-user" entityId={user.Username}/>
 												</div>
-												{firstName && (<span className="user-name first-name">{firstName}</span>)}
-												{lastName && (<span className="user-name last-name">{lastName}</span>)}
+												<DisplayName entity={user.Username} className="user-name"/>
 											</div>
 										</li>
 									);
