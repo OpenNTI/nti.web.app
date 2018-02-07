@@ -72,7 +72,7 @@ export default class UserList extends React.Component {
 			this.setState({showPre: true});
 		}
 
-		const scrollLeftMax = this.el.scrollWidth - this.el.clientWidth;
+		const scrollLeftMax = this.el.scrollWidth - this.el.clientWidth - (215 * 3);
 		if (this.el.scrollLeft >= scrollLeftMax) {
 			this.setState({showNext: false});
 			this.el.scrollLeft = this.el.scrollLeftMax;
@@ -98,10 +98,11 @@ export default class UserList extends React.Component {
 	}
 
 	scrollItems = () => {
+		const scrollLeftMax = this.el.scrollWidth - this.el.clientWidth;
 		if (this.el.scrollLeft === 0) {
 			this.setState({showPre: false});
 		}
-		else if (this.el.scrollLeft === this.el.scrollLeftMax) {
+		else if (this.el.scrollLeft === scrollLeftMax) {
 			this.setState({showNext: false});
 		}
 		else {
