@@ -136,6 +136,9 @@ export default class UserList extends React.Component {
 						<div className="result-block">
 							<ul ref={this.attachRef} onScroll={this.scrollItems}>
 								{userList.map((user, index) => {
+									if(user.Class !== 'User'){
+										return;
+									}
 									return (
 										<li className="block-info" key={index}>
 											<div className="user-info" onClick={this.navigateToUserProfile(user.Username)}>
