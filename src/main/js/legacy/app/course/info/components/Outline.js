@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
 const {getString} = require('legacy/util/Localization');
+const CoursesStateStore = require('legacy/app/library/courses/StateStore');
 
 require('./Menu');
 require('./OpenCourseInfo');
@@ -13,18 +14,35 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.CourseStore = CoursesStateStore.getInstance();
+
+		this.CourseStore.on('modified-course', (newEntry) => {
+			if(newEntry.NTIID === this.activeID) {
+				this.updateCatalogEntry(newEntry);
+			}
+		});
 	},
 
 	updateCatalogEntry: function (catalogEntry) {
+		this.activeID = catalogEntry.NTIID;
+
 		this.updateStartDate(catalogEntry.StartDate ? new Date(catalogEntry.StartDate) : null);
+
+		if(catalogEntry.Preview) {
+			this.startDate && this.startDate.show();
+		}
+		else {
+			this.startDate && this.startDate.hide();
+		}
 	},
 
 	updateStartDate: function (newDate) {
 		if(newDate) {
-			this.startDateLabel.update(Ext.util.Format.date(newDate, 'F j, Y') : '');
+			this.startDateLabel && this.startDateLabel.update(Ext.util.Format.date(newDate, 'F j, Y') : '');
 		}
 		else {
-			this.startDateLabel.update('No start date');
+			this.startDateLabel && this.startDateLabel.update('No start date');
 		}
 	},
 
@@ -33,28 +51,32 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 	},
 
 	setContent: function (info, status, showRoster, courseMode, inviteCodeLink, showReports) {
+		this.activeID = info.get('NTIID');
+
 		var startDateValue = info.get('StartDate');
 
 		var startDate = startDateValue ? Ext.util.Format.date(startDateValue, 'F j, Y') : null;
 
 		this.removeAll(true);
 
-		if (courseMode) {
-			this.startDate = this.add({
-				xtype: 'box',
-				autoEl: {
-					cls: 'course-info-header-bar',
-					cn: [
-						{
-							cls: 'col-left',
-							cn: [
-								{cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts')},
-								{cls: 'date', html: startDate || 'No start date'}
-							]
-						}
-					]
-				}
-			});
+		this.startDate = this.add({
+			xtype: 'box',
+			autoEl: {
+				cls: 'course-info-header-bar',
+				cn: [
+					{
+						cls: 'col-left',
+						cn: [
+							{cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts')},
+							{cls: 'date', html: startDate || 'No start date'}
+						]
+					}
+				]
+			}
+		});
+
+		if(!info.get('Preview') && !courseMode) {
+			this.startDate.hide();
 		}
 
 		this.menu = this.add({
