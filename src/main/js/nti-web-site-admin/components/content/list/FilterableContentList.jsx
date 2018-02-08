@@ -14,9 +14,10 @@ const COURSES = 'courses';
 
 const OPTIONS = {[BOOKS]: 'Books', [COURSES]: 'Courses'};
 
-const store = new CourseStore();
+// TODO: Maybe need to genericize this if we add support for book creation
+const store = CourseStore.getInstance();
 
-export default class FiterableContentList extends React.Component {
+export default class FilterableContentList extends React.Component {
 	static propTypes = {
 		searchTerm: PropTypes.string
 	}

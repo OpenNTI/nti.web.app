@@ -4,6 +4,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService} = require('nti-web-client');
+const {encodeForURI} = require ('nti-lib-ntiids');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const User = require('legacy/model/User');
@@ -20,6 +21,10 @@ const CATALOG_MIME_TYPES = {
 function getRouteFor (obj) {
 	if (obj.isUser) {
 		return `/app/user/${User.getUsernameForURL(obj.Username)}`;
+	}
+
+	if (obj.CatalogEntry) {
+		return `/app/course/${encodeForURI(obj.NTIID)}/info`;
 	}
 
 	if (CATALOG_MIME_TYPES[obj.MimeType]) {

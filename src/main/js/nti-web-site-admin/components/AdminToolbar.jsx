@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Flyout } from 'nti-web-commons';
 import { Editor } from 'nti-web-course';
+import { encodeForURI } from 'nti-lib-ntiids';
 
 export default class AdminToolbar extends React.Component {
 	static propTypes = {
@@ -40,9 +41,11 @@ export default class AdminToolbar extends React.Component {
 
 		this.flyout && this.flyout.dismiss();
 
-		Editor.createCourse(onCourseModified).then(() => {
+		Editor.createCourse(onCourseModified).then((createdEntry) => {
 			// course was created, do post processing
 			onCourseCreated && onCourseCreated();
+
+			this.props.handleNav(createdEntry.Title, '/course/' + encodeForURI(createdEntry.CourseNTIID) + '/info');
 		});
 	}
 

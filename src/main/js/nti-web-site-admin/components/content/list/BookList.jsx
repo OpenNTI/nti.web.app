@@ -9,7 +9,7 @@ import SearchablePagedView from '../../common/SearchablePagedView';
 import Store from './BookStore';
 import BookItem from './BookItem';
 
-const store = new Store();//FIXME: I would prefer if the store could be constructed on first use/mount... instead of statically.
+const store = Store.getInstance();//FIXME: I would prefer if the store could be constructed on first use/mount... instead of statically.
 const propMap = {
 	items: 'items',
 	searchTerm: 'searchTerm',
