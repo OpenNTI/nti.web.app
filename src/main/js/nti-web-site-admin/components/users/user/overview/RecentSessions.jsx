@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getService} from 'nti-web-client';
 import {DateTime, Loading} from 'nti-web-commons';
 import {scoped} from 'nti-lib-locale';
-
-const HISTORICAL_SESSIONS_LINK = 'HistoricalSessions';
-
-const NUM_SESSIONS_TO_SHOW = 5;
 
 const LABELS = {
 	title: 'Recent Sessions',
@@ -18,34 +13,13 @@ const t = scoped('nti-web-site-admins.components.users.user.overview.recentsessi
 
 export default class RecentSessions extends React.Component {
 	static propTypes = {
-		user: PropTypes.object.isRequired
+		user: PropTypes.object.isRequired,
+		historicalSessions: PropTypes.arrayOf(PropTypes.object),
+		loading: PropTypes.bool
 	}
 
 	constructor (props) {
 		super(props);
-
-		this.state = {
-			loading: true
-		};
-	}
-
-	componentDidMount () {
-		this.loadData();
-	}
-
-	async loadData () {
-		const { user } = this.props;
-
-		try {
-			const service = await getService();
-			const historicalSessions = user.Links.filter(x => x.rel === HISTORICAL_SESSIONS_LINK)[0] || {};
-			const results = historicalSessions ? await service.get(historicalSessions.href) : {};
-			const items = (results.Items || []).slice(0, NUM_SESSIONS_TO_SHOW);
-
-			this.setState({loading: false, items});
-		} catch (e) {
-			this.setState({loading: false, items: []});
-		}
 	}
 
 	renderHeader () {
@@ -71,19 +45,19 @@ export default class RecentSessions extends React.Component {
 	}
 
 	renderItems () {
-		const { loading, items } = this.state;
+		const { loading, historicalSessions } = this.props;
 
 		if(loading) {
 			return <Loading.Mask/>;
 		}
 
-		if(!items || items.length === 0) {
+		if(!historicalSessions || historicalSessions.length === 0) {
 			return (<div className="no-sessions">{t('noSessions')}</div>);
 		}
 
 		return (
 			<div className="items">
-				{items.map(this.renderItem)}
+				{historicalSessions.map(this.renderItem)}
 			</div>
 		);
 	}

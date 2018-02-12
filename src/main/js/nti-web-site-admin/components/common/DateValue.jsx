@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import {DateTime} from 'nti-web-commons';
+import {DateTime, Loading} from 'nti-web-commons';
 import {scoped} from 'nti-lib-locale';
 
 import LabeledValue from './LabeledValue';
@@ -15,15 +15,17 @@ const t = scoped('nti-web-site-admin.components.common.datevalue', DEFAULT_STRIN
 SiteAdminDateValue.propTypes = {
 	className: PropTypes.string,
 	date: PropTypes.any,
-	format: PropTypes.string
+	format: PropTypes.string,
+	loading: PropTypes.bool
 };
-export default function SiteAdminDateValue ({className, date, format, ...otherProps}) {
+export default function SiteAdminDateValue ({className, date, format, loading, ...otherProps}) {
 	return (
 		<LabeledValue className={cx('site-admin-date-value', className)} {...otherProps}>
 			{
-				date ?
-					(<DateTime className="date" date={date} format={format} />) :
-					(<div className="no-date">{t('noDate')}</div>)
+				loading ? (<Loading.Mask/>)
+					: date ?
+						(<DateTime className="date" date={date} format={format} />) :
+						(<div className="no-date">{t('noDate')}</div>)
 			}
 		</LabeledValue>
 	);
