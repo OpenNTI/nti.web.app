@@ -2,9 +2,11 @@ const Ext = require('extjs');
 const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
 
 const Search = require('nti-web-components-search');
+const ChatActions = require('legacy/app/chat/Actions');
 const PathActions = require('legacy/app/navigation/path/Actions');
 const LibraryActions = require('legacy/app/library/Actions');
 const NavigationActions = require('legacy/app/navigation/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
 const {isFeature} = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
@@ -36,7 +38,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.useNewSearch = isFeature('use-new-search');
 
+		this.ChatActions = ChatActions.create();
 		this.PathActions = PathActions.create();
+		this.WindowActions = WindowsActions.create();
 
 		if(this.useNewSearch) {
 			this.filtersWidget = this.add({
@@ -66,6 +70,12 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 				navigateToSearchHit: (record, hit, frag, containerId) => {
 					record = lazy.ParseUtils.parseItems(record)[0];
 					hit = lazy.ParseUtils.parseItems(hit)[0];
+
+					if (record.get('MimeType') === 'application/vnd.nextthought.messageinfo') {
+						this.handleChatNavigation(record, hit);
+						return;
+					}
+
 					this.SearchStore.setHitForContainer(containerId, hit, frag);
 
 					const failedNavigate = () => {
@@ -491,5 +501,25 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.SearchStore.setHitForContainer(containerId, hit, frag);
 
 		this.Router.root.attemptToNavigateToObject(record);
+	},
+
+
+	handleChatNavigation (record, hit) {
+		const hitId = encodeForURI(hit.get('NTIID'));
+
+		this.el.mask('Loading...');
+
+		this.ChatActions.loadTranscript(record.get('ContainerId'))
+			.then((transcript) => {
+				this.el.unmask();
+
+				this.WindowActions.pushWindow(transcript, hitId);
+			})
+			.catch(() => {
+				this.el.unmask();
+			});
+
+
 	}
+
 });

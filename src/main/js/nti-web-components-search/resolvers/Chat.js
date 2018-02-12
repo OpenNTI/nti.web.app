@@ -1,4 +1,3 @@
-import { encodeForURI } from 'nti-lib-ntiids';
 import { User, getAppUsername} from 'nti-web-client';
 
 //FIXME: do not import legacy code outside the legacy folder!
@@ -60,14 +59,5 @@ export default {
 
 	resolvePath (obj, hit, getBreadCrumb) {
 		return null;
-	},
-
-	resolveNavigateToSearchHit (obj, hit/*, fragment*/) {
-		const hitId = encodeForURI(hit.NTIID);
-
-		obj.onLoadTranscript
-			.then(transcript => {
-				obj.pushWindow(transcript, hitId, obj.el);
-			});
 	}
 };
