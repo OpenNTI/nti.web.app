@@ -417,6 +417,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(record => {
 				if (!record) {
 					console.error('No valid outline node to edit');
+					this.unmask();
+					this.body.showEmptyState();
 					return;
 				}
 
