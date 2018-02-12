@@ -9,7 +9,10 @@ require('../Base');
 module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', {
 	extend: 'NextThought.model.Base',
 
-	mimeType: 'application/vnd.nextthought.gradebook',
+	mimeType: [
+		'application/vnd.nextthought.gradebook',
+		'application/vnd.nextthought.gradebookshell'
+	],
 
 	fields: [
 		{name: 'Items', type: 'collectionItem'}
