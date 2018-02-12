@@ -47,10 +47,7 @@ export default class SiteAdminUserOverview extends React.Component {
 
 	render () {
 		const { user } = this.props;
-		//	const { MostRecentSession } = user;
 		const { loading, historicalSessions } = this.state;
-
-		//const sessionDate = (MostRecentSession && MostRecentSession.getSessionStartTime()) || user.getLastLoginTime();
 
 		return (
 			<div className="site-admin-user-overview">
