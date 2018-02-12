@@ -97,7 +97,12 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			Items: users.Items ? users.Items : []
 		};
 
-		return StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search'), userList);
+		return StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search')).then((result) =>{
+			if(result.Items){
+				result.Items.push(userList);
+			}
+			return result;
+		});
 
 	},
 
