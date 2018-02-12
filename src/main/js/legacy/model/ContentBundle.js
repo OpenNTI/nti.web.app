@@ -21,6 +21,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	extend: 'NextThought.model.Base',
 	mimeType: [
 		'application/vnd.nextthought.contentpackagebundle',
+		'application/vnd.nextthought.coursecontentpackagebundle',
 		'application/vnd.nextthought.contentbundle'
 	],
 
