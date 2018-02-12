@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.mon(this.CourseStore, {
 			'modified-course': (catalogEntry) => {
 				// only mark dirty if the active course is the one that was just modified
-				if(catalogEntry.CourseNTIID === this.activeBundle.getId()) {
+				if(catalogEntry && catalogEntry.CourseNTIID === this.activeBundle.getId()) {
 					this.isCourseDirty = true;
 				}
 			}

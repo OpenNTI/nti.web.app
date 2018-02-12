@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		}
 
 		function onDelete () {
-			me.LibraryCourseStateStore.fireEvent('modified-course');
+			me.LibraryCourseStateStore.fireEvent('modified-course', null);
 
 			me.switchContent('/library');
 		}

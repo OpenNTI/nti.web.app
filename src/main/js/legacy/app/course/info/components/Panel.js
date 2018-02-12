@@ -80,7 +80,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 				});
 
 				this.CourseStore.on('modified-course', (newEntry) => {
-					this.InfoCmp.setProps({catalogEntry: newEntry});
+					if(newEntry) {
+						this.InfoCmp.setProps({catalogEntry: newEntry});
+					}
 				});
 
 				if (showRoster || showReports) {

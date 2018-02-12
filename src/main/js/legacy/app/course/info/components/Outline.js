@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		this.CourseStore = CoursesStateStore.getInstance();
 
 		this.CourseStore.on('modified-course', (newEntry) => {
-			if(newEntry.NTIID === this.activeID) {
+			if(newEntry && newEntry.NTIID === this.activeID) {
 				this.updateCatalogEntry(newEntry);
 			}
 		});
