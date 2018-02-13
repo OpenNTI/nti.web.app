@@ -64,6 +64,25 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			me.switchContent('/library');
 		}
 
+		this.LibraryCourseStateStore.on('modified-course', (newCatalogEntry) => {
+			var state = me.getCurrentState();
+
+			if(newCatalogEntry) {
+				state.recent = state.recent.map(x => {
+					if(x.id === newCatalogEntry.CourseNTIID) {
+						return {
+							...x,
+							title: newCatalogEntry.Title
+						};
+					}
+
+					return x;
+				});
+			}
+
+			me.setState(state);
+		});
+
 		this.add({
 			xtype: 'component',
 			autoEl: {

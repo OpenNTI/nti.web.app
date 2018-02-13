@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 	 * catalogEntry always assumed to be lib-interfaces model, not webapp model
 	 */
 	updateEls: function (data, catalogEntry) {
-		this.titleEl.update(data.title);
+		this.titleEl.update((catalogEntry && catalogEntry.Title) || data.title);
 
 		if (data.label) {
 			this.labelEl.update(data.label);
