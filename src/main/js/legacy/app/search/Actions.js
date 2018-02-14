@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		return NTIID;
 	},
 
-	async loadSearchPage (term, accepts, bundle, location, page) {
+	async loadSearchPage (term, accepts, bundle, location, page, cachedHref) {
 		var rootUrl = Service.getUserUnifiedSearchURL(),
 			url, params;
 
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 
 		location = location || bundle || Globals.CONTENT_ROOT;
 
-		url = [rootUrl, location, '/', term].join('');
+		url = cachedHref || [rootUrl, location, '/', term].join('');
 
 		accepts = (accepts || []).map(function (mime) {
 			return 'application/vnd.nextthought.' + mime;
@@ -88,19 +88,23 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			params.course = bundle;
 		}
 
-		const userSearchUrl = Service.getUserSearchURL(term);
-		const users = await StoreUtils.loadRawItems(userSearchUrl).then(function (result) {
-			return JSON.parse(result);
-		});
+		let userList;
 
-		const userList = {
-			TargetMimeType: this.MIME_TYPE,
-			Class: 'User',
-			Items: users.Items ? users.Items : []
-		};
+		if(page === 1) {
+			const userSearchUrl = Service.getUserSearchURL(term);
+			const users = await StoreUtils.loadRawItems(userSearchUrl).then(function (result) {
+				return JSON.parse(result);
+			});
 
-		return StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search')).then((result) =>{
-			if(result.Items) {
+			userList = {
+				TargetMimeType: this.MIME_TYPE,
+				Class: 'User',
+				Items: users.Items ? users.Items : []
+			};
+		}
+
+		return StoreUtils.loadBatch(url, cachedHref ? {} : params, null, null, isFeature('use-new-search')).then((result) =>{
+			if(result.Items && userList) {
 				result.Items.push(userList);
 			}
 			return result;

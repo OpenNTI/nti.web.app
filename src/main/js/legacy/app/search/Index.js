@@ -283,8 +283,6 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.clearPages();
 
 		if(this.useNewSearch) {
-			this.userResults = null;
-
 			this.Results.setProps({
 				hits: []
 			});
@@ -377,9 +375,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.lock = Date.now();
 
 		const cachedHref = this.PAGE_TO_HREF[page];
-		const load = cachedHref ?
-			StoreUtils.loadBatch(cachedHref, null, null, null, this.useNewSearch) :
-			this.SearchActions.loadSearchPage(search.term, accepts, null, search.page, page);
+		const load = this.SearchActions.loadSearchPage(search.term, accepts, null, search.page, page, cachedHref);
 
 		load
 			.then(this.onLoadResults.bind(this, this.lock, page))
@@ -428,20 +424,6 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		const numPages = page === 1 && this.knownPages === 1 && !nextLink ? 0 : this.knownPages + 1;
 
 		this.removeLoading();
-
-		const userSearchResult = (batch.Items || []).filter(x => x.MimeType === SearchActions.MIME_TYPE)[0];
-
-		if(page === 1) {
-			// if first page, there are two cases:
-			// 1) this is the first time hitting it and we've loaded a user search result, so store it for later
-			// 2) this is a subsequent hit (paged to page 2 and back to 1, for example) so retrieve the stored user search result
-			if(userSearchResult) {
-				this.userResults = userSearchResult;
-			}
-			else if(batch.Items) {
-				batch.Items.push(this.userResults);
-			}
-		}
 
 		const isReallyEmpty = !batch.Items || batch.Items.length === 0 || (batch.Items[0].Items && batch.Items[0].Items.length === 0);
 
