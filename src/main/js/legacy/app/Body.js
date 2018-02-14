@@ -260,7 +260,9 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 				if (Globals.trimRoute(subRoute)) {
 					me.replaceRoute('', '/course/' + route.params.id);
 				} else {
-					me.replaceRoute('', '/library');
+					// stay on the page we're at and just alert the user that this
+					// course is not available
+					alert('You do not have access to this course');
 				}
 			});
 	},
