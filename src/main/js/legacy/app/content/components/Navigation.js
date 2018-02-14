@@ -100,11 +100,17 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		var data = bundle.asUIData(),
 			catalog = bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
-		getService().then(service => {
-			service.getObject(catalog.rawData).then(parsed => {
-				this.updateEls(data, parsed);
+		if(catalog) {
+			getService().then(service => {
+				service.getObject(catalog.rawData).then(parsed => {
+					this.updateEls(data, parsed);
+				});
 			});
-		});
+		}
+		else {
+			// if no catalog, pull all data from bundle
+			this.updateEls(data);
+		}
 	},
 
 	switchContent: function (route) {
