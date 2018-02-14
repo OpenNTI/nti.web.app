@@ -10,7 +10,6 @@ const WindowsActions = require('legacy/app/windows/Actions');
 const {isFeature} = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-const StoreUtils = require('legacy/util/Store');
 
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
