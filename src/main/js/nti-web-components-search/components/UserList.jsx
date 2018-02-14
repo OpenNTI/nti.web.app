@@ -44,7 +44,7 @@ export default class UserList extends React.Component {
 	}
 
 	componentWillReceiveProps (prevProps) {
-		if(prevProps.currentTab !== this.props.currentTab){
+		if (prevProps.currentTab !== this.props.currentTab) {
 			const userClass = prevProps.currentTab === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix';
 			this.setState({userClass: userClass});
 		}
@@ -135,11 +135,8 @@ export default class UserList extends React.Component {
 						</div>
 						<div className="result-block">
 							<ul ref={this.attachRef} onScroll={this.scrollItems}>
-								{userList.map((user, index) => {
-									if(user.Class !== 'User'){
-										return;
-									}
-									return (
+								{userList.map((user, index) =>
+									(user.Class === 'User') && (
 										<li className="block-info" key={index}>
 											<div className="user-info" onClick={this.navigateToUserProfile(user.Username)}>
 												<div className="img-user">
@@ -148,8 +145,8 @@ export default class UserList extends React.Component {
 												<DisplayName entity={user.Username} className="user-name"/>
 											</div>
 										</li>
-									);
-								})}
+									)
+								)}
 
 							</ul>
 						</div>
