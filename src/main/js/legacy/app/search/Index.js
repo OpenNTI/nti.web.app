@@ -427,7 +427,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 
-		if (batch.Items && batch.Items.length) {
+		var isReallyEmpty = !batch.Items || batch.Items.length === 0 || (batch.Items[0].Items && batch.Items[0].Items.length === 0);
+
+		if (!isReallyEmpty) {
 			if(this.useNewSearch) {
 				// if there are results with the new search, the onResultsLoaded
 				// handler will unhide the filters widget when those results

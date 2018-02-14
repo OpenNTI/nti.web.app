@@ -96,8 +96,8 @@ export default class SearchResults extends React.Component {
 
 		let showEmpty = hitItems.length === 0;
 
-		if(currentTab === 'all' || currentTab === 'people'){
-			if(userSearch && userSearch.length > 0){
+		if(currentTab === 'all' || currentTab === 'people') {
+			if(userSearch && userSearch.length > 0) {
 				showEmpty = false;
 			}
 		}

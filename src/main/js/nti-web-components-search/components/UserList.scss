@@ -170,11 +170,10 @@ $black_50: rgba(0, 0, 0, 0.5);
 			min-height: 227px;
 
 			.user-name {
-				word-spacing: 100vw;
 				white-space: pre-line;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				min-height: 2.3em;
+				height: 2.3em;
 
 				@extend %extend_1;
 
