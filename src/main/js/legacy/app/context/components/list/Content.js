@@ -84,6 +84,13 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 				iconUrl = Promise.resolve(iconUrl);
 				break;
 			}
+			else {
+				iconUrl = path[i].getIconImage && path[i].getIconImage();
+
+				if(iconUrl) {
+					break;
+				}
+			}
 		}
 
 		iconUrl = iconUrl || Promise.reject();
