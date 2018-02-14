@@ -16,6 +16,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 	extend: 'NextThought.common.Actions',
 	PAGE_SIZE: 10,
 
+	MIME_TYPE: 'application/vnd.nextthought.app.userlist',
+
 	constructor: function () {
 		this.callParent(arguments);
 
@@ -92,13 +94,13 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		});
 
 		const userList = {
-			TargetMimeType: 'application/vnd.nextthought.app.userlist',
+			TargetMimeType: this.MIME_TYPE,
 			Class: 'User',
 			Items: users.Items ? users.Items : []
 		};
 
 		return StoreUtils.loadBatch(url, params, null, null, isFeature('use-new-search')).then((result) =>{
-			if(result.Items){
+			if(result.Items) {
 				result.Items.push(userList);
 			}
 			return result;
