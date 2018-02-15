@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 	extend: 'NextThought.common.Actions',
 	PAGE_SIZE: 10,
 
-	MIME_TYPE: 'application/vnd.nextthought.app.userlist',
+	USER_LIST_MIME_TYPE: 'application/vnd.nextthought.app.userlist',
 
 	constructor: function () {
 		this.callParent(arguments);
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			});
 
 			userList = {
-				TargetMimeType: this.MIME_TYPE,
+				TargetMimeType: this.USER_LIST_MIME_TYPE,
 				Class: 'User',
 				Items: users.Items ? users.Items : []
 			};
