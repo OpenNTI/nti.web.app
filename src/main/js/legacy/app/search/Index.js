@@ -67,6 +67,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					this.filtersWidget.show();
 				},
 				navigateToSearchHit: (record, hit, frag, containerId) => {
+					let windowOpened = false;
+
 					record = lazy.ParseUtils.parseItems(record)[0];
 					hit = lazy.ParseUtils.parseItems(hit)[0];
 
@@ -78,10 +80,20 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					this.SearchStore.setHitForContainer(containerId, hit, frag);
 
 					const failedNavigate = () => {
-						alert('Could not navigate to search result.');
 						this.resultsWidget.setState({ navigating: false });
 						this.removeLoading();
 						this.filtersWidget.show();
+
+						if (this.WindowActions.hasWindow(record)) {
+							if (!windowOpened) {
+								windowOpened = true;
+								this.WindowActions.pushWindow(record);
+							}
+
+							return;
+						}
+
+						alert('Could not navigate to search result.');
 					};
 
 					this.Router.root.attemptToNavigateToObject(record, {
