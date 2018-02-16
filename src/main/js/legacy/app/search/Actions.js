@@ -96,10 +96,12 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 				return JSON.parse(result);
 			});
 
+			const userResults = users.Items ? users.Items.filter(x => x.Class === 'User') : [];
+
 			userList = {
 				TargetMimeType: this.USER_LIST_MIME_TYPE,
 				Class: 'User',
-				Items: users.Items ? users.Items : []
+				Items: userResults
 			};
 		}
 
