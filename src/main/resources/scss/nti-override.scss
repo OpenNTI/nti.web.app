@@ -173,6 +173,55 @@ body.x-body {margin:0;}
 		vertical-align:	middle;
 	}
 
+	div.figure[itemprop~=presentation-card] {
+		overflow: hidden;
+		background: #fafdff;
+		border: 1px solid #e3f2fc;
+		height: 152px;
+
+		span[itemprop="nti-data-markupenabled"] {
+			display: flex;
+			border: none;
+			height: 100%;
+
+			.wrapper.card {
+				min-width: 152px;
+
+				img {
+					height: 152px;
+					width: 152px;
+				}
+
+				div.caption {
+					height: 100px;
+				}
+			}
+
+			.bar.card {
+				padding: 0;
+				border: none;
+				background: none;
+
+				.bar-cell {
+					position: relative;
+					height: 100%;
+					margin-right: 0;
+
+					.image-caption {
+						padding: 10px 45px 10px 13px;
+						height: 100%;
+					}
+
+					a.mark {
+						position: absolute;
+						bottom: 10px;
+						margin: 0 0 0 10px;
+					}
+				}
+			}
+		}
+	}
+
 	[itemprop~=nti-data-markupenabled],
 	[itemprop~="nti-slide-video"] {
 		box-shadow: none !important;

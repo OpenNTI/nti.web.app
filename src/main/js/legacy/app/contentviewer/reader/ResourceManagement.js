@@ -27,9 +27,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		html: getString('NextThought.view.content.reader.ResourceManagement.youtubeblocked')
 	}),
 
-	IMAGE_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
+
+	CARD_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
 		{
-			cls: 'wrapper',
+			cls: 'wrapper {presentationType}',
 			cn: [{
 				tag: 'a',
 				href: '#zoom',
@@ -40,7 +41,68 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 			}]
 		},{
 			tag: 'span',
-			cls: 'bar',
+			cls: 'bar {presentationType}',
+			'data-non-anchorable': true,
+			'data-no-anchors-within': true,
+			unselectable: true,
+			cn: [{
+				tag: 'a',
+				href: '#slide',
+				'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.open-slide}}}',
+				cls: 'bar-cell slide',
+				html: ' '
+			},{
+				cls: 'bar-cell {[values.annotatable || values.title || values.caption ? \'\' : \'no-details\']}',
+				cn: [{
+					tag: 'a',
+					href: '#zoom',
+					cn: [{
+						tag: 'tpl',
+						'if': 'title',
+						cn: {
+							tag: 'span',
+							cls: 'image-title',
+							html: '{title}'
+						}
+					},{
+						tag: 'tpl',
+						'if': 'caption',
+						cn: {
+							tag: 'span',
+							cls: 'image-caption',
+							html: '{caption}'
+						}
+					}]
+				},{
+					tag: 'tpl',
+					'if': 'annotatable',
+					cn: {
+						tag: 'a',
+						href: '#mark',
+						'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.commentonthis}}}',
+						cls: 'mark',
+						html: '{{{NextThought.view.content.reader.ResourceManagement.comment}}}'
+					}
+				}]
+			}]
+		}
+	])),
+
+
+	IMAGE_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
+		{
+			cls: 'wrapper {presentationType}',
+			cn: [{
+				tag: 'a',
+				href: '#zoom',
+				'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.enlarge}}}',
+				cls: 'zoom disabled',
+				html: ' ',
+				'data-non-anchorable': true
+			}]
+		},{
+			tag: 'span',
+			cls: 'bar {presentationType}',
 			'data-non-anchorable': true,
 			'data-no-anchors-within': true,
 			unselectable: true,
@@ -295,7 +357,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 
 	activateAnnotatableItems: function (reader, doc) {
 		var els = reader.isAssignment() ? [] : doc.querySelectorAll('[itemprop*=nti-data-markup],[itemprop~=nti-slide-video]'),
-			tpl = this.IMAGE_TEMPLATE,
 			activators = {
 				'nti-data-markupenabled': Ext.bind(this.activateZoomBox, this)
 			};
@@ -307,17 +368,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 			return r;
 		}
 
-		Ext.each(els, function (el) {
+		Ext.each(els, (el) => {
 			var p = (el.getAttribute('itemprop') || '').split(' '),
+				figure = Ext.fly(el).up('div.figure'),
 				target = Ext.fly(el).down('img,iframe', true),
 				title = get(target, 'data-title'),
 				caption = get(target, 'data-caption'),
 				annotatable = Ext.Array.contains(p, 'nti-data-markupenabled'),
+				presentationProp = figure && figure.dom.getAttribute('itemprop'),
+				isCard = presentationProp === 'presentation-card',
+				presentationType = isCard ? 'card' : 'standard',
+				tpl = isCard ? this.CARD_TEMPLATE : this.IMAGE_TEMPLATE,
 				width, button, comment,
 				bar = tpl.append(el, {
 					title: title,
 					caption: caption,
-					annotatable: annotatable
+					annotatable: annotatable,
+					presentationType: presentationType
 				},false);
 
 			if (Ext.is.iOS) {
