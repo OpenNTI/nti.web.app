@@ -1475,6 +1475,39 @@ input[type=number]{
 				}
 			}
 		}
+
+		.controls-wrapper {
+			position: relative;
+			height: 28px;
+
+			.controls {
+				position: absolute;
+				display: flex;
+				right: 12px;
+
+				.select-box {
+					ul {
+						padding: 0;
+						font-size: 12px;
+						color: $secondary-grey;
+						cursor: pointer;
+					}
+
+					.menu-label {
+						font-size: 12px;
+						color: $secondary-grey;
+						margin-top: 6px;
+						margin-right: 10px;
+						cursor: pointer;
+					}
+				}
+
+				.nt-button {
+					height: 28px;
+					margin-top: 10px;
+				}
+			}
+		}
 	}
 
 	.overview-group-footer {

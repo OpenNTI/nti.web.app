@@ -114,8 +114,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, item);
 	},
 
+	getPreControls: function (record, bundle) {
+		return [];
+	},
+
 	getControls: function (record, bundle) {
-		var controls = [];
+		var controls = this.getPreControls(record, bundle) || [];
 
 		if (ContentPrompt.canEdit(record)) {
 			controls.push({
