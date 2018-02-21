@@ -1,14 +1,19 @@
 const Ext = require('extjs');
+const {SelectBox} = require('nti-web-commons');
 
 const MoveInfo = require('legacy/model/app/MoveInfo');
 
 const ContentPrompt = require('./Prompt');
 
+require('legacy/overrides/ReactHarness');
 require('legacy/mixins/dnd/OrderingItem');
 require('legacy/mixins/Transition');
 require('../controls/Edit');
 require('../controls/Synclock');
 require('../Controls');
+
+const REQUIRED = 'Required';
+const OPTIONAL = 'Optional';
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
@@ -121,15 +126,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getPreControls: function (record, bundle) {
-		// no pre controls at base level, but extending components can specify
-		// their own controls to be rendered before the standard controls
-		return [];
+	getRequireControl: function (record, bundle) {
+		const onChange = (value) => {
+			// TODO: do something with value, either REQUIRED or OPTIONAL
+			// once the server API is available
+		};
+
+		return {
+			xtype: 'react',
+			component: SelectBox,
+			value: REQUIRED,	// TODO: pull the actual value from the record
+			onChange,
+			showSelectedOption: true,
+			options: [
+				{ label: REQUIRED, value: REQUIRED },
+				{ label: OPTIONAL, value: OPTIONAL }
+			]
+		};
 	},
 
 
 	getControls: function (record, bundle) {
-		var controls = this.getPreControls(record, bundle) || [];
+		var controls = [];
 
 		if (ContentPrompt.canEdit(record)) {
 			controls.push({
@@ -139,6 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				root: this.lessonOverview,
 				bundle: bundle
 			});
+			controls.push(this.getRequireControl(record, bundle));
 			controls.push({
 				xtype: 'overview-editing-controls-edit',
 				record: record,
@@ -153,9 +172,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return {
 			xtype: 'container',
-			cls: 'controls',
+			cls: 'controls-wrapper',
 			layout: 'none',
-			items: controls
+			items: [
+				{
+					xtype: 'container',
+					cls: 'controls',
+					layout: 'none',
+					items: controls
+				}
+			]
 		};
 	},
 
