@@ -41,6 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	updateRecord: function (record) {
 		var enableDragging = this.Draggable && this.Draggable.isEnabled;
 
@@ -48,7 +49,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setRecord(record, enableDragging);
 	},
 
+
 	setUpRecord () { return Promise.resolve(); },
+
 
 	setRecord: function (record, enableDragging) {
 		this.removeAll(true);
@@ -86,11 +89,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
+
 	getDragHandle: function () {
 		return this.el && this.el.dom && this.el.dom.querySelector('.controls');
 	},
 
+
 	getPreviewType: function (/*record*/) {},
+
 
 	getPreview: function (record) {
 		var item = record.getRaw(),
@@ -114,9 +120,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, item);
 	},
 
+
 	getPreControls: function (record, bundle) {
+		// no pre controls at base level, but extending components can specify
+		// their own controls to be rendered before the standard controls
 		return [];
 	},
+
 
 	getControls: function (record, bundle) {
 		var controls = this.getPreControls(record, bundle) || [];

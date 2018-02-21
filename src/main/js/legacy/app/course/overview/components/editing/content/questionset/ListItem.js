@@ -26,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	getPreControls: function (record, bundle) {
 		const onChange = (value) => {
 			// TODO: do something with value, either REQUIRED, OPTIONAL, or DEFAULT
@@ -39,16 +40,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			onChange,
 			options: [
 				{ label: REQUIRED, value: REQUIRED },
-				{ label: OPTIONAL, value: OPTIONAL},
-				{ label: DEFAULT, value: DEFAULT}
+				{ label: OPTIONAL, value: OPTIONAL },
+				{ label: DEFAULT, value: DEFAULT }
 			]
 		}];
 	},
 
+
 	getControls: function (record, bundle) {
 		var controls = [this.callParent(arguments)];
 
-		// need a wrapper to help properly position the controls with
+		// override to make a wrapper to help properly position the controls with
 		// the required select box with wrapper-specific styling
 		return {
 			xtype: 'container',
@@ -57,6 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			items: controls
 		};
 	},
+
 
 	updateRecord: function (record) {
 		var me = this;
