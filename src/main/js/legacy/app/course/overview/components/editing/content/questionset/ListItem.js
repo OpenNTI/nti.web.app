@@ -10,7 +10,6 @@ require('../ListItem');
 
 const REQUIRED = 'Required';
 const OPTIONAL = 'Optional';
-const DEFAULT = 'Default';
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.ListItem', {
 	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
@@ -29,19 +28,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getPreControls: function (record, bundle) {
 		const onChange = (value) => {
-			// TODO: do something with value, either REQUIRED, OPTIONAL, or DEFAULT
+			// TODO: do something with value, either REQUIRED or OPTIONAL
 			// once the server API is available
 		};
 
 		return [{
 			xtype: 'react',
 			component: SelectBox,
-			value: DEFAULT,	// TODO: pull the actual value from the record
+			value: REQUIRED,	// TODO: pull the actual value from the record
 			onChange,
+			showSelectedOption: true,
 			options: [
 				{ label: REQUIRED, value: REQUIRED },
-				{ label: OPTIONAL, value: OPTIONAL },
-				{ label: DEFAULT, value: DEFAULT }
+				{ label: OPTIONAL, value: OPTIONAL }
 			]
 		}];
 	},
