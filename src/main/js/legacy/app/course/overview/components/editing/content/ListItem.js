@@ -1,6 +1,7 @@
 const Ext = require('extjs');
-const {SelectBox} = require('nti-web-commons');
+const {SelectBox, RemoveButton} = require('nti-web-commons');
 
+const Globals = require('legacy/util/Globals');
 const MoveInfo = require('legacy/model/app/MoveInfo');
 
 const ContentPrompt = require('./Prompt');
@@ -146,6 +147,29 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	getRemoveButton: function (record, bundle) {
+		const onRemove = () => {
+			this.parentRecord.removeRecord(this.record)
+				.then(function () {
+					return true;
+				})
+				.catch(function (reason) {
+					console.error('Failed to delete content: ', reason);
+					return false;
+				})
+				.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
+				.then(this.onPromptClose.bind(this));
+		};
+
+		return {
+			xtype: 'react',
+			component: RemoveButton,
+			onRemove,
+			confirmationMessage: 'Deleted items cannot be recovered.'
+		};
+	},
+
+
 	getControls: function (record, bundle) {
 		var controls = [];
 
@@ -168,6 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				onPromptOpen: function () {},
 				onPromptClose: () => this.onPromptClose()
 			});
+			controls.push(this.getRemoveButton(record, bundle));
 		}
 
 		return {
