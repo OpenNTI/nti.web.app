@@ -13,6 +13,7 @@ require('../controls/Edit');
 require('../controls/Synclock');
 require('../Controls');
 
+const DEFAULT = 'Default';
 const REQUIRED = 'Required';
 const OPTIONAL = 'Optional';
 
@@ -136,10 +137,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return {
 			xtype: 'react',
 			component: SelectBox,
-			value: REQUIRED,	// TODO: pull the actual value from the record
+			value: DEFAULT,	// TODO: pull the actual value from the record
 			onChange,
 			showSelectedOption: true,
 			options: [
+				{ label: DEFAULT, value: DEFAULT },
 				{ label: REQUIRED, value: REQUIRED },
 				{ label: OPTIONAL, value: OPTIONAL }
 			]
