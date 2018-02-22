@@ -1485,6 +1485,12 @@ input[type=number]{
 				display: flex;
 				right: 12px;
 
+				.requirement-select-box {
+					margin-top: 10px;
+					margin-right: 15px;
+					height: 28px;
+				}
+
 				.select-box {
 					height: 30px;
 					position: relative;
