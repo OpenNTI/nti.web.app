@@ -417,7 +417,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 			//If the image gets deleted this width is being set very small
 			//so the caption if wrapping after every character, use 30 px as
 			//the cutoff since thats what IE
-			if (width > 30) {
+			//Don't set width for card display, CSS will handle that
+			if (!isCard && width > 30) {
 				Ext.get(el).setWidth(width);
 			}
 

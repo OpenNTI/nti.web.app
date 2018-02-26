@@ -179,7 +179,7 @@ body.x-body {margin:0;}
 		border: 1px solid #e3f2fc;
 		height: 152px;
 
-		span[itemprop="nti-data-markupenabled"] {
+		span[itemprop~="nti-data-markupenabled"] {
 			display: flex;
 			border: none;
 			height: 100%;
