@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const cx = require('classnames');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -8,12 +9,13 @@ const Email = require('legacy/model/Email');
 const {isFeature} = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');
 
+require('legacy/overrides/ReactHarness');
 require('legacy/app/invite/Prompt');
 require('legacy/common/chart/Pie');
 require('legacy/common/menus/Reports');
 require('legacy/common/ux/FilterMenu');
 require('legacy/proxy/courseware/Roster');
-
+require('./ProgressWindow');
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Roster', {
 	extend: 'Ext.container.Container',
@@ -23,8 +25,108 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	layout: 'anchor',
 	margin: '0 0 10 0',
 
-	items: [
+	renderSelectors: {
+		emailEl: '.tools .email',
+		inviteEl: '.tools .invite'
+	},
+
+	allColumns: [
 		{
+			name: 'student',
+			text: getString('NextThought.view.courseware.info.Roster.student'),
+			xtype: 'templatecolumn',
+			dataIndex: 'realname',
+			padding: '0 0 0 30',
+			flex: 1,
+			possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
+			tpl: new Ext.XTemplate(Ext.DomHelper.markup({
+				cls: 'padded-cell user-cell', cn: [
+					'{Creator:avatar}',
+					{ cls: 'name', html: '{Creator:displayName}'},
+					{ cls: 'controls', cn: [
+						{tag: 'span', cls: 'link email', 'data-user': '{[this.getUsername(values)]}', html: 'Email'}
+					]}
+				]
+			}), {
+				getUsername: function (values) {
+					var user = values && values.Creator;
+					return user && user.get && user.get('Username');
+				}
+			})
+		},
+		{
+			name: 'username',
+			text: getString('NextThought.view.courseware.info.Roster.username'),
+			dataIndex: 'username', renderer: function (v, col, rec) {
+				return rec.get('OU4x4') || v;
+			}
+		},
+		{
+			name: 'status',
+			text: getString('NextThought.view.courseware.info.Roster.status'), sortable: false,
+			xtype: 'templatecolumn',
+			dataIndex: 'LegacyEnrollmentStatus',
+			tpl: Ext.DomHelper.markup({
+				cls: 'status', html: '{LegacyEnrollmentStatus}'
+			})
+		},
+		{
+			name: 'progress',
+			text: getString('NextThought.view.courseware.info.Roster.progress'), sortable: false,
+			renderer: function () {
+				// TODO: Get the actual progress value from the student record
+				const progressPct = 40;
+
+				if(progressPct === 100) {
+					return '<div class="progress progress-complete-container">' +
+						'<div class="progress-completed"><i class="icon-check"></i></div>' +
+						`<span>${progressPct}%</span>` +
+					'</div>';
+				}
+
+				const className = cx('progress', 'progress-container', progressPct === 0 ? 'none' : 'partial');
+
+				return `<div class="${className}">` +
+					'<svg width="25" height="25" viewBox="0 0 36 36">' +
+						'<path' +
+							' d="M18 2.0845' +
+							' a 15.9155 15.9155 0 0 1 0 31.831' +
+							' a 15.9155 15.9155 0 0 1 0 -31.831"' +
+							' fill="none"' +
+							' stroke="#eee";' +
+							' stroke-width="2";' +
+							' stroke-dasharray="100, 100"' +
+						'/><path' +
+							' d="M18 2.0845' +
+							' a 15.9155 15.9155 0 0 1 0 31.831' +
+							' a 15.9155 15.9155 0 0 1 0 -31.831"' +
+							' fill="none"' +
+							' stroke="#3FB34F";' +
+							' stroke-width="2";' +
+							` stroke-dasharray="${progressPct}, 100"` +
+						'/>' +
+					'</svg>' +
+					`<span>${progressPct}%</span>` +
+				'</div>';
+			}
+		},
+		{
+			//disclosure column
+			name: 'disclosure',
+			sortable: false,
+			hidden: !isFeature('analytic-reports'),
+			xtype: 'templatecolumn',
+			width: 60,
+			text: '', dataIndex: 'Creator',
+			tpl: Ext.DomHelper.markup({
+				cls: 'disclosure report'
+			})
+		}
+	],
+
+
+	addItems: function () {
+		this.add({
 			cls: 'nti-header',
 			xtype: 'container',
 			layout: 'auto',
@@ -40,7 +142,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 					]
 				}
 			]
-		}, {
+		});
+
+		let grouping = this.add({
 			xtype: 'grouping',
 			anchor: '0 -200',
 			layout: 'fit',
@@ -55,69 +159,26 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				itemId: 'email',
 				autoEl: {tag: 'div', cls: 'tool link email', html: 'Email'}
 			}],
-			items: [
-				{
-					xtype: 'grid',
-					layout: 'fit',
-					/*verticalScroller: {
-						synchronousRender: true,
-						scrollToLoadBuffer: 100,
-						trailingBufferZone: 100,
-						numFromEdge: 50,
-						leadingBufferZone: 150
-					},*/
-					scroll: 'vertical',
-					margin: '0 0 72 0',		// Add some margin to account for the space taken by the header.
-					columns: [
-						{
-							text: getString('NextThought.view.courseware.info.Roster.student'),
-							xtype: 'templatecolumn',
-							dataIndex: 'realname',
-							padding: '0 0 0 30',
-							flex: 1,
-							possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
-							tpl: new Ext.XTemplate(Ext.DomHelper.markup({
-								cls: 'padded-cell user-cell', cn: [
-									'{Creator:avatar}',
-									{ cls: 'name', html: '{Creator:displayName}'},
-									{ cls: 'controls', cn: [
-										{tag: 'span', cls: 'link email', 'data-user': '{[this.getUsername(values)]}', html: 'Email'}
-									]}
-								]
-							}), {
-								getUsername: function (values) {
-									var user = values && values.Creator;
-									return user && user.get && user.get('Username');
-								}
-							})
-						},
-						{ text: getString('NextThought.view.courseware.info.Roster.username'),
-							dataIndex: 'username', renderer: function (v, col, rec) {
-								return rec.get('OU4x4') || v;
-							}
-						},
-						{ text: getString('NextThought.view.courseware.info.Roster.status'), sortable: false,
-							xtype: 'templatecolumn',
-							dataIndex: 'LegacyEnrollmentStatus',
-							tpl: Ext.DomHelper.markup({
-								cls: 'status', html: '{LegacyEnrollmentStatus}'
-							})
-						},
-						{
-							//disclosure column
-							sortable: false,
-							hidden: !isFeature('analytic-reports'),
-							xtype: 'templatecolumn',
-							width: 60,
-							text: '', dataIndex: 'Creator',
-							tpl: Ext.DomHelper.markup({
-								cls: 'disclosure report'
-							})
-						}
-					]
-				}
-			]
-		}, {
+			items: []
+		});
+
+		grouping.add({
+			xtype: 'grid',
+			layout: 'fit',
+			/*verticalScroller: {
+				synchronousRender: true,
+				scrollToLoadBuffer: 100,
+				trailingBufferZone: 100,
+				numFromEdge: 50,
+				leadingBufferZone: 150
+			},*/
+			scroll: 'vertical',
+			margin: '0 0 72 0',		// Add some margin to account for the space taken by the header.
+			columns: this.allColumns
+		});
+
+
+		this.add({
 			xtype: 'filter-menupanel',
 			minWidth: 250,
 			searchPlaceHolderText: getString('NextThought.view.courseware.info.Roster.search'),
@@ -126,16 +187,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				{ text: getString('NextThought.view.courseware.info.Roster.enrolled'), filter: 'ForCredit'},
 				{ text: getString('NextThought.view.courseware.info.Roster.open'), filter: 'Open'}
 			]
-		}
-	],
-
-	renderSelectors: {
-		emailEl: '.tools .email',
-		inviteEl: '.tools .invite'
+		});
 	},
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.addItems();
+
 		this.filterMenu = this.down('filter-menupanel');
 		this.grid = this.down('grid');
 
@@ -281,6 +340,19 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 		this.grid.bindStore(Ext.getStore('ext-empty-store'));
 		this.grid.getView().refresh();
+
+		// TODO: Use course instance to determine progress support
+		// If it's not possible to determine that from the course instance, move this column
+		// reconfigure logic to onStoreLoad and base it off the first item in the store
+		let supportsProgress = true;
+
+		let visibleColumns = this.allColumns;
+
+		if(!supportsProgress) {
+			visibleColumns = this.allColumns.filter(x => x.name !== 'progress');
+		}
+
+		this.grid.reconfigure(this.store, visibleColumns);
 
 		this.filterMenu.setState('*');
 
@@ -448,6 +520,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			forCredit = serverResponse[forCreditKey],
 			open = total - forCredit;
 
+		this.totalPages = total;
 		this.setCount('*', total);
 		this.setCount('Open', open);
 		this.setCount('ForCredit', forCredit);
@@ -456,8 +529,41 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	handleClick: function (grid, record, node, i, e) {
+		grid.selModel.deselectAll();
+
 		var menu,
-			disclosure = e.getTarget('.disclosure');
+			disclosure = e.getTarget('.disclosure'),
+			progress = e.getTarget('.progress');
+
+		if (progress) {
+			const rosterURL = this.currentBundle && this.currentBundle.getLink('CourseEnrollmentRoster');
+
+			const sorter = this.store.getSorters()[0];
+
+			let url = rosterURL + '?batchSize=1&batchStart=' + i + (this.currentFilter ? '&filter=LegacyEnrollmentStatus' + this.currentFilter : '');
+
+			if(sorter) {
+				url += '&sortOn=' + sorter.property + '&sortOrder=' + (sorter.direction === 'DESC' ? 'descending' : 'ascending');
+			}
+
+			Service.request(url).then(resp => {
+				const singleItemResp = JSON.parse(resp);
+
+				const openEmailWindow = record.hasLink('Mail') && this.openIndividualEmail.bind(this);
+
+				this.progressWin = Ext.widget('progress-window',
+					{
+						record,
+						openEmailWindow,
+						initialPage: i + 1,
+						totalPages: this.totalPages || 1,
+						prevLink: singleItemResp.Links && singleItemResp.Links.filter(x => x.rel === 'batch-prev').map(x => x.href)[0],
+						nextLink: singleItemResp.Links && singleItemResp.Links.filter(x => x.rel === 'batch-next').map(x => x.href)[0]
+					}
+				);
+				this.progressWin.show();
+			});
+		}
 
 		if (disclosure) {
 			menu = Ext.widget('report-menu', {

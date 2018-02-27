@@ -10,5 +10,42 @@
 				}
 			}
 		}
+
+		.progress-complete-container {
+			display: flex;
+			color: #3fb34f;
+			cursor: pointer;
+
+			.progress-completed {
+				background-color: #3fb34f;
+				width: 24px;
+				height: 24px;
+				border-radius: 25px;
+				margin-top: 17px;
+				margin-right: 10px;
+				position: relative;
+
+				i {
+					color: white;
+					left: 5px;
+					top: 6px;
+					position: absolute;
+				}
+			}
+		}
+
+		.progress-container {
+			color: #3fb34f;
+			cursor: pointer;
+
+			&.none {
+				color: #b8b8b8;
+			}
+
+			svg {
+				margin-bottom: -8px;
+				margin-right: 10px;
+			}
+		}
 	}
 }
