@@ -30,9 +30,11 @@ require('./profiles/group/Index');
 require('./profiles/community/Index');
 require('./notifications/Index');
 require('./windows/Index');
-require('./contacts/Index');
+// require('./contacts/Index');
 require('./siteadmin/Index');
 require('./catalog/Index');
+require('./newContact/Index');
+
 
 module.exports = exports = Ext.define('NextThought.app.Body', {
 	extend: 'Ext.container.Container',
@@ -355,9 +357,9 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 	},
 
 	setContactsActive: function (route, subRoute) {
-		var contactsView = this.setActiveCmp('contacts-index');
+		var searchView = this.setActiveCmp('contact-component');
 
-		return contactsView.handleRoute(subRoute, route.precache);
+		return searchView.handleRoute(subRoute, route.precache);
 	},
 
 	setObjectActive: function (route, subRoute) {
