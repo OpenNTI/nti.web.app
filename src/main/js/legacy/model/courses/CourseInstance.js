@@ -870,10 +870,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	getLTIConfiguredTools: function () {
 		if (this.__getLTIConfiguredToolsPromise) { return this.__getLTIConfiguredToolsPromise; }
 
-		this.__getLTIConfiguredToolsPromise = this.__getList('LTI Configured Tools')
-			.catch(() => {
-				return {};
-			});
+		this.__getLTIConfiguredToolsPromise = this.__getList('LTI Configured Tools');
 
 		return this.__getLTIConfiguredToolsPromise;
 	},

@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	EDITOR_XTYPE: 'overview-editing-ltiexternaltoolasset-editor',
 	backToList: 'Configured Tools',
 	SWITCHED: 'switched',
-	cls: 'content-editor ltiexternaltoolasset',
+	cls: 'content-editor content-link',
 
 	afterRender: function () {
 		this.callParent(arguments);
