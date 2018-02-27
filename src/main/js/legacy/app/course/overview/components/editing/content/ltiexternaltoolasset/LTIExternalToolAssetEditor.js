@@ -11,13 +11,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-ltiexternaltoolasset-editor',
 
 	showEditor: function () {
+
 		this.callParent();
-
-		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
-
-		if (this.selectedItem) {
-			this.addPreview(this.selectedItem);
-		}
 
 		if (this.record) {
 			this.deleteBtn = this.addDeleteButton();
@@ -27,13 +22,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getFormSchema: function () {
 		var schema = [
 			{name: 'MimeType', type: 'hidden'},
+			{name: 'ConfiguredTool', type: 'hidden'},
 			{type: 'group', name: 'card', inputs: [
 				{type: 'group', name: 'meta', inputs: [
 					{
 						name: 'label',
 						type: 'text',
 						placeholder: 'Title',
-						required: true,
 						maxlength: EditingActions.MAX_TITLE_LENGTH
 					},
 					{name: 'description', type: 'textarea', placeholder: 'Description'}
@@ -44,28 +39,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return schema;
 	},
 
-	addPreview: function (item) {
-		var me = this,
-			parts = [
-				{cls: 'consumer-key', html: item.consumer_key},
-				{cls: 'secret', html: item.secret}
-			];
-
-		me.add({
-			xtype: 'box',
-			autoEl: {
-				cls: 'assignment-preview',
-				cn: parts
-			},
-		});
-	},
-
-	getValues: function () {
-		var item = this.selectedItem;
+	getDefaultValues: function () {
+		if (this.record) {
+			return this.record.isModel && this.record.getData();
+		}
 
 		return {
 			MimeType: LTIExternalToolAsset.mimeType,
-			ConfiguredTool: item.ntiid
+			ConfiguredTool: this.selectedItem.NTIID
 		};
 
 	},
@@ -74,13 +55,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
-			currentPosition = parentSelection && parentSelection.getCurrentPosition(),
-			values = me.getValues();
+			currentPosition = parentSelection && parentSelection.getCurrentPosition();
 
 		me.clearErrors();
 		me.disableSubmission();
 
-		return me.EditingActions.saveValues(values, me.record, originalPosition, currentPosition, me.rootRecord)
+		return me.EditingActions.saveEditorForm(me.formCmp, me.record, originalPosition, currentPosition, me.rootRecord)
 			.catch(function (reason) {
 				me.enableSubmission();
 
