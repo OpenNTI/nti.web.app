@@ -10,7 +10,7 @@ require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
 
 const CONTACTS_ACTIVE = /^\/contacts/;
-const LISTS_ACTIVE = /^\/lists/;
+const LISTS_ACTIVE = /^\/list/;
 
 function getPathname (a) {
 	const pathname = a.pathname;
@@ -86,22 +86,21 @@ module.exports = exports = Ext.define('NextThought.app.newContacts.Index', {
 
 		navigation.updateTitle('Contact');
 
-
 		const tabs = [
 			{
 				text: 'People',
 				route: '/',
-				active: true
+				active: path.length === 1
 			},
 			{
 				text: 'Contacts',
 				route: '/contacts',
-				active: false
+				active: CONTACTS_ACTIVE.test(path) && path.length !== 1
 			},
 			{
 				text: 'Sharing List',
 				route: '/list',
-				active: false
+				active: LISTS_ACTIVE.test(path) && path.length !== 1
 			}
 
 		];
