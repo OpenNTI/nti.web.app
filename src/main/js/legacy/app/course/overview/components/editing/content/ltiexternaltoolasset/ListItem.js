@@ -21,29 +21,4 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return 'course-overview-ltiexternaltoolasset';
 	},
 
-	getControls: function (record, bundle) {
-		var config = this.callParent(arguments),
-			items = config.items || [],
-			visibility = record && record.get('visibility');
-
-		if (visibility !== 'everyone') {
-			items.unshift({
-				xtype: 'box',
-				record: record,
-				autoEl: {
-					cls: 'visibility', html: visibility
-				}
-			});
-		}
-
-		config.items = items;
-		return config;
-	},
-
-	doNavigation (config) {
-		if (this.navigate) {
-			this.navigate(config, null, this.record.hasLink('edit'));
-		}
-	}
-
 });
