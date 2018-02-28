@@ -106,7 +106,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getSelectionFromRecord: function (record) {
 		return this.bundle.getLTIConfiguredTools()
 			.then(function (tools) {
-				return tools.Items.get(record.ConfiguredTool);
+				const ConfiguredToolNTIID = record.rawData.ConfiguredTool.NTIID;
+				var ConfiguredTool = undefined;
+				tools.Items.forEach(function (tool) {
+					if (tool.NTIID === ConfiguredToolNTIID) {
+						ConfiguredTool = tool;
+					}
+				});
+				return ConfiguredTool;
 			});
 	},
 

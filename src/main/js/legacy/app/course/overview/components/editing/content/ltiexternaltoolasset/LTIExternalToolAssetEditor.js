@@ -10,15 +10,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-ltiexternaltoolasset-editor',
 
-	showEditor: function () {
-
-		this.callParent();
-
-		if (this.record) {
-			this.deleteBtn = this.addDeleteButton();
-		}
-	},
-
 	getFormSchema: function () {
 		var schema = [
 			{name: 'MimeType', type: 'hidden'},
@@ -26,22 +17,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{type: 'group', name: 'card', inputs: [
 				{type: 'group', name: 'meta', inputs: [
 					{
-						name: 'label',
+						name: 'title',
 						type: 'text',
 						placeholder: 'Title',
 						maxlength: EditingActions.MAX_TITLE_LENGTH
 					},
 					{name: 'description', type: 'textarea', placeholder: 'Description'}
 				]},
-				{type: 'saveprogress'}
 			]}
 		];
 		return schema;
 	},
 
 	getDefaultValues: function () {
-		if (this.record) {
-			return this.record.isModel && this.record.getData();
+		if (this.record && this.record.isModel) {
+			const data = this.record.getData();
+			data.ConfiguredTool = this.selectedItem.NTIID;
+			return data;
 		}
 
 		return {
