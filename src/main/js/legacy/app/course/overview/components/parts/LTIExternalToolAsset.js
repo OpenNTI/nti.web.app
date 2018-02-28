@@ -20,14 +20,6 @@ function resolveIcon (config, n, root) {
 	return getIcon;
 }
 
-function getLinks(n) {
-	var links = n.getAttribute('Links');
-	if ('links' in links) {
-		links = links['links'];
-	}
-	return links;
-}
-
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.LTIExternalToolAsset', {
 	extend: 'NextThought.common.components.cards.Card',
 
@@ -43,8 +35,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				root: config.course && config.course.getContentRoots() && config.course.getContentRoots()[0]
 			},
 			root = i && i.root,
-			links = getLinks(n),
-			link = Service.getLinkFrom(links, 'Launch'),
+			record = n.getAttribute('record'),
+			link = record.getLink('Launch'),
 			ntiid = n.getAttribute('ntiid'),
 			href = Globals.getURL(link);
 

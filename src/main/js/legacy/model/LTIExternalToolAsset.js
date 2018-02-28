@@ -12,6 +12,7 @@ module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', 
 	fields: [
 		{name: 'title', type: 'string'},
 		{name: 'description', type: 'string'},
+		{name: 'ConfiguredTool', type: 'object'}
 	],
 
 });
