@@ -27,6 +27,7 @@ const DashboardIndex = require('./dashboard/Index');
 const InfoIndex = require('./info/Index');
 const OverviewIndex = require('./overview/Index');
 const ReportsIndex = require('./reports/Index');
+const ScormIndex = require('./scorm-content/Index');
 
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
@@ -46,7 +47,7 @@ const FORUM = 'bundle-forum';
 const REPORTS = 'course-reports';
 const INFO = 'course-info';
 const RESOURCES = 'course-resources';
-
+const SCORM = 'course-scorm-content';
 
 
 module.exports = exports = Ext.define('NextThought.app.course.Index', {
@@ -70,6 +71,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		{
 			xtype: OVERVIEW,
 			id: OVERVIEW
+		},
+		{
+			xtype: SCORM,
+			id: SCORM
 		},
 		{
 			xtype: ASSESSMENT,
@@ -117,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/discussions', this.showDiscussions.bind(this));
 		this.addRoute('/reports', this.showReports.bind(this));
 		this.addRoute('/info', this.showInfo.bind(this));
-		this.addRoute('/content', this.showContent.bind(this));
+		this.addRoute('/content', this.showScormContent.bind(this));
 		//TODO: add a /video route to show the grid view
 		this.addRoute('/videos/:id', this.showVideos.bind(this));
 		this.addRoute('/resources', this.showResources.bind(this));
@@ -270,6 +275,17 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 		}
 
+		if(showTab(ScormIndex)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.contenttab', 'Content'),
+				route: 'content',
+				root: this.getRoot(SCORM),
+				subRoute: this.getCmpRouteState(SCORM),
+				title: 'Content',
+				active: active === SCORM
+			});
+		}
+
 		if (showTab(AssessmentIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.assessmenttab', 'Assignments'),
@@ -328,6 +344,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			tabs = [
 				DashboardIndex,
 				OverviewIndex,
+				ScormIndex,
 				AssessmentIndex,
 				ForumIndex,
 				ReportsIndex,
@@ -378,6 +395,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		return this.setActiveView(DASHBOARD, [
 			OVERVIEW,
+			SCORM,
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
@@ -395,12 +413,32 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		return this.setActiveView(OVERVIEW, [
 			DASHBOARD,
+			SCORM,
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
 			INFO
 		]).then((item) => {
 			if (item && item.handleRoute) {
+				item.gotoResources = () => this.gotoResources();
+
+				return item.handleRoute(subRoute, route.precache)
+					.then();
+			}
+		});
+	},
+
+	showScormContent (route, subRoute) {
+		this.setCmpRouteState(SCORM, subRoute);
+
+		return this.setActiveView(SCORM, [
+			DASHBOARD,
+			ASSESSMENT,
+			FORUM,
+			REPORTS,
+			INFO
+		]).then(item => {
+			if(item && item.handleRoute) {
 				item.gotoResources = () => this.gotoResources();
 
 				return item.handleRoute(subRoute, route.precache)
@@ -419,6 +457,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return this.setActiveView(ASSESSMENT, [
 			DASHBOARD,
 			OVERVIEW,
+			SCORM,
 			FORUM,
 			REPORTS,
 			INFO
@@ -435,6 +474,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return this.setActiveView(FORUM, [
 			DASHBOARD,
 			OVERVIEW,
+			SCORM,
 			ASSESSMENT,
 			REPORTS,
 			INFO
@@ -451,6 +491,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return this.setActiveView(REPORTS, [
 			DASHBOARD,
 			OVERVIEW,
+			SCORM,
 			ASSESSMENT,
 			FORUM,
 			INFO
@@ -463,6 +504,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return this.setActiveView(INFO, [
 			DASHBOARD,
 			OVERVIEW,
+			SCORM,
 			ASSESSMENT,
 			FORUM,
 			REPORTS
@@ -489,6 +531,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return this.setActiveView(RESOURCES, [
 			DASHBOARD,
 			OVERVIEW,
+			SCORM,
 			ASSESSMENT,
 			FORUM,
 			REPORTS
@@ -505,6 +548,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return this.setActiveView('bundle-content[courseLevel]', [
 			DASHBOARD,
 			OVERVIEW,
+			SCORM,
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
@@ -523,6 +567,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		return this.setActiveView(OVERVIEW, [
 			DASHBOARD,
+			SCORM,
 			ASSESSMENT,
 			FORUM,
 			REPORTS,
@@ -644,7 +689,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			subPath = path.slice(1),
 			page, assignment, i,
 			route;
-
+		debugger;
 		for (i = 0; i < subPath.length; i++) {
 			let item = subPath[i];
 
@@ -744,6 +789,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		return route;
 	},
+
 
 	getRouteForHistoryItem: function (historyItem, path) {
 		let	root = path[0],
