@@ -3,7 +3,6 @@ const { encodeForURI, decodeFromURI, isNTIID } = require('@nti/lib-ntiids');
 
 const LibraryActions = require('legacy/app/library/Actions');
 const Globals = require('legacy/util/Globals');
-const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const Lesson = require('legacy/model/courses/overview/Lesson');
 const PageInfo = require('legacy/model/PageInfo');
 const PlaylistItem = require('legacy/model/PlaylistItem');
@@ -58,7 +57,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addDefaultRoute(this.showLessons.bind(this));
 
-		this.addObjectHandler(LTIExternalToolAsset.mimeType, this.getLTIExternalToolAssetRoute.bind(this));
 		this.addObjectHandler(PageInfo.mimeType, this.getPageInfoRoute.bind(this));
 		this.addObjectHandler(RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
 		this.addObjectHandler(PlaylistItem.mimeType, this.getVideoRoute.bind(this));
@@ -372,25 +370,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		this.activeMediaWindow.currentBundle = this.currentBundle;
 		this.activeMediaWindow.parentLesson = lessonId;
 		return this.activeMediaWindow.handleRoute(subRoute, precache);
-	},
-
-
-	getLTIExternalToolAssetRoute: function (obj) {
-		var lesson = obj.parent,
-			lessonId = lesson && lesson.getId(),
-			assetId = obj.get && obj.getId();
-
-		lessonId = encodeForURI(lessonId);
-		assetId = encodeForURI(assetId);
-
-		return {
-			route: lessonId + '/ltiexternaltoolasset/' + assetId,
-			title: obj.get && obj.get('title'),
-			precache: {
-				lesson: lesson,
-				basePath: obj.basePath
-			}
-		};
 	},
 
 	getPageInfoRoute: function (obj) {

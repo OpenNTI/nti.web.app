@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	canEdit: true,
 
-	getPreviewType: function (record) {
+	getPreviewType: function () {
 		return 'course-overview-ltiexternaltoolasset';
 	},
 
