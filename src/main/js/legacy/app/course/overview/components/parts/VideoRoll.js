@@ -61,13 +61,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	createVideoList: function () {
 		var videoRollItems = this.videoRoll && this.videoRoll.getItems(),
-			selectVideo = this.selectVideo.bind(this);
+			selectVideo = this.selectVideo.bind(this),
+			inEditMode = this.inEditMode;
 
 		this.videoList.add(videoRollItems.map(function (videoRollItem) {
 			return {
 				xtype: 'course-overview-videoroll-item',
 				video: videoRollItem,
-				selectVideo: selectVideo
+				selectVideo: selectVideo,
+				inEditMode
 			};
 		}));
 	},
