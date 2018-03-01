@@ -5,7 +5,6 @@ const EditingActions = require('../../Actions');
 
 require('../Editor');
 
-
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ltiexternaltoolasset.LTIExternalToolAssetEditor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-ltiexternaltoolasset-editor',
