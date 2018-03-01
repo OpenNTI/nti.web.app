@@ -1,5 +1,4 @@
 const Ext = require('extjs');
-const {RequirementMultiSelect} = require('nti-web-course');
 
 const VideoRoll = require('legacy/model/VideoRoll');
 
@@ -24,23 +23,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	getRequireControl: function (record, bundle) {
-		const groups = [
-			{
-				title: 'Videos',
-				items: (record && record.get('Items') || [])
-					.map(x => {
-						return {
-							name: x.get('title'),
-							id: x.get('ntiid')
-						};
-					})
-			}
-		];
-
-		return {
-			xtype: 'react',
-			component: RequirementMultiSelect,
-			groups
-		};
+		return null;
 	},
 });
