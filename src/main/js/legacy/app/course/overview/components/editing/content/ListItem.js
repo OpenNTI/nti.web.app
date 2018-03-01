@@ -130,8 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getRequireControl: function (record, bundle) {
 		const onChange = (value) => {
-			// TODO: do something with value, either REQUIRED or OPTIONAL
-			// once the server API is available
+			// TODO: hit this.course's link for setting required/optional status
 		};
 
 		return {

@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent(arguments);
 
 		const onChange = () => {
-			// TODO: Hit server API to set required status for an item
+			// TODO: Hit courseInstance link for setting required/optional
 		};
 
 		let container = this.add({
@@ -33,12 +33,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			]
 		});
 
+		// TODO: Check courseInstance.getLink for relevant required/optional link.  If there is no link, assume that's not supported for this course
 		if(this.inEditMode) {
 			container.add({
 				xtype: 'react',
 				cls: 'required-control',
 				component: SelectBox,
-				value: DEFAULT,	// TODO: pull the actual value from the record
+				value: DEFAULT,	// TODO: pull the actual value from the video record
 				onChange,
 				showSelectedOption: true,
 				options: [
