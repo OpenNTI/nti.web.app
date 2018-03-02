@@ -67,6 +67,8 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					this.filtersWidget.show();
 				},
 				navigateToSearchHit: (record, hit, frag, containerId) => {
+					let windowOpened = false;
+
 					record = lazy.ParseUtils.parseItems(record)[0];
 					hit = lazy.ParseUtils.parseItems(hit)[0];
 
@@ -78,10 +80,20 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 					this.SearchStore.setHitForContainer(containerId, hit, frag);
 
 					const failedNavigate = () => {
-						alert('Could not navigate to search result.');
 						this.resultsWidget.setState({ navigating: false });
 						this.removeLoading();
 						this.filtersWidget.show();
+
+						if (this.WindowActions.hasWindow(record)) {
+							if (!windowOpened) {
+								windowOpened = true;
+								this.WindowActions.pushWindow(record);
+							}
+
+							return;
+						}
+
+						alert('Could not navigate to search result.');
 					};
 
 					this.Router.root.attemptToNavigateToObject(record, {
@@ -424,9 +436,25 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 
-		const isReallyEmpty = !batch.Items || batch.Items.length === 0 || (batch.Items[0].Items && batch.Items[0].Items.length === 0);
+		const { Items } = batch;
 
-		if (!isReallyEmpty) {
+		// empty state:
+		// if All filter -> no items or only one item, which is empty user list
+		// if People filter -> no items or only one item, which is empty user list
+		// if any other filter -> no non-user list items
+		const noItemsAtAll = !Items || Items.length === 0;
+		const isReallyEmpty = noItemsAtAll || (Items[0].Items && Items[0].Items.length === 0);
+
+		let isEmptyState = false;
+		if('all' === this.currentSearch.filter || 'people' === this.currentSearch.filter) {
+			isEmptyState = isReallyEmpty;
+		}
+		else {
+			const nonUserListItems = (Items || []).filter(x => x.MimeType !== SearchActions.USER_LIST_MIME_TYPE);
+			isEmptyState = nonUserListItems.length === 0;
+		}
+
+		if (!isEmptyState) {
 			if(this.useNewSearch) {
 				// if there are results with the new search, the onResultsLoaded
 				// handler will unhide the filters widget when those results

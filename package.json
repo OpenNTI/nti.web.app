@@ -31,6 +31,7 @@
     "registry": "https://npm.nextthought.com"
   },
   "devDependencies": {
+    "@pandell/spritesmith-cli": "^2.0.0",
     "clamp-js": "^0.7.0",
     "classnames": "^2.2.3",
     "create-react-class": "^15.5.2",
@@ -47,11 +48,11 @@
     "nti-app-scripts": "^1.0.93",
     "nti-assignment-editor": "^1.11.0",
     "nti-commons": "^2.0.0",
-    "nti-content": "^1.15.0",
+    "nti-content": "^1.17.1",
     "nti-lib-dispatcher": "^1.0.0",
     "nti-lib-dom": "^1.2.3",
     "nti-lib-interfaces": "^1.72.0",
-    "nti-lib-locale": "^1.0.5",
+    "nti-lib-locale": "^1.2.0",
     "nti-lib-ntiids": "^1.0.2",
     "nti-lib-store": "^1.2.0",
     "nti-lib-store-connector": "0.x.x",
@@ -61,7 +62,7 @@
     "nti-web-charts": "0.x.x",
     "nti-web-client": "^1.1.1",
     "nti-web-commons": "0.x.x",
-    "nti-web-course": "^1.8.4",
+    "nti-web-course": "^1.9.2",
     "nti-web-discussions": "0.x.x",
     "nti-web-editor": "0.x.x",
     "nti-web-login": "^2018.0.0",
@@ -77,7 +78,6 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-test-renderer": "^16.2.0",
-    "@pandell/spritesmith-cli": "^2.0.0",
     "whatwg-fetch": "^2.0.0",
     "xregexp": "^4.0.0"
   },
