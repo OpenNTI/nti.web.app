@@ -2,7 +2,6 @@ const Ext = require('extjs');
 
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
-const {isFeature} = require('legacy/util/Globals');
 
 require('../../Editor');
 require('./LTIExternalToolAssetSelection');
@@ -38,12 +37,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	backToList: 'Configured Tools',
 	SWITCHED: 'switched',
 	cls: 'content-editor content-link',
-
-	beforeRender: function () {
-		if (isFeature('LTI')) {
-			this.callParent(arguments);
-		}
-	},
 
 	afterRender: function () {
 		this.callParent(arguments);

@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 
 const OverviewGroup = require('legacy/model/courses/overview/Group');
+const {isFeature} = require('legacy/util/Globals');
 
 const ContentlinkEditor = require('../contentlink/Editor');
 const VideoEditor = require('../video/Editor');
@@ -29,15 +30,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 		getEditors: function () {
-			return [
+
+			var editors = [
 				ContentlinkEditor,
 				VideoEditor,
 				DiscussionEditor,
-				LTIExternalToolAssetEditor,
 				QuestionsetEditor,
 				TimelineEditor,
 				SurveyEditor
 			];
+
+			if (isFeature('LTI')) {
+				editors.push(LTIExternalToolAssetEditor);
+			}
+
+			return editors;
 		}
 	},
 
