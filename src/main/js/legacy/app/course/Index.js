@@ -689,7 +689,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			subPath = path.slice(1),
 			page, assignment, i,
 			route;
-		debugger;
+
 		for (i = 0; i < subPath.length; i++) {
 			let item = subPath[i];
 
