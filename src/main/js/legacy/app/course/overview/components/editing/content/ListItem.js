@@ -182,6 +182,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				root: this.lessonOverview,
 				bundle: bundle
 			});
+			// TODO: Check record for required fields.  If there are some, add control.
+			// If there are none, assume this type doesn't support required/optional state
+			// and don't show the control at all
 			controls.push(this.getRequireControl(record, bundle));
 			controls.push({
 				xtype: 'overview-editing-controls-edit',
