@@ -11,16 +11,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{cls: 'ltiexternaltoolasset-item assignment-item {cls}', cn: [
-			{cls: 'consumer-key', html: 'Key: {consumerKey}'},
-			{cls: 'secret', html: 'Secret: {secret}'}
+			{cls: 'title', html: '{title}'},
+			{cls: 'description', html: '{description}'}
 		]}
 	)),
 
 
 	getItemData: function (item) {
 		return {
-			consumerKey: item.consumer_key,
-			secret: item.secret,
+			title: item.title,
+			description: item.description,
 		};
 	},
 
