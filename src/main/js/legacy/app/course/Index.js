@@ -122,7 +122,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/discussions', this.showDiscussions.bind(this));
 		this.addRoute('/reports', this.showReports.bind(this));
 		this.addRoute('/info', this.showInfo.bind(this));
-		this.addRoute('/content', this.showScormContent.bind(this));
+		this.addRoute('/content', this.showContent.bind(this));
+		this.addRoute('/scormcontent', this.showScormContent.bind(this));
 		//TODO: add a /video route to show the grid view
 		this.addRoute('/videos/:id', this.showVideos.bind(this));
 		this.addRoute('/resources', this.showResources.bind(this));
