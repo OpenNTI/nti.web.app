@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		IN_BUFFER: 'in-buffer',
 		CURRENT: 'current',
 		showTab: function (bundle) {
-			return bundle && !bundle.get('Preview');
+			return bundle && !bundle.get('Preview') && bundle.hasOutline();
 		}
 	},
 
