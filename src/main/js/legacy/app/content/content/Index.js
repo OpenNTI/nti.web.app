@@ -364,6 +364,14 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				if (me.activeMediaWindow) {
 					me.activeMediaWindow.destroy();
 				}
+
+				if (route.object.id) {
+					return Service.getObject(decodeFromURI(route.object.id))
+						.then(me.reader.showNote.bind(me.reader))
+						.catch(function (reason) {
+							console.log('Failed to resolve note: ', reason);
+						});
+				}
 			})
 			.catch(() => {
 				this.__onFail();
