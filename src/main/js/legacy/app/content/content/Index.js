@@ -367,7 +367,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 				if (route.object.id) {
 					return Service.getObject(decodeFromURI(route.object.id))
-						.then(me.reader.showNote.bind(me.reader))
+						.then(me.reader.goToNote.bind(me.reader))
 						.catch(function (reason) {
 							console.log('Failed to resolve note: ', reason);
 						});
