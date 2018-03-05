@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 
 	statics: {
 		showTab: function (bundle) {
-			return bundle && bundle.isScormCourse;
+			return bundle && bundle.isScormCourse && !bundle.get('Preview');
 		}
 	},
 
