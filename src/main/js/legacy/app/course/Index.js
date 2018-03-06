@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		if(showTab(ScormIndex)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.contenttab', 'Content'),
-				route: 'content',
+				route: 'scormcontent',
 				root: this.getRoot(SCORM),
 				subRoute: this.getCmpRouteState(SCORM),
 				title: 'Content',
