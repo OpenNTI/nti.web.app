@@ -1,7 +1,5 @@
 const Ext = require('extjs');
 
-const ObjectUtils = require('legacy/util/Object');
-
 const CourseCatalogEntry = require('./CourseCatalogEntry');
 require('./CourseInstance');
 
