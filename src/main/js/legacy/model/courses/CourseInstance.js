@@ -21,6 +21,7 @@ const UserSearch = require('../UserSearch');
 const Video = require('../Video');
 
 const CourseCatalogEntry = require('./CourseCatalogEntry');
+const CourseOutline = require('./CourseOutline');
 
 require('legacy/mixins/AuditLog');
 require('legacy/mixins/BundleLike');
@@ -35,7 +36,6 @@ require('../forums/CommunityForum');
 require('./AssignmentCollection');
 require('./CourseInstanceBoard');
 require('./CourseInstanceSharingScopes');
-require('./CourseOutline');
 require('./CourseVideoProgress');
 
 const flatten = arr => arr.reduce(
@@ -694,6 +694,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	getOutlineContents: function (doNotCache) {
 		var outline = this.get('Outline');
+
+		if (!outline) {
+			return Promise.resolve(new CourseOutline());
+		}
 
 		return outline.getOutlineContents(doNotCache);
 	},
