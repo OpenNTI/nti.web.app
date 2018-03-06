@@ -177,6 +177,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 						outline.setBundle(me);
 
+						rec.stores.push(me);
+
 						me.__courseCatalogEntry = rec;
 						if (rec) {
 							rec.get('Links').getRelLink('CourseInstance').href = me.get('href');

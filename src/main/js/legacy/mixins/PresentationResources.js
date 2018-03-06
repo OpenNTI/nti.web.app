@@ -35,7 +35,9 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	 * @return {string} default root to use
 	 * @override
 	 */
-	getDefaultAssetRoot: function () {},
+	getDefaultAssetRoot: function () {
+		return '/app/resources/images/default-course/';
+	},
 
 
 	getPresentationResource () {
