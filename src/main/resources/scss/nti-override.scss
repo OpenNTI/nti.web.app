@@ -173,6 +173,16 @@ body.x-body {margin:0;}
 		vertical-align:	middle;
 	}
 
+	.caption {
+		display: none;
+	}
+
+	.image-caption {
+		.caption {
+			display: block;
+		}
+	}
+
 	div.figure[itemprop~=presentation-card] {
 		overflow: hidden;
 		background: #fafdff;
