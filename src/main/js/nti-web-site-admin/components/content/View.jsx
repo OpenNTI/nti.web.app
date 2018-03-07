@@ -5,12 +5,17 @@ import List from './list';
 import Info from './info';
 import BookInfo from './book';
 
+const COURSE_MIMETYPES = [
+	'application/vnd.nextthought.courses.courseinstance',
+	'application/vnd.nextthought.courses.scormcourseinstance'
+];
+
 export default Router.for([
 	Route({
 		path: '/course/:courseID',
 		component: Info,
 		getRouteFor: (obj, context) => {
-			if (obj.MimeType === 'application/vnd.nextthought.courses.courseinstance' && context === 'site-admin.course-list-item') {
+			if (COURSE_MIMETYPES.includes(obj.MimeType) && context === 'site-admin.course-list-item') {
 				return `/course/${encodeForURI(obj.getID())}`;
 			}
 
