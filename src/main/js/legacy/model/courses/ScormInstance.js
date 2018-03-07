@@ -68,22 +68,27 @@ module.exports = exports = Ext.define('NextThought.model.courses.ScormInstance',
 	},
 
 	getPresentationProperties: function (id) {
-		return this.getCourseCatalogEntry().getPresentationProperties && this.getCourseCatalogEntry().getPresentationProperties(id);
+		const cce = this.getCourseCatalogEntry();
+		return cce.getPresentationProperties && cce.getPresentationProperties(id);
 	},
 
 	getBackgroundImage: function () {
-		return this.getCourseCatalogEntry().getBackgroundImage && this.getCourseCatalogEntry().getBackgroundImage();
+		const cce = this.getCourseCatalogEntry();
+		return cce.getBackgroundImage && cce.getBackgroundImage();
 	},
 
 	getIconImage: function () {
-		return this.getCourseCatalogEntry().getIconImage && this.getCourseCatalogEntry().getIconImage();
+		const cce = this.getCourseCatalogEntry();
+		return cce.getIconImage && cce.getIconImage();
 	},
 
 	getThumbnail: function () {
-		return (this.getCourseCatalogEntry().getThumbnail && this.getCourseCatalogEntry().getThumbnail()) || Promise.resolve('');
+		const cce = this.getCourseCatalogEntry();
+		return (cce.getThumbnail && cce.getThumbnail()) || Promise.resolve('');
 	},
 
 	getVendorIconImage: function () {
-		return (this.getCourseCatalogEntry().getVendorIcon && this.getCourseCatalogEntry().getVendorIcon()) || Promise.resolve('');
+		const cce = this.getCourseCatalogEntry();
+		return (cce.getVendorIcon && cce.getVendorIcon()) || Promise.resolve('');
 	}
 });
