@@ -7,7 +7,7 @@ require('legacy/overrides/ReactHarness');
 module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-scorm-content',
-	title: 'Activity',
+	title: 'Content',
 	cls: 'course-scorm-content',
 
 	mixins: {
@@ -21,6 +21,10 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 		showTab: function (bundle) {
 			return bundle && bundle.isScormCourse && !bundle.get('Preview');
 		}
+	},
+
+	onRouteActivate () {
+		this.setTitle('Content');
 	},
 
 	initComponent () {
