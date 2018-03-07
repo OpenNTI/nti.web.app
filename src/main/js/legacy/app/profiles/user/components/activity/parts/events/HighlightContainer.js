@@ -115,13 +115,29 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 						if (iconUrl) {
 							iconUrl = iconUrl.url || iconUrl;
+							iconUrl = Promise.resolve(iconUrl);
 							break;
+						}
+						else {
+							iconUrl = path[i].getIconImage && path[i].getIconImage();
+
+							if(iconUrl) {
+								break;
+							}
 						}
 					}
 
-					item.icon = iconUrl;
+					if(iconUrl) {
+						return iconUrl.then(url => {
+							item.icon = url;
 
-					pages.push(item);
+							pages.push(item);
+						});
+					}
+					else {
+						item.icon = '';
+						pages.push(item);
+					}
 				});
 		});
 
