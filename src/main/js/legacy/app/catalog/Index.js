@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			{
 				text: 'Courses',
 				route: '/',
-				active: path.length === 1
+				active: !PURCHASED_ACTIVE.test(path) && !REDEEM_ACTIVE.test(path)
 			},
 			{
 				text: 'History',
