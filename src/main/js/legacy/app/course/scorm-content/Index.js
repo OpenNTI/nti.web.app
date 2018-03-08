@@ -19,7 +19,8 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 
 	statics: {
 		showTab: function (bundle) {
-			return bundle && bundle.isScormCourse && (bundle.hasLink('ImportSCORM') || bundle.Metadata.getLink('LaunchSCORM'));
+			const metadata = bundle.get('Metadata');
+			return bundle && bundle.isScormCourse && (bundle.hasLink('ImportSCORM') || (metadata && metadata.hasLink('LaunchSCORM')));
 		}
 	},
 
