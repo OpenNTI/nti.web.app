@@ -26,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	renderSelectors: {
 		groupEl: '.groupBy',
+		groupLabelEl: '.groupBy .label',
 		searchEl: '.search input',
 		clearEl: '.search .clear',
 		createEl: '.create-assignment'
@@ -152,6 +153,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			items.push({ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.creationdate'), groupBy: 'creation', checked: type === 'creation'});
 		}
 
+		this.groupByItems = items;
+
 		this.groupByMenu = Ext.widget('menu', {
 			cls: 'group-by-menu',
 			width: 213,
@@ -254,6 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.bundle = bundle;
 		if (this.bundle.isScormCourse) {
 			this.createGroupByMenu(true);
+			this.groupLabelEl.dom.innerHTML = this.groupByItems[0] && this.groupByItems[0].text;
 		}
 	}
 });
