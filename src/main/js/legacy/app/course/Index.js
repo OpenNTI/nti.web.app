@@ -10,6 +10,7 @@ const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic')
 const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
 const DiscussionAssignment = require('legacy/model/assessment/DiscussionAssignment');
 const Globals = require('legacy/util/Globals');
+const Grade = require('legacy/model/courseware/Grade');
 const HeadlineTopic = require('legacy/model/forums/HeadlineTopic');
 const Topic = require('legacy/model/forums/Topic');
 const User = require('legacy/model/User');
@@ -724,6 +725,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route = this.getRouteForForum(root, subPath);
 		} else if (root instanceof Assignment || root.isAssignmentRef) {
 			route = this.getRouteForAssignment(root, subPath);
+		} else if (root instanceof Grade) {
+			route = this.getRouteForGrade(root, subPath);
 		} else if (root instanceof CourseOutlineContentNode) {
 			route = this.getRouteForLesson(root, subPath);
 		} else if (root instanceof PageInfo) {
@@ -781,6 +784,17 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		return route;
 	},
+
+
+	getRouteForGrade (grade, path) {
+		const cmp = this.down(ASSESSMENT);
+		const route = cmp.getRouteForPath(path, grade);
+
+		route.path = '/assignments/' + Globals.trimRoute(route.path);
+
+		return route;
+	},
+
 
 	getRouteForLesson: function (lesson, path) {
 		var cmp = this.down(OVERVIEW),
