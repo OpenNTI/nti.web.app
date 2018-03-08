@@ -84,7 +84,6 @@ module.exports = exports = Ext.define('NextThought.app.newContacts.Index', {
 	},
 
 	getTitleFromRoute (route) {
-		console.log(route);
 		if (route === '/') {
 			return 'Contacts';
 		}
