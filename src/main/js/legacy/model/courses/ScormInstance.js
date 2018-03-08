@@ -2,7 +2,7 @@ const Ext = require('extjs');
 
 const CourseCatalogEntry = require('./CourseCatalogEntry');
 require('./CourseInstance');
-
+require('./ScormCourseMetadata');
 
 module.exports = exports = Ext.define('NextThought.model.courses.ScormInstance', {
 	extend: 'NextThought.model.courses.CourseInstance',
@@ -12,6 +12,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.ScormInstance',
 	},
 	isScormCourse: true,
 
+	fields: [
+		{ name: 'Metadata', type: 'singleItem' }
+	],
+	
 	__precacheEntry: function () {
 		var p = this.precachePromise,
 			me = this,
@@ -52,6 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.ScormInstance',
 
 	asUIData: function () {
 		var e = this.getCourseCatalogEntry();
+
 		return {
 			id: this.getId(),
 			isCourse: true,
