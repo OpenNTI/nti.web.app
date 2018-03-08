@@ -68,8 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 				xtype: 'react',
 				component: Scorm,
 				bundle: this.libBundle,
-				error: error === '' ? 'Unknown Scorm Error' : (error || null),
-				updateBundle: this.updateBundle.bind(this)
+				error: error === '' ? 'Unknown Scorm Error' : (error || null)
 			});
 		}
 	}
