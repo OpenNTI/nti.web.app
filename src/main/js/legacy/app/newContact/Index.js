@@ -77,7 +77,24 @@ module.exports = exports = Ext.define('NextThought.app.newContacts.Index', {
 			});
 		}
 
+		const title = this.getTitleFromRoute(route.path);
+		this.setTitle(title);
+
 		this.setUpNavigation(baseroute, route.path);
+	},
+
+	getTitleFromRoute (route) {
+		console.log(route);
+		if (route === '/') {
+			return 'Contacts';
+		}
+		else if (route === '/groups') {
+			return 'Groups';
+		}
+		else if (route === '/list') {
+			return 'Sharing List';
+		}
+		return 'NextThought';
 	},
 
 	setUpNavigation (baseroute, path) {
