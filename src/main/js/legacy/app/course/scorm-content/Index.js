@@ -52,8 +52,6 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 		if (this.scormContent) {
 			this.scormContent.setProps({ bundle });
 		}
-
-	},
 	},
 
 
