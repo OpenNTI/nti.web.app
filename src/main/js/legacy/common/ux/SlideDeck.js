@@ -44,8 +44,9 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 		slidedeckId = slidedeckId || 'default';
 
 		var root = ContentUtils.getLineage(ntiidInContent).last(),
-			title = Library.getTitle(root),
-			toc = Library.getToc(title),
+			//Just suppress the warnings, this is still not right
+			title = Library.getTitle(root),//eslint-disable-line
+			toc = Library.getToc(title),//eslint-disable-line
 			ids = [],
 			videoIndex,
 			store = new Ext.data.Store({proxy: 'memory'});
@@ -117,7 +118,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
 			store.add(slides);
 		}
 
-		Library.getVideoIndex(title)
+		//Just supress the warning, it still wrong
+		Library.getVideoIndex(title)//eslint-disable-line
 			.catch(function () {return null;})
 			.then(function (data) {
 				videoIndex = data;

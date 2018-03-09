@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const {getService} = require('nti-web-client');
 const {Overview} = require('nti-web-course');
+const {encodeForURI} = require('nti-lib-ntiids');
 
 const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
@@ -9,6 +10,47 @@ require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
+
+function getURLPart (obj) {
+	return encodeForURI(obj.getId ? obj.getId() : obj.getID ? obj.getID() : obj.NTIID);
+}
+
+function getAssignmentRoute (course, lesson, obj) {
+	return `/app/course/${getURLPart(course)}/assignments/${encodeForURI(obj.getID())}/`;
+}
+
+function getDiscussionRoute (course, lesson, obj) {
+	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/object/${encodeForURI(obj.NTIID)}`;
+}
+
+const ROUTE_BUILDERS = {
+	'application/vnd.nextthought.ntivideo': (course, lesson, obj) => {
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/video/${getURLPart(obj)}/`;
+	},
+	'application/vnd.nextthought.naquestionset': (course, lesson, obj) => {
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj.containerId)}/`;
+	},
+	'application/vnd.nextthought.relatedworkref': (course, lesson, obj) => {
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj['target-NTIID'] || obj.NTIID)}/`;
+	},
+	'application/vnd.nextthought.assessment.discussionassignment': getAssignmentRoute,
+	'application/vnd.nextthought.assessment.timedassignment': getAssignmentRoute,
+	'application/vnd.nextthought.assessment.assignment': getAssignmentRoute,
+	'application/vnd.nextthought.ntitimeline': (course, lesson, obj) => {
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/object/${encodeForURI(obj.NTIID)}/`;
+	},
+	'application/vnd.nextthought.forums.topic': getDiscussionRoute,
+	'application/vnd.nextthought.forums.communityheadlinetopic': getDiscussionRoute,
+	'application/vnd.nextthought.forums.communitytopic': getDiscussionRoute,
+	'application/vnd.nextthought.forums.contentheadlinetopic': getDiscussionRoute,
+	'application/vnd.nextthought.forums.dflheadlinetopic': getDiscussionRoute,
+	'application/vnd.nextthought.forums.dfltopic': getDiscussionRoute,
+	'application/vnd.nextthought.forums.headlinetopic': getDiscussionRoute,
+	'application/vnd.nextthought.forums.forum': getDiscussionRoute,
+	'application/vnd.nextthought.forums.communityforum': getDiscussionRoute,
+	'application/vnd.nextthought.forums.contentforum': getDiscussionRoute,
+	'application/vnd.nextthought.forums.dflforum': getDiscussionRoute
+};
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.Lesson', {
@@ -102,17 +144,36 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	getRouteFor (object) {
+		const builder = ROUTE_BUILDERS[object.MimeType];
+
+		return builder ? builder(this.bundle, this.currentOutlineNode, object) : null;
+	},
+
+
 	async renderLesson (record, doNotCache) {
 		try {
 			this.buildingOutline = true;
 			this.maybeMask();
 
+			if (this.currentOverview) {
+				if (!doNotCache && record.getId() === this.activeRecord.getId()) {
+					return;
+				} else {
+					this.currentOverview.destroy();
+				}
+			}
+
+			this.activeRecord = record;
 
 			const service = await getService();
 			const course = await service.getObject(this.bundle.rawData);
 			const outline = await course.getOutline({force: !doNotCache});
 			const node = outline.getNode(record.get('ContentNTIID'));
 			const content = await node.getContent({force: !doNotCache});
+
+			this.currentOutlineNode = node;
+			this.currentLessonOverview = content;
 
 			this.currentOverview = this.add({
 				xtype: 'react',
@@ -121,7 +182,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				overview: content,
 				outlineNode: node,
 				course: course,
-				layout: Overview.Lesson.List
+				layout: Overview.Lesson.List,
+				baseroute: '/',
+				getRouteFor: this.getRouteFor.bind(this)
 			});
 		} catch (e) {
 			console.error(e);
