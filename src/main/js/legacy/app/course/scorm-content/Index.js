@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 
 
 	showScormContent (route) {
-		const queryParams = Ext.Object.fromQueryString(global.location.search || '');
+		const queryParams = queryString.decode((global.location.search || '').replace(/^\?/, ''));
 		const error = queryParams && queryParams.error;
 
 		if (this.scormContent) {
