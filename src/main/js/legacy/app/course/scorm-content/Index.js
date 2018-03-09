@@ -1,3 +1,5 @@
+const queryString = require('querystring');
+
 const Ext = require('extjs');
 const { Scorm } = require('nti-web-course');
 const { getService } = require('nti-web-client');
