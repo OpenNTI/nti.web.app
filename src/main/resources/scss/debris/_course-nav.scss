@@ -342,6 +342,12 @@
 		overflow: hidden;
 		@include scrollbar(#ffffff, $tertiary-grey);
 
+		.course-overview-lesson-content {
+			margin-top: -1.5em;
+			margin-bottom: -1.5em;
+			margin-left: -1.87em;
+		}
+
 		body.control-bar-open & {
 			padding-bottom: 2.5rem;
 		}

@@ -1,8 +1,11 @@
 const Ext = require('extjs');
+const {getService} = require('nti-web-client');
+const {Overview} = require('nti-web-course');
 
 const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
 
+require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
@@ -98,88 +101,115 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]);
 	},
 
-	renderLesson: function (record, doNotCache) {
-		var me = this,
-			course = me.bundle,
-			overviewsrc = (record && record.getLink('overview-content')) || null;
 
-		if (!record || !course) {
-			//show empty state?
-			console.warn('Nothing?', record, course);
-			return;
+	async renderLesson (record, doNotCache) {
+		try {
+			this.buildingOutline = true;
+			this.maybeMask();
+
+
+			const service = await getService();
+			const course = await service.getObject(this.bundle.rawData);
+			const outline = await course.getOutline({force: !doNotCache});
+			const node = outline.getNode(record.get('ContentNTIID'));
+			const content = await node.getContent({force: !doNotCache});
+
+			this.currentOverview = this.add({
+				xtype: 'react',
+				component: Overview.Lesson,
+				className: 'course-overview-lesson-content',
+				overview: content,
+				outlineNode: node,
+				course: course,
+				layout: Overview.Lesson.List
+			});
+		} catch (e) {
+			console.error(e);
+		} finally {
+			this.maybeUnmask();
 		}
 
-		me.currentNode = record;
-		me.currentPage = record.getId();
-		me.buildingOverview = true;
-		me.maybeMask();
+		// var me = this,
+		// 	course = me.bundle,
+		// 	overviewsrc = (record && record.getLink('overview-content')) || null;
 
-		me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
-		me.__getCurrentCounts = record.getCommentCounts ? record.getCommentCounts.bind(record) : null;
+		// if (!record || !course) {
+		// 	//show empty state?
+		// 	console.warn('Nothing?', record, course);
+		// 	return;
+		// }
 
-		if (me.currentOverview && me.currentOverview.record.getId() === record.getId() && !doNotCache) {
-			if (me.currentOverview.refresh) {
-				return me.currentOverview.refresh()
-					.then(me.__updateProgress.bind(me))
-					.then(me.__updateCounts.bind(me))
-					.always(me.maybeUnmask.bind(me));
-			}
+		// me.currentNode = record;
+		// me.currentPage = record.getId();
+		// me.buildingOverview = true;
+		// me.maybeMask();
 
-			me.maybeUnmask();
+		// me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
+		// me.__getCurrentCounts = record.getCommentCounts ? record.getCommentCounts.bind(record) : null;
 
-			return Promise.resolve();
-		}
+		// if (me.currentOverview && me.currentOverview.record.getId() === record.getId() && !doNotCache) {
+		// 	if (me.currentOverview.refresh) {
+		// 		return me.currentOverview.refresh()
+		// 			.then(me.__updateProgress.bind(me))
+		// 			.then(me.__updateCounts.bind(me))
+		// 			.always(me.maybeUnmask.bind(me));
+		// 	}
 
-		me.removeAll(true);
+		// 	me.maybeUnmask();
 
-		return this.getInfo(record, course, overviewsrc)
-			.then(function (results) {
-				var assignments = results[0],
-					enrollment = results[1],
-					//Just use the first one for now
-					locInfo = results[2][0],
-					videoIndex = results[3];
+		// 	return Promise.resolve();
+		// }
 
-				//Make sure we haven't changed what record to show before
-				//this finished
-				if (me.currentPage !== record.getId()) {
-					return;
-				}
+		// me.removeAll(true);
 
-				if (!overviewsrc) {
-					me.currentOverview = me.add({
-						xtype: 'overview-types-toc',
-						record: record,
-						locInfo: locInfo,
-						assignments: assignments,
-						enrollment: enrollment,
-						course: course,
-						videoIndex: videoIndex,
-						navigate: me.navigate.bind(me)
-					});
+		// return this.getInfo(record, course, overviewsrc)
+		// 	.then(function (results) {
+		// 		var assignments = results[0],
+		// 			enrollment = results[1],
+		// 			//Just use the first one for now
+		// 			locInfo = results[2][0],
+		// 			videoIndex = results[3];
 
-					return;
-				}
+		// 		//Make sure we haven't changed what record to show before
+		// 		//this finished
+		// 		if (me.currentPage !== record.getId()) {
+		// 			return;
+		// 		}
 
-				me.currentOverview = me.add({
-					xtype: 'overview-types-content',
-					record: record,
-					locInfo: locInfo,
-					assignments: assignments,
-					enrollment: enrollment,
-					course: course,
-					navigate: me.navigate.bind(me)
-				});
+		// 		if (!overviewsrc) {
+		// 			me.currentOverview = me.add({
+		// 				xtype: 'overview-types-toc',
+		// 				record: record,
+		// 				locInfo: locInfo,
+		// 				assignments: assignments,
+		// 				enrollment: enrollment,
+		// 				course: course,
+		// 				videoIndex: videoIndex,
+		// 				navigate: me.navigate.bind(me)
+		// 			});
+
+		// 			return;
+		// 		}
+
+		// 		me.currentOverview = me.add({
+		// 			xtype: 'overview-types-content',
+		// 			record: record,
+		// 			locInfo: locInfo,
+		// 			assignments: assignments,
+		// 			enrollment: enrollment,
+		// 			course: course,
+		// 			navigate: me.navigate.bind(me)
+		// 		});
 
 
-				me.currentOverview.loadCollection(overviewsrc);
+		// 		me.currentOverview.loadCollection(overviewsrc);
 
-				return me.currentOverview.onceLoaded();
-			})
-			.catch(function (reason) { console.error(reason); })
-			.then(me.__updateProgress.bind(me))
-			.then(me.__updateCounts.bind(me))
-			.then(me.maybeUnmask.bind(me));
+		// 		return me.currentOverview.onceLoaded();
+		// 	})
+		// 	.catch(function (reason) { console.error(reason); })
+		// 	.then(me.__updateProgress.bind(me))
+		// 	.then(me.__updateCounts.bind(me))
+		// 	.then(me.maybeUnmask.bind(me));
 	},
 
 	navigate: function (obj) {
