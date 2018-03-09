@@ -57,6 +57,13 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 	},
 
 
+	async onBundleUpdate (newBundle) {
+		if (this.scormContent && this.libBundle) {
+			const bundle = await this.libBundle.refresh(newBundle);
+			this.scormContent.setProps({ bundle });
+		}
+	},
+
 	showScormContent (route) {
 		const queryParams = queryString.decode((global.location.search || '').replace(/^\?/, ''));
 		const error = queryParams && queryParams.error;
@@ -70,7 +77,8 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 				xtype: 'react',
 				component: Scorm,
 				bundle: this.libBundle,
-				error: error === '' ? 'Unknown Scorm Error' : (error || null)
+				error: error === '' ? 'Unknown Scorm Error' : (error || null),
+				onBundleUpdate: this.onBundleUpdate.bind(this)
 			});
 		}
 	}
