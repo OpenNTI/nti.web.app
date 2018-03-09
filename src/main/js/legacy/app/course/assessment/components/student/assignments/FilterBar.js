@@ -26,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	renderSelectors: {
 		groupEl: '.groupBy',
+		groupLabelEl: '.groupBy .label',
 		searchEl: '.search input',
 		clearEl: '.search .clear',
 		createEl: '.create-assignment'
@@ -142,10 +143,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.completion'), groupBy: 'completion', checked: type === 'completion'}
 		];
 
+		if (this.bundle && this.bundle.isScormCourse) {
+			delete this.groupByMenu;
+			items = items.filter(x => x.groupBy !== 'lesson');
+		}
+
 		if (this.shouldShowPublishOption) {
 			items.push({ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.publicationstatus'), groupBy: 'publication', checked: type === 'publication'});
 			items.push({ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.creationdate'), groupBy: 'creation', checked: type === 'creation'});
 		}
+
+		this.groupByItems = items;
 
 		this.groupByMenu = Ext.widget('menu', {
 			cls: 'group-by-menu',
@@ -243,5 +251,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 
 		this.assignmentTypeMenu.showBy(this.createEl, 'tr-br');
+	},
+
+	setBundle (bundle) {
+		this.bundle = bundle;
+		if (this.bundle.isScormCourse) {
+			this.createGroupByMenu(true);
+			this.groupLabelEl.dom.innerHTML = this.groupByItems[0] && this.groupByItems[0].text;
+		}
 	}
 });

@@ -88,6 +88,10 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 			scrollingParent: this.el
 		});
 
+		if (cmp.Router) {
+			this.addChildRouter(cmp);
+		}
+
 		this.viewContainer.removeAll();
 		cmp.addCls('object-window');
 

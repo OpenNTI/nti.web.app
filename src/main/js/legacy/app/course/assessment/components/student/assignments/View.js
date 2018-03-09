@@ -536,6 +536,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return me.applyAssignmentsData();
 		}
 
+		const filterBar = this.getFilterBar();
+
+		filterBar.setBundle(instance);
+
 		return Promise.all([
 			assignments.updateAssignments(doNotCache),
 			outlineInterface.onceBuilt()

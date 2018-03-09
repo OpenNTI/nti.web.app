@@ -82,6 +82,11 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	],
 
 
+	getAssignmentId () {
+		return this.get('AssignmentId');
+	},
+
+
 	onSync (record) {
 		this.isPlaceholder = record.isPlaceholder;
 	},

@@ -1,3 +1,5 @@
+const queryString = require('querystring');
+
 const Ext = require('extjs');
 const { Scorm } = require('nti-web-course');
 const { getService } = require('nti-web-client');
@@ -19,7 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 
 	statics: {
 		showTab: function (bundle) {
-			return bundle && bundle.isScormCourse && !bundle.get('Preview');
+			const metadata = bundle.get('Metadata');
+			return bundle && bundle.isScormCourse && (bundle.hasLink('ImportSCORM') || (metadata && metadata.hasLink('LaunchSCORM')));
 		}
 	},
 
@@ -30,10 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 	initComponent () {
 		this.callParent(arguments);
 
-		this.scormContent = this.add({
-			xtype: 'react',
-			component: Scorm,
-		});
+		this.addDefaultRoute(this.showScormContent.bind(this));
 	},
 
 	async bundleChanged (legacyBundle) {
@@ -49,7 +49,37 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 		const service = await getService();
 
 		const bundle = await service.getObject(legacyBundle.raw);
+		this.libBundle = bundle;
 
-		this.scormContent.setProps({ bundle });
+		if (this.scormContent) {
+			this.scormContent.setProps({ bundle });
+		}
 	},
+
+
+	async onBundleUpdate (newBundle) {
+		if (this.scormContent && this.libBundle) {
+			const bundle = await this.libBundle.refresh(newBundle);
+			this.scormContent.setProps({ bundle });
+		}
+	},
+
+	showScormContent (route) {
+		const queryParams = queryString.decode((global.location.search || '').replace(/^\?/, ''));
+		const error = queryParams && queryParams.error;
+
+		if (this.scormContent) {
+			this.scormContent.setProps({
+				error: error === '' ? 'Unknown Scorm Error' : (error || null)
+			});
+		} else {
+			this.scormContent = this.add({
+				xtype: 'react',
+				component: Scorm,
+				bundle: this.libBundle,
+				error: error === '' ? 'Unknown Scorm Error' : (error || null),
+				onBundleUpdate: this.onBundleUpdate.bind(this)
+			});
+		}
+	}
 });
