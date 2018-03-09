@@ -5,7 +5,6 @@ const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService} = require('nti-web-client');
 const {encodeForURI} = require ('nti-lib-ntiids');
-const {getHistory} = require('nti-web-routing');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const User = require('legacy/model/User');
@@ -75,7 +74,6 @@ const Bridge = createReactClass({
 			routerLinkComponent: () => {},
 			router: {
 				makeHref: (x) => x,
-				history: getHistory(),
 				baseroute: this.state.baseroute,
 				getRouteFor: this.props.getRouteFor
 			},
