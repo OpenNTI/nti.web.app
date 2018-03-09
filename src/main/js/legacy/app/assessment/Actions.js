@@ -86,15 +86,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		return data;
 	},
 
-	gradeAssessment: function (questionSet, submissionData, containerId, startTime) {
-		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
+	gradeAssessment: function (questionSet, submissionData, container, startTime) {
+		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, container.NTIID, startTime),
 			qsetSubmission;
 
 		qsetSubmission = AssessmentQuestionSetSubmission.create(data);
 
+		const coursePagesLink = container.currentBundle && container.currentBundle.getLink('Pages');
+
 		return new Promise(function (fulfill, reject) {
 			qsetSubmission.save({
-				url: questionSet.getLink('PracticeSubmission'),
+				url: questionSet.getLink('PracticeSubmission') || coursePagesLink,
 				callback: function () {},
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();

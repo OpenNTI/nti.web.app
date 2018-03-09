@@ -638,7 +638,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 	submitAssessment: function (questionSet, submission) {
 		var me = this,
-			container = me.reader.getLocation().NTIID;
+			container = me.reader.getLocation();
 
 		me.mask();
 
