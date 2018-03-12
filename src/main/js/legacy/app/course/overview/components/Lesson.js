@@ -27,18 +27,26 @@ const ROUTE_BUILDERS = {
 	'application/vnd.nextthought.ntivideo': (course, lesson, obj) => {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/video/${getURLPart(obj)}/`;
 	},
-	'application/vnd.nextthought.naquestionset': (course, lesson, obj) => {
-		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj.containerId)}/`;
-	},
+
 	'application/vnd.nextthought.relatedworkref': (course, lesson, obj) => {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj['target-NTIID'] || obj.NTIID)}/`;
+	},
+
+	'application/vnd.nextthought.ntitimeline': (course, lesson, obj) => {
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/object/${encodeForURI(obj.NTIID)}/`;
+	},
+
+
+	'application/vnd.nextthought.naquestionset': (course, lesson, obj) => {
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj.containerId)}/`;
 	},
 	'application/vnd.nextthought.assessment.discussionassignment': getAssignmentRoute,
 	'application/vnd.nextthought.assessment.timedassignment': getAssignmentRoute,
 	'application/vnd.nextthought.assessment.assignment': getAssignmentRoute,
-	'application/vnd.nextthought.ntitimeline': (course, lesson, obj) => {
-		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/object/${encodeForURI(obj.NTIID)}/`;
+	'application/vnd.nextthought.surveyref': (course, lesson, obj) => {
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj['Target-NTIID'] || obj.NTIID)}`;
 	},
+
 	'application/vnd.nextthought.forums.topic': getDiscussionRoute,
 	'application/vnd.nextthought.forums.communityheadlinetopic': getDiscussionRoute,
 	'application/vnd.nextthought.forums.communitytopic': getDiscussionRoute,
@@ -49,7 +57,8 @@ const ROUTE_BUILDERS = {
 	'application/vnd.nextthought.forums.forum': getDiscussionRoute,
 	'application/vnd.nextthought.forums.communityforum': getDiscussionRoute,
 	'application/vnd.nextthought.forums.contentforum': getDiscussionRoute,
-	'application/vnd.nextthought.forums.dflforum': getDiscussionRoute
+	'application/vnd.nextthought.forums.dflforum': getDiscussionRoute,
+
 };
 
 
@@ -146,6 +155,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getRouteFor (object) {
 		const builder = ROUTE_BUILDERS[object.MimeType];
+
+		if (!builder) {
+			debugger;
+		}
 
 		return builder ? builder(this.bundle, this.currentOutlineNode, object) : null;
 	},
