@@ -156,10 +156,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getRouteFor (object) {
 		const builder = ROUTE_BUILDERS[object.MimeType];
 
-		if (!builder) {
-			debugger;
-		}
-
 		return builder ? builder(this.bundle, this.currentOutlineNode, object) : null;
 	},
 
