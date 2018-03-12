@@ -346,6 +346,14 @@
 			margin-top: -1.5em;
 			margin-bottom: -1.5em;
 			margin-left: -1.87em;
+
+			label.grid {
+				margin-right: 0;
+			}
+
+			.lesson-overview-padded-container.header {
+				margin-right: -1.87em;
+			}
 		}
 
 		body.control-bar-open & {
