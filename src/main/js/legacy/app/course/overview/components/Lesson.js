@@ -153,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	async renderLesson (record, doNotCache) {
 		try {
-			this.buildingOutline = true;
+			this.buildingOverview = true;
 			this.maybeMask();
 
 			if (this.currentOverview) {
