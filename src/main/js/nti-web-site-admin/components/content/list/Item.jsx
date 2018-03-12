@@ -12,8 +12,6 @@ SiteAdminCourseItem.propTypes = {
 	item: PropTypes.object
 };
 export default function SiteAdminCourseItem ({item}) {
-	const {enrolledTotalCount} = item;
-
 	return (
 		<div className="site-admin-course-item">
 			<CourseItem className="course-info" catalogEntry={item.CatalogEntry} />
@@ -22,7 +20,7 @@ export default function SiteAdminCourseItem ({item}) {
 					{t('totalEnrolled')}
 				</div>
 				<div className="value">
-					{enrolledTotalCount || 0}
+					{item.getTotalEnrollmentCount() || 0}
 				</div>
 			</div>
 		</div>

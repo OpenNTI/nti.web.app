@@ -54,11 +54,9 @@ export default class View extends React.Component {
 
 
 	renderItem = (item) => {
-		const {CourseInstance:course} = item;
-
 		return (
-			<LinkTo.Object object={course} context="site-admin.course-list-item">
-				<Item item={course} />
+			<LinkTo.Object object={item} context="site-admin.course-list-item">
+				<Item item={item} />
 			</LinkTo.Object>
 		);
 	}
