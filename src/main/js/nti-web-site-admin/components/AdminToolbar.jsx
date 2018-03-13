@@ -66,17 +66,19 @@ export default class AdminToolbar extends React.Component {
 			return null;
 		}
 
-		return (<Flyout.Triggered
-			className="admin-create-options"
-			trigger={this.renderCreateTrigger()}
-			horizontalAlign={Flyout.ALIGNMENTS.LEFT}
-			sizing={Flyout.SIZES.MATCH_SIDE}
-			ref={this.attachFlyoutRef}
-		>
-			<div>
-				<div className="create-item" onClick={this.launchCourseWizard}>Course</div>
-			</div>
-		</Flyout.Triggered>);
+		return (
+			<Flyout.Triggered
+				className="admin-create-options"
+				trigger={this.renderCreateTrigger()}
+				horizontalAlign={Flyout.ALIGNMENTS.LEFT}
+				sizing={Flyout.SIZES.MATCH_SIDE}
+				ref={this.attachFlyoutRef}
+			>
+				<div>
+					<div className="create-item" onClick={this.launchCourseWizard}>Course</div>
+				</div>
+			</Flyout.Triggered>
+		);
 	}
 
 	renderSiteAdminButton () {

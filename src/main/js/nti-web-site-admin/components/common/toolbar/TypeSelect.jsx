@@ -53,15 +53,17 @@ export default class TypeSelect extends React.Component {
 	render () {
 		const { options } = this.props;
 
-		return (<Flyout.Triggered
-			className="admin-list-type-select"
-			trigger={this.renderSelectedType()}
-			ref={this.attachFlyoutRef}
-			horizontalAlign={Flyout.ALIGNMENTS.LEFT}
-		>
-			<div>
-				{(options || []).map(this.renderOption)}
-			</div>
-		</Flyout.Triggered>);
+		return (
+			<Flyout.Triggered
+				className="admin-list-type-select"
+				trigger={this.renderSelectedType()}
+				ref={this.attachFlyoutRef}
+				horizontalAlign={Flyout.ALIGNMENTS.LEFT}
+			>
+				<div>
+					{(options || []).map(this.renderOption)}
+				</div>
+			</Flyout.Triggered>
+		);
 	}
 }

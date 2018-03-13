@@ -211,9 +211,11 @@ export default class PopularCourses extends React.Component {
 	}
 
 	render () {
-		return (<div className="dashboard-list-widget popular-courses">
-			{this.renderHeader()}
-			{this.renderItems()}
-		</div>);
+		return (
+			<div className="dashboard-list-widget popular-courses">
+				{this.renderHeader()}
+				{this.renderItems()}
+			</div>
+		);
 	}
 }

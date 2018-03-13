@@ -34,8 +34,10 @@ export default class View extends React.Component {
 			return null;
 		}
 
-		return (<div className="site-admin-advanced">
-			{this.renderItem(() => { return this.renderSyncControls(); })}
-		</div>);
+		return (
+			<div className="site-admin-advanced">
+				{this.renderItem(() => { return this.renderSyncControls(); })}
+			</div>
+		);
 	}
 }

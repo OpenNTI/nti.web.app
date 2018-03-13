@@ -16,28 +16,32 @@ export default class View extends React.Component {
 	}
 
 	renderWidgets () {
-		return (<div className="admin-dashboard-widgets">
-			<div className="widget-row">
-				<ActiveSessions/>
-				<PopularCourses/>
-				<ActiveUsers/>
-			</div>
-			<div className="widget-row">
-				<ActiveTimes/>
-				<div>
-					<RecentlyCreatedUsers/>
-					<RecentSessions/>
+		return (
+			<div className="admin-dashboard-widgets">
+				<div className="widget-row">
+					<ActiveSessions/>
+					<PopularCourses/>
+					<ActiveUsers/>
+				</div>
+				<div className="widget-row">
+					<ActiveTimes/>
+					<div>
+						<RecentlyCreatedUsers/>
+						<RecentSessions/>
+					</div>
+				</div>
+				<div className="widget-row">
+					<ActiveDays/>
 				</div>
 			</div>
-			<div className="widget-row">
-				<ActiveDays/>
-			</div>
-		</div>);
+		);
 	}
 
 	render () {
-		return (<div className="admin-dashboard">
-			{this.renderWidgets()}
-		</div>);
+		return (
+			<div className="admin-dashboard">
+				{this.renderWidgets()}
+			</div>
+		);
 	}
 }

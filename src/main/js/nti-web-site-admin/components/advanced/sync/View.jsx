@@ -109,38 +109,44 @@ export default class View extends React.Component {
 	}
 
 	renderOptions () {
-		return (<Flyout.Triggered
-			className="sync-options"
-			trigger={this.renderOptionsTrigger()}
-			horizontalAlign={Flyout.ALIGNMENTS.LEFT}
-			sizing={Flyout.SIZES.MATCH_SIDE}
-			ref={this.attachFlyoutRef}
-		>
-			<div>
-				<div onClick={this.doRefresh}>Refresh Status</div>
-				<div className={this.state.isLocked ? 'disabled' : ''} onClick={this.doResync}>Re-sync</div>
-			</div>
-		</Flyout.Triggered>);
+		return (
+			<Flyout.Triggered
+				className="sync-options"
+				trigger={this.renderOptionsTrigger()}
+				horizontalAlign={Flyout.ALIGNMENTS.LEFT}
+				sizing={Flyout.SIZES.MATCH_SIDE}
+				ref={this.attachFlyoutRef}
+			>
+				<div>
+					<div onClick={this.doRefresh}>Refresh Status</div>
+					<div className={this.state.isLocked ? 'disabled' : ''} onClick={this.doResync}>Re-sync</div>
+				</div>
+			</Flyout.Triggered>
+		);
 	}
 
 	renderLockStatus () {
-		return (<div>
-			<div className="label">Status</div>
-			<div className="control">
-				{this.renderLockedStatus()}
-				{this.renderRemoveSyncLock()}
+		return (
+			<div>
+				<div className="label">Status</div>
+				<div className="control">
+					{this.renderLockedStatus()}
+					{this.renderRemoveSyncLock()}
+				</div>
 			</div>
-		</div>);
+		);
 	}
 
 	renderLockHolder () {
 		if(this.state.isLocked && this.state.lockHolder) {
-			return (<div>
-				<div className="label">Lock Holder</div>
+			return (
 				<div>
-					{this.state.lockHolder}
+					<div className="label">Lock Holder</div>
+					<div>
+						{this.state.lockHolder}
+					</div>
 				</div>
-			</div>);
+			);
 		}
 
 		return null;
@@ -150,12 +156,14 @@ export default class View extends React.Component {
 		if(this.state.isLocked && this.state.lastLocked) {
 			const formattedDate = DateTime.format(this.state.lastLocked, 'LLLL');
 
-			return (<div>
-				<div className="label">Lock Time</div>
+			return (
 				<div>
-					{formattedDate}
+					<div className="label">Lock Time</div>
+					<div>
+						{formattedDate}
+					</div>
 				</div>
-			</div>);
+			);
 		}
 
 		return null;
@@ -194,9 +202,11 @@ export default class View extends React.Component {
 	renderFooter () {
 		const formattedDate = DateTime.format(this.state.lastSyncedDate, 'LLLL');
 
-		return (<div className="footer">
-			<div className="last-sync">Last sync on {formattedDate}</div>
-		</div>);
+		return (
+			<div className="footer">
+				<div className="last-sync">Last sync on {formattedDate}</div>
+			</div>
+		);
 	}
 
 	render () {
@@ -216,17 +226,19 @@ export default class View extends React.Component {
 			return (<div>{this.state.loadingMsg || 'Loading sync data...'}</div>);
 		}
 		else {
-			return (<div className="site-admin-sync">
-				<div className="title">
-					<span>Sync Status</span>
-					{this.renderOptions()}
+			return (
+				<div className="site-admin-sync">
+					<div className="title">
+						<span>Sync Status</span>
+						{this.renderOptions()}
+					</div>
+					{this.renderError()}
+					{this.renderLockStatus()}
+					{this.renderLockHolder()}
+					{this.renderLockTime()}
+					{this.renderFooter()}
 				</div>
-				{this.renderError()}
-				{this.renderLockStatus()}
-				{this.renderLockHolder()}
-				{this.renderLockTime()}
-				{this.renderFooter()}
-			</div>);
+			);
 		}
 	}
 }

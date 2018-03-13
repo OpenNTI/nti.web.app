@@ -210,9 +210,11 @@ export default class RecentSessions extends React.Component {
 	}
 
 	render () {
-		return (<div className="dashboard-list-widget recent-sessions">
-			{this.renderHeader()}
-			{this.renderItems()}
-		</div>);
+		return (
+			<div className="dashboard-list-widget recent-sessions">
+				{this.renderHeader()}
+				{this.renderItems()}
+			</div>
+		);
 	}
 }

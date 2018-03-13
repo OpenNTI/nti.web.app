@@ -22,10 +22,12 @@ export default class ActiveSessions extends React.Component {
 	}
 
 	render () {
-		return (<div className="active-sessions-widget">
-			<UpdateWithFrequency frequency={30000} selectData={this.getActiveSessions}>
-				<NumericValue label="Learners Online Now"/>
-			</UpdateWithFrequency>
-		</div>);
+		return (
+			<div className="active-sessions-widget">
+				<UpdateWithFrequency frequency={30000} selectData={this.getActiveSessions}>
+					<NumericValue label="Learners Online Now"/>
+				</UpdateWithFrequency>
+			</div>
+		);
 	}
 }

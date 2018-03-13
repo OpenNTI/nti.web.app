@@ -141,9 +141,11 @@ export default class RecentlyCreatedUsers extends React.Component {
 	}
 
 	render () {
-		return (<div className="dashboard-list-widget recently-created-users">
-			{this.renderHeader()}
-			{this.renderItems()}
-		</div>);
+		return (
+			<div className="dashboard-list-widget recently-created-users">
+				{this.renderHeader()}
+				{this.renderItems()}
+			</div>
+		);
 	}
 }

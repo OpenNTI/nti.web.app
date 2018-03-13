@@ -38,9 +38,11 @@ export default function UserItem ({item, isSelected, onSelect, removeCmp: Remove
 
 	return (
 		<div className={className}>
-			{onSelect && (<div onClick={onChange}>
-				<Checkbox checked={isSelected}/>
-			</div>)}
+			{onSelect && (
+				<div onClick={onChange}>
+					<Checkbox checked={isSelected}/>
+				</div>
+			)}
 			<Avatar className="avatar" entity={item} />
 			<div className="info">
 				<DisplayName className="display-name" entity={item} />
