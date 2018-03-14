@@ -130,7 +130,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getRequireControl: function (record, bundle) {
 		const onChange = (value) => {
-			// TODO: hit this.course's link for setting required/optional status
+			const id = record.get('Target-NTIID') || record.get('NTIID');
+			const encodedID = encodeURIComponent(id);
+
+			if(value === REQUIRED) {
+				Service.put(this.course.getLink('CompletionRequired'), {
+					ntiid: id
+				});
+
+				Service.requestDelete(this.course.getLink('CompletionNotRequired') + '/' + encodedID);
+			}
+			else if(value === OPTIONAL) {
+				Service.put(this.course.getLink('CompletionNotRequired'), {
+					ntiid: id
+				});
+
+				Service.requestDelete(this.course.getLink('CompletionRequired') + '/' + encodedID);
+			}
+			else if(value === DEFAULT) {
+				Service.requestDelete(this.course.getLink('CompletionRequired') + '/' + encodedID);
+				Service.requestDelete(this.course.getLink('CompletionNotRequired') + '/' + encodedID);
+			}
 		};
 
 		return {
@@ -185,17 +205,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			// TODO: Check record for required fields.  If there are some, add control.
 			// If there are none, assume this type doesn't support required/optional state
 			// and don't show the control at all
-			controls.push(this.getRequireControl(record, bundle));
-			controls.push({
-				xtype: 'overview-editing-controls-edit',
-				record: record,
-				parentRecord: this.parentRecord,
-				root: this.lessonOverview,
-				bundle: bundle,
-				outlineNode: this.outlineNode,
-				onPromptOpen: function () {},
-				onPromptClose: () => this.onPromptClose()
-			});
+			if(this.course.hasLink('CompletionRequired')) {
+				controls.push(this.getRequireControl(record, bundle));
+				controls.push({
+					xtype: 'overview-editing-controls-edit',
+					record: record,
+					parentRecord: this.parentRecord,
+					root: this.lessonOverview,
+					bundle: bundle,
+					outlineNode: this.outlineNode,
+					onPromptOpen: function () {},
+					onPromptClose: () => this.onPromptClose()
+				});
+			}
 			controls.push(this.getRemoveButton(record, bundle));
 		}
 

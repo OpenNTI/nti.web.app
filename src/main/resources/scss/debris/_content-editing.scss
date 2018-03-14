@@ -1480,6 +1480,12 @@ input[type=number]{
 			position: relative;
 			height: 28px;
 
+			.visibility {
+				position: absolute;
+				top: 10px;
+				left: 10px;
+			}
+
 			.controls {
 				position: absolute;
 				display: flex;
