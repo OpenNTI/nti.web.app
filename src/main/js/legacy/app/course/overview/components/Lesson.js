@@ -29,8 +29,11 @@ const ROUTE_BUILDERS = {
 	},
 
 	'application/vnd.nextthought.relatedworkref': (course, lesson, obj) => {
-		if (obj.isExternal) {
-			return obj.href;
+		if (obj.isExternal && !obj.isEmbeddableDocument) {
+			return {
+				href: obj.href,
+				target: '_blank'
+			};
 		}
 
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj['target-NTIID'] || obj.NTIID)}/`;
