@@ -130,7 +130,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getRequireControl: function (record, bundle) {
 		const onChange = (value) => {
-			const id = record.get('Target-NTIID') || record.get('NTIID');
+			const keyMap = Object.keys(record.data).map(k => {
+				return {
+					normalized: k.toLowerCase(),
+					actual: k
+				};
+			}).reduce((ac, v) => {
+				ac[v.normalized] = v.actual;
+				return ac;
+			},
+			{});
+
+			const isRelatedWorkRef = /relatedwork/.test(record.get('MimeType'));
+
+			let id;
+
+			if(isRelatedWorkRef) {
+				id = record.isContent && record.isContent() ? record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') : record.get(keyMap['ntiid']);
+			}
+			else {
+				id = record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') || record.get(keyMap['ntiid']);
+			}
+
 			const encodedID = encodeURIComponent(id);
 
 			if(value === REQUIRED) {
@@ -153,10 +174,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		};
 
+		const basedOnDefault = record.get('CompletionDefaultState');
+		const isRequired = record.get('CompletionRequired');
+		const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
+
 		return {
 			xtype: 'react',
 			component: SelectBox,
-			value: DEFAULT,	// TODO: pull the actual value from the record
+			value: requiredValue,
 			onChange,
 			showSelectedOption: true,
 			options: [
@@ -202,10 +227,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				root: this.lessonOverview,
 				bundle: bundle
 			});
-			// TODO: Check record for required fields.  If there are some, add control.
-			// If there are none, assume this type doesn't support required/optional state
-			// and don't show the control at all
-			if(this.course.hasLink('CompletionRequired')) {
+
+			if(this.course.hasLink('CompletionRequired') && Object.keys(record.rawData).includes('CompletionRequired')) {
 				controls.push(this.getRequireControl(record, bundle));
 				controls.push({
 					xtype: 'overview-editing-controls-edit',

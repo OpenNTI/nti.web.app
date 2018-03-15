@@ -13,8 +13,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		const onChange = () => {
-			// TODO: Hit courseInstance link for setting required/optional
+		const onChange = (value) => {
+			const id = this.video.get('Target-NTIID') || this.video.get('NTIID');
+			const encodedID = encodeURIComponent(id);
+
+			if(value === REQUIRED) {
+				Service.put(this.courseInstance.getLink('CompletionRequired'), {
+					ntiid: id
+				});
+
+				Service.requestDelete(this.courseInstance.getLink('CompletionNotRequired') + '/' + encodedID);
+			}
+			else if(value === OPTIONAL) {
+				Service.put(this.courseInstance.getLink('CompletionNotRequired'), {
+					ntiid: id
+				});
+
+				Service.requestDelete(this.courseInstance.getLink('CompletionRequired') + '/' + encodedID);
+			}
+			else if(value === DEFAULT) {
+				Service.requestDelete(this.courseInstance.getLink('CompletionRequired') + '/' + encodedID);
+				Service.requestDelete(this.courseInstance.getLink('CompletionNotRequired') + '/' + encodedID);
+			}
 		};
 
 		let container = this.add({
@@ -33,13 +53,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			]
 		});
 
-		// TODO: Check courseInstance.getLink for relevant required/optional link.  If there is no link, assume that's not supported for this course
-		if(this.inEditMode) {
+		if(this.inEditMode && this.courseInstance.hasLink('CompletionRequired') && Object.keys(this.video.rawData).includes('CompletionRequired')) {
+			const basedOnDefault = this.video.get('CompletionDefaultState');
+			const isRequired = this.video.get('CompletionRequired');
+			const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
+
 			container.add({
 				xtype: 'react',
 				cls: 'required-control',
 				component: SelectBox,
-				value: DEFAULT,	// TODO: pull the actual value from the video record
+				value: requiredValue,
 				onChange,
 				showSelectedOption: true,
 				options: [
