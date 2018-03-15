@@ -28,15 +28,17 @@ const ROUTE_BUILDERS = {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/video/${getURLPart(obj)}/`;
 	},
 
-	'application/vnd.nextthought.relatedworkref': (course, lesson, obj) => {
-		if (obj.isExternal && !obj.isEmbeddableDocument) {
+	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context) => {
+		if (obj.isExternal && !obj.isEmbeddableDocument && context !== 'discussions') {
 			return {
 				href: obj.href,
 				target: '_blank'
 			};
 		}
 
-		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj['target-NTIID'] || obj.NTIID)}/`;
+		const ntiid = obj.isExternal ? obj.NTIID : obj['target-NTIID'] || obj.NTIID;
+
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(ntiid)}/`;
 	},
 
 	'application/vnd.nextthought.ntitimeline': (course, lesson, obj) => {
@@ -160,10 +162,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getRouteFor (object) {
+	getRouteFor (object, context) {
 		const builder = ROUTE_BUILDERS[object.MimeType];
 
-		return builder ? builder(this.bundle, this.currentOutlineNode, object) : null;
+		return builder ? builder(this.bundle, this.currentOutlineNode, object, context) : null;
 	},
 
 
