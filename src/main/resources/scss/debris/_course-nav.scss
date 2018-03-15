@@ -338,21 +338,12 @@
 .x-container-course {
 	&.course-overview{
 		background: #ffffff;
-		padding: 1.5em 1.87em;//25px 30px;
 		overflow: hidden;
 		@include scrollbar(#ffffff, $tertiary-grey);
 
 		.course-overview-lesson-content {
-			margin-top: -1.5em;
-			margin-bottom: -1.5em;
-			margin-left: -1.87em;
-
 			label.grid {
 				margin-right: 0;
-			}
-
-			.lesson-overview-padded-container.header {
-				margin-right: -1.87em;
 			}
 		}
 
