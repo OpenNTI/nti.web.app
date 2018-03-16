@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		};
 
-		const basedOnDefault = record.get('isCompletionDefaultState');
+		const basedOnDefault = record.get('IsCompletionDefaultState');
 		const isRequired = record.get('CompletionRequired');
 		const defaultValue = record.get('CompletionDefaultState') ? REQUIRED : OPTIONAL;
 
