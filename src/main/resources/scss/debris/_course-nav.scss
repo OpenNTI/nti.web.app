@@ -339,6 +339,7 @@
 	&.course-overview{
 		background: #ffffff;
 		overflow: hidden;
+		min-height: 50px;
 		@include scrollbar(#ffffff, $tertiary-grey);
 
 		.course-overview-lesson-content {
