@@ -232,17 +232,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			if(this.course.hasLink('CompletionRequired') && Object.keys(record.rawData).includes('CompletionRequired')) {
 				controls.push(this.getRequireControl(record, bundle));
-				controls.push({
-					xtype: 'overview-editing-controls-edit',
-					record: record,
-					parentRecord: this.parentRecord,
-					root: this.lessonOverview,
-					bundle: bundle,
-					outlineNode: this.outlineNode,
-					onPromptOpen: function () {},
-					onPromptClose: () => this.onPromptClose()
-				});
 			}
+
+			controls.push({
+				xtype: 'overview-editing-controls-edit',
+				record: record,
+				parentRecord: this.parentRecord,
+				root: this.lessonOverview,
+				bundle: bundle,
+				outlineNode: this.outlineNode,
+				onPromptOpen: function () {},
+				onPromptClose: () => this.onPromptClose()
+			});
 			controls.push(this.getRemoveButton(record, bundle));
 		}
 
