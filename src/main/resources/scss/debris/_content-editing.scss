@@ -1551,15 +1551,12 @@ input[type=number]{
 				}
 
 				.nt-remove-button {
-					background-color: $secondary-grey;
-					border-radius: 14px;
-					width: 14px;
-					height: 14px;
-					margin: 18px 0 0 13px;
+					margin: 12px 0 0 10px;
 
 					i {
+						position: initial;
+						font-weight: bold;
 						font-size: 9px;
-						font-weight: 600;
 					}
 				}
 			}
