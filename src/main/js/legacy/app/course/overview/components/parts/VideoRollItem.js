@@ -1,31 +1,85 @@
 const Ext = require('extjs');
+const {SelectBox} = require('nti-web-commons');
 
+const DEFAULT = 'Default';
+const REQUIRED = 'Required';
+const OPTIONAL = 'Optional';
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.VideoRollItem', {
-	extend: 'Ext.Component',
+	extend: 'Ext.container.Container',
+
 	alias: 'widget.course-overview-videoroll-item',
 
-	renderTpl: Ext.DomHelper.markup([
-		{
-			cls: 'video-row',
-			cn: [
-				{ cls: 'label', html: '{label}', 'data-qtip': '{label:htmlEncode}' },
-				{ cls: 'viewed', html: 'viewed' }
-			]
-		}
-	]),
-
-	renderSelectors: {
-		'viewedEl': '.viewed'
-	},
-
-	beforeRender: function () {
+	initComponent: function () {
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData || {}, this.video);
 
-		this.renderData = Ext.applyIf(this.renderData, {
-			label: this.video.label || this.video.get('label') || this.video.get('title')
+		const onChange = (value) => {
+			const id = this.video.get('Target-NTIID') || this.video.get('NTIID');
+			const encodedID = encodeURIComponent(id);
+
+			if(value === REQUIRED) {
+				Service.put(this.courseInstance.getLink('CompletionRequired'), {
+					ntiid: id
+				});
+
+				Service.requestDelete(this.courseInstance.getLink('CompletionNotRequired') + '/' + encodedID);
+			}
+			else if(value === OPTIONAL) {
+				Service.put(this.courseInstance.getLink('CompletionNotRequired'), {
+					ntiid: id
+				});
+
+				Service.requestDelete(this.courseInstance.getLink('CompletionRequired') + '/' + encodedID);
+			}
+			else if(value === DEFAULT) {
+				Service.requestDelete(this.courseInstance.getLink('CompletionRequired') + '/' + encodedID);
+				Service.requestDelete(this.courseInstance.getLink('CompletionNotRequired') + '/' + encodedID);
+			}
+		};
+
+		let container = this.add({
+			xtype: 'container',
+			cls: 'video-row',
+			items: [
+				{
+					xtype: 'component',
+					html: `<span class="label" data-qtip="${Ext.String.htmlEncode(this.video.get('label'))}">${this.video.get('label')}</span>`
+				},
+				{
+					xtype: 'component',
+					cls: 'viewed',
+					html: 'viewed'
+				}
+			]
 		});
+
+		if(this.inEditMode && this.courseInstance.hasLink('CompletionRequired') && Object.keys(this.video.rawData).includes('CompletionRequired')) {
+			const basedOnDefault = this.video.get('isCompletionDefaultState');
+			const isRequired = this.video.get('CompletionRequired');
+			const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
+			const defaultValue = this.video.get('CompletionDefaultState') ? REQUIRED : OPTIONAL;
+
+			container.add({
+				xtype: 'react',
+				cls: 'required-control',
+				component: SelectBox,
+				value: requiredValue,
+				onChange,
+				showSelectedOption: true,
+				options: [
+					{ label: DEFAULT + ' (' + defaultValue + ')', value: DEFAULT },
+					{ label: REQUIRED, value: REQUIRED },
+					{ label: OPTIONAL, value: OPTIONAL }
+				]
+			});
+		}
+		else {
+			container.add({
+				xtype: 'component',
+				cls: 'required-value',
+				html: 'Required'
+			});
+		}
 	},
 
 
@@ -35,11 +89,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	handleClick: function () {
+	handleClick: function (e) {
+		if(e.getTarget('.required-control')) {
+			return;
+		}
+
 		if (this.selectVideo) {
 			this.selectVideo(this.video);
 		}
 	},
+
 
 	setProgress: function (progress) {
 		if (progress.hasBeenViewed(this.video.getId())) {

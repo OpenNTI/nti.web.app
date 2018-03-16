@@ -6,7 +6,6 @@ const AssignmentRef = require('legacy/model/AssignmentRef');
 require('../../../parts/QuestionSet');
 require('../ListItem');
 
-
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.ListItem', {
 	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
 	alias: 'widget.overview-editing-questionset-listitem',
@@ -20,6 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			];
 		}
 	},
+
 
 	updateRecord: function (record) {
 		var me = this;

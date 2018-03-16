@@ -1475,6 +1475,95 @@ input[type=number]{
 				}
 			}
 		}
+
+		.controls-wrapper {
+			position: relative;
+			height: 28px;
+
+			.visibility {
+				position: absolute;
+				top: 10px;
+				left: 10px;
+			}
+
+			.controls {
+				position: absolute;
+				display: flex;
+				right: 12px;
+
+				.requirement-select-box {
+					margin-top: 10px;
+					margin-right: 15px;
+					height: 28px;
+				}
+
+				.select-box {
+					height: 30px;
+					position: relative;
+					border-radius: 4px;
+					margin-right: 13px;
+					margin-top: 9px;
+					border: 1px solid rgba(151, 151, 151, 0.31);
+					padding: 0 12px;
+
+					ul {
+						padding: 18px 18px 18px 36px;
+						margin-left: -13px;
+						font-size: 14px;
+						color: $secondary-grey;
+						cursor: pointer;
+						border: 1px solid #e2e2e2;
+						box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.1);
+						font-weight: 400;
+						width: 200px;
+
+						span.selected {
+							background: none;
+							color: $secondary-grey;
+
+							&::before {
+								content: '\221A';
+								font-family: 'icomoon' !important;
+								font-size: 18px;
+								position: absolute;
+								left: 20px;
+								color: $primary-blue;
+							}
+						}
+					}
+
+					.menu-label {
+						font-size: 12px;
+						color: $secondary-grey;
+						line-height: 28px;
+						cursor: pointer;
+						font-weight: 600;
+
+						&.selected {
+							background: none;
+						}
+					}
+				}
+
+				.nt-button {
+					height: 28px;
+					margin-top: 10px;
+				}
+
+				.nt-remove-button {
+					background-color: $secondary-grey;
+					border-radius: 14px;
+					width: 14px;
+					height: 14px;
+					margin: 18px 0 0 13px;
+
+					i {
+						font-size: 9px;
+						font-weight: 600;
+					}
+				}
+			}
+		}
 	}
 
 	.overview-group-footer {

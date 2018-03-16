@@ -2,6 +2,7 @@ const Ext = require('extjs');
 
 const VideoRoll = require('legacy/model/VideoRoll');
 
+require('legacy/overrides/ReactHarness');
 require('../../../parts/VideoRoll');
 require('../ListItem');
 
@@ -18,5 +19,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getPreviewType: function (record) {
 		return 'course-overview-videoroll';
-	}
+	},
+
+
+	getRequireControl: function (record, bundle) {
+		return null;
+	},
 });
