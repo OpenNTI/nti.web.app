@@ -53,7 +53,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			]
 		});
 
-		if(this.inEditMode && this.courseInstance.hasLink('CompletionRequired') && Object.keys(this.video.rawData).includes('CompletionRequired')) {
+		const isCompletableObject = this.courseInstance.hasLink('CompletionRequired') && Object.keys(this.video.rawData).includes('CompletionRequired');
+
+		if(this.inEditMode && isCompletableObject) {
 			const basedOnDefault = this.video.get('IsCompletionDefaultState');
 			const isRequired = this.video.get('CompletionRequired');
 			const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
@@ -73,11 +75,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				]
 			});
 		}
-		else {
+		else if(!this.inEditMode && isCompletableObject && this.video.get('CompletionRequired')) {
 			container.add({
 				xtype: 'component',
 				cls: 'required-value',
-				html: 'Required'
+				html: REQUIRED
 			});
 		}
 	},
