@@ -174,8 +174,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		};
 
-		const basedOnDefault = record.get('CompletionDefaultState');
+		const basedOnDefault = record.get('isCompletionDefaultState');
 		const isRequired = record.get('CompletionRequired');
+		const defaultValue = record.get('CompletionDefaultState') ? REQUIRED : OPTIONAL;
+
 		const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
 
 		return {
@@ -185,7 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			onChange,
 			showSelectedOption: true,
 			options: [
-				{ label: DEFAULT, value: DEFAULT },
+				{ label: DEFAULT + ' (' + defaultValue + ')', value: DEFAULT },
 				{ label: REQUIRED, value: REQUIRED },
 				{ label: OPTIONAL, value: OPTIONAL }
 			]

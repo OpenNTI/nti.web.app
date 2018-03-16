@@ -125,6 +125,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		//Completable
 		{ name: 'CompletionRequired', type: 'bool', persist: false },
 		{ name: 'CompletionDefaultState', type: 'bool', persist: false },
+		{ name: 'isCompletionDefaultState', type: 'bool', persist: false },
 
 		//For templates
 		{ name: 'isModifiable', persist: false, convert: function (v, r) {return r.phantom || r.getLink('edit') !== null;} },

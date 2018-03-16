@@ -54,9 +54,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 
 		if(this.inEditMode && this.courseInstance.hasLink('CompletionRequired') && Object.keys(this.video.rawData).includes('CompletionRequired')) {
-			const basedOnDefault = this.video.get('CompletionDefaultState');
+			const basedOnDefault = this.video.get('isCompletionDefaultState');
 			const isRequired = this.video.get('CompletionRequired');
 			const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
+			const defaultValue = this.video.get('CompletionDefaultState') ? REQUIRED : OPTIONAL;
 
 			container.add({
 				xtype: 'react',
@@ -66,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				onChange,
 				showSelectedOption: true,
 				options: [
-					{ label: DEFAULT, value: DEFAULT },
+					{ label: DEFAULT + ' (' + defaultValue + ')', value: DEFAULT },
 					{ label: REQUIRED, value: REQUIRED },
 					{ label: OPTIONAL, value: OPTIONAL }
 				]
