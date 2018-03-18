@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
+
 const EditingActions = require('../../Actions');
 
 require('../Editor');
@@ -9,11 +10,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-ltiexternaltoolasset-editor',
 
+	getIconPlaceholder () { return null; },
+
 	getFormSchema: function () {
 		var schema = [
 			{name: 'MimeType', type: 'hidden'},
 			{name: 'ConfiguredTool', type: 'hidden'},
 			{type: 'group', name: 'card', inputs: [
+				{name: 'icon', type: 'image', height: 125, width: 100},
 				{type: 'group', name: 'meta', inputs: [
 					{
 						name: 'title',
