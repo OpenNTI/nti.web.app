@@ -1,5 +1,8 @@
 const Ext = require('extjs');
 
+const ContentviewerActions = require('legacy/app/contentviewer/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+const WindowsStateStore = require('legacy/app/windows/StateStore');
 const Globals = require('legacy/util/Globals');
 
 require('legacy/model/LTIExternalToolAsset');
@@ -10,7 +13,7 @@ function resolveIcon (config, n, root) {
 	let getIcon;
 
 	if (config.record && config.record.resolveIcon) {
-		getIcon = config.record.resolveIcon(root, config.course);
+		getIcon = config.record.resolveIcon(root);
 	} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
 		getIcon = Promise.resolve({url: Globals.getURL(icon)});
 	} else {
@@ -29,6 +32,26 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	doNotRenderIcon: true,
 
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'thumbnail', cn: [
+			{ cls: 'icon {extension} {iconCls}', style: 'background-image: url(\'{thumbnail}\');', cn: [
+				{tag: 'label', cls: 'extension', html: '{extension}'}
+			]}
+		]},
+		{ cls: 'meta', cn: [
+			{ cls: 'title', html: '{title}' },
+			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
+			{ cls: 'description', html: '{description}' }
+		]}
+	]),
+
+	renderSelectors: {
+		iconEl: '.thumbnail .icon',
+		extensionEl: '.thumbnail .icon .extension',
+		meta: '.meta',
+		titleEl: '.meta .title',
+		thumbnailEl: '.thumbnail'
+	},
 	constructor: function (config) {
 		var n = config.node || {getAttribute: function (a) { return config[a];} },
 			i = config.locationInfo || {
@@ -59,15 +82,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 
 		config.data = {
-			description: n.getAttribute('desc') || n.getAttribute('description'),
+			description: n.getAttribute('description'),
 			ntiid: ntiid,
-			creator: n.getAttribute('byline') || n.getAttribute('creator'),
-			title: n.getAttribute('title') || n.getAttribute('label'),
+			title: n.getAttribute('title'),
 			'attribute-data-href': href, href: href,
 		};
 
+		/* If there is no title or description, read through to the Configured Tool */
+		if (config.data.description === '') {
+			config.data.description = n.getAttribute('ConfiguredTool').description;
+		}
+
+		if (config.data.title === '') {
+			config.data.title = n.getAttribute('ConfiguredTool').title;
+		}
+
+		this.ContentActions = ContentviewerActions.create();
+
 		this.callParent([config]);
 
+		this.WindowActions = WindowsActions.create();
+		this.WindowStore = WindowsStateStore.getInstance();
 	},
 
 });
