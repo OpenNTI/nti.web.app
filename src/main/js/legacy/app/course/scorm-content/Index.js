@@ -1,4 +1,5 @@
 const queryString = require('querystring');
+const url = require('url');
 
 const Ext = require('extjs');
 const { Scorm } = require('nti-web-course');
@@ -67,6 +68,16 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 	showScormContent (route) {
 		const queryParams = queryString.decode((global.location.search || '').replace(/^\?/, ''));
 		const error = queryParams && queryParams.error;
+
+		if (queryParams) {
+			delete queryParams.error;
+			delete queryParams.regid;
+		}
+
+		const updatedRoute = url.parse(location.href);
+		updatedRoute.search = Object.keys(queryParams).length === 0 ? '' : queryString.stringify(queryParams));
+		history.replaceState(history.state, '', updatedRoute.format());
+
 
 		if (this.scormContent) {
 			this.scormContent.setProps({
