@@ -172,7 +172,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	async renderLesson (record, doNotCache) {
 		try {
 			this.buildingOverview = true;
-			this.maybeMask();
 
 			if (this.currentOverview) {
 				if (!doNotCache && record.getId() === this.activeRecord.getId()) {
@@ -186,15 +185,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			const service = await getService();
 			const course = await service.getObject(this.bundle.rawData);
-			const outline = await course.getOutline({force: !doNotCache});
-			const node = outline.getNode(record.get('ContentNTIID'));
-			const content = await node.getContent({force: !doNotCache});
-
-			//If another lesson got rendered while we were loading don't do anything
-			if (this.activeRecord.getId() !== record.getId()) { return; }
-
-			this.currentOutlineNode = node;
-			this.currentLessonOverview = content;
 
 			this.removeAll(true);
 
@@ -202,17 +192,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				xtype: 'react',
 				component: Overview.Lesson,
 				className: 'course-overview-lesson-content',
-				overview: content,
-				outlineNode: node,
 				course: course,
 				layout: Overview.Lesson.List,
 				baseroute: '/',
 				getRouteFor: this.getRouteFor.bind(this)
 			});
+
+
+			const outline = await course.getOutline({force: !doNotCache});
+			const node = outline.getNode(record.get('ContentNTIID'));
+
+			//If another lesson got rendered while we were loading don't do anything
+			if (this.activeRecord.getId() !== record.getId()) { return; }
+
+			this.currentOutlineNode = node;
+
+			this.currentOverview.setProps({
+				outlineNode: node
+			});
+
 		} catch (e) {
 			console.error(e);
-		} finally {
-			this.maybeUnmask();
 		}
 
 		// var me = this,
