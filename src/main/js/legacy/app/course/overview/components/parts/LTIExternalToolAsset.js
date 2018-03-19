@@ -88,15 +88,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			'attribute-data-href': href, href: href,
 		};
 
-		/* If there is no title or description, read through to the Configured Tool */
-		if (config.data.description === '') {
-			config.data.description = n.getAttribute('ConfiguredTool').description;
-		}
-
-		if (config.data.title === '') {
-			config.data.title = n.getAttribute('ConfiguredTool').title;
-		}
-
 		this.ContentActions = ContentviewerActions.create();
 
 		this.callParent([config]);
