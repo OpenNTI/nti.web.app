@@ -152,25 +152,30 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				id = record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') || record.get(keyMap['ntiid']);
 			}
 
+			const completionPolicy = this.course.get('CompletionPolicy');
+
+			const requirementLink = completionPolicy.getLink('Required');
+			const nonRequirementLink = completionPolicy.getLink('NotRequired');
+
 			const encodedID = encodeURIComponent(id);
 
 			if(value === REQUIRED) {
-				Service.put(this.course.getLink('CompletionRequired'), {
+				Service.put(requirementLink, {
 					ntiid: id
 				});
 
-				Service.requestDelete(this.course.getLink('CompletionNotRequired') + '/' + encodedID);
+				Service.requestDelete(nonRequirementLink + '/' + encodedID);
 			}
 			else if(value === OPTIONAL) {
-				Service.put(this.course.getLink('CompletionNotRequired'), {
+				Service.put(nonRequirementLink, {
 					ntiid: id
 				});
 
-				Service.requestDelete(this.course.getLink('CompletionRequired') + '/' + encodedID);
+				Service.requestDelete(requirementLink + '/' + encodedID);
 			}
 			else if(value === DEFAULT) {
-				Service.requestDelete(this.course.getLink('CompletionRequired') + '/' + encodedID);
-				Service.requestDelete(this.course.getLink('CompletionNotRequired') + '/' + encodedID);
+				Service.requestDelete(requirementLink + '/' + encodedID);
+				Service.requestDelete(nonRequirementLink + '/' + encodedID);
 			}
 		};
 
@@ -230,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				bundle: bundle
 			});
 
-			if(this.course.hasLink('CompletionRequired') && Object.keys(record.rawData).includes('CompletionRequired')) {
+			if(this.course.get('CompletionPolicy') && Object.keys(record.rawData).includes('CompletionRequired')) {
 				controls.push(this.getRequireControl(record, bundle));
 			}
 
