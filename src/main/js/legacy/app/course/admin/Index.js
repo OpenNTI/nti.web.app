@@ -2,6 +2,7 @@ const Ext = require('extjs');
 const { getService } = require('nti-web-client');
 const {AdminTools} = require('nti-web-course');
 const { encodeForURI } = require('nti-lib-ntiids');
+const { getAppUsername } = require('nti-web-client');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
@@ -14,6 +15,7 @@ require('legacy/login/StateStore');
 // const DASHBOARD_ACTIVE = /^\/dashboard/;
 const REPORTS_ACTIVE = /^\/reports/;
 const ROSTER_ACTIVE = /^\/roster/;
+const ADVANCED_ACTIVE = /^\/advanced/;
 const ROSTER_ID = 'course.admin.roster';
 const ADMIN_TOOLS_ID = 'course.admin.tools';
 
@@ -53,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			maybeHide(this.siteAdminRoster);
 
 			this.siteAdminTools.show();
-			this.siteAdminTools.setBaseRoute(baseroute);	
+			this.siteAdminTools.setBaseRoute(baseroute);
 		} else if (this.siteAdminRoster && ROSTER_ACTIVE.test(route.path)) {
 			maybeHide(this.siteAdminTools);
 
@@ -115,6 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		};
 		const showRoster = this.activeBundle && this.activeBundle.hasLink('CourseEnrollmentRoster');
 		const showReports = this.activeBundle && this.activeBundle.getReportLinks().length > 0 ? true : false;
+		const showAdvanced = getAppUsername().indexOf('@nextthought') >= 0;
 
 		navigation.updateTitle('Course Administration');
 
@@ -139,6 +142,14 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 				text: 'Roster',
 				route: '/roster',
 				active: ROSTER_ACTIVE.test(path)
+			});
+		}
+
+		if (showAdvanced) {
+			tabs.push({
+				text: 'Advanced',
+				route: '/advanced',
+				active: ADVANCED_ACTIVE.test(path)
 			});
 		}
 
