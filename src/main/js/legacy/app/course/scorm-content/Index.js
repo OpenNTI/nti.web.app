@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 			delete queryParams.regid;
 		}
 
-		const updatedRoute = url.parse(location.href);
+		const updatedRoute = url.parse(global.location.href);
 		updatedRoute.search = Object.keys(queryParams).length === 0 ? '' : queryString.stringify(queryParams));
 		history.replaceState(history.state, '', updatedRoute.format());
 
