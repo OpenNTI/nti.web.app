@@ -81,6 +81,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		{ name: 'ParentDiscussions', type: 'singleItem', persist: false},
 		{ name: 'Outline', type: 'singleItem', persist: false },
 		{ name: 'GradeBook', type: 'singleItem', persist: false},
+		{ name: 'CompletionPolicy', type: 'singleItem', persist: false},
 
 		{ name: 'Scopes', type: 'auto', mapping: 'LegacyScopes' },
 		{ name: 'ParentSharingScopes', type: 'singleItem'},

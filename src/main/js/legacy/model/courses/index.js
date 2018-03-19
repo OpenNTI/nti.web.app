@@ -1,4 +1,5 @@
 require('./AssignmentCollection');
+require('./CompletionPolicy');
 require('./CourseCatalogEntry');
 require('./CourseCatalogInstructorInfo');
 require('./CourseCreditLegacyInfo');
