@@ -1,4 +1,5 @@
 /*global ActiveXObject*/
+/*eslint no-control-regex:0*/
 const Url = require('url');
 
 const Ext = require('extjs');

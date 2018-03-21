@@ -1,3 +1,4 @@
+/*eslint no-control-regex: 0 */
 const Ext = require('extjs');
 
 const Cue = require('legacy/webvtt/Cue');

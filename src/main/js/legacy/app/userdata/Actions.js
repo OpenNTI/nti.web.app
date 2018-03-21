@@ -605,8 +605,10 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			}
 
 			Ext.each(containers, function (id) {
-				me.addPageStore(id, (containerId === id) ?//ensure we don't duplicate the root store
-				pageStore : Store.make(pageInfo.getSubContainerURL(rel, id), id));
+				//ensure we don't duplicate the root store
+				me.addPageStore(id, (containerId === id)
+					? pageStore
+					: Store.make(pageInfo.getSubContainerURL(rel, id), id));
 			});
 
 			this.onAnnotationsFilter(cmp);
