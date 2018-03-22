@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if(bundle.get('CompletionPolicy')) {
 			this.remove(this.header, true);
-			this.header = this.add({xtype: 'overview-outline-progress-header', wrapperRequest: bundle.getWrapper()});
+			this.header = this.add({xtype: 'overview-outline-progress-header', bundle});
 		}
 		else {
 			this.remove(this.header, true);
