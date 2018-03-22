@@ -24,6 +24,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceE
 			return (r.raw.LegacyEnrollmentStatus === 'ForCredit' && v) || '';
 		}},
 		{name: 'Creator', type: 'singleItem', mapping: 'UserProfile' },
-		{name: 'LegacyEnrollmentStatus', type: 'string'}
+		{name: 'LegacyEnrollmentStatus', type: 'string'},
+		{name: 'CourseProgress', type: 'singleItem'}
 	]
 });

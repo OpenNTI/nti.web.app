@@ -14,6 +14,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseProgress'
 		{ name: 'Completed', type: 'bool' },
 		{ name: 'CompletedDate', type: 'string' },
 		{ name: 'HasProgress', type: 'bool' },
-		{ name: 'MaxPossibleProgress', type: 'int' }
+		{ name: 'MaxPossibleProgress', type: 'int' },
+		{ name: 'PercentageProgress', type: 'number' }
 	]
 });

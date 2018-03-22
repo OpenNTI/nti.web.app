@@ -73,14 +73,15 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		{
 			name: 'progress',
 			text: getString('NextThought.view.courseware.info.Roster.progress'), sortable: false,
-			renderer: function () {
-				// TODO: Get the actual progress value from the student record
-				const progressPct = 40;
+			renderer: function (a, el, record) {
+				const courseProgress = record.get('CourseProgress');
+				const progressPct = (courseProgress && courseProgress.get('PercentageProgress')) || 0;
+				const isComplete = courseProgress && courseProgress.get('CompletedDate');
 
-				if(progressPct === 100) {
+				if(isComplete) {
 					return '<div class="progress progress-complete-container">' +
 						'<div class="progress-completed"><i class="icon-check"></i></div>' +
-						`<span>${progressPct}%</span>` +
+						'<span>100%</span>' +
 					'</div>';
 				}
 
@@ -341,10 +342,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.grid.bindStore(Ext.getStore('ext-empty-store'));
 		this.grid.getView().refresh();
 
-		// TODO: Use course instance to determine progress support
-		// If it's not possible to determine that from the course instance, move this column
-		// reconfigure logic to onStoreLoad and base it off the first item in the store
-		let supportsProgress = true;
+		let supportsProgress = instance.get('CompletionPolicy');
 
 		let visibleColumns = this.allColumns;
 

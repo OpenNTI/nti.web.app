@@ -1,4 +1,5 @@
 const Ext = require('extjs');
+const {getService} = require('nti-web-client');
 
 const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
 const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
@@ -103,9 +104,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
+		var me = this;
+
 		if(bundle.get('CompletionPolicy')) {
-			this.remove(this.header, true);
-			this.header = this.add({xtype: 'overview-outline-progress-header', bundle});
+			getService().then(service => {
+				service.getObject(bundle.rawData).then(course => {
+					if(course.isAdministrative) {
+						me.remove(me.header, true);
+						me.header = me.add({xtype: 'overview-outline-progress-header', course});
+					}
+					else {
+						me.remove(me.header, true);
+						me.header = me.add({xtype: 'overview-outline-header'});
+					}
+				});
+			});
 		}
 		else {
 			this.remove(this.header, true);
