@@ -30,6 +30,44 @@
 		}
 	}
 
+	.outline-progress-header {
+		padding: 9px 0 10px 11px;
+		border-bottom: solid 1px #eaeaea;
+
+		.progress-container {
+			position: relative;
+			display: flex;
+
+			.percentage-value {
+				position: absolute;
+				width: 39px;
+				text-align: center;
+				top: 8px;
+				color: green;
+
+				&.no-progress {
+					color: $tertiary-grey;
+				}
+			}
+
+			.label {
+				margin-left: 9px;
+
+				.course-progress {
+					font-size: 16px;
+					font-weight: 300;
+				}
+
+				.remaining {
+					font-size: 10px;
+					color: $tertiary-grey;
+					text-transform: uppercase;
+					font-weight: bold;
+				}
+			}
+		}
+	}
+
 	.outline-list {
 		margin-left: -50px;
 		padding-left: 50px;

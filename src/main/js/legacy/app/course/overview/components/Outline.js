@@ -10,6 +10,7 @@ const OutlinePrompt = require('./editing/outline/Prompt');
 require('legacy/common/components/BoundCollection');
 require('legacy/model/courses/navigation/CourseOutlineCalendarNode');
 require('./outline/Header');
+require('./outline/progress/Header');
 require('./editing/outline/outlinenode/AddNode');
 
 
@@ -25,7 +26,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'nav-outline course scrollable',
 
 	items: [
-		{xtype: 'overview-outline-header'},
 		{xtype: 'container', cls: 'outline-list', layout: 'none', items: [
 			{xtype: 'container', cls: 'body', bodyContainer: true, layout: 'none', items: []}
 		]}
@@ -33,6 +33,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.header = this.add({xtype: 'overview-outline-header'});
 
 		this.setDataTransferHandler(CourseOutlineNode.mimeType, {
 			onDrop: this.onDrop.bind(this),
@@ -99,6 +101,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (!this.rendered) {
 			this.on('afterrender', () => this.setOutline(bundle, outline), this, {single: true});
 			return;
+		}
+
+		if(bundle.get('CompletionPolicy')) {
+			this.remove(this.header, true);
+			this.header = this.add({xtype: 'overview-outline-progress-header', wrapperRequest: bundle.getWrapper()});
+		}
+		else {
+			this.remove(this.header, true);
+			this.header = this.add({xtype: 'overview-outline-header'});
 		}
 
 		this.disableOrderingContainer();

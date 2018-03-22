@@ -9,6 +9,7 @@ require('./CourseInstanceBoard');
 require('./CourseInstanceEnrollment');
 require('./CourseInstanceSharingScope');
 require('./CourseInstanceSharingScopes');
+require('./CourseProgress');
 require('./ScormInstance');
 require('./CourseOutline');
 require('./CourseVideoProgress');

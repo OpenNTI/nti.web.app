@@ -12,7 +12,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.CourseInstan
 		{ name: 'Username', type: 'string' },
 		{ name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'},
 		{ name: 'RealEnrollmentStatus', type: 'string'},
-		{ name: 'VendorThankYouPage', type: 'auto'}
+		{ name: 'VendorThankYouPage', type: 'auto'},
+		{ name: 'CourseProgress', type: 'singleItem'}
 	],
 
 
