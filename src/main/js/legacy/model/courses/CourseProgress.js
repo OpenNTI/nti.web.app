@@ -5,7 +5,7 @@ require('../Base');
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseProgress', {
 	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.completion.progress',
+	mimeType: 'application/vnd.nextthought.completion.completioncontextprogress',
 
 	fields: [
 		{ name: 'Class', type: 'string' },
