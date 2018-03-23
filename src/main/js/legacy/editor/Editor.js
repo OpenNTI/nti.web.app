@@ -1830,10 +1830,10 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	videoPart: function (vp) {
-		var hrefRegex = /.*?data-href="(.*?)".*?/,
-			typeRegex = /.*?data-type="(.*?)".*?/,
-			href = hrefRegex && hrefRegex.exec(vp)[1],
-			type = typeRegex && typeRegex.exec(vp)[1];
+		var hrefRegex = (/.*?data-href="(.*?)".*?/).exec(vp),
+			typeRegex = (/.*?data-type="(.*?)".*?/).exec(vp),
+			href = hrefRegex && hrefRegex[1],
+			type = typeRegex && typeRegex[1];
 
 
 		if (!href || !type) {
