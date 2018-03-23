@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 	alias: 'resolvers.videoservices.kaltura',
 
 	statics: {
-		type: 'kaltura',
+		TYPE: 'kaltura',
 
 		URL_MATCHES: /kaltura:\/\/[^/]+\/[^/]+\/{0,1}/i,
 
