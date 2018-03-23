@@ -2,6 +2,7 @@ const Ext = require('extjs');
 
 const Vimeo = require('./videoservices/Vimeo');
 const Youtube = require('./videoservices/Youtube');
+const Kaltura = require('./videoservices/Kaltura');
 
 
 /*
@@ -9,8 +10,9 @@ const Youtube = require('./videoservices/Youtube');
  */
 module.exports = exports = Ext.define('NextThought.model.resolvers.VideoPosters', {
 	statics: {
-		YOUTUBE: 'youtube',
-		VIMEO: 'vimeo',
+		YOUTUBE: Youtube.TYPE,
+		VIMEO: Vimeo.TYPE,
+		KALTURA: Kaltura.TYPE,
 
 		getResolver: function (source) {
 			var service = source.service,
@@ -41,6 +43,8 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.VideoPosters'
 				resolve = Youtube.resolvePosterForID(id);
 			} else if (type === this.VIMEO) {
 				resolve = Vimeo.resolvePosterForID(id);
+			} else if (type === this.KALTURA) {
+				resolve = Kaltura.resolvePosterForID(id);
 			} else {
 				resolve = Promise.reject('Unknown video type: ', type, id);
 			}

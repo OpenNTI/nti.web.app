@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 
 		getIdFromURL: function (raw) {
-			return raw;
+			return raw.replace('kaltura://', '').replace('/', ':');
 		},
 
 
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 				});
 			}
 
-			const [partnerId, videoId] = id.split(':');
+			const [partnerId, videoId] = id.split(/[/:]/);
 			const w = 1280;
 
 			const poster = `//www.kaltura.com/p/${partnerId}/thumbnail/entry_id/${videoId}/width/${w}/`;
