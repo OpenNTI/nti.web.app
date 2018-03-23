@@ -63,10 +63,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	setRecord: function (record, enableDragging) {
 		this.removeAll(true);
 
+		if(record.get('Class') === 'Video') {
+			console.log('1) ' + Object.keys(record.rawData));
+		}
+
 		this.setUpRecord(record)
 			.then(() => {
-				var preview = this.getPreview(record),
-					controls = this.getControls(record, this.course),
+				if(record.get('Class') === 'Video') {
+					console.log('2) ' + Object.keys(record.rawData));
+				}
+
+				var preview = this.getPreview(record);
+
+				if(record.get('Class') === 'Video') {
+					console.log('3) ' + Object.keys(record.rawData));
+				}
+
+				var controls = this.getControls(record, this.course),
 					items = [];
 
 				this.mon(record, {

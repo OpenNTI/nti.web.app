@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.header = this.add({xtype: 'overview-outline-header'});
+		this.outlineHeader = this.add({xtype: 'overview-outline-header'});
 
 		this.setDataTransferHandler(CourseOutlineNode.mimeType, {
 			onDrop: this.onDrop.bind(this),
@@ -98,6 +98,37 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setOutline(this.activeBundle, outline);
 	},
 
+	showHeader: function (showProgress, course) {
+		if(showProgress) {
+			if(this.progressHeader) {
+				// if already showing progress header, just update
+				this.progressHeader.update({course});
+			}
+			else {
+				// otherwise, add a new progress header since one doesn't exist
+				this.progressHeader = this.add({xtype: 'overview-outline-progress-header', course});
+			}
+
+			if(this.outlineHeader) {
+				// remove outline header if one exists
+				this.remove(this.outlineHeader, true);
+				delete this.outlineHeader;
+			}
+		}
+		else {
+			if(this.progressHeader) {
+				// remove progress header if one exists
+				this.remove(this.progressHeader, true);
+				delete this.progressHeader;
+			}
+
+			if(!this.outlineHeader) {
+				// add outline header if one does not already exist
+				this.outlineHeader = this.add({xtype: 'overview-outline-header'});
+			}
+		}
+	},
+
 	setOutline: function (bundle, outline) {
 		if (!this.rendered) {
 			this.on('afterrender', () => this.setOutline(bundle, outline), this, {single: true});
@@ -109,20 +140,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if(bundle.get('CompletionPolicy')) {
 			getService().then(service => {
 				service.getObject(bundle.rawData).then(course => {
-					if(course.isAdministrative) {
-						me.remove(me.header, true);
-						me.header = me.add({xtype: 'overview-outline-progress-header', course});
-					}
-					else {
-						me.remove(me.header, true);
-						me.header = me.add({xtype: 'overview-outline-header'});
-					}
+					me.showHeader(true, course);
 				});
 			});
 		}
 		else {
-			this.remove(this.header, true);
-			this.header = this.add({xtype: 'overview-outline-header'});
+			// no CompletionPolicy, show normal header
+			me.showHeader(false);
 		}
 
 		this.disableOrderingContainer();
