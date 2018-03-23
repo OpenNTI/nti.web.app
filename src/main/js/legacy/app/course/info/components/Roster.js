@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 const cx = require('classnames');
+const {Progress} = require('nti-web-course');
+const {getService} = require('nti-web-client');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -15,7 +17,14 @@ require('legacy/common/chart/Pie');
 require('legacy/common/menus/Reports');
 require('legacy/common/ux/FilterMenu');
 require('legacy/proxy/courseware/Roster');
-require('./ProgressWindow');
+
+
+async function launchProgressOverview (url, bundle) {
+	const service = await getService();
+	const course = await service.getObject(bundle.rawData);
+
+	Progress.Overview.showForBatchLink(url, course);
+}
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Roster', {
 	extend: 'Ext.container.Container',
@@ -544,23 +553,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				url += '&sortOn=' + sorter.property + '&sortOrder=' + (sorter.direction === 'DESC' ? 'descending' : 'ascending');
 			}
 
-			Service.request(url).then(resp => {
-				const singleItemResp = JSON.parse(resp);
-
-				const openEmailWindow = record.hasLink('Mail') && this.openIndividualEmail.bind(this);
-
-				this.progressWin = Ext.widget('progress-window',
-					{
-						record,
-						openEmailWindow,
-						initialPage: i + 1,
-						totalPages: this.totalPages || 1,
-						prevLink: singleItemResp.Links && singleItemResp.Links.filter(x => x.rel === 'batch-prev').map(x => x.href)[0],
-						nextLink: singleItemResp.Links && singleItemResp.Links.filter(x => x.rel === 'batch-next').map(x => x.href)[0]
-					}
-				);
-				this.progressWin.show();
-			});
+			launchProgressOverview(url, this.currentBundle);
 		}
 
 		if (disclosure) {
