@@ -36,7 +36,7 @@ const ROUTE_BUILDERS = {
 			};
 		}
 
-		const ntiid = obj.isExternal ? obj.NTIID : obj['target-NTIID'] || obj.NTIID;
+		const ntiid = (obj.isEmbeddableDocument || obj.isExternal) ? obj.NTIID : obj['target-NTIID'] || obj.NTIID;
 
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(ntiid)}/`;
 	},
