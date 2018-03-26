@@ -85,6 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			renderer: function (a, el, record) {
 				const courseProgress = record.get('CourseProgress');
 				const progressPct = (courseProgress && courseProgress.get('PercentageProgress')) || 0;
+				const progressAsInt = Math.floor(progressPct * 100);
 				const isComplete = courseProgress && courseProgress.get('CompletedDate');
 
 				if(isComplete) {
@@ -94,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 					'</div>';
 				}
 
-				const className = cx('progress', 'progress-container', progressPct === 0 ? 'none' : 'partial');
+				const className = cx('progress', 'progress-container', progressAsInt === 0 ? 'none' : 'partial');
 
 				return `<div class="${className}">` +
 					'<svg width="25" height="25" viewBox="0 0 36 36">' +
@@ -113,10 +114,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 							' fill="none"' +
 							' stroke="#3FB34F";' +
 							' stroke-width="2";' +
-							` stroke-dasharray="${progressPct}, 100"` +
+							` stroke-dasharray="${progressAsInt}, 100"` +
 						'/>' +
 					'</svg>' +
-					`<span>${progressPct}%</span>` +
+					`<span>${progressAsInt}%</span>` +
 				'</div>';
 			}
 		},
