@@ -554,6 +554,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				url += '&sortOn=' + sorter.property + '&sortOrder=' + (sorter.direction === 'DESC' ? 'descending' : 'ascending');
 			}
 
+			const filter = this.store.filters && this.store.filters.items && this.store.filters.items[0];
+
+			if(filter) {
+				url += '&' + filter.property + '=' + filter.value;
+			}
+
 			launchProgressOverview(url, this.currentBundle);
 		}
 
