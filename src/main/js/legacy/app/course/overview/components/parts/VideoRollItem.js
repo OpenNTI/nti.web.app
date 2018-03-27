@@ -10,12 +10,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	alias: 'widget.course-overview-videoroll-item',
 
+	bubbleEvents: ['requiredValueChanged'],
+
 	initComponent: function () {
 		this.callParent(arguments);
 
-		const onChange = (value) => {
-			const id = this.video.get('Target-NTIID') || this.video.get('NTIID');
-			const encodedID = encodeURIComponent(id);
+		const targetId = this.video.get('Target-NTIID') || this.video.get('NTIID');
+
+		const onChange = async (value) => {
+			const encodedID = encodeURIComponent(targetId);
 
 			const completionPolicy = this.courseInstance.get('CompletionPolicy');
 
@@ -23,24 +26,32 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			const nonRequirementLink = completionPolicy.getLink('NotRequired');
 
 			if(value === REQUIRED) {
-				Service.put(requirementLink, {
-					ntiid: id
+				await Service.put(requirementLink, {
+					ntiid: targetId
 				});
 
-				Service.requestDelete(nonRequirementLink + '/' + encodedID);
+				await Service.requestDelete(nonRequirementLink + '/' + encodedID);
 			}
 			else if(value === OPTIONAL) {
-				Service.put(nonRequirementLink, {
-					ntiid: id
+				await Service.put(nonRequirementLink, {
+					ntiid: targetId
 				});
 
-				Service.requestDelete(requirementLink + '/' + encodedID);
+				await Service.requestDelete(requirementLink + '/' + encodedID);
 			}
 			else if(value === DEFAULT) {
-				Service.requestDelete(requirementLink + '/' + encodedID);
-				Service.requestDelete(nonRequirementLink + '/' + encodedID);
+				await Service.requestDelete(requirementLink + '/' + encodedID);
+				await Service.requestDelete(nonRequirementLink + '/' + encodedID);
 			}
+
+			this.courseInstance.get('CompletionPolicy').fireEvent('requiredValueChanged', { ntiid: targetId, value });
 		};
+
+		this.courseInstance.get('CompletionPolicy').on('requiredValueChanged', ({ntiid, value}) => {
+			if(this.requireControl && targetId === ntiid) {
+				this.requireControl.setProps({value});
+			}
+		});
 
 		let container = this.add({
 			xtype: 'container',
@@ -66,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
 			const defaultValue = this.video.get('CompletionDefaultState') ? REQUIRED : OPTIONAL;
 
-			container.add({
+			this.requireControl = container.add({
 				xtype: 'react',
 				cls: 'required-control',
 				component: SelectBox,
@@ -87,6 +98,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				html: REQUIRED
 			});
 		}
+
+		this.on('requiredValueChanged', () => {
+			// sync value to any other with same target ID
+		});
 	},
 
 

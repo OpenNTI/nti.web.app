@@ -67,29 +67,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(() => {
 				var preview = this.getPreview(record);
 
-				var controls = this.getControls(record, this.course),
-					items = [];
-
 				this.mon(record, {
 					single: true,
 					destroyable: true,
 					'update': this.updateRecord.bind(this, record)
 				});
 
-				if (controls) {
-					items.push(controls);
-				}
+				this.addControlsIfNecessary(record, this.course);
 
-				if (preview) {
-					items.push({
+				if(preview) {
+					this.add({
 						xtype: 'container',
 						cls: 'body',
 						layout: 'none',
 						items: [preview]
 					});
 				}
-
-				this.add(items);
 
 				if (enableDragging || (this.Draggable && this.Draggable.isEnabled)) {
 					this.enableDragging();
@@ -128,57 +121,71 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, item);
 	},
 
+	getTargetId: function (record) {
+		const keyMap = Object.keys(record.data).map(k => {
+			return {
+				normalized: k.toLowerCase(),
+				actual: k
+			};
+		}).reduce((ac, v) => {
+			ac[v.normalized] = v.actual;
+			return ac;
+		},
+		{});
+
+		const isRelatedWorkRef = /relatedwork/.test(record.get('MimeType'));
+
+		let id;
+
+		if(isRelatedWorkRef) {
+			id = record.isContent && record.isContent() ? record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') : record.get(keyMap['ntiid']);
+		}
+		else {
+			id = record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') || record.get(keyMap['ntiid']);
+		}
+
+		return id;
+	},
+
 
 	getRequireControl: function (record, bundle) {
-		const onChange = (value) => {
-			const keyMap = Object.keys(record.data).map(k => {
-				return {
-					normalized: k.toLowerCase(),
-					actual: k
-				};
-			}).reduce((ac, v) => {
-				ac[v.normalized] = v.actual;
-				return ac;
-			},
-			{});
+		const targetId = this.getTargetId(record);
 
-			const isRelatedWorkRef = /relatedwork/.test(record.get('MimeType'));
-
-			let id;
-
-			if(isRelatedWorkRef) {
-				id = record.isContent && record.isContent() ? record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') : record.get(keyMap['ntiid']);
-			}
-			else {
-				id = record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') || record.get(keyMap['ntiid']);
-			}
-
+		const onChange = async (value) => {
 			const completionPolicy = this.course.get('CompletionPolicy');
 
 			const requirementLink = completionPolicy.getLink('Required');
 			const nonRequirementLink = completionPolicy.getLink('NotRequired');
 
-			const encodedID = encodeURIComponent(id);
+			const encodedID = encodeURIComponent(targetId);
 
 			if(value === REQUIRED) {
-				Service.put(requirementLink, {
-					ntiid: id
+				await Service.put(requirementLink, {
+					ntiid: targetId
 				});
 
-				Service.requestDelete(nonRequirementLink + '/' + encodedID);
+				await Service.requestDelete(nonRequirementLink + '/' + encodedID);
 			}
 			else if(value === OPTIONAL) {
-				Service.put(nonRequirementLink, {
-					ntiid: id
+				await Service.put(nonRequirementLink, {
+					ntiid: targetId
 				});
 
-				Service.requestDelete(requirementLink + '/' + encodedID);
+				await Service.requestDelete(requirementLink + '/' + encodedID);
 			}
 			else if(value === DEFAULT) {
-				Service.requestDelete(requirementLink + '/' + encodedID);
-				Service.requestDelete(nonRequirementLink + '/' + encodedID);
+				await Service.requestDelete(requirementLink + '/' + encodedID);
+				await Service.requestDelete(nonRequirementLink + '/' + encodedID);
 			}
+
+			this.course.get('CompletionPolicy').fireEvent('requiredValueChanged', { ntiid: targetId, value });
 		};
+
+		this.course.get('CompletionPolicy').on('requiredValueChanged', ({ntiid, value}) => {
+			if(this.requireControl && targetId === ntiid) {
+				this.requireControl.setProps({value});
+			}
+		});
 
 		const basedOnDefault = record.get('IsCompletionDefaultState');
 		const isRequired = record.get('CompletionRequired');
@@ -224,48 +231,47 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getControls: function (record, bundle) {
-		var controls = [];
-
-		if (ContentPrompt.canEdit(record)) {
-			controls.push({
-				xtype: 'overview-editing-controls-synclock',
-				record: record,
-				parentRecord: this.parentRecord,
-				root: this.lessonOverview,
-				bundle: bundle
-			});
-
-			if(this.course.get('CompletionPolicy') && Object.keys(record.rawData).includes('CompletionRequired')) {
-				controls.push(this.getRequireControl(record, bundle));
-			}
-
-			controls.push({
-				xtype: 'overview-editing-controls-edit',
-				record: record,
-				parentRecord: this.parentRecord,
-				root: this.lessonOverview,
-				bundle: bundle,
-				outlineNode: this.outlineNode,
-				onPromptOpen: function () {},
-				onPromptClose: () => this.onPromptClose()
-			});
-			controls.push(this.getRemoveButton(record, bundle));
+	addControlsIfNecessary: function (record, bundle) {
+		if(!ContentPrompt.canEdit(record)) {
+			return;
 		}
 
-		return {
+		this.controlsWrapper = this.add({
 			xtype: 'container',
 			cls: 'controls-wrapper',
-			layout: 'none',
-			items: [
-				{
-					xtype: 'container',
-					cls: 'controls',
-					layout: 'none',
-					items: controls
-				}
-			]
-		};
+			layout: 'none'
+		});
+
+		this.controls = this.controlsWrapper.add({
+			xtype: 'container',
+			cls: 'controls',
+			layout: 'none'
+		});
+
+		this.controls.add({
+			xtype: 'overview-editing-controls-synclock',
+			record: record,
+			parentRecord: this.parentRecord,
+			root: this.lessonOverview,
+			bundle: bundle
+		});
+
+		if(this.course.get('CompletionPolicy') && Object.keys(record.rawData).includes('CompletionRequired')) {
+			this.requireControl = this.controls.add(this.getRequireControl(record, bundle));
+		}
+
+		this.controls.add({
+			xtype: 'overview-editing-controls-edit',
+			record: record,
+			parentRecord: this.parentRecord,
+			root: this.lessonOverview,
+			bundle: bundle,
+			outlineNode: this.outlineNode,
+			onPromptOpen: function () {},
+			onPromptClose: () => this.onPromptClose()
+		});
+
+		this.controls.add(this.getRemoveButton(record, bundle));
 	},
 
 
