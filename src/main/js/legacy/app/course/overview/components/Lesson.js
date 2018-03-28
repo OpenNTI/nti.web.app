@@ -1,5 +1,4 @@
 const Ext = require('extjs');
-const {getService} = require('nti-web-client');
 const {Overview} = require('nti-web-course');
 const {encodeForURI} = require('nti-lib-ntiids');
 
@@ -183,8 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			this.activeRecord = record;
 
-			const service = await getService();
-			const course = await service.getObject(this.bundle.rawData);
+			const course = await this.bundle.getInterfaceInstance();
 
 			this.removeAll(true);
 

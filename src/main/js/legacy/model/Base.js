@@ -3,6 +3,7 @@
 const {EventEmitter} = require('events');
 
 const Ext = require('extjs');
+const {getService} = require('nti-web-client');
 
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
@@ -17,6 +18,7 @@ require('legacy/proxy/Rest');
 require('legacy/model/converters');
 
 const MODIFICATION_BUS = new EventEmitter();
+const INTERFACE_INSTANCE = Symbol('Interface Instance');
 
 const Base =
 module.exports = exports = Ext.define('NextThought.model.Base', {
@@ -232,6 +234,20 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		return this.updatedRaw || this.raw;
 	},
 
+
+	getInterfaceInstance () {
+		const getInstance = async () => {
+			const service = await getService();
+			const instance = service.getObject(this.rawData);
+
+			return instance;
+		};
+
+		this[INTERFACE_INSTANCE] = this[INTERFACE_INSTANCE] || getInstance();
+		return this[INTERFACE_INSTANCE];
+	},
+
+
 	/**
 	 * Given another instance of the same class, update this values.
 	 *
@@ -261,6 +277,13 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		if (!silent) {
 			this.fireEvent('update', this);
+		}
+
+		if (this[INTERFACE_INSTANCE]) {
+			this.getInterfaceInstance()
+				.then((instance) => {
+					instance.refresh(record.rawData);
+				});
 		}
 
 		return this;
