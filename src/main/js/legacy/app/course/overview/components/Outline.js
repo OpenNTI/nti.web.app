@@ -1,5 +1,4 @@
 const Ext = require('extjs');
-const {getService} = require('nti-web-client');
 
 const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
 const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');
