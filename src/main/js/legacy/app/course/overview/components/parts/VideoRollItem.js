@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {SelectBox} = require('nti-web-commons');
+const {ProgressWidgets} = require('nti-web-course');
 
 const DEFAULT = 'Default';
 const REQUIRED = 'Required';
@@ -74,24 +74,33 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const isCompletableObject = this.courseInstance.get('CompletionPolicy');
 
 		if(this.inEditMode && isCompletableObject) {
-			const basedOnDefault = this.video.get('IsCompletionDefaultState');
-			const isRequired = this.video.get('CompletionRequired');
-			const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
-			const defaultValue = this.video.get('CompletionDefaultState') ? REQUIRED : OPTIONAL;
+			const transformed = {
+				IsCompletionDefaultState: this.video.get('IsCompletionDefaultState'),
+				CompletionRequired: this.video.get('CompletionRequired'),
+				CompletionDefaultState: this.video.get('CompletionDefaultState')
+			};
 
 			this.requireControl = container.add({
 				xtype: 'react',
-				cls: 'required-control',
-				component: SelectBox,
-				value: requiredValue,
-				onChange,
-				showSelectedOption: true,
-				options: [
-					{ label: DEFAULT + ' (' + defaultValue + ')', value: DEFAULT },
-					{ label: REQUIRED, value: REQUIRED },
-					{ label: OPTIONAL, value: OPTIONAL }
-				]
+				component: ProgressWidgets.RequirementControl,
+				className: 'videoroll-item',
+				record: transformed,
+				onChange
 			});
+
+			// this.requireControl = container.add({
+			// 	xtype: 'react',
+			// 	cls: 'required-control',
+			// 	component: SelectBox,
+			// 	value: requiredValue,
+			// 	onChange,
+			// 	showSelectedOption: true,
+			// 	options: [
+			// 		{ label: DEFAULT + ' (' + defaultValue + ')', value: DEFAULT },
+			// 		{ label: REQUIRED, value: REQUIRED },
+			// 		{ label: OPTIONAL, value: OPTIONAL }
+			// 	]
+			// });
 		}
 		else if(!this.inEditMode && isCompletableObject && this.video.get('CompletionRequired')) {
 			container.add({
@@ -114,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	handleClick: function (e) {
-		if(e.getTarget('.required-control')) {
+		if(e.getTarget('.require-control-value')) {
 			return;
 		}
 

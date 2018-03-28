@@ -1,5 +1,6 @@
 const Ext = require('extjs');
-const {SelectBox, RemoveButton} = require('nti-web-commons');
+const {RemoveButton} = require('nti-web-commons');
+const {ProgressWidgets} = require('nti-web-course');
 
 const Globals = require('legacy/util/Globals');
 const MoveInfo = require('legacy/model/app/MoveInfo');
@@ -187,23 +188,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		});
 
-		const basedOnDefault = record.get('IsCompletionDefaultState');
-		const isRequired = record.get('CompletionRequired');
-		const defaultValue = record.get('CompletionDefaultState') ? REQUIRED : OPTIONAL;
-
-		const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
+		const transformed = {
+			IsCompletionDefaultState: record.get('IsCompletionDefaultState'),
+			CompletionRequired: record.get('CompletionRequired'),
+			CompletionDefaultState: record.get('CompletionDefaultState')
+		};
 
 		return {
 			xtype: 'react',
-			component: SelectBox,
-			value: requiredValue,
-			onChange,
-			showSelectedOption: true,
-			options: [
-				{ label: DEFAULT + ' (' + defaultValue + ')', value: DEFAULT },
-				{ label: REQUIRED, value: REQUIRED },
-				{ label: OPTIONAL, value: OPTIONAL }
-			]
+			component: ProgressWidgets.RequirementControl,
+			record: transformed,
+			onChange
 		};
 	},
 

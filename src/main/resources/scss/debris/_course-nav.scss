@@ -338,6 +338,21 @@
 	}
 }
 
+.require-control.videoroll-item {
+	.flyout-inner {
+		background-color: rgb(15, 45, 53);
+		font-size: 10px;
+		font-family: "Open Sans", sans-serif;
+		cursor: pointer;
+		padding: 0 20px;
+
+		.require-control-option {
+			font-weight: 400;
+			color: $tertiary-grey;
+			text-transform: uppercase;
+		}
+	}
+}
 
 .x-container-course {
 	&.course-overview{
@@ -578,6 +593,21 @@
 						y: auto; //scroll;
 					}
 					background: #04232c;
+
+					.require-control-value {
+						background: none;
+						color: $tertiary-grey;
+						text-transform: uppercase;
+						font-family: "Open Sans", sans-serif;
+						padding: 0;
+						cursor: pointer;
+						border: none;
+
+						span {
+							font-size: 10px;
+						}
+					}
+
 
 					.required-control {
 						display: inline-block;
