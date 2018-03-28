@@ -47,11 +47,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.courseInstance.get('CompletionPolicy').fireEvent('requiredValueChanged', { ntiid: targetId, value });
 		};
 
-		this.courseInstance.get('CompletionPolicy').on('requiredValueChanged', ({ntiid, value}) => {
-			if(this.requireControl && targetId === ntiid) {
-				this.requireControl.setProps({value});
-			}
-		});
+		if(this.courseInstance.get('CompletionPolicy')) {
+			this.courseInstance.get('CompletionPolicy').on('requiredValueChanged', ({ntiid, value}) => {
+				if(this.requireControl && targetId === ntiid) {
+					this.requireControl.setProps({value});
+				}
+			});
+		}
 
 		let container = this.add({
 			xtype: 'container',
