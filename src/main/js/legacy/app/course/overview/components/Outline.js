@@ -129,6 +129,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+	showProgressHeader: function (bundle) {
+		getService().then(service => {
+			service.getObject(bundle.rawData).then(course => {
+				this.showHeader(true, course);
+			});
+		});
+	},
+
 	setOutline: function (bundle, outline) {
 		if (!this.rendered) {
 			this.on('afterrender', () => this.setOutline(bundle, outline), this, {single: true});
@@ -138,11 +146,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this;
 
 		if(bundle.get('CompletionPolicy')) {
-			getService().then(service => {
-				service.getObject(bundle.rawData).then(course => {
-					me.showHeader(true, course);
-				});
+			bundle.get('CompletionPolicy').on('requiredValueChanged', () => {
+				this.showProgressHeader(bundle);
 			});
+
+			this.showProgressHeader(bundle);
 		}
 		else {
 			// no CompletionPolicy, show normal header
