@@ -181,6 +181,23 @@ body.media-viewer-open .window-container {
 	overflow: auto;
 	display: none;
 
+	&.full-screen {
+
+		html.x-viewport.msg-bar-open & {
+			top: 0;
+		}
+
+		top: 0;
+		z-index: 1000;
+		overflow: visible;
+
+		.window-content {
+			width: 100%;
+			margin: 0;
+			background: none;
+		}
+	}
+
 	.window-content {
 		width: 780px;
 		max-width: 100%;

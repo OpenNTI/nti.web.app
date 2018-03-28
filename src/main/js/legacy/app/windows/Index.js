@@ -63,6 +63,16 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		return allow;
 	},
 
+
+	setFullScreen () {
+		this.addCls('full-screen');
+	},
+
+
+	removeFullScreen () {
+		this.removeCls('full-screen');
+	},
+
 	showWindow: function (object, state, el, monitors, precache) {
 		var type = this.WindowStore.getComponentForMimeType(object && (object.mimeType || object)),
 			cmp;
@@ -78,12 +88,15 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 			return;
 		}
 
+		this.removeFullScreen();
+
 		cmp = type.create({
 			record: object && object.isModel && object,//only pass a record when we have an object and it is a model
 			precache: precache || {},
 			state: state,
 			doClose: this.doClose.bind(this, monitors && monitors.doClose, monitors && monitors.afterClose),
 			doNavigate: this.doNavigate.bind(this, monitors && monitors.beforeNavigate),
+			setFullScreen: this.setFullScreen.bind(this),
 			monitors: monitors,
 			scrollingParent: this.el
 		});

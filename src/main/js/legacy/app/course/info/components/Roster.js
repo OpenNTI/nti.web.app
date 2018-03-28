@@ -1,7 +1,5 @@
 const Ext = require('extjs');
 const cx = require('classnames');
-const {Progress} = require('nti-web-course');
-const {getService} = require('nti-web-client');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -11,20 +9,14 @@ const Email = require('legacy/model/Email');
 const {isFeature} = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');
 
+const ProgressWindow = require('./ProgressWindow');
+
 require('legacy/overrides/ReactHarness');
 require('legacy/app/invite/Prompt');
 require('legacy/common/chart/Pie');
 require('legacy/common/menus/Reports');
 require('legacy/common/ux/FilterMenu');
 require('legacy/proxy/courseware/Roster');
-
-
-async function launchProgressOverview (url, bundle) {
-	const service = await getService();
-	const course = await service.getObject(bundle.rawData);
-
-	Progress.Overview.showForBatchLink(url, course);
-}
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Roster', {
 	extend: 'Ext.container.Container',
@@ -544,23 +536,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			progress = e.getTarget('.progress');
 
 		if (progress) {
-			const rosterURL = this.currentBundle && this.currentBundle.getLink('CourseEnrollmentRoster');
-
 			const sorter = this.store.getSorters()[0];
-
-			let url = rosterURL + '?batchSize=1&batchStart=' + i + (this.currentFilter ? '&filter=LegacyEnrollmentStatus' + this.currentFilter : '');
-
-			if(sorter) {
-				url += '&sortOn=' + sorter.property + '&sortOrder=' + (sorter.direction === 'DESC' ? 'descending' : 'ascending');
-			}
-
 			const filter = this.store.filters && this.store.filters.items && this.store.filters.items[0];
+			const obj = ProgressWindow.getWindowObject(this.currentBundle, i, this.currentFilter, filter && filter.property, filter && filter.value, sorter && sorter.property, sorter && sorter.direction);
 
-			if(filter) {
-				url += '&' + filter.property + '=' + filter.value;
-			}
-
-			launchProgressOverview(url, this.currentBundle);
+			this.WindowActions.pushWindow(obj);
 		}
 
 		if (disclosure) {
