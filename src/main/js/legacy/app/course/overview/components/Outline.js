@@ -130,11 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	showProgressHeader: function (bundle) {
-		getService().then(service => {
-			service.getObject(bundle.rawData).then(course => {
-				this.showHeader(true, course);
-			});
-		});
+		this.showHeader(true, bundle);
 	},
 
 	setOutline: function (bundle, outline) {
@@ -146,11 +142,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this;
 
 		if(bundle.get('CompletionPolicy')) {
-			bundle.get('CompletionPolicy').on('requiredValueChanged', () => {
-				this.showProgressHeader(bundle);
-			});
+			bundle.getInterfaceInstance().then(bundleModel => {
+				bundle.get('CompletionPolicy').on('requiredValueChanged', () => {
+					this.showProgressHeader(bundleModel);
+				});
 
-			this.showProgressHeader(bundle);
+				this.showProgressHeader(bundleModel);
+			});
 		}
 		else {
 			// no CompletionPolicy, show normal header
