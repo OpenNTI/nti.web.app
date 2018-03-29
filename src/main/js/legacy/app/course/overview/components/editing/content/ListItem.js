@@ -17,6 +17,10 @@ require('../controls/Edit');
 require('../controls/Synclock');
 require('../Controls');
 
+const DEFAULT = 'Default';
+const REQUIRED = 'Required';
+const OPTIONAL = 'Optional';
+
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
 	extend: 'Ext.container.Container',
 
@@ -124,8 +128,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getRequireControl: function (record, bundle) {
 		const targetId = getTargetId(record);
 
-		const onChange = async (value) => {
-			saveRequireStatus(this.course, targetId, value);
+		const onChange = (value) => {
+			saveRequireStatus(this.course, targetId, value).then(() => {
+				record.set('IsCompletionDefaultState', value === DEFAULT);
+				record.set('CompletionRequired', value === REQUIRED || (value === DEFAULT && record.get('CompletionDefaultState')));
+			});
 		};
 
 		this.course.get('CompletionPolicy').on('requiredValueChanged', ({ntiid, value}) => {
