@@ -402,13 +402,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					me.readingEditorCmp.formCmp.setValue('target', pack.get('NTIID'));
 
 					return me.readingEditorCmp.onSave()
-						.then(() => {
+						.then((rec) => {
 							// navigate to newly created content's editor (still unpublished at this point)
 							const route = `/course/${encodeForURI(this.bundle.getId())}` +
 								(me.outlineNode ? `/lessons/${encodeForURI(me.outlineNode.get('NTIID'))}` : '') +
 								`/content/${encodeForURI(pack.get('NTIID'))}/edit/`;
 
 							NavigationActions.pushRootRoute(null, route, {pack});
+
+							return rec;
 						})
 						.catch(function (reason) {
 							me.enableSubmission();
