@@ -5,6 +5,9 @@ const {ProgressWidgets} = require('nti-web-course');
 const Globals = require('legacy/util/Globals');
 const MoveInfo = require('legacy/model/app/MoveInfo');
 
+const getTargetId = require('../../../../util/get-target-id');
+const saveRequireStatus = require('../../../../util/save-require-status');
+
 const ContentPrompt = require('./Prompt');
 
 require('legacy/overrides/ReactHarness');
@@ -13,11 +16,6 @@ require('legacy/mixins/Transition');
 require('../controls/Edit');
 require('../controls/Synclock');
 require('../Controls');
-
-const DEFAULT = 'Default';
-const REQUIRED = 'Required';
-const OPTIONAL = 'Optional';
-
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
 	extend: 'Ext.container.Container',
@@ -122,64 +120,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, item);
 	},
 
-	getTargetId: function (record) {
-		const keyMap = Object.keys(record.data).map(k => {
-			return {
-				normalized: k.toLowerCase(),
-				actual: k
-			};
-		}).reduce((ac, v) => {
-			ac[v.normalized] = v.actual;
-			return ac;
-		},
-		{});
-
-		const isRelatedWorkRef = /relatedwork/.test(record.get('MimeType'));
-
-		let id;
-
-		if(isRelatedWorkRef) {
-			id = record.isContent && record.isContent() ? record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') : record.get(keyMap['ntiid']);
-		}
-		else {
-			id = record.get(keyMap['target-ntiid']) || record.get('Target-NTIID') || record.get(keyMap['ntiid']);
-		}
-
-		return id;
-	},
-
 
 	getRequireControl: function (record, bundle) {
-		const targetId = this.getTargetId(record);
+		const targetId = getTargetId(record);
 
 		const onChange = async (value) => {
-			const completionPolicy = this.course.get('CompletionPolicy');
-
-			const requirementLink = completionPolicy.getLink('Required');
-			const nonRequirementLink = completionPolicy.getLink('NotRequired');
-
-			const encodedID = encodeURIComponent(targetId);
-
-			if(value === REQUIRED) {
-				await Service.put(requirementLink, {
-					ntiid: targetId
-				});
-
-				await Service.requestDelete(nonRequirementLink + '/' + encodedID);
-			}
-			else if(value === OPTIONAL) {
-				await Service.put(nonRequirementLink, {
-					ntiid: targetId
-				});
-
-				await Service.requestDelete(requirementLink + '/' + encodedID);
-			}
-			else if(value === DEFAULT) {
-				await Service.requestDelete(requirementLink + '/' + encodedID);
-				await Service.requestDelete(nonRequirementLink + '/' + encodedID);
-			}
-
-			this.course.get('CompletionPolicy').fireEvent('requiredValueChanged', { ntiid: targetId, value });
+			saveRequireStatus(this.course, targetId, value);
 		};
 
 		this.course.get('CompletionPolicy').on('requiredValueChanged', ({ntiid, value}) => {

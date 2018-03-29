@@ -2,6 +2,13 @@ const Ext = require('extjs');
 
 require('../creation/ChildCreation');
 
+const getTargetId = require('../../../../util/get-target-id');
+const saveRequireStatus = require('../../../../util/save-require-status');
+
+const DEFAULT = 'Default';
+const REQUIRED = 'Required';
+const OPTIONAL = 'Optional';
+
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.typeswitcher.Switcher', {
 	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
 	alias: 'widget.outline-editing-type-switcher',
@@ -39,7 +46,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return doSave
 			.then((result) => {
 				return this.removeOldRecord()
-					.then(() => result, () => result);
+					.then(() => result, () => result)
+					.then(() => {
+						// apply require status
+						const basedOnDefault = this.record.get('IsCompletionDefaultState');
+						const isRequired = this.record.get('CompletionRequired');
+						const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
+
+						const targetId = getTargetId(result);
+						saveRequireStatus(this.bundle, targetId, requiredValue);
+					});
 			});
 	},
 
