@@ -105,39 +105,21 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		const course = await this.resolveCourse();
 		const batchLink = this.getBatchLink(course);
 
+		this.removeAll(true);
+
 		this.add({
 			xtype: 'react',
 			component: Progress.Overview,
 			course,
 			batchLink,
-			onDismiss: () => this.doClose(),
-			loadNextPage: () => this.loadNextPage(),
-			loadPrevPage: () => this.loadPrevPage()
+			onDismiss: () => this.onDismiss()
 		});
 	},
 
 
-	loadNextPage () {
-		const {record} = this;
-
-		this.loadIndex(record.index + 1);
-	},
-
-
-	loadPrevPage () {
-		const {record} = this;
-
-		this.loadIndex(record.index - 1);
-	},
-
-	async loadIndex (index) {
-		const course = await this.resolveCourse();
-		const {record} = this;
-		const obj = getWindowObject(course, index, record.currentFilter, record.filterProperty, record.filterValue, record.sortOn, record.sortDirection);
-
-		this.WindowActions.pushWindow(obj);
+	onDismiss () {
+		global.history.go(-1);
 	}
-
 }, function () {
 	WindowsStateStore.register(MimeType, this);
 	WindowsStateStore.registerCustomResolver(MimeType, async function (id) {
