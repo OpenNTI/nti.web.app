@@ -19,7 +19,6 @@ require('../Controls');
 
 const DEFAULT = 'Default';
 const REQUIRED = 'Required';
-const OPTIONAL = 'Optional';
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
 	extend: 'Ext.container.Container',
