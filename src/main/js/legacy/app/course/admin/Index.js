@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	async setBundle (activeBundle) {
 		this.activeBundle = activeBundle;
 		const service = await getService();
-		const course = await service.getObject(activeBundle.rawData);
+		const course = await service.getObject(activeBundle.rawData.NTIID);
 
 		if (this.siteAdminRoster && this.siteAdminRoster.isVisible()) {
 			this.siteAdminRoster.setContent(activeBundle);
