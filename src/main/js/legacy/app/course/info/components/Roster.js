@@ -232,12 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	onRouteActivate: function () {
-		if (this.initialLoad || this.isDirty) {
-			this.isDirty = false;
-			this.loadStore();
-		} else {
-			this.refreshRosterGrid();
-		}
+		this.loadStore();
 	},
 
 	refreshRosterGrid () {
@@ -361,12 +356,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.setupEmail();
 		this.setupInvite();
 		this.initialLoad = true;
-
-		if(supportsProgress) {
-			this.currentBundle.get('CompletionPolicy').on('requiredValueChanged', () => {
-				this.isDirty = true;
-			});
-		}
 
 		if (Ext.isEmpty(roster) || !roster) {
 			if (this.store) {this.store.destroyStore();}
