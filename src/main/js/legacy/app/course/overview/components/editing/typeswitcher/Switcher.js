@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						const requiredValue = basedOnDefault ? DEFAULT : isRequired ? REQUIRED : OPTIONAL;
 
 						const targetId = getTargetId(result);
-						saveRequireStatus(this.bundle, targetId, requiredValue);
+						return saveRequireStatus(this.bundle, targetId, requiredValue);
 					});
 			});
 	},
