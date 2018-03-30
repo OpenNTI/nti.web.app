@@ -257,7 +257,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.bundle = bundle;
 		if (this.bundle.isScormCourse) {
 			this.createGroupByMenu(true);
-			this.groupLabelEl.dom.innerHTML = this.groupByItems[0] && this.groupByItems[0].text;
+
+			if(this.groupLabelEl) {
+				this.groupLabelEl.dom.innerHTML = this.groupByItems[0] && this.groupByItems[0].text;
+			}
 		}
 	}
 });
