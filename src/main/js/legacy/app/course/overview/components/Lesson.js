@@ -46,7 +46,12 @@ const ROUTE_BUILDERS = {
 
 
 	'application/vnd.nextthought.naquestionset': (course, lesson, obj) => {
-		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj.containerId)}/`;
+		const target = obj.containerId || obj['Target-NTIID'];
+		if (!target) {
+			console.log('No target for object?', obj);
+			return '';
+		}
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(target)}/`;
 	},
 	'application/vnd.nextthought.assessment.discussionassignment': getAssignmentRoute,
 	'application/vnd.nextthought.assessment.timedassignment': getAssignmentRoute,
