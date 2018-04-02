@@ -20,7 +20,7 @@ export default function SiteAdminCourseItem ({item}) {
 					{t('totalEnrolled')}
 				</div>
 				<div className="value">
-					{item.getTotalEnrollmentCount() || 0}
+					{(item.CatalogEntry && item.CatalogEntry.TotalEnrolledCount) || 0}
 				</div>
 			</div>
 		</div>
