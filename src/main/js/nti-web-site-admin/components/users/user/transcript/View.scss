@@ -9,6 +9,10 @@
 		margin: 0;
 		list-style: none;
 
+		li:not(:last-of-type) {
+			box-shadow: 0 1px 0 0 $border-grey-light;
+		}
+
 		li a {
 			text-decoration: none;
 		}
