@@ -1,13 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Progress} from 'nti-web-course';
+
+import Card from '../../common/Card';
 
 SiteAdminUserEnrollmentProgress.propTypes = {
-	user: PropTypes.object
+	course: PropTypes.object,
+	enrollment: PropTypes.object
 };
-export default function SiteAdminUserEnrollmentProgress ({user}) {
+export default function SiteAdminUserEnrollmentProgress ({course, enrollment}) {
 	return (
-		<div className="site-admin-user-enrollment-progress">
-			<div>Progress info goes here</div>
-		</div>
+		<Card>
+			{course && enrollment && (
+				<Progress.Overview course={course} enrollment={enrollment} singleItem />
+			)}
+		</Card>
 	);
 }

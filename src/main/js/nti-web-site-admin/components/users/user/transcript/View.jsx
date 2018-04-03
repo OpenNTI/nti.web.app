@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import {Loading} from 'nti-web-commons';
 import {scoped} from 'nti-lib-locale';
 import {LinkTo} from 'nti-web-routing';
+import {EnrollmentListItem} from 'nti-web-course';
 
 import ErrorMessage from '../../../common/ErrorMessage';
+import Card from '../../../common/Card';
 
-import Item from './Item';
 import Store from './Store';
 
 const DEFAULT_TEXT = {
@@ -78,17 +79,19 @@ export default class SiteAdminUserTranscript extends React.Component {
 		if (!items || !items.length) { return this.renderEmptyState(); }
 
 		return (
-			<ul>
-				{items.map((item, index) => {
-					return (
-						<li key={index}>
-							<LinkTo.Object object={item} context="site-admin.users.user-transcipt.list">
-								<Item item={item} />
-							</LinkTo.Object>
-						</li>
-					);
-				})}
-			</ul>
+			<Card>
+				<ul>
+					{items.map((item, index) => {
+						return (
+							<li key={index}>
+								<LinkTo.Object object={item} context="site-admin.users.user-transcipt.list">
+									<EnrollmentListItem enrollment={item} />
+								</LinkTo.Object>
+							</li>
+						);
+					})}
+				</ul>
+			</Card>
 		);
 	}
 

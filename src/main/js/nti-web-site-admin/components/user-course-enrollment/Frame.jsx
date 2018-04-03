@@ -14,7 +14,7 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.user.user-course-enrollment.Frame', DEFAULT_TEXT);
 
-@Store.connect({enrollment: 'enrollment', loading: 'loading'})
+@Store.connect({enrollment: 'enrollment', loading: 'loading', course: 'course'})
 export default class SiteAdminUserEnrollmentView extends React.Component {
 	static propTypes = {
 		enrollmentID: PropTypes.string,
@@ -24,6 +24,7 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 		loading: PropTypes.bool,
 		store: PropTypes.object,
 		enrollment: PropTypes.object,
+		course: PropTypes.object,
 
 		children: PropTypes.node
 	}
@@ -64,7 +65,7 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 	}
 
 	renderUser () {
-		const {children, enrollment} = this.props;
+		const {children, enrollment, course} = this.props;
 
 		return (
 			<Layouts.NavContent.Container>
@@ -74,7 +75,7 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
 					{React.Children.map(children, (item) => {
-						return React.cloneElement(item, {enrollment});
+						return React.cloneElement(item, {enrollment, course});
 					})}
 				</Layouts.NavContent.Content>
 			</Layouts.NavContent.Container>

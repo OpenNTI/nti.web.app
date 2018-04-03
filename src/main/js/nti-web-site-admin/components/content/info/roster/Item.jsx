@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, DisplayName} from 'nti-web-commons';
+import {CircularProgress} from 'nti-web-charts';
 
 SiteAdminCourseRosterItem.propTypes = {
 	item: PropTypes.object.isRequired
 };
 export default function SiteAdminCourseRosterItem ({item}) {
-	const {user} = item;
+	const {user, CourseProgress} = item;
+	const progress = CourseProgress && Math.floor((CourseProgress.PercentageProgress || 0) * 100);
 
 	return (
 		<div className="site-admin-course-roster-item">
@@ -14,6 +16,11 @@ export default function SiteAdminCourseRosterItem ({item}) {
 			<div className="info">
 				<DisplayName entity={user} className="username" />
 			</div>
+			{CourseProgress && (
+				<div className="progress">
+					<CircularProgress value={progress} width={40} height={40} />
+				</div>
+			)}
 		</div>
 	);
 }

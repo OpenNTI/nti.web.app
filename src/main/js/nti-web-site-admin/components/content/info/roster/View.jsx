@@ -6,6 +6,7 @@ import {scoped} from 'nti-lib-locale';
 import {LinkTo} from 'nti-web-routing';
 
 import ErrorMessage from '../../../common/ErrorMessage';
+import Card from '../../../common/Card';
 
 import Item from './Item';
 
@@ -43,17 +44,19 @@ export default class SiteAdminCourseRoster extends React.Component {
 
 	renderItems (items) {
 		return (
-			<ul>
-				{items.map((item, index) => {
-					return (
-						<li key={index}>
-							<LinkTo.Object object={item} context="site-admin.courses.course-roster.list">
-								<Item item={item} />
-							</LinkTo.Object>
-						</li>
-					);
-				})}
-			</ul>
+			<Card>
+				<ul>
+					{items.map((item, index) => {
+						return (
+							<li key={index}>
+								<LinkTo.Object object={item} context="site-admin.courses.course-roster.list">
+									<Item item={item} />
+								</LinkTo.Object>
+							</li>
+						);
+					})}
+				</ul>
+			</Card>
 		);
 	}
 

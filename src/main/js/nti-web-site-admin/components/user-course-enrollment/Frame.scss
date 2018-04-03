@@ -3,23 +3,6 @@
 .site-admin-user-enrollment-view {
 	min-height: 200px;
 
-	.header {
-		font-size: 1rem;
-		padding: 1rem 0;
-
-		a {
-			text-decoration: none;
-			color: $primary-grey;
-			display: flex;
-			align-items: center;
-		}
-
-		i {
-			font-size: 0.875rem;
-			font-weight: 700;
-			width: 1rem;
-		}
-	}
 
 	.content {
 		padding-top: rem-calc(54px);//the height of the header
@@ -27,5 +10,23 @@
 
 	.nav-content-nav {
 		margin-right: 10px;
+
+		& > .header {
+			font-size: 1rem;
+			padding: 1rem 0;
+
+			a {
+				text-decoration: none;
+				color: $primary-grey;
+				display: flex;
+				align-items: center;
+			}
+
+			i {
+				font-size: 0.875rem;
+				font-weight: 700;
+				width: 1rem;
+			}
+		}
 	}
 }

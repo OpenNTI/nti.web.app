@@ -8,6 +8,7 @@ export default class EnrollmentStore extends Stores.SimpleStore {
 
 		this.set('loading', false);
 		this.set('enrollment', null);
+		this.set('course', null);
 		this.set('error', null);
 	}
 
@@ -31,15 +32,18 @@ export default class EnrollmentStore extends Stores.SimpleStore {
 
 	async doLoad (enrollmentID) {
 		this.set('enrollment', null);
+		this.set('course', null);
 		this.set('loading', true);
 		this.emitChange('loading');
 
 		try {
 			const service = await getService();
-			const resolved = await this.getEnrollment(service, enrollmentID);
+			const enrollment = await this.getEnrollment(service, enrollmentID);
+			const course = await enrollment.fetchLinkParsed('CourseInstance');
 
-			this.set('enrollment', resolved);
-			this.emitChange('enrollment');
+			this.set('enrollment', enrollment);
+			this.set('course', course);
+			this.emitChange('enrollment', 'course');
 		} catch (e) {
 			this.set('error', e);
 			this.emitChange('error');

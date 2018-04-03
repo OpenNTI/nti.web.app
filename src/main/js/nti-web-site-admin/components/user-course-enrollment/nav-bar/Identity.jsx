@@ -14,7 +14,7 @@ SiteAdminUserIdentity.propTypes = {
 	enrollment: PropTypes.object
 };
 export default function SiteAdminUserIdentity ({enrollment}) {
-	const {UserProfile: user, CatalogEntry} = (enrollment || {});
+	const {UserProfile: user, Username, CatalogEntry} = (enrollment || {});
 
 	return (
 		<div className="site-admin-user-enrollment-identity">
@@ -23,12 +23,12 @@ export default function SiteAdminUserIdentity ({enrollment}) {
 					<img className="enrollment-course-image"/>
 				</Presentation.Asset>
 				<div className="user-avatar">
-					<Avatar entity={user}/>
+					<Avatar entity={user || Username}/>
 				</div>
 			</div>
 			<div className="enrollment-info">
 				<div className="plain-text">{t('activityFor')}</div>
-				<DisplayName entity={user} />
+				<DisplayName entity={user || Username} />
 				<div className="plain-text">{t('in')}</div>
 				<div className="course-title">
 					{CatalogEntry && CatalogEntry.Title}

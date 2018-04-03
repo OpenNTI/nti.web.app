@@ -112,6 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			component: Progress.Overview,
 			course,
 			batchLink,
+			modal: true,
 			onDismiss: () => this.onDismiss()
 		});
 	},
