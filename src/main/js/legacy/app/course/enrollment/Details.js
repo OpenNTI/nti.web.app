@@ -915,8 +915,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 						me.msgClickHandler = function () {
 							var c = me.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
 							Promise.resolve(c)
-								.then(course => {
-									var instance = course.get('CourseInstance');
+								.then(course => course.getCourseInstance())
+								.then(instance => {
 									instance.fireNavigationEvent(me);
 
 									if (win) {
@@ -993,9 +993,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		c = this.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
 		Promise.resolve(c)
-			.then(function (course) {
-				var instance = course.get('CourseInstance');
-
+			.then(course => course.getCourseInstance())
+			.then(instance => {
 				if (instance && instance.getSuggestContacts) {
 					instance.getSuggestContacts()
 						.then(function (items) {

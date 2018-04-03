@@ -84,12 +84,11 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 	},
 
 	navigateToCourse: function (enrollment, el, subRoute) {
-		var me = this,
-			instance = enrollment.get('CourseInstance');
+		const instance = enrollment.get('Links').getRelLink('CourseInstance').ntiid;
 
-		me.CourseViewActions.transitionToCourse(instance, el)
-			.then(function (route) {
-				me.pushRootRoute(null, route + (subRoute ? '/' + subRoute : ''), {course: instance});
+		this.CourseViewActions.transitionToCourse(instance, el)
+			.then(route => {
+				this.pushRootRoute(null, route + (subRoute ? '/' + subRoute : ''));
 			});
 	},
 

@@ -106,11 +106,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 			.then(function (response) {
 				var updateCatalog, updateEnrolled,
 					courseEnrollment = lazy.ParseUtils.parseItems(response)[0],
-					courseInstance = courseEnrollment.get('CourseInstance');
+					oldCatalogEntry = courseEnrollment.getCourseCatalogEntry();
 
 				course.setEnrolled(true);
 
-				updateCatalog = Service.request(courseInstance.getLink('CourseCatalogEntry'))
+				updateCatalog = Service.request(oldCatalogEntry.get('href'))
 					.then(function (catalogEntry) {
 						catalogEntry = lazy.ParseUtils.parseItems(catalogEntry)[0];
 

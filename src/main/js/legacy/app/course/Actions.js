@@ -16,12 +16,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 
 	/**
 	 * Transition to a course, if passed an element from the library show the image expanding
-	 * @param  {CourseInstance} course	   the course to navigate to
+	 * @param  {String} ntiid	   the course id to navigate to
 	 * @param  {Element} libraryCard dom node of the image to expand
 	 * @return {Promise}			fulfills with the route for the course, once the animation is done
 	 */
-	transitionToCourse: function (course, libraryCard) {
-		const ntiid = course.getId();
+	transitionToCourse: function (ntiid, libraryCard) {
 		const route = this.getRootRouteForId(ntiid);
 		// const subRoute = this.StateStore.getRouteFor(ntiid);
 

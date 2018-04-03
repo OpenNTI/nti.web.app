@@ -211,14 +211,6 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__courseCatalogEntry.getCatalogFamily();
 	},
 
-	/**
-	 * Whether or not this instance is in a given family id
-	 * @param  {String}	 id FamilyId
-	 * @return {Boolean}	if it is in the family
-	 */
-	isInFamily: function (id) {
-		return this.__courseCatalogEntry.isInFamily(id);
-	},
 
 	getFirstPage: function () {
 		var bundle = this.getBundle();

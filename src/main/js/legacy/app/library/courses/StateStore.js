@@ -200,6 +200,19 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		return item;
 	},
 
+	__findInAsync: async function (list, fn) {
+		var i, item = null;
+
+		for (i = 0; i < list.length; i++) {
+			if (await fn.call(null, list[i])) {
+				item = list[i];
+				break;
+			}
+		}
+
+		return item;
+	},
+
 
 	__findAllIn: function (list, fn) {
 		return list.reduce(function (acc, item) {
@@ -267,9 +280,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 	findCourseInstance: function (ntiid) {
 		function fn (rec) {
-			var instance = rec.get('CourseInstance');
+			var instance = rec.get('Links').getRelLink('CourseInstance').ntiid;
 
-			return instance.get('NTIID') === ntiid || rec.get('NTIID') === ntiid;
+			return instance === ntiid || rec.get('NTIID') === ntiid;
 		}
 
 		var enrollment = this.__findIn(this.__getAllForLevel(ENROLLED_COURSES), fn);
@@ -278,17 +291,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			enrollment = this.__findIn(this.__getAllForLevel(ADMINISTERED_COURSES), fn);
 		}
 
-		return enrollment && enrollment.get('CourseInstance');
+		return enrollment && enrollment.getCourseInstance();
 	},
 
 
-	findCourseInstanceByPriority: function (fn) {
+	findCourseInstanceByPriority: async function (fn) {
 		var priorities = {},
 			keys = [],
 			result = [];
 
-		function find (enrollment) {
-			var instance = enrollment.get('CourseInstance'),
+		async function find (enrollment) {
+			var instance = await enrollment.getCourseInstance(),
 				priority = fn.call(null, instance, enrollment);
 
 			if (priority && priority > 0) {
@@ -304,8 +317,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		}
 
 
-		this.__findIn(this.__getAllForLevel(ENROLLED_COURSES), find);
-		this.__findIn(this.__getAllForLevel(ADMINISTERED_COURSES), find);
+		await this.__findInAsync(this.__getAllForLevel(ENROLLED_COURSES), find);
+		await this.__findInAsync(this.__getAllForLevel(ADMINISTERED_COURSES), find);
 
 		keys.sort();
 
@@ -313,7 +326,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			result = result.concat(priorities[key]);
 		});
 
-		return Promise.resolve(result);
+		return result;
 	},
 
 
@@ -336,10 +349,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 			course;
 
 		function fn (rec) {
-			rec = rec.get('CourseInstance');
-
+			const instId = rec.get('Links').getRelLink('CourseInstance').ntiid;
+			console.log(instId);
 			//if the id is my id or oid
-			let match = rec.getId() === id || rec.get('OID') === id;
+			let match = instId === id;// || instOID === id;
 			let courseCatalog = rec.getCourseCatalogEntry();
 
 			match = match || (courseCatalog && courseCatalog.getId() === id);
@@ -356,7 +369,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		}
 
 		if (course) {
-			return Promise.resolve(course.get('CourseInstance'));
+			return course.getCourseInstance();
 		}
 
 		return Promise.reject();
@@ -381,8 +394,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		var ntiid = course.get('NTIID');
 
 		var found = this.findCourseBy(function (enrollment) {
-			var instance = enrollment.get('CourseInstance'),
-				instanceId = instance.getId() || '',
+			var instanceId = enrollment.get('Links').getRelLink('CourseInstance').ntiid || '',
 				enrollmentId = enrollment.get('NTIID') || '';
 
 			return instanceId === ntiid || enrollmentId === ntiid;
@@ -394,13 +406,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	/**
 	 * Return all courses in the same catalog family
 	 * @param  {String} familyId id of the catalog family to search for
-	 * @return {[Course]}		 list of courses in the same catalog family
+	 * @return {Course} list of courses in the same catalog family
 	 */
 	findForCatalogFamily: function (familyId) {
 		return this.findCoursesBy(function (course) {
-			var instance = course.get('CourseInstance');
-
-			return instance.isInFamily(familyId);
+			var cce = course.getCourseCatalogEntry();
+			return cce.isInFamily(familyId);
 		});
 	},
 

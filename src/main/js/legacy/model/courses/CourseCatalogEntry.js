@@ -373,8 +373,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 
 		var myCoursInstance = nomnom(this.getLink('CourseInstance'));
 
-		return function (instance) {
-			var i = instance.get('CourseInstance') || instance;
+		return function (record) {
+			console.log(record);
+			var i = record.getLink('CourseInstance');
 			return myCoursInstance === nomnom(getURL(i.get('href')));
 		};
 	},

@@ -260,20 +260,20 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				}
 				return new Promise(function (fulfill, reject) {
 					me.StoreActions.redeemGift(cmp, data.purchasable, data.token, data.AllowVendorUpdates, course.getId(), fulfill, reject);
-				}).then(function (courseInstanceEnrollment) {
+				})
+					.then(enrollment => enrollment.getCourseInstance())
+					.then(courseInstance => {
 					//trigger the library to reload
-					var courseInstance = courseInstanceEnrollment.get('CourseInstance');
-
-					return new Promise(function (fulfill, reject) {
-						Service.request(courseInstance.getLink('CourseCatalogEntry'))
-							.then(function (catalogEntry) {
-								catalogEntry = lazy.ParseUtils.parseItems(catalogEntry)[0];
-								course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
-								me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
-							})
-							.catch(reject);
+						return new Promise(function (fulfill, reject) {
+							Service.request(courseInstance.getLink('CourseCatalogEntry'))
+								.then(function (catalogEntry) {
+									catalogEntry = lazy.ParseUtils.parseItems(catalogEntry)[0];
+									course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
+									me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
+								})
+								.catch(reject);
+						});
 					});
-				});
 			}
 		}, steps);
 

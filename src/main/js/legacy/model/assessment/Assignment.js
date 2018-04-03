@@ -194,9 +194,10 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		link = nomnom(link);
 
 		return function (instance) {
-			var course = instance.get('CourseInstance') || instance,
-				href = nomnom(course && course.get('href'));
+			var course = instance.getLink('CourseInstance'),
+				href = nomnom(course);
 
+			console.log('nomnom? "%s" === "%s"', href, link);
 			return href === link;
 		};
 	},

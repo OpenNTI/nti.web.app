@@ -32,8 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	prepareData: function (data, index, record) {
 		var i = Ext.Object.chain(this.callParent(arguments)),
-			courseRecord = record.get('CourseInstance'),
-			course = courseRecord.asUIData(),
+			course = record.asUIData(),
 			badge;
 
 		if (course.upcoming) {
@@ -55,8 +54,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				upcoming: course.upcoming ? 'upcoming' : ''
 			});
 
-			if (courseRecord.getIconImage) {
-				courseRecord.getIconImage();
+			if (record.getIconImage) {
+				record.getIconImage();
 			}
 		}
 
@@ -72,16 +71,16 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		return data;
 	},
 
-	onItemClick: function (record, node, index, e) {
+	onItemClick: async function (record, node, index, e) {
 		var settingsTarget = e.getTarget('.settings');
 
 		if (settingsTarget) {
 			var menuWidth = 310,
-				course = record.get('CourseInstance');
+				course = await record.getCourseInstance();
 
 			// TODO: newly created courses don't have a title field, why is that?
 			if(!course.title) {
-				course.title = course.asUIData().title;
+				course.title = record.asUIData().title;
 			}
 
 			this.menu = Ext.widget('course-menu',

@@ -52,8 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	beforeRender: function () {
 		this.callParent(arguments);
-		var instance = this.course.get('CourseInstance'),
-			ui = instance && instance.asUIData();
+		var ui = this.course.asUIData();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: (ui && ui.title) || 'Course'

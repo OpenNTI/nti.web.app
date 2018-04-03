@@ -199,11 +199,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	sorterFn (a, b) {
-		var aVal = a.get('CourseInstance'),
-			bVal = b.get('CourseInstance');
-
-		aVal = aVal && aVal.getCourseCatalogEntry();
-		bVal = bVal && bVal.getCourseCatalogEntry();
+		var aVal = a.getCourseCatalogEntry(),
+			bVal = b.getCourseCatalogEntry();
 
 		aVal = aVal && aVal.get('ProviderUniqueID');
 		bVal = bVal && bVal.get('ProviderUniqueID');

@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				//if we get here and we already have views, don't push more
 				if (me.shouldPushViews()) {
 					if (enrollment && enrollment.isAdministrative) {
-						if (enrollment.isContentEditor && enrollment.isContentEditor()) {
+						if (isContentEditor(bundle)) {
 							me.addContentEditorViews();
 						}
 						else {
@@ -578,3 +578,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	}
 });
+
+
+/**
+ * A content editor has less access compared to an admin (i.e. course instructor)
+ * Right now, since we don't have any clear way of telling whether or not we have a content editor
+ * We will use the check for the GradeBook variable to determine that,
+ * given that content editors shouldn't have access to the GradeBook.
+ *
+ * @param {Course} bundle the course instance.
+ * @return {Boolean} whether or not this is a content editor
+ */
+function isContentEditor (bundle) {
+	return !(bundle && bundle.get('GradeBook'));
+}
