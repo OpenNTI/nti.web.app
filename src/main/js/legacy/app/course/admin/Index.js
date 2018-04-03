@@ -34,6 +34,10 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	layout: 'none',
 	items: [],
 
+	onRouteActivate () {
+		this.setTitle('Course Administration');
+	},
+
 
 	initComponent: function () {
 		this.callParent(arguments);
