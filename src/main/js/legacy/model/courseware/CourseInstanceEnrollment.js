@@ -65,7 +65,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.CourseInstan
 		this.__instance = new Promise(async (f, r) => {
 			try {
 				const resp = await Service.request(this.getLink('CourseInstance'));
-				f(lazy.ParseUtils.parseItems(JSON.parse(resp))[0]);
+				const inst = lazy.ParseUtils.parseItems(JSON.parse(resp))[0];
+				await inst.prepareData();
+
+				f(inst);
 			} catch (e) {
 				delete this.__instance;
 				r(e);

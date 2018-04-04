@@ -71,50 +71,51 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		return data;
 	},
 
-	onItemClick: async function (record, node, index, e) {
+	onItemClick: function (record, node, index, e) {
 		var settingsTarget = e.getTarget('.settings');
 
 		if (settingsTarget) {
-			var menuWidth = 310,
-				course = await record.getCourseInstance();
+			var menuWidth = 310;
 
-			// TODO: newly created courses don't have a title field, why is that?
-			if(!course.title) {
-				course.title = record.asUIData().title;
-			}
+			record.getCourseInstance().then(course => {
+				// TODO: newly created courses don't have a title field, why is that?
+				if(!course.title) {
+					course.title = record.asUIData().title;
+				}
 
-			this.menu = Ext.widget('course-menu',
-				{
-					collectionEl: this.el,
-					width: menuWidth,
-					course,
-					record,
-					goToRecord: this.goToRecord.bind(this)
+				this.menu = Ext.widget('course-menu',
+					{
+						collectionEl: this.el,
+						width: menuWidth,
+						course,
+						record,
+						goToRecord: this.goToRecord.bind(this)
+					});
+
+				// showBy settings icon
+				this.menu.showBy(settingsTarget, 'tr-br');
+
+				// re-adjust left location if left overlaps left side of window
+				const offsetX = this.menu.getEl().dom.getBoundingClientRect().left;
+
+				if(offsetX < 0) {
+					this.menu.setX(this.menu.getX() + Math.abs(offsetX));
+				}
+
+				// avoid having hidden menus build up in the dom
+				this.menu.on('hide', () => {
+					this.menu && !this.menu.isDestroyed && this.menu.destroy();
 				});
 
-			// showBy settings icon
-			this.menu.showBy(settingsTarget, 'tr-br');
+				// don't have menu linger after scrolling
+				window.addEventListener('scroll', () => {
+					this.menu.hide();
+				});
 
-			// re-adjust left location if left overlaps left side of window
-			const offsetX = this.menu.getEl().dom.getBoundingClientRect().left;
-
-			if(offsetX < 0) {
-				this.menu.setX(this.menu.getX() + Math.abs(offsetX));
-			}
-
-			// avoid having hidden menus build up in the dom
-			this.menu.on('hide', () => {
-				this.menu && !this.menu.isDestroyed && this.menu.destroy();
-			});
-
-			// don't have menu linger after scrolling
-			window.addEventListener('scroll', () => {
-				this.menu.hide();
-			});
-
-			this.on('destroy', () => {
-				this.menu && !this.menu.isDestroyed && this.menu.destroy();
-			});
+				this.on('destroy', () => {
+					this.menu && !this.menu.isDestroyed && this.menu.destroy();
+				});
+			}).catch(err => console.log(err));
 
 			e.stopPropagation();
 			return false;

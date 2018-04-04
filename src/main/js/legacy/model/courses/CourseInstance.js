@@ -20,7 +20,6 @@ const UsersCourseAssignmentSavepoint = require('../assessment/UsersCourseAssignm
 const UserSearch = require('../UserSearch');
 const Video = require('../Video');
 
-const CourseCatalogEntry = require('./CourseCatalogEntry');
 const CourseOutline = require('./CourseOutline');
 
 require('legacy/mixins/AuditLog');
@@ -98,6 +97,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		{ name: 'thumb', type: 'string', persist: false, defaultValue: 'missing.png'}
 	],
 
+	constructor: function () {
+		this.callParent(arguments);
+
+		this.__precacheEntry();
+	},
+
 	getBundle () {
 		return this.get('Bundle') || {};
 	},
@@ -160,39 +165,26 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	__precacheEntry: function () {
 		var p = this.precachePromise,
-			me = this,
-			Cls = CourseCatalogEntry;
+			me = this;
 
 		if (!p) {
-			this.precachePromise = new Promise(function (fulfill, reject) {
-				var url = me.getLink('CourseCatalogEntry');
+			this.precachePromise = this.getWrapper().then(enrollment => {
+				const rec = enrollment.getCourseCatalogEntry();
 
-				if (!url) {
-					return reject('Course Instance (' + me.getId() + ') has a null link for "CourseCatalogEntry".');
+				var outline = me.get('Outline');
+
+				outline.setBundle(me);
+
+				rec.stores.push(me);
+
+				me.__courseCatalogEntry = rec;
+				if (rec) {
+					rec.get('Links').getRelLink('CourseInstance').href = me.get('href');
+					me.set('Preview', rec.get('Preview'));
+					rec.set('enrolled', true);//if we come from here, we are enrolled.
+					me.afterEdit(['NTIID']);//let views know the record "changed".
 				}
-
-				Cls.load(null, {
-					url: url,
-					callback: function (rec) {
-						var outline = me.get('Outline');
-
-						outline.setBundle(me);
-
-						rec.stores.push(me);
-
-						me.__courseCatalogEntry = rec;
-						if (rec) {
-							rec.get('Links').getRelLink('CourseInstance').href = me.get('href');
-							me.set('Preview', rec.get('Preview'));
-							rec.set('enrolled', true);//if we come from here, we are enrolled.
-							me.afterEdit(['NTIID']);//let views know the record "changed".
-							fulfill(rec);
-						} else {
-							reject('No Record, See logs');
-						}
-					}
-				});
-			});
+			}).catch(e => console.error(e.stack));
 
 			p = this.precachePromise;
 		}
@@ -665,16 +657,6 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 						}
 					});
 				}
-			}).then((enrollment) => {
-				if (enrollment) {
-					enrollment.set('CourseInstance', this);
-				}
-
-				if (!enrollment) {
-					console.error('The Enrollment instance wasnt in the course instance stores');
-				}
-
-				return enrollment;
 			});
 		}
 
