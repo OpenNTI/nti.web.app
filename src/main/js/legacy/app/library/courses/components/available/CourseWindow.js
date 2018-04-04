@@ -553,6 +553,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	showCourseDetail: function (route, subRoute, notFoundMsg) {
+		debugger;
 		var ntiid = decodeFromURI(route.params.id),
 			course = route.precache.course,
 			q = route.queryParams,

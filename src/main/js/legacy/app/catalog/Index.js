@@ -1,16 +1,22 @@
 const Ext = require('extjs');
 const CatalogView = require('nti-web-catalog');
+const { encodeForURI } = require('nti-lib-ntiids');
 
 const Globals = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
+require('legacy/app/library/courses/components/available/CourseWindow');
 
 const PURCHASED_ACTIVE = /^\/purchased/;
 const REDEEM_ACTIVE = /^\/redeem/;
+
+const CATALOG_ENTRY_ROUTE = /(.*)\/nti-course-catalog-entry\/(.*)/;
 
 function getPathname (a) {
 	const pathname = a.pathname;
@@ -55,6 +61,13 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 
+	onDestroy () {
+		if (this.availableWin) {
+			this.availableWin.destroy();
+		}
+	},
+
+
 	onClick (e) {
 		const a = e.getTarget('a[href]');
 		const path = a && getPathname(a);
@@ -69,13 +82,22 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	showCatalog (route) {
 		const baseroute = this.getBaseRoute();
 
+		this.maybeShowCatalogEntry(route);
+
 		if (this.catalog) {
 			this.catalog.setBaseRoute(baseroute);
 		} else {
 			this.catalog = this.add({
 				xtype: 'react',
 				component: CatalogView,
-				baseroute: baseroute
+				baseroute: baseroute,
+				getRouteFor: (obj) => {
+					if (obj.isCourseCatalogEntry) {
+						const href = `uri:${obj.href}`;
+
+						return `nti-course-catalog-entry/${encodeURIComponent(href)}`;
+					}
+				}
 			});
 		}
 		const title = this.getTitleFromRoute(route.path);
@@ -151,5 +173,37 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 	onTabChange: function (title, route, subroute, tab) {
 		this.pushRoute(title, route, subroute);
+	},
+
+
+	maybeShowCatalogEntry (route) {
+		const {path} = route;
+		const matches = path && path.match(CATALOG_ENTRY_ROUTE);
+
+		if (!matches) { return; }
+
+		const parts = matches[2].split('/');
+		const href = decodeURIComponent(parts[0]);
+		const rest = parts.slice(1).join('/');
+
+		Service.request(href.replace(/^uri:/, ''))
+			.then(resp => lazy.ParseUtils.parseItems(resp)[0])
+			.then((catalogEntry) => {
+				this.availableWin = Ext.widget('library-available-courses-window', {
+					isSingle: true,
+					doClose: () => {
+						if (route.precache.closeURL) {
+							this.pushRootRoute('', route.precache.closeURL);
+						} else {
+							this.pushRoute('', '/');
+						}
+					}
+				});
+
+				this.addChildRouter(this.availableWin);
+
+				this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
+				this.availableWin.show();
+			});
 	}
 });
