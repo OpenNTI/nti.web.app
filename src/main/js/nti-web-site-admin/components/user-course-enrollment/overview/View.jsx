@@ -7,6 +7,7 @@ import DateValue from '../../common/DateValue';
 
 import ActiveTimes from './ActiveTimes';
 import LastActivity from './LastActivity';
+import Progress from './Progress';
 
 const { ActiveDays } = Widgets;
 
@@ -33,7 +34,10 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 					</div>
 				</div>
 				<ActiveDays entity={enrollment}/>
-				<ActiveTimes enrollment={enrollment}/>
+				<div className="activity-and-progress">
+					<ActiveTimes enrollment={enrollment}/>
+					{enrollment.CourseProgress && (<Progress enrollment={enrollment} />)}
+				</div>
 			</div>
 		);
 

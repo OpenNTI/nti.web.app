@@ -4,12 +4,12 @@
 	padding: 0.5rem;
 	color: $primary-grey;
 
-	.label {
+	& > .label {
 		text-transform: uppercase;
 		font: normal 700 0.625rem/1 $body-font-family;
 	}
 
-	.value {
+	& > .value {
 		text-align: right;
 		font: normal 300 2rem/1.2 $body-font-family;
 		padding-top: 2rem;
