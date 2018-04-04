@@ -22,4 +22,20 @@
 	.active-times-widget {
 		margin: 10px 0 0;
 	}
+
+	.activity-and-progress {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+
+		.user-course-enrollment-progress {
+			margin: 10px 0 10px 10px;
+			width: 240px;
+
+			.circular-progress {
+				width: 200px;
+				margin: 0 auto;
+			}
+		}
+	}
 }
