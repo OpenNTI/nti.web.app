@@ -48,6 +48,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return this.removeOldRecord()
 					.then(() => result, () => result)
 					.then(() => {
+						// if not a completable course, just return result
+						if(!this.bundle || !this.bundle.get('CompletionPolicy')) {
+							return result;
+						}
+
 						// apply require status
 						const basedOnDefault = this.record.get('IsCompletionDefaultState');
 						const isRequired = this.record.get('CompletionRequired');
