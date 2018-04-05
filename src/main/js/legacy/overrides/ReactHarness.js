@@ -5,6 +5,7 @@ const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService} = require('nti-web-client');
 const {encodeForURI} = require ('nti-lib-ntiids');
+const {getHistory} = require('nti-web-routing');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const User = require('legacy/model/User');
@@ -43,7 +44,8 @@ const Bridge = createReactClass({
 		baseroute: PropTypes.string,
 		children: PropTypes.any,
 		setRouteViewTitle: PropTypes.func,
-		getRouteFor: PropTypes.func
+		getRouteFor: PropTypes.func,
+		addHistory: PropTypes.bool
 	},
 
 	getInitialState () {
@@ -65,6 +67,16 @@ const Bridge = createReactClass({
 	getChildContext () {
 		const bundle = this.props.bundle || ContextStore.getInstance().getRootBundle();
 
+		let router = {
+			makeHref: (x) => x,
+			baseroute: this.state.baseroute,
+			getRouteFor: this.props.getRouteFor
+		};
+
+		if (this.props.addHistory) {
+			router.history = getHistory();
+		}
+
 		return {
 			analyticsManager: AnalyticsUtil.getManager(),
 			defaultEnvironment: {
@@ -72,11 +84,7 @@ const Bridge = createReactClass({
 				setPath: () => {}
 			},
 			routerLinkComponent: () => {},
-			router: {
-				makeHref: (x) => x,
-				baseroute: this.state.baseroute,
-				getRouteFor: this.props.getRouteFor
-			},
+			router,
 			setRouteViewTitle: this.props.setRouteViewTitle,
 			course: bundle && {
 				getAssignment (ntiid) {
@@ -219,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 		ReactDOM.render(
-			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, setRouteViewTitle: this.setRouteViewTitle, ref: x => this.bridgeInstance = x, getRouteFor: config.getRouteFor || getRouteFor },
+			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, setRouteViewTitle: this.setRouteViewTitle, ref: x => this.bridgeInstance = x, getRouteFor: config.getRouteFor || getRouteFor, addHistory: config.addHistory },
 				//The ref will be called on mount with the instance of the component.
 				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
 				//mounted. Calling doRender is the primary way to update the component with new props.
