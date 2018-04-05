@@ -513,7 +513,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	showCourseDetail: function (route, subRoute, notFoundMsg) {
 		var ntiid = decodeFromURI(route.params.id),
-			course = route.precache.course;
+			course = route.precache.course,
+			q = route.queryParams;
+
+		if (q && q['library[paymentcomplete]']) {
+			// We need to show the most recent enrollent, which should be the course we just enrolled in.
+			//TODO figure out what to do here
+		}
 
 		if (course && course.getId().toLowerCase() === ntiid.toLowerCase()) {
 			this.showCourse(course);
