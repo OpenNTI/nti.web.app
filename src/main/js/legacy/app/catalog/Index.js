@@ -17,6 +17,7 @@ const PURCHASED_ACTIVE = /^\/purchased/;
 const REDEEM_ACTIVE = /^\/redeem/;
 
 const CATALOG_ENTRY_ROUTE = /(.*)\/nti-course-catalog-entry\/(.*)/;
+const CATEGORY_NAME = /\/([^/]*)\/?/;
 
 function getPathname (a) {
 	const pathname = a.pathname;
@@ -81,8 +82,11 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 	showCatalog (route) {
 		const baseroute = this.getBaseRoute();
+		const categoryMatch = route.path.match(CATEGORY_NAME);
 
-		this.maybeShowCatalogEntry(route);
+		this.category = categoryMatch[1] !== 'nti-course-catalog-entry' ? categoryMatch[1] : '';
+
+		this.maybeShowCatalogEntry(route, this.category);
 
 		if (this.catalog) {
 			this.catalog.setBaseRoute(baseroute);
@@ -95,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 					if (obj.isCourseCatalogEntry) {
 						const href = `uri:${obj.href}`;
 
-						return `nti-course-catalog-entry/${encodeURIComponent(href)}`;
+						return `${this.category || '.'}/nti-course-catalog-entry/${encodeURIComponent(href)}`;
 					}
 				}
 			});
@@ -176,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 
-	maybeShowCatalogEntry (route) {
+	maybeShowCatalogEntry (route, category) {
 		const {path} = route;
 		const matches = path && path.match(CATALOG_ENTRY_ROUTE);
 
@@ -199,11 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				this.availableWin = Ext.widget('library-available-courses-window', {
 					isSingle: true,
 					doClose: () => {
-						if (route.precache.closeURL) {
-							this.pushRootRoute('', route.precache.closeURL);
-						} else {
-							this.pushRoute('', '/');
-						}
+						this.pushRoute('', category || '/');
 					}
 				});
 
