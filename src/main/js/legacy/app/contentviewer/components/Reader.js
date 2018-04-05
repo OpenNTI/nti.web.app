@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	cls: 'x-reader-pane scrollable',
 	overflowX: 'hidden',
-	overflowY: 'visible',
+	overflowY: 'hidden',
 	ui: 'reader',
 	layout: 'auto',
 	prefix: 'default',
