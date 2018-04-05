@@ -207,10 +207,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 					}
 				});
 
-				this.availableWin.pushRoute = (title, route) => {
-					const pushedParts = route.split('/');
-					const pushedRest = parts.splice(1).join('/');
-
+				this.availableWin.pushRoute = (title) => {
 					this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
 				};
 
