@@ -233,7 +233,6 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	afterRender: function () {
 		this.callParent(arguments);
-		this.addMask();
 		var me = this;
 
 		me.msgMonitors = me.mon(me.msgContainerEl, {
@@ -296,47 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-	updateAvailableCourses: function (current, upcoming, archived, archivedLoader) {
-		if (!this.tabpanel) { return; }
-
-		let needToPreloadArchived = false;
-
-		let upcomingMatches = [];
-		let currentMatches = [];
-
-		if(this.previouslySelectedCourse) {
-			// handle remembering which tab the previously selected course was on.  if it's determined that it was
-			// on the Archived tab, we'll have to pre-load the archived data up front
-			const matching = (current || []).concat(upcoming || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
-
-			upcomingMatches = (upcoming || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
-			currentMatches = (current || []).filter((c) => c.getId() === this.previouslySelectedCourse.getId());
-
-			needToPreloadArchived = matching.length === 0;
-		} else {
-			// if we know current and upcoming are empty, we are going to need to load
-			// archived up front
-			needToPreloadArchived = (current || []).length === 0 && (upcoming || []).length === 0;
-		}
-
-		if(needToPreloadArchived) {
-			this.loadingArchived = true;
-
-			archivedLoader().then((items) => {
-				this.loadingArchived = false;
-				this.removeMask();
-
-				this.tabpanel.setItems(upcoming, current, items, null,
-					upcomingMatches.length > 0
-						? 'Upcoming' : (
-							currentMatches.length > 0
-								? 'Current' : 'Archived'));
-			});
-		}
-		else {
-			this.tabpanel.setItems(upcoming, current, archived, archivedLoader);
-		}
-	},
+	updateAvailableCourses: function (current, upcoming, archived, archivedLoader) {},
 
 	allowNavigation: function () {
 		var active = this.getLayout().getActiveItem();
@@ -553,54 +512,23 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	showCourseDetail: function (route, subRoute, notFoundMsg) {
-		debugger;
 		var ntiid = decodeFromURI(route.params.id),
 			course = route.precache.course,
 			q = route.queryParams,
 			me = this, isEnrollmentConfirmation = false;
-
-		if (course && course.getId().toLowerCase() === ntiid.toLowerCase()) {
-			this.showCourse(course);
-			return Promise.resolve();
-		}
 
 		if (q && q['library[paymentcomplete]']) {
 			// We need to show the most recent enrollent, which should be the course we just enrolled in.
 			isEnrollmentConfirmation = true;
 		}
 
-		notFoundMsg = notFoundMsg || 'Unable to find the course';
+		if (course && course.getId().toLowerCase() === ntiid.toLowerCase()) {
+			this.showCourse(course);
+			this.removeMask();
+			return Promise.resolve();
+		}
 
-		return new Promise(function (fulfill, reject) {
-			me.mun(me.CourseStore, 'all-courses-set');
-			me.mon(me.CourseStore, {
-				'all-courses-set': function (courses) {
-					me.showTabpanel();
-					me.addMask();
-					me.setupCourses(courses);
-
-
-					course = me.CourseStore.findCourseForNtiid(ntiid) ||
-							isEnrollmentConfirmation && me.CourseStore.getMostRecentEnrollmentCourse();
-
-					if (course) {
-						wait()
-							.then(function () {
-								me.showCourse(course);
-								fulfill();
-							});
-					} else {
-						me.showTabpanel();
-
-						wait()
-							.then(alert.bind(null, notFoundMsg));
-
-						fulfill();
-					}
-				}
-			});
-			me.CourseActions.loadAllCourses();
-		});
+		alert(notFoundMsg || 'Unable to find the course');
 	},
 
 	onDrop: function () {
@@ -637,6 +565,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			} else {
 				me.labelEl.update(course.get('Title'));
 				me.identifierEl.update(course.get('ProviderUniqueID'));
+				me.labelEl.removeCls('back');
 			}
 
 			me.footerEl.removeCls(['enroll', 'admission']);

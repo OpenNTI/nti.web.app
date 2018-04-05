@@ -180,7 +180,14 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		const {path} = route;
 		const matches = path && path.match(CATALOG_ENTRY_ROUTE);
 
-		if (!matches) { return; }
+		if (!matches) {
+			if (this.availableWin) {
+				this.availableWin.destroy();
+				delete this.availableWin;
+			}
+
+			return;
+		}
 
 		const parts = matches[2].split('/');
 		const href = decodeURIComponent(parts[0]);
@@ -200,7 +207,12 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 					}
 				});
 
-				this.addChildRouter(this.availableWin);
+				this.availableWin.pushRoute = (title, route) => {
+					const pushedParts = route.split('/');
+					const pushedRest = parts.splice(1).join('/');
+
+					this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
+				};
 
 				this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
 				this.availableWin.show();
