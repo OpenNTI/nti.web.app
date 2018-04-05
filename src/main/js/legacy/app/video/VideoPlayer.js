@@ -5,6 +5,7 @@ const {default: Video, UNSTARTED, ENDED, PLAYING, PAUSED, BUFFERING, CUED} = req
 
 const AnalyticsUtil = require('../../util/Analytics');
 require('legacy/overrides/ReactHarness');
+require('legacy/mixins/InstanceTracking');
 
 const TIME_CHANGE_THRESHOLD = 5;
 

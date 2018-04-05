@@ -279,7 +279,9 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 			return;
 		}
 
-		Ext.each(me.getInstances(), deactivateOthers);
+		if (!this.doNotDeactivateOtherPlayers) {
+			Ext.each(me.getInstances(), deactivateOthers);
+		}
 
 		me.activatePlayer();
 	},

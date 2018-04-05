@@ -31,7 +31,8 @@ module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 
 		this.add({
 			xtype: 'content-video',
-			url: this.url
+			url: this.url,
+			doNotDeactivateOtherPlayers: true
 		});
 	},
 

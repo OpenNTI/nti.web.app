@@ -1,5 +1,7 @@
 const Ext = require('extjs');
 
+// require('legacy/app/video/VideoPlayer');
+
 const WhiteboardCanvas = require('legacy/app/whiteboard/Canvas');
 const Video = require('legacy/app/video/Video');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
@@ -257,10 +259,11 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 		p = Ext.widget({
 			xtype: 'content-video',
-			url: url,
+			src: url,
 			renderTo: node,
 			playerWidth: width,
-			floatParent: owner
+			floatParent: owner,
+			doNotDeactivateOtherPlayers: true
 		});
 
 		return p;
