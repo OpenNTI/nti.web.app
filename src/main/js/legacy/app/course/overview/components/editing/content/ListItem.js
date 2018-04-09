@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const {RemoveButton} = require('nti-web-commons');
-const {ProgressWidgets} = require('nti-web-course');
+const {ProgressWidgets, Overview} = require('nti-web-course');
 
 const Globals = require('legacy/util/Globals');
 const MoveInfo = require('legacy/model/app/MoveInfo');
@@ -9,6 +9,7 @@ const getTargetId = require('../../../../util/get-target-id');
 const saveRequireStatus = require('../../../../util/save-require-status');
 
 const ContentPrompt = require('./Prompt');
+const { ROUTE_BUILDERS } = require('../../Contants');
 
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/dnd/OrderingItem');
@@ -66,8 +67,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.removeAll(true);
 
 		this.setUpRecord(record)
-			.then(() => {
-				var preview = this.getPreview(record);
+			.then(async () => {
+				const preview = await this.getPreview(record);
 
 				this.mon(record, {
 					single: true,
@@ -77,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				this.addControlsIfNecessary(record, this.course);
 
-				if(preview) {
+				if (preview) {
 					this.add({
 						xtype: 'container',
 						cls: 'body',
@@ -101,26 +102,36 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getPreviewType: function (/*record*/) {},
 
 
-	getPreview: function (record) {
-		var item = record.getRaw(),
+	getRouteFor (object, context) {
+		const builder = ROUTE_BUILDERS[object.MimeType];
+
+		return builder ? builder(this.course, this.currentOutlineNode, object, context) : null;
+	},
+
+	getPreview: async function (record) {
+		var rawItem = record.getRaw(),
 			type = this.getPreviewType(record);
 
 		if (!type) {
 			return null;
 		}
 
+		const item = await record.getInterfaceInstance();
+		const course = await this.course.getInterfaceInstance();
+		this.currentOutlineNode = await this.outlineNode.getInterfaceInstance();
+
 		return Ext.applyIf({
-			xtype: type,
-			locationInfo: this.locationInfo,
-			courseRecord: this.outlineNode,
-			assignment: this.assignment,
-			course: this.course,
-			record: record,
-			'target-ntiid': item['Target-NTIID'],
-			ntiid: item.NTIID,
-			navigate: this.doNavigation.bind(this),
-			inEditMode: true
-		}, item);
+			xtype: 'react',
+			component: Overview.OverviewContents,
+			outlineNode: this.currentOutlineNode,
+			course,
+			layout: Overview.Lesson.Grid,
+			overview: { Items: [item], getID: () => {} },
+			baseroute: '/',
+			getRouteFor: this.getRouteFor.bind(this),
+			addHistory: true,
+			editMode: true
+		}, rawItem);
 	},
 
 
