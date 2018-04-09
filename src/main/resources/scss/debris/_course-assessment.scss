@@ -198,6 +198,17 @@ canvas.x-component-course-assessment {
 		&.disabled {
 			opacity: .3;
 		}
+
+		.nti-checkbox-input {
+			label {
+				position: absolute;
+				left: -1.55rem;
+			}
+
+			.date-editor {
+				margin-top: 10px;
+			}
+		}
 	}
 
 
