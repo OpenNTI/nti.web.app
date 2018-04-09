@@ -1,6 +1,5 @@
 const Ext = require('extjs');
 const {Overview} = require('nti-web-course');
-const {encodeForURI} = require('nti-lib-ntiids');
 
 const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
