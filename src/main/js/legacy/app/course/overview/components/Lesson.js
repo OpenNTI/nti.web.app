@@ -4,7 +4,7 @@ const {Overview} = require('nti-web-course');
 const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
 
-const { ROUTE_BUILDERS } = require('./Contants');
+const { ROUTE_BUILDERS } = require('./Constants');
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 require('./types/Content');

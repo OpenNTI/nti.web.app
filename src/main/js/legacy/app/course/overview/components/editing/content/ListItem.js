@@ -7,9 +7,9 @@ const MoveInfo = require('legacy/model/app/MoveInfo');
 
 const getTargetId = require('../../../../util/get-target-id');
 const saveRequireStatus = require('../../../../util/save-require-status');
+const { ROUTE_BUILDERS } = require('../../Constants');
 
 const ContentPrompt = require('./Prompt');
-const { ROUTE_BUILDERS } = require('../../Contants');
 
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/dnd/OrderingItem');
@@ -120,6 +120,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const course = await this.course.getInterfaceInstance();
 		this.currentOutlineNode = await this.outlineNode.getInterfaceInstance();
 
+		const targetId = getTargetId(record);
+
+		const onRequirementChange = (value, target) => {
+			let id = targetId;
+
+			if(target) {
+				id = target.NTIID;
+			}
+
+			saveRequireStatus(this.course, id, value).then(() => {
+				record.set('IsCompletionDefaultState', value === DEFAULT);
+				record.set('CompletionRequired', value === REQUIRED || (value === DEFAULT && record.get('CompletionDefaultState')));
+			});
+		};
+
 		return Ext.applyIf({
 			xtype: 'react',
 			component: Overview.OverviewContents,
@@ -130,39 +145,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			baseroute: '/',
 			getRouteFor: this.getRouteFor.bind(this),
 			addHistory: true,
-			editMode: true
+			editMode: true,
+			onRequirementChange
 		}, rawItem);
-	},
-
-
-	getRequireControl: function (record, bundle) {
-		const targetId = getTargetId(record);
-
-		const onChange = (value) => {
-			saveRequireStatus(this.course, targetId, value).then(() => {
-				record.set('IsCompletionDefaultState', value === DEFAULT);
-				record.set('CompletionRequired', value === REQUIRED || (value === DEFAULT && record.get('CompletionDefaultState')));
-			});
-		};
-
-		this.course.get('CompletionPolicy').on('requiredValueChanged', ({ntiid, value}) => {
-			if(this.requireControl && targetId === ntiid) {
-				this.requireControl.setProps({value});
-			}
-		});
-
-		const transformed = {
-			IsCompletionDefaultState: record.get('IsCompletionDefaultState'),
-			CompletionRequired: record.get('CompletionRequired'),
-			CompletionDefaultState: record.get('CompletionDefaultState')
-		};
-
-		return {
-			xtype: 'react',
-			component: ProgressWidgets.RequirementControl,
-			record: transformed,
-			onChange
-		};
 	},
 
 
@@ -213,10 +198,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			root: this.lessonOverview,
 			bundle: bundle
 		});
-
-		if(this.course.get('CompletionPolicy') && Object.keys(record.rawData).includes('CompletionRequired')) {
-			this.requireControl = this.controls.add(this.getRequireControl(record, bundle));
-		}
 
 		this.controls.add({
 			xtype: 'overview-editing-controls-edit',
