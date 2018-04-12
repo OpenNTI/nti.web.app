@@ -28,6 +28,13 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 	request: function (urlOrConfig) {
 		var cfg = {};
+		let returnResponse = false;
+
+		if (!Ext.isString(urlOrConfig)) {
+			returnResponse = urlOrConfig.returnResponse;
+
+			delete urlOrConfig.returnResponse;
+		}
 
 		return new Promise(function (fulfill, reject) {
 			function resolve (q, s, r) {
@@ -37,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 					return;
 				}
 
-				if (q.method === 'HEAD') {
+				if (q.method === 'HEAD' || returnResponse) {
 					value = r;
 				}
 

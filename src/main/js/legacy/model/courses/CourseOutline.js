@@ -30,7 +30,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 	fields: [
 		{name: 'CourseOutlineSharedEntries', type: 'auto', persist: false},
 		{name: 'Items', type: 'arrayItem', persist: false},
-		{name: 'IsCourseOutlineShared', type: 'bool', persist: false}
+		{name: 'IsCourseOutlineShared', type: 'bool', persist: false},
+		{name: 'ContentsLastModified', type: 'date', persist: false}
 	],
 
 	constructor () {
@@ -93,8 +94,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		let load = this.getFromCache(key);
 
 		if (!load || doNotCache) {
-			load = Service.request(link)
-				.then((text) => Ext.decode(text))
+			load = Service.request({url: link, returnResponse: true})
+				.then((resp) => {
+					this.set('ContentsLastModified', resp.getResponseHeader('Last-Modified'));
+
+					return Ext.decode(resp.responseText);
+				})
 				.then((json) => lazy.ParseUtils.parseItems(json))
 				.then((items) => {
 					//create a clone of this model

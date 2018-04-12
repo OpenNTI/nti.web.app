@@ -154,6 +154,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.showHeader(false);
 		}
 
+		//If we have an outline, its the same outline as what we are setting, and the contents haven't changed
+		if (this.outline && this.outline.getId() === outline.getId() && this.outlineContentsLastModified === outline.get('ContentsLastModified') && this.outlineWasEditing === this.isEditing) {
+			return;
+		}
+
 		this.disableOrderingContainer();
 
 		var catalog = bundle.getCourseCatalogEntry(),
@@ -161,6 +166,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.activeBundle = bundle;
 		this.outline = outline;
+		this.outlineContentsLastModified = outline.get('ContentsLastModified');
+		this.outlineWasEditing = this.isEditing;
 		this.shouldShowDates = !catalog.get('DisableOverviewCalendar');
 
 		// NOTE: We need to keep the height in order to make sure the scroll position
