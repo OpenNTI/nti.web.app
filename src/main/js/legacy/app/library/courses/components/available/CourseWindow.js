@@ -628,9 +628,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	showPaymenComplete: function (route, subRoute) {
-		var mostRecent = this.CourseStore.getMostRecentEnrollmentCourse();
-
-		this.showTabpanel();
+		var mostRecent = route.precache.course;
 
 		if (mostRecent && mostRecent.getEnrollmentOption('FiveminuteEnrollment')) {
 			this.showEnrollmentOption(mostRecent, 'FiveminuteEnrollment');

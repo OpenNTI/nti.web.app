@@ -86,7 +86,6 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		this.category = categoryMatch[1] !== 'nti-course-catalog-entry' ? categoryMatch[1] : '';
 
-		this.maybeShowCatalogEntry(route, this.category);
 
 		if (this.catalog) {
 			this.catalog.setBaseRoute(baseroute);
@@ -108,6 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		this.setTitle(title);
 
 		this.setUpNavigation(baseroute, route.path);
+		return this.maybeShowCatalogEntry(route, this.category);
 	},
 
 	getTitleFromRoute (route) {
@@ -180,6 +180,23 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 
+	loadCatalogEntry (href, rest) {
+		if (rest !== 'paymentcomplete') {
+			return Service.request(href.replace(/^uri:/, ''))
+				.then(resp => lazy.ParseUtils.parseItems(resp)[0]);
+		}
+
+		const enrolledURL = Service.getCollection('EnrolledCourses', 'Courses').href;
+
+		return Service.request(`${enrolledURL}?batchSize=1&batchStart=0`)
+			.then(resp => {
+				const item = lazy.ParseUtils.parseItems(JSON.parse(resp))[0];
+
+				return item.get('CatalogEntry');
+			});
+	},
+
+
 	maybeShowCatalogEntry (route, category) {
 		const {path} = route;
 		const matches = path && path.match(CATALOG_ENTRY_ROUTE);
@@ -190,15 +207,14 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				delete this.availableWin;
 			}
 
-			return;
+			return Promise.resolve();
 		}
 
 		const parts = matches[2].split('/');
 		const href = decodeURIComponent(parts[0]);
 		const rest = parts.slice(1).join('/');
 
-		Service.request(href.replace(/^uri:/, ''))
-			.then(resp => lazy.ParseUtils.parseItems(resp)[0])
+		return this.loadCatalogEntry(href, rest)
 			.then((catalogEntry) => {
 				this.availableWin = Ext.widget('library-available-courses-window', {
 					isSingle: true,
