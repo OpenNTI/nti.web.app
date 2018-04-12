@@ -1405,8 +1405,7 @@ input[type=number]{
 		clear: both;
 
 		.lesson-overview-discussion-grid-item {
-			width: auto;
-			margin: 0;
+			width: 100%;
 		}
 
 		&:not(.transition) {
