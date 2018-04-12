@@ -18,7 +18,7 @@ const ROUTE_BUILDERS = {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/video/${getURLPart(obj)}/`;
 	},
 
-	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context) => {
+	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context, editMode) => {
 		if (obj.isExternal && !obj.isEmbeddableDocument && context !== 'discussions') {
 			return {
 				href: obj.href,
@@ -28,7 +28,9 @@ const ROUTE_BUILDERS = {
 
 		const ntiid = (obj.isEmbeddableDocument || obj.isExternal) ? obj.NTIID : obj['target-NTIID'] || obj.NTIID;
 
-		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(ntiid)}/`;
+		const editPath = editMode ? 'edit/' : '';
+
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(ntiid)}/${editPath}`;
 	},
 
 	'application/vnd.nextthought.ntitimeline': (course, lesson, obj) => {

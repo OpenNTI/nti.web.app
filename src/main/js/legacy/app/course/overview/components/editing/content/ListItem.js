@@ -105,7 +105,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getRouteFor (object, context) {
 		const builder = ROUTE_BUILDERS[object.MimeType];
 
-		return builder ? builder(this.course, this.currentOutlineNode, object, context) : null;
+		// pass true for editMode.  Types that support going to edit straight from overview edit
+		// should honor this flag.. other types will ignore it
+		return builder ? builder(this.course, this.currentOutlineNode, object, context, true) : null;
 	},
 
 	getPreview: async function (record) {
