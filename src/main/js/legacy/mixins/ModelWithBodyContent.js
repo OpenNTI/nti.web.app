@@ -259,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 		p = Ext.widget({
 			xtype: 'content-video',
-			src: url,
+			url: url,
 			renderTo: node,
 			playerWidth: width,
 			floatParent: owner,
