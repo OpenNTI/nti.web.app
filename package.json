@@ -37,7 +37,7 @@
     "create-react-class": "^15.5.2",
     "detect-zoom": "^1.0.2",
     "durationjs": "1.1.1",
-    "email-validator": "^1.0.4",
+    "email-validator": "~1.1.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "extjs": "4.2.0-nti",
