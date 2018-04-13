@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		var cfg = {};
 		let returnResponse = false;
 
-		if (!Ext.isString(urlOrConfig)) {
+		if (urlOrConfig && !Ext.isString(urlOrConfig)) {
 			returnResponse = urlOrConfig.returnResponse;
 
 			delete urlOrConfig.returnResponse;
