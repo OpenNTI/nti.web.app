@@ -47,5 +47,13 @@
 				margin-right: 10px;
 			}
 		}
+
+		.completable {
+			.x-grid-data-row {
+				.x-grid-cell-inner {
+					cursor: pointer;
+				}
+			}
+		}
 	}
 }

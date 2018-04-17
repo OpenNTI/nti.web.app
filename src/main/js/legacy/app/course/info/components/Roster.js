@@ -348,6 +348,13 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			visibleColumns = this.allColumns.filter(x => x.name !== 'progress');
 		}
 
+		if(this.grid && supportsProgress) {
+			this.grid.addCls('completable');
+		}
+		else if(this.grid) {
+			this.grid.removeCls('completable');
+		}
+
 		this.grid.reconfigure(this.store, visibleColumns);
 
 		this.filterMenu.setState('*');
@@ -528,16 +535,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		grid.selModel.deselectAll();
 
 		var menu,
-			disclosure = e.getTarget('.disclosure'),
-			progress = e.getTarget('.progress');
-
-		if (progress) {
-			const sorter = this.store.getSorters()[0];
-			const filter = this.store.filters && this.store.filters.items && this.store.filters.items[0];
-			const obj = ProgressWindow.getWindowObject(this.currentBundle, i, this.currentFilter, filter && filter.property, filter && filter.value, sorter && sorter.property, sorter && sorter.direction);
-
-			this.WindowActions.pushWindow(obj);
-		}
+			disclosure = e.getTarget('.disclosure');
 
 		if (disclosure) {
 			menu = Ext.widget('report-menu', {
@@ -548,6 +546,17 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			this.on('destroy', menu.destroy.bind(menu));
 		} else if (e.getTarget('.email')) {
 			this.openIndividualEmail(e);
+		} else {
+
+			const supportsProgress = this.currentBundle && this.currentBundle.get && this.currentBundle.get('CompletionPolicy');
+
+			if(supportsProgress) {
+				const sorter = this.store.getSorters()[0];
+				const filter = this.store.filters && this.store.filters.items && this.store.filters.items[0];
+				const obj = ProgressWindow.getWindowObject(this.currentBundle, i, this.currentFilter, filter && filter.property, filter && filter.value, sorter && sorter.property, sorter && sorter.direction);
+
+				this.WindowActions.pushWindow(obj);
+			}
 		}
 	},
 
