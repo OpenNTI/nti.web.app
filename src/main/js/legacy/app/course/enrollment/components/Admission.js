@@ -569,8 +569,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			values.email = email;
 		}
 
-		if (!values['.contact_email'] && email) {
-			values['.contact_email'] = email;
+		if (!values['contact_email'] && email) {
+			values['contact_email'] = email;
 		}
 
 		return values;
