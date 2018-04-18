@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DisplayName, Avatar, DateTime, Checkbox} from 'nti-web-commons';
-import {scoped} from 'nti-lib-locale';
+import {DisplayName, Avatar, DateTime, Checkbox} from '@nti/web-commons';
+import {scoped} from '@nti/lib-locale';
 import cx from 'classnames';
 
 const DEFAULT_TEXT = {

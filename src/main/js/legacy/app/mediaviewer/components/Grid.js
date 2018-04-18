@@ -1,6 +1,6 @@
 
 const Ext = require('extjs');
-const { encodeForURI } = require('nti-lib-ntiids');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const VideoPosters = require('legacy/model/resolvers/VideoPosters');
 const PlaylistItem = require('legacy/model/PlaylistItem');

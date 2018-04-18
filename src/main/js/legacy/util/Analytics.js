@@ -1,9 +1,9 @@
 const Ext = require('extjs');
 const React = require('react');
 const ReactDOM = require('react-dom');
-const {createDOM} = require('nti-lib-dom');
-const {Session} = require('nti-web-session');
-const {wait} = require('nti-commons');
+const {createDOM} = require('@nti/lib-dom');
+const {Session} = require('@nti/web-session');
+const {wait} = require('@nti/lib-commons');
 
 const ContextStateStore = require('legacy/app/context/StateStore');
 

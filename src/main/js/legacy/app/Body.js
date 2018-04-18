@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const { isNTIID, encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+const { isNTIID, encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 
 const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
 const ContentBundle = require('legacy/model/ContentBundle');

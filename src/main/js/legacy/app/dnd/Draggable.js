@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const DndInfo = require('legacy/model/app/DndInfo');
 const DataTransferStore = require('legacy/store/DataTransfer');

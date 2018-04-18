@@ -1,7 +1,7 @@
 const Ext = require('extjs');
-const { CourseMenu } = require('nti-web-course');
-const { Prompt } = require('nti-web-commons');
-const { getService } = require('nti-web-client');
+const { CourseMenu } = require('@nti/web-course');
+const { Prompt } = require('@nti/web-commons');
+const { getService } = require('@nti/web-client');
 
 const { getString, getFormattedString } = require('legacy/util/Localization');
 const EnrollmentStateStore = require('legacy/app/course/enrollment/StateStore');

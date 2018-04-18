@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const { encodeForURI } = require('nti-lib-ntiids');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const Assignment = require('legacy/model/assessment/Assignment');
 const UsersCourseAssignmentHistoryItemFeedback = require('legacy/model/courseware/UsersCourseAssignmentHistoryItemFeedback');

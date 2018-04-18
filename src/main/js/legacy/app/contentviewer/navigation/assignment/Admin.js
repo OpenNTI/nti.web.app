@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {ControlBar} = require('nti-assignment-editor');
-const { encodeForURI } = require('nti-lib-ntiids');
+const {ControlBar} = require('@nti/web-assignment-editor');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const ChatStateStore = require('legacy/app/chat/StateStore');
 const AssignmentStatus = require('legacy/app/course/assessment/AssignmentStatus');

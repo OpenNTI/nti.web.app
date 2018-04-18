@@ -1,8 +1,8 @@
 import React from 'react';
 import cx from 'classnames';
-import {scoped} from 'nti-lib-locale';
+import {scoped} from '@nti/lib-locale';
 import PropTypes from 'prop-types';
-import {ControlBar, Button} from 'nti-web-commons';
+import {ControlBar, Button} from '@nti/web-commons';
 
 const PREVIEW = 'preview';
 const EDITING = 'editing';

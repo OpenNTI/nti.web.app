@@ -1,8 +1,8 @@
 /*eslint no-undef:1*/
 
 const Ext = require('extjs');
-const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
-const {wait} = require('nti-commons');
+const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
+const {wait} = require('@nti/lib-commons');
 
 const EnrollmentActions = require('legacy/app/course/enrollment/Actions');
 const EnrollmentStateStore = require('legacy/app/course/enrollment/StateStore');

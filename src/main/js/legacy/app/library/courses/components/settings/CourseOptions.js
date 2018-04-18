@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const {getString, getFormattedString} = require('legacy/util/Localization');
 const EnrollmentActions = require('legacy/app/course/enrollment/Actions');

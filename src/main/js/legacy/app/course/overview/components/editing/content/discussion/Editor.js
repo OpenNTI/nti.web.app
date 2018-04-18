@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {Forums} = require('nti-web-discussions');
+const {Forums} = require('@nti/web-discussions');
 
 const DiscussionRef = require('legacy/model/DiscussionRef');
 const Discussion = require('legacy/model/Discussion');

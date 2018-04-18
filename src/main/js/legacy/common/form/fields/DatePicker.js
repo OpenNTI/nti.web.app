@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const moment = require('moment');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker', {

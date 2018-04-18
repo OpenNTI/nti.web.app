@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {getService} = require('nti-web-client');
-const {wait} = require('nti-commons');
+const {getService} = require('@nti/web-client');
+const {wait} = require('@nti/lib-commons');
 
 const {getString} = require('legacy/util/Localization');
 const Socket = require('legacy/proxy/Socket');

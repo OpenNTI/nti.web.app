@@ -1,7 +1,7 @@
 const Ext = require('extjs');
-const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
-const {wait} = require('nti-commons');
-const {getHistory} = require('nti-web-routing');
+const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
+const {wait} = require('@nti/lib-commons');
+const {getHistory} = require('@nti/web-routing');
 
 const {getString} = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');

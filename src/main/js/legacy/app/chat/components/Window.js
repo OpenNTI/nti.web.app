@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const GroupsActions = require('legacy/app/groups/Actions');
 const GroupsStateStore = require('legacy/app/groups/StateStore');

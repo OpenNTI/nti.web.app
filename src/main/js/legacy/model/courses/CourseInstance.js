@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {URL: {join: urlJoin}} = require('nti-commons');
+const {URL: {join: urlJoin}} = require('@nti/lib-commons');
 
 const {getString} = require('legacy/util/Localization');
 const {getURL, isFeature} = require('legacy/util/Globals');

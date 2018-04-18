@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {RemoveButton} = require('nti-web-commons');
-const {Overview} = require('nti-web-course');
+const {RemoveButton} = require('@nti/web-commons');
+const {Overview} = require('@nti/web-course');
 
 const Globals = require('legacy/util/Globals');
 const MoveInfo = require('legacy/model/app/MoveInfo');

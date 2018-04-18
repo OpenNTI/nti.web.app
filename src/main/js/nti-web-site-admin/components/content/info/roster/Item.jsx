@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DisplayName} from 'nti-web-commons';
-import {CircularProgress} from 'nti-web-charts';
+import {Avatar, DisplayName} from '@nti/web-commons';
+import {CircularProgress} from '@nti/web-charts';
 
 SiteAdminCourseRosterItem.propTypes = {
 	item: PropTypes.object.isRequired

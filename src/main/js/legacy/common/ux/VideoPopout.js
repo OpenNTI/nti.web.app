@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {

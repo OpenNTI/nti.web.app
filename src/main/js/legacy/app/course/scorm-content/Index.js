@@ -2,8 +2,8 @@ const queryString = require('querystring');
 const url = require('url');
 
 const Ext = require('extjs');
-const { Scorm } = require('nti-web-course');
-const { getService } = require('nti-web-client');
+const { Scorm } = require('@nti/web-course');
+const { getService } = require('@nti/web-client');
 
 require('legacy/overrides/ReactHarness');
 

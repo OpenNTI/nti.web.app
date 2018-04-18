@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 
 const Search = require('nti-web-components-search');
 const ChatActions = require('legacy/app/chat/Actions');

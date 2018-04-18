@@ -1,6 +1,6 @@
-import {getService} from 'nti-web-client';
-import {Stores} from 'nti-lib-store';
-import {decodeFromURI} from 'nti-lib-ntiids';
+import {getService} from '@nti/web-client';
+import {Stores} from '@nti/lib-store';
+import {decodeFromURI} from '@nti/lib-ntiids';
 
 export default class EnrollmentStore extends Stores.SimpleStore {
 	constructor () {

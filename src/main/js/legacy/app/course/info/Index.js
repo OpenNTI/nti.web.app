@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const WindowsActions = require('../../windows/Actions');
 const CoursesStateStore = require('../../library/courses/StateStore');

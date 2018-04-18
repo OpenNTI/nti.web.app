@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const {guidGenerator, isMe, swallow} = require('legacy/util/Globals');
 const DomUtils = require('legacy/util/Dom');

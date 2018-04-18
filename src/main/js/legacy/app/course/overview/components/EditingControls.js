@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const ControlBar = require('nti-web-course-overview-controls').default;
 const ReactHarness = require('legacy/overrides/ReactHarness');

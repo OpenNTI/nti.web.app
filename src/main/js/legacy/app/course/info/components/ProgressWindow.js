@@ -1,7 +1,7 @@
 const Ext = require('extjs');
-const {parseNTIID} = require('nti-lib-ntiids');
-const {getService} = require('nti-web-client');
-const {Progress} = require('nti-web-course');
+const {parseNTIID} = require('@nti/lib-ntiids');
+const {getService} = require('@nti/web-client');
+const {Progress} = require('@nti/web-course');
 
 require('legacy/overrides/ReactHarness');
 const Base64 = require('legacy/util/Base64');

@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {DayTimeToggle} = require('nti-web-commons');
+const {DayTimeToggle} = require('@nti/web-commons');
 require('legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar', {

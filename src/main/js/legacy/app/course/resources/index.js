@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {getService} = require('nti-web-client');
+const {getService} = require('@nti/web-client');
 
 const Resources = require('nti-web-course-resources');
 const SearchStateStore = require('legacy/app/search/StateStore');

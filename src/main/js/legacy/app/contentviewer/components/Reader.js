@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const RangeUtils = require('legacy/util/Ranges');
 const ContentProxy = require('legacy/proxy/JSONP');

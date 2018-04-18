@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {getService} = require('nti-web-client');
-const {List} = require('nti-web-reports');
+const {getService} = require('@nti/web-client');
+const {List} = require('@nti/web-reports');
 
 require('legacy/overrides/ReactHarness.js');
 
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 	}
 });
 
-// const {wait} = require('nti-commons');
+// const {wait} = require('@nti/lib-commons');
 // const {getString} = require('legacy/util/Localization');
 
 

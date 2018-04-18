@@ -1,4 +1,4 @@
-import {getService} from 'nti-web-client';
+import {getService} from '@nti/web-client';
 
 export default {
 	resolveObject (hit) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {searchable} from 'nti-web-search';
+import {searchable} from '@nti/web-search';
 
 import List from './List';
 import Store from './CourseStore';

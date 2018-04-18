@@ -1,9 +1,9 @@
 const Ext = require('extjs');
-// const {wait} = require('nti-commons');
-const {ControlBar} = require('nti-content');
-const { encodeForURI } = require('nti-lib-ntiids');
-const { StickyToolbar } = require('nti-content');
-const {wait} = require('nti-commons');
+// const {wait} = require('@nti/lib-commons');
+const {ControlBar} = require('@nti/web-content');
+const { encodeForURI } = require('@nti/lib-ntiids');
+const { StickyToolbar } = require('@nti/web-content');
+const {wait} = require('@nti/lib-commons');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 

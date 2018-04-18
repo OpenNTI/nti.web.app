@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {ProgressWidgets} = require('nti-web-course');
+const {ProgressWidgets} = require('@nti/web-course');
 
 const DEFAULT = 'Default';
 const REQUIRED = 'Required';

@@ -1,6 +1,6 @@
 /*globals NextThought*/
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const {Deferred} = require('legacy/util/Promise');
 const Globals = require('legacy/util/Globals');

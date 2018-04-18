@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Flyout } from 'nti-web-commons';
-import { Editor } from 'nti-web-course';
-import { encodeForURI } from 'nti-lib-ntiids';
+import { Flyout } from '@nti/web-commons';
+import { Editor } from '@nti/web-course';
+import { encodeForURI } from '@nti/lib-ntiids';
 
 export default class AdminToolbar extends React.Component {
 	static propTypes = {

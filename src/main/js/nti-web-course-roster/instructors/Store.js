@@ -1,4 +1,4 @@
-import StorePrototype from 'nti-lib-store';
+import StorePrototype from '@nti/lib-store';
 
 import Permissions from './Permissions';
 import {

@@ -1,4 +1,4 @@
-import { User } from 'nti-web-client';
+import { User } from '@nti/web-client';
 
 //FIXME: do not import legacy code outside the legacy folder!
 import UserModel from 'legacy/model/User';

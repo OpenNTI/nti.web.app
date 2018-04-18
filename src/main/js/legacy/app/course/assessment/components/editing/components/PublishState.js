@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {Publish, Constants} = require('nti-web-commons');
+const {Publish, Constants} = require('@nti/web-commons');
 
 require('legacy/common/form/fields/DateTimeComponent');
 

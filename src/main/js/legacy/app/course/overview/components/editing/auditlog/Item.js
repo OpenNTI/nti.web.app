@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {DateTime} = require('nti-web-commons');
-const {Parsing} = require('nti-commons');
+const {DateTime} = require('@nti/web-commons');
+const {Parsing} = require('@nti/lib-commons');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const Video = require('legacy/model/Video');

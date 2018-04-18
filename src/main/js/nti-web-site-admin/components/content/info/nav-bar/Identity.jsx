@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Presentation} from 'nti-web-commons';
-import {LinkTo} from 'nti-web-routing';
-import {scoped} from 'nti-lib-locale';
+import {Presentation} from '@nti/web-commons';
+import {LinkTo} from '@nti/web-routing';
+import {scoped} from '@nti/lib-locale';
 
 const DEFAULT_TEXT = {
 	course: 'View Course'

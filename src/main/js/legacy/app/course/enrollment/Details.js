@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
-const {Presentation} = require('nti-web-commons');
+const {wait} = require('@nti/lib-commons');
+const {Presentation} = require('@nti/web-commons');
 
 const User = require('legacy/model/User');
 const {getString, getFormattedString} = require('legacy/util/Localization');

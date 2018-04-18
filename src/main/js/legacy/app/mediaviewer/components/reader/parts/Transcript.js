@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
 const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');

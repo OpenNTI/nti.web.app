@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const { decodeFromURI } = require('nti-lib-ntiids');
+const { decodeFromURI } = require('@nti/lib-ntiids');
 
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')

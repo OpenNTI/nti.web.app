@@ -1,5 +1,5 @@
 // import React from 'react';
-import {Router, Route} from 'nti-web-routing';// eslint-disable-line
+import {Router, Route} from '@nti/web-routing';// eslint-disable-line
 
 import Advanced from './advanced';
 import Content from './content';

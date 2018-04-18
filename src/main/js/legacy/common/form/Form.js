@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const DatePicker = require('legacy/common/form/fields/DatePicker');
 const FilePicker = require('legacy/common/form/fields/FilePicker');

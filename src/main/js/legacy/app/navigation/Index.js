@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const IdentityIndex = require('../account/identity/Index');
 const NotificationsTab = require('../notifications/Tab');

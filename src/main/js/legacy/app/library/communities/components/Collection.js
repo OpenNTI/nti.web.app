@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
-const {toCSSClassName} = require('nti-lib-dom');
+const {wait} = require('@nti/lib-commons');
+const {toCSSClassName} = require('@nti/lib-dom');
 
 const NTIFormat = require('legacy/util/Format');
 

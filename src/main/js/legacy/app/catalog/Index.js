@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const CatalogView = require('nti-web-catalog');
-const { encodeForURI } = require('nti-lib-ntiids');
+const CatalogView = require('@nti/web-catalog');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const Globals = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');

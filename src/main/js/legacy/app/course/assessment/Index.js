@@ -1,7 +1,7 @@
 const Path = require('path');
 
 const Ext = require('extjs');
-const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
+const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const lazy = require('legacy/util/lazy-require')

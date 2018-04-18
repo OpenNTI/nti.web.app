@@ -3,7 +3,7 @@
 		"public": true,
 		"apps": [
 			{
-				"package": "nti-web-login",
+				"package": "@nti/web-login",
 				"basepath": "/login/"
 			}
 		],

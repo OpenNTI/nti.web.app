@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const TemplatesForNotes = require('legacy/app/annotations/note/Templates');
 const ContentviewerActions = require('legacy/app/contentviewer/Actions');

@@ -1,7 +1,7 @@
 const Ext = require('extjs');
-const { encodeForURI, decodeFromURI } = require('nti-lib-ntiids');
-const {getService} = require('nti-web-client');
-const {Editor} = require('nti-content');
+const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
+const {getService} = require('@nti/web-client');
+const {Editor} = require('@nti/web-content');
 
 const ContentviewerIndex = require('legacy/app/contentviewer/Index');
 const PageInfo = require('legacy/model/PageInfo');

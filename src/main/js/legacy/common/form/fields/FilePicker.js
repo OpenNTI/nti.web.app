@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {autobind} = require('nti-commons');
-const {ContentResources} = require('nti-web-commons');
+const {autobind} = require('@nti/lib-commons');
+const {ContentResources} = require('@nti/web-commons');
 
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')

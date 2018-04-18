@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const { encodeForURI } = require('nti-lib-ntiids');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const Globals = require('legacy/util/Globals');
 

@@ -1,5 +1,5 @@
-import {Router, Route} from 'nti-web-routing';
-import {encodeForURI} from 'nti-lib-ntiids';
+import {Router, Route} from '@nti/web-routing';
+import {encodeForURI} from '@nti/lib-ntiids';
 
 import UserCourseEnrollment from '../../user-course-enrollment';
 

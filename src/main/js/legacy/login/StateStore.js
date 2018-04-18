@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const Socket = require('legacy/proxy/Socket');

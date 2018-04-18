@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 
 import React from 'react';
-import Connector from 'nti-lib-store-connector';
+import Connector from '@nti/lib-store-connector';
 
 const Instance = Symbol('Instance');
 

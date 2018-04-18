@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const Toaster = require('legacy/common/toast/Manager');
 const lazy = require('legacy/util/lazy-require')

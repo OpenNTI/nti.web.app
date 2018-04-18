@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {Publish} = require('nti-web-commons');
+const {Publish} = require('@nti/web-commons');
 
 const Actions = require('../Actions');
 

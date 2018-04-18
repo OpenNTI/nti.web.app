@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {Forums} = require('nti-web-discussions');
+const {Forums} = require('@nti/web-discussions');
 
 const WindowActions = require('legacy/app/windows/Actions');
 const DomUtils = require('legacy/util/Dom');

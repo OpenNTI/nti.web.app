@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {searchable, contextual} from 'nti-web-search';
-import {scoped} from 'nti-lib-locale';
-import {LinkTo} from 'nti-web-routing';
+import {searchable, contextual} from '@nti/web-search';
+import {scoped} from '@nti/lib-locale';
+import {LinkTo} from '@nti/web-routing';
 
 import SearchablePagedView from '../../common/SearchablePagedView';
 

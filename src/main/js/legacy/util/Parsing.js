@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	encodeForURI: function (ntiid) {
 		var cut = this.COMMON_PREFIX.length;
 
-		console.error('This is deprecated. Use nti-lib-ntiids encodeForURI instead.');
+		console.error('This is deprecated. Use @nti/lib-ntiids encodeForURI instead.');
 
 		if (ntiid && ntiid.substr(0, cut) === this.COMMON_PREFIX) {
 			ntiid = ntiid.substr(cut);
@@ -309,7 +309,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	decodeFromURI: function (component) {
 		var ntiid = decodeURIComponent(component);
 
-		console.error('This is deprecated. Use nti-lib-ntiids decodeFromURI instead.');
+		console.error('This is deprecated. Use @nti/lib-ntiids decodeFromURI instead.');
 
 		if (!this.isNTIID(ntiid) && ntiid.substr(0,3) !== 'tag') {
 			ntiid = this.COMMON_PREFIX + ntiid;

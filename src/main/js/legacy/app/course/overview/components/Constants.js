@@ -1,5 +1,5 @@
 
-const { encodeForURI } = require('nti-lib-ntiids');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 function getURLPart (obj) {
 	return encodeForURI(obj.getId ? obj.getId() : obj.getID ? obj.getID() : obj.NTIID);

@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const { encodeForURI } = require('nti-lib-ntiids');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const UIViewHeader = require('legacy/model/UIViewHeader');
 const {isFeature} = require('legacy/util/Globals');

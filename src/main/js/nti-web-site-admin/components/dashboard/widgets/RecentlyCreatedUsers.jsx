@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from 'nti-lib-locale';
-import {DateTime, Loading, Avatar} from 'nti-web-commons';
-import {getService, User} from 'nti-web-client';
+import {scoped} from '@nti/lib-locale';
+import {DateTime, Loading, Avatar} from '@nti/web-commons';
+import {getService, User} from '@nti/web-client';
 
 const LABELS = {
 	title: 'Recently Created Users',

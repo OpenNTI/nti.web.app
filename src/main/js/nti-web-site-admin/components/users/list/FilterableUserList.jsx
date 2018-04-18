@@ -1,5 +1,5 @@
 import React from 'react';
-import {Prompt} from 'nti-web-commons';
+import {Prompt} from '@nti/web-commons';
 
 import Toolbar from '../../common/toolbar/Toolbar';
 import AddConfirmation from '../../common/toolbar/AddConfirmation';

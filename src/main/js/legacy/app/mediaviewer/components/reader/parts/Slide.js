@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const SharingUtils = require('legacy/util/Sharing');
 const UserDataActions = require('legacy/app/userdata/Actions');

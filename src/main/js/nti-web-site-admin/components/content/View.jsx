@@ -1,5 +1,5 @@
-import {Router, Route} from 'nti-web-routing';// eslint-disable-line
-import {encodeForURI} from 'nti-lib-ntiids';
+import {Router, Route} from '@nti/web-routing';// eslint-disable-line
+import {encodeForURI} from '@nti/lib-ntiids';
 
 import List from './list';
 import Info from './info';

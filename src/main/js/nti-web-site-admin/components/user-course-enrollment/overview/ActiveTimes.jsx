@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getService} from 'nti-web-client';
-import { Widgets } from 'nti-web-reports';
+import {getService} from '@nti/web-client';
+import { Widgets } from '@nti/web-reports';
 
 const ANALYTICS_LINK = 'analytics';
 const ACTIVE_TIMES_SUMMARY_LINK = 'active_times_summary';

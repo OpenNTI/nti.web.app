@@ -1,6 +1,6 @@
 /*globals jQuery*/
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 const Formatter = require('formatter.js/dist/formatter');
 
 require('legacy/common/form/fields/SimpleTextField');

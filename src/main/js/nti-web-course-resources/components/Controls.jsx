@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'nti-web-commons';
+import {Button} from '@nti/web-commons';
 import PropTypes from 'prop-types';
 
 export default class ResourceControls extends React.Component {

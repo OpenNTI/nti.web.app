@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 require('legacy/common/form/fields/LegacySearchComboBox');
 require('./BaseInput');

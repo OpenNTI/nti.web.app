@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {InlineEditor} = require('nti-assignment-editor');
+const {InlineEditor} = require('@nti/web-assignment-editor');
 
 require('legacy/common/form/fields/DateTimeField');
 

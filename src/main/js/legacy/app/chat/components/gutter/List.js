@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const NTIFormat = require('legacy/util/Format');
 const NavigationActions = require('legacy/app/navigation/Actions');

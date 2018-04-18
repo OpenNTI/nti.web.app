@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Loading} from 'nti-web-commons';
-import { Widgets } from 'nti-web-reports';
+import {Loading} from '@nti/web-commons';
+import { Widgets } from '@nti/web-reports';
 
 import DateValue from '../../common/DateValue';
 

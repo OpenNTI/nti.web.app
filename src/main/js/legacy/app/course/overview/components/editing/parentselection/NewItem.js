@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const Globals = require('legacy/util/Globals');
 const Form = require('legacy/common/form/Form');

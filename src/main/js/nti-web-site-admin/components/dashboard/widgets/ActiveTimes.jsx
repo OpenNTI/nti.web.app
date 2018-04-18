@@ -1,7 +1,7 @@
 import React from 'react';
-import {getService} from 'nti-web-client';
-import {getLink} from 'nti-lib-interfaces';
-import { Widgets } from 'nti-web-reports';
+import {getService} from '@nti/web-client';
+import {getLink} from '@nti/lib-interfaces';
+import { Widgets } from '@nti/web-reports';
 
 const { ActiveTimesChart } = Widgets;
 

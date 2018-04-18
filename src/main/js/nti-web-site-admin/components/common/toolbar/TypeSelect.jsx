@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Flyout} from 'nti-web-commons';
+import {Flyout} from '@nti/web-commons';
 
 class Option extends React.Component {
 	static propTypes = {

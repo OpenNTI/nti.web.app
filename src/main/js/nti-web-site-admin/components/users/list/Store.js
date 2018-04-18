@@ -1,4 +1,4 @@
-import {getService, User} from 'nti-web-client';
+import {getService, User} from '@nti/web-client';
 
 import SearchablePagedStore from '../../common/SearchablePagedStore';
 

@@ -1,8 +1,8 @@
 const Ext = require('extjs');
-const { getService } = require('nti-web-client');
-const {AdminTools} = require('nti-web-course');
-const { encodeForURI } = require('nti-lib-ntiids');
-const { getAppUsername } = require('nti-web-client');
+const { getService } = require('@nti/web-client');
+const {AdminTools} = require('@nti/web-course');
+const { encodeForURI } = require('@nti/lib-ntiids');
+const { getAppUsername } = require('@nti/web-client');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');

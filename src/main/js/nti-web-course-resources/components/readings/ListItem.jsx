@@ -1,6 +1,6 @@
 import React from 'react';
-import {scoped} from 'nti-lib-locale';
-import {DateTime} from 'nti-web-commons';
+import {scoped} from '@nti/lib-locale';
+import {DateTime} from '@nti/web-commons';
 import PropTypes from 'prop-types';
 
 const DEFAULT_TEXT = {

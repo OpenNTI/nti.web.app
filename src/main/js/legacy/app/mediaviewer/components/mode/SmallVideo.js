@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const { encodeForURI } = require('nti-lib-ntiids');
-const {wait} = require('nti-commons');
+const { encodeForURI } = require('@nti/lib-ntiids');
+const {wait} = require('@nti/lib-commons');
 
 const ContentUtils = require('legacy/util/Content');
 const {isFeature} = require('legacy/util/Globals');

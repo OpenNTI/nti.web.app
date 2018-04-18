@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const LoginStore = require('legacy/login/StateStore');
 const PromptActions = require('legacy/app/prompt/Actions').create();

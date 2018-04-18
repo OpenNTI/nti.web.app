@@ -3,9 +3,9 @@ const PropTypes = require('prop-types');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
-const {getService} = require('nti-web-client');
-const {encodeForURI} = require ('nti-lib-ntiids');
-const {getHistory} = require('nti-web-routing');
+const {getService} = require('@nti/web-client');
+const {encodeForURI} = require ('@nti/lib-ntiids');
+const {getHistory} = require('@nti/web-routing');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const User = require('legacy/model/User');

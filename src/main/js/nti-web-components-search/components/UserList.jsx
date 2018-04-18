@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DisplayName} from 'nti-web-commons';
-import {getHistory} from 'nti-web-routing';
+import {Avatar, DisplayName} from '@nti/web-commons';
+import {getHistory} from '@nti/web-routing';
 
 import GroupsStateStore from '../../legacy/app/groups/StateStore';
 

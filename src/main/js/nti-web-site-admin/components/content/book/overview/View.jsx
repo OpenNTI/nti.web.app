@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Widgets } from 'nti-web-reports';
+import { Widgets } from '@nti/web-reports';
 
 const { ActiveDays, ActiveUsers, ActiveTimes } = Widgets;
 

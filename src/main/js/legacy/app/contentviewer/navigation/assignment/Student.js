@@ -1,7 +1,7 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
-const {ControlBar} = require('nti-assignment-editor');
-const { encodeForURI } = require('nti-lib-ntiids');
+const {wait} = require('@nti/lib-commons');
+const {ControlBar} = require('@nti/web-assignment-editor');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 const TimeUtils = require('legacy/util/Time');

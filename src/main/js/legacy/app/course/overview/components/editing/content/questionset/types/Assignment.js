@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {encodeForURI} = require('nti-lib-ntiids');
+const {encodeForURI} = require('@nti/lib-ntiids');
 
 const AssignmentRef = require('legacy/model/AssignmentRef');
 const AssessmentActions = require('legacy/app/course/assessment/Actions');

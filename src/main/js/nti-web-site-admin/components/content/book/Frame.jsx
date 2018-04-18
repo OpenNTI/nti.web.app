@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {LinkTo} from 'nti-web-routing';
-import {Loading, Layouts} from 'nti-web-commons';
-import {scoped} from 'nti-lib-locale';
-import {decodeFromURI} from 'nti-lib-ntiids';
+import {LinkTo} from '@nti/web-routing';
+import {Loading, Layouts} from '@nti/web-commons';
+import {scoped} from '@nti/lib-locale';
+import {decodeFromURI} from '@nti/lib-ntiids';
 
 import Store from '../info/Store';
 

@@ -3,7 +3,7 @@
 const {EventEmitter} = require('events');
 
 const Ext = require('extjs');
-const {getService} = require('nti-web-client');
+const {getService} = require('@nti/web-client');
 
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')

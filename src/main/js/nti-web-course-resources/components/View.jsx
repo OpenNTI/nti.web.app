@@ -1,5 +1,5 @@
 import React from 'react';
-import {scoped} from 'nti-lib-locale';
+import {scoped} from '@nti/lib-locale';
 import PropTypes from 'prop-types';
 
 import Controls from './Controls';

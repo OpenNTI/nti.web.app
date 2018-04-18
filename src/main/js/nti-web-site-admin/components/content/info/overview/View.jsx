@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AdminTools } from 'nti-web-course';
+import { AdminTools } from '@nti/web-course';
 
 SiteAdminCourseOverview.propTypes = {
 	course: PropTypes.object

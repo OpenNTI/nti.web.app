@@ -1,7 +1,7 @@
 import path from 'path';
 
-import {dispatch} from 'nti-lib-dispatcher';
-import {getService} from 'nti-web-client';
+import {dispatch} from '@nti/lib-dispatcher';
+import {getService} from '@nti/web-client';
 
 import {
 	LOADING,

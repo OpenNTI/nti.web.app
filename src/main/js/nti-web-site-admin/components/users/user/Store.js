@@ -1,5 +1,5 @@
-import {User} from 'nti-web-client';
-import {Stores} from 'nti-lib-store';
+import {User} from '@nti/web-client';
+import {Stores} from '@nti/lib-store';
 
 export default class UserStore extends Stores.SimpleStore {
 	constructor () {

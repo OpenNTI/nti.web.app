@@ -3,7 +3,7 @@
 const Url = require('url');
 
 const Ext = require('extjs');
-const {isNTIID} = require('nti-lib-ntiids');
+const {isNTIID} = require('@nti/lib-ntiids');
 
 const HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
 

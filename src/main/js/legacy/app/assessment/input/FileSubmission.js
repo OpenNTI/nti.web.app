@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {AssetIcon, ProgressBar} = require('nti-web-commons');
+const {AssetIcon, ProgressBar} = require('@nti/web-commons');
 
 const Globals = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');

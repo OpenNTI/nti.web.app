@@ -1,7 +1,7 @@
 const Ext = require('extjs');
-const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
-const {wait} = require('nti-commons');
-const {Store, Input} = require('nti-web-search');
+const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
+const {wait} = require('@nti/lib-commons');
+const {Store, Input} = require('@nti/web-search');
 
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');

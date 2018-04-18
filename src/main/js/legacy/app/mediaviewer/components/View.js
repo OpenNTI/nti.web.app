@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const LibraryActions = require('legacy/app/library/Actions');
 const GutterTab = require('legacy/app/chat/components/gutter/Tab');

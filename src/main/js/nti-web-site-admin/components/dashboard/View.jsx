@@ -1,5 +1,5 @@
 import React from 'react';
-import { Widgets } from 'nti-web-reports';
+import { Widgets } from '@nti/web-reports';
 
 import ActiveSessions from './widgets/ActiveSessions';
 import ActiveTimes from './widgets/ActiveTimes';

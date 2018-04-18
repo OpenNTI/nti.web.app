@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 require('./Part');
-const {FileType: {FileSetDescriptor: FileSet}} = require('nti-commons');
+const {FileType: {FileSetDescriptor: FileSet}} = require('@nti/lib-commons');
 
 const FilePicker = require('legacy/common/form/fields/FilePicker');
 

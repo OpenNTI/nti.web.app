@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Editor} from 'nti-web-course';
-import {getService} from 'nti-web-client';
+import {Editor} from '@nti/web-course';
+import {getService} from '@nti/web-client';
 
 import Toolbar from '../../common/toolbar/Toolbar';
 

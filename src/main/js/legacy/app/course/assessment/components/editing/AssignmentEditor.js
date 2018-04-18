@@ -1,6 +1,6 @@
 const Ext = require('extjs');
-const {Editor} = require('nti-assignment-editor');
-const {wait} = require('nti-commons');
+const {Editor} = require('@nti/web-assignment-editor');
+const {wait} = require('@nti/lib-commons');
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 

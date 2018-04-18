@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {AssetIcon} = require('nti-web-commons');
+const {AssetIcon} = require('@nti/web-commons');
 
 const RelatedWork = require('legacy/model/RelatedWork');
 

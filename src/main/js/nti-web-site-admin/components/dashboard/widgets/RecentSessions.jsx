@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from 'nti-lib-locale';
-import {DateTime, Loading, Avatar} from 'nti-web-commons';
-import {getService, User} from 'nti-web-client';
-import {getLink} from 'nti-lib-interfaces';
+import {scoped} from '@nti/lib-locale';
+import {DateTime, Loading, Avatar} from '@nti/web-commons';
+import {getService, User} from '@nti/web-client';
+import {getLink} from '@nti/lib-interfaces';
 
 const ANALYTICS = 'Analytics';
 const SESSIONS_LINK = 'sessions';

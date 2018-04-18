@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const StoreUtils = require('legacy/util/Store');

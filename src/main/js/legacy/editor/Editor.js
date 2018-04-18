@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const Mime = require('mime-types');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const AnnotationUtils = require('legacy/util/Annotations');
 const DomUtils = require('legacy/util/Dom');

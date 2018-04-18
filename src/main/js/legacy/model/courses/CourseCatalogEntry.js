@@ -1,6 +1,6 @@
 const Ext = require('extjs');
 const Duration = require('durationjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const {getString} = require('legacy/util/Localization');
 const {getURL} = require('legacy/util/Globals');

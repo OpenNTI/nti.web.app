@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const LocationMeta = require('legacy/cache/LocationMeta');
 const ContentUtils = require('legacy/util/Content');

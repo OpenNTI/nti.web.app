@@ -1,7 +1,7 @@
 const url = require('url');
 
 const Ext = require('extjs');
-const { encodeForURI, isNTIID } = require('nti-lib-ntiids');
+const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
 const PathActions = require('legacy/app/navigation/path/Actions');
 const WindowsActions = require('legacy/app/windows/Actions');

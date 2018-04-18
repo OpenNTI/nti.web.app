@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {wait} = require('nti-commons');
+const {wait} = require('@nti/lib-commons');
 
 const Globals = require('legacy/util/Globals');
 const MoveInfo = require('legacy/model/app/MoveInfo');

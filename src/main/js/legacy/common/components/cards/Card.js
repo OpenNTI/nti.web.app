@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const {AssetIcon} = require('nti-web-commons');
+const {AssetIcon} = require('@nti/web-commons');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const Globals = require('legacy/util/Globals');

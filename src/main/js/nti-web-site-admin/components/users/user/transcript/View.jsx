@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Loading} from 'nti-web-commons';
-import {scoped} from 'nti-lib-locale';
-import {LinkTo} from 'nti-web-routing';
-import {EnrollmentListItem} from 'nti-web-course';
+import {Loading} from '@nti/web-commons';
+import {scoped} from '@nti/lib-locale';
+import {LinkTo} from '@nti/web-routing';
+import {EnrollmentListItem} from '@nti/web-course';
 
 import ErrorMessage from '../../../common/ErrorMessage';
 import Card from '../../../common/Card';

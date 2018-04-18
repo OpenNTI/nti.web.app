@@ -1,6 +1,6 @@
 import React from 'react';
-import {searchable, contextual} from 'nti-web-search';
-import {scoped} from 'nti-lib-locale';
+import {searchable, contextual} from '@nti/web-search';
+import {scoped} from '@nti/lib-locale';
 
 import List from './List';
 import Store from './Store';

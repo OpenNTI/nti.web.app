@@ -1,7 +1,7 @@
 import React from 'react';
-import {NumericValue, UpdateWithFrequency} from 'nti-web-charts';
-import {getService} from 'nti-web-client';
-import {getLink} from 'nti-lib-interfaces';
+import {NumericValue, UpdateWithFrequency} from '@nti/web-charts';
+import {getService} from '@nti/web-client';
+import {getLink} from '@nti/lib-interfaces';
 
 const SESSIONS = 'Sessions';
 const ANALYTICS = 'Analytics';

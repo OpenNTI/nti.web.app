@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Presentation} from 'nti-web-commons';
+import {Presentation} from '@nti/web-commons';
 
 SiteAdminBookIdentity.propTypes = {
 	book: PropTypes.object
