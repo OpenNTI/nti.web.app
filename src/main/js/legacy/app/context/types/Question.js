@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 			.then(function (pageInfo) {
 				var contentPackage = pageInfo.get('ContentPackageNTIID');
 
-				return me.LibraryActions.findContentPackage(contentPackage);
+				return Service.getObject(contentPackage);
 			})
 			.then(function (contentPackage) {
 				question.set('ContentRoot', contentPackage.get('root'));
