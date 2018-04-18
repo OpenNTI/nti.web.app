@@ -411,14 +411,14 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		//clear out the old buttons
 		if (me.footerEl) {
 			me.footerEl.update('');
+
+			cfgs.forEach(function (cfg) {
+				cfg.disabled = cfg.disabled ? 'disabled' : '';
+				cfg.secondary = cfg.secondary ? 'secondary' : '';
+
+				me.btnTpl.append(me.footerEl, cfg);
+			});
 		}
-
-		cfgs.forEach(function (cfg) {
-			cfg.disabled = cfg.disabled ? 'disabled' : '';
-			cfg.secondary = cfg.secondary ? 'secondary' : '';
-
-			me.btnTpl.append(me.footerEl, cfg);
-		});
 	},
 
 	handleButtonClick: function (e) {
