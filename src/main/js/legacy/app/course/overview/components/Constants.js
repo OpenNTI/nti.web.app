@@ -42,6 +42,11 @@ const ROUTE_BUILDERS = {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(ntiid)}/${editPath}`;
 	},
 
+
+	'application/vnd.nextthought.ltiexternaltoolasset': (course, lesson, obj) => {
+		return { href: obj.getLink('Launch'), target: '_blank' };
+	},
+
 	'application/vnd.nextthought.ntitimeline': (course, lesson, obj) => {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/object/${encodeForURI(obj.NTIID)}/`;
 	},
