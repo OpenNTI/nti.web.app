@@ -16,22 +16,22 @@
     "ignoreWarnings": true
   },
   "scripts": {
-    "fix": "nti-app-scripts fix",
-    "test": "nti-app-scripts test",
-    "start": "nti-app-scripts start",
-    "prepack": "nti-app-scripts build",
-    "build": "nti-app-scripts build",
-    "clean": "nti-app-scripts clean",
-    "check": "nti-app-scripts check",
-    "release": "nti-app-scripts release",
-    "install-snapshots": "nti-app-scripts install-snapshots"
+    "fix": "app-scripts fix",
+    "test": "app-scripts test",
+    "start": "app-scripts start",
+    "prepack": "app-scripts build",
+    "build": "app-scripts build",
+    "clean": "app-scripts clean",
+    "check": "app-scripts check",
+    "release": "app-scripts release",
+    "install-snapshots": "app-scripts install-snapshots"
   },
-  "main": "./dist/server/index.js",
+  "main": "dist/server/index.js",
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
   "devDependencies": {
-    "nti-app-scripts": "^1.0.93",
+    "@nti/app-scripts": "^1.16.0",
     "@nti/lib-commons": "^2.0.0",
     "@nti/lib-dispatcher": "^1.0.0",
     "@nti/lib-dom": "^1.2.3",

@@ -2,8 +2,8 @@
 'use strict';
 const path = require('path');
 const fs = require('fs-extra');
-const call = require('nti-lib-scripts/tasks/utils/call-cmd');
-const paths = require('nti-app-scripts/config/paths');
+const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
+const paths = require('@nti/app-scripts/config/paths');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 
 const CSS = path.resolve(paths.assetsRoot, 'resources/css');
