@@ -14,6 +14,7 @@ export default function SiteAdminBookTabs () {
 	return (
 		<Tabs>
 			<LinkTo.Path to="./" activeClassName="active" exact>{t('overview')}</LinkTo.Path>
+			<LinkTo.Path to="./reports" activeClassName="active">{t('reports')}</LinkTo.Path>
 		</Tabs>
 	);
 }
