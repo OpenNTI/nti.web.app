@@ -21,8 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
-		getTypes: function () {
-			var editors = this.getEditors();
+		getTypes: function (bundle) {
+			var editors = this.getEditors(bundle);
 
 			return editors.reduce(function (acc, editor) {
 				var types = editor.getTypes ? editor.getTypes() : [];
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	getTypes: function () {
-		return this.self.getTypes();
+		return this.self.getTypes(this.bundle);
 	},
 
 
