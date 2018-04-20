@@ -209,6 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.WindowActions = WindowsActions.create();
 		this.WindowStore = WindowsStateStore.getInstance();
 		this.PromptActions = PromptActions.create();
+		this.storeLoaded = false;
 	},
 
 	afterRender: function () {
@@ -232,7 +233,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	onRouteActivate: function () {
-		this.loadStore();
+		if(!this.storeLoaded) {
+			this.loadStore();
+		}
 	},
 
 	refreshRosterGrid () {
@@ -258,6 +261,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			}
 
 			this.store.load();
+
+			this.storeLoaded = true;
 		}
 	},
 
