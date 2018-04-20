@@ -51,7 +51,7 @@
     "nti-content": "^1.18.2",
     "nti-lib-dispatcher": "^1.0.0",
     "nti-lib-dom": "^1.2.3",
-    "nti-lib-interfaces": "^1.72.0",
+    "nti-lib-interfaces": "^1.76.1",
     "nti-lib-locale": "^1.2.0",
     "nti-lib-ntiids": "^1.0.2",
     "nti-lib-store": "^1.2.0",
