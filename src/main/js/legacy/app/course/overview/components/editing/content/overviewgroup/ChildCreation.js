@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			];
 		},
 
-		getEditors: function () {
+		getEditors: function (bundle) {
 
 			var editors = [
 				ContentlinkEditor,
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				SurveyEditor
 			];
 
-			if (isFeature('LTI')) {
+			if (bundle && bundle.hasLink('lti-configured-tools')) {
 				editors.push(LTIExternalToolAssetEditor);
 			}
 
