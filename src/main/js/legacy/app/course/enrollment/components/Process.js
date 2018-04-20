@@ -92,15 +92,18 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			this.pricingInfo.destroy();
 		}
 
-		this.pricingInfo = Ext.widget('enrollment-pricing', {
-			course: course,
-			enrollmentOption: enrollmentOption,
-			hidePrice: hidePrice,
-			renderTo: container,
-			ownerCt: this,
-			scrollTarget: container,
-			lockProcess: this.lockProcess.bind(this),
-			unlockProcess: this.unlockProcess.bind(this)
+		course.getImgAsset('landing').then(courseIcon => {
+			this.pricingInfo = Ext.widget('enrollment-pricing', {
+				course: course,
+				courseIcon,
+				enrollmentOption: enrollmentOption,
+				hidePrice: hidePrice,
+				renderTo: container,
+				ownerCt: this,
+				scrollTarget: container,
+				lockProcess: this.lockProcess.bind(this),
+				unlockProcess: this.unlockProcess.bind(this)
+			});
 		});
 
 		this.on('destroy', 'destroy', this.pricingInfo);

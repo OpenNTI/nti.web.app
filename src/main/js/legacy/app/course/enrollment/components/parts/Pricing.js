@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			icon: course.get('icon'),
+			icon: this.courseIcon || course.get('icon'),
 			number: course.get('ProviderUniqueID'),
 			title: course.get('title'),
 			author: course.getAuthorLine(),
