@@ -85,11 +85,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 		let url = `${rosterURL}?batchSize=1&batchStart=${index}`;
 
-		if (currentFilter) {
+		if (currentFilter && currentFilter !== '*') {
 			url = `${url}&filter=LegacyEnrollmentStatus${currentFilter}`;
 		}
 
-		if (filterProperty && filterValue) {
+		if (filterProperty && filterValue && filterValue !== '*') {
 			url = `${url}&${filterProperty}=${filterValue}`;
 		}
 
