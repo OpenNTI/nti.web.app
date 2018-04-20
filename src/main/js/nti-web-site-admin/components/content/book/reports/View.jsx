@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List } from 'nti-web-reports';
+import { List } from '@nti/web-reports';
 
 import Card from '../../../common/Card';
 
