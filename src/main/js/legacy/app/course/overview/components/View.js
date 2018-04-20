@@ -71,11 +71,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.body.onRouteActivate();
 	},
 
+	mask: function () {
+		if (this.el && this.el.dom) {
+			this.el.mask(getString('NextThought.view.courseware.View.loading'), 'loading');
+		}
+	},
+
 	onRouteDeactivate: function () {
 		delete this.isActive;
 		this.removeScrollListener();
 
 		this.body.onRouteDeactivate();
+
+		this.mask();
 	},
 
 	alignNavigation: function () {
@@ -306,9 +314,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		wait()
 			.then(function () {
-				if (me.el && me.el.dom) {
-					me.el.mask(getString('NextThought.view.courseware.View.loading'), 'loading');
-				}
+				me.mask();
 			});
 
 		me.navigation.clearCollection();
