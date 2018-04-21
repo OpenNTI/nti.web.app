@@ -1,5 +1,5 @@
 /*global jQuery*/
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const SymbolicMath = require('legacy/app/assessment/input/SymbolicMath');
 

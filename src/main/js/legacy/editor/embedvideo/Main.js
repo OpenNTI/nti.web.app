@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Kaltura = require('legacy/model/resolvers/videoservices/Kaltura');
 const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');

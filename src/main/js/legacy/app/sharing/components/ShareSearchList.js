@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {toCSSClassName} = require('@nti/lib-dom');
 const cx = require('classnames');
 

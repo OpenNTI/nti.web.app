@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
 const {getString, getFormattedString} = require('legacy/util/Localization');

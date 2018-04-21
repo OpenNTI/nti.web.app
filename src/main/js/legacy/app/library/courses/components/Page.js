@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const naturalSort = require('node-natural-sort');
 
 const {getString} = require('legacy/util/Localization');

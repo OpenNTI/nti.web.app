@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ShareEntity =
 module.exports = exports = Ext.define('NextThought.mixins.ShareEntity', {

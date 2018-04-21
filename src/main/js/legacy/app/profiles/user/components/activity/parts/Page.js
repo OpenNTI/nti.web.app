@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 require('./events/ActivityItem');
 require('./events/ActivityItemReply');

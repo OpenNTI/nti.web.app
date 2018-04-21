@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {RemoveButton} = require('@nti/web-commons');
 const {Overview} = require('@nti/web-course');
 

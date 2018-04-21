@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const CatalogView = require('@nti/web-catalog');
 const { encodeForURI } = require('@nti/lib-ntiids');
 

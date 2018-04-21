@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {parseNTIID} = require('@nti/lib-ntiids');
 const {getService} = require('@nti/web-client');
 const {Progress} = require('@nti/web-course');

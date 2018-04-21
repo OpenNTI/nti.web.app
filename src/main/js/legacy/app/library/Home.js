@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const BundleActions = require('../bundle/Actions');
 const CourseActions = require('../course/Actions');

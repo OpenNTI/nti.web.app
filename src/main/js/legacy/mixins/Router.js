@@ -1,6 +1,6 @@
 const url = require('url');
 
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
 const PathActions = require('legacy/app/navigation/path/Actions');

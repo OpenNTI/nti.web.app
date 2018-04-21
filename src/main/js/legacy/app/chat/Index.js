@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const NavigationStateStore = require('legacy/app/navigation/StateStore');
 const GroupsStateStore = require('legacy/app/groups/StateStore');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const DetectZoom = require('detect-zoom');
 
 require('./MessageBox');

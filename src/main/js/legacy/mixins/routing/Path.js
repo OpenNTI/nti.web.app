@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {String} = require('@nti/lib-commons');
 
 const Globals = require('legacy/util/Globals');

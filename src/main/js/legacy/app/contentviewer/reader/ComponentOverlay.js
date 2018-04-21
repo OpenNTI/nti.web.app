@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const TabIndexTracker = require('legacy/util/TabIndexTracker');
 const {guidGenerator} = require('legacy/util/Globals');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const { validate } = require('email-validator');
 
 require('legacy/common/form/fields/TagField');

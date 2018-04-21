@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 require('legacy/app/course/StateStore');
 require('legacy/common/Actions');

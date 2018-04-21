@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 require('legacy/common/components/cards/Card');
 require('legacy/common/ux/IframeWindow');

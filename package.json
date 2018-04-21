@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@nti/app-scripts": "^1.16.0",
+    "@nti/extjs": "4.2.0",
     "@nti/lib-commons": "^2.0.0",
     "@nti/lib-dispatcher": "^1.0.0",
     "@nti/lib-dom": "^1.2.3",
@@ -65,7 +66,6 @@
     "email-validator": "~1.1.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "extjs": "4.2.0-nti",
     "formatter.js": "^0.1.5",
     "moment": "^2.20.1",
     "node-natural-sort": "^0.8.6",

@@ -1,6 +1,6 @@
 const Url = require('url');
 
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const PromptStateStore = require('legacy/app/prompt/StateStore');
 

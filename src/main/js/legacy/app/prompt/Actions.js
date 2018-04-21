@@ -1,5 +1,5 @@
 require('legacy/common/Actions');
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const PromptStateStore = require('./StateStore');
 

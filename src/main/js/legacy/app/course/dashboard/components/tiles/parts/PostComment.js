@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const moment = require('moment');
 
 const UserRepository = require('legacy/cache/UserRepository');

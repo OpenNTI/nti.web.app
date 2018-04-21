@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const FriendsListStore = require('legacy/store/FriendsList');
 const ContactsStore = require('legacy/store/Contacts');

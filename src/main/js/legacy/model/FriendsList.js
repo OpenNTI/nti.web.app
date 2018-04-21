@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
 const ObjectUtils = require('legacy/util/Object');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const WindowsStateStore = require('legacy/app/windows/StateStore');
 const WindowsActions = require('legacy/app/windows/Actions');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {encodeForURI, decodeFromURI} = require('@nti/lib-ntiids');
 

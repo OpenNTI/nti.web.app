@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const {isMe} = require('legacy/util/Globals');
 const GroupsStateStore = require('legacy/app/groups/StateStore');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const OutlinenodeIndex = require('./outlinenode/Index');
 const CalendarnodeIndex = require('./calendarnode/Index');

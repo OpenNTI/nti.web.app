@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {DateTime, Avatar} = require('@nti/web-commons');
 
 const {getString} = require('legacy/util/Localization');

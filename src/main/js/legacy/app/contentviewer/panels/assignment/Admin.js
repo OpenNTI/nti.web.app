@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 require('../../navigation/assignment/Admin');
 require('../Reader');

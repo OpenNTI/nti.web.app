@@ -1,6 +1,6 @@
 const { extname } = require('path');
 
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const UserCourseInvitations = require('legacy/model/courses/UserCourseInvitations');
 const lazy = require('legacy/util/lazy-require')

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const TimeContentPointer = require('legacy/model/anchorables/TimeContentPointer');
 const TimeRangeDescription = require('legacy/model/anchorables/TimeRangeDescription');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const MultiSelect = require('./filters/MultiSelect');
 const Select = require('./filters/Select');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.Preferences', {
 	extend: 'Ext.Component',

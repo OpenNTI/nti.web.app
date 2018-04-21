@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
 const Video = require('legacy/model/Video');

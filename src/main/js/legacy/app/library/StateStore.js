@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const CoursesStateStore = require('./courses/StateStore');
 const ContentStateStore = require('./content/StateStore');

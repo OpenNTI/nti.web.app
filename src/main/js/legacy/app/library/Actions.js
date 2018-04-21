@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ContentProxy = require('legacy/proxy/JSONP');
 const {getURL} = require('legacy/util/Globals');

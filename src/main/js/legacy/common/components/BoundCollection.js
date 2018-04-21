@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Transition = require('legacy/mixins/Transition');
 const lazy = require('legacy/util/lazy-require')

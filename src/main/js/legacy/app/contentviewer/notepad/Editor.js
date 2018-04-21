@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const DomUtils = require('legacy/util/Dom');
 const Editor = require('legacy/editor/Editor');

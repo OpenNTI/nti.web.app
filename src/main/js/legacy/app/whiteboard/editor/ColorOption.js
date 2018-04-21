@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorOption', {

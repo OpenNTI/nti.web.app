@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');

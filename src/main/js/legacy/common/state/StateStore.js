@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const AbstractStorage = require('legacy/cache/AbstractStorage');
 const {swallow} = require('legacy/util/Globals');

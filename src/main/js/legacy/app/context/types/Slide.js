@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const MediaviewerActions = require('legacy/app/mediaviewer/Actions');
 const PathActions = require('legacy/app/navigation/path/Actions');

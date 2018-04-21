@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const DiscussionRef = require('legacy/model/DiscussionRef');
 const Globals = require('legacy/util/Globals');

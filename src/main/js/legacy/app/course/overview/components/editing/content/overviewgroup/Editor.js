@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const OverviewGroup = require('legacy/model/courses/overview/Group');
 

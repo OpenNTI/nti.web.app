@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {ProgressWidgets} = require('@nti/web-course');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.outline.progress.Header', {

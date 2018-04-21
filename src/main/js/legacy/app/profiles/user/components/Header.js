@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ChatActions = require('legacy/app/chat/Actions');
 const ChatStateStore = require('legacy/app/chat/StateStore');

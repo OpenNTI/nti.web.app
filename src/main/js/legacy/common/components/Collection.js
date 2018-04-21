@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const $clamp = require('clamp-js');
 
 module.exports = exports = Ext.define('NextThought.common.components.Collection', {

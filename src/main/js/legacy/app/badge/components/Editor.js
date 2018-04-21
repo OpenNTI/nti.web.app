@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 require('legacy/app/account/emailverify/verify/Index');
 const {getString} = require('legacy/util/Localization');

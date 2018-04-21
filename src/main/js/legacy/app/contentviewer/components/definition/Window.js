@@ -1,5 +1,5 @@
 /*globals ActiveXObject*/
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const {getString} = require('legacy/util/Localization');
 const {getURL, swallow} = require('legacy/util/Globals');

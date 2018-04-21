@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Launcher = require('legacy/common/components/cards/Launcher');
 const DomUtils = require('legacy/util/Dom');

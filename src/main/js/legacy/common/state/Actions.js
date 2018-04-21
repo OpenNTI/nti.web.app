@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const B64 = require('legacy/util/Base64');
 const LoginStateStore = require('legacy/login/StateStore');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 
 //See http://jsfiddle.net/jsg2021/6yfw8/ for a demo

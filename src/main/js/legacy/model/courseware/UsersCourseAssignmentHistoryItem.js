@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const Duration = require('durationjs');
 
 const BatchExecution = require('legacy/util/BatchExecution');

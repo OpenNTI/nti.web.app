@@ -1,5 +1,5 @@
 /*globals createStoryJS*/
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Timeline = require('legacy/model/Timeline');
 const AnalyticsUtil = require('legacy/util/Analytics');

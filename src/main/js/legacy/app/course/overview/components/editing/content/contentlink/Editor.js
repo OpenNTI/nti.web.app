@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const TypeSwitcher = require('./TypeSwitcher');
 const TypesDoc = require('./types/Doc');

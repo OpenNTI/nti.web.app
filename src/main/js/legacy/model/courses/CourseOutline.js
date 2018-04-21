@@ -1,6 +1,6 @@
 const Url = require('url');
 
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ContentUtils = require('legacy/util/Content');
 const lazy = require('legacy/util/lazy-require')

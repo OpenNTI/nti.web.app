@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
 
 const CoursesStateStore = require('../../library/courses/StateStore');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Anchors = require('legacy/util/Anchors');
 const TextRangeFinderUtils = require('legacy/util/TextRangeFinder');

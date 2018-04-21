@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {autobind} = require('@nti/lib-commons');
 const {ContentResources} = require('@nti/web-commons');
 

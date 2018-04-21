@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const moment = require('moment');
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Base', {

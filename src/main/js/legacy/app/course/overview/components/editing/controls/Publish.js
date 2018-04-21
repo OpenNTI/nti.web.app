@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {Publish} = require('@nti/web-commons');
 
 const Actions = require('../Actions');

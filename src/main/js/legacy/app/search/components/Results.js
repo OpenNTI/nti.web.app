@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const PathActions = require('legacy/app/navigation/path/Actions');
 const WindowsActions = require('legacy/app/windows/Actions');

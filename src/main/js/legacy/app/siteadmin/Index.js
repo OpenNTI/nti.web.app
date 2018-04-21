@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');

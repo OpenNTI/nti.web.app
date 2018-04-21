@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const { CourseMenu } = require('@nti/web-course');
 const { Prompt } = require('@nti/web-commons');
 const { getService } = require('@nti/web-client');

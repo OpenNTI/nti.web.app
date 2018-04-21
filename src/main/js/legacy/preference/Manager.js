@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const PreferenceBase = require('legacy/model/preference/Base');
 const PreferenceRoot = require('legacy/model/preference/Root');

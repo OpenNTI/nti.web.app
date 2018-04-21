@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ContentPointer = require('./ContentPointer');
 const DomContentPointer = require('./DomContentPointer');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const LocationMeta = require('legacy/cache/LocationMeta');
 const UserRepository = require('legacy/cache/UserRepository');

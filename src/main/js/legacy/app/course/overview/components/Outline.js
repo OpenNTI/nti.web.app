@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
 const CourseOutlineNode = require('legacy/model/courses/navigation/CourseOutlineNode');

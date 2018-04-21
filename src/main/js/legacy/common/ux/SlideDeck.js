@@ -1,5 +1,5 @@
 /*eslint no-undef:1*/
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ContentUtils = require('legacy/util/Content');
 const PlaylistItem = require('legacy/model/PlaylistItem');

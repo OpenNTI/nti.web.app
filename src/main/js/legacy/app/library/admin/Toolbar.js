@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const { AdminToolbar } = require('nti-web-site-admin');

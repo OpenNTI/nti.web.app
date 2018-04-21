@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
 
 require('legacy/mixins/Router');

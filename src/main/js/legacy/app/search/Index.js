@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 
 const Search = require('nti-web-components-search');

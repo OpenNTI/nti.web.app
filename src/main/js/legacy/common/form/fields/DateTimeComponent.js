@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {DateTimeField} = require('@nti/web-commons');
 require('legacy/overrides/ReactHarness');
 

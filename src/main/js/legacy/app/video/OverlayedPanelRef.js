@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const PlaylistItem = require('legacy/model/PlaylistItem');
 const VideoPosters = require('legacy/model/resolvers/VideoPosters');

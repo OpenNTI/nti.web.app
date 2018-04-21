@@ -1,6 +1,6 @@
 //We are only declaring this here for this file... do not use the global "NextThought" in new code.
 /*globals NextThought*/
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const JSONProxy = require('../proxy/reader/Json');
 

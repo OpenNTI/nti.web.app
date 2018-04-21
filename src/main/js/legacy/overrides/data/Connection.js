@@ -1,5 +1,5 @@
 /*globals BUILD_PACKAGE_NAME, BUILD_PACKAGE_VERSION*/
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const {getURL} = require('legacy/util/Globals');
 

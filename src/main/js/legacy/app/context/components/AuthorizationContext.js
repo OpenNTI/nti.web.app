@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const {getURL} = require('legacy/util/Globals');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ContainerContext = require('legacy/app/context/ContainerContext');
 const {isMe} = require('legacy/util/Globals');

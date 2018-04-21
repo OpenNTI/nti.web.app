@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 require('legacy/mixins/ModelWithBodyContent');
 require('legacy/model/Base');
 require('legacy/model/Highlight');

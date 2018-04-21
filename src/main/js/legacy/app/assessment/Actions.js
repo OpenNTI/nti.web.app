@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const AssessmentQuestionSetSubmission = require('legacy/model/assessment/QuestionSetSubmission');
 const AssessmentAssignmentSubmission = require('legacy/model/assessment/AssignmentSubmission');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const StudentCollection = require('./assignments/StudentCollection');
 const InstructorCollection = require('./assignments/InstructorCollection');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Grade = require('legacy/model/courseware/Grade');
 const LibraryActions = require('legacy/app/library/Actions');

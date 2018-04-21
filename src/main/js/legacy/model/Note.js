@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const User = require('legacy/model/User');
 const ContentUtils = require('legacy/util/Content');

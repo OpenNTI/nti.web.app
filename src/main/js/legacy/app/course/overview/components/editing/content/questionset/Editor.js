@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const TypesSelfAssessment = require('./types/SelfAssessment');
 const TypesAssignment = require('./types/Assignment');

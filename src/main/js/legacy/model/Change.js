@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 require('legacy/model/Base');
 
 const Badge = require('legacy/model/openbadges/Badge');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {DayTimeToggle} = require('@nti/web-commons');
 require('legacy/overrides/ReactHarness');
 

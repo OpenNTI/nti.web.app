@@ -1,5 +1,5 @@
 /*globals OpenBadges*/
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));

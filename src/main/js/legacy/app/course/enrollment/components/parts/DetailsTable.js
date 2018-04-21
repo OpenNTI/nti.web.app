@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const Duration = require('durationjs');
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.DetailsTable', {

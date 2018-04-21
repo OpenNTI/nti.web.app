@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {DateTime} = require('@nti/web-commons');
 const moment = require('moment');
 

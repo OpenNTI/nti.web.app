@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 require('../../Base');
 require('legacy/mixins/OrderedContents');

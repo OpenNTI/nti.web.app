@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const Mime = require('mime-types');
 const {wait} = require('@nti/lib-commons');
 

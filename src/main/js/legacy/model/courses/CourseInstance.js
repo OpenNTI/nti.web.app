@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {URL: {join: urlJoin}} = require('@nti/lib-commons');
 
 const {getString} = require('legacy/util/Localization');

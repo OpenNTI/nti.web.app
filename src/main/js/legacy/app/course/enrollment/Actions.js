@@ -1,6 +1,6 @@
 const path = require('path');
 
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 
 const lazy = require('legacy/util/lazy-require')

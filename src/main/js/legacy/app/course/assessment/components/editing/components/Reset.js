@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 module.exports = exports = Ext.define('NextThought.app.assessment.components.editing.components.Reset', {
 	extend: 'Ext.container.Container',

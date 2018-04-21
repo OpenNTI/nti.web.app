@@ -1,5 +1,5 @@
 
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Socket = require('legacy/proxy/Socket');
 

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 Object.assign(Promise.prototype, {
 	always (fn) {

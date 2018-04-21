@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const PropTypes = require('prop-types');
 const React = require('react');
 const ReactDOM = require('react-dom');

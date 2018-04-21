@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const MSG_BAR_CLOSED = 'msg-bar-closed';
 const MSG_BAR_OPENED = 'msg-bar-opened';

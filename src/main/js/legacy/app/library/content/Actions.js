@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const StoreUtils = require('legacy/util/Store');
 const {getURL} = require('legacy/util/Globals');

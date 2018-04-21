@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const {getFormattedString, getString} = require('legacy/util/Localization');
 const Survey = require('legacy/model/assessment/Survey');

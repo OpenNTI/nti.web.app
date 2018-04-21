@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ToolOptionsState =
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.ToolOptionsState', {

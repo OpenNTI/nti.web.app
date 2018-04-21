@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const DISCUSSION_ASSIGNMENT = 'discussion-assignment';
 const PLAIN_ASSIGNMENT = 'plain-assignment';

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const User = require('legacy/model/User');
 const lazy = require('legacy/util/lazy-require')

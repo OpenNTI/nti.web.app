@@ -2,7 +2,7 @@
 // to avoid memory leaks
 const {EventEmitter} = require('events');
 
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {getService} = require('@nti/web-client');
 
 const Globals = require('legacy/util/Globals');

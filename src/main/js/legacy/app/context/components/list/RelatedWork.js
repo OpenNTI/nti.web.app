@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const PageInfo = require('legacy/model/PageInfo');
 

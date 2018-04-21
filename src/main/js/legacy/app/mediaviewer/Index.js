@@ -1,6 +1,6 @@
 const {resolve} = require('path');
 
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
 
 const LibraryActions = require('legacy/app/library/Actions');

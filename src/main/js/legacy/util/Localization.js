@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 var Localization =
 module.exports = exports = Ext.define('NextThought.util.Localization', {

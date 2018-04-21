@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 Ext.Loader.setConfig({enabled: false});
 
 const {getURL, validateConfig, loadScript} = require('./util/Globals');

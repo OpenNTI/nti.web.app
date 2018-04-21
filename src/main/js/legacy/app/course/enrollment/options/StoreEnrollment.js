@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const StoreActions = require('legacy/app/store/Actions');
 const PurchasableCourse = require('legacy/model/store/PurchasableCourse');

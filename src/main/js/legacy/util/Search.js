@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const XRegExp = require('xregexp');
 
 module.exports = exports = Ext.define('NextThought.util.Search', {

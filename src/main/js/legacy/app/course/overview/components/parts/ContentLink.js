@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ContentviewerActions = require('legacy/app/contentviewer/Actions');
 const WindowsActions = require('legacy/app/windows/Actions');

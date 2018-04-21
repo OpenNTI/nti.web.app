@@ -1,6 +1,6 @@
 /* eslint-env jest */
 /*eslint no-console: 0*/
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 Ext.Loader.setConfig({enabled: false});
 
 // require('legacy/util/Globals');

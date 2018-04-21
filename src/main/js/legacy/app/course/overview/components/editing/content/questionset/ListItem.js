@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const QuestionSetRef = require('legacy/model/QuestionSetRef');
 const AssignmentRef = require('legacy/model/AssignmentRef');

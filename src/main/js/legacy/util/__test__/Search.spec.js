@@ -1,6 +1,6 @@
 /* globals spyOn */
 /* eslint-env jest */
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const XRegExp = require('xregexp');
 
 const Hit = require('legacy/model/Hit');

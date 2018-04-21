@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const Scrolling = require('legacy/util/Scrolling');
 const DndInfo = require('legacy/model/app/DndInfo');

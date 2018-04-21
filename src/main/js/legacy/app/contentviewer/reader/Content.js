@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const ImageZoomView = require('legacy/common/ux/ImageZoomView');
 const SlideDeck = require('legacy/common/ux/SlideDeck');

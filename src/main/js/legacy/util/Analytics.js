@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const {createDOM} = require('@nti/lib-dom');

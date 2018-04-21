@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 const {Editor} = require('@nti/web-assignment-editor');
 const {wait} = require('@nti/lib-commons');
 require('legacy/overrides/ReactHarness');

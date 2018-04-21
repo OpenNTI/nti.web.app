@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 require('../../../../user/components/activity/parts/Stream');
 require('./events/Created');

@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const PromptActions = require('legacy/app/prompt/Actions');
 const WindowsActions = require('legacy/app/windows/Actions');

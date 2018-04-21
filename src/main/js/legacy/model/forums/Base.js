@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const UserdataStateStore = require('legacy/app/userdata/StateStore');
 const NTI = require('legacy/store/NTI');

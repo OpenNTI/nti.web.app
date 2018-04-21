@@ -1,5 +1,5 @@
 /* eslint-disable strict */
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 
 /**

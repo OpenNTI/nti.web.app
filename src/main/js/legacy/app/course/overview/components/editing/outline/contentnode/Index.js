@@ -1,4 +1,4 @@
-const Ext = require('extjs');
+const Ext = require('@nti/extjs');
 
 const CourseOutlineContentNode = require('legacy/model/courses/navigation/CourseOutlineContentNode');
 
