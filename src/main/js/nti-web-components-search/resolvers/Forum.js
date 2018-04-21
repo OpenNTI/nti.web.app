@@ -1,8 +1,5 @@
 import { User } from '@nti/web-client';
 
-//FIXME: do not import legacy code outside the legacy folder!
-import UserModel from 'legacy/model/User';
-
 export default {
 	handles (targetMimeType) {
 		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
@@ -21,10 +18,8 @@ export default {
 					.then(breadCrumb => breadCrumb),
 				User.resolve({entityId: hit.Creator})
 					.then(user => user.alias + ' Commented')
-					.catch(() => {
-						const u = UserModel.getUnresolved(hit.Creator);
-						return u.get('alias') + ' Commented';
-					})
+					//Implement the fallback logic in User.resolve() so that this catch isn't posible to hit
+					.catch(() => 'Unknown Commented')
 			]).then((results) => {
 				const path = results[0];
 				title = results[1];

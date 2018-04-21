@@ -1,8 +1,5 @@
 import { User, getAppUsername} from '@nti/web-client';
 
-//FIXME: do not import legacy code outside the legacy folder!
-import UserModel from 'legacy/model/User';
-
 export default {
 	handles (targetMimeType) {
 		targetMimeType = targetMimeType.replace('application/vnd.nextthought.', '');
@@ -34,8 +31,8 @@ export default {
 			sharedWith.map(u =>
 				User.resolve({entityId : u})
 					.catch(() => {
-						const user = UserModel.getUnresolved(u);
-						return {...user, alias: user.get('alias') };
+						//Implement the fallback logic in User.resolve() so that this catch isn't posible to hit
+						return {alias: 'Unknown' };
 					})
 			)
 		).then(function (users) {

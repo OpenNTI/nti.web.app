@@ -8,7 +8,7 @@ import Card from '../../../common/Card';
 SiteAdminBooksReports.propTypes = {
 	course: PropTypes.object
 };
-export default function SiteAdminBooksReports({ course }) {
+export default function SiteAdminBooksReports ({ course }) {
 	return course ?
 		(<Card><List context={course} /></Card>) :
 		null;
