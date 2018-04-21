@@ -17,7 +17,6 @@
 	<link rel="stylesheet" id="ext-base" type="text/css" href="/vendor/ext-4.2/resources/css/ext-all.css">
 	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css" href="/vendor/mathquill-0.9.4/mathquill.css">
 	<link rel="stylesheet" id="main-stylesheet" type="text/css" href="/resources/css/legacy.css">
-	<link rel="stylesheet" id="site-stylesheet" type="text/css" href="/site-assets/webapp/site.css">
 	<style type="text/css">
 		#loading-mask {
 			position: absolute;
@@ -64,8 +63,10 @@
 	</script>
 	<!-- End Google Analytics -->
 </head>
-<body><div id="loading-mask"><div id="loading" title="Loading..."><div></div></div></div>
-<svg height="0" id="svg-image-blur"><filter id="blur-effect"><feGaussianBlur stdDeviation="8"></feGaussianBlur></filter></svg>
+<body>
+	<link rel="stylesheet" id="site-stylesheet" type="text/css" href="/site-assets/webapp/site.css">
+	<div id="loading-mask"><div id="loading" title="Loading..."><div></div></div></div>
+	<svg height="0" id="svg-image-blur"><filter id="blur-effect"><feGaussianBlur stdDeviation="8"></feGaussianBlur></filter></svg>
 	<!--html:server-values-->
 	<script type="text/javascript">
 		if( false ){
