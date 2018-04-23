@@ -57,8 +57,16 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		this.alignNavigation();
 	},
 
+
+	onRouteActivate: function () {
+		this.unmask();
+	},
+
+
 	onRouteDeactivate: function () {
 		this.body && this.body.onRouteDeactivate && this.body.onRouteDeactivate();
+
+		this.mask();
 
 		this.routeDeactivated = true;
 	},

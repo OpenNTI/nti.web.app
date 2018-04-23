@@ -78,6 +78,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 	onRouteActivate () {
 		const active = this.getLayout().getActiveItem();
 
+		this.unmask();
+
 		if (active && active.onRouteActivate) {
 			active.onRouteActivate();
 		}
@@ -86,6 +88,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 	onRouteDeactivate () {
 		const active = this.getLayout().getActiveItem();
+
+		this.mask();
 
 		if (active && active.onRouteDeactivate) {
 			active.onRouteDeactivate();

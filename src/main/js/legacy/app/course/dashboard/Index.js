@@ -93,12 +93,16 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 	},
 
 	onRouteDeactivate: function () {
+		this.mask();
+
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
 	onRouteActivate: function () {
 		var me = this;
 		this.setTitle(this.title);
+
+		this.unmask();
 
 		// Cache the scroll position before we reload the tiles.
 		// This will help us to make we scroll again to that last position.

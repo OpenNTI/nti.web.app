@@ -45,6 +45,16 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 		this.setTitle(this.title);
 	},
 
+	onRouteActivate: function () {
+		this.unmask();
+	},
+
+
+	onRouteDeactivate: function () {
+		this.mask();
+	},
+
+
 	bundleChanged: function (bundle) {
 		var container = this.forumContainer;
 
