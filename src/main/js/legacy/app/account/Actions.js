@@ -17,6 +17,7 @@ require('legacy/common/ux/IframeWindow');
 require('./contact/Window');
 require('./coppa/Window');
 require('./coppa/upgraded/Window');
+require('./profile_update/Window');
 require('./recovery/Window');
 require('./registration/Prompt');
 
@@ -167,6 +168,12 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 
 	showHref: function (href, target) {
 		window.open(href, target);
+	},
+
+	showUserProfileUpdate (user) {
+		Ext.widget('profile-update-window', {
+			user
+		}).show();
 	},
 
 	submitCoppaInfo: function (values) {

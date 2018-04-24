@@ -115,6 +115,10 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 			AccountActions.showCoppaConfirmWindow();
 		}
 
+		if (user.hasLink('user_profile_update')) {
+			AccountActions.showUserProfileUpdate(user);
+		}
+
 		//What is the exact relationships between these windows?
 		//currently above and below are piling on top of one another
 		if (this.__shouldShowContentFor('content.initial_welcome_page')) {
