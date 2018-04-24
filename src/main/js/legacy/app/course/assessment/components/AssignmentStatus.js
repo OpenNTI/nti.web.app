@@ -153,6 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	closeDueDateEditor: function () {
 		if (this.el) {
 			this.el.removeCls('menu-open');
+			this.el.removeCls('allow-overflow');
 		}
 
 		if (this.onEditorClose) {
@@ -169,6 +170,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.closeDueDateEditor();
 		} else {
 			this.showDueDateEditor();
+			setTimeout(() => {
+				this.el.addCls('allow-overflow');
+			}, 500);
 		}
 	}
 });

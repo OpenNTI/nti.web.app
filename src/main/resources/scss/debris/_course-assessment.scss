@@ -736,10 +736,22 @@ canvas.x-component-course-assessment {
 		}
 	}
 
+	&.allow-overflow {
+		.menu-container {
+			overflow: visible;
+		}
+	}
+
 	.menu-container {
 		max-height: 0;
 		transition: max-height 0.5s;
 		overflow: hidden;
+	}
+}
+
+.assignment-list {
+	.x-container.grouping {
+		overflow: visible;
 	}
 }
 
