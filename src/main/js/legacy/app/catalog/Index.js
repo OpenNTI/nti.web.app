@@ -227,7 +227,16 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 					const pushedParts = pushedRoute.split('/');
 					const pushedRest = pushedParts.splice(1).join('/');
 
-					this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
+					const allowNavRequest = this.availableWin.allowNavigation();
+
+					if(allowNavRequest && allowNavRequest.then) {
+						allowNavRequest.then(() => {
+							this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
+						});
+					}
+					else if(allowNavRequest) {
+						this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
+					}
 				};
 
 				this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
