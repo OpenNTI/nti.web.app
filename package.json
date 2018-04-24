@@ -76,7 +76,6 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-test-renderer": "^16.2.0",
-    "whatwg-fetch": "^2.0.0",
     "xregexp": "^4.0.0"
   }
 }
