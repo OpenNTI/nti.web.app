@@ -150,14 +150,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	closeDueDateEditor: function () {
+	closeDueDateEditor: function (savedAssignment) {
 		if (this.el) {
 			this.el.removeCls('menu-open');
 			this.el.removeCls('allow-overflow');
 		}
 
 		if (this.onEditorClose) {
-			this.onEditorClose();
+			this.onEditorClose(savedAssignment);
 		}
 	},
 

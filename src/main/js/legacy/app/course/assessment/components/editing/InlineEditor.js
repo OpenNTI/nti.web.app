@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							//this.setAssignment(this.assignment);
 
 							if (this.onSave) {
-								this.onSave();
+								this.onSave(this.assignment);
 							}
 						}
 

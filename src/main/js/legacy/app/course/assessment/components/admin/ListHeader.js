@@ -392,6 +392,25 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
+	updateLabelsForAssignment: function (assignment) {
+		this.assignmentTitleEl.update(assignment.get('title'));
+		this.assignmentTitleEl.dom.setAttribute('data-qtip', assignment.get('title'));
+
+		this.assignmentDueEl.update(AssignmentStatus.getStatusHTML({
+			due: assignment.getDueDate(),
+			maxTime: assignment.isTimed && assignment.getMaxTime(),
+			duration: assignment.isTimed && assignment.getDuration(),
+			isNoSubmitAssignment: assignment.isNoSubmit(),
+			start: assignment.get('availableBeginning')
+		}));
+
+		if (assignment.getLink('edit')) {
+			this.assignmentDueEl.addCls('arrow');
+		} else {
+			this.assignmentDueEl.removeCls('arrow');
+		}
+	},
+
 	setAssignment: function (assignment) {
 		if (!this.rendered) {
 			this.assignment = assignment;
@@ -413,26 +432,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.setExportURL(exportLink, getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.download'));
 		}
 
-		this.assignmentTitleEl.update(assignment.get('title'));
-		this.assignmentTitleEl.dom.setAttribute('data-qtip', assignment.get('title'));
-
-		this.assignmentDueEl.update(AssignmentStatus.getStatusHTML({
-			due: assignment.getDueDate(),
-			maxTime: assignment.isTimed && assignment.getMaxTime(),
-			duration: assignment.isTimed && assignment.getDuration(),
-			isNoSubmitAssignment: assignment.isNoSubmit(),
-			start: assignment.get('availableBeginning')
-		}));
-
-		if (assignment.getLink('edit')) {
-			this.assignmentDueEl.addCls('arrow');
-		} else {
-			this.assignmentDueEl.removeCls('arrow');
-		}
+		this.updateLabelsForAssignment(assignment);
 
 		this.assignmentStatusCmp = new ComponentsAssignmentStatus({
 			assignment: assignment,
-			renderTo: this.editorContainer
+			renderTo: this.editorContainer,
+			onEditorClose: (savedAssignment) => {
+				if(savedAssignment) {
+					this.updateLabelsForAssignment(savedAssignment);
+				}
+			}
 		});
 
 		this.on('destroy', this.assignmentStatusCmp.destroy.bind(this.assignmentStatusCmp));
