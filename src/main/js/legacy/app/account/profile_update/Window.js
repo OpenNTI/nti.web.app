@@ -28,6 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Window', 
 					xtype: 'react',
 					component: Prompt.Dialog,
 					closeOnMaskClick: false,
+					closeOnEscape: false,
 					children: React.createElement(ProfileUpdate, {entity}),
 					onBeforeDismiss: () => this.close()
 				});
