@@ -333,6 +333,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			return;
 		}
 
+		this.storeLoaded = false;
+
 		var roster = instance && instance.getLink('CourseEnrollmentRoster'),
 			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
 				roster,
