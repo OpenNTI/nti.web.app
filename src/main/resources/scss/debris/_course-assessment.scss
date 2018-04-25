@@ -1515,6 +1515,22 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.assignment-due-date-editor {
+	.assignment-inline-editor {
+		.inline-due-date-editor {
+			.date-editor {
+				.select-wrapper {
+					.select-box.open {
+						ul {
+							max-height: 6rem;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 .course-assessment-header.assignment-item.hide-avatars {
 	.x-grid-body .x-grid-row .x-grid-cell .user-cell .avatar {
 		display: none;
