@@ -450,8 +450,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	toggleDateEditor: function () {
 		if (this.assignmentStatusCmp && this.assignmentStatusCmp.dueDateEditorVisible()) {
+			this.assignmentStatusCmp.el.removeCls('allow-overflow');
 			this.assignmentStatusCmp.closeDueDateEditor();
 		} else if (this.assignmentStatusCmp) {
+			setTimeout(() => {
+				this.assignmentStatusCmp.el.addCls('allow-overflow');
+			}, 500);
 			this.assignmentStatusCmp.showDueDateEditor();
 		}
 	},
