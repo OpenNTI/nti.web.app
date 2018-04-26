@@ -281,7 +281,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		Ext.each(slides || [], function (slide) {
 			var image = slide.get('image');
 			if (image) {
-				image = (basePath || '') + image;
+				image = Globals.getURLRooted(image, basePath || '');
 				slide.set('image', image);
 				slide.pageInfo = pageInfo;
 				slide.courseBundle = courseBundle;
