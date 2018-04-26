@@ -397,6 +397,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.assignmentTitleEl.dom.setAttribute('data-qtip', assignment.get('title'));
 
 		this.assignmentDueEl.update(AssignmentStatus.getStatusHTML({
+			isDraft: !assignment.get('availableBeginning') && !assignment.get('PublicationState'),
 			due: assignment.getDueDate(),
 			maxTime: assignment.isTimed && assignment.getMaxTime(),
 			duration: assignment.isTimed && assignment.getDuration(),
