@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 					'NTIID': dom.getAttribute('data-ntiid'),
 					'slidedeck-id': getParam('slidedeckid') || 'default',
 					'title': getParam('slidetitle'),
-					'image': root + getParam('slideimage'),
+					'image': getParam('slideimage'),
 					'image-thumbnail': root + getImage(),
 					'video': getParam('slidevideo'),
 					'video-type': getParam('slidevideotype'),
