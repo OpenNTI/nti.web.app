@@ -198,10 +198,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 			previewAssignment: (NTIID, title) => {
 				this.pushRoute(title, Path.join(encodeForURI(NTIID)));
 			},
-			findAssignment: (id) =>
+			findAssignment: (id, update) =>
 				config.bundle.getAssignments()
-					.then(collection => collection.getItem(id) || Promise.reject('Not Found'))
-
+					.then(collection => update ? collection.fetchAssignment(id) : (collection.getItem(id) || Promise.reject('Not Found')))
 		});
 
 		this.addChildRouter(this.assignmentEditor);

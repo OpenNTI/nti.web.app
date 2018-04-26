@@ -200,7 +200,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					fulfill({
 						result: result,
 						itemLink: itemLink,
-						assignmentId: assignmentId
+						assignmentId: assignmentId,
+						isPracticeSubmission
 					});
 				},
 				failure: function (rec, resp) {
