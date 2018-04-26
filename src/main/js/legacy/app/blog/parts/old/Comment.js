@@ -182,6 +182,18 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 			this.editor.destroy();
 			delete this.editor;
 		}
+
+		if (this.bodyEl) {
+			this.bodyEl.select('video').each(function (vid) {
+				try {
+					vid.dom.innerHTML = null;
+					vid.dom.load();
+				} catch (e) {
+					//don't care?
+				}
+			});
+		}
+
 		this.callParent(arguments);
 	},
 
@@ -194,11 +206,35 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 	},
 
 	updateContent: function () {
-		this.record.compileBodyContent(this.setContent, this);
+		this.record.compileBodyContent(this.setContent, this, null, { 'application/vnd.nextthought.embeddedvideo': 640 });
 	},
 
-	setContent: function (html) {
-		var el = this.bodyEl, me = this;
+	onBeforeDeactivate: function () {
+		if (this.bodyEl) {
+			this.bodyEl.select('video').each(function (v) {
+				v.dom.innerHTML = null;
+				v.dom.load();
+			});
+		}
+	},
+
+	onBeforeActivate: function () {
+		var href;
+		if (this.bodyEl) {
+			this.bodyEl.select('video').each(function (v) {
+				if (Ext.isEmpty((v.getHTML() || '').trim())) {
+					href = v.dom.getAttribute('href');
+					Ext.DomHelper.overwrite(v, {
+						tag: 'source',
+						src: href
+					});
+				}
+			});
+		}
+	},
+
+	setContent: function (html, cb) {
+		var el = this.bodyEl, me = this, cmps;
 
 		el.update(html);
 		DomUtils.adjustLinks(el, window.location.href);
@@ -213,6 +249,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 				me.up('[record]').fireEvent('sync-height');
 			});
 		});
+
+		if (Ext.isFunction(cb)) {
+			cmps = cb(this.bodyEl, this);
+			Ext.each(cmps, function (c) {
+				me.on('destroy', c.destroy, c);
+			});
+		}
 	},
 
 	/*
