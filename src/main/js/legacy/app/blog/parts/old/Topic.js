@@ -271,7 +271,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 		if (this.replyLinkEl) {
 			box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-			this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.commentEditorBox, enableFileUpload: true});
+			this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.commentEditorBox, enableFileUpload: true, enableVideo: true});
 			this.mon(this.replyLinkEl, 'click', this.showEditor, this);
 			this.mon(this.editor, {
 				scope: this,
