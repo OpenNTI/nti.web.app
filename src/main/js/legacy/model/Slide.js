@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 
+const Globals = require('legacy/util/Globals');
 const ContentUtils = require('legacy/util/Content');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
@@ -53,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 					'NTIID': dom.getAttribute('data-ntiid'),
 					'slidedeck-id': getParam('slidedeckid') || 'default',
 					'title': getParam('slidetitle'),
-					'image': getParam('slideimage'),
+					'image': Globals.getURLRooted(getParam('slideimage'), root),
 					'image-thumbnail': root + getImage(),
 					'video': getParam('slidevideo'),
 					'video-type': getParam('slidevideotype'),
