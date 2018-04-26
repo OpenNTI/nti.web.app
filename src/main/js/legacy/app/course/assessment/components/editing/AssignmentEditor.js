@@ -92,16 +92,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.updateAssignments();
 		}
 		else {
-			if (assignment && assignment.isModel && !assignment.isDeleted) {
-				assignment.updateFromServer();
-			}
-
 			if (this.findAssignment) {
-				this.findAssignment(this.assignmentId)
-					.then(a =>
-						!a.isDeleted
-						&& a !== assignment
-						&& a.updateFromServer());
+				this.findAssignment(this.assignmentId, true)
+					.then(a => this.assignment.syncWith(a));
+			} else if (assignment && assignment.isModel && !assignment.isDeleted) {
+				assignment.updateFromServer();
 			}
 		}
 	},
