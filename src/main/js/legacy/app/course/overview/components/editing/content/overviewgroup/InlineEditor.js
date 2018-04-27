@@ -38,11 +38,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		colorInput: '.color-input'
 	},
 
+
+	escapeForInput: function (value) {
+		return value && value.replace(/"/g, '&quot;');
+	},
+
 	beforeRender: function () {
 		this.callParent(arguments);
 
 		var colors = OverviewGroup.COLOR_CHOICES,
-			title = this.record ? this.record.get('title') : '',
+			title = this.record ? this.escapeForInput(this.record.get('title')) : '',
 			accent = this.record ? this.record.get('accentColor') : '';
 
 		function isSelectedColor (hex, index) {
