@@ -13,6 +13,15 @@ function getDiscussionRoute (course, lesson, obj) {
 	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/object/${encodeForURI(obj.NTIID)}`;
 }
 
+function getAssessmentRoute (course, lesson, obj) {
+	const target = obj.containerId || obj['Target-NTIID'];
+	if (!target) {
+		console.log('No target for object?', obj);
+		return '';
+	}
+	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(target)}/`;
+}
+
 const ROUTE_BUILDERS = {
 	'application/vnd.nextthought.ntivideo': (course, lesson, obj) => {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/video/${getURLPart(obj)}/`;
@@ -38,14 +47,10 @@ const ROUTE_BUILDERS = {
 	},
 
 
-	'application/vnd.nextthought.naquestionset': (course, lesson, obj) => {
-		const target = obj.containerId || obj['Target-NTIID'];
-		if (!target) {
-			console.log('No target for object?', obj);
-			return '';
-		}
-		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(target)}/`;
-	},
+	'application/vnd.nextthought.naquestionset': getAssessmentRoute,
+	'application/vnd.nextthought.naquestionbank': getAssessmentRoute,
+	'application/vnd.nextthought.narandomizedquestionset': getAssessmentRoute,
+
 	'application/vnd.nextthought.assessment.discussionassignment': getAssignmentRoute,
 	'application/vnd.nextthought.assessment.timedassignment': getAssignmentRoute,
 	'application/vnd.nextthought.assessment.assignment': getAssignmentRoute,
