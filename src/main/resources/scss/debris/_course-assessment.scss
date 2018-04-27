@@ -1543,7 +1543,7 @@ canvas.x-component-course-assessment {
 
 .assignment-reader, .course-assessment-header {
 	.component-overlay {
-		& > .x-panel.topic-embed-widget {
+		& > .x-panel {
 			z-index: 1;
 		}
 	}
