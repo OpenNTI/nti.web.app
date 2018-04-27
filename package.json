@@ -53,7 +53,7 @@
     "@nti/web-discussions": "0.x.x",
     "@nti/web-login": "^2018.0.0",
     "@nti/web-profiles": "^1.0.1",
-    "@nti/web-reports": "0.x.x",
+    "@nti/web-reports": "^0.5.3",
     "@nti/web-routing": "0.x.x",
     "@nti/web-search": "0.x.x",
     "@nti/web-session": "^1.0.0",
