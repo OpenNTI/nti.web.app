@@ -33,7 +33,7 @@
   "devDependencies": {
     "@nti/app-scripts": "^1.17.3",
     "@nti/extjs": "4.2.0",
-    "@nti/lib-commons": "^2.0.0",
+    "@nti/lib-commons": "^2.15.0",
     "@nti/lib-dispatcher": "^1.0.0",
     "@nti/lib-dom": "^1.2.3",
     "@nti/lib-interfaces": "^1.78.2",
