@@ -1,6 +1,6 @@
 {
   "name": "@nti/web-app",
-  "version": "2018.5.7",
+  "version": "2018.5.8",
   "description": "NextThought web application",
   "author": "nextthought",
   "license": "UNLICENSED",
@@ -36,7 +36,7 @@
     "@nti/lib-commons": "^2.16.0",
     "@nti/lib-dispatcher": "^1.0.0",
     "@nti/lib-dom": "^1.2.3",
-    "@nti/lib-interfaces": "^1.78.3",
+    "@nti/lib-interfaces": "^1.78.2",
     "@nti/lib-locale": "^1.2.0",
     "@nti/lib-ntiids": "^1.0.2",
     "@nti/lib-store": "^1.2.0",
