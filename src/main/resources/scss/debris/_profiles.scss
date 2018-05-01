@@ -1833,8 +1833,11 @@
 
 .profile-achievements {
 	min-height: 100%;
-	background: $panel-background;
 	overflow: hidden;
+
+	.nti-profile-certificates {
+		margin-top: 10px;
+	}
 
 	.empty-achievements-text {
 		color: $tertiary-grey;
@@ -1842,6 +1845,39 @@
 		margin: 2em auto;
 		width: 500px;
 		text-align: center;
+	}
+
+	.course-badges-container {
+		background-color: white;
+
+		.course-badges {
+			overflow: visible;
+
+			.badge-list {
+				width: 50%;
+				margin-bottom: 20px;
+				padding: 10px 0 20px 4px;
+
+				&.completed {
+					padding-left: 13px;
+
+					.nti-checkbox.email {
+						margin-top: -34px;
+						padding-right: 6px;
+						height: 14px;
+					}
+				}
+			}
+		}
+
+		.header-title {
+			background-color: white;
+			border-bottom: solid 1px #ddd;
+			padding: 25px 0 10px;
+			margin: 0 20px;
+			font-size: 24px;
+			font-weight: 300;
+		}
 	}
 
 	.course-badges {
@@ -1905,7 +1941,8 @@
 
 	.achievements {
 		padding: 25px 8px;
-		float: left;
+		background-color: white;
+		margin-top: 10px;
 		width: 100%;
 
 		.empty-badge-text {
@@ -1924,7 +1961,7 @@
 
 		.header {
 			color: $tertiary-grey;
-			font: normal 600 0.6em/14px $font;
+			font: normal bold 10px $font;
 			text-transform: uppercase;
 			float: left;
 			clear: both;

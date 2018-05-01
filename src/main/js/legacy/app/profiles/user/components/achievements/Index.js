@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {ProfileCertificates} = require('@nti/web-profiles');
 
 const {getString} = require('legacy/util/Localization');
 const Globals = require('legacy/util/Globals');
@@ -21,42 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	ui: 'profile-achievements',
 	cls: 'profile-achievements',
 
-	items: [
-		{
-			xtype: 'container',
-			layout: 'none',
-			cls: 'course-badges',
-			defaultType: 'profile-badge-list',
-			courseContainer: true,
-			items: [
-				{
-					header: getString('NextThought.view.profiles.parts.Achievements.current_title'),
-					current: true,
-					cls: 'current',
-					desiredColumns: 3,
-					emptyText: getString('NextThought.view.profiles.parts.Achievements.current_empty')
-				},
-				{
-					header: getString('NextThought.view.profiles.parts.Achievements.completed_title'),
-					completed: true,
-					cls: 'completed',
-					desiredColumns: 4,
-					hasPublicPreference: true,
-					preferencePath: 'Badges/Course',
-					preferenceKey: 'show_course_badges',
-					preferenceTooltip: getString('NextThought.view.profiles.parts.Achievements.completed_preference'),
-					emptyText: getString('NextThought.view.profiles.parts.Achievements.completed_empty')
-				}
-			]
-		},
-		{
-			xtype: 'profile-badge-list',
-			header: getString('NextThought.view.profiles.parts.Achievements.achievements_title'),
-			achievements: true,
-			cls: 'achievements',
-			emptyText: getString('NextThought.view.profiles.parts.Achievements.achievements_empty')
-		}
-	],
+	items: [],
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -64,10 +30,81 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.addRoute('/', this.showBadges.bind(this));
 		this.addDefaultRoute('/');
 
+		this.addItems();
+
 		this.coursesContainer = this.down('[courseContainer]');
 		this.completedCourses = this.down('[completed]');
 		this.currentCourses = this.down('[current]');
 		this.achievements = this.down('[achievements]');
+
+		this.on({
+			'activate': this.onActivate.bind(this)
+		});
+	},
+
+	addItems: function () {
+		this.add({
+			xtype: 'container',
+			layout: 'none',
+			cls: 'course-badges-container',
+			defaultType: 'profile-badge-list',
+			courseContainer: true,
+			items: [{
+				xtype: 'component',
+				cls: 'header-title',
+				html: 'Badges'
+			},{
+				xtype: 'container',
+				layout: 'none',
+				cls: 'course-badges',
+				defaultType: 'profile-badge-list',
+				courseContainer: true,
+				items: [
+					{
+						header: getString('NextThought.view.profiles.parts.Achievements.current_title'),
+						current: true,
+						cls: 'current',
+						desiredColumns: 3,
+						emptyText: getString('NextThought.view.profiles.parts.Achievements.current_empty')
+					},
+					{
+						header: getString('NextThought.view.profiles.parts.Achievements.completed_title'),
+						completed: true,
+						cls: 'completed',
+						desiredColumns: 4,
+						hasPublicPreference: true,
+						preferencePath: 'Badges/Course',
+						preferenceKey: 'show_course_badges',
+						preferenceTooltip: getString('NextThought.view.profiles.parts.Achievements.completed_preference'),
+						emptyText: getString('NextThought.view.profiles.parts.Achievements.completed_empty')
+					}
+				]
+			}
+			]});
+
+		this.add({
+			xtype: 'profile-badge-list',
+			header: getString('NextThought.view.profiles.parts.Achievements.achievements_title'),
+			achievements: true,
+			cls: 'achievements',
+			emptyText: getString('NextThought.view.profiles.parts.Achievements.achievements_empty')
+		});
+
+		this.certificatesCmp = this.add({
+			xtype: 'react',
+			component: ProfileCertificates
+		});
+	},
+
+	onActivate: function () {
+		// for now, we need to re-retrieve data from the server in case the
+		// underlying completion/certificate data has changed
+		this.remove(this.certificatesCmp);
+
+		this.certificatesCmp = this.add({
+			xtype: 'react',
+			component: ProfileCertificates
+		});
 	},
 
 	afterRender: function () {
