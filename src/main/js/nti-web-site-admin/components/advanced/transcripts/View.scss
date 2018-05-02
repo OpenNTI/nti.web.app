@@ -1,0 +1,48 @@
+@import "~@nti/style-common/all.scss";
+
+.site-admin-advanced-transcripts {
+	box-shadow: 0 1px 3px 1px #ddd;
+	background-color: white;
+
+	.section-header {
+		font-size: 20px;
+		font-weight: 300;
+		padding-bottom: 0.5rem;
+		padding-top: 1rem;
+		border-bottom: solid 1px $tertiary-grey;
+		margin-left: 5rem;
+		margin-right: 5rem;
+		padding-left: 1rem;
+	}
+
+	.manage-credit-types {
+		margin: 0 auto;
+		width: fit-content;
+
+		.credit-type {
+			.nt-remove-button {
+				position: unset;
+				margin-left: 1rem;
+				margin-top: 0.25rem;
+			}
+		}
+	}
+
+	.controls {
+		background-color: white;
+		border-top: solid 1px #ddd;
+		height: 2.2rem;
+
+		.save {
+			background-color: $primary-blue;
+			text-align: center;
+			color: white;
+			width: 4rem;
+			height: 2.2rem;
+			line-height: 2.2rem;
+			font-size: 14px;
+			float: right;
+			cursor: pointer;
+		}
+	}
+}

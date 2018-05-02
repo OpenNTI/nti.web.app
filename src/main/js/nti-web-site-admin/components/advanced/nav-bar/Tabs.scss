@@ -1,0 +1,28 @@
+@import '~@nti/style-common';
+
+.site-admin-advanced-tabs {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-width: 250px;
+
+	li {
+		box-shadow: 0 -1px 0 0 $border-grey-light;
+
+		a {
+			display: block;
+			padding: 0.5rem 1rem;
+			text-decoration: none;
+			color: $secondary-grey;
+
+			&:not(.active):hover {
+				background: $panel-background;
+			}
+
+			&.active {
+				background: $primary-blue;
+				color: white;
+			}
+		}
+	}
+}
