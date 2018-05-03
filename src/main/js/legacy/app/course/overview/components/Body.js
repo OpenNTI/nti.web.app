@@ -58,6 +58,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	onRouteActivate () {
 		this.isActive = true;
 
+		const lesson = this.getLesson();
+		// const editor = this.getEditor();
+
+		if (lesson && lesson.onRouteActivate) {
+			lesson.onRouteActivate();
+		}
+
+		// if (editor && editor.onRouteActivate) {
+		// 	editor.onRouteActivate();
+		// }
+
 		if (this.hasEditingControls) {
 			this.editingControlsCmp.show();
 		}

@@ -107,6 +107,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return builder ? builder(this.bundle, this.currentOutlineNode, object, context) : null;
 	},
 
+	onRouteDeactivate () {
+		this.currentOverview.onRouteDeactivate();
+	},
+
+	onRouteActivate () {
+		if (this.currentOverview) {
+			this.currentOverview.onRouteActivate();
+		}
+	},
 
 	async renderLesson (record, doNotCache) {
 		try {
