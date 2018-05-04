@@ -4,6 +4,7 @@ import {LinkTo} from '@nti/web-routing';// eslint-disable-line
 
 const DEFAULT_TEXT = {
 	transcript: 'Transcript',
+	courses: 'Courses',
 	reports: 'Reports',
 	overview: 'Overview'
 };
@@ -15,6 +16,9 @@ export default function SiteAdminUserTabs () {
 		<ul className="site-admin-user-tabs">
 			<li>
 				<LinkTo.Path to="./" activeClassName="active" exact>{t('overview')}</LinkTo.Path>
+			</li>
+			<li>
+				<LinkTo.Path to="./courses" activeClassName="active">{t('courses')}</LinkTo.Path>
 			</li>
 			<li>
 				<LinkTo.Path to="./transcript" activeClassName="active">{t('transcript')}</LinkTo.Path>
