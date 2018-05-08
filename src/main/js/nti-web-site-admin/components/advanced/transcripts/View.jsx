@@ -19,22 +19,11 @@ export default class AdminTranscripts extends React.Component {
 		this.state = {};
 	}
 
-	onValuesUpdated = (newValues) => {
-		this.setState({values: newValues});
-	}
-
-	onSave = () => {
-		//TODO: Save data
-	}
-
 	render () {
 		return (
 			<div className="site-admin-advanced-transcripts">
 				<div className="section-header">{t('creditTypes')}</div>
-				<ManageTranscriptCredits onValuesUpdated={this.onValuesUpdated}/>
-				<div className="controls">
-					<div className="save" onClick={this.onSave}>{t('save')}</div>
-				</div>
+				<ManageTranscriptCredits/>
 			</div>
 		);
 	}
