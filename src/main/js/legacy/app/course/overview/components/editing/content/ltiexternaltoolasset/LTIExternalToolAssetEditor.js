@@ -35,13 +35,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getDefaultValues: function () {
 		if (this.record && this.record.isModel) {
 			const data = this.record.getData();
-			data.ConfiguredTool = this.selectedItem.NTIID;
+			data.ConfiguredTool = this.selectedItem.OID;
 			return data;
 		}
 
 		return {
 			MimeType: LTIExternalToolAsset.mimeType,
-			ConfiguredTool: this.selectedItem.NTIID
+			ConfiguredTool: this.selectedItem.OID
 		};
 
 	},
