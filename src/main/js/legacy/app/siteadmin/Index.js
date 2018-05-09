@@ -90,13 +90,19 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				text: 'Reports',
 				route: '/reports',
 				active: REPORTS_ACTIVE.test(path)
-			},
-			{
+			}
+		];
+
+		// as of now, the only thing that exists on the advanced tab is the
+		// credit definitions maangement tool.  Without that link, no need to show
+		// the advanced tab at all
+		if(Service.getCollection('CreditDefinitions', 'Global')) {
+			tabs.push({
 				text: 'Advanced',
 				route: '/advanced',
 				active: ADVANCED_ACTIVE.test(path)
-			}
-		];
+			});
+		}
 
 		navigation.setTabs(tabs);
 
