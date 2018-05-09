@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {ProfileCertificates} = require('@nti/web-profiles');
+const {getAppUser} = require('@nti/web-client');
 
 const {getString} = require('legacy/util/Localization');
 const Globals = require('legacy/util/Globals');
@@ -90,10 +91,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			emptyText: getString('NextThought.view.profiles.parts.Achievements.achievements_empty')
 		});
 
-		this.certificatesCmp = this.add({
-			xtype: 'react',
-			component: ProfileCertificates
-		});
+		if(!this.hideCertificates) {
+			this.certificatesCmp = this.add({
+				xtype: 'react',
+				component: ProfileCertificates
+			});
+		}
 	},
 
 	onActivate: function () {
@@ -101,10 +104,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		// underlying completion/certificate data has changed
 		this.remove(this.certificatesCmp);
 
-		this.certificatesCmp = this.add({
-			xtype: 'react',
-			component: ProfileCertificates
-		});
+		if(!this.hideCertificates) {
+			this.certificatesCmp = this.add({
+				xtype: 'react',
+				component: ProfileCertificates
+			});
+		}
 	},
 
 	afterRender: function () {
@@ -169,41 +174,49 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			return Promise.resolve();
 		}
 
-		var link = user.getLink('Badges');
+		return getAppUser().then(appUser => {
+			var link = user.getLink('Badges');
 
-		this.loadingCmp = this.loadingCmp || this.add(Globals.getContainerLoadingMask());
+			this.hideCertificates = false;
 
-		if (this.emptyText) {
-			this.remove(this.emptyText, true);
-			delete this.emptyText;
-		}
-
-		this.activeUser = user;
-		this.isMe = isMe;
-
-		this.coursesContainer.show();
-		this.completedCourses.setPublicPreference(isMe);
-
-		this.completedCourses.hide();
-		this.currentCourses.hide();
-		this.achievements.hide();
-
-		if (isMe) {
-			this.loadWorkSpace(Service.getWorkspace('Badges'));
-		} else {
-			this.currentCourses.hide();
-
-			if (link) {
-				Service.request(link)
-					.then(this.loadWorkSpace.bind(this));
-			} else {
-				this.finishLoading();
-				this.setEmptyState();
+			if(user.get('ID') !== appUser.ID) {
+				this.hideCertificates = true;
 			}
-		}
+
+			this.loadingCmp = this.loadingCmp || this.add(Globals.getContainerLoadingMask());
+
+			if (this.emptyText) {
+				this.remove(this.emptyText, true);
+				delete this.emptyText;
+			}
+
+			this.activeUser = user;
+			this.isMe = isMe;
+
+			this.coursesContainer.show();
+			this.completedCourses.setPublicPreference(isMe);
+
+			this.completedCourses.hide();
+			this.currentCourses.hide();
+			this.achievements.hide();
+
+			if (isMe) {
+				this.loadWorkSpace(Service.getWorkspace('Badges'));
+			} else {
+				this.currentCourses.hide();
+
+				if (link) {
+					Service.request(link)
+						.then(this.loadWorkSpace.bind(this));
+				} else {
+					this.finishLoading();
+					this.setEmptyState();
+				}
+			}
 
 
-		return Promise.resolve();
+			return Promise.resolve();
+		});
 	},
 
 	showBadges: function (route, subRoute) {
