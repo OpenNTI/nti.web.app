@@ -24,7 +24,7 @@ export default function UserItem ({item, isSelected, onSelect, removeCmp: Remove
 	const {email, MostRecentSession} = item;
 
 	const createdTime = item.getCreatedTime();
-	const lastLoginTime = item.getLastLoginTime();
+	const lastLoginTime = item.lastLoginTime && item.getLastLoginTime();
 	const lastSeen = (MostRecentSession && MostRecentSession.getSessionStartTime()) || lastLoginTime;
 
 	function onChange (e) {
