@@ -193,12 +193,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			active: active === 'membership'
 		});
 
-		tabs.push({
-			label: 'Transcripts',
-			route: '/transcripts',
-			active: active === 'transcripts'
-		});
-
+		if(this.activeEntity.hasLink('transcript')) {
+			tabs.push({
+				label: 'Transcripts',
+				route: '/transcripts',
+				active: active === 'transcripts'
+			});
+		}
 
 		this.headerCmp.updateUser(this.activeEntity, tabs, isContact, this.isMe);
 
