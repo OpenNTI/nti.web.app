@@ -1,11 +1,14 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const Contacts = require('@nti/web-contacts');
+
+require('legacy/overrides/ReactHarness');
 
 const ComponentsNavigation = require('legacy/common/components/Navigation');
-const NavigationActions = require('legacy/app/navigation/Actions');
-
-const ContactsActions = require('./Actions');
-const ContactsStateStore = require('./StateStore');
+// const NavigationActions = require('legacy/app/navigation/Actions');
+//
+// const ContactsActions = require('./Actions');
+// const ContactsStateStore = require('./StateStore');
 
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
@@ -18,48 +21,53 @@ require('./components/ListView');
 module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-index',
+	id: 'contacts-index',
+	title: 'Contacts',
 
 	mixins: {
 		Route: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'
 	},
 
-	title: 'Contacts',
-	defaultTab: 'my-contacts',
-	id: 'contacts',
 
-	items: [
-		{ xtype: 'contacts-tab-view', id: 'my-contacts' },
-		{ xtype: 'groups-tab-view', id: 'my-groups'},
-		{ xtype: 'lists-tab-view', id: 'my-lists'}
-	],
+	items: [],
 
-	layout: {
-		type: 'card',
-		deferredRender: true
-	},
+	layout: 'none',
 
-	defaultType: 'box',
+	// defaultType: 'box',
 	activeItem: 0,
 	'componentMapping': {},
 
 	initComponent: function () {
 		var me = this;
-
 		me.callParent(arguments);
-		this.removeCls('make-white');
 
-		this.ContactsActions = ContactsActions.create();
-		this.ContactsStore = ContactsStateStore.getInstance();
-		this.NavigationActions = NavigationActions.create();
+		this.removeCls('make-white');
 
 		this.initRouter();
 
-		this.addRoute('/', this.showContacts.bind(this));
-		this.addRoute('/groups', this.showGroups.bind(this));
-		this.addRoute('/lists', this.showLists.bind(this));
+		this.addDefaultRoute(this.addContactComponents.bind(this));
+	},
 
-		this.addDefaultRoute('/');
+	addContactComponents () {
+		const baseroute = this.getBaseRoute();
+
+		if (this.contacts) {
+			this.contacts.setBaseRoute(baseroute);
+		} else {
+			this.contacts = this.add({
+				xtype: 'react',
+				component: Contacts,
+				baseroute: baseroute,
+				getRouteFor: (obj) => {
+					if (obj.isCourseCatalogEntry) {
+						const href = `uri:${obj.href}`;
+
+						return `${this.category || '.'}/nti-course-catalog-entry/${encodeURIComponent(href)}`;
+					}
+				}
+			});
+		}
 	},
 
 	afterRender: function () {
@@ -89,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 
 		tabs.push({
 			text: 'Distribution Lists',
-			route: '/lists',
+			route: '/sharing-lists',
 			subRoute: this.listsRoute,
 			active: active === 'lists'
 		});
@@ -110,6 +118,8 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 			}
 		});
 	},
+
+
 
 	showGroups: function (route, subRoute) {
 		this.groupsRoute = subRoute;
