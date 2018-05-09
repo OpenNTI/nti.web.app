@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				active: REPORTS_ACTIVE.test(path)
 			},
 			{
-				text: 'Advanced',
+				text: 'Settings',
 				route: '/advanced',
 				active: ADVANCED_ACTIVE.test(path)
 			}
