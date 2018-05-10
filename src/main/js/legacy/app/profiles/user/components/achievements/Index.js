@@ -90,13 +90,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			cls: 'achievements',
 			emptyText: getString('NextThought.view.profiles.parts.Achievements.achievements_empty')
 		});
-
-		if(!this.hideCertificates) {
-			this.certificatesCmp = this.add({
-				xtype: 'react',
-				component: ProfileCertificates
-			});
-		}
 	},
 
 	onActivate: function () {
@@ -177,10 +170,22 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return getAppUser().then(appUser => {
 			var link = user.getLink('Badges');
 
-			this.hideCertificates = false;
-
 			if(user.get('ID') !== appUser.ID) {
+				this.remove(this.certificatesCmp);
+
 				this.hideCertificates = true;
+			}
+			else {
+				this.hideCertificates = false;
+
+				if(this.certificatesCmp) {
+					this.remove(this.certificatesCmp);
+				}
+
+				this.certificatesCmp = this.add({
+					xtype: 'react',
+					component: ProfileCertificates
+				});
 			}
 
 			this.loadingCmp = this.loadingCmp || this.add(Globals.getContainerLoadingMask());
