@@ -14,7 +14,7 @@ require('./components/activity/Index');
 require('./components/about/Index');
 require('./components/membership/Index');
 require('./components/achievements/Index');
-
+require('./components/transcripts/Index');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	extend: 'Ext.container.Container',
@@ -80,6 +80,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		if (isFeature('badges')) {
 			this.addRoute('/achievements', this.showAchievements.bind(this));
 		}
+
+		this.addRoute('/transcripts', this.showTranscripts.bind(this));
 
 		this.addDefaultRoute('/about');
 	},
@@ -191,6 +193,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			active: active === 'membership'
 		});
 
+		if(this.activeEntity.hasLink('transcript')) {
+			tabs.push({
+				label: 'Transcripts',
+				route: '/transcripts',
+				active: active === 'transcripts'
+			});
+		}
 
 		this.headerCmp.updateUser(this.activeEntity, tabs, isContact, this.isMe);
 
@@ -272,6 +281,23 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		return achievementsCmp.userChanged(this.activeEntity, this.isMe)
 			.then(achievementsCmp.handleRoute.bind(achievementsCmp, subRoute, route.precache));
+	},
+
+	showTranscripts: function (route, subRoute) {
+		var transcriptsCmp = this.setActiveItem('user-profile-transcripts'),
+			headerCmp = this.headerCmp;
+
+		this.setState('transcripts');
+
+		if (this.isMe) {
+			this.activeEntity.getSchema()
+				.then(function (schema) {
+					headerCmp.setSchema();
+				});
+		}
+
+		return transcriptsCmp.userChanged(this.activeEntity, this.isMe)
+			.then(transcriptsCmp.handleRoute.bind(transcriptsCmp, subRoute, route.precache));
 	},
 
 	saveProfile: function () {

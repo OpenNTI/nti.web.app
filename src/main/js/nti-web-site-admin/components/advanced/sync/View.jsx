@@ -1,13 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { getService } from '@nti/web-client';
 import { DateTime, Flyout, Prompt } from '@nti/web-commons';
 
 export default class View extends React.Component {
-	static propTypes = {
-		workspace: PropTypes.object
-	}
-
 	attachFlyoutRef = x => this.flyout = x
 
 	constructor (props) {
@@ -16,8 +11,12 @@ export default class View extends React.Component {
 			isLocked: false,
 			loadingMeta: true
 		};
+	}
 
-		this.__refreshSyncStatus();
+	async componentDidMount () {
+		const service = await getService();
+
+		this.setState({ workspace: service.getWorkspace('SiteAdmin') }, this.__refreshSyncStatus);
 	}
 
 	__refreshSyncStatus () {
@@ -44,7 +43,7 @@ export default class View extends React.Component {
 	}
 
 	__getLink (name) {
-		const { workspace } = this.props;
+		const { workspace } = this.state;
 
 		if(!workspace || !workspace.Links) {
 			return null;
@@ -210,7 +209,7 @@ export default class View extends React.Component {
 	}
 
 	render () {
-		if(!this.props.workspace) {
+		if(!this.state.workspace) {
 			return null;
 		}
 

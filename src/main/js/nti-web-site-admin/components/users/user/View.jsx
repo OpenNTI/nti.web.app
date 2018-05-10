@@ -5,6 +5,7 @@ import UserCourseEnrollment from '../../user-course-enrollment';
 
 import Overview from './overview';
 import Reports from './reports';
+import Courses from './courses';
 import Transcript from './transcript';
 import Frame from './Frame';
 
@@ -22,6 +23,7 @@ export default Router.for([
 			return null;
 		}
 	}),
+	Route({path: '/courses', component: Courses, name: 'site-admin.users.user-courses'}),
 	Route({path: '/transcript', component: Transcript, name: 'site-admin.users.user-transcript'}),
 	Route({path: '/reports', component: Reports, name: 'site-admin.users.user-overview'}),
 	Route({path: '/', component: Overview, name: 'site-admin.users.user-overview'})
