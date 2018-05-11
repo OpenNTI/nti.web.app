@@ -27,22 +27,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.activeUser = user;
 
-		if(!this.transcriptsCmp) {
-			this.activeUser.getInterfaceInstance().then(modeledUser => {
-				this.transcriptsCmp = this.add({
-					xtype: 'react',
-					component: Transcripts,
-					entity: modeledUser
-				});
-			});
-		}
-		else {
-			this.activeUser.getInterfaceInstance().then(modeledUser => {
-				this.transcriptsCmp.setProps({entity: modeledUser});
-			});
-		}
+		this.remove(this.transcriptsCmp);
 
-		// update prop?
+		this.activeUser.getInterfaceInstance().then(modeledUser => {
+			this.transcriptsCmp = this.add({
+				xtype: 'react',
+				component: Transcripts,
+				entity: modeledUser
+			});
+		});
 
 		return Promise.resolve();
 	},
