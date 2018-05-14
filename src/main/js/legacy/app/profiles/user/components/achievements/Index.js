@@ -100,7 +100,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		if(!this.hideCertificates) {
 			this.certificatesCmp = this.add({
 				xtype: 'react',
-				component: ProfileCertificates
+				component: ProfileCertificates,
+				entity: this.activeUser
 			});
 		}
 	},
@@ -184,7 +185,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 				this.certificatesCmp = this.add({
 					xtype: 'react',
-					component: ProfileCertificates
+					component: ProfileCertificates,
+					entity: user
 				});
 			}
 
