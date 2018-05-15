@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				const isComplete = courseProgress && courseProgress.get('CompletedDate');
 
 				if(isComplete) {
-					return '<div class="progress progress-complete-container">' +
+					return `<div class="progress progress-complete-container" data-progress-percent=${progressPct}>` +
 						'<div class="progress-completed"><i class="icon-check"></i></div>' +
 						'<span>100%</span>' +
 					'</div>';
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 				const className = cx('progress', 'progress-container', progressAsInt === 0 ? 'none' : 'partial');
 
-				return `<div class="${className}">` +
+				return `<div class="${className}" data-progress-percent="${progressPct}">` +
 					'<svg width="25" height="25" viewBox="0 0 36 36">' +
 						'<path' +
 							' d="M18 2.0845' +
