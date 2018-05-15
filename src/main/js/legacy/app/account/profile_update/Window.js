@@ -7,7 +7,7 @@ require('legacy/common/window/Window');
 require('legacy/overrides/ReactHarness.js');
 
 
-module.exports = exports = Ext.define('NextThought.app.account.contact.Window', {
+module.exports = exports = Ext.define('NextThought.app.account.profile-update.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.profile-update-window',
 	cls: 'profile-update-window',
