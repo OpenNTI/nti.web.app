@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		// underlying completion/certificate data has changed
 		this.remove(this.certificatesCmp);
 
-		if(!this.hideCertificates) {
+		if(!this.hideCertificates && this.activeUser) {
 			this.certificatesCmp = this.add({
 				xtype: 'react',
 				component: ProfileCertificates,
