@@ -2,8 +2,10 @@ const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const Contacts = require('@nti/web-contacts');
 
+
 require('legacy/overrides/ReactHarness');
 
+const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
 // const NavigationActions = require('legacy/app/navigation/Actions');
 //
@@ -17,39 +19,31 @@ require('./components/ContactTabView');
 require('./components/GroupTabView');
 require('./components/ListView');
 
+const CONTACTS_ACTIVE = /^\/contacts/;
+const GROUPS_ACTIVE = /^\/groups/;
+const SHARING_LISTS_ACTIVE = /^\/sharing-lists/;
+
 
 module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-index',
 	id: 'contacts-index',
 	title: 'Contacts',
-
 	mixins: {
-		Route: 'NextThought.mixins.Router',
-		State: 'NextThought.mixins.State'
+		Route: 'NextThought.mixins.Router'
 	},
-
-
 	items: [],
-
 	layout: 'none',
 
-	// defaultType: 'box',
-	activeItem: 0,
-	'componentMapping': {},
-
 	initComponent: function () {
-		var me = this;
-		me.callParent(arguments);
-
-		this.removeCls('make-white');
-
+		this.callParent(arguments);
 		this.initRouter();
-
-		this.addDefaultRoute(this.addContactComponents.bind(this));
+		this.removeCls('make-white');
+		this.addDefaultRoute(this.showContacts.bind(this));
+		this.NavigationActions = NavigationActions.create();
 	},
 
-	addContactComponents () {
+	showContacts (route) {
 		const baseroute = this.getBaseRoute();
 
 		if (this.contacts) {
@@ -59,139 +53,47 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 				xtype: 'react',
 				component: Contacts,
 				baseroute: baseroute,
-				getRouteFor: (obj) => {
-					if (obj.isCourseCatalogEntry) {
-						const href = `uri:${obj.href}`;
-
-						return `${this.category || '.'}/nti-course-catalog-entry/${encodeURIComponent(href)}`;
-					}
-				}
+				setTitle: (title) => {this.setTitle(title);}
 			});
 		}
+
+		this.setUpNavigation(baseroute, route.path);
 	},
 
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iOS) {
-			this.__adjustmentForiOS();
-		}
-	},
+	setUpNavigation (baseroute, path) {
+		const navigation = this.getNavigation();
 
-	applyState: function (state) {
-		var active = state.active,
-			tabs = [];
+		navigation.updateTitle('Contacts');
 
-		tabs.push({
-			text: 'Contacts',
-			route: '/',
-			subRoute: this.contactsRoute,
-			active: active === 'contacts'
-		});
-
-		tabs.push({
-			text: 'Groups',
-			route: '/groups',
-			subRoute: this.groupsRoute,
-			active: active === 'groups'
-		});
-
-		tabs.push({
-			text: 'Distribution Lists',
-			route: '/sharing-lists',
-			subRoute: this.listsRoute,
-			active: active === 'lists'
-		});
-
-		this.navigation.setTabs(tabs);
-	},
-
-	showContacts: function (route, subRoute) {
-		this.contactsRoute = subRoute;
-
-		this.setTitle('Contacts');
-		this.setActiveView('contacts-tab-view',
-			['groups-tab-view', 'lists-tab-view'],
-			'contacts'
-		).then(function (item) {
-			if (item && item.handleRoute) {
-				item.handleRoute(subRoute);
+		const tabs = [
+			{
+				text: 'People',
+				route: '/contacts',
+				active: CONTACTS_ACTIVE.test(path)
+			},
+			{
+				text: 'Groups',
+				route: '/groups',
+				active: GROUPS_ACTIVE.test(path)
+			},
+			{
+				text: 'Sharing Lists',
+				route: '/sharing-lists',
+				active: SHARING_LISTS_ACTIVE.test(path)
 			}
-		});
-	},
+		];
 
+		navigation.setTabs(tabs);
 
-
-	showGroups: function (route, subRoute) {
-		this.groupsRoute = subRoute;
-
-		this.setTitle('Groups');
-		this.setActiveView('groups-tab-view',
-			['contacts-tab-view', 'lists-tab-view'],
-			'groups'
-		);
-	},
-
-	showLists: function (route, subRoute) {
-		this.listsRoute = subRoute;
-
-		this.setTitle('Distribution List');
-		this.setActiveView('lists-tab-view',
-			['groups-tab-view', 'contacts-tab-view'],
-			'lists'
-		);
-	},
-
-	setActiveView: function (active, inactive, tab) {
-		var me = this, item;
-
-		me.prepareNavigation();
-		me.applyState({
-			active: tab || active
-		});
-
-		me.navigation.updateTitle('Contacts');
-
-		return new Promise(function (fulfill, reject) {
-			item = me.setActiveItem(active);
-			fulfill(item);
-		});
-	},
-
-	setActiveItem: function (xtype) {
-		var layout = this.getLayout(),
-			item = this.getItem(xtype),
-			current = layout.getActiveItem();
-
-		if (current === item) {
-			item.fireEvent('activate');
-		}
-
-
-		this.getLayout().setActiveItem(item);
-		return item;
-	},
-
-	getItem: function (xtype) {
-		var cmp = this.componentMapping[xtype];
-
-		if (!cmp) {
-			cmp = this.componentMapping[xtype] = this.down(xtype);
-			if (cmp.handleRoute) {
-				this.addChildRouter(cmp);
-			}
-			cmp.contactsContainer = this;
-		}
-
-		return cmp;
-	},
-
-	prepareNavigation: function () {
+		this.NavigationActions.setActiveContent(null, true, true);
 		this.NavigationActions.updateNavBar({
-			cmp: this.getNavigation(),
-			hideBranding: true
+			cmp: navigation,
+			noLibraryLink: false,
+			hideBranding: true,
+			onBack: () => {
+				this.pushRootRoute('Library', '/library');
+			}
 		});
-
-		this.NavigationActions.setActiveContent(null);
 	},
 
 	getNavigation: function () {
@@ -204,60 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		return this.navigation;
 	},
 
-	onTabChange: function (title, route, tab) {
-		this.pushRoute('', route);
-	},
-
-	restore: function (state) {
-		return new Promise(function (fulfill) {
-			this.setActiveTab(((state || {}).contacts || {}).activeTab);
-			fulfill();
-		}.bind(this));
-	},
-
-	__adjustmentForiOS: function () {
-		var outline = this.el.down('.contact:nth-child(1)'),
-			list = this.el.down('.contact:nth-child(2)'),
-			input = this.el.down('input'),
-			me = this;
-
-		wait(100).then(function () {
-			me.outlineY = outline.getY();
-			me.outlineHeight = outline.getHeight();
-		});
-
-		//For keyboard, reduce height and adjust position of elements to fit within smaller screen
-		input.on('focus', function () {
-			wait(250).then(function () {
-				if (window.innerHeight < 600) {
-					outline.setHeight(window.innerHeight - 15);
-					outline.setY(window.outerHeight - window.innerHeight);
-					list.setY(window.outerHeight - window.innerHeight);
-					list.setHeight(window.innerHeight - 15);
-					me.keyboardUpScrollY = window.scrollY;
-				}
-			});
-		});
-
-		//Undo resizing and repositioning when keyboard dismissed
-		input.on('blur', function () {
-			if (this.outlineY) {
-				outline.setY(me.outlineY);
-				outline.setHeight(me.outlineHeight);
-				list.setY(me.outlineY);
-				list.setHeight(me.outlineHeight);
-				me.keyboardUpScrollY = false;
-			}
-		}, this);
-
-		//Keep from permanently scrolling content off viewable area
-		window.onscroll = function () {
-			if (!me.keyboardUpScrollY) {
-				return;
-			}
-			if (window.scrollY !== me.keyboardUpScrollY) {
-				window.scrollTo(0, me.keyboardUpScrollY);
-			}
-		};
+	onTabChange: function (title, route, subroute, tab) {
+		this.pushRoute(title, route, subroute);
 	}
 });
