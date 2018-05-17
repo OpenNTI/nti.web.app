@@ -4,7 +4,7 @@
 
 NTIStrings['months'] = {
 	1: 'January',
-	2: 'Febuary',
+	2: 'February',
 	3: 'March',
 	4: 'April',
 	5: 'May',
