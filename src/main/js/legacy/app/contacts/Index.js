@@ -1,19 +1,12 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
 const Contacts = require('@nti/web-contacts');
-
 
 require('legacy/overrides/ReactHarness');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
-// const NavigationActions = require('legacy/app/navigation/Actions');
-//
-// const ContactsActions = require('./Actions');
-// const ContactsStateStore = require('./StateStore');
 
 require('legacy/mixins/Router');
-require('legacy/mixins/State');
 require('./components/TabView');
 require('./components/ContactTabView');
 require('./components/GroupTabView');
@@ -37,8 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.initRouter();
 		this.removeCls('make-white');
+		this.initRouter();
 		this.addDefaultRoute(this.showContacts.bind(this));
 		this.NavigationActions = NavigationActions.create();
 	},
