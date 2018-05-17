@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 
 		navigation.setTabs(tabs);
 
-		this.NavigationActions.setActiveContent(null, true, true);
+		this.NavigationActions.setActiveContent(null, true, false);
 		this.NavigationActions.updateNavBar({
 			cmp: navigation,
 			noLibraryLink: false,
