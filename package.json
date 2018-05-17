@@ -47,7 +47,7 @@
     "@nti/web-catalog": "0.x.x",
     "@nti/web-charts": "0.x.x",
     "@nti/web-client": "^1.1.1",
-    "@nti/web-commons": "0.x.x",
+    "@nti/web-commons": "^0.36.1",
     "@nti/web-content": "^1.18.2",
     "@nti/web-course": "^1.22.2",
     "@nti/web-discussions": "0.x.x",
