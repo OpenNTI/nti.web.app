@@ -44,7 +44,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		Ext.destroy(topicList, filterBar, header);
 
 		filterBar = this.add({xtype: 'forums-forum-filterbar'});
-		header = this.add({xtype: 'forums-forum-header', record: record, store: store});
+		header = this.add({
+			xtype: 'forums-forum-header',
+			record: record,
+			store: store,
+			onDelete: this.onForumDelete,
+			isSimplified: this.isSimplified
+		});
 		topicList = this.add({
 			xtype: 'forums-forum-topic-list-view',
 			record: record,

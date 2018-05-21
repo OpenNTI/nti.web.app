@@ -16,6 +16,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 
 	initComponent: function () {
 		this.callParent(arguments);
+		this.body.onForumDelete = this.onForumDelete.bind(this);
+		this.navigation.isSimplified = this.isSimplified.bind(this);
+		this.body.isSimplified = this.isSimplified.bind(this);
 	},
 
 	onAddedToParentRouter: function () {
@@ -44,6 +47,31 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 	setForumList: function (forumList) {
 		this.forumList = forumList;
 		this.navigation.setForumList(forumList);
+	},
+
+
+	onForumDelete (record) {
+		const store = this.forumList[0].store || ((this.forumList[0].children || [])[0] || {}).store;
+		const deletedIndex = store.indexOf(record);
+		const size = store.getCount();
+		let nextForum;
+
+		if (deletedIndex === size - 1) {
+			nextForum = store.getAt(deletedIndex - 1);
+		} else {
+			nextForum = store.getAt(deletedIndex + 1);
+		}
+
+		store.remove([record]);
+
+		if (nextForum) {
+			this.setForum(nextForum.getId());
+		}
+		this.navigation.setForumList(this.forumList);
+	},
+
+	isSimplified () {
+		return (!this.forumList || this.forumList.length > 1 || this.forumList[0].title !== '') ? false : true;
 	},
 
 	setForum: function (id) {

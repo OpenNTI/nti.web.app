@@ -10,6 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'new-topic', html: '{{{NextThought.view.forums.forum.parts.Header.new}}}'},
+		{cls: 'delete-forum', html: 'Delete'},
 		{cls: 'controls', cn: [
 			{cls: 'position', cn: [
 				{tag: 'span', cls: 'bold', html: '{{{NextThought.view.forums.forum.parts.Header.page}}}'},
@@ -26,6 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 
 	renderSelectors: {
 		newTopicEl: '.new-topic',
+		deleteForumEl: '.delete-forum',
 		currentEl: '.controls .position .current',
 		totalEl: '.controls .position .total',
 		prevEl: '.controls .pager .prev',
@@ -43,11 +45,25 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			});
 		}
 
+		if(this.isSimplified()) {
+			me.mon(me.deleteForumEl, 'click', 'deleteForum');
+		} else {
+			me.deleteForumEl.hide();
+		}
+
 		me.updatePosition();
 		me.mon(me.store, 'load', 'updatePosition');
 
 		me.mon(me.prevEl, 'click', 'previousPage');
 		me.mon(me.nextEl, 'click', 'nextPage');
+
+	},
+
+	deleteForum () {
+		this.onDelete(this.record);
+		debugger;
+		Service.requestDelete(this.record.getLink('edit'))
+			.catch(() => alert('Unable to delete this forum.'));
 	},
 
 	updatePosition: function () {

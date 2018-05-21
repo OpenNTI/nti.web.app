@@ -3,6 +3,7 @@ const { encodeForURI } = require('@nti/lib-ntiids');
 
 const UIViewHeader = require('legacy/model/UIViewHeader');
 const {isFeature} = require('legacy/util/Globals');
+const WindowsActions = require('legacy/app/windows/Actions');
 
 require('legacy/util/Parsing');
 require('legacy/common/menus/Reports');
@@ -20,23 +21,27 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		toggleOnClick: false,
 		deselectOnContainerClick: false
 	},
+	renderTpl: Ext.DomHelper.markup([
+		{
+			cls: 'nav-outline forum-outline scrollable', cn: [
+				{cls: 'header', html: '{{{NextThought.view.forums.forum.Navigation.header}}}'},
+				{cls: 'outline-list' },
+				{ cls: 'new-forum', html: '{{{NextThought.view.forums.forum.Navigation.addforum}}}' },
+			]
+		}
+	]),
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'nav-outline forum-outline scrollable', cn: [
-			{cls: 'header', html: '{{{NextThought.view.forums.forum.Navigation.header}}}'},
-			{cls: 'outline-list', cn: [
-				{tag: 'tpl', 'for': '.', cn: [
-					{tag: 'tpl', 'if': 'values.divider', cn: {
-						cls: 'group-header outline-row', 'data-depth': '{depth}', 'data-board': '{attr}', html: '{label}'
-					}},
-					{tag: 'tpl', 'if': '!values.divider', cn: [
-						{cls: 'outline-row', 'data-qtip': '{displayTitle}', cn: [
-							{tag: 'tpl', 'if': 'this.showReport(values)', cn: [
-								{cls: 'report-icon', 'data-qtip': '{{{NextThought.view.forums.forum.Navigation.reports}}}'}
-							]},
-							{cls: 'label', html: '{displayTitle}'}
-						]}
-					]}
+		tag: 'tpl', 'for': '.', cn: [
+			{tag: 'tpl', 'if': 'values.divider', cn: {
+				cls: 'group-header outline-row', 'data-depth': '{depth}', 'data-board': '{attr}', html: '{label}'
+			}},
+			{tag: 'tpl', 'if': '!values.divider', cn: [
+				{cls: 'outline-row', 'data-qtip': '{displayTitle}', cn: [
+					{tag: 'tpl', 'if': 'this.showReport(values)', cn: [
+						{cls: 'report-icon', 'data-qtip': '{{{NextThought.view.forums.forum.Navigation.reports}}}'}
+					]},
+					{cls: 'label', html: '{displayTitle}'}
 				]}
 			]}
 		]
@@ -57,6 +62,21 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		}
 	}),
 
+	renderSelectors: {
+		newForumEl: '.new-forum',
+		frameBodyEl: '.outline-list'
+	},
+
+	getTargetEl: function () {
+		return this.frameBodyEl;
+	},
+
+	initComponent () {
+		this.callParent(arguments);
+
+		this.WindowActions = WindowsActions.create();
+	},
+
 	afterRender: function () {
 		this.callParent(arguments);
 
@@ -66,12 +86,58 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			click: 'maybeShowNewForum'
 		});
 
+		if (this.isSimplified()) {
+			me.newForumEl.show();
+		} else {
+			me.newForumEl.hide();
+		}
+
 		me.on('select', me.selectForum.bind(this));
+		me.mon(me.newForumEl, { click: 'createForum' });
 
 		me.on('beforeselect', function (cmp, record) {
 			//don't allow headers to be selected
 			return !(record instanceof UIViewHeader);
 		});
+	},
+
+	createForum () {
+		const board = this.getBoardForSimplified();
+		this.WindowActions.showWindow('new-forum', { board, onForumAdd: this.onForumAdd.bind(this)  });
+	},
+
+
+	getBoardForSimplified () {
+		if (!this.forumList) { return; }
+
+		const item = this.forumList[0] || {};
+
+		if (item.board) {
+			return item.board;
+		}
+
+		const board = (item && item.children && item.children[0]) || {};
+		return board && board.board;
+	},
+
+
+	getStoreForSimplified () {
+		if (!this.forumList) { return {}; }
+
+		const item = this.forumList[0] || {};
+
+		if (item.store) {
+			return item.store;
+		}
+
+		const forum = (item && item.children && item.children[0]) || {};
+		return forum.store;
+	},
+
+	onForumAdd (forum) {
+		const store = this.getStoreForSimplified();
+		store.add(forum);
+		this.buildStore(this.forumList);
 	},
 
 	canCreateForums: function (record) {
@@ -83,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			forumList = [];
 		}
 
-		forumList = maybeSimplify(forumList);
+		this.forumList = maybeSimplify(forumList);
 
 		var me = this,
 			store,
@@ -110,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			}
 		}
 
-		(forumList || []).forEach(function (list) {
+		(this.forumList || []).forEach(function (list) {
 			addList(list, 0);
 
 			if (list.board) {
@@ -146,6 +212,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 	setForumList: function (forumList) {
 		this.buildStore(forumList);
+
+		if (this.rendered) {
+			if (this.isSimplified()) {
+				this.newForumEl.show();
+			} else {
+				this.newForumEl.hide();
+			}
+		}
 
 		this.refresh();
 	},
@@ -194,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 			return false;
 		}
-	}
+	},
 });
 
 function maybeSimplify (forumList) {

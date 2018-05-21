@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { getService } = require('@nti/web-client');
 
 const UserdataActions = require('legacy/app/userdata/Actions');
 const UserdataStateStore = require('legacy/app/userdata/StateStore');
@@ -7,11 +8,11 @@ const Post = require('legacy/model/forums/Post');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {isMe} = require('legacy/util/Globals');
+const CommunityForum = require('legacy/model/forums/CommunityForum');
 
 const ForumStore = require('./StateStore');
 
 require('legacy/common/Actions');
-
 
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -152,6 +153,18 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				me.applyTopicToStores(entry);
 				return entry;
 			});
+	},
+
+
+	async createForum (newforum, rawBoard) {
+		const service = await getService();
+		const board = await service.getObject(rawBoard.getId());
+
+		const forum = await board.postToLink('add', {
+			...newforum,
+			MimeType: CommunityForum.mimeType
+		});
+		return await lazy.ParseUtils.parseItems(forum)[0];
 	},
 
 
