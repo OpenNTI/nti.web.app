@@ -1589,9 +1589,9 @@
 				}
 			}
 
-			// .outline-list{
-			// 	margin-top: 10px;
-			// }
+			.outline-list{
+				bottom: 50px;
+			}
 
 			.outline-row {
 				background: #ffffff;
@@ -1618,12 +1618,16 @@
 				font: normal 500 0.9em/50px $font;
 				height: 50px;
 				padding-left: 40px;
-				@include icon($editor-add_hover, $top: 10px, $left: 10px);
+				@include icon($editor-add_hover, $top: 18px, $left: 10px);
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				line-height: 50px;
 
 				&:hover{
 					color: $primary-blue;
-
-					@include icon($editor-add, $top: 10px, $left: 10px);
+					@include icon($editor-add, $top: 18px, $left: 10px);
+					position: absolute;
 				}
 			}
 		}
@@ -1720,6 +1724,14 @@
 					float: left;
 					@include new-post;
 					display: block;
+				}
+
+				.delete-forum {
+					color: $primary-red;
+					float: left;
+					line-height: 35px;
+					margin-left: 10px;
+					cursor: pointer;
 				}
 
 				.controls{

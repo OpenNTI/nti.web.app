@@ -30,7 +30,7 @@ require('legacy/util/Parsing');
 
 require('./components/forum/Index');
 require('./components/topic/Window');
-
+require('./components/forum/Window');
 
 module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 	extend: 'Ext.container.Container',
