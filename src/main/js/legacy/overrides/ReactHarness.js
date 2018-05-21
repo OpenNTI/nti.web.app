@@ -19,6 +19,8 @@ const CATALOG_MIME_TYPES = {
 	'application/vnd.nextthought.courseware.coursecataloglegacyentry': true
 };
 
+const GROUP_MIME_TYPE = 'application/vnd.nextthought.dynamicfriendslist';
+
 function getRouteFor (obj) {
 	if (obj.isUser) {
 		return `/app/user/${User.getUsernameForURL(obj.Username)}`;
@@ -31,6 +33,10 @@ function getRouteFor (obj) {
 	if (CATALOG_MIME_TYPES[obj.MimeType]) {
 		const href = `uri:${obj.href}`;
 		return `./object/${encodeURIComponent(href)}`;
+	}
+
+	if (obj.MimeType === GROUP_MIME_TYPE) {
+		return `/app/group/${encodeForURI(obj.NTIID)}/info`;
 	}
 }
 
