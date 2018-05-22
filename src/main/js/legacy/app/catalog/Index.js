@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const CatalogView = require('@nti/web-catalog');
-const { encodeForURI } = require('@nti/lib-ntiids');
+const { encodeForURI, decodeFromURI, isNTIID } = require('@nti/lib-ntiids');
 
 const Globals = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
@@ -180,9 +180,14 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 
-	loadCatalogEntry (href, rest) {
+	loadCatalogEntry (param, rest) {
+
+		if (isNTIID(param)) {
+			return Service.getObject(param);
+		}
+
 		if (rest !== 'paymentcomplete') {
-			return Service.request(href.replace(/^uri:/, ''))
+			return Service.request(param.replace(/^uri:/, ''))
 				.then(resp => lazy.ParseUtils.parseItems(resp)[0]);
 		}
 
@@ -210,11 +215,13 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			return Promise.resolve();
 		}
 
-		const parts = matches[2].split('/');
-		const href = decodeURIComponent(parts[0]);
-		const rest = parts.slice(1).join('/');
+		const [match, ...parts] = matches[2].split('/');
+		const param = /^uri/.test(match)
+			? decodeURIComponent(match)
+			: decodeFromURI(match);
+		const rest = parts.join('/');
 
-		return this.loadCatalogEntry(href, rest)
+		return this.loadCatalogEntry(param, rest)
 			.then((catalogEntry) => {
 				this.availableWin = Ext.widget('library-available-courses-window', {
 					isSingle: true,
