@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			});
 		}
 
-		if(this.isSimplified()) {
+		if(this.isSimplified() && me.record.hasLink('edit')) {
 			me.mon(me.deleteForumEl, 'click', 'deleteForum');
 		} else {
 			me.deleteForumEl.hide();
@@ -61,7 +61,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 
 	deleteForum () {
 		this.onDelete(this.record);
-		debugger;
 		Service.requestDelete(this.record.getLink('edit'))
 			.catch(() => alert('Unable to delete this forum.'));
 	},
