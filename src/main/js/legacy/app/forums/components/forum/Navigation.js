@@ -86,7 +86,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			click: 'maybeShowNewForum'
 		});
 
-		if (this.isSimplified()) {
+		const board = this.getBoardForSimplified();
+
+		if (this.isSimplified() && board.hasLink('add')) {
 			me.newForumEl.show();
 		} else {
 			me.newForumEl.hide();
@@ -116,8 +118,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			return item.board;
 		}
 
-		const board = (item && item.children && item.children[0]) || {};
-		return board && board.board;
+		const forum = (item && item.children && item.children[0]) || {};
+		return forum && forum.board;
 	},
 
 
@@ -214,7 +216,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		this.buildStore(forumList);
 
 		if (this.rendered) {
-			if (this.isSimplified()) {
+			const board = this.getBoardForSimplified();
+			if (this.isSimplified() && board.hasLink('add')) {
 				this.newForumEl.show();
 			} else {
 				this.newForumEl.hide();
