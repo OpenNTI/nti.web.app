@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {ProfileCertificates} = require('@nti/web-profiles');
+const {User} = require('@nti/web-profiles');
 const {getAppUser} = require('@nti/web-client');
 
 const {getString} = require('legacy/util/Localization');
@@ -9,6 +9,7 @@ require('legacy/mixins/Router');
 require('legacy/model/openbadges/Badge');
 require('./parts/BadgeList');
 
+const {ProfileCertificates} = User;
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 	extend: 'Ext.container.Container',

@@ -1,9 +1,10 @@
 const Ext = require('@nti/extjs');
-const {Transcripts} = require('@nti/web-profiles');
+const {User} = require('@nti/web-profiles');
 
 require('legacy/mixins/Router');
 require('legacy/overrides/ReactHarness.js');
 
+const {Transcripts} = User;
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.transcripts.Index', {
 	extend: 'Ext.container.Container',
