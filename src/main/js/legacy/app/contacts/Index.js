@@ -12,7 +12,7 @@ require('./components/ContactTabView');
 require('./components/GroupTabView');
 require('./components/ListView');
 
-const CONTACTS_ACTIVE = /^\/contacts/;
+const CONTACTS_ACTIVE = /^\//;
 const GROUPS_ACTIVE = /^\/groups/;
 const SHARING_LISTS_ACTIVE = /^\/sharing-lists/;
 
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		const tabs = [
 			{
 				text: 'People',
-				route: '/contacts',
+				route: '/',
 				active: CONTACTS_ACTIVE.test(path)
 			},
 			{
