@@ -53,6 +53,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		{ name: 'Preview', type: 'bool' },
 		{ name: 'enrolled', type: 'bool' },
 		{ name: 'DisableOverviewCalendar', type: 'bool', persist: false},
+		{ name: 'awardable_credits', type: 'arrayItem', persist: false },
+		{ name: 'AwardsCertificate', type: 'boolean', persist: false },
 
 		{ name: 'EnrollmentOptions', type: 'singleItem', persist: false },
 		{ name: 'LegacyEnrollmentStatus', type: 'string', persist: false },

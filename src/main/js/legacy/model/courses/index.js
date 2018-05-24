@@ -1,5 +1,6 @@
 require('./AssignmentCollection');
 require('./CompletionPolicy');
+require('./CourseAwardableCredit');
 require('./CourseCatalogEntry');
 require('./CourseCatalogInstructorInfo');
 require('./CourseCreditLegacyInfo');
@@ -10,6 +11,7 @@ require('./CourseInstanceEnrollment');
 require('./CourseInstanceSharingScope');
 require('./CourseInstanceSharingScopes');
 require('./CourseProgress');
+require('./CreditDefinition');
 require('./ScormInstance');
 require('./CourseOutline');
 require('./CourseVideoProgress');

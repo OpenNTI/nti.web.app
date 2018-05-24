@@ -34,12 +34,20 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Op
 	},
 
 	beforeRender: function () {
+		const credits = this.info && this.info.get('awardable_credits');
+
+		let noCreditMsg = getString('course-info.open-course-widget.not-for-credit', '', true).replace(/\u200B/ig, '');
+
+		if(credits && credits.length > 0) {
+			noCreditMsg = null;
+		}
+
 		this.addCls((this.enrollmentStatus || 'open').toLowerCase());
 		this.renderData = Ext.apply(this.renderData || {}, {
 			'heading': getString('course-info.open-course-widget.heading', '', true).replace(/\u200B/ig, ''),
 			'message': getString('course-info.open-course-widget.message', '', true).replace(/\u200B/ig, ''),
 			'pointfree': getString('course-info.open-course-widget.free-to-anyone', '', true).replace(/\u200B/ig, ''),
-			'nocredit': getString('course-info.open-course-widget.not-for-credit', '', true).replace(/\u200B/ig, ''),
+			'nocredit': noCreditMsg,
 			'registered': getString('course-info.open-course-widget.registered', '', true).replace(/\u200B/ig, '')
 		});
 
