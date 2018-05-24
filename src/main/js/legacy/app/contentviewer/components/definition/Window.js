@@ -137,8 +137,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				me.fillIn(o);
 			})
 			.catch(function (e) {
-				me.destroy();
-				alert(getString('NextThought.view.definition.Window.error'));
+				const error = Ext.DomHelper.markup([
+					{
+						cls: 'dictonary-error',
+						cn: [
+							{ tag: 'p', style: 'margin-top: 1rem;text-align: center;color: #494949;', html: 'Unable to find term.' }
+						]
+					}
+				]);
+				me.fillIn(error);
 				Error.raiseForReport(e);
 			});
 	},
