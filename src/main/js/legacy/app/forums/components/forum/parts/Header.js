@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { getString } = require('legacy/util/Localization');
 
 require('legacy/common/menus/Reports');
 
@@ -60,9 +61,26 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 	deleteForum () {
-		this.onDelete(this.record);
-		Service.requestDelete(this.record.getLink('edit'))
-			.catch(() => alert('Unable to delete this forum.'));
+		Ext.Msg.show({
+			msg: getString(
+				'NextThought.view.forums.forum.parts.Header.deletewarning'
+			),
+			title: getString(
+				'NextThought.view.forums.forum.parts.Header.deletetitle'
+			),
+			icon: 'warning-red',
+			buttons: {
+				primary: {
+					text: 'Remove',
+					handler: () => {
+						this.onDelete(this.record);
+						Service.requestDelete(this.record.getLink('edit'))
+							.catch(() => alert('Unable to delete this forum.'));
+					}
+				},
+				secondary: 'Cancel'
+			}
+		});
 	},
 
 	updatePosition: function () {
