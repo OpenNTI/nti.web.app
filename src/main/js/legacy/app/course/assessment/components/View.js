@@ -356,6 +356,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				if (this.performanceView) {
 					this.navigation.disabledItem(this.performanceView.xtype);
 				}
+
+				if (this.notificationsView) {
+					this.navigation.disabledItem(this.notificationsView.xtype);
+				}
 			});
 	},
 
