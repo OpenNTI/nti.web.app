@@ -22,10 +22,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	userChanged: function (user, isMe) {
-		if (this.activeUser === user) {
-			return Promise.resolve();
-		}
-
 		this.activeUser = user;
 
 		this.remove(this.transcriptsCmp);
