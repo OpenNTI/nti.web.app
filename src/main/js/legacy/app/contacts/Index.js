@@ -12,7 +12,7 @@ require('./components/ContactTabView');
 require('./components/GroupTabView');
 require('./components/ListView');
 
-const CONTACTS_ACTIVE = /^\//;
+const CONTACTS_ACTIVE = /^\/$/;
 const GROUPS_ACTIVE = /^\/groups/;
 const SHARING_LISTS_ACTIVE = /^\/sharing-lists/;
 
