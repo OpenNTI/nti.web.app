@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		};
 		const showRoster = this.activeBundle && this.activeBundle.hasLink('CourseEnrollmentRoster');
 		const showReports = this.activeBundle && this.activeBundle.getReportLinks().length > 0 ? true : false;
-		const showAdvanced = getAppUsername().indexOf('@nextthought') >= 0;
+		const showAdvanced = this.activeBundle && (this.activeBundle.hasLink('lti-configured-tools') || this.activeBundle.hasLink('CompletionPolicy'));
 
 		navigation.updateTitle('Course Administration');
 
