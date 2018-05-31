@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {User} = require('@nti/web-commons');
 
 const Toaster = require('legacy/common/toast/Manager');
 const lazy = require('legacy/util/lazy-require')
@@ -98,6 +99,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 				}
 			}
 		}
+
+		presence.getInterfaceInstance()
+			.then((instance) => {
+				User.Presence.Store.setPresenceFor(username, instance);
+			});
 
 		this.PRESENCE_MAP[username] = presence;
 
