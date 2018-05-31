@@ -87,6 +87,16 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 			} else {
 				this.inflightSavepoint = this.saveProgressHandler()
 					.then((result) => {
+						if(result.status === 403) {
+							const respJson = Ext.decode(result.responseText);
+
+							if(respJson.code === 'SubmissionPastDueDateError') {
+								this.onSaveProgress();
+
+								return;
+							}
+						}
+
 						const pending = this.pendingProgress;
 						const toUpdate = [...(pending || []), {input, question}];
 						const resolvePending = pending ? this.saveProgressHandler() : Promise.resolve(result);

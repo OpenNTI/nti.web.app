@@ -263,13 +263,36 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 					if (err && err.status === 409) {
 						me.handleConflictError(assignment);
 					} else if (err && err.status === 403) {
-						me.handleUnavailableError(assignment);
+						if(err.responseJson && err.responseJson.code === 'SubmissionPastDueDateError') {
+							me.handlePastDueError(assignment);
+						}
+						else {
+							me.handleUnavailableError(assignment);
+						}
 					} else if (err && err.status === 404) {
 						me.handleDeletionError(assignment);
 					}
 					fulfill(err);
 				}
 			});
+		});
+	},
+
+	handlePastDueError: function (assignment) {
+		Ext.MessageBox.alert({
+			title: 'This assignment is past due',
+			msg: 'You can continue to view this assignment, but it cannot be submitted',
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: 'OK'
+				}
+			},
+			fn: function (button) {
+
+			}
 		});
 	},
 
