@@ -34,9 +34,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.W
 	},
 
 	async onSubmit (newForum) {
-		const forum = await this.ForumsActions.createForum(newForum, this.board, this.onForumAdd);
-		this.onForumAdd(forum);
-		this.doClose();
+		try {
+			const forum = await this.ForumsActions.createForum(newForum, this.board, this.onForumAdd);
+			this.onForumAdd(forum);
+			this.doClose();
+		}
+		catch (e) {
+			this.forumCreate.setProps({error: e.message || e});
+		}
 	},
 
 	onClose () {
