@@ -159,11 +159,26 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.assignments-options-menu {
+	> div {
+		padding: 4px !important;
+	}
+}
+
 .course-assessment-view.navigation-panel {
 	padding-top: 20px;
 	.body-view {
 		background: white;
 		padding-top: 0;
+	}
+
+	.header {
+		.assignments-options {
+			position: absolute;
+			font-size: 18px;
+			right: 14px;
+			cursor: pointer;
+		}
 	}
 }
 

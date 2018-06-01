@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+require('./OptionsMenu');
+
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.Navigation', {
 	extend: 'Ext.Component',
@@ -17,15 +19,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'header', html: '{title}'},
+		{cls: 'header', html: '<span class="assignments-title">{title}</span><span class="assignments-options"/>'},
 		{cls: 'outline-list'}
 	]),
 
 
 	renderSelectors: {
-		titleEl: '.header',
-		outlineEl: '.outline-list'
+		titleEl: '.assignments-title',
+		outlineEl: '.outline-list',
+		assignmentsOptionsEl: '.assignments-options'
 	},
+
+	settingsIconMarkup: '<i class="icon-settings"/>',
 
 
 	beforeRender: function () {
@@ -47,6 +52,63 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (this.items && this.items.length) {
 			this.addItems(this.items);
 		}
+
+		if(this.assignmentsOptionsEl) {
+			this.assignmentsOptionsEl.on('click', this.showOptionsMenu.bind(this));
+
+			if(this.showControlOnRender) {
+				this.showControlOnRender = false;
+
+				this.assignmentsOptionsEl.update(this.settingsIconMarkup);
+			}
+			else if(this.hideControlOnRender) {
+				this.hideControlOnRender = false;
+
+				this.assignmentsOptionsEl.update(null);
+			}
+		}
+	},
+
+	showOptionsMenu: function (e) {
+		console.log(e.target);
+
+		var settingsTarget = e.target;
+
+		if (settingsTarget) {
+			var menuWidth = 280;
+
+			this.menu = Ext.widget('assignments-options-menu',
+				{
+					width: menuWidth,
+					bundle: this.bundle,
+				});
+
+
+			this.menu.showBy(settingsTarget, 'tr-br');
+
+			// re-adjust left location if left overlaps left side of window
+			const offsetX = this.menu.getEl().dom.getBoundingClientRect().left;
+
+			if(offsetX < 0) {
+				this.menu.setX(this.menu.getX() + Math.abs(offsetX));
+			}
+
+			// avoid having hidden menus build up in the dom
+			this.menu.on('hide', () => {
+				this.menu && !this.menu.isDestroyed && this.menu.destroy();
+			});
+
+			// don't have menu linger after scrolling
+			window.addEventListener('scroll', () => {
+				this.menu.hide();
+			});
+
+			this.on('destroy', () => {
+				this.menu && !this.menu.isDestroyed && this.menu.destroy();
+			});
+
+			return false;
+		}
 	},
 
 
@@ -65,6 +127,27 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.title = title;
 		} else {
 			this.titleEl.update(title);
+		}
+	},
+
+
+	addAssignmentOptionControl: function (bundle) {
+		this.bundle = bundle;
+
+		if (this.rendered) {
+			this.assignmentsOptionsEl.update(this.settingsIconMarkup);
+		}
+		else {
+			this.showControlOnRender = true;
+		}
+	},
+
+	removeAssignmentOptionControl: function () {
+		if (this.rendered) {
+			this.assignmentsOptionsEl.update(null);
+		}
+		else {
+			this.hideControlOnRender = true;
 		}
 	},
 

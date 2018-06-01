@@ -73,6 +73,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		me.currentBundle = bundle;
 
+		if(bundle.hasLink('CourseAssignmentBulkFilePartDownload')) {
+			this.navigation.addAssignmentOptionControl(bundle);
+		}
+		else {
+			this.navigation.removeAssignmentOptionControl();
+		}
+
 		//if we can't get the wrapper or the bundle shouldn't show assignments
 		if (!bundle || !bundle.getWrapper || !bundle.shouldShowAssignments()) {
 			return Promise.resolve()
