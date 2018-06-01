@@ -1,7 +1,5 @@
 const Ext = require('@nti/extjs');
 
-const {getString} = require('legacy/util/Localization');
-
 module.exports = exports = Ext.define('NextThought.app.course.assesment.components.OptionsMenu', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.assignments-options-menu',
