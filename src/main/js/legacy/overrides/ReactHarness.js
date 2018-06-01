@@ -21,8 +21,14 @@ const CATALOG_MIME_TYPES = {
 
 const GROUP_MIME_TYPE = 'application/vnd.nextthought.dynamicfriendslist';
 
-function getRouteFor (obj) {
+function getRouteFor (obj, context) {
 	if (obj.isUser) {
+		if (context === 'open-chat') {
+			return () => {
+				alert('Open Chat');
+			};
+		}
+
 		return `/app/user/${User.getUsernameForURL(obj.Username)}`;
 	}
 
