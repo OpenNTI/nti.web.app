@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 function maybeSimplify (forumList) {
 	//If we have more than one item, or its title is not Other Discussions we don't want to simplify it
-	if (!forumList || forumList.length > 1 || forumList[0].title !== 'Other Discussions') { return forumList; }
+	if (!forumList || forumList.length === 0 || forumList.length > 1 || forumList[0].title !== 'Other Discussions') { return forumList; }
 
 	const forum = forumList[0];
 	const children = forum.children;
