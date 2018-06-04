@@ -8,8 +8,10 @@ const {encodeForURI} = require ('@nti/lib-ntiids');
 const {getHistory} = require('@nti/web-routing');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
+const ParsingUtils = require('legacy/util/Parsing');
 const User = require('legacy/model/User');
 const ContextStore = require('legacy/app/context/StateStore');
+const ChatActions = require('legacy/app/chat/Actions');
 
 const unwrap = x => (x && x.default) ? x.default : x;
 
@@ -25,7 +27,10 @@ function getRouteFor (obj, context) {
 	if (obj.isUser) {
 		if (context === 'open-chat') {
 			return () => {
-				alert('Open Chat');
+				const user = ParsingUtils.parseItems([obj.toJSON()])[0];
+				const chatActions = ChatActions.create();
+
+				chatActions.startChat(user);
 			};
 		}
 
