@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {getService} = require('@nti/web-client');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const Globals = require('legacy/util/Globals');
@@ -291,58 +292,87 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 	//TODO: figure out what groupList is suppose to be, I can't tell from the old code
 	addContact: function (username, groupList) {
-		var contactId = this.GroupStore.getMyContactsId(),
-			contacts = this.GroupStore.getContactGroup(),
-			tracker = Globals.getAsynchronousTaskQueueForList(groupList),
-			oldContacts;
-
 		if (isMe(username)) {
 			console.warn('You should not add yourself to your groups.');
 			return Promise.resolve();
 		}
 
-		return new Promise(function (fulfill) {
-			function finish () {
-				if (!tracker.pop()) {
-					fulfill();
-				}
-			}
+		const userID = username.getId ? username.getId() : username;
+		const groups = (groupList || []).map(g => g.getId ? g.getId() : g);
 
-			function revertEditOnError (group, oldValue) {
-				return function () {
-					console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
-					group.set('friends', oldValue);
-				};
-			}
+		const store = this.GroupStore.getFriendsList();
+		const contactId = this.GroupStore.getMyContactsId();
+		const contacts = this.GroupStore.getContactGroup();
 
-			if (!contacts) {
-				fulfill();
-				return;
-			}
+		return getService()
+			.then(service => service.getContacts())
+			.then((contactStore) => contactStore.addContact(userID, groups))
+			.then((results) => {
+				return Promise.all(
+					results.map(result => {
+						const id = result.getID();
 
-			//TODO simplify this further
-			if (!contacts.hasFriend(username)) {
-				//add one just in case the contacts group is already in the list...
-				if (groupList && groupList.length) {
-					tracker.push({});
-				}
+						if (id === contactId) {
+							contacts.addFriend(userID);
+						} else {
+							const list = store.getById(id);
 
-				oldContacts = contacts.get('friends').slice();
-				contacts.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(contacts, oldContacts));
-			}
-
-			Ext.each(groupList, function (g) {
-				var oldValue;
-				if (g.get('Username') !== contactId && !g.hasFriend(username)) {
-					oldValue = g.get('friends').slice();
-					g.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(g, oldValue));
-				}
-				else {
-					//skip it, we did this up front.
-					finish();
-				}
+							if (list) {
+								list.addFriend(userID);
+							}
+						}
+					})
+				);
 			});
-		});
+
+		// var contactId = this.GroupStore.getMyContactsId(),
+		// 	contacts = this.GroupStore.getContactGroup(),
+		// 	tracker = Globals.getAsynchronousTaskQueueForList(groupList),
+		// 	oldContacts;
+
+
+		// return new Promise(function (fulfill) {
+		// 	function finish () {
+		// 		if (!tracker.pop()) {
+		// 			fulfill();
+		// 		}
+		// 	}
+
+		// 	function revertEditOnError (group, oldValue) {
+		// 		return function () {
+		// 			console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
+		// 			group.set('friends', oldValue);
+		// 		};
+		// 	}
+
+		// 	if (!contacts) {
+		// 		fulfill();
+		// 		return;
+		// 	}
+
+		// 	//TODO simplify this further
+		// 	if (!contacts.hasFriend(username)) {
+		// 		//add one just in case the contacts group is already in the list...
+		// 		if (groupList && groupList.length) {
+		// 			tracker.push({});
+		// 		}
+
+		// 		oldContacts = contacts.get('friends').slice();
+		// 		contacts.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(contacts, oldContacts));
+		// 	}
+
+		// 	Ext.each(groupList, function (g) {
+		// 		var oldValue;
+		// 		if (g.get('Username') !== contactId && !g.hasFriend(username)) {
+		// 			oldValue = g.get('friends').slice();
+		// 			g.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(g, oldValue));
+		// 		}
+		// 		else {
+		// 			//skip it, we did this up front.
+		// 			finish();
+		// 		}
+		// 	});
+		// });
 	},
 
 
