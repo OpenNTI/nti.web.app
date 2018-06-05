@@ -18,7 +18,8 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 	fields: [
 		{ name: 'questions', type: 'arrayItem' },
 		{name: 'title', type: 'String'},
-		{name: 'question-count', type: 'int'}
+		{name: 'question-count', type: 'int'},
+		{name: 'isPastDue', tpype: 'bool'}
 	],
 
 	tallyParts: function () {
@@ -92,6 +93,8 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 
 							if(respJson.code === 'SubmissionPastDueDateError') {
 								this.onSaveProgress();
+
+								this.set('isPastDue', true);
 
 								return;
 							}

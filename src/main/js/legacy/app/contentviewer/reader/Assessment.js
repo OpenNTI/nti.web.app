@@ -378,6 +378,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 		const isPracticeSubmission = assignment && assignment.hasLink('PracticeSubmission');
 
+		if(this.isPastDue()) {
+			return Promise.resolve();
+		}
+
 		if (isSubmitted || this.isInstructorProspective || isPracticeSubmission) {
 			return Promise.resolve();
 		}
@@ -397,8 +401,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		return Promise.resolve();
 	},
 
+	isPastDue: function () {
+		return this.submission.questionSet.get('isPastDue');
+	},
+
 	beforeRouteChange: function () {
-		if (this.submission) {
+		if (this.submission && !this.isPastDue()) {
 			this.submission.beforeRouteChange();
 		}
 	},
