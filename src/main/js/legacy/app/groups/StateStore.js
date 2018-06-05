@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {getService} = require('@nti/web-client');
 
 const FriendsListStore = require('legacy/store/FriendsList');
 const ContactsStore = require('legacy/store/Contacts');
@@ -6,10 +7,39 @@ const ContactsStore = require('legacy/store/Contacts');
 require('legacy/common/StateStore');
 require('../chat/StateStore');
 
+function syncFriendsList (ext, lib) {
+	ext.set('friends', lib.friends.map(friend => friend.getID()));
+	ext.fireEvent('changed', ext);
+}
+
 
 module.exports = exports = Ext.define('NextThought.app.groups.StateStore', {
 	extend: 'NextThought.common.StateStore',
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
+
+
+	syncContacts () {
+		const store = this.getFriendsList();
+
+		getService()
+			.then(service => service.getContacts())
+			.then((contacts) => {
+				contacts.addListener('change', () => {
+					syncFriendsList(this.getContactGroup(), contacts.getContactsList());
+
+					const lists = contacts.getLists();
+
+					for (let list of lists) {
+						const group = store.getById(list.getID());
+
+						if (group) {
+							syncFriendsList(group, list);
+						}
+					}
+				});
+			});
+	},
+
 
 	getFriendsList: function () {
 		if (!this['friends_list_store']) {
@@ -106,5 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.StateStore', {
 		store.filter(function (rec) { return !rec.hidden; });
 		store.resumeEvents();
 		store.fireEvent('refilter');
+
+		this.syncContacts();
 	}
 });
