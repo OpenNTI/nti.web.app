@@ -320,17 +320,18 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * on any components that implement it. Handling it here is too late to
 	 * stop the route from changing
 	 *
+	 * @param {string} route the route that is activating
 	 * @return {void}
 	 */
-	beforeRouteChange: function () {
+	beforeRouteChange: function (route) {
 		var activeItem = this.getActiveItem();
 
 		if (activeItem && activeItem.__onInternalRouteDeactivate) {
-			activeItem.__onInternalRouteDeactivate();
+			activeItem.__onInternalRouteDeactivate(route);
 		}
 
 		if (activeItem && activeItem.beforeRoute) {
-			activeItem.beforeRouteChange();
+			activeItem.beforeRouteChange(route);
 		}
 	},
 

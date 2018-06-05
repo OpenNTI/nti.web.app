@@ -451,14 +451,15 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	/**
 	 * Gets called whenever a route we handle changes
 	 * @override
+	 * @param {string} route the new route
 	 */
-	__onInternalRouteDeactivate: function () {
+	__onInternalRouteDeactivate: function (route) {
 		if (this.handlingRoute) {
 			this.wasDeactivedWhileHandlingRoute = true;
 		}
 
 		if (this.onRouteDeactivate) {
-			this.onRouteDeactivate();
+			this.onRouteDeactivate(route);
 		}
 	},
 

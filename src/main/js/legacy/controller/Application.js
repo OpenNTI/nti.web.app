@@ -250,7 +250,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 				}
 
 				if (body.isRouteDifferent(r)) {
-					body.beforeRouteChange();
+					body.beforeRouteChange(r);
 				}
 
 				body.handleRoute(r, p)

@@ -16,6 +16,8 @@ const CONTACTS_ACTIVE = /^\/$/;
 const GROUPS_ACTIVE = /^\/groups/;
 const SHARING_LISTS_ACTIVE = /^\/sharing-lists/;
 
+const CONTACTS_ROUTE = /^\/contacts/;
+
 
 module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 	extend: 'Ext.container.Container',
@@ -34,6 +36,13 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		this.initRouter();
 		this.addDefaultRoute(this.showContacts.bind(this));
 		this.NavigationActions = NavigationActions.create();
+	},
+
+	onRouteDeactivate (newRoute) {
+		if (!CONTACTS_ROUTE.test(newRoute)) {
+			this.contacts.destroy();
+			delete this.contacts;
+		}
 	},
 
 	showContacts (route) {
