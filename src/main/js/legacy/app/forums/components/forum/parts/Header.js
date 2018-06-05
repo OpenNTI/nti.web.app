@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+
 const { getString } = require('legacy/util/Localization');
 
 require('legacy/common/menus/Reports');
@@ -46,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			});
 		}
 
-		if(this.isSimplified() && me.record.hasLink('edit')) {
+		if(this.isSimplified() && me.record.hasLink('edit') && me.record.get('Title') !== 'Forum') {
 			me.mon(me.deleteForumEl, 'click', 'deleteForum');
 		} else {
 			me.deleteForumEl.hide();
