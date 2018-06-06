@@ -49,6 +49,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.transition) {
 			this.applyTransition(this.transition);
 		}
+
+		if (this.outline && this.outline.hasSharedEntries && this.outline.hasSharedEntries()) {
+			this.addCls('has-shared-entries');
+		}
 	},
 
 
@@ -201,18 +205,42 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			bundle: bundle
 		});
 
-		this.controls.add({
-			xtype: 'overview-editing-controls-edit',
-			record: record,
-			parentRecord: this.parentRecord,
-			root: this.lessonOverview,
-			bundle: bundle,
-			outlineNode: this.outlineNode,
-			onPromptOpen: function () {},
-			onPromptClose: () => this.onPromptClose()
-		});
+		if (!this.unavailable) {
+			this.controls.add({
+				xtype: 'overview-editing-controls-edit',
+				record: record,
+				parentRecord: this.parentRecord,
+				root: this.lessonOverview,
+				bundle: bundle,
+				outlineNode: this.outlineNode,
+				onPromptOpen: function () {},
+				onPromptClose: () => this.onPromptClose()
+			});
+		}
+
 
 		this.controls.add(this.getRemoveButton(record, bundle));
+	},
+
+
+	addUnavailableMask () {
+		this.unavailable = true;
+
+		this.unavailableMask = this.add({
+			xtype: 'box',
+			cls: 'unavaiable-overview-item-mask',
+			autoEl: {html: 'Unavailable in this course.'}
+		});
+	},
+
+
+	removeUnavailableMask () {
+		this.unavailable = false;
+
+		if (this.unavailableMask) {
+			this.unavailableMask.destroy();
+			delete this.unavailableMask;
+		}
 	},
 
 

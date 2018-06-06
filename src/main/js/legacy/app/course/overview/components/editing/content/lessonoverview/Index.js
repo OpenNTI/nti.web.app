@@ -122,6 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				record: record,
 				lessonOverview: this.lessonOverview,
 				outlineNode: this.record,
+				outline: this.outline,
 				enrollment: this.enrollment,
 				locInfo: this.locInfo,
 				assignments: this.assignments,

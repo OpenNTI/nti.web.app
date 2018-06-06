@@ -1402,7 +1402,27 @@ input[type=number]{
 		background: white;
 		margin-bottom: 10px;
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+		position: relative;
 		clear: both;
+
+		.unavaiable-overview-item-mask {
+			position: absolute;
+			top: 40px; bottom: 1px;
+			left: 1px; right: 1px;
+			z-index: 1;
+			padding-top: 2rem;
+			background: rgba(255, 255, 255, 0.9);
+			color: $tertiary-grey;
+			font: normal 700 0.625rem/1.3 $font;
+			text-transform: uppercase;
+			text-align: center;
+		}
+
+		&.has-shared-entries {
+			.unavaiable-overview-item-mask {
+				top: 0;
+			}
+		}
 
 		.lesson-overview-discussion-grid-item {
 			width: 100%;

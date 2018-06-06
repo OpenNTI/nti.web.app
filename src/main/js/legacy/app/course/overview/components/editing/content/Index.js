@@ -4,6 +4,20 @@ require('../../Lesson');
 
 require('./lessonoverview/Index');
 
+function getOutlineFromNode (outlineNode) {
+	let parent = outlineNode;
+
+	while (parent) {
+		if (parent.hasSharedEntries) {
+			return parent;
+		}
+
+		parent = parent.parent;
+	}
+
+	return null;
+}
+
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
 	extend: 'NextThought.app.course.overview.components.Lesson',
@@ -50,6 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					enrollment: enrollment,
 					bundle: course,
 					contents: contents,
+					outline: getOutlineFromNode(outlineNode),
 					navigate: me.navigate
 				});
 

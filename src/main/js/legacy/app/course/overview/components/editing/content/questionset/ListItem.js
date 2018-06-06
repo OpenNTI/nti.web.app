@@ -43,7 +43,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				this.assignment = assignments.getItem(target);
 
 				if (this.IsAssignment && !this.assignment) {
-					this.hide();
+					this.addUnavailableMask();
+				} else {
+					this.removeUnavailableMask();
 				}
 			});
 	},
