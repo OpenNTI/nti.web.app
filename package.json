@@ -44,7 +44,7 @@
     "@nti/lib-ntiids": "^1.0.2",
     "@nti/lib-store": "^1.2.0",
     "@nti/lib-store-connector": "0.x.x",
-    "@nti/style-common": "^1.4.0",
+    "@nti/style-common": "^1.6.0",
     "@nti/web-assignment-editor": "^1.11.0",
     "@nti/web-catalog": "0.x.x",
     "@nti/web-charts": "0.x.x",
