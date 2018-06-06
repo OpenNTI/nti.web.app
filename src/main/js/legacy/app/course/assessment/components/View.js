@@ -50,9 +50,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.on('activate', this.onActivate.bind(this));
 	},
 
-	bundleChanged: function (bundle) {
+	bundleChanged: function (bundle, force) {
 		var me = this,
-			isSync = (me.currentBundle && me.currentBundle.getId()) === (bundle && bundle.getId());
+			isSync = !force && (me.currentBundle && me.currentBundle.getId()) === (bundle && bundle.getId());
 
 		function resetView (noAssignments) {
 			me.clearViews();
@@ -564,9 +564,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.appendAssignment(assignment);
 
 			if (this.shouldPushViews()) {
+				const bundle = this.currentBundle;
 				delete this.currentBundle;
 
-				this.bundleChanged(this.bundle)
+				this.bundleChanged(bundle, true);
+
+				this.bundleLoaded
+					.then(() => this.showAssignments({}, ''))
 					.then(() => fulfill(assignment));
 			} else {
 				fulfill(assignment);
