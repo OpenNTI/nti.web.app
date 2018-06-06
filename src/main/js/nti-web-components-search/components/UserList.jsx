@@ -140,9 +140,9 @@ export default class UserList extends React.Component {
 										<li className="block-info" key={index}>
 											<div className="user-info" onClick={this.navigateToUserProfile(user.Username)}>
 												<div className="img-user">
-													<Avatar className="img-user" entityId={user.Username}/>
+													<Avatar className="img-user" entity={user}/>
 												</div>
-												<DisplayName entity={user.Username} className="user-name"/>
+												<DisplayName entity={user} className="user-name"/>
 											</div>
 										</li>
 									)

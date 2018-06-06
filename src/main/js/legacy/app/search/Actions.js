@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {getService} = require('@nti/web-client');
 
 const {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
@@ -91,18 +92,20 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		let userList;
 
 		if(page === 1) {
-			const userSearchUrl = Service.getUserSearchURL(term);
-			const users = await StoreUtils.loadRawItems(userSearchUrl).then(function (result) {
-				return JSON.parse(result);
-			});
+			try {
+				const service = await getService();
+				const contacts = service.getContacts();
+				const searchResults = await contacts.search(term);
 
-			const userResults = users.Items ? users.Items.filter(x => x.Class === 'User') : [];
 
-			userList = {
-				TargetMimeType: this.USER_LIST_MIME_TYPE,
-				Class: 'User',
-				Items: userResults
-			};
+				userList = {
+					TargetMimeType: this.USER_LIST_MIME_TYPE,
+					Class: 'User',
+					Items: searchResults
+				};
+			} catch (e) {
+				//
+			}
 		}
 
 		return StoreUtils.loadBatch(url, cachedHref ? {} : params, null, null, isFeature('use-new-search')).then((result) =>{
