@@ -55,7 +55,7 @@
     "@nti/web-course": "^1.22.3",
     "@nti/web-discussions": "0.x.x",
     "@nti/web-login": "^2018.0.0",
-    "@nti/web-profiles": "^1.0.1",
+    "@nti/web-profiles": "^1.4.0",
     "@nti/web-reports": "0.x.x",
     "@nti/web-routing": "0.x.x",
     "@nti/web-search": "0.x.x",
