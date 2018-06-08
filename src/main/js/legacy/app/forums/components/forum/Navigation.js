@@ -108,6 +108,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		this.WindowActions.showWindow('new-forum', { board, onForumAdd: this.onForumAdd.bind(this)  });
 	},
 
+	scrollToActive () {
+		const selectedItem = this.frameBodyEl && this.frameBodyEl.dom.getElementsByClassName('x-item-selected')[0];
+
+		if(selectedItem) {
+			this.frameBodyEl.dom.scrollTop = selectedItem.offsetTop;
+		}
+	},
+
 
 	getBoardForSimplified () {
 		if (!this.forumList) { return; }

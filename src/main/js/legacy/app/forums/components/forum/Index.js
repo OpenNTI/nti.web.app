@@ -82,6 +82,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 			this.setTitle(title);
 		}
 
+		this.navigation.scrollToActive();
+
 		if (this.body.activeTopicList && this.body.activeTopicList.getId() === record.getId()) {
 			return this.body.updateForum()
 				.then(this.alignNavigation.bind(this));
