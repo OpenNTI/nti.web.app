@@ -96,10 +96,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 								return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/reports`;
 							} else if (name === 'admin-info-roster') {
 								return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/roster`;
+							} else if (name === 'admin-info-advanced') {
+								return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/advanced`;
 							}
 						},
 					});
-	
+
 					this.AdminTools.setProps({ totalLearners: catalogEntry && catalogEntry.TotalEnrolledCount, showRoster, showReports});
 				}
 			});
