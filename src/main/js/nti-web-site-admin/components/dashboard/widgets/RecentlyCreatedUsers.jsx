@@ -22,7 +22,7 @@ class Item extends React.Component {
 	renderImg () {
 		const { item } = this.props;
 
-		return <Avatar className="item-image" entityId={item.Username}/>;
+		return <Avatar className="item-image" entity={item.Username}/>;
 	}
 
 	renderInfo () {
