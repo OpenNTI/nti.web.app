@@ -22,7 +22,7 @@ class Item extends React.Component {
 	renderImg () {
 		const { item } = this.props;
 
-		return <Avatar className="item-image" entity={item.Username}/>;
+		return <Avatar className="item-image" entity={item.entity}/>;
 	}
 
 	renderInfo () {
@@ -91,7 +91,7 @@ export default class RecentlyCreatedUsers extends React.Component {
 					allItems: users.Items,
 					items: users.Items.slice(0, PAGE_SIZE).map(x => {
 						return {
-							...x,
+							entity: x,
 							name: x.alias,
 							description: 'Created ' + DateTime.format(new Date(x.getCreatedTime()), 'LLLL')
 						};
