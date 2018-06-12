@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 	},
 
 	isSimplified () {
-		return (!this.forumList || this.forumList.length > 1 || this.forumList[0].title !== '') ? false : true;
+		return (!this.forumList || this.forumList.length === 0 || this.forumList.length > 1 || this.forumList[0].title !== '') ? false : true;
 	},
 
 	setForum: function (id) {
