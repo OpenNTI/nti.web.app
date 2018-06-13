@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			});
 		}
 
-		if(this.isSimplified() && me.record.hasLink('edit') && me.record.get('Title') !== 'Forum') {
+		if(this.isSimplified() && me.record.hasLink('edit')) {
 			me.mon(me.deleteForumEl, 'click', 'deleteForum');
 		} else {
 			me.deleteForumEl.hide();
