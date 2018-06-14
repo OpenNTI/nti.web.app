@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 				.then(function (e) {
 					var showRoster = bundle.hasLink('CourseEnrollmentRoster');
 					const showReports = bundle.getReportLinks().length > 0 ? true : false;
-					const showAdvanced = bundle && (bundle.hasLink('lti-configured-tools') || bundle.hasLink('CompletionPolicy'));
+					const showAdvanced = catalogEntry.hasLink('edit') && bundle && (bundle.hasLink('lti-configured-tools') || bundle.hasLink('CompletionPolicy'));
 					update(catalogEntry, e.get('Status'), showRoster, showReports, showAdvanced);
 				})
 				.catch(function () {
