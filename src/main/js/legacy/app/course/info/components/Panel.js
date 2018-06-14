@@ -36,76 +36,77 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		}
 	},
 
-	setContent: function (content, status, bundle, showRoster, showReports, showAdvanced) {
+	setContent: async function (content, status, bundle, showRoster, showReports, showAdvanced) {
 		if (this.activeContent === content) { return Promise.resolve(); }
 
 		this.activeContent = content;
 		this.removeAll(true);
 
-		return getService()
-			.then((service) => {
-				return service.getObject(content.rawData);
-			})
-			.then((catalogEntry) => {
-				var infoCmp = this.up('course-info');
+		const parsedBundle = await bundle.getInterfaceInstance();
+		const catalogEntry = await content.getInterfaceInstance();
 
-				if (!Ext.isObject(content)) {
-					if (Ext.isString(content)) {
-						Service.getPageInfo(
-							content,
-							this.loadPage,
-							this.loadPageFailed,
-							this);
-					}
-					return;
-				}
+		var infoCmp = this.up('course-info');
 
-				if (infoCmp && infoCmp.infoOnly && catalogEntry.IsEnrolled) {
-					this.add({
-						xtype: 'course-info-not-started',
-						info: content,
-						enrollmentStatus: status
-					});
-				}
+		if (!Ext.isObject(content)) {
+			if (Ext.isString(content)) {
+				Service.getPageInfo(
+					content,
+					this.loadPage,
+					this.loadPageFailed,
+					this);
+			}
+			return;
+		}
 
-				this.InfoCmp = this.add({
-					xtype: 'react',
-					component: Info,
-					catalogEntry,
-					onSave: (savedEntry) => {
-						this.CourseStore.fireEvent('modified-course', savedEntry);
-						this.onSave && this.onSave(savedEntry);
-					},
-					editable: !this.viewOnly && content.hasLink('edit')
-				});
-
-				this.CourseStore.on('modified-course', (newEntry) => {
-					if(newEntry) {
-						this.InfoCmp.setProps({catalogEntry: newEntry});
-					}
-				});
-
-				if (showRoster || showReports || showAdvanced) {
-					this.AdminTools = this.add({
-						xtype: 'react',
-						component: AdminTools.InfoPanel,
-						getRouteFor: function (name) {
-							if (name === 'admin-info-dashboard') {
-								return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/dashboard`;
-							} else if (name === 'admin-info-reports') {
-								return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/reports`;
-							} else if (name === 'admin-info-roster') {
-								return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/roster`;
-							} else if (name === 'admin-info-advanced') {
-								return `app/course/${encodeForURI(catalogEntry.CourseNTIID)}/admin/advanced`;
-							}
-						},
-					});
-
-					this.AdminTools.setProps({ totalLearners: catalogEntry && catalogEntry.TotalEnrolledCount, showRoster, showReports, showAdvanced});
-				}
+		if (infoCmp && infoCmp.infoOnly && catalogEntry.IsEnrolled) {
+			this.add({
+				xtype: 'course-info-not-started',
+				info: content,
+				enrollmentStatus: status
 			});
+		}
 
+		this.InfoCmp = this.add({
+			xtype: 'react',
+			component: Info,
+			catalogEntry,
+			onSave: (savedEntry) => {
+				this.CourseStore.fireEvent('modified-course', savedEntry);
+				this.onSave && this.onSave(savedEntry);
+			},
+			editable: !this.viewOnly && content.hasLink('edit')
+		});
+
+		this.CourseStore.on('modified-course', (newEntry) => {
+			if(newEntry) {
+				this.InfoCmp.setProps({catalogEntry: newEntry});
+			}
+		});
+
+		if (showRoster || showReports || showAdvanced) {
+			this.AdminTools = this.add({
+				xtype: 'react',
+				component: AdminTools.InfoPanel,
+				totalLearners: catalogEntry && catalogEntry.TotalEnrolledCount,
+				bundle: parsedBundle,
+				showRoster,
+				showReports,
+				showAdvanced,
+				getRouteFor: function (obj, name) {
+					if(obj.isCourse && !obj.isCatalogEntry) {
+						if (name === 'admin-info-dashboard') {
+							return `app/course/${encodeForURI(obj.getID())}/admin/dashboard`;
+						} else if (name === 'admin-info-reports') {
+							return `app/course/${encodeForURI(obj.getID())}/admin/reports`;
+						} else if (name === 'admin-info-roster') {
+							return `app/course/${encodeForURI(obj.getID())}/admin/roster`;
+						} else if (name === 'admin-info-advanced') {
+							return `app/course/${encodeForURI(obj.getID())}/admin/advanced`;
+						}
+					}
+				},
+			});
+		}
 	},
 
 	getVideo: function () {
