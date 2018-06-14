@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 const {getService} = require('@nti/web-client');
 const {wait} = require('@nti/lib-commons');
+const {init} = require('@nti/lib-locale');
 
 const {getString} = require('legacy/util/Localization');
 const Socket = require('legacy/proxy/Socket');
@@ -102,6 +103,9 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				me.store.onSessionReady();
 
 				return wait();
+			})
+			.then(() => {
+				return init();
 			})
 			.then(function () {
 				return AnalyticsUtil.beginSession();
