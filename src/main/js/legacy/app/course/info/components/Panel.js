@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		}
 	},
 
-	setContent: function (content, status, bundle, showRoster, showReports) {
+	setContent: function (content, status, bundle, showRoster, showReports, showAdvanced) {
 		if (this.activeContent === content) { return Promise.resolve(); }
 
 		this.activeContent = content;
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 					}
 				});
 
-				if (showRoster || showReports) {
+				if (showRoster || showReports || showAdvanced) {
 					this.AdminTools = this.add({
 						xtype: 'react',
 						component: AdminTools.InfoPanel,
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 						},
 					});
 
-					this.AdminTools.setProps({ totalLearners: catalogEntry && catalogEntry.TotalEnrolledCount, showRoster, showReports});
+					this.AdminTools.setProps({ totalLearners: catalogEntry && catalogEntry.TotalEnrolledCount, showRoster, showReports, showAdvanced});
 				}
 			});
 

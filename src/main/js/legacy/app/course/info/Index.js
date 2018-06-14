@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		var me = this,
 			catalogEntry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
-		function update (info, status, showRoster, showReports) {
+		function update (info, status, showRoster, showReports, showAdvanced) {
 			let showInviteCode = me.bundle.hasLink('SendCourseInvitations'),
 				inviteCodeLink = showInviteCode && me.bundle.getLink('CourseAccessTokens');
 
@@ -85,8 +85,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 
 			if(me.routeDeactivated || me.currId !== bundle.getId()) {
 				me.routeDeactivated = false;
-				me.body.setContent(info, status, showRoster, bundle, showReports);
-				me.navigation.setContent(info, status, showRoster, me.infoOnly, inviteCodeLink, showReports);
+				me.body.setContent(info, status, showRoster, bundle, showReports, showAdvanced);
+				me.navigation.setContent(info, status, showRoster, me.infoOnly, inviteCodeLink, showReports, showAdvanced);
 			}
 
 			me.currId = bundle.getId();
@@ -102,7 +102,8 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 				.then(function (e) {
 					var showRoster = bundle.hasLink('CourseEnrollmentRoster');
 					const showReports = bundle.getReportLinks().length > 0 ? true : false;
-					update(catalogEntry, e.get('Status'), showRoster, showReports);
+					const showAdvanced = bundle && (bundle.hasLink('lti-configured-tools') || bundle.hasLink('CompletionPolicy'));
+					update(catalogEntry, e.get('Status'), showRoster, showReports, showAdvanced);
 				})
 				.catch(function () {
 					//hide tab?

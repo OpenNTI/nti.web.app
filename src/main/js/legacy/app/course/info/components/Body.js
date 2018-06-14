@@ -34,9 +34,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		me.add(items);
 	},
 
-	setContent: function (info, status, showRoster, bundle, showReports) {
+	setContent: function (info, status, showRoster, bundle, showReports, showAdvanced) {
 		this.onceContentSet = Promise.all([
-			this.getComponent('info').setContent(info, status, bundle, showRoster, showReports),
+			this.getComponent('info').setContent(info, status, bundle, showRoster, showReports, showAdvanced),
 			this.getComponent('roster').setContent(showRoster && bundle),
 			this.getComponent('report').setContent(showRoster && bundle)
 		]);
