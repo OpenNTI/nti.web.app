@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		this.activeContent = content;
 		this.removeAll(true);
 
-		const parsedBundle = await bundle.getInterfaceInstance();
+		const parsedBundle = bundle ? await bundle.getInterfaceInstance() : null;
 		const catalogEntry = await content.getInterfaceInstance();
 
 		var infoCmp = this.up('course-info');
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 				showReports,
 				showAdvanced,
 				getRouteFor: function (obj, name) {
-					if(obj.isCourse && !obj.isCatalogEntry) {
+					if(obj && obj.isCourse && !obj.isCatalogEntry) {
 						if (name === 'admin-info-dashboard') {
 							return `app/course/${encodeForURI(obj.getID())}/admin/dashboard`;
 						} else if (name === 'admin-info-reports') {
