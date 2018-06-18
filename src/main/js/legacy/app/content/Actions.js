@@ -6,6 +6,7 @@ const {getString} = require('legacy/util/Localization');
 const ContentUtils = require('legacy/util/Content');
 const Globals = require('legacy/util/Globals');
 const PageSource = require('legacy/util/PageSource');
+const RealPageSource = require('legacy/util/RealPageSource');
 const TopicNode = require('legacy/model/TopicNode');
 const PathActions = require('legacy/app/navigation/path/Actions');
 const lazy = require('legacy/util/lazy-require')
@@ -408,7 +409,9 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				return ContentUtils.getNavigationInfo(ntiid, rootId, bundle);
 			})
 			.then(function (navInfo) {
-				return PageSource.create(navInfo);
+				return navInfo.isRealPages ?
+					RealPageSource.create(navInfo) :
+					PageSource.create(navInfo);
 			});
 	},
 
