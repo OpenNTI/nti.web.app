@@ -73,7 +73,26 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 				this.CourseStore.fireEvent('modified-course', savedEntry);
 				this.onSave && this.onSave(savedEntry);
 			},
-			editable: !this.viewOnly && content.hasLink('edit')
+			editable: !this.viewOnly && content.hasLink('edit'),
+			hasAdminToolsAccess: showRoster || showReports || showAdvanced,
+			totalLearners: catalogEntry && catalogEntry.TotalEnrolledCount,
+			bundle: parsedBundle,
+			showRoster,
+			showReports,
+			showAdvanced,
+			getRouteFor: function (obj, name) {
+				if(obj && obj.isCourse && !obj.isCatalogEntry) {
+					if (name === 'admin-info-dashboard') {
+						return `app/course/${encodeForURI(obj.getID())}/admin/dashboard`;
+					} else if (name === 'admin-info-reports') {
+						return `app/course/${encodeForURI(obj.getID())}/admin/reports`;
+					} else if (name === 'admin-info-roster') {
+						return `app/course/${encodeForURI(obj.getID())}/admin/roster`;
+					} else if (name === 'admin-info-advanced') {
+						return `app/course/${encodeForURI(obj.getID())}/admin/advanced`;
+					}
+				}
+			}
 		});
 
 		this.CourseStore.on('modified-course', (newEntry) => {
@@ -81,31 +100,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 				this.InfoCmp.setProps({catalogEntry: newEntry});
 			}
 		});
-
-		if (showRoster || showReports || showAdvanced) {
-			this.AdminTools = this.add({
-				xtype: 'react',
-				component: AdminTools.InfoPanel,
-				totalLearners: catalogEntry && catalogEntry.TotalEnrolledCount,
-				bundle: parsedBundle,
-				showRoster,
-				showReports,
-				showAdvanced,
-				getRouteFor: function (obj, name) {
-					if(obj && obj.isCourse && !obj.isCatalogEntry) {
-						if (name === 'admin-info-dashboard') {
-							return `app/course/${encodeForURI(obj.getID())}/admin/dashboard`;
-						} else if (name === 'admin-info-reports') {
-							return `app/course/${encodeForURI(obj.getID())}/admin/reports`;
-						} else if (name === 'admin-info-roster') {
-							return `app/course/${encodeForURI(obj.getID())}/admin/roster`;
-						} else if (name === 'admin-info-advanced') {
-							return `app/course/${encodeForURI(obj.getID())}/admin/advanced`;
-						}
-					}
-				},
-			});
-		}
 	},
 
 	getVideo: function () {
