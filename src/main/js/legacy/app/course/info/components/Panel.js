@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const { Info, AdminTools } = require('@nti/web-course');
+const { Info } = require('@nti/web-course');
 const { encodeForURI } = require('@nti/lib-ntiids');
 
 const ContentProxy = require('legacy/proxy/JSONP');
