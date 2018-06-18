@@ -382,6 +382,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		var root = toc && toc.firstChild,
 			onSuppressed = false,
 			prev, next, prevTitle, nextTitle,
+			prevNode, nextNode,
 			walker, visibleNodes, currentIndex,
 			topicOrTocRegex = /topic|toc/i;
 
@@ -457,11 +458,13 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		if (!maybeBlocker(getRef(prev))) {
+			prevNode = prev;
 			prevTitle = getTitle(prev);
 			prev = getRef(prev);
 		}
 
 		if (!maybeBlocker(getRef(next))) {
+			nextNode = next;
 			nextTitle = getTitle(next);
 			next = getRef(next);
 		}
@@ -473,17 +476,58 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return {
+			toc,
 			isSuppressed: onSuppressed,
 			currentIndex: currentIndex,
 			totalNodes: visibleNodes.length,
 			previous: prev,
 			next: next,
 			previousTitle: prevTitle,
-			nextTitle: nextTitle
+			nextTitle: nextTitle,
+			previousNode: prevNode,
+			nextNode: nextNode
 		};
 	},
 
 	getNavigationInfo: function (ntiid, rootId, bundleOrToc) {
+		if (!bundleOrToc || !bundleOrToc.getContentPackageContaining) {
+			return this._getContentNavigationInfo(ntiid, rootId, bundleOrToc);
+		}
+
+		return Promise.all([
+			this._getContentNavigationInfo(ntiid, rootId, bundleOrToc),
+			bundleOrToc.getContentPackageContaining(ntiid)
+				.then(contentPackage => contentPackage.getInterfaceInstance())
+				.then(contentPackage => contentPackage.getRealPageIndex())
+				.catch(() => null)
+		])
+			.then((results) => {
+				const [navInfo, realPageIndex] = results;
+
+				return realPageIndex ?
+					this._getRealPageNavigationInfo(realPageIndex, navInfo, ntiid, rootId) :
+					navInfo;
+			});
+	},
+
+
+	_getRealPageNavigationInfo (realPageIndex, navInfo, ntiid, rootId) {
+		const allPages = realPageIndex.NTIIDs[rootId];
+		const pages = realPageIndex.NTIIDs[ntiid];
+
+		if (!allPages || !pages || !allPages.length || !pages.length) { throw new Error('Invalid real pages'); }
+
+		return {
+			...navInfo,
+			isRealPages: true,
+			realPageIndex,
+			pages: allPages,
+			page: pages[0]
+		};
+	},
+
+
+	_getContentNavigationInfo (ntiid, rootId, bundleOrToc) {
 		if (!ntiid) {
 			return Promise.reject('No NTIID');
 		}
@@ -493,7 +537,6 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		function mapNode (node) {
 			return me.__getNavInfoFromToc(node && node.location, node && node.toc, rootId);
 		}
-
 
 		return this.getNodes(ntiid, bundleOrToc)
 			.then(function (nodes) {
