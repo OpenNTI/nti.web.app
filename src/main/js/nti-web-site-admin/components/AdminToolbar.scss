@@ -4,15 +4,31 @@
 	.flyout-inner {
 		margin-top: 10px;
 		border-radius: 10px;
-		width: 200px;
+		width: 300px;
 		cursor: pointer;
+		padding: 12px 0;
 
 		.create-item {
-			padding: 12px;
-			border-bottom: solid 1px #eee;
+			padding: 4px 15px;
 
-			&:last-of-type {
-				border: none;
+			.option-title {
+				font-size: 14px;
+				line-height: 19px;
+				font-weight: 600;
+				color: $primary-grey;
+			}
+
+			.option-description {
+				font-size: 14px;
+				line-height: 19px;
+				font-weight: 300;
+				color: $secondary-grey;
+			}
+
+			&.new-course {
+				border-bottom: solid 1px #eee;
+				padding-bottom: 14px;
+				margin-bottom: 10px;
 			}
 		}
 	}

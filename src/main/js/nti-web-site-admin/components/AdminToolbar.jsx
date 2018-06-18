@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Flyout } from '@nti/web-commons';
-import { Editor } from '@nti/web-course';
+import { Editor, Templates } from '@nti/web-course';
 import { encodeForURI } from '@nti/lib-ntiids';
 
 export default class AdminToolbar extends React.Component {
@@ -36,17 +36,29 @@ export default class AdminToolbar extends React.Component {
 		);
 	}
 
-	launchCourseWizard = () => {
+	launchCourseWizard = (template) => {
 		const { onCourseCreated, onCourseModified } = this.props;
 
 		this.flyout && this.flyout.dismiss();
 
-		Editor.createCourse(onCourseModified).then((createdEntry) => {
+		Editor.createCourse(onCourseModified, template).then((createdEntry) => {
 			// course was created, do post processing
 			onCourseCreated && onCourseCreated();
 
 			this.props.handleNav(createdEntry.Title, '/course/' + encodeForURI(createdEntry.CourseNTIID) + '/info');
 		});
+	}
+
+	launchCreateCourseWizard = () => {
+		this.launchCourseWizard(Templates.Blank);
+	}
+
+	launchImportCourseWizard = () => {
+		this.launchCourseWizard(Templates.Import);
+	}
+
+	launchScormCourseWizard = () => {
+		this.launchCourseWizard(Templates.Scorm);
 	}
 
 	// these endpoints aren't available yet
@@ -59,6 +71,15 @@ export default class AdminToolbar extends React.Component {
 	// 	this.flyout && this.flyout.dismiss();
 	// }
 
+	renderOption (title, description) {
+		return (
+			<div>
+				<div className="option-title">{title}</div>
+				<div className="option-description">{description}</div>
+			</div>
+		);
+	}
+
 	renderCreateButton () {
 		const { canCreate } = this.props;
 
@@ -70,12 +91,13 @@ export default class AdminToolbar extends React.Component {
 			<Flyout.Triggered
 				className="admin-create-options"
 				trigger={this.renderCreateTrigger()}
-				horizontalAlign={Flyout.ALIGNMENTS.LEFT}
-				sizing={Flyout.SIZES.MATCH_SIDE}
+				horizontalAlign={Flyout.ALIGNMENTS.RIGHT}
 				ref={this.attachFlyoutRef}
 			>
 				<div>
-					<div className="create-item" onClick={this.launchCourseWizard}>Course</div>
+					<div className="create-item new-course" onClick={this.launchCreateCourseWizard}>{this.renderOption('New Course', '')}</div>
+					<div className="create-item import-course" onClick={this.launchImportCourseWizard}>{this.renderOption('Import a Course', 'Use content from a previous course.')}</div>
+					<div className="create-item import-scorm-package" onClick={this.launchScormCourseWizard}>{this.renderOption('Import a SCORM Package', 'Use content from external services.')}</div>
 				</div>
 			</Flyout.Triggered>
 		);
