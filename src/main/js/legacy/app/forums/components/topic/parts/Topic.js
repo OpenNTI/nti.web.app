@@ -58,7 +58,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 					{ tag: 'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'}
 				]},
 				{ tag: 'tpl', 'if': 'headline.isModifiable', cn: [
-					{ tag: 'span', cls: 'edit link', html: '{{{NextThought.view.forums.topic.parts.Topic.edit}}}'},
+					{ tag: 'span', cls: 'edit link', html: '{{{NextThought.view.forums.topic.parts.Topic.edit}}}'}
+				]},
+				{ tag: 'tpl', 'if': 'headline.isDeletable', cn: [
 					{ tag: 'span', cls: 'delete link', html: '{{{NextThought.view.forums.topic.parts.Topic.delete}}}'}
 				]}
 			]},

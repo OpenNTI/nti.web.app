@@ -131,6 +131,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		//For templates
 		{ name: 'isModifiable', persist: false, convert: function (v, r) {return r.phantom || r.getLink('edit') !== null;} },
+		{ name: 'isDeletable', persist: false, convert: function (v, r) {return r.phantom || r.getLink('delete') !== null;} },
 		{ name: 'favoriteState', persist: false, type: 'auto', convert: function (o, r) { return r.getLink('unfavorite') ? 'on' : 'off'; }},
 		{ name: 'likeState', persist: false, type: 'auto', convert: function (o, r) { return r.getLink('unlike') ? 'on' : 'off'; }}
 	],
