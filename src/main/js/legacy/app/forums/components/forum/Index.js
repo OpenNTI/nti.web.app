@@ -63,10 +63,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		}
 
 		store.remove([record]);
+		const nextSize = store.getCount();
 
-		if (nextForum) {
+		if (nextForum && nextSize > 0) {
 			this.setForum(nextForum.getId());
+		} else if  (nextSize === 0) {
+			this.setEmptyState();
 		}
+
 		this.navigation.setForumList(this.forumList);
 	},
 
@@ -91,5 +95,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 
 		return this.body.setForum(record)
 			.then(this.alignNavigation.bind(this));
+	},
+
+	setEmptyState () {
+		this.body.setEmpty();
 	}
 });
