@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { Forums } = require('@nti/web-discussions');
 
 require('./parts/FilterBar');
 require('./parts/Header');
@@ -24,6 +25,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		Ext.destroy(topicList, filterBar, header);
 	},
 
+	setEmpty () {
+		this.clearForum();
+		this.emptyForum = this.add({
+			xtype: 'react',
+			component: Forums.EmptyTopicList,
+		});
+	},
+
 	setForum: function (record) {
 		var topicList = this.down('forums-forum-topic-list-view'),
 			filterBar = this.down('forums-forum-filterbar'),
@@ -41,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 
 		this.store = store;
 
-		Ext.destroy(topicList, filterBar, header);
+		Ext.destroy(topicList, filterBar, header, this.emptyForum);
 
 		filterBar = this.add({xtype: 'forums-forum-filterbar'});
 		header = this.add({

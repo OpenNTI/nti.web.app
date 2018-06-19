@@ -1312,6 +1312,16 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			forumList.push(other);
 		}
 
+		if (isEmpty(bin.ForCredit) && isEmpty(bin.Open) && isEmpty(bin.Other)) {
+			forumList.push({
+				title: 'Other Discussions',
+				children: [{
+					title: 'My Section',
+					store: buildStore(sectionId + 'Other'),
+					board: section
+				}]
+			});
+		}
 
 		return forumList;
 	},

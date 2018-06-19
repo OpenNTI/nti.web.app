@@ -109,7 +109,31 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 				id = id && decodeFromURI(id);
 
 				me.forumView.setForumList(forumList);
-				me.forumView.setForum(id);
+
+				if (!id && forumList.length === 1 && me.forumView.isSimplified()) {
+					const store = me.getStoreForSimplified(forumList);
+					if (store.getCount() === 0) {
+						me.forumView.setEmptyState();
+					} else {
+						me.forumView.setForum(id);
+					}
+				} else {
+					me.forumView.setForum(id);
+				}
+
 			});
-	}
+	},
+
+	getStoreForSimplified (forumList) {
+		if (!forumList) { return {}; }
+
+		const item = forumList[0] || {};
+
+		if (item.store) {
+			return item.store;
+		}
+
+		const forum = (item && item.children && item.children[0]) || {};
+		return forum.store;
+	},
 });
