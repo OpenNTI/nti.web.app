@@ -85,7 +85,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		previewImageEl: '.preview .thumbnail',
 		changeInputEl: '.change-link input[type=file]',
 		dropZoneEl:'.drop-zone',
-		previewLinkEl: '.preview .controls .preview-link a'
+		previewLinkEl: '.preview .controls .preview-link a',
+		previewLinkContainerEl: '.preview .controls .preview-link'
 	},
 
 
@@ -178,6 +179,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 
 		this.on('destroy', this.cleanUpObjectURL.bind(this));
+
+		if(this.questionSet) {
+			this.questionSet.on('past-due', () => {
+				if(this.previewLinkContainerEl) {
+					this.previewLinkContainerEl.remove();
+				}
+			});
+		}
 
 		if (this.inputIsDisabled) {
 			this.disableInput();

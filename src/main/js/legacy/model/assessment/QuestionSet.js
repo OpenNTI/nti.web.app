@@ -96,6 +96,8 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 
 								this.set('isPastDue', true);
 
+								this.fireEvent('past-due', {});
+
 								delete this.inflightSavepoint;
 								delete this.pendingProgress;
 
