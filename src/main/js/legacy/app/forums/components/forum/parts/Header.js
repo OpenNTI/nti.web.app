@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 					handler: () => {
 						this.onDelete(this.record);
 						Service.requestDelete(this.record.getLink('edit'))
-							.catch(() => alert('Unable to delete this forum.'));
+							.catch(() => setTimeout(() => {alert('Unable to delete this forum.');}, 500));
 					}
 				},
 				secondary: 'Cancel'
