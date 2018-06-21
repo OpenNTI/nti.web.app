@@ -27,10 +27,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 
 	setEmpty () {
 		this.clearForum();
-		this.emptyForum = this.add({
-			xtype: 'react',
-			component: Forums.EmptyTopicList,
-		});
+		if (!this.emptyForum) {
+			this.emptyForum = this.add({
+				xtype: 'react',
+				component: Forums.EmptyTopicList,
+			});
+		}
 	},
 
 	setForum: function (record) {
@@ -51,6 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		this.store = store;
 
 		Ext.destroy(topicList, filterBar, header, this.emptyForum);
+		delete this.emptyForum;
 
 		filterBar = this.add({xtype: 'forums-forum-filterbar'});
 		header = this.add({
