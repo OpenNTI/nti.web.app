@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+const CoursesStateStore = require('legacy/app/library/courses/StateStore');
+
 const {getString, getFormattedString} = require('legacy/util/Localization');
 
 
@@ -44,6 +46,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		return this.menuEl;
 	},
 
+	initComponent () {
+		this.CourseStore = CoursesStateStore.getInstance();
+	},
+
 	afterRender: function () {
 		this.callParent(arguments);
 
@@ -54,6 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		}
 
 		this.mon(this.menuEl, 'click', this.onClick.bind(this));
+		this.CourseStore.on('modified-course', this.addStaticInviteCode.bind(this));
 	},
 
 	adjustScroll: function (el) {
@@ -119,6 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 					codes = courseInvitations.Items && courseInvitations.Items.map( invite => invite.Code).join(',');
 
 				if (me.inviteEl) {
+					me.inviteEl.dom.innerHTML = '';
 					me.inviteTpl.append(me.inviteEl, {
 						code: codes
 					});
