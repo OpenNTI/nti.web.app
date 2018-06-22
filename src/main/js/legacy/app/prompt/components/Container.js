@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		this.prompt = this.add({
 			xtype: 'container',
 			layout: 'none',
-			cls: 'prompt',
+			cls: 'prompt' + (this.promptType ? ' ' + this.promptType : ''),
 			items: []
 		});
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="45px" viewBox="0 0 50 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Link</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="50" height="50"></rect>
+    </defs>
+    <g id="Handoff" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2" transform="translate(-695.000000, -329.000000)">
+            <g id="Link" transform="translate(695.000000, 324.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Mask"></g>
+                <g mask="url(#mask-2)">
+                    <rect id="frame" x="0" y="0" width="50" height="50"></rect>
+                    <rect id="Rectangle-13" stroke="#3FB3F6" fill="#E2F4FE" x="0.5" y="5.5" width="49" height="39" rx="3"></rect>
+                    <text font-family="OpenSans-Bold, Open Sans" font-size="10" font-weight="bold" fill="#3FB3F6">
+                        <tspan x="14.2626953" y="31.5">Link</tspan>
+                    </text>
+                    <rect id="Rectangle-2" fill="#3FB3F6" x="15" y="33" width="21" height="1"></rect>
+                    <path d="M0.5,14.5 L48.5,14.5 L48.5,8.8458278 C48.5,7.70208522 48.4115008,7.24379883 48.1583943,6.77053087 C47.9435336,6.36877622 47.6312238,6.05646639 47.2294691,5.84160565 C46.7562012,5.58849918 46.2979148,5.5 45.1541722,5.5 L3.8458278,5.5 C2.70208522,5.5 2.24379883,5.58849918 1.77053087,5.84160565 C1.36877622,6.05646639 1.05646639,6.36877622 0.841605655,6.77053087 C0.588499184,7.24379883 0.5,7.70208522 0.5,8.8458278 L0.5,14.5 Z" id="Rectangle-13" stroke="#3FB3F6" fill="#3FB3F6"></path>
+                    <path d="M30.5,43.3981105 L30.5,48.5 C30.5,49.0522847 30.0522847,49.5 29.5,49.5 L28.5,49.5 C27.9477153,49.5 27.5,49.0522847 27.5,48.5 L27.5,43.3980149 L25.9469915,44.1115491 C25.194217,44.4574135 24.3035943,44.1275477 23.9577299,43.3747733 C23.772224,42.9710193 23.7752677,42.5057991 23.9660406,42.1045069 L27.645188,34.3653946 C28.0008723,33.6172101 28.8957349,33.2990258 29.6439195,33.6547102 C29.9554916,33.8028305 30.2064836,34.0538225 30.3546039,34.3653946 L34.0337512,42.1045069 C34.3894356,42.8526915 34.0712513,43.7475541 33.3230668,44.1032384 C32.9217746,44.2940113 32.4565544,44.297055 32.0528004,44.1115491 L30.5,43.3981105 Z" id="Combined-Shape" stroke="#FFFFFF" fill="#3FB3F6" transform="translate(29.000013, 41.504592) rotate(-23.000000) translate(-29.000013, -41.504592) "></path>
+                    <circle id="Oval-10" fill="#FFFFFF" cx="6" cy="10" r="2"></circle>
+                    <circle id="Oval-10" fill="#FFFFFF" cx="11" cy="10" r="2"></circle>
+                    <circle id="Oval-10" fill="#FFFFFF" cx="16" cy="10" r="2"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

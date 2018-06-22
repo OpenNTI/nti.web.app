@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getTypes: function () {
 			return [
 				{
-					title: 'LTI Tool',
+					title: 'LTI Tools',
 					advanced: false,
 					category: 'ltiexternaltoolasset',
 					iconCls: 'link',

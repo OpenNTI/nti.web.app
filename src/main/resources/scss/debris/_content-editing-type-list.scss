@@ -1,71 +1,90 @@
+.prompt-container {
+	.prompt.overview-creation {
+		.body-container {
+			background-color: white;
+		}
+	}
+}
+
 .overview-editing.child-creation {
 	.new-type-list {
-		padding: 35px 15px 0;
-		overflow: hidden;
+		margin: 22px 20px 110px 19px;
+		min-height: 350px;
+		background-color: white;
+		border-top: solid 1px #f2f2f2;
+		border-left: solid 1px #f2f2f2;
 
 		.new-type {
 			cursor: pointer;
-			width: 100px;
-			height: 125px;
 			background: white;
-			margin: 0 15px 35px;
+			width: 154px;
+			height: 154px;
 			position: relative;
 			float: left;
-			border-radius: 2px;
-			box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);
+			border-right: solid 1px #f2f2f2;
+			border-bottom: solid 1px #f2f2f2;
+
+			&:hover {
+				border: 1px solid #f2f2f2;
+				transform: scale(1.07);
+				z-index: 100;
+				box-shadow: 0 6px 30px -5px rgba(0, 0, 0, 0.15);
+			}
 
 			.icon {
-				height: 80px;
-				width: 80px;
-				margin: 10px;
+				width: 46px;
+				height: 46px;
+				margin: 0 auto;
+				margin-top: 36px;
+				margin-bottom: 26px;
+				background-size: cover !important;
+				background-repeat: no-repeat !important;
 
 				&.document {
-					@include icon($upload-file, $side: after, $top: 0, $left: 0);
+					background: url(/app/resources/images/overview-type-icons/Upload.svg);
 				}
 
 				&.reading {
-					@include icon($content, $side: after, $top: 0, $left: 0);
+					background: url(/app/resources/images/overview-type-icons/Reading.svg);
 				}
 
 				&.link {
-					@include icon($link, $side: after, $top: 0, $left: 0);
+					width: 51px;
+					background: url(/app/resources/images/overview-type-icons/Link.svg);
 				}
 
 				&.video {
-					@include icon($video-content, $side: after, $top: 0, $left: 0);
+					background: url(/app/resources/images/overview-type-icons/Video.svg);
 				}
 
 				&.discussion {
-					@include icon($discussion-content, $side: after, $top: 0, $left: 0);
+					width: 52px;
+					background: url(/app/resources/images/overview-type-icons/Discussion.svg);
 				}
 
 				&.assessment {
-					@include icon($self-assessment-content, $side: after, $top: 0, $left: 0);
+					background: url(/app/resources/images/overview-type-icons/Self-Assessment.svg);
 				}
 
 				&.assignment {
-					@include icon($assignment-content, $side: after, $top: 0, $left: 0);
+					background: url(/app/resources/images/overview-type-icons/Assignment.svg);
 				}
 
 				&.survey {
-					@include icon($assignment-content, $side: after, $top: 0, $left: 0);
+					width: 63px;
+					background: url(/app/resources/images/overview-type-icons/Survey.svg);
 				}
 
 				&.timeline {
-					@include icon($timeline-content, $side: after, $top: 0, $left: 0);
+					background: url(/app/resources/images/overview-type-icons/Reading.svg);
 				}
 			}
 
 			.title {
-				position: absolute;
-				bottom: 13px;
-				left: -10px;
-				padding: 0 8px;
-				font: normal 600 0.625em/20px $font;
-				color: white;
+				font: normal 600 0.625em/20px "Open Sans", sans-serif;
 				text-transform: uppercase;
-				border-radius: 2px;
-				background-color: $primary-blue;
+				text-align: center;
+				color: $tertiary-grey;
 			}
 		}
 	}

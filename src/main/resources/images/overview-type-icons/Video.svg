@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="46px" viewBox="0 0 46 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Video</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Handoff" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2" transform="translate(-851.000000, -326.000000)">
+            <g id="Video" transform="translate(849.000000, 324.000000)">
+                <rect id="frame" x="0" y="0" width="50" height="50"></rect>
+                <circle id="Oval-11" stroke="#3FB3F6" fill="#E2F4FE" cx="25" cy="25" r="22.5"></circle>
+                <polygon id="Rectangle-6" fill="#3FB3F6" transform="translate(23.666667, 25.000000) rotate(-45.000000) translate(-23.666667, -25.000000) " points="26.7307961 18.1646344 30.5020322 31.8353656 16.8313011 28.0641294"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

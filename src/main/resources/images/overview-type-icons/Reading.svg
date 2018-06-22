@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="47px" viewBox="0 0 40 47" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Reading</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M0.166666667,1.33579501 C0.166666667,0.782150712 0.615885417,0.333333333 1.17544183,0.333333333 L39.1578915,0.333333333 C39.7150226,0.333333333 40.1666667,0.772791674 40.1666667,1.33579501 L40.1666667,21.3308717 C40.1666667,21.884516 39.7174479,22.3333333 39.1578915,22.3333333 L1.17544183,22.3333333 C0.61831069,22.3333333 0.166666667,21.893875 0.166666667,21.3308717 L0.166666667,1.33579501 Z" id="path-1"></path>
+    </defs>
+    <g id="Handoff" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2" transform="translate(-547.000000, -326.000000)">
+            <g id="Reading" transform="translate(542.000000, 324.000000)">
+                <rect id="frame" x="0" y="0" width="50" height="50"></rect>
+                <rect id="Rectangle-4" fill="#C5C5C5" x="5" y="2" width="40" height="2" rx="1"></rect>
+                <rect id="Rectangle-4" fill="#C5C5C5" x="5" y="6" width="40" height="2" rx="1"></rect>
+                <path d="M6,10 L29,10 C29.5522847,10 30,10.4477153 30,11 L30,11 C30,11.5522847 29.5522847,12 29,12 L6,12 C5.44771525,12 5,11.5522847 5,11 L5,11 C5,10.4477153 5.44771525,10 6,10 Z" id="Rectangle-4" fill="#C5C5C5"></path>
+                <rect id="Rectangle-4" fill="#C5C5C5" x="5" y="14" width="40" height="2" rx="1"></rect>
+                <path d="M6,18 L44,18 C44.5522847,18 45,18.4477153 45,19 L45,19 C45,19.5522847 44.5522847,20 44,20 L6,20 C5.44771525,20 5,19.5522847 5,19 L5,19 C5,18.4477153 5.44771525,18 6,18 Z" id="Rectangle-4" fill="#C5C5C5"></path>
+                <path d="M6,22 L29,22 C29.5522847,22 30,22.4477153 30,23 L30,23 C30,23.5522847 29.5522847,24 29,24 L6,24 C5.44771525,24 5,23.5522847 5,23 L5,23 C5,22.4477153 5.44771525,22 6,22 Z" id="Rectangle-4" fill="#C5C5C5"></path>
+                <g id="Group-2" transform="translate(4.833333, 26.666667)">
+                    <g id="Group">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Mask" fill-opacity="0.15" fill="#3FB3F6" xlink:href="#path-1"></use>
+                        <path d="M45.5935718,12.3654867 L20.3822709,35.7092838 L45.4668786,35.5919753 L45.5935718,12.3654867 Z" id="Rectangle-56" stroke="#3FB34F" fill="#E2F4E5" mask="url(#mask-2)" transform="translate(32.629265, 23.795932) rotate(-135.000000) translate(-32.629265, -23.795932) "></path>
+                        <path d="M19.996227,19.2529149 L8.77505223,29.6109223 L19.996227,29.6109223 L19.996227,19.2529149 Z" id="Rectangle-56" stroke="#3FB34F" fill="#E2F4E5" mask="url(#mask-2)" transform="translate(13.885116, 24.051783) rotate(-135.000000) translate(-13.885116, -24.051783) "></path>
+                    </g>
+                    <circle id="Oval-16" stroke="#EAC143" fill="#FFF8EB" cx="7.16666667" cy="7.33333333" r="3.5"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
