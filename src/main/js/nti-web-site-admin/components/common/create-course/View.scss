@@ -1,0 +1,60 @@
+@import "~@nti/style-common";
+.admin-create-options {
+	.flyout-inner {
+		margin-top: 10px;
+		border-radius: 10px;
+		width: 300px;
+		cursor: pointer;
+		padding: 12px 0;
+
+		.create-item {
+			padding: 4px 15px;
+
+			.option-title {
+				font-size: 14px;
+				line-height: 19px;
+				font-weight: 600;
+				color: $primary-grey;
+			}
+
+			.option-description {
+				font-size: 14px;
+				line-height: 19px;
+				font-weight: 300;
+				color: $secondary-grey;
+			}
+
+			&.new-course {
+				border-bottom: solid 1px #eee;
+				padding-bottom: 14px;
+				margin-bottom: 10px;
+			}
+		}
+	}
+}
+
+.admin-create-button {
+	height: 40px;
+	width: 115px;
+	background-color: #3fb3f6;
+	border-radius: 30px;
+	color: white;
+	padding: 4px 4px 4px 7px;
+	display: flex;
+	cursor: pointer;
+
+	.add-container {
+		background-color: white;
+		border-radius: 12px;
+		width: 24px;
+		height: 24px;
+		color: #3fb3f6;
+		padding: 1px 0 0 3px;
+		margin: 4px 10px 0 3px;
+		font-size: 18px;
+	}
+
+	.create-label {
+		margin-top: 4px;
+	}
+}

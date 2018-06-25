@@ -58,23 +58,10 @@ export default class FilterableContentList extends React.Component {
 		}
 	}
 
-	launch = () => {
-		Editor.createCourse()
-			.then((createdEntry) => {
-				// course created
-				this.onCourseCreated(createdEntry);
-			});
-	};
-
 	renderToolbar () {
 		const {type, selectedItems} = this.state;
 
 		let selectedType = OPTIONS[type];
-		let onCreate = null;
-
-		if(type === COURSES) {
-			onCreate = this.launch;
-		}
 
 		return (
 			<Toolbar
@@ -84,7 +71,7 @@ export default class FilterableContentList extends React.Component {
 				options={Object.values(OPTIONS)}
 				//sorters={sorters} // sorters not supported yet
 				selectedItems={selectedItems}
-				onCreate={onCreate}
+				onCourseCreated={this.onCourseCreated}
 			/>
 		);
 	}
