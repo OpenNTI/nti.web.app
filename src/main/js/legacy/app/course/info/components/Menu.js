@@ -113,9 +113,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	},
 
 	addStaticInviteCode () {
-		if (!this.rendered && !this.onceRendered.addStaticInviteCode) {
-			this.onceRendered.addStaticInviteCode = true;
-			this.onceRendered.then(this.addStaticInviteCode.bind(this));
+		if (!this.rendered) {
+			if(!this.onceRendered.addStaticInviteCode) {
+				this.onceRendered.addStaticInviteCode = true;
+				this.onceRendered.then(this.addStaticInviteCode.bind(this));
+			}
 			return;
 		}
 
