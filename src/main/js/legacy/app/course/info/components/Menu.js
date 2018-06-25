@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 
 const CoursesStateStore = require('legacy/app/library/courses/StateStore');
-
 const {getString, getFormattedString} = require('legacy/util/Localization');
 
 
@@ -114,23 +113,29 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	},
 
 	addStaticInviteCode () {
-		const me = this;
-		if (!me.rendered) {
-			me.onceRendered.then(me.addStaticInviteCode.bind(me));
+		if (!this.rendered && !this.onceRendered.addStaticInviteCode) {
+			this.onceRendered.addStaticInviteCode = true;
+			this.onceRendered.then(this.addStaticInviteCode.bind(this));
 			return;
 		}
 
-		Service.request(me.inviteCodeLink)
+		delete this.onceRendered.addStaticInviteCode;
+
+		if (!this.inviteCodeLink) {
+			return;
+		}
+
+		Service.request(this.inviteCodeLink)
 			.then( code => {
 				let courseInvitations = JSON.parse(code),
 					codes = courseInvitations.Items && courseInvitations.Items.map( invite => invite.Code).join(',');
 
-				if (me.inviteEl) {
-					me.inviteEl.dom.innerHTML = '';
-					me.inviteTpl.append(me.inviteEl, {
+				if (this.inviteEl) {
+					this.inviteEl.dom.innerHTML = '';
+					this.inviteTpl.append(this.inviteEl, {
 						code: codes
 					});
-					me.inviteEl.selectable();
+					this.inviteEl.selectable();
 				}
 			});
 	},
