@@ -330,7 +330,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				getIcon: function (fromBook) {
 					var iconPath = fromBook ? this.title.get('icon') : this.icon;
 
-					if (iconPath.substr(0, this.root.length) !== root) {
+					if (this.root && iconPath.substr(0, this.root.length) !== root) {
 						iconPath = this.root + this.icon;
 					}
 
