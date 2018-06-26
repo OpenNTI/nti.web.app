@@ -75,9 +75,15 @@ module.exports = exports = Ext.define('NextThought.util.RealPageSource', {
 	getPreviousPrecache () {},
 
 
-	getRouteForPage (page) {
-		const pageID = this.realPageIndex && this.realPageIndex['real-pages'][page];
-		const parts = pageID.split('#');
+	getRouteForPage (pageNumber) {
+		const page = this.realPageIndex && this.realPageIndex['real-pages'][pageNumber];
+
+		if (!page) {
+			return {title: '', href: ''};
+		}
+
+		const {NavNTIID} = page;
+		const parts = NavNTIID.split('#');
 
 		parts[0] = encodeForURI(parts[0]);
 

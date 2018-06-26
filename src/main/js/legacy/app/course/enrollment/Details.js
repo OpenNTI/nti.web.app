@@ -898,29 +898,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		var me = this,
 			video = me.details.getVideo(),
 			name = button.getAttribute('data-name'),
-			win = this.up('window'),
-			option = me.enrollmentOptions[name],
-			action;
+			option = me.enrollmentOptions[name];
 
 		if (!option) {
 			console.error('No enrollment option with that name', button);
 			return;
-		}
-
-		const courseTitle = me.course.get('Title');
-
-		// const displayTitle = (courseTitle.length >= 50)
-		// 	? courseTitle.substr(0, 47) + '...'
-		// 	: courseTitle + '.';
-
-		function done (success, changed) {
-			delete me.changingEnrollment;
-
-			if (success && changed) {
-				me.updateEnrollmentCard();
-			}
-
-			me.removeMask();
 		}
 
 		if (video) {
@@ -1022,9 +1004,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	doDrop (option) {
 		const me = this;
 		const courseTitle = me.course.get('Title');
-		const win = this.up('window');
-
-		let action;
 
 		me.changingEnrollment = true;
 		Ext.Msg.show({
