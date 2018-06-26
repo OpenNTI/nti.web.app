@@ -1,8 +1,6 @@
 const Ext = require('@nti/extjs');
 const {encodeForURI} = require('@nti/lib-ntiids');
 
-const HASH_REGEX = /#/;
-
 module.exports = exports = Ext.define('NextThought.util.RealPageSource', {
 	mixins: {
 		observable: 'Ext.util.Observable'
