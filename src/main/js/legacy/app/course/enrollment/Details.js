@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {Presentation} = require('@nti/web-commons');
+const {Enrollment} = require('@nti/web-course');
 
 const User = require('legacy/model/User');
 const {getString, getFormattedString} = require('legacy/util/Localization');
@@ -14,6 +15,7 @@ const EnrollmentStateStore = require('./StateStore');
 const EnrollmentActions = require('./Actions');
 
 require('../info/components/Panel');
+require('legacy/overrides/ReactHarness');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details', {
@@ -115,6 +117,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
 
+		this.useReactEnrollment = isFeature('use-new-enrollment-card');
+
 		AnalyticsUtil.startEvent(this.course.getId(), {
 			type: 'CourseCatalogView',
 			RootContextID: this.course.getId()
@@ -183,7 +187,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		me.updateEnrollmentCard();
 
-		me.mon(me.cardsEl, 'click', 'handleEnrollmentClick', me);
+		if (!this.useReactEnrollment) {
+			me.mon(me.cardsEl, 'click', 'handleEnrollmentClick', me);
+		}
 
 		me.course.getBackgroundImage()
 			.then(function (img) {
@@ -249,6 +255,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 	onDestroy: function () {
 		this.callParent(arguments);
+
+		if (this.reactEnrollmentCard) {
+			this.reactEnrollmentCard.destroy();
+			delete this.reactEnrollmentCard;
+		}
 
 		AnalyticsUtil.stopEvent(this.course.getId(), 'CourseCatalogView');
 	},
@@ -552,14 +563,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			return;
 		}
 
+
 		var me = this, c;
 
 		if(updateFromStore) {
 			c = this.CourseStore.findCourseForNtiid(me.course.getId());
 			if (c) {
-				c = me.course;
+				me.course = c;
 			}
 		}
+
+		if (this.useReactEnrollment) {
+			this.showNewEnrollmentCard();
+			return;
+		}
+
 
 		me.cardsContainerEl.addCls('loading');
 		me.cardsContainerEl.dom.innerHTML = '';
@@ -601,6 +619,70 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					me.__stateToRestore.call();
 				}
 			});
+	},
+
+
+	showNewEnrollmentCard () {
+		Promise.all([
+			this.course.getInterfaceInstance(),
+			this.CourseEnrollmentStore.getEnrollmentDetails(this.course)
+				.then((enrollment) => {
+					const {Options} = enrollment;
+
+					return Promise.all(
+						Object.keys(Options)
+							.map((key) => {
+								const option = Options[key];
+
+								return option.loaded
+									.catch(() => null);
+							})
+					);
+				}),
+			this.CourseEnrollmentStore.getGiftDetails(this.course)
+		])
+			.then(([catalogEntry, enrollment]) => {
+				if (this.reactEnrollmentCard) {
+					this.reactEnrollmentCard.destroy();
+					delete this.reactEnrollmentCard;
+				}
+
+				this.reactEnrollmentCard = Ext.widget({
+					xtype: 'react',
+					addHistory: true,
+					renderTo: this.cardsContainerEl,
+					component: Enrollment.Options,
+					catalogEntry,
+					getRouteFor: (option, context) => {
+						if (context === 'enroll') {
+							return () => this.handleEnrollInOption(option, enrollment);
+						}
+
+						if (context === 'drop') {
+							return () => this.handleDropOption(option, enrollment);
+						}
+					}
+				});
+			});
+	},
+
+
+
+	handleEnrollInOption (option, availableOptions) {
+		for (let available of availableOptions) {
+			if (available && available.Name === option.Class) {
+				return this.doEnrollment(available);
+			}
+		}
+	},
+
+
+	handleDropOption (option, availableOptions) {
+		for (let available of availableOptions) {
+			if (available && available.Name === option.Class) {
+				return this.doDrop(available);
+			}
+		}
 	},
 
 	/**
@@ -696,6 +778,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @return {Boolean}   if the event was stopped
 	 */
 	handleEnrollmentClick: function (e) {
+		if (this.useReactEnrollment) { return; }
+
 		var checkbox = e.getTarget('.addon.checkbox'),
 			button = e.getTarget('.button'),
 			gift = e.getTarget('.gift-card'),
@@ -844,120 +928,153 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 
 		if (option.Enrolled && option.undoEnrollment) {
-			me.changingEnrollment = true;
-			Ext.Msg.show({
-				msg: getFormattedString('NextThought.view.courseware.enrollment.Details.DropDetails', {course: courseTitle}),
-				title: getString('NextThought.view.courseware.enrollment.Details.AreSure'),
-				icon: 'warning-red',
-				buttons: {
-					primary: {
-						text: getString('NextThought.view.courseware.enrollment.Details.DropCourse'),
-						cls: 'caution',
-						handler: function () {
-							me.addMask();
-							option.undoEnrollment(me)
-								.then(function (changed) {
-									me.fireEvent('enrolled-action', false);
-									me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
-										course: courseTitle
-									}));
-
-									me.course.updateFromServer().then(() => {
-										if (me.onDrop) {
-											done(true, changed);
-											me.onDrop();
-										} else {
-											done(true, changed);
-										}
-									});
-								})
-								.catch(function (reason) {
-									var msg;
-
-									if (reason === 404) {
-										msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
-									} else {
-										msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
-									}
-
-									console.error('failed to drop course', reason);
-									//already dropped?? -- double check the string to make sure it's correct
-									me.showMessage(msg, true);
-									done(false);
-								});
-						}
-					},
-					secondary: {
-						text: getString('NextThought.view.courseware.enrollment.Details.DropCancel'),
-						handler: done.bind(me, false)
-					}
-				}
-			});
+			this.doDrop(option);
 		} else if (option.doEnrollment) {
-			if (option.lock) {
-				me.changingEnrollment = true;
-			}
-
-			action = option.doEnrollment(me);
-
-			if (action) {
-				me.addMask();
-				action
-					.then(function (changed) {
-						// TODO: We're not ready to show this yet.
-						if (isFeature('suggest-contacts')) {
-							me.__buildCongratsCard();
-						}
-						return changed;
-					})
-					.then(function (changed) {
-						me.fireEvent('enrolled-action', true);
-						me.msgClickHandler = function () {
-							var c = me.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
-							Promise.resolve(c)
-								.then(course => course.getCourseInstance())
-								.then(instance => {
-									instance.fireNavigationEvent(me);
-
-									if (win) {
-										win.close();
-									}
-								})
-								.catch(function (reason) {
-									alert('Unable to find course.');
-									console.error('Unable to find course.', reason);
-								});
-						};
-
-						if (!isFeature('suggest-contacts')) {
-							me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
-								course: courseTitle
-							}));
-						} else {
-							me.clearMessage();
-						}
-
-						me.course.updateFromServer().then(() => {
-							if (me.onEnroll) {
-								done(true, changed);
-								me.onEnroll();
-							} else {
-								done(true, changed);
-							}
-						});
-					})
-					.catch(function (reason) {
-						if (reason === 409) {
-							console.error('failed to enroll in course', reason);
-							me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
-						}
-						else {
-							done(false);
-						}
-					});
-			}
+			this.doEnrollment(option);
 		}
 
+	},
+
+	doneEnrolling (success, changed) {
+		delete this.changingEnrollment;
+
+		if (success && changed) {
+			this.updateEnrollmentCard();
+		}
+
+		this.removeMask();
+	},
+
+
+	doEnrollment (option) {
+		const me = this;
+		const courseTitle = me.course.get('Title');
+		const win = this.up('window');
+
+		let action;
+
+		if (!option.doEnrollment) { return; }
+
+		if (option.lock) {
+			me.changingEnrollment = true;
+		}
+
+		action = option.doEnrollment(me);
+
+		if (action) {
+			me.addMask();
+			action
+				.then(function (changed) {
+					// TODO: We're not ready to show this yet.
+					if (isFeature('suggest-contacts')) {
+						me.__buildCongratsCard();
+					}
+					return changed;
+				})
+				.then(function (changed) {
+					me.fireEvent('enrolled-action', true);
+					me.msgClickHandler = function () {
+						var c = me.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
+						Promise.resolve(c)
+							.then(course => course.getCourseInstance())
+							.then(instance => {
+								instance.fireNavigationEvent(me);
+
+								if (win) {
+									win.close();
+								}
+							})
+							.catch(function (reason) {
+								alert('Unable to find course.');
+								console.error('Unable to find course.', reason);
+							});
+					};
+
+					if (!isFeature('suggest-contacts')) {
+						me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
+							course: courseTitle
+						}));
+					} else {
+						me.clearMessage();
+					}
+
+					me.course.updateFromServer().then(() => {
+						if (me.onEnroll) {
+							me.doneEnrolling(true, changed);
+							me.onEnroll();
+						} else {
+							me.doneEnrolling(true, changed);
+						}
+					});
+				})
+				.catch(function (reason) {
+					if (reason === 409) {
+						console.error('failed to enroll in course', reason);
+						me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
+					}
+					else {
+						me.donEnrolling(false);
+					}
+				});
+		}
+	},
+
+	doDrop (option) {
+		const me = this;
+		const courseTitle = me.course.get('Title');
+		const win = this.up('window');
+
+		let action;
+
+		me.changingEnrollment = true;
+		Ext.Msg.show({
+			msg: getFormattedString('NextThought.view.courseware.enrollment.Details.DropDetails', {course: courseTitle}),
+			title: getString('NextThought.view.courseware.enrollment.Details.AreSure'),
+			icon: 'warning-red',
+			buttons: {
+				primary: {
+					text: getString('NextThought.view.courseware.enrollment.Details.DropCourse'),
+					cls: 'caution',
+					handler: function () {
+						me.addMask();
+						option.undoEnrollment(me)
+							.then(function (changed) {
+								me.fireEvent('enrolled-action', false);
+								me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
+									course: courseTitle
+								}));
+
+								me.course.updateFromServer().then(() => {
+									if (me.onDrop) {
+										me.doneEnrolling(true, changed);
+										me.onDrop();
+									} else {
+										me.doneEnrolling(true, changed);
+									}
+								});
+							})
+							.catch(function (reason) {
+								var msg;
+
+								if (reason === 404) {
+									msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
+								} else {
+									msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
+								}
+
+								console.error('failed to drop course', reason);
+								//already dropped?? -- double check the string to make sure it's correct
+								me.showMessage(msg, true);
+								me.doneEnrolling(false);
+							});
+					}
+				},
+				secondary: {
+					text: getString('NextThought.view.courseware.enrollment.Details.DropCancel'),
+					handler: me.doneEnrolling.bind(me, false)
+				}
+			}
+		});
 	},
 
 	giftClicked: function (el, e) {
