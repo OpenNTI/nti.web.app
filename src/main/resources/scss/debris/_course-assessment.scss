@@ -1767,7 +1767,6 @@ canvas.x-component-course-assessment {
 	&.assignment-item {
 
 		.toolbar {
-			padding: 0 17px 0 0;
 			font: normal normal 12px $font;
 			color: $primary-grey;
 			height: 50px;
@@ -1866,7 +1865,6 @@ canvas.x-component-course-assessment {
 			}
 
 			.right.controls {
-				display: inline-block;
 				line-height: 0;
 				float: right;
 			}
@@ -1877,7 +1875,7 @@ canvas.x-component-course-assessment {
 				display: inline-block;
 				font-style: italic;
 				color: $primary-grey;
-				margin-right: 25px;
+
 				span {
 					font-weight: 600;
 				}
@@ -1886,8 +1884,6 @@ canvas.x-component-course-assessment {
 			.up, .down {
 				cursor: pointer;
 				display: inline-block;
-				width: 40px;
-				height: 50px;
 				line-height: 0;
 				opacity: 0.65;
 
