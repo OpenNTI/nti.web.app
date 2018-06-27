@@ -17,7 +17,9 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 	},
 
 	reader: {
-		totalProperty: `['FilteredTotalItemCount', 'TotalItemCount']`,
+		totalProperty: (data) => {
+			return data.FilteredTotalItemCount || data.TotalItemCount;
+		},
 		type: 'json',
 		root: 'Items',
 		readRecords: function () {
