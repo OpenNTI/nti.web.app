@@ -239,29 +239,38 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		//Get the path for the record
 		return me.getPathToObject(record, rootObject)
 			.then(function (path) {
-				var i, titles = [], item;
-
 				//if the first path item is the root bundle, take it off
 				if ((path && rootObject) && path[0].getId() === rootObject.getId()) {
 					path.shift();
 				}
 
-				for (i = 0; i < path.length; i++) {
-					item = path[i];
+				return Promise.all(
+					path.map(async (item) => {
+						const title = item.getBreadCrumbTitle ? await item.getBreadCrumbTitle() : (item.getTitle && item.getTitle());
 
-					if (item.getTitle && item.getTitle() !== '') {
-						titles.push({
-							label: item.getTitle(),
-							ntiid: item.getId()
-						});
+
+						return {title, item};
+					})
+				).then((results) => {
+					const titles = [];
+
+					for (let result of results) {
+						const {title, item} = result;
+
+						if (title) {
+							titles.push({
+								label: title,
+								ntiid: item.getId()
+							});
+						}
+
+						if (item.shouldBeRoot && item.shouldBeRoot()) {
+							break;
+						}
 					}
 
-					if (item.shouldBeRoot && item.shouldBeRoot()) {
-						break;
-					}
-				}
-
-				return titles;
+					return titles;
+				});
 			})
 			.catch(function () {
 				//if we fail to get the path to the item, try to get the container
