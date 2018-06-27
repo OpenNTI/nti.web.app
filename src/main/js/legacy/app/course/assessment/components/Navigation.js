@@ -66,6 +66,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 				this.assignmentsOptionsEl.update(null);
 			}
+
+			delete this.showControlOnRender;
+			delete this.hideControlOnRender;
 		}
 	},
 
