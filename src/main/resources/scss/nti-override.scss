@@ -180,6 +180,14 @@ body.x-body {margin:0;}
 	.image-caption {
 		.caption {
 			display: block;
+			max-height: 6em;
+			overflow: hidden;
+			//Magic non-standard CSS:
+
+			/* autoprefixer: off */
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 5;
 		}
 	}
 

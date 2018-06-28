@@ -80,7 +80,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		image: 'img',
 		barEl: '.bar',
 		commentEl: 'a.mark',
-		presentationEl: 'a.slide'
+		presentationEl: 'a.slide',
+		captionEl: '.image-caption'
 	},
 
 	initComponent: function () {
@@ -149,6 +150,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 		};
 
 		img.onload = function () {
+			me.barHeightCache = me.barEl.getHeight();
 			me.syncSize();
 			me.barEl.show();
 			me.image.dom.src = img.src;
@@ -171,8 +173,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 			me = this,
 			barH = me.barHeightCache,
 			img = me.imageCache,
-			vpH = (El.getViewportHeight() - 200),
-			vpW = (El.getViewportWidth() - 200),
+			vpH = (El.getViewportHeight() - barH + 125),
+			vpW = (El.getViewportWidth()),
 			h = img.height,
 			w = img.width;
 
