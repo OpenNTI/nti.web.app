@@ -46,13 +46,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 	onClick: function (e) {
-		var target = e.getTarget('a[href]'),
-			id = target && (target.href || '').split('#')[0];
-		if (!target || !lazy.ParseUtils.isNTIID(id)) {return;}
-		e.stopEvent();
+		const target = e.getTarget('a[href]');
+		const internalHref = target && target.getAttribute('data-internal-nav-href');
+		const id = target && (target.href || '').split('#')[0];
 
-		NavigationActions.navigateToHref(target.href);
-		this.destroy();
+		const doInternalNav = (nav) => {
+			e.stopEvent();
+			NavigationActions.navigateToHref(nav);
+			this.destroy();
+		};
+
+		if (lazy.ParseUtils.isNTIID(id)) {
+			doInternalNav(target.href);
+		} else if (lazy.ParseUtils.isNTIID(internalHref)) {
+			doInternalNav(internalHref);
+		}
 	},
 
 
