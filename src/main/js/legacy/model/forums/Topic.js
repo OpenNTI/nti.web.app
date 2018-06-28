@@ -15,5 +15,15 @@ module.exports = exports = Ext.define('NextThought.model.forums.Topic', {
 		{ name: 'PublicationState', type: 'string', persist: false },
 		{ name: 'NewestDescendant', type: 'singleitem', persist: false },
 		{ name: 'NewestDescendantCreatedTime', type: 'date', persist: false, dateFormat: 'timestamp'}
-	]
+	],
+
+	isModifiable: function () {
+		try {
+			return this.phantom || (this.getLink('edit') !== null);
+		}
+		catch (e) {
+			console.warn('No getLink()!');
+		}
+		return false;
+	},
 });
