@@ -76,9 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 			catalogEntry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
 		function update (info, status, showRoster, showReports, showAdvanced) {
-			let showInviteCode = me.bundle.hasLink('SendCourseInvitations'),
-				inviteCodeLink = showInviteCode && me.bundle.getLink('CourseAccessTokens');
-
+			const inviteCodeLink = me.bundle.getLink('CourseAccessTokens');
 			me.hasInfo = !!info;
 
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
