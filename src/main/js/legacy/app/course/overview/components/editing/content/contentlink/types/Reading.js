@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getTypes: function () {
 			return [
 				{
-					title: 'From Catalog',
+					title: 'Reading',
 					category: 'content',
 					iconCls: 'reading',
 					description: '',

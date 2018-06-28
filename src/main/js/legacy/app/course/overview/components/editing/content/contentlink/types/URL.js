@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getTypes: function () {
 			return [
 				{
-					title: 'External Link',
+					title: 'Website Link',
 					category: 'content',
 					iconCls: 'link',
 					description: 'External links are used for',
