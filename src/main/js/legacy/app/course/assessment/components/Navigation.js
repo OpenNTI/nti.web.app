@@ -141,6 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.assignmentsOptionsEl.update(this.settingsIconMarkup);
 		}
 		else {
+			delete this.hideControlOnRender;
 			this.showControlOnRender = true;
 		}
 	},
@@ -150,6 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.assignmentsOptionsEl.update(null);
 		}
 		else {
+			delete this.showControlOnRender;
 			this.hideControlOnRender = true;
 		}
 	},
