@@ -1,16 +1,9 @@
-.prompt-container {
-	.prompt.overview-creation {
-		.body-container {
-			background-color: white;
-		}
-	}
-}
-
 .overview-editing.child-creation {
 	.new-type-list {
-		margin: 22px 20px 110px 19px;
+		padding: 22px 20px 110px 19px;
 		min-height: 350px;
 		background-color: white;
+		box-sizing: content-box;
 
 		.new-type {
 			cursor: pointer;
@@ -29,51 +22,53 @@
 			}
 
 			.icon {
-				width: 46px;
-				height: 46px;
+				width: 50px;
+				height: 50px;
 				margin: 0 auto;
 				margin-top: 36px;
 				margin-bottom: 26px;
-				background-size: cover !important;
-				background-repeat: no-repeat !important;
+				background-repeat: no-repeat;
+				background-position: center;
 
 				&.document {
-					background: url(/app/resources/images/overview-type-icons/Upload.svg);
+					background-image: url(/app/resources/images/overview-type-icons/Upload.svg);
 				}
 
 				&.reading {
-					background: url(/app/resources/images/overview-type-icons/Reading.svg);
+					background-image: url(/app/resources/images/overview-type-icons/Reading.svg);
 				}
 
 				&.link {
 					width: 51px;
-					background: url(/app/resources/images/overview-type-icons/Link.svg);
+					background-image: url(/app/resources/images/overview-type-icons/Link.svg);
 				}
 
 				&.video {
-					background: url(/app/resources/images/overview-type-icons/Video.svg);
+					background-image: url(/app/resources/images/overview-type-icons/Video.svg);
 				}
 
 				&.discussion {
-					width: 52px;
-					background: url(/app/resources/images/overview-type-icons/Discussion.svg);
+					background-image: url(/app/resources/images/overview-type-icons/Discussion.svg);
 				}
 
 				&.assessment {
-					background: url(/app/resources/images/overview-type-icons/Self-Assessment.svg);
+					background-image: url(/app/resources/images/overview-type-icons/Self-Assessment.svg);
 				}
 
 				&.assignment {
-					background: url(/app/resources/images/overview-type-icons/Assignment.svg);
+					background-image: url(/app/resources/images/overview-type-icons/Assignment.svg);
 				}
 
 				&.survey {
-					width: 63px;
-					background: url(/app/resources/images/overview-type-icons/Survey.svg);
+					background-image: url(/app/resources/images/overview-type-icons/Survey.svg);
 				}
 
 				&.timeline {
-					background: url(/app/resources/images/overview-type-icons/Reading.svg);
+					background-image: url(/app/resources/images/overview-type-icons/timeline.svg);
+				}
+
+				&.ltitools {
+					background-image: url(/app/resources/images/overview-type-icons/ltitools.svg);
 				}
 			}
 

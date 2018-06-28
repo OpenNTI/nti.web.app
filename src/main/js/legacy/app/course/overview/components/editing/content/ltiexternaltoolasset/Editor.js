@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					title: 'LTI Tools',
 					advanced: false,
 					category: 'ltiexternaltoolasset',
-					iconCls: 'link',
+					iconCls: 'ltitools',
 					description: '',
 					editor: this
 				}
