@@ -1867,7 +1867,6 @@ canvas.x-component-course-assessment {
 			.right.controls {
 				line-height: 0;
 				float: right;
-				display: inline-block;
 			}
 
 			.page {
@@ -1877,6 +1876,7 @@ canvas.x-component-course-assessment {
 				font-style: italic;
 				color: $primary-grey;
 				margin-right: 15px;
+				vertical-align: middle;
 
 				span {
 					font-weight: 600;
@@ -1886,6 +1886,7 @@ canvas.x-component-course-assessment {
 			.up, .down {
 				cursor: pointer;
 				display: inline-block;
+				vertical-align: middle;
 				width: 40px;
 				height: 50px;
 				line-height: 0;
