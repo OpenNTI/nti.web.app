@@ -17,7 +17,7 @@ require('../../creation/ChildCreation');
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation', {
 	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
 	alias: 'widget.overview-editing-overviewgroup-childcreation',
-	title: 'Choose a content type',
+	title: 'Choose a Content Type',
 	backText: 'Content Types',
 	saveText: 'Add to Lesson',
 
