@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Flyout } from '@nti/web-commons';
 import { Editor, Templates } from '@nti/web-course';
 import { encodeForURI } from '@nti/lib-ntiids';
+import { getService } from '@nti/web-client';
+import { Models } from '@nti/lib-interfaces';
 
 import Option from './Option';
 
@@ -14,7 +16,20 @@ export default class CreateCourse extends Component {
 		handleNav: PropTypes.func,
 	};
 
+	state = {
+	}
+
 	attachFlyoutRef = x => (this.flyout = x);
+
+	async componentDidMount () {
+		const service = await getService();
+		const courseWorkspace = service.getWorkspace('Courses');
+		const allCoursesCollection = courseWorkspace && service.getCollection('AllCourses', courseWorkspace.Title);
+
+		if (allCoursesCollection && allCoursesCollection.accepts.includes(Models.courses.scorm.SCORMInstance.MimeType)) {
+			this.setState({canCreateScorm: true});
+		}
+	}
 
 	launchCourseWizard = template => {
 		const { onCourseCreated, onCourseModified, handleNav } = this.props;
@@ -71,12 +86,14 @@ export default class CreateCourse extends Component {
 						description="Use content from a previous course."
 						onClick={() => this.launchCourseWizard(Templates.Import)}
 					/>
-					<Option
-						className="import-scorm-package"
-						title="Import a SCORM Package"
-						description="Use content from external services."
-						onClick={() => this.launchCourseWizard(Templates.Scorm)}
-					/>
+					{this.state.canCreateScorm && (
+						<Option
+							className="import-scorm-package"
+							title="Import a SCORM Package"
+							description="Use content from external services."
+							onClick={() => this.launchCourseWizard(Templates.Scorm)}
+						/>
+					)}
 				</React.Fragment>
 			</Flyout.Triggered>
 		);
