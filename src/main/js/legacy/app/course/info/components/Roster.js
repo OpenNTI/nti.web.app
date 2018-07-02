@@ -498,6 +498,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}
 			]);
 			this.maybeShowEmailButton();
+			this.updateFilterCount();
 		} catch (e) {
 			console.log('Meh');
 		}
