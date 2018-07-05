@@ -22,7 +22,7 @@ export default class EnrollmentStore extends Stores.SimpleStore {
 		});
 	}
 
-	async lookBook (bookID, userID) {
+	async loadBook (bookID, userID) {
 
 		this.set('book', null);
 		this.set('user', null);
@@ -33,50 +33,19 @@ export default class EnrollmentStore extends Stores.SimpleStore {
 			const decodedID = decodeFromURI(bookID);
 			const service = await getService();
 			const user = await service.resolveEntity(userID);
-			const bookRecords = await user.fetchLink('UserBundleRecords');
+			const bookRecords = await user.fetchLinkParsed('UserBundleRecords');
 
-			const matches = ((bookRecords && bookRecords.Items) || []).filter(rec => rec.Bundle.NTIID === decodedID);
+			const matches = (bookRecords || []).filter(rec => rec.Bundle.NTIID === decodedID);
 
 			this.set('userBookRecord', matches[0]);
 			this.set('loading', false);
 			this.emitChange('loading', 'userBookRecord');
 		}
 		catch (e) {
-			this.set('book', null);
-			this.set('user', null);
+			this.set('userBookRecord', null);
 			this.set('error', e.message || e);
 			this.set('loading', false);
-			this.emitChange('loading', 'book', 'user');
-		}
-
-
-		// const decodedID = decodeFromURI(enrollmentID);
-		//
-		// if (this.enrollment && decodedID === this.enrollment.getID()) { return; }
-		//
-		// this.doLoad(decodedID);
-	}
-
-	async doLoad (enrollmentID) {
-		this.set('enrollment', null);
-		this.set('course', null);
-		this.set('loading', true);
-		this.emitChange('loading');
-
-		try {
-			const service = await getService();
-			const enrollment = await this.getEnrollment(service, enrollmentID);
-			const course = await enrollment.fetchLinkParsed('CourseInstance');
-
-			this.set('enrollment', enrollment);
-			this.set('course', course);
-			this.emitChange('enrollment', 'course');
-		} catch (e) {
-			this.set('error', e);
-			this.emitChange('error');
-		} finally {
-			this.set('loading', false);
-			this.emitChange('loading');
+			this.emitChange('loading', 'userBookRecord');
 		}
 	}
 }

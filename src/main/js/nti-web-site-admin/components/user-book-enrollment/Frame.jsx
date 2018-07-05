@@ -39,7 +39,7 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 		const {bookID: newID, userID} = this.props;
 
 		if (newID !== oldID) {
-			this.store.lookBook(newID, userID);
+			this.store.loadBook(newID, userID);
 		}
 	}
 
@@ -47,7 +47,7 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 	componentDidMount () {
 		const {bookID, userID} = this.props;
 
-		this.store.lookBook(bookID, userID);
+		this.store.loadBook(bookID, userID);
 	}
 
 
@@ -71,7 +71,7 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 			<Layouts.NavContent.Container>
 				<Layouts.NavContent.Nav className="nav-bar">
 					{this.renderHeader()}
-					<NavBar book={userBookRecord && userBookRecord.Bundle} user={userBookRecord && userBookRecord.user}/>
+					<NavBar book={userBookRecord && userBookRecord.Bundle} user={userBookRecord && userBookRecord.User}/>
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
 					{React.Children.map(children, (item) => {

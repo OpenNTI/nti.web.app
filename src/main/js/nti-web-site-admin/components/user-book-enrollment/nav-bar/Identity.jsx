@@ -27,7 +27,7 @@ export default function SiteAdminUserIdentity ({book, user}) {
 			</div>
 			<div className="enrollment-info">
 				<div className="plain-text">{t('activityFor')}</div>
-				<DisplayName entity={user } />
+				<DisplayName entity={user} />
 				<div className="plain-text">{t('in')}</div>
 				<div className="course-title">
 					{book && book.title}
