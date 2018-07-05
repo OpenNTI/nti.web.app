@@ -13,12 +13,14 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.user.Frame', DEFAULT_TEXT);
 
-@Store.connect({user: 'user', loading: 'loading'})
+@Store.connect({user: 'user', loading: 'loading', hasBooks: 'hasBooks', hasCourses: 'hasCourses'})
 export default class SiteAdminUserView extends React.Component {
 	static propTypes = {
 		userID: PropTypes.string,
 
 		user: PropTypes.object,
+		hasBooks: PropTypes.bool,
+		hasCourses: PropTypes.bool,
 		loading: PropTypes.bool,
 		store: PropTypes.object,
 
@@ -31,9 +33,9 @@ export default class SiteAdminUserView extends React.Component {
 	}
 
 
-	componentWillReceiveProps (nextProps) {
-		const {userID: newID} = nextProps;
-		const {userID: oldID} = this.props;
+	componentDidUpdate (oldProps) {
+		const {userID: newID} = this.props;
+		const {userID: oldID} = oldProps;
 
 		if (newID !== oldID) {
 			this.store.loadUser(newID);
@@ -68,7 +70,7 @@ export default class SiteAdminUserView extends React.Component {
 	}
 
 	renderUser () {
-		const {user, children} = this.props;
+		const {user, hasBooks, hasCourses, children} = this.props;
 
 		if (!user) {
 			return null;
@@ -78,7 +80,7 @@ export default class SiteAdminUserView extends React.Component {
 			<Layouts.NavContent.Container>
 				<Layouts.NavContent.Nav className="nav-bar">
 					{this.renderHeader()}
-					<NavBar user={user} />
+					<NavBar user={user} hasBooks={hasBooks} hasCourses={hasCourses}/>
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
 					{React.Children.map(children, (item) => {

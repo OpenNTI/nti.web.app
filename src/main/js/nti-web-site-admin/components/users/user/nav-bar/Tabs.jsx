@@ -13,54 +13,39 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.user.nav-bar.Tabs', DEFAULT_TEXT);
 
-export default class SiteAdminUserTabs extends React.Component {
-	static propTypes = {
-		user: PropTypes.object.isRequired
-	}
+SiteAdminUserTabs.propTypes = {
+	user: PropTypes.object.isRequired,
+	hasBooks: PropTypes.bool,
+	hasCourses: PropTypes.bool
+};
 
-	state = {}
-
-	async componentDidMount () {
-		const {user} = this.props;
-
-		if(user.hasLink('UserBundleRecords')) {
-			const bookRecords = await user.fetchLink('UserBundleRecords');
-
-			if(bookRecords && bookRecords.Items && bookRecords.Items.length > 0) {
-				this.setState({hasBooks: true});
-			}
-		}
-	}
-
-	render () {
-		const {user} = this.props;
-		const {hasBooks} = this.state;
-
-		return (
-			<ul className="site-admin-user-tabs">
+export default function SiteAdminUserTabs ({user, hasBooks, hasCourses}) {
+	return (
+		<ul className="site-admin-user-tabs">
+			<li>
+				<LinkTo.Path to="./" activeClassName="active" exact>{t('overview')}</LinkTo.Path>
+			</li>
+			{hasBooks && (
 				<li>
-					<LinkTo.Path to="./" activeClassName="active" exact>{t('overview')}</LinkTo.Path>
+					<LinkTo.Path to="./books" activeClassName="active">{t('books')}</LinkTo.Path>
 				</li>
-				{hasBooks && (
-					<li>
-						<LinkTo.Path to="./books" activeClassName="active">{t('books')}</LinkTo.Path>
-					</li>
-				)
-				}
+			)
+			}
+			{hasCourses && (
 				<li>
 					<LinkTo.Path to="./courses" activeClassName="active">{t('courses')}</LinkTo.Path>
 				</li>
-				{
-					user.hasLink('transcript') && (
-						<li>
-							<LinkTo.Path to="./transcript" activeClassName="active">{t('transcript')}</LinkTo.Path>
-						</li>
-					)
-				}
-				<li>
-					<LinkTo.Path to="./reports" activeClassName="active">{t('reports')}</LinkTo.Path>
-				</li>
-			</ul>
-		);
-	}
+			)}
+			{
+				user.hasLink('transcript') && (
+					<li>
+						<LinkTo.Path to="./transcript" activeClassName="active">{t('transcript')}</LinkTo.Path>
+					</li>
+				)
+			}
+			<li>
+				<LinkTo.Path to="./reports" activeClassName="active">{t('reports')}</LinkTo.Path>
+			</li>
+		</ul>
+	);
 }

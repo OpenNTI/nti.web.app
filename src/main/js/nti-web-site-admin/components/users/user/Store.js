@@ -27,8 +27,21 @@ export default class UserStore extends Stores.SimpleStore {
 		try {
 			const resolved = await User.resolve({entity: user});
 
+			let hasBooks = false;
+			let hasCourses = true; // inexpensive way to know this?  for now, always true
+
+			if(resolved.hasLink('UserBundleRecords')) {
+				const bookRecords = await resolved.fetchLink('UserBundleRecords');
+
+				if(bookRecords && bookRecords.Items && bookRecords.Items.length > 0) {
+					hasBooks = true;
+				}
+			}
+
 			this.set('user', resolved);
-			this.emitChange('user');
+			this.set('hasBooks', hasBooks);
+			this.set('hasCourses', hasCourses);
+			this.emitChange('user', 'hasBooks', 'hasCourses');
 		} catch (e) {
 			this.set('error', e);
 			this.emitChange('error');
