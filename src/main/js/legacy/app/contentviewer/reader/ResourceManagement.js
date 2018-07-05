@@ -422,6 +422,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 				Ext.get(el).setWidth(width);
 			}
 
+			// if we have a narrow image, remove the 'Comment' label and just show the comment icon
+			if(imgWidth < 116) {
+				comment = Ext.get(el).down('.mark');
+				comment.dom.innerHTML = '';
+			}
 
 			Ext.each(p, function (feature) {
 				(activators[feature] || Ext.emptyFn)(el, bar, reader.basePath);
