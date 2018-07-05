@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import {Loading} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
-import {EnrollmentListItem} from '@nti/web-course';
 
 import ErrorMessage from '../../../common/ErrorMessage';
 import Card from '../../../common/Card';
 
+import BookListItem from './BookListItem';
 import Store from './Store';
 
 const DEFAULT_TEXT = {
@@ -22,7 +22,7 @@ const propMap = {
 };
 
 @Store.connect(propMap)
-export default class SiteAdminUserTranscript extends React.Component {
+export default class SiteAdminUserBooks extends React.Component {
 	static propTypes = {
 		user: PropTypes.object,
 		store: PropTypes.object,
@@ -40,23 +40,23 @@ export default class SiteAdminUserTranscript extends React.Component {
 	componentDidMount () {
 		const {user} = this.props;
 
-		this.store.loadTranscript(user);
+		this.store.loadBooks(user);
 	}
 
 
 	componentWillUnmount () {
 		const {user} = this.props;
 
-		this.store.unloadTranscript(user);
+		this.store.unloadBooks(user);
 	}
 
 
-	componentWillReceiveProps (nextProps) {
-		const {user:newUser} = nextProps;
-		const {user: oldUser} = this.props;
+	componentDidUpdate (oldProps) {
+		const {user:newUser} = this.props;
+		const {user: oldUser} = oldProps;
 
 		if (newUser !== oldUser) {
-			this.store.loadTranscript(newUser);
+			this.store.loadBooks(newUser);
 		}
 	}
 
@@ -84,8 +84,8 @@ export default class SiteAdminUserTranscript extends React.Component {
 					{items.map((item, index) => {
 						return (
 							<li key={index}>
-								<LinkTo.Object object={item} context="site-admin.users.user-transcript.list">
-									<EnrollmentListItem enrollment={item} />
+								<LinkTo.Object object={item.Bundle} context="site-admin.users.user-books.list">
+									<BookListItem book={item.Bundle} />
 								</LinkTo.Object>
 							</li>
 						);

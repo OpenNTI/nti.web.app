@@ -1,0 +1,41 @@
+@import '~@nti/style-common';
+
+.site-admin-user-enrollment-overview {
+	.date-info {
+		display: flex;
+
+		.joined {
+			margin: 0 10px 10px 0;
+			width: 370px;
+
+			.site-admin-card {
+				background-color: #3fb34f;
+				color: white;
+			}
+		}
+
+		.last-activity {
+			width: 370px;
+		}
+	}
+
+	.active-times-widget {
+		margin: 10px 0 0;
+	}
+
+	.activity-and-progress {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+
+		.user-course-enrollment-progress {
+			margin: 10px 0 10px 10px;
+			width: 240px;
+
+			.circular-progress {
+				width: 200px;
+				margin: 0 auto;
+			}
+		}
+	}
+}
