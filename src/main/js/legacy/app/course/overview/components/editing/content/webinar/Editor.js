@@ -25,6 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					advanced: false,
 					category: 'webinar',
 					iconCls: 'webinar',
+					hideFooter: true,
 					description: '',
 					editor: this
 				}

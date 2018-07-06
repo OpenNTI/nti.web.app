@@ -188,6 +188,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			setSubTitle: this.setSubTitle.bind(this),
 			enableBack: this.enableHeaderBack.bind(this),
 			disableBack: this.disableHeaderBack.bind(this),
+			showFooter: this.showFooter.bind(this),
+			hideFooter: this.hideFooter.bind(this),
 			showError: this.showError.bind(this),
 			showWarning: this.showWarning.bind(this),
 			showMessage: this.showMessage.bind(this),
@@ -259,6 +261,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	enableHeaderBack: function (text) {
 		return this.Prompt.Header.enableBack(text);
+	},
+
+	hideFooter: function () {
+		this.Prompt.Footer.hide();
+	},
+
+	showFooter: function () {
+		this.Prompt.Footer.show();
 	},
 
 	disableHeaderBack: function () {

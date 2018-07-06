@@ -102,6 +102,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.activeTypeList.show();
 		}
 
+		if (this.showFooter) {
+			this.showFooter();
+		}
+
 		this.setUpTypeList();
 	},
 
@@ -132,6 +136,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.setUpTypeEditor(type);
 
+		if(type.hideFooter && this.hideFooter) {
+			this.hideFooter();
+		}
 
 		this.activeEditor = this.add(type.editor.create({
 			copyValues: this.copyValues,
