@@ -1,7 +1,7 @@
 .overview-editing.child-creation {
 	.new-type-list {
 		padding: 22px 20px 110px 19px;
-		min-height: 350px;
+		min-height: 374px;
 		background-color: white;
 		box-sizing: content-box;
 
@@ -69,6 +69,10 @@
 
 				&.ltitools {
 					background-image: url(/app/resources/images/overview-type-icons/ltitools.svg);
+				}
+
+				&.webinar {
+					background-image: url(/app/resources/images/overview-type-icons/Webinar.svg);
 				}
 			}
 

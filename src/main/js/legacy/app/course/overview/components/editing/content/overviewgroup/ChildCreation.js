@@ -9,6 +9,7 @@ const LTIExternalToolAssetEditor = require('../ltiexternaltoolasset/Editor');
 const QuestionsetEditor = require('../questionset/Editor');
 const TimelineEditor = require('../timeline/Editor');
 const SurveyEditor = require('../survey/Editor');
+const WebinarEditor = require('../webinar/Editor');
 
 require('../../creation/ChildCreation');
 
@@ -36,7 +37,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				DiscussionEditor,
 				QuestionsetEditor,
 				TimelineEditor,
-				SurveyEditor
+				SurveyEditor,
+				WebinarEditor
 			];
 
 			if (bundle && bundle.hasLink('lti-configured-tools')) {

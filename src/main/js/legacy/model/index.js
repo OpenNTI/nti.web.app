@@ -48,6 +48,7 @@ require('./UserPasswordSet');
 require('./UserSearch');
 require('./Video');
 require('./VideoRoll');
+require('./Webinar');
 
 require('./anchorables');
 require('./app');

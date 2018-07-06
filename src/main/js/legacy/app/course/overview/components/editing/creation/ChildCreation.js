@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (this.setTitle) {
-			this.setTitle(type.title);
+			this.setTitle(type.editorTitle || type.title);
 		}
 
 		if (this.setSaveText) {
