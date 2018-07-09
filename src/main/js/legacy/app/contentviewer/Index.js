@@ -221,6 +221,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			// p = Service.getPageInfo(this.assignment.getId(), null, null, null, this.bundle);
 		} else if (this.contentId) {
 			p = Service.getPageInfo(this.contentId, null, null, null, this.bundle);
+		} else if (this.externalToolAsset) {
+			p = this.ContentViewerActions.getExternalToolAssetPageInfo(this.externalToolAsset, this.bundle);
 		}
 
 		return p;
