@@ -152,7 +152,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 					tag: 'head',
 					cn: [
 						{ tag: 'title', html: data.title },
-						{ tag: 'meta', name: 'icon', content: data.thumbnail }
+						{
+							tag: 'meta',
+							name: 'icon',
+							content: data.thumbnail
+						}
 					]
 				},
 				{
@@ -161,8 +165,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 						cls: 'page-contents no-padding',
 						cn: [
 							{
-								tag: 'iframe',
-								src: href
+								tag: 'object',
+								cls: 'nticard-iframe',
+								type: 'application/vnd.nextthought.nticard-iframe',
+								'data-ntiid': ntiid,
+								'data-href': href,
+								html: Ext.DomHelper.markup([
+									{ tag: 'img', src: data.thumbnail },
+									{
+										tag: 'span',
+										cls: 'description',
+										html: data.description
+									}
+								])
 							}
 						]
 					}
