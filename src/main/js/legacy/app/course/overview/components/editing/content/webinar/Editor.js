@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {WebinarEditor} = require('@nti/web-course');
 
 const Webinar = require('legacy/model/Webinar');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
@@ -36,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	EDITOR_XTYPE: 'overview-editing-webinar-editor',
 	backToList: 'Configured Tools',
 	SWITCHED: 'switched',
-	cls: 'content-editor content-link',
+	cls: 'content-editor content-webinar',
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -47,26 +48,29 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	hasWebinar: false,
-
 	showEditor: function () {
-		if (this.hasWebinar) {
-			this.showNotConnectedMessage();
-		} else {
-			this.showWebinarEditor();
-		}
+		this.webinarEditor = this.add({
+			xtype: 'react',
+			component: WebinarEditor,
+			activePanel: 'overview',
+			onCancel: () => {
+				if(this.doClose) {
+					this.doClose();
+				}
+			},
+			onAddToLesson: () => {
+
+			}
+			// baseroute: baseroute,
+			// getRouteFor: (obj) => {
+			// 	if (obj.isCourseCatalogEntry) {
+			// 		const href = `uri:${obj.href}`;
+			//
+			// 		return `${this.category || '.'}/nti-course-catalog-entry/${encodeURIComponent(href)}`;
+			// 	}
+			// }
+		});
 	},
-
-
-	showNotConnectedMessage: function () {
-
-	},
-
-
-	showWebinarEditor: function () {
-
-	},
-
 
 	onBack: function () {
 		if (this.itemEditorCmp) {
