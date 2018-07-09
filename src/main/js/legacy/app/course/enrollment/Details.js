@@ -641,7 +641,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 				}),
 			this.CourseEnrollmentStore.getGiftDetails(this.course)
 		])
-			.then(([catalogEntry, enrollment]) => {
+			.then(([catalogEntry, enrollment, gift]) => {
 				if (this.reactEnrollmentCard) {
 					this.reactEnrollmentCard.destroy();
 					delete this.reactEnrollmentCard;
@@ -655,11 +655,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					catalogEntry,
 					getRouteFor: (option, context) => {
 						if (context === 'enroll') {
-							return () => this.handleEnrollInOption(option, enrollment);
+							return () => this.handleEnrollInOption(option, enrollment, gift);
 						}
 
 						if (context === 'drop') {
-							return () => this.handleDropOption(option, enrollment);
+							return () => this.handleDropOption(option, enrollment, gift);
+						}
+
+						if (context === 'gift') {
+							return () => this.handleGiftOption(option, enrollment, gift);
+						}
+
+						if (context === 'redeem') {
+							return () => this.handleRedeemOption(option, enrollment, gift);
 						}
 					}
 				});
@@ -682,6 +690,20 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			if (available && available.Name === option.Class) {
 				return this.doDrop(available);
 			}
+		}
+	},
+
+
+	handleGiftOption (option, availableOptions, gift) {
+		if (gift) {
+			gift.doEnrollment(this, 'gift');
+		}
+	},
+
+
+	handleRedeemOption (option, availableOptions, gift) {
+		if (gift) {
+			gift.doEnrollment(this, 'redeem');
 		}
 	},
 
