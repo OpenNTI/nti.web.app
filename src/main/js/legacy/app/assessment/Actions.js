@@ -281,7 +281,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 	handlePastDueError: function (assignment) {
 		Ext.MessageBox.alert({
 			title: 'This assignment is past due',
-			msg: 'You can continue to view this assignment, but it cannot be submitted',
+			msg: 'You can continue to view this assignment, but it cannot be submitted.',
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
