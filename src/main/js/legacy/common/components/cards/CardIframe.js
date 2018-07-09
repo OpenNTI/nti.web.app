@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 
 const DomUtils = require('legacy/util/Dom');
-const Globals = require('legacy/util/Globals');
 
 require('legacy/app/contentviewer/overlay/Panel');
 
