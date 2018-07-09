@@ -6,6 +6,7 @@ const {getString} = require('legacy/util/Localization');
 
 require('legacy/common/ux/ImageZoomView');
 require('legacy/common/components/cards/CardTarget');
+require('../../../common/components/cards/CardIframe');
 require('legacy/common/components/cards/OverlayedPanel');
 require('../../mediaviewer/content/deck/OverlayedPanel');
 require('../../mediaviewer/content/OverlayedPanel');
@@ -203,6 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 	OVERLAY_DOM_QUERY_XTYPE_MAP: {
 		'object[type$=nticard]': 'overlay-card',
 		'object[type$=nticard-target]': 'overlay-card-target',
+		'object[type$=nticard-iframe]': 'overlay-card-iframe',
 		'object[type$=ntislidedeck]': 'overlay-slidedeck',
 		'object[type$=ntislidevideo][itemprop=presentation-card]': 'overlay-slidevideo',
 		'object[type$=ntivideo][itemprop=presentation-video]': 'overlay-video',
