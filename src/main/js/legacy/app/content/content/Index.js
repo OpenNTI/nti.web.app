@@ -7,6 +7,7 @@ const ContentviewerIndex = require('legacy/app/contentviewer/Index');
 const PageInfo = require('legacy/model/PageInfo');
 const RelatedWork = require('legacy/model/RelatedWork');
 const PlaylistItem = require('legacy/model/PlaylistItem');
+const ExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 
 const ContentActions = require('../Actions');
 
@@ -310,6 +311,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		this.reader = ContentviewerIndex.create({
 			pageInfo: page instanceof PageInfo ? page : null,
 			relatedWork: page instanceof RelatedWork ? page : null,
+			externalToolAsset: page instanceof ExternalToolAsset ? page : null,
 			// toc: !this.currentBundle.isCourse ? this.ContentActions.getTocStore(this.currentBundle, this.root) : null,
 			showToc: !this.currentBundle.isCourse,
 			contentPackage: this.ContentActions.getContentPackage(this.currentBundle, this.root),

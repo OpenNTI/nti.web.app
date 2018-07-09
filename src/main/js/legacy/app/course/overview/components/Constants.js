@@ -43,8 +43,9 @@ const ROUTE_BUILDERS = {
 	},
 
 
-	'application/vnd.nextthought.ltiexternaltoolasset': (course, lesson, obj) => {
-		return { href: obj.getLink('Launch'), target: '_blank' };
+	'application/vnd.nextthought.ltiexternaltoolasset': (course, lesson, obj, context, editMode) => {
+		const editPath = editMode ? 'edit/' : '';
+		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj.NTIID)}/${editPath}`;
 	},
 
 	'application/vnd.nextthought.ntitimeline': (course, lesson, obj) => {

@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-
+const { ContentSelection } = require('@nti/web-course');
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
 
@@ -148,6 +148,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.getSelection()
 			.then(function (selection) {
+				const contentSelectionLink = (selection.Links || []).find(x => x.rel === 'ContentSelection');
+
+				if (contentSelectionLink && !me.record) {
+					me.ltiContentSelection = me.add({
+						xtype: 'react',
+						component: ContentSelection,
+						src: contentSelectionLink.href,
+						overviewGroupOID: me.parentRecord.get('OID'),
+						title: selection.title || '',
+						selectContent: me.selectContent.bind(me),
+						onClose: me.onClose.bind(me)
+					});
+				}
+
 				me.itemEditorCmp = me.add({
 					xtype: me.EDITOR_XTYPE,
 					record: me.record,
@@ -211,5 +225,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				me.enableSubmission();
 				return Promise.reject(reason);
 			});
+	},
+
+	onClose () {
+		if (this.ltiContentSelection) {
+			this.ltiContentSelection.destroy();
+		}
+	},
+
+	selectContent (content) {
+		const { title, ConfiguredTool, description, launchUrl } = content;
+		if (this.itemEditorCmp) {
+			this.itemEditorCmp.formCmp.setValue('title', title || '');
+			this.itemEditorCmp.formCmp.setValue('description', description || '');
+			this.itemEditorCmp.formCmp.setValue('ConfiguredTool', ConfiguredTool);
+			this.itemEditorCmp.formCmp.setValue('launch_url', launchUrl);
+			if (this.ltiContentSelection) {
+				this.ltiContentSelection.destroy();
+			}
+		}
 	}
 });

@@ -8,6 +8,7 @@ require('./Base');
 module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.ltiexternaltoolasset',
+	isPage: true,
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.ltiexternaltoolasset',
@@ -21,7 +22,8 @@ module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', 
 				icon: data.thumbnail,
 				title: data.title,
 				ConfiguredTool: data.ConfiguredTool,
-				NTIID: data.ntiid
+				NTIID: data.ntiid,
+				'launch_url': data['launch_url']
 			});
 		},
 
@@ -75,7 +77,8 @@ module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', 
 		{name: 'title', type: 'string'},
 		{name: 'description', type: 'string'},
 		{name: 'ConfiguredTool', type: 'object'},
-		{name: 'icon', type: 'string'}
+		{name: 'icon', type: 'string'},
+		{name: 'launch_url', type: 'string'}
 	],
 
 	asDomData: function (root) {
