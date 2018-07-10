@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getItemList: function () {
-		return this.bundle.getLTIConfiguredTools();
+		return this.bundle.getLTIConfiguredTools(true);
 	},
 
 	showItemList: function (selectedItems) {
