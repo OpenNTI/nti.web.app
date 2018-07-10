@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 								cls: 'nticard-iframe',
 								type: 'application/vnd.nextthought.nticard-iframe',
 								'data-ntiid': ntiid,
-								'data-href': href,
+								'data-href': `${href}?target=iframe&width=669`,
 								html: Ext.DomHelper.markup([
 									{ tag: 'img', src: data.thumbnail },
 									{
