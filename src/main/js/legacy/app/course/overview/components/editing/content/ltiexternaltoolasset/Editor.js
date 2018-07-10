@@ -156,6 +156,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						component: ContentSelection,
 						src: contentSelectionLink.href,
 						overviewGroupOID: me.parentRecord.get('OID'),
+						width: selection.selection_height,
+						height: selection.selection_height,
 						title: selection.title || '',
 						selectContent: me.selectContent.bind(me),
 						onClose: me.onClose.bind(me)
