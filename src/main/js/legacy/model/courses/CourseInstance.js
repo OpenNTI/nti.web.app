@@ -877,10 +877,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return baseLink && urlJoin(baseLink, encodeURIComponent(ntiid));
 	},
 
-	getLTIConfiguredTools: function () {
-		if (this.__getLTIConfiguredToolsPromise) { return this.__getLTIConfiguredToolsPromise; }
+	getLTIConfiguredTools: function (force) {
+		if (this.__getLTIConfiguredToolsPromise && !force) { return this.__getLTIConfiguredToolsPromise; }
 
-		this.__getLTIConfiguredToolsPromise = this.__getList('lti-configured-tools');
+		this.__getLTIConfiguredToolsPromise = this.__getList('lti-configured-tools', force);
 
 		return this.__getLTIConfiguredToolsPromise;
 	},
