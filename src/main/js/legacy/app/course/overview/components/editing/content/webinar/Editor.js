@@ -48,27 +48,26 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showEditor: function () {
+	showEditor: async function () {
+		const lessonOverview = await this.rootRecord.getInterfaceInstance();
+		const overviewGroup = await this.parentRecord.getInterfaceInstance();
+
 		this.webinarEditor = this.add({
 			xtype: 'react',
 			component: WebinarEditor,
-			activePanel: 'overview',
+			activePanel: 'overview', // determine which panel to show based on status (not connected yet, choosing a webinar, etc)
+			lessonOverview,
+			overviewGroup,
 			onCancel: () => {
 				if(this.doClose) {
 					this.doClose();
 				}
 			},
 			onAddToLesson: () => {
-
+				if(this.doSave) {
+					this.doSave();
+				}
 			}
-			// baseroute: baseroute,
-			// getRouteFor: (obj) => {
-			// 	if (obj.isCourseCatalogEntry) {
-			// 		const href = `uri:${obj.href}`;
-			//
-			// 		return `${this.category || '.'}/nti-course-catalog-entry/${encodeURIComponent(href)}`;
-			// 	}
-			// }
 		});
 	},
 
@@ -93,18 +92,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onSave: function () {
-		var me = this;
+		// TODO: Handle adding to lesson
 
-		if (!me.itemEditorCmp) {
-			me.showItemEditor();
-			return Promise.reject(me.SWITCHED);
-		}
+		return Promise.resolve();
 
-		me.disableSubmission();
-		return me.itemEditorCmp.onSave()
-			.catch(function (reason) {
-				me.enableSubmission();
-				return Promise.reject(reason);
-			});
+		// var me = this;
+		//
+		// if (!me.itemEditorCmp) {
+		// 	me.showItemEditor();
+		// 	return Promise.reject(me.SWITCHED);
+		// }
+		//
+		// me.disableSubmission();
+		// return me.itemEditorCmp.onSave()
+		// 	.catch(function (reason) {
+		// 		me.enableSubmission();
+		// 		return Promise.reject(reason);
+		// 	});
 	}
 });
