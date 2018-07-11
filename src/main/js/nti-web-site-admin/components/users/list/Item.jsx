@@ -25,7 +25,12 @@ export default function UserItem ({item, isSelected, onSelect, removeCmp: Remove
 
 	const createdTime = item.getCreatedTime();
 	const lastLoginTime = item.getLastLoginTime && item.getLastLoginTime();
-	const lastSeen = (MostRecentSession && MostRecentSession.getSessionStartTime()) || lastLoginTime;
+	let lastSeen = (MostRecentSession && MostRecentSession.getSessionStartTime()) || lastLoginTime;
+
+	// if none of the 'last seen' times resolved to anything greater than 0, just set it null so that we show 'Never'
+	if(lastSeen && lastSeen.getTime() === 0) {
+		lastSeen = null;
+	}
 
 	function onChange (e) {
 		e.stopPropagation();
