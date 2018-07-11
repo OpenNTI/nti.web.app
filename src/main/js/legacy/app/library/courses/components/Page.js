@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const naturalSort = require('node-natural-sort');
+const {compare: naturalSort} = require('natural-orderby');
 
 const {getString} = require('legacy/util/Localization');
 const CourseCatalogEntry = require('legacy/model/courses/CourseCatalogEntry');
