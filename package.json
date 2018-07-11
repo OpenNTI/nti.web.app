@@ -54,6 +54,7 @@
     "@nti/web-content": "^1.22.2",
     "@nti/web-course": "^1.22.3",
     "@nti/web-discussions": "0.x.x",
+    "@nti/web-integrations": "^1.0.0-alpha.20180711160926",
     "@nti/web-login": "^2018.0.0",
     "@nti/web-profiles": "^1.0.1",
     "@nti/web-reports": "0.x.x",

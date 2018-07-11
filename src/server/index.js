@@ -3,6 +3,7 @@
 const path = require('path');
 
 const redirects = require('./lib/redirects');
+const api = require('./lib/api');
 
 let dev;
 let assets = path.resolve(__dirname, '../client');
@@ -23,6 +24,7 @@ exports = module.exports = {
 
 		return resolveDev.then(devmode => {
 			redirects.register(expressApp, config);
+			api.register(expressApp, config);
 
 			if (devmode) {
 				expressApp.use(devmode.middleware); //serve in-memory compiled sources/assets
