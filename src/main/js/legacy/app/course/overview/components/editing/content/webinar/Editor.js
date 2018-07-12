@@ -63,8 +63,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					this.doClose();
 				}
 			},
-			onAddToLesson: () => {
+			onAddToLesson: (selectedSection, selectedRank, img, webinar) => {
 				if(this.doSave) {
+					// get ext record based on selected interface record
+					const parent = this.rootRecord.get('Items').filter(x=>x.getId() === selectedSection.getID())[0];
+
 					this.doSave();
 				}
 			}
