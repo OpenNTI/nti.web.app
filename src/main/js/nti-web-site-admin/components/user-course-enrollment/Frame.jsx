@@ -34,9 +34,9 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 	}
 
 
-	componentWillReceiveProps (nextProps) {
-		const {enrollmentID: newID} = nextProps;
-		const {enrollmentID: oldID} = this.props;
+	componentDidUpdate (prevProps) {
+		const {enrollmentID: newID} = this.props;
+		const {enrollmentID: oldID} = prevProps;
 
 		if (newID !== oldID) {
 			this.store.loadEnrollment(newID);

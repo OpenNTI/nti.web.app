@@ -43,20 +43,24 @@ export default class UserList extends React.Component {
 		}
 	}
 
-	componentWillReceiveProps (prevProps) {
-		if (prevProps.currentTab !== this.props.currentTab) {
-			const userClass = prevProps.currentTab === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix';
-			this.setState({userClass: userClass});
+	componentDidUpdate (prevProps) {
+		const {userList, currentTab} = this.props;
+
+		if (prevProps.currentTab !== currentTab) {
+			this.setState({
+				userClass: currentTab === 'all' ? 'user-lookup-search all-user clearfix' : 'user-lookup-search people clearfix'
+			});
 		}
-		if (prevProps.userList !== this.props.userList) {
+
+		if (prevProps.userList !== userList) {
 			let isFollow = [];
-			prevProps.userList.map((user, index) =>{
+			userList.map((user, index) =>{
 				const isContact = groupStore.isContact(user.Username);
 				isFollow[index] = isContact;
 			});
 
 			this.setState({isFollow: isFollow});
-			if (prevProps.userList.length < 4) {
+			if (userList.length < 4) {
 				this.setState({showNext: false, showPre: false});
 			}
 			else {

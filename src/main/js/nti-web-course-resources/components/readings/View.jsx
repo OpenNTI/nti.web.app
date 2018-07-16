@@ -63,17 +63,13 @@ export default class Readings extends React.Component {
 		const columns = [
 			{
 				name: 'name',
-				classes: Object.assign({
-					name: 'name'
-				}, columnClasses),
+				classes: {name: 'name', ...columnClasses},
 				display: t('name'),
 				sortFn: sortOnTitle
 			},
 			{
 				name: 'publish',
-				classes: Object.assign({
-					name: 'publish'
-				}, columnClasses),
+				classes: {name: 'publish', ...columnClasses},
 				display: t('publish'),
 				sortFn: (a, b) => {
 					const {isPublished:aPublished} = a;
@@ -84,9 +80,7 @@ export default class Readings extends React.Component {
 			},
 			{
 				name: 'modified',
-				classes: Object.assign({
-					name: 'last-modified'
-				}, columnClasses),
+				classes: {name: 'last-modified', ...columnClasses},
 				display: t('lastModified'),
 				sortFn: (a, b) => {
 					const aModified = a.getLastModified();

@@ -729,7 +729,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			focusNode, isSelectionInContent;
 
 		// Apply icon data
-		data = Object.assign({}, data, iconData);
+		data = { ...data, ...iconData};
 
 		//Need to see if we have a selection and it is in our content element
 		if (document && document.getSelection) {
@@ -768,14 +768,15 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			type = data.contentType || data.FileMimeType || '';
 
 		// Apply icon data
-		data = Object.assign({
+		data = {
 			type: Mime.extension(type),
 			extension: data.type,
-			placeholder: this.defaultValue
-		}, data, iconData, {
+			placeholder: this.defaultValue,
+			...data,
+			...iconData,
 			name: data.name || guidGenerator(),
 			size: size ? size : data.size
-		});
+		};
 
 
 		this.trackedParts[data.name] = data;

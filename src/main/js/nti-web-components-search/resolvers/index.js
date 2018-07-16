@@ -32,7 +32,8 @@ function getTargetForHit (hit) {
 function resolveObject (target, hit) {
 	const resolve = target && target.resolveObject ? target.resolveObject : Base.resolveObject;
 
-	return resolve(hit).catch(() => Object.assign({}, hit, {
+	return resolve(hit).catch(() => ({
+		...hit,
 		title: '[deleted]',
 		hit,
 		MimeType: hit.mimeType,

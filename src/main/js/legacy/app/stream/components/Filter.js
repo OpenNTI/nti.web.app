@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 			filter.typeCls = filter.cls;
 			delete filter.cls;
 
-			acc[filter.key] = cmp && this.add(cmp.create(Object.assign({onChange: this.onFilterChange.bind(this)}, filter)));
+			acc[filter.key] = cmp && this.add(cmp.create({onChange: this.onFilterChange.bind(this), ...filter}));
 
 			return acc;
 		}, {});

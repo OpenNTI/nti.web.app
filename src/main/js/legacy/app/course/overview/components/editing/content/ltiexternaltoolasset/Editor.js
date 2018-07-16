@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const { ContentSelection } = require('@nti/web-course');
+
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
 

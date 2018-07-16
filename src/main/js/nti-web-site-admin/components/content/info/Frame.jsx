@@ -37,18 +37,18 @@ export default class SiteAdminCourseView extends React.Component {
 	}
 
 
-	componentWillReceiveProps (nextProps) {
-		const newID = this.getCourseID(nextProps);
-		const oldID = this.getCourseID(this.props);
+	componentDidMount () {
+		this.store.loadCourse(this.getCourseID());
+	}
+
+
+	componentDidUpdate (prevProps) {
+		const newID = this.getCourseID(this.props);
+		const oldID = this.getCourseID(prevProps);
 
 		if (newID !== oldID) {
 			this.store.loadUser(newID);
 		}
-	}
-
-
-	componentDidMount () {
-		this.store.loadCourse(this.getCourseID());
 	}
 
 

@@ -51,9 +51,9 @@ export default class SiteAdminUserTranscript extends React.Component {
 	}
 
 
-	componentWillReceiveProps (nextProps) {
-		const {user:newUser} = nextProps;
-		const {user: oldUser} = this.props;
+	componentDidUpdate (prevProps) {
+		const {user:newUser} = this.props;
+		const {user: oldUser} = prevProps;
 
 		if (newUser !== oldUser) {
 			this.store.loadTranscript(newUser);
