@@ -566,7 +566,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		var me = this, c;
 
-		if(updateFromStore) {
+		if(updateFromStore && !this.useReactEnrollment) {
 			c = this.CourseStore.findCourseForNtiid(me.course.getId());
 			if (c) {
 				me.course = c;
@@ -574,7 +574,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 
 		if (this.useReactEnrollment) {
-			this.showNewEnrollmentCard();
+			this.showNewEnrollmentCard(updateFromStore);
 			return;
 		}
 
@@ -622,9 +622,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	},
 
 
-	showNewEnrollmentCard () {
+	showNewEnrollmentCard (update) {
 		Promise.all([
-			this.course.getInterfaceInstance(),
+			this.course.getInterfaceInstance()
+				.then((catalogEntry) => {
+					return update ? catalogEntry.refresh() : catalogEntry;
+				}),
 			this.CourseEnrollmentStore.getEnrollmentDetails(this.course)
 				.then((enrollment) => {
 					const {Options} = enrollment;
@@ -943,7 +946,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		delete this.changingEnrollment;
 
 		if (success && changed) {
-			this.updateEnrollmentCard();
+			this.updateEnrollmentCard(true);
 		}
 
 		this.removeMask();
