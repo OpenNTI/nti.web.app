@@ -171,11 +171,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				},
 				undoEnrollment: function (cmp) {
 					return new Promise(function (fulfill2, reject2) {
-						cmp.CourseEnrollmentActions.dropCourse(course, function (success, changed, status) {
+						cmp.CourseEnrollmentActions.dropCourse(course, function (success, changed, reason) {
 							if (success) {
 								fulfill2(changed);
 							} else {
-								reject2(status);
+								reject2(reason);
 							}
 						});
 					});
