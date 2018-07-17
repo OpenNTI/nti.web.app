@@ -13,6 +13,7 @@ const SurveyListItem = require('../survey/ListItem');
 const TimelineListItem = require('../timeline/ListItem');
 const VideoListItem = require('../video/ListItem');
 const VideorollListItem = require('../videoroll/ListItem');
+const WebinarListItem = require('../webinar/ListItem');
 
 require('legacy/common/components/BoundCollection');
 require('legacy/mixins/dnd/OrderingItem');
@@ -52,7 +53,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				SurveyListItem,
 				TimelineListItem,
 				VideoListItem,
-				VideorollListItem
+				VideorollListItem,
+				WebinarListItem
 			];
 
 		this.MIME_TO_CMP = items.reduce(function (acc, item) {

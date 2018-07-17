@@ -49,6 +49,7 @@ require('./UserSearch');
 require('./Video');
 require('./VideoRoll');
 require('./Webinar');
+require('./WebinarAsset');
 
 require('./anchorables');
 require('./app');

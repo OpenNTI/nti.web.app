@@ -204,6 +204,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var editor = this.self.getEditor(record.mimeType),
 			cmp = editor && editor.getEditorForRecord(record);
 
+		// TODO: There should be a way to do this through configuration, not special casing
+		if(record.get('MimeType').match(/webinarasset/)) {
+			this.hideFooter();
+		}
+
 		if (!cmp) {
 			console.error('No editor to edit record: ', record.mimeType);
 			return;

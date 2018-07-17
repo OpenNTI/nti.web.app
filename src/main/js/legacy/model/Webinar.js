@@ -10,26 +10,8 @@ module.exports = exports = Ext.define('NextThought.model.Webinar', {
 		mimeType: 'application/vnd.nextthought.webinar',
 	},
 
-	// TODO: Get actual webinar fields
-
 	fields: [
-		{name: 'title', type: 'string'},
-		{name: 'description', type: 'string'},
-		{name: 'ConfiguredTool', type: 'object'},
-		{name: 'icon', type: 'string'}
-	],
-
-	asDomData: function (root) {
-		var data = {
-			ntiid: this.get('NTIID'),
-			icon: this.getIcon(root),
-			title: this.get('title'),
-			description: this.get('description'),
-		};
-
-		data.icon = data.icon && data.icon.url;
-
-		return data;
-	}
-
+		{name: 'subject', type: 'string'},
+		{name: 'description', type: 'string'}
+	]
 });

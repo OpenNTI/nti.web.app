@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const {WebinarEditor} = require('@nti/web-course');
 
-const Webinar = require('legacy/model/Webinar');
+const WebinarAsset = require('legacy/model/WebinarAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
 
 require('../../Editor');
@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		getHandledMimeTypes: function () {
 			return [
-				Webinar.mimeType
+				WebinarAsset.mimeType
 			];
 		},
 
@@ -52,24 +52,51 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const lessonOverview = await this.rootRecord.getInterfaceInstance();
 		const overviewGroup = await this.parentRecord.getInterfaceInstance();
 
+		let webinar = null;
+		if(this.record) {
+			webinar = await this.record.getInterfaceInstance();
+		}
+
+		const course = await this.bundle.getInterfaceInstance();
+
 		this.webinarEditor = this.add({
 			xtype: 'react',
 			component: WebinarEditor,
-			activePanel: 'overview', // determine which panel to show based on status (not connected yet, choosing a webinar, etc)
 			lessonOverview,
 			overviewGroup,
+			webinar,
+			course,
+			onDelete: webinar ? () => {
+				this.parentRecord.removeRecord(this.record)
+					.then(function () {
+						return true;
+					})
+					.catch(function (reason) {
+						console.error('Failed to delete content: ', reason);
+						return false;
+					})
+					.then(Promise.minWait(200))
+					.then(() => { this.doClose(); });
+			} : null,
 			onCancel: () => {
 				if(this.doClose) {
 					this.doClose();
 				}
 			},
-			onAddToLesson: (selectedSection, selectedRank, img, webinar) => {
+			onAddToLesson: (selectedSection, selectedRank, img, selectedWebinar) => {
 				if(this.doSave) {
 					// get ext record based on selected interface record
 					const parent = this.rootRecord.get('Items').filter(x=>x.getId() === selectedSection.getID())[0];
 
+					this.webinar = selectedWebinar;
+					this.selectedParent = parent;
+					this.selectedRank = selectedRank - 1;
+
 					this.doSave();
 				}
+			},
+			onAddAsExternalLink: (url) => {
+				//this.doSave();
 			}
 		});
 	},
@@ -95,9 +122,45 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onSave: function () {
-		// TODO: Handle adding to lesson
+		let originalPosition = {};
 
-		return Promise.resolve();
+		if(this.record) {
+			let index = 0;
+
+			this.parentRecord.get('Items').forEach((i, idx) => {
+				if(i.getId() === this.record.getId()) {
+					index = idx;
+				}
+			});
+
+			originalPosition = {
+				parent: this.parentRecord,
+				index
+			};
+		}
+
+		const currentPosition = {
+			parent: this.selectedParent,
+			index: this.selectedRank
+		};
+
+		// webinars shouldn't be editable after the initial creation, so don't pass values in when we already have a record
+		const values = this.record ? null : {
+			MimeType: 'application/vnd.nextthought.webinarasset',
+			webinar: this.webinar.__toRaw()
+		};
+
+		return this.EditingActions.saveValues(values, this.record, originalPosition, currentPosition, this.rootRecord)
+			.then(() => {
+				this.doClose();
+			})
+			.catch(function (reason) {
+				// this.enableSubmission();
+
+				return Promise.reject(reason);
+			});
+
+		// return Promise.resolve();
 
 		// var me = this;
 		//
