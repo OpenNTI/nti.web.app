@@ -77,10 +77,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 				}).catch(function (reason) {
 					console.error('Failed to enroll in course: ', reason);
 				});
-			}).catch(function (reason) {
-				console.error('Failed to enroll in course: ', reason);
-
-				callback.call(null, false, false);
+			}).catch(function (response) {
+				console.error('Failed to enroll in course: ', response);
+				const rawReason = response && response.responseText;
+				const reason = (rawReason && JSON.parse(rawReason)) || {};
+				reason.status = response && response.status;
+				callback.call(null, false, false, reason);
 			});
 	},
 

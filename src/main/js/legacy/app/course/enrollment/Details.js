@@ -1060,8 +1060,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 							.catch(function (reason) {
 								var msg;
 
-								if (reason === 404) {
-									msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
+								if (reason) {
+									if (reason.status === 404) {
+										msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
+									} else if (reason.status === 403) {
+										msg = reason.message || getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
+									}
 								} else {
 									msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
 								}
