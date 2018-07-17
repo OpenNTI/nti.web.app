@@ -234,6 +234,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.ltiContentSelection) {
 			this.ltiContentSelection.destroy();
 		}
+		this.onBack();
 	},
 
 	selectContent (content) {
