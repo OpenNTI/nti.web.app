@@ -82,6 +82,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 				const rawReason = response && response.responseText;
 				const reason = (rawReason && JSON.parse(rawReason)) || {};
 				reason.status = response && response.status;
+
+				me.CourseStore.onDropCourseError();
+
 				callback.call(null, false, false, reason);
 			});
 	},
