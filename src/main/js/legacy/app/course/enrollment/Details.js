@@ -1028,7 +1028,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 						me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
 					}
 					else {
-						me.donEnrolling(false);
+						me.doneEnrolling(false);
 					}
 				});
 		}
