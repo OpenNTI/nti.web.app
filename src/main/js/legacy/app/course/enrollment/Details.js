@@ -627,11 +627,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			this.course.getInterfaceInstance()
 				.then((catalogEntry) => {
 					if(update) {
-						return catalogEntry.refresh().then(entry => entry).catch(() => {
-							if(this.onDrop) {
-								this.onDrop(true);
-							}
-						});
+						return catalogEntry.refresh()
+							.then(entry => entry)
+							.catch(() => {
+								if(this.onDrop) {
+									this.onDrop(true);
+								}
+							});
 					}
 
 					return catalogEntry;

@@ -3,6 +3,7 @@ const {wait} = require('@nti/lib-commons');
 
 const WindowsStateStore = require('legacy/app/windows/StateStore');
 const CourseCatalogEntry = require('legacy/model/courses/CourseCatalogEntry');
+const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('./CourseWindow');
 
@@ -40,10 +41,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-	onDrop: function (closeWindow) {
-		// close window on drop or not?  for now, leave it open
-		if(closeWindow) {
-			this.doClose();
+	onDrop: function (navigateToHome) {
+		if(navigateToHome) {
+			NavigationActions.pushRootRoute('', '/');
 		}
 	},
 
