@@ -119,6 +119,10 @@ module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', 
 		return data;
 	},
 
+	getTitle: function () {
+		return this.get('title');
+	},
+
 	/**
 	 * Resolve the icon to the content package if we don't have one set
 	 * @param {String} root - the base root.

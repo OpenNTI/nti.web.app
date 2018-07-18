@@ -11,6 +11,7 @@ const RelatedWork = require('legacy/model/RelatedWork');
 const SurveyRef = require('legacy/model/SurveyRef');
 const Slidedeck = require('legacy/model/Slidedeck');
 const Video = require('legacy/model/Video');
+const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 
 require('legacy/mixins/FillScreen');
 require('legacy/mixins/Router');
@@ -506,6 +507,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			route = this.getRouteForVideoPath(root, subPath);
 		} else if (root instanceof Slidedeck) {
 			route = this.getRouteForSlidedeckPath(root, subPath);
+		} else if (root instanceof LTIExternalToolAsset) {
+			route = this.getRouteForLTIExternalTool(root, subPath);
 		} else if (root instanceof Lesson) {
 			route = {
 				path: '',
@@ -614,6 +617,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			precache: {
 				slidedeck: slidedeck
 			}
+		};
+	},
+
+	getRouteForLTIExternalTool: function (externalTool) {
+		var externalToolId = externalTool && externalTool.getId();
+
+		externalToolId = externalTool && encodeForURI(externalToolId);
+
+		return {
+			path: 'content/' + externalToolId,
+			isFull: true
 		};
 	}
 });
