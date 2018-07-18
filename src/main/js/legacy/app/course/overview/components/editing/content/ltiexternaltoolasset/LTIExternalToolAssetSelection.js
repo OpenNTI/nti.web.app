@@ -24,17 +24,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
+	checkForMatch: function (string, value) {
+		return string && string.toLowerCase().indexOf(value) >= 0;
+	},
+
 	itemMatchesSearch: function (item, searchTerm) {
-		var consumerKey = item.consumer_key,
-			matches = false;
-
-		searchTerm = searchTerm.toLowerCase();
-
-		if (consumerKey && consumerKey.toLowerCase().indexOf(searchTerm) >= 0) {
-			matches = true;
-		}
-
-		return matches;
+		return this.checkForMatch(item.ID, searchTerm.toLowerCase()) || this.checkForMatch(item.description, searchTerm.toLowerCase());
 	},
 
 
