@@ -40,8 +40,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-	onDrop: function () {
+	onDrop: function (closeWindow) {
 		// close window on drop or not?  for now, leave it open
+		if(closeWindow) {
+			this.doClose();
+		}
 	},
 
 	addMask: function () {},

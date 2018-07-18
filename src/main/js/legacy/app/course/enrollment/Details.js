@@ -626,7 +626,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		Promise.all([
 			this.course.getInterfaceInstance()
 				.then((catalogEntry) => {
-					return update ? catalogEntry.refresh() : catalogEntry;
+					if(update) {
+						return catalogEntry.refresh().then(entry => entry).catch(() => {
+							if(this.onDrop) {
+								this.onDrop(true);
+							}
+						});
+					}
+
+					return catalogEntry;
 				}),
 			this.CourseEnrollmentStore.getEnrollmentDetails(this.course)
 				.then((enrollment) => {
