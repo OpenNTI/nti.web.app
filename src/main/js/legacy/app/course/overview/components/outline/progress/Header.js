@@ -9,20 +9,63 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'outline-header',
 
 
-	update (props) {
-		if(this.header) {
-			this.header.setProps(props);
+	initComponent () {
+		this.callParent(arguments);
+
+		this.addHeader();
+	},
+
+
+	addHeader () {
+		if (!this.header) {
+			this.header = this.add({
+				xtype: 'react',
+				component: ProgressWidgets.OutlineHeader,
+				course: this.course
+			});
 		}
 	},
 
 
-	initComponent () {
-		this.callParent(arguments);
+	removeHeader () {
+		if (this.header) {
+			this.header.destroy();
+			delete this.header;
+		}
+	},
 
-		this.header = this.add({
-			xtype: 'react',
-			component: ProgressWidgets.OutlineHeader,
-			course: this.course
-		});
+
+	updateCourse (course) {
+		this.course = course;
+
+		if (this.header) {
+			this.header.setProps({course});
+		}
+	},
+
+
+	onRouteActivate () {
+		clearTimeout(this.deactivateTimeout);
+
+		if (!this.wasDeactivated) { return null; }
+
+		this.wasDeactivated = false;
+
+		this.addHeader();
+
+		this.course.refreshPreferredAccess()
+			.then(() => {
+				this.removeHeader();
+				this.addHeader();
+			});
+	},
+
+
+	onRouteDeactivate () {
+		this.deactivateTimeout = setTimeout(() => {
+			this.wasDeactivated = true;
+
+			this.removeHeader();
+		}, 100);
 	}
 });

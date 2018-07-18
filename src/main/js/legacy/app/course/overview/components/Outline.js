@@ -57,6 +57,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.SYNCED_TOP) { this.syncTop(this.SYNCED_TOP); }
 	},
 
+
+	onRouteActivate () {
+		if (this.progressHeader) {
+			this.progressHeader.onRouteActivate();
+		}
+	},
+
+
+	onRouteDeactivate () {
+		if (this.progressHeader) {
+			this.progressHeader.onRouteDeactivate();
+		}
+	},
+
 	onScroll: function () {
 		var body = this.getBodyContainer(),
 			bodyRect = body && body.el && body.el.dom && body.el.dom.getBoundingClientRect(),
@@ -101,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if(showProgress) {
 			if(this.progressHeader) {
 				// if already showing progress header, just update
-				this.progressHeader.update({course});
+				this.progressHeader.updateCourse(course);
 			}
 			else {
 				// otherwise, add a new progress header since one doesn't exist

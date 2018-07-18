@@ -69,6 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		this.body.onRouteActivate();
+		this.navigation.onRouteActivate();
 	},
 
 	mask: function () {
@@ -82,6 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.removeScrollListener();
 
 		this.body.onRouteDeactivate();
+		this.navigation.onRouteDeactivate();
 
 		this.mask();
 	},
