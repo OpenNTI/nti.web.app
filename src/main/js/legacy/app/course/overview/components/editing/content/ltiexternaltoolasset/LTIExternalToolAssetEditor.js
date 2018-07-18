@@ -61,7 +61,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.catch(function (reason) {
 				me.enableSubmission();
 
-				return Promise.reject(reason);
+				// reduce the error to just a message and code, no field names, since we don't have a form here
+				return Promise.reject({msg: reason.message, code: reason.code});
 			});
 	}
 
