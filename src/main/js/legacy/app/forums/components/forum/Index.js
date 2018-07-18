@@ -68,7 +68,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		if (nextForum && nextSize > 0) {
 			this.setForum(nextForum.getId());
 		} else if  (nextSize === 0) {
-			this.setEmptyState();
+			// assume they are an editor if they just deleted a forum
+			this.setEmptyState(true);
 		}
 
 		this.navigation.setForumList(this.forumList);
@@ -97,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 			.then(this.alignNavigation.bind(this));
 	},
 
-	setEmptyState () {
-		this.body.setEmpty();
+	setEmptyState (isEditor) {
+		this.body.setEmpty(isEditor);
 	}
 });

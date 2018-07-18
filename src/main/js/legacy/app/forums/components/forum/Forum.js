@@ -25,12 +25,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		Ext.destroy(topicList, filterBar, header);
 	},
 
-	setEmpty () {
+	setEmpty (isEditor) {
 		this.clearForum();
 		if (!this.emptyForum) {
 			this.emptyForum = this.add({
 				xtype: 'react',
 				component: Forums.EmptyTopicList,
+				isEditor
 			});
 		}
 	},
