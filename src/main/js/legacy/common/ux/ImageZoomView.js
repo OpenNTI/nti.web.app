@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 			me = this,
 			barH = me.barHeightCache,
 			img = me.imageCache,
-			vpH = (El.getViewportHeight() - barH + 125),
+			vpH = (El.getViewportHeight() - barH - 125),
 			vpW = (El.getViewportWidth()),
 			h = img.height,
 			w = img.width;
