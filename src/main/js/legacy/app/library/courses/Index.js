@@ -58,6 +58,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 			'added-course': () => {
 				me.loadCourses(true);
 			},
+			'dropped-error': () => {
+				me.removeLoadingCmp();
+			},
 			'modified-course': () => {
 				me.el.mask('Loading...');
 				me.addLoadingCmp();

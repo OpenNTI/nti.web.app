@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		function undoEnrollment (cmp) {
 			return new Promise(function (fulfill, reject) {
-				cmp.CourseEnrollmentActions.dropEnrollment(catalog, me.record, function (success, changed, status) {
+				cmp.CourseEnrollmentActions.dropEnrollment(catalog, function (success, changed, status) {
 					if (success) {
 						fulfill(changed);
 					} else {
@@ -139,13 +139,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 								if (reason === 404) {
 									msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
+								} else if (reason.status === 403) {
+									msg = reason.message || getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
 								} else {
 									msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
 								}
 
 								console.error('failed to drop course', reason);
 								//already dropped?? -- double check the string to make sure it's correct
-								alert(msg);
+								setTimeout(() => {
+									alert(msg);
+								}, 500);
 							});
 					}
 				},
