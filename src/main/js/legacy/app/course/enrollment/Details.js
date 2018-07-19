@@ -665,7 +665,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					addHistory: true,
 					renderTo: this.cardsContainerEl,
 					component: Enrollment.Options,
-					catalogEntry: fakeCourse,
+					catalogEntry,
 					getRouteFor: (option, context) => {
 						if (context === 'enroll') {
 							return () => this.handleEnrollInOption(option, enrollment, gift);
