@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 
 				if (!id && forumList.length === 1 && me.forumView.isSimplified()) {
 					const store = me.getStoreForSimplified(forumList);
-					let isEditor = forumList[0].children[0] && forumList[0].children[0].board.hasLink('edit');
+					let isEditor = forumList[0].children[0] && forumList[0].children[0].board.hasLink('add');
 
 					if (store.getCount() === 0) {
 						me.forumView.setEmptyState(isEditor);
