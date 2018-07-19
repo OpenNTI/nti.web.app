@@ -364,6 +364,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 	},
 
 	beginViewedAnalytics: function () {
+		//if the page info opts out of analytics don't send any
+		if (this.pageInfo.doNotSendAnalytics) { return; }
+
 		var data = this.getAnalyticData();
 		//if we don't have a resource id for some reason, we can't send a valid event
 		if (!data.resourceId) { return; }

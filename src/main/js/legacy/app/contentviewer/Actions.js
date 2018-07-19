@@ -198,6 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		});
 
 		pageInfo.hideControls = true;
+		pageInfo.doNotSendAnalytics = true;
 
 		return Promise.resolve(pageInfo);
 	},
