@@ -171,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 	syncSize: Ext.Function.createBuffered(function () {
 		var El = Ext.dom.Element,
 			me = this,
-			barH = me.barHeightCache,
+			barH = Math.min(200, me.barHeightCache),
 			img = me.imageCache,
 			vpH = (El.getViewportHeight() - barH - 125),
 			vpW = (El.getViewportWidth()),

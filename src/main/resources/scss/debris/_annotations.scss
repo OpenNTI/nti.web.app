@@ -29,6 +29,8 @@
 		padding: 0 14px 20px 14px;
 		background: #fafafa;
 		min-height: 37px;
+		max-height: 200px;
+		overflow-y: auto;
 
 		.image-caption,.image-title {
 			line-height: 1.2em;
