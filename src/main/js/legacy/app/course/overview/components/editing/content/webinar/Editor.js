@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {WebinarEditor} = require('@nti/web-course');
+const {Overview} = require('@nti/web-course');
 
 const WebinarAsset = require('legacy/model/WebinarAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.webinarEditor = this.add({
 			xtype: 'react',
-			component: WebinarEditor,
+			component: Overview.Webinar.Editor,
 			lessonOverview,
 			overviewGroup,
 			webinar,
