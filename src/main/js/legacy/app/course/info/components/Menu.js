@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 			title: getString('NextThought.view.courseware.info.outline.Menu.support'),
 		});
 
-		if (this.showRoster || this.showReports) {
+		if (this.showRoster || this.showReports || this.showAdvanced) {
 			me.itemTpl.append(me.menuEl, {
 				title: 'Admin Tools',
 			});

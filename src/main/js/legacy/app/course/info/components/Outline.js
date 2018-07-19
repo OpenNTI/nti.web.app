@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		startDateLabel: '.course-info-header-bar .date'
 	},
 
-	setContent: function (info, status, showRoster, courseMode, inviteCodeLink, showReports) {
+	setContent: function (info, status, showRoster, courseMode, inviteCodeLink, showReports, showAdvanced) {
 		this.activeID = info.get('NTIID');
 
 		var startDateValue = info.get('StartDate');
@@ -84,6 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 			info: info,
 			showRoster: showRoster,
 			showReports: showReports,
+			showAdvanced,
 			inviteCodeLink: inviteCodeLink
 		});
 
