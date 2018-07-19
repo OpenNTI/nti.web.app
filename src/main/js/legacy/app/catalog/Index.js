@@ -62,6 +62,23 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 
+	onRouteActivate () {
+		clearTimeout(this.routeDeactivateTimeout);
+	},
+
+
+	onRouteDeactivate () {
+		clearTimeout(this.routeDeactivateTimeout);
+
+		this.routeDeactivateTimeout = setTimeout(() => {
+			if (this.availableWin) {
+				this.availableWin.destroy();
+				delete this.availableWin;
+			}
+		}, 100);
+	},
+
+
 	onDestroy () {
 		if (this.availableWin) {
 			this.availableWin.destroy();

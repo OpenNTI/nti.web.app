@@ -665,7 +665,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					addHistory: true,
 					renderTo: this.cardsContainerEl,
 					component: Enrollment.Options,
-					catalogEntry,
+					catalogEntry: fakeCourse,
 					getRouteFor: (option, context) => {
 						if (context === 'enroll') {
 							return () => this.handleEnrollInOption(option, enrollment, gift);
@@ -681,6 +681,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 						if (context === 'redeem') {
 							return () => this.handleRedeemOption(option, enrollment, gift);
+						}
+
+						if (context === 'get-acquainted') {
+							return () => this.launchWelcomeGuide();
+						}
+
+						if (context === 'complete-profile') {
+							return () => this.completeProfile();
 						}
 					}
 				});
@@ -921,6 +929,22 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 
 		return r;
+	},
+
+
+	launchWelcomeGuide () {
+		const u = $AppConfig.userObject;
+
+		this.AccountActions.showWelcomePage(u.getLink('content.permanent_welcome_page'));
+	},
+
+
+	completeProfile () {
+		const u = $AppConfig.userObject;
+
+		NavigationActions.pushRootRoute(u.getName(), u.getProfileUrl('about'), {
+			user: u
+		});
 	},
 
 	/**
