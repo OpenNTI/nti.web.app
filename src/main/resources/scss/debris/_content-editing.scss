@@ -278,7 +278,6 @@ input[type=number]{
 }
 
 .content-editor.content-link {
-
 	&.document {
 		.overview-editing-parentselection {
 			position: relative;
@@ -432,6 +431,16 @@ input[type=number]{
 					border: none;
 					box-shadow: 0 0 0 1px #d8d8d8;
 				}
+			}
+		}
+	}
+
+	&.lti-tools {
+		.group.card {
+			.field.icon.image {
+				max-height: 124px;
+				margin-right: 10px;
+				border-right: solid 1px #d8d8d8;
 			}
 		}
 	}

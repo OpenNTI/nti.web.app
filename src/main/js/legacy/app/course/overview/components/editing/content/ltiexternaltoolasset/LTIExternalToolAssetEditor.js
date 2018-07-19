@@ -25,6 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						placeholder: 'Title',
 						maxlength: EditingActions.MAX_TITLE_LENGTH
 					},
+					{name: 'byline', type: 'text', placeholder: 'Author'},
 					{name: 'description', type: 'textarea', placeholder: 'Description'},
 					{name: 'launch_url', type: 'text', placeholder: 'Launch URL'}
 				]},

@@ -78,6 +78,7 @@ module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', 
 		{name: 'description', type: 'string'},
 		{name: 'ConfiguredTool', type: 'object'},
 		{name: 'icon', type: 'string'},
+		{name: 'byline', type: 'string'},
 		{name: 'launch_url', type: 'string'}
 	],
 
@@ -86,6 +87,7 @@ module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', 
 			ntiid: this.get('NTIID'),
 			icon: this.getIcon(root),
 			title: this.get('title'),
+			byline: this.get('byline'),
 			description: this.get('description'),
 		};
 
