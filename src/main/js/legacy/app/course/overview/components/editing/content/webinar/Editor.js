@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.webinarEditor = this.add({
 			xtype: 'react',
-			component: Overview.Webinar.Editor,
+			component: Overview.Items.Webinar.Editor,
 			lessonOverview,
 			overviewGroup,
 			webinar,
