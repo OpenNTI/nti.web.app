@@ -52,7 +52,7 @@
     "@nti/web-commons": "0.x.x",
     "@nti/web-contacts": "*",
     "@nti/web-content": "^1.22.2",
-    "@nti/web-course": "^1.22.3",
+    "@nti/web-course": "^1.28.0",
     "@nti/web-discussions": "0.x.x",
     "@nti/web-login": "^2018.0.0",
     "@nti/web-profiles": "^1.0.1",
