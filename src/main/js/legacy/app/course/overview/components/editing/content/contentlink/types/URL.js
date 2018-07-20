@@ -46,6 +46,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		base.targetMimeType = RelatedWork.EXTERNAL_TYPE;
 
+		if(this.params && this.params.title) {
+			base.label = this.params && this.params.title;
+		}
+
+		if(this.params && this.params.url) {
+			base.href = this.params && this.params.url;
+		}
+
 		return base;
 	},
 

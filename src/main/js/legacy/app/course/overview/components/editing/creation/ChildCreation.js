@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setUpTypeList();
 	},
 
-	showEditorForType: function (type) {
+	showEditorForType: function (type, params) {
 		if (this.activeEditor) {
 			//TODO: if we have an existing editor, do we want to prefill
 			//the values that where there?
@@ -161,9 +161,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			backText: this.backText || this.title,
 			doBack: this.switchToTypeList.bind(this),
 			lockBodyHeight: this.lockBodyHeight,
-			unlockBodyHeight: this.unlockBodyHeight
+			unlockBodyHeight: this.unlockBodyHeight,
+			switchType: this.switchType.bind(this),
+			hideFooter: this.hideFooter.bind(this),
+			showFooter: this.showFooter.bind(this),
+			params
 		}));
 
+	},
+
+	switchType: function (newType, params) {
+		this.showEditorForType(newType, params);
 	},
 
 	onBack: function () {

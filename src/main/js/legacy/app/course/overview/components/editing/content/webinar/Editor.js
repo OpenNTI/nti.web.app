@@ -4,6 +4,7 @@ const {Overview} = require('@nti/web-course');
 const WebinarAsset = require('legacy/model/WebinarAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
 
+const ContentlinkEditor = require('../contentlink/types/URL');
 require('../../Editor');
 require('legacy/app/course/assessment/components/CreateMenu');
 
@@ -91,12 +92,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					this.webinar = selectedWebinar;
 					this.selectedParent = parent;
 					this.selectedRank = selectedRank - 1;
+					this.img = img;
 
 					this.doSave();
 				}
 			},
 			onAddAsExternalLink: (url) => {
-				//this.doSave();
+				// switch over to external link editor
+				this.showFooter();
+				this.switchType(ContentlinkEditor.getTypes()[0], { url, title: 'Webinar'});
 			}
 		});
 	},
