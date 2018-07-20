@@ -6,7 +6,7 @@ import Card from '../../common/Card';
 export default function SiteAdminAdvancedIntegrations () {
 	return (
 		<Card>
-			<List />
+			<List header={t('emptyHeader')}/>
 		</Card>
 	);
 }
