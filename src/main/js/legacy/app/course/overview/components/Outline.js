@@ -58,6 +58,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	onBeforeRouteActivate () {
+		if (this.progressHeader) {
+			this.progressHeader.onBeforeRouteActivate();
+		}
+	},
+
+
 	onRouteActivate () {
 		if (this.progressHeader) {
 			this.progressHeader.onRouteActivate();

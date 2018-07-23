@@ -72,6 +72,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.navigation.onRouteActivate();
 	},
 
+
+	onBeforeRouteActivate () {
+		this.navigation.onBeforeRouteActivate();
+	},
+
 	mask: function () {
 		if (this.el && this.el.dom) {
 			this.el.mask(getString('NextThought.view.courseware.View.loading'), 'loading');

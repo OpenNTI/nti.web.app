@@ -260,7 +260,10 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		this.currentFullRoute = path;
 		this.currentRoute = currentRoute;
 
+
 		this.handlingRoute = true;
+
+		this.__onInternalBeforeRouteActivate();
 
 		let val = null;
 
@@ -435,6 +438,12 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	beforeRoute: function () {},
 	afterRoute: function () {},
+
+	__onInternalBeforeRouteActivate () {
+		if (this.onBeforeRouteActivate) {
+			this.onBeforeRouteActivate();
+		}
+	},
 
 	/**
 	 * Gets called whenever a route we handle becomes active

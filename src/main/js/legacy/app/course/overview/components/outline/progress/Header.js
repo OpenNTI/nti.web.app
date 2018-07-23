@@ -44,6 +44,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	onBeforeRouteActivate () {
+		this.onRouteActivate();
+	},
+
+
 	onRouteActivate () {
 		clearTimeout(this.deactivateTimeout);
 
@@ -55,17 +60,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.course.refreshPreferredAccess()
 			.then(() => {
-				this.removeHeader();
-				this.addHeader();
+				if (!this.wasDeactivated) {
+					this.removeHeader();
+					this.addHeader();
+				}
 			});
 	},
 
 
 	onRouteDeactivate () {
+		clearTimeout(this.deactivateTimeout);
 		this.deactivateTimeout = setTimeout(() => {
 			this.wasDeactivated = true;
 
 			this.removeHeader();
-		}, 100);
+		}, 1000);
 	}
 });
