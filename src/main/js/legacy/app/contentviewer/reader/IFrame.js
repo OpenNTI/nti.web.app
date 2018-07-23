@@ -686,6 +686,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			object.appendChild(fallback.cloneNode(true));
 		});
 
+		Ext.each(div.querySelectorAll('realpagenumber'), (page) => {
+			const value = page.getAttribute('value');
+			const object = document.createElement('object');
+
+			object.setAttribute('type', 'application/vnd.nextthought.app.realpagenumber');
+			object.setAttribute('data-real-page-number', value);
+			object.setAttribute('data-ntiid', `${value}-fake-page-id`);
+
+			page.parentNode.insertBefore(object, page);
+			page.parentNode.removeChild(page);
+		});
+
 		html = div.innerHTML;
 
 		//Append some tags to the head

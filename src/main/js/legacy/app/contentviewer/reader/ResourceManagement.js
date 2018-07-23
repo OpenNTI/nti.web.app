@@ -16,6 +16,7 @@ require('../../video/roll/OverlayedPanel');
 require('../../image/OverlayedPanel');
 require('../../forums/OverlayedPanel');
 require('../components/EmbededWidgetPanel');
+require('../components/RealPageNumber');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
@@ -213,6 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		'object[type$=image-collection]': 'overlay-image-roll',
 
 		'object[type$=embeded\\2e widget]': 'overlay-content-embeded-widget',
+		'object[type$=realpagenumber]': 'overlay-content-real-page-number',
 
 		'object[class=ntirelatedworkref]': 'overlay-card',
 		'object[type$=embededtopic]': 'overlay-topic'
