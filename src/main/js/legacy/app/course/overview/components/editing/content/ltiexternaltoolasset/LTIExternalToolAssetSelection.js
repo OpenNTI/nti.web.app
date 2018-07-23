@@ -11,16 +11,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{cls: 'ltiexternaltoolasset-item assignment-item {cls}', cn: [
-			{cls: 'title', html: '{title}'},
-			{cls: 'description', html: '{description}'}
+			{tag: 'tpl', 'if': 'icon', cn: [
+				{cls: 'icon', tag: 'img', src: '{icon}'},
+			]},
+			{tag: 'tpl', 'if': '!icon', cn: [
+				{cls: 'icon-fallback icon-hyperlink', tag: 'i'},
+			]},
+			{cls: 'meta', cn: [
+				{cls: 'title', html: '{title}'},
+				{cls: 'description', html: '{description}'}
+			]}
 		]}
 	)),
-
 
 	getItemData: function (item) {
 		return {
 			title: item.title,
 			description: item.description,
+			icon: item['icon_url']
 		};
 	},
 

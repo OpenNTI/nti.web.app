@@ -478,6 +478,35 @@
 	}
 }
 
+.ltiexternaltoolasset-item-selection {
+	.ltiexternaltoolasset-item {
+		display: flex;
+
+		.title {
+			font-style: normal;
+			color: $primary-grey;
+		}
+
+		.description {
+			color: $secondary-grey;
+		}
+
+		i.icon-fallback.icon-hyperlink {
+			margin-left: 5px;
+			margin-right: 10px;
+			margin-top: 5px;
+		}
+
+		.icon {
+			height: 16px;
+			width: 16px;
+			margin-top: 5px;
+			margin-right: 10px;
+			margin-left: 5px;
+		}
+	}
+}
+
 .timeline-item-selection{
 	.selection-item {
 		&.selected {
