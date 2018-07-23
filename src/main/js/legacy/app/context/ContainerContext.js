@@ -9,6 +9,7 @@ require('./types/Question');
 require('./types/RelatedWork');
 require('./types/Slide');
 require('./types/Video');
+require('./types/LTIExternalToolAsset');
 require('./components/AuthorizationContext');
 
 
