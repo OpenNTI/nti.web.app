@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	},
 
 	__validateSession: function () {
-		console.log('Validating Session');
+		console.debug('Validating Session');
 
 		var v = this.sessionStarted && TemporaryStorage.get(this.sessionTrackerKey);
 

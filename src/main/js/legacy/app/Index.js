@@ -373,7 +373,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 
 		try {
 			z = DetectZoom.zoom();
-			console.log('Zoom:', z);
+			console.debug('Zoom:', z);
 		}
 		catch (e) {
 			console.error('Detect Zoom failed to load');
