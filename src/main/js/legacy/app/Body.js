@@ -305,6 +305,11 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		id = User.getIdFromURIPart(id);
 
+		if (id === 'me') {
+			me.replaceRoute('', `/user/${$AppConfig.userObject.getURLPart()}/${Globals.trimRoute(subRoute)}`);
+			return;
+		}
+
 		return userView.setActiveEntity(id, user)
 			.then(userView.handleRoute.bind(userView, subRoute, route.precache))
 			.catch(function () {
