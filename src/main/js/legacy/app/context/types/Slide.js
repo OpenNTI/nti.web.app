@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 				return Promise.resolve();
 			})
 			.then(function (root) {
-				var dom = new Ext.XTemplate(me.contextTpl).apply({image: (root || '') + slide.get('image')}),
+				var dom = new Ext.XTemplate(me.contextTpl).apply({image: slide.get('image')}),
 					cmp, config;
 				dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 
