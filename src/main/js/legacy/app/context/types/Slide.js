@@ -3,6 +3,7 @@ const Ext = require('@nti/extjs');
 const MediaviewerActions = require('legacy/app/mediaviewer/Actions');
 const PathActions = require('legacy/app/navigation/path/Actions');
 const Slide = require('legacy/model/Slide');
+const Globals = require('legacy/util/Globals');
 
 require('../components/Default');
 require('../components/cards/Slide');
@@ -53,7 +54,10 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 				return Promise.resolve();
 			})
 			.then(function (root) {
-				var dom = new Ext.XTemplate(me.contextTpl).apply({image: slide.get('image')}),
+				const slideImage = slide.get('image');
+				const image = Globals.ROOT_URL_PATTERN.test(slideImage) ? slideImage : (root || '') + slideImage;
+
+				var dom = new Ext.XTemplate(me.contextTpl).apply({ image }),
 					cmp, config;
 				dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 
