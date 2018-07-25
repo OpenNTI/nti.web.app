@@ -149,7 +149,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			index: this.selectedRank
 		};
 
-		// if(this.img) {
 		const formData = new FormData();
 
 		formData.append('MimeType', 'application/vnd.nextthought.webinarasset');
@@ -170,23 +169,5 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}).then(() => {
 			this.doClose();
 		});
-		// }
-
-		// // webinars shouldn't be editable after the initial creation, so don't pass values in when we already have a record
-		// const values = this.record ? null : {
-		// 	MimeType: 'application/vnd.nextthought.webinarasset',
-		// 	webinar: this.webinar.webinarKey,
-		// 	organizerKey: this.webinar.organizerKey
-		// };
-		//
-		// return this.EditingActions.saveValues(values, this.record, originalPosition, currentPosition, this.rootRecord)
-		// 	.then(() => {
-		// 		this.doClose();
-		// 	})
-		// 	.catch(function (reason) {
-		// 		// this.enableSubmission();
-		//
-		// 		return Promise.reject(reason);
-		// 	});
 	}
 });
