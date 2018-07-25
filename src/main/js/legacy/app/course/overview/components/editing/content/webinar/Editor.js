@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Overview} = require('@nti/web-course');
+const {getService} = require('@nti/web-client');
 
 const WebinarAsset = require('legacy/model/WebinarAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
@@ -148,35 +149,43 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			index: this.selectedRank
 		};
 
-		// webinars shouldn't be editable after the initial creation, so don't pass values in when we already have a record
-		const values = this.record ? null : {
-			MimeType: 'application/vnd.nextthought.webinarasset',
-			webinar: this.webinar.__toRaw()
-		};
+		// if(this.img) {
+		const formData = new FormData();
 
-		return this.EditingActions.saveValues(values, this.record, originalPosition, currentPosition, this.rootRecord)
-			.then(() => {
-				this.doClose();
-			})
-			.catch(function (reason) {
-				// this.enableSubmission();
+		formData.append('MimeType', 'application/vnd.nextthought.webinarasset');
+		formData.append('webinar', this.webinar.webinarKey);
+		formData.append('organizerKey', this.webinar.organizerKey);
+		formData.append('icon', this.img || null);
 
-				return Promise.reject(reason);
-			});
+		return getService().then(service => {
+			if(this.record) {
+				return service.put(this.record.getLink('edit'), formData);
+			}
 
-		// return Promise.resolve();
-
-		// var me = this;
-		//
-		// if (!me.itemEditorCmp) {
-		// 	me.showItemEditor();
-		// 	return Promise.reject(me.SWITCHED);
+			return service.post(this.parentRecord.getLink('ordered-contents') + '/index/' + this.selectedRank, formData);
+		}).then(() => {
+			return this.EditingActions.__moveRecord(this.record, originalPosition, currentPosition, this.rootRecord);
+		}).then(() => {
+			this.record.fireEvent('update');
+		}).then(() => {
+			this.doClose();
+		});
 		// }
+
+		// // webinars shouldn't be editable after the initial creation, so don't pass values in when we already have a record
+		// const values = this.record ? null : {
+		// 	MimeType: 'application/vnd.nextthought.webinarasset',
+		// 	webinar: this.webinar.webinarKey,
+		// 	organizerKey: this.webinar.organizerKey
+		// };
 		//
-		// me.disableSubmission();
-		// return me.itemEditorCmp.onSave()
+		// return this.EditingActions.saveValues(values, this.record, originalPosition, currentPosition, this.rootRecord)
+		// 	.then(() => {
+		// 		this.doClose();
+		// 	})
 		// 	.catch(function (reason) {
-		// 		me.enableSubmission();
+		// 		// this.enableSubmission();
+		//
 		// 		return Promise.reject(reason);
 		// 	});
 	}
