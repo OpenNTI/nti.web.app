@@ -154,7 +154,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		formData.append('MimeType', 'application/vnd.nextthought.webinarasset');
 		formData.append('webinar', this.webinar.webinarKey);
 		formData.append('organizerKey', this.webinar.organizerKey);
-		formData.append('icon', this.img || null);
+
+		if(this.img !== undefined) {
+			formData.append('icon', this.img || null);
+		}
 
 		return getService().then(service => {
 			if(this.record) {
@@ -163,9 +166,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			return service.post(this.parentRecord.getLink('ordered-contents') + '/index/' + this.selectedRank, formData);
 		}).then(() => {
-			return this.EditingActions.__moveRecord(this.record, originalPosition, currentPosition, this.rootRecord);
+			if(this.record) {
+				return this.EditingActions.__moveRecord(this.record, originalPosition, currentPosition, this.rootRecord);
+			}
+
+			return Promise.resolve();
 		}).then(() => {
-			this.record.fireEvent('update');
+			if(this.record) {
+				return this.record.fireEvent('update');
+			}
+
+			return Promise.resolve();
 		}).then(() => {
 			this.doClose();
 		});
