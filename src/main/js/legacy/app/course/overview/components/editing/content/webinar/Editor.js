@@ -87,6 +87,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			},
 			onAddToLesson: (selectedSection, selectedRank, img, selectedWebinar) => {
 				if(this.doSave) {
+					this.webinarEditor.setProps({saveDisabled: true});
+
 					// get ext record based on selected interface record
 					const parent = this.rootRecord.get('Items').filter(x=>x.getId() === selectedSection.getID())[0];
 
@@ -179,6 +181,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return Promise.resolve();
 		}).then(() => {
 			this.doClose();
+
+			this.webinarEditor.setProps({saveDisabled: false});
+		}).catch(() => {
+			this.webinarEditor.setProps({saveDisabled: false});
 		});
 	}
 });
