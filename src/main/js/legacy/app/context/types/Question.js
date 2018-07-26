@@ -40,7 +40,9 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 				return Service.getObject(contentPackage);
 			})
 			.then(function (contentPackage) {
-				question.set('ContentRoot', contentPackage.get('root'));
+				if (!question.get('ContentRoot')) {
+					question.set('ContentRoot', contentPackage.get('root'));
+				}
 
 				return me.__parseQuestion(question, kind);
 			});
