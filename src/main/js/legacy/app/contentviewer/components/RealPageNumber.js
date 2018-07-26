@@ -32,7 +32,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	setupContentElement () {
 		try {
 			if (this.contentElement) {
-				debugger;
 				Ext.fly(this.contentElement).setStyle({
 					height: 0,
 					margin: 0
