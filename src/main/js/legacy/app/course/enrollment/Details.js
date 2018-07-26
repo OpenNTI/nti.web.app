@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
 
-		this.useReactEnrollment = isFeature('use-new-enrollment-card');
+		this.useReactEnrollment = true;//isFeature('use-new-enrollment-card');
 
 		AnalyticsUtil.startEvent(this.course.getId(), {
 			type: 'CourseCatalogView',
@@ -667,7 +667,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					component: Enrollment.Options,
 					catalogEntry,
 					getRouteFor: (option, context) => {
+						const isIMIS = option.MimeType === 'application/vnd.nextthought.courseware.ensyncimisexternalenrollmentoption';
+
 						if (context === 'enroll') {
+							if (isIMIS) {
+								return option.enrollmentURL;
+							}
+
 							return () => this.handleEnrollInOption(option, enrollment, gift);
 						}
 
