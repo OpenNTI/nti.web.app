@@ -89,11 +89,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				if(this.doSave) {
 					this.webinarEditor.setProps({saveDisabled: true});
 
-					// get ext record based on selected interface record
-					const parent = this.rootRecord.get('Items').filter(x=>x.getId() === selectedSection.getID())[0];
-
 					this.webinar = selectedWebinar;
-					this.selectedParent = parent;
+					this.selectedParent = selectedSection;
 					this.selectedRank = selectedRank - 1;
 					this.img = img;
 
@@ -166,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return service.put(this.record.getLink('edit'), formData);
 			}
 
-			return service.post(this.parentRecord.getLink('ordered-contents') + '/index/' + this.selectedRank, formData);
+			return service.post(this.selectedParent.getLink('ordered-contents') + '/index/' + this.selectedRank, formData);
 		}).then(() => {
 			if(this.record) {
 				return this.EditingActions.__moveRecord(this.record, originalPosition, currentPosition, this.rootRecord);
