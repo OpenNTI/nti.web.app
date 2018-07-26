@@ -19,11 +19,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 		const config = DomUtils.parseDomObject(this.contentElement);
 
+
 		this.add({
 			xtype: 'react',
 			component: VisibleComponentTracker,
 			data: {pageNumber: config['attribute-data-real-page-number']},
 			group: 'real-page-numbers'
 		});
+	},
+
+
+	setupContentElement () {
+		try {
+			if (this.contentElement) {
+				debugger;
+				Ext.fly(this.contentElement).setStyle({
+					height: 0,
+					margin: 0
+				});
+			}
+		} catch (e) {
+			//swallow
+		}
 	}
 });
