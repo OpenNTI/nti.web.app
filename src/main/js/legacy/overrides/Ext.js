@@ -35,6 +35,9 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 	Ext.isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
 	Ext.isGecko = Ext.isGecko && !Ext.isIE11p;
 
+	Ext.isFunction = function isFunction (f) {
+		return typeof f === 'function';
+	};
 
 	var EC = Ext.cache,
 		removeAllEvents = Ext.EventManager.removeAll,
