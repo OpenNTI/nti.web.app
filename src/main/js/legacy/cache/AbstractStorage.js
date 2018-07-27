@@ -12,11 +12,12 @@ function prefix (v) {
 
 function AbstractStorage (storage, noPrefix) {
 	this.currentVersion = 2;
-	if (!storage ||
-		!Ext.isFunction(storage.removeItem) ||
-		!Ext.isFunction(storage.setItem) ||
-		!Ext.isFunction(storage.getItem) ||
-		!Ext.isFunction(storage.clear)) {
+	if (!storage
+		|| !typeof storage.removeItem === 'function'
+		|| !typeof storage.setItem === 'function'
+		|| !typeof storage.getItem === 'function'
+		|| !typeof storage.clear === 'function'
+	) {
 		Ext.Error.raise('Given storage object does not implement Storage api');
 	}
 
