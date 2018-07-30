@@ -35,7 +35,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			course = record.asUIData(),
 			badge;
 
-		if (course.upcoming) {
+		if (course.completed) {
+			badge = 'Completed';
+		} else if (course.upcoming) {
 			badge = Ext.Date.format(course.startDate, 'F j, Y');
 		} else if (course.archived) {
 			badge = course.semester;
@@ -51,7 +53,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				semester: course.semester,
 				badge: badge,
 				archived: course.archived ? 'archived' : '',
-				upcoming: course.upcoming ? 'upcoming' : ''
+				upcoming: course.upcoming ? 'upcoming' : '',
+				completed: course.completed ? 'completed' : '',
+				progress: course.progress
 			});
 
 			if (record.getIconImage) {

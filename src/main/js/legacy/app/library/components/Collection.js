@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 
 	entryTpl: Ext.DomHelper.markup({
 		tag: 'li',
-		cls: 'library-grid-item item {featured} allow-zoom {archived} {upcoming}',
+		cls: 'library-grid-item item {featured} allow-zoom {archived} {upcoming} {completed}',
 		'role': 'link',
 		'aria-label': '{title}',
 		cn: [
@@ -34,7 +34,18 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 			]},
 			{ cls: 'controls', cn: [
 				{ tag: 'tpl', 'if': 'preview', cn: {cls: 'preview', html: '{preview}'}},
-				{ tag: 'tpl', 'if': 'badge', cn: {cls: 'badge', html: '{badge}'}}
+				{ tag: 'tpl', 'if': 'badge', cn: [
+					{tag: 'tpl', 'if': 'completed', cn: {
+						cls: 'badge completed',
+						cn: [
+							{tag: 'i', cls: 'icon-check completed-check'},
+							{tag: 'span', cls: 'text', html: '{badge}'}
+						]
+					}},
+					{tag: 'tpl', 'if': '!completed', cn: [
+						{cls: 'badge', html: '{badge}'}
+					]}
+				]}
 			]},
 			{ tag: 'tpl', 'if': 'enableSettings', cn: { cls: 'settings'}},
 			{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', 'data-qtip': 'Sample' }}, //store - sample flag
@@ -47,7 +58,10 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 					//it will likely be clipped if its longer than 20 chars, so add a tip if it is
 					'data-qtip': '{[values.author.length>20?Ext.String.htmlEncode(values.author):""]}' } },
 				{ cls: 'description', html: '{description}' }
-			]}
+			]},
+			{tag: 'tpl', 'if': 'progress', cn: {
+				cls: 'progress', style: 'width: {progress * 100}%'
+			}}
 		]
 	}),
 

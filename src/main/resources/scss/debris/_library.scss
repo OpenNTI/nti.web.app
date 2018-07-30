@@ -281,6 +281,29 @@ li.library-grid-item {
 			& + .preview {
 				margin-left: 10px;
 			}
+
+			&.completed {
+				background-color: $primary-green;
+				border-radius: 3px;
+
+				.text {
+					display: inline-block;
+					vertical-align: middle;
+					margin-left: 0.3rem;
+				}
+
+				.completed-check {
+					display: inline-block;
+					border: 2px solid white;
+					border-radius: 18px;
+					width: 18px;
+					height: 18px;
+					text-align: center;
+					font-size: 0.875rem;
+					line-height: 0.875rem;
+					vertical-align: middle;
+				}
+			}
 		}
 
 		.preview {
@@ -296,6 +319,15 @@ li.library-grid-item {
 				margin-left: 7px;
 			}
 		}
+	}
+
+
+	.progress {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		background: $primary-green;
+		height: 0.5rem;
 	}
 
 

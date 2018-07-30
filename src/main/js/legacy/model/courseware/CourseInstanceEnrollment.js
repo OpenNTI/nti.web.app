@@ -27,6 +27,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.CourseInstan
 
 	asUIData () {
 		const e = this.getCourseCatalogEntry();
+		const progress = this.get('CourseProgress');
 
 		const data = {
 			id: this.getId(),
@@ -37,7 +38,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.CourseInstan
 			semester: e && e.getSemesterBadge(),
 			archived: e && e.isArchived(),
 			upcoming: e && e.isUpcoming(),
-			startDate: e && e.get('StartDate')
+			startDate: e && e.get('StartDate'),
+			completed: progress && progress.get('Completed'),
+			progress: progress && progress.get('PercentageProgress')
 		};
 
 		return Ext.applyIf(data, {
