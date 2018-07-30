@@ -33,6 +33,14 @@
 			}
 		}
 
+		.webinar-editor {
+			.image-and-description {
+				.description {
+					max-width: 490px;
+				}
+			}
+		}
+
 		&.reading-editor {
 			padding: 20px;
 		}
@@ -47,6 +55,20 @@
 			    font-size: 1em;
 			    padding: .5em;
 			}
+		}
+	}
+}
+
+.webinar-base-item {
+	.image-and-description {
+		&.iconless {
+			.description {
+				max-width: 588px;
+			}
+		}
+
+		.description {
+			max-width: 365px;
 		}
 	}
 }
