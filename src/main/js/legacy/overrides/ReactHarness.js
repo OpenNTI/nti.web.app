@@ -5,7 +5,7 @@ const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService} = require('@nti/web-client');
 const {encodeForURI} = require ('@nti/lib-ntiids');
-const {getHistory} = require('@nti/web-routing');
+const {getHistory, LinkTo} = require('@nti/web-routing');
 
 const AnalyticsUtil = require('legacy/util/Analytics');
 const ParsingUtils = require('legacy/util/Parsing');
@@ -62,7 +62,8 @@ const Bridge = createReactClass({
 		children: PropTypes.any,
 		setRouteViewTitle: PropTypes.func,
 		getRouteFor: PropTypes.func,
-		addHistory: PropTypes.bool
+		addHistory: PropTypes.bool,
+		addRouteTo: PropTypes.bool
 	},
 
 	getInitialState () {
@@ -92,6 +93,10 @@ const Bridge = createReactClass({
 
 		if (this.props.addHistory) {
 			router.history = getHistory();
+		}
+
+		if (this.props.addRouteTo) {
+			router.routeTo = { object: (...args) => LinkTo.Object.routeTo(router, ...args) };
 		}
 
 		return {
@@ -244,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 		ReactDOM.render(
-			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, setRouteViewTitle: this.setRouteViewTitle, ref: x => this.bridgeInstance = x, getRouteFor: config.getRouteFor || getRouteFor, addHistory: config.addHistory },
+			React.createElement(Bridge, {bundle: this.bundle, baseroute: this.baseroute, setRouteViewTitle: this.setRouteViewTitle, ref: x => this.bridgeInstance = x, getRouteFor: config.getRouteFor || getRouteFor, addHistory: config.addHistory, addRouteTo: config.addRouteTo },
 				//The ref will be called on mount with the instance of the component.
 				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
 				//mounted. Calling doRender is the primary way to update the component with new props.
