@@ -90,11 +90,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					this.webinarEditor.setProps({saveDisabled: true});
 
 					this.webinar = selectedWebinar;
-					this.selectedParent = selectedSection;
-					this.selectedRank = selectedRank - 1;
-					this.img = img;
+					this.selectedParent = null;
 
-					this.doSave();
+					// refresh root record in case a new section was created and chosen
+					this.rootRecord.updateFromServer().then((updated) => {
+						updated.get('Items').forEach(item => {
+							if(selectedSection.getID() === item.getId()) {
+								this.selectedParent = item;
+							}
+						});
+
+						this.selectedRank = selectedRank - 1;
+						this.img = img;
+
+						this.doSave();
+					});
 				}
 			},
 			onAddAsExternalLink: (url) => {
