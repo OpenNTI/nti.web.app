@@ -132,6 +132,20 @@
 			}
 		}
 
+		.video-item {
+			.thumbnail {
+				background-position: center;
+				background-size: cover;
+				background-repeat: no-repeat;
+			}
+		}
+
+		.discussion-item {
+			.thumbnail {
+				background-size: contain;
+			}
+		}
+
 		.video-item, .discussion-item {
 			cursor: pointer;
 			overflow: hidden;
@@ -148,7 +162,6 @@
 			.thumbnail {
 				width: 100%;
 				height: 100px;
-				background-size: contain;
 			}
 
 			.title {
