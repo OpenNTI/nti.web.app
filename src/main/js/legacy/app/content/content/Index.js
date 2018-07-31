@@ -318,6 +318,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle, parent, this.root, rootRoute),
 			rootRoute: rootRoute,
 			pageSource: pageSource,
+			rootId: this.root,
+			currentPage: page.getId(),
 			bundle: this.currentBundle,
 			handleNavigation: this.handleNavigation.bind(this),
 			navigateToObject: this.navigateToObject && this.navigateToObject.bind(this),

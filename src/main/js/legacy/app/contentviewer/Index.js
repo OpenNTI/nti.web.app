@@ -75,6 +75,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			// toc: config.toc,
 			showToc: config.showToc,
 			contentPackage: config.contentPackage,
+			rootId: config.rootId,
+			currentPage: config.currentPage,
 			bundle: config.bundle,
 			handleNavigation: config.handleNavigation,
 			navigateToObject: config.navigateToObject,

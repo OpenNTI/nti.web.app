@@ -195,6 +195,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 			toc: this.toc,
 			showToc: this.showToc,
 			contentPackage: this.contentPackage,
+			rootId: this.rootId,
+			currentPage: this.currentPage,
 			hideHeader: this.hideHeader,
 			rootRoute: this.rootRoute,
 			doNavigation: (title, route, precache) => { return this.doNavigation(title, route, precache); }

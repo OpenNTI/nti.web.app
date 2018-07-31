@@ -107,6 +107,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			component: StickyToolbar,
 			path: this.path,
 			pageSource: this.pageSource,
+			rootId: this.rootId,
+			currentPage: this.currentPage,
+			getRouteFor: this.getRouteFor.bind(this),
+			addHistory: true,
+			addRouteTo: true,
 			// toc: this.toc,
 			showToc: this.showToc,
 			contentPackage: this.contentPackage,
@@ -116,6 +121,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			selectTocNode: (node) => this.selectTocNode(node),
 			renderTo: this.toolbarCmpEl
 		});
+	},
+
+	getRouteFor (obj = {}, context) {
+		if (context === 'previous-page' || context === 'next-page') {
+			return () => {
+				this.doNavigation(obj.title, encodeForURI(obj.ntiid));
+			};
+		} else if (obj.NavNTIID) {
+			return () => {
+				const parts = (obj && obj.NavNTIID.split('#')) || [];
+				parts[0] = encodeForURI(parts[0]);
+
+				this.doNavigation('', parts.join('#'));
+			};
+		}
 	},
 
 	onDestroy: function () {
