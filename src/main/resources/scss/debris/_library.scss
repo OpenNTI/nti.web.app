@@ -240,7 +240,7 @@ li.library-grid-item {
 		height: 27px;
 		background: rgba(0,0,0,0.6);
 		border-radius: 5px;
-		display: none;
+		opacity: 0;
 		@include icon($library-gear, $side: after, $top: 50%, $left: 50%, $position: absolute);
 
 		&::after {
@@ -339,6 +339,7 @@ li.library-grid-item {
 
 		.settings {
 			display: block;
+			opacity: 1;
 		}
 	}
 
@@ -678,7 +679,7 @@ li.library-grid-item {
 				height: 30px;
 				background: rgba(0,0,0,0.6);
 				border-radius: 5px;
-				display: none;
+				opacity: 0;
 				@include icon($rhp-contact-flyout-settings, $top: 7px, $left: 7px, $position: absolute);
 			}
 		}
@@ -692,6 +693,7 @@ li.library-grid-item {
 
 				.settings {
 					display: block;
+					opacity: 1;
 				}
 			}
 		}
