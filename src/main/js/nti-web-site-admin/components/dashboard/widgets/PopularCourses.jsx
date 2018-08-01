@@ -161,7 +161,9 @@ export default class PopularCourses extends React.Component {
 	}
 
 	renderHeader () {
-		const prevClassName = cx('page-control', 'previous', { disabled: this.state.loading || !this.state.prevLink });
+		// disabled state for previous includes a check where pageNumber is 0.  This way, if we get to that last "phantom" page where we have no
+		// links (prev or next), we can still go back to the previous real page
+		const prevClassName = cx('page-control', 'previous', { disabled: this.state.loading || (!this.state.prevLink && this.state.pageNumber === 0) });
 		const nextClassName = cx('page-control', 'next', { disabled: this.state.loading || !this.state.nextLink });
 
 		return (
