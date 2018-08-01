@@ -89,6 +89,8 @@ export default class PopularCourses extends React.Component {
 
 		const batchStart = pageNumber * PAGE_SIZE;
 
+		this.setState({loading: true});
+
 		getService().then(service => {
 			const collection = service.getCollection('Courses', 'Catalog');
 			const popularLink = collection && collection.Links && collection.Links.filter(x => x.rel === 'Popular')[0];
@@ -159,8 +161,8 @@ export default class PopularCourses extends React.Component {
 	}
 
 	renderHeader () {
-		const prevClassName = cx('page-control', 'previous', { disabled: !this.state.prevLink });
-		const nextClassName = cx('page-control', 'next', { disabled: !this.state.nextLink });
+		const prevClassName = cx('page-control', 'previous', { disabled: this.state.loading || !this.state.prevLink });
+		const nextClassName = cx('page-control', 'next', { disabled: this.state.loading || !this.state.nextLink });
 
 		return (
 			<div className="header">

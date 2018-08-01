@@ -38,6 +38,7 @@
 
 				&.disabled {
 					color: #ccc;
+					pointer-events: none;
 				}
 
 				&.previous {
