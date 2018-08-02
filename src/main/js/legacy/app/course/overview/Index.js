@@ -12,6 +12,7 @@ const SurveyRef = require('legacy/model/SurveyRef');
 const Slidedeck = require('legacy/model/Slidedeck');
 const Video = require('legacy/model/Video');
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
+const WebinarAsset = require('legacy/model/WebinarAsset');
 
 require('legacy/mixins/FillScreen');
 require('legacy/mixins/Router');
@@ -509,7 +510,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			route = this.getRouteForSlidedeckPath(root, subPath);
 		} else if (root instanceof LTIExternalToolAsset) {
 			route = this.getRouteForLTIExternalTool(root, subPath);
-		} else if (root instanceof Lesson) {
+		} else if (root instanceof Lesson || root instanceof WebinarAsset) {
 			route = {
 				path: '',
 				isFull: true
