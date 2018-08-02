@@ -51,8 +51,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	showEditor: async function () {
+		this.loading = true;
+
 		const lessonOverview = await this.rootRecord.getInterfaceInstance();
 		const overviewGroup = await this.parentRecord.getInterfaceInstance();
+
+		// we have to make sure the overview is the latest, otherwise we could have a stale list of sections
+		await lessonOverview.refresh();
 
 		let webinar = null;
 		if(this.record) {
@@ -60,6 +65,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		const course = await this.bundle.getInterfaceInstance();
+
+		this.loading = false;
+		this.el.unmask();
 
 		this.webinarEditor = this.add({
 			xtype: 'react',
