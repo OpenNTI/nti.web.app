@@ -146,11 +146,29 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		let el = this.getDragTarget();
 		let info = this.getDnDEventData();
 
+		let count = {};
+
+		const setData = (key, value) => {
+			count[key] = value;
+			e.dataTransfer.setData(key, value);
+
+			if(Object.keys(count).length !== e.dataTransfer.types.length) {
+				throw new Error('Spec incompliance');
+			}
+		};
+
 		try {
 			e.dataTransfer.effectAllowed = 'all';
 			e.dataTransfer.dropEffect = 'move';
-			e.dataTransfer.setData(info.mimeType, info.getDataTransferValue());
+			setData(info.mimeType, info.getDataTransferValue());
+
+			if (this.transferData) {
+				this.transferData.forEach(function (key, value) {
+					setData(key, value);
+				});
+			}
 		} catch (er) {
+			console.log(er);
 			// abort the drag (IE)
 			e.preventDefault();
 			return;
@@ -164,12 +182,6 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		this.DnDActions.startDrag(this);
 
 		this.isDragging = true;
-
-		if (this.transferData) {
-			this.transferData.forEach(function (key, value) {
-				e.dataTransfer.setData(key, value);
-			});
-		}
 
 		if (this.onDragStart) {
 			this.onDragStart();
