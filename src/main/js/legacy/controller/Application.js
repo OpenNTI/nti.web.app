@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const {wait} = require('@nti/lib-commons');
 const {getHistory} = require('@nti/web-routing');
-
+const Logger = require('@nti/util-logger');
 const {getString} = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');
 const Globals = require('legacy/util/Globals');
@@ -22,6 +22,7 @@ const NavigationActions = require('legacy/app/navigation/Actions');
 require('legacy/app/Index');
 
 const history = getHistory();
+const logger = Logger.get('controller:Application');
 
 module.exports = exports = Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
@@ -228,6 +229,14 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		}
 	},
 
+	sendGAEvent () {
+		if (!global.ga) {
+			logger.warn('Router requires ga to be available in global scope. Aborting attempt to send google analytics navigation event');
+			return;
+		}
+		global.ga('set', 'page', global.location.href.replace(global.location.origin, ''));
+		global.ga('send', 'pageview');
+	},
 
 	handleRoute: function (title, route, precache, afterRoute) {
 		var me = this, location;
@@ -298,6 +307,8 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			.then(function (context) {
 				store.setContext(context, title || document.title, route);
 			});
+
+		this.sendGAEvent();
 
 		if (afterRoute) {
 			afterRoute();
