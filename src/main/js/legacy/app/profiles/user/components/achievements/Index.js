@@ -238,7 +238,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		if (!workspace) {
 			this.finishLoading();
-			this.setEmptyState();
+
+			// if there is no "Badges" workspace, don't show anything else
 			return;
 		}
 
