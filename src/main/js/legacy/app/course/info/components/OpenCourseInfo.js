@@ -11,14 +11,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Op
 	ui: 'course-info',
 	cls: 'open-course-info',
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'heading || message || pointfree || nocredit', cn: { cls: 'open-info', cn: [
-			{tag: 'tpl', 'if': 'heading', cn: { cls: 'heading', html: '{heading}' }},
-			{tag: 'tpl', 'if': 'message', cn: { cls: 'content', html: '{message}'}},
-			{tag: 'tpl', 'if': 'pointfree || nocredit', cn: { tag: 'ul', cn: [
-				{tag: 'tpl', 'if': 'pointfree', cn: { tag: 'li', html: '{pointfree}'}},
-				{tag: 'tpl', 'if': 'nocredit', cn: { tag: 'li', cls: 'red', html: '{nocredit}'}}
-			] }}
-		]}},
 		{ cls: 'foot', cn: [
 			{ cls: 'edit', html: 'Edit'},
 			{ cls: 'registered', html: '{registered}' }
