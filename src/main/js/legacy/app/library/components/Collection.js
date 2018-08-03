@@ -54,7 +54,10 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 				{ cls: 'semester', html: '{semester}'},
 				{ tag: 'tpl', 'if': 'title', cn: { cls: 'title', html: '{title}',
 					'data-qtip': '{[values.title.length>40?Ext.String.htmlEncode(values.title):""]}' } },
-				{ tag: 'tpl', 'if': 'author', cn: { cls: 'author', html: '{author}',
+				{ tag: 'tpl', 'if': 'byline', cn: { cls: 'author', html: '{byline}',
+					//it will likely be clipped if its longer than 20 chars, so add a tip if it is
+					'data-qtip': '{[values.byline.length>20?Ext.String.htmlEncode(values.byline):""]}' } },
+				{ tag: 'tpl', 'if': '(!byline && author)', cn: { cls: 'author', html: '{author}',
 					//it will likely be clipped if its longer than 20 chars, so add a tip if it is
 					'data-qtip': '{[values.author.length>20?Ext.String.htmlEncode(values.author):""]}' } },
 				{ cls: 'description', html: '{description}' }
