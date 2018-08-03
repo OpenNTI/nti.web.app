@@ -876,7 +876,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	getReadingPages: function (reading) {
 		var children = reading.children;
 
-		children = Array.prototype.slice.call(children);
+		children = children ? Array.prototype.slice.call(children) : [];
 
 		return children.filter(function (node) {
 			var tagName = node.tagName,
