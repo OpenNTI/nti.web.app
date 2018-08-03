@@ -184,9 +184,9 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 	__showPlaceholderByInfo: function (placeholder, info, styles) {
 		var target = this.getDropzoneTarget();
 
-		if (info.append) {
+		if (info.append && target.lastChild !== placeholder) {
 			target.appendChild(placeholder);
-		} else if (info.before) {
+		} else if (info.before && info.before.previousSibling !== placeholder) {
 			target.insertBefore(placeholder, info.before);
 		}
 
@@ -194,10 +194,11 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 			placeholder.style.height = styles.height ? styles.height + 'px' : null;
 			placeholder.style.width = styles.width ? styles.width + 'px' : null;
 			placeholder.style['float'] = styles.side ? styles.side : null;
+			let has = placeholder.classList.contains('column');
 
-			if (styles.side) {
+			if (styles.side && !has) {
 				placeholder.classList.add('column');
-			} else {
+			} else if (has) {
 				placeholder.classList.remove('column');
 			}
 		}

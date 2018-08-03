@@ -113,21 +113,28 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 	},
 
 	getHandlersForDataTransfer: function (dataTransfer) {
-		var handlers = this.transferHandlers,
-			keys = handlers && Object.keys(handlers);
+		const handlers = this.transferHandlers;
+		const keys = handlers && Object.keys(handlers);
 
-		return keys.reduce(function (acc, key) {
-			var handler = handlers[key];
+		const cacheKey = keys.join(',');
+		const cache = this.dthCache || (this.dthCache = {});
 
-			//If there is no data for this handler
-			if (!dataTransfer.containsType(key)) { return acc; }
 
-			if (!handler.isValid || handler.isValid(dataTransfer)) {
-				acc.push(handler);
-			}
+		return cache[cacheKey] || (cache[cacheKey] = (
+			console.log('Calculating Handlers....'),
+			keys.reduce(function (acc, key) {
+				var handler = handlers[key];
 
-			return acc;
-		}, []);
+				//If there is no data for this handler
+				if (!dataTransfer.containsType(key)) { return acc; }
+
+				if (!handler.isValid || handler.isValid(dataTransfer)) {
+					acc.push(handler);
+				}
+
+				return acc;
+			}, [])
+		));
 	},
 
 	__onDragStart: function () {
@@ -144,6 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 	},
 
 	__onDragStop: function () {
+		delete this.dthCache;
 		if (this.scrollingParent) {
 			this.scrollingParent.unscrollWhenDragNearEdges();
 		}
