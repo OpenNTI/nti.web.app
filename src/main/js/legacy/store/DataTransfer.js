@@ -142,16 +142,16 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 		var types = this.dataTransfer && this.dataTransfer.types;
 
 		if (types) {
-			//Firefox returns a DomStringList which doesn't have
-			//an indexOf
+			// The spec returns specifies this as a DomStringList which implements a fast contains check.
 			if(types.contains) {
 				return types.contains(key);
 			}
-			else if(types.indexOf) {
+
+			// Buggy/non-spec-compliant browsers return something that does not implement 'contains'.
+			// This is DIRT SLOW... avoid calling this repeatedly.
+			if(types.indexOf) {
 				return types.indexOf(key) >= 0;
 			}
 		}
-
-		//TODO: maybe search things that have been set with setData
 	}
 });

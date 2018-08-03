@@ -143,21 +143,25 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 	},
 
 	__dragStart: function (e) {
-		var el = this.getDragTarget(),
-			info = this.getDnDEventData();
+		let el = this.getDragTarget();
+		let info = this.getDnDEventData();
+
+		try {
+			e.dataTransfer.effectAllowed = 'all';
+			e.dataTransfer.dropEffect = 'move';
+			e.dataTransfer.setData(info.mimeType, info.getDataTransferValue());
+		} catch (er) {
+			// abort the drag (IE)
+			e.preventDefault();
+			return;
+		}
 
 		if (el) {
 			wait(100)
-				.then(function () {
-					el.classList.add('dragging');
-				});
+				.then(() => el.classList.add('dragging'));
 		}
 
 		this.DnDActions.startDrag(this);
-
-		e.dataTransfer.effectAllowed = 'all';
-		e.dataTransfer.dropEffect = 'move';
-		e.dataTransfer.setData(info.mimeType, info.getDataTransferValue());
 
 		this.isDragging = true;
 
