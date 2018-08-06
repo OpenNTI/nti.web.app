@@ -344,7 +344,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 			reader = lazyResolve.ReaderPanel.get(),
 			readerScrollTop = reader.getAnnotationOffsets().scrollTop; //Tight coupling here
 
-			//clear ranges and get the node on this y
+		//clear ranges and get the node on this y
 		sel.removeAllRanges();
 
 		while (xStart < xEnd) {

@@ -50,11 +50,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 			this.mon(v, 'click', this.openVideos, this);
 		}
 
-	//		this.mon(l, 'click', function(){ r.like(l); }, this);
-	//		this.mon(f, 'click', function(){ r.favorite(f); }, this);
-	//		l.update(r.getFriendlyLikeCount());
-	//		l[(r.isLiked()?'add':'remove')+'Cls']('on');
-	//		f[(r.isFavorited()?'add':'remove')+'Cls']('on');
+		//		this.mon(l, 'click', function(){ r.like(l); }, this);
+		//		this.mon(f, 'click', function(){ r.favorite(f); }, this);
+		//		l.update(r.getFriendlyLikeCount());
+		//		l[(r.isLiked()?'add':'remove')+'Cls']('on');
+		//		f[(r.isFavorited()?'add':'remove')+'Cls']('on');
 
 
 	},

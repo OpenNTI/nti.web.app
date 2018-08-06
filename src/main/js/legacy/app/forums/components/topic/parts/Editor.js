@@ -124,10 +124,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		 *	 and we like that behavior, don't warn the user if the editor is open, since it will still be there when we can back.
 		 *	 If we change at some point, just uncomment the following lines to display a warning message.
 		 */
-	//		if(this.isVisible()){
-	//			this.warnBeforeDismissingEditor();
-	//		}
-	//		return !this.isVisible();
+		//		if(this.isVisible()){
+		//			this.warnBeforeDismissingEditor();
+		//		}
+		//		return !this.isVisible();
 		return true;
 	},
 
