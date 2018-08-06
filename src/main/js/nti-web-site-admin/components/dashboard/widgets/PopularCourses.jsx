@@ -8,7 +8,7 @@ import cx from 'classnames';
 import {getString} from 'legacy/util/Localization';
 
 const LABELS = {
-	title: getString('NextThought.view.Navigation.popular'),
+	title: getString('NextThought.view.courseware.assessment.admin.dashboard.widget.PopularCourses'),
 	name: 'Course Rank',
 	value: 'Students',
 	noItems: 'No courses found'

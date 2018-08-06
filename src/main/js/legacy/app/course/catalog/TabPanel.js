@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 
 			cmp = this.add({
 				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.current.none')},
+				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.TabPanel.current.empty')},
 				title: 'Current'
 			});
 			this.relayEvents(cmp, ['show-course-detail']);
@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 
 			cmp = this.add({
 				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.upcoming.none')},
+				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.TabPanel.upcoming.empty')},
 				title: 'Upcoming'
 			});
 			this.relayEvents(cmp, ['show-course-detail']);
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 
 			cmp = this.add({
 				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.archive.none')},
+				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.TabPanel.archive.empty')},
 				title: 'Archived'
 			});
 			this.relayEvents(cmp, ['show-course-detail']);
