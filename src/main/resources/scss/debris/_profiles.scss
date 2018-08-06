@@ -2072,6 +2072,15 @@
 
 	}
 
+	&.read-only {
+		.fieldset {
+			.empty-text {
+				color: $primary-grey;
+				cursor: initial;
+			}
+		}
+	}
+
 	.left {
 		width: 75%;
 		float: left;

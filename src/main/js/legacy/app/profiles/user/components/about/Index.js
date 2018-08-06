@@ -64,6 +64,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		me.addDefaultRoute('/');
 
+		me.readOnly = false;
+
 		me.emptyCmp = me.down('profile-user-empty');
 		me.aboutCmp = me.down('profile-user-about-about');
 		me.educationCmp = me.down('profile-user-about-education');
@@ -124,7 +126,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	doEdit: function () {
-		this.pushRoute('Edit', '/edit');
+		if (!this.readOnly) {
+			this.pushRoute('Edit', '/edit');
+		}
 	},
 
 	isDataEmpty: function (user) {
@@ -396,6 +400,28 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	setSchema: function (schema) {
+		let readOnly = false;
+		const fields = Object.values(schema.ProfileSchema);
+
+		for (let i = 0; i < fields.length; i++) {
+			if (fields[i].readonly) {
+				readOnly = true;
+			} else {
+				if (fields[i].name !== 'password') {
+					readOnly = false;
+					break;
+				}
+			}
+		}
+
+		this.readOnly = readOnly;
+
+		if (this.readOnly) {
+			this.el.addCls('read-only');
+		} else {
+			this.el.removeCls('read-only');
+		}
+
 		this.profileParts.forEach(function (part) {
 			if (part.setSchema) {
 				part.setSchema(schema);
@@ -450,7 +476,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		delete this.successfulEdit;
 
-		if (!this.isMe) {
+		if (!this.isMe || this.readOnly) {
 			this.replaceRoute('', '/');
 			return;
 		}

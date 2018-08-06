@@ -52,7 +52,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		twitterEl: '.social.twitter',
 		googleEl: '.social.google-plus',
 		tabsEl: '.tabs',
-		buttonsEl: '.buttons'
+		buttonsEl: '.buttons',
+		editEl: '.buttons .edit'
 	},
 
 	initComponent: function () {
@@ -116,7 +117,27 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.__updatePresence(presence);
 	},
 
-	setSchema: function (schema) {},
+	setSchema: function (schema) {
+		this.schema = schema;
+		let readOnly = false;
+		const fields = Object.values(this.schema.ProfileSchema);
+		const editButton = this.el.down('.buttons .edit');
+
+		for (let i = 0; i < fields.length; i++) {
+			if (fields[i].readonly) {
+				readOnly = true;
+			} else {
+				if (fields[i].name !== 'password') {
+					readOnly = false;
+					break;
+				}
+			}
+		}
+
+		if (readOnly && editButton) {
+			editButton.hide();
+		}
+	},
 
 	__updateAbout: function (data) {
 		var education = data.education[0],
