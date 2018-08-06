@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	addItems: function () {
-		this.add({
+		this.courseBadgesContainer = this.add({
 			xtype: 'container',
 			layout: 'none',
 			cls: 'course-badges-container',
@@ -238,6 +238,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		if (!workspace) {
 			this.finishLoading();
+
+			if(this.courseBadgesContainer) {
+				this.courseBadgesContainer.hide();
+			}
 
 			// if there is no "Badges" workspace, don't show anything else
 			return;
