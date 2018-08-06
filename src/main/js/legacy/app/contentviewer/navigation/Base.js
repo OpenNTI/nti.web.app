@@ -105,24 +105,36 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 
 	afterRender: function () {
-		this.toolbarCmp = ReactHarness.create({
-			component: StickyToolbar,
-			path: this.path,
-			pageSource: this.usePageSource && this.pageSource,
-			rootId: this.rootId,
-			currentPage: this.currentPage,
-			getRouteFor: this.getRouteFor.bind(this),
-			addHistory: true,
-			addRouteTo: true,
-			// toc: this.toc,
-			showToc: this.showToc,
-			contentPackage: this.contentPackage,
-			hideControls: this.hideControls,
-			hideHeader: this.hideHeader,
-			doNavigation: this.doNavigation,
-			selectTocNode: (node) => this.selectTocNode(node),
-			renderTo: this.toolbarCmpEl
-		});
+		const addToolbar = (pageSource) => {
+			this.toolbarCmp = ReactHarness.create({
+				component: StickyToolbar,
+				path: this.path,
+				pageSource: pageSource,
+				rootId: this.rootId,
+				currentPage: this.currentPage,
+				getRouteFor: this.getRouteFor.bind(this),
+				addHistory: true,
+				addRouteTo: true,
+				// toc: this.toc,
+				showToc: this.showToc,
+				contentPackage: this.contentPackage,
+				hideControls: this.hideControls,
+				hideHeader: this.hideHeader,
+				doNavigation: this.doNavigation,
+				selectTocNode: (node) => this.selectTocNode(node),
+				renderTo: this.toolbarCmpEl
+			});
+		};
+
+		if (!this.usePageSource) {
+			addToolbar();
+		} else if (this.pageSource instanceof Promise) {
+			this.pageSource
+				.then(x => addToolbar(x));
+		} else {
+			addToolbar(this.pageSource);
+		}
+
 	},
 
 	getRouteFor (obj = {}, context) {
