@@ -65,12 +65,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (!this.inlineEditorEl.isVisible()) {
 			this.showEditor();
 		} else {
+			this.addLessonEl.hide();
+
 			this.onSave(e)
 				.then(function (rec) {
 					if (me.afterSave) {
 						me.afterSave(rec);
 					}
 					me.el.scrollIntoView(bodyListEl);
+					me.addLessonEl.show();
+				}).catch(() => {
+					me.addLessonEl.show();
 				});
 		}
 	},
