@@ -52,7 +52,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				enableSettings: true,
 				semester: course.semester,
 				badge: badge,
-				archived: course.archived ? 'archived' : '',
+				//if the course is completed don't mark it as archived
+				archived: course.archived && !course.completed ? 'archived' : '',
 				upcoming: course.upcoming ? 'upcoming' : '',
 				completed: course.completed ? 'completed' : '',
 				progress: course.progress

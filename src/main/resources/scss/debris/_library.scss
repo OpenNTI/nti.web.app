@@ -283,7 +283,7 @@ li.library-grid-item {
 			}
 
 			&.completed {
-				background-color: $primary-green;
+				background-color: $secondary-green;
 				border-radius: 3px;
 
 				.text {
@@ -326,7 +326,7 @@ li.library-grid-item {
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		background: $primary-green;
+		background: $secondary-green;
 		height: 0.5rem;
 	}
 
