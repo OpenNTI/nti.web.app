@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	getRouteFor (obj = {}, context) {
 		if (context === 'previous-page' || context === 'next-page') {
 			return () => {
-				this.doNavigation(obj.title, encodeForURI(obj.ntiid));
+				this.doNavigation(obj.title, (this.rootRoute || '') + encodeForURI(obj.ntiid));
 			};
 		} else if (obj.NavNTIID) {
 			return () => {
