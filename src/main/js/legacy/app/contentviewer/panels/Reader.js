@@ -321,7 +321,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 	},
 
 	doNavigation: function (title, route, precache) {
-		this.handleNavigation(title, route, precache);
+		const r = this.rootRoute ? this.rootRoute + route : route;
+		this.handleNavigation(title, r, precache);
 	},
 
 	showNote: function (record, el, monitors) {
