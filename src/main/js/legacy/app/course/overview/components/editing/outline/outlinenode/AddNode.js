@@ -65,17 +65,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (!this.inlineEditorEl.isVisible()) {
 			this.showEditor();
 		} else {
-			this.addLessonEl.hide();
-
 			this.onSave(e)
 				.then(function (rec) {
 					if (me.afterSave) {
 						me.afterSave(rec);
 					}
 					me.el.scrollIntoView(bodyListEl);
-					me.addLessonEl.show();
-				}).catch(() => {
-					me.addLessonEl.show();
 				});
 		}
 	},
@@ -126,22 +121,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @return {Promise}   returns a promise that fulfills after the record is published.
 	 */
 	onSave: function (e) {
-		var me = this,
-			values = me.editor.getValue(),
-			outline = me.outlineCmp && me.outlineCmp.outline,
+		var values = this.editor.getValue(),
+			outline = this.outlineCmp && this.outlineCmp.outline,
 			parent, shouldNavigate = e.getKey() === e.ENTER;
 
-		if (!me.isValid()) {
+		if (!this.isValid()) {
 			return Promise.reject();
 		}
 
-		if (!me.parentRecord) {
+		if (!this.parentRecord) {
+			return Promise.reject();
+		}
+
+		if (this.isSaving) {
 			return Promise.reject();
 		}
 
 		if (this.editor.el) {
 			this.editor.el.mask('Saving');
 		}
+
+		this.addLessonEl.hide();
 
 		//In case the outline node changed, reset it.
 		//This ensures that we have the right set of listeners set.
@@ -151,27 +151,38 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			parent = this.parentRecord;
 		}
 
+		this.isSaving = true;
+
 		return parent.appendContent(values)
-			.then(function (rec) {
-				if (me.autoPublish) {
-					me.EditingActions.publish(rec);
+			.then((rec) => {
+				if (this.autoPublish) {
+					this.EditingActions.publish(rec);
 				}
 
-				me.editor.el.unmask();
-				me.hideEditor();
-				if (shouldNavigate && me.doSelectNode) {
-					me.doSelectNode(rec);
+				this.editor.el.unmask();
+				this.addLessonEl.show();
+				this.hideEditor();
+
+				delete this.isSaving;
+
+				if (shouldNavigate && this.doSelectNode) {
+					this.doSelectNode(rec);
 				}
 				else {
 					wait()
 						.then(function () {
-							if (me.editor.setSuggestTitle) {
-								me.editor.setSuggestTitle();
+							if (this.editor.setSuggestTitle) {
+								this.editor.setSuggestTitle();
 							}
 						});
 				}
 
 				return rec;
+			})
+			.catch(() => {
+				this.editor.el.unmask();
+				this.addLessonEl.show();
+				delete this.isSaving;
 			});
 	}
 });
