@@ -25,6 +25,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	ui: 'course-assessment',
 	cls: 'admin-reader-header reader-header course-assessment-header assignment-item',
 
+	usePageSource: true,
+
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		enableChat: 'NextThought.mixins.ChatLinks'

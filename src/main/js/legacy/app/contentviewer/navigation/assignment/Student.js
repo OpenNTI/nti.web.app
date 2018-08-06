@@ -19,6 +19,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	RED_PERCENT: 0.1,
 	cls: 'student-reader-header reader-header course-assessment-header assignment-item',
 
+	usePageSource: true,
+
 	toolbarTpl: Ext.DomHelper.markup([
 		'{super}',
 		{

@@ -18,6 +18,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	extend: 'Ext.Component',
 	cls: 'content-toolbar',
 
+	usePageSource: false,
+
 	toolbarTpl: Ext.DomHelper.markup([
 		{cls: 'toolbar', html: '<div/>'}
 	]),
@@ -106,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.toolbarCmp = ReactHarness.create({
 			component: StickyToolbar,
 			path: this.path,
-			pageSource: this.pageSource,
+			pageSource: this.usePageSource && this.pageSource,
 			rootId: this.rootId,
 			currentPage: this.currentPage,
 			getRouteFor: this.getRouteFor.bind(this),
