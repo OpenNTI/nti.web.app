@@ -314,7 +314,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			externalToolAsset: page instanceof ExternalToolAsset ? page : null,
 			// toc: !this.currentBundle.isCourse ? this.ContentActions.getTocStore(this.currentBundle, this.root) : null,
 			showToc: !this.currentBundle.isCourse,
-			contentPackage: this.ContentActions.getContentPackage(this.currentBundle, this.root),
+			contentPackage: this.ContentActions.getContentPackage(this.currentBundle, this.root, page.get('ContentPackageNTIID')),
 			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle, parent, this.root, rootRoute),
 			rootRoute: rootRoute,
 			pageSource: pageSource,

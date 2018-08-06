@@ -457,13 +457,12 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	 *
 	 * @param  {Object} bundleModel bundle to look in
 	 * @param  {String} root        the id of the content package to look for
+	 * @param  {String} contentPackageNTIID the id of the contentPackage
 	 * @return {Promise}            fulfills with the content package
 	 */
-	async getContentPackage (bundleModel, root) {
-		const service = await getService();
-		const bundle = await service.getObject(bundleModel.raw);
-
-		return bundle.getPackage(root);
+	async getContentPackage (bundleModel, root, contentPackageNTIID) {
+		const bundle = await bundleModel.getInterfaceInstance();
+		return bundle.getPackage(root) || bundle.getPackage(contentPackageNTIID);
 	},
 
 
