@@ -26,20 +26,20 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.removeAll(true);
 
 		if (upcoming && upcoming.length) {
-			this.addCourses(upcoming, getString('Coming Soon'));
+			this.addCourses(upcoming, getString('library.courses.components.Page.upcoming'));
 		}
 
 		if (current && current.length) {
-			this.addCourses(current, getString('NextThought.view.profiles.parts.Achievements.current_title'));
+			this.addCourses(current, getString('library.courses.components.Page.current'));
 		}
 
 		if (archived && archived.length) {
 			// if specifically providing a list of archived to this method, use those
-			this.addBinnedCourses(this, this.binCourses(archived), getString('course.catalog.archive'));
+			this.addBinnedCourses(this, this.binCourses(archived), getString('library.courses.components.Page.upcoming.archived'));
 		}
 		else if (this.archived && this.archived.length) {
 			// if we've already loaded archived, use those
-			this.addBinnedCourses(this, this.binCourses(this.archived), getString('course.catalog.archive'));
+			this.addBinnedCourses(this, this.binCourses(this.archived), getString('library.courses.components.Page.upcoming.archived'));
 		}
 		else if(this.archivedLoader) {
 			// otherwise, defer archived loading using a load button
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 					me.archived = items;
 					me.archivedLoaded = true;
-					me.addBinnedCourses(me, me.binCourses(me.archived), getString('course.catalog.archive'));
+					me.addBinnedCourses(me, me.binCourses(me.archived), getString('library.courses.components.Page.upcoming.archived'));
 				});
 			};
 
