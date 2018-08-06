@@ -2,6 +2,8 @@ const Ext = require('@nti/extjs');
 
 require('./Base');
 
+const {getString} = require('legacy/util/Localization');
+
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 	extend: 'NextThought.app.course.enrollment.options.Base',
@@ -20,12 +22,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 
 	DefaultStrings: {
 		notEnrolled: {
-			title: 'Take the Course for Free',
+			title: getString('NextThought.view.courseware.enrollment.OpenEnrollment.notEnrolled'),
 			price: 0,
-			information: 'Gain complete access to interact with all course content.'
+			information: getString('NextThought.view.courseware.enrollment.OpenEnrollment.notEnrolled.info')
 		},
 		enrolled: {
-			title: 'You are enrolled in the Open Course',
+			title: getString('NextThought.view.courseware.enrollment.OpenEnrollment.enrolled'),
 			cls: 'enrolled',
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
@@ -34,15 +36,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			]
 		},
 		archivedEnrolled: {
-			title: 'You took the Open Course!',
+			title: getString('NextThought.view.courseware.enrollment.OpenEnrollment.archivedEnrolled'),
 			cls: 'enrolled',
-			information: 'Thanks for your participation! ' +
-							'The content of this course will remain available for you to review at any time.'
+			information: getString('NextThought.view.courseware.enrollment.OpenEnrollment.archivedEnrolled.info')
 		},
 		archivedNotEnrolled: {
-			title: 'This Course is Archived.',
+			title:  getString('NextThought.view.courseware.enrollment.OpenEnrollment.archivedNotEnrolled'),
 			price: 0,
-			information: 'Archived courses are out of session but all course content will remain available.'
+			information: getString('NextThought.view.courseware.enrollment.OpenEnrollment.archivedNotEnrolled.info')
 		}
 	},
 
@@ -106,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 
 				state.cls = '';
 				state.price = null;
-				state.title = 'You are administering this course.';
+				state.title = getString('NextThought.view.courseware.enrollment.OpenEnrollment.administering');
 				state.name = me.NAME;
 
 				fulfill({

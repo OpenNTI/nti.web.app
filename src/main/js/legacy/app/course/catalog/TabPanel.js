@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		if (archived && archived.store && archived.store.find('NTIID', id) > 0) { return archived; }
 
 		return {
-			title: 'Courses'
+			title: getString('NextThought.view.library.View.course')
 		};
 	},
 
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 
 			cmp = this.add({
 				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'empty-text', html: 'There are no current courses.'},
+				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.current.none')},
 				title: 'Current'
 			});
 			this.relayEvents(cmp, ['show-course-detail']);
@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 
 			cmp = this.add({
 				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'empty-text', html: 'There are no upcoming courses.'},
+				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.upcoming.none')},
 				title: 'Upcoming'
 			});
 			this.relayEvents(cmp, ['show-course-detail']);
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 
 			cmp = this.add({
 				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'empty-text', html: 'There are no archived courses.'},
+				autoEl: {tag: 'div', cls: 'empty-text', html: getString('course.catalog.archive.none')},
 				title: 'Archived'
 			});
 			this.relayEvents(cmp, ['show-course-detail']);

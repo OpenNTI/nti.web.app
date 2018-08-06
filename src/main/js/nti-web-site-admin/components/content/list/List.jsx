@@ -4,17 +4,19 @@ import {scoped} from '@nti/lib-locale';
 import {contextual} from '@nti/web-search';
 import {LinkTo} from '@nti/web-routing';
 
+import {getString} from 'legacy/util/Localization';
+
 import SearchablePagedView from '../../common/SearchablePagedView';
 
 import Item from './Item';
 
 const DEFAULT_TEXT = {
-	courses: 'Courses',
+	courses: getString('NextThought.view.library.View.course'),
 	createSuccess: 'Course was successfully created',
-	empty: 'No Courses',
-	emptySearch: 'No courses found. Please refine your search.',
-	backLabel: 'View all Courses',
-	error: 'Unable to load courses.'
+	empty: getString('NextThought.view.Navigation.noCourses'),
+	emptySearch: getString('NextThought.view.Navigation.noCoursesSearch'),
+	backLabel: getString('NextThought.view.Navigation.viewAll'),
+	error: getString('NextThought.view.Navigation.error')
 };
 const t = scoped('siteadmin.components.course.view', DEFAULT_TEXT);
 

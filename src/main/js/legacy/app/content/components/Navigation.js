@@ -1,6 +1,8 @@
 const Ext = require('@nti/extjs');
 const { getService } = require('@nti/web-client');
 
+const {getString} = require('legacy/util/Localization');
+
 const CoursesStateStore = require('../../library/courses/StateStore');
 
 require('legacy/common/components/Navigation');
@@ -73,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		if (isPreview) {
 			data.preview = 'in preview';
 			if (catalogEntry.StartDate) {
-				data.preview += '&mdash;Course starts on '
+				data.preview += getString('NextThought.view.courseware.info.parts.NotStarted.startsOn')
 					+ Ext.Date.format(
 						catalogEntry.StartDate && new Date(catalogEntry.StartDate),
 						'l, F j');

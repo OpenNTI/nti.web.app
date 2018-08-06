@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
 
 const CourseActions = require('../../course/Actions');
 
@@ -29,9 +30,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		cls: 'title-container',
 		autoEl: {cn: [
 			{cls: 'home', html: 'Home'},
-			{cls: 'title', html: 'Courses'},
+			{cls: 'title', html: getString('NextThought.view.library.View.course')},
 			{cls: 'spacer'},
-			{cls: 'add-more-link hidden', html: 'Add Courses'}
+			{cls: 'add-more-link hidden', html: getString('NextThought.view.library.available.CourseWindow.AddCourses')}
 		]}
 	}],
 
@@ -183,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 
 	showCourses: function (/*route, subRoute*/) {
-		this.setTitle('Your Courses');
+		this.setTitle(getString('NextThought.view.Navigation.your'));
 
 		if (this.availableWin) {
 			this.availableWin.destroy();
@@ -217,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 
 			me.loadCourses();
 			me.availableWin.show();
-			me.setTitle('All Courses');
+			me.setTitle(getString('NextThought.view.Navigation.all'));
 
 			me.addChildRouter(me.availableWin);
 			if (me.availableWin && me.availableWin.handleRoute) {
@@ -233,9 +234,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 			delete this.coursePage;
 		}
 
+		let emptyTextHtml = 'You don\'t have any ' + getString('NextThought.view.library.View.course') + ' yet...<br><a class="add-more-link">+ Add ' + getString('NextThought.view.library.View.course') + '</a>';
+
 		this.emptyText = this.emptyText || this.add({
 			xtype: 'box',
-			autoEl: {cls: 'empty-text', html: 'You don\'t have any courses yet...<br><a class="add-more-link">+ Add Courses</a>'}
+			autoEl: {cls: 'empty-text', html: emptyTextHtml}
 		});
 	},
 

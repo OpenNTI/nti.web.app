@@ -6,6 +6,8 @@ import { encodeForURI } from '@nti/lib-ntiids';
 import { getService } from '@nti/web-client';
 import { Models } from '@nti/lib-interfaces';
 
+import {getString} from 'legacy/util/Localization';
+
 import Option from './Option';
 
 export default class CreateCourse extends Component {
@@ -76,14 +78,14 @@ export default class CreateCourse extends Component {
 				<React.Fragment>
 					<Option
 						className="new-course"
-						title="New Course"
+						title={getString('NextThought.view.courseware.assessment.admin.createCourse.new')}
 						description=""
 						onClick={() => this.launchCourseWizard(Templates.Blank)}
 					/>
 					<Option
 						className="import-course"
-						title="Import a Course"
-						description="Use content from a previous course."
+						title={getString('NextThought.view.courseware.assessment.admin.createCourse.import')}
+						description={getString('NextThought.view.courseware.assessment.admin.createCourse.import.description')}
 						onClick={() => this.launchCourseWizard(Templates.Import)}
 					/>
 					{this.state.canCreateScorm && (

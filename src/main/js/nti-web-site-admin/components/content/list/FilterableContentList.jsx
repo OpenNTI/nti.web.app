@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {getService} from '@nti/web-client';
 
+import {getString} from 'legacy/util/Localization';
+
 import Toolbar from '../../common/toolbar/Toolbar';
 
 import CourseList from './CourseList';
@@ -11,7 +13,7 @@ import CourseStore from './CourseStore';
 const BOOKS = 'books';
 const COURSES = 'courses';
 
-const OPTIONS = {[BOOKS]: 'Books', [COURSES]: 'Courses'};
+const OPTIONS = {[BOOKS]: 'Books', [COURSES]: getString('NextThought.view.library.View.course')};
 
 // TODO: Maybe need to genericize this if we add support for book creation
 const store = CourseStore.getInstance();

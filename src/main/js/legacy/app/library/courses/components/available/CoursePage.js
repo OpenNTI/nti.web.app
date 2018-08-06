@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		var me = this;
 		if (upcoming && upcoming.length) {
 			const activeState = !this.code && (!activeTab || activeTab === 'Upcoming');
-			this.tabbedComponents['upcoming'] = this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming', xtype: 'course-catalog-collection'});
+			this.tabbedComponents['upcoming'] = this.addCourses(upcoming, getString('Coming Soon'), null, {category: 'upcoming', xtype: 'course-catalog-collection'});
 			this.addTab({label: 'Upcoming', category: 'upcoming', active: activeState});
 			if(!activeState) {
 				this.tabbedComponents['upcoming'].hide();
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		if (current && current.length) {
 			const activeState = (Ext.isEmpty(upcoming) && !activeTab) || activeTab === 'Current';
-			this.tabbedComponents['current'] = this.addCourses(current, 'Current Courses', null, {category: 'current', xtype: 'course-catalog-collection'});
+			this.tabbedComponents['current'] = this.addCourses(current, getString('NextThought.view.profiles.parts.Achievements.current_title'), null, {category: 'current', xtype: 'course-catalog-collection'});
 			this.addTab({label: 'Current', category: 'current', active: activeState});
 			if(!activeState) {
 				this.tabbedComponents['current'].hide();
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			var containerCmp = this.add(container);
 
 			const activeState = (Ext.isEmpty(current) && Ext.isEmpty(upcoming) && !activeTab) || activeTab === 'Archived';
-			this.tabbedComponents['archived'] = this.addBinnedCourses(containerCmp, this.binCourses(archived), 'Archived Courses', {category: 'archived', xtype: 'course-catalog-collection'});
+			this.tabbedComponents['archived'] = this.addBinnedCourses(containerCmp, this.binCourses(archived), getString('course.catalog.archive'), {category: 'archived', xtype: 'course-catalog-collection'});
 			this.addTab({label: 'Archived', category: 'archived', active: activeState});
 			if(!activeState) {
 				this.tabbedComponents['archived'].hide();
@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 
 		return {
-			title: 'Courses'
+			title: getString('NextThought.view.library.View.course')
 		};
 	},
 
@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 						// save items for later use
 						me.loadedArchivedItems = items;
 
-						me.tabbedComponents['archived'] = me.addBinnedCourses(containerCmp, me.binCourses(items), 'Archived Courses', {category: 'archived', xtype: 'course-catalog-collection'});
+						me.tabbedComponents['archived'] = me.addBinnedCourses(containerCmp, me.binCourses(items), getString('course.catalog.archive'), {category: 'archived', xtype: 'course-catalog-collection'});
 						me.archivedLoaded = true;
 						me.archivedLoading = false;
 						me.el.unmask();

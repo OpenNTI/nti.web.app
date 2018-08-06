@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.library.components.Navigation', {
 	extend: 'Ext.Component',
@@ -11,8 +12,8 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Naviga
 		{
 			cls: 'dropdown',
 			cn: [
-				{cls: 'label', html: 'Your Courses'},
-				{cls: 'available', html: 'Find Courses'}
+				{cls: 'label', html: getString('NextThought.view.Navigation.your')},
+				{cls: 'available', html: getString('NextThought.view.Navigation.find')}
 			]
 		}
 	]),
