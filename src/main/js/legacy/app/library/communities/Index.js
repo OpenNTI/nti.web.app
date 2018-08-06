@@ -3,7 +3,7 @@ const Ext = require('@nti/extjs');
 require('legacy/mixins/Router');
 require('./components/Page');
 
-
+const {getString} = require('legacy/util/Localization');
 
 module.exports = exports = Ext.define('NextThought.app.library.communities.Index', {
 	extend: 'Ext.container.Container',
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Index
 			{cls: 'home', html: 'Home'},
 			{cls: 'title', html: 'Communities'},
 			{cls: 'spacer'},
-			{cls: 'add-more-link hidden', html: 'Add Courses'}
+			{cls: 'add-more-link hidden', html: getString('NextThought.view.library.available.CourseWindow.AddCourses')}
 		]}
 	}],
 

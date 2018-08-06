@@ -7,6 +7,7 @@ const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
+const {getString} = require('legacy/util/Localization');
 
 require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
@@ -151,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 		const tabs = [
 			{
-				text: 'Courses',
+				text: getString('NextThought.view.library.View.course'),
 				route: '/',
 				active: !PURCHASED_ACTIVE.test(path) && !REDEEM_ACTIVE.test(path)
 			},

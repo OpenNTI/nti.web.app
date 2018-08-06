@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';// eslint-disable-line
 
+import {getString} from 'legacy/util/Localization';
+
 import Tabs from '../../../common/Tabs';
 
 const DEFAULT_TEXT = {
 	transcript: 'Transcript',
-	courses: 'Courses',
+	courses: getString('NextThought.view.library.View.course'),
 	books: 'Books',
 	reports: 'Reports',
 	overview: 'Overview'

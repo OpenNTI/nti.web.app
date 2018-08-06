@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+const {getString} = require('legacy/util/Localization');
+
 const CoursesStateStore = require('../courses/StateStore');
 
 require('../courses/Current');
@@ -9,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 	extend: 'NextThought.app.library.courses.Current',
 	alias: 'widget.library-current-admin',
 	layout: 'none',
-	title: 'Administered Courses',
+	title: getString('NextThought.view.library.View.administered'),
 	storeModel: 'NextThought.model.courses.CourseInstanceAdministrativeRole',
 
 	doNotMaskOnLoad: true,
@@ -50,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 
 	onSeeAllClick: function () {
 		if (this.pushRoute) {
-			this.pushRoute('Administered Courses', '/admin');
+			this.pushRoute(getString('NextThought.view.library.View.administered'), '/admin');
 		}
 	}
 });

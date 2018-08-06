@@ -5,11 +5,13 @@ import {Loading, Layouts} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {decodeFromURI} from '@nti/lib-ntiids';
 
+import {getString} from 'legacy/util/Localization';
+
 import Store from './Store';
 import NavBar from './nav-bar';
 
 const DEFAULT_TEXT = {
-	back: 'Back to Courses'
+	back: getString('NextThought.view.Navigation.back')
 };
 const t = scoped('nti-site-admin.courses.info.Frame', DEFAULT_TEXT);
 

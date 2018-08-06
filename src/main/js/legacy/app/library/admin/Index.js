@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+const {getString} = require('legacy/util/Localization');
+
 require('../courses/Index');
 require('legacy/mixins/Router');
 
@@ -21,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 		cls: 'title-container',
 		autoEl: {cn: [
 			{cls: 'home', html: 'Home'},
-			{cls: 'title', html: 'Administered Courses'}
+			{cls: 'title', html: getString('NextThought.view.library.View.administered')}
 		]}
 	}],
 

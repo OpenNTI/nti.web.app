@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 	floating: true,
-	label: 'Add Courses',
+	label: getString('NextThought.view.library.available.CourseWindow.AddCourses'),
 	constrainTo: Ext.getBody(),
 	width: 1024,
 	height: '85%',
@@ -560,7 +560,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				me.labelEl.addCls('back');
 				activeTab = me.tabpanel.getTabForCourse(course);
 
-				me.labelEl.update(activeTab.title + ' Courses');
+				me.labelEl.update(activeTab.title + ' ' + getString('NextThought.view.library.View.course'));
 			} else {
 				me.labelEl.update(course.get('Title'));
 				me.identifierEl.update(course.get('ProviderUniqueID'));

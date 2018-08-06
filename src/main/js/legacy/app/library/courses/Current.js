@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+const {getString} = require('legacy/util/Localization');
+
 const CoursesStateStore = require('./StateStore');
 
 require('../components/Current');
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 	extend: 'NextThought.app.library.components.Current',
 	alias: 'widget.library-current-courses',
 	layout: 'none',
-	title: 'Courses',
+	title: getString('NextThought.view.library.View.course'),
 	storeModel: 'NextThought.model.courseware.CourseInstanceEnrollment',
 
 	statics: {
@@ -151,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 
 	onSeeAllClick: function () {
 		if (this.pushRoute) {
-			this.pushRoute('Courses', '/courses');
+			this.pushRoute(getString('NextThought.view.library.View.course'), '/courses');
 		}
 	},
 
@@ -169,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 
 		this.emptyText = this.emptyText || this.add({
 			xtype: 'box',
-			autoEl: {cls: 'empty-text', html: 'You don\'t have any courses yet...<br><a class="add-more-link">+ Add Courses</a>'}
+			autoEl: {cls: 'empty-text', html: 'You don\'t have any ' + getString('NextThought.view.library.View.course') + ' yet...<br><a class="add-more-link">+ Add ' + getString('NextThought.view.library.View.course') + '</a>'}
 		});
 	},
 

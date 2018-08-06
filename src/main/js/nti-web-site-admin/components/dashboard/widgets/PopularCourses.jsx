@@ -5,8 +5,10 @@ import {Presentation, Loading} from '@nti/web-commons';
 import {getService} from '@nti/web-client';
 import cx from 'classnames';
 
+import {getString} from 'legacy/util/Localization';
+
 const LABELS = {
-	title: 'Popular Courses',
+	title: getString('NextThought.view.Navigation.popular'),
 	name: 'Course Rank',
 	value: 'Students',
 	noItems: 'No courses found'
