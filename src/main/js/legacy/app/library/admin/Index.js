@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 		cls: 'title-container',
 		autoEl: {cn: [
 			{cls: 'home', html: 'Home'},
-			{cls: 'title', html: getString('NextThought.view.library.View.administered')}
+			{cls: 'title', html: getString('NextThought.view.library.View.administeredCourses')}
 		]}
 	}],
 
