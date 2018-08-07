@@ -118,23 +118,26 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	setSchema: function (schema) {
+		if (!schema) { return; }
+
 		this.schema = schema;
-		let readOnly = false;
-		const fields = Object.values(this.schema.ProfileSchema);
 		const editButton = this.el.down('.buttons .edit');
+		const excludedFields = {
+			'password': true
+		};
+		let isReadOnly = true;
+		const fields = Object.values(this.schema.ProfileSchema);
 
 		for (let i = 0; i < fields.length; i++) {
-			if (fields[i].readonly) {
-				readOnly = true;
-			} else {
-				if (fields[i].name !== 'password') {
-					readOnly = false;
-					break;
-				}
+			if (!excludedFields[fields[i].name] && !fields[i].readonly) {
+				isReadOnly = false;
+				break;
 			}
 		}
 
-		if (readOnly && editButton) {
+		this.readOnly = isReadOnly;
+
+		if (this.readOnly && editButton) {
 			editButton.hide();
 		}
 	},
