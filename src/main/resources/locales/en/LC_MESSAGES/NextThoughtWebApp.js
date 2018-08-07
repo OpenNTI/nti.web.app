@@ -714,6 +714,7 @@ NTIStrings['library:branding logo-alt-text'] = 'Logo';
 NTIStrings['library:branding message-title'] = 'Title';
 NTIStrings['library:branding message'] = 'Message';
 NTIStrings['NextThought.view.library.View.administered'] = 'My Administered Courses';
+NTIStrings['NextThought.view.library.View.administeredCourses'] = 'Administered Courses';
 NTIStrings['NextThought.view.library.View.enrolled'] = 'My Courses';
 NTIStrings['NextThought.view.library.View.course'] = 'Courses';
 NTIStrings['NextThought.view.library.View.books'] = 'Books';

@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 	extend: 'NextThought.app.library.courses.Current',
 	alias: 'widget.library-current-admin',
 	layout: 'none',
-	title: getString('NextThought.view.library.View.administered'),
+	title: getString('NextThought.view.library.View.administeredCourses'),
 	storeModel: 'NextThought.model.courses.CourseInstanceAdministrativeRole',
 
 	doNotMaskOnLoad: true,
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 
 	onSeeAllClick: function () {
 		if (this.pushRoute) {
-			this.pushRoute(getString('NextThought.view.library.View.administered'), '/admin');
+			this.pushRoute(getString('NextThought.view.library.View.administeredCourses'), '/admin');
 		}
 	}
 });
