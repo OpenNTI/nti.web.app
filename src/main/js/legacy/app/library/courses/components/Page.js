@@ -35,11 +35,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		if (archived && archived.length) {
 			// if specifically providing a list of archived to this method, use those
-			this.addBinnedCourses(this, this.binCourses(archived), getString('library.courses.components.Page.upcoming.archived'));
+			this.addBinnedCourses(this, this.binCourses(archived), getString('library.courses.components.Page.archived'));
 		}
 		else if (this.archived && this.archived.length) {
 			// if we've already loaded archived, use those
-			this.addBinnedCourses(this, this.binCourses(this.archived), getString('library.courses.components.Page.upcoming.archived'));
+			this.addBinnedCourses(this, this.binCourses(this.archived), getString('library.courses.components.Page.archived'));
 		}
 		else if(this.archivedLoader) {
 			// otherwise, defer archived loading using a load button
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 					me.archived = items;
 					me.archivedLoaded = true;
-					me.addBinnedCourses(me, me.binCourses(me.archived), getString('library.courses.components.Page.upcoming.archived'));
+					me.addBinnedCourses(me, me.binCourses(me.archived), getString('library.courses.components.Page.archived'));
 				});
 			};
 
