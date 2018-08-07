@@ -540,7 +540,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (this.applyingState || this.stateDisabled) { return; }
 
 		this.searchKey = this.header.inputEl.getValue();
-		this.updateFilter();
+		this.updateFilter(true);
 	},
 
 	clearSearch: function () {
@@ -772,7 +772,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	updateFilter: function () {
+	updateFilter: function (resetPage) {
 		var state = Ext.clone(this.currentState) || {},
 			newPage = state.currentPage !== this.currentPage;
 
@@ -792,7 +792,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (this.searchKey) {
 			state.searchKey = this.searchKey;
-			if (this.currentPage && this.currentPage > 1) {
+			if (this.currentPage && this.currentPage > 1 && resetPage) {
 				this.currentPage = 1;
 			}
 		} else {
