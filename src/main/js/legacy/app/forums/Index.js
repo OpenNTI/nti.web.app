@@ -95,6 +95,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this['get_forum_list'] = forumList instanceof Promise ? forumList : Promise.resolve(forumList);
 	},
 
+	setCurrentBundle (bundle) {
+		this.forumView.setCurrentBundle(bundle);
+	},
+
 	getForumList: function () {
 		return this['get_forum_list'] || Promise.reject('No forum list defined');
 	},

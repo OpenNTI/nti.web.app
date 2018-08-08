@@ -118,18 +118,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 
 	getBoardForSimplified () {
-		if (!this.forumList) { return; }
+		if (!this.currentBundle) { return; }
 
-		const item = this.forumList[0] || {};
-
-		if (item.board) {
-			return item.board;
-		}
-
-		const forum = (item && item.children && item.children[0]) || {};
-		return forum && forum.board;
+		return this.currentBundle.get('Discussions');
 	},
 
+	setCurrentBundle (bundle) {
+		this.currentBundle = bundle;
+	},
 
 	getStoreForSimplified () {
 		if (!this.forumList) { return {}; }
