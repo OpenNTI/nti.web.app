@@ -49,6 +49,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		this.navigation.setForumList(forumList);
 	},
 
+	setCurrentBundle (bundle) {
+		this.navigation.setCurrentBundle(bundle);
+	},
 
 	onForumDelete (record) {
 		const store = this.forumList[0].store || ((this.forumList[0].children || [])[0] || {}).store;
