@@ -62,6 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 
 		this.currentBundle = bundle;
 		container.clearForumList();
+		container.setCurrentBundle(this.currentBundle);
 
 		return bundle.getForumList()
 			.then(container.setForumList.bind(container));

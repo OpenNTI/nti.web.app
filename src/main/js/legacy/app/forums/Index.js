@@ -95,6 +95,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this['get_forum_list'] = forumList instanceof Promise ? forumList : Promise.resolve(forumList);
 	},
 
+	setCurrentBundle (bundle) {
+		this.forumView.setCurrentBundle(bundle);
+	},
+
 	getForumList: function () {
 		return this['get_forum_list'] || Promise.reject('No forum list defined');
 	},
@@ -112,7 +116,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 
 				if (!id && forumList.length === 1 && me.forumView.isSimplified()) {
 					const store = me.getStoreForSimplified(forumList);
-					let isEditor = forumList[0].children[0] && forumList[0].children[0].board.hasLink('add');
+
+					const item = forumList[0];
+					let isEditor = false;
+
+					if (item.board) {
+						isEditor = item.board.hasLink('add');
+					} else if (item.children && item.children[0]) {
+						isEditor = item.children[0].board && forumList[0].children[0].board.hasLink('add');
+					}
 
 					if (store.getCount() === 0) {
 						me.forumView.setEmptyState(isEditor);

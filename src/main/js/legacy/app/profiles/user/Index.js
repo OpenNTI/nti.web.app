@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		if (this.isMe) {
 			this.activeEntity.getSchema()
 				.then(function (schema) {
-					headerCmp.setSchema();
+					headerCmp.setSchema(schema);
 				});
 		}
 
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		if (this.isMe) {
 			this.activeEntity.getSchema()
 				.then(function (schema) {
-					headerCmp.setSchema();
+					headerCmp.setSchema(schema);
 				});
 		}
 
@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		if (this.isMe) {
 			this.activeEntity.getSchema()
 				.then(function (schema) {
-					headerCmp.setSchema();
+					headerCmp.setSchema(schema);
 				});
 		}
 
@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		if (this.isMe) {
 			this.activeEntity.getSchema()
 				.then(function (schema) {
-					headerCmp.setSchema();
+					headerCmp.setSchema(schema);
 				});
 		}
 
