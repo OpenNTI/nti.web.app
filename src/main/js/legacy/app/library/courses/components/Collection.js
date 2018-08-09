@@ -49,6 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				title: course.title,
 				courseName: course.label,
 				author: course.author,
+				byline: null,
 				enableSettings: true,
 				semester: course.semester,
 				badge: badge,
