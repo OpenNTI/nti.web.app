@@ -1,0 +1,97 @@
+@import '~@nti/style-common';
+
+.site-admin-change-role-dialog {
+	background-color: white;
+	width: 760px;
+
+	.panel-title-bar {
+		background-color: #fafafa;
+		border-bottom: solid 1px #ddd;
+	}
+
+	.contents {
+		padding: 30px 20px 60px 20px;
+
+		.description-container {
+			margin-bottom: 10px;
+
+			.description {
+				font-size: 14px;
+				line-height: 22px;
+				color: $primary-grey;
+			}
+		}
+
+		.people {
+			padding-bottom: 60px;
+
+			.subtitle {
+				font-size: 10px;
+				font-weight: 600;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+			}
+
+			.people-list {
+				display: flex;
+				flex-direction: row-reverse;
+				float: left;
+				margin-top: 18px;
+				margin-left: 6px;
+
+				.user {
+					img, svg {
+						height: 32px;
+						width: 32px;
+						border-radius: 50%;
+						float: left;
+						margin: -6px;
+						border: solid 1px white;
+					}
+				}
+			}
+		}
+
+		.roles {
+			.role-options {
+				.role-option {
+					display: flex;
+
+					.radio {
+						width: 26px;
+						height: 26px;
+						cursor: pointer;
+						border-radius: 50%;
+						border: solid 1px #ddd;
+						margin-right: 1rem;
+
+						&.selected {
+							border-color: $primary-blue;
+							position: relative;
+
+							.inner {
+								width: 16px;
+								height: 16px;
+								border-radius: 50%;
+								background-color: $primary-blue;
+								position: absolute;
+								top: 4px;
+								left: 4px;
+							}
+						}
+					}
+
+					.label {
+						line-height: 26px;
+					}
+				}
+			}
+		}
+	}
+
+	.dialog-buttons {
+		button.cancel {
+			text-decoration: none;
+		}
+	}
+}

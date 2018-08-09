@@ -1,0 +1,68 @@
+@import '~@nti/style-common';
+
+.users-table-container {
+	padding: 20px 0 60px 0;
+	min-height: 6rem;
+
+	.header {
+		position: relative;
+
+		.title {
+			font-size: 32px;
+			padding-left: 30px;
+			font-weight: 300;
+		}
+
+		.controls {
+			position: absolute;
+			right: 30px;
+			top: 0;
+			display: flex;
+
+			.button {
+				cursor: pointer;
+				color: $primary-blue;
+				border: 1px solid #e2e2e2;
+				border-radius: 4px;
+				line-height: 40px;
+				padding: 0 17px;
+				font-size: 14px;
+
+				&.rescind {
+					background-color: $primary-red;
+					color: white;
+				}
+			}
+		}
+	}
+
+	thead {
+		.select-col {
+			height: 62px;
+
+			.checkbox-component {
+				padding-left: 16px;
+			}
+		}
+	}
+
+	tbody {
+		tr {
+			height: 60px;
+			box-shadow: inset 0 1px 0 0 #e2e2e2;
+			padding: 0 24px;
+
+			td {
+				padding: 0;
+
+				.cell {
+					height: 60px;
+
+					&.row-selected {
+						background-color: rgba(63, 179, 246, 0.05);
+					}
+				}
+			}
+		}
+	}
+}

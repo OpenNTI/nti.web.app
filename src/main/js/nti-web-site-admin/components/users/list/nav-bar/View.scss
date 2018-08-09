@@ -1,0 +1,46 @@
+@import '~@nti/style-common';
+
+.site-admin-user-list-nav-bar {
+	.site-admin-tabs {
+		li {
+			font-size: 14px;
+			line-height: 40px;
+			box-shadow: none;
+
+			a {
+				padding: 0 1rem;
+				position: relative;
+
+				.invitations-count {
+					position: absolute;
+					top: 6px;
+					right: 8px;
+					color: $tertiary-grey;
+					border: solid 1px $tertiary-grey;
+					border-radius: 20px;
+					padding: 2px 14px;
+					height: 26px;
+					font-size: 12px;
+					line-height: 22px;
+				}
+
+				&.active {
+					box-shadow: inset 4px 0 0 0 #168fe7;
+
+					.invitations-count {
+						border: 1px solid rgba(255, 255, 255, 0.38);
+						color: white;
+					}
+				}
+			}
+		}
+	}
+
+	.invite {
+		color: #3fb3f6;
+		font-size: 14px;
+		margin: 0 1rem;
+		line-height: 60px;
+		cursor: pointer;
+	}
+}

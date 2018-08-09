@@ -1,0 +1,12 @@
+@import '~@nti/style-common';
+
+.site-admin-invite-people-dialog {
+	background-color: white;
+	width: 760px;
+
+	.dialog-buttons {
+		button.cancel {
+			text-decoration: none;
+		}
+	}
+}

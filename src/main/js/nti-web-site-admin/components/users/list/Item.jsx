@@ -21,11 +21,11 @@ UserItem.propTypes = {
 	removeCmp: PropTypes.func
 };
 export default function UserItem ({item, isSelected, onSelect, removeCmp: RemoveCmp, addCmp: AddCmp}) {
-	const {email, MostRecentSession} = item;
+	const {email} = item;
 
 	const createdTime = item.getCreatedTime();
 	const lastLoginTime = item.getLastLoginTime && item.getLastLoginTime();
-	let lastSeen = (MostRecentSession && MostRecentSession.getSessionStartTime()) || lastLoginTime;
+	let lastSeen = lastLoginTime;
 
 	// if none of the 'last seen' times resolved to anything greater than 0, just set it null so that we show 'Never'
 	if(lastSeen && lastSeen.getTime() === 0) {

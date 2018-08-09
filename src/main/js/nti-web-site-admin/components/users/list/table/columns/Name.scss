@@ -1,0 +1,40 @@
+@import '~@nti/style-common';
+
+.users-table-container {
+	.name-col {
+		.cell {
+			display: flex;
+
+			svg, img {
+				width: 40px;
+				height: 40px;
+				border-radius: 20px;
+				margin-right: 20px;
+				margin-top: 10px;
+			}
+
+			.user-info {
+				margin-top: 10px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: calc(100% - 150px);
+
+				.username {
+					font-size: 14px;
+					line-height: 19px;
+					color: $primary-grey;
+					white-space: nowrap;
+				}
+
+				.email {
+					font-size: 14px;
+					line-height: 19px;
+					color: $secondary-grey;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+				}
+			}
+		}
+	}
+}

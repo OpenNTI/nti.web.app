@@ -1,0 +1,15 @@
+.users-table-container {
+	.select-col {
+		width: 70px;
+	}
+
+	tbody {
+		.select-col {
+			.checkbox-component {
+				padding-left: 30px;
+				position: relative;
+				top: 20px;
+			}
+		}
+	}
+}
