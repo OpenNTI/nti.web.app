@@ -1,12 +1,14 @@
-import 'legacy'; //kick start the app (the core is still defined in extjs)
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {addFeatureCheckClasses} from '@nti/lib-dom';
 import {ConflictResolutionHandler, Updates} from '@nti/web-commons';
-import {overrideConfigAndForceCurrentHost, getConfigFor} from '@nti/web-client';
+import {overrideConfigAndForceCurrentHost, getConfigFor, initErrorReporter} from '@nti/web-client';
 
+initErrorReporter();
 addFeatureCheckClasses();
 overrideConfigAndForceCurrentHost();
+
+import 'legacy'; //kick start the app (the core is still defined in extjs)
 
 const basePath = (x => (x = getConfigFor(x), typeof x === 'string' ? x : '/'))('basepath');
 
