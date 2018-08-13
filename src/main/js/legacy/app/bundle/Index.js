@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 
 const {getString} = require('legacy/util/Localization');
 const PageInfo = require('legacy/model/PageInfo');
+const { isFeature } = require('legacy/util/Globals');
 
 const ContentIndex = require('../content/content/Index');
 const ForumIndex = require('../content/forum/Index');
@@ -131,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			});
 		}
 
-		if(showTab(NotebookIndex)) {
+		if(showTab(NotebookIndex) && isFeature('show-notebook-tab')) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.notebooktab', 'Notebook'),
 				route: 'notebook',
