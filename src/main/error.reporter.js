@@ -40,12 +40,14 @@
 	function hook () {
 		var onerror = window.onerror || function () {};
 		window.onerror = function (msg, url, line, column, errObj) {
+			var me = this, args = arguments, message = '', data = {}, count;
+
+			onerror.apply(me, args);
 
 			if (/^(SecurityError)/i.test(msg)) {
 				return;
 			}
 
-			var me = this, args = arguments, message = '', data = {}, count;
 			function escape (s) {
 				return (s || '').toString().replace(/"/g, '\\"');
 			}
@@ -83,12 +85,12 @@
 
 				sendRequest(
 					'/dataserver2/@@send-crash-report',
-					function () {onerror.apply(me, args);},
+					function () {},
 					message
 				);
 
 			} catch (e2) {
-				onerror.apply(me, args);
+				//
 			}
 		};
 	}

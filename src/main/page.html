@@ -71,14 +71,15 @@
 	<script type="text/javascript">
 		if( false ){
 			window.onerror = function(msg,url,line){
+				if((window.NextThought || {}).isInitialized){
+					return;
+				}
+
 				//strange, spec says we get a file url, ff seems to have given a stacktrace of sorts
 				var urls = url.split(/([\r\n]+)|(\s*-\>\s*)/);
 				//did it come from us?
 				var basePrefix = new RegExp("^" + location.protocol + '//' + location.host, "i");
 				if (basePrefix.test(urls[0])) {
-					if((window.NextThought || {}).isInitialized){
-						return;
-					}
 					window.location.replace('/login/unsupported.html');
 				}
 			};

@@ -105,14 +105,8 @@ Ext.application({
 		//Uncomment to supress cross domain flash socket message
 		//window.WEB_SOCKET_SUPPRESS_CROSS_DOMAIN_SWF_ERROR = true;
 
-		//if we get this far, we're good... no need to redirect to the unsupoprted page.
-		//Clear out the old onerror if there is one and register our own.
-		//Note: In chrome and firefox if you delete window.onerror and then reset
-		//it the old onerror function gets called when an error occurs (bizarre)
-		//That is why we just null it out here rather than deleting it.
-		//delete window.onerror;
-		window.onerror = null;
-		window.reportErrorEvent();//keep the error reporter going.
+		//TODO: remove this line once Airbrake is inplace.
+		global.reportErrorEvent();
 
 		loadScript(getURL('/socket.io/static/socket.io.js'));
 
