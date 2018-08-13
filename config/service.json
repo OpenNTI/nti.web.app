@@ -37,7 +37,8 @@
 			"show-open-students-first":false,
 			"suggest-contacts": false,
 			"transcript-follow-video": true,
-			"use-new-search":true
+			"use-new-search":true,
+			"show-notebook-tab": true
 		},
 
 		"server-host": "",

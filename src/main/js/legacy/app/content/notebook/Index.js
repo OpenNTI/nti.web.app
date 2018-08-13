@@ -2,7 +2,9 @@ const Ext = require('@nti/extjs');
 const { Stream } = require('@nti/web-content');
 const { getService } = require('@nti/web-client');
 
+const User = require('legacy/model/User');
 require('legacy/mixins/Router');
+require('legacy/mixins/ProfileLinks');
 
 module.exports = exports = Ext.define('NextThought.app.content.notebook.Index', {
 	extend: 'Ext.container.Container',
@@ -22,8 +24,18 @@ module.exports = exports = Ext.define('NextThought.app.content.notebook.Index', 
 
 		this.notebook = this.add({
 			xtype: 'react',
-			component: Stream
+			component: Stream,
+			addHistory: true,
+			getRouteFor: this.getRouteFor.bind(this)
 		});
+	},
+
+	getRouteFor (object, context) {
+		if (context === 'stream-highlight') {
+			return () => this.navigateToObject(object);
+		} else if (object.isUser) {
+			return `/app/user/${User.getUsernameForURL(object.Username)}`;
+		}
 	},
 
 	async bundleChanged (bundle) {
