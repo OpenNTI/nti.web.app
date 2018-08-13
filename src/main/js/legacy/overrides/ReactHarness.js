@@ -3,7 +3,8 @@ const PropTypes = require('prop-types');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
-const {getService} = require('@nti/web-client');
+const {getService, reportError} = require('@nti/web-client');
+const { Error } = require('@nti/web-commons');
 const {encodeForURI} = require ('@nti/lib-ntiids');
 const {getHistory, LinkTo} = require('@nti/web-routing');
 
@@ -133,7 +134,20 @@ const Bridge = createReactClass({
 	},
 
 
+	componentDidCatch (error, info) {
+		this.setState({ error, info, hasError: true });
+		reportError({
+			error,
+			params: {info}
+		});
+	},
+
+
 	render () {
+		if (this.state.hasError) {
+			return React.createElement(Error, this.state, 'Something went wrong.');
+		}
+
 		return React.Children.only(this.props.children);
 	}
 });
