@@ -548,7 +548,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		if (!lazy.ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
-			return Promise.reject('Bad NTIID');
+			return Promise.reject(new Error(`Bad PageInfo NTIID: ${JSON.stringify(ntiid)}`));
 		}
 
 		if (!cache.listeningForInvalidations) {
@@ -675,7 +675,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		if (!lazy.ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
-			return Promise.reject('Bad NTIID');
+			return Promise.reject(new Error(`Bad Object NTIID: ${JSON.stringify(ntiid)}`));
 		}
 
 		url = this.getObjectURL(ntiid);
