@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Table, Loading} from '@nti/web-commons';
+import {Table, Loading, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 
-import {Name, Select, InviteDate} from './columns';
+import {Select, InviteDate, InviteName} from './columns';
 import Store from './InvitationsStore';
 import Pager from './Pager';
 import EmptyState from './EmptyState';
@@ -41,7 +41,7 @@ class InvitationsTable extends React.Component {
 
 	columns = [
 		Select,
-		Name,
+		InviteName,
 		InviteDate
 	]
 
@@ -58,10 +58,18 @@ class InvitationsTable extends React.Component {
 		this.props.store.onSortChange(sortKey, sortDirection);
 	}
 
+	onRescind = () => {
+		const {selectedUsers, store} = this.props;
+
+		Prompt.areYouSure('Do you want to rescind pending invitations for the selected users?', 'Rescind Invitations', { iconClass: 'alert', confirmButtonClass: 'alert', confirmButtonLabel: 'Yes', cancelButtonLabel: 'No' }).then(() => {
+			store.rescind(selectedUsers);
+		});
+	}
+
 	renderControls () {
 		return (
 			<div className="controls">
-				<div className="button rescind">{t('rescind')}</div>
+				<div className="button rescind" onClick={this.onRescind}>{t('rescind')}</div>
 			</div>
 		);
 	}

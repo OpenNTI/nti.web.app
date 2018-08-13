@@ -6,7 +6,8 @@ import {LinkTo} from '@nti/web-routing';
 import cx from 'classnames';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.Name', {
-	headerTitle: 'Type'
+	headerTitle: 'Type',
+	title: 'Name'
 });
 
 export default class Name extends React.Component {
@@ -18,7 +19,7 @@ export default class Name extends React.Component {
 
 	static cssClassName = 'name-col';
 
-	static Name = 'Name'
+	static Name = () => t('title')
 
 	static SortKey = 'alias'
 

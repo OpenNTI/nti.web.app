@@ -4,7 +4,8 @@ import {scoped} from '@nti/lib-locale';
 import {DateTime} from '@nti/web-commons';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.InviteDate', {
-	headerTitle: 'Invite Date'
+	headerTitle: 'Invite Date',
+	title: 'Invite Date'
 });
 
 export default class InviteDate extends React.Component {
@@ -15,12 +16,12 @@ export default class InviteDate extends React.Component {
 
 	static cssClassName = 'invitedate-col';
 
-	static Name = 'Invite Date'
+	static Name = () => t('title')
 
 	// static SortKey = 'CreatedTime';
 
 	render () {
-		// const {item} = this.props;
-		return <div></div>;
+		const {item} = this.props;
+		return <div className="cell"><DateTime className="value" date={item.getCreatedTime()} format="LL" /></div>;
 	}
 }

@@ -5,7 +5,7 @@ import {DateTime} from '@nti/web-commons';
 import cx from 'classnames';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.JoinDate', {
-	headerTitle: 'Type'
+	title: 'Join Date'
 });
 
 export default class JoinDate extends React.Component {
@@ -17,9 +17,9 @@ export default class JoinDate extends React.Component {
 
 	static cssClassName = 'joindate-col';
 
-	static Name = 'Join Date'
+	static Name = () => t('title')
 
-	// static SortKey = 'CreatedTime';
+	static SortKey = 'createdTime';
 
 	render () {
 		const {item, store} = this.props;

@@ -12,7 +12,8 @@ const DEFAULT_TEXT = {
 	learners: 'Learners',
 	admins: 'Admins',
 	invitations: 'Invitations',
-	invitePeople: 'Invite People'
+	invitePeople: 'Invite People',
+	people: 'People'
 };
 
 const t = scoped('nti-site-admin.users.list.navbar.View', DEFAULT_TEXT);
@@ -33,6 +34,10 @@ class UsersTable extends React.Component {
 		this.props.store.loadInvitations();
 	}
 
+	componentWillUnmount () {
+		this.props.store.setUnload();
+	}
+
 	render () {
 		const {loading, items} = this.props;
 
@@ -40,6 +45,7 @@ class UsersTable extends React.Component {
 
 		return (
 			<Card className="site-admin-user-list-nav-bar">
+				<div className="header">{t('people')}</div>
 				<Tabs>
 					<LinkTo.Path to="./" activeClassName="active" exact>{t('learners')}</LinkTo.Path>
 					<LinkTo.Path to="./admins" activeClassName="active">{t('admins')}</LinkTo.Path>

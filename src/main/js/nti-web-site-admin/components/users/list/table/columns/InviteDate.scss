@@ -1,0 +1,11 @@
+@import '~@nti/style-common';
+
+.users-table-container {
+	.invitedate-col {
+		.cell {
+			font-size: 14px;
+			color: $secondary-grey;
+			line-height: 60px;
+		}
+	}
+}

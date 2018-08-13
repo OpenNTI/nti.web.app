@@ -6,7 +6,8 @@ import cx from 'classnames';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.LastSeen', {
 	never: 'Never',
-	duration: '%(duration)s ago'
+	duration: '%(duration)s ago',
+	title: 'Last Seen'
 });
 
 export default class LastSeen extends React.Component {
@@ -18,7 +19,9 @@ export default class LastSeen extends React.Component {
 
 	static cssClassName = 'lastseen-col';
 
-	static Name = 'Last Seen'
+	static Name = () => t('title')
+
+	static SortKey = 'lastSeenTime'
 
 	render () {
 		const {item, store} = this.props;

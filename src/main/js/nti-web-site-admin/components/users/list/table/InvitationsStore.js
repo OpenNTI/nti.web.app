@@ -1,5 +1,5 @@
 import {Stores} from '@nti/lib-store';
-// import {getService, User} from '@nti/web-client';
+import {getService} from '@nti/web-client';
 
 // const PAGE_SIZE = 20;
 
@@ -15,17 +15,23 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.set('pageNumber', 1);
 	}
 
+	setUnload () {
+		this.isUnloading = true;
+
+		setTimeout(() => { this.isUnloading = false; }, 100);
+	}
+
 	onSortChange (sortOn, sortDirection) {
 		this.set('sortOn', sortOn);
 		this.set('sortDirection', sortDirection);
 
-		this.loadUsers();
+		this.loadInvitations();
 	}
 
 	goToPage (pageNumber) {
 		this.set('pageNumber', pageNumber);
 
-		this.loadUsers();
+		this.loadInvitations();
 	}
 
 	selectAll () {
@@ -76,57 +82,61 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.emitChange('selectedUsers');
 	}
 
+	async rescind (users) {
+		const service = await getService();
+
+		const invitationsCollection = service.getCollection('Invitations', 'Invitations');
+
+		// this should return the list of deleted items, maybe we should compare to users to verify deletion was successful?
+		await service.post(invitationsCollection.getLink('delete-site-invitations'), { emails: users.map(x=>x.receiver)});
+
+		this.set('selectedUsers', []);
+
+		this.loadInvitations();
+	}
+
+	async sendInvites (emails, message, isAdmin) {
+		const service = await getService();
+
+		let payload = {
+			invitations: emails.map(x=>{return {'email': x, 'realname': x};}),
+			message
+		};
+
+		const invitationsCollection = service.getCollection('Invitations', 'Invitations');
+
+		await service.post(invitationsCollection.getLink(isAdmin ? 'send-site-admin-invitation' : 'send-site-invitation'), payload);
+
+		this.loadInvitations();
+	}
+
+	sendLearnerInvites (emails, message) {
+		this.sendInvites(emails, message);
+	}
+
+
+	sendAdminInvites (emails, message) {
+		this.sendInvites(emails, message, true);
+	}
+
 	async loadInvitations () {
+		if(this.isUnloading) {
+			return; // don't re-retrieve and emit changes during unload
+		}
+
 		this.set('loading', true);
 		this.emitChange('loading');
 
-		// const service = await getService();
+		const service = await getService();
 
-		let items = [];
+		const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
-		// const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
+		const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations'));
+		const adminResult = await service.getBatch(invitationsCollection.getLink('pending-site-admin-invitations'));
 
-		// const sortOn = this.get('sortOn');
-		// const sortDirection = this.get('sortDirection');
-		// const pageNumber = this.get('pageNumber');
-
-		// let params = [];
-		//
-		// if(sortOn) {
-		// 	params.push('sortOn=' + sortOn);
-		// }
-		//
-		// if(sortDirection) {
-		// 	params.push('sortOrder=' + sortDirection);
-		// }
-		//
-		// if(pageNumber) {
-		// 	const batchStart = (pageNumber - 1) * PAGE_SIZE;
-		//
-		// 	params.push('batchStart=' + batchStart);
-		// }
-		//
-		// params.push('batchSize=' + PAGE_SIZE);
-		//
-		// const paramStr = params.length > 0 ? '?' + params.join('&') : '';
-		//
-		// const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
-		// const siteAdmins = await service.getBatch(siteAdminsLink + paramStr);
-		//
-		// items = siteAdmins.Items;
+		const items = (result.Items || []).concat(adminResult.Items || []);
 
 		this.set('numPages', 0);
-
-		// items = [
-		// 	{
-		// 		Username: 'Test data 1',
-		// 		getID: () => 'testData1'
-		// 	},
-		// 	{
-		// 		Username: 'Test data 2',
-		// 		getID: () => 'testData2'
-		// 	}
-		// ];
 
 		this.set('loading', false);
 		this.set('items', items);

@@ -4,6 +4,90 @@
 	background-color: white;
 	width: 760px;
 
+	.contents {
+		max-height: calc(100vh - 200px);
+		overflow-y: auto;
+
+		.label {
+			margin-top: 0.75rem;
+			margin-left: 1.25rem;
+			font-size: 14px;
+			color: $tertiary-grey;
+			width: 2rem;
+		}
+
+		.invite-people-to-field {
+			display: flex;
+			border-bottom: solid 1px #ddd;
+
+			.token-editor {
+				width: 100%;
+				border: none;
+				min-height: 1.5rem;
+
+				input.token {
+					width: 12rem;
+				}
+			}
+
+			.label {
+				width: auto;
+			}
+		}
+
+		.invite-people-role-field {
+			display: flex;
+			border-bottom: solid 1px #ddd;
+
+			.select-box {
+				.option-label {
+					font-size: 14px;
+				}
+
+				.menu-label {
+					line-height: 2.75rem;
+					font-size: 14px;
+					font-weight: 400;
+
+					&::after {
+						font-size: 0.65rem;
+					}
+				}
+
+				ul {
+					padding-left: 0;
+					padding-right: 10px;
+					font-weight: 400;
+
+					li {
+						line-height: 1.5rem;
+					}
+				}
+
+				&.open {
+					.menu-label.selected {
+						background: white;
+						color: $primary-grey;
+					}
+				}
+			}
+		}
+
+		.invite-people-message-field {
+			.textarea-container {
+				border: none;
+				box-shadow: none;
+				padding: 0.75rem;
+				background-color: white;
+				height: 20rem;
+
+				textarea {
+					height: 100%;
+				}
+			}
+		}
+	}
+
 	.dialog-buttons {
 		button.cancel {
 			text-decoration: none;
