@@ -5,6 +5,7 @@ const PageInfo = require('legacy/model/PageInfo');
 
 const ContentIndex = require('../content/content/Index');
 const ForumIndex = require('../content/forum/Index');
+const NotebookIndex = require('../content/notebook/Index');
 const ContentStateStore = require('../library/content/StateStore');
 
 const BundleStateStore = require('./StateStore');
@@ -33,6 +34,10 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		{
 			xtype: 'bundle-content',
 			id: 'bundle-content'
+		},
+		{
+			xtype: 'bundle-notebook',
+			id: 'bundle-notebook'
 		}
 	],
 
@@ -48,6 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 
 		this.addRoute('/content', this.showContent.bind(this));
 		this.addRoute('/discussions', this.showDiscussions.bind(this));
+		this.addRoute('/notebook', this.showNotebook.bind(this));
 
 		this.addDefaultRoute('/content');
 	},
@@ -125,6 +131,15 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			});
 		}
 
+		if(showTab(NotebookIndex)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.notebooktab', 'Notebook'),
+				route: 'notebook',
+				subRoute: this.notebookRoute,
+				active: active === 'bundle-notebook'
+			});
+		}
+
 		this.navigation.setTabs(tabs);
 	},
 
@@ -147,6 +162,18 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			'bundle-forum'
 		]).then(function (item) {
 			if (item.handleRoute) {
+				item.handleRoute(subRoute, route);
+			}
+		});
+	},
+
+	showNotebook (route, subRoute) {
+		this.notebookRoute = subRoute;
+
+		return this.setActiveView('bundle-notebook', [
+			'bundle-forum'
+		]).then(item => {
+			if(item.handleRoute) {
 				item.handleRoute(subRoute, route);
 			}
 		});
