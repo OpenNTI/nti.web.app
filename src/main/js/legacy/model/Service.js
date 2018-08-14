@@ -40,7 +40,17 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			function resolve (q, s, r) {
 				var value = r.responseText;
 				if (!s) {
-					reject(Object.assign(new Error(r.responseText), r));
+					const asPlain = (txt) => {
+						try {
+							return JSON.parse(txt).message;
+						} catch (e) {
+							let d = document.createElement('div');
+							d.innerHTML = txt;
+							return (d.innerText || d.textContent || '').trim();
+						}
+					};
+
+					reject(Object.assign(new Error(`${r.status}: ${r.statusText}\n${asPlain(r.responseText)}`), r));
 					return;
 				}
 
