@@ -11,8 +11,7 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.JoinDat
 export default class JoinDate extends React.Component {
 	static propTypes = {
 		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired,
-		nonViewable: PropTypes.bool
+		store: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'joindate-col';

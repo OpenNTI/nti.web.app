@@ -20,6 +20,7 @@ export default
 @Store.connect({
 	loading: 'loading',
 	items: 'items',
+	error: 'error',
 	sortOn: 'sortOn',
 	sortDirection: 'sortDirection',
 	selectedUsers: 'selectedUsers',
@@ -30,6 +31,7 @@ class AdminsTable extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
 		items: PropTypes.array,
+		error: PropTypes.string,
 		loading: PropTypes.bool,
 		sortOn: PropTypes.string,
 		sortDirection: PropTypes.string,
@@ -86,11 +88,12 @@ class AdminsTable extends React.Component {
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, loading, numPages, pageNumber} = this.props;
+		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber} = this.props;
 
 		return (
 			<div className="users-table-container admins">
 				{loading && <Loading.Mask/>}
+				{!loading && error && <div className="error">{error}</div>}
 				{!loading && (!items || items.length === 0) && <EmptyState message={t('emptyMessage')}/>}
 				{!loading && items && items.length > 0 && (
 					<div>

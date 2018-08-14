@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import {Table, Loading, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 
-import {Select, InviteDate, InviteName} from './columns';
+import InvitePeople from '../InvitePeople';
+
+import {Select, InviteDate, InviteName, Rescind} from './columns';
 import Store from './InvitationsStore';
 import Pager from './Pager';
 import EmptyState from './EmptyState';
@@ -12,13 +14,15 @@ const t = scoped('nti-web-site-admin.users.list.table.InvitationsTable', {
 	learners: 'Invitations',
 	selected: '%(numSelected)s Selected',
 	rescind: 'Rescind Invitation',
-	emptyMessage: 'There are no outstanding invitations'
+	emptyMessage: 'There are no outstanding invitations',
+	invitePeople: 'Invite People'
 });
 
 export default
 @Store.connect({
 	loading: 'loading',
 	items: 'items',
+	error: 'error',
 	sortOn: 'sortOn',
 	sortDirection: 'sortDirection',
 	selectedUsers: 'selectedUsers',
@@ -29,6 +33,7 @@ class InvitationsTable extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
 		items: PropTypes.array,
+		error: PropTypes.string,
 		loading: PropTypes.bool,
 		sortOn: PropTypes.string,
 		sortDirection: PropTypes.string,
@@ -42,7 +47,8 @@ class InvitationsTable extends React.Component {
 	columns = [
 		Select,
 		InviteName,
-		InviteDate
+		InviteDate,
+		Rescind
 	]
 
 	state = {
@@ -66,33 +72,41 @@ class InvitationsTable extends React.Component {
 		});
 	}
 
+	launchInvite = () => {
+		InvitePeople.show();
+	}
+
 	renderControls () {
+		const {selectedUsers} = this.props;
+		const numSelected = (selectedUsers && selectedUsers.length) || 0;
+
 		return (
 			<div className="controls">
-				<div className="button rescind" onClick={this.onRescind}>{t('rescind')}</div>
+				{numSelected > 0 && <div className="button rescind" onClick={this.onRescind}>{t('rescind')}</div>}
+				{numSelected <= 0 && <div className="button invite-people" onClick={this.launchInvite}>{t('invitePeople')}</div>}
 			</div>
 		);
 	}
 
 	renderHeader () {
 		const {selectedUsers} = this.props;
-
 		const numSelected = selectedUsers && selectedUsers.length;
 
 		return (
 			<div className="header">
 				<div className="title">{numSelected ? t('selected', { numSelected }) : t('learners')}</div>
-				{numSelected > 0 && this.renderControls()}
+				{this.renderControls()}
 			</div>
 		);
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, loading, numPages, pageNumber} = this.props;
+		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber} = this.props;
 
 		return (
 			<div className="users-table-container invitations">
 				{loading && <Loading.Mask/>}
+				{!loading && error && <div className="error">{error}</div>}
 				{!loading && (!items || items.length === 0) && <EmptyState message={t('emptyMessage')}/>}
 				{!loading && items && items.length > 0 && (
 					<div>

@@ -124,42 +124,47 @@ export default class UserListStore extends Stores.SimpleStore {
 
 		let items = [];
 
-		// const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
+		try {
+			const sortOn = this.get('sortOn');
+			const sortDirection = this.get('sortDirection');
+			const pageNumber = this.get('pageNumber');
 
-		const sortOn = this.get('sortOn');
-		const sortDirection = this.get('sortDirection');
-		const pageNumber = this.get('pageNumber');
+			let params = [];
 
-		let params = [];
+			if(sortOn) {
+				params.push('sortOn=' + sortOn);
+			}
 
-		if(sortOn) {
-			params.push('sortOn=' + sortOn);
+			if(sortDirection) {
+				params.push('sortOrder=' + sortDirection);
+			}
+
+			if(pageNumber) {
+				const batchStart = (pageNumber - 1) * PAGE_SIZE;
+
+				params.push('batchStart=' + batchStart);
+			}
+
+			params.push('batchSize=' + PAGE_SIZE);
+
+			const paramStr = params.length > 0 ? '?' + params.join('&') : '';
+
+			const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
+			const siteAdmins = await service.getBatch(siteAdminsLink + paramStr);
+
+			items = siteAdmins.Items;
+
+			this.set('numPages', Math.ceil(siteAdmins.Total / PAGE_SIZE));
+
+			this.set('loading', false);
+			this.set('items', items);
+
+			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
 		}
-
-		if(sortDirection) {
-			params.push('sortOrder=' + sortDirection);
+		catch (e) {
+			this.set('loading', false);
+			this.set('error', e.message || 'Could not load site administrators');
+			this.emitChange('loading', 'error');
 		}
-
-		if(pageNumber) {
-			const batchStart = (pageNumber - 1) * PAGE_SIZE;
-
-			params.push('batchStart=' + batchStart);
-		}
-
-		params.push('batchSize=' + PAGE_SIZE);
-
-		const paramStr = params.length > 0 ? '?' + params.join('&') : '';
-
-		const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
-		const siteAdmins = await service.getBatch(siteAdminsLink + paramStr);
-
-		items = siteAdmins.Items;
-
-		this.set('numPages', Math.ceil(siteAdmins.Total / PAGE_SIZE));
-
-		this.set('loading', false);
-		this.set('items', items);
-
-		this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
 	}
 }

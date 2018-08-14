@@ -13,8 +13,7 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.LastSee
 export default class LastSeen extends React.Component {
 	static propTypes = {
 		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired,
-		nonViewable: PropTypes.bool
+		store: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'lastseen-col';

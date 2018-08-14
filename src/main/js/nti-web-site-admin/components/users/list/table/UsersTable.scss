@@ -4,6 +4,13 @@
 	padding: 20px 0 60px 0;
 	min-height: 6rem;
 
+	.error {
+		text-align: center;
+		color: red;
+		margin-bottom: 2rem;
+		font-size: 18px;
+	}
+
 	.header {
 		position: relative;
 
@@ -31,6 +38,12 @@
 				&.rescind {
 					background-color: $primary-red;
 					color: white;
+				}
+
+				&.invite-people {
+					background-color: $primary-blue;
+					color: white;
+					border-color: $primary-blue;
 				}
 			}
 		}

@@ -83,16 +83,27 @@ export default class UserListStore extends Stores.SimpleStore {
 	}
 
 	async rescind (users) {
-		const service = await getService();
+		this.set('loading', true);
+		this.emitChange('loading');
 
-		const invitationsCollection = service.getCollection('Invitations', 'Invitations');
+		try {
+			const service = await getService();
 
-		// this should return the list of deleted items, maybe we should compare to users to verify deletion was successful?
-		await service.post(invitationsCollection.getLink('delete-site-invitations'), { emails: users.map(x=>x.receiver)});
+			const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
-		this.set('selectedUsers', []);
+			// this should return the list of deleted items, maybe we should compare to users to verify deletion was successful?
+			await service.post(invitationsCollection.getLink('delete-site-invitations'), { emails: users.map(x=>x.receiver)});
 
-		this.loadInvitations();
+			this.set('selectedUsers', []);
+
+			// will set loading back to false after refreshing the data
+			this.loadInvitations();
+		}
+		catch (e) {
+			this.set('loading', false);
+			this.set('error', e.message || 'Could not rescind invitation');
+			this.emitChange('loading', 'error');
+		}
 	}
 
 	async sendInvites (emails, message, isAdmin) {
@@ -108,6 +119,10 @@ export default class UserListStore extends Stores.SimpleStore {
 		await service.post(invitationsCollection.getLink(isAdmin ? 'send-site-admin-invitation' : 'send-site-invitation'), payload);
 
 		this.loadInvitations();
+	}
+
+	getSelectedCount () {
+		return (this.get('selectedUsers') || []).length;
 	}
 
 	sendLearnerInvites (emails, message) {
@@ -127,20 +142,27 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.set('loading', true);
 		this.emitChange('loading');
 
-		const service = await getService();
+		try {
+			const service = await getService();
 
-		const invitationsCollection = service.getCollection('Invitations', 'Invitations');
+			const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
-		const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations'));
-		const adminResult = await service.getBatch(invitationsCollection.getLink('pending-site-admin-invitations'));
+			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations'));
+			const adminResult = await service.getBatch(invitationsCollection.getLink('pending-site-admin-invitations'));
 
-		const items = (result.Items || []).concat(adminResult.Items || []);
+			const items = (result.Items || []).concat(adminResult.Items || []);
 
-		this.set('numPages', 0);
+			this.set('numPages', 0);
 
-		this.set('loading', false);
-		this.set('items', items);
+			this.set('loading', false);
+			this.set('items', items);
 
-		this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
+			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
+		}
+		catch (e) {
+			this.set('loading', false);
+			this.set('error', e.message || 'Could not load invitations');
+			this.emitChange('loading', 'error');
+		}
 	}
 }

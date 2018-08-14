@@ -1,7 +1,6 @@
 import {Stores} from '@nti/lib-store';
 import {getService, User} from '@nti/web-client';
 
-const useNewCall = true;
 const PAGE_SIZE = 20;
 
 export default class UserListStore extends Stores.SimpleStore {
@@ -84,7 +83,7 @@ export default class UserListStore extends Stores.SimpleStore {
 
 		let items = [];
 
-		if(useNewCall) {
+		try {
 			const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
 
 			const sortOn = this.get('sortOn');
@@ -117,19 +116,18 @@ export default class UserListStore extends Stores.SimpleStore {
 
 			this.set('numPages', Math.ceil(siteUsers.Total / PAGE_SIZE));
 			this.set('pageNumber', siteUsers.BatchPage);
+
+
+			this.set('loading', false);
+			this.set('items', items);
+
+			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
 		}
-		else {
-			const community = await User.resolve({entity: service.SiteCommunity});
-			const membersLink = community.getLink('members');
+		catch (e) {
+			this.set('loading', false);
+			this.set('error', e.message || 'Could not load learners');
 
-			const siteUsers = await service.getBatch(membersLink);
-
-			items = siteUsers.Items;
+			this.emitChange('loading', 'error');
 		}
-
-		this.set('loading', false);
-		this.set('items', items);
-
-		this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
 	}
 }

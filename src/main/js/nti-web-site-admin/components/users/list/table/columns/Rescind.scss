@@ -1,0 +1,12 @@
+@import '~@nti/style-common';
+
+.users-table-container {
+	.rescind-col {
+		.cell {
+			color: $primary-red;
+			cursor: pointer;
+			line-height: 60px;
+			font-size: 14px;
+		}
+	}
+}
