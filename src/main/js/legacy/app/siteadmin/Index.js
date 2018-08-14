@@ -9,7 +9,7 @@ require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
 
 const CONTENT_ACTIVE = /^\/content/;
-const USERS_ACTIVE = /^\/users/;
+const USERS_ACTIVE = /^\/people/;
 const DASHBOARD_ACTIVE = /^\/dashboard/;
 const REPORTS_ACTIVE = /^\/reports/;
 const ADVANCED_ACTIVE = /^\/advanced/;
