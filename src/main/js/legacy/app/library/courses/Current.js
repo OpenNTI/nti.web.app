@@ -47,6 +47,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			}
 		};
 
+		const unmask = () => {
+			if (this.el) {
+				this.el.unmask();
+			}
+		};
+
 		const update = (updatedCatalogEntry, el) => {
 			this.updateCurrentItems(el);
 		};
@@ -56,6 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			'dropping-course': mask,
 			'adding-course': mask,
 			'dropped-course': update,
+			'dropped-error': unmask,
 			'added-course': update,
 			'modified-course': update
 		});
