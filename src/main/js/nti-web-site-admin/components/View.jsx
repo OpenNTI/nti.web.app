@@ -11,6 +11,7 @@ export default Router.for([
 	Route({path: '/dashboard', component: Dashboard}),
 	Route({path: '/content', component: Content}),
 	Route({path: '/users', component: Users}),
+	Route({path: '/people', component: Users}),
 	Route({path: '/reports', component: Reports}),
 	Route({path: '/advanced', component: Advanced}),
 	Route({path: '/', component: Dashboard})
