@@ -63,6 +63,21 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
+	setSchema: function (schema) {
+		this.profileSchema = schema;
+
+		if (!schema.ProfileSchema[this.name]) {
+			this.hide();
+		} else {
+			if (!this.rendered) {
+				this.on('afterrender', this.applySchema.bind(this));
+			} else {
+				this.applySchema();
+			}
+		}
+	},
+
+
 	setUser: function (user, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUser.bind(this, user, isMe));

@@ -68,6 +68,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	afterRender: function () {
 		this.callParent(arguments);
 
+		this.fieldToCmp = {
+			location: this.locationEl,
+			education: this.educationEl,
+			positions: this.positionEl
+		};
+
 		this.mon(this.avatarContainerEl, 'click', this.maybeEditAvatar.bind(this));
 	},
 
@@ -118,6 +124,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	setSchema: function (schema) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setSchema.bind(this, schema));
+			return;
+		}
+
 		if (!schema) { return; }
 
 		this.schema = schema;
@@ -139,6 +150,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		if (this.readOnly && editButton) {
 			editButton.hide();
+		}
+
+		for (let key of Object.keys(this.fieldToCmp)) {
+			if (!schema.ProfileSchema[key]) {
+				this.fieldToCmp[key].hide();
+			}
 		}
 	},
 
