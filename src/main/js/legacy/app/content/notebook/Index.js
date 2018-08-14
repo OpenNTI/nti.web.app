@@ -42,11 +42,10 @@ module.exports = exports = Ext.define('NextThought.app.content.notebook.Index', 
 		if (this.currentBundle === bundle) { return; }
 
 		this.currentBundle = bundle;
-		this.root = await Service.getPageInfo(bundle.getFirstPage(), null, null, null, bundle);
 
 		if (this.notebook) {
 			const service = await getService();
-			const context = await service.getObject(this.root.rawData);
+			const context = await service.getObject(this.currentBundle.rawData);
 
 			this.notebook.setProps({ context });
 		}
