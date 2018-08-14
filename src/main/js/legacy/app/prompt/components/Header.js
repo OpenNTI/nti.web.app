@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 				key: this.messages.length + 1
 			};
 
-		this.onceRendered().then(() =>
+		this.onceRendered.then(() =>
 			this.msgTpl.append(this.msgEl, config));
 
 		config.remove = this.__removeMessage.bind(this, key);
