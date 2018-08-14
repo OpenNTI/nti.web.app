@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			id: this.getId(),
 			isBundle: true,
 			title: this.get('title'),
-			label: this.get('author'),//TODO: delete this line when we know uiData.label is not referenced. (I'm 90% sure its not already.)
+			label: this.get('byline') || this.get('author'),//TODO: delete this line when we know uiData.label is not referenced. (I'm 90% sure its not already.)
 			author: this.get('author'),
 			byline: this.get('byline'),
 			icon: this.get('icon'),
