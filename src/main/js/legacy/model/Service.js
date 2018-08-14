@@ -36,6 +36,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			delete urlOrConfig.returnResponse;
 		}
 
+		const {stack} = Error();
 		return new Promise(function (fulfill, reject) {
 			function resolve (q, s, r) {
 				var value = r.responseText;
@@ -50,7 +51,10 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 						}
 					};
 
-					reject(Object.assign(new Error(`${r.status}: ${r.statusText}\n${asPlain(r.responseText)}`), r));
+					const e = new Error(`${r.status}: ${r.statusText}\n${asPlain(r.responseText)}`);
+					reject(Object.assign(e, r, {
+						stack: e.stack + '\n' + String(stack).split('\n').slice(1).join('\n')
+					}));
 					return;
 				}
 
