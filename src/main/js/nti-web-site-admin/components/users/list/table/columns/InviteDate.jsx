@@ -21,7 +21,7 @@ export default class InviteDate extends React.Component {
 
 	static Name = () => t('title')
 
-	// static SortKey = 'CreatedTime';
+	// static SortKey = 'created_time';
 
 	render () {
 		const {item, store} = this.props;

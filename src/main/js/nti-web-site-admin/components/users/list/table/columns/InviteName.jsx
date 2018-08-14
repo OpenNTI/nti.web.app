@@ -6,8 +6,12 @@ import cx from 'classnames';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.InviteName', {
 	headerTitle: 'Type',
-	title: 'Name'
+	title: 'Name',
+	administrator: 'Administrator',
+	learner: 'Learner'
 });
+
+const ADMIN_TYPE = /siteadmininvitation/;
 
 export default class InviteName extends React.Component {
 	static propTypes = {
@@ -19,7 +23,7 @@ export default class InviteName extends React.Component {
 
 	static Name = () => t('title')
 
-	// static SortKey = 'receiver'
+	static SortKey = 'email'
 
 	render () {
 		const {item, store} = this.props;
@@ -34,6 +38,7 @@ export default class InviteName extends React.Component {
 				<Avatar entity={entity}/>
 				<div className="user-info">
 					<div className="invite-email">{item.receiver}</div>
+					<div className="invite-type">{ADMIN_TYPE.test(item.MimeType) ? t('administrator') : t('learner')}</div>
 				</div>
 			</div>
 		);

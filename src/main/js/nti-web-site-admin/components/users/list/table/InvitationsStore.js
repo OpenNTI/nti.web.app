@@ -1,7 +1,7 @@
 import {Stores} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
 
-// const PAGE_SIZE = 20;
+const PAGE_SIZE = 20;
 
 export default class UserListStore extends Stores.SimpleStore {
 
@@ -143,19 +143,40 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.emitChange('loading');
 
 		try {
+			const sortOn = this.get('sortOn');
+			const sortDirection = this.get('sortDirection');
+			const pageNumber = this.get('pageNumber');
+
+			let params = [];
+
+			if(sortOn) {
+				params.push('sortOn=' + sortOn);
+			}
+
+			if(sortDirection) {
+				params.push('sortOrder=' + sortDirection);
+			}
+
+			if(pageNumber) {
+				const batchStart = (pageNumber - 1) * PAGE_SIZE;
+
+				params.push('batchStart=' + batchStart);
+			}
+
+			params.push('batchSize=' + PAGE_SIZE);
+
+			const paramStr = params.length > 0 ? '?' + params.join('&') : '';
+
 			const service = await getService();
 
 			const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
-			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations'));
-			const adminResult = await service.getBatch(invitationsCollection.getLink('pending-site-admin-invitations'));
+			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations') + paramStr);
 
-			const items = (result.Items || []).concat(adminResult.Items || []);
-
-			this.set('numPages', 0);
-
+			this.set('numPages', Math.ceil(result.Total / PAGE_SIZE));
+			this.set('pageNumber', result.BatchPage);
 			this.set('loading', false);
-			this.set('items', items);
+			this.set('items', result.Items);
 
 			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
 		}
