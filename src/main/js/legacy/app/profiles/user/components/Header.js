@@ -59,6 +59,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	initComponent: function () {
 		this.callParent(arguments);
 
+		this.missingFields = {};
+
 		this.ChatStore = ChatStateStore.getInstance();
 		this.ChatActions = ChatActions.create();
 
@@ -154,7 +156,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		for (let key of Object.keys(this.fieldToCmp)) {
 			if (!schema.ProfileSchema[key]) {
-				this.fieldToCmp[key].hide();
+				this.missingFields[key] = true;
+				this.fieldToCmp[key].addCls('hidden');
+			} else {
+				this.missingFields[key] = false;
+				this.fieldToCmp[key].removeCls('hidden');
 			}
 		}
 	},
@@ -181,21 +187,21 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			}
 		}
 
-		if (educationString) {
+		if (educationString && !this.missingFields.education) {
 			this.educationEl.removeCls('hidden');
 			this.educationEl.update(educationString);
 		} else {
 			this.educationEl.addCls('hidden');
 		}
 
-		if (positionString) {
+		if (positionString && !this.missingFields.positions) {
 			this.positionEl.removeCls('hidden');
 			this.positionEl.update(positionString);
 		} else {
 			this.positionEl.addCls('hidden');
 		}
 
-		if (data.location) {
+		if (data.location && !this.missingFields.location) {
 			this.locationEl.removeCls('hidden');
 			this.locationEl.update(data.location);
 		} else {
