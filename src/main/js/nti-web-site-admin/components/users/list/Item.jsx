@@ -24,8 +24,9 @@ export default function UserItem ({item, isSelected, onSelect, removeCmp: Remove
 	const {email} = item;
 
 	const createdTime = item.getCreatedTime();
+	const lastSeenTime = item.getLastSeenTime && item.getLastSeenTime();
 	const lastLoginTime = item.getLastLoginTime && item.getLastLoginTime();
-	let lastSeen = lastLoginTime;
+	let lastSeen = lastSeenTime || lastLoginTime;
 
 	// if none of the 'last seen' times resolved to anything greater than 0, just set it null so that we show 'Never'
 	if(lastSeen && lastSeen.getTime() === 0) {
