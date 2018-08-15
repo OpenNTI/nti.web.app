@@ -1,5 +1,6 @@
 import {Stores} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
+import {Models} from '@nti/lib-interfaces';
 
 const PAGE_SIZE = 20;
 
@@ -110,13 +111,14 @@ export default class UserListStore extends Stores.SimpleStore {
 		const service = await getService();
 
 		let payload = {
-			invitations: emails.map(x=>{return {'email': x, 'realname': x};}),
-			message
+			invitations: emails.map(x=>{return {'receiver': x, 'receiver_name': x};}),
+			message,
+			MimeType: isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType
 		};
 
 		const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
-		await service.post(invitationsCollection.getLink(isAdmin ? 'send-site-admin-invitation' : 'send-site-invitation'), payload);
+		await service.post(invitationsCollection.getLink('send-site-invitation'), payload);
 
 		this.loadInvitations();
 	}
