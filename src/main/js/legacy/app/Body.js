@@ -397,6 +397,8 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 			if (hasWindow) {
 				path = path + '/object/' + objId;
+			} else {
+				alert('Unable to navigate to object.');
 			}
 
 			me.el.unmask();
