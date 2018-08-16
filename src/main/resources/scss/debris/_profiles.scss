@@ -252,7 +252,7 @@
 					opacity: 1;
 				}
 
-				&.hidden {
+				&.hidden, &.not-in-schema {
 					display: none;
 				}
 			}
@@ -327,7 +327,7 @@
 			font-weight: 300;
 			@include ellipse;
 
-			&.hidden {
+			&.hidden, &.not-in-schema {
 				display: none;
 			}
 		}
@@ -2130,7 +2130,7 @@
 			font-size: 0.875rem;
 			font-weight: 300;
 
-			&.hidden {
+			&.hidden, &.not-in-schema {
 				display: none;
 			}
 		}
