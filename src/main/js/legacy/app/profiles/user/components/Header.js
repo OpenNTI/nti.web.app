@@ -85,6 +85,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			return;
 		}
 
+		if (user !== this.user) {
+			this.missingFields = {};
+		}
+
 		this.user = user;
 		this.isContact = contact;
 		Ext.destroy(this.userMonitor);
@@ -133,6 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		if (!schema) { return; }
 
+		this.missingFields = {};
 		this.schema = schema;
 		const editButton = this.el.down('.buttons .edit');
 		const excludedFields = {
@@ -157,10 +162,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		for (let key of Object.keys(this.fieldToCmp)) {
 			if (!schema.ProfileSchema[key]) {
 				this.missingFields[key] = true;
-				this.fieldToCmp[key].addCls('hidden');
+				this.fieldToCmp[key].addCls('not-in-schema');
 			} else {
 				this.missingFields[key] = false;
-				this.fieldToCmp[key].removeCls('hidden');
+				this.fieldToCmp[key].removeCls('not-in-schema');
 			}
 		}
 	},
