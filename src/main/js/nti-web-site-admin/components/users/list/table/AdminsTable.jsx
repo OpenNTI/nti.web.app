@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Table, Loading} from '@nti/web-commons';
+import {Table, Loading, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 
 import {Name, JoinDate, LastSeen, Select} from './columns';
@@ -54,22 +54,26 @@ class AdminsTable extends React.Component {
 		sortOn: 'name'
 	}
 
-	componentDidMount () {
-		this.props.store.loadUsers();
-	}
+	// componentDidMount () {
+	// 	this.props.store.load();
+	// }
 
 	onSortChange = (sortKey, sortDirection) => {
-		this.props.store.onSortChange(sortKey, sortDirection);
+		this.props.store.setSort(sortKey, sortDirection);
 	}
 
-	launchRoleChangeDialog = () => {
-		ChangeRole.show(this.props.selectedUsers, true);
+	showChangeRolesDialog = () => {
+		this.setState({showChangeRoles: true});
+	}
+
+	hideChangeRolesDialog = () => {
+		this.setState({showChangeRoles: false});
 	}
 
 	renderControls () {
 		return (
 			<div className="controls">
-				<div className="button change-role" onClick={this.launchRoleChangeDialog}>{t('changeRole')}</div>
+				<div className="button change-role" onClick={this.showChangeRolesDialog}>{t('changeRole')}</div>
 			</div>
 		);
 	}
@@ -88,7 +92,8 @@ class AdminsTable extends React.Component {
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber} = this.props;
+		const {store, sortOn, sortDirection, items, selectedUsers, error, loading, numPages, pageNumber} = this.props;
+		const {showChangeRoles} = this.state;
 
 		return (
 			<div className="users-table-container admins">
@@ -108,6 +113,11 @@ class AdminsTable extends React.Component {
 						/>
 						<Pager store={store} numPages={numPages} pageNumber={pageNumber}/>
 					</div>
+				)}
+				{showChangeRoles && (
+					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>
+						<ChangeRole selectedUsers={selectedUsers}/>
+					</Prompt.Dialog>
 				)}
 			</div>
 		);

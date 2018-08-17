@@ -1,9 +1,12 @@
-import {Stores} from '@nti/lib-store';
-import {getService, User} from '@nti/web-client';
+import {Stores, Mixins} from '@nti/lib-store';
+import {getService} from '@nti/web-client';
+import {mixin} from '@nti/lib-decorators';
 
 const PAGE_SIZE = 20;
 
-export default class UserListStore extends Stores.SimpleStore {
+export default
+@mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
+class UserListStore extends Stores.BoundStore {
 
 	constructor () {
 		super();
@@ -12,19 +15,6 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.set('loading', true);
 		this.set('sortOn', null);
 		this.set('sortDirection', null);
-	}
-
-	onSortChange (sortOn, sortDirection) {
-		this.set('sortOn', sortOn);
-		this.set('sortDirection', sortDirection);
-
-		this.loadUsers();
-	}
-
-	goToPage (pageNumber) {
-		this.set('pageNumber', pageNumber);
-
-		this.loadUsers();
 	}
 
 	selectAll () {
@@ -75,9 +65,33 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.emitChange('selectedUsers');
 	}
 
-	async loadUsers () {
+	loadPage (pageNumber) {
+		this.set('pageNumber', pageNumber);
+
+		this.load();
+	}
+
+	async loadSearch () {
+		const service = await getService();
+		const link = service.getUserSearchURL(this.searchTerm);
+
+		const batch = await service.getBatch(link);
+
+		this.set('loading', false);
+		this.set('items', batch.Items);
+
+		this.emitChange('loading', 'items');
+	}
+
+	async load () {
 		this.set('loading', true);
 		this.emitChange('loading');
+
+		if(this.searchTerm && this.searchTerm.length >= 3) {
+			return this.loadSearch();
+		}
+
+		// console.log(this.searchTerm);
 
 		const service = await getService();
 
@@ -86,8 +100,8 @@ export default class UserListStore extends Stores.SimpleStore {
 		try {
 			const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
 
-			const sortOn = this.get('sortOn');
-			const sortDirection = this.get('sortDirection');
+			const sortOn = this.sortProperty;
+			const sortDirection = this.sortDirection;
 			const pageNumber = this.get('pageNumber');
 
 			let params = [];
@@ -114,9 +128,10 @@ export default class UserListStore extends Stores.SimpleStore {
 
 			items = siteUsers.Items;
 
+			this.set('sortOn', sortOn);
+			this.set('sortDirection', sortDirection);
 			this.set('numPages', Math.ceil(siteUsers.Total / PAGE_SIZE));
 			this.set('pageNumber', siteUsers.BatchPage);
-
 
 			this.set('loading', false);
 			this.set('items', items);

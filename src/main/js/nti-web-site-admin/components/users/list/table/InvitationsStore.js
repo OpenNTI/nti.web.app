@@ -1,10 +1,14 @@
-import {Stores} from '@nti/lib-store';
+import {Stores, Mixins} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
 import {Models} from '@nti/lib-interfaces';
+import {mixin} from '@nti/lib-decorators';
 
 const PAGE_SIZE = 20;
 
-export default class UserListStore extends Stores.SimpleStore {
+export default
+@mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
+class UserListStore extends Stores.BoundStore {
+	static Singleton = true;
 
 	constructor () {
 		super();
@@ -20,19 +24,6 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.isUnloading = true;
 
 		setTimeout(() => { this.isUnloading = false; }, 100);
-	}
-
-	onSortChange (sortOn, sortDirection) {
-		this.set('sortOn', sortOn);
-		this.set('sortDirection', sortDirection);
-
-		this.loadInvitations();
-	}
-
-	goToPage (pageNumber) {
-		this.set('pageNumber', pageNumber);
-
-		this.loadInvitations();
 	}
 
 	selectAll () {
@@ -110,17 +101,28 @@ export default class UserListStore extends Stores.SimpleStore {
 	async sendInvites (emails, message, isAdmin) {
 		const service = await getService();
 
-		let payload = {
-			invitations: emails.map(x=>{return {'receiver': x, 'receiver_name': x};}),
-			message,
-			MimeType: isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType
-		};
+		this.set('loading', true);
+		this.set('error', null);
+		this.emitChange('loading', 'error');
 
-		const invitationsCollection = service.getCollection('Invitations', 'Invitations');
+		try {
+			let payload = {
+				invitations: emails.map(x=>{return {'receiver': x, 'receiver_name': x};}),
+				message,
+				MimeType: isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType
+			};
 
-		await service.post(invitationsCollection.getLink('send-site-invitation'), payload);
+			const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
-		this.loadInvitations();
+			await service.post(invitationsCollection.getLink('send-site-invitation'), payload);
+
+			this.loadInvitations();
+		}
+		catch (e) {
+			this.set('loading', false);
+			this.set('error', e.Message || e);
+			this.emitChange('loading', 'error');
+		}
 	}
 
 	getSelectedCount () {
@@ -136,7 +138,25 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.sendInvites(emails, message, true);
 	}
 
-	async loadInvitations () {
+	loadPage (pageNumber) {
+		this.set('pageNumber', pageNumber);
+
+		this.load();
+	}
+
+	async loadSearch () {
+		// const service = await getService();
+		// const link = service.getUserSearchURL(this.searchTerm);
+		//
+		// const batch = await service.getBatch(link);
+		//
+		// this.set('loading', false);
+		// this.set('items', batch.Items);
+		//
+		// this.emitChange('loading', 'items');
+	}
+
+	async load () {
 		if(this.isUnloading) {
 			return; // don't re-retrieve and emit changes during unload
 		}
@@ -145,8 +165,8 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.emitChange('loading');
 
 		try {
-			const sortOn = this.get('sortOn');
-			const sortDirection = this.get('sortDirection');
+			const sortOn = this.sortProperty;
+			const sortDirection = this.sortDirection;
 			const pageNumber = this.get('pageNumber');
 
 			let params = [];
@@ -177,6 +197,8 @@ export default class UserListStore extends Stores.SimpleStore {
 
 			this.set('numPages', Math.ceil(result.Total / PAGE_SIZE));
 			this.set('pageNumber', result.BatchPage);
+			this.set('sortOn', sortOn);
+			this.set('sortDirection', sortDirection);
 			this.set('loading', false);
 			this.set('items', result.Items);
 

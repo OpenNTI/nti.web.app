@@ -1,9 +1,13 @@
-import {Stores} from '@nti/lib-store';
-import {getService, User} from '@nti/web-client';
+import {Stores, Mixins} from '@nti/lib-store';
+import {getService} from '@nti/web-client';
+import {mixin} from '@nti/lib-decorators';
 
 const PAGE_SIZE = 20;
 
-export default class UserListStore extends Stores.SimpleStore {
+export default
+@mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
+class UserAdminListStore extends Stores.BoundStore {
+	static Singleton = true;
 
 	constructor () {
 		super();
@@ -13,19 +17,6 @@ export default class UserListStore extends Stores.SimpleStore {
 		this.set('sortOn', null);
 		this.set('sortDirection', null);
 		this.set('pageNumber', 1);
-	}
-
-	onSortChange (sortOn, sortDirection) {
-		this.set('sortOn', sortOn);
-		this.set('sortDirection', sortDirection);
-
-		this.loadUsers();
-	}
-
-	goToPage (pageNumber) {
-		this.set('pageNumber', pageNumber);
-
-		this.loadUsers();
 	}
 
 	selectAll () {
@@ -85,7 +76,7 @@ export default class UserListStore extends Stores.SimpleStore {
 			this.set('error', 'Unknown error setting admin role for ' + errors.length + ' user(s)');
 		}
 
-		this.loadUsers();
+		this.load();
 	}
 
 	async removeAdmin (users) {
@@ -97,7 +88,7 @@ export default class UserListStore extends Stores.SimpleStore {
 			this.set('error', 'Unknown error removing admin role for ' + errors.length + ' user(s)');
 		}
 
-		this.loadUsers();
+		this.load();
 	}
 
 	changeRoleForUser (user, service, removing) {
@@ -116,7 +107,25 @@ export default class UserListStore extends Stores.SimpleStore {
 		}
 	}
 
-	async loadUsers () {
+	loadPage (pageNumber) {
+		this.set('pageNumber', pageNumber);
+
+		this.load();
+	}
+
+	async loadSearch () {
+		const service = await getService();
+		const link = service.getUserSearchURL(this.searchTerm);
+
+		const batch = await service.getBatch(link);
+
+		this.set('loading', false);
+		this.set('items', batch.Items);
+
+		this.emitChange('loading', 'items');
+	}
+
+	async load () {
 		this.set('loading', true);
 		this.emitChange('loading');
 
@@ -125,8 +134,8 @@ export default class UserListStore extends Stores.SimpleStore {
 		let items = [];
 
 		try {
-			const sortOn = this.get('sortOn');
-			const sortDirection = this.get('sortDirection');
+			const sortOn = this.sortProperty;
+			const sortDirection = this.sortDirection;
 			const pageNumber = this.get('pageNumber');
 
 			let params = [];
@@ -155,7 +164,8 @@ export default class UserListStore extends Stores.SimpleStore {
 			items = siteAdmins.Items;
 
 			this.set('numPages', Math.ceil(siteAdmins.Total / PAGE_SIZE));
-
+			this.set('sortOn', sortOn);
+			this.set('sortDirection', sortDirection);
 			this.set('loading', false);
 			this.set('items', items);
 

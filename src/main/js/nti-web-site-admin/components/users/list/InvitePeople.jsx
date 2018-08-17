@@ -17,10 +17,11 @@ const t = scoped('nti-web-site-admin.componentsusers.list.InvitePeople', DEFAULT
 
 
 export default class InvitePeople extends React.Component {
-	static show () {
+	static show (store) {
 		return new Promise((fulfill, reject) => {
 			Prompt.modal(
 				<InvitePeople
+					store={store}
 					onFinish={fulfill}
 					onCancel={reject}
 				/>,
@@ -30,8 +31,7 @@ export default class InvitePeople extends React.Component {
 	}
 
 	static propTypes = {
-		selectedUsers: PropTypes.array,
-		removing: PropTypes.bool,
+		store: PropTypes.object.isRequired,
 		onDismiss: PropTypes.func,
 		onFinish: PropTypes.func,
 
@@ -39,8 +39,6 @@ export default class InvitePeople extends React.Component {
 
 	constructor (props) {
 		super(props);
-
-		this.store = InvitationsStore.getInstance();
 	}
 
 
@@ -49,13 +47,13 @@ export default class InvitePeople extends React.Component {
 	}
 
 	onSave = async () => {
-		const {onFinish, onDismiss} = this.props;
+		const {onFinish, onDismiss, store} = this.props;
 		const {role, message, emails} = this.state;
 
 		if(role === 'learner') {
-			this.store.sendLearnerInvites(emails, message);
+			store.sendLearnerInvites(emails, message);
 		} else {
-			this.store.sendAdminInvites(emails, message);
+			store.sendAdminInvites(emails, message);
 		}
 
 

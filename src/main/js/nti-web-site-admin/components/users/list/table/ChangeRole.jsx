@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {Prompt, Loading, DialogButtons, Avatar, Panels} from '@nti/web-commons';
 
-import AdminStore from './AdminStore';
+import Store from './AdminStore';
 
 const ADMIN = 'admin';
 const LEARNER = 'learner';
@@ -24,33 +24,23 @@ const DEFAULT_TEXT = {
 const t = scoped('nti-web-site-admin.componentsusers.list.table.ChangeRole', DEFAULT_TEXT);
 
 
-export default class ChangeRole extends React.Component {
-	static show (selectedUsers, removing) {
-		return new Promise((fulfill, reject) => {
-			Prompt.modal(
-				<ChangeRole
-					selectedUsers={selectedUsers}
-					removing={removing}
-					onFinish={fulfill}
-					onCancel={reject}
-				/>,
-				'site-admins-change-role-container'
-			);
-		});
-	}
-
+export default
+@Store.connect({
+	addAdmin: 'addAdmin',
+	removeAdmin: 'removeAdmin'
+})
+class ChangeRole extends React.Component {
 	static propTypes = {
+		addAdmin: PropTypes.func.isRequired,
+		removeAdmin: PropTypes.func.isRequired,
 		selectedUsers: PropTypes.array,
 		removing: PropTypes.bool,
-		onDismiss: PropTypes.func,
-		onFinish: PropTypes.func,
+		onDismiss: PropTypes.func
 
 	}
 
 	constructor (props) {
 		super(props);
-
-		this.adminStore = AdminStore.getInstance();
 
 		this.state = {
 			selectedType: props.removing ? ADMIN : LEARNER
@@ -61,17 +51,16 @@ export default class ChangeRole extends React.Component {
 	state = {}
 
 	onSave = () => {
-		const {onFinish, onDismiss, selectedUsers} = this.props;
+		const {onDismiss, selectedUsers, addAdmin, removeAdmin} = this.props;
 		const {selectedType} = this.state;
 
 		if(selectedType === ADMIN) {
-			this.adminStore.addAdmin(selectedUsers);
+			addAdmin(selectedUsers);
 		}
 		else {
-			this.adminStore.removeAdmin(selectedUsers);
+			removeAdmin(selectedUsers);
 		}
 
-		onFinish();
 		onDismiss();
 	}
 

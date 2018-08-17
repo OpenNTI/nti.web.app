@@ -56,12 +56,12 @@ class InvitationsTable extends React.Component {
 		sortOn: 'name'
 	}
 
-	componentDidMount () {
-		this.props.store.loadInvitations();
-	}
+	// componentDidMount () {
+	// 	this.props.store.load();
+	// }
 
 	onSortChange = (sortKey, sortDirection) => {
-		this.props.store.onSortChange(sortKey, sortDirection);
+		this.props.store.setSort(sortKey, sortDirection);
 	}
 
 	onRescind = () => {
@@ -73,7 +73,7 @@ class InvitationsTable extends React.Component {
 	}
 
 	launchInvite = () => {
-		InvitePeople.show();
+		InvitePeople.show(this.props.store);
 	}
 
 	renderControls () {
