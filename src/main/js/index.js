@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {addFeatureCheckClasses} from '@nti/lib-dom';
 import {ConflictResolutionHandler, Updates} from '@nti/web-commons';
-import {overrideConfigAndForceCurrentHost, getConfigFor, initErrorReporter} from '@nti/web-client';
+import {overrideConfigAndForceCurrentHost, getConfigFor} from '@nti/web-client';
 
-initErrorReporter();
+// initErrorReporter();
 addFeatureCheckClasses();
 overrideConfigAndForceCurrentHost();
 

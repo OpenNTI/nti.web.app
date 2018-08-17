@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Table, Loading} from '@nti/web-commons';
+import {Table, Loading, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
+import {searchable} from '@nti/web-search';
 
 import {Name, JoinDate, LastSeen, Select} from './columns';
 import Store from './Store';
@@ -17,6 +18,7 @@ const t = scoped('nti-web-site-admin.users.list.table.UsersTable', {
 });
 
 export default
+@searchable()
 @Store.connect({
 	loading: 'loading',
 	items: 'items',
@@ -54,22 +56,26 @@ class UsersTable extends React.Component {
 		sortOn: 'name'
 	}
 
-	componentDidMount () {
-		this.props.store.loadUsers();
-	}
+	// componentDidMount () {
+	// 	this.props.store.load();
+	// }
 
 	onSortChange = (sortKey, sortDirection) => {
-		this.props.store.onSortChange(sortKey, sortDirection);
+		this.props.store.setSort(sortKey, sortDirection);
 	}
 
-	launchRoleChangeDialog = () => {
-		ChangeRole.show(this.props.selectedUsers);
+	showChangeRolesDialog = () => {
+		this.setState({showChangeRoles: true});
+	}
+
+	hideChangeRolesDialog = () => {
+		this.setState({showChangeRoles: false});
 	}
 
 	renderControls () {
 		return (
 			<div className="controls">
-				<div className="button change-role" onClick={this.launchRoleChangeDialog}>{t('changeRole')}</div>
+				<div className="button change-role" onClick={this.showChangeRolesDialog}>{t('changeRole')}</div>
 			</div>
 		);
 	}
@@ -88,7 +94,8 @@ class UsersTable extends React.Component {
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber} = this.props;
+		const {store, sortOn, sortDirection, items, selectedUsers, error, loading, numPages, pageNumber} = this.props;
+		const {showChangeRoles} = this.state;
 
 		return (
 			<div className="users-table-container">
@@ -108,6 +115,11 @@ class UsersTable extends React.Component {
 						/>
 						<Pager store={store} numPages={numPages} pageNumber={pageNumber}/>
 					</div>
+				)}
+				{showChangeRoles && (
+					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>
+						<ChangeRole selectedUsers={selectedUsers}/>
+					</Prompt.Dialog>
 				)}
 			</div>
 		);

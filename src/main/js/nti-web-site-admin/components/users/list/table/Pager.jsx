@@ -14,7 +14,21 @@ export default class Pager extends React.Component {
 
 		const cls = cx('page', { selected: pageNumber === num + 1 });
 
-		return <div key={pageNumber} onClick={()=>{ store.goToPage(num + 1); }} className={cls}>{num + 1}</div>;
+		return (
+			<div
+				key={num}
+				onClick={()=>{
+					if(store.loadPage) {
+						store.loadPage(num + 1);
+					}
+					else {
+						store.goToPage(num + 1);
+					}
+				}}
+				className={cls}>
+				{num + 1}
+			</div>
+		);
 	}
 
 	render () {

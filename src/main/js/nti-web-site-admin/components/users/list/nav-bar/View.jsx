@@ -23,23 +23,23 @@ export default
 	loading: 'loading',
 	items: 'items'
 })
-class UsersTable extends React.Component {
+class UserListNavBar extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
 		items: PropTypes.array,
 		loading: PropTypes.bool
 	}
 
-	componentDidMount () {
-		this.props.store.loadInvitations();
-	}
+	// componentDidMount () {
+	// 	this.props.store.loadPage();
+	// }
 
 	componentWillUnmount () {
 		this.props.store.setUnload();
 	}
 
 	render () {
-		const {loading, items} = this.props;
+		const {loading, items, store} = this.props;
 
 		const hasCount = !loading && items != null;
 
@@ -55,7 +55,7 @@ class UsersTable extends React.Component {
 					</LinkTo.Path>
 				</Tabs>
 				<div className="invite" onClick={() => {
-					InvitePeople.show();
+					InvitePeople.show(store);
 				}}>
 					{t('invitePeople')}
 				</div>
