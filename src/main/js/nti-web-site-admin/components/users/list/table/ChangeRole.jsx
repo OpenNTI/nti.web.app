@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
-import {Prompt, Loading, DialogButtons, Avatar, Panels} from '@nti/web-commons';
+import {DialogButtons, Avatar, Panels} from '@nti/web-commons';
 
 import Store from './AdminStore';
 

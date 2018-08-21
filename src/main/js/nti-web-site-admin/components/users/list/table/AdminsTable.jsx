@@ -116,7 +116,7 @@ class AdminsTable extends React.Component {
 				)}
 				{showChangeRoles && (
 					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>
-						<ChangeRole selectedUsers={selectedUsers}/>
+						<ChangeRole selectedUsers={selectedUsers} removing/>
 					</Prompt.Dialog>
 				)}
 			</div>

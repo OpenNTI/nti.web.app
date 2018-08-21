@@ -121,6 +121,8 @@ class UserListStore extends Stores.BoundStore {
 			}
 
 			params.push('batchSize=' + PAGE_SIZE);
+			// TODO: Only get learners, filter out users who are site admins
+			// params.push('filterAdmin');
 
 			const paramStr = params.length > 0 ? '?' + params.join('&') : '';
 

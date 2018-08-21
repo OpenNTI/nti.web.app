@@ -21,12 +21,12 @@ const t = scoped('nti-site-admin.users.list.navbar.View', DEFAULT_TEXT);
 export default
 @Store.connect({
 	loading: 'loading',
-	items: 'items'
+	total: 'total'
 })
 class UserListNavBar extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
-		items: PropTypes.array,
+		total: PropTypes.number,
 		loading: PropTypes.bool
 	}
 
@@ -39,9 +39,9 @@ class UserListNavBar extends React.Component {
 	}
 
 	render () {
-		const {loading, items, store} = this.props;
+		const {loading, total, store} = this.props;
 
-		const hasCount = !loading && items != null;
+		const hasCount = !loading && (total || total === 0);
 
 		return (
 			<Card className="site-admin-user-list-nav-bar">
@@ -51,7 +51,7 @@ class UserListNavBar extends React.Component {
 					<LinkTo.Path to="./admins" activeClassName="active">{t('admins')}</LinkTo.Path>
 					<LinkTo.Path to="./invitations" activeClassName="active">
 						{t('invitations')}
-						{hasCount && <div className="invitations-count">{items.length}</div>}
+						{hasCount && <div className="invitations-count">{total || 0}</div>}
 					</LinkTo.Path>
 				</Tabs>
 				<div className="invite" onClick={() => {
