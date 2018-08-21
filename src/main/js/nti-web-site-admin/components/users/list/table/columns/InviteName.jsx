@@ -23,7 +23,7 @@ export default class InviteName extends React.Component {
 
 	static Name = () => t('title')
 
-	static SortKey = 'email'
+	static SortKey = 'receiver'
 
 	render () {
 		const {item, store} = this.props;
