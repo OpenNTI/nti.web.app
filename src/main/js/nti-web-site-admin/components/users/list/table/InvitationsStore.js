@@ -89,7 +89,7 @@ class UserListStore extends Stores.BoundStore {
 			this.set('selectedUsers', []);
 
 			// will set loading back to false after refreshing the data
-			this.loadInvitations();
+			this.load();
 		}
 		catch (e) {
 			this.set('loading', false);
@@ -116,7 +116,7 @@ class UserListStore extends Stores.BoundStore {
 
 			await service.post(invitationsCollection.getLink('send-site-invitation'), payload);
 
-			this.loadInvitations();
+			this.load();
 		}
 		catch (e) {
 			this.set('loading', false);
@@ -201,8 +201,9 @@ class UserListStore extends Stores.BoundStore {
 			this.set('sortDirection', sortDirection);
 			this.set('loading', false);
 			this.set('items', result.Items);
+			this.set('total', result.Total);
 
-			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
+			this.emitChange('loading', 'items', 'total', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
 		}
 		catch (e) {
 			this.set('loading', false);
