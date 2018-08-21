@@ -164,6 +164,13 @@ class UserListStore extends Stores.BoundStore {
 		this.set('loading', true);
 		this.emitChange('loading');
 
+		if(this.searchTerm && this.searchTerm.length < 3) {
+			this.set('items', []);
+			this.set('numPages', 1);
+			this.emitChange('items', 'numPages');
+			return;
+		}
+
 		try {
 			const sortOn = this.sortProperty;
 			const sortDirection = this.sortDirection;
@@ -187,6 +194,10 @@ class UserListStore extends Stores.BoundStore {
 
 			params.push('batchSize=' + PAGE_SIZE);
 
+			if(this.searchTerm) {
+				params.push('filterOn=receiver&filter=' + this.searchTerm);
+			}
+
 			const paramStr = params.length > 0 ? '?' + params.join('&') : '';
 
 			const service = await getService();
@@ -195,7 +206,7 @@ class UserListStore extends Stores.BoundStore {
 
 			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations') + paramStr);
 
-			this.set('numPages', Math.ceil(result.Total / PAGE_SIZE));
+			this.set('numPages', Math.ceil((result.FilteredTotalItemCount || result.Total) / PAGE_SIZE));
 			this.set('pageNumber', result.BatchPage);
 			this.set('sortOn', sortOn);
 			this.set('sortDirection', sortDirection);

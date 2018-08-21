@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {DialogButtons, Avatar, Panels} from '@nti/web-commons';
+import {Connectors} from '@nti/lib-store';
 
-import Store from './AdminStore';
+// import Store from './AdminStore';
 
 const ADMIN = 'admin';
 const LEARNER = 'learner';
@@ -25,7 +26,7 @@ const t = scoped('nti-web-site-admin.componentsusers.list.table.ChangeRole', DEF
 
 
 export default
-@Store.connect({
+@Connectors.Any.connect({
 	addAdmin: 'addAdmin',
 	removeAdmin: 'removeAdmin'
 })

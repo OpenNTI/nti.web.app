@@ -39,7 +39,10 @@ class UsersTable extends React.Component {
 		sortDirection: PropTypes.string,
 		pageNumber: PropTypes.number,
 		numPages: PropTypes.number,
-		selectedUsers: PropTypes.array
+		selectedUsers: PropTypes.array,
+		filter: PropTypes.string,
+		title: PropTypes.string,
+		emptyMessage: PropTypes.string
 	}
 
 	items = []
@@ -81,27 +84,27 @@ class UsersTable extends React.Component {
 	}
 
 	renderHeader () {
-		const {selectedUsers} = this.props;
+		const {selectedUsers, title} = this.props;
 
 		const numSelected = selectedUsers && selectedUsers.length;
 
 		return (
 			<div className="header">
-				<div className="title">{numSelected ? t('selected', { numSelected }) : t('learners')}</div>
+				<div className="title">{numSelected ? t('selected', { numSelected }) : title}</div>
 				{numSelected > 0 && this.renderControls()}
 			</div>
 		);
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, selectedUsers, error, loading, numPages, pageNumber} = this.props;
+		const {store, sortOn, sortDirection, items, selectedUsers, error, loading, numPages, pageNumber, emptyMessage, filter} = this.props;
 		const {showChangeRoles} = this.state;
 
 		return (
 			<div className="users-table-container">
 				{loading && <Loading.Mask/>}
 				{!loading && error && <div className="error">{error}</div>}
-				{!loading && (!items || items.length === 0) && <EmptyState message={t('emptyMessage')}/>}
+				{!loading && (!items || items.length === 0) && <EmptyState message={emptyMessage}/>}
 				{!loading && items && items.length > 0 && (
 					<div>
 						{this.renderHeader()}
@@ -118,7 +121,7 @@ class UsersTable extends React.Component {
 				)}
 				{showChangeRoles && (
 					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>
-						<ChangeRole selectedUsers={selectedUsers}/>
+						<ChangeRole selectedUsers={selectedUsers} removing={filter === 'admin'}/>
 					</Prompt.Dialog>
 				)}
 			</div>

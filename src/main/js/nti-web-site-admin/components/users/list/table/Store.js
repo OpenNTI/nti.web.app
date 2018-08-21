@@ -5,7 +5,7 @@ import {mixin} from '@nti/lib-decorators';
 const PAGE_SIZE = 20;
 
 export default
-@mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
+@mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
 class UserListStore extends Stores.BoundStore {
 
 	constructor () {
@@ -65,41 +65,77 @@ class UserListStore extends Stores.BoundStore {
 		this.emitChange('selectedUsers');
 	}
 
+	async addAdmin (users) {
+		const service = await getService();
+		const results = await Promise.all(users.map(user => this.changeRoleForUser(user, service)));
+		const errors = results.filter(x => x && x.error);
+
+		if(errors.length > 0) {
+			this.set('error', 'Unknown error setting admin role for ' + errors.length + ' user(s)');
+		}
+
+		this.load();
+	}
+
+	async removeAdmin (users) {
+		const service = await getService();
+		const results = await Promise.all(users.map(user => this.changeRoleForUser(user, service, true)));
+		const errors = results.filter(x => x && x.error);
+
+		if(errors.length > 0) {
+			this.set('error', 'Unknown error removing admin role for ' + errors.length + ' user(s)');
+		}
+
+		this.load();
+	}
+
+	changeRoleForUser (user, service, removing) {
+		const userName = user.Username;
+		const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
+
+		if(removing) {
+			return service.delete(siteAdminsLink + '/' + userName).catch(() => {
+				return Promise.resolve({error: 'Could not change roles for ' + userName});
+			});
+		}
+		else {
+			return service.post(siteAdminsLink + '/' + userName).catch(() => {
+				return Promise.resolve({error: 'Could not change roles for ' + userName});
+			});
+		}
+	}
+
 	loadPage (pageNumber) {
 		this.set('pageNumber', pageNumber);
 
 		this.load();
 	}
 
-	async loadSearch () {
-		const service = await getService();
-		const link = service.getUserSearchURL(this.searchTerm);
-
-		const batch = await service.getBatch(link);
-
-		this.set('loading', false);
-		this.set('items', batch.Items);
-
-		this.emitChange('loading', 'items');
+	getLink (service) {
+		if(this.filter === 'admin') {
+			return service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
+		}
+		else {
+			return service.Items.filter(x => x.hasLink('SiteUsers'))[0].getLink('SiteUsers');
+		}
 	}
 
 	async load () {
 		this.set('loading', true);
 		this.emitChange('loading');
 
-		if(this.searchTerm && this.searchTerm.length >= 3) {
-			return this.loadSearch();
+		if(this.searchTerm && this.searchTerm.length < 3) {
+			this.set('items': []);
+			this.set('numPages', 1);
+			this.emitChange('items', 'numPages');
+			return;
 		}
-
-		// console.log(this.searchTerm);
 
 		const service = await getService();
 
 		let items = [];
 
 		try {
-			const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
-
 			const sortOn = this.sortProperty;
 			const sortDirection = this.sortDirection;
 			const pageNumber = this.get('pageNumber');
@@ -122,14 +158,19 @@ class UserListStore extends Stores.BoundStore {
 
 			params.push('batchSize=' + PAGE_SIZE);
 			// TODO: Only get learners, filter out users who are site admins
-			// params.push('filterAdmin');
+			params.push('filterAdmins=true');
+
+			if(this.searchTerm) {
+				params.push('searchTerm=' + this.searchTerm);
+			}
 
 			const paramStr = params.length > 0 ? '?' + params.join('&') : '';
 
-			const siteUsers = await service.getBatch(userWorkspace.getLink('SiteUsers') + paramStr);
+			const siteUsers = await service.getBatch(this.getLink(service) + paramStr);
 
 			items = siteUsers.Items;
 
+			this.set('selectedUsers', []);
 			this.set('sortOn', sortOn);
 			this.set('sortDirection', sortDirection);
 			this.set('numPages', Math.ceil(siteUsers.Total / PAGE_SIZE));
