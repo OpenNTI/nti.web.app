@@ -219,8 +219,9 @@
 	}
 
 	.meta {
-		padding: 20px 20px 0 200px;
+		padding: 20px 20px 0 20px;
 		height: 145px;//180 - 35
+		overflow: hidden;
 
 		.about {
 			float: left;
