@@ -1,0 +1,29 @@
+@import '~@nti/style-common';
+
+.content-table-container {
+	.bookname-col {
+		padding-left: 1rem;
+
+		.cell {
+			display: flex;
+
+			.book-icon {
+				width: 5rem;
+			}
+
+			.book-info {
+				max-width: calc(100% - 150px);
+				font-size: 16px;
+				line-height: 19px;
+				color: $primary-grey;
+				white-space: nowrap;
+				margin-left: 0.5rem;
+
+				.title {
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+		}
+	}
+}

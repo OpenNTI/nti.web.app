@@ -41,11 +41,13 @@ export default class Toolbar extends React.Component {
 				{actions && (
 					<Actions actions={actions} selectedItems={selectedItems} />
 				)}
-				<TypeSelect
-					options={options}
-					selectedType={selectedType}
-					onTypeToggle={onTypeToggle}
-				/>
+				{options && onTypeToggle && (
+					<TypeSelect
+						options={options}
+						selectedType={selectedType}
+						onTypeToggle={onTypeToggle}
+					/>
+				)}
 				{selectedType === 'Courses' && (
 					<CreateCourse canCreate onCourseCreated={onCourseCreated} />
 				)}

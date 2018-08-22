@@ -1,0 +1,10 @@
+@import '~@nti/style-common';
+
+.content-table-container {
+	.createdtime-col {
+		color: $secondary-grey;
+		font-size: 14px;
+		line-height: 60px;
+		width: 7rem;
+	}
+}

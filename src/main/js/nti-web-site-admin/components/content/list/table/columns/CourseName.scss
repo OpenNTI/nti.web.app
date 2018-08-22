@@ -1,0 +1,36 @@
+@import '~@nti/style-common';
+
+.content-table-container {
+	.coursename-col {
+		padding-left: 1rem;
+
+		.cell {
+			display: flex;
+
+			.site-admin-course-info {
+				width: 100%;
+
+				.course-icon {
+					width: 5rem;
+					background-size: contain;
+				}
+
+				.info {
+					max-width: 100%;
+
+					.label {
+						font-size: 10px;
+					}
+
+					.title {
+						font-size: 16px;
+					}
+
+					.meta {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+}

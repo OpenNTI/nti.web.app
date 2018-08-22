@@ -1,0 +1,30 @@
+@import '~@nti/style-common';
+
+.site-admin-content-list-nav-bar {
+	.header {
+		color: $tertiary-grey;
+		box-shadow: 0 1px 0 0 #e2e2e2;
+		height: 52px;
+		line-height: 52px;
+		padding-left: 20px;
+		font-size: 14px;
+		margin-bottom: 10px;
+	}
+
+	.site-admin-tabs {
+		li {
+			font-size: 14px;
+			line-height: 40px;
+			box-shadow: none;
+
+			a {
+				padding: 0 20px;
+				position: relative;
+
+				&.active {
+					box-shadow: inset 4px 0 0 0 #168fe7;
+				}
+			}
+		}
+	}
+}

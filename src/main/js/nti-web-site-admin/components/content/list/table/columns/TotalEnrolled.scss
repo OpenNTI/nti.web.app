@@ -1,0 +1,14 @@
+@import '~@nti/style-common';
+
+.content-table-container {
+	.totalenrolled-col {
+		color: $secondary-grey;
+		font-size: 14px;
+		line-height: 60px;
+		width: 4rem;
+
+		.cell {
+			text-align: center;
+		}
+	}
+}
