@@ -8,7 +8,7 @@ import Store from './Store';
 import NavBar from './nav-bar';
 
 const DEFAULT_TEXT = {
-	back: 'Back to Users'
+	back: 'Back to People'
 };
 
 const t = scoped('nti-site-admin.users.user.Frame', DEFAULT_TEXT);
