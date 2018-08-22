@@ -4,9 +4,10 @@ import {Table, Loading} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {searchable, contextual} from '@nti/web-search';
 
+import Pager from '../../../common/Pager';
+
 import {BookName, CreatedTime} from './columns';
 import Store from './BooksStore';
-import Pager from './Pager';
 import EmptyState from './EmptyState';
 
 const t = scoped('nti-web-site-admin.content.list.table.BooksTable', {

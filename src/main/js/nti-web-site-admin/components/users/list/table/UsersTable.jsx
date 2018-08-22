@@ -4,9 +4,10 @@ import {Table, Loading, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {searchable} from '@nti/web-search';
 
+import Pager from '../../../common/Pager';
+
 import {Name, JoinDate, LastSeen, Select} from './columns';
 import Store from './Store';
-import Pager from './Pager';
 import ChangeRole from './ChangeRole';
 import EmptyState from './EmptyState';
 

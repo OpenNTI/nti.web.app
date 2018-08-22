@@ -5,10 +5,10 @@ import {scoped} from '@nti/lib-locale';
 import {searchable} from '@nti/web-search';
 
 import InvitePeople from '../InvitePeople';
+import Pager from '../../../common/Pager';
 
 import {Select, InviteDate, InviteName, Rescind} from './columns';
 import Store from './InvitationsStore';
-import Pager from './Pager';
 import EmptyState from './EmptyState';
 
 const t = scoped('nti-web-site-admin.users.list.table.InvitationsTable', {

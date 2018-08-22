@@ -5,10 +5,10 @@ import {scoped} from '@nti/lib-locale';
 import {searchable, contextual} from '@nti/web-search';
 
 import Toolbar from '../../../common/toolbar/Toolbar';
+import Pager from '../../../common/Pager';
 
 import {CourseName, StartDate, EndDate, TotalEnrolled} from './columns';
 import Store from './CoursesStore';
-import Pager from './Pager';
 import EmptyState from './EmptyState';
 
 const t = scoped('nti-web-site-admin.content.list.table.CoursesTable', {
