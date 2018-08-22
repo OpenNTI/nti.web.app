@@ -35,7 +35,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				Ext.fly(this.contentElement).setStyle({
 					height: 0,
 					width: 0,
-					margin: 0
+					margin: 0,
+					float: 'left'
 				});
 			}
 		} catch (e) {

@@ -670,6 +670,31 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return doc;
 	},
 
+
+	fixDocumentRealPages (div) {
+		const location = this.reader.getLocation();
+		const realPages = location && location.realPages;
+
+		if (!realPages || !div) { return div; }
+
+		const firstPage = realPages[0];
+		const firstPageTag = div.querySelector(`realpagenumber[value="${firstPage}"]`);
+
+		if (firstPageTag) { return div; }
+
+		const page = div.querySelector('.page-contents');
+		const tag = document.createElement('realpagenumber');
+
+		tag.setAttribute('value', firstPage);
+		tag.setAttribute('continued', true);
+
+
+		page.insertBefore(tag, page.firstChild);
+
+		return div;
+	},
+
+
 	update: function (html, metaData) {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body || doc.getElementsByName('body')[0]),
@@ -681,6 +706,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		Ext.select('meta[nti-injected="true"]', false, head).remove();
 
 		div.innerHTML = html || '';
+		div = this.fixDocumentRealPages(div);
 
 		Ext.each(div.querySelectorAll('object object'), function (object) {
 			object.appendChild(fallback.cloneNode(true));

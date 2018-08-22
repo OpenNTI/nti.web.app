@@ -12,7 +12,6 @@ const Globals = require('./Globals');
 const {getURL} = Globals;
 
 
-
 module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	mixins: {
@@ -315,12 +314,13 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return null;
 		}
 
-		function mapNode (node) {
+		function mapNode (node, realPageIndex) {
 			var doc = node.toc && node.toc.documentElement,
 				loc = node.location;
 
 			return Ext.apply({
 				NTIID: ntiid,
+				realPages: realPageIndex ? realPageIndex.NTIIDs[ntiid] : null,
 				icon: getAttribute([loc, doc], 'icon'),
 				isCourse: (getAttribute([loc, doc], 'isCourse') || '').toLowerCase() === 'true',
 				root: getAttribute([loc, doc], 'base'),
@@ -355,9 +355,17 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		result = me.cache[ntiid];
 
 		if (!result) {
-			result = this.getNodes(ntiid, bundleOrToc)
-				.then(function (nodes) {
-					return (nodes || []).map(mapNode);
+			result = Promise.all([
+				this.getNodes(ntiid, bundleOrToc),
+				bundleOrToc.getContentPackageContaining(ntiid)
+					.then(contentPackage => contentPackage.getInterfaceInstance())
+					.then(contentPackage => contentPackage.getRealPageIndex())
+					.catch(() => null)
+			])
+				.then((results) => {
+					const [nodes, realPageIndex] = results;
+
+					return (nodes || []).map(n => mapNode(n, realPageIndex));
 				});
 
 			me.cache[ntiid] = result;
