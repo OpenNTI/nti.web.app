@@ -23,7 +23,7 @@ class UserListStore extends Stores.BoundStore {
 	setUnload () {
 		this.isUnloading = true;
 
-		setTimeout(() => { this.isUnloading = false; }, 100);
+		setTimeout(() => { this.isUnloading = false; }, 400);
 	}
 
 	selectAll () {
