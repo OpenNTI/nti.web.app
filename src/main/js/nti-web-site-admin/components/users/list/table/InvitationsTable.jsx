@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Table, Loading, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
-import {searchable} from '@nti/web-search';
+import {searchable, contextual} from '@nti/web-search';
 
 import InvitePeople from '../InvitePeople';
 import Pager from '../../../common/Pager';
@@ -21,6 +21,7 @@ const t = scoped('nti-web-site-admin.users.list.table.InvitationsTable', {
 
 export default
 @searchable()
+@contextual(t('learners'))
 @Store.connect({
 	loading: 'loading',
 	items: 'items',
