@@ -93,6 +93,9 @@ class UserListStore extends Stores.BoundStore {
 		const userName = user.Username;
 		const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
 
+		this.set('loading', true);
+		this.emitChange('loading');
+
 		if(removing) {
 			return service.delete(siteAdminsLink + '/' + userName).catch(() => {
 				return Promise.resolve({error: 'Could not change roles for ' + userName});
@@ -136,37 +139,43 @@ class UserListStore extends Stores.BoundStore {
 		let items = [];
 
 		try {
+			const link = this.getLink(service);
+
+			if(!link) {
+				throw new Error('Access forbidden');
+			}
+
 			const sortOn = this.sortProperty;
 			const sortDirection = this.sortDirection;
 			const pageNumber = this.get('pageNumber');
 
-			let params = [];
+			let params = {};
 
 			if(sortOn) {
-				params.push('sortOn=' + sortOn);
+				params.sortOn = sortOn;
 			}
 
 			if(sortDirection) {
-				params.push('sortOrder=' + sortDirection);
+				params.sortOrder = sortDirection;
 			}
 
 			if(pageNumber) {
 				const batchStart = (pageNumber - 1) * PAGE_SIZE;
 
-				params.push('batchStart=' + batchStart);
+				params.batchStart = batchStart;
 			}
 
-			params.push('batchSize=' + PAGE_SIZE);
-			// TODO: Only get learners, filter out users who are site admins
-			params.push('filterAdmins=true');
+			params.batchSize = PAGE_SIZE;
+
+			if(this.filter === 'learners') {
+				params.filterAdmins = 'true';
+			}
 
 			if(this.searchTerm) {
-				params.push('searchTerm=' + this.searchTerm);
+				params.searchTerm = this.searchTerm;
 			}
 
-			const paramStr = params.length > 0 ? '?' + params.join('&') : '';
-
-			const siteUsers = await service.getBatch(this.getLink(service) + paramStr);
+			const siteUsers = await service.getBatch(link, params);
 
 			items = siteUsers.Items;
 

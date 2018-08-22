@@ -176,35 +176,34 @@ class UserListStore extends Stores.BoundStore {
 			const sortDirection = this.sortDirection;
 			const pageNumber = this.get('pageNumber');
 
-			let params = [];
+			let params = {};
 
 			if(sortOn) {
-				params.push('sortOn=' + sortOn);
+				params.sortOn = sortOn;
 			}
 
 			if(sortDirection) {
-				params.push('sortOrder=' + sortDirection);
+				params.sortOrder = sortDirection;
 			}
 
 			if(pageNumber) {
 				const batchStart = (pageNumber - 1) * PAGE_SIZE;
 
-				params.push('batchStart=' + batchStart);
+				params.batchStart = batchStart;
 			}
 
-			params.push('batchSize=' + PAGE_SIZE);
+			params.batchSize = PAGE_SIZE;
 
 			if(this.searchTerm) {
-				params.push('filterOn=receiver&filter=' + this.searchTerm);
+				params.filterOn = 'receiver';
+				params.filter = this.searchTerm;
 			}
-
-			const paramStr = params.length > 0 ? '?' + params.join('&') : '';
 
 			const service = await getService();
 
 			const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
-			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations') + paramStr);
+			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations'), params);
 
 			this.set('numPages', Math.ceil((result.FilteredTotalItemCount || result.Total) / PAGE_SIZE));
 			this.set('pageNumber', result.BatchPage);
