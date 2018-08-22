@@ -104,7 +104,7 @@ class UsersTable extends React.Component {
 			<div className="users-table-container">
 				{loading && <Loading.Mask/>}
 				{!loading && error && <div className="error">{error}</div>}
-				{!loading && (!items || items.length === 0) && <EmptyState message={emptyMessage}/>}
+				{!error && !loading && (!items || items.length === 0) && <EmptyState message={emptyMessage}/>}
 				{!loading && items && items.length > 0 && (
 					<div>
 						{this.renderHeader()}

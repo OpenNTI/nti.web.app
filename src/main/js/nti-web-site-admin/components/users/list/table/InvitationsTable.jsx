@@ -109,7 +109,7 @@ class InvitationsTable extends React.Component {
 			<div className="users-table-container invitations">
 				{loading && <Loading.Mask/>}
 				{!loading && error && <div className="error">{error}</div>}
-				{!loading && (!items || items.length === 0) && <EmptyState message={t('emptyMessage')}/>}
+				{!error && !loading && (!items || items.length === 0) && <EmptyState message={t('emptyMessage')}/>}
 				{!loading && items && items.length > 0 && (
 					<div>
 						{this.renderHeader()}
