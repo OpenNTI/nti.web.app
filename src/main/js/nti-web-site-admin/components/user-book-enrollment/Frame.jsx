@@ -9,10 +9,10 @@ import NavBar from './nav-bar';
 
 const DEFAULT_TEXT = {
 	backToUser: 'Back to User',
-	backToCourse: 'Back to Course'
+	backToCourse: 'Back to Book'
 };
 
-const t = scoped('nti-site-admin.users.user.user-course-enrollment.Frame', DEFAULT_TEXT);
+const t = scoped('nti-site-admin.users.user.user-book-enrollment.Frame', DEFAULT_TEXT);
 
 @Store.connect({userBookRecord: 'userBookRecord', loading: 'loading'})
 export default class SiteAdminUserEnrollmentView extends React.Component {
@@ -85,7 +85,7 @@ export default class SiteAdminUserEnrollmentView extends React.Component {
 
 	renderHeader () {
 		const {courseContext} = this.props;
-		const linkName = courseContext ? 'site-admin.courses.course-roster' : 'site-admin.users.user-overview';
+		const linkName = courseContext ? 'site-admin.courses.book-roster' : 'site-admin.users.user-overview';
 		const label = courseContext ? t('backToCourse') : t('backToUser');
 
 		return (

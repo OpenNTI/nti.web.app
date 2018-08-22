@@ -84,7 +84,7 @@ export default class SiteAdminUserBooks extends React.Component {
 					{items.map((item, index) => {
 						return (
 							<li key={index}>
-								<LinkTo.Object object={item.Bundle} context="site-admin.users.user-books.list">
+								<LinkTo.Object object={item} context="site-admin.users.user-books.list">
 									<BookListItem book={item.Bundle} />
 								</LinkTo.Object>
 							</li>

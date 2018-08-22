@@ -6,6 +6,7 @@ import Tabs from '../../../common/Tabs';
 
 const DEFAULT_TEXT = {
 	overview: 'Overview',
+	roster: 'Roster',
 	reports: 'Reports'
 };
 const t = scoped('nti-site-admin.courses.book.nav-bar.Tabs', DEFAULT_TEXT);
@@ -14,6 +15,7 @@ export default function SiteAdminBookTabs () {
 	return (
 		<Tabs>
 			<LinkTo.Path to="./" activeClassName="active" exact>{t('overview')}</LinkTo.Path>
+			<LinkTo.Path to="./roster" activeClassName="active">{t('roster')}</LinkTo.Path>
 			<LinkTo.Path to="./reports" activeClassName="active">{t('reports')}</LinkTo.Path>
 		</Tabs>
 	);

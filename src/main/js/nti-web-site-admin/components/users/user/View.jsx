@@ -31,8 +31,8 @@ export default Router.for([
 		props: {userContext: true},
 		frameless: true,
 		getRouteFor (obj, context) {
-			if (context === 'site-admin.users.user-books.list') {
-				return `/book/${encodeForURI(obj.getID())}`;
+			if (obj.MimeType === 'application/vnd.nextthought.userbundlerecord' && context === 'site-admin.users.user-books.list') {
+				return `/book/${encodeForURI(obj.Bundle.getID())}`;
 			}
 
 			return null;
