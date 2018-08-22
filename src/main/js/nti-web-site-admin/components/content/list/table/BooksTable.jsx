@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Table, Loading} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
-import {searchable} from '@nti/web-search';
+import {searchable, contextual} from '@nti/web-search';
 
 import {BookName, CreatedTime} from './columns';
 import Store from './BooksStore';
@@ -16,6 +16,7 @@ const t = scoped('nti-web-site-admin.content.list.table.BooksTable', {
 
 export default
 @searchable()
+@contextual(t('title'))
 @Store.connect({
 	loading: 'loading',
 	items: 'items',

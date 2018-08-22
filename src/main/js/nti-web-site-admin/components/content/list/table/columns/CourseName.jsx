@@ -19,7 +19,7 @@ export default class CourseName extends React.Component {
 
 	static Name = () => t('title')
 
-	static SortKey = 'Title'
+	// static SortKey = 'Title'
 
 	render () {
 		const {item} = this.props;

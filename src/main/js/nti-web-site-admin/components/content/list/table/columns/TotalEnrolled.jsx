@@ -16,7 +16,7 @@ export default class TotalEnrolled extends React.Component {
 
 	static Name = () => t('title')
 
-	static SortKey = 'totalEnrolled';
+	// static SortKey = 'totalEnrolled';
 
 	render () {
 		const {item} = this.props;

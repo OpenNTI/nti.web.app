@@ -17,7 +17,7 @@ export default class StartDate extends React.Component {
 
 	static Name = () => t('title')
 
-	static SortKey = 'StartDate';
+	// static SortKey = 'StartDate';
 
 	render () {
 		const {item} = this.props;
