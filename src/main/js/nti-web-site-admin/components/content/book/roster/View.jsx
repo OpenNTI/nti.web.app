@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Loading} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
+import {searchable} from '@nti/web-search';
 
 import ErrorMessage from '../../../common/ErrorMessage';
 import Pager from '../../../common/Pager';
@@ -18,6 +19,7 @@ const DEFAULT_TEXT = {
 const t = scoped('nti-site-admin.courses.course.info.Roster', DEFAULT_TEXT);
 
 export default
+@searchable()
 @BookRosterStore.connect({
 	loading: 'loading',
 	items: 'items',

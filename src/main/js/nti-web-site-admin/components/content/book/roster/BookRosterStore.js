@@ -5,8 +5,8 @@ import {mixin} from '@nti/lib-decorators';
 const PAGE_SIZE = 20;
 
 export default
-@mixin(Mixins.BatchPaging)
-class BookRosterStore extends Stores.SimpleStore {
+@mixin(Mixins.BatchPaging, Mixins.Searchable)
+class BookRosterStore extends Stores.BoundStore {
 	constructor () {
 		super();
 
@@ -40,7 +40,16 @@ class BookRosterStore extends Stores.SimpleStore {
 		const pageNumber = this.get('pageNumber');
 		const batchStart = pageNumber ? (pageNumber - 1) * PAGE_SIZE : 0;
 
-		const result = await service.getBatch(this.get('book').getLink('users'), { batchSize: PAGE_SIZE, batchStart });
+		let params = {
+			batchSize: PAGE_SIZE,
+			batchStart
+		};
+
+		if(this.searchTerm) {
+			params.searchTerm = this.searchTerm;
+		}
+
+		const result = await service.getBatch(this.get('book').getLink('users'), params);
 
 		this.set({
 			items: result.Items,
@@ -50,23 +59,5 @@ class BookRosterStore extends Stores.SimpleStore {
 		});
 
 		this.emitChange('items', 'loading');
-	}
-
-	updateSearchTerm (term) {
-		this.set('searchTerm', term);
-		this.set('loading', true);
-		this.emitChange('loading', 'searchTerm');
-
-		clearTimeout(this.doSearchTimeout);
-
-		if (!term) {
-			this.removeOption('usernameSearchTerm');
-		} else {
-			this.doSearchTimeout = setTimeout(() => {
-				this.addOptions({
-					usernameSearchTerm: encodeURIComponent(term)
-				});
-			}, 300);
-		}
 	}
 }
