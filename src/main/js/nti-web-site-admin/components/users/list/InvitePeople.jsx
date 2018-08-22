@@ -4,11 +4,7 @@ import {scoped} from '@nti/lib-locale';
 import {Prompt, DialogButtons, TokenEditor, SelectBox, Panels, Input} from '@nti/web-commons';
 import {validate as isEmail} from 'email-validator';
 
-import InvitationsStore from './table/InvitationsStore';
-
 const DEFAULT_TEXT = {
-	description: 'Changing a person\'s role wil effect what features and permissions are available.',
-	subDescription: 'You can change a person\'s role at any time.',
 	people: 'People',
 	title: 'Invite People'
 };

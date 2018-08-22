@@ -4,13 +4,11 @@ import {scoped} from '@nti/lib-locale';
 import {DialogButtons, Avatar, Panels} from '@nti/web-commons';
 import {Connectors} from '@nti/lib-store';
 
-// import Store from './AdminStore';
-
 const ADMIN = 'admin';
 const LEARNER = 'learner';
 
 const DEFAULT_TEXT = {
-	description: 'Changing a person\'s role wil effect what features and permissions are available.',
+	description: 'Changing a person\'s role will effect what features and permissions are available.',
 	subDescription: 'You can change a person\'s role at any time.',
 	people: 'People',
 	title: {
