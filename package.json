@@ -12,9 +12,6 @@
     "dist"
   ],
   "homepage": "proxy://localhost:8083/app/",
-  "build": {
-    "ignoreWarnings": true
-  },
   "scripts": {
     "fix": "app-scripts fix",
     "test": "app-scripts test",
