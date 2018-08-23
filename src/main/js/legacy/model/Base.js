@@ -33,6 +33,10 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		isInstanceOf: function (instance) {
 			return instance instanceof this;
+		},
+
+		interfaceToModel (object) {
+			return lazy.ParseUtils.parseItems(object.__toRaw())[0];
 		}
 	},
 

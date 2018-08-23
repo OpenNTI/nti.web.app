@@ -3,6 +3,10 @@ const { Stream } = require('@nti/web-content');
 const { getService } = require('@nti/web-client');
 
 const User = require('legacy/model/User');
+const Note = require('legacy/model/Note');
+const HighLight = require('legacy/model/Highlight');
+const Bookmark = require('legacy/model/Bookmark');
+
 require('legacy/mixins/Router');
 require('legacy/mixins/ProfileLinks');
 
@@ -31,8 +35,12 @@ module.exports = exports = Ext.define('NextThought.app.content.notebook.Index', 
 	},
 
 	getRouteFor (object, context) {
-		if (context === 'stream-highlight') {
-			return () => this.navigateToObject(object);
+		if (object.MimeType === HighLight.mimeType) {
+			return () => this.Router.root.attemptToNavigateToObject(HighLight.interfaceToModel(object));
+		} else if (object.MimeType === Bookmark.mimeType) {
+			return () => this.Router.root.attemptToNavigateToObject(Bookmark.interfaceToModel(object));
+		} else if (object.MimeType === Note.mimeType) {
+			return () => this.Router.root.attemptToNavigateToObject(Note.interfaceToModel(object));
 		} else if (object.isUser) {
 			return `/app/user/${User.getUsernameForURL(object.Username)}`;
 		}
