@@ -91,7 +91,7 @@ export default class SiteAdminBookView extends React.Component {
 	renderHeader () {
 		return (
 			<div className="header">
-				<LinkTo.Name name="site-admin.courses">
+				<LinkTo.Name name="site-admin.content.content-list-books">
 					<i className="icon-chevron-left" />
 					<span>{t('back')}</span>
 				</LinkTo.Name>
