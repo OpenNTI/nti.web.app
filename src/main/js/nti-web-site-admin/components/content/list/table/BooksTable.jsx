@@ -5,6 +5,7 @@ import {scoped} from '@nti/lib-locale';
 import {searchable, contextual} from '@nti/web-search';
 
 import Pager from '../../../common/Pager';
+import SearchInfo from '../../../common/SearchInfo';
 
 import {BookName, CreatedTime} from './columns';
 import Store from './BooksStore';
@@ -25,7 +26,8 @@ export default
 	sortOn: 'sortOn',
 	sortDirection: 'sortDirection',
 	pageNumber: 'pageNumber',
-	numPages: 'numPages'
+	numPages: 'numPages',
+	currentSearchTerm: 'currentSearchTerm'
 })
 class BooksTable extends React.Component {
 	static propTypes = {
@@ -36,7 +38,8 @@ class BooksTable extends React.Component {
 		sortOn: PropTypes.string,
 		sortDirection: PropTypes.string,
 		pageNumber: PropTypes.number,
-		numPages: PropTypes.number
+		numPages: PropTypes.number,
+		currentSearchTerm: PropTypes.string
 	}
 
 	items = []
@@ -72,12 +75,13 @@ class BooksTable extends React.Component {
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber} = this.props;
+		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber, currentSearchTerm} = this.props;
 
 		return (
 			<div className="content-table-container">
 				{loading && <Loading.Mask/>}
 				{!loading && error && <div className="error">{error}</div>}
+				{!error && !loading && <SearchInfo searchTerm={currentSearchTerm}/>}
 				{!error && !loading && (!items || items.length === 0) && <EmptyState message={t('emptyMessage')}/>}
 				{!loading && items && items.length > 0 && (
 					<div>

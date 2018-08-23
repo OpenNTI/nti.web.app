@@ -5,6 +5,7 @@ import {scoped} from '@nti/lib-locale';
 import {searchable} from '@nti/web-search';
 
 import Pager from '../../../common/Pager';
+import SearchInfo from '../../../common/SearchInfo';
 
 import {Name, JoinDate, LastSeen, Select} from './columns';
 import Store from './Store';
@@ -28,7 +29,8 @@ export default
 	sortDirection: 'sortDirection',
 	selectedUsers: 'selectedUsers',
 	pageNumber: 'pageNumber',
-	numPages: 'numPages'
+	numPages: 'numPages',
+	currentSearchTerm: 'currentSearchTerm'
 })
 class UsersTable extends React.Component {
 	static propTypes = {
@@ -43,7 +45,8 @@ class UsersTable extends React.Component {
 		selectedUsers: PropTypes.array,
 		filter: PropTypes.string,
 		title: PropTypes.string,
-		emptyMessage: PropTypes.string
+		emptyMessage: PropTypes.string,
+		currentSearchTerm: PropTypes.string
 	}
 
 	items = []
@@ -98,13 +101,14 @@ class UsersTable extends React.Component {
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, selectedUsers, error, loading, numPages, pageNumber, emptyMessage, filter} = this.props;
+		const {store, sortOn, sortDirection, items, selectedUsers, error, loading, numPages, pageNumber, emptyMessage, currentSearchTerm, filter} = this.props;
 		const {showChangeRoles} = this.state;
 
 		return (
 			<div className="users-table-container">
 				{loading && <Loading.Mask/>}
 				{!loading && error && <div className="error">{error}</div>}
+				{!error && !loading && <SearchInfo searchTerm={currentSearchTerm}/>}
 				{!error && !loading && (!items || items.length === 0) && <EmptyState message={emptyMessage}/>}
 				{!loading && items && items.length > 0 && (
 					<div>

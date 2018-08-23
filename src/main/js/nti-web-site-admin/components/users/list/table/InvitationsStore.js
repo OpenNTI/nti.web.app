@@ -7,7 +7,7 @@ const PAGE_SIZE = 20;
 
 export default
 @mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
-class UserListStore extends Stores.BoundStore {
+class UserInvitationsStore extends Stores.BoundStore {
 	static Singleton = true;
 
 	constructor () {
@@ -15,9 +15,8 @@ class UserListStore extends Stores.BoundStore {
 
 		this.set('items', null);
 		this.set('loading', true);
-		this.set('sortOn', null);
-		this.set('sortDirection', null);
 		this.set('pageNumber', 1);
+		this.setSort('created_time', 'descending');
 	}
 
 	setUnload () {
@@ -144,18 +143,6 @@ class UserListStore extends Stores.BoundStore {
 		this.load();
 	}
 
-	async loadSearch () {
-		// const service = await getService();
-		// const link = service.getUserSearchURL(this.searchTerm);
-		//
-		// const batch = await service.getBatch(link);
-		//
-		// this.set('loading', false);
-		// this.set('items', batch.Items);
-		//
-		// this.emitChange('loading', 'items');
-	}
-
 	async load () {
 		if(this.isUnloading) {
 			return; // don't re-retrieve and emit changes during unload
@@ -165,9 +152,12 @@ class UserListStore extends Stores.BoundStore {
 		this.emitChange('loading');
 
 		if(this.searchTerm && this.searchTerm.length < 3) {
-			this.set('items', []);
-			this.set('numPages', 1);
-			this.emitChange('items', 'numPages');
+			this.set({
+				items: [],
+				numPages: 1,
+				loading: false
+			});
+			this.emitChange('items', 'numPages', 'loading');
 			return;
 		}
 
@@ -205,15 +195,18 @@ class UserListStore extends Stores.BoundStore {
 
 			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations'), params);
 
-			this.set('numPages', Math.ceil((result.FilteredTotalItemCount || result.Total) / PAGE_SIZE));
-			this.set('pageNumber', result.BatchPage);
-			this.set('sortOn', sortOn);
-			this.set('sortDirection', sortDirection);
-			this.set('loading', false);
-			this.set('items', result.Items);
-			this.set('total', result.Total);
+			this.set({
+				numPages: Math.ceil((result.FilteredTotalItemCount || result.Total) / PAGE_SIZE),
+				pageNumber: result.BatchPage,
+				sortOn,
+				sortDirection,
+				loading: false,
+				items: result.Items,
+				total: result.Total,
+				currentSearchTerm: this.searchTerm
+			});
 
-			this.emitChange('loading', 'items', 'total', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
+			this.emitChange('loading', 'items', 'total', 'sortOn', 'sortDirection', 'numPages', 'pageNumber', 'currentSearchTerm');
 		}
 		catch (e) {
 			this.set('loading', false);

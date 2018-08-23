@@ -6,6 +6,7 @@ import {searchable, contextual} from '@nti/web-search';
 
 import InvitePeople from '../InvitePeople';
 import Pager from '../../../common/Pager';
+import SearchInfo from '../../../common/SearchInfo';
 
 import {Select, InviteDate, InviteName, Rescind} from './columns';
 import Store from './InvitationsStore';
@@ -30,7 +31,8 @@ export default
 	sortDirection: 'sortDirection',
 	selectedUsers: 'selectedUsers',
 	pageNumber: 'pageNumber',
-	numPages: 'numPages'
+	numPages: 'numPages',
+	currentSearchTerm: 'currentSearchTerm'
 })
 class InvitationsTable extends React.Component {
 	static propTypes = {
@@ -42,7 +44,8 @@ class InvitationsTable extends React.Component {
 		sortDirection: PropTypes.string,
 		pageNumber: PropTypes.number,
 		numPages: PropTypes.number,
-		selectedUsers: PropTypes.array
+		selectedUsers: PropTypes.array,
+		currentSearchTerm: PropTypes.string
 	}
 
 	items = []
@@ -104,12 +107,13 @@ class InvitationsTable extends React.Component {
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber} = this.props;
+		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber, currentSearchTerm} = this.props;
 
 		return (
 			<div className="users-table-container invitations">
 				{loading && <Loading.Mask/>}
 				{!loading && error && <div className="error">{error}</div>}
+				{!error && !loading && <SearchInfo searchTerm={currentSearchTerm}/>}
 				{!error && !loading && (!items || items.length === 0) && <EmptyState message={t('emptyMessage')}/>}
 				{!loading && items && items.length > 0 && (
 					<div>

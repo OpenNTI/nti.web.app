@@ -13,8 +13,6 @@ class UserListStore extends Stores.BoundStore {
 
 		this.set('items', null);
 		this.set('loading', true);
-		this.set('sortOn', null);
-		this.set('sortDirection', null);
 	}
 
 	loadPage (pageNumber) {
@@ -32,15 +30,18 @@ class UserListStore extends Stores.BoundStore {
 		this.emitChange('loading');
 
 		if(this.searchTerm && this.searchTerm.length < 3) {
-			this.set('items': []);
-			this.set('numPages', 1);
-			this.emitChange('items', 'numPages');
+			this.set({
+				items: [],
+				numPages: 1,
+				loading: false
+			});
+
+			this.emitChange('items', 'numPages', 'loading');
+
 			return;
 		}
 
 		const service = await getService();
-
-		let items = [];
 
 		try {
 			const sortOn = this.sortProperty;
@@ -76,18 +77,18 @@ class UserListStore extends Stores.BoundStore {
 
 			const batch = await service.getBatch(collection.href, params);
 
-			items = batch.Items;
+			this.set({
+				selectedUsers: [],
+				sortOn,
+				sortDirection,
+				numPages: Math.ceil(batch.Total / PAGE_SIZE),
+				pageNumber: batch.BatchPage,
+				loading: false,
+				items: batch.Items,
+				currentSearchTerm: this.searchTerm
+			});
 
-			this.set('selectedUsers', []);
-			this.set('sortOn', sortOn);
-			this.set('sortDirection', sortDirection);
-			this.set('numPages', Math.ceil(batch.Total / PAGE_SIZE));
-			this.set('pageNumber', batch.BatchPage);
-
-			this.set('loading', false);
-			this.set('items', items);
-
-			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber');
+			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber', 'currentSearchTerm');
 		}
 		catch (e) {
 			this.set('loading', false);
