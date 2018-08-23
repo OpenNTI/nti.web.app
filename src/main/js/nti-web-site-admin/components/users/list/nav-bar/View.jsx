@@ -57,7 +57,7 @@ class UserListNavBar extends React.Component {
 				<div className="invite" onClick={() => {
 					InvitePeople.show(store);
 				}}>
-					{t('invitePeople')}
+					<i className="icon-addfriend"/>{t('invitePeople')}
 				</div>
 			</Card>
 		);

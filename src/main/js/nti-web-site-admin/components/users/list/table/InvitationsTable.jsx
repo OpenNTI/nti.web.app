@@ -88,8 +88,8 @@ class InvitationsTable extends React.Component {
 
 		return (
 			<div className="controls">
-				{numSelected > 0 && <div className="button rescind" onClick={this.onRescind}>{t('rescind')}</div>}
-				{numSelected <= 0 && <div className="button invite-people" onClick={this.launchInvite}>{t('invitePeople')}</div>}
+				{numSelected > 0 && <div className="button rescind" onClick={this.onRescind}><i className="icon-reset"/>{t('rescind')}</div>}
+				{numSelected <= 0 && <div className="button invite-people" onClick={this.launchInvite}><i className="icon-addfriend"/>{t('invitePeople')}</div>}
 			</div>
 		);
 	}
