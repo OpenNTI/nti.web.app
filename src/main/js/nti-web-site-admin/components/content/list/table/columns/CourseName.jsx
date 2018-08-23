@@ -11,8 +11,7 @@ const t = scoped('nti-web-site-admin.components.content.list.table.columns.Cours
 
 export default class CourseName extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'coursename-col';

@@ -10,6 +10,12 @@
 				position: relative;
 				top: 20px;
 			}
+
+			&.row-selected {
+				&, & ~ td {
+					background-color: rgba(63, 179, 246, 0.05);
+				}
+			}
 		}
 	}
 }

@@ -10,8 +10,7 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.JoinDat
 
 export default class JoinDate extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'joindate-col';
@@ -21,9 +20,9 @@ export default class JoinDate extends React.Component {
 	static SortKey = 'createdTime';
 
 	render () {
-		const {item, store} = this.props;
+		const {item} = this.props;
 		return (
-			<div className={cx('cell', {'row-selected': store.isSelected(item)})}>
+			<div className={cx('cell')}>
 				<DateTime className="value" date={item.getCreatedTime()} format="ll" />
 			</div>
 		);

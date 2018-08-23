@@ -3,6 +3,7 @@ import {scoped} from '@nti/lib-locale';
 import {contextual} from '@nti/web-search';
 
 import UsersTable from './UsersTable';
+import Store from './Store';
 
 const t = scoped('nti-web-site-admin.users.list.table.AdminsTable', {
 	administrators: 'Administrators',
@@ -11,7 +12,10 @@ const t = scoped('nti-web-site-admin.users.list.table.AdminsTable', {
 
 export default
 @contextual(t('administrators'))
+@Store.connect({})
 class AdminsTable extends React.Component {
+	static deriveStateKeyFromProps = () => 'AdminsTable';
+
 	render () {
 		return <UsersTable filter="admin" title={t('administrators')} emptyMessage={t('emptyMessage')}/>;
 	}

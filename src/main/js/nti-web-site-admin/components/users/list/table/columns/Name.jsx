@@ -12,8 +12,7 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.Name', 
 
 export default class Name extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'name-col';
@@ -23,10 +22,10 @@ export default class Name extends React.Component {
 	static SortKey = 'alias'
 
 	render () {
-		const {item, store} = this.props;
+		const {item} = this.props;
 		return (
 			<LinkTo.Path to={`./user/${item.getID()}`} activeClassName="active" exact>
-				<div className={cx('cell', {'row-selected': store.isSelected(item)})}>
+				<div className={cx('cell')}>
 					<Avatar entity={item}/>
 					<div className="user-info">
 						<DisplayName entity={item}/>

@@ -9,8 +9,7 @@ const t = scoped('nti-web-site-admin.components.content.list.table.columns.EndDa
 
 export default class EndDate extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'enddate-col';

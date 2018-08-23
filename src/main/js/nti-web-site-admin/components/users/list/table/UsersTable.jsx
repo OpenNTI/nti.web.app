@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import {Table, Loading, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {searchable} from '@nti/web-search';
+import {Connectors} from '@nti/lib-store';
 
 import Pager from '../../../common/Pager';
 import SearchInfo from '../../../common/SearchInfo';
 
 import {Name, JoinDate, LastSeen, Select} from './columns';
-import Store from './Store';
 import ChangeRole from './ChangeRole';
 import EmptyState from './EmptyState';
 
@@ -21,7 +21,7 @@ const t = scoped('nti-web-site-admin.users.list.table.UsersTable', {
 
 export default
 @searchable()
-@Store.connect({
+@Connectors.Any.connect({
 	loading: 'loading',
 	items: 'items',
 	error: 'error',
@@ -30,7 +30,8 @@ export default
 	selectedUsers: 'selectedUsers',
 	pageNumber: 'pageNumber',
 	numPages: 'numPages',
-	currentSearchTerm: 'currentSearchTerm'
+	currentSearchTerm: 'currentSearchTerm',
+	setSort: 'setSort'
 })
 class UsersTable extends React.Component {
 	static propTypes = {
@@ -46,7 +47,8 @@ class UsersTable extends React.Component {
 		filter: PropTypes.string,
 		title: PropTypes.string,
 		emptyMessage: PropTypes.string,
-		currentSearchTerm: PropTypes.string
+		currentSearchTerm: PropTypes.string,
+		setSort: PropTypes.func
 	}
 
 	items = []
@@ -68,7 +70,7 @@ class UsersTable extends React.Component {
 	// }
 
 	onSortChange = (sortKey, sortDirection) => {
-		this.props.store.setSort(sortKey, sortDirection);
+		this.props.setSort(sortKey, sortDirection);
 	}
 
 	showChangeRolesDialog = () => {

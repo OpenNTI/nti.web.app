@@ -15,8 +15,7 @@ const ADMIN_TYPE = /siteadmininvitation/;
 
 export default class InviteName extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'invite-name-col';
@@ -26,7 +25,7 @@ export default class InviteName extends React.Component {
 	static SortKey = 'receiver'
 
 	render () {
-		const {item, store} = this.props;
+		const {item} = this.props;
 
 		const entity = {
 			Username: item.receiver,
@@ -34,7 +33,7 @@ export default class InviteName extends React.Component {
 		};
 
 		return (
-			<div className={cx('cell', {'row-selected': store.isSelected(item)})}>
+			<div className={cx('cell')}>
 				<Avatar entity={entity}/>
 				<div className="user-info">
 					<div className="invite-email">{item.receiver}</div>

@@ -10,10 +10,10 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.LastSee
 	title: 'Last Seen'
 });
 
+
 export default class LastSeen extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'lastseen-col';
@@ -23,7 +23,7 @@ export default class LastSeen extends React.Component {
 	static SortKey = 'lastSeenTime'
 
 	render () {
-		const {item, store} = this.props;
+		const {item} = this.props;
 
 		const lastLoginTime = item.getLastLoginTime && item.getLastLoginTime();
 		const lastSeenTime = item.getLastSeenTime && item.getLastSeenTime();
@@ -35,6 +35,6 @@ export default class LastSeen extends React.Component {
 			label = t('duration', { duration: DateTime.getNaturalDuration(Date.now() - lastSeen, 1)});
 		}
 
-		return <div className={cx('cell', {'row-selected': store.isSelected(item)})}>{label}</div>;
+		return <div className={cx('cell')}>{label}</div>;
 	}
 }

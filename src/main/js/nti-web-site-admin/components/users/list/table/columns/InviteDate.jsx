@@ -13,8 +13,7 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.InviteD
 
 export default class InviteDate extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'invitedate-col';
@@ -24,7 +23,7 @@ export default class InviteDate extends React.Component {
 	static SortKey = 'created_time';
 
 	render () {
-		const {item, store} = this.props;
+		const {item} = this.props;
 
 		const isToday = DateTime.isToday(item.getCreatedTime());
 
@@ -33,7 +32,7 @@ export default class InviteDate extends React.Component {
 		const isYesterday = DateTime.isToday(newDate);
 
 		return (
-			<div className={cx('cell', {'row-selected': store.isSelected(item)})}>
+			<div className={cx('cell')}>
 				{!isToday && !isYesterday && <DateTime className="value" date={item.getCreatedTime()} format="LL" />}
 				{isToday && <span>{t('today')}</span>}
 				{isYesterday && <span>{t('yesterday')}</span>}

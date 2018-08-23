@@ -8,8 +8,7 @@ const t = scoped('nti-web-site-admin.components.content.list.table.columns.Total
 
 export default class TotalEnrolled extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'totalenrolled-col';

@@ -9,8 +9,7 @@ const t = scoped('nti-web-site-admin.components.content.list.table.columns.Start
 
 export default class StartDate extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
-		store: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'startdate-col';

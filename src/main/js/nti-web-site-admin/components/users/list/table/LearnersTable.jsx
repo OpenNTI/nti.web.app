@@ -3,6 +3,7 @@ import {scoped} from '@nti/lib-locale';
 import {contextual} from '@nti/web-search';
 
 import UsersTable from './UsersTable';
+import Store from './Store';
 
 const t = scoped('nti-web-site-admin.users.list.table.LearnersTable', {
 	learners: 'Learners',
@@ -11,7 +12,10 @@ const t = scoped('nti-web-site-admin.users.list.table.LearnersTable', {
 
 export default
 @contextual(t('learners'))
+@Store.connect({})
 class LearnersTable extends React.Component {
+	static deriveStateKeyFromProps = () => 'LearnersTable';
+
 	render () {
 		return <UsersTable filter="learners" title={t('learners')} emptyMessage={t('emptyMessage')}/>;
 	}

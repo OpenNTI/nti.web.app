@@ -5,8 +5,10 @@ import {mixin} from '@nti/lib-decorators';
 const PAGE_SIZE = 20;
 
 export default
-@mixin(Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
+@mixin(Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
 class UserListStore extends Stores.BoundStore {
+
+	StatefulProperties = ['sortProperty', 'sortDirection']
 
 	constructor () {
 		super();
