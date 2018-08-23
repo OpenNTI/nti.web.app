@@ -15,7 +15,6 @@ class UserListStore extends Stores.BoundStore {
 
 		this.set('items', null);
 		this.set('loading', true);
-		this.setSort('createdTime', 'descending');
 	}
 
 	selectAll () {
@@ -155,13 +154,8 @@ class UserListStore extends Stores.BoundStore {
 
 			let params = {};
 
-			if(sortOn) {
-				params.sortOn = sortOn;
-			}
-
-			if(sortDirection) {
-				params.sortOrder = sortDirection;
-			}
+			params.sortOn = sortOn || 'createdTime';
+			params.sortOrder = sortDirection || 'descending';
 
 			if(pageNumber) {
 				const batchStart = (pageNumber - 1) * PAGE_SIZE;
