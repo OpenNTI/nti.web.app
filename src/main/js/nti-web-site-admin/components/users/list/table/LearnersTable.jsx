@@ -1,6 +1,6 @@
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
-import {contextual} from '@nti/web-search';
+import {searchable, contextual} from '@nti/web-search';
 
 import UsersTable from './UsersTable';
 import Store from './Store';
@@ -11,6 +11,7 @@ const t = scoped('nti-web-site-admin.users.list.table.LearnersTable', {
 });
 
 export default
+@searchable()
 @contextual(t('learners'))
 @Store.connect({})
 class LearnersTable extends React.Component {
