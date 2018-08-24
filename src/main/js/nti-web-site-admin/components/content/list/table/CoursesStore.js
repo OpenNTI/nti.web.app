@@ -33,6 +33,7 @@ class UserListStore extends Stores.BoundStore {
 			this.set({
 				items: [],
 				numPages: 1,
+				currentSearchTerm: '',
 				loading: false
 			});
 
@@ -41,6 +42,7 @@ class UserListStore extends Stores.BoundStore {
 			return;
 		}
 
+		const searchTerm = this.searchTerm;
 		const service = await getService();
 
 		try {
@@ -76,6 +78,12 @@ class UserListStore extends Stores.BoundStore {
 			const collection = service.getCollection('AdministeredCourses', 'Courses');
 
 			const batch = await service.getBatch(collection.href, params);
+
+			if(this.searchTerm !== searchTerm) {
+				// TODO: Is there a way to bake this kind of logic into the mixin?
+				// a new search term has been entered since we performed the load
+				return;
+			}
 
 			this.set({
 				selectedUsers: [],

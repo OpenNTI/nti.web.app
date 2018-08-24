@@ -131,6 +131,7 @@ class UserListStore extends Stores.BoundStore {
 			this.set({
 				items: [],
 				numPages: 1,
+				currentSearchTerm: '',
 				loading: false
 			});
 
@@ -138,6 +139,8 @@ class UserListStore extends Stores.BoundStore {
 
 			return;
 		}
+
+		const searchTerm = this.searchTerm;
 
 		const service = await getService();
 
@@ -174,6 +177,11 @@ class UserListStore extends Stores.BoundStore {
 			}
 
 			const siteUsers = await service.getBatch(link, params);
+
+			if(this.searchTerm !== searchTerm) {
+				// a new search term has been entered since we performed the load
+				return;
+			}
 
 			this.set({
 				selectedUsers: [],

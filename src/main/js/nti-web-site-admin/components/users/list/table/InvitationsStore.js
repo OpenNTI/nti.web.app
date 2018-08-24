@@ -154,11 +154,14 @@ class UserInvitationsStore extends Stores.BoundStore {
 			this.set({
 				items: [],
 				numPages: 1,
+				currentSearchTerm: '',
 				loading: false
 			});
 			this.emitChange('items', 'numPages', 'loading');
 			return;
 		}
+
+		const searchTerm = this.searchTerm;
 
 		try {
 			const sortOn = this.sortProperty;
@@ -188,6 +191,11 @@ class UserInvitationsStore extends Stores.BoundStore {
 			const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
 			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations'), params);
+
+			if(this.searchTerm !== searchTerm) {
+				// a new search term has been entered since we performed the load
+				return;
+			}
 
 			this.set({
 				numPages: Math.ceil((result.FilteredTotalItemCount || result.Total) / PAGE_SIZE),
