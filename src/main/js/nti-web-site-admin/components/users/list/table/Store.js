@@ -1,5 +1,6 @@
 import {Stores, Mixins} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
+import {URL} from '@nti/lib-commons';
 import {mixin} from '@nti/lib-decorators';
 
 const PAGE_SIZE = 20;
@@ -68,11 +69,19 @@ class UserListStore extends Stores.BoundStore {
 
 	async addAdmin (users) {
 		const service = await getService();
-		const results = await Promise.all(users.map(user => this.changeRoleForUser(user, service)));
-		const errors = results.filter(x => x && x.error);
 
-		if(errors.length > 0) {
-			this.set('error', 'Unknown error setting admin role for ' + errors.length + ' user(s)');
+		try {
+			await this.changeRoleForUsers(users.map(u=>u.Username), service, false);
+		}
+		catch (e) {
+			this.set({
+				error: e.Message || e,
+				loading: false
+			});
+
+			this.emitChange('error', 'loading');
+
+			return;
 		}
 
 		this.load();
@@ -80,32 +89,40 @@ class UserListStore extends Stores.BoundStore {
 
 	async removeAdmin (users) {
 		const service = await getService();
-		const results = await Promise.all(users.map(user => this.changeRoleForUser(user, service, true)));
-		const errors = results.filter(x => x && x.error);
 
-		if(errors.length > 0) {
-			this.set('error', 'Unknown error removing admin role for ' + errors.length + ' user(s)');
+		try {
+			await this.changeRoleForUsers(users.map(u=>u.Username), service, true);
+		}
+		catch (e) {
+			this.set({
+				error: e.Message || e,
+				loading: false
+			});
+
+			this.emitChange('error', 'loading');
+
+			return;
 		}
 
 		this.load();
 	}
 
-	changeRoleForUser (user, service, removing) {
-		const userName = user.Username;
+	changeRoleForUsers (users, service, removing) {
 		const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
 
 		this.set('loading', true);
 		this.emitChange('loading');
 
 		if(removing) {
-			return service.delete(siteAdminsLink + '/' + userName).catch(() => {
-				return Promise.resolve({error: 'Could not change roles for ' + userName});
-			});
+			const params = {
+				users: users.join(',')
+			};
+
+			URL.appendQueryParams(siteAdminsLink, params);
+			return service.delete(URL.appendQueryParams(siteAdminsLink, params));
 		}
 		else {
-			return service.post(siteAdminsLink + '/' + userName).catch(() => {
-				return Promise.resolve({error: 'Could not change roles for ' + userName});
-			});
+			return service.post(siteAdminsLink, { users: users.join(',') });
 		}
 	}
 
