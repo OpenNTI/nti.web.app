@@ -1,4 +1,21 @@
-const importAll = x => x.keys().forEach(x);
-
-
-importAll(require.context('./', true, /^.\/(?!index).+js$/));
+require('./app');
+require('./builtins');
+require('./container');
+require('./data');
+require('./dd');
+require('./dom');
+require('./grid');
+require('./layout');
+require('./menu');
+require('./panel');
+require('./picker');
+require('./selection');
+require('./tab');
+require('./tip');
+require('./view');
+require('./Component');
+require('./EventManager');
+require('./Ext');
+require('./JSON');
+require('./ReactHarness');
+require('./XTemplate');
