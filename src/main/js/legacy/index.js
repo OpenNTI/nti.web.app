@@ -104,10 +104,6 @@ Ext.application({
 
 		//Uncomment to supress cross domain flash socket message
 		//window.WEB_SOCKET_SUPPRESS_CROSS_DOMAIN_SWF_ERROR = true;
-
-		//TODO: remove this line once Airbrake is inplace.
-		global.reportErrorEvent();
-
 		loadScript(getURL('/socket.io/static/socket.io.js'));
 
 		start();
