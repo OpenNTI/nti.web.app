@@ -197,6 +197,10 @@ class UserInvitationsStore extends Stores.BoundStore {
 
 			const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
+			if(!invitationsCollection || !invitationsCollection.getLink('pending-site-invitations')) {
+				throw new Error('Access forbidden');
+			}
+
 			const result = await service.getBatch(invitationsCollection.getLink('pending-site-invitations'), params);
 
 			if(this.searchTerm !== searchTerm) {
