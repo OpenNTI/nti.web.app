@@ -121,6 +121,8 @@ export default class InvitePeople extends React.Component {
 
 
 	render () {
+		const { emails } = this.state;
+
 		const buttons = [
 			{
 				label: 'Cancel',
@@ -130,6 +132,7 @@ export default class InvitePeople extends React.Component {
 			{
 				label: 'Save',
 				className: 'save',
+				disabled: !emails || emails.length === 0,
 				onClick: this.onSave
 			}
 		];
