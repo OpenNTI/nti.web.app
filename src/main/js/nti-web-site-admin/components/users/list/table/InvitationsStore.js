@@ -118,7 +118,14 @@ class UserInvitationsStore extends Stores.BoundStore {
 		}
 		catch (e) {
 			this.set('loading', false);
-			this.set('error', e.Message || e);
+
+			if(e.statusCode !== 409) {
+				this.set('error', e.Message || e);
+			}
+			else {
+				this.set('error', null);
+			}
+
 			this.emitChange('loading', 'error');
 		}
 	}
