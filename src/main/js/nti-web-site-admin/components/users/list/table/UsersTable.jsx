@@ -110,7 +110,7 @@ class UsersTable extends React.Component {
 				{!loading && error && <div className="error">{error}</div>}
 				{!error && !loading && <SearchInfo searchTerm={currentSearchTerm}/>}
 				{!error && !loading && (!items || items.length === 0) && <EmptyState message={emptyMessage}/>}
-				{!loading && items && items.length > 0 && (
+				{!error && !loading && items && items.length > 0 && (
 					<div>
 						{this.renderHeader()}
 						<Table.Table
