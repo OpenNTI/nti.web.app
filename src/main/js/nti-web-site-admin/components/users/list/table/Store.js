@@ -3,6 +3,7 @@ import {getService} from '@nti/web-client';
 import {mixin} from '@nti/lib-decorators';
 
 const PAGE_SIZE = 20;
+const ACCESS_FORBIDDEN = 'Access forbidden';
 
 export default
 @mixin(Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
@@ -116,10 +117,22 @@ class UserListStore extends Stores.BoundStore {
 
 	getLink (service) {
 		if(this.filter === 'admin') {
-			return service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
+			const adminWorkspace = service.getWorkspace('SiteAdmin');
+
+			if(!adminWorkspace) {
+				throw new Error(ACCESS_FORBIDDEN);
+			}
+
+			return adminWorkspace.getLink('SiteAdmins');
 		}
 		else {
-			return service.Items.filter(x => x.hasLink('SiteUsers'))[0].getLink('SiteUsers');
+			const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
+
+			if(!userWorkspace) {
+				throw new Error(ACCESS_FORBIDDEN);
+			}
+
+			return userWorkspace.getLink('SiteUsers');
 		}
 	}
 
@@ -148,7 +161,7 @@ class UserListStore extends Stores.BoundStore {
 			const link = this.getLink(service);
 
 			if(!link) {
-				throw new Error('Access forbidden');
+				throw new Error(ACCESS_FORBIDDEN);
 			}
 
 			const sortOn = this.sortProperty;
