@@ -16,7 +16,6 @@ class UserInvitationsStore extends Stores.BoundStore {
 		this.set('items', null);
 		this.set('loading', true);
 		this.set('pageNumber', 1);
-		this.setSort('created_time', 'descending');
 	}
 
 	setUnload () {
@@ -168,13 +167,8 @@ class UserInvitationsStore extends Stores.BoundStore {
 
 			let params = {};
 
-			if(sortOn) {
-				params.sortOn = sortOn;
-			}
-
-			if(sortDirection) {
-				params.sortOrder = sortDirection;
-			}
+			params.sortOn = sortOn || 'created_time';
+			params.sortOrder = sortDirection || 'descending';
 
 			if(pageNumber) {
 				const batchStart = (pageNumber - 1) * PAGE_SIZE;
