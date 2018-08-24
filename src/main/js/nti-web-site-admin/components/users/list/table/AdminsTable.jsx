@@ -16,8 +16,9 @@ export default
 @Store.connect({})
 class AdminsTable extends React.Component {
 	static deriveStateKeyFromProps = () => 'AdminsTable';
+	static deriveFilterFromProps = () => 'admin';
 
 	render () {
-		return <UsersTable filter="admin" title={t('administrators')} emptyMessage={t('emptyMessage')}/>;
+		return <UsersTable title={t('administrators')} emptyMessage={t('emptyMessage')}/>;
 	}
 }

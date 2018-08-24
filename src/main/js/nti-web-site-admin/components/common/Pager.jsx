@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import {Connectors} from '@nti/lib-store';
 
-export default class Pager extends React.Component {
+export default
+@Connectors.Any.connect({
+	loadPage: 'loadPage'
+})
+class Pager extends React.Component {
 	static propTypes = {
-		store: PropTypes.object.isRequired,
+		loadPage: PropTypes.func.isRequired,
 		pageNumber: PropTypes.number,
 		numPages: PropTypes.number
 	}
 
 	renderPage = (num) => {
-		const {pageNumber, store} = this.props;
+		const {pageNumber, loadPage} = this.props;
 
 		const cls = cx('page', { selected: pageNumber === num + 1 });
 
@@ -18,12 +23,7 @@ export default class Pager extends React.Component {
 			<div
 				key={num}
 				onClick={()=>{
-					if(store.loadPage) {
-						store.loadPage(num + 1);
-					}
-					else {
-						store.goToPage(num + 1);
-					}
+					loadPage(num + 1);
 				}}
 				className={cls}>
 				{num + 1}

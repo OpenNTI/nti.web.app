@@ -16,8 +16,9 @@ export default
 @Store.connect({})
 class LearnersTable extends React.Component {
 	static deriveStateKeyFromProps = () => 'LearnersTable';
+	static deriveFilterFromProps = () => 'learners';
 
 	render () {
-		return <UsersTable filter="learners" title={t('learners')} emptyMessage={t('emptyMessage')}/>;
+		return <UsersTable title={t('learners')} emptyMessage={t('emptyMessage')}/>;
 	}
 }
