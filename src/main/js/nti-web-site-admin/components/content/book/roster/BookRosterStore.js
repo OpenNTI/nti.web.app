@@ -45,11 +45,17 @@ class BookRosterStore extends Stores.BoundStore {
 			batchStart
 		};
 
+		const searchTerm = this.searchTerm;
+
 		if(this.searchTerm) {
 			params.searchTerm = this.searchTerm;
 		}
 
 		const result = await service.getBatch(this.get('book').getLink('users'), params);
+
+		if(this.searchTerm !== searchTerm) {
+			return;
+		}
 
 		this.set({
 			items: result.Items,
