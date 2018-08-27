@@ -72,6 +72,14 @@ class UserInvitationsStore extends Stores.BoundStore {
 		this.emitChange('selectedUsers');
 	}
 
+	async canSendInvitations () {
+		const service = await getService();
+
+		const invitationsCollection = service.getCollection('Invitations', 'Invitations');
+
+		return invitationsCollection && invitationsCollection.hasLink('send-site-invitation');
+	}
+
 	async rescind (users) {
 		this.set('loading', true);
 		this.emitChange('loading');

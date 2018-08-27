@@ -62,9 +62,11 @@ class InvitationsTable extends React.Component {
 		sortOn: 'name'
 	}
 
-	// componentDidMount () {
-	// 	this.props.store.load();
-	// }
+	componentDidMount () {
+		this.props.store.canSendInvitations().then(canSendInvitations => {
+			this.setState({canSendInvitations});
+		});
+	}
 
 	onSortChange = (sortKey, sortDirection) => {
 		this.props.store.setSort(sortKey, sortDirection);
@@ -83,6 +85,12 @@ class InvitationsTable extends React.Component {
 	}
 
 	renderControls () {
+		const {canSendInvitations} = this.state;
+
+		if(!canSendInvitations) {
+			return null;
+		}
+
 		const {selectedUsers} = this.props;
 		const numSelected = (selectedUsers && selectedUsers.length) || 0;
 

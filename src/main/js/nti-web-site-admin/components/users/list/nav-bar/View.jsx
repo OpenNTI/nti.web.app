@@ -30,9 +30,13 @@ class UserListNavBar extends React.Component {
 		loading: PropTypes.bool
 	}
 
-	// componentDidMount () {
-	// 	this.props.store.loadPage();
-	// }
+	state = {}
+
+	componentDidMount () {
+		this.props.store.canSendInvitations().then(canSendInvitations => {
+			this.setState({canSendInvitations});
+		});
+	}
 
 	componentWillUnmount () {
 		this.props.store.setUnload();
@@ -40,6 +44,7 @@ class UserListNavBar extends React.Component {
 
 	render () {
 		const {loading, total, store} = this.props;
+		const {canSendInvitations} = this.state;
 
 		const hasCount = !loading && (total || total === 0);
 
@@ -54,11 +59,13 @@ class UserListNavBar extends React.Component {
 						{hasCount && <div className="invitations-count">{total || 0}</div>}
 					</LinkTo.Path>
 				</Tabs>
-				<div className="invite" onClick={() => {
-					InvitePeople.show(store);
-				}}>
-					<i className="icon-addfriend"/>{t('invitePeople')}
-				</div>
+				{canSendInvitations && (
+					<div className="invite" onClick={() => {
+						InvitePeople.show(store);
+					}}>
+						<i className="icon-addfriend"/>{t('invitePeople')}
+					</div>
+				)}
 			</Card>
 		);
 	}
