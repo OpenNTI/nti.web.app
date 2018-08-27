@@ -239,3 +239,9 @@ body.media-viewer-open .window-container {
 .nti-control-bar {
 	z-index: 151;
 }
+
+.main-body {
+	.site-admin-index {
+		max-width: 1024px !important;
+	}
+}
