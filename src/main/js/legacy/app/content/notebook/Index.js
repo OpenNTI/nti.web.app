@@ -47,6 +47,8 @@ module.exports = exports = Ext.define('NextThought.app.content.notebook.Index', 
 	},
 
 	async bundleChanged (bundle) {
+		this.setTitle('Notebook');
+
 		if (this.currentBundle === bundle) { return; }
 
 		this.currentBundle = bundle;
