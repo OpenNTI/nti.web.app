@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
-import {Prompt, DialogButtons, TokenEditor, SelectBox, Panels, Input, Loading} from '@nti/web-commons';
+import {DialogButtons, TokenEditor, SelectBox, Panels, Input, Loading} from '@nti/web-commons';
 import {validate as isEmail} from 'email-validator';
 
 const DEFAULT_TEXT = {
@@ -13,19 +13,6 @@ const t = scoped('nti-web-site-admin.componentsusers.list.InvitePeople', DEFAULT
 
 
 export default class InvitePeople extends React.Component {
-	static show (store) {
-		return new Promise((fulfill, reject) => {
-			Prompt.modal(
-				<InvitePeople
-					store={store}
-					onFinish={fulfill}
-					onCancel={reject}
-				/>,
-				'site-admin-invite-people-container'
-			);
-		});
-	}
-
 	static propTypes = {
 		store: PropTypes.object.isRequired,
 		loading: PropTypes.bool
