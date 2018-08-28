@@ -15,7 +15,7 @@ import EmptyState from './EmptyState';
 const t = scoped('nti-web-site-admin.users.list.table.InvitationsTable', {
 	learners: 'Invitations',
 	selected: '%(numSelected)s Selected',
-	rescind: 'Rescind Invitation',
+	rescind: 'Cancel Invitation',
 	emptyMessage: 'There are no outstanding invitations',
 	invitePeople: 'Invite People'
 });
@@ -32,7 +32,8 @@ export default
 	selectedUsers: 'selectedUsers',
 	pageNumber: 'pageNumber',
 	numPages: 'numPages',
-	currentSearchTerm: 'currentSearchTerm'
+	currentSearchTerm: 'currentSearchTerm',
+	showInviteDialog: 'showInviteDialog'
 })
 class InvitationsTable extends React.Component {
 	static propTypes = {
@@ -45,7 +46,8 @@ class InvitationsTable extends React.Component {
 		pageNumber: PropTypes.number,
 		numPages: PropTypes.number,
 		selectedUsers: PropTypes.array,
-		currentSearchTerm: PropTypes.string
+		currentSearchTerm: PropTypes.string,
+		showInviteDialog: PropTypes.bool
 	}
 
 	items = []
@@ -81,7 +83,7 @@ class InvitationsTable extends React.Component {
 	}
 
 	launchInvite = () => {
-		InvitePeople.show(this.props.store);
+		this.props.store.showInviteDialog();
 	}
 
 	renderControls () {
@@ -115,7 +117,7 @@ class InvitationsTable extends React.Component {
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, error, loading, numPages, pageNumber, currentSearchTerm} = this.props;
+		const {store, showInviteDialog, sortOn, sortDirection, items, error, loading, numPages, pageNumber, currentSearchTerm} = this.props;
 
 		return (
 			<div className="users-table-container invitations">
@@ -136,6 +138,11 @@ class InvitationsTable extends React.Component {
 						/>
 						<Pager store={store} numPages={numPages} pageNumber={pageNumber}/>
 					</div>
+				)}
+				{showInviteDialog && (
+					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>
+						<InvitePeople store={store} loading={loading}/>
+					</Prompt.Dialog>
 				)}
 			</div>
 		);

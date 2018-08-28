@@ -6,7 +6,7 @@ import {Connectors} from '@nti/lib-store';
 import cx from 'classnames';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.LastSeen', {
-	rescind: 'Rescind'
+	rescind: 'Cancel'
 });
 
 export default

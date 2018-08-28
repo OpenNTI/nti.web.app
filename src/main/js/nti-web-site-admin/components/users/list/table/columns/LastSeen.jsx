@@ -7,7 +7,7 @@ import cx from 'classnames';
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.LastSeen', {
 	never: 'Never',
 	duration: '%(duration)s ago',
-	title: 'Last Seen'
+	title: 'Last Active'
 });
 
 

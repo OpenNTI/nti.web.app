@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
-import {Prompt, DialogButtons, TokenEditor, SelectBox, Panels, Input} from '@nti/web-commons';
+import {Prompt, DialogButtons, TokenEditor, SelectBox, Panels, Input, Loading} from '@nti/web-commons';
 import {validate as isEmail} from 'email-validator';
 
 const DEFAULT_TEXT = {
@@ -28,8 +28,7 @@ export default class InvitePeople extends React.Component {
 
 	static propTypes = {
 		store: PropTypes.object.isRequired,
-		onDismiss: PropTypes.func,
-		onFinish: PropTypes.func,
+		loading: PropTypes.bool
 
 	}
 
@@ -42,8 +41,12 @@ export default class InvitePeople extends React.Component {
 		role: 'learner'
 	}
 
+	onCancel = () => {
+		this.props.store.hideInviteDialog();
+	}
+
 	onSave = async () => {
-		const {onFinish, onDismiss, store} = this.props;
+		const {store} = this.props;
 		const {role, message, emails} = this.state;
 
 		if(role === 'learner') {
@@ -51,10 +54,6 @@ export default class InvitePeople extends React.Component {
 		} else {
 			store.sendAdminInvites(emails, message);
 		}
-
-
-		onFinish();
-		onDismiss();
 	}
 
 	onToChange = (emails) => {
@@ -122,18 +121,19 @@ export default class InvitePeople extends React.Component {
 
 	render () {
 		const { emails } = this.state;
+		const { loading } = this.props;
 
 		const buttons = [
 			{
 				label: 'Cancel',
 				className: 'cancel',
-				onClick: this.props.onDismiss
+				onClick: !loading && this.onCancel
 			},
 			{
 				label: 'Save',
 				className: 'save',
-				disabled: !emails || emails.length === 0,
-				onClick: this.onSave
+				disabled: loading || (!emails || emails.length === 0),
+				onClick: !loading && this.onSave
 			}
 		];
 
@@ -141,12 +141,13 @@ export default class InvitePeople extends React.Component {
 		return (
 			<div className="site-admin-invite-people-dialog">
 				<div className="title">
-					<Panels.TitleBar title={t('title')} iconAction={this.props.onDismiss} />
+					<Panels.TitleBar title={t('title')} iconAction={!loading && this.onCancel} />
 				</div>
 				<div className="contents">
-					{this.renderToField()}
-					{this.renderRoleField()}
-					{this.renderMessageField()}
+					{loading && <Loading.Mask/>}
+					{!loading && this.renderToField()}
+					{!loading && this.renderRoleField()}
+					{!loading && this.renderMessageField()}
 				</div>
 				<DialogButtons buttons={buttons}/>
 			</div>

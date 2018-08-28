@@ -6,6 +6,7 @@
 
 	.contents {
 		max-height: calc(100vh - 200px);
+		min-height: 411px;
 		overflow-y: auto;
 
 		.label {

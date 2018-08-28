@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
+import {Prompt} from '@nti/web-commons';
 
 import Card from '../../../common/Card';
 import Tabs from '../../../common/Tabs';
@@ -21,13 +22,15 @@ const t = scoped('nti-site-admin.users.list.navbar.View', DEFAULT_TEXT);
 export default
 @Store.connect({
 	loading: 'loading',
-	total: 'total'
+	total: 'total',
+	showInviteDialog: 'showInviteDialog'
 })
 class UserListNavBar extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
 		total: PropTypes.number,
-		loading: PropTypes.bool
+		loading: PropTypes.bool,
+		showInviteDialog: PropTypes.bool
 	}
 
 	state = {}
@@ -43,7 +46,7 @@ class UserListNavBar extends React.Component {
 	}
 
 	render () {
-		const {loading, total, store} = this.props;
+		const {loading, total, showInviteDialog, store} = this.props;
 		const {canSendInvitations} = this.state;
 
 		const hasCount = !loading && (total || total === 0);
@@ -61,10 +64,15 @@ class UserListNavBar extends React.Component {
 				</Tabs>
 				{canSendInvitations && (
 					<div className="invite" onClick={() => {
-						InvitePeople.show(store);
+						store.showInviteDialog();
 					}}>
 						<i className="icon-addfriend"/>{t('invitePeople')}
 					</div>
+				)}
+				{showInviteDialog && (
+					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>
+						<InvitePeople store={store} loading={loading}/>
+					</Prompt.Dialog>
 				)}
 			</Card>
 		);

@@ -16,6 +16,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 		this.set('items', null);
 		this.set('loading', true);
 		this.set('pageNumber', 1);
+		this.set('showInviteDialog', false);
 	}
 
 	setUnload () {
@@ -123,6 +124,8 @@ class UserInvitationsStore extends Stores.BoundStore {
 			await service.post(invitationsCollection.getLink('send-site-invitation'), payload);
 
 			this.load();
+
+			this.hideInviteDialog();
 		}
 		catch (e) {
 			this.set('loading', false);
@@ -155,6 +158,18 @@ class UserInvitationsStore extends Stores.BoundStore {
 		this.set('pageNumber', pageNumber);
 
 		this.load();
+	}
+
+	showInviteDialog = () => {
+		this.set('showInviteDialog', true);
+
+		this.emitChange('showInviteDialog');
+	}
+
+	hideInviteDialog = () => {
+		this.set('showInviteDialog', false);
+
+		this.emitChange('showInviteDialog');
 	}
 
 	async load () {
