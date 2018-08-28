@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {Presentation} = require('@nti/web-commons');
 const {Enrollment} = require('@nti/web-course');
+const {encodeForURI} = require('@nti/lib-ntiids');
 
 const User = require('legacy/model/User');
 const {getString, getFormattedString} = require('legacy/util/Localization');
@@ -668,6 +669,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					catalogEntry,
 					getRouteFor: (option, context) => {
 						const isIMIS = option.MimeType === 'application/vnd.nextthought.courseware.ensyncimisexternalenrollmentoption';
+						const isEnrolled = option.MimeType === 'application/vnd.nextthought.courseware.courseinstanceenrollment';
+						const isAdmin = option.MimeType === 'application/vnd.nextthought.courseware.courseinstanceadministrativerole';
+
+						if (context === 'open' && (isEnrolled || isAdmin)) {
+							return () => this.openCourse(option);
+						}
 
 						if (context === 'enroll') {
 							if (isIMIS) {
@@ -951,6 +958,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		NavigationActions.pushRootRoute(u.getName(), u.getProfileUrl('about'), {
 			user: u
 		});
+	},
+
+
+	openCourse (course) {
+		NavigationActions.pushRootRoute(course.CatalogEntry.title, `course/${encodeForURI(course.NTIID)}`);
 	},
 
 	/**
