@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		console.log('logout, redirect to ' + url);
 
 		//Start a timer now just in case 'will-logout' blows up.
-		wait(60000)
+		wait(10000)
 			.then(finishLoggingOut);
 
 		me.store.willLogout(finishLoggingOut);
