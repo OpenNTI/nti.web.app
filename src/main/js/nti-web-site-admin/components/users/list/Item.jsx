@@ -6,7 +6,7 @@ import cx from 'classnames';
 
 const DEFAULT_TEXT = {
 	joined: 'Joined:',
-	lastSeen: 'Last Seen:',
+	lastSeen: 'Last Active:',
 	never: 'Never'
 };
 

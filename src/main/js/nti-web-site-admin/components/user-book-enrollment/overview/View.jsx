@@ -5,7 +5,7 @@ import {scoped} from '@nti/lib-locale';
 import DateValue from '../../common/DateValue';
 
 const t = scoped('nti-web-site-admin.components.user-book-enrollment.Overview', {
-	lastSeen: 'Last Seen'
+	lastSeen: 'Last Active'
 });
 
 export default class SiteAdminUserBookView extends React.Component {
