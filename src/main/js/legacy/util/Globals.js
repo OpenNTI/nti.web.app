@@ -3,7 +3,8 @@
 const Url = require('url');
 
 const Ext = require('@nti/extjs');
-const {isNTIID} = require('@nti/lib-ntiids');
+const { isNTIID } = require('@nti/lib-ntiids');
+const { isFlag } = require('@nti/web-client');
 
 const HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
 
@@ -838,7 +839,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 	isFeature: function (name) {
 		var f = (global.$AppConfig || {}).features || {};
-		return Boolean(f[name]);
+
+		return (name in f) ? Boolean(f[name]) : isFlag(name);
 	},
 
 
