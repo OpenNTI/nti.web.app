@@ -962,7 +962,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 
 	openCourse (course) {
-		NavigationActions.pushRootRoute(course.CatalogEntry.title, `course/${encodeForURI(course.NTIID)}`);
+		NavigationActions.pushRootRoute(course.CatalogEntry.title, `course/${encodeForURI(course.getCourseID ? course.getCourseID() : course.NTIID)}`);
 	},
 
 	/**
