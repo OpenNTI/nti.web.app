@@ -117,7 +117,7 @@ export default class InvitePeople extends React.Component {
 				onClick: !loading && this.onCancel
 			},
 			{
-				label: 'Save',
+				label: 'Send',
 				className: 'save',
 				disabled: loading || (!emails || emails.length === 0),
 				onClick: !loading && this.onSave
