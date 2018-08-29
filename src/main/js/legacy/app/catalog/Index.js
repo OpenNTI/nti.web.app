@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const CatalogView = require('@nti/web-catalog');
+const {getService} = require('@nti/web-client');
 const { encodeForURI, decodeFromURI, isNTIID } = require('@nti/lib-ntiids');
 
 const Globals = require('legacy/util/Globals');
@@ -114,9 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				baseroute: baseroute,
 				getRouteFor: (obj) => {
 					if (obj.isCourseCatalogEntry) {
-						const href = `uri:${obj.href}`;
-
-						return `${this.category || '.'}/nti-course-catalog-entry/${encodeURIComponent(href)}`;
+						return `${this.category || '.'}/nti-course-catalog-entry/${obj.getID()}`;
 					}
 				}
 			});
@@ -199,24 +198,25 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 
 	loadCatalogEntry (param, rest) {
+		if (rest === 'paymentcomplete') {
+			const enrolledURL = Service.getCollection('EnrolledCourses', 'Courses').href;
+
+			return Service.request(`${enrolledURL}?batchSize=1&batchStart=0`)
+				.then(resp => {
+					const item = lazy.ParseUtils.parseItems(JSON.parse(resp))[0];
+
+					return item.get('CatalogEntry');
+				});
+		}
+
 
 		if (isNTIID(param)) {
-			return Service.getObject(param);
+			return getService()
+				.then(service => service.getObjectRaw(param))
+				.then(catalog => lazy.ParseUtils.parseItems(catalog)[0]);
 		}
 
-		if (rest !== 'paymentcomplete') {
-			return Service.request(param.replace(/^uri:/, ''))
-				.then(resp => lazy.ParseUtils.parseItems(resp)[0]);
-		}
-
-		const enrolledURL = Service.getCollection('EnrolledCourses', 'Courses').href;
-
-		return Service.request(`${enrolledURL}?batchSize=1&batchStart=0`)
-			.then(resp => {
-				const item = lazy.ParseUtils.parseItems(JSON.parse(resp))[0];
-
-				return item.get('CatalogEntry');
-			});
+		throw new Error('Unable to resole catalog');
 	},
 
 
@@ -233,11 +233,10 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			return Promise.resolve();
 		}
 
-		const [match, ...parts] = matches[2].split('/');
-		const param = /^uri/.test(match)
-			? decodeURIComponent(match)
-			: decodeFromURI(match);
+		const [param, ...parts] = matches[2].split('/');
 		const rest = parts.join('/');
+
+		debugger;
 
 		return this.loadCatalogEntry(param, rest)
 			.then((catalogEntry) => {
