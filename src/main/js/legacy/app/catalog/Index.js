@@ -236,7 +236,6 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		const [param, ...parts] = matches[2].split('/');
 		const rest = parts.join('/');
 
-		debugger;
 
 		return this.loadCatalogEntry(param, rest)
 			.then((catalogEntry) => {
