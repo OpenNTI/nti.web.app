@@ -7,7 +7,8 @@ import cx from 'classnames';
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.LastSeen', {
 	never: 'Never',
 	duration: '%(duration)s ago',
-	title: 'Last Active'
+	title: 'Last Active',
+	now: 'Now'
 });
 
 
@@ -32,7 +33,14 @@ export default class LastSeen extends React.Component {
 		let label = t('never');
 
 		if(lastSeen && lastLoginTime && lastLoginTime.getTime() > 0) {
-			label = t('duration', { duration: DateTime.getNaturalDuration(Date.now() - lastSeen, 1)});
+			const diff = Date.now() - lastSeen;
+
+			if(diff <= (60 * 1000)) {
+				label = t('now');
+			}
+			else {
+				label = t('duration', { duration: DateTime.getNaturalDuration(Date.now() - lastSeen, 1)});
+			}
 		}
 
 		return <div className={cx('cell')}>{label}</div>;
