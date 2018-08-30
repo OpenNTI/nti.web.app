@@ -26,20 +26,17 @@ export default class LastSeen extends React.Component {
 	render () {
 		const {item} = this.props;
 
-		const lastLoginTime = item.getLastLoginTime && item.getLastLoginTime();
 		const lastSeenTime = item.getLastSeenTime && item.getLastSeenTime();
-		let lastSeen = lastSeenTime || lastLoginTime;
-
 		let label = t('never');
 
-		if(lastSeen && lastLoginTime && lastLoginTime.getTime() > 0) {
-			const diff = Date.now() - lastSeen;
+		if(lastSeenTime && lastSeenTime > 0) {
+			const diff = Date.now() - lastSeenTime;
 
 			if(diff <= (60 * 1000)) {
 				label = t('now');
 			}
 			else {
-				label = t('duration', { duration: DateTime.getNaturalDuration(Date.now() - lastSeen, 1)});
+				label = t('duration', { duration: DateTime.getNaturalDuration(Date.now() - lastSeenTime, 1)});
 			}
 		}
 
