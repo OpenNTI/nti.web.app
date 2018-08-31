@@ -75,9 +75,9 @@ class UserListStore extends Stores.BoundStore {
 			const collection = service.getCollection('VisibleContentBundles', 'ContentBundles');
 
 			// batch params not currently supported by server
-			const batch = await service.get(collection.href);
+			const batch = await service.getBatch(collection.href, params);
 
-			const promises = batch.titles.map(x => service.getObject(x));
+			const promises = (batch.titles || []).map(x => service.getObject(x));
 
 			const parsed = await Promise.all(promises);
 

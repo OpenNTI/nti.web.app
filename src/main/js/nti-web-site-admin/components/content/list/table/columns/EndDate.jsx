@@ -16,7 +16,7 @@ export default class EndDate extends React.Component {
 
 	static Name = () => t('title')
 
-	// static SortKey = 'EndDate';
+	static SortKey = 'endDate';
 
 	render () {
 		const {item} = this.props;

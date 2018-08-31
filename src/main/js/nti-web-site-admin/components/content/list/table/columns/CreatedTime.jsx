@@ -16,7 +16,7 @@ export default class CreatedTime extends React.Component {
 
 	static Name = () => t('title')
 
-	// static SortKey = 'createdTime';
+	static SortKey = 'createdTime';
 
 	render () {
 		const {item} = this.props;

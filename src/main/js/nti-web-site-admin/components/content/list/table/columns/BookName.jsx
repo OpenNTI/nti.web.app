@@ -18,7 +18,7 @@ export default class BookName extends React.Component {
 
 	static Name = () => t('title')
 
-	// static SortKey = 'Title'
+	static SortKey = 'title'
 
 	render () {
 		const {item} = this.props;
