@@ -25,7 +25,6 @@ class UserListStore extends Stores.BoundStore {
 
 	async load () {
 		this.set('loading', true);
-		this.emitChange('loading');
 
 		if(this.searchTerm && this.searchTerm.length < 3) {
 			this.set({
@@ -34,8 +33,6 @@ class UserListStore extends Stores.BoundStore {
 				currentSearchTerm: '',
 				loading: false
 			});
-
-			this.emitChange('items', 'numPages', 'loading');
 
 			return;
 		}
@@ -100,14 +97,10 @@ class UserListStore extends Stores.BoundStore {
 				items,
 				currentSearchTerm: this.searchTerm
 			});
-
-			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber', 'currentSearchTerm');
 		}
 		catch (e) {
 			this.set('loading', false);
 			this.set('error', e.message || 'Could not load learners');
-
-			this.emitChange('loading', 'error');
 		}
 	}
 }

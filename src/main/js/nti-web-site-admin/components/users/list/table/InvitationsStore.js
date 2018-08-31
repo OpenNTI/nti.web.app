@@ -15,10 +15,12 @@ class UserInvitationsStore extends Stores.BoundStore {
 	constructor () {
 		super();
 
-		this.set('items', null);
-		this.set('loading', true);
-		this.set('pageNumber', 1);
-		this.set('showInviteDialog', false);
+		this.set({
+			items: null,
+			loading: true,
+			pageNumber: 1,
+			showInviteDialog: false
+		});
 	}
 
 	setUnload () {
@@ -37,7 +39,6 @@ class UserInvitationsStore extends Stores.BoundStore {
 
 	async rescind (users) {
 		this.set('loading', true);
-		this.emitChange('loading');
 
 		try {
 			const service = await getService();
@@ -55,7 +56,6 @@ class UserInvitationsStore extends Stores.BoundStore {
 		catch (e) {
 			this.set('loading', false);
 			this.set('error', e.message || 'Could not rescind invitation');
-			this.emitChange('loading', 'error');
 		}
 	}
 
@@ -64,7 +64,6 @@ class UserInvitationsStore extends Stores.BoundStore {
 
 		this.set('loading', true);
 		this.set('error', null);
-		this.emitChange('loading', 'error');
 
 		try {
 			let payload = {
@@ -90,8 +89,6 @@ class UserInvitationsStore extends Stores.BoundStore {
 			else {
 				this.set('error', null);
 			}
-
-			this.emitChange('loading', 'error');
 		}
 	}
 
@@ -116,14 +113,10 @@ class UserInvitationsStore extends Stores.BoundStore {
 
 	showInviteDialog = () => {
 		this.set('showInviteDialog', true);
-
-		this.emitChange('showInviteDialog');
 	}
 
 	hideInviteDialog = () => {
 		this.set('showInviteDialog', false);
-
-		this.emitChange('showInviteDialog');
 	}
 
 	async load () {
@@ -132,7 +125,6 @@ class UserInvitationsStore extends Stores.BoundStore {
 		}
 
 		this.set('loading', true);
-		this.emitChange('loading');
 
 		if(this.searchTerm && this.searchTerm.length < 3) {
 			this.set({
@@ -141,7 +133,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 				currentSearchTerm: '',
 				loading: false
 			});
-			this.emitChange('items', 'numPages', 'loading');
+
 			return;
 		}
 
@@ -196,12 +188,10 @@ class UserInvitationsStore extends Stores.BoundStore {
 				currentSearchTerm: this.searchTerm
 			});
 
-			this.emitChange('loading', 'items', 'total', 'sortOn', 'sortDirection', 'numPages', 'pageNumber', 'currentSearchTerm');
 		}
 		catch (e) {
 			this.set('loading', false);
 			this.set('error', e.message || 'Could not load invitations');
-			this.emitChange('loading', 'error');
 		}
 	}
 }

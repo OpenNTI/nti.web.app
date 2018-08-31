@@ -33,8 +33,6 @@ class UserListStore extends Stores.BoundStore {
 				loading: false
 			});
 
-			this.emitChange('error', 'loading');
-
 			return;
 		}
 
@@ -53,8 +51,6 @@ class UserListStore extends Stores.BoundStore {
 				loading: false
 			});
 
-			this.emitChange('error', 'loading');
-
 			return;
 		}
 
@@ -65,7 +61,6 @@ class UserListStore extends Stores.BoundStore {
 		const siteAdminsLink = service.getWorkspace('SiteAdmin').getLink('SiteAdmins');
 
 		this.set('loading', true);
-		this.emitChange('loading');
 
 		if(removing) {
 			const params = {
@@ -109,7 +104,6 @@ class UserListStore extends Stores.BoundStore {
 
 	async load () {
 		this.set('loading', true);
-		this.emitChange('loading');
 
 		if(this.searchTerm && this.searchTerm.length < 3) {
 			this.set({
@@ -118,8 +112,6 @@ class UserListStore extends Stores.BoundStore {
 				currentSearchTerm: '',
 				loading: false
 			});
-
-			this.emitChange('items', 'numPages', 'loading');
 
 			return;
 		}
@@ -177,14 +169,10 @@ class UserListStore extends Stores.BoundStore {
 				loading: false,
 				items: siteUsers.Items
 			});
-
-			this.emitChange('loading', 'items', 'sortOn', 'sortDirection', 'numPages', 'pageNumber', 'currentSearchTerm');
 		}
 		catch (e) {
 			this.set('loading', false);
 			this.set('error', e.message || 'Could not load learners');
-
-			this.emitChange('loading', 'error');
 		}
 	}
 }
