@@ -29,9 +29,10 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('siteadmin.components.course.list.booklist', DEFAULT_TEXT);
 
+export default
 @contextual(t('books'))
 @searchable(store, propMap)
-export default class BookListView extends React.Component {
+class BookListView extends React.Component {
 	static propTypes = {
 		searchTerm: PropTypes.string,
 		hasNextPage: PropTypes.bool,

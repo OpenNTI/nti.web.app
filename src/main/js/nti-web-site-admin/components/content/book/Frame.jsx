@@ -14,8 +14,9 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.courses.book.Frame', DEFAULT_TEXT);
 
+export default
 @Store.connect({course: 'course', loading: 'loading'})
-export default class SiteAdminBookView extends React.Component {
+class SiteAdminBookView extends React.Component {
 	static propTypes = {
 		bookID: PropTypes.string.isRequired,
 

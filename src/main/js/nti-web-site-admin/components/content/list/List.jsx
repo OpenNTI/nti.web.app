@@ -20,8 +20,9 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('siteadmin.components.course.view', DEFAULT_TEXT);
 
+export default
 @contextual(t('courses'))
-export default class View extends React.Component {
+class View extends React.Component {
 	static propTypes = {
 		selectedItems: PropTypes.object,
 		loadNextPage: PropTypes.func,

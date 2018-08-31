@@ -21,8 +21,9 @@ const propMap = {
 	error: 'error',
 };
 
+export default
 @Store.connect(propMap)
-export default class SiteAdminUserBooks extends React.Component {
+class SiteAdminUserBooks extends React.Component {
 	static propTypes = {
 		user: PropTypes.object,
 		store: PropTypes.object,

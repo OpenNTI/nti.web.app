@@ -16,8 +16,9 @@ const propMap = {
 	error: 'error'
 };
 
+export default
 @searchable(store, propMap)
-export default class CourseListView extends React.Component {
+class CourseListView extends React.Component {
 	static propTypes = {
 		searchTerm: PropTypes.string,
 		hasNextPage: PropTypes.bool,

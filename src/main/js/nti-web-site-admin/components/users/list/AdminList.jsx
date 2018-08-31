@@ -45,9 +45,10 @@ function RemoveButton ({item}) {
 	);
 }
 
+export default
 @searchable(store, propMap)
 @contextual(t('users'))
-export default class AdminListView extends React.Component {
+class AdminListView extends React.Component {
 	static propTypes = {
 		searchTerm: PropTypes.string,
 		hasNextPage: PropTypes.bool,

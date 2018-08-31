@@ -14,8 +14,9 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.user.user-course-enrollment.Frame', DEFAULT_TEXT);
 
+export default
 @Store.connect({enrollment: 'enrollment', loading: 'loading', course: 'course'})
-export default class SiteAdminUserEnrollmentView extends React.Component {
+class SiteAdminUserCourseEnrollmentView extends React.Component {
 	static propTypes = {
 		enrollmentID: PropTypes.string,
 		courseContext: PropTypes.bool,

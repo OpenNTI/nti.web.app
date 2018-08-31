@@ -13,7 +13,7 @@ import Store from './Store';
 const DEFAULT_TEXT = {
 	error: 'Unable to load transcript.'
 };
-const t = scoped('nti-site-admin.users.user.Transcript', DEFAULT_TEXT);
+const t = scoped('nti-site-admin.users.user.courses.View', DEFAULT_TEXT);
 
 const propMap = {
 	items: 'items',
@@ -21,8 +21,9 @@ const propMap = {
 	error: 'error',
 };
 
+export default
 @Store.connect(propMap)
-export default class SiteAdminUserTranscript extends React.Component {
+class SiteAdminUserCourses extends React.Component {
 	static propTypes = {
 		user: PropTypes.object,
 		store: PropTypes.object,

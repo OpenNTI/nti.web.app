@@ -21,9 +21,10 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.users.adminlist', DEFAULT_TEXT);
 
+export default
 @searchable(store, propMap)
 @contextual(t('users'))
-export default class UserListView extends React.Component {
+class UserListView extends React.Component {
 	componentDidMount () {
 		store.load();
 	}

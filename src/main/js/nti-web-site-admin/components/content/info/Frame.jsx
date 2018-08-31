@@ -15,8 +15,9 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.courses.info.Frame', DEFAULT_TEXT);
 
+export default
 @Store.connect({course: 'course', loading: 'loading'})
-export default class SiteAdminCourseView extends React.Component {
+class SiteAdminCourseView extends React.Component {
 	static propTypes = {
 		courseID: PropTypes.string.isRequired,
 
