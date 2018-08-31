@@ -3,11 +3,13 @@ import {getService} from '@nti/web-client';
 import {URL} from '@nti/lib-commons';
 import {mixin} from '@nti/lib-decorators';
 
+import Selectable from './Selectable';
+
 const PAGE_SIZE = 20;
 const ACCESS_FORBIDDEN = 'Access forbidden';
 
 export default
-@mixin(Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
+@mixin(Selectable, Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
 class UserListStore extends Stores.BoundStore {
 
 	StatefulProperties = ['sortProperty', 'sortDirection']
@@ -17,54 +19,6 @@ class UserListStore extends Stores.BoundStore {
 
 		this.set('items', null);
 		this.set('loading', true);
-	}
-
-	selectAll () {
-		this.set('selectedUsers', this.get('items'));
-
-		this.emitChange('selectedUsers');
-	}
-
-	deselectAll () {
-		this.set('selectedUsers', []);
-
-		this.emitChange('selectedUsers');
-	}
-
-	isAllSelected () {
-		const selected = this.get('selectedUsers');
-		const items = this.get('items');
-
-		return selected && selected.length === items.length;
-	}
-
-	onSelect (user) {
-		let selected = this.get('selectedUsers');
-
-		if(!selected) {
-			selected = [user];
-		}
-		else {
-			selected.push(user);
-		}
-
-		this.set('selectedUsers', selected);
-
-		this.emitChange('selectedUsers');
-	}
-
-	isSelected (user) {
-		return (this.get('selectedUsers') || []).some(x => x.getID() === user.getID());
-	}
-
-	onDeselect (user) {
-		let selected = this.get('selectedUsers');
-
-		selected = selected.filter(x => x.getID() !== user.getID());
-
-		this.set('selectedUsers', selected);
-
-		this.emitChange('selectedUsers');
 	}
 
 	async addAdmin (users) {
