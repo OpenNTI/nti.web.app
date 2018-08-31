@@ -190,8 +190,10 @@ class UserInvitationsStore extends Stores.BoundStore {
 
 		}
 		catch (e) {
-			this.set('loading', false);
-			this.set('error', e.message || 'Could not load invitations');
+			this.set({
+				loading: false,
+				error: e.message || 'Could not load invitations'
+			});
 		}
 	}
 }

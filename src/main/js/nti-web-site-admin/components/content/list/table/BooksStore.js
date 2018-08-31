@@ -11,10 +11,12 @@ class UserListStore extends Stores.BoundStore {
 	constructor () {
 		super();
 
-		this.set('items', null);
-		this.set('loading', true);
-		this.set('sortOn', null);
-		this.set('sortDirection', null);
+		this.set({
+			items: null,
+			loading: true,
+			sortOn: null,
+			sortDirection: null
+		});
 	}
 
 	loadPage (pageNumber) {
@@ -70,14 +72,9 @@ class UserListStore extends Stores.BoundStore {
 			}
 
 			const collection = service.getCollection('VisibleContentBundles', 'ContentBundles');
-
-			// batch params not currently supported by server
 			const batch = await service.getBatch(collection.href, params);
-
 			const promises = (batch.titles || []).map(x => service.getObject(x));
-
 			const parsed = await Promise.all(promises);
-
 			const result = { items: parsed, total: parsed.length };
 
 			items = result.items;
@@ -99,8 +96,10 @@ class UserListStore extends Stores.BoundStore {
 			});
 		}
 		catch (e) {
-			this.set('loading', false);
-			this.set('error', e.message || 'Could not load learners');
+			this.set({
+				loading: false,
+				error: e.message || 'Could not load books'
+			});
 		}
 	}
 }

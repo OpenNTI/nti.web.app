@@ -17,8 +17,10 @@ class UserListStore extends Stores.BoundStore {
 	constructor () {
 		super();
 
-		this.set('items', null);
-		this.set('loading', true);
+		this.set({
+			items: null,
+			loading: true
+		});
 	}
 
 	async addAdmin (users) {
@@ -171,8 +173,10 @@ class UserListStore extends Stores.BoundStore {
 			});
 		}
 		catch (e) {
-			this.set('loading', false);
-			this.set('error', e.message || 'Could not load learners');
+			this.set({
+				loading: false,
+				error: e.message || 'Could not load learners'
+			});
 		}
 	}
 }
