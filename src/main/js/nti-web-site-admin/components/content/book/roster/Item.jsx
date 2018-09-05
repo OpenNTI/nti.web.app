@@ -6,13 +6,11 @@ SiteAdminBookRosterItem.propTypes = {
 	item: PropTypes.object.isRequired
 };
 export default function SiteAdminBookRosterItem ({item}) {
-	const {User} = item;
-
 	return (
 		<div className="site-admin-course-roster-item">
-			<Avatar entity={User} className="user-avatar"/>
+			<Avatar entity={item} className="user-avatar"/>
 			<div className="info">
-				<DisplayName entity={User} className="username" />
+				<DisplayName entity={item} className="username" />
 			</div>
 		</div>
 	);
