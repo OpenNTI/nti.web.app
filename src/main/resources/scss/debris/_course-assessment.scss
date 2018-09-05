@@ -311,10 +311,33 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.assignment-list {
+	.labels-container {
+		display: flex;
+		padding: 0 2em 10px 60px;
+		line-height: 0;
+
+		.required-container {
+			.required-label {
+				font: normal 600 0.6rem/1 "Open Sans", sans-serif;
+				text-transform: uppercase;
+				border: 1px solid #e2e2e2;
+				border-radius: 3px;
+				display: inline-block;
+				margin-right: 1rem;
+				padding: 5px;
+				padding: 0.25rem;
+				color: $tertiary-grey;
+			}
+		}
+	}
+}
+
 .assignment-status {
 	font: normal 600 0.6rem/1 $font;
 	text-transform: uppercase;
 	color: $tertiary-grey;
+	line-height: 20px;
 
 	* {
 		display: inline;
@@ -664,10 +687,6 @@ canvas.x-component-course-assessment {
 
 		.assignment-status-container {
 			margin-left: -60px;
-
-			.status-container {
-				padding: 0 8em 10px 60px;
-			}
 
 			.assignment-due-date-editor > .contents {
 				padding: 20px 0 0 60px;

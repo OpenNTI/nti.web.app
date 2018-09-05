@@ -31,12 +31,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	cls: 'assignment-status-container',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'status-container'},
+		{cls: 'labels-container', cn: [
+			{cls: 'required-container'},
+			{cls: 'status-container'}
+		]},
 		{cls: 'menu-container'}
 	]),
 
 	renderSelectors: {
 		statusEl: '.status-container',
+		requiredEl: '.required-container',
 		menuContainer: '.menu-container'
 	},
 
@@ -102,6 +106,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 
 		me.statusEl.dom.innerHTML = status;
+
+		if(assignment.get('CompletionRequired')) {
+			me.requiredEl.dom.innerHTML = '<div class="required-label">required</div>';
+		}
 
 		wait(100)
 			.then(function () {
