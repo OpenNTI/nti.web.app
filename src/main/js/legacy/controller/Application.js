@@ -91,6 +91,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		this.loggedIn = true;
 
 		body.pushRoute = this.pushRoute.bind(this);
+		body.pushRouteKeepScroll = this.pushRouteKeepScroll.bind(this);
 		body.replaceRoute = this.replaceRoute.bind(this);
 		body.pushRootRoute = this.pushRoute.bind(this);
 		body.replaceRootRoute = this.replaceRoute.bind(this);
@@ -395,6 +396,10 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		this.__doRoute('push', null, title, route, precache, () => {
 			window.scroll(0, 0);
 		});
+	},
+
+	pushRouteKeepScroll: function (title, route, precache) {
+		this.__doRoute('push', null, title, route, precache);
 	},
 
 

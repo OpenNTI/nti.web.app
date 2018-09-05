@@ -229,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		route = location.pathname + (location.search || '') + (location.hash || '');
 
-		this.pushRoute(title, route, precache, state);
+		this.pushRouteKeepScroll(title, route, precache, state);
 	},
 
 	replaceOpenWindowRoute: function () {
