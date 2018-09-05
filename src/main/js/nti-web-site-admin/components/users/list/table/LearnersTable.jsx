@@ -19,6 +19,6 @@ class LearnersTable extends React.Component {
 	static deriveFilterFromProps = () => 'learners';
 
 	render () {
-		return <UsersTable title={t('learners')} emptyMessage={t('emptyMessage')}/>;
+		return <UsersTable filter="learners" title={t('learners')} emptyMessage={t('emptyMessage')}/>;
 	}
 }

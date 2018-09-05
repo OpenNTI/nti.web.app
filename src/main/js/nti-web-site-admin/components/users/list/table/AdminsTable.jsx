@@ -19,6 +19,6 @@ class AdminsTable extends React.Component {
 	static deriveFilterFromProps = () => 'admin';
 
 	render () {
-		return <UsersTable title={t('administrators')} emptyMessage={t('emptyMessage')}/>;
+		return <UsersTable filter="admin" title={t('administrators')} emptyMessage={t('emptyMessage')}/>;
 	}
 }
