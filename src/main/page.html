@@ -78,7 +78,7 @@
 			var urls = url.split(/([\r\n]+)|(\s*-\>\s*)/);
 			//did it come from us?
 			var basePrefix = new RegExp("^" + location.protocol + '//' + location.host, "i");
-			if (basePrefix.test(urls[0])) {
+			if (basePrefix.test(urls[0]) && !/\/login\/$/.test(urls[0])) {
 				window.location.replace('/login/unsupported.html');
 			}
 		};
