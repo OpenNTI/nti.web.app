@@ -24,15 +24,26 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
 	 * @return {Promise}			fulfills with the route for the bundle, once the animation is done
 	 */
 	transitionToBundle: function (bundle, libraryCard) {
-		var ntiid = bundle.get('NTIID'),
-			route = this.getRootRouteForId(ntiid),
-			subRoute = this.StateStore.getRouteFor(ntiid);
+		if(typeof bundle === 'string') {
+			let route = this.getRootRouteForId(bundle);
+			let subRoute = this.StateStore.getRouteFor(bundle);
 
-		if (subRoute) {
-			route = route + '/' + Globals.trimRoute(subRoute);
+			if (subRoute) {
+				route = route + '/' + Globals.trimRoute(subRoute);
+			}
+
+			return Promise.resolve(route);
+		} else {
+			var ntiid = bundle.get('NTIID'),
+				route = this.getRootRouteForId(ntiid),
+				subRoute = this.StateStore.getRouteFor(ntiid);
+
+			if (subRoute) {
+				route = route + '/' + Globals.trimRoute(subRoute);
+			}
+
+			return Promise.resolve(route);
 		}
-
-		return Promise.resolve(route);
 	},
 
 	getRootRouteForId: function (id) {

@@ -1,109 +1,110 @@
-const Ext = require('@nti/extjs');
+const {isFeature} = require('legacy/util/Globals');
 
-const NavigationActions = require('legacy/app/navigation/Actions');
+const Library = require('./Library');
+const LibrarySearchable = require('./LibrarySearchable');
 
-require('legacy/mixins/Router');
-require('./communities/Index');
-require('./admin/Index');
-require('./content/Index');
-require('./courses/Index');
-require('./Home');
+if(isFeature('library-searchable')) {
+	module.exports = exports = LibrarySearchable;
+} else {
+	module.exports = exports = Library;
+}
 
-
-
-module.exports = exports = Ext.define('NextThought.app.library.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.library-view-container',
-
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
-
-	layout: 'card',
-	cls: 'library-view',
-	items: [],
-
-	initComponent: function () {
-		this.callParent(arguments);
-
-		this.NavActions = NavigationActions.create();
-
-		this.addRoute('/', this.showHome.bind(this));
-		this.addRoute('/courses', this.showCourses.bind(this));
-		this.addRoute('/admin', this.showAdminCourses.bind(this));
-		this.addRoute('/books', this.showBooks.bind(this));
-		this.addRoute('/communities', this.showCommunities.bind(this));
-		this.addDefaultRoute('/');
-
-		this.on({
-			deactivate: this.onDeactivate.bind(this)
-		});
-	},
-
-	onDeactivate: function () {
-		var activeItem = this.getLayout().getActiveItem();
-
-		activeItem.fireEvent('deactivate');
-	},
-
-	setActiveView: function (xtype, selector) {
-		var old = this.getLayout().getActiveItem(),
-			cmp = this.down(selector || xtype);
-
-		if (!cmp) {
-			cmp = this.add(Ext.widget(xtype));
-
-			this.addChildRouter(cmp);
-		}
-
-		this.getLayout().setActiveItem(cmp);
-
-		this.NavActions.updateNavBar({
-			noLibraryLink: xtype === 'library-home',
-			darkStyle: true
-		});
-
-		this.NavActions.setActiveContent(null);
-
-		//If this is the first element added, the card layout
-		//wont' fire the activate event so trigger it ourselves.
-		if (!old) {
-			cmp.fireEvent('activate');
-		}
-
-
-		return cmp;
-	},
-
-	showHome: function (route, subRoute) {
-		var cmp = this.setActiveView('library-home');
-
-		this.setTitle('Home');
-
-		return cmp.handleRoute(subRoute, route.precache);
-	},
-
-	showCourses: function (route, subRoute) {
-		var cmp = this.setActiveView('library-courses', '[isCoursePage]');
-
-		return cmp.handleRoute(subRoute, route.precache);
-	},
-
-	showAdminCourses: function (route, subRoute) {
-		var cmp = this.setActiveView('library-admin');
-
-		return cmp.handleRoute(subRoute, route.precache);
-	},
-
-	showBooks: function (route, subRoute) {
-		var cmp = this.setActiveView('library-content');
-
-		return cmp.handleRoute(subRoute, route.precache);
-	},
-
-	showCommunities: function (route, subRoute) {
-		var cmp = this.setActiveView('library-communities');
-
-		return cmp.handleRoute(subRoute, route.precache);
-	}
-});
+// module.exports = exports = Ext.define('NextThought.app.library.Index', {
+// 	extend: 'Ext.container.Container',
+// 	alias: 'widget.library-view-container',
+//
+// 	mixins: {
+// 		Router: 'NextThought.mixins.Router'
+// 	},
+//
+// 	layout: 'none',
+// 	cls: 'library-view',
+// 	items: [],
+//
+// 	initComponent: function () {
+// 		this.callParent(arguments);
+//
+// 		this.initRouter();
+//
+// 		this.addDefaultRoute(this.showLibrary.bind(this));
+//
+// 		this.NavigationActions = NavigationActions.create();
+// 		this.CourseActions = CourseActions.create();
+// 		this.BundleActions = BundleActions.create();
+// 	},
+//
+// 	showLibrary (route) {
+// 		this.NavigationActions.updateNavBar({
+// 			noLibraryLink: true,
+// 			darkStyle: true
+// 		});
+//
+// 		this.NavigationActions.setActiveContent(null);
+//
+// 		const baseroute = this.getBaseRoute();
+//
+// 		if (this.library) {
+// 			this.library.setBaseRoute(baseroute);
+// 		} else {
+// 			this.library = this.add({
+// 				xtype: 'react',
+// 				component: LibrarySearchableView,
+// 				baseroute: baseroute,
+// 				setTitle: (title) => {this.setTitle(title); },
+// 				getRouteFor: (obj) => {
+// 					if (obj.MimeType === 'application/vnd.nextthought.community') {
+// 						return () => this.navigateToCommunity(obj);
+// 					} else if (obj.isCourse) {
+// 						return () => this.navigateToCourse(obj);
+// 					} else if (obj.isBundle) {
+// 						return () => this.navigateToBundle(obj);
+// 					} else if (obj.isCourseCatalogEntry) {
+// 						return () => this.navigateToCatalog(obj);
+// 					}
+// 				}
+// 			});
+// 		}
+//
+// 		this.setTitle('Home');
+// 	},
+//
+// 	navigateToCatalog (catalogEntry) {
+// 		debugger;
+// 		const href = `uri:${catalogEntry.href}`;
+//
+// 		const route = `./nti-course-catalog-entry/${encodeURIComponent(href)}`;
+// 		this.pushRootRoute(null, route);
+// 	},
+//
+// 	navigateToCommunity (community) {
+// 		let route;
+// 		var id = community.Username;
+// 		if (id && community.getLink('Activity')) {
+// 			route = '/community/' + encodeURIComponent(id);
+// 		}
+//
+// 		if (route) {
+// 			this.pushRootRoute(null, route, {community: community});
+// 		}
+// 	},
+//
+//
+// 	navigateToCourse (course) {
+// 		const courseID = course.getCourseID ? course.getCourseID() : course.NTIID;
+//
+// 		this.CourseActions.transitionToCourse(courseID)
+// 			.then(route => {
+// 				this.pushRootRoute(null, route);
+// 			});
+// 	},
+//
+//
+// 	navigateToBundle (bundle) {
+// 		const bundleID = bundle.getID ? bundle.getID() : bundle.NTIID;
+//
+// 		this.BundleActions.transitionToBundle(bundleID)
+// 			.then(route => {
+// 				this.pushRootRoute(null, route);
+// 			});
+// 	}
+// });
