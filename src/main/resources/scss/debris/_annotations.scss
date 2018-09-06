@@ -797,6 +797,16 @@
 		display: inline-block;
 	}
 
+	.sidebar.warning {
+		.application-highlight {
+			&.shared-with-me {
+				&,.math {
+					color: white;
+				}
+			}
+		}
+	}
+
 	.application-highlight {
 		&.suppressed {
 			//do nothing special when range is suppressed.
