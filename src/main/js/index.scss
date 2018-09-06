@@ -1,24 +1,3 @@
-//TODO: find a way to auto-import component styles.
-@import "~@nti/style-common/all.scss";
-@import "~@nti/web-assignment-editor/lib/index.css";
-@import "~@nti/web-catalog/lib/index.css";
-@import "~@nti/web-charts/lib/index.css";
-@import "~@nti/web-commons/lib/index.css";
-@import "~@nti/web-content/lib/index.css";
-@import "~@nti/web-contacts/lib/index.css";
-@import "~@nti/web-course/lib/index.css";
-@import "~@nti/web-discussions/lib/index.css";
-@import "~@nti/web-editor/lib/index.css";
-@import "~@nti/web-integrations/lib/index.css";
-@import "~@nti/web-modeled-content/lib/index.css";
-@import "~@nti/web-profiles/lib/index.css";
-@import "~@nti/web-reports/lib/index.css";
-@import "~@nti/web-routing/lib/index.css";
-@import "~@nti/web-search/lib/index.css";
-@import "~@nti/web-video/lib/index.css";
-@import "~@nti/web-whiteboard/lib/index.css";
-
-
 //Workarond ExtJS legacy z-index-happy bull$#!+ >.<
 body > .modal .modal-mask {
 	z-index: 1000;
