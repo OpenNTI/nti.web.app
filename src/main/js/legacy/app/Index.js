@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const DetectZoom = require('detect-zoom');
+const Commons = require('@nti/web-commons');
 
 require('./MessageBox');
 require('./MessageBar');
@@ -10,6 +11,8 @@ require('./windows/Index');
 require('./chat/Index');
 require('./prompt/Index');
 require('../layout/container/None');
+
+Commons.Layouts.Responsive.setWebappContext();
 
 module.exports = exports = Ext.define('NextThought.app.Index', {
 	extend: 'Ext.container.Viewport',
