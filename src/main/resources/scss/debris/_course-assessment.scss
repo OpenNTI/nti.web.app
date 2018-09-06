@@ -736,10 +736,7 @@ canvas.x-component-course-assessment {
 				&::after {
 					content: '';
 					@include arrow($pointFrom: top, $color: $tertiary-grey);
-					position: absolute;
-					top: 50%;
-					margin-top: -3px;
-					right: 9px;
+					margin-top: 2px;
 				}
 
 				&.late {
