@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user table join date column test Test none selected 1`] = `
+<div
+  className="cell"
+  onClick={[Function]}
+>
+  Cancel
+</div>
+`;
+
+exports[`Site admin user table join date column test Test some selected 1`] = `
+<div
+  className="cell"
+/>
+`;

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user table empty state test Test custom wording 1`] = `
+<div
+  className="empty-state"
+>
+  this is custom text
+</div>
+`;
+
+exports[`Site admin user table empty state test Test default wording 1`] = `
+<div
+  className="empty-state"
+>
+  There are no users
+</div>
+`;

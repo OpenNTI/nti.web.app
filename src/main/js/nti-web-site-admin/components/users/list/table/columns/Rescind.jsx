@@ -5,7 +5,7 @@ import {Prompt} from '@nti/web-commons';
 import {Connectors} from '@nti/lib-store';
 import cx from 'classnames';
 
-const t = scoped('nti-web-site-admin.components.users.list.table.columns.LastSeen', {
+const t = scoped('nti-web-site-admin.components.users.list.table.columns.Rescind', {
 	rescind: 'Cancel'
 });
 
@@ -14,7 +14,7 @@ export default
 	getSelectedCount: 'getSelectedCount',
 	rescind: 'rescind'
 })
-class LastSeen extends React.Component {
+class Rescind extends React.Component {
 	static propTypes = {
 		item: PropTypes.object.isRequired,
 		getSelectedCount: PropTypes.func,

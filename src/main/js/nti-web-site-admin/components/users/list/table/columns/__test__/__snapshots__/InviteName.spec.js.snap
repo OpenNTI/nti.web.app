@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user table invite name column test Test admin invitation 1`] = `
+<div
+  className="cell"
+>
+  <div
+    className="user-info"
+  >
+    <div
+      className="invite-email"
+    >
+      adminUser1
+    </div>
+    <div
+      className="invite-type"
+    >
+      Administrator
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Site admin user table invite name column test Test learner invitation 1`] = `
+<div
+  className="cell"
+>
+  <div
+    className="user-info"
+  >
+    <div
+      className="invite-email"
+    >
+      learnerUser1
+    </div>
+    <div
+      className="invite-type"
+    >
+      Learner
+    </div>
+  </div>
+</div>
+`;

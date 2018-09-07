@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin table pager test Test 1 page 1`] = `null`;
+
+exports[`Site admin table pager test Test 2 pages 1`] = `
+<div
+  className="site-admin-table-pager"
+>
+  <div
+    className="page selected"
+    onClick={[Function]}
+  >
+    1
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    2
+  </div>
+</div>
+`;
+
+exports[`Site admin table pager test Test 10 pages, pageNumber=1 1`] = `
+<div
+  className="site-admin-table-pager"
+>
+  <div
+    className="page selected"
+    onClick={[Function]}
+  >
+    1
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    2
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    3
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    4
+  </div>
+</div>
+`;
+
+exports[`Site admin table pager test Test 10 pages, pageNumber=5 1`] = `
+<div
+  className="site-admin-table-pager"
+>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    2
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    3
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    4
+  </div>
+  <div
+    className="page selected"
+    onClick={[Function]}
+  >
+    5
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    6
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    7
+  </div>
+  <div
+    className="page"
+    onClick={[Function]}
+  >
+    8
+  </div>
+</div>
+`;
+
+exports[`Site admin table pager test Test no pages 1`] = `null`;

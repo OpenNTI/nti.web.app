@@ -1,0 +1,231 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user table change role test Test admin list 1`] = `
+<div
+  className="site-admin-change-role-dialog"
+>
+  <div
+    className="title"
+  >
+    <div
+      className="panel-title-bar"
+    >
+      <h1>
+        Change Roles (2 People)
+      </h1>
+    </div>
+  </div>
+  <div
+    className="contents"
+  >
+    <div
+      className="description-container"
+    >
+      <div
+        className="description"
+      >
+        Changing a person's role will affect what features and permissions are available.
+      </div>
+      <div
+        className="description"
+      >
+        You can change a person's role at any time.
+      </div>
+    </div>
+    <div
+      className="people"
+    >
+      <div
+        className="subtitle"
+      >
+        People
+      </div>
+      <div
+        className="people-list"
+      >
+        <div
+          className="user"
+        />
+        <div
+          className="user"
+        />
+      </div>
+    </div>
+    <div
+      className="roles"
+    >
+      <div
+        className="title"
+      >
+        Roles
+      </div>
+      <div
+        className="role-options"
+      >
+        <div
+          className="role-option"
+          onClick={[Function]}
+        >
+          <div
+            className="radio selected"
+          >
+            <div
+              className="inner"
+            />
+          </div>
+          <div
+            className="label"
+          >
+            Administrator
+          </div>
+        </div>
+        <div
+          className="role-option"
+          onClick={[Function]}
+        >
+          <div
+            className="radio"
+          />
+          <div
+            className="label"
+          >
+            Learner
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="dialog-buttons"
+  >
+    <button
+      className="button cancel secondary"
+      role="button"
+    >
+      Cancel
+    </button>
+    <button
+      className="button save primary"
+      onClick={[Function]}
+      role="button"
+    >
+      Save
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Site admin user table change role test Test learner list 1`] = `
+<div
+  className="site-admin-change-role-dialog"
+>
+  <div
+    className="title"
+  >
+    <div
+      className="panel-title-bar"
+    >
+      <h1>
+        Change Roles (2 People)
+      </h1>
+    </div>
+  </div>
+  <div
+    className="contents"
+  >
+    <div
+      className="description-container"
+    >
+      <div
+        className="description"
+      >
+        Changing a person's role will affect what features and permissions are available.
+      </div>
+      <div
+        className="description"
+      >
+        You can change a person's role at any time.
+      </div>
+    </div>
+    <div
+      className="people"
+    >
+      <div
+        className="subtitle"
+      >
+        People
+      </div>
+      <div
+        className="people-list"
+      >
+        <div
+          className="user"
+        />
+        <div
+          className="user"
+        />
+      </div>
+    </div>
+    <div
+      className="roles"
+    >
+      <div
+        className="title"
+      >
+        Roles
+      </div>
+      <div
+        className="role-options"
+      >
+        <div
+          className="role-option"
+          onClick={[Function]}
+        >
+          <div
+            className="radio"
+          />
+          <div
+            className="label"
+          >
+            Administrator
+          </div>
+        </div>
+        <div
+          className="role-option"
+          onClick={[Function]}
+        >
+          <div
+            className="radio selected"
+          >
+            <div
+              className="inner"
+            />
+          </div>
+          <div
+            className="label"
+          >
+            Learner
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="dialog-buttons"
+  >
+    <button
+      className="button cancel secondary"
+      role="button"
+    >
+      Cancel
+    </button>
+    <button
+      className="button save primary"
+      onClick={[Function]}
+      role="button"
+    >
+      Save
+    </button>
+  </div>
+</div>
+`;

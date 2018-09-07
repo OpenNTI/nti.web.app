@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user table select column test Test not selected 1`] = `
+<td
+  className="select-col"
+>
+  <div
+    className="cell"
+  >
+    <label
+      className="checkbox-component"
+    >
+      <input
+        checked={false}
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <span
+        className="label"
+      />
+    </label>
+  </div>
+</td>
+`;
+
+exports[`Site admin user table select column test Test selected 1`] = `
+<td
+  className="select-col row-selected"
+>
+  <div
+    className="cell"
+  >
+    <label
+      className="checkbox-component"
+    >
+      <input
+        checked={true}
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <span
+        className="label"
+      />
+    </label>
+  </div>
+</td>
+`;

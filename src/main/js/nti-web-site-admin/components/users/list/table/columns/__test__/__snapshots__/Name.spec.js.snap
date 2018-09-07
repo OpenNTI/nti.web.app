@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user table name column test Test name 1`] = `
+<div
+  className="nti-link-to-path"
+  exact={true}
+  to="./user/user"
+>
+  <div
+    className="cell"
+  >
+    <div
+      className="user-info"
+    >
+      <div
+        className="email"
+      >
+        user@blah.com
+      </div>
+    </div>
+  </div>
+</div>
+`;
