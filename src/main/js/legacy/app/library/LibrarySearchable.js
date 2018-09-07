@@ -9,7 +9,7 @@ require('legacy/mixins/Router');
 
 module.exports = exports = Ext.define('NextThought.app.library.Index', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.library-searchable-view-container',
+	alias: 'widget.library-view-container',
 
 	mixins: {
 		Router: 'NextThought.mixins.Router'
@@ -63,11 +63,16 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 			});
 		}
 
-		this.setTitle('Home');
+		if(route.path === '/admin-courses') {
+			this.setTitle('Your Admin Courses');
+		} else if(route.path === '/courses') {
+			this.setTitle('Your Courses');
+		} else {
+			this.setTitle('Home');
+		}
 	},
 
 	navigateToCatalog (catalogEntry) {
-		debugger;
 		const href = `uri:${catalogEntry.href}`;
 
 		const route = `./nti-course-catalog-entry/${encodeURIComponent(href)}`;
