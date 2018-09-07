@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin content table created time column test Test date is many days ago 1`] = `
+<div
+  className="cell"
+>
+  <time
+    className="value"
+    dateTime="2017-10-31T00:00:00-05:00"
+  >
+    Oct 31, 2017
+  </time>
+</div>
+`;

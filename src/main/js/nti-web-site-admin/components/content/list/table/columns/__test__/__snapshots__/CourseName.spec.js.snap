@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin content table course name column test Test name 1`] = `
+<div
+  className="nti-link-to-path"
+  exact={true}
+  to="#"
+>
+  <div
+    className="cell"
+  >
+    <div
+      className="site-admin-course-info course-info"
+    >
+      <div
+        className="course-icon"
+        style={
+          Object {
+            "backgroundImage": "url()",
+          }
+        }
+      />
+      <div
+        className="info"
+      >
+        <div
+          className="label"
+        >
+          testCourse
+        </div>
+        <div
+          className="title"
+        >
+          Test course
+        </div>
+        <div
+          className="meta"
+        >
+          <div
+            className="start date"
+          >
+            <span
+              className="label"
+            >
+              Starts:
+            </span>
+            <time
+              className="value"
+              dateTime="2017-02-01T00:00:00-06:00"
+            >
+              Feb 1, 2017
+            </time>
+          </div>
+          <div
+            className="end date"
+          >
+            <span
+              className="label"
+            >
+              Ends:
+            </span>
+            <time
+              className="value"
+              dateTime="2017-04-05T00:00:00-05:00"
+            >
+              Apr 5, 2017
+            </time>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

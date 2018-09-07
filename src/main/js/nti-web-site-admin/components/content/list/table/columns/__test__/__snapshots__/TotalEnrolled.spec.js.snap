@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin content table total enrolled column test Test catalog entry with non-zero TotalEnrolled 1`] = `
+<div
+  className="cell"
+>
+  6
+</div>
+`;
+
+exports[`Site admin content table total enrolled column test Test catalog entry, but no TotalEnrolled 1`] = `
+<div
+  className="cell"
+>
+  0
+</div>
+`;
+
+exports[`Site admin content table total enrolled column test Test no catalog entry 1`] = `
+<div
+  className="cell"
+>
+  0
+</div>
+`;

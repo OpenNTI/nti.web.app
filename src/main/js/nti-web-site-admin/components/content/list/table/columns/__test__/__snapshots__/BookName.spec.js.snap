@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin content table book name column test Test name 1`] = `
+<div
+  className="nti-link-to-path"
+  exact={true}
+  to="./book/bookName"
+>
+  <div
+    className="cell"
+  >
+    <img
+      className="book-icon"
+      src=""
+    />
+    <div
+      className="book-info"
+    >
+      <div
+        className="title"
+      >
+        book name
+      </div>
+    </div>
+  </div>
+</div>
+`;
