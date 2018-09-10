@@ -33,7 +33,6 @@ export default
 })
 class UsersTable extends React.Component {
 	static propTypes = {
-		store: PropTypes.object.isRequired,
 		items: PropTypes.array,
 		error: PropTypes.string,
 		loading: PropTypes.bool,
@@ -101,7 +100,7 @@ class UsersTable extends React.Component {
 	}
 
 	render () {
-		const {store, sortOn, sortDirection, items, selectedUsers, error, loading, numPages, pageNumber, emptyMessage, currentSearchTerm, filter} = this.props;
+		const {sortOn, sortDirection, items, selectedUsers, error, loading, numPages, pageNumber, emptyMessage, currentSearchTerm, filter} = this.props;
 		const {showChangeRoles} = this.state;
 
 		return (
@@ -114,14 +113,13 @@ class UsersTable extends React.Component {
 					<div>
 						{this.renderHeader()}
 						<Table.Table
-							store={store}
 							items={items || []}
 							sortDirection={sortDirection}
 							sortOn={sortOn}
 							columns={this.columns}
 							onSortChange={this.onSortChange}
 						/>
-						<Pager store={store} numPages={numPages} pageNumber={pageNumber}/>
+						<Pager numPages={numPages} pageNumber={pageNumber}/>
 					</div>
 				)}
 				{showChangeRoles && (
