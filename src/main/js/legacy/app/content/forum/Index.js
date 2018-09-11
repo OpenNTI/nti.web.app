@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 	},
 
 	statics: {
-		showTab: function (bundle) {
+		showTab (bundle) {
 			return bundle && bundle.hasForumList && bundle.hasForumList();
 		}
 	},
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 		{xtype: 'forum-container'}
 	],
 
-	initComponent: function () {
+	initComponent () {
 		this.callParent(arguments);
 
 		this.forumContainer = this.down('forum-container');
@@ -37,38 +37,34 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 		this.addDefaultRoute(this.onRoute.bind(this));
 	},
 
-	getRouteTitle: function () {
+	getRouteTitle () {
 		return this.title;
 	},
 
-	onActivate: function () {
+	onActivate () {
 		this.setTitle(this.title);
 	},
 
-	onRouteActivate: function () {
+	onRouteActivate () {
 		this.unmask();
 	},
 
 
-	onRouteDeactivate: function () {
+	onRouteDeactivate () {
 		this.mask();
 	},
 
 
-	bundleChanged: function (bundle) {
-		var container = this.forumContainer;
+	bundleChanged (bundle) {
+		const container = this.forumContainer;
 
 		if (this.currentBundle === bundle) { return; }
 
 		this.currentBundle = bundle;
-		container.clearForumList();
 		container.setCurrentBundle(this.currentBundle);
-
-		return bundle.getForumList()
-			.then(container.setForumList.bind(container));
 	},
 
-	onRoute: function (route, subRoute) {
+	onRoute (route, subRoute) {
 		return this.forumContainer.handleRoute(route.path, route.precache);
 	}
 });

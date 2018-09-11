@@ -1,6 +1,8 @@
 const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
 
+const Forum = require('legacy/model/forums/Forum');
+
 require('legacy/mixins/Router');
 require('legacy/model/forums/Base');
 require('legacy/model/forums/Board');
@@ -30,7 +32,6 @@ require('legacy/util/Parsing');
 
 require('./components/forum/Index');
 require('./components/topic/Window');
-require('./components/forum/Window');
 
 module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 	extend: 'Ext.container.Container',
@@ -47,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		{xtype: 'forum-view'}
 	],
 
-	initComponent: function () {
+	initComponent () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -59,95 +60,67 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this.forumView = this.down('forum-view');
 	},
 
-	onAddedToParentRouter: function () {
+	onAddedToParentRouter () {
 		this.forumView.pushRoute = this.pushRoute.bind(this);
 		this.forumView.pushRouteState = this.pushForumState.bind(this);
 		this.forumView.replaceRouteState = this.replaceForumState.bind(this);
 		this.forumView.getRouteState = this.getRouteState.bind(this);
 		this.forumView.setTitle = this.setTitle.bind(this);
+		this.forumView.setInitForum = this.setInitForum.bind(this);
 		this.forumView.onAddedToParentRouter();
 	},
 
-	replaceForumState: function (state, title, route, precache) {
+	replaceForumState (state, title, route, precache) {
 		route = route || this.getCurrentRoute();
 
 		this.replaceRouteState(state, title, route, precache);
 	},
 
-	pushForumState: function (state, title, route, precache) {
+	pushForumState (state, title, route, precache) {
 		route = route || this.getCurrentRoute();
 
 		this.pushRouteState(state, title, route, precache);
 	},
 
-	clearForumList: function () {
-		this.forumView.clearForum();
-	},
-
-	/**
-	 * Take a forum list or a promise that fulfills with a forum list
-	 * @param {Array|Object} forumList see comments in the CourseInstance model to see structure
-	 * @returns {void}
-	 */
-	setForumList: function (forumList) {
-		this.forumView.setForumList(null);
-		delete this.forumView.forumList;
-		this['get_forum_list'] = forumList instanceof Promise ? forumList : Promise.resolve(forumList);
-	},
-
 	setCurrentBundle (bundle) {
+		delete this.activeForum;
 		this.forumView.setCurrentBundle(bundle);
 	},
 
-	getForumList: function () {
-		return this['get_forum_list'] || Promise.reject('No forum list defined');
-	},
+	showForum (route) {
+		const { precache: { forum }, params: { forum: forumID } } = route;
+		const id = forumID && decodeFromURI(forumID);
 
-	showForum: function (route, subRoute) {
-		var me = this;
-
-		return me.getForumList()
-			.then(function (forumList) {
-				var id = route.params.forum;
-
-				id = id && decodeFromURI(id);
-
-				me.forumView.setForumList(forumList);
-
-				if (!id && forumList.length === 1 && me.forumView.isSimplified()) {
-					const store = me.getStoreForSimplified(forumList);
-
-					const item = forumList[0];
-					let isEditor = false;
-
-					if (item.board) {
-						isEditor = item.board.hasLink('add');
-					} else if (item.children && item.children[0]) {
-						isEditor = item.children[0].board && forumList[0].children[0].board.hasLink('add');
-					}
-
-					if (store.getCount() === 0) {
-						me.forumView.setEmptyState(isEditor);
-					} else {
-						me.forumView.setForum(id);
-					}
-				} else {
-					me.forumView.setForum(id);
-				}
-
-			});
-	},
-
-	getStoreForSimplified (forumList) {
-		if (!forumList) { return {}; }
-
-		const item = forumList[0] || {};
-
-		if (item.store) {
-			return item.store;
+		if (forum && forum !== this.activeForum) {
+			// Forum clicked on nav
+			this.setActiveForum(forum);
+		} else if (id && !forum && ((this.activeForum && this.activeForum.getId() !== id) || !this.activeForum)) {
+			// Load forum
+			this.getForum(id);
+		} else if (this.activeForum) {
+			// Reset active forum
+			this.setActiveForum(this.activeForum);
+		} else {
+			// Clear Forum
+			this.forumView.setEmptyState();
 		}
-
-		const forum = (item && item.children && item.children[0]) || {};
-		return forum.store;
 	},
+
+	async getForum (forumID) {
+		try {
+			const forum = await Service.getObject(forumID);
+			this.setActiveForum(forum);
+		} catch (error) {
+			console.error(error);
+		}
+	},
+
+	setInitForum (forum) {
+		this.setActiveForum(Forum.interfaceToModel(forum));
+	},
+
+	setActiveForum (forum) {
+		this.activeForum = forum;
+		this.forumView.setForum(this.activeForum);
+	}
 });

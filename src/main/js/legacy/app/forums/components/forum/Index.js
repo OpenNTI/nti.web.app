@@ -14,39 +14,28 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 	storeCfg: {},
 	model: 'NextThought.model.forums.CommunityForum',
 
-	initComponent: function () {
+	initComponent () {
 		this.callParent(arguments);
 		this.body.onForumDelete = this.onForumDelete.bind(this);
-		this.navigation.isSimplified = this.isSimplified.bind(this);
 		this.body.isSimplified = this.isSimplified.bind(this);
 	},
 
-	onAddedToParentRouter: function () {
+	onAddedToParentRouter () {
 		this.navigation.pushRoute = this.pushForum.bind(this);
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
 		this.body.getRouteState = this.getRouteState.bind(this);
 		this.body.alignNavigation = this.alignNavigation.bind(this);
+		this.navigation.setInitForum = this.setInitForum;
 	},
 
-	clearForum: function () {
-		this.forumList = null;
-		this.navigation.setForumList(null);
-		this.body.clearForum();
-	},
-
-	pushForum: function (title, route, precache) {
+	pushForum (title, route, precache) {
 		var state = this.getRouteState();
 
 		delete state.currentPage;
 		delete state.search;
 
 		this.pushRouteState(state, title, route, precache);
-	},
-
-	setForumList: function (forumList) {
-		this.forumList = forumList;
-		this.navigation.setForumList(forumList);
 	},
 
 	setCurrentBundle (bundle) {
@@ -74,23 +63,21 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 			// assume they are an editor if they just deleted a forum
 			this.setEmptyState(true);
 		}
-
-		this.navigation.setForumList(this.forumList);
 	},
 
 	isSimplified () {
 		return (!this.forumList || this.forumList.length === 0 || this.forumList.length > 1 || this.forumList[0].title !== '') ? false : true;
 	},
 
-	setForum: function (id) {
-		var record = this.navigation.selectRecord(id),
-			title = record && record.get('title');
+	setForum (record) {
+		const title = record && record.get('title');
 
 		if (title) {
 			this.setTitle(title);
 		}
 
 		this.navigation.scrollToActive();
+		this.navigation.setActiveForum(record.getId());
 
 		if (this.body.activeTopicList && this.body.activeTopicList.getId() === record.getId()) {
 			return this.body.updateForum()
