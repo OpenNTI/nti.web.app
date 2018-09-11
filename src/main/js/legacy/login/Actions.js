@@ -186,6 +186,8 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}).then(function (response) {
 			response = Globals.parseJSON(response, true);
 
+			$AppConfig.features = $AppConfig.features || {};
+
 			var link = me.ServiceInterface.getLinkFrom(response.Links, 'logon.handshake'),
 				siteFeatures = $AppConfig.features[response.Site];
 
