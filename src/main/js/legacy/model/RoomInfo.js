@@ -7,7 +7,20 @@ require('./Base');
 
 module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought._meeting',
+
+	statics: {
+		mimeType: [
+			'application/vnd.nextthought._meeting',
+			'application/vnd.nextthought.meeting',
+			'application/vnd.nextthought.roominfo'
+		]
+	},
+
+	mimeType: [
+		'application/vnd.nextthought._meeting',
+		'application/vnd.nextthought.meeting',
+		'application/vnd.nextthought.roominfo'
+	],
 
 	idProperty: 'ID',
 	fields: [
