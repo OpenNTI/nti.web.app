@@ -16,7 +16,6 @@ const Topic = require('legacy/model/forums/Topic');
 const User = require('legacy/model/User');
 const PageInfo = require('legacy/model/PageInfo');
 const Video = require('legacy/model/Video');
-const {getString} = require('legacy/util/Localization');
 
 const ContentviewerActions = require('../contentviewer/Actions');
 const CoursesStateStore = require('../library/courses/StateStore');
@@ -29,9 +28,11 @@ const InfoIndex = require('./info/Index');
 const OverviewIndex = require('./overview/Index');
 const ReportsIndex = require('./reports/Index');
 const ScormIndex = require('./scorm-content/Index');
+const CourseNavigation = require('./Tabs');
 
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
+require('legacy/overrides/ReactHarness');
 require('legacy/util/Parsing');
 
 require('../content/Index');
@@ -243,94 +244,43 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 
 	applyState: function (state) {
-		var bundle = this.activeBundle,
-			active = state.active,
-			tabs = [];
+		if (!this.activeBundle) { return; }
 
-		/* Wether or not a view should show its tab
-		 * if the view doesn't have a static showTab then show it,
-		 * otherwise return the value of showTab
-		 */
-		function showTab (index) {
-			return !index.showTab || index.showTab(bundle);
-		}
+		this.activeBundle.getInterfaceInstance()
+			.then((course) => {
+				if (this.navigationCmp && this.navigationCmp.course === course) {
+					return;
+				}
 
-		if (showTab(DashboardIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.dashboardtab', 'Activity'),
-				route: 'activity',
-				root: this.getRoot(DASHBOARD),
-				subRoute: this.getCmpRouteState(DASHBOARD),
-				title: 'Activity',
-				active: active === DASHBOARD
+				this.renderNavigationCmp(CourseNavigation, {
+					course,
+					baseroute: this.getBaseRoute(),
+					getRouteFor: (obj, context) => {
+						if (obj !== course) { return; }
+
+						const base = `/app/course/${encodeForURI(course.getID())}/`;
+						let part = '';
+
+						if (context === 'activity') {
+							part = 'activity';
+						} else if (context === 'lessons') {
+							part = 'lessons';
+						} else if (context === 'assignments') {
+							part = 'assignments';
+						} else if (context === 'discussions') {
+							part = 'discussions';
+						} else if (context === 'info') {
+							part = 'info';
+						} else if (context === 'scorm') {
+							part = 'scormcontent';
+						}
+
+						return `${base}${part}/`;
+					}
+				});
 			});
-		}
 
-		if (showTab(OverviewIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.lessontab', 'Lessons'),
-				route: 'lessons',
-				root: this.getRoot(OVERVIEW),
-				subRoute: this.getCmpRouteState(OVERVIEW),
-				title: 'Lessons',
-				active: active === OVERVIEW
-			});
-		}
-
-		if(showTab(ScormIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.contenttab', 'Content'),
-				route: 'scormcontent',
-				root: this.getRoot(SCORM),
-				subRoute: this.getCmpRouteState(SCORM),
-				title: 'Content',
-				active: active === SCORM
-			});
-		}
-
-		if (showTab(AssessmentIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.assessmenttab', 'Assignments'),
-				route: 'assignments',
-				root: this.getRoot(ASSESSMENT),
-				subRoute: this.getCmpRouteState(ASSESSMENT),
-				title: 'Assignments',
-				active: active === ASSESSMENT
-			});
-		}
-
-		if (showTab(ForumIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
-				route: 'discussions',
-				root: this.getRoot(FORUM),
-				subRoute: this.getCmpRouteState(FORUM),
-				title: 'Discussions',
-				active: active === FORUM
-			});
-		}
-
-		if (showTab(ReportsIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.reporttab', 'Reports'),
-				route: 'reports',
-				root: this.getRoot(REPORTS),
-				title: 'Reports',
-				active: active === REPORTS
-			});
-		}
-
-		if (showTab(InfoIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.infotab'),
-				route: 'info',
-				root: this.getRoot(INFO),
-				title: 'Info',
-				active: active === INFO
-			});
-		}
-
-		this.navigation.setTabs(tabs);
+		this.navigation.useCommonTabs();
 	},
 
 	setPreview: function () {

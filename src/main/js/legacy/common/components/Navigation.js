@@ -1,8 +1,12 @@
 const Ext = require('@nti/extjs');
+const React = require('react');
 const {wait} = require('@nti/lib-commons');
+const {Navigation} = require('@nti/web-commons');
+const {LinkTo} = require('@nti/web-routing');
 
 const Globals = require('legacy/util/Globals');
 
+require('legacy/overrides/ReactHarness');
 require('../menus/LabeledSeparator');
 
 
@@ -95,6 +99,14 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 			.then(this.maybeCollapse.bind(this));
 	},
 
+
+	beforeDestroy () {
+		if (this.commonTabs) {
+			this.commonTabs.destroy();
+			delete this.commonTabs;
+		}
+	},
+
 	updateTitle: function (newTitle) {
 		if(!this.rendered) {
 			this.title = newTitle;
@@ -157,6 +169,11 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 			});
 		}
 
+		if (this.commonTabs) {
+			this.commonTabs.destroy();
+			delete this.commonTabs;
+		}
+
 		container.dom.innerHTML = '';
 
 		tabs = me.tabsTpl.append(container, {tabs: tabs}, true);
@@ -174,6 +191,33 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 
 		me.maybeCollapse();
 	},
+
+
+	useCommonTabs () {
+		if (!this.rendered) {
+			this.on('afterrender', this.useCommonTabs.bind(this));
+			return;
+		}
+
+		if (this.commonTabs) { return; }
+
+		const container = this.tabContainerEl;
+
+		container.dom.innerHTML = '';
+
+		function RenderTab (tabCmp, {route}) {
+			return React.createElement(LinkTo.Path, {to: route}, tabCmp);
+		}
+
+		this.commonTabs = Ext.widget({
+			xtype: 'react',
+			addHistory: true,
+			component: Navigation,
+			renderTab: RenderTab,
+			renderTo: container
+		});
+	},
+
 
 	updateRoute: function (route, subRoute) {
 		if (!this.rendered) {

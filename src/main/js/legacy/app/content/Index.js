@@ -20,6 +20,12 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		deferredRender: true
 	},
 
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'navigation-container'},
+		{id: '{id}-body', cn: ['{%this.renderContainer(out,values)%}']}
+	]),
+
 	initComponent: function () {
 		this.callParent(arguments);
 
@@ -33,6 +39,13 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 			'beforedeactivate': this.onBeforeDeactivate.bind(this),
 			'deactivate': this.onDeactivate.bind(this)
 		});
+	},
+
+	beforeDestroy () {
+		if (this.navigationCmp) {
+			this.navigationCmp.destroy();
+			delete this.navigationCmp;
+		}
 	},
 
 	onBack: function () {
@@ -181,6 +194,28 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.NavigationActions.setActiveContent(bundle, useWhiteMask, useWhiteMask);
 	},
 
+
+	renderNavigationCmp (cmp, props) {
+		if (!this.rendered) {
+			this.on('afterrender', () => this.setNavigationCmp(cmp, props));
+			return;
+		}
+
+		if (this.navigationCmp) {
+			this.navigationCmp.destroy();
+			delete this.navigationCmp;
+		}
+
+		const container = this.el.down('.navigation-container');
+
+		this.navigationCmp = Ext.widget({
+			xtype: 'react',
+			component: cmp,
+			renderTo: container,
+			...props
+		});
+	},
+
 	/**
 	 * Set up the active tab
 	 * @param  {String} active	 xtype of the active tab
@@ -227,6 +262,8 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 				me.replaceRoute('Info', 'info');
 			});
 	},
+
+
 
 	getRouteForPageInfo: function (pageInfo, path) {
 		var id = pageInfo.getId();
