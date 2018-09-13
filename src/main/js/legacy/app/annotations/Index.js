@@ -37,11 +37,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 		this.on('beforedeactivate', 'beforeDeactivate');
 		this.on('select', 'navigateToNote');
 
-		ModelBase.addListener('deleted', this.deleteNote);
+		this.deleteWrapper = (id) => this.deleteNote(id);
+
+		ModelBase.addListener('deleted', this.deleteWrapper);
 	},
 
 	onDestroy: function () {
-		ModelBase.removeListener('deleted', this.deleteNote);
+		ModelBase.removeListener('deleted', this.deleteWrapper);
 
 		this.callParent(arguments);
 	},
