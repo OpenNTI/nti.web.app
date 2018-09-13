@@ -303,12 +303,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		}
 	},
 
-	onDelete: function () {
-		this.noteBody.mask('Deleting...');
-
-		this.callParent(arguments);
-	},
-
 	onEdit: function () {
 		this.text.hide();
 		this.editMode = true;

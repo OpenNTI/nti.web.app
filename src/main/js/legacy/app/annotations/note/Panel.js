@@ -1052,6 +1052,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 
 	onDelete: function (e) {
 		if (e && e.stopEvent) {e.stopEvent();}
+
+		this.noteBody.mask('Deleting...');
+
 		this.record.destroy({
 			callback: () => {
 				if(this.doClose) {
