@@ -22,25 +22,20 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 		}
 	},
 
-	setContent (bundle) {
-		if (this.currentBundle === bundle) {
+	async setContent (bundle) {
+		if (this.currentBundle === bundle || !bundle) {
 			return;
 		}
 
 		this.currentBundle = bundle;
+		const context = await bundle.getInterfaceInstance();
 
-		getService()
-			.then(service => service.getObject(bundle.rawData))
-			.then(context => {
-				this.removeAll(true);
-
-				this.add({
-					xtype: 'react',
-					component: List,
-					context
-				});
-			});
-
+		this.removeAll(true);
+		this.add({
+			xtype: 'react',
+			component: List,
+			context
+		});
 	}
 });
 
