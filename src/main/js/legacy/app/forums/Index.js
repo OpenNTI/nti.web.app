@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const { decodeFromURI } = require('@nti/lib-ntiids');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const Forum = require('legacy/model/forums/Forum');
 
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this.forumView.replaceRouteState = this.replaceForumState.bind(this);
 		this.forumView.getRouteState = this.getRouteState.bind(this);
 		this.forumView.setTitle = this.setTitle.bind(this);
-		this.forumView.setInitForum = this.setInitForum.bind(this);
+		this.forumView.setActiveForum = this.setActiveForum.bind(this);
 		this.forumView.onAddedToParentRouter();
 	},
 
@@ -83,44 +83,28 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 	},
 
 	setCurrentBundle (bundle) {
-		delete this.activeForum;
 		this.forumView.setCurrentBundle(bundle);
 	},
 
 	showForum (route) {
-		const { precache: { forum }, params: { forum: forumID } } = route;
-		const id = forumID && decodeFromURI(forumID);
-
-		if (forum && forum !== this.activeForum) {
-			// Forum clicked on nav
-			this.setActiveForum(forum);
-		} else if (id && !forum && ((this.activeForum && this.activeForum.getId() !== id) || !this.activeForum)) {
-			// Load forum
-			this.getForum(id);
-		} else if (this.activeForum) {
-			// Reset active forum
-			this.setActiveForum(this.activeForum);
+		const { params: { forum }, precache } = route;
+		if (precache && precache.forum) {
+			this.forumView.setForum(precache.forum);
 		} else {
-			// Clear Forum
-			this.forumView.setEmptyState();
+			this.forumView.loadForum(forum);
 		}
-	},
-
-	async getForum (forumID) {
-		try {
-			const forum = await Service.getObject(forumID);
-			this.setActiveForum(forum);
-		} catch (error) {
-			console.error(error);
-		}
-	},
-
-	setInitForum (forum) {
-		this.setActiveForum(Forum.interfaceToModel(forum));
 	},
 
 	setActiveForum (forum) {
-		this.activeForum = forum;
-		this.forumView.setForum(this.activeForum);
+		if (!forum) {
+			this.forumView.setEmptyState();
+			return;
+		}
+
+		const record = Forum.interfaceToModel(forum);
+		const id = encodeForURI(record.getId());
+
+		this.forumView.setForum(record);
+		this.pushRoute(record.get('title'), id);
 	}
 });

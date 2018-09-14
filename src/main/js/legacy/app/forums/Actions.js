@@ -156,18 +156,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 	},
 
 
-	async createForum (newforum, rawBoard) {
-		const service = await getService();
-		const board = await service.getObject(rawBoard.getId());
-
-		const forum = await board.postToLink('add', {
-			...newforum,
-			MimeType: CommunityForum.mimeType
-		});
-		return await lazy.ParseUtils.parseItems(forum)[0];
-	},
-
-
 	deleteObject: function (record, cmp, callback) {
 		var idToDestroy, me = this;
 		if (!record.get('href')) {

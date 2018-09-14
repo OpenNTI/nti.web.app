@@ -12,30 +12,23 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	extend: 'Ext.container.Container',
 	alias: 'widget.forums-forum-nav',
 	cls: 'topic-list-nav forum-nav',
+	layout: 'none',
 
 	initComponent () {
 		this.callParent(arguments);
-
 		this.forumList = this.add({
 			xtype: 'react',
 			component: Forums.ForumList,
 			addHistory: true,
 			getRouteFor: this.getRouteFor.bind(this),
-			setActiveForum: this.setInitForum
+			setActiveForum: this.setActiveForum
 		});
+		this.forumList.addCls('forum-list-nav');
 	},
 
 	afterRender () {
 		this.callParent(arguments);
-		this.forumList.setProps({ setActiveForum: this.setInitForum });
-	},
-
-	scrollToActive () {
-		const selectedItem = this.frameBodyEl && this.frameBodyEl.dom.getElementsByClassName('x-item-selected')[0];
-
-		if(selectedItem) {
-			this.frameBodyEl.dom.scrollTop = selectedItem.offsetTop;
-		}
+		this.forumList.setProps({ setActiveForum: this.setActiveForum });
 	},
 
 	async setCurrentBundle (bundle) {
@@ -53,11 +46,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	navigateToForum (forum) {
 		const id = encodeForURI(forum.getId());
 		this.pushRoute(forum.get('title'), id, { forum });
+		this.forumList.setProps({ activeForum: id });
 	},
-
-	setActiveForum (id) {
-		if (this.forumList) {
-			this.forumList.setProps({ activeForum: id });
-		}
-	}
 });

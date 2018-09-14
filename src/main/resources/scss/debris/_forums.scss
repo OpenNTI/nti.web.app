@@ -1420,6 +1420,7 @@
 	}
 
 	.forum-nav{
+
 		&.topic-nav{
 			background: #fbfbfb;
 			.x-grid-header-ct{
@@ -1531,7 +1532,12 @@
 
 		&.topic-list-nav{
 			-webkit-font-smoothing: initial;
-			background: #fafafa;
+			background:white;
+
+			.forum-list-nav {
+				height: 100%;
+				overflow: hidden;
+			}
 
 			.header.no-pop {
 				cursor: default;
@@ -1633,6 +1639,7 @@
 		}
 
 		.nav-outline{
+			position: relative;
 			background: none;
 			left: 0; right: 0;
 
