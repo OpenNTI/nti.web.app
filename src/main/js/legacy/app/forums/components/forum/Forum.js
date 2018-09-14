@@ -16,10 +16,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		pageSize: 10
 	},
 
-	clearForum: function () {
-		var topicList = this.down('forums-forum-topic-list-view'),
-			filterBar = this.down('forums-forum-filterbar'),
-			header = this.down('forums-forum-header');
+	clearForum () {
+		const topicList = this.down('forums-forum-topic-list-view');
+		const filterBar = this.down('forums-forum-filterbar');
+		const header = this.down('forums-forum-header');
 
 		this.activeTopicList = null;
 		Ext.destroy(topicList, filterBar, header);
@@ -36,11 +36,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		}
 	},
 
-	setForum: function (record) {
-		var topicList = this.down('forums-forum-topic-list-view'),
-			filterBar = this.down('forums-forum-filterbar'),
-			header = this.down('forums-forum-header'),
-			store = record && record.buildContentsStore('topic-list-view', this.storeCfg);
+	setForum (record) {
+		let topicList = this.down('forums-forum-topic-list-view');
+		let filterBar = this.down('forums-forum-filterbar');
+		let header = this.down('forums-forum-header');
+
+		const store = record && record.buildContentsStore('topic-list-view', this.storeCfg);
 
 		if (!record) {
 			Ext.destroy(topicList, filterBar, header);
@@ -61,8 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 			xtype: 'forums-forum-header',
 			record: record,
 			store: store,
-			onDelete: this.onForumDelete,
-			isSimplified: this.isSimplified
+			replaceRouteState: this.replaceRouteState
 		});
 		topicList = this.add({
 			xtype: 'forums-forum-topic-list-view',
@@ -80,8 +80,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		return topicList.restoreState(this.getRouteState());
 	},
 
-	updateForum: function () {
-		var topicList = this.down('forums-forum-topic-list-view');
+	updateForum () {
+		const topicList = this.down('forums-forum-topic-list-view');
 
 		if (!topicList) {
 			return Promise.resolve();

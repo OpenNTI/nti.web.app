@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { decodeFromURI } = require('@nti/lib-ntiids');
 
 require('legacy/common/components/NavPanel');
 require('./Navigation');
@@ -14,19 +15,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 	storeCfg: {},
 	model: 'NextThought.model.forums.CommunityForum',
 
-	initComponent () {
-		this.callParent(arguments);
-		this.body.onForumDelete = this.onForumDelete.bind(this);
-		this.body.isSimplified = this.isSimplified.bind(this);
-	},
-
 	onAddedToParentRouter () {
 		this.navigation.pushRoute = this.pushForum.bind(this);
+		this.navigation.setInitForum = this.setInitForum;
+		this.navigation.setActiveForum = this.setActiveForum.bind(this);
+
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
 		this.body.getRouteState = this.getRouteState.bind(this);
 		this.body.alignNavigation = this.alignNavigation.bind(this);
-		this.navigation.setInitForum = this.setInitForum;
 	},
 
 	pushForum (title, route, precache) {
@@ -34,7 +31,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 
 		delete state.currentPage;
 		delete state.search;
-
 		this.pushRouteState(state, title, route, precache);
 	},
 
@@ -42,42 +38,23 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		this.navigation.setCurrentBundle(bundle);
 	},
 
-	onForumDelete (record) {
-		const store = this.forumList[0].store || ((this.forumList[0].children || [])[0] || {}).store;
-		const deletedIndex = store.indexOf(record);
-		const size = store.getCount();
-		let nextForum;
-
-		if (deletedIndex === size - 1) {
-			nextForum = store.getAt(deletedIndex - 1);
-		} else {
-			nextForum = store.getAt(deletedIndex + 1);
+	async loadForum (id) {
+		try {
+			const record = await Service.getObject(decodeFromURI(id));
+			this.setForum(record);
+		} catch (error) {
+			console.error(error);
 		}
-
-		store.remove([record]);
-		const nextSize = store.getCount();
-
-		if (nextForum && nextSize > 0) {
-			this.setForum(nextForum.getId());
-		} else if  (nextSize === 0) {
-			// assume they are an editor if they just deleted a forum
-			this.setEmptyState(true);
-		}
-	},
-
-	isSimplified () {
-		return (!this.forumList || this.forumList.length === 0 || this.forumList.length > 1 || this.forumList[0].title !== '') ? false : true;
 	},
 
 	setForum (record) {
-		const title = record && record.get('title');
+		if (!record) { return; }
+
+		const title = record.get('title');
 
 		if (title) {
 			this.setTitle(title);
 		}
-
-		this.navigation.scrollToActive();
-		this.navigation.setActiveForum(record.getId());
 
 		if (this.body.activeTopicList && this.body.activeTopicList.getId() === record.getId()) {
 			return this.body.updateForum()

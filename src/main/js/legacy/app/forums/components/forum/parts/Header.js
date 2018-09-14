@@ -1,9 +1,11 @@
 const Ext = require('@nti/extjs');
+const { dispatch } = require('@nti/lib-dispatcher');
 
 const { getString } = require('legacy/util/Localization');
 
 require('legacy/common/menus/Reports');
 
+const FORUM_LIST_REFRESH = 'FORUM_LIST_REFRESH';
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.Header', {
 	extend: 'Ext.Component',
@@ -36,8 +38,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		nextEl: '.controls .pager .next'
 	},
 
-	afterRender: function () {
-		var me = this;
+	afterRender () {
+		const me = this;
 
 		if (!me.record.getLink('add')) {
 			me.newTopicEl.destroy();
@@ -47,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			});
 		}
 
-		if(this.isSimplified && this.isSimplified() && me.record.hasLink('edit')) {
+		if(me.record.hasLink('edit')) {
 			me.mon(me.deleteForumEl, 'click', 'deleteForum');
 		} else {
 			me.deleteForumEl.hide();
@@ -73,10 +75,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			buttons: {
 				primary: {
 					text: 'Remove',
-					handler: () => {
-						Service.requestDelete(this.record.getLink('edit'))
-							.then(() => { this.onDelete(this.record); })
-							.catch(() => setTimeout(() => {alert('Unable to delete this forum.');}, 1000));
+					handler: async () => {
+						try {
+							await Service.requestDelete(this.record.getLink('edit'));
+							dispatch(FORUM_LIST_REFRESH);
+							this.replaceRouteState(null, '', '/');
+						} catch (error) {
+							console.error(error);
+							setTimeout(() => { alert('Unable to delete this forum.'); }, 1000);
+						}
 					}
 				},
 				secondary: 'Cancel'
@@ -84,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		});
 	},
 
-	updatePosition: function () {
+	updatePosition () {
 		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
 			currentPage = total ? this.store.currentPage : 0;
 
@@ -95,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		this.totalEl.update(total || '0');
 	},
 
-	previousPage: function () {
+	previousPage () {
 		var current = this.store.currentPage;
 
 		if (current - 1 > 0) {
@@ -103,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		}
 	},
 
-	nextPage: function () {
+	nextPage () {
 		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
 			current = this.store.currentPage;
 
