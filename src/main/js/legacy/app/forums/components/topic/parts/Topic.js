@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const { dispatch } = require('@nti/lib-dispatcher');
+const { Forums } = require('@nti/web-discussions');
 
 const {getString} = require('legacy/util/Localization');
 const ContentviewerActions = require('legacy/app/contentviewer/Actions');
@@ -340,6 +342,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			fn: function (str) {
 				if (str === 'ok') {
 					me.fireDeleteEvent();
+					dispatch(Forums.FORUM_TOPIC_CHANGE, { forum: me.forum.getId() });
 				}
 			}
 		});
