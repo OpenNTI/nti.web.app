@@ -5,7 +5,6 @@ require('./parts/FilterBar');
 require('./parts/Header');
 require('./parts/TopicListView');
 
-
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Forum', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.forums-forum-body',
@@ -70,7 +69,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 			store: store,
 			filterBar: filterBar,
 			header: header,
-			alignNavigation: this.alignNavigation.bind(this),
 			replaceRouteState: this.replaceRouteState.bind(this),
 			pushRouteState: this.pushRouteState.bind(this)
 		});
