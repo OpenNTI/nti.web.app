@@ -255,6 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 				this.renderNavigationCmp(CourseNavigation, {
 					course,
 					baseroute: this.getBaseRoute(),
+					exclude: ['videos'],
 					getRouteFor: (obj, context) => {
 						if (obj !== course) { return; }
 
