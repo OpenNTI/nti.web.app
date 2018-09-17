@@ -5,7 +5,6 @@ require('legacy/common/components/NavPanel');
 require('./Navigation');
 require('./Forum');
 
-
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Index', {
 	extend: 'NextThought.common.components.NavPanel',
 	alias: 'widget.forum-view',
@@ -23,7 +22,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
 		this.body.getRouteState = this.getRouteState.bind(this);
-		this.body.alignNavigation = this.alignNavigation.bind(this);
 	},
 
 	pushForum (title, route, precache) {
@@ -57,12 +55,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		}
 
 		if (this.body.activeTopicList && this.body.activeTopicList.getId() === record.getId()) {
-			return this.body.updateForum()
-				.then(this.alignNavigation.bind(this));
+			return this.body.updateForum();
 		}
 
-		return this.body.setForum(record)
-			.then(this.alignNavigation.bind(this));
+		return this.body.setForum(record);
 	},
 
 	setEmptyState (isEditor) {

@@ -462,8 +462,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			this.fillInData(records, search);
 		}
 
-		this.alignNavigation();
-
 		delete this.fromMe;
 
 		this.setGrouper(by);
