@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { Forums } = require('@nti/web-discussions');
-const { getService } = require('@nti/web-client');
 
 const Forum = require('legacy/model/forums/Forum');
 
@@ -32,12 +31,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	},
 
 	async setCurrentBundle (bundle) {
-		const service = await getService();
-		this.currentBundle = await service.getObject(bundle.rawData.NTIID);
+		this.currentBundle = await bundle.getInterfaceInstance();
 		this.forumList.setProps({ bundle: this.currentBundle });
 	},
 
-	getRouteFor (object, context) {
+	getRouteFor (object) {
 		if (object.MimeType.includes('application/vnd.nextthought.forums')) {
 			return () => this.navigateToForum(Forum.interfaceToModel(object));
 		}
