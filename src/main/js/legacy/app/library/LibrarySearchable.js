@@ -31,11 +31,23 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		this.BundleActions = BundleActions.create();
 	},
 
+	onRouteDeactivate () {
+		this.deactivateTimeout = setTimeout(() => {
+			this.library.destroy();
+			delete this.library;
+		}, 300);
+	},
+
 	showLibrary (route) {
 		this.NavigationActions.updateNavBar({
 			noLibraryLink: true,
 			darkStyle: true
 		});
+
+		if(this.deactivateTimeout) {
+			clearTimeout(this.deactivateTimeout);
+			delete this.deactivateTimeout;
+		}
 
 		this.NavigationActions.setActiveContent(null);
 
