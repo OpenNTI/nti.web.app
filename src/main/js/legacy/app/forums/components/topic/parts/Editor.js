@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const { dispatch } = require('@nti/lib-dispatcher');
+const { Forums } = require('@nti/web-discussions');
 
 const {getString} = require('legacy/util/Localization');
 const Post = require('legacy/model/forums/Post');
@@ -8,8 +9,6 @@ const FilePicker = require('legacy/common/form/fields/FilePicker');
 const ForumsActions = require('../../../Actions');
 
 require('legacy/editor/Editor');
-
-const FORUM_TOPIC_ADD = 'FORUM_TOPIC_ADD';
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 	extend: 'NextThought.editor.Editor',
@@ -258,9 +257,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		me.ForumActions.saveTopic(me, me.record, me.forum, v.title, v.tags, v.body, v.publish)
 			.then(function (record) {
-				debugger;
 				unmask();
-				dispatch(FORUM_TOPIC_ADD, { forum: me.forum.getId() });
+				dispatch(Forums.FORUM_TOPIC_CHANGE, { forum: me.forum.getId() });
 				me.fireEvent('after-save', record);
 			})
 			.catch(function (reason) {
