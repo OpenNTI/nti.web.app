@@ -2,8 +2,6 @@ const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { Forums } = require('@nti/web-discussions');
 
-const Forum = require('legacy/model/forums/Forum');
-
 require('legacy/util/Parsing');
 require('legacy/common/menus/Reports');
 
@@ -13,29 +11,30 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	cls: 'topic-list-nav forum-nav',
 	layout: 'none',
 
-	initComponent () {
-		this.callParent(arguments);
-		this.forumList = this.add({
-			xtype: 'react',
-			component: Forums.ForumList,
-			getRouteFor: this.getRouteFor.bind(this),
-			setActiveForum: this.setActiveForum
-		});
-		this.forumList.addCls('forum-list-nav');
-	},
-
-	afterRender () {
-		this.callParent(arguments);
-		this.forumList.setProps({ setActiveForum: this.setActiveForum });
-	},
-
 	setBaseRoute (baseroute) {
-		this.forumList.setBaseRoute(baseroute);
+		if (this.forumList) {
+			this.forumList.setBaseRoute(baseroute);
+		}
 	},
 
 	async setCurrentBundle (bundle) {
-		this.currentBundle = await bundle.getInterfaceInstance();
-		this.forumList.setProps({ bundle: this.currentBundle });
+		if (!this.currentBundle || this.currentBundle.getID() !== bundle.getId()) {
+			if (this.forumList) {
+				this.forumList.destroy();
+				delete this.forumList;
+			}
+
+			this.currentBundle = await bundle.getInterfaceInstance();
+
+			this.forumList = this.add({
+				xtype: 'react',
+				component: Forums.ForumList,
+				getRouteFor: this.getRouteFor.bind(this),
+				setActiveForum: this.setActiveForum,
+				bundle: this.currentBundle
+			});
+			this.forumList.addCls('forum-list-nav');
+		}
 	},
 
 	getRouteFor (object) {
