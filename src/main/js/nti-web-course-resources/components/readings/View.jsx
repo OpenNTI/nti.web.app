@@ -44,8 +44,8 @@ function getReadings (course) {
 export default class Readings extends React.Component {
 	static propTypes = {
 		course: PropTypes.object,
-		filter: PropTypes.func,
-		gotoResource: PropTypes.func
+		gotoResource: PropTypes.func,
+		searchTerm: PropTypes.string
 	}
 
 	renderItem = (item, cols) => {
@@ -54,11 +54,17 @@ export default class Readings extends React.Component {
 		);
 	}
 
+	filter = (title) =>  {
+		const { searchTerm } = this.props;
+
+		return searchTerm ? new RegExp(searchTerm, 'i').test(title) : true;
+	}
+
 	render () {
-		const { course, filter } = this.props;
+		const { course } = this.props;
 
 		const loading = !course;
-		const readings = getReadings(course).filter((x) => filter(x.title));
+		const readings = getReadings(course).filter((x) => this.filter(x.title));
 
 		const columns = [
 			{

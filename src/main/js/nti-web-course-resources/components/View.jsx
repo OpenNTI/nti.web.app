@@ -1,6 +1,7 @@
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
 import PropTypes from 'prop-types';
+import {searchable, contextual} from '@nti/web-search';
 
 import Controls from './Controls';
 import Readings, {KEY as READINGS} from './readings';
@@ -11,14 +12,17 @@ const DEFAULT_STRINGS = {
 
 const t = scoped('nti-course-resources.View', DEFAULT_STRINGS);
 
-export default class CourseResources extends React.Component {
+export default
+@searchable()
+@contextual(t('readings'))
+class CourseResources extends React.Component {
 	static READINGS = READINGS
 
 	static propTypes = {
 		course: PropTypes.object,
 		createResource: PropTypes.func,
 		gotoResource: PropTypes.func,
-		filter: PropTypes.func
+		searchTerm: PropTypes.string
 	}
 
 	static defaultProps = {
@@ -45,7 +49,7 @@ export default class CourseResources extends React.Component {
 
 
 	render () {
-		const {course, filter} = this.props;
+		const {course, searchTerm} = this.props;
 
 		return (
 			<div className="course-resources">
@@ -53,7 +57,7 @@ export default class CourseResources extends React.Component {
 					<span className="header">{t('readings')}</span>
 					<Controls onCreate={this.onCreate} />
 				</div>
-				<Readings filter={filter} course={course} gotoResource={this.gotoResource} />
+				<Readings course={course} gotoResource={this.gotoResource} searchTerm={searchTerm} />
 			</div>
 		);
 	}
