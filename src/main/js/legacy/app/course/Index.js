@@ -274,6 +274,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 							part = 'info';
 						} else if (context === 'scorm') {
 							part = 'scormcontent';
+						} else if (context === 'content') {
+							part = 'content';
 						}
 
 						return `${base}${part}/`;
