@@ -18,7 +18,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		this.forumList = this.add({
 			xtype: 'react',
 			component: Forums.ForumList,
-			addHistory: true,
 			getRouteFor: this.getRouteFor.bind(this),
 			setActiveForum: this.setActiveForum
 		});
@@ -30,6 +29,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		this.forumList.setProps({ setActiveForum: this.setActiveForum });
 	},
 
+	setBaseRoute (baseroute) {
+		this.forumList.setBaseRoute(baseroute);
+	},
+
 	async setCurrentBundle (bundle) {
 		this.currentBundle = await bundle.getInterfaceInstance();
 		this.forumList.setProps({ bundle: this.currentBundle });
@@ -37,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 	getRouteFor (object) {
 		if (object.MimeType.includes('application/vnd.nextthought.forums')) {
-			return () => this.navigateToForum(Forum.interfaceToModel(object));
+			return `./${encodeForURI(object.NTIID)}`;
 		}
 	},
 
