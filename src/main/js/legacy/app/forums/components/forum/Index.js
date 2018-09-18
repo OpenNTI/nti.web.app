@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		if (this.body.activeTopicList && this.body.activeTopicList.getId() === record.getId()) {
 			return this.body.updateForum();
 		}
-
+		this.navigation.setBaseRoute(this.getBaseRoute());
 		return this.body.setForum(record);
 	},
 

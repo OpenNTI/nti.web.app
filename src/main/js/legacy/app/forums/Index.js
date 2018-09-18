@@ -67,6 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this.forumView.getRouteState = this.getRouteState.bind(this);
 		this.forumView.setTitle = this.setTitle.bind(this);
 		this.forumView.setActiveForum = this.setActiveForum.bind(this);
+		this.forumView.getBaseRoute = this.getBaseRoute.bind(this);
 		this.forumView.onAddedToParentRouter();
 	},
 

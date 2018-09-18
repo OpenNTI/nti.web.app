@@ -321,6 +321,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		me.ForumActions.deleteObject(me.record,me,function (cmp) {
 			me.fireEvent('record-deleted', null);
 			me.destroy();
+			dispatch(Forums.FORUM_TOPIC_CHANGE, { forum: me.forum.getId() });
 		});
 	},
 
@@ -342,7 +343,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			fn: function (str) {
 				if (str === 'ok') {
 					me.fireDeleteEvent();
-					dispatch(Forums.FORUM_TOPIC_CHANGE, { forum: me.forum.getId() });
 				}
 			}
 		});
