@@ -334,7 +334,9 @@
 
 	.new-forum, .new-topic {
 		@include new-post;
+
 		display: block;
+		z-index: 0;
 	}
 
 	.controls {
@@ -1731,6 +1733,7 @@
 					float: left;
 					@include new-post;
 					display: block;
+					z-index: 0;
 				}
 
 				.delete-forum {
