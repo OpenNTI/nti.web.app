@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this.forumView.replaceRouteState = this.replaceForumState.bind(this);
 		this.forumView.getRouteState = this.getRouteState.bind(this);
 		this.forumView.setTitle = this.setTitle.bind(this);
-		this.forumView.setActiveForum = this.setActiveForum.bind(this);
+		this.forumView.setFirstForum = this.setFirstForum.bind(this);
 		this.forumView.getBaseRoute = this.getBaseRoute.bind(this);
 		this.forumView.onAddedToParentRouter();
 	},
@@ -91,12 +91,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		const { params: { forum }, precache } = route;
 		if (precache && precache.forum) {
 			this.forumView.setForum(precache.forum);
-		} else {
+		} else if (forum) {
 			this.forumView.loadForum(forum);
+		} else {
+			this.forumView.setActiveForum();
 		}
 	},
 
-	setActiveForum (forum) {
+	setFirstForum (forum) {
 		if (!forum) {
 			this.forumView.setEmptyState();
 			return;

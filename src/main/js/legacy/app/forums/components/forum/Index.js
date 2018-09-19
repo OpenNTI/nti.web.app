@@ -16,9 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 
 	onAddedToParentRouter () {
 		this.navigation.pushRoute = this.pushForum.bind(this);
-		this.navigation.setInitForum = this.setInitForum;
-		this.navigation.setActiveForum = this.setActiveForum.bind(this);
-
+		this.navigation.setFirstForum = this.setFirstForum;
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
 		this.body.getRouteState = this.getRouteState.bind(this);
@@ -39,6 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 	async loadForum (id) {
 		try {
 			const record = await Service.getObject(decodeFromURI(id));
+			this.navigation.setActiveForum(id);
 			this.setForum(record);
 		} catch (error) {
 			console.error(error);
@@ -63,5 +62,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 
 	setEmptyState (isEditor) {
 		this.body.setEmpty(isEditor);
+	},
+
+	setActiveForum () {
+		this.navigation.setActiveForum(null);
 	}
 });

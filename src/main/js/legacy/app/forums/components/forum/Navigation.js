@@ -30,8 +30,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 				xtype: 'react',
 				component: Forums.ForumList,
 				getRouteFor: this.getRouteFor.bind(this),
-				setActiveForum: this.setActiveForum,
-				bundle: this.currentBundle
+				setFirstForum: this.setFirstForum,
+				bundle: this.currentBundle,
+				activeForumId: this.activeForumId
 			});
 			this.forumList.addCls('forum-list-nav');
 		}
@@ -46,6 +47,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	navigateToForum (forum) {
 		const id = encodeForURI(forum.getId());
 		this.pushRoute(forum.get('title'), id, { forum });
-		this.forumList.setProps({ activeForum: id });
 	},
+
+	setActiveForum (activeForumId) {
+		this.activeForumId = activeForumId;
+		if (this.forumList) {
+			this.forumList.setProps({ activeForumId });
+		}
+	}
 });
