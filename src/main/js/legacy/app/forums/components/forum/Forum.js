@@ -1,9 +1,12 @@
 const Ext = require('@nti/extjs');
 const { Forums } = require('@nti/web-discussions');
+const { dispatch } = require('@nti/lib-dispatcher');
 
 require('./parts/FilterBar');
 require('./parts/Header');
 require('./parts/TopicListView');
+
+const FORUM_LIST_REFRESH = 'FORUM_LIST_REFRESH';
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Forum', {
 	extend: 'Ext.container.Container',
@@ -61,7 +64,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 			xtype: 'forums-forum-header',
 			record: record,
 			store: store,
-			replaceRouteState: this.replaceRouteState
+			replaceRouteState: this.replaceRouteState,
+			onEdit: () => { this.onEdit(); }
 		});
 		topicList = this.add({
 			xtype: 'forums-forum-topic-list-view',
@@ -76,6 +80,30 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		this.activeTopicList = record;
 
 		return topicList.restoreState(this.getRouteState());
+	},
+
+	onEdit () {
+		this.editor = this.add({
+			xtype: 'react',
+			component: Forums.Editor,
+			title: this.activeTopicList.get('title'),
+			onSubmit: async (payload) => {
+				const object = await this.activeTopicList.getInterfaceInstance();
+				await object.edit(payload);
+
+				this.activeTopicList.updateFromServer();
+
+				dispatch(FORUM_LIST_REFRESH);
+
+				this.editor.destroy();
+				delete this.editor;
+			},
+			onBeforeDismiss: () => {
+				this.editor.destroy();
+				delete this.editor;
+			},
+			isEditing: true
+		});
 	},
 
 	updateForum () {

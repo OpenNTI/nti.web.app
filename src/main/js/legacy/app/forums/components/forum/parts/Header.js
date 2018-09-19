@@ -15,6 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'new-topic', html: '{{{NextThought.view.forums.forum.parts.Header.new}}}'},
 		{cls: 'delete-forum', html: 'Delete'},
+		{cls: 'edit-forum', html: 'Edit'},
 		{cls: 'controls', cn: [
 			{cls: 'position', cn: [
 				{tag: 'span', cls: 'bold', html: '{{{NextThought.view.forums.forum.parts.Header.page}}}'},
@@ -32,6 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	renderSelectors: {
 		newTopicEl: '.new-topic',
 		deleteForumEl: '.delete-forum',
+		editForumEl: '.edit-forum',
 		currentEl: '.controls .position .current',
 		totalEl: '.controls .position .total',
 		prevEl: '.controls .pager .prev',
@@ -51,8 +53,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 
 		if(me.record.hasLink('edit')) {
 			me.mon(me.deleteForumEl, 'click', 'deleteForum');
+			me.mon(me.editForumEl, 'click', 'editForum');
 		} else {
 			me.deleteForumEl.hide();
+			me.editForumEl.hide();
 		}
 
 		me.updatePosition();
@@ -61,6 +65,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		me.mon(me.prevEl, 'click', 'previousPage');
 		me.mon(me.nextEl, 'click', 'nextPage');
 
+	},
+
+	editForum () {
+		this.onEdit();
 	},
 
 	deleteForum () {

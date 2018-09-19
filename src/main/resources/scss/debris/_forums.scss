@@ -1736,12 +1736,17 @@
 					z-index: 0;
 				}
 
-				.delete-forum {
+				.delete-forum, .edit-forum {
 					color: $primary-red;
 					float: left;
 					line-height: 35px;
 					margin-left: 10px;
 					cursor: pointer;
+					font-size: 14px;
+				}
+
+				.edit-forum {
+					color: $primary-blue;
 				}
 
 				.controls{
