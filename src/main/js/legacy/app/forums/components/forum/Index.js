@@ -40,6 +40,20 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 			this.navigation.setActiveForum(id);
 			this.setForum(record);
 		} catch (error) {
+			Ext.Msg.show({
+				msg: 'This forum was deleted.',
+				title: 'Forum not found.',
+				icon: 'warning-yellow',
+				buttons: {
+					primary: {
+						text: 'Okay',
+						handler: async () => {
+							this.replaceRouteState(null, '', '/');
+						}
+					}
+				}
+			});
+			this.setEmptyState();
 			console.error(error);
 		}
 	},
