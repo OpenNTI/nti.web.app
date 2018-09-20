@@ -1,12 +1,20 @@
 const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
 const { dispatch } = require('@nti/lib-dispatcher');
+const { scoped } = require('@nti/lib-locale');
 
 require('legacy/common/components/NavPanel');
 require('./Navigation');
 require('./Forum');
 
 const FORUM_LIST_REFRESH = 'FORUM_LIST_REFRESH';
+
+const DEAFULT_TEXT = {
+	title: 'Not found.',
+	message: 'Unable to find forum.'
+};
+
+const t = scoped('nti.web.disscussions.forums.emptytopiclist', DEAFULT_TEXT);
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Index', {
 	extend: 'NextThought.common.components.NavPanel',
@@ -44,8 +52,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 			this.setForum(record);
 		} catch (error) {
 			Ext.Msg.show({
-				msg: 'This forum was deleted.',
-				title: 'Forum not found.',
+				msg: t('message'),
+				title: t('title'),
 				icon: 'warning-yellow',
 				buttons: {
 					primary: {
