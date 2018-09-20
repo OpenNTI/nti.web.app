@@ -1,9 +1,12 @@
 const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
+const { dispatch } = require('@nti/lib-dispatcher');
 
 require('legacy/common/components/NavPanel');
 require('./Navigation');
 require('./Forum');
+
+const FORUM_LIST_REFRESH = 'FORUM_LIST_REFRESH';
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Index', {
 	extend: 'NextThought.common.components.NavPanel',
@@ -47,13 +50,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 				buttons: {
 					primary: {
 						text: 'Okay',
-						handler: async () => {
-							this.replaceRouteState(null, '', '/');
-						}
+						handler: async () => {}
 					}
 				}
 			});
+			dispatch(FORUM_LIST_REFRESH);
 			this.setEmptyState();
+			this.replaceRouteState(null, '', '/');
 			console.error(error);
 		}
 	},
