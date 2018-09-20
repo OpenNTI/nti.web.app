@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		//If we have an outline, its the same outline as what we are setting, and the contents haven't changed
-		if (this.outline && this.outline.getId() === outline.getId() && this.outlineContentsLastModified === outline.get('ContentsLastModified') && this.outlineWasEditing === this.isEditing) {
+		if (this.outline && this.outline.getId() === outline.getId() && this.outlineContentsHash === outline.get('ContentsHash') && this.outlineWasEditing === this.isEditing) {
 			return;
 		}
 
@@ -187,7 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.activeBundle = bundle;
 		this.outline = outline;
-		this.outlineContentsLastModified = outline.get('ContentsLastModified');
+		this.outlineContentsHash = outline.get('ContentsHash');
 		this.outlineWasEditing = this.isEditing;
 		this.shouldShowDates = !catalog.get('DisableOverviewCalendar');
 

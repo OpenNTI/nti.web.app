@@ -31,7 +31,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		{name: 'CourseOutlineSharedEntries', type: 'auto', persist: false},
 		{name: 'Items', type: 'arrayItem', persist: false},
 		{name: 'IsCourseOutlineShared', type: 'bool', persist: false},
-		{name: 'ContentsLastModified', type: 'date', persist: false}
+		{name: 'ContentsLastModified', type: 'date', persist: false},
+		{name: 'ContentsHash', type: 'auto', persist: false}
 	],
 
 	constructor () {
@@ -97,6 +98,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 			load = Service.request({url: link, returnResponse: true})
 				.then((resp) => {
 					this.set('ContentsLastModified', resp.getResponseHeader('Last-Modified'));
+					this.set('ContentsHash', resp.getResponseHeader('etag'));
 
 					return Ext.decode(resp.responseText);
 				})
@@ -104,6 +106,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 				.then((items) => {
 					//create a clone of this model
 					this[outline] = this[outline] || this.self.create(this.getData());
+
+					this[outline].set('ContentsLastModified', this.get('ContentsLastModified'));
+					this[outline].set('ContentsHash', this.get('ContentsHash'));
 
 					this[outline].set('Items', this.__syncItems(items, `${outline}-cache`));
 					this[outline].fillInItems();
