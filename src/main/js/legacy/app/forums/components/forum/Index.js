@@ -65,6 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 	},
 
 	setActiveForum () {
+		this.navigation.setBaseRoute(this.getBaseRoute());
 		this.navigation.setActiveForum(null);
 	}
 });
