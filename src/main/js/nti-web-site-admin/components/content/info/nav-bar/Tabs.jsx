@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
 
@@ -11,11 +12,16 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.courses.info.nav-bar.Tabs', DEFAULT_TEXT);
 
-export default function SiteAdminCourseTabs () {
+SiteAdminCourseTabs.propTypes = {
+	course: PropTypes.object.isRequired
+};
+
+export default function SiteAdminCourseTabs ({course}) {
+	const hasRoster = course.hasLink('CourseEnrollmentRoster');
 	return (
 		<Tabs>
 			<LinkTo.Path to="./" activeClassName="active" exact>{t('overview')}</LinkTo.Path>
-			<LinkTo.Path to="./roster" activeClassName="active">{t('roster')}</LinkTo.Path>
+			{hasRoster && <LinkTo.Path to="./roster" activeClassName="active">{t('roster')}</LinkTo.Path>}
 			<LinkTo.Path to="./reports" activeClassName="active">{t('reports')}</LinkTo.Path>
 		</Tabs>
 	);
