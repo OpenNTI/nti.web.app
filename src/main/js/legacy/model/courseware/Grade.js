@@ -78,7 +78,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		{name: 'AssignmentId', type: 'string'},
 		{name: 'assignmentName', type: 'string', persist: false},
 		{name: 'assignmentContainer', type: 'string', persist: false},
-		{name: 'IsExcused', type: 'auto', persist: false}
+		{name: 'IsExcused', type: 'auto', persist: false},
+		{name: 'CatalogEntryNTIID', type: 'string', persist: false}
 	],
 
 
