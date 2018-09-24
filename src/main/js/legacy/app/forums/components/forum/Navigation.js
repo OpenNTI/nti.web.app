@@ -11,12 +11,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 	cls: 'topic-list-nav forum-nav',
 	layout: 'none',
 
-	setBaseRoute (baseroute) {
-		if (this.forumList) {
-			this.forumList.setBaseRoute(baseroute);
-		}
-	},
-
 	async setCurrentBundle (bundle) {
 		if (!this.currentBundle || this.currentBundle.getID() !== bundle.getId()) {
 			if (this.forumList) {
@@ -25,11 +19,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			}
 
 			this.currentBundle = await bundle.getInterfaceInstance();
-
+			const baseroute = `/app/${bundle.isCourse ? 'course' : 'bundle'}/${encodeForURI(bundle.getId())}/discussions`;
 			this.forumList = this.add({
 				xtype: 'react',
 				component: Forums.ForumList,
 				getRouteFor: this.getRouteFor.bind(this),
+				baseroute: baseroute,
 				setFirstForum: this.setFirstForum,
 				bundle: this.currentBundle,
 				activeForumId: this.activeForumId
@@ -42,11 +37,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		if (object.MimeType.includes('application/vnd.nextthought.forums')) {
 			return `./${encodeForURI(object.NTIID)}`;
 		}
-	},
-
-	navigateToForum (forum) {
-		const id = encodeForURI(forum.getId());
-		this.pushRoute(forum.get('title'), id, { forum });
 	},
 
 	setActiveForum (activeForumId) {

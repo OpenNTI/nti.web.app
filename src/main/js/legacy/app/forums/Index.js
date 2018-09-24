@@ -88,13 +88,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 	},
 
 	showForum (route) {
-		const { params: { forum }, precache } = route;
-		if (precache && precache.forum) {
-			this.forumView.setForum(precache.forum);
-		} else if (forum) {
+		const { params: { forum }} = route;
+
+		if (forum) {
 			this.forumView.loadForum(forum);
 		} else {
-			this.forumView.setActiveForum();
+			this.forumView.setActiveForum(null);
 		}
 	},
 

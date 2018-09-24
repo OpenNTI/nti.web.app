@@ -62,9 +62,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 					}
 				}
 			});
+			this.replaceRouteState(null, '', '/');
 			dispatch(FORUM_LIST_REFRESH);
 			this.setEmptyState();
-			this.replaceRouteState(null, '', '/');
 			console.error(error);
 		}
 	},
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		if (this.body.activeTopicList && this.body.activeTopicList.getId() === record.getId()) {
 			return this.body.updateForum();
 		}
-		this.navigation.setBaseRoute(this.getBaseRoute());
+
 		return this.body.setForum(record);
 	},
 
@@ -89,8 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		this.body.setEmpty(isEditor);
 	},
 
-	setActiveForum () {
-		this.navigation.setBaseRoute(this.getBaseRoute());
-		this.navigation.setActiveForum(null);
+	setActiveForum (activeForum) {
+		this.navigation.setActiveForum(activeForum);
 	}
 });
