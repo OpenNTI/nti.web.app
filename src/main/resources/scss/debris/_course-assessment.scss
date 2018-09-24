@@ -333,6 +333,25 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.admin-list-header {
+	.assignment-status {
+		line-height: 0.5rem;
+	}
+
+	.required-label {
+		font: normal 600 0.6rem/1 "Open Sans", sans-serif;
+		text-transform: uppercase;
+		border: 1px solid #e2e2e2;
+		border-radius: 3px;
+		padding: 5px;
+		padding: 0.25rem;
+		margin-left: 2rem;
+		color: $tertiary-grey;
+		display: inline-block;
+		margin-bottom: 1rem;
+	}
+}
+
 .assignment-status {
 	font: normal 600 0.6rem/1 $font;
 	text-transform: uppercase;
