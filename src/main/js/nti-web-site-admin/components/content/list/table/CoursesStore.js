@@ -72,6 +72,7 @@ class UserListStore extends Stores.BoundStore {
 
 			if(this.searchTerm) {
 				params.filter = this.searchTerm;
+				params.batchStart = 0;
 			}
 
 			const collection = service.getCollection('AdministeredCourses', 'Courses');

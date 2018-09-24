@@ -152,6 +152,7 @@ class UserListStore extends Stores.BoundStore {
 
 			if(this.searchTerm) {
 				params.searchTerm = this.searchTerm;
+				params.batchStart = 0;
 			}
 
 			const siteUsers = await service.getBatch(link, params);

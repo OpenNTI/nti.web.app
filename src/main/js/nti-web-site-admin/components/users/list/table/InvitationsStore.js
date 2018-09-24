@@ -160,6 +160,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 			if(this.searchTerm) {
 				params.filterOn = 'receiver';
 				params.filter = this.searchTerm;
+				params.batchStart = 0;
 			}
 
 			const service = await getService();
