@@ -201,6 +201,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.editor.activate();
 		Ext.defer(this.editor.focus, 350, this.editor);
 		this.updateLayout();
+		this.syncElementHeight();
 
 		return this.editor;
 	},
