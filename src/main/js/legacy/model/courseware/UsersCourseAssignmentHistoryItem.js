@@ -376,7 +376,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 					let txt = record.get('IsExcused') === true ? 'Unexcuse Grade' : 'Excuse Grade';
 					// let store = me.store;
 					let newGrade = me.get('Grade');
-					menuItemEl.setText(txt);
+
+					if (menuItemEl) {
+						menuItemEl.setText(txt);
+					}
 
 					if (newGrade) {
 						newGrade.set('IsExcused', record.get('IsExcused'));
