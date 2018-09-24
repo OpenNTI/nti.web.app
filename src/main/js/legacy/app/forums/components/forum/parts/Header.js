@@ -1,11 +1,10 @@
 const Ext = require('@nti/extjs');
 const { dispatch } = require('@nti/lib-dispatcher');
+const { Forums } = require('@nti/web-discussions');
 
 const { getString } = require('legacy/util/Localization');
 
 require('legacy/common/menus/Reports');
-
-const FORUM_LIST_REFRESH = 'FORUM_LIST_REFRESH';
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.Header', {
 	extend: 'Ext.Component',
@@ -86,8 +85,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 					handler: async () => {
 						try {
 							await Service.requestDelete(this.record.getLink('edit'));
-							dispatch(FORUM_LIST_REFRESH);
 							this.replaceRouteState(null, '', '/');
+							dispatch(Forums.FORUM_LIST_REFRESH);
 						} catch (error) {
 							console.error(error);
 							setTimeout(() => { alert('Unable to delete this forum.'); }, 1000);
