@@ -17,6 +17,6 @@ export default class LastActivity extends React.Component {
 	render () {
 		const {enrollment} = this.props;
 
-		return <DateValue date={enrollment.getLastSeenTime()} label="Last Active"/>;
+		return <DateValue date={enrollment.getLastSeenTime()} format="lll" label="Last Active"/>;
 	}
 }
