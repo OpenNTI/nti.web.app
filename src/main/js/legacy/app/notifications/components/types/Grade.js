@@ -33,14 +33,19 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	itemCls: 'grade',
 	wording: 'graded {assignment}',
 
-	fillInData: async function () {
-		var me = this,
-			creator = me.record.get('Creator');
+	fillInData: function () {
+		var creator = this.record.get('Creator');
 
 		if(creator !== 'system') {
 			// if not the system user, call parent which will resolve the user's display name and avatar
 			return this.callParent(arguments);
 		}
+
+		this.addCourseData();
+	},
+
+	addCourseData: async function () {
+		var me = this;
 
 		const id = me.record.get('CatalogEntryNTIID');
 		const catalogEntry = await resolveCatalogEntry(id);
