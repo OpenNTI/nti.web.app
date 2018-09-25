@@ -453,7 +453,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.emptyText = this.add({
 			xtype: 'box',
-			autoEl: {cls: 'empty-achievements-text', html: getString('NextThought.view.profiles.parts.Achievements.empty')}
+			autoEl: {cls: 'empty-achievements-container', cn: [{cls: 'empty-achievements-text', html: getString('NextThought.view.profiles.parts.Achievements.empty')}]}
 		});
 	}
 });
