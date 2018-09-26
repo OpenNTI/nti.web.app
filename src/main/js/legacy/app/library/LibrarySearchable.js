@@ -61,11 +61,11 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 				component: LibrarySearchableView,
 				baseroute: baseroute,
 				setTitle: (title) => {this.setTitle(title); },
-				getRouteFor: (obj) => {
+				getRouteFor: (obj, context) => {
 					if (obj.MimeType === 'application/vnd.nextthought.community') {
 						return () => this.navigateToCommunity(obj);
 					} else if (obj.isCourse) {
-						return () => this.navigateToCourse(obj);
+						return () => this.navigateToCourse(obj, context);
 					} else if (obj.isBundle) {
 						return () => this.navigateToBundle(obj);
 					} else if (obj.isCourseCatalogEntry) {
@@ -104,10 +104,11 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 	},
 
 
-	navigateToCourse (course) {
-		const courseID = course.getCourseID ? course.getCourseID() : course.NTIID;
+	navigateToCourse (course, context) {
+		const courseID = course.getCourseID ? course.getCourseID() : (course.CourseNTIID || course.NTIID);
+		const part = context === 'new-course' ? 'info' : '';
 
-		this.CourseActions.transitionToCourse(courseID)
+		this.CourseActions.transitionToCourse(courseID, null, part)
 			.then(route => {
 				this.pushRootRoute(null, route);
 			});
