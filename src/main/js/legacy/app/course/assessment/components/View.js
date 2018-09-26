@@ -130,13 +130,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					resetView(false);
 				}
 
+				me.assignmentCollection = assignments;
+
 				if (isSync) {
 					wait()
 						.then(me.alignNavigation.bind(me));
 					return;
 				}
-
-				me.assignmentCollection = assignments;
 
 				//prime
 				assignments.getHistory(true);
