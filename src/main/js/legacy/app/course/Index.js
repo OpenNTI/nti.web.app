@@ -251,15 +251,25 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	applyState: function (state) {
 		if (!this.activeBundle) { return; }
 
+
 		this.activeBundle.getInterfaceInstance()
 			.then((course) => {
+				const shadowRoots = {
+					'lessons': this.getRoot('course-overview')
+				};
+
+				shadowRoots.lessons = shadowRoots.lessons && shadowRoots.lessons !== '/' ? `/app/course/${encodeForURI(course.getID())}/lessons${shadowRoots.lessons}/` : '';
+
 				if (this.navigationCmp && this.navigationCmp.course === course) {
+					this.navigationCmp.setProps({shadowRoots});
+
 					return;
 				}
 
 				this.renderNavigationCmp(CourseNavigation, {
 					course,
 					baseroute: this.getBaseRoute(),
+					shadowRoots,
 					exclude: ['videos'],
 					getRouteFor: (obj, context) => {
 						if (obj !== course) { return; }

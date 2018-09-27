@@ -165,6 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 	clearRouteStates () {
 		this.ROUTE_STATES = {};
+		this.SHADOW_ROOTS = {};
 	},
 
 
