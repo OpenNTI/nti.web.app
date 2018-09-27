@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 	getRouteFor (object) {
 		if (object.MimeType.includes('application/vnd.nextthought.forums')) {
-			return `./${encodeForURI(object.NTIID)}`;
+			return `./${encodeForURI(object.getID())}`;
 		}
 	},
 

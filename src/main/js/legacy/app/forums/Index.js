@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		}
 
 		const record = Forum.interfaceToModel(forum);
-		const id = encodeForURI(record.getId());
+		const id = encodeForURI(forum.getID());
 
 		this.forumView.setForum(record);
 		this.pushRoute(record.get('title'), id);
