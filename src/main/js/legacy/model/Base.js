@@ -312,6 +312,14 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		return this.syncWith(newRecord, silent);
 	},
 
+	syncWithInterface (model, silent) {
+		const json = model.__toRaw();
+		const data = {...this.getRaw(), ...json};
+		const newRecord = lazy.ParseUtils.parseItems([data])[0];
+
+		return this.syncWith(newRecord, silent);
+	},
+
 	/**
 	 * Get the link to request updated values from on the server
 	 *

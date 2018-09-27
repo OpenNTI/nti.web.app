@@ -191,7 +191,14 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 		this.NavigationActions.updateNavBar(this.navBarConfig);
 
+		this.usingWhiteMask = useWhiteMask;
+
 		this.NavigationActions.setActiveContent(bundle, useWhiteMask, useWhiteMask);
+	},
+
+
+	updateActiveContent () {
+		this.NavigationActions.setActiveContent(this.activeBundle, this.usingWhiteMask, this.usingWhiteMask);
 	},
 
 

@@ -30,6 +30,10 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	},
 
 
+	clearAssetCache () {
+		delete this.__assetPromises;
+	},
+
 	/*
 	 * return the root that should be used if PlatforPresentationResources isn't defined
 	 * @return {string} default root to use

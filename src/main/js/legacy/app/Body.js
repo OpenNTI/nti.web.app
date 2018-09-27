@@ -480,6 +480,8 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		if (content !== this.activeContent) {
 			this.removeBodyContent(this.activeContent);
 			this.addBodyContent(content);
+		} else {
+			this.addBodyContent(content);
 		}
 
 		this.activeContent = content;

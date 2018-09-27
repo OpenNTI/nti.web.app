@@ -150,10 +150,15 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		// if a course is modified, we should force a reload of the active bundle
 		// so that things like the updated course ID/name are reflected
 		this.mon(this.CourseStore, {
-			'modified-course': (catalogEntry) => {
+			'modified-course': (updatedEntry) => {
+				const catalogEntry = this.activeBundle.getCourseCatalogEntry();
 				// only mark dirty if the active course is the one that was just modified
-				if(catalogEntry && catalogEntry.CourseNTIID === this.activeBundle.getId()) {
+				if(updatedEntry && updatedEntry.CourseNTIID === this.activeBundle.getId()) {
 					this.isCourseDirty = true;
+
+					catalogEntry.syncWithInterface(updatedEntry);
+					catalogEntry.clearAssetCache();
+					this.updateActiveContent();
 				}
 			}
 		});
