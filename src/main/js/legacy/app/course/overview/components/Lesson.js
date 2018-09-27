@@ -146,8 +146,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 
 
-			const outline = await course.getOutline({force: doNotCache});
-			const node = outline.getNode(record.get('ContentNTIID'));
+			let outline = await course.getOutline({force: doNotCache});
+			let node = outline.getNode(record.get('ContentNTIID'));
+
+			if (!node) {
+				outline = await course.getOutline({force: true});
+				node = outline.getNode(record.get('ContentNTIID'));
+			}
 
 			//If another lesson got rendered while we were loading don't do anything
 			if (this.activeRecord.getId() !== record.getId()) { return; }
