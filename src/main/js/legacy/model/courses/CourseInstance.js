@@ -580,25 +580,39 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.getBundle().getAssetRoot && this.getBundle().getAssetRoot();
 	},
 
+
+	__getPresentationResourcesBacking () {
+		return this.prepareData()
+			.then(course => course.getCourseCatalogEntry());
+	},
+
 	/**
 	 * Return the a promise that fulfills with the background image of the bundle
 	 *
 	 * @return {Promise} fulfills with url
 	 */
 	getBackgroundImage: function () {
-		return this.getBundle().getBackgroundImage && this.getBundle().getBackgroundImage();
+		return this.__getPresentationResourcesBacking()
+			.then(backing => backing.getBackgroundImage())
+			.catch(() => '');
 	},
 
 	getIconImage: function () {
-		return this.getBundle().getIconImage && this.getBundle().getIconImage();
+		return this.__getPresentationResourcesBacking()
+			.then(backing => backing.getIconImage())
+			.catch(() => '');
 	},
 
 	getThumbnail: function () {
-		return (this.getBundle().getThumbnail && this.getBundle().getThumbnail()) || Promise.resolve('');
+		return this.__getPresentationResourcesBacking()
+			.then(backing => backing.getThumbnail())
+			.catch(() => '');
 	},
 
 	getVendorIconImage: function () {
-		return (this.getBundle().getVendorIcon && this.getBundle().getVendorIcon()) || Promise.resolve('');
+		return this.__getPresentationResourcesBacking()
+			.then(backing => backing.getVendorIcon())
+			.catch(() => '');
 	},
 
 	getPublicScope: function () { return this.getScope('Public'); },

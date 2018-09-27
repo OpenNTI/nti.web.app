@@ -155,6 +155,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		return this.getAsset('promoImage');
 	},
 
+	getVendorIcon: function () {
+		return this.getAsset('vendorIcon');
+	},
+
 	getEffectiveDate: function () {
 		// if there is no start date, but we have an end date, consider that end date
 		// as the 'effective' date for the course.  So when determining which semester an archived
