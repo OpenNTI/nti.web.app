@@ -1,8 +1,10 @@
 const Ext = require('@nti/extjs');
 const { decodeFromURI } = require('@nti/lib-ntiids');
+const { getService } = require('@nti/web-client');
 const { dispatch } = require('@nti/lib-dispatcher');
 const { scoped } = require('@nti/lib-locale');
 
+const Forum = require('legacy/model/forums/Forum');
 require('legacy/common/components/NavPanel');
 require('./Navigation');
 require('./Forum');
@@ -47,7 +49,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 
 	async loadForum (id) {
 		try {
-			const record = await Service.getObject(decodeFromURI(id));
+			const service = await getService();
+			const forum = await service.getObject(decodeFromURI(id));
+			const record = Forum.interfaceToModel(forum);
 			this.navigation.setActiveForum(id);
 			this.setForum(record);
 		} catch (error) {
