@@ -311,6 +311,10 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		var body = this.getBodyContainer();
 
 		body.removeAll(true);
+
+		if (this.onClearCollection) {
+			this.onClearCollection();
+		}
 	},
 
 	refresh: function () {
