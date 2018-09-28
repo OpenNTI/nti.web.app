@@ -11,14 +11,15 @@ import Card from '../../../common/Card';
 import Store from './Store';
 
 const DEFAULT_TEXT = {
-	error: 'Unable to load transcript.'
+	error: 'Unable to load transcript.',
+	noCourses: 'This user is not enrolled in any courses'
 };
 const t = scoped('nti-site-admin.users.user.courses.View', DEFAULT_TEXT);
 
 const propMap = {
 	items: 'items',
 	loading: 'loading',
-	error: 'error',
+	error: 'error'
 };
 
 export default
@@ -98,6 +99,6 @@ class SiteAdminUserCourses extends React.Component {
 
 
 	renderEmptyState () {
-
+		return <div className="empty-state">{t('noCourses')}</div>;
 	}
 }
