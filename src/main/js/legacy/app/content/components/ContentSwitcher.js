@@ -219,12 +219,20 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		return family ? this.getFamilyData(family, bundle, route) : this.getCourseData(bundle, route);
 	},
 
-	addBundle: function (bundle, route) {
+	addBundle: async function (bundle, route) {
 		var state = this.getCurrentState() || {recent: []},
 			recent = state.recent || [],
 			getData = bundle.isCourse ? this.getCourseOrFamilyData(bundle, route) : this.getBundleData(bundle, route);
 
 		state.isAdmin = bundle.hasLink('delete');
+
+		if(bundle.isCourse) {
+			// make sure we have a catalog entry resolved
+			await bundle.prepareData();
+			const catalogEntry = bundle.getCourseCatalogEntry();
+
+			state.isEditor = catalogEntry.hasLink('edit');
+		}
 
 		state.recent.forEach(function (item) {
 			if (item.subItems) {
@@ -236,26 +244,24 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			}
 		});
 
-		getData
-			.then(function (data) {
-				var currentIndex = -1;
+		const data = await getData;
 
-				recent.forEach(function (item, idx) {
-					if (item.id === data.id) {
-						currentIndex = idx;
-					}
-				});
+		var currentIndex = -1;
 
-				if (currentIndex >= 0) {
-					recent.splice(currentIndex, 1);
-				}
+		recent.forEach(function (item, idx) {
+			if (item.id === data.id) {
+				currentIndex = idx;
+			}
+		});
 
-				recent.unshift(data);
-				state.recent = recent.slice(0, 5);
+		if (currentIndex >= 0) {
+			recent.splice(currentIndex, 1);
+		}
 
-				return state;
-			})
-			.then(this.setState.bind(this));
+		recent.unshift(data);
+		state.recent = recent.slice(0, 5);
+
+		this.setState(state);
 	},
 
 	updateRouteFor: function (bundle, route) {
@@ -288,7 +294,8 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.navMenu.setProps({
 			activeCourse: state.recent[0],
 			recentCourses: state.recent.slice(1),
-			isAdministrator: state.isAdmin
+			isAdministrator: state.isAdmin,
+			isEditor: state.isEditor
 		});
 	},
 
