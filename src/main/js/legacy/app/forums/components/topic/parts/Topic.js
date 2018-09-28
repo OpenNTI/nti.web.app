@@ -20,7 +20,6 @@ require('legacy/editor/Editor');
 require('legacy/common/menus/BlogTogglePublish');
 require('legacy/common/ux/SearchHits');
 require('legacy/layout/component/Natural');
-require('legacy/common/menus/Reports');
 
 require('./Pager');
 

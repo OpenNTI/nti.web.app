@@ -1,7 +1,5 @@
 const Ext = require('@nti/extjs');
 
-require('legacy/common/menus/Reports');
-
 require('../../../AssignmentStatus');
 require('../../student/assignments/List');
 require('./ListItem');

@@ -4,8 +4,6 @@ const { Forums } = require('@nti/web-discussions');
 
 const { getString } = require('legacy/util/Localization');
 
-require('legacy/common/menus/Reports');
-
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-forum-header',

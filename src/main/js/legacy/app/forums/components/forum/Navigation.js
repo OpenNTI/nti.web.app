@@ -3,7 +3,6 @@ const { encodeForURI } = require('@nti/lib-ntiids');
 const { Forums } = require('@nti/web-discussions');
 
 require('legacy/util/Parsing');
-require('legacy/common/menus/Reports');
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Navigation', {
 	extend: 'Ext.container.Container',

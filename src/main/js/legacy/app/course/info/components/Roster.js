@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const cx = require('classnames');
+const {Viewer} = require('@nti/web-reports');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -14,7 +15,6 @@ const ProgressWindow = require('./ProgressWindow');
 require('legacy/overrides/ReactHarness');
 require('legacy/app/invite/Prompt');
 require('legacy/common/chart/Pie');
-require('legacy/common/menus/Reports');
 require('legacy/common/ux/FilterMenu');
 require('legacy/proxy/courseware/Roster');
 
@@ -542,16 +542,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	handleClick: function (grid, record, node, i, e) {
 		grid.selModel.deselectAll();
 
-		var menu,
-			disclosure = e.getTarget('.disclosure');
+		var disclosure = e.getTarget('.disclosure');
 
 		if (disclosure) {
-			menu = Ext.widget('report-menu', {
-				links: record.getReportLinks(),
-				showByEl: disclosure
+			record.getInterfaceInstance().then(newRecord => {
+				Viewer.show(newRecord.Reports[0]);
 			});
-
-			this.on('destroy', menu.destroy.bind(menu));
 		} else if (e.getTarget('.email')) {
 			this.openIndividualEmail(e);
 		} else {

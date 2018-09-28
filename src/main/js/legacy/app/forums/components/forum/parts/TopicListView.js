@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Viewer} = require('@nti/web-reports');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const UserRepository = require('legacy/cache/UserRepository');
@@ -196,10 +197,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			} else if (e.getTarget('.like')) {
 				record.like();
 			} else if (reports) {
-				Ext.widget('report-menu', {
-					links: record.getReportLinks(),
-					showIfOne: true,
-					showByEl: reports
+				record.getInterfaceInstance().then(newRecord => {
+					Viewer.show(newRecord.Reports[0]);
 				});
 			}
 			return;

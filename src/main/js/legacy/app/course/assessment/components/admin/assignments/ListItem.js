@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Viewer} = require('@nti/web-reports');
 
 const {isFeature} = require('legacy/util/Globals');
 
@@ -119,10 +120,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (link) {
 			e.stopEvent();
-			Ext.widget('report-menu', {
-				links: this.assignment.getReportLinks(),
-				showIfOne: true,
-				showByEl: link
+
+			this.assignment.getInterfaceInstance().then(assignment => {
+				Viewer.show(assignment.Reports[0]);
 			});
 
 			return false;

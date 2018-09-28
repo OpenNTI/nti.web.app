@@ -2,6 +2,8 @@ const Ext = require('@nti/extjs');
 
 require('legacy/mixins/HasLinks');
 
+require('../Base');
+
 
 /**
  * TODO: This is a duplicate of the NextThought.model.courseware.CourseInstanceEnrollment
@@ -10,7 +12,7 @@ require('legacy/mixins/HasLinks');
  *
  */
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceEnrollment', {
-	extend: 'Ext.data.Model',
+	extend: 'NextThought.model.Base',
 
 	idProperty: 'id',
 
