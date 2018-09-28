@@ -55,7 +55,7 @@
     "@nti/web-integrations": "^1.0.0-alpha.20180711160926",
     "@nti/web-library": "^1.0.0-alpha.20180906151621",
     "@nti/web-login": "^2018.0.0",
-    "@nti/web-profiles": "^1.0.1",
+    "@nti/web-profiles": "^1.9.0",
     "@nti/web-reports": "0.x.x",
     "@nti/web-routing": "0.x.x",
     "@nti/web-search": "0.x.x",
