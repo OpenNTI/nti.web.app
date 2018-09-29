@@ -1,0 +1,43 @@
+.nt-select {
+	position: relative;
+	background-color: white;
+	height: 40px;
+	color: $primary-grey;
+	box-shadow: 0 0 0 1px #dbdbdb;
+	border-radius: 3px;
+	cursor: pointer;
+	font: normal 400 14px/40px $font;
+
+	@include icon($mv-dropdown-arrow_hover, $side: after, $top: 50%, $right: 10px, $left: auto);
+
+	&::after {
+		margin-top: -4px;
+	}
+
+	&:hover::after {
+		@include sprite($mv-dropdown-arrow);
+	}
+
+	.active {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		z-index: 1;
+		padding: 0 20px 0 10px;
+	}
+
+	select {
+		border: none;
+		cursor: pointer;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		z-index: 2;
+		margin: 0;
+		opacity: 0;
+	}
+}

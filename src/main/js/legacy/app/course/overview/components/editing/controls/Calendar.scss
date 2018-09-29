@@ -2,15 +2,18 @@
 	.daytime-toggle-trigger {
 		.calendar {
 			margin-left: 15px;
+
 			&::after {
 				content: '';
-			    overflow: hidden;
-			    position: absolute;
-			    top: 40%;
-			    right: 1rem;
-			    height: 10px;
-			    width: 10px;
-				background: url(../images/icons/dropdown-am-pm-icon.png) no-repeat center;
+				overflow: hidden;
+				position: absolute;
+				top: 40%;
+				right: 1rem;
+				height: 10px;
+				width: 10px;
+				//FIXME: don't reference icons from /src/resources/images (Assets should be local to the component being
+				// styled and assets should be shared by reusing the component... do define your components wisely.)
+				background: url(../../../../../../../../resources/images/icons/dropdown-am-pm-icon.png) no-repeat center;
 			}
 		}
 	}
