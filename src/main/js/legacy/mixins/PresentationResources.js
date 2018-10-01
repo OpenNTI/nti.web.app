@@ -32,6 +32,7 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 
 	clearAssetCache () {
 		delete this.__assetPromises;
+		delete this.presentationroot;
 	},
 
 	/*
