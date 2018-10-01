@@ -113,10 +113,10 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 	},
 
 	handleDispatch (event) {
-		const { action: { type, response: { id = '' } } } = event;
+		const { action: { type, response} } = event;
 
 		if (type === 'COURSE_ASSET_UPLOAD') {
-			this.updateEntry(id);
+			this.updateEntry(response && response.id);
 		}
 	},
 
