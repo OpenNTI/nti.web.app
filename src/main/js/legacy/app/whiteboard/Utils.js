@@ -5,6 +5,14 @@ const {getURL} = require('legacy/util/Globals');
 const NTMatrix = require('./Matrix');
 
 
+function maybeMakeSourceRelative (src) {
+	const location = window.location;
+	const origin = location.origin ? location.origin : (location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : ''));
+
+	return src.replace(origin, '');
+}
+
+
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 
 	USE_DATA_URLS: false,
@@ -196,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 
 		data.shapeList.push({
 			Class: 'CanvasUrlShape',
-			url: img.src,
+			url: maybeMakeSourceRelative(img.src),
 			transform: m.toTransform()
 		});
 
