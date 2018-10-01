@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Navigation} = require('@nti/web-course');
+const AppDispatcher = require('@nti/lib-dispatcher').default;
 
 const Globals = require('legacy/util/Globals');
 
@@ -99,6 +100,8 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			onVisibilityChanged,
 			onDelete
 		});
+
+		this.dispatcher = AppDispatcher.register(this.handleDispatch.bind(this));
 	},
 
 	afterRender: function () {
@@ -107,6 +110,14 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.applyState(this.getCurrentState());
 
 		this.mon(this.el, 'click', this.onItemClicked.bind(this));
+	},
+
+	handleDispatch (event) {
+		const { action: { type, response: { id = '' } } } = event;
+
+		if (type === 'COURSE_ASSET_UPLOAD') {
+			this.updateEntry(id);
+		}
 	},
 
 	openAt: function (x, y) {
@@ -316,5 +327,24 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			this.hide();
 			this.switchContent(Globals.trimRoute(root) + '/' + Globals.trimRoute(route));
 		}
+	},
+
+	async updateEntry (id) {
+		const state = this.getCurrentState();
+		const newCatalogEntry = await Service.getObject(id);
+		const thumb = await newCatalogEntry.getThumbnail();
+
+		state.recent = state.recent.map(x => {
+			if (x.id === newCatalogEntry.getId()) {
+				return {
+					...x,
+					thumb
+				};
+			}
+
+			return x;
+		});
+
+		this.setState(state);
 	}
 });
