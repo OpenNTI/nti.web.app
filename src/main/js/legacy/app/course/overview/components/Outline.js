@@ -154,11 +154,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onClearCollection () {
+	clear () {
 		delete this.outline;
 		delete this.outlineContentsHash;
 		delete this.outlineWasEditing;
+
+		this.clearCollection();
 	},
+
 
 	setOutline: function (bundle, outline) {
 		if (!this.rendered) {

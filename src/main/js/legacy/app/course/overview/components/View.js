@@ -324,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				me.mask();
 			});
 
-		me.navigation.clearCollection();
+		me.navigation.clear();
 		me.body.clear();
 	},
 
