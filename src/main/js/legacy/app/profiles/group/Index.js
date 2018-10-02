@@ -3,7 +3,7 @@ const Ext = require('@nti/extjs');
 const {isMe} = require('legacy/util/Globals');
 const GroupsActions = require('legacy/app/groups/Actions');
 
-require('../user/Index');
+require('../user/BaseExtProfile');
 require('../user/components/membership/Index');
 require('./components/Header');
 require('./components/activity/Index');
@@ -11,7 +11,7 @@ require('./components/membership/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
-	extend: 'NextThought.app.profiles.user.Index',
+	extend: 'NextThought.app.profiles.user.Base',
 	alias: 'widget.profile-group',
 	cls: 'group-profile profile',
 
