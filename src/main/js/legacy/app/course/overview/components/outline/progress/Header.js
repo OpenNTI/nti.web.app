@@ -64,6 +64,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					this.removeHeader();
 					this.addHeader();
 				}
+			}).catch(() => {
+				// need to handle this?
 			});
 	},
 

@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user learners list (with 5 items) Basic render test 1`] = `
+<div
+  className="users-table-container"
+>
+  <div
+    className="error"
+  >
+    Cannot read property 'filter' of undefined
+  </div>
+</div>
+`;
+
+exports[`Site admin user learners list (with 25 items) Basic render test 1`] = `
+<div
+  className="users-table-container"
+>
+  <div
+    className="error"
+  >
+    Cannot read property 'filter' of undefined
+  </div>
+</div>
+`;
+
+exports[`Site admin user learners list (with no items) Basic render test 1`] = `
+<div
+  className="users-table-container"
+>
+  <div
+    className="error"
+  >
+    Cannot read property 'filter' of undefined
+  </div>
+</div>
+`;

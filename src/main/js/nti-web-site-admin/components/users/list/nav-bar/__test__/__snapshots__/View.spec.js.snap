@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user list nav bar (with invite link) Basic render test 1`] = `
+<div
+  className="site-admin-card site-admin-user-list-nav-bar"
+>
+  <div
+    className="header"
+  >
+    People
+  </div>
+  <ul
+    className="site-admin-tabs"
+  >
+    <li>
+      <div
+        className="nti-link-to-path"
+        exact={true}
+        to="./"
+      >
+        Learners
+      </div>
+    </li>
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./admins"
+      >
+        Admins
+      </div>
+    </li>
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./invitations"
+      >
+        Invitations
+        <div
+          className="invitations-count"
+        >
+          5
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div
+    className="invite"
+    onClick={[Function]}
+  >
+    <i
+      className="icon-addfriend"
+    />
+    Invite People
+  </div>
+</div>
+`;
+
+exports[`Site admin user list nav bar (without invite link) Basic render test 1`] = `
+<div
+  className="site-admin-card site-admin-user-list-nav-bar"
+>
+  <div
+    className="header"
+  >
+    People
+  </div>
+  <ul
+    className="site-admin-tabs"
+  >
+    <li>
+      <div
+        className="nti-link-to-path"
+        exact={true}
+        to="./"
+      >
+        Learners
+      </div>
+    </li>
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./admins"
+      >
+        Admins
+      </div>
+    </li>
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./invitations"
+      >
+        Invitations
+        <div
+          className="invitations-count"
+        >
+          5
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+`;
