@@ -118,9 +118,13 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		const onBack = () => {
 			me.pushRootRoute('', `/course/${encodeForURI(me.activeBundle.getId())}/info`);
 		};
+
 		const showRoster = this.activeBundle && this.activeBundle.hasLink('CourseEnrollmentRoster');
 		const showReports = this.activeBundle && this.activeBundle.getReportLinks().length > 0 ? true : false;
-		const showAdvanced = this.activeBundle && (this.activeBundle.hasLink('lti-configured-tools') || this.activeBundle.hasLink('CompletionPolicy'));
+
+		// we should only be showing this page if the user has an administrative enrollment, might as well always show advanced (individual items on the advanced tab will be
+		// disabled/enabled according to the user's permissions)
+		const showAdvanced = true;//this.activeBundle && (this.activeBundle.hasLink('lti-configured-tools') || this.activeBundle.hasLink('CompletionPolicy'));
 
 		navigation.updateTitle('Course Administration');
 
