@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user book enrollment nav bar test Basic render test 1`] = `
+<div
+  className="site-admin-card site-admin-user-enrollment-nav-bar"
+>
+  <div
+    className="site-admin-user-enrollment-identity"
+  >
+    <div
+      className="profile-image"
+    >
+      <img
+        className="enrollment-course-image"
+        src=""
+      />
+      <div
+        className="user-avatar"
+      />
+    </div>
+    <div
+      className="enrollment-info"
+    >
+      <div
+        className="plain-text"
+      >
+        Activity for
+      </div>
+      <div
+        className="plain-text"
+      >
+        in
+      </div>
+      <div
+        className="course-title"
+      >
+        book1
+      </div>
+    </div>
+  </div>
+  <ul
+    className="site-admin-user-tabs"
+  >
+    <li>
+      <div
+        className="nti-link-to-path"
+        exact={true}
+        to="./"
+      >
+        Overview
+      </div>
+    </li>
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./reports"
+      >
+        Reports
+      </div>
+    </li>
+  </ul>
+</div>
+`;

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin advanced nav bar test Basic render test 1`] = `
+<ul
+  className="site-admin-advanced-tabs"
+>
+  <li>
+    <div
+      className="nti-link-to-path"
+      exact={true}
+      to="./"
+    >
+      Transcripts
+    </div>
+    <div
+      className="nti-link-to-path"
+      to="./integrations"
+    >
+      Integrations
+    </div>
+  </li>
+</ul>
+`;
