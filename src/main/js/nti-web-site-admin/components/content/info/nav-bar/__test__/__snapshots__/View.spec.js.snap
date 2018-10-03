@@ -1,0 +1,140 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user course enrollment nav bar test Basic render test (has no roster link) 1`] = `
+<div
+  className="site-admin-card site-admin-course-nav-bar"
+>
+  <div
+    className="site-admin-course-identity"
+  >
+    <img
+      className="course-icon"
+      src=""
+    />
+    <div
+      className="info"
+    >
+      <div
+        className="label"
+      >
+        Course 1
+      </div>
+      <div
+        className="title"
+      >
+        course1
+      </div>
+    </div>
+    <div
+      className="actions"
+    >
+      <div
+        className="nti-link-to-path profile"
+        to="#"
+      >
+        <i
+          className="icon-goto"
+        />
+        <span>
+          View Course
+        </span>
+      </div>
+    </div>
+  </div>
+  <ul
+    className="site-admin-tabs"
+  >
+    <li>
+      <div
+        className="nti-link-to-path"
+        exact={true}
+        to="./"
+      >
+        Overview
+      </div>
+    </li>
+    <li />
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./reports"
+      >
+        Reports
+      </div>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Site admin user course enrollment nav bar test Basic render test (has roster link) 1`] = `
+<div
+  className="site-admin-card site-admin-course-nav-bar"
+>
+  <div
+    className="site-admin-course-identity"
+  >
+    <img
+      className="course-icon"
+      src=""
+    />
+    <div
+      className="info"
+    >
+      <div
+        className="label"
+      >
+        Course 1
+      </div>
+      <div
+        className="title"
+      >
+        course1
+      </div>
+    </div>
+    <div
+      className="actions"
+    >
+      <div
+        className="nti-link-to-path profile"
+        to="#"
+      >
+        <i
+          className="icon-goto"
+        />
+        <span>
+          View Course
+        </span>
+      </div>
+    </div>
+  </div>
+  <ul
+    className="site-admin-tabs"
+  >
+    <li>
+      <div
+        className="nti-link-to-path"
+        exact={true}
+        to="./"
+      >
+        Overview
+      </div>
+    </li>
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./roster"
+      >
+        Roster
+      </div>
+    </li>
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./reports"
+      >
+        Reports
+      </div>
+    </li>
+  </ul>
+</div>
+`;

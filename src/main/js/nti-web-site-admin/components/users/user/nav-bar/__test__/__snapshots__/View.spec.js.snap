@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user info nav bar test Basic render test (has no transcript link) 1`] = `
+<div
+  className="site-admin-card site-admin-user-nav-bar"
+>
+  <div
+    className="site-admin-user-identity"
+  >
+    <div
+      className="actions"
+    >
+      <span
+        className="email"
+      >
+        <a
+          href="mailto:testUser@test.com"
+        >
+          Email
+        </a>
+      </span>
+      <div
+        className="nti-link-to-path profile"
+        to="#"
+      >
+        <i
+          className="icon-goto"
+        />
+        <span>
+          Profile
+        </span>
+      </div>
+    </div>
+  </div>
+  <ul
+    className="site-admin-tabs"
+  >
+    <li>
+      <div
+        className="nti-link-to-path"
+        exact={true}
+        to="./"
+      >
+        Overview
+      </div>
+    </li>
+    <li />
+    <li />
+    <li />
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./reports"
+      >
+        Reports
+      </div>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Site admin user info nav bar test Basic render test (has transcript link) 1`] = `
+<div
+  className="site-admin-card site-admin-user-nav-bar"
+>
+  <div
+    className="site-admin-user-identity"
+  >
+    <div
+      className="actions"
+    >
+      <span
+        className="email"
+      >
+        <a
+          href="mailto:testUser@test.com"
+        >
+          Email
+        </a>
+      </span>
+      <div
+        className="nti-link-to-path profile"
+        to="#"
+      >
+        <i
+          className="icon-goto"
+        />
+        <span>
+          Profile
+        </span>
+      </div>
+    </div>
+  </div>
+  <ul
+    className="site-admin-tabs"
+  >
+    <li>
+      <div
+        className="nti-link-to-path"
+        exact={true}
+        to="./"
+      >
+        Overview
+      </div>
+    </li>
+    <li />
+    <li />
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./transcript"
+      >
+        Transcript
+      </div>
+    </li>
+    <li>
+      <div
+        className="nti-link-to-path"
+        to="./reports"
+      >
+        Reports
+      </div>
+    </li>
+  </ul>
+</div>
+`;
