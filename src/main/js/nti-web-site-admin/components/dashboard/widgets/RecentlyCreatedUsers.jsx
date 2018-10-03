@@ -76,35 +76,44 @@ export default class RecentlyCreatedUsers extends React.Component {
 		});
 	}
 
-	loadData () {
-		// TODO: Get server to handle sorting, then we can just take the first X items rather than
-		// retrieving all, sorting and splicing
-		getService().then(service => {
-			User.resolve({entity: service.SiteCommunity}).then(community => {
-				const membersLink = community.getLink('members');
+	async loadData () {
+		const service = await getService();
 
-				return service.getBatch(membersLink + '?sortOn=createdTime&sortOrder=descending&batchSize=4');
-			}).then((users) => {
-				this.setState({
-					loading: false,
-					totalCount: users.Total,
-					allItems: users.Items,
-					items: users.Items.slice(0, PAGE_SIZE).map(x => {
-						return {
-							entity: x,
-							name: x.alias,
-							description: 'Created ' + DateTime.format(new Date(x.getCreatedTime()), 'LLLL')
-						};
-					})
-				});
-			}).catch((resp) => {
-				// can't get recent users data, set items to empty
-				this.setState({
-					loading: false,
-					items: []
-				});
+		const userWorkspace = service.Items.filter(x => x.hasLink('SiteUsers'))[0];
+
+		if(!userWorkspace) {
+			this.setState({
+				loading: false,
+				items: [],
+				error: 'Could not load users'
 			});
-		});
+
+			return;
+		}
+
+		try {
+			const users = await service.getBatch(userWorkspace.getLink('SiteUsers'), { sortOn: 'createdTime', sortOrder: 'descending', batchSize: 4});
+
+			this.setState({
+				loading: false,
+				totalCount: users.Total,
+				allItems: users.Items,
+				items: users.Items.slice(0, PAGE_SIZE).map(x => {
+					return {
+						entity: x,
+						name: x.alias,
+						description: 'Created ' + DateTime.format(new Date(x.getCreatedTime()), 'LLLL')
+					};
+				})
+			});
+		}
+		catch (e) {
+			this.setState({
+				loading: false,
+				items: [],
+				error: e.message || 'There was an error loading users'
+			});
+		}
 	}
 
 	renderHeader () {
