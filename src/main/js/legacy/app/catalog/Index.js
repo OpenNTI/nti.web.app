@@ -21,6 +21,8 @@ const REDEEM_ACTIVE = /^\/redeem/;
 const CATALOG_ENTRY_ROUTE = /(.*)\/nti-course-catalog-entry\/(.*)/;
 const CATEGORY_NAME = /\/([^/]*)\/?/;
 
+const URI_PART = /^uri/;
+
 function getPathname (a) {
 	const pathname = a.pathname;
 
@@ -214,6 +216,15 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 			return getService()
 				.then(service => service.getObjectRaw(param))
 				.then(catalog => lazy.ParseUtils.parseItems(catalog)[0]);
+		}
+
+
+		if (URI_PART.test(param)) {
+			const href = decodeURIComponent(param).replace('uri:', '');
+
+			return Service.request(href)
+				.then(raw => lazy.ParseUtils.parseItems(raw)[0]);
+
 		}
 
 		throw new Error('Unable to resole catalog');
