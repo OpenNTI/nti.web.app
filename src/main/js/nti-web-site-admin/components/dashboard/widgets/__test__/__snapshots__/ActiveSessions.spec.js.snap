@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin dashboard widget active sessions (with 0 count) Basic render test 1`] = `
+<div
+  className="active-sessions-widget"
+>
+  <div
+    className="numeric-value"
+  >
+    <div
+      className="label"
+    >
+      Learners Online Now
+    </div>
+    <div
+      className="value"
+    >
+      0
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Site admin dashboard widget active sessions (with 5 count) Basic render test 1`] = `
+<div
+  className="active-sessions-widget"
+>
+  <div
+    className="numeric-value"
+  >
+    <div
+      className="label"
+    >
+      Learners Online Now
+    </div>
+    <div
+      className="value"
+    >
+      5
+    </div>
+  </div>
+</div>
+`;
