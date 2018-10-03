@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Site admin user book frame test Basic render test 1`] = `
+exports[`Site admin user book overview test Basic render test 1`] = `
 <div
   className="site-admin-book-overview"
 >
