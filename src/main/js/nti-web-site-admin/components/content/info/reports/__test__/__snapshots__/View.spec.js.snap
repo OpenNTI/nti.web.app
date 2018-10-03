@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user course reports test Basic render test 1`] = `
+<div
+  className="site-admin-card"
+>
+  <div
+    className="reports-list-view"
+  >
+    <figure
+      className="notice empty-state-component"
+    >
+      <h1>
+        No Reports
+      </h1>
+      <p>
+        There are no reports found.
+      </p>
+    </figure>
+  </div>
+</div>
+`;

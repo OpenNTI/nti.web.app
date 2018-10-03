@@ -31,6 +31,8 @@ export default class SiteAdminCourseRoster extends React.Component {
 
 
 	renderRoster = ({loading, error, items, loadNextPage, loadPrevPage}) => {
+		console.log('rending roster, items', items);
+
 		return (
 			<div className="site-admin-course-roster">
 				{loading && (<div className="loading-mask"><Loading.Mask /></div>)}
