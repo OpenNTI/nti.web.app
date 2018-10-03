@@ -56,6 +56,10 @@ class SiteAdminBookRoster extends React.Component {
 	}
 
 	renderItems (items) {
+		if(items.length === 0) {
+			return <div className="empty-state">{t('empty')}</div>;
+		}
+
 		return (
 			<Card>
 				<ul>
