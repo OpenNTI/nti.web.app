@@ -95,17 +95,17 @@ export default class PopularCourses extends React.Component {
 
 		getService().then(service => {
 			const collection = service.getCollection('Courses', 'Catalog');
-			const popularLink = collection && collection.Links && collection.Links.filter(x => x.rel === 'Popular')[0];
+			const popularLink = collection && collection.getLink('Popular');
 
 			if(popularLink) {
-				const getBatchLink = link ? link : popularLink.href + '?batchSize=' + PAGE_SIZE + '&batchStart=' + batchStart;
+				const getBatchLink = link ? link : popularLink + '?batchSize=' + PAGE_SIZE + '&batchStart=' + batchStart;
 
-				service.get(getBatchLink).then((results) => {
+				service.getBatch(getBatchLink).then((results) => {
 					this.setState({
 						loading: false,
 						totalPages: Math.ceil(results.Total / PAGE_SIZE),
-						prevLink: ((results.Links || []).filter(x => x.rel === 'batch-prev')[0] || {}).href,
-						nextLink: ((results.Links || []).filter(x => x.rel === 'batch-next')[0] || {}).href,
+						prevLink: results.getLink('batch-prev'),
+						nextLink: results.getLink('batch-next'),
 						items: results.Items.map((x, i) => {
 							return {
 								...x,

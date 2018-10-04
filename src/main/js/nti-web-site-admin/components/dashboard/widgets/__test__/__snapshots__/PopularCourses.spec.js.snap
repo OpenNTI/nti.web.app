@@ -1,0 +1,454 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin dashboard widget popular courses (3 items, has previous) Basic render test 1`] = `
+<div
+  className="dashboard-list-widget popular-courses"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="title"
+    >
+      NextThought.view.courseware.assessment.admin.dashboard.widget.PopularCourses
+    </div>
+    <div
+      className="pager"
+    >
+      <div
+        className="page-control previous"
+        onClick={[Function]}
+      >
+        <i
+          className="icon-chevron-left"
+        />
+      </div>
+      <div
+        className="page-control next disabled"
+        onClick={[Function]}
+      >
+        <i
+          className="icon-chevron-right"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="items-container"
+  >
+    <div
+      className="items-header"
+    >
+      <div
+        className="column-header name"
+      >
+        Course Rank
+      </div>
+      <div
+        className="column-header value"
+      >
+        Students
+      </div>
+    </div>
+    <div
+      className="items"
+    >
+      <div
+        className="item"
+      >
+        <div
+          className="rank"
+        >
+          1
+          .
+        </div>
+        <div
+          className="item-image"
+          style={
+            Object {
+              "backgroundImage": "url()",
+            }
+          }
+        />
+        <div
+          className="info"
+        >
+          <div
+            className="name"
+          >
+            course1
+          </div>
+          <div
+            className="description"
+          >
+            COURSE1
+          </div>
+        </div>
+        <div
+          className="value"
+        >
+          99
+        </div>
+      </div>
+      <div
+        className="item"
+      >
+        <div
+          className="rank"
+        >
+          2
+          .
+        </div>
+        <div
+          className="item-image"
+          style={
+            Object {
+              "backgroundImage": "url()",
+            }
+          }
+        />
+        <div
+          className="info"
+        >
+          <div
+            className="name"
+          >
+            course2
+          </div>
+          <div
+            className="description"
+          >
+            COURSE2
+          </div>
+        </div>
+        <div
+          className="value"
+        >
+          98
+        </div>
+      </div>
+      <div
+        className="item"
+      >
+        <div
+          className="rank"
+        >
+          3
+          .
+        </div>
+        <div
+          className="item-image"
+          style={
+            Object {
+              "backgroundImage": "url()",
+            }
+          }
+        />
+        <div
+          className="info"
+        >
+          <div
+            className="name"
+          >
+            course3
+          </div>
+          <div
+            className="description"
+          >
+            COURSE3
+          </div>
+        </div>
+        <div
+          className="value"
+        >
+          97
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Site admin dashboard widget popular courses (5 items, no previous) Basic render test 1`] = `
+<div
+  className="dashboard-list-widget popular-courses"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="title"
+    >
+      NextThought.view.courseware.assessment.admin.dashboard.widget.PopularCourses
+    </div>
+    <div
+      className="pager"
+    >
+      <div
+        className="page-control previous disabled"
+        onClick={[Function]}
+      >
+        <i
+          className="icon-chevron-left"
+        />
+      </div>
+      <div
+        className="page-control next"
+        onClick={[Function]}
+      >
+        <i
+          className="icon-chevron-right"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="items-container"
+  >
+    <div
+      className="items-header"
+    >
+      <div
+        className="column-header name"
+      >
+        Course Rank
+      </div>
+      <div
+        className="column-header value"
+      >
+        Students
+      </div>
+    </div>
+    <div
+      className="items"
+    >
+      <div
+        className="item"
+      >
+        <div
+          className="rank"
+        >
+          1
+          .
+        </div>
+        <div
+          className="item-image"
+          style={
+            Object {
+              "backgroundImage": "url()",
+            }
+          }
+        />
+        <div
+          className="info"
+        >
+          <div
+            className="name"
+          >
+            course1
+          </div>
+          <div
+            className="description"
+          >
+            COURSE1
+          </div>
+        </div>
+        <div
+          className="value"
+        >
+          99
+        </div>
+      </div>
+      <div
+        className="item"
+      >
+        <div
+          className="rank"
+        >
+          2
+          .
+        </div>
+        <div
+          className="item-image"
+          style={
+            Object {
+              "backgroundImage": "url()",
+            }
+          }
+        />
+        <div
+          className="info"
+        >
+          <div
+            className="name"
+          >
+            course2
+          </div>
+          <div
+            className="description"
+          >
+            COURSE2
+          </div>
+        </div>
+        <div
+          className="value"
+        >
+          98
+        </div>
+      </div>
+      <div
+        className="item"
+      >
+        <div
+          className="rank"
+        >
+          3
+          .
+        </div>
+        <div
+          className="item-image"
+          style={
+            Object {
+              "backgroundImage": "url()",
+            }
+          }
+        />
+        <div
+          className="info"
+        >
+          <div
+            className="name"
+          >
+            course3
+          </div>
+          <div
+            className="description"
+          >
+            COURSE3
+          </div>
+        </div>
+        <div
+          className="value"
+        >
+          97
+        </div>
+      </div>
+      <div
+        className="item"
+      >
+        <div
+          className="rank"
+        >
+          4
+          .
+        </div>
+        <div
+          className="item-image"
+          style={
+            Object {
+              "backgroundImage": "url()",
+            }
+          }
+        />
+        <div
+          className="info"
+        >
+          <div
+            className="name"
+          >
+            course4
+          </div>
+          <div
+            className="description"
+          >
+            COURSE4
+          </div>
+        </div>
+        <div
+          className="value"
+        >
+          96
+        </div>
+      </div>
+      <div
+        className="item"
+      >
+        <div
+          className="rank"
+        >
+          5
+          .
+        </div>
+        <div
+          className="item-image"
+          style={
+            Object {
+              "backgroundImage": "url()",
+            }
+          }
+        />
+        <div
+          className="info"
+        >
+          <div
+            className="name"
+          >
+            course5
+          </div>
+          <div
+            className="description"
+          >
+            COURSE5
+          </div>
+        </div>
+        <div
+          className="value"
+        >
+          95
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Site admin dashboard widget popular courses (no items, no previous) Basic render test 1`] = `
+<div
+  className="dashboard-list-widget popular-courses"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="title"
+    >
+      NextThought.view.courseware.assessment.admin.dashboard.widget.PopularCourses
+    </div>
+    <div
+      className="pager"
+    >
+      <div
+        className="page-control previous disabled"
+        onClick={[Function]}
+      >
+        <i
+          className="icon-chevron-left"
+        />
+      </div>
+      <div
+        className="page-control next disabled"
+        onClick={[Function]}
+      >
+        <i
+          className="icon-chevron-right"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="no-items"
+  >
+    No courses found
+  </div>
+</div>
+`;
