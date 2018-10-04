@@ -18,6 +18,7 @@ require('legacy/mixins/FillScreen');
 require('legacy/mixins/Router');
 require('legacy/util/Parsing');
 
+require('../../contentviewer/Index');
 require('../../content/content/Index');
 require('../../mediaviewer/Index');
 require('./components/View');
@@ -54,6 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		this.addRoute('/:lesson/content/:id/:page/video/', this.showMediaViewer.bind(this));
 		this.addRoute('/:lesson/content/:id/:page', this.showContent.bind(this));
 		this.addRoute('/:lesson/content/:id/video/', this.showMediaViewer.bind(this));
+		this.addRoute('/:lesson/assignment/:id', this.showAssignment.bind(this));
 		this.addRoute('/:lesson/video/', this.showMediaViewer.bind(this));
 		this.addRoute('/:lesson/slidedeck/', this.showMediaViewer.bind(this));
 
@@ -177,6 +179,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			delete this.activeMediaWindow;
 		}
 
+		if (this.assignmentViewer) {
+			Ext.destroy(this.assignmentViewer);
+			delete this.assignmentViewer;
+		}
+
 		return lessons.handleRoute(route.path, route.precache);
 	},
 
@@ -289,6 +296,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 					me.reader.destroy();
 				}
 
+				if (me.assignmentViewer) {
+					me.assignmentViewer.destroy();
+				}
+
 				me.reader = me.add({
 					xtype: 'bundle-content',
 					currentBundle: me.currentBundle,
@@ -333,6 +344,75 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 				return Promise.reject(reason);
 			});
+	},
+
+
+	showAssignment (route, subRoute) {
+		const lessonId = decodeFromURI(route.params.lesson || '');
+		const assignmentId = decodeFromURI(route.params.id || '');
+
+		if (this.rendered) {
+			this.fillScreen(this.el.dom, 10);
+			this.el.mask('Loading...');
+		}
+
+		return Promise.all([
+			this.store.onceBuilt()
+				.then(() => this.store.getNode(lessonId)),
+			this.currentBundle.getAssignments()
+				.then(assignments => assignments.fetchAssignment(assignmentId)),
+			this.currentBundle.getAssignments()
+				.then(assignments => assignments.getHistoryItem(assignmentId, true))
+				.catch(() => null)
+		]).then(([lesson, assignment, assignmentHistory]) => {
+			if (this.reader) {
+				Ext.destroy(this.reader);
+				delete this.reader;
+			}
+
+			if (this.activeMediaWindow) {
+				Ext.destroy(this.activeMediaWindow);
+				delete this.activeMediaWindow;
+			}
+
+			if (this.assignmentViewer) {
+				Ext.destroy(this.assignmentViewer);
+				delete this.assignmentViewer;
+			}
+
+			this.assignmentViewer = this.add({
+				xtype: 'content-viewer',
+				bundle: this.currentBundle,
+				handleNavigation: this.handleNavigation.bind(this),
+				assignment,
+				assignmentHistory,
+				path: [
+					{
+						label: lesson.get('title'),
+						title: lesson.get('title'),
+						route: `/${encodeForURI(lesson.getId())}`
+					},
+					{
+						cls: 'locked',
+						label: assignment.get('title')
+					}
+				]
+			});
+
+			this.getLayout().setActiveItem(this.assignmentViewer);
+		}).then(() => {
+			if (this.el) {
+				this.el.unmask();
+			}
+		}).catch((reason) => {
+			alert('Failed to load assignment.');
+
+			if (this.el) {
+				this.el.unmask();
+			}
+
+			return Promise.reject(reason);
+		});
 	},
 
 	showMediaViewer: function (route, subRoute) {

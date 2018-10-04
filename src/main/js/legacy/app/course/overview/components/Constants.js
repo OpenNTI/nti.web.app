@@ -6,7 +6,7 @@ function getURLPart (obj) {
 }
 
 function getAssignmentRoute (course, lesson, obj) {
-	return `/app/course/${getURLPart(course)}/assignments/${encodeForURI(obj.getID())}/`;
+	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/assignment/${encodeForURI(obj.getID())}/`;
 }
 
 function getDiscussionRoute (course, lesson, obj) {
