@@ -19,7 +19,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			assignment: this.assignment,
 			assignmentHistory: this.assignmentHistory,
 			doNavigation: this.doNavigation.bind(this),
-			currentBundle: this.bundle
+			currentBundle: this.bundle,
+			handleEdit: this.handleEdit
 		};
 	},
 

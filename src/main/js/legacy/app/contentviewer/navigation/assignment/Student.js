@@ -141,7 +141,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			component: ControlBar,
 			assignment: this.assignment,
 			doEdit: () => {
-				this.doNavigation('', `${routePart}/edit`, {assignment: this.assignment});
+				if (this.handleEdit) {
+					this.handleEdit(this.assignment);
+				} else {
+					this.doNavigation('', `${routePart}/edit`, {assignment: this.assignment});
+				}
 			},
 			renderTo: this.controlBarEl
 		};
