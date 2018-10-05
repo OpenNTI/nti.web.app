@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		this.currentBundle = bundle;
 
-		if (lessons === item) {
+		if (lessons === item || !item.bundleChanged) {
 			return lessons.bundleChanged(bundle);
 		}
 
