@@ -1,0 +1,230 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user overview recent sessions Basic render test (2 sessions) 1`] = `
+<div
+  className="user-recent-sessions"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="title"
+    >
+      Recent Sessions
+    </div>
+  </div>
+  <div
+    className="items"
+  >
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:00 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:01 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Site admin user overview recent sessions Basic render test (10 sessions) 1`] = `
+<div
+  className="user-recent-sessions"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="title"
+    >
+      Recent Sessions
+    </div>
+  </div>
+  <div
+    className="items"
+  >
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:00 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:01 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:02 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:03 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:04 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:05 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:06 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:07 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:08 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+    <div
+      className="item"
+    >
+      <div
+        className="time"
+      >
+        Oct 30, 2017 12:09 AM
+      </div>
+      <div
+        className="day"
+      >
+        Monday
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Site admin user overview recent sessions Basic render test (no sessions) 1`] = `
+<div
+  className="user-recent-sessions"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="title"
+    >
+      Recent Sessions
+    </div>
+  </div>
+  <div
+    className="no-sessions"
+  >
+    No recent sessions
+  </div>
+</div>
+`;

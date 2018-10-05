@@ -35,8 +35,8 @@ export default class SiteAdminUserOverview extends React.Component {
 
 		try {
 			const service = await getService();
-			const historicalSessions = user.Links.filter(x => x.rel === HISTORICAL_SESSIONS_LINK)[0] || {};
-			const results = historicalSessions ? await service.get(historicalSessions.href) : {};
+			const historicalSessions = user.getLink(HISTORICAL_SESSIONS_LINK);
+			const results = historicalSessions ? await service.get(historicalSessions) : {};
 			const items = (results.Items || []).slice(0, NUM_SESSIONS_TO_SHOW);
 
 			this.setState({loading: false, historicalSessions: items});

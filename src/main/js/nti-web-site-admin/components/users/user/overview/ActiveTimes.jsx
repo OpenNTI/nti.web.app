@@ -28,10 +28,12 @@ export default class ActiveTimes extends React.Component {
 			const { user } = this.props;
 
 			const service = await getService();
-			const analyticsLink = user.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
-			const results = await service.get(analyticsLink.href) || {};
-			const activeTimesSummaryLink = (results.Links || []).filter(x => x.rel === ACTIVE_TIMES_SUMMARY_LINK)[0];
-			const summaryData = await service.get(activeTimesSummaryLink.href) || {};
+			const analyticsLink = user.getLink(ANALYTICS_LINK);
+			console.log('>>> ', analyticsLink);
+			const results = await service.getBatch(analyticsLink) || {};
+			const activeTimesSummaryLink = results.getLink(ACTIVE_TIMES_SUMMARY_LINK);
+			console.log('>>> ', activeTimesSummaryLink);
+			const summaryData = await service.get(activeTimesSummaryLink) || {};
 
 			this.setState({data: summaryData.WeekDays});
 		}
