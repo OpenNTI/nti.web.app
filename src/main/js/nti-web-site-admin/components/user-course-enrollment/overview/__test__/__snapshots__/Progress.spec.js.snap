@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user course enrollment overview progress widget Basic render test (no CourseProgress) 1`] = `null`;
+
+exports[`Site admin user course enrollment overview progress widget Basic render test (no PercentageProgress) 1`] = `
+<div
+  className="site-admin-card site-admin-labeled-value user-course-enrollment-progress"
+>
+  <div
+    className="label"
+  >
+    Course Progress
+  </div>
+  <div
+    className="value"
+  >
+    <div
+      className="circular-progress no-progress"
+    >
+      <svg
+        height={200}
+        viewBox="0 0 36 36"
+        width={200}
+      >
+        <path
+          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+          fill="none"
+          stroke="#eee"
+          strokeDasharray="100, 100"
+          strokeWidth="2"
+        />
+        <path
+          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+          fill="none"
+          stroke="#3fb34f"
+          strokeDasharray="0, 100"
+          strokeWidth="2"
+        />
+      </svg>
+      <div
+        className="value"
+        style={
+          Object {
+            "fontSize": 66.66666666666667,
+            "top": 50,
+            "width": 200,
+          }
+        }
+      >
+        <span
+          className="number"
+        >
+          0
+        </span>
+        <span
+          className="percent"
+          style={
+            Object {
+              "fontSize": 33.333333333333336,
+            }
+          }
+        >
+          %
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Site admin user course enrollment overview progress widget Basic render test (percent = 55) 1`] = `
+<div
+  className="site-admin-card site-admin-labeled-value user-course-enrollment-progress"
+>
+  <div
+    className="label"
+  >
+    Course Progress
+  </div>
+  <div
+    className="value"
+  >
+    <div
+      className="circular-progress"
+    >
+      <svg
+        height={200}
+        viewBox="0 0 36 36"
+        width={200}
+      >
+        <path
+          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+          fill="none"
+          stroke="#eee"
+          strokeDasharray="100, 100"
+          strokeWidth="2"
+        />
+        <path
+          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+          fill="none"
+          stroke="#3fb34f"
+          strokeDasharray="55, 100"
+          strokeWidth="2"
+        />
+      </svg>
+      <div
+        className="value"
+        style={
+          Object {
+            "fontSize": 66.66666666666667,
+            "top": 50,
+            "width": 200,
+          }
+        }
+      >
+        <span
+          className="number"
+        >
+          55
+        </span>
+        <span
+          className="percent"
+          style={
+            Object {
+              "fontSize": 33.333333333333336,
+            }
+          }
+        >
+          %
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,989 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user course enrollment overview view Basic render test 1`] = `
+<div
+  className="site-admin-user-enrollment-overview"
+>
+  <div
+    className="date-info"
+  >
+    <div
+      className="joined"
+    >
+      <div
+        className="site-admin-card site-admin-labeled-value site-admin-date-value"
+      >
+        <div
+          className="label"
+        >
+          Enrolled
+        </div>
+        <div
+          className="value"
+        >
+          <time
+            className="date"
+            dateTime="2017-10-20T00:00:00-05:00"
+          >
+            October 20, 2017
+          </time>
+        </div>
+      </div>
+    </div>
+    <div
+      className="last-activity"
+    >
+      <div
+        className="site-admin-card site-admin-labeled-value site-admin-date-value"
+      >
+        <div
+          className="label"
+        >
+          Last Active
+        </div>
+        <div
+          className="value"
+        >
+          <time
+            className="date"
+            dateTime="2017-10-30T00:00:00-05:00"
+          >
+            Oct 30, 2017 12:00 AM
+          </time>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="admin-active-days"
+  >
+    <div
+      className="daily-activity-header"
+    >
+      Daily Activity
+    </div>
+    <div
+      className="no-data"
+    >
+      No activity found
+    </div>
+  </div>
+  <div
+    className="activity-and-progress"
+  >
+    <div
+      className="active-times-widget"
+    >
+      <div
+        className="active-times-header"
+      >
+        Active Times
+      </div>
+      <div
+        className="active-times-chart"
+      >
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#3182bd",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            12 am
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            2 am
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            4 am
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            6 am
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#3182bd",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#dfdfef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#6baed6",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            8 am
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            10 am
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#08306b",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#dfdfef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            12 pm
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#6baed6",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            2 pm
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#dfdfef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#6baed6",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            4 pm
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#6baed6",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#3182bd",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#3182bd",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            6 pm
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#08306b",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#dfdfef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#6baed6",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            8 pm
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#3182bd",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            10 pm
+          </div>
+        </div>
+        <div
+          className="days-of-week"
+        >
+          <div
+            className="day"
+          >
+            Sun
+          </div>
+          <div
+            className="day"
+          >
+            Mon
+          </div>
+          <div
+            className="day"
+          >
+            Tues
+          </div>
+          <div
+            className="day"
+          >
+            Wed
+          </div>
+          <div
+            className="day"
+          >
+            Thur
+          </div>
+          <div
+            className="day"
+          >
+            Fri
+          </div>
+          <div
+            className="day"
+          >
+            Sat
+          </div>
+        </div>
+      </div>
+      <div
+        className="active-times-popular"
+      >
+        <div
+          className="active-times-popular-header"
+        >
+          Most Popular Time
+        </div>
+        <div
+          className="active-times-popular-content"
+        >
+          Monday
+          , 
+          12 pm
+           – 
+          2 pm
+        </div>
+      </div>
+    </div>
+    <div
+      className="site-admin-card site-admin-labeled-value user-course-enrollment-progress"
+    >
+      <div
+        className="label"
+      >
+        Course Progress
+      </div>
+      <div
+        className="value"
+      >
+        <div
+          className="circular-progress"
+        >
+          <svg
+            height={200}
+            viewBox="0 0 36 36"
+            width={200}
+          >
+            <path
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="#eee"
+              strokeDasharray="100, 100"
+              strokeWidth="2"
+            />
+            <path
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="#3fb34f"
+              strokeDasharray="55, 100"
+              strokeWidth="2"
+            />
+          </svg>
+          <div
+            className="value"
+            style={
+              Object {
+                "fontSize": 66.66666666666667,
+                "top": 50,
+                "width": 200,
+              }
+            }
+          >
+            <span
+              className="number"
+            >
+              55
+            </span>
+            <span
+              className="percent"
+              style={
+                Object {
+                  "fontSize": 33.333333333333336,
+                }
+              }
+            >
+              %
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

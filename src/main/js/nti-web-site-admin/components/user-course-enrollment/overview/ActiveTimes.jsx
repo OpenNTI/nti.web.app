@@ -26,10 +26,10 @@ export default class ActiveTimes extends React.Component {
 		const { enrollment } = this.props;
 
 		const service = await getService();
-		const analyticsLink = enrollment.Links.filter(x => x.rel === ANALYTICS_LINK)[0];
-		const results = await service.get(analyticsLink.href) || {};
-		const activeTimesSummaryLink = (results.Links || []).filter(x => x.rel === ACTIVE_TIMES_SUMMARY_LINK)[0];
-		const summaryData = await service.get(activeTimesSummaryLink.href) || {};
+		const analyticsLink = enrollment.getLink(ANALYTICS_LINK);
+		const results = await service.getBatch(analyticsLink) || {};
+		const activeTimesSummaryLink = results.getLink(ACTIVE_TIMES_SUMMARY_LINK);
+		const summaryData = await service.get(activeTimesSummaryLink) || {};
 
 		this.setState({data: summaryData.WeekDays});
 	}

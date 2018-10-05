@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user course enrollment frame Basic render test 1`] = `
+<div
+  className="site-admin-user-enrollment-view"
+>
+  <div
+    className="nav-content-container"
+  >
+    <div
+      className="nav-content-nav nav-bar"
+    >
+      <div
+        className="header"
+      >
+        <div
+          className="nti-link-to-path"
+          to="site-admin.users.user-overview"
+        >
+          <i
+            className="icon-chevron-left"
+          />
+          <span>
+            Back to User
+          </span>
+        </div>
+      </div>
+      <div
+        className="site-admin-card site-admin-user-enrollment-nav-bar"
+      >
+        <div
+          className="site-admin-user-enrollment-identity"
+        >
+          <div
+            className="profile-image"
+          >
+            <img
+              className="enrollment-course-image"
+              src=""
+            />
+            <div
+              className="user-avatar"
+            />
+          </div>
+          <div
+            className="enrollment-info"
+          >
+            <div
+              className="plain-text"
+            >
+              Activity for
+            </div>
+            <div
+              className="plain-text"
+            >
+              in
+            </div>
+            <div
+              className="course-title"
+            />
+          </div>
+        </div>
+        <ul
+          className="site-admin-user-tabs"
+        >
+          <li>
+            <div
+              className="nti-link-to-path"
+              exact={true}
+              to="./"
+            >
+              Overview
+            </div>
+          </li>
+          <li>
+            <div
+              className="nti-link-to-path"
+              to="./reports"
+            >
+              Reports
+            </div>
+          </li>
+          <li>
+            <div
+              className="nti-link-to-path"
+              to="./progress"
+            >
+              Progress
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      className="nav-content-content content"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user course enrollment progress view Basic render test (no course) 1`] = `
+<div
+  className="site-admin-card"
+/>
+`;
+
+exports[`Site admin user course enrollment progress view Basic render test (no enrollment) 1`] = `
+<div
+  className="site-admin-card"
+/>
+`;
+
+exports[`Site admin user course enrollment progress view Basic render test 1`] = `
+<div
+  className="site-admin-card"
+>
+  <div
+    className="progress-overview"
+  >
+    <div
+      className="progress-overview-stats"
+    >
+      <div
+        className="progress-overview-stats-charts large"
+      >
+        <div
+          className="switcher"
+        >
+          <span
+            className="chart"
+          >
+            Course Standing
+          </span>
+        </div>
+        <div
+          className="active-chart"
+        >
+          <div
+            className="progress-overview-charts-course-standing"
+          >
+            <div
+              className="error-container"
+            >
+              <div
+                className="error"
+              >
+                Unable to load progress statistics.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

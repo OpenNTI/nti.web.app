@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user course enrollment overview last activity widget Basic render test 1`] = `
+<div
+  className="site-admin-card site-admin-labeled-value site-admin-date-value"
+>
+  <div
+    className="label"
+  >
+    Last Active
+  </div>
+  <div
+    className="value"
+  >
+    <time
+      className="date"
+      dateTime="2017-10-30T00:00:00-05:00"
+    >
+      Oct 30, 2017 12:00 AM
+    </time>
+  </div>
+</div>
+`;

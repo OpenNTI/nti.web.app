@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user table invite dialog test Test date is now 1`] = `
+<div
+  className="site-admin-invite-people-dialog"
+>
+  <div
+    className="title"
+  >
+    <div
+      className="panel-title-bar"
+    >
+      <h1>
+        Invite People
+      </h1>
+      <i
+        aria-label="Close"
+        className="icon-light-x"
+        data-tip="Close"
+        onClick={[Function]}
+        role="button"
+      />
+    </div>
+  </div>
+  <div
+    className="contents"
+  >
+    <div
+      className="invite-people-to-field"
+    >
+      <div
+        className="label"
+      >
+        To
+      </div>
+      <div
+        className="token-editor"
+        onClick={[Function]}
+      >
+        <span
+          className="placeholder"
+        >
+          Enter an email address
+        </span>
+        <input
+          className="token"
+          maxLength={64}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onKeyDown={[Function]}
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className="invite-people-role-field"
+    >
+      <div
+        className="label"
+      >
+        Role
+      </div>
+      <div
+        className="select-box"
+        tabIndex="-1"
+      >
+        <div
+          className="menu-label selected"
+          onClick={[Function]}
+        >
+          <span
+            className="option-label"
+          >
+            Learner
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      className="invite-people-message-field"
+    >
+      <div
+        className="textarea-container"
+      >
+        <textarea
+          className="textarea textarea-text"
+          onChange={[Function]}
+          placeholder="Write a personal message..."
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="dialog-buttons"
+  >
+    <button
+      className="button cancel secondary"
+      onClick={[Function]}
+      role="button"
+    >
+      Cancel
+    </button>
+    <button
+      className="button save disabled primary"
+      onClick={null}
+      role="button"
+    >
+      Send
+    </button>
+  </div>
+</div>
+`;
