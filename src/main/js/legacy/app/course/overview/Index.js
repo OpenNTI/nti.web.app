@@ -184,6 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			delete this.assignmentViewer;
 		}
 
+
 		return lessons.handleRoute(route.path, route.precache);
 	},
 
@@ -298,6 +299,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 				if (me.assignmentViewer) {
 					me.assignmentViewer.destroy();
+					delete me.assignmentViewer;
 				}
 
 				me.reader = me.add({
