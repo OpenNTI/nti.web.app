@@ -384,6 +384,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				xtype: 'content-viewer',
 				bundle: this.currentBundle,
 				handleNavigation: this.handleNavigation.bind(this),
+				handleEdit: (editAssignment) => {
+					const coursePart = encodeForURI(this.currentBundle.getId());
+					const assignmentPart = encodeForURI(editAssignment.getId());
+
+					this.pushRootRoute(editAssignment.get('title'), `/course/${coursePart}/assignments/${assignmentPart}/edit`, {assignment: editAssignment});
+				},
 				assignment,
 				assignmentHistory,
 				path: [
