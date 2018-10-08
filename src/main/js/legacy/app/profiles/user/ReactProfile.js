@@ -43,6 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		this.initRouter();
 
+		this.addRoute('/edit', this.showEdit.bind(this));
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));
 		this.addRoute('/membership', this.showMembership.bind(this));
@@ -93,6 +94,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				if (context === 'transcripts') {
 					return `${base}transcripts/`;
 				}
+
+				if (context === 'edit') {
+					return `${base}edit/`;
+				}
 			}
 		});
 
@@ -127,6 +132,27 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.bodyContainer.removeAll(true);
 
 		return this.bodyContainer.add(cmp);
+	},
+
+
+	showEdit () {
+		this.updateHeader();
+
+		const baseroute = this.getBaseRoute();
+		const active = this.getActive('[isEdit]');
+
+		if (active) {
+			active.setBaseRoute(baseroute);
+		} else {
+			this.setActive({
+				xtype: 'react',
+				isEdit: true,
+				component: User.Edit,
+				user: this.interfaceEntity,
+				addHistory: true,
+				baseroute
+			});
+		}
 	},
 
 
