@@ -121,8 +121,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 				me.fireEvent('reader-set');
 
 				me.mon(me.reader, {
-					'assignment-submitted': me.fireEvent.bind(me, 'assignment-submitted'),
-					'assessment-graded': me.fireEvent.bind(me, 'assessment-graded')
+					'assignment-submitted': (...args) => {
+						me.fireEvent('assignment-submitted', ...args);
+
+						if (me.onAssignmentSubmitted) {
+							me.onAssignmentSubmitted(...args);
+						}
+					},
+					'assessment-graded': (...args) => {
+						me.fireEvent('assessment-graded', ...args);
+
+						if (me.onAssessmentGraded) {
+							me.onAssessmentGraded(...args);
+						}
+					}
 				});
 
 				me.initSearch();

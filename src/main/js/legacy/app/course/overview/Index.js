@@ -1,6 +1,8 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI, decodeFromURI, isNTIID } = require('@nti/lib-ntiids');
 
+const lazy = require('legacy/util/lazy-require')
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const LibraryActions = require('legacy/app/library/Actions');
 const Globals = require('legacy/util/Globals');
 const Lesson = require('legacy/model/courses/overview/Lesson');
@@ -361,12 +363,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		return Promise.all([
 			this.store.onceBuilt()
 				.then(() => this.store.getNode(lessonId)),
+			this.currentBundle.getAssignments(),
 			this.currentBundle.getAssignments()
 				.then(assignments => assignments.fetchAssignment(assignmentId)),
 			this.currentBundle.getAssignments()
 				.then(assignments => assignments.getHistoryItem(assignmentId, true))
 				.catch(() => null)
-		]).then(([lesson, assignment, assignmentHistory]) => {
+		]).then(([lesson, assignments, assignment, assignmentHistory]) => {
 			if (this.reader) {
 				Ext.destroy(this.reader);
 				delete this.reader;
@@ -391,6 +394,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 					const assignmentPart = encodeForURI(editAssignment.getId());
 
 					this.pushRootRoute(editAssignment.get('title'), `/course/${coursePart}/assignments/${assignmentPart}/edit`, {assignment: editAssignment});
+				},
+				onAssignmentSubmitted: (submittedId, historyItemLink) => {
+					Service.request(historyItemLink)
+						.then(resp => lazy.ParseUtils.parseItems(JSON.parse(resp))[0])
+						.then((history) => {
+							if (this.assignmentViewer) {
+								this.assignmentViewer.updateHistory(history);
+							}
+
+							return history;
+						})
+						.then(history => assignments.updateHistoryItem(submittedId, history));
+
 				},
 				assignment,
 				assignmentHistory,
