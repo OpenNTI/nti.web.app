@@ -5,6 +5,7 @@ const {isMe} = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const UserRepository = require('legacy/cache/UserRepository');
 const UserModel = require('legacy/model/User');
+const PersonalBlog = require('legacy/model/forums/PersonalBlog');
 
 const Header = require('./Tabs');
 
@@ -186,6 +187,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			cmp = this.setActive({
 				xtype: 'profile-user-activity'
 			});
+
+			this.addChildRouter(cmp);
 		}
 
 		return cmp.userChanged(this.activeEntity, this.isMe)
@@ -243,6 +246,28 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				baseroute
 			});
 		}
+	},
+
+	getRouteForBlog: function (blog, path) {
+		// Select the activity tab.
+		return {
+			path: '/activity/',
+			isFull: true
+		};
+	},
+
+	getRouteForPath: function (path, user) {
+		var root = path[0],
+			subPath = path.slice(1);
+
+		if (root && root instanceof PersonalBlog) {
+			return this.getRouteForBlog(root, subPath);
+		}
+
+		return {
+			path: typeof root === 'string' ? root : '',
+			isFull: true
+		};
 	}
 
 
