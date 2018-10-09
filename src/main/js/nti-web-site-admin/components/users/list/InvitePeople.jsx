@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {DialogButtons, TokenEditor, SelectBox, Panels, Input, Loading} from '@nti/web-commons';
 import {validate as isEmail} from 'email-validator';
+import { Connectors } from '@nti/lib-store';
 
 const DEFAULT_TEXT = {
 	people: 'People',
@@ -14,10 +15,15 @@ const DEFAULT_TEXT = {
 const t = scoped('nti-web-site-admin.componentsusers.list.InvitePeople', DEFAULT_TEXT);
 
 
-export default class InvitePeople extends React.Component {
+export default
+@Connectors.Any.connect(['inviteError', 'hideInviteDialog', 'sendLearnerInvites', 'sendAdminInvites'])
+class InvitePeople extends React.Component {
 	static propTypes = {
-		store: PropTypes.object.isRequired,
-		loading: PropTypes.bool
+		loading: PropTypes.bool,
+		hideInviteDialog: PropTypes.func.isRequired,
+		sendLearnerInvites: PropTypes.func.isRequired,
+		sendAdminInvites: PropTypes.func.isRequired,
+		inviteError: PropTypes.string
 	}
 
 	state = {
@@ -26,17 +32,17 @@ export default class InvitePeople extends React.Component {
 	}
 
 	onCancel = () => {
-		this.props.store.hideInviteDialog();
+		this.props.hideInviteDialog();
 	}
 
 	onSave = async () => {
-		const {store} = this.props;
+		const {sendAdminInvites, sendLearnerInvites} = this.props;
 		const {role, message, emails, file} = this.state;
 
 		if(role === 'learner') {
-			store.sendLearnerInvites(emails, message, file);
+			sendLearnerInvites(emails, message, file);
 		} else {
-			store.sendAdminInvites(emails, message, file);
+			sendAdminInvites(emails, message, file);
 		}
 	}
 
@@ -134,27 +140,28 @@ export default class InvitePeople extends React.Component {
 
 	render () {
 		const { emails, file } = this.state;
-		const { loading } = this.props;
+		const { loading, inviteError } = this.props;
 
 		const buttons = [
 			{
 				label: 'Cancel',
 				className: 'cancel',
-				onClick: !loading && this.onCancel
+				onClick: loading ? () => {} : this.onCancel
 			},
 			{
 				label: 'Send',
 				className: 'save',
 				disabled: loading || (!file && (!emails || emails.length === 0)),
-				onClick: !loading && this.onSave
+				onClick: loading ? () => {} : this.onSave
 			}
 		];
 
 		return (
 			<div className="site-admin-invite-people-dialog">
 				<div className="title">
-					<Panels.TitleBar title={t('title')} iconAction={!loading && this.onCancel} />
+					<Panels.TitleBar title={t('title')} iconAction={loading ? () => {} : this.onCancel} />
 				</div>
+				{inviteError && <Panels.MessageBar message={inviteError} error />}
 				<div className="contents">
 					{this.renderContents()}
 				</div>

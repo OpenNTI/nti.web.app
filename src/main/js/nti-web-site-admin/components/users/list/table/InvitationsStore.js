@@ -63,7 +63,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 		const service = await getService();
 
 		this.set('loading', true);
-		this.set('error', null);
+		this.set('inviteError', null);
 
 		try {
 			let payload;
@@ -93,10 +93,10 @@ class UserInvitationsStore extends Stores.BoundStore {
 			this.set('loading', false);
 
 			if(e.statusCode !== 409) {
-				this.set('error', e.Message || e);
+				this.set('inviteError', e.Message || e);
 			}
 			else {
-				this.set('error', null);
+				this.set('inviteError', null);
 			}
 		}
 	}
