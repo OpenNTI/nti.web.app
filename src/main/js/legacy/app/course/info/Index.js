@@ -60,6 +60,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 
 	onRouteActivate: function () {
 		this.unmask();
+
+		if (this.body && this.body.onRouteActivate) {
+			this.body.onRouteActivate();
+		}
 	},
 
 
