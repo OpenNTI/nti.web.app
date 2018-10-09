@@ -5,6 +5,7 @@ const {isMe} = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const UserRepository = require('legacy/cache/UserRepository');
 const UserModel = require('legacy/model/User');
+const PersonalBlog = require('legacy/model/forums/PersonalBlog');
 const AnalyticsUtil = require('legacy/util/Analytics');
 
 const Header = require('./Tabs');
