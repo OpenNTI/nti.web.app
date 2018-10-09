@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		if (!cmp) {
 			cmp = this.setActive({
-				xtype: 'user-profile-membership'
+				xtype: 'user-profile-achievements'
 			});
 		}
 
