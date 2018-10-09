@@ -5,7 +5,7 @@ const {isMe} = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const UserRepository = require('legacy/cache/UserRepository');
 const UserModel = require('legacy/model/User');
-const PersonalBlog = require('legacy/model/forums/PersonalBlog');
+const AnalyticsUtil = require('legacy/util/Analytics');
 
 const Header = require('./Tabs');
 
@@ -156,12 +156,37 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
+	startResourceViewed: function () {
+		var id = this.activeEntity && this.activeEntity.getId();
+
+		if (id && !this.hasCurrentTimer) {
+			AnalyticsUtil.startEvent(id, 'ProfileAboutView');
+
+			console.log('analytics event started');
+
+			this.hasCurrentTimer = true;
+		}
+	},
+
+	stopResourceViewed: function () {
+		var id = this.activeEntity && this.activeEntity.getId();
+
+		if (id && this.hasCurrentTimer) {
+			AnalyticsUtil.stopEvent(id, 'ProfileAboutView');
+			delete this.hasCurrentTimer;
+
+			console.log('analytics event stopped');
+		}
+	},
+
 
 	showAbout () {
 		this.updateHeader();
 
 		const baseroute = this.getBaseRoute();
 		const active = this.getActive('[isAbout]');
+
+		this.startResourceViewed();
 
 		if (active) {
 			active.setBaseRoute(baseroute);
@@ -175,6 +200,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				baseroute
 			});
 		}
+	},
+
+	onRouteDeactivate () {
+		this.stopResourceViewed();
 	},
 
 
