@@ -5,8 +5,8 @@ import renderer from 'react-test-renderer';
 import InvitePeople from '../InvitePeople';
 
 describe('Site admin user table invite dialog test', () => {
-	test('Test date is now', () => {
-		const colCmp = renderer.create(<InvitePeople/>);
+	test('General Snapshot', () => {
+		const colCmp = renderer.create(<InvitePeople store={{}} />);
 
 		const tree = colCmp.toJSON();
 
