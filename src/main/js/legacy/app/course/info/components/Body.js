@@ -54,6 +54,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		return this.onceContentSet;
 	},
 
+	onRouteActivate () {
+		const infoCmp = this.getComponent('info');
+		if (infoCmp) {
+			infoCmp.onRouteActivate();
+		}
+	},
 
 	onRouteDeactivate: function () {
 		var infoCmp = this.getComponent('info');

@@ -25,13 +25,21 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		this.CourseStore = CoursesStateStore.getInstance();
 	},
 
-	onRouteDeactivate: function () {
+	onRouteDeactivate () {
 		if (!this.rendered) { return; }
 
 		var videos = this.el.dom.getElementsByTagName('video');
 
 		for(let v of (videos || [])) {
 			v.pause && v.pause();
+		}
+
+		this.InfoCmp.onRouteDeactivate();
+	},
+
+	onRouteActivate () {
+		if (this.InfoCmp) {
+			this.InfoCmp.onRouteActivate();
 		}
 	},
 
