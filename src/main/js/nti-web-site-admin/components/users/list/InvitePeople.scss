@@ -20,9 +20,10 @@
 		.invite-people-to-field {
 			display: flex;
 			border-bottom: solid 1px #ddd;
+			border-top: solid 1px #ddd;
 
 			.token-editor {
-				width: 100%;
+				flex-grow: 1;
 				border: none;
 				min-height: 1.5rem;
 
@@ -34,6 +35,39 @@
 			.label {
 				width: auto;
 			}
+
+			.nti-file-input {
+				span.button.file-picker {
+					line-height: rem-calc(30px);
+					margin-top: rem-calc(5px);
+				}
+			}
+
+			.file-pill-wrap {
+				font-size: 0.875rem;
+				padding: 0.375rem;
+				background: white;
+				min-height: 1.5rem;
+				line-height: 1.28571;
+
+				.file-pill {
+					display: inline-block;
+					background: #fbfbfb;
+					border: 1px solid #e2e2e2;
+					padding: 0.1875rem 0.5rem 0.3125rem 0.75rem;
+					color: #757474;
+					font-size: 0.875rem;
+					line-height: 1.28571;
+					margin: 0.1875rem;
+
+					i.icon-bold-x {
+						color: #b8b8b8;
+						cursor: pointer;
+						margin-left:  0.375rem;
+					}
+				}
+			}
+
 		}
 
 		.invite-people-role-field {

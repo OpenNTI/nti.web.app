@@ -51,6 +51,43 @@ exports[`Site admin user table invite dialog test Test date is now 1`] = `
           value=""
         />
       </div>
+      <div
+        className="nti-file-input"
+      >
+        <span
+          accept=".csv"
+          aria-label="Upload CSV File"
+          className="button file-picker"
+          data-tip="Upload CSV File"
+          onChange={[Function]}
+          onDrop={[Function]}
+          role="button"
+        >
+          <input
+            accept=".csv"
+            onChange={[Function]}
+            onDrop={[Function]}
+            type="file"
+          />
+          <span>
+            <i
+              className="small icon-upload"
+            />
+            <span>
+              Upload CSV File
+            </span>
+          </span>
+        </span>
+        <span
+          className="file-select-filename"
+        >
+          <span
+            className="nofile"
+          >
+            
+          </span>
+        </span>
+      </div>
     </div>
     <div
       className="invite-people-role-field"

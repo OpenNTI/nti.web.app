@@ -6,7 +6,9 @@ import {validate as isEmail} from 'email-validator';
 
 const DEFAULT_TEXT = {
 	people: 'People',
-	title: 'Invite People'
+	title: 'Invite People',
+	importFile: 'Upload CSV File',
+	role: 'Role'
 };
 
 const t = scoped('nti-web-site-admin.componentsusers.list.InvitePeople', DEFAULT_TEXT);
@@ -16,16 +18,11 @@ export default class InvitePeople extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
 		loading: PropTypes.bool
-
 	}
-
-	constructor (props) {
-		super(props);
-	}
-
 
 	state = {
-		role: 'learner'
+		role: 'learner',
+		file: null
 	}
 
 	onCancel = () => {
@@ -34,17 +31,25 @@ export default class InvitePeople extends React.Component {
 
 	onSave = async () => {
 		const {store} = this.props;
-		const {role, message, emails} = this.state;
+		const {role, message, emails, file} = this.state;
 
 		if(role === 'learner') {
-			store.sendLearnerInvites(emails, message);
+			store.sendLearnerInvites(emails, message, file);
 		} else {
-			store.sendAdminInvites(emails, message);
+			store.sendAdminInvites(emails, message, file);
 		}
 	}
 
 	onToChange = (emails) => {
-		this.setState({emails});
+		this.setState({ emails });
+	}
+
+	onMessageChange = (message) => {
+		this.setState({ message });
+	}
+
+	onRoleChange = (role) => {
+		this.setState({ role });
 	}
 
 	validator = (value) => {
@@ -57,44 +62,52 @@ export default class InvitePeople extends React.Component {
 		return errors;
 	}
 
-	renderToField () {
-		const { emails } = this.state;
+	renderFileUpload () {
+		return <Input.File label={t('importFile')} accept=".csv" onFileChange={file => this.setState({ file })} />;
+	}
 
+	renderToField () {
+		const { emails, file } = this.state;
+		const noEmails = !emails || emails.length === 0;
 		return (
 			<div className="invite-people-to-field">
 				<div className="label">To</div>
-				<TokenEditor
-					value={emails}
-					onChange={this.onToChange}
-					placeholder={emails && emails.length > 0 ? 'Add more email addresses' : 'Enter an email address'}
-					validator={this.validator}
-					maxTokenLength={64}/>
+				{!file && (
+					<TokenEditor
+						value={emails}
+						onChange={this.onToChange}
+						placeholder={emails && emails.length > 0 ? 'Add more email addresses' : 'Enter an email address'}
+						validator={this.validator}
+						maxTokenLength={64}
+					/>
+				)}
+				{file && (
+					<div className="file-pill-wrap">
+						<div className="file-pill">
+							{file.name}
+							<i className="icon-bold-x small" onClick={() => this.setState({ file: null })} />
+						</div>
+					</div>
+				)}
+				{!file && noEmails && this.renderFileUpload()}
 			</div>
 		);
 	}
 
-	onRoleChange = (role) => {
-		this.setState({role});
-	}
-
 	renderRoleField () {
-		const {role} = this.state;
+		const { role } = this.state;
 
 		const OPTIONS = [
-			{ label: 'Learner', value: 'learner'},
-			{ label: 'Administrator', value: 'admin'}
+			{ label: 'Learner', value: 'learner' },
+			{ label: 'Administrator', value: 'admin' }
 		];
 
 		return (
 			<div className="invite-people-role-field">
-				<div className="label">Role</div>
+				<div className="label">{t('role')}</div>
 				<SelectBox options={OPTIONS} onChange={this.onRoleChange} value={role}/>
 			</div>
 		);
-	}
-
-	onMessageChange = (message) => {
-		this.setState({message});
 	}
 
 	renderMessageField () {
@@ -105,9 +118,22 @@ export default class InvitePeople extends React.Component {
 		);
 	}
 
+	renderContents () {
+		const { loading } = this.props;
+
+		if (loading) { return <Loading.Mask />; }
+
+		return (
+			<>
+				{this.renderToField()}
+				{this.renderRoleField()}
+				{this.renderMessageField()}
+			</>
+		);
+	}
 
 	render () {
-		const { emails } = this.state;
+		const { emails, file } = this.state;
 		const { loading } = this.props;
 
 		const buttons = [
@@ -119,11 +145,10 @@ export default class InvitePeople extends React.Component {
 			{
 				label: 'Send',
 				className: 'save',
-				disabled: loading || (!emails || emails.length === 0),
+				disabled: loading || (!file && (!emails || emails.length === 0)),
 				onClick: !loading && this.onSave
 			}
 		];
-
 
 		return (
 			<div className="site-admin-invite-people-dialog">
@@ -131,10 +156,7 @@ export default class InvitePeople extends React.Component {
 					<Panels.TitleBar title={t('title')} iconAction={!loading && this.onCancel} />
 				</div>
 				<div className="contents">
-					{loading && <Loading.Mask/>}
-					{!loading && this.renderToField()}
-					{!loading && this.renderRoleField()}
-					{!loading && this.renderMessageField()}
+					{this.renderContents()}
 				</div>
 				<DialogButtons buttons={buttons}/>
 			</div>

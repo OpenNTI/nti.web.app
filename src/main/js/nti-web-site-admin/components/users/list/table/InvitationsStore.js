@@ -59,18 +59,27 @@ class UserInvitationsStore extends Stores.BoundStore {
 		}
 	}
 
-	async sendInvites (emails, message, isAdmin) {
+	async sendInvites ({ emails, message, file, isAdmin }) {
 		const service = await getService();
 
 		this.set('loading', true);
 		this.set('error', null);
 
 		try {
-			let payload = {
-				invitations: emails.map(x=>{return {'receiver': x, 'receiver_name': x};}),
-				message,
-				MimeType: isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType
-			};
+			let payload;
+
+			if (file) {
+				payload = new FormData();
+				payload.set('message', message);
+				payload.set('MimeType', isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType);
+				payload.set('source', file);
+			} else {
+				payload = {
+					invitations: emails.map(x => { return { 'receiver': x, 'receiver_name': x }; }),
+					message,
+					MimeType: isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType
+				};
+			}
 
 			const invitationsCollection = service.getCollection('Invitations', 'Invitations');
 
@@ -96,13 +105,13 @@ class UserInvitationsStore extends Stores.BoundStore {
 		return (this.get('selectedUsers') || []).length;
 	}
 
-	sendLearnerInvites (emails, message) {
-		this.sendInvites(emails, message);
+	sendLearnerInvites (emails, message, file) {
+		this.sendInvites({ emails, message, file });
 	}
 
 
-	sendAdminInvites (emails, message) {
-		this.sendInvites(emails, message, true);
+	sendAdminInvites (emails, message, file) {
+		this.sendInvites({ emails, message, file, isAdmin: true });
 	}
 
 	loadPage (pageNumber) {
