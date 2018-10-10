@@ -7,6 +7,7 @@ const UserRepository = require('legacy/cache/UserRepository');
 const UserModel = require('legacy/model/User');
 const PersonalBlog = require('legacy/model/forums/PersonalBlog');
 const AnalyticsUtil = require('legacy/util/Analytics');
+const SettingsWindow = require('legacy/app/account/settings/Window');
 
 const Header = require('./Tabs');
 
@@ -72,6 +73,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			xtype: 'react',
 			component: Header,
 			entity: interfaceUser,
+			launchEditor: () => {
+				var win = SettingsWindow.create({
+					onUserChange: async (modifiedUser) => {
+						this.headerCmp.setProps({entity: this.interfaceEntity});
+					}
+				});
+
+				win.show();
+				win.center();
+			},
 			getRouteFor: (obj, context) => {
 				if (!obj.isUser) { return; }
 

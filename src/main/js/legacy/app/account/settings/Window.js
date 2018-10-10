@@ -116,6 +116,10 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 				el.down('.identity div.name').update(r.getName());
 				el.down('.identity div.affiliation').update(r.get('affiliation'));
 				el.down('.identity .avatar-wrapper').dom.innerHTML = Ext.util.Format.avatar(r);
+
+				if(me.onUserChange) {
+					me.onUserChange(r);
+				}
 			}
 		});
 	},
