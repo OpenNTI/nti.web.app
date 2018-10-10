@@ -76,6 +76,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			launchEditor: () => {
 				var win = SettingsWindow.create({
 					onUserChange: async (modifiedUser) => {
+						await this.interfaceEntity.refresh();
+
 						this.headerCmp.setProps({entity: this.interfaceEntity});
 					}
 				});
