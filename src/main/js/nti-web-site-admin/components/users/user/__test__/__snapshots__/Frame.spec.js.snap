@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Site admin user frame test Basic render test 1`] = `
+<div
+  className="site-admin-user-view"
+>
+  <div
+    className="nav-content-container"
+  >
+    <div
+      className="nav-content-nav nav-bar"
+    >
+      <div
+        className="header"
+      >
+        <div
+          className="nti-link-to-path"
+          to="site-admin.users"
+        >
+          <i
+            className="icon-chevron-left"
+          />
+          <span>
+            Back to People
+          </span>
+        </div>
+      </div>
+      <div
+        className="site-admin-card site-admin-user-nav-bar"
+      >
+        <div
+          className="site-admin-user-identity"
+        >
+          <img
+            alt="Avatar for undefined"
+            className="avatar avatar-color-6"
+            src="data:image/png;base64,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"
+          />
+          <span
+            className="username"
+            rel="author"
+          />
+          <div
+            className="actions"
+          >
+            <span
+              className="email"
+            />
+            <div
+              className="nti-link-to-path profile"
+              to="#"
+            >
+              <i
+                className="icon-goto"
+              />
+              <span>
+                Profile
+              </span>
+            </div>
+          </div>
+        </div>
+        <ul
+          className="site-admin-tabs"
+        >
+          <li>
+            <div
+              className="nti-link-to-path"
+              exact={true}
+              to="./"
+            >
+              Overview
+            </div>
+          </li>
+          <li />
+          <li>
+            <div
+              className="nti-link-to-path"
+              to="./courses"
+            >
+              NextThought.view.library.View.course
+            </div>
+          </li>
+          <li>
+            <div
+              className="nti-link-to-path"
+              to="./transcript"
+            >
+              Transcript
+            </div>
+          </li>
+          <li>
+            <div
+              className="nti-link-to-path"
+              to="./reports"
+            >
+              Reports
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      className="nav-content-content content"
+    />
+  </div>
+</div>
+`;

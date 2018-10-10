@@ -41,6 +41,7 @@ export default class UserBookStore extends Stores.SimpleStore {
 
 			this.emitChange('items');
 		} catch (e) {
+			console.log(e);
 			this.set('error', e);
 			this.emitChange('error');
 		} finally {

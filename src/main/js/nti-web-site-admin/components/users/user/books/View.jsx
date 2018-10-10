@@ -11,14 +11,15 @@ import BookListItem from './BookListItem';
 import Store from './Store';
 
 const DEFAULT_TEXT = {
-	error: 'Unable to load transcript.'
+	error: 'Unable to load transcript.',
+	noBooks: 'This user does not have access to any books'
 };
 const t = scoped('nti-site-admin.users.user.Transcript', DEFAULT_TEXT);
 
 const propMap = {
 	items: 'items',
 	loading: 'loading',
-	error: 'error',
+	error: 'error'
 };
 
 export default
@@ -98,6 +99,6 @@ class SiteAdminUserBooks extends React.Component {
 
 
 	renderEmptyState () {
-
+		return <div className="empty-state">{t('noBooks')}</div>;
 	}
 }
