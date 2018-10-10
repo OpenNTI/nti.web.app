@@ -54,10 +54,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.callParent(arguments);
 
 		var commentBox;
-
+		this.afterImageLoad = this.afterImageLoad.bind(this);
 		this.feedbackList = this.down('assignment-feedback-list');
 		this.feedbackList.syncElementHeight = this.syncElementHeight.bind(this);
 		this.feedbackList.openReply = this.showEditor.bind(this);
+		this.feedbackList.el.dom.addEventListener('load', this.afterImageLoad, true);
 
 		this.comment = this.down('box[name=comment]');
 
@@ -98,6 +99,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 				return false;
 			}
 		});
+	},
+
+	beforeDestroy () {
+		this.callParent(arguments);
+		this.feedbackList.el.dom.removeEventListener('load', this.afterImageLoad, true);
+	},
+
+	afterImageLoad () {
+		this.syncElementHeight();
 	},
 
 	addFeedback: function (editor) {
