@@ -156,6 +156,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		const baseroute = this.getBaseRoute();
 		const active = this.getActive('[isEdit]');
 
+		this.setContextualTitle('Edit');
+
 		if (active) {
 			active.setBaseRoute(baseroute);
 		} else {
@@ -193,6 +195,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
+	setContextualTitle (context) {
+		this.setTitle(context + ' - ' + this.activeEntity.get('displayName'));
+	},
 
 	showAbout () {
 		this.updateHeader();
@@ -201,6 +206,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		const active = this.getActive('[isAbout]');
 
 		this.startResourceViewed();
+
+		this.setContextualTitle('About');
 
 		if (active) {
 			active.setBaseRoute(baseroute);
@@ -226,6 +233,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		let cmp = this.getActive('profile-user-activity');
 
+		this.setContextualTitle('Activity');
+
 		if (!cmp) {
 			cmp = this.setActive({
 				xtype: 'profile-user-activity'
@@ -244,6 +253,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		let cmp = this.getActive('user-profile-membership');
 
+		this.setContextualTitle('Membership');
+
 		if (!cmp) {
 			cmp = this.setActive({
 				xtype: 'user-profile-membership'
@@ -259,6 +270,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.updateHeader();
 
 		let cmp = this.getActive('user-profile-achievements');
+
+		this.setContextualTitle('Achievements');
 
 		if (!cmp) {
 			cmp = this.setActive({
@@ -276,6 +289,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		const baseroute = this.getBaseRoute();
 		const active = this.getActive('[isTranscripts]');
+
+		this.setContextualTitle('Transcripts');
 
 		if (active) {
 			active.setBaseRoute(baseroute);
