@@ -85,9 +85,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		this.AccountActions = AccountActions.create();
 
-		if (this.assignmentHistory) {
-			rd.title = this.assignment.get('title');
+		rd.title = this.assignment.get('title');
 
+		if (this.assignmentHistory) {
 			if (this.assignmentHistory instanceof Promise) {
 				this.assignmentHistory.then(this.setHistory.bind(this));
 			} else {
