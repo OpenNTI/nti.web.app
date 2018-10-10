@@ -6,7 +6,7 @@ import InvitePeople from '../InvitePeople';
 
 describe('Site admin user table invite dialog test', () => {
 	test('General Snapshot', () => {
-		const colCmp = renderer.create(<InvitePeople store={{}} />);
+		const colCmp = renderer.create(<InvitePeople loading={false} hideInviteDialog={() => {}} sendLearnerInvites={() => {}} sendAdminInvites={() => {}} />);
 
 		const tree = colCmp.toJSON();
 

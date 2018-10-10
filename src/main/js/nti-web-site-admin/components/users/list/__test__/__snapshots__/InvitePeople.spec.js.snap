@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Site admin user table invite dialog test Test date is now 1`] = `
+exports[`Site admin user table invite dialog test General Snapshot 1`] = `
 <div
   className="site-admin-invite-people-dialog"
 >
