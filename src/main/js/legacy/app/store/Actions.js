@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			return;
 		}
 
-		sender.lockPurchaseAction;
+		sender.lockPurchaseAction = true;
 
 		function onPriced (pricing) {
 			delete sender.lockPurchaseAction;
