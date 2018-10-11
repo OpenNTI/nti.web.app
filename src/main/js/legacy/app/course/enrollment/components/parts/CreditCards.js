@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	alias: 'widget.enrollment-credit-card',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'credit-card-container {size}'}
+		{cls: 'credit-card-container nti-web-credit-card-override {size}'}
 	]),
 
 

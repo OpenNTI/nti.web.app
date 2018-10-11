@@ -1,0 +1,30 @@
+.nti-web-credit-card-override {
+	max-width: 406px;
+
+	.nti-credit-card-form {
+		.name-input {
+			padding-top: 7px;
+			padding-bottom: 7px;
+			height: 2.4rem;
+		}
+
+		.card-input .card-number,
+		.card-input .card-expiry,
+		.card-input .card-cvc {
+			padding-top: 3px;
+			padding-bottom: 3px;
+		}
+
+		.name-input,
+		.card-input .card-number,
+		.card-input .card-expiry,
+		.card-input .card-cvc {
+			border: 1px solid #b8b8b8;
+			box-shadow: inset 4px 0 0 0 #b8b8b8;
+			border-left-width: 0;
+			background: white;
+			border-radius: 0;
+		}
+	}
+
+}
