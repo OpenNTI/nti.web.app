@@ -22,6 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				name: this.reveals
 			};
 		}
+
 	},
 
 

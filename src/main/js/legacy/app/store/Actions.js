@@ -80,44 +80,24 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @returns {void}
 	 */
 	createEnrollmentPurchase: function (sender, desc, cardinfo, success, failure) {
-		var purchasable = desc.Purchasable || {},
-			connectInfo = purchasable.get('StripeConnectKey'),
-			pKey = connectInfo && connectInfo.get('PublicKey'),
-			tokenObject, me = this;
-
-		if (!pKey) {
-			console.error('No Stripe connection infor for the purchasable', purchasable);
-			failure.call();
-			return;
-		}
+		let tokenObject;
 
 		if (sender.lockPurchaseAction) {
 			failure.call();
 			return;
 		}
 
-		function onPriced (result) {
+		sender.lockPurchaseAction;
+
+		function onPriced (pricing) {
 			delete sender.lockPurchaseAction;
-			success.call(null, {pricing: result, tokenObject: tokenObject});
+			success.call(null, {pricing, tokenObject});
 		}
 
 		function onFail (reason) {
 			delete sender.lockPurchaseAction;
 			failure.call(null, reason);
 		}
-
-		function tokenResponseHandler (status, response) {
-			if (status !== 200 || response.error) {
-				console.error('An error occurred during the token generation for purchasable', purchasable, response);
-				onFail(response.error);
-			} else {
-				console.log('Stripe token response handler', arguments);
-				tokenObject = response;
-				me.priceEnrollmentPurchase(me, desc, onPriced, onFail);
-			}
-		}
-
-		sender.lockPurchaseAction = true;
 
 		try {
 			if (desc.from && !Globals.isEmail(desc.from)) {
@@ -133,14 +113,83 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 					field: 'receiver'
 				});
 			} else {
-				Stripe.setPublishableKey(pKey);
-				Stripe.createToken(cardinfo, tokenResponseHandler);
+				cardinfo.creditCard.createToken(cardinfo)
+					.then(({token}) => {
+						tokenObject = token;
+						this.priceEnrollmentPurchase(this, desc, onPriced, onFail);
+					})
+					.catch((reason) => {
+						console.error('An error occurred during the token generation for purchasable', reason);
+						onFail(reason);
+					});
 			}
 		} catch (e) {
 			console.error('Error generating a stripe token', e);
 			delete sender.lockPurchaseAction;
 			failure.call();
 		}
+
+		// var purchasable = desc.Purchasable || {},
+		// 	connectInfo = purchasable.get('StripeConnectKey'),
+		// 	pKey = connectInfo && connectInfo.get('PublicKey'),
+		// 	tokenObject, me = this;
+
+		// if (!pKey) {
+		// 	console.error('No Stripe connection info for the purchasable', purchasable);
+		// 	failure.call();
+		// 	return;
+		// }
+
+		// if (sender.lockPurchaseAction) {
+		// 	failure.call();
+		// 	return;
+		// }
+
+		// function onPriced (result) {
+		// 	delete sender.lockPurchaseAction;
+		// 	success.call(null, {pricing: result, tokenObject: tokenObject});
+		// }
+
+		// function onFail (reason) {
+		// 	delete sender.lockPurchaseAction;
+		// 	failure.call(null, reason);
+		// }
+
+		// function tokenResponseHandler (status, response) {
+		// 	if (status !== 200 || response.error) {
+		// 		console.error('An error occurred during the token generation for purchasable', purchasable, response);
+		// 		onFail(response.error);
+		// 	} else {
+		// 		console.log('Stripe token response handler', arguments);
+		// 		tokenObject = response;
+		// 		me.priceEnrollmentPurchase(me, desc, onPriced, onFail);
+		// 	}
+		// }
+
+		// sender.lockPurchaseAction = true;
+
+		// try {
+		// 	if (desc.from && !Globals.isEmail(desc.from)) {
+		// 		onFail({
+		// 			Type: 'FormError',
+		// 			Message: 'Invalid Email',
+		// 			field: 'from'
+		// 		});
+		// 	} else if (desc.receiver && !Globals.isEmail(desc.receiver)) {
+		// 		onFail({
+		// 			Type: 'FormError',
+		// 			Message: 'Invalid Email',
+		// 			field: 'receiver'
+		// 		});
+		// 	} else {
+		// 		Stripe.setPublishableKey(pKey);
+		// 		Stripe.createToken(cardinfo, tokenResponseHandler);
+		// 	}
+		// } catch (e) {
+		// 	console.error('Error generating a stripe token', e);
+		// 	delete sender.lockPurchaseAction;
+		// 	failure.call();
+		// }
 	},
 
 	/**

@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 
+require('./CreditCards');
 require('./Description');
 require('./RadioGroup');
 require('./Checkbox');
@@ -24,6 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	layout: 'none',
 
 	typesMap: {
+		'credit-card': 'enrollment-credit-card',
 		'text': 'enrollment-textinput',
 		'textarea': 'enrollment-textarea',
 		'checkbox': 'enrollment-checkbox',

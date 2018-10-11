@@ -85,45 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					xtype: 'enrollment-set',
 					label: getString('NextThought.view.courseware.enrollment.Gift.CCInfo'),
 					inputs: [
-						{type: 'text', name: 'name', required: true, placeholder: getString('NextThought.view.courseware.enrollment.Gift.CardName'), size: 'card-name'},
-						{
-							type: 'text',
-							name: 'number',
-							required: true,
-							doNotStore: true,
-							//valueType: 'numeric',
-							placeholder: getString('NextThought.view.courseware.enrollment.Gift.CC1234'),
-							size: 'left card-number',
-							validateOnChange: true,
-							paymentFormatter: 'formatCardNumber',
-							//validator: 'validateCardNumber',
-							getter: function (val) {
-								return val.replace(/[^0-9]/g, '');
-							}
-						},
-						{
-							type: 'text',
-							name: 'exp_',
-							required: true,
-							doNotStore: true,
-							placeholder: getString('NextThought.view.courseware.enrollment.Gift.CCExp'),
-							size: 'left card-code',
-							validateOnChange: true,
-							paymentFormatter: 'formatCardExpiry',
-							validator: 'validateCardExpiry',
-							paymentGetter: 'cardExpiryVal'
-						},
-						{
-							type: 'text',
-							name: 'cvc',
-							required: true,
-							doNotStore: true,
-							placeholder: getString('NextThought.view.courseware.enrollment.Gift.CVCCode'),
-							size: 'left card-code',
-							validateOnChange: true,
-							paymentFormatter: 'formatCardCVC',
-							validator: 'validateCardCVC'
-						}
+						{type: 'credit-card', name: 'creditCard', required: true, doNotStore: true}
 					]
 				},
 				{

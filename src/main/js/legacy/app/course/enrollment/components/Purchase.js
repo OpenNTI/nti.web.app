@@ -7,6 +7,7 @@ require('legacy/mixins/enrollment-feature/Form');
 require('./parts/BaseInput');
 require('./parts/Checkbox');
 require('./parts/CheckboxGroup');
+require('./parts/CreditCards');
 require('./parts/DateInput');
 require('./parts/Description');
 require('./parts/Description');
@@ -50,45 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					xtype: 'enrollment-set',
 					label: getString('NextThought.view.courseware.enrollment.Purchase.CCInfo'),
 					inputs: [
-						{type: 'text', name: 'name', required: true, placeholder: getString('NextThought.view.courseware.enrollment.Purchase.CardName'), size: 'card-name'},
-						{
-							type: 'text',
-							name: 'number',
-							required: true,
-							doNotStore: true,
-							//valueType: 'numeric',
-							placeholder: getString('NextThought.view.courseware.enrollment.Purchase.Card1234'),
-							size: 'left card-number',
-							validateOnChange: true,
-							paymentFormatter: 'formatCardNumber',
-							//validator: 'validateCardNumber',
-							getter: function (val) {
-								return val.replace(/[^0-9]/g, '');
-							}
-						},
-						{
-							type: 'text',
-							name: 'exp_',
-							required: true,
-							doNotStore: true,
-							placeholder: getString('NextThought.view.courseware.enrollment.Purchase.CardExpDate'),
-							size: 'left card-code',
-							validateOnChange: true,
-							paymentFormatter: 'formatCardExpiry',
-							validator: 'validateCardExpiry',
-							paymentGetter: 'cardExpiryVal'
-						},
-						{
-							type: 'text',
-							name: 'cvc',
-							required: true,
-							doNotStore: true,
-							placeholder: getString('NextThought.view.courseware.enrollment.Purchase.CardCVC'),
-							size: 'left card-code',
-							validateOnChange: true,
-							paymentFormatter: 'formatCardCVC',
-							validator: 'validateCardCVC'
-						}
+						{type: 'credit-card', name: 'creditCard', required: true, doNotStore: true}
 					]
 				},
 				{
@@ -179,6 +142,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.updateFromStorage();
 	},
 
+
+	getEnrollmentOption () {
+		return this.enrollmentOption;
+	},
+
 	getButtonCfg: function () {
 		return this.buttonCfg;
 	},
@@ -238,10 +206,6 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	getParsedValues: function () {
 		var raw = this.getValue();
 
-		if (raw.exp_) {
-			raw['exp_month'] = raw.exp_.month;
-			raw['exp_year'] = raw.exp_.year;
-		}
 
 		if (raw.quantity < 0) {
 			raw.quantity = 'self';
