@@ -243,7 +243,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	getInterfaceInstance () {
 		const getInstance = async () => {
 			const service = await getService();
-			const instance = service.getObject(this.rawData);
+			const instance = service.getObject(this.rawData || this.initialData);
 
 			return instance;
 		};
@@ -378,6 +378,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			cField = fs.getByKey('Class'), me = this;
 
 		this.rawData = raw && JSON.parse(JSON.stringify(raw));
+		this.initialData = data && JSON.parse(JSON.stringify(data));
 
 		//Workaround for objects that don't have an NTIID yet.
 		if (data && this.idProperty === 'NTIID' && id && raw) {
