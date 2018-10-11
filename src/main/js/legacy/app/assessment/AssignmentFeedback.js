@@ -103,7 +103,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 
 	beforeDestroy () {
 		this.callParent(arguments);
-		this.feedbackList.el.dom.removeEventListener('load', this.afterImageLoad, true);
+
+		if(this.feedbackList && this.feedbackList.el) {
+			this.feedbackList.el.dom.removeEventListener('load', this.afterImageLoad, true);
+		}
 	},
 
 	afterImageLoad () {
