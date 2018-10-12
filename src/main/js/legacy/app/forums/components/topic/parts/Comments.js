@@ -655,7 +655,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 						});
 
 					}).catch(function (reason) {
-						console.error(reason);
+						let msg = 'Unable to delete this comment.';
+
+						if (reason && reason.status === 403) {
+							msg = 'Forbidden to delete this comment.';
+						}
+
+						setTimeout(() => {
+							alert({ title: 'Attention', msg, icon: 'warning-red' });
+						}, 500);
 					});
 
 				}

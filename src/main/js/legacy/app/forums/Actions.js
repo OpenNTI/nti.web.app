@@ -192,8 +192,16 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 					Ext.callback(callback, null, [cmp]);
 					fulfill();
 				},
-				failure: function () {
-					alert('Sorry, could not delete that');
+				failure (reason) {
+					let msg = 'Unable to delete.';
+
+					if (reason && reason.status === 403) {
+						msg = 'Forbidden to delete.';
+					}
+
+					setTimeout(() => {
+						alert({ title: 'Attention', msg, icon: 'warning-red' });
+					}, 500);
 					reject();
 				}
 			});
