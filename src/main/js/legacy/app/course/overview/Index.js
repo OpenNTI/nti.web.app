@@ -571,6 +571,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 
 	handleNavigation: function (title, route, precache) {
+		if(!route) {
+			return;
+		}
+
 		this.pushRoute(title, route, precache);
 	},
 
