@@ -1,4 +1,3 @@
-/*global Stripe */
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 
@@ -114,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 				});
 			} else {
 				cardinfo.creditCard.createToken(cardinfo)
-					.then(({token}) => {
+					.then((token) => {
 						tokenObject = token;
 						this.priceEnrollmentPurchase(this, desc, onPriced, onFail);
 					})
