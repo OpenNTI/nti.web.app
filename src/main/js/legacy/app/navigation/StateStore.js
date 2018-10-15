@@ -19,6 +19,14 @@ module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 		this.fireEvent('chat-notify-tab', msg);
 	},
 
+	fireMessageBarOpen () {
+		this.fireEvent('message-bar-open');
+	},
+
+	fireMessageBarClose () {
+		this.fireEvent('message-bar-close');
+	},
+
 	markReturnPoint: function (route) {
 		this.returnPoint = route;
 	},

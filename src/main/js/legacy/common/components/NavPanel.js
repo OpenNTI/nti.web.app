@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+const NavStore = require('legacy/app/navigation/StateStore');
+
 
 module.exports = exports = Ext.define('NextThought.common.components.NavPanel', {
 	extend: 'Ext.container.Container',
@@ -23,6 +25,8 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 	initComponent: function () {
 		this.callParent(arguments);
 
+		this.NavStore = NavStore.getInstance();
+
 		this.alignNavigation = this.alignNavigation.bind(this);
 
 		this.add([
@@ -36,6 +40,9 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 
 		this.navigation.addCls('navigation-view floating');
 		this.body.addCls('body-view');
+
+		this.mon(this.NavStore, 'message-bar-open', this.alignNavigation);
+		this.mon(this.NavStore, 'message-bar-close', this.alignNavigation);
 	},
 
 

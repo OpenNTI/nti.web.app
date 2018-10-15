@@ -2,6 +2,7 @@
 	overflow: hidden;
 	height: auto;
 
+
 	.navigation-view.floating {
 		position: fixed;
 		top: 90px;//$header-height + 20;
@@ -11,7 +12,7 @@
 		z-index: 1;
 
 		html.msg-bar-open & {
-			top: 130px !important; // $header-height + $msg-bar-height + 20
+			top: 130px; // $header-height + $msg-bar-height + 20
 		}
 
 		body.control-bar-open & {

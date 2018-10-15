@@ -193,10 +193,20 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		if (messageCmp) {
 			messageCmp.onceRendered
 				.then(() => {
+					this.store.fireMessageBarOpen();
+
 					messageCmp.setIcon(cfg.iconCls);
 					messageCmp.setMessage(cfg.message);
 					Ext.each(cfg.buttons || [], messageCmp.addButton.bind(messageCmp));
-					messageCmp.closeHandler = cfg.closeHandler;
+					messageCmp.closeHandler = () => {
+						setTimeout(() => {
+							this.store.fireMessageBarClose();
+						}, 100);
+
+						if (cfg.closeHandler) {
+							cfg.closeHandler();
+						}
+					};
 
 					htmlEl = Ext.query('.x-viewport')[0];
 					if (htmlEl) {
@@ -218,5 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		if (messageCmp) {
 			messageCmp.close();
 		}
+
+		this.store.fireMessageBarClose();
 	}
 });
