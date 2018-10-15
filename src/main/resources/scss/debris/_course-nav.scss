@@ -305,9 +305,10 @@
 
 .course-overview {
 	.empty-state {
-		background: #ffffff;
-	    padding: 2em;
-	    margin-top: 0;
+		background: #fff;
+		padding: 9rem 2rem 2rem 2rem;
+		margin-top: 0;
+		min-height: 22rem;
 
 		a.edit {
 			color: $primary-blue;
