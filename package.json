@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@nti/lib-decorators": "^1.4.0",
-    "@nti/util-logger": "^1.0.2",
+    "@nti/util-logger": "^1.0.2"
   },
   "devDependencies": {
     "@nti/app-scripts": "^2.0.6",
