@@ -1,3 +1,5 @@
+@import "~@nti/style-common";
+
 .nti-web-credit-card-override {
 	max-width: 406px;
 
@@ -24,6 +26,39 @@
 			border-left-width: 0;
 			background: white;
 			border-radius: 0;
+
+			.missing-all & {
+				border: 1px solid $primary-red;
+				box-shadow: inset 4px 0 0 0 $primary-red;
+			}
+		}
+
+		.name-input {
+			.missing-name & {
+				border: 1px solid $primary-red;
+				box-shadow: inset 4px 0 0 0 $primary-red;
+			}
+		}
+
+		.card-input .card-number {
+			.missing-number & {
+				border: 1px solid $primary-red;
+				box-shadow: inset 4px 0 0 0 $primary-red;
+			}
+		}
+
+		.card-input .card-expiry {
+			.missing-expiry & {
+				border: 1px solid $primary-red;
+				box-shadow: inset 4px 0 0 0 $primary-red;
+			}
+		}
+
+		.card-input .card-cvc {
+			.missing-cvc & {
+				border: 1px solid $primary-red;
+				box-shadow: inset 4px 0 0 0 $primary-red;
+			}
 		}
 	}
 

@@ -44,7 +44,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 
 	isValid () {
-		if (this.required && this.isEmpty()) { return false; }
+		if (this.required && this.isEmpty()) {
+			this.addEmptyErrors();
+			return false;
+		}
 
 		return this.cardInfo && this.cardInfo.isValid;
 	},
@@ -68,6 +71,31 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	onCreditCardChange (cardInfo) {
 		this.cardInfo = cardInfo;
 
+		this.removeEmptyErrors();
 		this.changed();
+	},
+
+
+	addEmptyErrors () {
+		if (!this.cardInfo) {
+			this.addCls('missing-all');
+			return;
+		}
+
+		const {empty} = this.cardInfo;
+
+		if (empty.name) { this.addCls('missing-name'); }
+		if (empty.number) { this.addCls('missing-number'); }
+		if (empty.expiry) { this.addCls('missing-expiry'); }
+		if (empty.cvc) { this.addCls('missing-cvc'); }
+	},
+
+
+	removeEmptyErrors () {
+		this.removeCls('missing-all');
+		this.removeCls('missing-name');
+		this.removeCls('missing-number');
+		this.removeCls('missing-expiry');
+		this.removeCls('missing-cvc');
 	}
 });
