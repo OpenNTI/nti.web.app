@@ -10,6 +10,13 @@ const lazyResolve = {
 };
 
 
+function getCurrentSizeForImage (img) {
+	const allowed = {'quarter': true, 'half': true, 'full': true};
+	const name = img.getAttribute('data-nti-image-size');
+
+	return allowed[name] ? name : 'full';
+}
+
 module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 	alias: 'widget.image-zoom-view',
 	extend: 'Ext.Component',
@@ -156,6 +163,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 			me.image.dom.src = img.src;
 			me.el.unmask();
 		};
+
 		img.src = this.url;
 
 		Ext.defer(this.el.focus, 100, this.el);
@@ -261,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 					'full': 2
 				},
 				src = img.getAttribute('src'),
-				currentSizeName = img.getAttribute('data-nti-image-size'),
+				currentSizeName = getCurrentSizeForImage(img),//img.getAttribute('data-nti-image-size'),
 				currentSize = sizes[sizeMap[currentSizeName]],
 				currentSizeUrl = img.getAttribute(currentSize),
 				nextSize = sizes[Math.min(sizeMap[currentSizeName] + 1, sizes.length - 1)],
