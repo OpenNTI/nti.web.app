@@ -29,6 +29,10 @@ class UserInvitationsStore extends Stores.BoundStore {
 		setTimeout(() => { this.isUnloading = false; }, 400);
 	}
 
+	clearInviteError () {
+		this.set('inviteError', null);
+	}
+
 	async canSendInvitations () {
 		const service = await getService();
 

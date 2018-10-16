@@ -16,13 +16,14 @@ const t = scoped('nti-web-site-admin.componentsusers.list.InvitePeople', DEFAULT
 
 
 export default
-@Connectors.Any.connect(['inviteError', 'hideInviteDialog', 'sendLearnerInvites', 'sendAdminInvites'])
+@Connectors.Any.connect(['inviteError', 'hideInviteDialog', 'sendLearnerInvites', 'sendAdminInvites', 'clearInviteError'])
 class InvitePeople extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
 		hideInviteDialog: PropTypes.func.isRequired,
 		sendLearnerInvites: PropTypes.func.isRequired,
 		sendAdminInvites: PropTypes.func.isRequired,
+		clearInviteError: PropTypes.func.isRequired,
 		inviteError: PropTypes.string
 	}
 
@@ -73,6 +74,7 @@ class InvitePeople extends React.Component {
 	}
 
 	renderToField () {
+		const { clearInviteError } = this.props;
 		const { emails, file } = this.state;
 		const noEmails = !emails || emails.length === 0;
 		return (
@@ -91,7 +93,7 @@ class InvitePeople extends React.Component {
 					<div className="file-pill-wrap">
 						<div className="file-pill">
 							{file.name}
-							<i className="icon-bold-x small" onClick={() => this.setState({ file: null })} />
+							<i className="icon-bold-x small" onClick={() => this.setState({ file: null }, () => { clearInviteError(); })} />
 						</div>
 					</div>
 				)}
