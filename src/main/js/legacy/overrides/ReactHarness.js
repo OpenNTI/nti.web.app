@@ -23,6 +23,7 @@ const CATALOG_MIME_TYPES = {
 };
 
 const GROUP_MIME_TYPE = 'application/vnd.nextthought.dynamicfriendslist';
+const COMMUNITY_MIME_TYPE = 'application/vnd.nextthought.community';
 
 function getRouteFor (obj, context) {
 	if (obj.isUser) {
@@ -49,6 +50,10 @@ function getRouteFor (obj, context) {
 
 	if (obj.MimeType === GROUP_MIME_TYPE) {
 		return `/app/group/${encodeForURI(obj.NTIID)}/info`;
+	}
+
+	if (obj.MimeType === COMMUNITY_MIME_TYPE) {
+		return `/app/community/${encodeForURI(obj.NTIID)}`;
 	}
 }
 
