@@ -769,6 +769,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 	},
 
 	handleNavigation: function (title, route, precache, replace) {
+		if (!route) { return; }
+
 		if (replace) {
 			this.replaceRoute(title, route, precache);
 		} else {
