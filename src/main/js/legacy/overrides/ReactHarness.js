@@ -53,7 +53,7 @@ function getRouteFor (obj, context) {
 	}
 
 	if (obj.MimeType === COMMUNITY_MIME_TYPE) {
-		return `/app/community/${encodeForURI(obj.NTIID)}`;
+		return `/app/community/${encodeForURI(obj.Username)}`;
 	}
 }
 
