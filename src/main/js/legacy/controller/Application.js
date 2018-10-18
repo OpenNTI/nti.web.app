@@ -364,16 +364,23 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		function finish () {
 			me.currentMyRoute = myRoute;
 
-			history[fn](myRoute, state || (window.history.state && window.history.state.state) || window.history.state);
-			//Yuck!^2 The history library doesn't allow us to set the title
-			//so immediately replace the current state with one with the title
-			//also the history library is decodeURIing the so for a uri encoded
-			//uri part we still need to replaceState to make sure that encoding is correct
-			window.history.replaceState(window.history.state, myTitle, myRoute);
-			// history[fn](state || window.history.state, myTitle, myRoute);
-			document.title = title;
+			const remove = history.listen((_, action) => {
+				if (fn === 'push' && action !== 'PUSH') { return; }
+				if (fn === 'replace' && action !== 'REPLACE') { return; }
 
-			me.handleRoute(title, route, precache, afterRoute);
+				//Yuck!^2 The history library doesn't allow us to set the title
+				//so immediately replace the current state with one with the title
+				//also the history library is decodeURIing the so for a uri encoded
+				//uri part we still need to replaceState to make sure that encoding is correct
+				window.history.replaceState(window.history.state, myTitle, myRoute);
+				// history[fn](state || window.history.state, myTitle, myRoute);
+				document.title = title;
+
+				me.handleRoute(title, route, precache, afterRoute);
+				remove();
+			});
+
+			history[fn](myRoute, state || (window.history.state && window.history.state.state) || window.history.state);
 		}
 
 		function stopNav () {
