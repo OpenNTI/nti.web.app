@@ -76,11 +76,11 @@ class UserInvitationsStore extends Stores.BoundStore {
 				payload = new FormData();
 
 				if(message) {
-					payload.set('message', message);
+					payload.append('message', message);
 				}
 
-				payload.set('MimeType', isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType);
-				payload.set('source', file);
+				payload.append('MimeType', isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType);
+				payload.append('source', file);
 			} else {
 				payload = {
 					invitations: emails.map(x => { return { 'receiver': x, 'receiver_name': x }; }),
@@ -101,7 +101,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 			this.set('loading', false);
 
 			if(e.statusCode !== 409) {
-				this.set('inviteError', e.Message || e);
+				this.set('inviteError', e.Message || e.message || 'Could not send invitations.');
 			}
 			else {
 				this.set('inviteError', null);
