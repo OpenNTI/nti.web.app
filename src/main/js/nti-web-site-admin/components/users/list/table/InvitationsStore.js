@@ -74,7 +74,11 @@ class UserInvitationsStore extends Stores.BoundStore {
 
 			if (file) {
 				payload = new FormData();
-				payload.set('message', message);
+
+				if(message) {
+					payload.set('message', message);
+				}
+
 				payload.set('MimeType', isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType);
 				payload.set('source', file);
 			} else {
@@ -129,7 +133,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 	}
 
 	hideInviteDialog = () => {
-		this.set('showInviteDialog', false);
+		this.set({'showInviteDialog': false, 'inviteError': null});
 	}
 
 	async load () {
