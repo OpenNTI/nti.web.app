@@ -56,6 +56,22 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.addDefaultRoute('/about');
 	},
 
+
+	onRouteActivate () {
+		clearTimeout(this.cleanupTimeout);
+	},
+
+
+	onRouteDeactivate () {
+		this.stopResourceViewed();
+
+		clearTimeout(this.cleanupTimeout);
+		this.cleanupTimeout = setTimeout(() => {
+			this.setActive(null);
+		}, 100);
+	},
+
+
 	async setActiveEntity (id) {
 		if (this.activeEntity && (this.activeEntity.get('Username') || '').toLowerCase() === id.toLowerCase()) {
 			return;
@@ -146,7 +162,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	setActive (cmp) {
 		this.bodyContainer.removeAll(true);
 
-		return this.bodyContainer.add(cmp);
+		if (cmp) {
+			return this.bodyContainer.add(cmp);
+		}
 	},
 
 
@@ -223,9 +241,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
-	onRouteDeactivate () {
-		this.stopResourceViewed();
-	},
 
 
 	showActivity (route, subRoute) {
