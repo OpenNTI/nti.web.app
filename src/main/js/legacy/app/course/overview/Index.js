@@ -410,6 +410,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				},
 				assignment,
 				assignmentHistory,
+				student: $AppConfig.userObject,
 				path: [
 					{
 						label: lesson.get('title'),
