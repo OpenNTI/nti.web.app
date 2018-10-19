@@ -116,10 +116,14 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		if (!this.currentMyRoute) { return; }
 
 		const {pathname} = history.location;
-		const partsPathname = decodeURI(Globals.getURLParts(this.currentMyRoute).pathname);
+		const currentPathname = decodeURI(Globals.getURLParts(this.currentMyRoute).pathname);
+		const pendingPathname = decodeURI(Globals.getURLParts(this.pendingRoute).pathname);
 
 		//if the history changes to a new path that doesn't match our current route, handle it
-		if (Globals.trimRoute(pathname) !== Globals.trimRoute(partsPathname)) {
+		if (
+			Globals.trimRoute(pathname) !== Globals.trimRoute(currentPathname) &&
+			Globals.trimRoute(pathname) !== Globals.trimRoute(pendingPathname)
+		) {
 			this.handleCurrentState();
 		}
 	},
@@ -370,6 +374,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 				if (fn === 'replace' && action !== 'REPLACE') { return; }
 
 				me.currentMyRoute = myRoute;
+				delete me.pendingRoute;
 
 				//Yuck!^2 The history library doesn't allow us to set the title
 				//so immediately replace the current state with one with the title
