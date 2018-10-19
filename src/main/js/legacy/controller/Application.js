@@ -361,12 +361,19 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			allow = body.allowNavigation();
 
 
+		this.pendingRoute = myRoute;
+
 		function finish () {
-			me.currentMyRoute = myRoute;
+			if (this.removeHistoryListener) {
+				this.removeHistoryListener();
+			}
 
 			const remove = history.listen((_, action) => {
+				if (this.pendingRoute !== myRoute) { return; }
 				if (fn === 'push' && action !== 'PUSH') { return; }
 				if (fn === 'replace' && action !== 'REPLACE') { return; }
+
+				me.currentMyRoute = myRoute;
 
 				//Yuck!^2 The history library doesn't allow us to set the title
 				//so immediately replace the current state with one with the title
@@ -377,6 +384,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 				document.title = title;
 
 				me.handleRoute(title, route, precache, afterRoute);
+
 				remove();
 			});
 
