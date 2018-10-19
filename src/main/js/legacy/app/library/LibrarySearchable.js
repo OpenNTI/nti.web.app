@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 
 	showLibrary (route) {
 		this.NavigationActions.updateNavBar({
-			noLibraryLink: true,
+			noLibraryLink: false,
 			darkStyle: true
 		});
 
