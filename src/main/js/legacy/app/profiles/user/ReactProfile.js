@@ -58,17 +58,22 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 
 	onRouteActivate () {
-		clearTimeout(this.cleanupTimeout);
+		this.stopCleanup();
 	},
 
 
 	onRouteDeactivate () {
 		this.stopResourceViewed();
 
-		clearTimeout(this.cleanupTimeout);
+		this.stopCleanup();
 		this.cleanupTimeout = setTimeout(() => {
 			this.setActive(null);
 		}, 100);
+	},
+
+
+	stopCleanup () {
+		clearTimeout(this.cleanupTimeout);
 	},
 
 
@@ -170,6 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 	showEdit () {
 		this.updateHeader();
+		this.stopCleanup();
 
 		const baseroute = this.getBaseRoute();
 		const active = this.getActive('[isEdit]');
@@ -219,6 +225,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 	showAbout () {
 		this.updateHeader();
+		this.stopCleanup();
+
 
 		const baseroute = this.getBaseRoute();
 		const active = this.getActive('[isAbout]');
@@ -245,6 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 	showActivity (route, subRoute) {
 		this.updateHeader();
+		this.stopCleanup();
 
 		let cmp = this.getActive('profile-user-activity');
 
@@ -265,6 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 	showMembership (route, subRoute) {
 		this.updateHeader();
+		this.stopCleanup();
 
 		let cmp = this.getActive('user-profile-membership');
 
@@ -283,6 +293,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 	showAchievements (route, subRoute) {
 		this.updateHeader();
+		this.stopCleanup();
 
 		let cmp = this.getActive('user-profile-achievements');
 
@@ -301,6 +312,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 	showTranscripts () {
 		this.updateHeader();
+		this.stopCleanup();
 
 		const baseroute = this.getBaseRoute();
 		const active = this.getActive('[isTranscripts]');
