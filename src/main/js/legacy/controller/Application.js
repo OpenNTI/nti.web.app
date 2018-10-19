@@ -361,15 +361,11 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			allow = body.allowNavigation();
 
 
-		this.pendingRoute = myRoute;
-
 		function finish () {
-			if (this.removeHistoryListener) {
-				this.removeHistoryListener();
-			}
+			me.pendingRoute = myRoute;
 
 			const remove = history.listen((_, action) => {
-				if (this.pendingRoute !== myRoute) { return; }
+				if (me.pendingRoute !== myRoute) { return; }
 				if (fn === 'push' && action !== 'PUSH') { return; }
 				if (fn === 'replace' && action !== 'REPLACE') { return; }
 
