@@ -94,8 +94,8 @@
 		position: absolute;
 		right: 80px; // 70 + (70 / 2) - 15 - (20 / 2)
 		top: -10px;
-		width: 0; 
-		height: 0; 
+		width: 0;
+		height: 0;
 		border-left: 10px solid transparent;
 		border-right: 10px solid transparent;
 		border-bottom: 10px solid white;
@@ -284,7 +284,15 @@
 			float: left;
 
 			.avatar-pic {
-				border-radius: 3px;	
+				border-radius: 3px;
+
+				&.initials {
+					.inner {
+						font-weight: 700;
+						font-size: 12pt;
+						font-family: Tahoma, Arial, Sans-Serif;
+					}
+				}
 			}
 		}
 
