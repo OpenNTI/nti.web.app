@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
-import {DialogButtons, TokenEditor, SelectBox, Panels, Input, Loading} from '@nti/web-commons';
+import {DialogButtons, TokenEditor, SelectBox, Panels, Input, Loading, List} from '@nti/web-commons';
 import {validate as isEmail} from 'email-validator';
 import { Connectors } from '@nti/lib-store';
 
@@ -9,10 +9,44 @@ const DEFAULT_TEXT = {
 	people: 'People',
 	title: 'Invite People',
 	importFile: 'Upload CSV File',
-	role: 'Role'
+	role: 'Role',
+	invalidEmails: {
+		message: {
+			one: 'There is an invalid email: ',
+			other: 'There are invalid emails: '
+		}
+	}
 };
 
 const t = scoped('nti-web-site-admin.componentsusers.list.InvitePeople', DEFAULT_TEXT);
+
+const errorRenderers = [
+	{
+		handles: (error) => error.code === 'InvalidSiteInvitationData' && error.InvalidEmails && error.InvalidEmails.length > 0,
+		render: (error) => {
+			const {InvalidEmails} = error;
+
+			return (
+				<>
+					<span>{t('invalidEmails.message', {count: InvalidEmails.length})}</span>
+					<List.LimitedInline limit={2}>
+						{InvalidEmails.map((email, key) => {
+							return (
+								<span key={key}>
+									{email}
+								</span>
+							);
+						})}
+					</List.LimitedInline>
+				</>
+			);
+		}
+	},
+	{
+		handles: () => true,
+		render: error => error.Message || error.message
+	}
+];
 
 
 export default
@@ -24,7 +58,7 @@ class InvitePeople extends React.Component {
 		sendLearnerInvites: PropTypes.func.isRequired,
 		sendAdminInvites: PropTypes.func.isRequired,
 		clearInviteError: PropTypes.func.isRequired,
-		inviteError: PropTypes.string
+		inviteError: PropTypes.object
 	}
 
 	state = {
@@ -72,6 +106,23 @@ class InvitePeople extends React.Component {
 	renderFileUpload () {
 		return <Input.File label={t('importFile')} accept=".csv" onFileChange={file => this.setState({ file })} />;
 	}
+
+
+	renderError () {
+		const {inviteError} = this.props;
+		const renderer = errorRenderers.find(option => option.handles(inviteError));
+
+		if (!renderer) {
+			throw new Error('Unknown error type');
+		}
+
+		return (
+			<div className="invite-error">
+				{renderer.render(inviteError)}
+			</div>
+		);
+	}
+
 
 	renderToField () {
 		const { clearInviteError } = this.props;
@@ -163,7 +214,7 @@ class InvitePeople extends React.Component {
 				<div className="title">
 					<Panels.TitleBar title={t('title')} iconAction={loading ? () => {} : this.onCancel} />
 				</div>
-				{inviteError && <Panels.MessageBar message={inviteError} error />}
+				{inviteError && this.renderError()}
 				<div className="contents">
 					{this.renderContents()}
 				</div>

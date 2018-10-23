@@ -100,10 +100,9 @@ class UserInvitationsStore extends Stores.BoundStore {
 		catch (e) {
 			this.set('loading', false);
 
-			if(e.statusCode !== 409) {
-				this.set('inviteError', e.Message || e.message || 'Could not send invitations.');
-			}
-			else {
+			if (e.statusCode !== 409) {
+				this.set('inviteError', e || {message: 'Could not send invitations.'});
+			} else {
 				this.set('inviteError', null);
 			}
 		}
