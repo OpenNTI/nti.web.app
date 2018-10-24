@@ -99,11 +99,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.remove(this.certificatesCmp);
 
 		if(!this.hideCertificates && this.activeUser) {
-			this.certificatesCmp = this.add({
-				xtype: 'react',
-				component: ProfileCertificates,
-				entity: this.activeUser
-			});
+			this.activeUser.getInterfaceInstance()
+				.then((entity) => {
+					this.certificatesCmp = this.add({
+						xtype: 'react',
+						component: ProfileCertificates,
+						entity
+					});
+				});
 		}
 	},
 
@@ -184,11 +187,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					this.remove(this.certificatesCmp);
 				}
 
-				this.certificatesCmp = this.add({
-					xtype: 'react',
-					component: ProfileCertificates,
-					entity: user
-				});
+				user.getInterfaceInstance()
+					.then((entity) => {
+						this.certificatesCmp = this.add({
+							xtype: 'react',
+							component: ProfileCertificates,
+							entity
+						});
+					});
 			}
 
 			this.loadingCmp = this.loadingCmp || this.add(Globals.getContainerLoadingMask());
