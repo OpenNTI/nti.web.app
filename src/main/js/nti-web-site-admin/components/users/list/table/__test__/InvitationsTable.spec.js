@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { TestUtils } from '@nti/web-client';
@@ -64,54 +65,23 @@ const onAfter = () => {
 
 const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
-/* eslint-env jest */
 describe('Site admin user invitations list (with no items)', () => {
-	beforeEach(() => onBefore(0));
-	afterEach(onAfter);
+	for(let i of [0, 5, 25]) {
+		describe('Site admin user invitations list (with ' + i + ' items)', () => {
+			beforeEach(() => onBefore(i));
+			afterEach(onAfter);
 
-	test('Basic render test', async () => {
-		const cmp = renderer.create(<InvitationsTable/>);
+			test('Basic render test', async () => {
+				const cmp = renderer.create(<InvitationsTable/>);
 
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
+				jest.runAllTimers();
+				await flushPromises();
+				jest.runAllTimers();
 
-		const tree = cmp.toJSON();
+				const tree = cmp.toJSON();
 
-		expect(tree).toMatchSnapshot();
-	});
-});
-
-describe('Site admin user invitations list (with 5 items)', () => {
-	beforeEach(() => onBefore(5));
-	afterEach(onAfter);
-
-	test('Basic render test', async () => {
-		const cmp = renderer.create(<InvitationsTable/>);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
-
-		const tree = cmp.toJSON();
-
-		expect(tree).toMatchSnapshot();
-	});
-});
-
-describe('Site admin user invitations list (with 25 items)', () => {
-	beforeEach(() => onBefore(25));
-	afterEach(onAfter);
-
-	test('Basic render test', async () => {
-		const cmp = renderer.create(<InvitationsTable/>);
-
-		jest.runAllTimers();
-		await flushPromises();
-		jest.runAllTimers();
-
-		const tree = cmp.toJSON();
-
-		expect(tree).toMatchSnapshot();
-	});
+				expect(tree).toMatchSnapshot();
+			});
+		});
+	}
 });

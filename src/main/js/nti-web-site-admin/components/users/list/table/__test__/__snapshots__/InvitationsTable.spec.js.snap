@@ -1,6 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Site admin user invitations list (with 5 items) Basic render test 1`] = `
+exports[`Site admin user invitations list (with no items) Site admin user invitations list (with 0 items) Basic render test 1`] = `
+<div
+  className="users-table-container invitations"
+>
+  <div
+    className="empty-state"
+  >
+    There are no outstanding invitations
+  </div>
+</div>
+`;
+
+exports[`Site admin user invitations list (with no items) Site admin user invitations list (with 5 items) Basic render test 1`] = `
 <div
   className="users-table-container invitations"
 >
@@ -430,7 +442,7 @@ exports[`Site admin user invitations list (with 5 items) Basic render test 1`] =
 </div>
 `;
 
-exports[`Site admin user invitations list (with 25 items) Basic render test 1`] = `
+exports[`Site admin user invitations list (with no items) Site admin user invitations list (with 25 items) Basic render test 1`] = `
 <div
   className="users-table-container invitations"
 >
@@ -2232,18 +2244,6 @@ exports[`Site admin user invitations list (with 25 items) Basic render test 1`] 
         2
       </div>
     </div>
-  </div>
-</div>
-`;
-
-exports[`Site admin user invitations list (with no items) Basic render test 1`] = `
-<div
-  className="users-table-container invitations"
->
-  <div
-    className="empty-state"
-  >
-    There are no outstanding invitations
   </div>
 </div>
 `;
