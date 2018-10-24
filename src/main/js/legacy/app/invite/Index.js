@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 	schema: [
 		{name: 'MimeType', type: 'hidden'},
 		{type: 'emailtoken', required: true, name:'emails', placeholder: 'Add an email address'},
-		{type: 'textarea', cls: 'message-area', name:'message', required: false, placeholder: 'Type a message...'}
+		{type: 'textarea', cls: 'message-area', name:'message', required: false, placeholder: '(Optional) Type a message...'}
 	],
 
 	accepts: [
@@ -37,6 +37,12 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 		this.callParent(arguments);
 
 		this.inviteUrl = this.record.getLink('SendCourseInvitations');
+
+		this.add({
+			xtype: 'box',
+			html: 'Invite others to enroll in this course. We\'ll send an email with personalized invitation codes and a course link to the addresses provided. <a target="_blank" href="https://help.nextthought.com/guide/part3.html#course-roster">More Information</a>',
+			cls: 'instructions'
+		});
 
 		this.unfocusedTokens = this.add({
 			xtype: 'email-tokens',
