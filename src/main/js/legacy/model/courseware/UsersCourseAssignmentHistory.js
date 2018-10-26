@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 
 require('../Base');
 require('./Grade');
+const UsersCourseAssignmentHistoryItem = require('./UsersCourseAssignmentHistoryItem');
 require('./UsersCourseAssignmentHistoryItemFeedback');
 require('./UsersCourseAssignmentHistoryItemFeedbackContainer');
 
@@ -18,7 +19,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	],
 
 	getItem: function (id) {
-		return this.getFieldItem('Items', id);
+		const container = this.getFieldItem('Items', id);
+		let item = container && container.getFieldItem('Items', 'UsersCourseAssignmentHistoryItem');
+
+		return item || container;
 	},
 
 	addItem: function (key, item) {

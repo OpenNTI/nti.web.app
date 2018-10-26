@@ -7,5 +7,6 @@ require('./GradeBookEntry');
 require('./GradeBookPart');
 require('./UsersCourseAssignmentHistory');
 require('./UsersCourseAssignmentHistoryItem');
+require('./UsersCourseAssignmentHistoryItemContainer');
 require('./UsersCourseAssignmentHistoryItemFeedback');
 require('./UsersCourseAssignmentHistoryItemFeedbackContainer');
