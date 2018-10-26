@@ -13,7 +13,6 @@ const t = scoped('nti-web-site-admins.components.users.user.overview.recentsessi
 
 export default class RecentSessions extends React.Component {
 	static propTypes = {
-		user: PropTypes.object.isRequired,
 		historicalSessions: PropTypes.arrayOf(PropTypes.object),
 		loading: PropTypes.bool
 	}

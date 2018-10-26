@@ -6,7 +6,8 @@ import View from '../View';
 const getCourse = (hasRosterLink) => {
 	return {
 		CatalogEntry: {
-			Title: 'course1'
+			Title: 'course1',
+			getDefaultAssetRoot () { return 'testRoot'; }
 		},
 		getPresentationProperties: () => {
 			return {

@@ -24,13 +24,14 @@ const getMockService = (numberOfUsers) => {
 
 			for(let i = 0; i < numberOfUsers; i++) {
 				const index = i + 1;
+				const timeAdd = i * 10;
 
 				Items.push({
 					Username: 'user' + index,
 					getCreatedTime: () => new Date('10/30/2018'),
 					userAgent: i % 2 === 0 ? 'android' : 'chrome',
-					SessionStartTime: startTime,
-					SessionEndTime: i % 2 === 0 ? null : startTime + 60 * 5
+					SessionStartTime: startTime + timeAdd,
+					SessionEndTime: i % 2 === 0 ? null : startTime + timeAdd + 60 * 5
 				});
 			}
 

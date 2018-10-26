@@ -12,7 +12,9 @@ describe('Site admin user overview last login', () => {
 			}
 		];
 
-		const cmp = renderer.create(<LastLogin historicalSessions={historicalSessions}/>);
+		const user = {};
+
+		const cmp = renderer.create(<LastLogin user={user} historicalSessions={historicalSessions}/>);
 
 		const tree = cmp.toJSON();
 

@@ -18,7 +18,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
-              src=""
+              src="contentpackage-landing-232x170.png?t=0"
             />
             <div
               className="course-enrollment-meta"
@@ -47,7 +47,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
-              src=""
+              src="contentpackage-landing-232x170.png?t=0"
             />
             <div
               className="course-enrollment-meta"
@@ -76,7 +76,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
-              src=""
+              src="contentpackage-landing-232x170.png?t=0"
             />
             <div
               className="course-enrollment-meta"
@@ -105,7 +105,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
-              src=""
+              src="contentpackage-landing-232x170.png?t=0"
             />
             <div
               className="course-enrollment-meta"
@@ -134,7 +134,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
-              src=""
+              src="contentpackage-landing-232x170.png?t=0"
             />
             <div
               className="course-enrollment-meta"

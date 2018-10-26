@@ -33,7 +33,7 @@ exports[`Site admin user book frame test Basic render test 1`] = `
         >
           <img
             className="course-icon"
-            src=""
+            src="contentpackage-landing-232x170.png?t=0"
           />
           <div
             className="info"

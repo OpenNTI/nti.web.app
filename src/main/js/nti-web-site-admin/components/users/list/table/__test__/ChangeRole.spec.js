@@ -17,7 +17,11 @@ const SAMPLE_USERS = [
 
 describe('Site admin user table change role test', () => {
 	test('Test learner list', () => {
-		const changeRoleCmp = renderer.create(<ChangeRole selectedUsers={SAMPLE_USERS}/>);
+		const changeRoleCmp = renderer.create(<ChangeRole
+			addAdmin={()=>{}}
+			removeAdmin={()=>{}}
+			selectedUsers={SAMPLE_USERS}
+		/>);
 
 		const tree = changeRoleCmp.toJSON();
 
@@ -26,7 +30,12 @@ describe('Site admin user table change role test', () => {
 	});
 
 	test('Test admin list', () => {
-		const changeRoleCmp = renderer.create(<ChangeRole selectedUsers={SAMPLE_USERS} removing/>);
+		const changeRoleCmp = renderer.create(<ChangeRole
+			addAdmin={()=>{}}
+			removeAdmin={()=>{}}
+			selectedUsers={SAMPLE_USERS}
+			removing
+		/>);
 
 		const tree = changeRoleCmp.toJSON();
 

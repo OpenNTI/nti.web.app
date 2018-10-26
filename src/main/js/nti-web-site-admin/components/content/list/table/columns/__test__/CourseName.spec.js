@@ -11,7 +11,8 @@ describe('Site admin content table course name column test', () => {
 				getStartDate: () => new Date('2/1/2017'),
 				getEndDate: () => new Date('4/5/2017'),
 				Title: 'Test course',
-				ProviderUniqueID: 'testCourse'
+				ProviderUniqueID: 'testCourse',
+				getDefaultAssetRoot () { return 'testRoot'; }
 			}
 		}}/>);
 

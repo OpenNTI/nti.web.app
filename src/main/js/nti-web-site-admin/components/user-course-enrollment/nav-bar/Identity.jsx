@@ -16,6 +16,10 @@ SiteAdminUserIdentity.propTypes = {
 export default function SiteAdminUserIdentity ({enrollment}) {
 	const {UserProfile: user, Username, CatalogEntry} = (enrollment || {});
 
+	if(!enrollment) {
+		return null;
+	}
+
 	return (
 		<div className="site-admin-user-enrollment-identity">
 			<div className="profile-image">

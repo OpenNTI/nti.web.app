@@ -30,7 +30,8 @@ describe('Site admin user book enrollment nav bar test', () => {
 		};
 
 		const book = {
-			title: 'book1'
+			title: 'book1',
+			getDefaultAssetRoot () { return 'testRoot'; }
 		};
 
 		const cmp = renderer.create(<View user={user} book={book}/>);

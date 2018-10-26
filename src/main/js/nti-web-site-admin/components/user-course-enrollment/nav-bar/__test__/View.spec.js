@@ -31,8 +31,10 @@ describe('Site admin user course enrollment nav bar test', () => {
 
 		const course = {
 			CatalogEntry: {
-				Title: 'course1'
-			}
+				Title: 'course1',
+				getDefaultAssetRoot () { return 'testRoot'; }
+			},
+			UserProfile: 'testUser'
 		};
 
 		const cmp = renderer.create(<View user={user} enrollment={course}/>);

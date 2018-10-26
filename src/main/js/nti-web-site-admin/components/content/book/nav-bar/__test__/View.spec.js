@@ -7,7 +7,8 @@ import View from '../View';
 describe('Site admin user book nav bar test', () => {
 	test('Basic render test', async () => {
 		const book = {
-			title: 'book1'
+			title: 'book1',
+			getDefaultAssetRoot () { return 'testRoot'; }
 		};
 
 		const cmp = renderer.create(<View book={book}/>);

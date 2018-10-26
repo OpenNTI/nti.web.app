@@ -6,13 +6,29 @@ import Frame from '../Frame';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
 
-const getMockService = (hasData) => {
-	return {};
+const getMockService = () => {
+	return {
+		getObject: async () => {
+			return {
+				fetchLinkParsed: () => {
+					return {
+						course: {
+							CatalogEntry: {
+								Title: 'course1',
+								getDefaultAssetRoot () { return 'testRoot'; }
+							}
+						}
+					};
+				},
+				UserProfile: 'testUser'
+			};
+		}
+	};
 };
 
-const onBefore = (hasData) => {
+const onBefore = () => {
 	jest.useFakeTimers();
-	setupTestClient(getMockService(hasData));
+	setupTestClient(getMockService());
 };
 
 const onAfter = () => {
@@ -23,7 +39,7 @@ const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 /* eslint-env jest */
 describe('Site admin user course enrollment frame', () => {
-	beforeEach(() => onBefore(true));
+	beforeEach(() => onBefore());
 	afterEach(onAfter);
 
 	test('Basic render test', async () => {

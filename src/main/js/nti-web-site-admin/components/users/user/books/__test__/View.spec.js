@@ -19,7 +19,8 @@ const getMockService = (numberOfBooks) => {
 						label: 'Book' + index,
 						title: 'book' + index
 					};
-				}
+				},
+				getDefaultAssetRoot () { return 'testRoot'; }
 			}
 		});
 	}

@@ -12,7 +12,7 @@ exports[`Site admin user book enrollment nav bar test Basic render test 1`] = `
     >
       <img
         className="enrollment-course-image"
-        src=""
+        src="contentpackage-landing-232x170.png?t=0"
       />
       <div
         className="user-avatar"

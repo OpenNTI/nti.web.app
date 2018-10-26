@@ -10,7 +10,8 @@ const getMockService = () => {
 	return {
 		getObject: () => {
 			return {
-				title: 'abc'
+				title: 'abc',
+				getDefaultAssetRoot () { return 'testRoot'; }
 			};
 		}
 	};

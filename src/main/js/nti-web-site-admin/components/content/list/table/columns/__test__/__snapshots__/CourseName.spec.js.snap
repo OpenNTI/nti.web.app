@@ -16,7 +16,7 @@ exports[`Site admin content table course name column test Test name 1`] = `
         className="course-icon"
         style={
           Object {
-            "backgroundImage": "url()",
+            "backgroundImage": "url(contentpackage-landing-232x170.png?t=0)",
           }
         }
       />

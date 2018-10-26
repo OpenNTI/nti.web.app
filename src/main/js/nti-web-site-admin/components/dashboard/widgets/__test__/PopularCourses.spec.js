@@ -26,7 +26,8 @@ const getMockService = (numberOfCourses, hasBatchPrev) => {
 				Items.push({
 					Title: 'course' + index,
 					ProviderUniqueID: 'COURSE' + index,
-					TotalEnrolledCount: 100 - index
+					TotalEnrolledCount: 100 - index,
+					getDefaultAssetRoot () { return 'testRoot'; }
 				});
 			}
 

@@ -11,7 +11,6 @@ import cx from 'classnames';
 })
 class SelectHeader extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired,
 		isAllSelected: PropTypes.func,
 		selectAll: PropTypes.func,
 		deselectAll: PropTypes.func
