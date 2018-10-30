@@ -12,7 +12,8 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.Name', 
 
 export default class Name extends React.Component {
 	static propTypes = {
-		item: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired,
+		store: PropTypes.object.isRequired
 	}
 
 	static cssClassName = 'name-col';
@@ -22,9 +23,13 @@ export default class Name extends React.Component {
 	static SortKey = 'alias'
 
 	render () {
-		const {item} = this.props;
+		const {item, store} = this.props;
+
+		const type = store.filter === 'learners' ? 'users' : 'admins';
+		const context = `site-admin.${type}-list-item`;
+
 		return (
-			<LinkTo.Path to={`./user/${item.getID()}`} activeClassName="active" exact>
+			<LinkTo.Object object={item} context={context} exact>
 				<div className={cx('cell')}>
 					<Avatar entity={item}/>
 					<div className="user-info">
@@ -32,7 +37,7 @@ export default class Name extends React.Component {
 						<div className="email">{item.email}</div>
 					</div>
 				</div>
-			</LinkTo.Path>
+			</LinkTo.Object>
 		);
 	}
 }

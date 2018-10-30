@@ -6,14 +6,11 @@ import User from './user';
 export default Router.for([
 	Route({
 		path: '/user/:userID',
-		component: User,
-		getRouteFor (obj, context) {
-			if (obj.MimeType === 'application/vnd.nextthought.user' && context === 'site-admin.users-list-item') {
-				return `/user/${(obj.getID())}`;
-			}
-
-			return null;
-		}
+		component: User
+	}),
+	Route({
+		path: '/admins/user/:userID',
+		component: User
 	}),
 	Route({path: '/', component: FiterableUserList, name: 'site-admin.users'})
 ]);

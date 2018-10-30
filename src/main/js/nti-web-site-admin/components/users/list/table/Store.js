@@ -12,7 +12,7 @@ export default
 @mixin(Selectable, Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
 class UserListStore extends Stores.BoundStore {
 
-	StatefulProperties = ['sortProperty', 'sortDirection']
+	StatefulProperties = ['sortProperty', 'sortDirection', 'pageNumber']
 
 	constructor () {
 		super();

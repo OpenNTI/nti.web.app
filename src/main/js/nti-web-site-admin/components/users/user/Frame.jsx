@@ -96,10 +96,10 @@ class SiteAdminUserView extends React.Component {
 	renderHeader () {
 		return (
 			<div className="header">
-				<LinkTo.Name name="site-admin.users">
+				<LinkTo.Path to="../..">
 					<i className="icon-chevron-left" />
 					<span>{t('back')}</span>
-				</LinkTo.Name>
+				</LinkTo.Path>
 			</div>
 		);
 	}

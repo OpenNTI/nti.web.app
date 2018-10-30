@@ -45,7 +45,8 @@ class UsersTable extends React.Component {
 		title: PropTypes.string,
 		emptyMessage: PropTypes.string,
 		currentSearchTerm: PropTypes.string,
-		setSort: PropTypes.func
+		setSort: PropTypes.func,
+		store: PropTypes.object.isRequired
 	}
 
 	items = []
@@ -118,6 +119,7 @@ class UsersTable extends React.Component {
 							sortOn={sortOn}
 							columns={this.columns}
 							onSortChange={this.onSortChange}
+							store={{filter}}
 						/>
 						<Pager numPages={numPages} pageNumber={pageNumber}/>
 					</div>
