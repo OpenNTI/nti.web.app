@@ -15,7 +15,7 @@ exports[`Site admin user frame test Basic render test 1`] = `
       >
         <div
           className="nti-link-to-path"
-          to="site-admin.users"
+          to="../.."
         >
           <i
             className="icon-chevron-left"

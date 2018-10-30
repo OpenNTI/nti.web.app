@@ -23,11 +23,30 @@ describe('Site admin user table name column test', () => {
 	beforeEach(onBefore);
 	afterEach(onAfter);
 
-	test('Test name', () => {
-		const colCmp = renderer.create(<Name item={{
-			email: 'user@blah.com',
-			getID: () => 'user'
-		}}/>);
+	test('Test for learners', () => {
+		const colCmp = renderer.create(<Name
+			item={{
+				email: 'user@blah.com',
+				getID: () => 'user'
+			}}
+			store={{
+				filter: 'learners'
+			}}/>);
+
+		const tree = colCmp.toJSON();
+
+		expect(tree).toMatchSnapshot();
+	});
+
+	test('Test for admins', () => {
+		const colCmp = renderer.create(<Name
+			item={{
+				email: 'user@blah.com',
+				getID: () => 'user'
+			}}
+			store={{
+				filter: 'admins'
+			}}/>);
 
 		const tree = colCmp.toJSON();
 
