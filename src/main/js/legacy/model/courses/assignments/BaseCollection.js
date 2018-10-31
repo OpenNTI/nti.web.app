@@ -4,6 +4,7 @@ require('../../Base');
 require('legacy/mixins/DurationCache');
 require('../../courseware/UsersCourseAssignmentHistory');
 require('../../courseware/UsersCourseAssignmentHistoryItem');
+require('../../courseware/UsersCourseAssignmentHistoryItemContainer');
 require('../../assessment/Assignment');
 require('../../assessment/DiscussionAssignment');
 
