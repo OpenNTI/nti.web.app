@@ -4,7 +4,7 @@ const Ext = require('@nti/extjs');
 module.exports = exports = Ext.define('NextThought.store.courseware.HistoryItems', {
 	extend: 'Ext.data.Store',
 
-	model: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItem',
+	model: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemContainer',
 
 	proxy: {
 		type: 'ajax',
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.HistoryItems
 					if (item[1] !== null) {
 						item = item[1];
 					} else {
-						item = {Creator: item[0], Class: 'UsersCourseAssignmentHistoryItem'};
+						item = {Creator: item[0], Class: 'UsersCourseAssignmentHistoryItemContainer'};
 					}
 				}
 

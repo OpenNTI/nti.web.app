@@ -10,6 +10,7 @@ const AssignmentHistoryItems = require('legacy/store/courseware/AssignmentHistor
 const Grade = require('../../courseware/Grade');
 const UsersCourseAssignmentHistory = require('../../courseware/UsersCourseAssignmentHistory');
 const UsersCourseAssignmentHistoryItem = require('../../courseware/UsersCourseAssignmentHistoryItem');
+const UsersCourseAssignmentHistoryItemContainer = require('../../courseware/UsersCourseAssignmentHistoryItemContainer');
 
 require('./BaseCollection');
 
@@ -45,9 +46,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		return SharedInstance.create({
 			getKeyForRecord: function (record) {
 				var user = record.get ? record.get('Creator') : record.Creator,
-					assignment = record.get ? record.get('item') : record.item,
+					// historyItem = record.getHistoryItem && record.getHistoryItem(),
+					// assignment = historyItem && (historyItem.get ? historyItem.get('item') : historyItem.item),
 					userName = me.__getIdOf(user),
-					assignmentId = me.__getIdOf(assignment);
+					assignmentId = record.get('AssignmentId');
 
 				return userName + '/' + assignmentId;
 			}
@@ -193,12 +195,18 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 	createPlaceholderHistoryItem: function (assignment, user) {
 		var grade = this.createPlaceholderGrade(assignment, user),
-			historyItem = UsersCourseAssignmentHistoryItem.create({
+			historySubItem = UsersCourseAssignmentHistoryItem.create({
 				Creator: user,
 				item: assignment,
 				AssignmentId: assignment.getId(),
 				Grade: grade
 			});
+
+		let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
+			Creator: user,
+			AssignmentId: assignment.getId(),
+			Items: {'UsersCourseAssignmentHistoryItem': historySubItem}
+		});
 
 		//pass the update flag to force incase we already have a cached instance
 		//so it will be updated to a placeholder

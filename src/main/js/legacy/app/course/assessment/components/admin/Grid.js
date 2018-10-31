@@ -50,6 +50,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				tdCls: 'padded-cell',
 				padding: '0 0 0 30',
 				flex: 1,
+				renderer: function (v, col, rec) {
+					return Ext.DomHelper.markup({
+						html: rec.getHistoryItem().get('name')
+					});
+				},
 				doSort: function (state) {
 					let get = (o) => { return o.get('name'); },
 						store = this.up('grid').getStore(),
@@ -57,7 +62,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							{
 								direction: state,
 								property: 'name',
-								sorterFn: function (a, b) {
+								sorterFn: function (containerA, containerB) {
+									const a = containerA.getHistoryItem();
+									const b = containerB.getHistoryItem();
+
 									let aVal = get(a),
 										bVal = get(b),
 										aNum = parseFloat(aVal),
@@ -86,8 +94,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 			{ text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'), dataIndex: 'completed', name: 'completed', width: 140,
-				renderer: function (v, col, rec) {
-					var d = rec.collection.findItem(rec.get('item').getId()).get('availableEnding'),
+				renderer: function (val, col, rec) {
+					const v = rec.getHistoryItem().get('Submission');
+
+					var d = rec.collection.findItem(rec.getHistoryItem().get('item').getId()).get('availableEnding'),
 						s = (v && v.get && v.get('Last Modified')) || v;
 
 
@@ -104,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					}
 
 					//If the submission was created from an instructor adding a grade
-					if (rec.isSyntheticSubmission()) {
+					if (rec.getHistoryItem().isSyntheticSubmission()) {
 						return Ext.DomHelper.markup({
 							cls: 'ontime',
 							cn: [
@@ -146,7 +156,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							{
 								direction: state,
 								property: 'dateSubmitted',
-								sorterFn: function (a, b) {
+								sorterFn: function (containerA, containerB) {
+									const a = containerA.getHistoryItem();
+									const b = containerB.getHistoryItem();
+
 									var v1 = !!a.get('completed'),
 										v2 = !!b.get('completed'),
 										v = v1 && !v2 ? -1 : (!v1 && v2 ? 1 : 0);
@@ -159,8 +172,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 								direction: state,
 								property: 'dateSubmitted',
 								//not invoked if remote sort.
-								sorterFn: function (a, b) {
+								sorterFn: function (containerA, containerB) {
+									const a = containerA.getHistoryItem();
+									const b = containerB.getHistoryItem();
+
 									var v1 = get(a), v2 = get(b);
+
+									if(!v1 && v2) {
+										return -1;
+									}
+
+									if(!v2 && v1) {
+										return 1;
+									}
+
 									return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
 								}
 							}
@@ -178,11 +203,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				dataIndex: 'Grade', allowTab: true, name: 'grade', width: 120,/*90*/
 				tdCls: 'text score',
 				renderer: function (v, col, rec) {
-					const item = rec.get('item');
+					const historyItem = rec.getHistoryItem();
+					const item = historyItem.get('item');
 					const totalPoints = item && item.get('total_points');
 
-					var grade = rec.get('Grade'),
-						scoreTpl = Ext.DomHelper.markup({tag: 'input', type: 'text', value: rec.get('grade')}),
+					var grade = historyItem.get('Grade'),
+						scoreTpl = Ext.DomHelper.markup({tag: 'input', type: 'text', value: historyItem.get('grade')}),
 						isExcused = grade && grade.get('IsExcused'), excusedTpl;
 
 					if (isExcused) {
@@ -231,7 +257,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							property: store.remoteSort ? 'gradeValue' : 'Grade',
 							//the transform and root are ignored on remote sort
 							root: 'data',
-							sorterFn: function (oA, oB) {
+							sorterFn: function (containerA, containerB) {
+								const oA = containerA.getHistoryItem();
+								const oB = containerB.getHistoryItem();
+
 								var a = getGrade(oA),
 									b = getGrade(oB),
 									cA = oA.get('completed'),
@@ -276,11 +305,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				tdCls: 'feedback',
 				width: 120,
 				renderer: function (v, col, rec) {
-					var feedbackTpl, commentText = rec.get('feedback') === 1 ? ' Comment' : ' Comments';
+					const historyItem = rec.getHistoryItem();
+					var feedbackTpl, commentText = historyItem.get('feedback') === 1 ? ' Comment' : ' Comments';
 
-					feedbackTpl = Ext.DomHelper.markup({cls: 'feedback', html: rec.get('feedback') + commentText});
+					feedbackTpl = Ext.DomHelper.markup({cls: 'feedback', html: historyItem.get('feedback') + commentText});
 
-					if (rec.get('feedback')) {
+					if (historyItem.get('feedback')) {
 						return feedbackTpl;
 					}
 
