@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 
 
 	getHistoryItemFromRecord: function (record) {
-		return record;
+		return (record.getHistoryItem && record.getHistoryItem()) || record;
 	},
 
 
