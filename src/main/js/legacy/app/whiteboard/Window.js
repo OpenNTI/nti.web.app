@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 
 		this.mon(new Ext.dom.CompositeElement(Ext.query('body > .x-mask')), {
 			scope: this,
-			'click': this.absorbeClick
+			'click': this.absorbClick
 		});
 
 		if(Ext.is.iOS) {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 		}
 	},
 
-	absorbeClick: function (e) {
+	absorbClick: function (e) {
 		if (this.isVisible()) {
 			e.stopEvent();
 			return false;
@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 		this.callParent(arguments);
 		var me = this;
 
-		me.mon(me.el, 'click', me.absorbeClick, this);
+		me.mon(me.el, 'click', me.absorbClick, this);
 		me.mon(this.el, 'click', function () {
 			console.log('WB clicked');
 			if (me.ownerCmp) {
