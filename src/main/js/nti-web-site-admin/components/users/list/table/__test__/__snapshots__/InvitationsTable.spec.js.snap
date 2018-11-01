@@ -123,6 +123,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-7"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -191,6 +204,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-0"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -259,6 +285,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-5"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -327,6 +366,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-10"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -395,6 +447,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-3"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -553,6 +618,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-7"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -621,6 +699,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-0"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -689,6 +780,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-5"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -757,6 +861,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-10"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -825,6 +942,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-3"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -893,6 +1023,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-8"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -961,6 +1104,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-1"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1029,6 +1185,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-6"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1097,6 +1266,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-11"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1165,6 +1347,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-9"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1233,6 +1428,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-2"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1301,6 +1509,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-9"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1369,6 +1590,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-4"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1437,6 +1671,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-11"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1505,6 +1752,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-6"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1573,6 +1833,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-1"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1641,6 +1914,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-8"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1709,6 +1995,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-3"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1777,6 +2076,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-10"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1845,6 +2157,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-0"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1913,6 +2238,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-7"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -1981,6 +2319,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-2"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -2049,6 +2400,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-9"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -2117,6 +2481,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-8"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >
@@ -2185,6 +2562,19 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             <div
               className="cell"
             >
+              <svg
+                alt="Avatar for undefined"
+                className="avatar avatar-color-1"
+                viewBox="0 0 32 32"
+              >
+                <text
+                  textAnchor="middle"
+                  x="16px"
+                  y="21px"
+                >
+                  t
+                </text>
+              </svg>
               <div
                 className="user-info"
               >

@@ -15,7 +15,7 @@ const getMockService = (numberOfUsers) => {
 				getLink: () => 'mockLink'
 			};
 		},
-		getBatch: () => {
+		async getBatch () {
 			let Items = [];
 
 			for(let i = 0; i < numberOfUsers; i++) {
@@ -40,11 +40,11 @@ const getMockService = (numberOfUsers) => {
 				});
 			}
 
-			return Promise.resolve({
+			return {
 				Total: numberOfUsers,
 				BatchPage: 1,
 				Items
-			});
+			};
 		},
 		getWorkspace: () => {
 			return {
@@ -54,31 +54,51 @@ const getMockService = (numberOfUsers) => {
 	};
 };
 
-const onBefore = (numberOfUsers) => {
-	jest.useFakeTimers();
-	setupTestClient(getMockService(numberOfUsers));
-};
 
-const onAfter = () => {
-	tearDownTestClient();
-};
 
-const flushPromises = () => new Promise(resolve => setImmediate(resolve));
+const flushPromises = (run => () => new Promise(resolve => {
+	if(jest.isMockFunction(setTimeout)) {
+		jest.runAllTimers();
+	}
+
+	run.call(process, resolve);
+}))(process.nextTick);
+
+
+async function pollForState (testRenderer, Component, test, timeout = 5000) {
+	let start = new Date();
+
+	const target = Component.WrappedComponent || Component;
+	const cmp = testRenderer.root.findByType(target);
+
+	do {
+		await flushPromises();
+
+		if(new Date() - start > timeout) {
+			throw new Error('Timed out waiting for loading state to be false');
+		}
+	} while(test(cmp));
+}
 
 describe('Site admin user invitations list (with no items)', () => {
 	for(let i of [0, 5, 25]) {
 		describe('Site admin user invitations list (with ' + i + ' items)', () => {
-			beforeEach(() => onBefore(i));
-			afterEach(onAfter);
+
+			beforeEach(() => {
+				jest.useFakeTimers();
+				setupTestClient(getMockService(i));
+			});
+
+			afterEach(() => {
+				tearDownTestClient();
+			});
 
 			test('Basic render test', async () => {
-				const cmp = renderer.create(<InvitationsTable/>);
+				const testRenderer = renderer.create(<InvitationsTable/>);
 
-				jest.runAllTimers();
-				await flushPromises();
-				jest.runAllTimers();
+				await pollForState(testRenderer, InvitationsTable, (cmp) => cmp.props.loading);
 
-				const tree = cmp.toJSON();
+				const tree = testRenderer.toJSON();
 
 				expect(tree).toMatchSnapshot();
 			});
