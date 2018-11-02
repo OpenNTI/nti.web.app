@@ -477,7 +477,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 
 	__getHistoryItem: function (historyItem) {
-		return historyItem.resolveFullItem();
+		const item = historyItem && historyItem.getHistoryItem && historyItem.getHistoryItem();
+		return (item || historyItem).resolveFullItem();
 	},
 
 
