@@ -1,10 +1,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { TestUtils } from '@nti/web-client';
+import { Date as DateUtils } from '@nti/lib-commons';
 
 import View from '../View';
 
 const { tearDownTestClient, setupTestClient } = TestUtils;
+const { MockDate } = DateUtils;
 
 const getMockService = (hasData) => {
 	return {
@@ -46,8 +48,15 @@ const flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 /* eslint-env jest */
 describe('Site admin user course enrollment overview view', () => {
+	const actingDate = new Date('10/31/2018');
+	MockDate.install(actingDate);
+
 	beforeEach(() => onBefore(true));
 	afterEach(onAfter);
+
+	afterAll(() => {
+		MockDate.uninstall();
+	});
 
 	test('Basic render test', async () => {
 		const enrollment = {
