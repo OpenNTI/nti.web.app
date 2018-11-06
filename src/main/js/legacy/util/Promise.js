@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+const {guidGenerator} = require('legacy/util/Globals');
+
 Object.assign(Promise.prototype, {
 	always (fn) {
 		return this.then(fn, fn);
@@ -64,6 +66,7 @@ global.Deferred = Promise.Deferred = (function () {
 		var o = false;
 		function wtf (f, r) {
 			o = {
+				id: guidGenerator(),
 				fulfill: function (value) {f(value);},
 				reject: function (reason) {r(reason);}
 			};
