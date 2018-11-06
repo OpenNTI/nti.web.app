@@ -19,10 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	],
 
 	getItem: function (id) {
-		const container = this.getFieldItem('Items', id);
-		let item = container && container.getFieldItem('Items', 'UsersCourseAssignmentHistoryItem');
-
-		return item || container;
+		return this.getFieldItem('Items', id);
 	},
 
 	addItem: function (key, item) {

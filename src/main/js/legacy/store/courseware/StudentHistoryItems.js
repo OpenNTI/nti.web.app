@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 					me.remove(entry);
 				}
 			} else if (entry) {
-				entry.getHistoryItem().set({
+				entry.getMostRecentHistoryItem().set({
 					'item': assignment,
 					'AssignmentId': assignment.getId()
 				});

@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				flex: 1,
 				renderer: function (v, col, rec) {
 					return Ext.DomHelper.markup({
-						html: rec.getHistoryItem().get('name')
+						html: rec.getMostRecentHistoryItem().get('name')
 					});
 				},
 				doSort: function (state) {
@@ -63,8 +63,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 								direction: state,
 								property: 'name',
 								sorterFn: function (containerA, containerB) {
-									const a = containerA.getHistoryItem();
-									const b = containerB.getHistoryItem();
+									const a = containerA.getMostRecentHistoryItem();
+									const b = containerB.getMostRecentHistoryItem();
 
 									let aVal = get(a),
 										bVal = get(b),
@@ -95,9 +95,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 			{ text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'), dataIndex: 'completed', name: 'completed', width: 140,
 				renderer: function (val, col, rec) {
-					const v = rec.getHistoryItem().get('Submission');
+					const v = rec.getMostRecentHistoryItem().get('Submission');
 
-					var d = rec.collection.findItem(rec.getHistoryItem().get('item').getId()).get('availableEnding'),
+					var d = rec.collection.findItem(rec.getMostRecentHistoryItem().get('item').getId()).get('availableEnding'),
 						s = (v && v.get && v.get('Last Modified')) || v;
 
 
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					}
 
 					//If the submission was created from an instructor adding a grade
-					if (rec.getHistoryItem().isSyntheticSubmission()) {
+					if (rec.getMostRecentHistoryItem().isSyntheticSubmission()) {
 						return Ext.DomHelper.markup({
 							cls: 'ontime',
 							cn: [
@@ -157,8 +157,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 								direction: state,
 								property: 'dateSubmitted',
 								sorterFn: function (containerA, containerB) {
-									const a = containerA.getHistoryItem();
-									const b = containerB.getHistoryItem();
+									const a = containerA.getMostRecentHistoryItem();
+									const b = containerB.getMostRecentHistoryItem();
 
 									var v1 = !!a.get('completed'),
 										v2 = !!b.get('completed'),
@@ -173,8 +173,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 								property: 'dateSubmitted',
 								//not invoked if remote sort.
 								sorterFn: function (containerA, containerB) {
-									const a = containerA.getHistoryItem();
-									const b = containerB.getHistoryItem();
+									const a = containerA.getMostRecentHistoryItem();
+									const b = containerB.getMostRecentHistoryItem();
 
 									var v1 = get(a), v2 = get(b);
 
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				dataIndex: 'Grade', allowTab: true, name: 'grade', width: 120,/*90*/
 				tdCls: 'text score',
 				renderer: function (v, col, rec) {
-					const historyItem = rec.getHistoryItem();
+					const historyItem = rec.getMostRecentHistoryItem();
 					const item = historyItem.get('item');
 					const totalPoints = item && item.get('total_points');
 
@@ -258,8 +258,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							//the transform and root are ignored on remote sort
 							root: 'data',
 							sorterFn: function (containerA, containerB) {
-								const oA = containerA.getHistoryItem();
-								const oB = containerB.getHistoryItem();
+								const oA = containerA.getMostRecentHistoryItem();
+								const oB = containerB.getMostRecentHistoryItem();
 
 								var a = getGrade(oA),
 									b = getGrade(oB),
@@ -305,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				tdCls: 'feedback',
 				width: 120,
 				renderer: function (v, col, rec) {
-					const historyItem = rec.getHistoryItem();
+					const historyItem = rec.getMostRecentHistoryItem();
 					var feedbackTpl, commentText = historyItem.get('feedback') === 1 ? ' Comment' : ' Comments';
 
 					feedbackTpl = Ext.DomHelper.markup({cls: 'feedback', html: historyItem.get('feedback') + commentText});

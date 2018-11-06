@@ -11,14 +11,16 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 
 	fields: [
-		{name: 'Items', type: 'collectionItem', persist: false},
+		{name: 'Items', type: 'arrayItem', persist: false},
 
 		//set by the store when it loads
 		{name: 'AssignmentId', type: 'string', persit: false},
 	],
 
 
-	getHistoryItem () {
-		return this.get('Items') && this.getFieldItem('Items', 'UsersCourseAssignmentHistoryItem');
+	getMostRecentHistoryItem () {
+		const items = this.get('Items');
+
+		return items && items[items.length - 1];
 	}
 });
