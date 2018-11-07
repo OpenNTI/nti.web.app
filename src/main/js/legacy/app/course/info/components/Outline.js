@@ -38,12 +38,13 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 	},
 
 	updateStartDate: function (newDate) {
-		if(newDate) {
-			this.startDateLabel && this.startDateLabel.update(Ext.util.Format.date(newDate, 'F j, Y') : '');
+		if (this.startDateLabel) {
+			this.startDateLabel.update(newDate
+				? Ext.util.Format.date(newDate, 'F j, Y') || ''
+				: 'No start date'
+			);
 		}
-		else {
-			this.startDateLabel && this.startDateLabel.update('No start date');
-		}
+
 	},
 
 	renderSelectors: {
