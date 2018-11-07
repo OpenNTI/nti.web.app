@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					});
 				},
 				doSort: function (state) {
-					let get = (o) => { return o.get('name'); },
+					let get = (o) => { return o && o.get('name'); },
 						store = this.up('grid').getStore(),
 						sorters = [
 							{
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					});
 				},
 				doSort: function (state) {
-					function get (o) { o = o.data; return o.completed || o.due; }
+					function get (o) { o = o && o.data; return o && (o.completed || o.due); }
 					var store = this.up('grid').getStore(),
 						groupModifier = state === 'ASC' ? 1 : -1,
 						sorters = [
@@ -160,8 +160,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 									const a = containerA.getMostRecentHistoryItem();
 									const b = containerB.getMostRecentHistoryItem();
 
-									var v1 = !!a.get('completed'),
-										v2 = !!b.get('completed'),
+									var v1 = a && !!a.get('completed'),
+										v2 = b && !!b.get('completed'),
 										v = v1 && !v2 ? -1 : (!v1 && v2 ? 1 : 0);
 
 									//keep the completed items on top
@@ -237,6 +237,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				},
 				doSort: function (state) {
 					function getGrade (o) {
+						if(!o) {
+							return null;
+						}
+
 						var grade = o.get('Grade'),
 							values = grade && grade.getValues(),
 							value = values && values.value,
@@ -263,8 +267,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 								var a = getGrade(oA),
 									b = getGrade(oB),
-									cA = oA.get('completed'),
-									cB = oB.get('completed'),
+									cA = oA && oA.get('completed'),
+									cB = oB && oB.get('completed'),
 									tA = typeof a,
 									tB = typeof b,
 									direction;
@@ -317,14 +321,26 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					return '';
 				},
 				doSort: function (state) {
+					function getFeedbackCount (o) {
+						return o && o.get('feedback');
+					}
+
+
 					var store = this.up('grid').getStore(),
+						less = -1, more = 1, same = 0,
 						sorter = new Ext.util.Sorter({
 							direction: state,
 							property: store.remoteSort ? 'feedbackCount' : 'feedback',
-
+							//the transform and root are ignored on remote sort
 							root: 'data',
-							transform: function (o) {
-								return o || 0;
+							sorterFn: function (containerA, containerB) {
+								const oA = containerA.getMostRecentHistoryItem();
+								const oB = containerB.getMostRecentHistoryItem();
+
+								const v1 = getFeedbackCount(oA) || 0;
+								const v2 = getFeedbackCount(oB) || 0;
+
+								return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
 							}
 						});
 

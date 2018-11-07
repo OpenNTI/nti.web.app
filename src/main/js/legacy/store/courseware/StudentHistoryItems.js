@@ -87,12 +87,16 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 					me.remove(entry);
 				}
 			} else if (entry) {
-				entry.getMostRecentHistoryItem().set({
-					'item': assignment,
-					'AssignmentId': assignment.getId()
-				});
+				const mostRecentHistoryItem = entry.getMostRecentHistoryItem();
 
-				me.__replaceWithCachedInstance(entry);
+				if(mostRecentHistoryItem) {
+					mostRecentHistoryItem.set({
+						'item': assignment,
+						'AssignmentId': assignment.getId()
+					});
+
+					me.__replaceWithCachedInstance(entry);
+				}
 			} else if (!assignment.doNotShow() && me.__hasAccessTo(assignment)) {
 				me.add(me.assignments.createPlaceholderHistoryItem(assignment, me.student));
 			}
