@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 					}
 				}), txt, grade;
 
-			const record = containerRecord && containerRecord.getMostRecentHistoryItem();
+			const record = (containerRecord && containerRecord.getMostRecentHistoryItem) ? containerRecord.getMostRecentHistoryItem() : containerRecord;
 
 			if (record.get('submission')) {
 				menu.add(new Ext.Action({
