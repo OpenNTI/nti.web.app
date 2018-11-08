@@ -327,7 +327,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 					var store = this.up('grid').getStore(),
-						less = -1, more = 1, same = 0,
 						sorter = new Ext.util.Sorter({
 							direction: state,
 							property: store.remoteSort ? 'feedbackCount' : 'feedback',

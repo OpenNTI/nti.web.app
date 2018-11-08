@@ -581,7 +581,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	getHistoryItemFromRecord: function (record) {
-		return record.get('HistoryItemSummary');
+		const container = record.get('HistoryItemSummary');
+
+		if(container && container.getMostRecentHistoryItem) {
+			return container.getMostRecentHistoryItem();
+		}
+
+		return container;
 	},
 
 	onItemClicked: function (v, record, dom, i, e) {

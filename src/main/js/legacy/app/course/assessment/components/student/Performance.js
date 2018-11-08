@@ -329,6 +329,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						h = null;
 					}
 
+					h = h && h.getMostRecentHistoryItem();
+
 					var submission = h && h.get('Submission'),
 						feedback = h && h.get('Feedback'),
 						grade = h && h.get('Grade'),

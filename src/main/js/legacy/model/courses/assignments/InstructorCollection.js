@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
 			Creator: user,
 			AssignmentId: assignment.getId(),
-			Items: {'UsersCourseAssignmentHistoryItem': historySubItem}
+			Items: [historySubItem]
 		});
 
 		//pass the update flag to force incase we already have a cached instance
