@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	updateStatus: function () {
 		var me = this,
 			assignment = me.assignment,
-			history = me.history && me.history.getMostRecentHistoryItem(),
+			history = (me.history && me.history.getMostRecentHistoryItem) ? me.history.getMostRecentHistoryItem() : me.history,
 			completed = history && history.get('completed'),
 			grade = history && history.get && history.get('Grade'),
 			status = me.status || AssignmentStatus.getStatusHTML({
