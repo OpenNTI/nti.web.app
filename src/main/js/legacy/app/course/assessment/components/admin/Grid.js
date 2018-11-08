@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				flex: 1,
 				renderer: function (v, col, rec) {
 					return Ext.DomHelper.markup({
-						html: rec.getMostRecentHistoryItem().get('name')
+						html: rec.get('item').get('title')
 					});
 				},
 				doSort: function (state) {
@@ -95,9 +95,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 			{ text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'), dataIndex: 'completed', name: 'completed', width: 140,
 				renderer: function (val, col, rec) {
-					const v = rec.getMostRecentHistoryItem().get('Submission');
+					const historyItem = rec.getMostRecentHistoryItem();
+					const v = historyItem && historyItem.get('Submission');
 
-					var d = rec.collection.findItem(rec.getMostRecentHistoryItem().get('item').getId()).get('availableEnding'),
+					const item = rec.get('item');
+
+					var d = item && rec.collection.findItem(item.getId()).get('availableEnding'),
 						s = (v && v.get && v.get('Last Modified')) || v;
 
 
@@ -204,11 +207,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				tdCls: 'text score',
 				renderer: function (v, col, rec) {
 					const historyItem = rec.getMostRecentHistoryItem();
-					const item = historyItem.get('item');
+					const item = rec.get('item');
 					const totalPoints = item && item.get('total_points');
 
-					var grade = historyItem.get('Grade'),
-						scoreTpl = Ext.DomHelper.markup({tag: 'input', type: 'text', value: historyItem.get('grade')}),
+					var grade = historyItem && historyItem.get('Grade'),
+						scoreTpl = Ext.DomHelper.markup({tag: 'input', type: 'text', value: historyItem && historyItem.get('grade')}),
 						isExcused = grade && grade.get('IsExcused'), excusedTpl;
 
 					if (isExcused) {
@@ -310,12 +313,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				width: 120,
 				renderer: function (v, col, rec) {
 					const historyItem = rec.getMostRecentHistoryItem();
-					var feedbackTpl, commentText = historyItem.get('feedback') === 1 ? ' Comment' : ' Comments';
+					var commentText = historyItem && historyItem.get('feedback') === 1 ? ' Comment' : ' Comments';
 
-					feedbackTpl = Ext.DomHelper.markup({cls: 'feedback', html: historyItem.get('feedback') + commentText});
-
-					if (historyItem.get('feedback')) {
-						return feedbackTpl;
+					if (historyItem && historyItem.get('feedback')) {
+						return Ext.DomHelper.markup({cls: 'feedback', html: historyItem.get('feedback') + commentText});
 					}
 
 					return '';
@@ -348,8 +349,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			},
 
 
-			{ text: '', dataIndex: 'submission', name: 'submission', sortable: false, width: 40, renderer: function (v) {
-				return v && Ext.DomHelper.markup({cls: 'actions'});
+			{ text: '', dataIndex: 'submission', name: 'submission', sortable: false, width: 40, renderer: function (v, col, rec) {
+				const submission = rec.getMostRecentHistoryItem() && rec.getMostRecentHistoryItem().get('submission');
+				return submission && Ext.DomHelper.markup({cls: 'actions'});
 			} }
 		]
 	},

@@ -197,7 +197,6 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		var grade = this.createPlaceholderGrade(assignment, user),
 			historySubItem = UsersCourseAssignmentHistoryItem.create({
 				Creator: user,
-				item: assignment,
 				AssignmentId: assignment.getId(),
 				Grade: grade
 			});
@@ -205,6 +204,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
 			Creator: user,
 			AssignmentId: assignment.getId(),
+			item: assignment,
 			Items: [historySubItem]
 		});
 

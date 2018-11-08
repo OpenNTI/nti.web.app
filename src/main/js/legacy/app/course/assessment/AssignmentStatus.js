@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		 * @param {Function} onExcused -
 		 * @return {Ext.Menu} a menu component
 		 */
-		getActionsMenu: function (record, onReset = () => {}, onExcused = () => {}) {
+		getActionsMenu: function (containerRecord, onReset = () => {}, onExcused = () => {}) {
 			var menu = Ext.widget('menu', {
 					ownerCmp: this,
 					constrainTo: Ext.getBody(),
@@ -231,6 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 					}
 				}), txt, grade;
 
+			const record = containerRecord && containerRecord.getMostRecentHistoryItem();
 
 			if (record.get('submission')) {
 				menu.add(new Ext.Action({
@@ -238,6 +239,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 					scope: this,
 					handler: () => {
 						record.beginReset()
+							.then(() => {
+								// trigger re-sync on containerRecord with new history item record
+								containerRecord.syncWith(containerRecord);
+								return Promise.resolve();
+							})
 							.then(onReset);
 					},
 					itemId: 'delete-assignment-history',

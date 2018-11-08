@@ -328,13 +328,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	setHistory: function (history) {
+	setHistory: function (historyContainer) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setHistory.bind(this, history));
+			this.on('afterrender', this.setHistory.bind(this, historyContainer));
 			return;
 		}
 
-		var grade = history && history.get('Grade'),
+		var history = (historyContainer && historyContainer.getMostRecentHistoryItem) ? historyContainer.getMostRecentHistoryItem() : historyContainer,
+			grade = history && history.get('Grade'),
 			// due = this.assignment && this.assignment.getDueDate(),
 			historyDuration = history && history.getDuration() || {},
 			submission = history && history.get('Submission'),

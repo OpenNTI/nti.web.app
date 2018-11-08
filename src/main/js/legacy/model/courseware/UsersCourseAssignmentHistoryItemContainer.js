@@ -14,7 +14,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{name: 'Items', type: 'arrayItem', persist: false},
 
 		//set by the store when it loads
-		{name: 'AssignmentId', type: 'string', persit: false},
+		{name: 'item', type: 'auto', persist: false},
+		{name: 'AssignmentId', type: 'string', persist: false},
 	],
 
 
