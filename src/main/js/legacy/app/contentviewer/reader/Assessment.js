@@ -117,16 +117,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 					return lazy.ParseUtils.parseItems(response)[0];
 				})
 				.then(function (history) {
-					survey.fireEvent('graded', history.get('Submission'));
+					survey.fireEvent('graded', me.getHistory(history).get('Submission'));
 				});
 		}
+	},
+
+	getHistory (h) {
+		return (h && h.getMostRecentHistoryItem) ? h.getMostRecentHistoryItem() : h;
 	},
 
 	makeAssessmentQuiz: function (set, guid) {
 		var me = this,
 			isInstructor = this.isInstructorProspective,
 			completed,
-			h = me.injectedAssignmentHistory,
+			h = me.getHistory(me.injectedAssignmentHistory),
 			o = me.reader.getComponentOverlay(),
 			c = o.componentOverlayEl,
 			r = me.reader,
