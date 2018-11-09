@@ -28,9 +28,22 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		};
 	},
 
+	/**
+	 * Get the reader
+	 * @return {[type]} [description]
+	 */
 	getReaderConfig: function () {
-		var assignment = this.assignment;
+		const assignment = this.assignment;
 		const isPracticeSubmission = assignment && assignment.hasLink('PracticeSubmission');
+		const defaultConfig = this.callParent(this);
+
+		const getNewPageInfo = (newAssignment) => {
+			if (this.pageInfo.regenerate) {
+				return this.pageInfo.regenerate(newAssignment);
+			}
+
+			return this.pageInfo.clone().replaceAssignment(newAssignment);
+		};
 
 		//If the assignment hasn't started yet, and you can't do a practice submission
 		if (!assignment.isAvailable() && !isPracticeSubmission) {
@@ -39,8 +52,39 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				assignment: assignment,
 				flex: 1
 			};
-		//If the assignment is timed and hasn't starte yet, and you aren't an instructor
-		} else if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !isPracticeSubmission) {
+		}
+
+		//the assignment is a practice submission
+		if (assignment.isNoSubmit() || (isMe(this.student) && isPracticeSubmission)) {
+			if (!assignment.isTimed) {
+				this.hasTimedPlaceholder = false;//BOOOOOO side effects
+			}
+
+			return defaultConfig;
+		}
+
+		//the assignment is started, or submitted. Show the latest attempt
+		if (assignment.isStarted() || assignment.hasSubmission()) {
+			return assignment.getLatestAttempt()
+				.then(attempt => attempt.getAssignment())
+				.then((attemptAssignment) => {
+					if (!assignment.isTime) {
+						this.hasTimedPlaceholder = false;
+					}
+
+					this.assignmentOverride = attemptAssignment;
+
+					return {
+						...defaultConfig,
+						pageInfo: getNewPageInfo(attemptAssignment)
+					};
+				})
+				.catch(() => defaultConfig);
+		}
+
+
+		//the assignment should not auto start
+		if (!assignment.shouldAutoStart()) {
 			this.hasTimedPlaceholder = true;
 
 			return {
@@ -49,12 +93,38 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				startAssignment: this.startTimed.bind(this),
 				flex: 1
 			};
-		} else {
-			if (!assignment.isTimed) {
-				this.hasTimedPlaceholder = false;
-			}
-			return this.callParent(arguments);
 		}
+
+		return assignment.start()
+			.then((startedAssignment) => {
+				if (!assignment.isTime) {
+					this.hasTimedPlaceholder = false;
+				}
+
+				return {
+					...defaultConfig,
+					pageInfo: getNewPageInfo(startedAssignment)
+				};
+			})
+			.catch(() => defaultConfig);
+
+
+		// //If the assignment is timed and hasn't started yet, and you aren't an instructor
+		// } else if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !isPracticeSubmission) {
+		// 	this.hasTimedPlaceholder = true;
+
+		// 	return {
+		// 		xtype: 'assignment-timedplaceholder',
+		// 		assignment: assignment,
+		// 		startAssignment: this.startTimed.bind(this),
+		// 		flex: 1
+		// 	};
+		// } else {
+		// 	if (!assignment.isTimed) {
+		// 		this.hasTimedPlaceholder = false;
+		// 	}
+		// 	return this.callParent(arguments);
+		// }
 	},
 
 	startTimed: function (assignment) {
@@ -69,12 +139,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		regenerate
 			.then((pageInfo) => {
 				this.pageInfo = pageInfo;
-				this.showReader();
-				delete this.hasTimedPlaceholder;
+				this.showReader()
+					.then(() => {
+						delete this.hasTimedPlaceholder;
 
-				if (this.rendered) {
-					this.showAssignment();
-				}
+						if (this.rendered) {
+							this.showAssignment();
+						}
+					});
 			});
 
 	},
@@ -99,8 +171,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				.then((pageInfo) => {
 					this.pageInfo = pageInfo;
 
-					this.showReader();
-					this.maybeShowAllowedTime();
+					this.showReader()
+						.then(() => {
+							this.showReader();
+							this.maybeShowAllowedTime();
+						});
+
 				});
 		});
 
@@ -126,18 +202,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	setPageInfo: function () {},
 
 	showAssignment: function () {
-		var me = this,
-			header = me.getToolbar(),
-			reader = me.getReaderContent(),
-			readerAssessment = reader && reader.getAssessment(),
-			assignment = me.assignment,
-			savepoint = assignment && assignment.getSavePoint(),
-			assignmentHistory = assignment && assignment.hasHistoryLink() ? assignment.getHistory() : me.assignmentHistory;
+		const header = this.getToolbar();
+		const reader = this.getReaderContent();
 
 		if (!reader) {
+			this.mon(this, 'reader-set', () => this.showAssignment(), this, {single: true});
 			return;
 		}
 
+		var me = this,
+			readerAssessment = reader && reader.getAssessment(),
+			assignment = me.assignmentOverride || me.assignment,
+			savepoint = assignment && assignment.getSavePoint(),
+			assignmentHistory = assignment && assignment.hasHistoryLink() ? assignment.getHistory() : me.assignmentHistory;
 
 		reader.getScroll().lock();
 		reader.hidePageWidgets();

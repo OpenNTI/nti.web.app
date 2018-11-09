@@ -6,7 +6,10 @@ const lazy = require('legacy/util/lazy-require')
 const TimeUtils = require('legacy/util/Time');
 const ModelWithPublish = require('legacy/mixins/ModelWithPublish');
 
+require('./UsersCourseAssignmentAttemptMetadataItem');
+
 require('../Base');
+
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Assignment', {
@@ -55,6 +58,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'IsTimedAssignment', type: 'bool'},
 		{ name: 'MaximumTimeAllowed', type: 'int'}, //this is in seconds
 		{ name: 'Metadata', type: 'auto'},
+		{ name: 'CurrentMetadataAttemptItem', type: 'singleItem'},
 		//ui fields
 		{ name: 'isStarted', type: 'bool', persist: false, convert: function (v, rec) {
 			return v || !!rec.getLink('StartTime');
@@ -209,28 +213,52 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		return part && part.tallyParts();
 	},
 
-	//Timed Assignment Methods
+
+	shouldAutoStart: function () {
+		return !this.isTimed;
+	},
+
+
+	hasSubmission () {
+		return this.hasHistoryLink();
+	},
+
+
 	isStarted: function () {
-		return this.get('isStarted');
+		const attempt = this.get('CurrentMetadataAttemptItem');
+
+		return !!attempt || !this.hasLink('Commence');
 	},
 
 
 	start: function () {
-		var me = this,
-			link = this.getLink('Commence');
+		const link = this.getLink('Commence');
 
 		if (!link) {
-			console.error('No commence link');
+			console.error('No Commence Link.');
 			return Promise.reject();
 		}
 
 		return Service.post(link)
-			.then(function (response) {
-				return me.syncWithResponse(response);
+			.then((response) => {
+				return this.syncWithResponse(response);
 			});
 	},
 
 
+	getLatestAttempt () {
+		const current = this.get('CurrentMetadataAttemptItem');
+
+		if (current) {
+			return Promise.resolve(current);
+		}
+
+		return this.getHistory()
+			.then(history => history.get('MetadataAttemptItem'));
+	},
+
+
+	//Timed Assignment Methods
 	updateMetaData: function (metaData) {
 		var current = this.get('Metadata');
 

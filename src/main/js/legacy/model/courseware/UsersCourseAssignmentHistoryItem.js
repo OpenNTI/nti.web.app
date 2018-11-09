@@ -5,6 +5,7 @@ const BatchExecution = require('legacy/util/BatchExecution');
 
 const Grade = require('./Grade');
 
+require('../assessment/UsersCourseAssignmentAttemptMetadataItem');
 require('../Base');
 
 module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
@@ -35,6 +36,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{name: 'pendingAssessment', type: 'singleItem', persist: false},
 		{name: 'Metadata', type: 'auto', persit: false},
 		{name: 'SyntheticSubmission', type: 'boolean', persist: false},
+		{name: 'MetadataAttemptItem', type: 'singleItem'},
 
 		//set by the store when it loads
 		{name: 'AssignmentId', type: 'string', persit: false},

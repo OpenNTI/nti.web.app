@@ -107,55 +107,63 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		this.navigation.removeAll(true);
 		this.body.removeAll(true);
 
-		var toolbarConfig = this.getToolbarConfig(),
-			readerConfig = this.getReaderConfig(),
-			readerContent;
+		return Promise.all([
+			this.getToolbarConfig(),
+			this.getReaderConfig()
+		]).then((results) => {
+			const [toolbarConfig, readerConfig] = results;
+			let readerContent;
 
-		this.flatPageStore = this.flatPageStore || FlatPage.create({ storeId: 'FlatPage-' + this.id });
-		this.UserDataActions.initPageStores(this);
+			this.flatPageStore = this.flatPageStore || FlatPage.create({ storeId: 'FlatPage-' + this.id });
+			this.UserDataActions.initPageStores(this);
 
-		toolbarConfig.isReaderToolBar = true;
+			toolbarConfig.isReaderToolBar = true;
 
-		this.body.add([
-			toolbarConfig,
-			readerConfig
-		]);
+			this.body.add([
+				toolbarConfig,
+				readerConfig
+			]);
 
-		this.navigation.setActiveTab(this.navigation.add(
-			{
-				title: 'Discussion',
-				iconCls: 'discuss',
-				xtype: 'annotation-view',
-				discussion: true,
-				store: this.flatPageStore,
-				showNote: this.showNote.bind(this)
-			}
-		));
+			this.navigation.setActiveTab(this.navigation.add(
+				{
+					title: 'Discussion',
+					iconCls: 'discuss',
+					xtype: 'annotation-view',
+					discussion: true,
+					store: this.flatPageStore,
+					showNote: this.showNote.bind(this)
+				}
+			));
 
 
-		readerContent = this.getReaderContent();
+			readerContent = this.getReaderContent();
 
-		this.mon(this.flatPageStore, 'bookmark-loaded', function (r) {
-			readerContent.pageWidgets.onBookmark(r);
-		});
-
-		Ext.destroy(this.readerMons);
-
-		if (readerContent) {
-			this.readerMons = this.mon(readerContent, {
-				'destroyable': true,
-				'filter-by-line': 'selectDiscussion',
-				'assignment-submitted': this.fireEvent.bind(this, 'assignment-submitted'),
-				'assessment-graded': this.fireEvent.bind(this, 'assessment-graded'),
-				'sync-height': this.alignNavigation.bind(this),
-				'refresh-reader': this.showReader.bind(this)
+			this.mon(this.flatPageStore, 'bookmark-loaded', function (r) {
+				readerContent.pageWidgets.onBookmark(r);
 			});
-			this.down('annotation-view').anchorComponent = readerContent;
-		}
 
-		if (this.rendered && this.pageInfo) {
-			this.setPageInfo(this.pageInfo, this.bundle);
-		}
+			Ext.destroy(this.readerMons);
+
+			if (readerContent) {
+				this.readerMons = this.mon(readerContent, {
+					'destroyable': true,
+					'filter-by-line': 'selectDiscussion',
+					'assignment-submitted': this.fireEvent.bind(this, 'assignment-submitted'),
+					'assessment-graded': this.fireEvent.bind(this, 'assessment-graded'),
+					'sync-height': this.alignNavigation.bind(this),
+					'refresh-reader': this.showReader.bind(this)
+				});
+				this.down('annotation-view').anchorComponent = readerContent;
+			}
+
+			if (this.rendered && readerConfig.pageInfo) {
+				this.setPageInfo(readerConfig.pageInfo, this.bundle);
+			} else if (this.rendered && this.pageInfo) {
+				this.setPageInfo(this.pageInfo, this.bundle);
+			}
+
+			this.fireEvent('reader-set');
+		});
 	},
 
 	alignNavigation: function () {

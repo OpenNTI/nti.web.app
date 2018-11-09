@@ -207,5 +207,10 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 		});
 
 		this.set('AssessmentItems', items);
+	},
+
+
+	clone () {
+		return lazy.ParseUtils.parseItems(this.rawData)[0];
 	}
 });
