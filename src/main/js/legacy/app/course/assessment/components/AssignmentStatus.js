@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				start: assignment.get('availableBeginning'),
 				completed: !assignment.getDateEditingLink() && completed,
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
-				duration: assignment.isTimed && assignment.getDuration(),
+				duration: assignment.isTimed && history && history.getDuration(),
 				isExcused: grade && grade.get('IsExcused'),
 				isNoSubmitAssignment: assignment.isNoSubmit() || (history && history.isSyntheticSubmission()),
 				isDraft: assignment.isDraft()

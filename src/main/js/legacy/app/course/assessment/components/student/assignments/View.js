@@ -575,6 +575,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 		function buildConfig (id, assignment, history, grade, node, actualId) {
+			const mostRecentAttempt = history && history.getMostRecentHistoryItem();
+
 			return {
 				id: id,
 				canEdit: assignment.canEdit(),
@@ -588,7 +590,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				opens: assignment.get('availableBeginning'),
 				due: assignment.get('availableEnding'),
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
-				duration: assignment.isTimed && history && history.getDuration(),
+				duration: assignment.isTimed && mostRecentAttempt && mostRecentAttempt.getDuration(),
 
 				completed: history && history.get('completed'),
 				correct: history && history.get('correct'),
