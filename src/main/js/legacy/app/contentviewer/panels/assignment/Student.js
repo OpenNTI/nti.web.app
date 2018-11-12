@@ -77,11 +77,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 					this.assignmentOverride = attemptAssignment;
 
-					return {
-						...defaultConfig,
-						pageInfo: getNewPageInfo(attemptAssignment)
-					};
+					return getNewPageInfo(attemptAssignment);
 				})
+				.then(pageInfo => ({...defaultConfig, pageInfo}))
 				.catch(() => defaultConfig);
 		}
 
@@ -106,11 +104,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 				this.assignmentOverride = startedAssignment;
 
-				return {
-					...defaultConfig,
-					pageInfo: getNewPageInfo(startedAssignment)
-				};
+				return getNewPageInfo(startedAssignment);
 			})
+			.then(pageInfo => ({...defaultConfig, pageInfo}))
 			.catch(() => defaultConfig);
 	},
 
@@ -252,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 			reader.getNoteOverlay().disable();
 
-			return reader.setPageInfo(me.pageInfo, me.bundle, me.fragment);
+			return reader.setPageInfo(me.pageInfoOverride || me.pageInfo, me.bundle, me.fragment);
 		}).always(done.bind(this));
 	},
 

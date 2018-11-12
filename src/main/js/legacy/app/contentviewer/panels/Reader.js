@@ -156,6 +156,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 				this.down('annotation-view').anchorComponent = readerContent;
 			}
 
+			this.pageInfoOverride = readerConfig.pageInfo;
+
 			if (this.rendered && readerConfig.pageInfo) {
 				this.setPageInfo(readerConfig.pageInfo, this.bundle);
 			} else if (this.rendered && this.pageInfo) {
@@ -182,8 +184,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		var center = this.el.down('.center'),
 			height = Ext.Element.getViewportHeight();
 
-		if (this.pageInfo) {
-			this.setPageInfo(this.pageInfo, this.bundle);
+		if (this.pageInfo || this.pageInfoOverride) {
+			this.setPageInfo(this.pageInfoOverride || this.pageInfo, this.bundle);
 		} else {
 			console.error('No Page Info set on the reader. Everyone PANIC!!!!!!');
 		}
