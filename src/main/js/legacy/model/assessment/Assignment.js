@@ -3,7 +3,6 @@ const Ext = require('@nti/extjs');
 const {getURL} = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-const TimeUtils = require('legacy/util/Time');
 const ModelWithPublish = require('legacy/mixins/ModelWithPublish');
 
 require('./UsersCourseAssignmentAttemptMetadataItem');
@@ -253,8 +252,12 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 			return Promise.resolve(current);
 		}
 
+
 		return this.getHistory()
-			.then(history => history.get('MetadataAttemptItem'));
+			.then(history => {
+				return history.get('MetadataAttemptItem');
+			})
+			.catch(() => null);
 	},
 
 
@@ -275,35 +278,22 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 	},
 
 
-	getMaxTimeString: function () {
-		var maxTime = this.get('MaximumTimeAllowed');
-
-		return TimeUtils.getNaturalDuration(maxTime, 2);
-	},
-
-
-	getStartTime: function () {
-		var metaData = this.get('Metadata');
-
-		return (metaData && (metaData.StartTime * 1000));
-	},
-
-
 	getTimeRemaining: function () {
-		var link = this.getLink('TimeRemaining');
+		const current = this.get('CurrentMetadataAttemptItem');
+		const link = current && current.getLink('TimeRemaining');
 
-		function fail () {
-			console.error('Unable get time remaining.. Returning Zero');
+		const fail = () => {
+			console.error('Unable to get time remaining... Returning Zero');
 			return Promise.resolve(0);
-		}
+		};
 
 		if (!link) {
 			return fail();
 		}
 
 		return Service.request(link)
-			.then(function (response) {
-				var json = JSON.parse(response);
+			.then((response) => {
+				const json = JSON.parse(response);
 
 				return json.TimeRemaining * 1000;
 			})
@@ -312,8 +302,6 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 
 	getDuration: function () {
-		var metaData = this.get('Metadata');
-
-		return metaData && (metaData.Duration * 1000);
+		throw new Error('Duration is no longer available on the assignment metadata, you have to get it from the history item');
 	}
 });

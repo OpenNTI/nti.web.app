@@ -197,9 +197,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	},
 
 	getDuration: function () {
-		var metaData = this.get('Metadata');
+		const attempt = this.get('MetadataAttemptItem');
 
-		return metaData && ((metaData.Duration || 0) * 1000);
+		return attempt.getDuration();
 	},
 
 	allowReset: function () {
@@ -277,6 +277,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 										Grade: grade,
 										Feedback: null,
 										Metadata: null,
+										MetadataAttemptItem: null,
 										completed: null,
 										SubmissionCreatedTime: null,
 										submission: null,

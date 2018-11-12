@@ -29,7 +29,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	},
 
 	/**
-	 * Get the reader
+	 * Get the reader.
+	 *
 	 * @return {[type]} [description]
 	 */
 	getReaderConfig: function () {
@@ -66,9 +67,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		//the assignment is started, or submitted. Show the latest attempt
 		if (assignment.isStarted() || assignment.hasSubmission()) {
 			return assignment.getLatestAttempt()
-				.then(attempt => attempt.getAssignment())
+				.then(attempt => attempt && attempt.getAssignment())
 				.then((attemptAssignment) => {
-					if (!assignment.isTime) {
+					if (!attemptAssignment) { return defaultConfig; }
+
+					if (!attemptAssignment.isTime) {
 						this.hasTimedPlaceholder = false;
 					}
 
@@ -101,30 +104,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 					this.hasTimedPlaceholder = false;
 				}
 
+				this.assignmentOverride = startedAssignment;
+
 				return {
 					...defaultConfig,
 					pageInfo: getNewPageInfo(startedAssignment)
 				};
 			})
 			.catch(() => defaultConfig);
-
-
-		// //If the assignment is timed and hasn't started yet, and you aren't an instructor
-		// } else if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !isPracticeSubmission) {
-		// 	this.hasTimedPlaceholder = true;
-
-		// 	return {
-		// 		xtype: 'assignment-timedplaceholder',
-		// 		assignment: assignment,
-		// 		startAssignment: this.startTimed.bind(this),
-		// 		flex: 1
-		// 	};
-		// } else {
-		// 	if (!assignment.isTimed) {
-		// 		this.hasTimedPlaceholder = false;
-		// 	}
-		// 	return this.callParent(arguments);
-		// }
 	},
 
 	startTimed: function (assignment) {
