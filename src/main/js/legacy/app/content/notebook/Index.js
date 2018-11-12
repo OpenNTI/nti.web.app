@@ -34,6 +34,18 @@ module.exports = exports = Ext.define('NextThought.app.content.notebook.Index', 
 		});
 	},
 
+	onRouteActivate () {
+		if (this.notebook) {
+			this.notebook.onRouteActivate();
+		}
+	},
+
+	onRouteDeactivate () {
+		if (this.notebook) {
+			this.notebook.onRouteDeactivate();
+		}
+	},
+
 	getRouteFor (object, context) {
 		if (object.MimeType === HighLight.mimeType) {
 			return () => this.Router.root.attemptToNavigateToObject(HighLight.interfaceToModel(object));
