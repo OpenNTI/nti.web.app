@@ -49,10 +49,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 
 	async loadForum (id) {
 		try {
+			this.navigation.setActiveForum(id);
 			const service = await getService();
 			const forum = await service.getObject(decodeFromURI(id));
 			const record = Forum.interfaceToModel(forum);
-			this.navigation.setActiveForum(id);
 			this.setForum(record);
 		} catch (error) {
 			Ext.Msg.show({
