@@ -36,8 +36,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	addClasses: function () {
-		var cls = [],
-			completed = this.history && this.history.get('completed');
+		const cls = [];
+		const attempt = this.history && this.history.getMostRecentHistoryItem();
+		const completed = attempt && attempt.get('completed');
 
 		if (!this.assignment.isOpen()) {
 			cls.push('closed');

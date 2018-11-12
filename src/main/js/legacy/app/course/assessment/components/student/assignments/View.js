@@ -592,8 +592,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
 				duration: assignment.isTimed && mostRecentAttempt && mostRecentAttempt.getDuration(),
 
-				completed: history && history.get('completed'),
-				correct: history && history.get('correct'),
+				completed: mostRecentAttempt && mostRecentAttempt.get('completed'),
+				correct: mostRecentAttempt && mostRecentAttempt.get('correct'),
 
 				history: history,
 
