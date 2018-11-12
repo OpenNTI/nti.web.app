@@ -7,12 +7,13 @@ require('../../components/assignment/TimedPlaceholder');
 require('../../components/assignment/NotStartedPlaceholder');
 require('../Reader');
 
-
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 	extend: 'NextThought.app.contentviewer.panels.Reader',
 	alias: 'widget.assignment-reader',
 	prefix: 'course-assignment',
 	cls: 'reader-container assignment-reader',
+
+
 
 	getToolbarConfig: function () {
 		return {
@@ -28,15 +29,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		};
 	},
 
+
 	/**
-	 * Get the reader.
+	 * Get the toolbar and reader config with the correct assignment
 	 *
-	 * @return {[type]} [description]
+	 * @return {[Array]} [toolbarConfig, readerConfig]
 	 */
-	getReaderConfig: function () {
+	getToolbarAndReaderConfig () {
 		const assignment = this.assignment;
 		const isPracticeSubmission = assignment && assignment.hasLink('PracticeSubmission');
-		const defaultConfig = this.callParent(this);
+		const baseToolbarConfig = this.getToolbarConfig();
+		const baseReaderConfig = this.getReaderConfig();
+		const defaultConfig = [baseToolbarConfig, baseReaderConfig];
 
 		const getNewPageInfo = (newAssignment) => {
 			if (this.pageInfo.regenerate) {
@@ -46,22 +50,25 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			return this.pageInfo.clone().replaceAssignment(newAssignment);
 		};
 
-		//If the assignment hasn't started yet, and you can't do a practice submission
-		if (!assignment.isAvailable() && !isPracticeSubmission) {
-			return {
-				xtype: 'assignment-notstarted-placeholder',
-				assignment: assignment,
-				flex: 1
-			};
+		//if the assignment hasn't started yet, and you can't do a practice submission
+		if (!assignment || (!assignment.isAvailable() && !isPracticeSubmission)) {
+			return [
+				baseToolbarConfig,
+				{
+					xtype: 'assignment-notstarted-placeholder',
+					assignment,
+					flex: 1
+				}
+			];
 		}
 
-		//the assignment is a practice submission
+		//the assignment is a practice submission, or a no submit
 		if (assignment.isNoSubmit() || (isMe(this.student) && isPracticeSubmission)) {
 			if (!assignment.isTimed) {
 				this.hasTimedPlaceholder = false;//BOOOOOO side effects
 			}
 
-			return defaultConfig;
+			return [baseToolbarConfig, baseReaderConfig];
 		}
 
 		//the assignment is started, or submitted. Show the latest attempt
@@ -77,24 +84,32 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 					this.assignmentOverride = attemptAssignment;
 
-					return getNewPageInfo(attemptAssignment);
+					return getNewPageInfo(attemptAssignment)
+						.then((pageInfo) => {
+							return [
+								{...baseToolbarConfig, assignment: attemptAssignment},
+								{...baseReaderConfig, pageInfo}
+							];
+						});
 				})
-				.then(pageInfo => ({...defaultConfig, pageInfo}))
 				.catch(() => defaultConfig);
 		}
-
 
 		//the assignment should not auto start
 		if (!assignment.shouldAutoStart()) {
 			this.hasTimedPlaceholder = true;
 
-			return {
-				xtype: 'assignment-timedplaceholder',
-				assignment: assignment,
-				startAssignment: this.startTimed.bind(this),
-				flex: 1
-			};
+			return [
+				baseToolbarConfig,
+				{
+					xtype: 'assignment-timedplaceholder',
+					assignment: assignment,
+					startAssignment: this.startTimed.bind(this),
+					flex: 1
+				}
+			];
 		}
+
 
 		return assignment.start()
 			.then((startedAssignment) => {
@@ -104,11 +119,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 				this.assignmentOverride = startedAssignment;
 
-				return getNewPageInfo(startedAssignment);
+				return getNewPageInfo(startedAssignment)
+					.then((pageInfo) => {
+						return [
+							{...baseToolbarConfig, assignment: startedAssignment},
+							{...baseReaderConfig, pageInfo}
+						];
+					});
 			})
-			.then(pageInfo => ({...defaultConfig, pageInfo}))
 			.catch(() => defaultConfig);
 	},
+
 
 	startTimed: function (assignment) {
 		if (this.pageInfo) {
