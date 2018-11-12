@@ -400,7 +400,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			isDraft: !assignment.get('availableBeginning') && !assignment.get('PublicationState'),
 			due: assignment.getDueDate(),
 			maxTime: assignment.isTimed && assignment.getMaxTime(),
-			duration: assignment.isTimed && assignment.getDuration(),
+			// duration: assignment.isTimed && assignment.getDuration(),
 			isNoSubmitAssignment: assignment.isNoSubmit(),
 			start: assignment.get('availableBeginning')
 		}));
