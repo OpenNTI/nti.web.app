@@ -238,13 +238,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 					text: 'Reset Assignment',
 					scope: this,
 					handler: () => {
-						record.beginReset()
-							.then(() => {
-								// trigger re-sync on containerRecord with new history item record
-								containerRecord.syncWith(containerRecord);
-								return Promise.resolve();
-							})
-							.then(onReset);
+						if(containerRecord.hasLink('Reset')) {
+							Service.post(containerRecord.getLink('Reset'))
+								.then(() => {
+									containerRecord.set('Items', []);
+
+									// trigger re-sync on containerRecord with new history item record so store updates grid
+									containerRecord.syncWith(containerRecord);
+									return Promise.resolve();
+								})
+								.then(onReset);
+						}
 					},
 					itemId: 'delete-assignment-history',
 					ui: 'nt-menuitem', plain: true
