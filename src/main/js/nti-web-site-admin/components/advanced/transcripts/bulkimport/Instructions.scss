@@ -1,0 +1,30 @@
+@import "~@nti/style-common/all.scss";
+
+.transcript-credit-import-instructions {
+	.instructions {
+		color: $secondary-grey;
+	}
+
+	.download-sample {
+		font-size: 0.875rem;
+		text-decoration: none;
+		color: $primary-blue;
+		float: right;
+		overflow: hidden;
+		margin-bottom: 1rem;
+	}
+
+	.field-descriptions {
+		font-size: 0.875rem;
+
+		.field-name {
+			font-weight: bold;
+			margin-right: 0.5em;
+		}
+
+		.field-description {
+			color: #b8b8b8;
+			margin-bottom: 1em;
+		}
+	}
+}
