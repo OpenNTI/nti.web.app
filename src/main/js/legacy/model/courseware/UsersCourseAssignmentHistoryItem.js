@@ -93,8 +93,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 
 		{name: 'submission', type: 'string', persist: false, affectedBy: ['SubmissionCreatedTime', 'Submission'], convert: function (v, r) {
-			r = r.raw || {};
-			return (r.hasOwnProperty('SubmissionCreatedTime') || r.hasOwnProperty('Submission') || v) ? 'true' : '';
+			return (r.get('SubmissionCreatedTime') || r.get('Submission') || v) ? 'true' : '';
 		}},
 
 

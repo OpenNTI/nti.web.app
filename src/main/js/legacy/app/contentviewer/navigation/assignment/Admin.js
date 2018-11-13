@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 	__getExcusedTpl: function () {
 		var excusedTpl = {cls: 'off', html: 'Excused'},
-			grade = this.assignmentHistory && this.assignmentHistory.get && this.assignmentHistory.get('Grade');
+			grade = this.assignmentHistory && this.assignmentHistory.getMostRecentHistoryItemGrade && this.assignmentHistory.getMostRecentHistoryItemGrade();
 
 		if (grade && grade.get('IsExcused')) {
 			excusedTpl.cls = 'on';
@@ -146,8 +146,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			}
 		});
 
-		if (this.assignmentHistory && this.assignmentHistory instanceof Promise) {
-			this.assignmentHistory.then(this.setUpGradeBox.bind(this));
+		if (this.assignmentHistoryItemContainer && this.assignmentHistoryItemContainer instanceof Promise) {
+			this.assignmentHistoryItemContainer.then(this.setUpGradeBox.bind(this));
 		} else {
 			this.setUpGradeBox();
 		}
@@ -252,25 +252,28 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			});
 	},
 
-	setUpGradeBox: function (historyItem) {
-		if (!this.assignmentHistory && !historyItem) { return; }
+	setUpGradeBox: function (historyItemContainer) {
+		if (!this.assignmentHistoryItemContainer && !historyItemContainer) { return; }
 
 		if (!this.rendered) { return; }
 
-		if (historyItem) {
-			this.assignmentHistory = historyItem;
+		if (historyItemContainer) {
+			this.assignmentHistoryItemContainer = historyItemContainer;
 		}
 
-		var grade = this.assignmentHistory.get('Grade'),
+		const historyItem = this.assignmentHistoryItemContainer.getMostRecentHistoryItem();
+
+
+		var grade = historyItem && historyItem.get('Grade'),
 			values = grade && grade.getValues(),
 			number = values && values.value,
 			letter = values && values.letter,
 			due = this.assignment.getDueDate(),
-			isNoSubmitAssignment = this.assignmentHistory.isSyntheticSubmission(),
-			submission = this.assignmentHistory.get('Submission'),
+			isNoSubmitAssignment = historyItem && historyItem.isSyntheticSubmission(),
+			submission = historyItem && historyItem.get('Submission'),
 			completed = submission && submission.get('CreatedTime'),
 			maxTime = this.assignment.isTimed && this.assignment.getMaxTime(),
-			duration = this.assignment.isTimed && this.assignmentHistory.getDuration(),
+			duration = this.assignment.isTimed && historyItem.getDuration(),
 			start = this.assignment.get('availableBeginning'),
 			status = AssignmentStatus.getRenderData({
 				start,
@@ -290,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.gradeBoxEl.hide();
 		}
 
-		if (AssignmentStatus.hasActions(this.assignmentHistory)) {
+		if (AssignmentStatus.hasActions(this.assignmentHistoryItemContainer)) {
 			this.actionsEl.removeCls('disabled');
 		} else {
 			this.actionsEl.addCls('disabled');
@@ -359,29 +362,34 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.currentLetter = letter;
 			//this.letterEl.update(letter);
 		}
-		this.mon(this.assignmentHistory, 'excused-changed', this.excuseGradeStatusChanged.bind(this));
-		this.mon(this.assignmentHistory, 'reset-assignment', this.markAssignmentAsReset.bind(this));
+
+		if (historyItem) {
+			this.mon(historyItem, 'excused-changed', this.excuseGradeStatusChanged.bind(this));
+			this.mon(historyItem, 'reset-assignment', this.markAssignmentAsReset.bind(this));
+		}
+
+		this.mon(this.assignmentHistoryItemContainer, 'reset-assignment', this.markAssignmentAsReset.bind(this));
 	},
 
 	showActionsMenu: function (e) {
-		if (e.getTarget('.disabled') || !this.assignmentHistory) { return; }
+		if (e.getTarget('.disabled') || !this.assignmentHistoryItemContainer) { return; }
 
 		var me = this,
-			menu = AssignmentStatus.getActionsMenu(me.assignmentHistory);
+			menu = AssignmentStatus.getActionsMenu(me.assignmentHistoryItemContainer);
 
 		menu.showBy(me.actionsEl, 'tr-br');
 	},
 
 	changeGrade: function (number, letter) {
 		var me = this,
-			historyItem = this.assignmentHistory;
+			historyItemContainer = this.assignmentHistoryItemContainer;
 
-		if (!historyItem) {
+		if (!historyItemContainer) {
 			console.error('No assignmentHistory set, cannot change the grade');
 			return;
 		}
 
-		historyItem.saveGrade(number, letter)
+		historyItemContainer.saveGrade(number, letter)
 			.then(me.fireEvent.bind(me, 'grade-saved'))
 			.catch(function (reason) {
 				console.error('Failed to save Grade:', reason);
@@ -451,7 +459,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 	excuseGradeStatusChanged: function () {
-		var grade = this.assignmentHistory.get('Grade');
+		const historyItem = this.assignmentHistoryItemContainer.getMostRecentHistoryItem();
+		var grade = historyItem.get('Grade');
 
 		if (!grade) { return; }
 

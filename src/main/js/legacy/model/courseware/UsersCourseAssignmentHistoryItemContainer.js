@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	saveGrade: function (value, letter) {
 		const historyItem = this.getMostRecentHistoryItem();
 
-		historyItem.saveGrade(value, letter, (response) => {
+		return historyItem.saveGrade(value, letter, (response) => {
 			const newRaw = {
 				...this.raw,
 				Links: response.Links,
@@ -88,10 +88,19 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 					if (button === 'yes') {
 						Service.post(record.getLink('Reset'))
 							.then(() => {
-								record.set('Items', []);
+								let items = [];
+
+								if (record.collection && record.collection.createPlaceholderHistoryItem) {
+									items = [
+										record.collection.createPlaceholderHistoryItem(record.get('item'), record.get('Creator'))
+									];
+								}
+
+								record.set('Items', items);
 
 								// trigger re-sync on containerRecord with new history item record so store updates grid
 								record.syncWith(record);
+								record.fireEvent('reset-assignment');
 								return Promise.resolve();
 							}).then(() => {
 								fulfill();

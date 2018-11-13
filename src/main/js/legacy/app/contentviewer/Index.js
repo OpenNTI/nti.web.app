@@ -90,6 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			readerConfig.xtype = !config.student || isMe(config.student) ? 'assignment-reader' : 'admin-assignment-reader';
 			readerConfig.assignment = config.assignment;
 			readerConfig.assignmentHistory = config.assignmentHistory;
+			readerConfig.assignmentHistoryItemContainer = config.assignmentHistoryItemContainer;
 			readerConfig.assignmentId = config.assignment.getId();
 			readerConfig.student = config.student;
 			readerConfig.instructorProspective = config.instructorProspective;

@@ -481,6 +481,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 		return (item || historyItem).resolveFullItem();
 	},
 
+	__getHistoryItemContainer (item) {
+		return item.getHistoryItemContainer ? item.getHistoryItemContainer() : item;
+	},
 
 	showStudentForAssignment: function (route, subRoute) {
 		var me = this,
@@ -558,7 +561,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 						historyItem = record && record.get('HistoryItemSummary');
 
-						load = me.__getHistoryItem(historyItem);
+						load = me.__getHistoryItemContainer(historyItem);
 
 						pageSource = PagedPageSource.create({
 							store: students,
@@ -614,7 +617,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 							pageSource: pageSource.load(),
 							assignment: assignment,
 							student: student,
-							assignmentHistory: load
+							assignmentHistoryItemContainer: load
 						};
 					})
 					.then(me.showReader.bind(me))
@@ -725,7 +728,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 							path: path,
 							pageSource: pageSource.load(),
 							assignment: assignment,
-							assignmentHistory: me.__getHistoryItem(record),
+							assignmentHistoryItemContainer: me.__getHistoryItemContainer(record),
 							student: student
 						};
 					})

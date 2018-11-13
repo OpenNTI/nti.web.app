@@ -205,18 +205,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 
 		/**
 		 * If there are any actions for a history item
-		 * @param  {UsersCourseAssignmentHistoryItem}  record history item to check
+		 * @param  {UsersCourseAssignmentHistoryItem}  containerRecord history item to check
 		 * @return {Boolean}		if there are actions
 		 */
-		hasActions: function (record) {
-			var grade = record.get('Grade');
+		hasActions: function (containerRecord) {
+			const record = (containerRecord && containerRecord.getMostRecentHistoryItem) ? containerRecord.getMostRecentHistoryItem() : containerRecord;
+			const grade = record && record.get('Grade');
 
-			return record.get('submission') || grade.isExcusable();
+			return (record && record.get('submission')) || (grade && grade.isExcusable());
 		},
 
 		/**
 		 * Return a menu of actions available for a history item
-		 * @param  {UsersCourseAssignmentHistoryItem} record the history item we are getting actions for
+		 * @param  {UsersCourseAssignmentHistoryItem} containerRecord the history item we are getting actions for
 		 * @param {Function} onReset -
 		 * @param {Function} onExcused -
 		 * @return {Ext.Menu} a menu component

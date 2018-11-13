@@ -18,6 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			pageSource: this.pageSource,
 			assignment: this.assignment,
 			assignmentHistory: this.assignmentHistory,
+			assignmentHistoryItemContainer: this.assignmentHistoryItemContainer,
 			doNavigation: this.doNavigation.bind(this),
 			currentBundle: this.bundle,
 			handleEdit: this.handleEdit
@@ -32,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			bundle = this.bundle,
 			pageInfo = this.pageInfo,
 			assignment = this.assignment,
-			assignmentHistory = this.assignmentHistory,
+			assignmentHistoryItemContainer = this.assignmentHistoryItemContainer,
 			readerAssessment = reader.getAssessment();
 
 		reader.getScroll().lock();
@@ -48,16 +49,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			return;
 		}
 
-		if (!assignmentHistory || !(assignmentHistory instanceof Promise)) {
-			assignmentHistory = Promise.resolve(this.assignmentHistory);
+		if (!assignmentHistoryItemContainer || !(assignmentHistoryItemContainer instanceof Promise)) {
+			assignmentHistoryItemContainer = Promise.resolve(this.assignmentHistoryItemContainer);
 		}
 
-		assignmentHistory.then(function (h) {
-			readerAssessment.setAssignmentFromInstructorProspective(assignment, h, student);
-			reader.getNoteOverlay().disable();
+		assignmentHistoryItemContainer
+			.then(container => container.getMostRecentHistoryItem())
+			.then((h) => {
+				readerAssessment.setAssignmentFromInstructorProspective(assignment, h, student);
+				reader.getNoteOverlay().disable();
 
-			return reader.setPageInfo(pageInfo, bundle);
-		})
+				return reader.setPageInfo(pageInfo, bundle);
+			})
 			.then(done.bind(this));
 	},
 
