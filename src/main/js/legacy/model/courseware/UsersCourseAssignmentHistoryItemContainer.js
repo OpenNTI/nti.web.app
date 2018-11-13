@@ -23,5 +23,49 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		const items = this.get('Items');
 
 		return items && items[items.length - 1];
+	},
+
+	beginReset: function (isMine) {
+		let record = this;
+		let msg;
+
+		if (!isMine) {
+			msg = 'This will reset this assignment for this student. It is not recoverable.' +
+					'\nFeedback and work will be deleted.';
+		} else {
+			msg = 'This will reset the assignment. All work will be deleted and is not recoverable.';
+		}
+
+		return new Promise(function (fulfill, reject) {
+			Ext.MessageBox.alert({
+				title: 'Are you sure?',
+				msg: msg,
+				icon: 'warning-red',
+				buttonText: true,
+				buttons: {
+					primary: {
+						name: 'yes',
+						text: 'Yes',
+						cls: 'caution'
+					},
+					secondary: 'Cancel'
+				},
+				fn: function (button) {
+					if (button === 'yes') {
+						Service.post(record.getLink('Reset'))
+							.then(() => {
+								record.set('Items', []);
+
+								// trigger re-sync on containerRecord with new history item record so store updates grid
+								record.syncWith(record);
+								return Promise.resolve();
+							}).then(() => {
+								fulfill();
+							});
+					}
+				}
+			});
+		});
+
 	}
 });

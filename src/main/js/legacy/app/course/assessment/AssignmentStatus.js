@@ -239,14 +239,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 					scope: this,
 					handler: () => {
 						if(containerRecord.hasLink('Reset')) {
-							Service.post(containerRecord.getLink('Reset'))
-								.then(() => {
-									containerRecord.set('Items', []);
-
-									// trigger re-sync on containerRecord with new history item record so store updates grid
-									containerRecord.syncWith(containerRecord);
-									return Promise.resolve();
-								})
+							containerRecord
+								.beginReset()
 								.then(onReset);
 						}
 					},
