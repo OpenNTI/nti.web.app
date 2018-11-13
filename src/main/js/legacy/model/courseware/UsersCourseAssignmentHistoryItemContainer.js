@@ -51,6 +51,14 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		return items && items[items.length - 1];
 	},
 
+
+	getMostRecentHistoryItemGrade () {
+		const mostRecentHistoryItem = this.getMostRecentHistoryItem();
+
+		return mostRecentHistoryItem && mostRecentHistoryItem.get('Grade');
+	},
+
+
 	beginReset: function (isMine) {
 		let record = this;
 		let msg;

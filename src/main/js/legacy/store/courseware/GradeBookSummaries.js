@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 			return this.HistoryItemContainerCache.getRecord(historyItem);
 		}
 		else {
-			return this.assignments.createPlaceholderHistoryContainerItem(assignment, userId);
+			return this.assignments.createPlaceholderHistoryItemContainer(assignment, userId);
 		}
 	},
 

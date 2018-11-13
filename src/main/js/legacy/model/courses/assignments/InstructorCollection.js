@@ -160,6 +160,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 			url: gradeBook && gradeBook.getLink('GradeBookSummary'),
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
+			HistoryItemContainerCache: this.HistoryItemContainerCache,
 			assignments: this
 		});
 	},

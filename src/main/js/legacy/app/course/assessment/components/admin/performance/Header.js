@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	setGradeBook: function (historyItem) {
-		this.historyItem = historyItem;
+		this.historyItem = historyItem.getMostRecentHistoryItem ? historyItem.getMostRecentHistoryItem() : historyItem;
 		this.setUpGradeBox();
 	},
 
