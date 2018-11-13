@@ -440,13 +440,14 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	},
 
 
-	__createNewGrade (grade, value, letter) {
+	__createNewGrade (grade, value, letter, callback) {
 		const batcher = this.self.getBatchExecution();
 
 		return batcher.schedule(() => grade.createNewGrade(value, letter))
 			.then(response => Ext.decode(response))
-			.then(historyItem => {
+			.then(historyItemContainer => {
 				//update the grade with the new values;
+				let historyItem = historyItemContainer.Items[historyItemContainer.Items.length - 1];
 				grade.set(historyItem.Grade);
 				grade.isPlaceholder = false;
 
@@ -460,6 +461,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				//if we get here the submission has been forced from setting the grade
 				//so fire an event to update the ui appropriately
 				this.fireEvent('force-submission');
+
+				if(callback) {
+					callback(historyItemContainer);
+				}
 			});
 	},
 
@@ -477,7 +482,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		const batcher = this.self.getBatchExecution();
 		const grade = this.get('Grade');
 
-		return !grade || grade.isPlaceholder ?
+		return (!grade || grade.isPlaceholder) && grade.getId() ?
 			batcher.schedule(() => this.updateFromServer()) :
 			Promise.resolve();
 	},
@@ -487,9 +492,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	 * Given a value and letter for a grade, either create one or update an existing one
 	 * @param  {String} value  value of the grade
 	 * @param  {Char} letter letter of the grade
+	 * @param  {function} callback Called with response of setGrade
 	 * @return {Promise}	 fulfills when the grade has been saved
 	 */
-	saveGrade: function (value, letter) {
+	saveGrade: function (value, letter, callback) {
 		const oldGrade = this.get('Grade');
 		const cleanUp = () => {
 			delete this.gradeIsSaving;
@@ -521,7 +527,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 				//If we are a placeholder create new grade
 				} else if (this.isPlaceholder) {
-					update = this.__createNewGrade(grade, value, letter);
+					update = this.__createNewGrade(grade, value, letter, callback);
 
 				//If we aren't a placeholder and the grade has different values save the new ones
 				} else if (!grade.valueEquals(value, letter)) {

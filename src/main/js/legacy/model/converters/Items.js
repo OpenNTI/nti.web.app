@@ -36,6 +36,9 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 					result = result.slice(0, this.limit);
 					result.forEach(function (a) {if (a) {a.stores.push(r);}});
 				}
+				else {
+					result.forEach(function (a) {if (a) {a.stores.push(r);}});
+				}
 				return result;
 			}
 

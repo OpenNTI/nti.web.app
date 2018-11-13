@@ -19,6 +19,32 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	],
 
 
+	shouldSaveGrade: function (value, letter) {
+		const historyItem = this.getMostRecentHistoryItem();
+
+		return historyItem && historyItem.shouldSaveGrade(value, letter);
+	},
+
+
+	saveGrade: function (value, letter) {
+		const historyItem = this.getMostRecentHistoryItem();
+
+		historyItem.saveGrade(value, letter, (response) => {
+			const newRaw = {
+				...this.raw,
+				Links: response.Links,
+				NTIID: response.NTIID,
+				OID: response.OID,
+				LastModified: response.LastModified,
+				href: response.href
+			};
+
+			this.isPlaceholder = false;
+			this.set(newRaw);
+		});
+	},
+
+
 	getMostRecentHistoryItem () {
 		const items = this.get('Items');
 

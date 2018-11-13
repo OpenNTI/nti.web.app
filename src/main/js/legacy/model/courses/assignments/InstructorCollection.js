@@ -23,6 +23,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 		this.GradeCache = this.__createGradeCache();
 		this.HistoryItemCache = this.__createHistoryItemCache();
+		this.HistoryItemContainerCache = this.__createHistoryItemContainerCache();
 	},
 
 	__getIdOf: function (obj) {
@@ -41,6 +42,22 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	},
 
 	__createHistoryItemCache: function () {
+		var me = this;
+
+		return SharedInstance.create({
+			getKeyForRecord: function (record) {
+				var user = record.get ? record.get('Creator') : record.Creator,
+					// historyItem = record.getHistoryItem && record.getHistoryItem(),
+					// assignment = historyItem && (historyItem.get ? historyItem.get('item') : historyItem.item),
+					userName = me.__getIdOf(user),
+					assignmentId = record.get('AssignmentId');
+
+				return userName + '/' + assignmentId;
+			}
+		});
+	},
+
+	__createHistoryItemContainerCache: function () {
 		var me = this;
 
 		return SharedInstance.create({
@@ -78,6 +95,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 			url: assignment.getLink('GradeBookByAssignment'),
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
+			HistoryItemContainerCache: this.HistoryItemContainerCache,
 			assignment: assignment,
 			assignments: this
 		});
@@ -96,6 +114,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 			url: historyLink,
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
+			HistoryItemContainerCache: this.HistoryItemContainerCache,
 			assignments: this,
 			student: studentId,
 			pageSize: this.getCount() //load all of the history item for a student
@@ -195,22 +214,34 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 	createPlaceholderHistoryItem: function (assignment, user) {
 		var grade = this.createPlaceholderGrade(assignment, user),
-			historySubItem = UsersCourseAssignmentHistoryItem.create({
+			historyItem = UsersCourseAssignmentHistoryItem.create({
 				Creator: user,
 				AssignmentId: assignment.getId(),
-				Grade: grade
+				Grade: grade,
+				item: assignment
 			});
-
-		let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
-			Creator: user,
-			AssignmentId: assignment.getId(),
-			item: assignment,
-			Items: [historySubItem]
-		});
 
 		//pass the update flag to force incase we already have a cached instance
 		//so it will be updated to a placeholder
 		historyItem = this.HistoryItemCache.getRecord(historyItem, null, true);
+
+		historyItem.isPlaceholder = true;
+		historyItem.collection = this;
+
+		return historyItem;
+	},
+
+	createPlaceholderHistoryItemContainer: function (assignment, user) {
+		let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
+			Creator: user,
+			AssignmentId: assignment.getId(),
+			item: assignment,
+			Items: [this.createPlaceholderHistoryItem(assignment, user)]
+		});
+
+		//pass the update flag to force incase we already have a cached instance
+		//so it will be updated to a placeholder
+		historyItem = this.HistoryItemContainerCache.getRecord(historyItem, null, true);
 
 		historyItem.isPlaceholder = true;
 		historyItem.collection = this;

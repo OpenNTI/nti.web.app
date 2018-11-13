@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 
 				me.__replaceWithCachedInstance(entry);
 			} else if (!assignment.doNotShow() && me.__hasAccessTo(assignment)) {
-				me.add(me.assignments.createPlaceholderHistoryItem(assignment, me.student));
+				me.add(me.assignments.createPlaceholderHistoryItemContainer(assignment, me.student));
 			}
 		});
 
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 
 		this.remove(record);
 
-		record = this.HistoryItemCache.getRecord(record);
+		record = this.HistoryItemContainerCache.getRecord(record);
 
 		record.collection = this.assignments;
 

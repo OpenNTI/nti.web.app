@@ -8,5 +8,14 @@ module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentHi
 
 	getAssignment: function () {
 		return this.assignment;
+	},
+
+	getHistoryItem: function (historyItem, assignment, userId) {
+		if(historyItem) {
+			return this.HistoryItemCache.getRecord(historyItem);
+		}
+		else {
+			return this.assignments.createPlaceholderHistoryItem(assignment, userId);
+		}
 	}
 });

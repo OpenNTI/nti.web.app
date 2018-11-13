@@ -127,6 +127,15 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 			});
 	},
 
+	getHistoryItem: function (historyItem, assignment, userId) {
+		if(historyItem) {
+			return this.HistoryItemContainerCache.getRecord(historyItem);
+		}
+		else {
+			return this.assignments.createPlaceholderHistoryContainerItem(assignment, userId);
+		}
+	},
+
 	/**
 	 * Take a record fill in the user and replace its HistoryItemSummary with a shared instance or a placeholder
 	 * @param  {Model} record record to fill in
@@ -171,9 +180,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 				grade = this.assignments.createPlaceholderGrade(assignment, userId);
 			}
 
-
-
-			historyItem = this.HistoryItemCache.getRecord(historyItem);
+			historyItem = this.getHistoryItem(historyItem);
 
 			historyItem.set('Grade', grade);
 
@@ -181,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 
 			record.set('HistoryItemSummary', historyItem);
 		} else if (assignment) {
-			historyItem = this.assignments.createPlaceholderHistoryItem(assignment, userId);
+			historyItem = this.getHistoryItem(null, assignment, userId);
 
 			record.set('HistoryItemSummary', historyItem);
 		}
