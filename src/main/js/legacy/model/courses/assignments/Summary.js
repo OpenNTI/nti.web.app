@@ -63,5 +63,17 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Sum
 
 				this.fireEvent('update');
 			});
+	},
+
+
+	getHistoryItemContainer () {
+		const historyItem = this.get('HistoryItemSummary');
+
+		if (!historyItem) {
+			return Promise.reject('No HistoryItemSummary');
+		}
+
+		return historyItem.resolveFullContainer();
 	}
+
 });

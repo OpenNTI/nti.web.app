@@ -521,8 +521,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 					})
 					.then(function (students) {
 						const params = students.proxy.extraParams || {};
-						var record, pageSource, path = [],
-							historyItem, load,
+						var record, pageSource, path = [], load,
 							current = students.findBy(function (rec) {
 								var user = rec.get('User');
 
@@ -559,9 +558,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						delete params.batchContainingUsernameFilterByScope;
 						record = students.getAt(current);
 
-						historyItem = record && record.get('HistoryItemSummary');
-
-						load = me.__getHistoryItemContainer(historyItem);
+						load = me.__getHistoryItemContainer(record);
 
 						pageSource = PagedPageSource.create({
 							store: students,

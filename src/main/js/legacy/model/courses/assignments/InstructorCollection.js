@@ -248,5 +248,24 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		historyItem.collection = this;
 
 		return historyItem;
+	},
+
+
+	createPlaceholderHistoryItemContainerWithItem (assignment, user, item) {
+		let historyItem = UsersCourseAssignmentHistoryItemContainer.create({
+			Creator: user,
+			AssignmentId: assignment.getId(),
+			item: assignment,
+			Items: [item]
+		});
+
+		//pass the update flag to force incase we already have a cached instance
+		//so it will be updated to a placeholder
+		historyItem = this.HistoryItemContainerCache.getRecord(historyItem, null, true);
+
+		historyItem.isPlaceholder = true;
+		historyItem.collection = this;
+
+		return historyItem;
 	}
 });

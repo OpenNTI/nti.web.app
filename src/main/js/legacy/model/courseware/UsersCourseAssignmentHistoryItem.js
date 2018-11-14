@@ -1,6 +1,9 @@
 const Ext = require('@nti/extjs');
 const Duration = require('durationjs');
 
+const lazy = require('legacy/util/lazy-require')
+	.get('UserDataActions', () => require('legacy/app/userdata/Actions'))
+	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const BatchExecution = require('legacy/util/BatchExecution');
 
 const Grade = require('./Grade');
@@ -158,6 +161,44 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				fulfill();
 			}
 		});
+	},
+
+
+	resolveFullContainer () {
+		return this.isPlaceholder || !this.hasLink('HistoryItemContainer') ?
+			this.__resolveFullContainerPlaceholder() :
+			this.__resolveFullContainerActual();
+	},
+
+
+	__resolveFullContainerPlaceholder () {
+		debugger;
+		return this.collection.createPlaceholderHistoryItemContainerWithItem(this.get('item'), this.get('Creator'), this);
+	},
+
+
+	async __resolveFullContainerActual () {
+		try {
+			const containerLink = this.getLink('HistoryItemContainer');
+			const historyItem = await this.resolveFullItem();
+
+			const containerRaw = await Service.request(containerLink);
+			const container = lazy.ParseUtils.parseItems([containerRaw])[0];
+
+			container.set({
+				Items: (container.get('Items') || []).map((item) => {
+					if (item.getId() === historyItem.getId()) {
+						return historyItem;
+					}
+
+					return item;
+				})
+			});
+
+			return container;
+		} catch (e) {
+			return null;
+		}
 	},
 
 
