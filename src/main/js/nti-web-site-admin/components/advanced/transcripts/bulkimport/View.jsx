@@ -9,7 +9,7 @@ import Result from './Result';
 
 const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport.Upload', {
 	title: 'Drag a file to upload, or',
-	requirements: 'Must be a .csv, comma- or tab-delimited',
+	requirements: 'Must be a .csv file',
 });
 
 const ALLOWED = {
@@ -77,14 +77,12 @@ export default class TranscriptCreditBulkImport extends React.Component {
 	render () {
 		const {model, error, result, busy} = this.state;
 
-		const E = !error ? null : <Error error={error} onDismiss={this.clearError} />;
-
 		return !model ? null : (
 			<div className="transcript-credit-import">
 				<Instructions />
 				<Result result={result} />
+				{error && <Error error={error} />}
 				<Input.FileDrop
-					error={E}
 					ref={this.input}
 					getString={t}
 					allowedTypes={ALLOWED}
