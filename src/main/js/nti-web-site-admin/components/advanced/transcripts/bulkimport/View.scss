@@ -1,4 +1,7 @@
+@import "~@nti/style-common/all.scss";
+
 .transcript-credit-import {
 	position: relative;
-	padding: 2rem 5rem;
+	padding: 0.875rem 5rem 2rem;
+	color: $secondary-grey;
 }
