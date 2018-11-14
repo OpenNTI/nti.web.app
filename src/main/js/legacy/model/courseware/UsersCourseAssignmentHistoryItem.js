@@ -172,7 +172,6 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 
 	__resolveFullContainerPlaceholder () {
-		debugger;
 		return this.collection.createPlaceholderHistoryItemContainerWithItem(this.get('item'), this.get('Creator'), this);
 	},
 
