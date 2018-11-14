@@ -243,6 +243,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 							containerRecord
 								.beginReset()
 								.then(onReset);
+						} else if (containerRecord.resolveFullContainer) {
+							containerRecord.resolveFullContainer()
+								.then((container) => {
+									container
+										.beginReset()
+										.then(onReset);
+								});
 						}
 					},
 					itemId: 'delete-assignment-history',
