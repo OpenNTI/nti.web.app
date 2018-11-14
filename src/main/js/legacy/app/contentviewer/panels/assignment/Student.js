@@ -47,8 +47,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				return this.pageInfo.regenerate(newAssignment);
 			}
 
-			return this.pageInfo.clone().replaceAssignment(newAssignment);
+			const newPageInfo = this.pageInfo.clone();
+
+			newPageInfo.replaceAssignment(newAssignment);
+
+			return Promise.resolve(newPageInfo);
 		};
+
 
 		//if the assignment hasn't started yet, and you can't do a practice submission
 		if (!assignment || (!assignment.isAvailable() && !isPracticeSubmission)) {

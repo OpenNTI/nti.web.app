@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	getDuration: function () {
 		const attempt = this.get('MetadataAttemptItem');
 
-		return attempt.getDuration();
+		return attempt && attempt.getDuration();
 	},
 
 	allowReset: function () {
