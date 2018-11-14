@@ -236,7 +236,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.deriveEvents(o, historyItem);
 	},
 
-	deriveEvents: function (assignment, historyItem) {
+	deriveEvents: function (assignment, container) {
+		const historyItem = container && container.getMostRecentHistoryItem && container.getMostRecentHistoryItem();
 		var me = this,
 			now = new Date(),
 			submission = historyItem && historyItem.get && historyItem.get('Submission'),
