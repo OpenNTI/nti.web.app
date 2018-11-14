@@ -1,0 +1,10 @@
+@import "~@nti/style-common/all.scss";
+
+.status-report {
+	.heading {
+		background-color: $primary-green;
+		color: white;
+		font-size: 0.875rem;
+		padding: 1rem;
+	}
+}

@@ -1,0 +1,49 @@
+@import "~@nti/style-common/all.scss";
+
+.transcript-credit-import-instructions {
+	font-size: 0.875rem;
+
+	.instructions {
+		margin-bottom: 5px;
+	}
+
+	.download-sample {
+		font-size: 0.875rem;
+		text-decoration: none;
+		color: $primary-blue;
+		margin-bottom: 1rem;
+	}
+
+	.field-descriptions-heading {
+		color: $tertiary-grey;
+		text-transform: uppercase;
+		font-size: 0.625rem;
+		font-weight: bold;
+		margin: 0.625rem 0 0.5rem;
+	}
+
+	.field-descriptions {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		line-height: 1.5;
+
+		> * {
+			display: flex;
+
+			.field-name {
+				flex: 0 0 150px;
+				padding-right: 0.5em;
+
+				.field-requiredness {
+					font-style: italic;
+					color: $tertiary-grey;
+				}
+			}
+
+			.field-description {
+				flex: 1 1 auto;
+			}
+		}
+	}
+}
