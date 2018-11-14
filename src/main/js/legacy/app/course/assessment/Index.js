@@ -224,14 +224,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						return JSON.parse(response);
 					})
 					.then(function (history) {
-						var reader = me.assignment,
-							item = lazy.ParseUtils.parseItems(history)[0];
+						const item = lazy.ParseUtils.parseItems(history)[0];
+
+						return Promise.all([Promise.resolve(item), item.resolveFullContainer()]);
+					})
+					.then(function ([item, container]) {
+						var reader = me.assignment;
 
 						if (reader && reader.updateHistory) {
 							reader.updateHistory(item);
 						}
 
-						return history;
+						return container;
 					})
 					.then(assignmentCollection.updateHistoryItem.bind(assignmentCollection, assignmentId))
 					.always(this.bundleChanged.bind(this, this.currentBundle));
