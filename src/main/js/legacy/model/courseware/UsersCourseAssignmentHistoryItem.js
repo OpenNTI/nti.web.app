@@ -194,6 +194,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				})
 			});
 
+			container.collection = this.collection;
+
 			return container;
 		} catch (e) {
 			return null;
