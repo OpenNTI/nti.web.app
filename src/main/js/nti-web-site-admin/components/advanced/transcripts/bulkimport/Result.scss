@@ -1,0 +1,19 @@
+.transcript-credit-import-result {
+	.results-tab {
+		text-align: center;
+		padding: 1.25rem 1rem 1rem;
+
+		.count {
+			display: block;
+			font-size: 2rem;
+			font-weight: 300;
+			line-height: 1;
+		}
+
+		.unit {
+			font-size: 0.625rem;
+			font-weight: 600;
+			text-transform: uppercase;
+		}
+	}
+}

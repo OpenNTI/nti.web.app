@@ -13,8 +13,37 @@ const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport.resu
 		titleByUser: 'Credit Title',
 		typeByUser: 'Types',
 		username: 'Username'
+	},
+	units: {
+		credits: {
+			one: 'Credit',
+			other: 'Credits',
+		},
+		users: {
+			one: 'Learner',
+			other: 'Learners',
+		},
+		types: {
+			one: 'Type',
+			other: 'Types',
+		}
 	}
+
 });
+
+function Tab ({count, unit} = {}) {
+	return (
+		<div className="results-tab">
+			<span className="count">{count}</span>
+			<span className="unit">{unit}</span>
+		</div>
+	);
+}
+
+Tab.propTypes = {
+	count: PropTypes.number.isRequired,
+	unit: PropTypes.string.isRequired
+};
 
 const getProp = (item, prop) => prop.split('.').reduce((node, property) => (node || {})[property], item);
 
@@ -70,17 +99,17 @@ export default class Result extends React.PureComponent {
 
 		return [
 			{
-				label: `${titleByUser.numGroups} Credits`,
+				label: <Tab count={titleByUser.numGroups} unit={t(['units', 'credits'], {count: titleByUser.numGroups})} />,
 				data: Object.entries(titleByUser.results).map(([name, learners]) => ({name, learners: learners.size})),
 				columns: [column('name', t(['columnHeader', 'titleByUser'])), column('learners')]
 			},
 			{
-				label: `${typeByUser.numGroups} Types`,
+				label: <Tab count={typeByUser.numGroups} unit={t(['units', 'types'], {count: typeByUser.numGroups})} />,
 				data: Object.entries(typeByUser.results).map(([name, learners]) => ({name, learners: learners.size})),
 				columns: [column('name', t(['columnHeader', 'typeByUser'])), column('learners')]
 			},
 			{
-				label: `${Object.values(users).length} Learners`,
+				label: <Tab count={Object.values(users).length} unit={t(['units', 'users'], {count: Object.values(users).length})} />,
 				data: Object.values(users),
 				columns: [DisplayNameColumn, column('Username', t(['columnHeader', 'username']))]
 			}
@@ -97,7 +126,7 @@ export default class Result extends React.PureComponent {
 		const tabs = this.tabs();
 
 		return (
-			<StatusReport heading={t('heading')}>
+			<StatusReport className="transcript-credit-import-result" heading={t('heading')}>
 				<ResultTabs tabs={tabs} />
 			</StatusReport>
 		);
