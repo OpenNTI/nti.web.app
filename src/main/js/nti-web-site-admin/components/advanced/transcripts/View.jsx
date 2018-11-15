@@ -29,10 +29,7 @@ export default class AdminTranscripts extends React.Component {
 					<div className="section-header">{t('creditTypes')}</div>
 					<ManageTranscriptCredits/>
 				</div>
-				<div>
-					<div className="section-header">{t('importCredits')}</div>
-					<BulkImport />
-				</div>
+				<BulkImport />
 			</div>
 		);
 	}

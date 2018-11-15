@@ -78,18 +78,21 @@ export default class TranscriptCreditBulkImport extends React.Component {
 		const {model, error, result, busy} = this.state;
 
 		return !model ? null : (
-			<div className="transcript-credit-import">
-				<Instructions />
-				{!error && <Result result={result} />}
-				{error && <Error error={error} />}
-				<Input.FileDrop
-					ref={this.input}
-					getString={t}
-					allowedTypes={ALLOWED}
-					onChange={this.onUpload}
-					onError={this.onError} />
+			<div>
+				<div className="section-header">{t('importCredits')}</div>
+				<div className="transcript-credit-import">
+					<Instructions />
+					{!error && <Result result={result} />}
+					{error && <Error error={error} />}
+					<Input.FileDrop
+						ref={this.input}
+						getString={t}
+						allowedTypes={ALLOWED}
+						onChange={this.onUpload}
+						onError={this.onError} />
 
-				{busy && <Loading.Ellipsis mask />}
+					{busy && <Loading.Ellipsis mask />}
+				</div>
 			</div>
 		);
 	}
