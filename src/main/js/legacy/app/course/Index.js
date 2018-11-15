@@ -782,7 +782,9 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		const submissionCreator = User.getUsernameForURL(root.get('SubmissionCreator'));
 
 		if (root instanceof UsersCourseAssignmentHistoryItemFeedback) {
-			route = `/assignments/${AssignmentId}/students/${submissionCreator}/#feedback`;
+			route = Globals.isMe(submissionCreator) ?
+				`/assignments/${AssignmentId}/#feedback` :
+				`/assignments/${AssignmentId}/students/${submissionCreator}/#feedback`;
 
 			return {
 				path: route,
