@@ -36,6 +36,7 @@ export default class ResultTabs extends React.Component {
 				</ul>
 				<div className="tab-content">
 					<T.Table items={activeTab.data} columns={activeTab.columns} />
+					{activeTab.footer && <div className="footer">{activeTab.footer}</div>}
 				</div>
 			</div>
 		);

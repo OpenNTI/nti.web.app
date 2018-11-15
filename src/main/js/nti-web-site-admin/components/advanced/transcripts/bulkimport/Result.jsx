@@ -27,8 +27,8 @@ const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport.resu
 			one: 'Type',
 			other: 'Types',
 		}
-	}
-
+	},
+	more: '…and %(number)s more'
 });
 
 function Tab ({count, unit} = {}) {
@@ -45,6 +45,7 @@ Tab.propTypes = {
 	unit: PropTypes.string.isRequired
 };
 
+const MAX_ROWS = 6;
 const getProp = (item, prop) => prop.split('.').reduce((node, property) => (node || {})[property], item);
 
 class Counter {
@@ -100,18 +101,25 @@ export default class Result extends React.PureComponent {
 		return [
 			{
 				label: <Tab count={titleByUser.numGroups} unit={t(['units', 'credits'], {count: titleByUser.numGroups})} />,
-				data: Object.entries(titleByUser.results).map(([name, learners]) => ({name, learners: learners.size})),
-				columns: [column('name', t(['columnHeader', 'titleByUser'])), column('learners')]
+				data: Object.entries(titleByUser.results)
+					.map(([name, learners]) => ({name, learners: learners.size}))
+					.slice(0, MAX_ROWS),
+				columns: [column('name', t(['columnHeader', 'titleByUser'])), column('learners')],
+				footer: titleByUser.numGroups > MAX_ROWS ? t('more', {number: titleByUser.numGroups - MAX_ROWS}) : null
 			},
 			{
 				label: <Tab count={typeByUser.numGroups} unit={t(['units', 'types'], {count: typeByUser.numGroups})} />,
-				data: Object.entries(typeByUser.results).map(([name, learners]) => ({name, learners: learners.size})),
-				columns: [column('name', t(['columnHeader', 'typeByUser'])), column('learners')]
+				data: Object.entries(typeByUser.results)
+					.map(([name, learners]) => ({name, learners: learners.size}))
+					.slice(0, MAX_ROWS),
+				columns: [column('name', t(['columnHeader', 'typeByUser'])), column('learners')],
+				footer: typeByUser.numGroups > MAX_ROWS ? t('more', {number: typeByUser.numGroups - MAX_ROWS}) : null
 			},
 			{
 				label: <Tab count={Object.values(users).length} unit={t(['units', 'users'], {count: Object.values(users).length})} />,
-				data: Object.values(users),
-				columns: [DisplayNameColumn, column('Username', t(['columnHeader', 'username']))]
+				data: Object.values(users).slice(0, MAX_ROWS),
+				columns: [DisplayNameColumn, column('Username', t(['columnHeader', 'username']))],
+				footer: Object.values(users).length > MAX_ROWS ? t('more', {number: Object.values(users).length - MAX_ROWS}) : null
 			}
 		];
 	}
