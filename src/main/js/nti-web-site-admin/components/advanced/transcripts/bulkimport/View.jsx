@@ -80,7 +80,7 @@ export default class TranscriptCreditBulkImport extends React.Component {
 		return !model ? null : (
 			<div className="transcript-credit-import">
 				<Instructions />
-				<Result result={result} />
+				{!error && <Result result={result} />}
 				{error && <Error error={error} />}
 				<Input.FileDrop
 					ref={this.input}
