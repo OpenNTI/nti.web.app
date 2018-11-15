@@ -410,6 +410,43 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		});
 	},
 
+
+	makePlaceholder (gradeOverride) {
+		const user = this.get('Creator');
+		const item = this.get('item');
+		let grade = null;
+
+		delete this.isSummary;
+		delete this.raw.SubmissionCreatedTime;
+		delete this.raw.Submission;
+		delete this.raw.FeedbackCount;
+		delete this.raw.Grade;
+		delete this.raw.Feedback;
+		delete this.raw.Metadata;
+
+		if (gradeOverride || (this.collection && this.collection.createPlaceholderGrade)) {
+			grade = gradeOverride || this.collection.createPlaceholderGrade(item, user);
+
+			this.raw.Grade = grade;
+		}
+
+		this.set({
+			Submission: null,
+			Grade: grade,
+			Feedback: null,
+			Metadata: null,
+			completed: null,
+			SubmissionCreatedTime: null,
+			submission: null,
+			pendingAssessment: null
+		});
+
+		this.isPlaceholder = true;
+
+		this.fireEvent('was-destroyed');
+	},
+
+
 	handleExcuseGrade: function (menuItemEl) {
 		var grade = this.get('Grade'), me = this;
 		var handle;

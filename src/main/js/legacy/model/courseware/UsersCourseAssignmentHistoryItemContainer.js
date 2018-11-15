@@ -88,15 +88,15 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 					if (button === 'yes') {
 						Service.post(record.getLink('Reset'))
 							.then(() => {
-								let items = [];
+								const historyItem = record.getMostRecentHistoryItem();
 
-								if (record.collection && record.collection.createPlaceholderHistoryItem) {
-									items = [
+								if (historyItem) {
+									historyItem.makePlaceholder(record.collection && record.collection.createPlaceholderGrade(record.get('item'), record.get('Creator')));
+								} else 	if (record.collection && record.collection.createPlaceholderHistoryItem) {
+									record.set('Items', [
 										record.collection.createPlaceholderHistoryItem(record.get('item'), record.get('Creator'))
-									];
+									]);
 								}
-
-								record.set('Items', items);
 
 								// trigger re-sync on containerRecord with new history item record so store updates grid
 								record.syncWith(record);
