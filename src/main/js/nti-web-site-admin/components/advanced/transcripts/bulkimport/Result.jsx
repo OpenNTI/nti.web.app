@@ -53,7 +53,7 @@ export default class Result extends React.PureComponent {
 		result: PropTypes.array
 	}
 
-	bins = () => {
+	tabs = () => {
 		const {result: items = []} = this.props;
 		const titleByUser = new Counter('title', 'user.ID');
 		const typeByUser = new Counter('creditDefinition.type', 'user.ID');
@@ -68,23 +68,23 @@ export default class Result extends React.PureComponent {
 			}
 		});
 
-		return {
-			titleByUser: {
-				tabLabel: `${titleByUser.numGroups} Credits`,
-				rows: Object.entries(titleByUser.results).map(([name, learners]) => ({name, learners: learners.size})),
+		return [
+			{
+				label: `${titleByUser.numGroups} Credits`,
+				data: Object.entries(titleByUser.results).map(([name, learners]) => ({name, learners: learners.size})),
 				columns: [column('name', t(['columnHeader', 'titleByUser'])), column('learners')]
 			},
-			typeByUser: {
-				tabLabel: `${typeByUser.numGroups} Types`,
-				rows: Object.entries(typeByUser.results).map(([name, learners]) => ({name, learners: learners.size})),
+			{
+				label: `${typeByUser.numGroups} Types`,
+				data: Object.entries(typeByUser.results).map(([name, learners]) => ({name, learners: learners.size})),
 				columns: [column('name', t(['columnHeader', 'typeByUser'])), column('learners')]
 			},
-			users: {
-				tabLabel: `${Object.values(users).length} Learners`,
-				rows: Object.values(users),
+			{
+				label: `${Object.values(users).length} Learners`,
+				data: Object.values(users),
 				columns: [DisplayNameColumn, column('Username', t(['columnHeader', 'username']))]
 			}
-		};
+		];
 	}
 
 	render () {
@@ -94,13 +94,7 @@ export default class Result extends React.PureComponent {
 			return null;
 		}
 
-		const bins = this.bins();
-
-		const tabs = Object.entries(bins).map(([key, {tabLabel: label, rows: data, columns}]) => ({
-			label,
-			data,
-			columns
-		}));
+		const tabs = this.tabs();
 
 		return (
 			<StatusReport heading={t('heading')}>

@@ -7,17 +7,19 @@ export default class StatusReport extends React.PureComponent {
 	static propTypes = {
 		className: PropTypes.string,
 		heading: PropTypes.any,
-		children: PropTypes.any
+		children: PropTypes.any,
+		footer: PropTypes.any
 	}
 
 	render () {
-		const {className, heading, children} = this.props;
+		const {className, heading, children, footer} = this.props;
 
 		return (
 			<div className={cx('status-report', className)}>
 				<div className="heading">{heading}</div>
 				<div className="status-report-content">
 					{children}
+					{footer && <div className="footer">{footer}</div>}
 				</div>
 			</div>
 		);

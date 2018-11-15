@@ -1,0 +1,32 @@
+@import "~@nti/style-common/all.scss";
+
+.status-report.transcript-bulk-import-error {
+	> .heading {
+		background: $primary-red;
+	}
+
+	.status-report-content {
+		background-color: #fef8f8;
+		padding: 1rem;
+	}
+
+	table {
+		table-layout: auto;
+		line-height: 1.75;
+
+		td.row-number {
+			vertical-align: top;
+			font-weight: bold;
+			padding-right: 0.75em;
+			white-space: nowrap;
+		}
+
+		td.row-error-message {
+			width: 100%;
+		}
+	}
+
+	.more {
+		font-weight: bold;
+	}
+}
