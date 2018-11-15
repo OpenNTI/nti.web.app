@@ -86,10 +86,11 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 				if (entry) {
 					me.remove(entry);
 				}
-			} else if (entry && entry.get('Items') && entry.get('Items').length > 0) {
+			} else if (entry && entry.get('Items') && entry.get('Items').length === 0) {
 				entry.set({
 					'item': assignment,
-					'AssignmentId': assignment.getId()
+					'AssignmentId': assignment.getId(),
+					'Items': [me.assignments.createPlaceholderHistoryItem(assignment, me.student)]
 				});
 
 				me.__replaceWithCachedInstance(entry);
