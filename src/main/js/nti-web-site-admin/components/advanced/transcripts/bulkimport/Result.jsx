@@ -132,9 +132,10 @@ export default class Result extends React.PureComponent {
 		}
 
 		const tabs = this.tabs();
+		const heading = <div><i className="icon-check success"/>{t('heading')}</div>;
 
 		return (
-			<StatusReport className="transcript-credit-import-result" heading={t('heading')}>
+			<StatusReport className="transcript-credit-import-result" heading={heading}>
 				<ResultTabs tabs={tabs} />
 			</StatusReport>
 		);

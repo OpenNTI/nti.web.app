@@ -3,6 +3,24 @@
 .status-report.transcript-bulk-import-error {
 	> .heading {
 		background: $primary-red;
+		position: relative;
+		padding-left: 4em;
+
+		&::before {
+			content: '!';
+			box-shadow: 0 0 0 2px currentColor;
+			border-radius: 50%;
+			display: block;
+			position: absolute;
+			width: 1.5em;
+			height: 1.5em;
+			text-align: center;
+			line-height: 1.5;
+			left: 1em;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 1rem;
+		}
 	}
 
 	.status-report-content {

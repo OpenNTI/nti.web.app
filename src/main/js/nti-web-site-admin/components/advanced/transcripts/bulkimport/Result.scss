@@ -1,4 +1,16 @@
 .transcript-credit-import-result {
+	.heading {
+		i[class^="icon-check"] {
+			font-size: 1rem;
+			box-shadow: 0 0 0 2px currentColor;
+			display: inline-block;
+			border-radius: 50%;
+			padding: 0.125em;
+			margin-right: 0.5em;
+			vertical-align: top;
+		}
+	}
+
 	.results-tab {
 		text-align: center;
 		padding: 1.25rem 1rem 1rem;
