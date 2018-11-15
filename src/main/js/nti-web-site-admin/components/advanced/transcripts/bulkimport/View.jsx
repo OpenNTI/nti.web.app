@@ -56,7 +56,7 @@ export default class TranscriptCreditBulkImport extends React.Component {
 		try {
 			const formData = new FormData();
 			formData.append('source', file);
-			result = await model.postToLink(REL, formData);
+			result = await model.postToLink(REL, formData, true);
 		}
 		catch (e) {
 			error = e;

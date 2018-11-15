@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function column (prop, header) {
+export default function column (prop, header = prop) {
 	return (
 		class PropertyColumn extends React.Component {
 
@@ -9,7 +9,7 @@ export default function column (prop, header) {
 				item: PropTypes.object
 			}
 
-			static HeaderComponent = () => header
+			static HeaderComponent = () => header || null
 
 			render () {
 				const {item = {}} = this.props;

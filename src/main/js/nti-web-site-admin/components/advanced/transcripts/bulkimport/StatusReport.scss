@@ -1,6 +1,10 @@
 @import "~@nti/style-common/all.scss";
 
 .status-report {
+	font-size: 0.875rem;
+	margin-bottom: 2.75rem;
+	border: 1px solid $tertiary-grey;
+
 	.heading {
 		background-color: $primary-green;
 		color: white;

@@ -9,13 +9,15 @@ export default class ResultTabs extends React.Component {
 		tabs: PropTypes.arrayOf(
 			PropTypes.shape({
 				label: PropTypes.any,
-				data: PropTypes.object,
+				data: PropTypes.array,
 				columns: PropTypes.array
 			})
 		)
 	}
 
 	state = {}
+
+	onTabClick = active => this.setState({active})
 
 	render () {
 		const {
@@ -28,14 +30,34 @@ export default class ResultTabs extends React.Component {
 		return (tabs || []).length === 0 ? null : (
 			<div className="result-tabs">
 				<ul className="tabs">
-					{tabs.map((t,i) => (
-						<li key={i} className={cx({active: active === i})}></li>
+					{tabs.map(({label},i) => (
+						<Tab key={i} index={i} onClick={this.onTabClick} className={cx({active: active === i})}>{label}</Tab>
 					))}
 				</ul>
 				<div className="tab-content">
-					<T.Table data={activeTab.data} columns={activeTab.columns} />
+					<T.Table items={activeTab.data} columns={activeTab.columns} />
 				</div>
 			</div>
+		);
+	}
+}
+
+class Tab extends React.PureComponent {
+
+	static propTypes = {
+		children: PropTypes.any,
+		index: PropTypes.number,
+		className: PropTypes.string,
+		onClick: PropTypes.func
+	}
+
+	onClick = () => this.props.onClick(this.props.index)
+
+	render () {
+		const {className, children} = this.props;
+
+		return (
+			<li className={className} onClick={this.onClick}>{children}</li>
 		);
 	}
 }

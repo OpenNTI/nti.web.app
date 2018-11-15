@@ -1,0 +1,28 @@
+@import "~@nti/style-common/all.scss";
+
+.result-tabs {
+	.tabs {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		background: $light-green;
+
+		> * {
+			flex: 1 1 auto;
+		}
+	}
+
+	.tab-content {
+		padding: 1rem;
+	}
+
+	table {
+		th {
+			font-size: 0.625rem;
+			text-transform: uppercase;
+			text-align: left;
+			color: $tertiary-grey;
+		}
+	}
+}
