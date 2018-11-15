@@ -17,10 +17,12 @@ export default class StatusReport extends React.PureComponent {
 		return (
 			<div className={cx('status-report', className)}>
 				<div className="heading">{heading}</div>
-				<div className="status-report-content">
-					{children}
-					{footer && <div className="footer">{footer}</div>}
-				</div>
+				{(children || footer) && (
+					<div className="status-report-content">
+						{children}
+						{footer && <div className="footer">{footer}</div>}
+					</div>
+				)}
 			</div>
 		);
 	}

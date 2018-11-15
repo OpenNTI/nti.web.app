@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Logger from '@nti/util-logger';
 import {scoped} from '@nti/lib-locale';
 
+import StatusReport from '../StatusReport';
+
 const logger = Logger.get('web-site-admin.components.advanced.transcripts.bulkimport.error');
 
 const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport.error.Unknown', {
@@ -23,12 +25,11 @@ export default class UnknownError extends React.Component {
 	}
 
 	render () {
-		const message = t('message');
+		const {error: {message: m} = {}} = this.props;
+		const message = m || t('message');
 
 		return (
-			<div className="transcript-bulk-import-error">
-				{message}
-			</div>
+			<StatusReport className="transcript-bulk-import-error" heading={message} />
 		);
 	}
 }
