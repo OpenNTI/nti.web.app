@@ -1,3 +1,16 @@
 {
-	"extends": "@nti/codestyle-jsx/stylelint"
+	"extends": "@nti/codestyle-jsx/stylelint",
+	"rules": {
+		'at-rule-no-unknown': [true, {
+			'ignoreAtRules': [
+				'at-root',
+				'each',
+				'for',
+				'function',
+				'if',
+				'include',
+				'mixin'
+			]
+		}]
+	}
 }
