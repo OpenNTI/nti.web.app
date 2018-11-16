@@ -2,6 +2,7 @@ import React from 'react';
 import {scoped} from '@nti/lib-locale';
 import cx from 'classnames';
 
+// import SAMPLE from './assets/sample.csv';
 import Collapsible from './Collapsible';
 
 const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport', {
@@ -21,10 +22,7 @@ const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport', {
 	},
 	required: '',
 	optional: 'optional',
-	sampleCsv: `username,title,description,issuer,date,value,type,units
-user001,Fire Safety,Completed Continuing Education,NextThought,2018-11-05T00:00:00Z,3,CEU,Hours
-user002,English Comp,Continuing Education,NextThought,2018-11-06T00:00:00Z,3,CEU,Hours
-`,
+	downloadsample: 'Download Sample CSV'
 });
 
 const REQUIRED = [
@@ -40,7 +38,9 @@ export default function Instructions () {
 	return (
 		<div className="transcript-credit-import-instructions">
 			<div className="instructions">{t('instructions')}</div>
-			<a className="download-sample" href={`data:application/csv,${encodeURIComponent(t('sampleCsv'))}`} download="sample.csv">Download Sample CSV</a>
+			{/*
+			<a className="download-sample" href={SAMPLE} download="sample.csv">{t('downloadsample')}</a>
+			*/}
 			<Collapsible label={t('showdetails')} labelOpened={t('hidedetails')}>
 				<div className="field-descriptions-heading">{t('fieldsheading')}</div>
 				<ul className="field-descriptions">
