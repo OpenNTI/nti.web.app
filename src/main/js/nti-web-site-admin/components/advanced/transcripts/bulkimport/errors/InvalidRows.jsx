@@ -16,9 +16,13 @@ const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport.erro
 
 const FIELDS = [
 	'credit_definition',
+	'description',
+	'issuer',
 	'date',
 	'username',
 	'value',
+	'type',
+	'units',
 	'title',
 ];
 const MAX_ROWS = 5;
