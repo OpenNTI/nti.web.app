@@ -12,24 +12,23 @@ const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport', {
 	fieldsheading: 'Columns',
 	fielddescriptions: {
 		username: 'a learner’s unique nextthought username',
-		title: 'name of the credit ',
+		title: 'name of the credit',
 		description: 'description of the credit',
 		issuer: 'entity issuing the credit',
-		date: 'the awarded date in ISO-8601 format, e.g. <span style="white-space:nowrap">2018-11-09T18:38:00.000-0500</span>',
-		value: 'amount of credit (i.e. 4)',
-		type: 'domain specific kind of credit (i.e. CRE)',
-		units: 'unit of measurement (i.e. Hours)'
+		date: 'the awarded date in ISO-8601 format (e.g. <span style="white-space:nowrap">2018-11-09T18:38:00.000-0500</span>)',
+		value: 'amount of credit (e.g. 4)',
+		type: 'domain specific kind of credit (e.g. CRE)'
 	},
 	required: '',
 	optional: 'optional',
 	downloadsample: 'Download Sample CSV',
-	sampleCsv: `username,title,description,issuer,date,value,type,units
-"858180955","Control Your Own Level of Motivation",,,2018-11-09T18:38:13.889Z,3,CEU,Hours
-"586022714","Winner S Gold",,,2018-11-09T18:38:13.889Z,3,CEU,Hours
-"710014911","Yes You Can",,,2018-11-09T18:38:13.889Z,3,CEU,Hours
-"652805478","Living in the Now",,,2018-11-09T18:38:13.889Z,3,ARG,Points
-"153810455","Sometimes Typhoons Come",,,2018-11-09T18:38:13.889Z,3,CEU,Hours
-"532119498","All Faith Needs Feet",,,2018-11-09T18:38:13.889Z,3,CEU,Hours
+	sampleCsv: `"username","title","description","issuer","date","value","type","units"
+"858180955","Volunteer","Description of volunteering","Supervisor","2018-11-09T18:38:13.889Z","3","CEU","Hours"
+"586022714","Seminar","","","2018-11-09T18:38:13.889Z","3","CEU","Hours"
+"710014911","Leadership Summit","","","2018-11-09T18:38:13.889Z","3","CEU","Hours"
+"652805478","Live Training","","","2018-11-09T18:38:13.889Z","3","ARG","Points"
+"153810455","Seminar","","","2018-11-09T18:38:13.889Z","3","CEU","Hours"
+"example.username","Training","","","2018-11-09T18:38:13.889Z","3","CEU","Hours"
 `
 });
 
