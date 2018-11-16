@@ -39,6 +39,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				href: response.href
 			};
 
+			delete newRaw.Items;
+
 			this.isPlaceholder = false;
 			this.set(newRaw);
 		});
