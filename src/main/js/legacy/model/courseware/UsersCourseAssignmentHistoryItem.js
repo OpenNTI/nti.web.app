@@ -185,6 +185,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 			const container = lazy.ParseUtils.parseItems([containerRaw])[0];
 
 			container.set({
+				item: this.get('item'),
 				Items: (container.get('Items') || []).map((item) => {
 					if (item.getId() === historyItem.getId()) {
 						return historyItem;
