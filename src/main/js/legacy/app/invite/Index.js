@@ -38,9 +38,11 @@ module.exports = exports = Ext.define('NextThought.app.invite.Index', {
 
 		this.inviteUrl = this.record.getLink('SendCourseInvitations');
 
+		const courseName = this.record.get('bundle').get('title');
+
 		this.add({
 			xtype: 'box',
-			html: 'Invite others to enroll in this course. We\'ll send an email with personalized invitation codes and a course link to the addresses provided. <a target="_blank" href="https://help.nextthought.com/guide/part3.html#course-roster">More Information</a>',
+			html: `Invite others to take ${courseName}. Add a message below and we'll send your message along with a course link to the emails provided. Each email will receive a personalized invitation code. <a target="_blank" href="https://help.nextthought.com/guide/part3.html#course-roster">More Information</a>`,
 			cls: 'instructions'
 		});
 
