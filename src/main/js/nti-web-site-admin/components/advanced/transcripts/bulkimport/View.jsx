@@ -10,6 +10,7 @@ import Result from './Result';
 const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport.Upload', {
 	title: 'Drag a file to upload, or',
 	requirements: 'Must be a .csv file',
+	importCredits: 'Bulk Import Transcript Credits'
 });
 
 const ALLOWED = {

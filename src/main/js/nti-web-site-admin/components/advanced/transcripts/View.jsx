@@ -7,8 +7,7 @@ import BulkImport from './bulkimport';
 
 const t = scoped('web-site-admin.components.advanced.transcripts.View', {
 	creditTypes: 'Credit Types',
-	save: 'Save',
-	importCredits: 'Bulk Import Transcript Credits',
+	save: 'Save'
 });
 
 export default class AdminTranscripts extends React.Component {
