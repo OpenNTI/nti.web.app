@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {ManageTranscriptCredits} from '@nti/web-course';
 import {scoped} from '@nti/lib-locale';
 
@@ -11,9 +10,6 @@ const t = scoped('web-site-admin.components.advanced.transcripts.View', {
 });
 
 export default class AdminTranscripts extends React.Component {
-	static propTypes = {
-		workspace: PropTypes.object.isRequired
-	}
 
 	constructor (props) {
 		super(props);
@@ -26,7 +22,7 @@ export default class AdminTranscripts extends React.Component {
 			<div className="site-admin-advanced-transcripts">
 				<div>
 					<div className="section-header">{t('creditTypes')}</div>
-					<ManageTranscriptCredits/>
+					<ManageTranscriptCredits />
 				</div>
 				<BulkImport />
 			</div>
