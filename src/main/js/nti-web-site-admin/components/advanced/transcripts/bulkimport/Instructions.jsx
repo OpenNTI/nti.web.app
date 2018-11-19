@@ -4,6 +4,7 @@ import {rawContent} from '@nti/lib-commons';
 import cx from 'classnames';
 
 import Collapsible from './Collapsible';
+import SAMPLE from './assets/sample.csv?for-download';
 
 const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport', {
 	instructions: 'Import transcript credits for multiple learners with a comma or tab separated csv file.',
@@ -22,14 +23,6 @@ const t = scoped('web-site-admin.components.advanced.transcripts.bulkimport', {
 	required: '',
 	optional: 'optional',
 	downloadsample: 'Download Sample CSV',
-	sampleCsv: `"username","title","description","issuer","date","value","type","units"
-"858180955","Volunteer","Description of volunteering","Supervisor","2018-11-09T18:38:13.889Z","3","CEU","Hours"
-"586022714","Seminar","","","2018-11-09T18:38:13.889Z","3","CEU","Hours"
-"710014911","Leadership Summit","","","2018-11-09T18:38:13.889Z","3","CEU","Hours"
-"652805478","Live Training","","","2018-11-09T18:38:13.889Z","3","ARG","Points"
-"153810455","Seminar","","","2018-11-09T18:38:13.889Z","3","CEU","Hours"
-"example.username","Training","","","2018-11-09T18:38:13.889Z","3","CEU","Hours"
-`
 });
 
 const REQUIRED = [
@@ -45,7 +38,7 @@ export default function Instructions () {
 	return (
 		<div className="transcript-credit-import-instructions">
 			<div className="instructions">{t('instructions')}</div>
-			<a className="download-sample" href={`data:application/csv,${encodeURIComponent(t('sampleCsv'))}`} download="sample.csv">{t('downloadsample')}</a>
+			<a className="download-sample" href={SAMPLE} download="sample.csv">{t('downloadsample')}</a>
 			<Collapsible label={t('showdetails')} labelOpened={t('hidedetails')}>
 				<div className="field-descriptions-heading">{t('fieldsheading')}</div>
 				<ul className="field-descriptions">
