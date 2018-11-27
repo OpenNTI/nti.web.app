@@ -5,6 +5,7 @@ const OverviewGroup = require('legacy/model/courses/overview/Group');
 const ContentlinkEditor = require('../contentlink/Editor');
 const VideoEditor = require('../video/Editor');
 const DiscussionEditor = require('../discussion/Editor');
+const EventEditor = require('../event/Editor');
 const LTIExternalToolAssetEditor = require('../ltiexternaltoolasset/Editor');
 const QuestionsetEditor = require('../questionset/Editor');
 const TimelineEditor = require('../timeline/Editor');
@@ -38,7 +39,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				QuestionsetEditor,
 				TimelineEditor,
 				SurveyEditor,
-				WebinarEditor
+				WebinarEditor,
+				EventEditor
 			];
 
 			if (bundle && bundle.hasLink('lti-configured-tools')) {

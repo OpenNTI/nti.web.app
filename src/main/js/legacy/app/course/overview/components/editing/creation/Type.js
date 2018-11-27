@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'new-type',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'icon {iconCls}'},
+		{cls: 'icon {iconCls}', html: '{customHTML}'},
 		{cls: 'title', html: '{title}'}
 	]),
 
@@ -20,7 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			iconCls: this.typeConfig.iconCls,
-			title: this.typeConfig.title
+			title: this.typeConfig.title,
+			customHTML: this.typeConfig.customHTML
 		});
 	},
 
