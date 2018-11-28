@@ -1,1 +1,2 @@
 require('./CalendarEventRef');
+require('./CourseCalendarEvent');

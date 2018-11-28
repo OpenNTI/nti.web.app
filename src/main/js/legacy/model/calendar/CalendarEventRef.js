@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.model.CalendarEventRef', {
 	},
 
 	fields: [
-		{name: 'event', type: 'object'}
+		{name: 'CalendarEvent', type: 'object'}
 	]
 
 });

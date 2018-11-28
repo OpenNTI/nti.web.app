@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			cmp = editor && editor.getEditorForRecord(record);
 
 		// TODO: There should be a way to do this through configuration, not special casing
-		if(record.get('MimeType').match(/webinarasset/)) {
+		if(record.get('MimeType').match(/webinarasset/) || record.get('MimeType').match(/nticalendareventref/)) {
 			this.hideFooter();
 		}
 
