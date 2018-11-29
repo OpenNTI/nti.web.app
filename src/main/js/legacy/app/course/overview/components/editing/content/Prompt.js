@@ -14,6 +14,7 @@ const QuestionsetEditor = require('./questionset/Editor');
 const SurveyEditor = require('./survey/Editor');
 const TimelineEditor = require('./timeline/Editor');
 const WebinarEditor = require('./webinar/Editor');
+const EventEditor = require('./event/Editor');
 
 require('../outline/Prompt');
 
@@ -44,7 +45,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				QuestionsetEditor,
 				SurveyEditor,
 				TimelineEditor,
-				WebinarEditor
+				WebinarEditor,
+				EventEditor
 			];
 		}
 	}

@@ -54,6 +54,7 @@ require('./WebinarAsset');
 require('./anchorables');
 require('./app');
 require('./assessment');
+require('./calendar');
 require('./conflict');
 require('./courses');
 require('./courseware');

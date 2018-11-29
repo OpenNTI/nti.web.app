@@ -2,6 +2,11 @@
 @import 'content-editing-parentselection';
 @import 'content-editing-itemselection';
 
+.overview-editing-prompt .content-editor.content-event {
+	padding: 0;
+	background-color: white;
+}
+
 .overview-editing-prompt {
 	width: 90vw;
 	max-width: 810px;
@@ -36,7 +41,7 @@
 			}
 		}
 
-		.webinar-editor {
+		.webinar-editor, .event-editor {
 			.image-and-description {
 				.description {
 					max-width: 490px;
@@ -62,7 +67,7 @@
 	}
 }
 
-.webinar-base-item {
+.webinar-base-item, .event-base-item {
 	.image-and-description {
 		&.iconless {
 			.description {
