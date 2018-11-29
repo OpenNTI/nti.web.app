@@ -98,24 +98,31 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			},
 			onAddToLesson: (selectedSection, selectedRank, img, selectedEvent) => {
 				if(this.doSave) {
-					this.eventEditor.setProps({saveDisabled: true});
+					try {
+						this.eventEditor.setProps({saveDisabled: true});
 
-					this.event = selectedEvent;
-					this.selectedParent = null;
+						this.event = selectedEvent;
+						this.selectedParent = null;
 
-					// refresh root record in case a new section was created and chosen
-					this.rootRecord.updateFromServer().then((updated) => {
-						updated.get('Items').forEach(item => {
-							if(selectedSection.getID() === item.getId()) {
-								this.selectedParent = item;
-							}
+						// refresh root record in case a new section was created and chosen
+						this.rootRecord.updateFromServer().then((updated) => {
+							updated.get('Items').forEach(item => {
+								if(selectedSection.getID() === item.getId()) {
+									this.selectedParent = item;
+								}
+							});
+
+							this.selectedRank = selectedRank - 1;
+							this.img = img;
+
+							this.doSave();
 						});
-
-						this.selectedRank = selectedRank - 1;
-						this.img = img;
-
-						this.doSave();
-					});
+					}
+					catch (e) {
+						if(this.eventEditor) {
+							this.eventEditor.setProps({saveDisabled: false});
+						}
+					}
 				}
 			}
 		});
