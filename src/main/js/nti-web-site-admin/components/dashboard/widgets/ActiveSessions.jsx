@@ -31,7 +31,10 @@ export default class ActiveSessions extends React.Component {
 			return {value: stats.Count};
 		}
 		catch (e) {
-			return {value: (<div className="not-available">{t('notAvailable')}</div>)};
+			return {
+				value: 0,
+				error: (<div className="not-available">{t('notAvailable')}</div>)
+			};
 		}
 	}
 
