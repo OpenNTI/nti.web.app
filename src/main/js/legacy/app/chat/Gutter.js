@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {DateIcon} = require('@nti/web-calendar');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
@@ -8,6 +9,8 @@ const lazy = require('legacy/util/lazy-require')
 const GroupsStateStore = require('legacy/app/groups/StateStore');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const NavigationStateStore = require('legacy/app/navigation/StateStore');
+
+require('legacy/overrides/ReactHarness');
 
 const ChatStateStore = require('./StateStore');
 const ChatActions = require('./Actions');
@@ -23,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
+		{cls: 'presence-gutter-entry show-calendar', 'data-qtip': 'Show Calendar'},
 		{cls: 'presence-gutter-entry other-contacts', 'data-qtip': 'Expand Contacts', 'data-badge': '0', cn: [
 			{cls: 'profile-pic'}
 		]},
@@ -34,7 +38,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 	renderSelectors: {
 		contactsButtonEl: '.show-contacts',
-		otherContactsEl: '.other-contacts'
+		otherContactsEl: '.other-contacts',
+		showCalendarEl: '.show-calendar'
 	},
 
 	ENTRY_BOTTOM_OFFSET: 100,
@@ -93,13 +98,28 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		this.callParent(arguments);
 		this.mon(this.contactsButtonEl, 'click', this.goToContacts.bind(this));
 		this.mon(this.otherContactsEl, 'click', this.showAllOnlineContacts.bind(this));
+		this.mon(this.showCalendarEl, 'click', this.showCalendar.bind(this));
 		this.maybeUpdateOtherButton();
 		Ext.EventManager.onWindowResize(Ext.bind(this.onResize, this));
+
+		this.dateIcon = Ext.widget('react', {
+			renderTo: this.showCalendarEl,
+			component: DateIcon
+		});
 
 		this.on('show', function () {
 			me.updateList(me.store, me.store.data.items);
 		});
 		this.syncWithRecentChats();
+	},
+
+	onDestroy: function () {
+		this.callParent(arguments);
+
+		if(this.dateIcon) {
+			this.dateIcon.destroy();
+			delete this.dateIcon;
+		}
 	},
 
 	syncWithRecentChats: function () {
@@ -134,6 +154,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 	goToContacts: function (e) {
 		NavigationActions.pushRootRoute('Contacts', '/contacts/');
+	},
+
+	showCalendar: function (e) {
+		this.ChatStore.fireEvent('show-calendar-window', this);
 	},
 
 	showAllOnlineContacts: function (e) {

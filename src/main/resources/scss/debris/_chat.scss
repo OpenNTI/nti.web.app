@@ -853,13 +853,19 @@
 			display: block;
 		}
 	}
+
+	&.showing-calendar {
+		.gutter-event-window {
+			display: block;
+		}
+	}
 }
 
 body.white-shade-mask .chat-gutter-window {
  	background-color: rgba(35, 35, 35, 0.15);
 }
 
-.chat-gutter-window, .chat-gutter-list-window {
+.chat-gutter-window, .chat-gutter-list-window, .gutter-event-window {
 	position: fixed;
 	top: 100px;
 	bottom: 60px;
@@ -958,6 +964,24 @@ body.white-shade-mask .chat-gutter-window {
   		}
   	}
 
+	&.gutter-event-window {
+		right: 80px;
+		width: 280px;
+		padding-bottom: 0px;
+		background-color: rgba(35, 35, 35, 1);
+
+		&.hidden {
+			display: none;
+		}
+
+		.x-component {
+			height: 100%;
+
+			.calendar-main {
+				height: 100%;
+			}
+		}
+	}
 
   	&.chat-gutter-list-window {
 		right: 10px;

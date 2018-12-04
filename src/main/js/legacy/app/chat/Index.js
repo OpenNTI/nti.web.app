@@ -10,6 +10,7 @@ require('./Gutter');
 require('./transcript/Window');
 require('./components/Window');
 require('./components/gutter/List');
+require('./components/gutter/EventWindow');
 
 const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 	extend: 'Ext.container.Container',
@@ -26,6 +27,7 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'gutter'},
 		{cls: 'gutter-list'},
+		{cls: 'event-window'},
 		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
@@ -34,7 +36,8 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 
 	renderSelectors: {
 		gutter: '.gutter',
-		listEl: '.gutter-list'
+		listEl: '.gutter-list',
+		eventWindowEl: '.event-window'
 	},
 
 	CHAT_WIN_MAP: {},
@@ -53,6 +56,7 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 			'notify': this.handleTabNotifications.bind(this),
 			'show-all-gutter-contacts': this.showAllOnlineContacts.bind(this),
 			'hide-all-gutter-contacts': this.hideAllOnlineContacts.bind(this),
+			'show-calendar-window': this.showCalendarWindow.bind(this),
 			'toggle-gutter': this.toggleGutter.bind(this)
 		});
 	},
@@ -76,6 +80,7 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 		}
 
 		this.addCls('show-all');
+		this.hideCalendarWindow();
 	},
 
 	hideAllOnlineContacts: function () {
@@ -87,6 +92,36 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 				me.gutterWin.adjustToExpandedChat(win);
 			}
 		});
+	},
+
+	showCalendarWindow: function (gutter) {
+		if (!this.calendarWin) {
+			this.calendarWin = Ext.widget('gutter-list-event-window', {
+				renderTo: this.eventWindowEl,
+				onClose: () => {
+					this.hideCalendarWindow();
+				}
+			});
+
+			this.showingCalendar = true;
+			gutter.calendarWin = this.calendarWin;
+		}
+		else {
+			if(this.showingCalendar) {
+				this.hideCalendarWindow();
+			}
+			else {
+				this.calendarWin.removeCls('hidden');
+				this.showingCalendar = true;
+			}
+		}
+	},
+
+	hideCalendarWindow: function (gutter) {
+		if(this.calendarWin) {
+			this.calendarWin.addCls('hidden');
+			this.showingCalendar = false;
+		}
 	},
 
 	showChatWindow: function (roomInfo) {
