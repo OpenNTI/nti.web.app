@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@nti/lib-decorators": "^1.4.0",
-    "@nti/util-logger": "^1.0.2"
+    "@nti/util-logger": "^1.0.2",
+    "@nti/web-calendar": "^1.0.0-alpha.20181203161957"
   },
   "devDependencies": {
     "@nti/app-scripts": "^2.0.6",
