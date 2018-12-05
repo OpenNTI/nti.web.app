@@ -12,6 +12,8 @@ require('./components/Window');
 require('./components/gutter/List');
 require('./components/gutter/EventWindow');
 
+const REBUILD_TIMEOUT = 1000 * 60 * 5; // 5 minutes
+
 const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chats-view',
@@ -95,7 +97,17 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 	},
 
 	showCalendarWindow: function (gutter) {
-		if (!this.calendarWin) {
+		if(this.shouldRebuildCalendar && this.calendarWin) {
+			this.calendarWin.destroy();
+			delete this.calendarWin;
+			this.shouldRebuildCalendar = false;
+			this.showingCalendar = false;
+		}
+
+		if(this.showingCalendar) {
+			this.hideCalendarWindow();
+		}
+		else if (!this.calendarWin) {
 			this.calendarWin = Ext.widget('gutter-list-event-window', {
 				renderTo: this.eventWindowEl,
 				onClose: () => {
@@ -104,24 +116,21 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 			});
 
 			this.showingCalendar = true;
-			gutter.calendarWin = this.calendarWin;
 		}
 		else {
-			if(this.showingCalendar) {
-				this.hideCalendarWindow();
-			}
-			else {
-				this.calendarWin.removeCls('hidden');
-				this.showingCalendar = true;
-			}
+			this.calendarWin.removeCls('hidden');
+			this.showingCalendar = true;
 		}
 	},
 
-	hideCalendarWindow: function (gutter) {
+	hideCalendarWindow: function () {
 		if(this.calendarWin) {
 			this.calendarWin.addCls('hidden');
 			this.showingCalendar = false;
 		}
+
+		clearTimeout(this.calendarDirty);
+		this.calendarDirty = setTimeout(() => { this.shouldRebuildCalendar = true; }, REBUILD_TIMEOUT);
 	},
 
 	showChatWindow: function (roomInfo) {
