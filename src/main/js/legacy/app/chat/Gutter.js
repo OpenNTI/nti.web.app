@@ -157,6 +157,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	showCalendar: function (e) {
+		this.dateIcon.setProps({viewed: true});
+
 		this.ChatStore.fireEvent('show-calendar-window', this);
 	},
 
