@@ -27,17 +27,18 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 	minWidth: 1024,
 	touchStartTime: -1,
 
-	items: [
-		{xtype: 'navigation-message-bar', id: 'message-bar'},
-		{xtype: 'main-navigation', id: 'nav'},
-		{xtype: 'main-views', id: 'view'},
-		{xtype: 'windows-view', id: 'window'},
-		{xtype: 'prompt-view', id: 'prompt'},
-		{xtype: 'chats-view', id: 'chat-window'}
-	],
+	items: [],
 
 	initComponent: function () {
 		this.callParent();
+
+		this.add({xtype: 'navigation-message-bar', id: 'message-bar'});
+		this.add({xtype: 'main-navigation', id: 'nav'});
+		this.body = this.add({xtype: 'main-views', id: 'view'});
+		this.add({xtype: 'windows-view', id: 'window'});
+		this.add({xtype: 'prompt-view', id: 'prompt'});
+		this.add({xtype: 'chats-view', id: 'chat-window', navigateToObject: (obj) => this.body.attemptToNavigateToObject(obj)});
+
 		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
 

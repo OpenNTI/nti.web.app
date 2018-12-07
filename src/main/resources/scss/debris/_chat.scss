@@ -855,7 +855,7 @@
 	}
 
 	&.showing-calendar {
-		.gutter-event-window {
+		.gutter-calendar-window {
 			display: block;
 		}
 	}
@@ -865,7 +865,7 @@ body.white-shade-mask .chat-gutter-window {
  	background-color: rgba(35, 35, 35, 0.15);
 }
 
-.chat-gutter-window, .chat-gutter-list-window, .gutter-event-window {
+.chat-gutter-window, .chat-gutter-list-window, .gutter-calendar-window {
 	position: fixed;
 	top: 100px;
 	bottom: 60px;
@@ -964,7 +964,7 @@ body.white-shade-mask .chat-gutter-window {
   		}
   	}
 
-	&.gutter-event-window {
+	&.gutter-calendar-window {
 		right: 80px;
 		width: 280px;
 		padding-bottom: 0px;

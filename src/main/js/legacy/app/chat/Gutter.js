@@ -102,10 +102,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		this.maybeUpdateOtherButton();
 		Ext.EventManager.onWindowResize(Ext.bind(this.onResize, this));
 
-		this.dateIcon = Ext.widget('react', {
-			renderTo: this.showCalendarEl,
-			component: DateIcon
-		});
+		if(Service.getCollection('Calendars')) {
+			this.dateIcon = Ext.widget('react', {
+				renderTo: this.showCalendarEl,
+				component: DateIcon
+			});
+		}
+		else {
+			this.showCalendarEl.hide();
+		}
 
 		this.on('show', function () {
 			me.updateList(me.store, me.store.data.items);
