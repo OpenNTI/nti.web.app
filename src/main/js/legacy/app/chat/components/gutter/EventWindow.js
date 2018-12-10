@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Models} = require('@nti/lib-interfaces');
-const {Editor} = require('@nti/web-calendar');
+const {Event} = require('@nti/web-calendar');
 const {GotoWebinar} = require('@nti/web-integrations');
 
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.event.Window', {
 		else {
 			this.add({
 				xtype: 'react',
-				component: Editor,
+				component: Event.View,
 				event: obj,
 				getAvailableCalendars: () => [],
 				onCancel: () => {
