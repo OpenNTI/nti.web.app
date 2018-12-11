@@ -46,7 +46,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.event.Window', {
 				getAvailableCalendars: () => [],
 				onCancel: () => {
 					this.WindowActions.closeWindow();
-				}
+				},
+				editable: obj.hasLink('edit')
 			});
 		}
 	}
