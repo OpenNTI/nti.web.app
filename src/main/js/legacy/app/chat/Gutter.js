@@ -25,8 +25,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	cls: 'chat-gutter-window',
 
 	renderTpl: Ext.DomHelper.markup([
-		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
 		{cls: 'presence-gutter-entry show-calendar', 'data-qtip': 'Show Calendar'},
+		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
 		{cls: 'presence-gutter-entry other-contacts', 'data-qtip': 'Expand Contacts', 'data-badge': '0', cn: [
 			{cls: 'profile-pic'}
 		]},
