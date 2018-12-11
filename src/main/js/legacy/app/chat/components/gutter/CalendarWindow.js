@@ -50,13 +50,18 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ev
 							target: '_blank'
 						};
 					}
-					else {
+					else if(obj.hasLink('WebinarRegister')) {
 						return async () => {
 							const webinar = await obj.fetchLinkParsed('Webinar');
 
 							if(obj.hasLink('WebinarRegister')) {
 								this.WindowActions.pushWindow(Base.interfaceToModel(webinar));
 							}
+						};
+					}
+					else {
+						return () => {
+							alert('This webinar is no longer available');
 						};
 					}
 				}
