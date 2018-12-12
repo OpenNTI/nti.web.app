@@ -12,14 +12,6 @@
 		text-decoration: none;
 		color: $primary-blue;
 		margin-bottom: 1rem;
-
-		// NTI-6969 - data url downloads don't work in IE/Edge
-		@at-root {
-			.is-ie &,
-			.is-edge & {
-				display: none;
-			}
-		}
 	}
 
 	.field-descriptions-heading {
