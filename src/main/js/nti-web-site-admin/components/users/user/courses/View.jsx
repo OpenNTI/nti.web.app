@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Loading} from '@nti/web-commons';
+import {Loading, Button} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
-import {EnrollmentListItem} from '@nti/web-course';
+import {EnrollmentListItem, Enrollment} from '@nti/web-course';
 
 import ErrorMessage from '../../../common/ErrorMessage';
 import Card from '../../../common/Card';
@@ -12,7 +12,8 @@ import Store from './Store';
 
 const DEFAULT_TEXT = {
 	error: 'Unable to load transcript.',
-	noCourses: 'This user is not enrolled in any courses'
+	noCourses: 'This user is not enrolled in any courses',
+	manage: 'Manage Courses'
 };
 const t = scoped('nti-site-admin.users.user.courses.View', DEFAULT_TEXT);
 
@@ -63,17 +64,43 @@ class SiteAdminUserCourses extends React.Component {
 	}
 
 
+	onEnrollmentChange = () => {
+		const {user} = this.props;
+
+		this.store.loadTranscript(user);
+	}
+
+
 	render () {
 		const {loading, error} = this.props;
 
 		return (
 			<div className="site-admin-user-transcripts">
 				{loading && (<Loading.Mask />)}
+				{!loading && this.renderControls()}
 				{!loading && this.renderItems()}
 				{error && (<ErrorMessage>{t('error')}</ErrorMessage>)}
 			</div>
 		);
 	}
+
+
+	renderControls () {
+		const {user} = this.props;
+
+		if (!user.hasLink('EnrollUser')) { return null; }
+
+		return (
+			<div className="user-transcript-controls">
+				<Enrollment.Admin.Prompt.Trigger user={user} onChange={this.onEnrollmentChange} >
+					<Button rounded>
+						{t('manage')}
+					</Button>
+				</Enrollment.Admin.Prompt.Trigger>
+			</div>
+		);
+	}
+
 
 	renderItems () {
 		const {items} = this.props;
@@ -87,7 +114,7 @@ class SiteAdminUserCourses extends React.Component {
 						return (
 							<li key={index}>
 								<LinkTo.Object object={item} context="site-admin.users.user-transcript.list">
-									<EnrollmentListItem enrollment={item} />
+									<EnrollmentListItem enrollment={item} onChange={this.onEnrollmentChange} />
 								</LinkTo.Object>
 							</li>
 						);

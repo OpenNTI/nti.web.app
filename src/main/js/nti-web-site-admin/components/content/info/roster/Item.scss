@@ -21,4 +21,16 @@
 			word-break: break-word;
 		}
 	}
+
+	.manage {
+		flex: 0 0 auto;
+		margin-left: 1rem;
+
+		 .nti-course-enrollment-admin-prompt-trigger {
+		 	width: 40px;
+		 	height: 40px;
+		 	line-height: 40px;
+		 	color: $primary-blue;
+		 }
+	}
 }

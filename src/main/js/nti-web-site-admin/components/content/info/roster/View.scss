@@ -1,6 +1,17 @@
 @import '~@nti/style-common';
 
+.nti-site-admin-course-roster {
+	.site-admin-course-roster-header {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		margin-bottom: 1rem;
+	}
+}
+
 .site-admin-course-roster {
+
+
 	.loading-mask {
 		position: relative;
 		min-height: 200px;
