@@ -5,24 +5,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
   className="site-admin-user-transcripts"
 >
   <div
-    className="user-transcript-controls"
-  >
-    <div
-      className="nti-course-enrollment-admin-prompt-trigger"
-      onClick={[Function]}
-    >
-      <a
-        className="nti-button primary rounded"
-        onClick={[Function]}
-        onKeyDown={[Function]}
-        role="button"
-        tabIndex="0"
-      >
-        Manage Courses
-      </a>
-    </div>
-  </div>
-  <div
     className="site-admin-card"
   >
     <ul>
@@ -33,7 +15,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
         >
           <div
             className="nti-course-enrollment-list-item"
-            onChange={[Function]}
           >
             <img
               className="course-enrollment-icon"
@@ -53,18 +34,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
                 course1
               </div>
             </div>
-            <div
-              className="course-enrollment-controls"
-            >
-              <div
-                className="nti-course-enrollment-admin-prompt-trigger"
-                onClick={[Function]}
-              >
-                <i
-                  className="icon-edit"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </li>
@@ -75,7 +44,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
         >
           <div
             className="nti-course-enrollment-list-item"
-            onChange={[Function]}
           >
             <img
               className="course-enrollment-icon"
@@ -95,18 +63,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
                 course2
               </div>
             </div>
-            <div
-              className="course-enrollment-controls"
-            >
-              <div
-                className="nti-course-enrollment-admin-prompt-trigger"
-                onClick={[Function]}
-              >
-                <i
-                  className="icon-edit"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </li>
@@ -117,7 +73,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
         >
           <div
             className="nti-course-enrollment-list-item"
-            onChange={[Function]}
           >
             <img
               className="course-enrollment-icon"
@@ -137,18 +92,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
                 course3
               </div>
             </div>
-            <div
-              className="course-enrollment-controls"
-            >
-              <div
-                className="nti-course-enrollment-admin-prompt-trigger"
-                onClick={[Function]}
-              >
-                <i
-                  className="icon-edit"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </li>
@@ -159,7 +102,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
         >
           <div
             className="nti-course-enrollment-list-item"
-            onChange={[Function]}
           >
             <img
               className="course-enrollment-icon"
@@ -179,18 +121,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
                 course4
               </div>
             </div>
-            <div
-              className="course-enrollment-controls"
-            >
-              <div
-                className="nti-course-enrollment-admin-prompt-trigger"
-                onClick={[Function]}
-              >
-                <i
-                  className="icon-edit"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </li>
@@ -201,7 +131,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
         >
           <div
             className="nti-course-enrollment-list-item"
-            onChange={[Function]}
           >
             <img
               className="course-enrollment-icon"
@@ -221,18 +150,6 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
                 course5
               </div>
             </div>
-            <div
-              className="course-enrollment-controls"
-            >
-              <div
-                className="nti-course-enrollment-admin-prompt-trigger"
-                onClick={[Function]}
-              >
-                <i
-                  className="icon-edit"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </li>
@@ -245,24 +162,6 @@ exports[`Site admin user course list test (no courses) Basic render test 1`] = `
 <div
   className="site-admin-user-transcripts"
 >
-  <div
-    className="user-transcript-controls"
-  >
-    <div
-      className="nti-course-enrollment-admin-prompt-trigger"
-      onClick={[Function]}
-    >
-      <a
-        className="nti-button primary rounded"
-        onClick={[Function]}
-        onKeyDown={[Function]}
-        role="button"
-        tabIndex="0"
-      >
-        Manage Courses
-      </a>
-    </div>
-  </div>
   <div
     className="empty-state"
   >

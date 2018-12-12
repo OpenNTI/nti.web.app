@@ -15,8 +15,7 @@ const getMockService = (numberOfItems) => {
 		Items.push({
 			getID: () => 'abc' + index,
 			User: {
-				Username: 'abc' + index,
-				avatarURL: 'someAvatarURL'
+				Username: 'abc' + index
 			}
 		});
 	}
