@@ -13,7 +13,8 @@ const getMockService = () => {
 				hasLink: () => true,
 				fetchLink: () => {
 					return {};
-				}
+				},
+				avatarURL: 'someAvatarURL'
 			};
 		},
 		getObject: () => {
