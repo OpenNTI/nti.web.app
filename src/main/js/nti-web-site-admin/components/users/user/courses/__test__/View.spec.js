@@ -18,7 +18,8 @@ const getMockService = (numberOfCourses) => {
 					label: 'Course' + index,
 					title: 'course' + index
 				};
-			}
+			},
+			hasLink: () => true
 		});
 	}
 
@@ -49,7 +50,8 @@ describe('Site admin user course list test (5 courses)', () => {
 
 	test('Basic render test', async () => {
 		const user = {
-			getLink: () => 'mockLink'
+			getLink: () => 'mockLink',
+			hasLink: () => true
 		};
 
 		const cmp = renderer.create(<View user={user}/>);
@@ -70,7 +72,8 @@ describe('Site admin user course list test (no courses)', () => {
 
 	test('Basic render test', async () => {
 		const user = {
-			getLink: () => 'mockLink'
+			getLink: () => 'mockLink',
+			hasLink: () => true
 		};
 
 		const cmp = renderer.create(<View user={user}/>);
