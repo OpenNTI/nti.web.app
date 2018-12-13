@@ -11,7 +11,7 @@ import Card from '../../../common/Card';
 import Store from './Store';
 
 const DEFAULT_TEXT = {
-	error: 'Unable to load transcript.',
+	error: 'Unable to load courses.',
 	noCourses: 'This user is not enrolled in any courses',
 	manage: 'Manage Courses'
 };

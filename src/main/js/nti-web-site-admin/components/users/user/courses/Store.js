@@ -41,8 +41,11 @@ export default class UserTranscriptStore extends Stores.SimpleStore {
 
 			this.emitChange('items');
 		} catch (e) {
-			this.set('error', e);
-			this.emitChange('error');
+			if(e.code !== 'UserEnrollmentsNotFound') {
+				// we shouldn't show error info for this, just means no enrolled courses and the view will reflect that
+				this.set('error', e);
+				this.emitChange('error');
+			}
 		} finally {
 			this.set('loading', false);
 			this.emitChange('loading');
