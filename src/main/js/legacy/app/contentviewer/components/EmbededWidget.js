@@ -14,6 +14,14 @@ function getOriginFrom (uri) {
 	return o.format();
 }
 
+function getData (e) {
+	try {
+		return e.data ? JSON.parse(e.data) : {};
+	} catch (e) {
+		return {};
+	}
+}
+
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 	extend: 'Ext.Component',
 	alias: 'widget.overlay-content-embeded-widget-frame',
@@ -167,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	onMessage: function (e) {
 		var me = this;
-		var data = JSON.parse(e.data) || {};
+		var data = getData(e.data);
 		var id = data[this.getIdKey()];
 		var method = data.method;
 		var value = data.value;
