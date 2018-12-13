@@ -113,6 +113,15 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 				onClose: () => {
 					this.hideCalendarWindow();
 				},
+				onItemClick: (obj) => {
+					this.hideCalendarWindow();
+
+					// temp solution to prevent having stale webinars in the calendar
+					if(obj.hasLink && obj.hasLink('WebinarRegister')) {
+						clearTimeout(this.calendarDirty);
+						this.shouldRebuildCalendar = true;
+					}
+				},
 				navigateToObject: (obj) => this.navigateToObject(obj)
 			});
 

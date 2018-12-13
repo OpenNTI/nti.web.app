@@ -36,6 +36,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ev
 			getRouteFor: (obj, context) => {
 				if (obj.MimeType === Models.calendar.CourseCalendarEvent.MimeType) {
 					return () => {
+						if(this.onItemClick) {
+							this.onItemClick(obj);
+						}
+
 						this.WindowActions.pushWindow(Base.interfaceToModel(obj));
 					};
 				}
@@ -54,6 +58,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ev
 						return async () => {
 							const webinar = await obj.fetchLinkParsed('Webinar');
 
+							if(this.onItemClick) {
+								this.onItemClick(obj);
+							}
+
 							if(obj.hasLink('WebinarRegister')) {
 								this.WindowActions.pushWindow(Base.interfaceToModel(webinar));
 							}
@@ -71,6 +79,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ev
 
 						if(obj.MimeType.match(/assignment/)) {
 							libraryPathObject = await obj.fetchLinkParsed('Assignment');
+						}
+
+						if(this.onItemClick) {
+							this.onItemClick(obj);
 						}
 
 						this.navigateToObject(Base.interfaceToModel(libraryPathObject));
