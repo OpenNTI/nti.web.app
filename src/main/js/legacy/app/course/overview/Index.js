@@ -162,7 +162,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 	showLessons: function (route/*, subRoute*/) {
-		debugger;
 		var lessons = this.getLessons();
 
 		this.getLayout().setActiveItem(lessons);
