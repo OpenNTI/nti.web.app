@@ -275,6 +275,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	openChatWindow: function (user, entry) {
+		if(this.onChatOpen) {
+			this.onChatOpen();
+		}
+
 		var isVisible = user.associatedWindow && user.associatedWindow.isVisible();
 		if (user.associatedWindow && !user.associatedWindow.isDestroyed) {
 			user.associatedWindow[isVisible ? 'hide' : 'show']();

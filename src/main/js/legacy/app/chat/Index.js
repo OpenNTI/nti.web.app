@@ -65,7 +65,7 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 
 	afterRender: function () {
 		this.callParent(arguments);
-		this.gutterWin = Ext.widget('chat-gutter-window', {renderTo: this.gutter, autoShow: true});
+		this.gutterWin = Ext.widget('chat-gutter-window', {renderTo: this.gutter, autoShow: true, onChatOpen: () => { this.hideCalendarWindow(); }});
 	},
 
 	showAllOnlineContacts: function (gutter) {
@@ -94,6 +94,16 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 				me.gutterWin.adjustToExpandedChat(win);
 			}
 		});
+	},
+
+	closeAllChatWindows: function () {
+		const wins = this.gutterWin.ChatStore.getAllChatWindows();
+
+		for(let win of wins) {
+			if(win.close) {
+				win.close();
+			}
+		}
 	},
 
 	showCalendarWindow: function (gutter) {
@@ -126,10 +136,12 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 			});
 
 			this.showingCalendar = true;
+			this.closeAllChatWindows();
 		}
 		else {
 			this.calendarWin.removeCls('hidden');
 			this.showingCalendar = true;
+			this.closeAllChatWindows();
 		}
 	},
 
