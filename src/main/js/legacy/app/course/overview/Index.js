@@ -162,6 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 	showLessons: function (route/*, subRoute*/) {
+		debugger;
 		var lessons = this.getLessons();
 
 		this.getLayout().setActiveItem(lessons);
@@ -389,6 +390,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				xtype: 'content-viewer',
 				bundle: this.currentBundle,
 				handleNavigation: this.handleNavigation.bind(this),
+				onRouteDeactivate: () => {
+					Ext.destroy(this.assignmentViewer.reader);
+				},
 				handleEdit: (editAssignment) => {
 					const coursePart = encodeForURI(this.currentBundle.getId());
 					const assignmentPart = encodeForURI(editAssignment.getId());
