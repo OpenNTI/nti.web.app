@@ -20,7 +20,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			items: [{
 				xtype: 'overlay-content-embeded-widget-frame',
 				data: DomUtils.parseDomObject(config.contentElement),
-				basePath: config.reader.basePath
+				basePath: config.reader.basePath,
+				reader: config.reader,
+				syncElementHeight: () => this.syncElementHeight()
 			}]
 		});
 
