@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const AppDispatcher = require('@nti/lib-dispatcher').default;
 
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
@@ -543,6 +544,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 
 	afterAddCourse () {
+		AppDispatcher.handleRequestAction({
+			type: 'Course-Enrollment-Changed',
+			data: {}
+		});
+
 		this.fireEvent('added-course');
 	}
 });
