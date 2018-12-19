@@ -380,6 +380,11 @@ body.dragging * {
 		border-radius: 3px;
 		box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
 
+		a {
+			color: $primary-blue;
+			text-decoration: none;
+		}
+
 		& > .x-panel-body-assessment {
 			.question-content {
 				@extend .assessment-content;
