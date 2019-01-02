@@ -17,6 +17,10 @@ const t = scoped('nti-site-admin.courses.book.Frame', DEFAULT_TEXT);
 export default
 @Store.connect({course: 'course', loading: 'loading'})
 class SiteAdminBookView extends React.Component {
+	static deriveStoreKeyFromProps (props) {
+		return props.bookID;
+	}
+
 	static propTypes = {
 		bookID: PropTypes.string.isRequired,
 
