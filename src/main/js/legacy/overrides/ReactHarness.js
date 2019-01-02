@@ -22,6 +22,11 @@ const CATALOG_MIME_TYPES = {
 	'application/vnd.nextthought.courseware.coursecataloglegacyentry': true
 };
 
+const BOOK_MIME_TYPES = {
+	'application/vnd.nextthought.publishablecontentpackagebundle': true,
+	'application/vnd.nextthought.contentpackagebundle': true
+};
+
 const GROUP_MIME_TYPE = 'application/vnd.nextthought.dynamicfriendslist';
 const COMMUNITY_MIME_TYPE = 'application/vnd.nextthought.community';
 
@@ -41,6 +46,10 @@ function getRouteFor (obj, context) {
 
 	if (obj.CatalogEntry) {
 		return `/app/course/${encodeForURI(obj.NTIID)}/info`;
+	}
+
+	if (BOOK_MIME_TYPES[obj.MimeType]) {
+		return `/app/bundle/${encodeForURI(obj.NTIID)}`;
 	}
 
 	if (CATALOG_MIME_TYPES[obj.MimeType]) {
