@@ -23,6 +23,21 @@ exports[`Site admin user book nav bar test Basic render test 1`] = `
         book1
       </div>
     </div>
+    <div
+      className="actions"
+    >
+      <div
+        className="nti-link-to-path"
+        to="#"
+      >
+        <i
+          className="icon-goto"
+        />
+        <span>
+          View Book
+        </span>
+      </div>
+    </div>
   </div>
   <ul
     className="site-admin-tabs"
