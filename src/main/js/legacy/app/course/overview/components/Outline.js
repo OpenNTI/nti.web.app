@@ -26,6 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'nav-outline course scrollable',
 
 	items: [
+		{xtype: 'container', cls: 'outline-header-container', items: []},
 		{xtype: 'container', cls: 'outline-list', layout: 'none', items: [
 			{xtype: 'container', cls: 'body', bodyContainer: true, layout: 'none', items: []}
 		]}
@@ -34,21 +35,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.outlineHeader = this.add({xtype: 'overview-outline-header'});
-
 		this.setDataTransferHandler(CourseOutlineNode.mimeType, {
 			onDrop: this.onDrop.bind(this),
 			isValid: DndOrderingContainer.hasMoveInfo,
 			effect: 'move'
 		});
-
-		this.headerCmp = this.down('overview-outline-header');
 	},
 
 	addBodyConfig: function () {},
 
 	afterRender: function () {
 		this.callParent(arguments);
+
+		this.headerContainer = this.items.items[0]; // how to really get this?
+		this.outlineHeader = this.headerContainer.add({xtype: 'overview-outline-header'});
+		this.headerCmp = this.down('overview-outline-header');
 
 		var body = this.getBodyContainer();
 
@@ -126,12 +127,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 			else {
 				// otherwise, add a new progress header since one doesn't exist
-				this.progressHeader = this.add({xtype: 'overview-outline-progress-header', course});
+				this.progressHeader = this.headerContainer.add({xtype: 'overview-outline-progress-header', course});
 			}
 
 			if(this.outlineHeader) {
 				// remove outline header if one exists
-				this.remove(this.outlineHeader, true);
+				this.headerContainer.remove(this.outlineHeader, true);
 				delete this.outlineHeader;
 			}
 		}
@@ -144,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			if(!this.outlineHeader) {
 				// add outline header if one does not already exist
-				this.outlineHeader = this.add({xtype: 'overview-outline-header'});
+				this.outlineHeader = this.headerContainer.add({xtype: 'overview-outline-header'});
 			}
 		}
 	},
