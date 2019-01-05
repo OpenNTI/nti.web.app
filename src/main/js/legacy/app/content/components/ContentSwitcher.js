@@ -1,8 +1,10 @@
 const Ext = require('@nti/extjs');
-const {Navigation} = require('@nti/web-course');
+const {getService} = require('@nti/web-client');
+const {Navigation} = require('@nti/web-content');
 const AppDispatcher = require('@nti/lib-dispatcher').default;
-
-const Globals = require('legacy/util/Globals');
+const {encodeForURI} = require('@nti/lib-ntiids');
+const {Prompt} = require('@nti/web-commons');
+const {PublishCourse} = require('@nti/web-course');
 
 const BundleActions = require('../../bundle/Actions');
 const BundleStateStore = require('../../bundle/StateStore');
@@ -13,6 +15,55 @@ const CoursesStateStore = require('../../library/courses/StateStore');
 require('legacy/mixins/State');
 require('legacy/overrides/ReactHarness');
 
+const DEFAULT = 'default';
+
+const HANDLERS = {
+	'course': {
+		'edit': (item) => {
+			return `/course/${encodeForURI(item.id)}/info`;
+		},
+		'delete': async (item, fireEvent) => {
+			await Prompt.areYouSure('Do you want to delete this course?');
+
+			try {
+				const service = await getService();
+				const course = await service.getObject(item.id);
+
+				await course.delete();
+
+				fireEvent('modified-course', null);
+
+				return '/library';
+			} catch (e) {
+				if (e && e.message) {
+					alert(e.message);
+				} else {
+					alert('You don\t have permission to delete this course.');
+				}
+			}
+		},
+		'publish': async (item, fireEvent) => {
+			try {
+				const savedEntry = PublishCourse.show(item.id);
+
+				fireEvent('modified-course', savedEntry);
+			} catch (e) {
+				//swallow
+			}
+		},
+		[DEFAULT]: (item) => {
+			return `/course/${encodeForURI(item.id)}/`;
+		}
+	},
+	'book': {
+		'publish': () => {
+			debugger;
+		},
+		[DEFAULT]: (item) => {
+			return `/bundle/${encodeForURI(item.id)}/`;
+		}
+	}
+};
 
 module.exports = exports = Ext.define('NextThought.app.content.components.ContentSwitcher', {
 	extend: 'Ext.container.Container',
@@ -24,16 +75,67 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 	},
 
 	floating: true,
+	layout: 'none',
 	cls: 'content-switcher',
 
-	initComponent: function () {
+	initComponent () {
+		this.callParent(arguments);
+
+		this.LibraryCourseStateStore = CoursesStateStore.getInstance();
+
+		this.add({
+			xtype: 'component',
+			autoEl: {
+				tag: 'div',
+				cls: 'course-nav-arrow'
+			}
+		});
+
+		this.add({
+			xtype: 'react',
+			component: Navigation.ContentSwitcher,
+			addHistory: true,
+			getRouteFor: (item, context) => {
+				return () => {
+					this.navigateToItem(item, context);
+				};
+			}
+		});
+	},
+
+
+	async navigateToItem (item, context) {
+		this.hide();
+
+		const typeHandler = HANDLERS[item.type];
+
+		if (!typeHandler) { return; }
+
+		const contextHandler = typeHandler[context] || typeHandler[DEFAULT];
+
+		if (!contextHandler) { return; }
+
+		try {
+			const route = await contextHandler(item, (...args) => {
+				this.LibraryCourseStateStore.fireEvent(...args);
+			});
+
+			if (route) {
+				this.switchContent(route);
+			}
+		} catch (e) {
+			//swallow
+		}
+	},
+
+
+	xinitComponent: function () {
 		this.callParent(arguments);
 
 		this.BundleActions = BundleActions.create();
 		this.BundleStateStore = BundleStateStore.getInstance();
 		this.CourseActions = CourseActions.create();
 		this.CourseStateStore = CourseStateStore.getInstance();
-		this.LibraryCourseStateStore = CoursesStateStore.getInstance();
 
 		var me = this;
 
@@ -104,13 +206,6 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.dispatcher = AppDispatcher.register(this.handleDispatch.bind(this));
 	},
 
-	afterRender: function () {
-		this.callParent(arguments);
-
-		this.applyState(this.getCurrentState());
-
-		this.mon(this.el, 'click', this.onItemClicked.bind(this));
-	},
 
 	handleDispatch (event) {
 		const { action: { type, response} } = event;
@@ -140,194 +235,25 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.el.dom.style.top = top + 'px';
 	},
 
-	getBundleData: function (bundle, route, cls) {
-		var me = this,
-			uiData = bundle.asUIData();
-
-		return bundle.getThumbnail()
-			.then(function (thumb) {
-				return {
-					id: uiData.id,
-					title: uiData.title,
-					thumb: thumb,
-					cls: cls,
-					rootRoute: me.BundleActions.getRootRouteForId(uiData.id),
-					activeRoute: route
-				};
-			});
-	},
-
-	getCourseData: function (bundle, route, cls) {
-		var me = this,
-			uiData = bundle.asUIData();
-
-		return bundle.getThumbnail()
-			.then(function (thumb) {
-				return {
-					id: uiData.id,
-					title: uiData.title,
-					thumb: thumb,
-					cls: cls,
-					rootRoute: me.CourseActions.getRootRouteForId(uiData.id),
-					activeRoute: route
-				};
-			});
-	},
-
-	getFamilyData: function (family, bundle, route) {
-		const me = this;
-		const id = family.get('CatalogFamilyID');
-
-		let courses = !bundle.isCourse ? Promise.Resolve([]) : bundle.getCatalogFamilies().then(entries => {
-			if (entries.length === 1) {
-				return null;//this.getCourseData(bundle, route);
-			}
-
-			return entries.map(function (courseCatalogEntry) {
-				if (courseCatalogEntry.isInFamily(id)) {
-					const entry = bundle.getCourseCatalogEntry();
-					const isCurrent = courseCatalogEntry.getId() === entry.getId();
-					const uiData = {
-						id: courseCatalogEntry.getId(),
-						title: courseCatalogEntry.get('ProviderUniqueID'),
-						thumb: courseCatalogEntry.get('thumb')
-					};
-
-					return {
-						id: uiData.id,
-						title: uiData.title,
-						thumb: uiData.thumb,
-						cls: isCurrent ? 'current' : null,
-						rootRoute: me.CourseActions.getRootRouteForId(uiData.id),
-						activeRoute: isCurrent ? route : me.CourseStateStore.getRouteFor(uiData.id)
-					};
-				}
-			});
-		});
-
-
-		const uiData = family.asUIData();
-
-		return Promise.all([
-			courses,
-			family.getThumbnail()
-		]).then(function (results) {
-			const subItems = results[0];
-
-			uiData.cls = subItems ? 'has-sub-items' : '';
-			uiData.subItems = subItems;
-			uiData.thumb = results[1];
-			uiData.rootRoute = me.CourseActions.getRootRouteForId(bundle.getId());
-			uiData.activeRoute = me.CourseStateStore.getRouteFor(bundle.id);
-
-			return uiData;
-		});
-	},
-
-	getCourseOrFamilyData: function (bundle, route) {
-		var family = bundle.getCatalogFamily();
-
-		return family ? this.getFamilyData(family, bundle, route) : this.getCourseData(bundle, route);
-	},
 
 	addBundle: async function (bundle, route) {
-		var state = this.getCurrentState() || {recent: []},
-			recent = state.recent || [],
-			getData = bundle.isCourse ? this.getCourseOrFamilyData(bundle, route) : this.getBundleData(bundle, route);
+		try {
+			const instance = await bundle.getInterfaceInstance();
 
-		state.isAdmin = bundle.hasLink('delete');
-
-		if(bundle.isCourse) {
-			// make sure we have a catalog entry resolved
-			await bundle.prepareData();
-			const catalogEntry = bundle.getCourseCatalogEntry();
-
-			state.isEditor = catalogEntry.hasLink('edit');
+			Navigation.ContentSwitcher.setActiveContent(instance, route);
+		} catch (e) {
+			//swallow
 		}
-
-		state.recent.forEach(function (item) {
-			if (item.subItems) {
-				item.subItems.forEach(function (subItem) {
-					subItem.cls = '';
-				});
-
-				item.cls = 'has-sub-items collapsed';
-			}
-		});
-
-		const data = await getData;
-
-		var currentIndex = -1;
-
-		recent.forEach(function (item, idx) {
-			if (item.id === data.id) {
-				currentIndex = idx;
-			}
-		});
-
-		if (currentIndex >= 0) {
-			recent.splice(currentIndex, 1);
-		}
-
-		recent.unshift(data);
-		state.recent = recent.slice(0, 5);
-
-		this.setState(state);
 	},
+
 
 	updateRouteFor: function (bundle, route) {
-		var id = bundle.getId(),
-			// rootRoute = this[bundle.isCourse ? 'CourseActions' : 'BundleActions'].getRootRouteForId(id),
-			state = this.getCurrentState() || {recent: []};
-
-		state.recent.forEach(function (item) {
-			if (item.id === id) {
-				item.activeRoute = route;
-			} else if (item.subItems) {
-				item.subItems.forEach(function (subItem) {
-					if (subItem.id === id) {
-						subItem.activeRoute = route;
-
-						if (item.rootRoute === subItem.rootRoute) {
-							item.activeRoute = route;
-						}
-					}
-				});
-			}
-		});
-
-		this.setState(state);
+		debugger;
 	},
 
-	applyState: function (state) {
-		if (!this.rendered) { return; }
 
-		this.navMenu.setProps({
-			activeCourse: state.recent[0],
-			recentCourses: state.recent.slice(1),
-			isAdministrator: state.isAdmin,
-			isEditor: state.isEditor
-		});
-	},
+	applyState: function () {},
 
-	onItemClicked: function (e) {
-		if (!e.getTarget('li')) { return; }
-
-		var item = e.getTarget('li'),
-			arrow = e.getTarget('.arrow'),
-			isTopLevel = item.classList.contains('item'),
-			root, route;
-
-		if (arrow) {
-			item.classList.toggle('collapsed');
-		} else if (!isTopLevel || (isTopLevel && e.getTarget('.meta'))) {
-			root = item.getAttribute('data-root-route');
-			route = item.getAttribute('data-route') || '';
-
-			this.hide();
-			this.switchContent(Globals.trimRoute(root) + '/' + Globals.trimRoute(route));
-		}
-	},
 
 	async updateEntry (id) {
 		const state = this.getCurrentState();

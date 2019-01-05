@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {getService} = require('@nti/web-client');
 
 const {getString} = require('legacy/util/Localization');
 const Globals = require('legacy/util/Globals');
@@ -685,20 +686,20 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 
 	getObject: function (ntiid, success, failure, scope, safe, targetBundle) {
-		var url, result;
+		var result;
 
 		if (!lazy.ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
 			return Promise.reject(new Error(`Bad Object NTIID: ${JSON.stringify(ntiid)}`));
 		}
 
-		url = this.getObjectURL(ntiid);
-
-		result = this.getObjectRaw(url, null, false, targetBundle)
-			.then(function (resp) {
+		result = getService()
+			.then(service => service.getObjectURL(ntiid))
+			.then(url => this.getObjectRaw(url, null, false, targetBundle))
+			.then((resp) => {
 				try {
 					return lazy.ParseUtils.parseItems(resp.responseText)[0];
-				}catch (e) {
+				} catch (e) {
 					if (!safe) {
 						throw e;
 					}
