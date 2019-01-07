@@ -10,7 +10,7 @@
 		flex: 1 1 auto;
 		display: flex;
 		flex-direction: row;
-		align-items: start;
+		align-items: flex-start;
 	}
 
 	.icon {
@@ -33,7 +33,7 @@
 		flex: 0 0 100px;
 		color: $primary-blue;
 		text-align: right;
-		font-size: .875rem;
+		font-size: 0.875rem;
 		margin-right: 40px;
 		vertical-align: middle;
 		line-height: 50px;
@@ -46,7 +46,7 @@
 	.published, .modified {
 		flex: 0 0 150px;
 		color: $tertiary-grey;
-		font-size: .875rem;
+		font-size: 0.875rem;
 		line-height: 50px;
 		vertical-align: middle;
 	}
