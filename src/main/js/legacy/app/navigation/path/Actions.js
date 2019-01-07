@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 			.catch(function () {
 				//if we fail to get the path to the item, try to get the container
 				//and show its title
-				var containerId = record && record.get('ContainerId');
+				var containerId = record && record.get ? record.get('ContainerId') : record;
 
 				if (!containerId) {
 					return Promise.reject();
