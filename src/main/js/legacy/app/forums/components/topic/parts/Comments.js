@@ -811,12 +811,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		function unmask () {
 			if (editor.el) {
-				editor.el.unmask();
+				me.el.unmask();
 			}
 		}
 
 		if (editor.el) {
-			editor.el.mask('Saving...');
+			me.el.mask('Saving...');
 			editor.el.repaint();
 		}
 
