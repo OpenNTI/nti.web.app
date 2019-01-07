@@ -1,15 +1,11 @@
 const Ext = require('@nti/extjs');
 const {getService} = require('@nti/web-client');
-const {Navigation} = require('@nti/web-content');
+const {Navigation, Publish:PublishContent} = require('@nti/web-content');
 const AppDispatcher = require('@nti/lib-dispatcher').default;
 const {encodeForURI} = require('@nti/lib-ntiids');
 const {Prompt} = require('@nti/web-commons');
 const {PublishCourse} = require('@nti/web-course');
 
-const BundleActions = require('../../bundle/Actions');
-const BundleStateStore = require('../../bundle/StateStore');
-const CourseActions = require('../../course/Actions');
-const CourseStateStore = require('../../course/StateStore');
 const CoursesStateStore = require('../../library/courses/StateStore');
 
 require('legacy/mixins/State');
@@ -44,7 +40,7 @@ const HANDLERS = {
 		},
 		'publish': async (item, fireEvent) => {
 			try {
-				const savedEntry = PublishCourse.show(item.id);
+				const savedEntry = await PublishCourse.show(item.id);
 
 				fireEvent('modified-course', savedEntry);
 			} catch (e) {
@@ -56,8 +52,8 @@ const HANDLERS = {
 		}
 	},
 	'book': {
-		'publish': () => {
-			debugger;
+		'publish': async (item) => {
+			await PublishContent.show(item.id);
 		},
 		[DEFAULT]: (item) => {
 			return `/bundle/${encodeForURI(item.id)}/`;
@@ -101,6 +97,31 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 				};
 			}
 		});
+
+		this.mon(this.LibraryCourseStateStore, 'modified-course', this.onCourseModified.bind(this));
+		this.dispatcher = AppDispatcher.register(this.handleDispatch.bind(this));
+
+	},
+
+
+	onCourseModified (course) {
+		Navigation.ContentSwitcher.updateContent(course);
+	},
+
+
+	async handleDispatch (event) {
+		const { action: { type, response} } = event;
+
+		if (type !== 'COURSE_ASSET_UPLOAD') { return; }
+
+		try {
+			const service = await getService();
+			const course = await service.getObject(response.id);
+
+			this.onCourseModified(course);
+		} catch (e) {
+			//swallow
+		}
 	},
 
 
@@ -129,85 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 	},
 
 
-	xinitComponent: function () {
-		this.callParent(arguments);
-
-		this.BundleActions = BundleActions.create();
-		this.BundleStateStore = BundleStateStore.getInstance();
-		this.CourseActions = CourseActions.create();
-		this.CourseStateStore = CourseStateStore.getInstance();
-
-		var me = this;
-
-		function onItemClick (item) {
-			me.hide();
-
-			if(item) {
-				me.switchContent(item.rootRoute);
-			}
-		}
-
-		function goToEditor (item) {
-			me.hide();
-
-			if(item) {
-				me.switchContent(item.rootRoute + '/info');
-			}
-		}
-
-		function onVisibilityChanged (catalogEntry) {
-			me.onVisibilityChanged && me.onVisibilityChanged(catalogEntry);
-
-			me.LibraryCourseStateStore.fireEvent('modified-course', catalogEntry);
-		}
-
-		function onDelete () {
-			me.LibraryCourseStateStore.fireEvent('modified-course', null);
-
-			me.switchContent('/library');
-		}
-
-		this.LibraryCourseStateStore.on('modified-course', (newCatalogEntry) => {
-			var state = me.getCurrentState();
-
-			if(newCatalogEntry) {
-				state.recent = state.recent.map(x => {
-					if(x.id === newCatalogEntry.CourseNTIID) {
-						return {
-							...x,
-							title: newCatalogEntry.Title
-						};
-					}
-
-					return x;
-				});
-			}
-
-			me.setState(state);
-		});
-
-		this.add({
-			xtype: 'component',
-			autoEl: {
-				tag: 'div',
-				cls: 'course-nav-arrow'
-			}
-		});
-
-		this.navMenu = this.add({
-			xtype: 'react',
-			component: Navigation.CourseNavMenu,
-			onItemClick,
-			goToEditor,
-			onVisibilityChanged,
-			onDelete
-		});
-
-		this.dispatcher = AppDispatcher.register(this.handleDispatch.bind(this));
-	},
-
-
-	handleDispatch (event) {
+	xhandleDispatch (event) {
 		const { action: { type, response} } = event;
 
 		if (type === 'COURSE_ASSET_UPLOAD') {
@@ -247,8 +190,14 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 	},
 
 
-	updateRouteFor: function (bundle, route) {
-		debugger;
+	updateRouteFor: async function (bundle, route) {
+		try {
+			const instance = await bundle.getInterfaceInstance();
+
+			Navigation.ContentSwitcher.updateContent(instance, route);
+		} catch (e) {
+			//swallow
+		}
 	},
 
 
