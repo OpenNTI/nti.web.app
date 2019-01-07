@@ -43,7 +43,8 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 		this.PathActions = PathActions.create();
 
 		this.PathActions.getPathToObject(this.record)
-			.then(this.setPath.bind(this));
+			.then(this.setPath.bind(this))
+			.catch(this.hideIcon.bind(this));
 	},
 
 	afterRender: function () {
@@ -63,6 +64,15 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 		this.setLineage(path);
 	},
 
+	hideIcon () {
+		if (!this.rendered) {
+			this.on('afterrender', this.setIcon.bind(this));
+			return;
+		}
+
+		this.iconEl.hide();
+	},
+
 	setIcon: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setIcon.bind(this, path));
@@ -79,7 +89,10 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 			iconUrl = path[i].getIcon && path[i].getIcon();
 			//RelatedWork models implemented a getIcon method... and OF COURSE it does not adhere to the spec!
 			//Ignore RelatedWork getIcon results... since it returns an object, not a string.
-			if (iconUrl) {
+			if (iconUrl instanceof Promise) {
+				break;
+			}
+			else if (iconUrl) {
 				iconUrl = typeof iconUrl === 'string' ? iconUrl : iconUrl.url;
 				iconUrl = Promise.resolve(iconUrl);
 				break;
