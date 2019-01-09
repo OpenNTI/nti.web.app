@@ -40,8 +40,8 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 
 	onRouteDeactivate () {
 		this.cleanupTimeout = setTimeout(() => {
-			Ext.destroy(this.siteAdminTools);
-			Ext.destroy(this.siteAdminRoster);
+			this.remove(this.siteAdminTools, true);
+			this.remove(this.siteAdminRoster, true);
 
 			delete this.siteAdminTools;
 			delete this.siteAdminRoster;
@@ -108,6 +108,8 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			xtype: 'course-info-roster',
 			itemId: ROSTER_ID
 		});
+
+
 	},
 
 	async setBundle (activeBundle) {

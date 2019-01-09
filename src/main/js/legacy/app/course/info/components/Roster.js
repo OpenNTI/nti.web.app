@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			]
 		});
 
-		let grouping = this.add({
+		this.grouping = this.add({
 			xtype: 'grouping',
 			anchor: '0 -200',
 			layout: 'fit',
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			items: []
 		});
 
-		grouping.add({
+		this.grouping.add({
 			xtype: 'grid',
 			layout: 'fit',
 			/*verticalScroller: {
@@ -204,6 +204,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.mon(this.filterMenu, {
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}
+		});
+
+		this.mon(this.grouping, 'beforedestroy', () => {
+			if (this.grouping.destroying) { return false; }
 		});
 
 		this.WindowActions = WindowsActions.create();
