@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 
 	navigateToCourse (course, context) {
 		const courseID = course.getCourseID ? course.getCourseID() : (course.CourseNTIID || course.NTIID);
-		const part = context === 'new-course' ? 'info' : '';
+		const part = context === 'new-course' || context === 'edit' ? 'info' : '';
 
 		this.CourseActions.transitionToCourse(courseID, null, part)
 			.then(route => {
