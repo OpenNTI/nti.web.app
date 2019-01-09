@@ -55,8 +55,11 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 	},
 
 	onMenuHide: function () {
-		this.list.hide();
-		this.list.onDeactivate();
+		if (this.list.isVisible()) {
+			this.list.hide();
+			this.list.onDeactivate();
+		}
+
 	},
 
 	toggleMenu: function () {
