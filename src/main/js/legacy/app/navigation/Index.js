@@ -79,6 +79,10 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		var me = this;
 
 		function render (animate) {
+			if (this.pendingNavCmp && this.pendingNavCmp !== cmp) { return; }
+
+			this.pendingNavCmp = null;
+
 			if (animate) {
 				cmp.addCls('showing');
 
@@ -95,9 +99,13 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			me.resizeNavCmp();
 		}
 
-		if (this.navCmp && this.navCmp.xtype === cmp.xtype && this.navCmp.getId() === cmp.getId()) {
+		const isSame = (nav) => nav && nav.xtype === cmp.xtype && nav.getId() === cmp.getId();
+
+		if (isSame(this.navCmp) || isSame(this.pendingNavCmp)) {
 			return;
 		}
+
+		this.pendingNavCmp = cmp;
 
 		return this.__removeNavCmp()
 			.then(render.bind(null, true));
