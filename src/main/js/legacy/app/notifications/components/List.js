@@ -64,8 +64,13 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 	addRecord: function (prepend, record) {
-		var groupValue = record.get('NotificationGroupingField'),
-			groupName = groupValue.getTime(),
+		var groupValue = record.get('NotificationGroupingField');
+
+		if(!groupValue) {
+			return;
+		}
+
+		var groupName = groupValue.getTime(),
 			group = this.groups[groupName];
 
 		//fill this in here so hopefully it will be cached when the
