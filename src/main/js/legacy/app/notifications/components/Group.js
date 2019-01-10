@@ -76,6 +76,11 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	addItem: function (item, prepend) {
 		item = this.unwrap(item);
 
+		if(!item) {
+			// if it's a change with no sub-item
+			return;
+		}
+
 		const getCmp = (mimeType, cmpMap) => {
 			const isValid = (element) => !!cmpMap[element];
 			return Array.isArray(mimeType) ?
