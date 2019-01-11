@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.ScormInstance',
 	fields: [
 		{ name: 'Metadata', type: 'singleItem' }
 	],
-	
+
 	__precacheEntry: function () {
 		var p = this.precachePromise,
 			me = this,
@@ -53,6 +53,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.ScormInstance',
 
 		return p;
 	},
+
+
+	getContentPackageContaining () {
+		return Promise.reject('No Content Packages in a scorm course.');
+	},
+
 
 	asUIData: function () {
 		var e = this.getCourseCatalogEntry();
