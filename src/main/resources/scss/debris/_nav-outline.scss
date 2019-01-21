@@ -10,12 +10,12 @@
 		bottom: auto;
 	}
 
+	.outline-header-container {
+		flex: 0 0 auto;
+	}
+
 	.outline-list {
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		top: 4em;//50px;
+		flex: 1 1 auto;
 		margin-left: -3.15em;
 		padding-left: 3.15em;
 
