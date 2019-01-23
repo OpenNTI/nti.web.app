@@ -2,21 +2,30 @@
 	overflow: hidden;
 	height: auto;
 
-
 	.navigation-view.floating {
 		position: fixed;
+		top: 90px;
 		bottom: 20px;
 		height: auto !important;
 		transition: left 0.5s, right 0.5s;
 		z-index: 1;
-		display: flex;
-		flex-direction: column;
+	}
 
-		html.msg-bar-open & {
+	&.course-overview {
+		.navigation-view.floating {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+
+	html.msg-bar-open & {
+		.navigation-view.floating {
 			top: 130px; // $header-height + $msg-bar-height + 20
 		}
+	}
 
-		body.control-bar-open & {
+	body.control-bar-open & {
+		.navigation-view.floating {
 			bottom: 65px;
 		}
 	}
@@ -26,7 +35,6 @@
 		background: none !important;
 		box-shadow: none !important;
 		border: none !important;
-
 		width: 255px;
 		float: left;
 		margin-right: 5px;
