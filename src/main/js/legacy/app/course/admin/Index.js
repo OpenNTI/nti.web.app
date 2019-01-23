@@ -36,6 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	onRouteActivate () {
 		clearTimeout(this.cleanupTimeout);
 		this.setTitle('Course Administration');
+		this.el.mask('Loading...');
 	},
 
 	onRouteDeactivate () {
@@ -96,6 +97,13 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			itemId: ADMIN_TOOLS_ID,
 			component: AdminTools.View,
 			baseroute: baseroute,
+			onChange: async () => {
+				if(this.activeBundle) {
+					await this.activeBundle.updateFromServer();
+
+					this.setBundle(this.activeBundle);
+				}
+			},
 			loading: true,
 			setTitle: (title) => { this.setTitle(title); }
 		});
@@ -123,6 +131,8 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 		} else if (this.siteAdminTools && this.siteAdminTools.isVisible()) {
 			this.siteAdminTools.setProps({ course, loading: false });
 		}
+
+		this.el.unmask();
 	},
 
 	setUpNavigation (baseroute, path) {

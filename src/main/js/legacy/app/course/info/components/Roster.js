@@ -334,7 +334,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 	setContent: function (instance) {
 		if (instance === this.currentBundle) {
-			return;
+			const supportsProgress = instance && instance.get && instance.get('CompletionPolicy');
+
+			if(supportsProgress === this.supportsProgress) {
+				return;
+			}
 		}
 
 		this.storeLoaded = false;
@@ -351,15 +355,15 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.grid.bindStore(Ext.getStore('ext-empty-store'));
 		this.grid.getView().refresh();
 
-		let supportsProgress = instance && instance.get && instance.get('CompletionPolicy');
+		this.supportsProgress = instance && instance.get && instance.get('CompletionPolicy');
 
 		let visibleColumns = this.allColumns;
 
-		if(!supportsProgress) {
+		if(!this.supportsProgress) {
 			visibleColumns = this.allColumns.filter(x => x.name !== 'progress');
 		}
 
-		if(this.grid && supportsProgress) {
+		if(this.grid && this.supportsProgress) {
 			this.grid.addCls('completable');
 		}
 		else if(this.grid) {
