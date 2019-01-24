@@ -11,7 +11,7 @@
 }
 
 .nti-notes-and-discussion-tabbar,
-.content-toolbar  {
+.content-toolbar:not(.student-reader-header)  {
 	border-bottom: 1px solid #ededed;
 	border-bottom-width: 1px !important;
 }

@@ -1955,79 +1955,13 @@ canvas.x-component-course-assessment {
 		&.student-reader-header{
 			text-transform: uppercase;
 
-			&.submitted{
-				.header{
-					display: block;
-				}
+			.header {
+				margin-top: 59px !important;//yuck
+				margin-bottom: -59px !important;//yuck
 			}
 
-
-			&.ontime{
-				.header::before{
-					@include sprite($assignment_ontime);
-				}
-			}
-
-			&.nosubmit{
-				.header::before{
-					@include sprite($assignment_due);
-				}
-			}
-
-			.header{
-				padding-left: 80px;
-				min-height: 70px;
-				display: none;
-				overflow: hidden;
-
-				@include icon($assignment_late, $side:'before', $top:16px, $left:30px);
-
-				.quiz-container{
-					width: 525px;
-					float: left;
-
-					.title{
-						text-transform: none;
-						font-size: 1em;
-						font-weight: 600;
-						line-height: 1.3;
-						color: $primary-grey;
-					}
-
-					.turned-in{
-						font: normal 700 1em/1 $font;
-						line-height: 2.5;
-						margin-top: 0.3em;
-					}
-				}
-
-				.grade-container{
-					width: 130px;
-					float: left;
-
-					.title{
-						color: $secondary-grey;
-						font-size: 0.6em;
-						font-weight: 700;
-						line-height: 1.7;
-					}
-
-					.grade{
-						color: $secondary-grey;
-						width: 50%;
-						line-height: 2.4;
-
-						.grade-value {
-							padding-right: 0.3rem;
-						}
-
-						.total-points {
-							font-weight: 700;
-							color: $primary-grey;
-						}
-					}
-
-				}
+			.assignment-navigation-bar-status {
+				text-transform: initial;
 			}
 		}
 
@@ -2085,7 +2019,7 @@ canvas.x-component-course-assessment {
 			}
 		}
 
-		.header {
+		&:not(.student-reader-header) .header {
 			background: #f8f8f8;
 			position: relative;
 			padding: 15px 30px;

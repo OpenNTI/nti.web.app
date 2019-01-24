@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
-const {ControlBar} = require('@nti/web-assignment-editor');
+const {ControlBar, NavigationBar} = require('@nti/web-assignment-editor');
 const { encodeForURI } = require('@nti/lib-ntiids');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
@@ -44,27 +44,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	]),
 
 	headerTpl: Ext.DomHelper.markup([
-		{cls: 'quiz-container ontime', cn: [
-			{cls: 'title', html: '{title}'},
-			{cls: 'turned-in'}
-		]},
-		{cls: 'grade-container', cn: [
-			{cls: 'title', html: '{{{NextThought.view.courseware.assessment.reader.Header.grade}}}'},
-			{cls: 'grade', cn: [
-				{tag: 'span', cls: 'grade-value'},
-				{ tag: 'tpl', 'if': 'totalPoints', cn: [
-					{tag: 'span', 'cls': 'total-points', html: '/ {totalPoints}'}
-				]}
-			]}
-		]}
+		{cls: 'assignment-status-container'}
 	]),
 
 	renderSelectors: {
-		ontimeIconEl: '.quiz-container .ontime-icon',
-		turnedInEl: '.quiz-container .turned-in',
-		gradeContainerEl: '.grade-container',
-		gradeEl: '.grade-container .grade .grade-value',
-		totalEl: '.grade-container .total-points',
+		assignmentStatusContainerEl: '.assignment-status-container',
 		timeContainerEl: '.time-remaining',
 		loadingBarEl: '.time-remaining .time .loading-bar',
 		timeLabelEl: '.time-remaining .time .meta span.label',
@@ -131,6 +115,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		me.mon(me.helpEl, 'click', 'helpClicked');
 
 		this.maybeMountControlBar();
+
+		this.assignment.getInterfaceInstance()
+			.then((assignment) => {
+				this.assignmentStatusComponent = new ReactHarness({
+					component: NavigationBar.Status,
+					assignment: assignment,
+					renderTo: this.assignmentStatusContainerEl,
+					historyItemContainer: this.historyItemContainer,
+					historyItem: this.historyItemContainer && this.historyItemContainer.Items[0]
+				});
+
+				this.on('destroy', () => {
+					if (this.assignmentStatusComponent) {
+						this.assignmentStatusComponent.destroy();
+					}
+				});
+			});
+
 	},
 
 
@@ -209,6 +211,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.on('afterrender', this.showRemainingTime.bind(this, time, max, getSubmitFn));
 			return;
 		}
+
+		if (this.hasHistory) { return; }
 
 		if (time < 0) {
 			wait()
@@ -334,59 +338,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			return;
 		}
 
-		var history = (historyContainer && historyContainer.getMostRecentHistoryItem) ? historyContainer.getMostRecentHistoryItem() : historyContainer,
-			grade = history && history.get('Grade'),
-			// due = this.assignment && this.assignment.getDueDate(),
-			historyDuration = history && history.getDuration() || {},
-			submission = history && history.get('Submission'),
-			parts = this.assignment.get('parts'),
-			hasParts = parts && parts.length > 0,
-			completed = submission && submission.get('CreatedTime'),
-			isNoSubmit = this.assignment.isNoSubmit();
+		if (!historyContainer) { return; }
 
-		if (((!history || !submission) && hasParts) || (this.assignment.isTimed && !this.assignment.isStarted())) {
-			this.removeCls('submitted');
-			this.updateLayout();
-			return;
-		} else {
-			this.addCls('submitted');
-		}
-
-		if (isNoSubmit === true) {
-			this.addCls('nosubmit');
-		}
-
-		if (!this.rendered) { return; }
-
-		this.turnedInEl.update(AssignmentStatus.getStatusHTML({
-			due: this.assignment.getDueDate(),
-			maxTime: this.assignment.isTimed && this.assignment.getMaxTime(),
-			duration: this.assignment.isTimed && historyDuration,
-			isNoSubmitAssignment: this.assignment.isNoSubmit() || (history && history.isSyntheticSubmission()),
-			completed: completed,
-			isExcused: grade && grade.get('IsExcused')
-		}));
-
-		//we don't want to show the remaining time if we have a submission
-		this.showRemainingTime = function () {};
-
-		if (this.timer) {
-			this.timer.stop();
-		}
+		this.hasHistory = true;
 
 		if (this.hideTimer) {
 			this.hideTimer();
 		}
 
-		grade = grade && grade.getValues();
+		historyContainer.getInterfaceInstance()
+			.then((history) => {
+				this.historyContainer = history;
 
-		if (grade) {
-			this.gradeEl.update(grade.value);
-			this.gradeContainerEl.show();
-		} else {
-			this.gradeContainerEl.hide();
-		}
-
-		this.updateLayout();
+				if (this.assignmentStatusComponent) {
+					this.assignmentStatusComponent.setProps({
+						historyItemContainer: history,
+						historyItem: history.Items[0]
+					});
+				}
+			});
 	}
 });
