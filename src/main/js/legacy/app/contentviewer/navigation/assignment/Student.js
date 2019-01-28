@@ -347,6 +347,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 
 		historyContainer.getInterfaceInstance()
+			.then((history) => (history.hasLink('HistoryItemContainer') ? history.fetchLinkParsed('HistoryItemContainer') : history))
 			.then((history) => {
 				this.historyContainer = history;
 
