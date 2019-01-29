@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	onRouteActivate () {
 		clearTimeout(this.cleanupTimeout);
 		this.setTitle('Course Administration');
-		this.el.mask('Loading...');
+		this.siteAdminTools.el.mask('Loading...');
 	},
 
 	onRouteDeactivate () {
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			this.siteAdminTools.setProps({ course, loading: false });
 		}
 
-		this.el.unmask();
+		this.siteAdminTools.el.unmask();
 	},
 
 	setUpNavigation (baseroute, path) {
