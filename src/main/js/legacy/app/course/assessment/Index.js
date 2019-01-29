@@ -232,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						var reader = me.assignment;
 
 						if (reader && reader.updateHistory) {
-							reader.updateHistory(item);
+							reader.updateHistory(item, container);
 						}
 
 						return container;

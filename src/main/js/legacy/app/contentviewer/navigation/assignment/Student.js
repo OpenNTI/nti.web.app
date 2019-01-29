@@ -73,12 +73,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		if (this.assignmentHistory) {
 			if (this.assignmentHistory instanceof Promise) {
-				this.assignmentHistory.then(this.setHistory.bind(this));
+				this.assignmentHistory.then(this.applyHistoryContainer.bind(this));
 			} else {
-				this.setHistory(this.assignmentHistory);
+				this.applyHistoryContainer(this.assignmentHistory);
 			}
 		} else {
-			this.setHistory(this.assignmentHistory);
+			this.applyHistoryContainer(this.assignmentHistory);
 		}
 
 		if (totalPoints) {
@@ -332,9 +332,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	setHistory: function (historyContainer) {
+
+	applyHistoryContainer (historyContainer) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setHistory.bind(this, historyContainer));
+			this.on('afterrender', this.applyHistoryContainer.bind(this, historyContainer));
 			return;
 		}
 
@@ -346,17 +347,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.hideTimer();
 		}
 
-		historyContainer.getInterfaceInstance()
-			.then((history) => (history.hasLink('HistoryItemContainer') ? history.fetchLinkParsed('HistoryItemContainer') : history))
-			.then((history) => {
-				this.historyContainer = history;
+		Promise.all([
+			historyContainer.getInterfaceInstance(),
+			this.assignment.getInterfaceInstance()
+		]).then(([history, assignment]) => {
+			this.historyContainer = history;
 
-				if (this.assignmentStatusComponent) {
-					this.assignmentStatusComponent.setProps({
-						historyItemContainer: history,
-						historyItem: history.Items[0]
-					});
-				}
-			});
+			if (this.assignmentStatusComponent) {
+				this.assignmentStatusComponent.setProps({
+					assignment,
+					historyItemContainer: history,
+					historyItem: history.Items[0]
+				});
+			}
+		});
+	},
+
+	setHistory: function (item, historyContainer) {
+		this.assignment.updateFromServer()
+			.then(() => this.applyHistoryContainer(historyContainer));
 	}
 });

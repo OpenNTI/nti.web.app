@@ -40,11 +40,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	updateHistory: function (h) {
+	updateHistory: function (h, container) {
 		var reader = this.reader;
 
 		if (reader && reader.updateHistory) {
-			reader.updateHistory(h);
+			reader.updateHistory(h, container);
 		}
 	},
 

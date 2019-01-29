@@ -269,11 +269,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 	},
 
 
-	updateHistory: function (h) {
+	updateHistory: function (h, container) {
 		var reader = this.reader;
 
 		if (reader && reader.updateHistory) {
-			reader.updateHistory(h);
+			reader.updateHistory(h, container);
 		}
 	}
 });

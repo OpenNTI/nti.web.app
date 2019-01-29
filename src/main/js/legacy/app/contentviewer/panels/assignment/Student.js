@@ -278,13 +278,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}).always(done.bind(this));
 	},
 
-	updateHistory: function (h) {
+	updateHistory: function (h, container) {
 		var header = this.getToolbar(),
 			readerContent = this.getReaderContent(),
 			assessment = readerContent.getAssessment();
 
 		assessment.updateAssignmentHistoryItem(h);
-		header.setHistory(h);
+		header.setHistory(h, container);
 	},
 
 	getAnalyticData: function () {
