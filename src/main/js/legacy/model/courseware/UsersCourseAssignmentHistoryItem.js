@@ -340,6 +340,17 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 	},
 
+
+	doReset () {
+		if (this.hasLink('Reset')) {
+			return Service.post(this.getLink('Reset'));
+		}
+
+		return Service.request({
+			url: this.getLink('UsersCourseAssignmentHistoryItem') || this.get('href')
+		});
+	},
+
 	beginReset: function () {
 		let record = this;
 		// let store = record.store;
@@ -361,9 +372,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				},
 				fn: function (button) {
 					if (button === 'yes') {
-						Service.request({
-							url: record.getLink('UsersCourseAssignmentHistoryItem') || record.get('href'),
-							method: 'DELETE'})
+						record.doReset()
 							.catch(function () {
 								alert('Sorry, I could not do that.');
 								reject();
