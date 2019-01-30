@@ -368,9 +368,14 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 	setObjectActive: function (route, subRoute) {
 		var me = this,
 			hash = route.hash,
-			id = route.params.id;
+			id = route.params.id,
+			wasHandled = false;
 
 		function doNavigate (obj, {path}) {
+			if (wasHandled) { return; }
+
+			wasHandled = true;
+
 			var objId = obj.getId(),
 				hasWindow = me.Router.WindowActions.hasWindow(obj);
 
@@ -389,6 +394,10 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		}
 
 		function failedNavigate (obj) {
+			if (wasHandled) { return; }
+
+			wasHandled = true;
+
 			var objId = obj && obj.getId(),
 				path = '/library',
 				hasWindow = obj && me.Router.WindowActions.hasWindow(obj);
