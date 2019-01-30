@@ -62,7 +62,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var base = this.callParent(arguments);
 
 		base.push({type: 'hidden', name: 'targetMimeType'});
-		base.unshift({type: 'url', name: 'href', required: true});
+
+		if (!this.record || this.record.hasLink('edit-target')) {
+			base.unshift({type: 'url', name: 'href', required: true});
+		}
 
 		return base;
 	}
