@@ -57,9 +57,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				})},
 				{tag: 'span', cls: 'label', html: item.getAttribute('label')},
 				{tag: 'span', cls: 'page-count', html: '(' + Ext.util.Format.plural(pageCount, 'Page') + ')'},
-				{tag: 'span', cls: 'change', html: 'Change'}
 			];
 
+		if (!this.record || this.record.hasLink('edit-target')) {
+			parts.push([
+				{tag: 'span', cls: 'change', html: 'Change'}
+			]);
+		}
 
 
 		breadcrumb.pop();//Pop off the leaf, which should be the reading itself

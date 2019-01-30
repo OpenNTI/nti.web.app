@@ -59,8 +59,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getFormSchema: function () {
 		var base = this.callParent(arguments);
 
-		//TODO: fill info about the existing file
-		base.unshift({type: 'file', name: 'href', onFileAdded: this.onFileAdded.bind(this)});
+		if (!this.record || this.record.hasLink('edit-target')) {
+			//TODO: fill info about the existing file
+			base.unshift({type: 'file', name: 'href', onFileAdded: this.onFileAdded.bind(this)});
+		}
 
 		return base;
 	},
