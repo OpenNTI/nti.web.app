@@ -9,6 +9,8 @@ import Tabs from '../../../common/Tabs';
 import InvitePeople from '../InvitePeople';
 import Store from '../table/InvitationsStore';
 
+import SeatLimit from './SeatLimit';
+
 const DEFAULT_TEXT = {
 	learners: 'Learners',
 	admins: 'Admins',
@@ -52,29 +54,34 @@ class UserListNavBar extends React.Component {
 		const hasCount = !loading && (total || total === 0);
 
 		return (
-			<Card className="site-admin-user-list-nav-bar">
-				<div className="header">{t('people')}</div>
-				<Tabs>
-					<LinkTo.Path to="./" activeClassName="active" exact>{t('learners')}</LinkTo.Path>
-					<LinkTo.Path to="./admins" activeClassName="active">{t('admins')}</LinkTo.Path>
-					<LinkTo.Path to="./invitations" activeClassName="active">
-						{t('invitations')}
-						{hasCount && <div className="invitations-count">{total || 0}</div>}
-					</LinkTo.Path>
-				</Tabs>
-				{canSendInvitations && (
-					<div className="invite" onClick={() => {
-						store.showInviteDialog();
-					}}>
-						<i className="icon-addfriend"/>{t('invitePeople')}
-					</div>
-				)}
+			<div className="site-admin-user-list-nav-bar">
+				<Card>
+					<div className="header">{t('people')}</div>
+					<Tabs>
+						<LinkTo.Path to="./" activeClassName="active" exact>{t('learners')}</LinkTo.Path>
+						<LinkTo.Path to="./admins" activeClassName="active">{t('admins')}</LinkTo.Path>
+						<LinkTo.Path to="./invitations" activeClassName="active">
+							{t('invitations')}
+							{hasCount && <div className="invitations-count">{total || 0}</div>}
+						</LinkTo.Path>
+					</Tabs>
+				</Card>
+				<Card>
+					<SeatLimit />
+					{canSendInvitations && (
+						<div className="invite" onClick={() => {
+							store.showInviteDialog();
+						}}>
+							<i className="icon-addfriend"/>{t('invitePeople')}
+						</div>
+					)}
+				</Card>
 				{showInviteDialog && (
 					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>
 						<InvitePeople store={store} loading={loading}/>
 					</Prompt.Dialog>
 				)}
-			</Card>
+			</div>
 		);
 	}
 }

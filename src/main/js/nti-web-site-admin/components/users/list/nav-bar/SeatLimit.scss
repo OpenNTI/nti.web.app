@@ -1,0 +1,17 @@
+@import '~@nti/style-common';
+
+.site-seat-limit {
+	padding: 1.25rem;
+	border-bottom: 1px solid $border-grey-light;
+
+	.active {
+		font: normal 400 1.125rem/1.3 $body-font-family;
+		color: $primary-grey;
+	}
+
+	.limit {
+		font: normal 600 0.75rem/1.3 $body-font-family;
+		color: $tertiary-grey;
+		text-transform: uppercase;
+	}
+}
