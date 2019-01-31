@@ -2,101 +2,116 @@
 
 exports[`Site admin user list nav bar (with invite link) Basic render test 1`] = `
 <div
-  className="site-admin-card site-admin-user-list-nav-bar"
+  className="site-admin-user-list-nav-bar"
 >
   <div
-    className="header"
+    className="site-admin-card"
   >
-    People
-  </div>
-  <ul
-    className="site-admin-tabs"
-  >
-    <li>
-      <div
-        className="nti-link-to-path"
-        exact={true}
-        to="./"
-      >
-        Learners
-      </div>
-    </li>
-    <li>
-      <div
-        className="nti-link-to-path"
-        to="./admins"
-      >
-        Admins
-      </div>
-    </li>
-    <li>
-      <div
-        className="nti-link-to-path"
-        to="./invitations"
-      >
-        Invitations
+    <div
+      className="header"
+    >
+      People
+    </div>
+    <ul
+      className="site-admin-tabs"
+    >
+      <li>
         <div
-          className="invitations-count"
+          className="nti-link-to-path"
+          exact={true}
+          to="./"
         >
-          5
+          Learners
         </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+      <li>
+        <div
+          className="nti-link-to-path"
+          to="./admins"
+        >
+          Admins
+        </div>
+      </li>
+      <li>
+        <div
+          className="nti-link-to-path"
+          to="./invitations"
+        >
+          Invitations
+          <div
+            className="invitations-count"
+          >
+            5
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
   <div
-    className="invite"
-    onClick={[Function]}
+    className="site-admin-card"
   >
-    <i
-      className="icon-addfriend"
-    />
-    Invite People
+    <div
+      className="invite"
+      onClick={[Function]}
+    >
+      <i
+        className="icon-addfriend"
+      />
+      Invite People
+    </div>
   </div>
 </div>
 `;
 
 exports[`Site admin user list nav bar (without invite link) Basic render test 1`] = `
 <div
-  className="site-admin-card site-admin-user-list-nav-bar"
+  className="site-admin-user-list-nav-bar"
 >
   <div
-    className="header"
+    className="site-admin-card"
   >
-    People
-  </div>
-  <ul
-    className="site-admin-tabs"
-  >
-    <li>
-      <div
-        className="nti-link-to-path"
-        exact={true}
-        to="./"
-      >
-        Learners
-      </div>
-    </li>
-    <li>
-      <div
-        className="nti-link-to-path"
-        to="./admins"
-      >
-        Admins
-      </div>
-    </li>
-    <li>
-      <div
-        className="nti-link-to-path"
-        to="./invitations"
-      >
-        Invitations
+    <div
+      className="header"
+    >
+      People
+    </div>
+    <ul
+      className="site-admin-tabs"
+    >
+      <li>
         <div
-          className="invitations-count"
+          className="nti-link-to-path"
+          exact={true}
+          to="./"
         >
-          5
+          Learners
         </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+      <li>
+        <div
+          className="nti-link-to-path"
+          to="./admins"
+        >
+          Admins
+        </div>
+      </li>
+      <li>
+        <div
+          className="nti-link-to-path"
+          to="./invitations"
+        >
+          Invitations
+          <div
+            className="invitations-count"
+          >
+            5
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div
+    className="site-admin-card"
+  />
 </div>
 `;
