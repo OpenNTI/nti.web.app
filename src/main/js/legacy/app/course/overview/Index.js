@@ -402,8 +402,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 					Service.request(historyItemLink)
 						.then(resp => lazy.ParseUtils.parseItems(JSON.parse(resp))[0])
 						.then((history) => {
+							return history.resolveFullContainer()
+								.then(container => {
+									return [history, container];
+								});
+						})
+						.then(([history, container]) => {
 							if (this.assignmentViewer) {
-								this.assignmentViewer.updateHistory(history);
+								this.assignmentViewer.updateHistory(history, container);
 							}
 
 							return history;
