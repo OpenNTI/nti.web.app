@@ -390,7 +390,10 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			}
 
 			me.el.unmask();
-			me.replaceRootRoute('', path);
+
+			setTimeout(() => {
+				me.replaceRootRoute('', path);
+			}, 100);
 		}
 
 		function failedNavigate (obj) {
@@ -411,7 +414,10 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			}
 
 			me.el.unmask();
-			me.replaceRootRoute('', path);
+
+			setTimeout(() => {
+				me.replaceRootRoute('', path);
+			}, 100);
 		}
 
 		me.el.mask('Loading...');
