@@ -10,6 +10,7 @@ const TypesForumComment = require('./types/ForumComment');
 const TypesForumTopic = require('./types/ForumTopic');
 const TypesGrade = require('./types/Grade');
 const TypesNote = require('./types/Note');
+const TypesEvent = require('./types/Event');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.Group', {
@@ -58,7 +59,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 			TypesBlogComment,
 			TypesBlogEntryPost,
 			TypesContact,
-			TypesBadge
+			TypesBadge,
+			TypesEvent
 		]);
 
 		if (this.showLabel) {
@@ -91,7 +93,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		var cmp = getCmp(item.mimeType, this.self.MIME_TO_COMPONENT),
 			config = {
 				record: item,
-				navigateToItem: this.navigateToItem.bind(this)
+				navigateToItem: this.navigateToItem.bind(this),
+				hideNotifications: this.hideNotifications
 			};
 
 		if (!cmp) {

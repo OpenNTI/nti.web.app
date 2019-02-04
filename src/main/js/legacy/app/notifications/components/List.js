@@ -132,7 +132,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 				xtype: 'notification-group',
 				group: group,
 				showLabel: this.SHOW_GROUP_LABEL,
-				navigateToItem: this.navigateToItem.bind(this)
+				navigateToItem: this.navigateToItem.bind(this),
+				hideNotifications: this.hideNotifications
 			};
 
 		if (prepend) {

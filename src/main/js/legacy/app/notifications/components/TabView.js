@@ -16,7 +16,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		this.add([{
 			xtype: 'notifications-most-recent',
 			updateBadge: this.updateBadge.bind(this),
-			navigateToObject: this.navigateToObject.bind(this)
+			navigateToObject: this.navigateToObject.bind(this),
+			hideNotifications: this.hide.bind(this)
 		}, {
 			xtype: 'box',
 			cls: 'show-all',
