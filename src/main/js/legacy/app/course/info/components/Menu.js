@@ -1,7 +1,18 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const CoursesStateStore = require('legacy/app/library/courses/StateStore');
-const {getString, getFormattedString} = require('legacy/util/Localization');
+const {getString} = require('legacy/util/Localization');
+
+const DEFAULT_TEXT = {
+	instructor: {
+		one: 'Instructor',
+		other: 'Instructors'
+	},
+	invitation: 'Invitation Code'
+};
+
+const t = scoped('course.info.components.menu', DEFAULT_TEXT);
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Menu', {
@@ -31,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 	inviteTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'invitation-wrapper', cn: [
-			{cls: 'invite-header', html: 'Course Invitation Code'},
+			{cls: 'invite-header', html: t('invitation')},
 			{cls: 'label code', html: '{code}'}
 		]
 	})),
@@ -97,8 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		});
 
 		me.itemTpl.append(me.menuEl, {
-			title: getFormattedString('NextThought.view.courseware.info.outline.Menu.courseinstructors', {
-				instructor: Ext.util.Format.plural(i.length, 'Instructor', true)}),
+			title: i.length > 1 ? t('instructor.other') : t('instructor.one')
 		});
 
 		me.itemTpl.append(me.menuEl, {
