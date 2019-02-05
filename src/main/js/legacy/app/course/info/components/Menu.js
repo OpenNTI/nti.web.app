@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	]),
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'outline-row{[values.active ? " x-item-selected" : ""]}', 'data-qtip': '{title:htmlEncode}', 'data-route': '{route}', cn: [
+		cls: 'outline-row{[values.active ? " x-item-selected" : ""]}', 'data-trigger': '{trigger}', 'data-qtip': '{title:htmlEncode}', 'data-route': '{route}', cn: [
 			{cls: 'label', html: '{title:htmlEncode}'}
 		]
 	})),
@@ -104,20 +104,24 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		me.itemTpl.append(me.menuEl, {
 			title: 'About',
-			active: true
+			active: true,
+			trigger: 'about'
 		});
 
 		me.itemTpl.append(me.menuEl, {
-			title: i.length > 1 ? t('instructor.other') : t('instructor.one')
+			title: i.length > 1 ? t('instructor.other') : t('instructor.one'),
+			trigger: 'instructors'
 		});
 
 		me.itemTpl.append(me.menuEl, {
 			title: getString('NextThought.view.courseware.info.outline.Menu.support'),
+			trigger: 'support'
 		});
 
 		if (this.showRoster || this.showReports || this.showAdvanced) {
 			me.itemTpl.append(me.menuEl, {
 				title: 'Admin Tools',
+				trigger: 'admin'
 			});
 		}
 	},
@@ -169,36 +173,31 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	},
 
 
-	updateClasses: function (qtip) {
+	updateClasses: function (trigger) {
 		var activeItem = this.el && this.el.down('.x-item-selected');
 
 		activeItem && activeItem.removeCls('x-item-selected');
-		activeItem = this.el.down('[data-qtip=' + qtip + ']');
+		activeItem = this.el.down(`[data-trigger=${trigger}]`);
 		activeItem.addCls('x-item-selected');
 	},
 
 	QTIP_TO_CLASS_MAP: {
-		'About': {
+		'about': {
 			cls: 'course-info-panel',
 			targetCls: 'course-info-panel',
 			doLocalNav: true
 		},
-		'Course Instructors': {
+		'instructors': {
 			cls: 'course-info-panel',
 			targetCls: 'facilitators-section',
 			doLocalNav: true
 		},
-		'Course Instructor': {
-			cls: 'course-info-panel',
-			targetCls: 'facilitators-section',
-			doLocalNav: true
-		},
-		'Tech Support': {
+		'support': {
 			cls: 'course-info-panel',
 			targetCls: 'course-info-support',
 			doLocalNav: true
 		},
-		'Admin Tools': {
+		'admin': {
 			cls: 'course-info-panel',
 			targetCls: 'course-admin-panel',
 			doLocalNav: true
@@ -232,14 +231,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		if (!item) { return; }
 
-		var qtip = item.getAttribute('data-qtip');
+		var trigger = item.getAttribute('data-trigger');
 
 		var infoPanel = document.getElementsByClassName('course-info-panel');
 
 		infoPanel = (infoPanel && infoPanel[0]) || {};
 
-		if(this.QTIP_TO_CLASS_MAP[qtip]) {
-			var { cls, targetCls, doLocalNav } = this.QTIP_TO_CLASS_MAP[qtip];
+		if(this.QTIP_TO_CLASS_MAP[trigger]) {
+			var { cls, targetCls, doLocalNav } = this.QTIP_TO_CLASS_MAP[trigger];
 
 			var target = document.getElementsByClassName(targetCls);
 			var containerPanel = document.getElementsByClassName(cls);
@@ -252,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 					window.scrollTo(0, target[0].offsetTop);
 				}
 
-				this.updateClasses(qtip);
+				this.updateClasses(trigger);
 			}
 		}
 		else {
