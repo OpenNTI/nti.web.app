@@ -11,6 +11,17 @@ const AccountActions = require('../../../account/Actions');
 
 require('../Base');
 
+function getCurrentHistoryItem (container, assignment) {
+	const {CurrentMetadataAttemptItem} = assignment;
+	const {Items: historyItems = []} = container;
+
+	if (!CurrentMetadataAttemptItem) { return historyItems[historyItems.length - 1]; }
+
+	return historyItems.find((item) => {
+		return item.MetadataAttemptItem.NTIID === CurrentMetadataAttemptItem.NTIID;
+	});
+}
+
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 	extend: 'NextThought.app.contentviewer.navigation.Base',
@@ -122,8 +133,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 					component: NavigationBar.Status,
 					assignment: assignment,
 					renderTo: this.assignmentStatusContainerEl,
-					historyItemContainer: this.historyItemContainer,
-					historyItem: this.historyItemContainer && this.historyItemContainer.Items[0]
+					historyItemContainer: this.resolvedHistoryItemContainer,
+					historyItem: this.resolvedHistoryItem,
+					onTryAgain: () => {
+						if (this.onTryAgain) {
+							this.onTryAgain();
+						}
+					}
 				});
 
 				this.on('destroy', () => {
@@ -341,23 +357,28 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		if (!historyContainer) { return; }
 
-		this.hasHistory = true;
-
-		if (this.hideTimer) {
-			this.hideTimer();
-		}
-
 		Promise.all([
 			historyContainer.getInterfaceInstance(),
 			this.assignment.getInterfaceInstance()
-		]).then(([history, assignment]) => {
-			this.historyContainer = history;
+		]).then(([container, assignment]) => {
+			return [container, assignment, getCurrentHistoryItem(container, assignment)];
+		}).then(([container, assignment, item]) => {
+			if (!item) { return; }
+
+			this.hasHistory = true;
+
+			if (this.hideTimer) {
+				this.hideTimer();
+			}
+
+			this.resolvedHistoryContainer = container;
+			this.resolvedHistoryItem = item;
 
 			if (this.assignmentStatusComponent) {
 				this.assignmentStatusComponent.setProps({
 					assignment,
-					historyItemContainer: history,
-					historyItem: history.Items[0]
+					historyItemContainer: container,
+					historyItem: item
 				});
 			}
 		});

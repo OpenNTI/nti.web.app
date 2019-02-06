@@ -25,7 +25,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			assignment: this.assignment,
 			assignmentId: this.assignment.getId(),
 			doNavigation: this.doNavigation.bind(this),
-			handleEdit: this.handleEdit
+			handleEdit: this.handleEdit,
+			onTryAgain: this.onTryAgain.bind(this)
 		};
 	},
 
@@ -160,6 +161,29 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 	},
 
+
+	onTryAgain () {
+		this.assignment.start()
+			.then(() => {
+				if (this.pageInfo) {
+					this.pageInfo.replaceAssignment(this.assignment);
+				}
+
+				return this.pageInfo.regenerate ? this.pageInfo.regenerate(this.assignment) : this.pageInfo;
+			})
+			.then((pageInfo) => {
+				this.pageInfo = pageInfo;
+
+				this.showReader()
+					.then(() => {
+						if (this.rendered) {
+							this.showAssignment();
+						}
+					});
+			});
+	},
+
+
 	showAllowedTime: function () {
 		var toolbar = this.getToolbar();
 
@@ -210,6 +234,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	//Override this so the reader doesn't set the page info twice
 	setPageInfo: function () {},
 
+
+	getAssignmentHistory () {
+		return this.assignment.getLatestAttempt()
+			.then(attempt => attempt.getHistoryItem())
+			.catch(() => this.assignmentHistory);
+	},
+
+
 	showAssignment: function () {
 		const header = this.getToolbar();
 		const reader = this.getReaderContent();
@@ -222,8 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		var me = this,
 			readerAssessment = reader && reader.getAssessment(),
 			assignment = me.assignmentOverride || me.assignment,
-			savepoint = assignment && assignment.getSavePoint(),
-			assignmentHistory = assignment && assignment.hasHistoryLink() ? assignment.getHistory() : me.assignmentHistory;
+			savepoint = assignment && assignment.getSavePoint();
 
 		reader.getScroll().lock();
 		reader.hidePageWidgets();
@@ -244,38 +275,36 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			me.showAllowedTime();
 		}
 
-		if (!assignmentHistory || !(assignmentHistory instanceof Promise)) {
-			assignmentHistory = Promise.resolve(assignmentHistory);
-		}
+		this.getAssignmentHistory()
+			.then(function (h) {
+				return h;
+			}).catch(function () {
+				return null;
+			}).then(function (h) {
+				readerAssessment.setAssignmentFromStudentProspective(assignment, h);
+				header.setHistory(h);
 
-		assignmentHistory.then(function (h) {
-			return h;
-		}).catch(function () {
-			return null;
-		}).then(function (h) {
-			readerAssessment.setAssignmentFromStudentProspective(assignment, h);
-			header.setHistory(h);
+				if (savepoint) {
+					savepoint.then(function (point) {
+						/**
+						 * NOTE: Only apply a savepoint if it's version is the same as the assignment version.
+						 * Otherwise, just don't apply it. In the future, we might come up with a smarter way to apply
+						 * the savepoint if it affects areas that haven't changed.
+						 */
+						let submission = point && point.get('Submission'),
+							savePointVersion = submission && submission.get('version');
 
-			if (savepoint) {
-				savepoint.then(function (point) {
-					/**
-					 * NOTE: Only apply a savepoint if it's version is the same as the assignment version.
-					 * Otherwise, just don't apply it. In the future, we might come up with a smarter way to apply
-					 * the savepoint if it affects areas that haven't changed.
-					 */
-					let submission = point && point.get('Submission'),
-						savePointVersion = submission && submission.get('version');
+						if (savePointVersion === assignment.get('version')) {
+							readerAssessment.injectAssignmentSavePoint(point);
+						}
+					});
+				}
 
-					if (savePointVersion === assignment.get('version')) {
-						readerAssessment.injectAssignmentSavePoint(point);
-					}
-				});
-			}
+				reader.getNoteOverlay().disable();
 
-			reader.getNoteOverlay().disable();
-
-			return reader.setPageInfo(me.pageInfoOverride || me.pageInfo, me.bundle, me.fragment);
-		}).always(done.bind(this));
+				return reader.setPageInfo(me.pageInfoOverride || me.pageInfo, me.bundle, me.fragment);
+			})
+			.always(done.bind(this));
 	},
 
 	updateHistory: function (h, container) {

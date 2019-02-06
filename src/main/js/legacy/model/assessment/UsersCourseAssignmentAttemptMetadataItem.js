@@ -28,6 +28,16 @@ module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseA
 	},
 
 
+	getHistoryItem () {
+		const link = this.getLink('HistoryItem');
+
+		if (!link) { return Promise.resolve(null); }
+
+		return Service.request(link)
+			.then(response => lazy.ParseUtils.parseItems(response)[0]);
+	},
+
+
 	getStartTime () {
 		const start = this.get('StartTime');
 
