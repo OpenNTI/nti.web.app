@@ -34,8 +34,7 @@ exports[`Site admin user frame test Basic render test 1`] = `
           <img
             alt="Avatar for undefined"
             className="avatar avatar-color-6"
-            onError={[Function]}
-            src="someAvatarURL"
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
           />
           <span
             className="username"

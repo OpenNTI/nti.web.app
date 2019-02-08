@@ -44,7 +44,7 @@ exports[`Site admin user course enrollment frame Basic render test 1`] = `
               <img
                 alt="Avatar for Anonymous User"
                 className="avatar avatar-color-6"
-                src="unresolved-user-avatar.png"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
               />
             </div>
           </div>
