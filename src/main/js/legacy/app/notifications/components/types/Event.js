@@ -14,12 +14,14 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 	itemCls: 'event',
 
-	createdWording: 'create an event {name}',
+	createdWording: 'created an event {name}',
 	updatedWording: 'updated an event {name}',
 
 
 	isCreated () {
-		return this.record.get('Created') === this.record.get('Last Modified');
+		const type = this.change && this.change.get('ChangeType');
+
+		return type === 'Created';
 	},
 
 

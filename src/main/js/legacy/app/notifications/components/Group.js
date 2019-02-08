@@ -75,8 +75,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		return this.ISCHANGE.test(item.mimeType) ? item.getItem() : item;
 	},
 
-	addItem: function (item, prepend) {
-		item = this.unwrap(item);
+	addItem: function (change, prepend) {
+		const item = this.unwrap(change);
 
 		if(!item) {
 			// if it's a change with no sub-item
@@ -93,6 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		var cmp = getCmp(item.mimeType, this.self.MIME_TO_COMPONENT),
 			config = {
 				record: item,
+				change,
 				navigateToItem: this.navigateToItem.bind(this),
 				hideNotifications: this.hideNotifications
 			};
