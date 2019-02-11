@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 
 	onTryAgain () {
-		this.assignment.start()
+		(this.assignmentOverride || this.assignment).start()
 			.then(() => {
 				if (this.pageInfo) {
 					this.pageInfo.replaceAssignment(this.assignment);
