@@ -15,13 +15,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 
 
-	getToolbarConfig: function () {
+	getToolbarConfig: function (newAttempt) {
 		return {
 			xtype: 'assignment-header',
 			student: this.student,
 			pageSource: this.pageSource,
 			path: this.path,
-			assignmentHistory: this.assignmentHistory,
+			assignmentHistory: newAttempt ? null : this.assignmentHistory,
 			assignment: this.assignment,
 			assignmentId: this.assignment.getId(),
 			doNavigation: this.doNavigation.bind(this),
@@ -34,12 +34,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	/**
 	 * Get the toolbar and reader config with the correct assignment
 	 *
+	 * @param {Boolean} newAttempt load the previous attempt or start a new one
 	 * @return {[Array]} [toolbarConfig, readerConfig]
 	 */
-	getToolbarAndReaderConfig () {
+	getToolbarAndReaderConfig (newAttempt) {
 		const assignment = this.assignment;
 		const isPracticeSubmission = assignment && assignment.hasLink('PracticeSubmission');
-		const baseToolbarConfig = this.getToolbarConfig();
+		const baseToolbarConfig = this.getToolbarConfig(newAttempt);
 		const baseReaderConfig = this.getReaderConfig();
 		const defaultConfig = [baseToolbarConfig, baseReaderConfig];
 
@@ -78,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 
 		//the assignment is started, or submitted. Show the latest attempt
-		if (assignment.isStarted() || assignment.hasSubmission()) {
+		if (!newAttempt && (assignment.isStarted() || assignment.hasSubmission())) {
 			return assignment.getLatestAttempt()
 				.then(attempt => attempt && attempt.getAssignment())
 				.then((attemptAssignment) => {
@@ -162,25 +163,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	},
 
 
-	onTryAgain () {
-		(this.assignmentOverride || this.assignment).start()
-			.then(() => {
-				if (this.pageInfo) {
-					this.pageInfo.replaceAssignment(this.assignment);
-				}
+	async onTryAgain () {
+		const config = await this.getToolbarAndReaderConfig(true);
 
-				return this.pageInfo.regenerate ? this.pageInfo.regenerate(this.assignment) : this.pageInfo;
-			})
-			.then((pageInfo) => {
-				this.pageInfo = pageInfo;
+		await this.applyReaderConfigs(config);
 
-				this.showReader()
-					.then(() => {
-						if (this.rendered) {
-							this.showAssignment();
-						}
-					});
-			});
+		if (this.rendered) {
+			this.showAssignment({noHistory: true});
+		}
 	},
 
 
@@ -235,19 +225,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	setPageInfo: function () {},
 
 
-	getAssignmentHistory () {
+	getAssignmentHistory (config) {
+		if (config && config.noHistory) {
+			return Promise.resolve(null);
+		}
+
 		return this.assignment.getLatestAttempt()
 			.then(attempt => attempt.getHistoryItem())
 			.catch(() => this.assignmentHistory);
 	},
 
 
-	showAssignment: function () {
+	showAssignment: function (config) {
 		const header = this.getToolbar();
 		const reader = this.getReaderContent();
 
 		if (!reader) {
-			this.mon(this, 'reader-set', () => this.showAssignment(), this, {single: true});
+			this.mon(this, 'reader-set', () => this.showAssignment(config), this, {single: true});
 			return;
 		}
 
@@ -275,14 +269,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			me.showAllowedTime();
 		}
 
-		this.getAssignmentHistory()
+		this.getAssignmentHistory(config)
 			.then(function (h) {
-				return h;
+				if (!h) { return [null, null]; }
+
+				return h.resolveFullContainer()
+					.then(container => [h, container]);
 			}).catch(function () {
 				return null;
-			}).then(function (h) {
+			}).then(function ([h, container]) {
 				readerAssessment.setAssignmentFromStudentProspective(assignment, h);
-				header.setHistory(h);
+				header.setHistory(h, container);
 
 				if (savepoint) {
 					savepoint.then(function (point) {

@@ -111,74 +111,79 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		];
 	},
 
+
+	applyReaderConfigs (config) {
+		this.navigation.removeAll(true);
+		this.body.removeAll(true);
+
+		const [toolbarConfig, readerConfig] = config;
+		let readerContent;
+
+		this.flatPageStore = this.flatPageStore || FlatPage.create({ storeId: 'FlatPage-' + this.id });
+		this.UserDataActions.initPageStores(this);
+
+		toolbarConfig.isReaderToolBar = true;
+
+		this.body.add([
+			toolbarConfig,
+			readerConfig
+		]);
+
+		this.navigation.setActiveTab(this.navigation.add(
+			{
+				title: 'Discussion',
+				iconCls: 'discuss',
+				xtype: 'annotation-view',
+				discussion: true,
+				store: this.flatPageStore,
+				showNote: this.showNote.bind(this)
+			}
+		));
+
+
+		readerContent = this.getReaderContent();
+
+		this.mon(this.flatPageStore, 'bookmark-loaded', function (r) {
+			readerContent.pageWidgets.onBookmark(r);
+		});
+
+		Ext.destroy(this.readerMons);
+
+		if (readerContent) {
+			this.readerMons = this.mon(readerContent, {
+				'destroyable': true,
+				'filter-by-line': 'selectDiscussion',
+				'assignment-submitted': this.fireEvent.bind(this, 'assignment-submitted'),
+				'assessment-graded': this.fireEvent.bind(this, 'assessment-graded'),
+				'sync-height': this.alignNavigation.bind(this),
+				'refresh-reader': this.showReader.bind(this)
+			});
+			this.down('annotation-view').anchorComponent = readerContent;
+		}
+
+		this.pageInfoOverride = readerConfig.pageInfo;
+
+		if (this.rendered && readerConfig.pageInfo) {
+			this.setPageInfo(readerConfig.pageInfo, this.bundle);
+		} else if (this.rendered && this.pageInfo) {
+			this.setPageInfo(this.pageInfo, this.bundle);
+		}
+
+		this.fireEvent('reader-set');
+
+	},
+
 	showReader: function () {
 		this.navigation.removeAll(true);
 		this.body.removeAll(true);
 
-		const applyConfigs = (config) => {
-			const [toolbarConfig, readerConfig] = config;
-			let readerContent;
-
-			this.flatPageStore = this.flatPageStore || FlatPage.create({ storeId: 'FlatPage-' + this.id });
-			this.UserDataActions.initPageStores(this);
-
-			toolbarConfig.isReaderToolBar = true;
-
-			this.body.add([
-				toolbarConfig,
-				readerConfig
-			]);
-
-			this.navigation.setActiveTab(this.navigation.add(
-				{
-					title: 'Discussion',
-					iconCls: 'discuss',
-					xtype: 'annotation-view',
-					discussion: true,
-					store: this.flatPageStore,
-					showNote: this.showNote.bind(this)
-				}
-			));
-
-
-			readerContent = this.getReaderContent();
-
-			this.mon(this.flatPageStore, 'bookmark-loaded', function (r) {
-				readerContent.pageWidgets.onBookmark(r);
-			});
-
-			Ext.destroy(this.readerMons);
-
-			if (readerContent) {
-				this.readerMons = this.mon(readerContent, {
-					'destroyable': true,
-					'filter-by-line': 'selectDiscussion',
-					'assignment-submitted': this.fireEvent.bind(this, 'assignment-submitted'),
-					'assessment-graded': this.fireEvent.bind(this, 'assessment-graded'),
-					'sync-height': this.alignNavigation.bind(this),
-					'refresh-reader': this.showReader.bind(this)
-				});
-				this.down('annotation-view').anchorComponent = readerContent;
-			}
-
-			this.pageInfoOverride = readerConfig.pageInfo;
-
-			if (this.rendered && readerConfig.pageInfo) {
-				this.setPageInfo(readerConfig.pageInfo, this.bundle);
-			} else if (this.rendered && this.pageInfo) {
-				this.setPageInfo(this.pageInfo, this.bundle);
-			}
-
-			this.fireEvent('reader-set');
-		};
-
 		const config = this.getToolbarAndReaderConfig();
 
 		if (config instanceof Promise) {
-			return config.then(applyConfigs);
+			return config.then(c => this.applyReaderConfigs(c));
 		}
 
-		return applyConfigs(config);
+		return Promise.resolve(this.applyReaderConfigs(config));
 	},
 
 	alignNavigation: function () {

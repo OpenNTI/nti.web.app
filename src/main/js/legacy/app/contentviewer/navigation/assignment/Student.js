@@ -350,12 +350,32 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 
 	applyHistoryContainer (historyContainer) {
+		const updateStatusComponent = (assignment, container, item) => {
+			if (this.assignmentStatusComponent) {
+				this.assignmentStatusComponent.setProps({
+					assignment,
+					historyItemContainer: container,
+					historyItem: item
+				});
+			}
+		};
+
+
 		if (!this.rendered) {
 			this.on('afterrender', this.applyHistoryContainer.bind(this, historyContainer));
 			return;
 		}
 
-		if (!historyContainer) { return; }
+		if (!historyContainer) {
+			this.assignment.getInterfaceInstance()
+				.then((assignment) => {
+					delete this.resolvedHistoryContainer;
+					delete this.resolvedHistoryItem;
+
+					updateStatusComponent(assignment, null, null);
+				});
+			return;
+		}
 
 		Promise.all([
 			historyContainer.getInterfaceInstance(),
@@ -363,7 +383,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		]).then(([container, assignment]) => {
 			return [container, assignment, getCurrentHistoryItem(container, assignment)];
 		}).then(([container, assignment, item]) => {
-			if (!item) { return; }
+			if (!item) {
+				updateStatusComponent(assignment, container, item);
+				return;
+			}
 
 			this.hasHistory = true;
 
@@ -374,13 +397,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.resolvedHistoryContainer = container;
 			this.resolvedHistoryItem = item;
 
-			if (this.assignmentStatusComponent) {
-				this.assignmentStatusComponent.setProps({
-					assignment,
-					historyItemContainer: container,
-					historyItem: item
-				});
-			}
+			updateStatusComponent(assignment, container, item);
 		});
 	},
 
