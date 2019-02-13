@@ -55,14 +55,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 	},
 
 	showRoster (route) {
-		// const baseroute = this.getBaseRoute();
+		const baseroute = this.getParentBaseRoute();
 
 		if (!this.roster) {
 			this.roster = this.add({
 				xtype: 'react',
 				component: Roster,
 				course: this.course,
-				// baseroute: baseroute,
+				baseroute: `${baseroute}/roster`,
 				setTitle: (title) => {
 					this.setTitle(title);
 				}

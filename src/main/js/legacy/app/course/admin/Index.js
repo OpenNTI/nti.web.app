@@ -117,10 +117,11 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	setupRoster () {
 		this.siteAdminRoster = this.add({
 			xtype: 'course-info-roster',
-			itemId: ROSTER_ID
+			itemId: ROSTER_ID,
+			getParentBaseRoute: () => this.getBaseRoute()
 		});
 
-
+		this.addChildRouter(this.siteAdminRoster);
 	},
 
 	async setBundle (activeBundle) {
