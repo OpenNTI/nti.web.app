@@ -21,7 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			assignmentHistoryItemContainer: this.assignmentHistoryItemContainer,
 			doNavigation: this.doNavigation.bind(this),
 			currentBundle: this.bundle,
-			handleEdit: this.handleEdit
+			handleEdit: this.handleEdit,
+			selectHistoryItem: item => this.selectHistoryItem(item)
 		};
 	},
 
@@ -29,12 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		this.callParent(arguments);
 
 		var reader = this.down('reader-content'),
-			student = this.student,
-			bundle = this.bundle,
-			pageInfo = this.pageInfo,
-			assignment = this.assignment,
-			assignmentHistoryItemContainer = this.assignmentHistoryItemContainer,
-			readerAssessment = reader.getAssessment();
+			assignmentHistoryItemContainer = this.assignmentHistoryItemContainer;
 
 		reader.getScroll().lock();
 		reader.pageWidgets.hide();
@@ -56,13 +52,28 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		assignmentHistoryItemContainer
 			.then(container => container.getMostRecentHistoryItem())
 			.then((h) => {
-				readerAssessment.setAssignmentFromInstructorProspective(assignment, h, student);
 				reader.getNoteOverlay().disable();
 
-				return reader.setPageInfo(pageInfo, bundle);
+				return this.selectHistoryItem(h);
 			})
 			.then(done.bind(this));
 	},
+
+
+	selectHistoryItem (historyItem) {
+		const reader = this.down('reader-content');
+		const header = this.down('course-assessment-admin-reader-header');
+		const {assignment, student, bundle, pageInfo} = this;
+		const readerAssessment = reader.getAssessment();
+
+		readerAssessment.setAssignmentFromInstructorProspective(assignment, historyItem, student);
+
+		return reader.setPageInfo(pageInfo, bundle)
+			.then(() => {
+				header.setActiveHistoryItem(historyItem);
+			});
+	},
+
 
 	getAnalyticData: function () {
 		if (!this.assignment) {

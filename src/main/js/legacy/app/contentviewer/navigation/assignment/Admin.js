@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {ControlBar} = require('@nti/web-assignment-editor');
+const {ControlBar, NavigationBar} = require('@nti/web-assignment-editor');
 const { encodeForURI } = require('@nti/lib-ntiids');
 
 const ChatStateStore = require('legacy/app/chat/StateStore');
@@ -14,6 +14,7 @@ const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const TimeUtils = require('legacy/util/Time');
 
+require('legacy/overrides/ReactHarness');
 require('legacy/mixins/ProfileLinks');
 require('legacy/mixins/ChatLinks');
 require('../Base');
@@ -62,7 +63,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 					{ tag: 'span', cls: 'profile link', html: '{{{NextThought.view.courseware.assessment.admin.Header.profile}}}'},
 					{ tag: 'span', cls: 'email link', html: '{{{NextThought.view.courseware.assessment.admin.Header.email}}}'},
 					{ tag: 'span', cls: 'chat link', html: '{{{NextThought.view.courseware.assessment.admin.Header.chat}}}'}
-				]}
+				]},
+				{ cls: 'attempt-switcher'}
 			]}
 		]},
 		{cls: 'control-bar-container'}
@@ -83,6 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		predictedEl: '.header .predicted .value',
 		actionsEl: '.header .assignment-actions',
 		excusedEl: '.header .status .excused',
+		attemptSwitcherEL: '.header .user .attempt-switcher',
 		controlBarEl: '.control-bar-container'
 	},
 
@@ -147,9 +150,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		});
 
 		if (this.assignmentHistoryItemContainer && this.assignmentHistoryItemContainer instanceof Promise) {
-			this.assignmentHistoryItemContainer.then(this.setUpGradeBox.bind(this));
+			this.assignmentHistoryItemContainer.then(this.setupHistoryItemContainer.bind(this));
 		} else {
-			this.setUpGradeBox();
+			this.setupHistoryItemContainer(this.assignmentHistoryItemContainer);
 		}
 
 		//for profile link
@@ -252,17 +255,91 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			});
 	},
 
-	setUpGradeBox: function (historyItemContainer) {
-		if (!this.assignmentHistoryItemContainer && !historyItemContainer) { return; }
 
+
+	setupHistoryItemContainer (historyItemContainer) {
+		if (!this.assignmentHistoryItemContainer && !historyItemContainer) { return; }
 		if (!this.rendered) { return; }
 
 		if (historyItemContainer) {
 			this.assignmentHistoryItemContainer = historyItemContainer;
 		}
 
-		const historyItem = this.assignmentHistoryItemContainer.getMostRecentHistoryItem();
+		this.mon(this.assignmentHistoryItemContainer, 'reset-assignment', this.markAssignmentAsReset.bind(this));
 
+		this.assignmentHistoryItemContainer.getInterfaceInstance()
+			.then((container) => {
+				const attempts = container.Items
+					.map(item => item.MetadataAttemptItem);
+
+				if (this.attemptSwitcherComponent) {
+					this.attemptSwitcherComponent.setProps({
+						attempts,
+						active: this.activeAttemptItemInterface
+					});
+					return;
+				}
+
+				this.attemptSwitcherComponent = Ext.widget({
+					xtype: 'react',
+					component: NavigationBar.AttemptSwitcher,
+					attempts,
+					addHistory: true,
+					addRouteTo: true,
+					active: this.activeAttemptItemInterface,
+					renderTo: this.attemptSwitcherEL,
+					getRouteFor: (attempt) => {
+						if (attempt.MimeType !== 'application/vnd.nextthought.assessment.userscourseassignmentattemptmetadataitem') { return; }
+
+						return () => this.selectAttemptById(attempt.getID());
+					}
+				});
+
+				this.on('destroy', () => {
+					if (this.attemptSwitcherComponent) {
+						this.attemptSwitcherComponent.destroy();
+					}
+				});
+			});
+	},
+
+
+	selectAttemptById (id) {
+		if (!this.selectHistoryItem) { return; }
+
+		const items = this.assignmentHistoryItemContainer.get('Items');
+
+		for (let item of items) {
+			const attempt = item.get('MetadataAttemptItem');
+
+			if (attempt.getId() === id) {
+				this.selectHistoryItem(item);
+				return;
+			}
+		}
+	},
+
+
+
+	setActiveHistoryItem (historyItem) {
+		this.activeHistoryItem = historyItem;
+		this.setUpGradeBox(historyItem);
+
+		historyItem.getInterfaceInstance()
+			.then((active) => {
+				const {MetadataAttemptItem: attempt} = active;
+
+				this.activeAttemptItemInterface = attempt;
+
+				if (this.attemptSwitcherComponent) {
+					this.attemptSwitcherComponent.setProps({active: attempt});
+				}
+			});
+	},
+
+
+	setUpGradeBox: function (historyItem) {
+		if (!this.rendered) { return; }
 
 		var grade = historyItem && historyItem.get('Grade'),
 			values = grade && grade.getValues(),
@@ -293,7 +370,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.gradeBoxEl.hide();
 		}
 
-		if (AssignmentStatus.hasActions(this.assignmentHistoryItemContainer)) {
+		if (AssignmentStatus.hasActions(this.historyItem)) {
 			this.actionsEl.removeCls('disabled');
 		} else {
 			this.actionsEl.addCls('disabled');
@@ -367,8 +444,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.mon(historyItem, 'excused-changed', this.excuseGradeStatusChanged.bind(this));
 			this.mon(historyItem, 'reset-assignment', this.markAssignmentAsReset.bind(this));
 		}
-
-		this.mon(this.assignmentHistoryItemContainer, 'reset-assignment', this.markAssignmentAsReset.bind(this));
 	},
 
 	showActionsMenu: function (e) {
