@@ -120,8 +120,6 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 			itemId: ROSTER_ID,
 			getParentBaseRoute: () => this.getBaseRoute()
 		});
-
-		this.addChildRouter(this.siteAdminRoster);
 	},
 
 	async setBundle (activeBundle) {
