@@ -7,7 +7,8 @@ import View from '../View';
 describe('Site admin user course enrollment progress view', () => {
 	test('Basic render test', async () => {
 		const course = {
-			hasLink: () => true
+			hasLink: () => true,
+			getContentDataSource: () => ({loadPage: () => {}, getTotalCount: () => 0})
 		};
 
 		const enrollment = {};
@@ -19,6 +20,8 @@ describe('Site admin user course enrollment progress view', () => {
 		const tree = cmp.toJSON();
 
 		expect(tree).toMatchSnapshot();
+
+		cmp.unmount();
 	});
 
 	test('Basic render test (no course)', async () => {

@@ -53,6 +53,68 @@ exports[`Site admin user course enrollment progress view Basic render test 1`] =
         </div>
       </div>
     </div>
+    <div
+      className="progress-overview-contents"
+    >
+      <div
+        className="lesson-overview-padded-container progress-overview-contents-controls"
+      >
+        <div
+          className="required-filter"
+        >
+          <label
+            className="checkbox-component"
+          >
+            <input
+              checked={false}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              className="label"
+            >
+              Only Required
+            </span>
+          </label>
+        </div>
+      </div>
+      <div
+        className="nti-infinite-load-list"
+        style={Object {}}
+      >
+        <div
+          className="course-progress-progress-loading"
+        >
+          <div
+            className="placeholder"
+          />
+          <div
+            className="placeholder"
+          />
+          <div
+            className="placeholder"
+          />
+          <div
+            className="placeholder"
+          />
+          <div
+            className="placeholder"
+          />
+          <div
+            className="placeholder"
+          />
+          <div
+            className="placeholder"
+          />
+          <div
+            className="placeholder"
+          />
+          <div
+            className="placeholder"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
