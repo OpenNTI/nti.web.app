@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 
 	getAssignmentHistory (config) {
-		if (config && config.noHistory) {
+		if ((config && config.noHistory) || this.instructorProspective) {
 			return Promise.resolve(null);
 		}
 
