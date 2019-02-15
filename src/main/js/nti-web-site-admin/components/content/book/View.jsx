@@ -21,7 +21,12 @@ export default Router.for([
 			return null;
 		}
 	}),
-	Route({ path: '/reports', component: Reports, name: 'site-admin.courses.book-reprots' }),
-	Route({ path: '/roster', component: Roster, name: 'site-admin.courses.book-roster' }),
-	Route({path: '/', component: Overview, name: 'site-admin.courses.book-overview'})
-], {frame: Frame});
+	Route({
+		path: '/',
+		component: Router.for([
+			Route({ path: '/reports', component: Reports, name: 'site-admin.courses.book-reprots' }),
+			Route({ path: '/roster', component: Roster, name: 'site-admin.courses.book-roster' }),
+			Route({path: '/', component: Overview, name: 'site-admin.courses.book-overview'})
+		], {frame: Frame})
+	})
+]);

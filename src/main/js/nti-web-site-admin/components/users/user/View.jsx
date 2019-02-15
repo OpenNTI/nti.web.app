@@ -16,7 +16,6 @@ export default Router.for([
 		path: '/transcript/:enrollmentID',
 		component: UserCourseEnrollment,
 		props: {userContext: true},
-		frameless: true,
 		getRouteFor (obj, context) {
 			if (obj.MimeType === 'application/vnd.nextthought.courseware.courseinstanceenrollment' && context === 'site-admin.users.user-transcript.list') {
 				return `/transcript/${encodeForURI(obj.getID())}`;
@@ -29,7 +28,6 @@ export default Router.for([
 		path: '/book/:bookID',
 		component: UserBookEnrollment,
 		props: {userContext: true},
-		frameless: true,
 		getRouteFor (obj, context) {
 			if (obj.MimeType === 'application/vnd.nextthought.userbundlerecord' && context === 'site-admin.users.user-books.list') {
 				return `/book/${encodeForURI(obj.Bundle.getID())}`;
@@ -38,9 +36,14 @@ export default Router.for([
 			return null;
 		}
 	}),
-	Route({path: '/books', component: Books, name: 'site-admin.users.user-books'}),
-	Route({path: '/courses', component: Courses, name: 'site-admin.users.user-courses'}),
-	Route({path: '/transcript', component: Transcript, name: 'site-admin.users.user-transcript'}),
-	Route({path: '/reports', component: Reports, name: 'site-admin.users.user-overview'}),
-	Route({path: '/', component: Overview, name: 'site-admin.users.user-overview'})
-], {frame: Frame});
+	Route({
+		path: '/',
+		component: Router.for([
+			Route({path: '/books', component: Books, name: 'site-admin.users.user-books'}),
+			Route({path: '/courses', component: Courses, name: 'site-admin.users.user-courses'}),
+			Route({path: '/transcript', component: Transcript, name: 'site-admin.users.user-transcript'}),
+			Route({path: '/reports', component: Reports, name: 'site-admin.users.user-overview'}),
+			Route({path: '/', component: Overview, name: 'site-admin.users.user-overview'})
+		], {frame: Frame})
+	})
+]);

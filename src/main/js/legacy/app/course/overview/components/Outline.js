@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		else {
 			if(this.progressHeader) {
 				// remove progress header if one exists
-				this.remove(this.progressHeader, true);
+				this.headerContainer.remove(this.progressHeader, true);
 				delete this.progressHeader;
 			}
 
