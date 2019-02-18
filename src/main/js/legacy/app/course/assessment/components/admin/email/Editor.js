@@ -20,10 +20,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	enableObjectControls: false,
 	enableTextControls: false,
 
+	DEFAULT_SCOPES: ['All', 'ForCredit', 'Open'],
+
 	RECEIVER_MAP: {
-		'ForCredit': 'Enrolled Students',
-		'All': 'All Students',
-		'Open': 'Open Students'
+		All: 'All Students',
+		Open: 'Open Students',
+		Public: 'Open Students',
+		ForCredit: 'For Credit',
+		ForCreditDegree: 'For Credit (degree)',
+		ForCreditNonDegree: 'For Credit (non-degree)',
+		Purchased: 'Purchased'
 	},
 
 	REPLY_DEFAULTS: {
@@ -157,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 		else {
 			scope = this.record && this.record.get('scope');
-			this.receiverEl.setHTML(this.RECEIVER_MAP[scope]);
+			this.receiverEl.setHTML(this.RECEIVER_MAP[scope] || scope);
 			this.receiverEl.addCls('group');
 			this.receiverEl.addCls('link');
 			this.receiverEl.addCls('arrow');
@@ -168,6 +174,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	createReceiverScopePicker: function () {
+		const scopes = (this.record && this.record.get('scopes')) || this.DEFAULT_SCOPES;
+		console.log(scopes);
 		var me = this,
 			menu =
 				Ext.widget('menu', {
@@ -181,26 +189,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						}
 					},
 					width: 220,
-					items: [
-						{
-							text: 'All Students',
-							studentFilter: 'All',
-							isLabel: true,
-							checked: me.currentScope === 'All'
-						},
-						{
-							text: 'Enrolled Students',
-							studentFilter: 'ForCredit',
-							isLabel: true,
-							checked: me.currentScope === 'ForCredit'
-						},
-						{
-							text: 'Open Students',
-							studentFilter: 'Open',
-							isLabel: true,
-							checked: me.currentScope === 'Open'
-						}
-					]
+					items: scopes.map(studentFilter => ({
+						text: me.RECEIVER_MAP[studentFilter] || studentFilter,
+						studentFilter,
+						isLabel: true,
+						checked: me.currentScope === studentFilter
+					}))
 				});
 
 		this.on('destroy', menu.destroy.bind(menu));
@@ -332,6 +326,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	createNoReplyMenu: function () {
 		var me = this, menu,
 			initialScope = this.record && this.record.get('scope') || 'All',
+			scopes = this.record && this.record.get('scopes') || this.DEFAULT_SCOPES,
 			defaults = this.REPLY_DEFAULTS;
 
 		if (this.isIndividualEmail) {
@@ -350,25 +345,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					}
 				},
 				width: 120,
-				items: [{
-					text: 'All',
-					scope: 'All',
-					checked: defaults[initialScope] === 'All',
+				items: scopes.map(scope => ({
+					text: me.RECEIVER_MAP[scope] || scope,
+					scope,
+					checked: defaults[initialScope] === scope,
 					NoReply: false
-				},
-				{
-					text: 'Open',
-					scope: 'Open',
-					checked: defaults[initialScope] === 'Open',
-					NoReply: false
-				},
-				{
-					text: 'Enrolled',
-					scope: 'ForCredit',
-					checked: defaults[initialScope] === 'ForCredit',
-					NoReply: false
-				}
-				]
+				}))
 			});
 
 		this.on('destroy', menu.destroy.bind(menu));

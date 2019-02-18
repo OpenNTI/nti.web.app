@@ -4,6 +4,8 @@ const {Roster} = require('@nti/web-course');
 require('legacy/overrides/ReactHarness');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
+const WindowsActions = require('legacy/app/windows/Actions');
+const Email = require('legacy/model/Email');
 
 require('legacy/mixins/Router');
 
@@ -25,6 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.initRouter();
 		this.addDefaultRoute(this.showRoster.bind(this));
 		this.NavigationActions = NavigationActions.create();
+		this.WindowActions = WindowsActions.create();
 		
 	},
 
@@ -65,8 +68,28 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				baseroute: `${baseroute}/roster`,
 				setTitle: (title) => {
 					this.setTitle(title);
+				},
+				getRouteFor: (object, context) => {
+					const {type, filter, scopes} = (context || {});
+					if (type === 'email' && (object || {}).canEmailEnrollees) {
+						return () => this.showEmailEditor(object, filter, scopes);
+					}
 				}
 			});
 		}
-	}
+	},
+
+	showEmailEditor: function (course, scope = 'All', scopes) {
+		const emailRecord = new Email();
+
+		// Set the link to post the email to
+		emailRecord.set('url', course && course.getLink('Mail'));
+		emailRecord.set('scope', scope);
+		emailRecord.set('scopes', scopes);
+
+		this.WindowActions.showWindow('new-email', null, null, null, {
+			record: emailRecord
+		});
+	},
+
 });
