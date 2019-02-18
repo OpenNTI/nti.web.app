@@ -1,7 +1,5 @@
 const Ext = require('@nti/extjs');
 
-const WindowActions = require('legacy/app/windows/Actions');
-
 require('./Base');
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Event', {
@@ -33,17 +31,6 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 		if (this.wordingEl && this.wordingEl.dom) {
 			this.wordingEl.dom.innerHTML = wording;
-		}
-	},
-
-	onClicked () {
-		//TODO: once we have a library path use that to navigate to the event instead of just opening the window
-		const actions = WindowActions.create();
-
-		actions.pushWindow(this.record);
-
-		if (this.hideNotifications) {
-			this.hideNotifications();
 		}
 	}
 });

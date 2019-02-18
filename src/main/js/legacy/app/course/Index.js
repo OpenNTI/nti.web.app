@@ -16,6 +16,7 @@ const Topic = require('legacy/model/forums/Topic');
 const User = require('legacy/model/User');
 const PageInfo = require('legacy/model/PageInfo');
 const Video = require('legacy/model/Video');
+const CourseCalendarEvent = require('legacy/model/calendar/CourseCalendarEvent');
 
 const ContentviewerActions = require('../contentviewer/Actions');
 const CoursesStateStore = require('../library/courses/StateStore');
@@ -701,6 +702,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route = this.getRouteForPageInfo(root, subPath);
 		} else if (root instanceof UsersCourseAssignmentHistoryItem) {
 			route = this.getRouteForHistoryItem(root, subPath);
+		} else if (root instanceof CourseCalendarEvent) {
+			route = this.getRouteForEvent(root, subPath);
 		} else {
 			route = {
 				path: '',
@@ -791,5 +794,13 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 				isFull: true
 			};
 		}
+	},
+
+
+	getRouteForEvent (event, path) {
+		return {
+			path: '/lessons/',
+			isFull: true
+		};
 	}
 });
