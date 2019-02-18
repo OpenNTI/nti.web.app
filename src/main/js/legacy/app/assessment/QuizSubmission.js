@@ -159,18 +159,24 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	moveToActive: function () {
+		const isAssignment = !!this.questionSet.associatedAssignment;
+
 		if (this.isActive()) {
 			return;
 		}
 
-		if (this.questionSet.associatedAssignment && this.submitted) {
+		if (isAssignment && this.submitted) {
 			return;
 		}
 
 		delete this.allowResettingAssignment;
 		console.log('New status is active');
 		this.state = 'active';
-		this.resetBtn.show();
+
+		if (!isAssignment) {
+			this.resetBtn.show();
+		}
+
 		this.statusMessage.show();
 		this.submitBtn.update(getString('NextThought.view.assessment.QuizSubmission.finished'));
 		this.submitBtn.removeCls('disabled');
