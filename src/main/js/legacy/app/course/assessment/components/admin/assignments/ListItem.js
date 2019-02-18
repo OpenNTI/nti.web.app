@@ -42,9 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		const {assignment, item} = this;
 
 		const totalPossibleSubmissions = AorB(assignment.get('SubmittedCountTotalPossible'), item.get('enrolledCount'));
+		const totalSubmissions = AorB(assignment.get('UserCompletionCount'), item.get('SubmittedCount'));
+
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			submittedCount: assignment.get('SubmittedCount') || 0,
+			submittedCount: totalSubmissions || 0,
 			totalPossibleSubmissions,
 			hasReports: item.get('reportLinks') && item.get('reportLinks').length && isFeature('analytic-reports'),
 			canEdit: item.get('canEdit'),
