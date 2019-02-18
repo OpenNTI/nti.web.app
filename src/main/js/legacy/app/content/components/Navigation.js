@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		}
 
 		if (this.currentBundle === bundle) {
-			this.ContentSwitcher.updateRouteFor(bundle, activeRoute);
+			// this.ContentSwitcher.updateRouteFor(bundle, activeRoute);
 			return;
 		}
 
