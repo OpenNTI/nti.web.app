@@ -71,15 +71,35 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				},
 				getRouteFor: (object, context) => {
 					const {type, filter, scopes} = (context || {});
-					if (type === 'email' && (object || {}).canEmailEnrollees) {
-						return () => this.showEmailEditor(object, filter, scopes);
+					object = object || {};
+
+					if (type === 'email') {
+						if (object.hasLink && object.hasLink('Mail') && object.username) {
+							return () => this.showIndividualEmailEditor(object.getLink('Mail'), object.username);
+						}
+
+						if (object.isCourse && object.canEmailEnrollees) {
+							return () => this.showCourseEmailEditor(object, filter, scopes);
+						}
 					}
 				}
 			});
 		}
 	},
 
-	showEmailEditor: function (course, scope = 'All', scopes) {
+	showIndividualEmailEditor: function (url, receiver) {
+		const emailRecord = new Email();
+
+		// Set the link to post the email to
+		emailRecord.set('url', url);
+		emailRecord.set('Receiver', receiver);
+
+		this.WindowActions.showWindow('new-email', null, null, null, {
+			record: emailRecord
+		});
+	},
+
+	showCourseEmailEditor: function (course, scope = 'All', scopes) {
 		const emailRecord = new Email();
 
 		// Set the link to post the email to
