@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				return h.resolveFullContainer()
 					.then(container => [h, container]);
 			}).catch(function () {
-				return null;
+				return [null, null];
 			}).then(function ([h, container]) {
 				readerAssessment.setAssignmentFromStudentProspective(assignment, h);
 				header.setHistory(h, container);
