@@ -300,13 +300,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	setPageInfo: function (pageInfo, bundle, fragment, note) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note));
-			return;
+			return new Promise((fulfill) => {
+				const handle = () => {
+					fulfill(this.setPageInfo(pageInfo, bundle, fragment, note));
+				};
+
+				this.on('afterrender', handle);
+			});
 		}
 
 		if (!this.iframeReady) {
-			this.getIframe().on('iframe-ready', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note), this, {single: true});
-			return;
+			return new Promise((fulfill) => {
+				const handle = () => {
+					fulfill(this.setPageInfo(pageInfo, bundle, fragment, note));
+				};
+
+				this.getIframe().on('iframe-ready', handle, {single: true});
+			});
 		}
 
 		var me = this,
