@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				baseToolbarConfig,
 				{
 					xtype: 'assignment-timedplaceholder',
-					assignment: assignment,
+					assignment: this.assignmentOverride || assignment,
 					startAssignment: this.startTimed.bind(this),
 					flex: 1
 				}
