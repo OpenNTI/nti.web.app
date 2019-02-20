@@ -32,9 +32,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		delete data['attribute-type'];
 		delete data['asDomSpec'];
 
-		if (location && location.currentBundle) {
-			location.currentBundle.getInterfaceInstance()
-				.then(c => this.addWidget(data, c))
+		if (location && location.currentBundle && location.pageInfo) {
+			Promise.all([
+				location.currentBundle.getInterfaceInstance(),
+				location.pageInfo.getInterfaceInstance()
+			])
+				.then(([c, p]) => this.addWidget(data, c, p))
 				.catch(() => this.addWidget(data));
 		} else {
 			this.addWidget(data);
@@ -49,12 +52,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	addWidget (data, contentPackage) {
+	addWidget (data, contentPackage, page) {
+		debugger;
 		this.widget = Ext.widget({
 			xtype: 'react',
 			component: Widgets.EmbeddedWidget,
 			item: data,
 			contentPackage,
+			page,
 			maxWidth: 671,
 			onHeightChange: () => this.onHeightChange(),
 			renderTo: this.containerEl
