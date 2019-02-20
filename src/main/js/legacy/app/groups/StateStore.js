@@ -8,7 +8,7 @@ require('legacy/common/StateStore');
 require('../chat/StateStore');
 
 function syncFriendsList (ext, lib) {
-	ext.set('friends', lib.friends.map(friend => friend.getID()));
+	ext.set('friends', (lib.friends || []).map(friend => friend.getID()));
 	ext.fireEvent('changed', ext);
 }
 
