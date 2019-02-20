@@ -53,7 +53,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 	addWidget (data, contentPackage, page) {
-		debugger;
 		this.widget = Ext.widget({
 			xtype: 'react',
 			component: Widgets.EmbeddedWidget,
