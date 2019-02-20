@@ -240,10 +240,24 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	},
 
 
+	hasInterfaceInstance () {
+		return !!this[INTERFACE_INSTANCE];
+	},
+
+
+	clearInterfaceInstance () {
+		delete this[INTERFACE_INSTANCE];
+	},
+
+
 	getInterfaceInstance () {
+		if (this.doNotAllowInterfaceInstance && this.doNotAllowInterfaceInstance()) {
+			return Promise.resolve(null);
+		}
+
 		const getInstance = async () => {
 			const service = await getService();
-			const instance = service.getObject(this.rawData || this.initialData);
+			const instance = service.getObject(this.updatedRaw || this.rawData || this.initialData);
 
 			return instance;
 		};
@@ -258,6 +272,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 *
 	 * @param  {Model} record the instance to update with
 	 * @param {Boolean} silent do not fire the update event
+	 * @param {Object} refreshInterfaceRaw raw data to update the interface with
 	 * @returns {void}
 	 */
 	syncWith: function (record, silent) {
@@ -285,10 +300,10 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		}
 
 		if (this[INTERFACE_INSTANCE]) {
-			this.getInterfaceInstance()
-				.then((instance) => {
-					instance.refresh(record.rawData);
-				});
+			return this.getInterfaceInstance()
+				.then((instance) =>  instance.refresh(record.rawData))
+				.then(() => this)
+				.catch(() => this);
 		}
 
 		return this;
@@ -297,12 +312,12 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	/**
 	 * Given a response from the server, update my values
 	 *
-	 * @param  {String} response server response
+	 * @param  {[String, Object]} response server response
 	 * @param {Boolean} silent do not fire the update event
 	 * @returns {void}
 	 */
 	syncWithResponse: function (response, silent) {
-		var json = JSON.parse(response),
+		var json = typeof response === 'string' ? JSON.parse(response) : response,
 			newRecord;
 
 		json = {...this.getRaw(), ...json};

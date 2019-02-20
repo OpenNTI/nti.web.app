@@ -267,9 +267,26 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		this.mon(this.assignmentHistoryItemContainer, 'reset-assignment', this.markAssignmentAsReset.bind(this));
 
+		if (AssignmentStatus.hasActions(this.assignmentHistoryItemContainer)) {
+			this.actionsEl.removeCls('disabled');
+		} else {
+			this.actionsEl.addCls('disabled');
+		}
+
+		if (this.assignmentHistoryItemContainer.isPlaceholder) {
+			if (this.attemptSwitcherComponent) {
+				this.attemptSwitcherComponent.setProps({
+					attempts: []
+				});
+			}
+
+			return;
+		}
+
 		this.assignmentHistoryItemContainer.getInterfaceInstance()
 			.then((container) => {
 				const attempts = container.Items
+					.filter(item => !!item.MetadataAttemptItem)
 					.map(item => item.MetadataAttemptItem);
 
 				if (this.attemptSwitcherComponent) {
@@ -370,11 +387,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.gradeBoxEl.hide();
 		}
 
-		if (AssignmentStatus.hasActions(this.historyItem)) {
-			this.actionsEl.removeCls('disabled');
-		} else {
-			this.actionsEl.addCls('disabled');
-		}
 
 		if (status.completed) {
 			if (isNoSubmitAssignment) {
@@ -456,8 +468,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 	changeGrade: function (number, letter) {
-		var me = this,
-			historyItemContainer = this.assignmentHistoryItemContainer;
+		const historyItemContainer = this.assignmentHistoryItemContainer;
 
 		if (!historyItemContainer) {
 			console.error('No assignmentHistory set, cannot change the grade');
@@ -465,13 +476,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 
 		historyItemContainer.saveGrade(number, letter)
-			.then(me.fireEvent.bind(me, 'grade-saved'))
-			.catch(function (reason) {
+			.then(() => this.fireEvent('grade-saved'))
+			.catch((reason) => {
 				console.error('Failed to save Grade:', reason);
 				Error.raiseForReport(reason);
 			})
-			.always(function () {
-				me.setUpGradeBox();
+			.always(() => {
+				this.setupHistoryItemContainer(historyItemContainer);
+				this.setUpGradeBox(this.activeHistoryItem);
 			});
 	},
 
@@ -554,7 +566,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	markAssignmentAsReset: function () {
 		this.excusedEl.removeCls('on');
 		this.excusedEl.addCls('off');
-		this.setUpGradeBox();
+		this.setupHistoryItemContainer(this.assignmentHistoryItemContainer);
+		this.setUpGradeBox(this.activeHistoryItem);
 	},
 
 	openEmail: function (e) {

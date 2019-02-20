@@ -25,24 +25,24 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		return historyItem && historyItem.shouldSaveGrade(value, letter);
 	},
 
+	doNotAllowInterfaceInstance () {
+		return this.isPlaceholder;
+	},
+
 
 	saveGrade: function (value, letter) {
 		const historyItem = this.getMostRecentHistoryItem();
 
-		return historyItem.saveGrade(value, letter, (response) => {
-			const newRaw = {
-				...this.raw,
-				Links: response.Links,
-				NTIID: response.NTIID,
-				OID: response.OID,
-				LastModified: response.LastModified,
-				href: response.href
-			};
-
-			delete newRaw.Items;
+		return historyItem.saveGrade(value, letter, async (response) => {
+			const oldItems = this.get('Items');
 
 			this.isPlaceholder = false;
-			this.set(newRaw);
+
+			try {
+				await this.syncWithResponse(response);
+			} finally {
+				this.set('Items', oldItems);
+			}
 		});
 	},
 
@@ -94,6 +94,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 								if (historyItem) {
 									historyItem.makePlaceholder(record.collection && record.collection.createPlaceholderGrade(record.get('item'), record.get('Creator')));
+									record.set('Items', [historyItem]);
 								} else 	if (record.collection && record.collection.createPlaceholderHistoryItem) {
 									record.set('Items', [
 										record.collection.createPlaceholderHistoryItem(record.get('item'), record.get('Creator'))
@@ -101,7 +102,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 								}
 
 								// trigger re-sync on containerRecord with new history item record so store updates grid
-								record.syncWith(record);
+								record.isPlaceholder = true;
+								record.clearInterfaceInstance();
+								record.syncWith(record, false);
 								record.fireEvent('reset-assignment');
 								return Promise.resolve();
 							}).then(() => {
