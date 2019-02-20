@@ -36,10 +36,6 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.Index', {
 	onRouteActivate () {
 		clearTimeout(this.cleanupTimeout);
 		this.setTitle('Course Administration');
-
-		if(this.siteAdminTools) {
-			this.siteAdminTools.el.mask('Loading...');
-		}
 	},
 
 	onRouteDeactivate () {
