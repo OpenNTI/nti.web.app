@@ -231,7 +231,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 
 		return this.assignment.getLatestAttempt()
-			.then(attempt => attempt.getHistoryItem())
+			.then(attempt => {
+				if (attempt) {
+					return attempt.getHistoryItem();
+				}
+
+				return this.assignment.getHistory();
+			})
 			.catch(() => this.assignmentHistory);
 	},
 
