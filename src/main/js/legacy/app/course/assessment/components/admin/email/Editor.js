@@ -360,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						me.handleNoReplyMenuClick(item, item.up('.menu'));
 					}
 				},
-				width: 120,
+				width: 200,
 				items: scopes.map(scope => ({
 					text: me.RECEIVER_MAP[scope] || scope,
 					scope,
