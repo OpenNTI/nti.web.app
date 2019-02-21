@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Panels} = require('@nti/web-commons');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -10,6 +11,7 @@ const CommunityHeadlinePost = require('legacy/model/forums/CommunityHeadlinePost
 const AnalyticsUtil = require('legacy/util/Analytics');
 const {isFeature} = require('legacy/util/Globals');
 
+require('legacy/overrides/ReactHarness');
 require('legacy/app/windows/components/Header');
 require('legacy/app/windows/components/Loading');
 require('legacy/app/windows/Actions');
@@ -236,6 +238,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			Ext.destroy(topicCmp);
 			Ext.destroy(commentCmp);
 			Ext.destroy(controlCmp);
+		}
+
+		if (!topic && forum.get('EmailNotifications')) {
+			me.add({
+				xtype: 'react',
+				component: Panels.MessageBar,
+				message: 'Topic created in this forum will notify the community.',
+				iconCls: 'icon-bell'
+			});
 		}
 
 		editor = me.add({xtype: 'forums-topic-editor', record: topic, forum: forum});

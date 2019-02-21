@@ -1293,6 +1293,11 @@
 
 .topic-window {
 	-webkit-font-smoothing: antialiased;
+
+	.panels-message-bar {
+		padding: 8px 15px;
+	}
+
 	.topic-post, .forum-comment-thread {
 		position: relative;
 		margin-top: 0;

@@ -9,7 +9,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	cls: 'community-topics',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		tag: 'li', cls: 'topic{[values.cls ? " " + values.cls : ""]}', 'data-route': '{route}', 'data-count': '{count}', html: '{label}'
+		tag: 'li',
+		cls: 'topic{[values.cls ? " " + values.cls : ""]}',
+		'data-route': '{route}',
+		'data-count': '{count}',
+		cn: [
+			{tag: 'span', html: '{label}'},
+			{tag: 'tpl', 'if': 'emails', cn: [
+				{tag: 'i', cls: 'icon-bell'}
+			]}
+		]
 	})),
 
 	renderTpl: Ext.DomHelper.markup([
@@ -72,7 +81,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 						cls: id === activeForum ? 'active' : '',
 						route: id,
 						count: 0,
-						label: forum.get('title')
+						label: forum.get('title'),
+						emails: forum.hasLink('add') && forum.get('EmailNotifications')
 					});
 				});
 			})

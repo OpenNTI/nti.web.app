@@ -34,7 +34,8 @@ module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 		{ name: 'TopicCount', type: 'int', persist: false },
 		{ name: 'NewestDescendant', type: 'singleitem' },
 		{ name: 'NewestDescendantCreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultVale: new Date() },
-		{ name: 'ACL', type: 'auto'}
+		{ name: 'ACL', type: 'auto'},
+		{ name: 'EmailNotifications', type: 'bool'}
 	],
 
 	buildContentsStore: function (idSuffix, cfg, extraParams) {
