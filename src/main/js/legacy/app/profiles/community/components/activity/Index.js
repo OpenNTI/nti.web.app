@@ -350,7 +350,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.isLoading = false;
-		this.newPostCmp.show();
+
+		if (this.postContainer && this.postContainer.hasLink('add')) {
+			this.newPostCmp.show();
+		}
 
 		//if we have items
 		if (batch.ItemCount) {
