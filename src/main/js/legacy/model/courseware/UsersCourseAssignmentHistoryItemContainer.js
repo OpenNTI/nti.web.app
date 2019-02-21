@@ -35,13 +35,19 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 		return historyItem.saveGrade(value, letter, async (response) => {
 			const oldItems = this.get('Items');
+			const oldItem = this.get('item');
+			const oldId = this.get('AssignmentId');
 
 			this.isPlaceholder = false;
 
 			try {
 				await this.syncWithResponse(response);
 			} finally {
-				this.set('Items', oldItems);
+				this.set({
+					Items: oldItems,
+					item: oldItem,
+					AssignmentId: oldId
+				});
 			}
 		});
 	},
