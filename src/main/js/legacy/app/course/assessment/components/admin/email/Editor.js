@@ -110,6 +110,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.saveButtonEl.setHTML(' Send Email');
 		this.mon(this.replyScopeEl, 'click', this.replyPickerClicked.bind(this));
 		this.mon(this.replyCheckBoxEl, 'click', this.replyCheckboxClicked.bind(this));
+
+		if (!this.hasScopeChoices()) {
+			this.replyScopeEl.removeCls('arrow');
+		}
 	},
 
 	setupTitleField: function () {
@@ -166,16 +170,28 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			this.receiverEl.setHTML(this.RECEIVER_MAP[scope] || scope);
 			this.receiverEl.addCls('group');
 			this.receiverEl.addCls('link');
-			this.receiverEl.addCls('arrow');
+			this.hasScopeChoices() && this.receiverEl.addCls('arrow'); // omit arrow if it's not a select
 
 			this.currentScope = scope;
 			this.createReceiverScopePicker();
 		}
 	},
 
+	getScopes () {
+		return ((this.record && this.record.get('scopes')) || this.DEFAULT_SCOPES);
+	},
+
+	hasScopeChoices () {
+		return this.getScopes().length > 1;
+	},
+
 	createReceiverScopePicker: function () {
-		const scopes = (this.record && this.record.get('scopes')) || this.DEFAULT_SCOPES;
-		console.log(scopes);
+		const scopes = this.getScopes();
+
+		if (scopes.length < 2) {
+			return;
+		}
+
 		var me = this,
 			menu =
 				Ext.widget('menu', {
