@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {Panels} = require('@nti/web-commons');
+const {Forums} = require('@nti/web-discussions');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -243,9 +243,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		if (!topic && forum.get('EmailNotifications')) {
 			me.add({
 				xtype: 'react',
-				component: Panels.MessageBar,
-				message: 'Creating a topic in this forum will notify the community.',
-				iconCls: 'icon-bell'
+				component: Forums.EmailNotificationBar
 			});
 		}
 
