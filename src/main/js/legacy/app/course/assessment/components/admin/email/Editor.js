@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		All: 'All Students',
 		Open: 'Open Students',
 		Public: 'Open Students',
-		ForCredit: 'For Credit',
+		ForCredit: 'Enrolled Students',
 		ForCreditDegree: 'For Credit (degree)',
 		ForCreditNonDegree: 'For Credit (non-degree)',
 		Purchased: 'Purchased'
