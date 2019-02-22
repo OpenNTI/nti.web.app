@@ -244,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			me.add({
 				xtype: 'react',
 				component: Panels.MessageBar,
-				message: 'Topic created in this forum will notify the community.',
+				message: 'Creating a topic in this forum will notify the community.',
 				iconCls: 'icon-bell'
 			});
 		}
