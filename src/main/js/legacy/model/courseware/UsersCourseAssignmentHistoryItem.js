@@ -181,16 +181,26 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 			const containerLink = this.getLink('HistoryItemContainer');
 			const historyItem = await this.resolveFullItem();
 
+			let grade = historyItem.get('Grade');
+
+			if (grade && this.collection && this.collection.GradeCache) {
+				grade = this.collection.GradeCache.getRecord(grade);
+			}
+
 			const containerRaw = await Service.request(containerLink);
 			const container = lazy.ParseUtils.parseItems([containerRaw])[0];
+
 
 			container.set({
 				item: this.get('item'),
 				Items: (container.get('Items') || []).map((item) => {
 					if (item.getId() === historyItem.getId()) {
+						historyItem.set('Grade', grade);
+
 						return historyItem;
 					}
 
+					item.set('Grade', grade);
 					return item;
 				})
 			});
