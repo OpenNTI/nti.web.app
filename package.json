@@ -81,6 +81,7 @@
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-test-renderer": "^16.2.0",
+    "vtt.js": "^0.13.0",
     "xregexp": "4.2.0"
   }
 }
