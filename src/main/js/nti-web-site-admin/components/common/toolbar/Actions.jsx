@@ -49,6 +49,7 @@ export default class Actions extends React.Component {
 						return this.renderAction(action, clickHandler);
 					})}
 				</div>
-			</Flyout.Triggered>);
+			</Flyout.Triggered>
+		);
 	}
 }

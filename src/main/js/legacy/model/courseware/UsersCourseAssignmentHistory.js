@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 
 require('../Base');
 require('./Grade');
-const UsersCourseAssignmentHistoryItem = require('./UsersCourseAssignmentHistoryItem');
 require('./UsersCourseAssignmentHistoryItemFeedback');
 require('./UsersCourseAssignmentHistoryItemFeedbackContainer');
 

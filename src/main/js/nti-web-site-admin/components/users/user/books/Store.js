@@ -1,13 +1,18 @@
 import {getService} from '@nti/web-client';
 import {Stores} from '@nti/lib-store';
+import Logger from '@nti/util-logger';
+
+const logger =  Logger.get('site-admin:components:user:books:store');
 
 export default class UserBookStore extends Stores.SimpleStore {
 	constructor () {
 		super();
 
-		this.set('items', []);
-		this.set('loading', false);
-		this.set('error', null);
+		this.set({
+			items: [],
+			loading: false,
+			error: null
+		});
 	}
 
 	get error () {
@@ -38,21 +43,15 @@ export default class UserBookStore extends Stores.SimpleStore {
 			} else {
 				this.set('items', []);
 			}
-
-			this.emitChange('items');
 		} catch (e) {
-			console.log(e);
+			logger.error(e);
 			this.set('error', e);
-			this.emitChange('error');
 		} finally {
 			this.set('loading', false);
-			this.emitChange('loading');
 		}
 	}
 
-
 	unloadBooks () {
 		this.set('items', []);
-		this.emitChange('items');
 	}
 }

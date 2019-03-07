@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const {getService} = require('@nti/web-client');
 const {List} = require('@nti/web-reports');
 
 require('legacy/overrides/ReactHarness.js');

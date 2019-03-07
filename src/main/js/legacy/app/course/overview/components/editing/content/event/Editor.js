@@ -5,7 +5,6 @@ const {getService} = require('@nti/web-client');
 const CalendarEventRef = require('legacy/model/calendar/CalendarEventRef');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
 
-const ContentlinkEditor = require('../contentlink/types/URL');
 require('../../Editor');
 require('legacy/app/course/assessment/components/CreateMenu');
 

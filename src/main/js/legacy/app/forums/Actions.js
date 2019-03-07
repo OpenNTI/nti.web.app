@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { getService } = require('@nti/web-client');
 
 const UserdataActions = require('legacy/app/userdata/Actions');
 const UserdataStateStore = require('legacy/app/userdata/StateStore');
@@ -8,7 +7,6 @@ const Post = require('legacy/model/forums/Post');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const {isMe} = require('legacy/util/Globals');
-const CommunityForum = require('legacy/model/forums/CommunityForum');
 
 const ForumStore = require('./StateStore');
 
