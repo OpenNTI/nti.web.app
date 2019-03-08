@@ -1,14 +1,17 @@
 const Ext = require('@nti/extjs');
 const {Overview} = require('@nti/web-course');
 
+const {Modal} = require('nti-web-app-lesson-items');
 const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
 
-const { ROUTE_BUILDERS } = require('./Constants');
+const { ROUTE_BUILDERS, MODAL_ROUTE_BUILDERS } = require('./Constants');
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
+
+const useModal = true;
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	extend: 'Ext.container.Container',
@@ -102,22 +105,42 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	getRouteFor (object, context) {
-		const builder = ROUTE_BUILDERS[object.MimeType];
+		const builder = useModal ?
+			(MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']) :
+			(ROUTE_BUILDERS[object.MimeType]);
 
 		return builder ? builder(this.bundle, this.currentOutlineNode, object, context) : null;
 	},
 
+
+	getRouteForModal (object, context) {
+		return this.getRouteFor(object, context);
+	},
+
 	onRouteDeactivate () {
-		this.currentOverview.onRouteDeactivate();
+		if (this.deactivating) { return; }
+
+		this.deactivating = true;
+		this.deactivateTimeout = setTimeout(() => {
+			if (this.currentOverview) {
+				this.currentOverview.onRouteDeactivate();
+			}
+
+			delete this.deactivating;
+		}, 100);
 	},
 
 	onRouteActivate () {
-		if (this.currentOverview) {
+		if (this.deactivating) {
+			clearTimeout(this.deactivateTimeout);
+		} else if (this.currentOverview) {
 			this.currentOverview.onRouteActivate();
 		}
 	},
 
-	async renderLesson (record, doNotCache) {
+	async renderLesson (record, doNotCache, subRoute) {
+		this.maybeShowContentPager(record, subRoute);
+
 		try {
 			this.buildingOverview = true;
 
@@ -132,8 +155,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.activeRecord = record;
 
 			const course = await this.bundle.getInterfaceInstance();
-
-			this.removeAll(true);
 
 			this.currentOverview = this.add({
 				xtype: 'react',
@@ -166,89 +187,33 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		} catch (e) {
 			console.error(e);
 		}
-
-		// var me = this,
-		// 	course = me.bundle,
-		// 	overviewsrc = (record && record.getLink('overview-content')) || null;
-
-		// if (!record || !course) {
-		// 	//show empty state?
-		// 	console.warn('Nothing?', record, course);
-		// 	return;
-		// }
-
-		// me.currentNode = record;
-		// me.currentPage = record.getId();
-		// me.buildingOverview = true;
-		// me.maybeMask();
-
-		// me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
-		// me.__getCurrentCounts = record.getCommentCounts ? record.getCommentCounts.bind(record) : null;
-
-		// if (me.currentOverview && me.currentOverview.record.getId() === record.getId() && !doNotCache) {
-		// 	if (me.currentOverview.refresh) {
-		// 		return me.currentOverview.refresh()
-		// 			.then(me.__updateProgress.bind(me))
-		// 			.then(me.__updateCounts.bind(me))
-		// 			.always(me.maybeUnmask.bind(me));
-		// 	}
-
-		// 	me.maybeUnmask();
-
-		// 	return Promise.resolve();
-		// }
-
-		// me.removeAll(true);
-
-		// return this.getInfo(record, course, overviewsrc)
-		// 	.then(function (results) {
-		// 		var assignments = results[0],
-		// 			enrollment = results[1],
-		// 			//Just use the first one for now
-		// 			locInfo = results[2][0],
-		// 			videoIndex = results[3];
-
-		// 		//Make sure we haven't changed what record to show before
-		// 		//this finished
-		// 		if (me.currentPage !== record.getId()) {
-		// 			return;
-		// 		}
-
-		// 		if (!overviewsrc) {
-		// 			me.currentOverview = me.add({
-		// 				xtype: 'overview-types-toc',
-		// 				record: record,
-		// 				locInfo: locInfo,
-		// 				assignments: assignments,
-		// 				enrollment: enrollment,
-		// 				course: course,
-		// 				videoIndex: videoIndex,
-		// 				navigate: me.navigate.bind(me)
-		// 			});
-
-		// 			return;
-		// 		}
-
-		// 		me.currentOverview = me.add({
-		// 			xtype: 'overview-types-content',
-		// 			record: record,
-		// 			locInfo: locInfo,
-		// 			assignments: assignments,
-		// 			enrollment: enrollment,
-		// 			course: course,
-		// 			navigate: me.navigate.bind(me)
-		// 		});
-
-
-		// 		me.currentOverview.loadCollection(overviewsrc);
-
-		// 		return me.currentOverview.onceLoaded();
-		// 	})
-		// 	.catch(function (reason) { console.error(reason); })
-		// 	.then(me.__updateProgress.bind(me))
-		// 	.then(me.__updateCounts.bind(me))
-		// 	.then(me.maybeUnmask.bind(me));
 	},
+
+
+	async maybeShowContentPager (record, subRoute) {
+		if (!this.itemFlyout) {
+			this.itemFlyout = this.add({
+				xtype: 'react',
+				component: Modal,
+				getRouteFor: this.getRouteForModal.bind(this),
+				addHistory: true
+			});
+		}
+
+		try {
+			const course = await this.bundle.getInterfaceInstance();
+			const lesson = record.get('ContentNTIID');
+
+			this.itemFlyout.setProps({
+				course,
+				lesson,
+				path: subRoute
+			});
+		} catch (e) {
+			console.error(e);
+		}
+	},
+
 
 	navigate: function (obj) {
 		obj.parent = this.currentNode;

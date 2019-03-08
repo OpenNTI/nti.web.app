@@ -3,6 +3,7 @@ Ext.Loader.setConfig({enabled: false});
 
 const {getURL, validateConfig, loadScript} = require('./util/Globals');
 
+require('@nti/style-common/variables.css');
 require('./util/Localization');
 require('./overrides');
 require('./model');

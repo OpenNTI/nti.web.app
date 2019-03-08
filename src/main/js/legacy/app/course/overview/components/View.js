@@ -376,7 +376,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	showOutlineNode: function (route/*, subRoute*/) {
+	showOutlineNode: function (route, subRoute) {
 		const bundle = this.currentBundle;
 		if (this.editingMap && this.editingMap[bundle.getId()]) {
 			this.replaceRoute('Editing', '/edit');
@@ -408,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				this.setTitle(selectedRecord.get('label'));
 				this.activeNode = selectedRecord;
 
-				return this.body.showOutlineNode(selectedRecord, changedEditing)
+				return this.body.showOutlineNode(selectedRecord, changedEditing, subRoute)
 					.then(() => this.alignNavigation())
 					.then(() => selectedRecord);
 			});

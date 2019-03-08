@@ -22,6 +22,16 @@ function getAssessmentRoute (course, lesson, obj) {
 	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(target)}/`;
 }
 
+function getOverviewPart (obj) {
+	return encodeForURI(obj['Target-NTIID'] || obj['target-NTIID'] || obj.getID());
+}
+
+const MODAL_ROUTE_BUILDERS = {
+	'default': (course, lesson, obj) => {
+		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lesson)}/items/${getOverviewPart(obj)}`;
+	}
+};
+
 const ROUTE_BUILDERS = {
 	'application/vnd.nextthought.ntivideo': (course, lesson, obj) => {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/video/${getURLPart(obj)}/`;
@@ -79,5 +89,6 @@ const ROUTE_BUILDERS = {
 };
 
 module.exports = exports = {
-	ROUTE_BUILDERS
+	ROUTE_BUILDERS,
+	MODAL_ROUTE_BUILDERS
 };

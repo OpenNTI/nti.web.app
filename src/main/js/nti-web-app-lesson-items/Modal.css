@@ -1,0 +1,14 @@
+.nti-web-app-lesson-items-modal {
+	justify-content: flex-start;
+	padding: 20px 0 100px 0;
+	top: 70px;/*height of the header*/
+}
+
+.nti-web-app-lesson-items-modal :global(.modal-content) {
+	width: 100vw;
+	max-width: 994px;
+}
+
+:global(html.msg-bar-open) .nti-web-app-lesson-items-modal {
+	top: 110px;/*height of the header with a message */
+}

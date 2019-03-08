@@ -244,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.outlineInterface = outlineInterface;
 	},
 
-	showOutlineNode: function (record, doNotCache) {
+	showOutlineNode: function (record, doNotCache, subRoute) {
 		var lesson = this.getLesson(true),
 			editor = this.getEditor(),
 			emptyState = this.getEmptyState();
@@ -259,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		lesson.show();
 
-		return lesson.renderLesson(record, doNotCache);
+		return lesson.renderLesson(record, doNotCache, subRoute);
 	},
 
 	editOutlineNode: function (record) {
