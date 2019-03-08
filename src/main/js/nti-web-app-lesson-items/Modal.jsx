@@ -39,6 +39,7 @@ export default class NTIWebAppLessonItems extends React.Component {
 	static propTypes = {
 		course: PropTypes.object,
 		lesson: PropTypes.string,
+		dismissPath: PropTypes.string,
 		path: PropTypes.string
 	}
 
@@ -66,8 +67,9 @@ export default class NTIWebAppLessonItems extends React.Component {
 		});
 	}
 
+
 	render () {
-		const {course, lesson} = this.props;
+		const {course, lesson, dismissPath} = this.props;
 		const {selection} = this.state;
 
 		if (!selection || !course || !lesson) {
@@ -76,7 +78,7 @@ export default class NTIWebAppLessonItems extends React.Component {
 
 		return (
 			<Prompt.Dialog className={cx('nti-web-app-lesson-items-modal')}>
-				<Content.Pager course={course} lesson={lesson} selection={selection} />
+				<Content.Pager course={course} lesson={lesson} selection={selection} dismissPath={dismissPath} />
 			</Prompt.Dialog>
 		);
 	}

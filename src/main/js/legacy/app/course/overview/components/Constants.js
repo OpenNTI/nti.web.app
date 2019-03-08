@@ -27,8 +27,14 @@ function getOverviewPart (obj) {
 }
 
 const MODAL_ROUTE_BUILDERS = {
-	'default': (course, lesson, obj) => {
-		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lesson)}/items/${getOverviewPart(obj)}`;
+	'dismiss': (course, lesson) => {
+		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lesson)}/`;
+	},
+
+	'default': (course, lesson, obj, context) => {
+		const {lesson:lessonOverride} = context || {};
+
+		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}/items/${getOverviewPart(obj)}`;
 	}
 };
 

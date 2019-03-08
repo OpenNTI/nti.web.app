@@ -207,6 +207,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.itemFlyout.setProps({
 				course,
 				lesson,
+				baseroute: '/',
+				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, record),
 				path: subRoute
 			});
 		} catch (e) {
