@@ -1,0 +1,19 @@
+.loading-container {
+	min-height: 200px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.reading-view :global(.content-toolbar) {
+	display: none;
+}
+
+.reading-view :global(.content-viewer) {
+	padding: 0 0 20px;
+}
+
+.reading-view :global(.reader-container.navigation-panel .center .x-reader-pane) {
+	margin-top: 0;
+}

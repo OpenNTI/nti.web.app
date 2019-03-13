@@ -194,7 +194,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		var me = this,
 			location = me.reader.getLocation(),
 			pageId = location.NTIID,
-			readerRect = me.reader.getAnnotationOffsets().rect, left,
+			annotationOffsets = me.reader.getAnnotationOffsets(),
+			readerRect = annotationOffsets.rect, left,
 			currentBundle = location.currentBundle,
 			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			tabPanel = me.getTabPanel(),
@@ -232,6 +233,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 					'deactivated-editor': 'destroy',
 					'no-title-content': function () {return true;},//require title if notepad is a feature
 					grew: function () {
+						if (!annotationOffsets.isBodyScroll) {
+							return;
+						}
+
 						if (Ext.is.iPad) {
 							return;
 						}
@@ -257,6 +262,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 			//20 px left of the right side of the reader
 			left = readerRect.right - 20;
+
+			if (!annotationOffsets.isBodyScroll) {
+				top += annotationOffsets.scrollTop - annotationOffsets.viewTop;
+			}
 
 			editorWidth = me.editor.getWidth();
 
@@ -365,6 +374,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 	},
 
 	noteHereEvent: function (range, rect, style, top) {
+		debugger;
 		this.data.box.activeLineInfo = Ext.apply(
 			{style: style},
 			this.lineInfoForRangeAndRect(range, rect));

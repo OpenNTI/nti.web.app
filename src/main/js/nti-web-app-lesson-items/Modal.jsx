@@ -6,6 +6,7 @@ import {Content} from '@nti/web-course';
 import {decodeFromURI} from '@nti/lib-ntiids';
 
 import Styles from './Modal.css';
+import overrides from './overrides';
 
 const cx = classnames.bind(Styles);
 
@@ -78,7 +79,14 @@ export default class NTIWebAppLessonItems extends React.Component {
 
 		return (
 			<Prompt.Dialog className={cx('nti-web-app-lesson-items-modal')}>
-				<Content.Pager course={course} lesson={lesson} selection={selection} dismissPath={dismissPath} />
+				<Content.Pager
+					course={course}
+					lesson={lesson}
+					selection={selection}
+
+					dismissPath={dismissPath}
+					overrides={overrides}
+				/>
 			</Prompt.Dialog>
 		);
 	}

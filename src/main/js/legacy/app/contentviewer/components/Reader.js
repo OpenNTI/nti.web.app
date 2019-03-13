@@ -214,6 +214,36 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return this.fireEvent('allow-custom-scrolling');
 	},
 
+	getScrollParent () {
+		if (!this.rendered) { return null; }
+
+		function getScrollParent (node) {
+			if (node == null) {
+				return null;
+			}
+
+			if (node.scrollHeight > node.clientHeight) {
+				return node;
+			} else {
+				return getScrollParent(node.parentNode);
+			}
+		}
+
+		const scrollParent = getScrollParent(this.el.dom);
+
+		return scrollParent ? Ext.get(scrollParent) : Ext.getBody();
+	},
+
+
+	getViewTop () {
+		const view = document.getElementById('view');
+
+		if (!view) { return 0; }
+
+		return view.getBoundingClientRect().top;
+	},
+
+
 	calculateNecessaryAnnotationOffsets: function () {
 		var cache = this.annotationOffsetsCache || {},
 			windowSizeStatics = cache.windowSizeStatics || {},
@@ -221,7 +251,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			currentWindowSize = Ext.dom.Element.getViewSize(),
 			f = this.getIframe().get(),
 			//since the body is scrolling now get its scroll top
-			scrollPosition = Ext.getBody().getScroll().top;
+			scrollParent = this.getScrollParent(),
+			scrollPosition = scrollParent.getScroll().top;
 
 		//Other things are based on the windowSize. left and height
 		if (!windowSizeStatics.hasOwnProperty('windowSize') ||
@@ -251,7 +282,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			top: scrollStatics.top, //static by scroll position
 			left: windowSizeStatics.left, //static based on window size
 			scrollTop: scrollPosition, //dynamic
-			rect: this.el && this.el.dom && this.el.dom.getBoundingClientRect()
+			rect: this.el && this.el.dom && this.el.dom.getBoundingClientRect(),
+			isBodyScroll: scrollParent === Ext.getBody(),
+			viewTop: this.getViewTop()
 		};
 	},
 

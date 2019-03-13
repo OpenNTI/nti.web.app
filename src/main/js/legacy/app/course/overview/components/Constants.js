@@ -22,7 +22,15 @@ function getAssessmentRoute (course, lesson, obj) {
 	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(target)}/`;
 }
 
-function getOverviewPart (obj) {
+function getOverviewPart (obj, context) {
+	if (obj.isTableOfContentsNode) {
+		const {relatedWorkRef} = context;
+
+		return relatedWorkRef ?
+			`${getOverviewPart(relatedWorkRef)}/${obj.getID()}` :
+			`${obj.getID()}`;
+	}
+
 	return encodeForURI(obj['Target-NTIID'] || obj['target-NTIID'] || obj.getID());
 }
 
@@ -34,7 +42,7 @@ const MODAL_ROUTE_BUILDERS = {
 	'default': (course, lesson, obj, context) => {
 		const {lesson:lessonOverride} = context || {};
 
-		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}/items/${getOverviewPart(obj)}`;
+		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}/items/${getOverviewPart(obj, context)}`;
 	}
 };
 

@@ -1,0 +1,14 @@
+.note-list {
+	position: sticky;
+	top: -18px;
+}
+
+.note-list :global(ul) {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.note-list :global(li:not(:last-of-type)) {
+	margin: 0 0 2px;
+}

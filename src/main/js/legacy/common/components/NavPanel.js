@@ -55,6 +55,10 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 
 		Ext.EventManager.onWindowResize(me.alignNavigation, me, false);
 
+		if (this.contentOnly) {
+			this.addCls('content-only');
+		}
+
 		this.on('destroy', function () {
 			Ext.EventManager.removeResizeListener(me.alignNavigation, me);
 		});

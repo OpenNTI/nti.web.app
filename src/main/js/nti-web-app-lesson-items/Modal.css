@@ -1,12 +1,20 @@
 .nti-web-app-lesson-items-modal {
 	justify-content: flex-start;
-	padding: 20px 0 100px 0;
+	padding: 20px 0;
 	top: 70px;/*height of the header*/
+
+	--course-content-viewer-header-position: sticky;
+	--course-content-viewer-header-top: -20px;
 }
 
 .nti-web-app-lesson-items-modal :global(.modal-content) {
 	width: 100vw;
 	max-width: 994px;
+	max-height: initial;
+}
+
+.nti-web-app-lesson-items-modal :global(.nti-course-content > div) {
+	padding-bottom: 40px;
 }
 
 :global(html.msg-bar-open) .nti-web-app-lesson-items-modal {

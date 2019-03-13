@@ -123,24 +123,30 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		this.UserDataActions.initPageStores(this);
 
 		toolbarConfig.isReaderToolBar = true;
+		toolbarConfig.contentOnly = this.contentOnly;
 
 		this.body.add([
 			toolbarConfig,
 			readerConfig
 		]);
 
-		this.navigation.setActiveTab(this.navigation.add(
-			{
-				title: 'Discussion',
-				iconCls: 'discuss',
-				xtype: 'annotation-view',
-				discussion: true,
-				store: this.flatPageStore,
-				showNote: this.showNote.bind(this)
-			}
-		));
+		if (this.contentOnly) {
+			this.navigation.hide();
+		} else {
+			this.navigation.setActiveTab(this.navigation.add(
+				{
+					title: 'Discussion',
+					iconCls: 'discuss',
+					xtype: 'annotation-view',
+					discussion: true,
+					store: this.flatPageStore,
+					showNote: this.showNote.bind(this)
+				}
+			));
+		}
 
 
+		const annotationView = this.down('annotation-view');
 		readerContent = this.getReaderContent();
 
 		this.mon(this.flatPageStore, 'bookmark-loaded', function (r) {
@@ -158,7 +164,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 				'sync-height': this.alignNavigation.bind(this),
 				'refresh-reader': this.showReader.bind(this)
 			});
-			this.down('annotation-view').anchorComponent = readerContent;
+
+			if (annotationView) {
+				annotationView.anchorComponent = readerContent;
+			}
 		}
 
 		this.pageInfoOverride = readerConfig.pageInfo;

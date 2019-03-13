@@ -453,10 +453,9 @@
 
 
 
-
-
-
-
+body .modal ~ .simple-popover-widget {
+	z-index: 1100;
+}
 
 .simple-popover-widget {
 	position: fixed;

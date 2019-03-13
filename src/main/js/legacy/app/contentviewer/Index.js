@@ -80,6 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			bundle: config.bundle,
 			handleNavigation: config.handleNavigation,
 			navigateToObject: config.navigateToObject,
+			contentOnly: config.contentOnly,
 			fragment: config.fragment,
 			note: config.note,
 			rootRoute: config.rootRoute,
