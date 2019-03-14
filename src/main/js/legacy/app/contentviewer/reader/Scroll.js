@@ -17,6 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 			scroll = me.menuHideOnScroll.bind(me);
 
 		function afterReaderRenders () {
+			me.scrollingElOverride = reader.getScrollParent();
 			me.scrollingEl = Ext.get(ScrollingUtils.getPageScrollingEl());
 			reader.on('destroy', 'destroy',
 				reader.relayEvents(me.scrollingEl, [
@@ -237,6 +238,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	},
 
 	to: function (top, animate) {
+		const scrollOverride = this.reader.getScrollParent();
+
+		if (scrollOverride && scrollOverride !== this.scrollingEl) {
+			scrollOverride.scrollTo('top', top, animate !== false);
+		}
+
 		if (!this.scrollingEl || !this.scrollingEl.dom) {
 			return;
 		}
