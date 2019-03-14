@@ -22,6 +22,11 @@ const {Aside} = Layouts;
 const DATA_ATTR = 'data-reading-content-placeholder';
 const PLACEHOLDER_TPL = `<div ${DATA_ATTR}></div>`;
 
+const MIME_TYPES = {
+	'application/vnd.nextthought.ltiexternaltoolasset': true,
+	'application/vnd.nextthought.relatedworkref': true
+};
+
 const handles = (obj) => {
 	const {location} = obj || {};
 
@@ -33,7 +38,7 @@ const handles = (obj) => {
 		return true;
 	}
 
-	return item && item.MimeType === 'application/vnd.nextthought.relatedworkref';
+	return item && MIME_TYPES[item.MimeType] ;
 };
 
 export default

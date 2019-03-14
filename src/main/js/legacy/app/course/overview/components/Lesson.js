@@ -139,8 +139,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	async renderLesson (record, doNotCache, subRoute) {
-		this.maybeShowContentPager(record, subRoute);
-
 		try {
 			this.buildingOverview = true;
 
@@ -190,25 +188,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	async maybeShowContentPager (record, subRoute) {
+	async maybeShowContent (lesson, route, subRoute) {
 		if (!this.itemFlyout) {
 			this.itemFlyout = this.add({
 				xtype: 'react',
 				component: Modal,
 				getRouteFor: this.getRouteForModal.bind(this),
-				addHistory: true
+				addHistory: true,
+				baseroute: '/'
 			});
 		}
 
 		try {
 			const course = await this.bundle.getInterfaceInstance();
-			const lesson = record.get('ContentNTIID');
 
 			this.itemFlyout.setProps({
 				course,
 				lesson,
-				baseroute: '/',
-				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, record),
+				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, lesson),
 				path: subRoute
 			});
 		} catch (e) {

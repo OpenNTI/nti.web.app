@@ -13,7 +13,7 @@
 	max-height: initial;
 }
 
-.nti-web-app-lesson-items-modal :global(.nti-course-content > div) {
+.nti-web-app-lesson-items-modal :global(.nti-course-content > section) {
 	padding-bottom: 40px;
 }
 

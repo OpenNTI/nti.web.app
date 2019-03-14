@@ -244,6 +244,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.outlineInterface = outlineInterface;
 	},
 
+	maybeShowContent (id, route, subRoute) {
+		const lesson = this.getLesson(true);
+
+		return lesson.maybeShowContent(id, route, subRoute);
+	},
+
 	showOutlineNode: function (record, doNotCache, subRoute) {
 		var lesson = this.getLesson(true),
 			editor = this.getEditor(),

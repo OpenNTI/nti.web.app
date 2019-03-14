@@ -393,6 +393,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		delete this.isEditing;
 
+		this.body.maybeShowContent(id, route, subRoute);
+
 		return this.__getRecord(id, route.precache.outlineNode, false, changedEditing)
 			.then(record => {
 				this.unmask();

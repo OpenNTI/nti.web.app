@@ -16,8 +16,7 @@ async function resolvePageInfo (page, course) {
 
 		return BaseModel.interfaceToModel(pageInfo);
 	} catch (e) {
-
-		return page;
+		return BaseModel.interfaceToModel(page);
 	}
 }
 

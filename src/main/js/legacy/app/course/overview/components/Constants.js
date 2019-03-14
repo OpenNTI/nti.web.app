@@ -36,7 +36,11 @@ function getOverviewPart (obj, context) {
 
 const MODAL_ROUTE_BUILDERS = {
 	'dismiss': (course, lesson) => {
-		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lesson)}/`;
+		const lessonId = typeof lesson === 'string' ?
+			encodeForURI(lesson) :
+			getURLPart(lesson);
+
+		return `/app/course/${getURLPart(course)}/lessons/${lessonId}/`;
 	},
 
 	'default': (course, lesson, obj, context) => {
