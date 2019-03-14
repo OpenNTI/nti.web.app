@@ -4,7 +4,7 @@ import {getService} from '@nti/web-client';
 import BaseModel from 'legacy/model/Base';
 
 async function resolvePageInfo (page, course) {
-	const id = page['target-NTIID'] || page.getID();
+	const id = page['target-NTIID'] || page['Target-NTIID'] || page.getID();
 
 	try {
 		const service = await getService();

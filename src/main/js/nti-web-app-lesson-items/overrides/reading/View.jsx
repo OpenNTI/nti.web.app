@@ -24,7 +24,8 @@ const PLACEHOLDER_TPL = `<div ${DATA_ATTR}></div>`;
 
 const MIME_TYPES = {
 	'application/vnd.nextthought.ltiexternaltoolasset': true,
-	'application/vnd.nextthought.relatedworkref': true
+	'application/vnd.nextthought.relatedworkref': true,
+	'application/vnd.nextthought.questionsetref': true
 };
 
 const handles = (obj) => {
