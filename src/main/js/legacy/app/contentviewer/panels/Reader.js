@@ -218,7 +218,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		}
 
 		center.setStyle({
-			'min-height': (height - 72) + 'px'
+			'min-height': this.contentOnly ?
+				'calc(10vh + 10rem)' :
+				`${height - 72}px`
 		});
 	},
 
