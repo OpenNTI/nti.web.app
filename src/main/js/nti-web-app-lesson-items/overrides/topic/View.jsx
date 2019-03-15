@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Loading} from '@nti/web-commons';
+import {Loading, Layouts} from '@nti/web-commons';
 import {rawContent} from '@nti/lib-commons';
 
 import TopicViewer from 'legacy/app/forums/components/topic/Window';
@@ -8,6 +8,9 @@ import TopicViewer from 'legacy/app/forums/components/topic/Window';
 import Registry from '../Registry';
 
 import Store from './Store';
+import ActiveUsers from './ActiveUsers';
+
+const {Aside} = Layouts;
 
 const DATA_ATTR = 'data-topic-content-placeholder';
 const PLACEHOLDER_TPL = `<div ${DATA_ATTR}></div>`;
@@ -25,7 +28,7 @@ const handles = (obj) => {
 
 export default
 @Registry.register(handles)
-@Store.connect(['loading', 'error', 'topicModel'])
+@Store.connect(['loading', 'error', 'topicModel', 'activeUsers'])
 class NTIWebAppLessonItemsTopic extends React.Component {
 	static deriveBindingFromProps (props) {
 		const {location = {}} = props;
@@ -44,7 +47,8 @@ class NTIWebAppLessonItemsTopic extends React.Component {
 
 		loading: PropTypes.bool,
 		error: PropTypes.any,
-		topicModel: PropTypes.object
+		topicModel: PropTypes.object,
+		activeUsers: PropTypes.array
 	}
 
 
@@ -86,10 +90,11 @@ class NTIWebAppLessonItemsTopic extends React.Component {
 	}
 
 	render () {
-		const {loading} = this.props;
+		const {loading, activeUsers} = this.props;
 
 		return (
 			<div>
+				<Aside component={ActiveUsers} activeUsers={activeUsers} />
 				{loading && (
 					<div>
 						<Loading.Spinner.Large />

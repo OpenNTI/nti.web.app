@@ -51,6 +51,11 @@ async function resolveTopic (ntiids, course) {
 }
 
 
+async function getActiveUsers (topic) {
+	return null;
+}
+
+
 export default class NTIWebAppLessonItemsTopicStore extends Stores.BoundStore {
 	async load () {
 		const {topic, course} = this.binding;
@@ -67,10 +72,12 @@ export default class NTIWebAppLessonItemsTopicStore extends Stores.BoundStore {
 		try {
 			const ntiids = topic.NTIID ? topic.NTIID.split(' ') : [];
 			const resolved = await resolveTopic(ntiids, course);
+			const activeUsers = await getActiveUsers(resolved);
 
 			this.set({
 				loading: false,
-				topicModel: BaseModel.interfaceToModel(resolved)
+				topicModel: BaseModel.interfaceToModel(resolved),
+				activeUsers
 			});
 		} catch (e) {
 			this.set({
