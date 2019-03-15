@@ -30,10 +30,7 @@ const MIME_TYPES = {
 
 const handles = (obj) => {
 	const {location} = obj || {};
-
-	if (!location) { return false; }
-
-	const {item} = location;
+	const {item} = location || {};
 
 	if (item && item.isTableOfContentsNode && item.isTopic()) {
 		return true;

@@ -12,10 +12,7 @@ const ASPECT_RATIO = 1.333;//4:3
 const MIME_TYPE = 'application/vnd.nextthought.ntitimeline';
 const handles = (obj) => {
 	const {location} = obj || {};
-
-	if (!location) { return false; }
-
-	const {item} = location;
+	const {item} = location || {};
 
 	return item && item.MimeType === MIME_TYPE;
 };

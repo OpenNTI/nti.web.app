@@ -33,11 +33,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 		this.WindowActions = WindowsActions.create();
 
-		this.headerCmp = this.add({
-			xtype: 'window-header',
-			doClose: this.onClose.bind(this),
-			doNavigate: this.doNavigate.bind(this)
-		});
+		if (!this.hideHeader) {
+			this.headerCmp = this.add({
+				xtype: 'window-header',
+				doClose: this.onClose.bind(this),
+				doNavigate: this.doNavigate.bind(this)
+			});
+		}
 
 		this.loadingEl = this.add({xtype: 'window-loading'});
 
@@ -73,7 +75,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 				me.remove(me.loadingEl);
 				me.showTopic(me.record, forum);
-				me.headerCmp.showPathFor(me.record, me.record.get('title'));
+
+				if (me.headerCmp) {
+					me.headerCmp.showPathFor(me.record, me.record.get('title'));
+				}
 			});
 	},
 
@@ -92,7 +97,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 				me.remove(me.loadingEl);
 				me.showTopic(topic, forum, me.record);
-				me.headerCmp.showPathFor(topic);
+
+				if (me.headerCmp) {
+					me.headerCmp.showPathFor(topic);
+				}
 			});
 	},
 
@@ -111,7 +119,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 				me.remove(me.loadingEl);
 				me.showTopic(topic, forum);
-				me.headerCmp.showPathFor(topic);
+
+				if (me.headerCmp) {
+					me.headerCmp.showPathFor(topic);
+				}
 			});
 	},
 
@@ -124,7 +135,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 				me.remove(me.loadingEl);
 				me.showEditor(me.record, forum);
-				me.headerCmp.showPathFor(forum, 'New Discussion', -1, forum.getTitle());
+
+				if (me.headerCmp) {
+					me.headerCmp.showPathFor(forum, 'New Discussion', -1, forum.getTitle());
+				}
 			});
 	},
 
