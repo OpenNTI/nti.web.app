@@ -75,7 +75,6 @@ export default class NTIWebAppLessonItemsAssignmentStore extends Stores.BoundSto
 				container
 			};
 		} catch (e) {
-			debugger;
 			return null;
 		}
 	}
