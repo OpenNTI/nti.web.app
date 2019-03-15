@@ -374,7 +374,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 	},
 
 	noteHereEvent: function (range, rect, style, top) {
-		debugger;
 		this.data.box.activeLineInfo = Ext.apply(
 			{style: style},
 			this.lineInfoForRangeAndRect(range, rect));
