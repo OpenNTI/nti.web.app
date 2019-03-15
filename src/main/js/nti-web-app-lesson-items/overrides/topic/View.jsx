@@ -67,6 +67,20 @@ class NTIWebAppLessonItemsTopic extends React.Component {
 	}
 
 
+	componentDidUpdate (prev) {
+		const {topicModel} = this.props;
+		const {topicModel: prevTopic} = prev;
+
+		if (topicModel !==  prevTopic) {
+			this.setupTopic();
+		}
+	}
+
+	componentWillUnmount () {
+		this.tearDownTopic();
+	}
+
+
 	setupTopic () {
 		this.tearDownTopic();
 
