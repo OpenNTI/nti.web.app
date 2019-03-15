@@ -17,3 +17,8 @@
 .reading-view :global(.reader-container.navigation-panel .center .x-reader-pane) {
 	margin-top: 0;
 }
+
+.reading-view.submitting :global(.reader-container.navigation-panel .center .x-reader-pane) {
+	opacity: 0.3;
+	pointer-events: none;
+}

@@ -244,6 +244,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		return {
 			xtype: 'reader-content',
 			prefix: this.prefix,
+			beforeSubmit: this.beforeSubmit,
+			afterSubmit: this.afterSubmit,
 			flex: 1
 		};
 	},

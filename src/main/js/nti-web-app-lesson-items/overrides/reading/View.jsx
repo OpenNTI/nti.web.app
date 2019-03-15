@@ -86,6 +86,8 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		notes: PropTypes.array
 	}
 
+	state = {}
+
 	attachContentRef = (node) => {
 		if (!this.node && node) {
 			this.node = node;
@@ -127,6 +129,12 @@ class NTIWebAppLessonItemsReading extends React.Component {
 			bundle,
 			rootId,
 			renderTo,
+			beforeSubmit: () => {
+				this.setState({submitting: true});
+			},
+			afterSubmit: () => {
+				this.setState({submitting: false});
+			},
 			contentOnly: true
 		});
 
@@ -163,9 +171,10 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 	render () {
 		const {loading, error, notes} = this.props;
+		const {submitting} = this.state;
 
 		return (
-			<div className={cx('reading-view')}>
+			<div className={cx('reading-view', {submitting})}>
 				<Aside component={Notes} notes={notes} />
 				{loading && (
 					<div className={cx('loading-container')}>
@@ -180,7 +189,8 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 
 	renderError () {
-		debugger;
+		//TODO: figure this out
+		return null;
 	}
 
 	renderContent () {

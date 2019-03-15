@@ -600,7 +600,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			return;
 		}
 
-		Ext.getBody().mask(getString('Submitting...'), 'navigation');
+		this.onBeforeSubmit();
 
 		if (isAssignment) {
 			this.submitAssignment(questionSet, submission);
@@ -696,7 +696,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		try {
 			assessedQuestionSet = assessedQuestionSet || AssessedQuestionSet.from(this.questionSet);
 			this.questionSet.fireEvent('graded', assessedQuestionSet);
-			Ext.getBody().unmask();
+			this.onAfterSubmit();
 		} catch (e) {
 			console.error(e.stack || e.message || e);
 		}
@@ -704,7 +704,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 	onFailure: function () {
 		try {
-			Ext.getBody().unmask();
+			this.onAfterSubmit();
 		} catch (e) {
 			console.error(e.stack || e.message || e);
 		}
@@ -715,5 +715,28 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			this.show();
 		}
 		return this.callParent();
+	},
+
+
+	onBeforeSubmit () {
+		if (this.reader && this.reader.beforeSubmit) {
+			this.reader.beforeSubmit();
+		} else {
+			Ext.getBody().mask(getString('Submitting...'), 'navigation');
+		}
+
+	},
+
+
+	onAfterSubmit () {
+		try {
+			if (this.reader && this.reader.afterSubmit) {
+				this.reader.afterSubmit();
+			} else {
+				Ext.getBody().unmask();
+			}
+		} catch (e) {
+			console.error(e);
+		}
 	}
 });
