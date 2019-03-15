@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
 import {Loading, Layouts} from '@nti/web-commons';
 import {rawContent} from '@nti/lib-commons';
 
@@ -7,8 +8,11 @@ import TopicViewer from 'legacy/app/forums/components/topic/Window';
 
 import Registry from '../Registry';
 
+import Styles from './View.css';
 import Store from './Store';
 import ActiveUsers from './ActiveUsers';
+
+const cx = classnames.bind(Styles);
 
 const {Aside} = Layouts;
 
@@ -93,10 +97,10 @@ class NTIWebAppLessonItemsTopic extends React.Component {
 		const {loading, activeUsers} = this.props;
 
 		return (
-			<div>
+			<div className={cx('topic-viewe')}>
 				<Aside component={ActiveUsers} activeUsers={activeUsers} />
 				{loading && (
-					<div>
+					<div className={cx('loading-container')}>
 						<Loading.Spinner.Large />
 					</div>
 				)}
