@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 const {Overview} = require('@nti/web-course');
 
+const { isFeature } = require('legacy/util/Globals');
 const {Modal} = require('nti-web-app-lesson-items');
 const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
@@ -11,7 +12,7 @@ require('legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
 
-const useModal = true;
+const forceModal = false;
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	extend: 'Ext.container.Container',
@@ -105,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	getRouteFor (object, context) {
-		const builder = useModal ?
+		const builder = forceModal || isFeature('course-content-modal') ?
 			(MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']) :
 			(ROUTE_BUILDERS[object.MimeType]);
 
