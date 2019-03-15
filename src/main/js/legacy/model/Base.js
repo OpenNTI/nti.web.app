@@ -19,6 +19,7 @@ require('legacy/model/converters');
 
 const MODIFICATION_BUS = new EventEmitter();
 const INTERFACE_INSTANCE = Symbol('Interface Instance');
+const INTERFACE_INSTANCE_BACKER = Symbol('Interface Instance Backer');
 
 const Base =
 module.exports = exports = Ext.define('NextThought.model.Base', {
@@ -36,6 +37,8 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		},
 
 		interfaceToModel (object) {
+			if (object[INTERFACE_INSTANCE_BACKER]) { return object[INTERFACE_INSTANCE_BACKER]; }
+
 			return lazy.ParseUtils.parseItems(object.__toRaw())[0];
 		}
 	},
@@ -257,7 +260,15 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		const getInstance = async () => {
 			const service = await getService();
-			const instance = service.getObject(this.updatedRaw || this.rawData || this.initialData);
+			const instance = await service.getObject(this.updatedRaw || this.rawData || this.initialData);
+
+			Object.defineProperties(instance, {
+				[INTERFACE_INSTANCE_BACKER]: {
+					writable: false,
+					enumerable: false,
+					value: this
+				}
+			});
 
 			return instance;
 		};

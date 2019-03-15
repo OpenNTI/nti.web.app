@@ -1,0 +1,16 @@
+.assignment-view :global(.content-toolbar .toolbar-container .toolbar) {
+	display: none;
+}
+
+.assignment-view :global(.content-viewer) {
+	padding: 0 0 20px;
+}
+
+.assignment-view :global(.reader-container.navigation-panel > .body-view > .x-component .toolbar-container .header) {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+.assignment-view :global(.reader-container.navigation-panel .center .x-reader-pane) {
+	margin-top: 0;
+}
