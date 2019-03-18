@@ -12,7 +12,7 @@ require('legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
 
-const forceModal = false;
+const forceModal = true;
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	extend: 'Ext.container.Container',

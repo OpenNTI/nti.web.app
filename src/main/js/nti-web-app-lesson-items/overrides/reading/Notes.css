@@ -1,8 +1,3 @@
-.note-list {
-	position: sticky;
-	top: -18px;
-}
-
 .note-list :global(ul) {
 	list-style: none;
 	padding: 0;

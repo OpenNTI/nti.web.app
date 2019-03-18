@@ -1,0 +1,5 @@
+.sidebar-container {
+	position: sticky;
+	top: -18px;
+	overflow-y: auto;
+}

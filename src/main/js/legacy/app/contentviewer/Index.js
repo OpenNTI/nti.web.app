@@ -82,6 +82,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			navigateToObject: config.navigateToObject,
 			doNotAssumeBodyScrollParent: config.doNotAssumeBodyScrollParent,
 			contentOnly: config.contentOnly,
+			showRemainingTimeOverride: config.showRemainingTime,
+			setActiveHistoryItem: config.setActiveHistoryItem,
 			beforeSubmit: config.beforeSubmit,
 			afterSubmit: config.afterSubmit,
 			fragment: config.fragment,

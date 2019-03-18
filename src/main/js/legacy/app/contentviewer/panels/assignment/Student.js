@@ -138,6 +138,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	},
 
 
+	doStartAssignment () {
+		const assignment = this.assignmentOverride || this.assignment;
+
+		return assignment.start()
+			.then((started) => this.startTimed(started));
+	},
+
+
 	startTimed: function (assignment) {
 		if (this.pageInfo) {
 			this.pageInfo.replaceAssignment(assignment);
@@ -284,6 +292,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			}).catch(function () {
 				return [null, null];
 			}).then(function ([h, container]) {
+				if (this.setActiveHistoryItem) {
+					this.setActiveHistoryItem(h, container);
+				}
+
 				readerAssessment.setAssignmentFromStudentProspective(assignment, h);
 				header.setHistory(h, container);
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {NoteSummary, FillToBottom} from '@nti/web-commons';
+import {NoteSummary} from '@nti/web-commons';
+
+import Sidebar from '../../components/Sidebar';
 
 import Styles from './Notes.css';
 
@@ -18,7 +20,7 @@ export default class NTIWebAppLessonItemsReadingNotes extends React.Component {
 		if (!notes || !notes.length) { return null; }
 
 		return (
-			<FillToBottom limit className={cx('note-list')}>
+			<Sidebar className={cx('note-list')}>
 				<ul>
 					{notes.map((note) => {
 						return (
@@ -28,7 +30,7 @@ export default class NTIWebAppLessonItemsReadingNotes extends React.Component {
 						);
 					})}
 				</ul>
-			</FillToBottom>
+			</Sidebar>
 		);
 	}
 }

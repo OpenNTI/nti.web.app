@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {Loading, Layouts} from '@nti/web-commons';
-import {rawContent} from '@nti/lib-commons';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
 
@@ -14,10 +13,7 @@ import Store from './Store';
 
 const cx = classnames.bind(Styles);
 
-const {Aside} = Layouts;
-
-const DATA_ATTR = 'data-assignment-content-placeholder';
-const PLACEHOLDER_TPL = `<div ${DATA_ATTR}></div>`;
+const {Aside, Uncontrolled} = Layouts;
 
 const MIME_TYPES = {
 	'application/vnd.nextthought.assessment.discussionassignment': true,
@@ -75,19 +71,10 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 		updateHistoryItem: PropTypes.func
 	}
 
-
-	attachContentRef = (node) => {
-		if (!this.node && node) {
-			this.node = node;
-			this.setupAssignment();
-		} else if (this.node && !node) {
-			this.node = null;
-			this.tearDownAssignment();
-		}
-	}
+	state = {}
 
 
-	setupAssignment () {
+	setupAssignment = (renderTo) => {
 		this.tearDownAssignment();
 
 		const {
@@ -97,7 +84,6 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 			student,
 			updateHistoryItem
 		} = this.props;
-		const renderTo = this.node && this.node.querySelector(`[${DATA_ATTR}]`);
 
 		if (!renderTo || !assignmentModel) { return; }
 
@@ -105,6 +91,16 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 			renderTo,
 			contentOnly: true,
 			bundle: courseModel,
+			setActiveHistoryItem: (item) => {
+				this.setState({activeHistoryItemModel: item});
+			},
+			showRemainingTime: (time, max, getSubmitFn) => {
+				this.setState({
+					remainingTime: time,
+					maxTime: max,
+					getSubmitFn
+				});
+			},
 			handleNavigation: () => {},
 			handleEdit: () => {},
 			onAssignmentSubmitted: async (submittedId, historyItemLink) => {
@@ -122,21 +118,32 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 	}
 
 
-	tearDownAssignment () {
+	tearDownAssignment = () => {
 		if (this.contentViewer) {
 			this.contentViewer.destroy();
 			delete this.contentViewer;
 		}
 	}
 
+	doStart = () => {
+		if (this.contentViewer && this.contentViewer.reader) {
+			return this.contentViewer.reader.doStartAssignment();
+		}
+	}
+
 
 	render () {
-		const {loading, error} = this.props;
+		const {loading, error, assignmentModel} = this.props;
 		// const {submitting} = this.state;
 
 		return (
 			<div className={cx('assignment-view')}>
-				<Aside component={Sidebar} />
+				<Aside
+					component={Sidebar}
+					assignmentModel={assignmentModel}
+					doStart={this.doStart}
+					{...this.state}
+				/>
 				{loading && (
 					<div>
 						<Loading.Spinner.Large />
@@ -156,10 +163,7 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 
 	renderContent () {
 		return (
-			<div
-				ref={this.attachContentRef}
-				{...rawContent(PLACEHOLDER_TPL)}
-			/>
+			<Uncontrolled onMount={this.setupAssignment} onUnmount={this.tearDownAssignment} />
 		);
 	}
 }

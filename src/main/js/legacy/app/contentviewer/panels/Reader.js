@@ -267,10 +267,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		}
 	},
 
-	showRemainingTime: function () {
+	showRemainingTime: function (...args) {
 		var header = this.getToolbar();
 
-		if (header && header.showRemainingTime) {
+		if (this.showRemainingTimeOverride) {
+			this.showRemainingTimeOverride(...args);
+		} else if (header && header.showRemainingTime) {
 			header.showRemainingTime.apply(header, arguments);
 		}
 	},

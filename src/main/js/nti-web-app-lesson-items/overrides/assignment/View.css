@@ -14,3 +14,11 @@
 .assignment-view :global(.reader-container.navigation-panel .center .x-reader-pane) {
 	margin-top: 0;
 }
+
+.assignment-view :global(.reader-container.navigation-panel .time-remaining) {
+	display: none;
+}
+
+.assignment-view :global(.timed-placeholder .nti-alert .alert-container ) {
+	display: none;
+}
