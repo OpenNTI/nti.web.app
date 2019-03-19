@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onRouteDeactivate () {
-		if (this.deactivating) { return; }
+		if (this.deactivating || this.deactivated) { return; }
 
 		this.deactivating = true;
 		this.deactivateTimeout = setTimeout(() => {
@@ -127,13 +127,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				this.currentOverview.onRouteDeactivate();
 			}
 
+			this.deactivated = true;
 			delete this.deactivating;
 		}, 100);
 	},
 
 	onRouteActivate () {
+		this.deactivated = false;
+
 		if (this.deactivating) {
 			clearTimeout(this.deactivateTimeout);
+			delete this.deactivating;
 		} else if (this.currentOverview) {
 			this.currentOverview.onRouteActivate();
 		}
