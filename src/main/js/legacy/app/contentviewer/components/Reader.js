@@ -215,6 +215,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 	getScrollParent () {
+		if (!this.doNotAssumeBodyScrollParent) { return Ext.getBody(); }
+
 		if (!this.rendered) { return null; }
 
 		function getScrollParent (node) {

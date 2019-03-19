@@ -80,6 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			bundle: config.bundle,
 			handleNavigation: config.handleNavigation,
 			navigateToObject: config.navigateToObject,
+			doNotAssumeBodyScrollParent: config.doNotAssumeBodyScrollParent,
 			contentOnly: config.contentOnly,
 			beforeSubmit: config.beforeSubmit,
 			afterSubmit: config.afterSubmit,

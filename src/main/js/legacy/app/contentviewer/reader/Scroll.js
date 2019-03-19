@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	to: function (top, animate) {
 		const scrollOverride = this.reader.getScrollParent();
 
-		if (scrollOverride && scrollOverride !== this.scrollingEl) {
+		if (scrollOverride && scrollOverride !== Ext.getBody()) {
 			scrollOverride.scrollTo('top', top, animate !== false);
 		}
 

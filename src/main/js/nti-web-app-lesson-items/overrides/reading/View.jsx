@@ -133,7 +133,8 @@ class NTIWebAppLessonItemsReading extends React.Component {
 			afterSubmit: () => {
 				this.setState({submitting: false});
 			},
-			contentOnly: true
+			contentOnly: true,
+			doNotAssumeBodyScrollParent: true
 		});
 
 		this.contentViewer.on({
