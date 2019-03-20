@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				if (savepoint) {
 					savepoint.then(function (point) {
 						/**
-						 * NOTE: Only apply a savepoint if it's version is the same as the assignment version.
+						 * NOTE: Only apply a savepoint if its version is the same as the assignment version.
 						 * Otherwise, just don't apply it. In the future, we might come up with a smarter way to apply
 						 * the savepoint if it affects areas that haven't changed.
 						 */
