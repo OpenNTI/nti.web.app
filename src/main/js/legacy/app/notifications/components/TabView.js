@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+const getCssValue = require('legacy/util/get-css-property-value');
+
 require('./MostRecent');
 
 
@@ -70,7 +72,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 		var winHeight = Ext.Element.getViewportHeight(),
 			el = this.el,
-			maxHeight = winHeight - 85 - 20 - 32;//the top of the list is set at 85 and allow some room on the bottom
+			messageBarHeight = parseInt(getCssValue(el.dom, '--msg-bar-height', 0), 10),
+			maxHeight = winHeight - 85 - 20 - 32 - messageBarHeight; //the top of the list is set at 85 and allow some room on the bottom
 
 		el = el.down('.recent-notifications');
 

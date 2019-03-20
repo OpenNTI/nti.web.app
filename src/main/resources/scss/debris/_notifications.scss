@@ -89,6 +89,10 @@
 	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3);
 	z-index: 201;
 
+	html.msg-bar-open & {
+		top: 85px + $msg-bar-height !important;
+	}
+
 	&::after {
 		content: '';
 		position: absolute;

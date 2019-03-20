@@ -22,6 +22,8 @@ html.x-viewport {
 	}
 
 	&.msg-bar-open {
+		--msg-bar-height: #{$msg-bar-height};
+
 		padding-top: $header-height-withbar;
 
 		body {
