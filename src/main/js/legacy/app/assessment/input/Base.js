@@ -606,7 +606,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		const assignment = this.questionSet && this.questionSet.associatedAssignment;
 		const hasSavepointLink = Boolean(assignment && assignment.getLink('Savepoint'));
 
-		if ( this.questionSet && hasSavepointLink) {
+		if (!this.submitted && this.questionSet && hasSavepointLink) {
 			this.questionSet.saveProgress(this.question, this);
 		}
 	},
