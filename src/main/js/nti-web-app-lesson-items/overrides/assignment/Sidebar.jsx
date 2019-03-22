@@ -32,7 +32,6 @@ export default class AssignmentSidebar extends React.Component {
 
 
 	renderHistoryItem () {
-		debugger;
 	}
 
 	renderTimer () {
@@ -40,6 +39,5 @@ export default class AssignmentSidebar extends React.Component {
 	}
 
 	renderNotTimed () {
-		debugger;
 	}
 }

@@ -76,12 +76,10 @@ export default class AssignmentCountDownTimer extends React.Component {
 
 
 	renderOverdue () {
-		debugger;
 	}
 
 
 	renderExpired () {
-		debugger;
 	}
 
 
