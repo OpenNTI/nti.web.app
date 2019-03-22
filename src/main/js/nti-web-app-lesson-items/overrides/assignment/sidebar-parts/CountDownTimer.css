@@ -1,4 +1,28 @@
 .time-remaining {
+	height: 58px;
 	background-color: var(--secondary-green);
 	color: white;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.time-remaining :global(.icon-clock) {
+	font-size: 1.5rem;
+	margin-right: 0.5rem;
+}
+
+.progress-bar {
+	position: absolute;
+	bottom: 0;
+	height: 2px;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.duration {
+	display: inline-block;
+	font: normal 300 1.125rem/1.3 var(--body-font-family);
 }

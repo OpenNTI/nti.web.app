@@ -90,16 +90,24 @@ export default class AssignmentCountDownTimer extends React.Component {
 		const {maxTime} = this.props;
 		//since we are counting down the remaining will be the max starting out
 		//so 100 - % remaining of max will give the % of time left
-		const percentDone = 100 - ((remainingTime / maxTime) * 100);
+		const percentDone = Math.floor(100 - ((remainingTime / maxTime) * 100));
 
 		const warn = remainingTime < (maxTime * WARN_PERCENT);
 		const danger = remainingTime < DANGER_CUTOFF || remainingTime < (maxTime * DANGER_PERCENT);
 
 		return (
 			<div className={cx('time-remaining', {warn, danger})}>
-				<span>{DateTime.getNaturalDuration(remainingTime, 2)}</span>
-				<div className="progress" style={{width: `${percentDone}%`}} />
+				<i className="icon-clock" />
+				{this.renderDuration(remainingTime)}
+				<div className={cx('progress-bar')} style={{width: `${percentDone}%`}} />
 			</div>
+		);
+	}
+
+
+	renderDuration (duration) {
+		return (
+			<span className={cx('duration')}>{DateTime.getNaturalDuration(duration, 2)}</span>
 		);
 	}
 }

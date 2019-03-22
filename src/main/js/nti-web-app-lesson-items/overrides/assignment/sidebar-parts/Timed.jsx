@@ -82,7 +82,7 @@ export default class TimedAssignmentSidebar extends React.Component {
 		if (remainingTime == null) { return null; }
 
 		return (
-			<div className={cx('submitted')}>
+			<div className={cx('running')}>
 				<Timer>
 					<CountDownTimer remainingTime={remainingTime} maxTime={maxTime} />
 				</Timer>
