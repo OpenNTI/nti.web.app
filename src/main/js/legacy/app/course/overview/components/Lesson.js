@@ -127,6 +127,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				this.currentOverview.onRouteDeactivate();
 			}
 
+			if (this.itemFlyout) {
+				this.itemFlyout.onRouteDeactivate();
+			}
+
 			this.deactivated = true;
 			delete this.deactivating;
 		}, 100);
@@ -138,8 +142,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.deactivating) {
 			clearTimeout(this.deactivateTimeout);
 			delete this.deactivating;
-		} else if (this.currentOverview) {
-			this.currentOverview.onRouteActivate();
+		} else {
+			if (this.currentOverview) {
+				this.currentOverview.onRouteActivate();
+			}
+
+			if (this.itemFlyout) {
+				this.itemFlyout.onRouteActivate();
+			}
 		}
 	},
 
