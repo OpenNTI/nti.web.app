@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {NoteSummary} from '@nti/web-commons';
+import {NoteSummary} from '@nti/web-discussions';
 
 import Sidebar from '../../components/Sidebar';
 
