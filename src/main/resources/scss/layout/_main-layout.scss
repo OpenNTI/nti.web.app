@@ -183,6 +183,10 @@ body.media-viewer-open .window-container {
 	overflow: auto;
 	display: none;
 
+	.nti-course-content-open & {
+		z-index: 1001; // NTI-7578 - place window container above nti-course-content
+	}
+
 	&.full-screen {
 
 		html.x-viewport.msg-bar-open & {
