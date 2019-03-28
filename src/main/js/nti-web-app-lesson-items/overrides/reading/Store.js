@@ -1,5 +1,6 @@
 import {Stores} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
+import {UserDataThreader} from '@nti/lib-interfaces';
 
 import BaseModel from 'legacy/model/Base';
 
@@ -87,9 +88,13 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 
 	async convertNotes (notes) {
 		try {
-			const converted = await Promise.all(
-				notes.map(note => note.getInterfaceInstance())
-			);
+			const converted = UserDataThreader.threadThreadables(
+				await Promise.all(
+					flatten(notes)
+						.filter(n => !n.placeholder)
+						.map(note => note.getInterfaceInstance())
+				)
+			).sort((a, b) => b.getLastModified() - a.getLastModified());
 
 			this.set({
 				notes: converted
@@ -98,4 +103,12 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 			//swallow
 		}
 	}
+}
+
+
+function flatten (notes) {
+	return [
+		notes,
+		(notes || []).map(note => flatten(note.children))
+	].filter(Boolean).flat(Infinity);
 }
