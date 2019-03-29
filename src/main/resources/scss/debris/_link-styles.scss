@@ -99,6 +99,23 @@ a[href] {
 	&, .note-window .note.main-view &{
 		@include content-card-def;
 	}
+
+	> a[target^=_blank] { // NTI-7651 - ensure entire card is clickable. tried to make the selector specific enough to not disrupt other uses; might make sense to broaden it.
+		display: flex;
+
+		> * {
+			flex: 1 1 auto;
+		}
+
+		> .thumbnail {
+			flex: 0 0 auto;
+		}
+
+		> .meta {
+			padding-left: 15px;
+			margin-left: 0;
+		}
+	}
 }
 
 .content-launcher {
