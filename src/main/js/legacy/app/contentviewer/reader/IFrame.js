@@ -743,6 +743,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		if (body) {
 			body.update(html || '');
 			body.setStyle('background', 'transparent');
+			body.setStyle('min-height', 0); // override the rule from _main-layout.scss used by the parent window which can cause sync-height looping. (NTI-7645)
 			doc.normalize();
 		} else if (html) {
 			console.error('We attempted to set the content of the IFrame and there was no BODY element to write to!');
