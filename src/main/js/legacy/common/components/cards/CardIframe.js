@@ -4,6 +4,8 @@ const DomUtils = require('legacy/util/Dom');
 
 require('legacy/app/contentviewer/overlay/Panel');
 
+const TOP_GAP = 10;
+
 module.exports = exports = Ext.define(
 	'NextThought.common.components.cards.CardIframe',
 	{
@@ -46,6 +48,7 @@ module.exports = exports = Ext.define(
 
 		afterRender () {
 			this.callParent(arguments);
+			this.initialY = this.getY();
 			this.viewportMonitor();
 		},
 
@@ -89,7 +92,7 @@ module.exports = exports = Ext.define(
 				return;
 			}
 			const ctTop = this.el.up('.x-reader-pane').getY();
-			const top = 10 + ctTop;
+			const top = TOP_GAP + ctTop;
 
 			this.el.setY(top);
 			this.viewportMonitor();
@@ -100,7 +103,7 @@ module.exports = exports = Ext.define(
 		viewportMonitor () {
 			try {
 				const margin = 15;
-				const y = this.getY();
+				const y = this.initialY;
 				const h = Ext.dom.Element.getViewportHeight() - y - margin;
 
 				if (this.getHeight() !== h) {
