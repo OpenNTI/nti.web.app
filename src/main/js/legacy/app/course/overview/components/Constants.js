@@ -64,6 +64,17 @@ const MODAL_ROUTE_BUILDERS = {
 		const {lesson:lessonOverride} = context || {};
 
 		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}/items/${getOverviewPart(obj, context)}`;
+	},
+
+	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context) => {
+		if (obj.isExternal && !obj.isEmbeddableDocument && context !== 'discussions') {
+			return {
+				href: obj.href,
+				target: '_blank'
+			};
+		}
+
+		return MODAL_ROUTE_BUILDERS.default(course, lesson, obj, context);
 	}
 };
 
