@@ -31,6 +31,9 @@ export default class AssignmentSidebar extends React.Component {
 	}
 
 
+	renderUnavailable () {}
+
+
 	renderHistoryItem () {
 	}
 
