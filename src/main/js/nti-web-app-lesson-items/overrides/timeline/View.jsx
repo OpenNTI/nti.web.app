@@ -43,11 +43,22 @@ class NTIWebAppLessonItemsTimeline extends React.Component {
 		}, 1);
 	}
 
+	componentDidUpdate (prev) {
+		const {location} = this.props;
+		const {location: prevLocation} = prev;
+
+		const {item} = location || {};
+		const {item:prevItem} = prevLocation || {};
+
+		if (item !== prevItem) {
+			this.setupTimeline();
+		}
+	}
 
 	setupTimeline () {
 		const {location} = this.props;
 		const {item} = location || {};
-		const renderTo = this.node.querySelector(`[${DATA_ATTR}]`);
+		const renderTo = this.node && this.node.querySelector(`[${DATA_ATTR}]`);
 
 		if (!item || !renderTo) { return null; }
 
