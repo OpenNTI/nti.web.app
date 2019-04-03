@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {Loading, Layouts} from '@nti/web-commons';
 import {rawContent} from '@nti/lib-commons';
+import {Notes} from '@nti/web-discussions';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
 import PageInfo from 'legacy/model/PageInfo';
@@ -13,7 +14,6 @@ import Registry from '../Registry';
 
 import Styles from './View.css';
 import Store from './Store';
-import Notes from './Notes';
 
 const cx = classnames.bind(Styles);
 
@@ -174,7 +174,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 		return (
 			<div className={cx('reading-view', {submitting})}>
-				<Aside component={Notes} notes={notes} />
+				<Aside component={Notes.Sidebar} notes={notes} />
 				{loading && (
 					<div className={cx('loading-container')}>
 						<Loading.Spinner.Large />

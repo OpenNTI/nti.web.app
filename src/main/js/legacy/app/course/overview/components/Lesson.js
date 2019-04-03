@@ -5,6 +5,8 @@ const { isFeature } = require('legacy/util/Globals');
 const {Modal} = require('nti-web-app-lesson-items');
 const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
+const WindowActions = require('legacy/app/windows/Actions');
+const BaseModel = require('legacy/model/Base');
 
 const { ROUTE_BUILDERS, MODAL_ROUTE_BUILDERS } = require('./Constants');
 require('legacy/overrides/ReactHarness');
@@ -106,6 +108,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	getRouteFor (object, context) {
+		if (object.MimeType === 'application/vnd.nextthought.note') {
+			return () => {
+				this.WindowActions = this.WindowActions || WindowActions.create();
+
+				this.WindowActions.pushWindow(BaseModel.interfaceToModel(object));
+			};
+		}
+
 		const builder = forceModal || isFeature('course-content-modal') ?
 			(MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']) :
 			(ROUTE_BUILDERS[object.MimeType]);
