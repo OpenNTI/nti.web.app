@@ -251,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		}
 
 		this.addCls('loading');
-		this.el.mask('Loading media viewer comtents...', 'loading');
+		this.el.mask('Loading media viewer contents...', 'loading');
 	},
 
 	maybeUnmask: function () {
