@@ -38,7 +38,7 @@ class NTIWebAppLessonItemsTopic extends React.Component {
 		const {location = {}} = props;
 
 		return {
-			topic: location.item,
+			topicRef: location.item,
 			course: props.course
 		};
 	}
