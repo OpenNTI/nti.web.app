@@ -44,6 +44,10 @@ function getOverviewPart (obj, context) {
 			`${obj.getID()}`;
 	}
 
+	if (obj.isVideo) {
+		return obj.getLinkProperty('ref', 'RefNTIID') || obj.getID();
+	}
+
 	return obj.getID();
 }
 
