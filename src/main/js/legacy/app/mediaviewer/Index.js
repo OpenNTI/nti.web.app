@@ -262,6 +262,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	exitViewer: function () {
+		if (this.handleClose) {
+			return this.handleClose();
+		}
+		
 		const route = this.Router.root.ContextStore.getCurrentRoute();
 
 		const parentPath = resolve(route, '../../');

@@ -9,6 +9,7 @@ const WindowActions = require('legacy/app/windows/Actions');
 const BaseModel = require('legacy/model/Base');
 
 const { ROUTE_BUILDERS, MODAL_ROUTE_BUILDERS } = require('./Constants');
+require('legacy/app/mediaviewer/Index');
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
 require('./types/Content');
@@ -213,7 +214,47 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
+	maybeAddMediaViewer (viewerRoute, lesson, returnPath) {
+		if (!viewerRoute) {
+			return;
+		}
+
+		if (!this.mediaViewer) {
+			this.mediaViewer = this.add({
+				xtype: 'media-window-view',
+				currentBundle: this.bundle,
+				autoShow: true,
+				handleNavigation:  () => {}, //this.handleNavigation.bind(this),
+				handleClose: this.handleMediaClose.bind(this, returnPath)
+			});
+		}
+
+		this.addChildRouter(this.mediaViewer);
+
+		this.mediaViewer.currentBundle = this.bundle;
+		this.mediaViewer.parentLesson = lesson;
+		this.mediaViewer.handleRoute(viewerRoute);
+
+		return true;
+	},
+
+	async handleMediaClose (returnPath) {
+		this.pushRoute(null, returnPath);
+	},
+
 	async maybeShowContent (lesson, route, subRoute) {
+		const [itemRoute, viewerRoute] = !subRoute ? [] : subRoute.split('/viewer/');
+
+		if (this.maybeAddMediaViewer(viewerRoute, lesson, itemRoute)) {
+			// don't render the lesson content while the media viewer is open. (z-index issues, multiple instances of the video, etc.)
+			this.remove(this.itemFlyout, true);
+			delete this.itemFlyout;
+			return;
+		}
+
+		this.remove(this.mediaViewer, true);
+		delete this.mediaViewer;
+
 		if (!this.itemFlyout) {
 			this.itemFlyout = this.add({
 				xtype: 'react',
@@ -224,6 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 		}
 
+
 		try {
 			const course = await this.bundle.getInterfaceInstance();
 
@@ -231,7 +273,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				course,
 				lesson,
 				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, lesson),
-				path: subRoute
+				path: itemRoute
 			});
 		} catch (e) {
 			console.error(e);
