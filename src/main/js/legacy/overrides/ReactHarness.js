@@ -236,9 +236,17 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	 * The primary way to update a component's props. DO NOT externally call setState() unless you
 	 * KNOW what you are doing!
 	 * @param {object} props - The props for the given component.
+	 * @param {boolean} skipIfUnchanged - Don't re-render if props haven't changed. (Shallow comparison)
 	 * @return {void}
 	 */
-	setProps (props) {
+	setProps (props, skipIfUnchanged) {
+
+		const changed = () => Object.entries(props || {}).some(([key, value]) => this.initialConfig[key] !== props[key]);
+
+		if (skipIfUnchanged && !changed()) {
+			return;
+		}
+
 		this.initialConfig = {...this.initialConfig, ...props};
 
 		// There is no need to register an 'afterrender' handler nor

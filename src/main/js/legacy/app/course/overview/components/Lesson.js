@@ -245,15 +245,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	async maybeShowContent (lesson, route, subRoute) {
 		const [itemRoute, viewerRoute] = !subRoute ? [] : subRoute.split('/viewer/');
 
-		if (this.maybeAddMediaViewer(viewerRoute, lesson, itemRoute)) {
-			// don't render the lesson content while the media viewer is open. (z-index issues, multiple instances of the video, etc.)
-			this.remove(this.itemFlyout, true);
-			delete this.itemFlyout;
-			return;
+		if (!this.maybeAddMediaViewer(viewerRoute, lesson, itemRoute)) {
+			this.remove(this.mediaViewer, true);
+			delete this.mediaViewer;
 		}
-
-		this.remove(this.mediaViewer, true);
-		delete this.mediaViewer;
 
 		if (!this.itemFlyout) {
 			this.itemFlyout = this.add({
@@ -265,7 +260,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 		}
 
-
 		try {
 			const course = await this.bundle.getInterfaceInstance();
 
@@ -274,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				lesson,
 				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, lesson),
 				path: itemRoute
-			});
+			}, true);
 		} catch (e) {
 			console.error(e);
 		}
