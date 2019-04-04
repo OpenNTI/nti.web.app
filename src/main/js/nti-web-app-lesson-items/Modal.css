@@ -19,6 +19,10 @@
 	padding-bottom: 40px;
 }
 
+:global(.media-viewer-open) .nti-web-app-lesson-items-modal {
+	z-index: 1 !important; /* don't want the lesson rendering on top of the media viewer */
+}
+
 :global(html.msg-bar-open) .nti-web-app-lesson-items-modal {
-	top: 110px;/*height of the header with a message */
+	top: 110px; /* height of the header with a message */
 }
