@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 
 	commentOn: function (e) {
 		this.close();
-		(this.ownerCmp || lazyResolve.ReaderPanel.get()).fireEvent('markupenabled-action', this.refEl, 'mark');
+		(this.ownerCmp || this.reader || lazyResolve.ReaderPanel.get()).fireEvent('markupenabled-action', this.refEl, 'mark');
 		e.stopEvent();
 		return false;
 	},
