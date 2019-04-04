@@ -51,6 +51,17 @@ function getOverviewPart (obj, context) {
 	return obj.getID();
 }
 
+function modalDefault (course, lesson, obj, context) {
+	const {lesson:lessonOverride} = context || {};
+
+	return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}/items/${getOverviewPart(obj, context)}`;
+}
+
+function mediaViewer (course, lesson, obj) {
+	const itemId = getURLPart(obj);
+	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/items/${itemId}/viewer/${itemId}/`;
+}
+
 const MODAL_ROUTE_BUILDERS = {
 	'dismiss': (course, lesson) => {
 		const lessonId = typeof lesson === 'string' ?
@@ -60,10 +71,17 @@ const MODAL_ROUTE_BUILDERS = {
 		return `/app/course/${getURLPart(course)}/lessons/${lessonId}/`;
 	},
 
-	'default': (course, lesson, obj, context) => {
-		const {lesson:lessonOverride} = context || {};
+	'application/vnd.nextthought.ntivideo': (course, lesson, obj, context, ...others) => (
+		((context || {}).mediaViewer
+			? mediaViewer
+			: modalDefault
+		)(course, lesson, obj, context, ...others)
+	),
 
-		return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}/items/${getOverviewPart(obj, context)}`;
+	'application/vnd.nextthought.note': (course, lesson, obj, context) => {
+		return () => {
+			console.log(obj, context);
+		};
 	},
 
 	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context) => {
@@ -75,7 +93,9 @@ const MODAL_ROUTE_BUILDERS = {
 		}
 
 		return MODAL_ROUTE_BUILDERS.default(course, lesson, obj, context);
-	}
+	},
+
+	'default': modalDefault
 };
 
 const ROUTE_BUILDERS = {
