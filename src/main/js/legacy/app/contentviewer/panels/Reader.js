@@ -125,6 +125,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		toolbarConfig.isReaderToolBar = true;
 		toolbarConfig.contentOnly = this.contentOnly;
 
+		readerConfig.doNotAssumeBodyScrollParent = this.doNotAssumeBodyScrollParent;
+
 		this.body.add([
 			toolbarConfig,
 			readerConfig

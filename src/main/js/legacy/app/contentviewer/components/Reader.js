@@ -231,9 +231,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			}
 		}
 
-		const scrollParent = getScrollParent(this.el.dom);
+		if (!this.cachedScrollParent) {
+			const scrollParent = getScrollParent(this.el.dom);
 
-		return scrollParent ? Ext.get(scrollParent) : Ext.getBody();
+			this.cachedScrollParent = scrollParent ?
+				Ext.get(scrollParent) :
+				Ext.getBody();
+		}
+
+
+		return this.cachedScrollParent;
 	},
 
 
@@ -373,6 +380,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				me.getIframe().onceSettled()
 					.then(function () {
 						var el;
+						delete me.cachedScrollParent;
 
 						if (fragment === 'feedback') {
 							el = me.getAssessment().getFeedbackContentEl();
