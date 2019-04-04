@@ -174,7 +174,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 		return (
 			<div className={cx('reading-view', {submitting})}>
-				<Aside component={Notes.Sidebar} notes={notes} />
+				<Aside component={Notes.Sidebar} notes={notes} fillToBottom sticky />
 				{loading && (
 					<div className={cx('loading-container')}>
 						<Loading.Spinner.Large />

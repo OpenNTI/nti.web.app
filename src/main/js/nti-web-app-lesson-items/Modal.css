@@ -5,6 +5,8 @@
 
 	--course-content-viewer-header-position: sticky;
 	--course-content-viewer-header-top: -20px;
+
+	--note-sidebar-sticky-top: -18px;
 }
 
 .nti-web-app-lesson-items-modal :global(.modal-content) {
