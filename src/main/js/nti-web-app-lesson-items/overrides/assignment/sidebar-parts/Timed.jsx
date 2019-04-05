@@ -26,7 +26,7 @@ export default class TimedAssignmentSidebar extends React.Component {
 		doStart: PropTypes.func,
 		remainingTime: PropTypes.number,
 		maxTime: PropTypes.number,
-		getSubmitFn: PropTypes.number
+		getSubmitFn: PropTypes.func
 	}
 
 	state = {}
