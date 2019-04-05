@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+const {isCourseContentModalOpen} = require('nti-web-app-lesson-items');
+
 const ContextStateStore = require('../StateStore');
 
 
@@ -44,7 +46,9 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Defaul
 
 		this.__setContent();
 
-		if (this.doNavigate && !this.isInContext()) {
+		//For not just don't show read more if the content modal is open
+		//we need to be smarter about checking what content is open
+		if (this.doNavigate && !this.isInContext() && !isCourseContentModalOpen()) {
 			this.seeMoreEl.removeCls('hidden');
 
 			this.mon(this.seeMoreEl, 'click', this.doNavigate.bind(this, this.record));
