@@ -433,6 +433,9 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		if (this.sharedList) {
 			this.sharedList.pickerView.hide();
 		}
+
+		//Pick a more unique name to prevent anything from accidentally handling it
+		this.fireEvent('canceling-editor');
 	},
 
 	onSave: function (e) {
