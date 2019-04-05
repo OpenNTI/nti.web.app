@@ -14,6 +14,12 @@ require('../layout/container/None');
 
 Commons.Layouts.Responsive.setWebappContext();
 
+Commons.Prompt.Manager.setAllowedExternalFocus((target) => {
+	const el = target && Ext.get(target);
+
+	return el && el.findParent('.window-container');
+});
+
 module.exports = exports = Ext.define('NextThought.app.Index', {
 	extend: 'Ext.container.Viewport',
 	alias: 'widget.master-view',
