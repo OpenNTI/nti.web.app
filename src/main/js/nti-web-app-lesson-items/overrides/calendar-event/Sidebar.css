@@ -1,0 +1,7 @@
+.calendar-event-sidebar :global(.icon-wrapper) {
+	display: none;
+}
+
+.calendar-event-sidebar :global(.calendar-day .day-events) {
+	padding: 0;
+}

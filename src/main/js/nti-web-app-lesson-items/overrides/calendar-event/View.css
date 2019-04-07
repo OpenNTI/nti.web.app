@@ -1,0 +1,3 @@
+.lesson-event-view :global(.calendar-event-editor) {
+	width: auto;
+}
