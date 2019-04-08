@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {Events} = require('@nti/web-session');
 
 const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');
@@ -1057,6 +1058,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 
 		this.record.destroy({
 			success: () => {
+				this.record.getInterfaceInstance()
+					.then(note => Events.emit(Events.NOTE_DELETED, note));
+
 				if(this.doClose) {
 					this.doClose();
 				}

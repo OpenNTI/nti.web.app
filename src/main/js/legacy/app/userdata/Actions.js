@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Events} = require('@nti/web-session');
 
 const ContextStateStore = require('legacy/app/context/StateStore');
 const GroupsStateStore = require('legacy/app/groups/StateStore');
@@ -738,6 +739,12 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			.then(function (response) {
 				var rec = lazy.ParseUtils.parseItems(response)[0];
 				me.incomingCreatedChange({}, rec, {});
+
+				rec.getInterfaceInstance()
+					.then((note) => {
+						Events.emit(Events.NOTE_CREATED, note);
+					});
+
 				return rec;
 			})
 			.catch(function (err) {
