@@ -92,7 +92,8 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 				renderTo: me.videoEl,
 				playerWidth: me.WIDTH,
 				width: me.WIDTH,
-				floatParent: me
+				floatParent: me,
+				doNotAutoPlay: true
 			});
 
 			if (me.range) {
