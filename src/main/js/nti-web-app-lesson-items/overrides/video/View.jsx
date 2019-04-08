@@ -142,7 +142,10 @@ class NTIWebLessonItemsVideo extends React.Component {
 			await this.userDataActions.__saveNote(applicableRange, body, title, ContainerId, sharing, selectedText, style);
 
 			this.editor.el.unmask();
-			this.hideEditor();
+			this.setState({
+				newNote: null,
+				alignTo: null
+			});
 		} catch (e) {
 			alert('There was an error saving your note.');
 			this.editor.el.unmask();
