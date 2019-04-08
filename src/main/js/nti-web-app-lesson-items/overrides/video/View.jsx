@@ -139,7 +139,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 		this.userDataActions = this.userDataActions || UserDataActions.create();
 
 		try {
-			const noteModel = await this.userDataActions.__saveNote(applicableRange, body, title, ContainerId, sharing, selectedText, style);
+			await this.userDataActions.__saveNote(applicableRange, body, title, ContainerId, sharing, selectedText, style);
 
 			this.editor.el.unmask();
 			this.hideEditor();
@@ -161,7 +161,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 		return (
 			<Router.RouteForProvider getRouteFor={this.getRouteFor} >
 				<div className="nti-web-lesson-items-video">
-					<TranscriptedVideo course={course} videoId={item.getID()} />
+					<TranscriptedVideo course={course} videoId={item.getID()} disableNoteCreation={!!newNote} />
 					{newNote && (<Layouts.Uncontrolled onMount={this.showEditor} onUnmount={this.hideEditor} />)}
 				</div>
 			</Router.RouteForProvider>
