@@ -1,0 +1,36 @@
+.webinar-container {
+	padding: 2.25rem;
+}
+
+.header {
+	display: flex;
+	font-size: 1.875rem;
+}
+
+.header > * {
+	flex: 0 1 auto;
+}
+
+.title {
+	font-weight: 300;
+	margin: 0;
+	font-size: inherit;
+}
+
+.start-date {
+	margin-right: 0.5em;
+	position: relative;
+}
+
+.start-date :global(.day) {
+	font-weight: 300;
+}
+
+.start-date :global(.month) {
+	position: absolute;
+	top: -1em;
+	font-size: 10px;
+	width: 100%;
+	left: 0;
+	right: 0;
+}
