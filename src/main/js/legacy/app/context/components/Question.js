@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 
+const {isCourseContentModalOpen} = require('nti-web-app-lesson-items');
 const ContentUtils = require('legacy/util/Content');
 
 const ContextStateStore = require('../StateStore');
@@ -30,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Questi
 
 		this.__setContent();
 
-		if (this.doNavigate && !this.isInContent() && this.seeMoreEl) {
+		if (this.doNavigate && !this.isInContent() && !isCourseContentModalOpen() && this.seeMoreEl) {
 			this.seeMoreEl.removeCls('hidden');
 
 			this.mon(this.seeMoreEl, 'click', this.doNavigate.bind(this, this.question));

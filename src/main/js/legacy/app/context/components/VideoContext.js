@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 
+const {isCourseContentModalOpen} = require('nti-web-app-lesson-items');
 const PathActions = require('legacy/app/navigation/path/Actions');
 const PageInfo = require('legacy/model/PageInfo');
 
@@ -102,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 				me.videoplayer.jumpToVideoLocation(startTimeSeconds);
 			}
 
-			if (me.doNavigate) {
+			if (me.doNavigate && !isCourseContentModalOpen()) {
 				me.isInPageContext()
 					.catch(function () {
 						me.seeMoreEl.removeCls('hidden');
