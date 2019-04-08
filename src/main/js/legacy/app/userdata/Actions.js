@@ -896,6 +896,10 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			.then(function (response) {
 				let rec = lazy.ParseUtils.parseItems(response)[0];
 				r.fireEvent('updated', rec);
+
+				rec.getInterfaceInstance()
+					.then(note => Events.emit(Events.NOTE_UPDATED, note));
+
 				return rec;
 			})
 			.catch(function (err) {
