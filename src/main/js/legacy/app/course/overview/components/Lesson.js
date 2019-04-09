@@ -30,6 +30,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	cls: 'course-overview',
 
+	initComponent () {
+		this.callParent(arguments);
+
+		this.useModal = forceModal || isFeature('course-content-modal');
+	},
+
 	afterRender: function () {
 		this.callParent(arguments);
 
@@ -117,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			};
 		}
 
-		const builder = forceModal || isFeature('course-content-modal') ?
+		const builder = this.useModal ?
 			(MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']) :
 			(ROUTE_BUILDERS[object.MimeType]);
 
@@ -187,7 +193,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				course: course,
 				layout: Overview.Lesson.List,
 				baseroute: '/',
-				getRouteFor: this.getRouteFor.bind(this)
+				getRouteFor: this.getRouteFor.bind(this),
+				doNotPlayVideosInline: this.useModal
 			});
 
 
