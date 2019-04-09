@@ -85,14 +85,18 @@ const MODAL_ROUTE_BUILDERS = {
 	},
 
 	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context) => {
+		const href = MODAL_ROUTE_BUILDERS.default(course, lesson, obj, context);
+
 		if (obj.isExternal && !obj.isEmbeddableDocument && context !== 'discussions') {
 			return {
-				href: obj.href,
-				target: '_blank'
+				href: href,
+				onClick: () => {
+					window.open(obj.href, '_blank');
+				}
 			};
 		}
 
-		return MODAL_ROUTE_BUILDERS.default(course, lesson, obj, context);
+		return href;
 	},
 
 	'default': modalDefault
