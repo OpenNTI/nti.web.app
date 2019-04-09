@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Calendar, Layouts} from '@nti/web-commons';
+import {DateTime, Layouts} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
 import TypeRegistry from '../Registry';
@@ -43,7 +43,7 @@ class NTIWebLessonItemsWebinar extends React.Component {
 				<Aside component={Sidebar} course={course} />
 				<section className={cx('webinar-container')}>
 					<header className={cx('header')}>
-						<Calendar.DateIcon minimal date={startTime} className={cx('start-date')}/>
+						<DateTime.DateIcon minimal date={startTime} className={cx('start-date')}/>
 						<h1 className={cx('title')}>{item.title}</h1>
 					</header>
 				</section>
