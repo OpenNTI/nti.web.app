@@ -21,6 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 
 	ui: 'media-viewer',
 	viewerType: 'transcript-focus',
+	playerConfiguration: 'mediaviewer-transcript',
 	border: false,
 	plain: true,
 	frame: false,
@@ -160,7 +161,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			width: width,
 			floatParent: this,
 			nextVideo: this.nextVideo,
-			prevVideo: this.prevVideo
+			prevVideo: this.prevVideo,
+			playerConfiguration: this.playerConfiguration
 		});
 
 		this.on('destroy', 'destroy', this.videoplayer);

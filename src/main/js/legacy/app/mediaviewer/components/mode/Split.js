@@ -14,6 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 	cls:'',
 
 	viewerType: 'video-focus',
+	playerConfiguration: 'mediaviewer-split',
 
 	statics:{
 

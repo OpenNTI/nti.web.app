@@ -13,6 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 	cls: 'full-video-player',
 
 	viewerType: 'full-video',
+	playerConfiguration: 'mediaviewer-full',
 
 	transcriptRatio: 0,
 

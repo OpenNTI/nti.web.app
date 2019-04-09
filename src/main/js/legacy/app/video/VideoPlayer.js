@@ -10,7 +10,7 @@ require('legacy/mixins/InstanceTracking');
 const TIME_CHANGE_THRESHOLD = 5;
 
 //TODO: throw this away and use the analytics from the video player
-function getAnalyticMethods (doNotAllow, hasTranscript) {
+function getAnalyticMethods (doNotAllow, hasTranscript, configuration) {
 	let hasWatch = false;
 	let lastTime;
 
@@ -23,6 +23,7 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 			AnalyticsUtil.startEvent(video, {
 				type: 'VideoWatch',
 				withTranscript: hasTranscript,
+				'player_configuration': configuration,
 				videoStartTime: time,
 				duration: duration,
 				playSpeed: speed
@@ -59,6 +60,7 @@ function getAnalyticMethods (doNotAllow, hasTranscript) {
 					AnalyticsUtil.sendEvent(video, {
 						type: 'VideoSkip',
 						withTranscript: hasTranscript,
+						'player_configuration': configuration,
 						videoStartTime: lastTime,
 						videoEndTime: time
 					});
@@ -135,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 		this.trackThis();
 
-		this.analytics = getAnalyticMethods(this.doNotCaptureAnalytics, !!this.up('media-view'));
+		this.analytics = getAnalyticMethods(this.doNotCaptureAnalytics, !!this.up('media-view'), this.playerConfiguration);
 
 		this.taskMediaHeartBeat = {
 			interval: 1000,
