@@ -40,15 +40,16 @@ function getOverviewPart (obj, context) {
 		const {relatedWorkRef} = context;
 
 		return relatedWorkRef ?
-			`${getOverviewPart(relatedWorkRef)}/${obj.getID()}` :
-			`${obj.getID()}`;
+			`${getOverviewPart(relatedWorkRef)}/${getURLPart(obj)}` :
+			`${getURLPart(obj)}`;
 	}
 
 	if (obj.isVideo) {
-		return obj.getLinkProperty('ref', 'RefNTIID') || obj.getID();
+		const ref = obj.getLinkProperty('ref', 'RefNTIID');
+		return ref ? encodeForURI(ref) : getURLPart(obj);
 	}
 
-	return obj.getID();
+	return getURLPart(obj);
 }
 
 function modalDefault (course, lesson, obj, context) {
