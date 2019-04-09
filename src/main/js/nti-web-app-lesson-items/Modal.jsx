@@ -41,7 +41,8 @@ export default class NTIWebAppLessonItems extends React.Component {
 		course: PropTypes.object,
 		lesson: PropTypes.string,
 		dismissPath: PropTypes.string,
-		path: PropTypes.string
+		path: PropTypes.string,
+		requiredOnly: PropTypes.bool
 	}
 
 	state = {}
@@ -70,7 +71,7 @@ export default class NTIWebAppLessonItems extends React.Component {
 
 
 	render () {
-		const {course, lesson, dismissPath} = this.props;
+		const {course, lesson, dismissPath, requiredOnly} = this.props;
 		const {selection} = this.state;
 
 		if (!selection || !course || !lesson) {
@@ -83,6 +84,7 @@ export default class NTIWebAppLessonItems extends React.Component {
 					course={course}
 					lesson={lesson}
 					selection={selection}
+					requiredOnly={requiredOnly}
 
 					dismissPath={dismissPath}
 					overrides={overrides}

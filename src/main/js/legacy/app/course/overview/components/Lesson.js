@@ -273,6 +273,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.itemFlyout.setProps({
 				course,
 				lesson,
+				requiredOnly: Overview.isFilteredToRequired(),
 				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, lesson),
 				path: itemRoute
 			}, true);
