@@ -92,7 +92,11 @@ const MODAL_ROUTE_BUILDERS = {
 			return {
 				href: href,
 				onClick: () => {
-					window.open(obj.href, '_blank');
+					if (context && (context.isNextLink || context.isPrevLink)) { return; }
+
+					setTimeout(() => {
+						window.open(obj.href, '_blank');
+					}, 1000);
 				}
 			};
 		}
