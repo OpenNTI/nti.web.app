@@ -163,6 +163,10 @@ body.white-shade-mask .body-shade-mask {
 	z-index: 201;
 	overflow: auto;
 	display: none;
+
+	.nti-course-content-open & {
+		z-index: 1010;
+	}
 }
 
 body.media-viewer-open .window-container {
