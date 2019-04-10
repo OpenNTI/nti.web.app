@@ -1,6 +1,8 @@
 const Ext = require('@nti/extjs');
 const {AssetIcon} = require('@nti/web-commons');
 
+const {isCourseContentModalOpen} = require('nti-web-app-lesson-items');
+
 const RelatedWork = require('legacy/model/RelatedWork');
 
 const ContextStateStore = require('../../StateStore');
@@ -52,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		this.callParent(arguments);
 		this.setContent();
 
-		if (this.doNavigate && !this.isInContext()) {
+		if (this.doNavigate && !this.isInContext() && !isCourseContentModalOpen()) {
 			this.seeMoreEl.removeCls('hidden');
 			this.mon(this.seeMoreEl, 'click', this.doNavigate.bind(this, this.record));
 		}
