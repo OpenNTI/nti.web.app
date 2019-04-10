@@ -22,3 +22,7 @@
 	opacity: 0.3;
 	pointer-events: none;
 }
+
+.reading-view :global(.x-component-editor.in-gutter) {
+	position: absolute !important;
+}

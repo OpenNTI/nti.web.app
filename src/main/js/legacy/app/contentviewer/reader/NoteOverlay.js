@@ -265,6 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 			if (!annotationOffsets.isBodyScroll) {
 				top += annotationOffsets.scrollTop - annotationOffsets.viewTop;
+				left -= annotationOffsets.left;
 			}
 
 			editorWidth = me.editor.getWidth();
