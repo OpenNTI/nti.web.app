@@ -38,4 +38,5 @@
 
 .support .link {
 	color: var(--primary-blue);
+	cursor: pointer;
 }

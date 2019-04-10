@@ -4,6 +4,8 @@ import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
 import {DateTime} from '@nti/web-commons';
 
+import AccountActions from 'legacy/app/account/Actions';
+
 import Styles from './Instructions.css';
 
 const cx = classnames.bind(Styles);
@@ -35,7 +37,9 @@ export default class AssignmentSidebarInstructions extends React.Component {
 	}
 
 	contactUs = () => {
-		debugger;
+		const actions = AccountActions.create();
+
+		actions.showContactUs();
 	}
 
 	render () {
