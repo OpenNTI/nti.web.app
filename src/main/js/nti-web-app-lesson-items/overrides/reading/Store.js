@@ -107,8 +107,22 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 
 
 function flatten (notes) {
-	return [
-		notes,
-		(notes || []).map(note => flatten(note.children))
-	].filter(Boolean).flat(Infinity);
+
+	return flattenArray(
+		([
+			notes,
+			(notes || []).map(note => flatten(note.children))
+		])
+			.filter(Boolean)
+	);
+}
+
+function flattenArray (arr) {
+	if (typeof arr.flat === 'function') { return arr.flat(Infinity); }
+
+	return arr.reduce((acc, val) => {
+		const flat = Array.isArray(val) ? flattenArray(val) : val;
+
+		return acc.concat(flat);
+	}, []);
 }
