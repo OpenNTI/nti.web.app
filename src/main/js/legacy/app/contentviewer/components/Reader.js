@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {getScrollParent} = require('@nti/lib-dom');
 
 const RangeUtils = require('legacy/util/Ranges');
 const ContentProxy = require('legacy/proxy/JSONP');
@@ -218,18 +219,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		if (!this.doNotAssumeBodyScrollParent) { return Ext.getBody(); }
 
 		if (!this.rendered) { return null; }
-
-		function getScrollParent (node) {
-			if (node == null) {
-				return null;
-			}
-
-			if (node.scrollHeight > node.clientHeight) {
-				return node;
-			} else {
-				return getScrollParent(node.parentNode);
-			}
-		}
 
 		if (!this.cachedScrollParent) {
 			const scrollParent = getScrollParent(this.el.dom);
