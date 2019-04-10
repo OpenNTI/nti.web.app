@@ -4,6 +4,7 @@ import classnames from 'classnames/bind';
 import {Prompt} from '@nti/web-commons';
 import {Content} from '@nti/web-course';
 import {decodeFromURI} from '@nti/lib-ntiids';
+import {LinkTo} from '@nti/web-routing';
 
 import Styles from './Modal.css';
 import overrides from './overrides';
@@ -45,6 +46,10 @@ export default class NTIWebAppLessonItems extends React.Component {
 		requiredOnly: PropTypes.bool
 	}
 
+	static contextTypes = {
+		router: PropTypes.object
+	}
+
 	state = {}
 
 	componentDidMount () {
@@ -70,6 +75,16 @@ export default class NTIWebAppLessonItems extends React.Component {
 	}
 
 
+	onBeforeDismiss = () => {
+		const {dismissPath} = this.props;
+		const {router} = this.context;
+
+		if (dismissPath && router) {
+			LinkTo.Path.routeTo(router, dismissPath);
+		}
+	}
+
+
 	render () {
 		const {course, lesson, dismissPath, requiredOnly} = this.props;
 		const {selection} = this.state;
@@ -79,7 +94,12 @@ export default class NTIWebAppLessonItems extends React.Component {
 		}
 
 		return (
-			<Prompt.Dialog className={cx('nti-web-app-lesson-items-modal')}>
+			<Prompt.Dialog
+				className={cx('nti-web-app-lesson-items-modal')}
+				closeOnMaskClick={false}
+				closeOnEscape={true}
+				onBeforeDismiss={this.onBeforeDismiss}
+			>
 				<Content.Pager
 					course={course}
 					lesson={lesson}
