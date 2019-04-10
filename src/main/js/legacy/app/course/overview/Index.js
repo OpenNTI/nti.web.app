@@ -24,6 +24,7 @@ require('../../contentviewer/Index');
 require('../../content/content/Index');
 require('../../mediaviewer/Index');
 require('./components/View');
+const LessonCmp = require('./components/Lesson');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
@@ -609,6 +610,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 
 	getRouteForRoot: function (root, subPath, lesson) {
+		if (LessonCmp.useModal()) {
+			const modalRoute = this.getRouteForRootModal(root, subPath, lesson);
+
+			if (modalRoute) { return modalRoute; }
+		}
+
 		let route;
 		if (root instanceof QuestionSetRef) {
 			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
@@ -642,6 +649,31 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		return route;
 	},
+
+
+	getRouteForRootModal (root, subPath, lesson) {
+		let path = '';
+
+		if (
+			root instanceof QuestionSetRef ||
+			root instanceof SurveyRef ||
+			root instanceof Video ||
+			root instanceof LTIExternalToolAsset
+		) {
+			path = `items/${encodeForURI(root.getId())}`;
+		} else if (root instanceof RelatedWork) {
+			const target = root.get('target');
+			const page = subPath[0];
+			const pageId = page && page instanceof PageInfo ? page.getId() : null;
+
+			path = !pageId || pageId === lesson.getId() || pageId === lesson.get('ContentNTIID') || pageId === target ?
+				`items/${encodeForURI(root.getId())}` :
+				`items/${encodeForURI(root.getId())}/${encodeForURI(pageId)}`;
+		}
+
+		return path && {path, isFull: true};
+	},
+
 
 	getRouteForRelatedWorkPath: function (relatedWork, path, lesson) {
 		var page = path[0],

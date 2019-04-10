@@ -15,12 +15,14 @@ require('legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
 
-const forceModal = true;
-
-module.exports = exports = Ext.define('NextThought.app.course.overview.components.Lesson', {
+const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-overview-lesson',
 	ui: 'course',
+
+	statics: {
+		useModal: () => isFeature('course-content-modal')
+	},
 
 	mixins: {
 		Router: 'NextThought.mixins.Router'
@@ -33,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent () {
 		this.callParent(arguments);
 
-		this.useModal = forceModal || isFeature('course-content-modal');
+		this.useModal = Lesson.useModal();
 	},
 
 	afterRender: function () {
@@ -289,3 +291,5 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.navigateToObject(obj);
 	}
 });
+
+module.exports = exports = Lesson;
