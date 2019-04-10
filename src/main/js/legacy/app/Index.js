@@ -17,7 +17,7 @@ Commons.Layouts.Responsive.setWebappContext();
 Commons.Prompt.Manager.setAllowedExternalFocus((target) => {
 	const el = target && Ext.get(target);
 
-	return el && el.findParent('.window-container');
+	return el && (el.findParent('.window-container') || el.findParent('.search-field'));
 });
 
 module.exports = exports = Ext.define('NextThought.app.Index', {

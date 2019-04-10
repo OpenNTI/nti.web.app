@@ -184,7 +184,7 @@ body.media-viewer-open .window-container {
 	display: none;
 
 	.nti-course-content-open & {
-		z-index: 1001; // NTI-7578 - place window container above nti-course-content
+		z-index: 1002; // NTI-7578 - place window container above nti-course-content
 	}
 
 	&.full-screen {

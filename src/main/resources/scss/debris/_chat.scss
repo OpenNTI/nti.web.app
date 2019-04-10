@@ -880,6 +880,10 @@ body.white-shade-mask .chat-gutter-window {
 		top: 140px;
 	}
 
+	.nti-course-content-open & {
+		z-index: 1001;
+	}
+
 	@media #{$hide-chat-break-point} {
 		.chat-container:not(.show-gutter) & {
 			display: none;
