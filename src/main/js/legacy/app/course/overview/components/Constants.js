@@ -58,9 +58,9 @@ function modalDefault (course, lesson, obj, context) {
 	return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}/items/${getOverviewPart(obj, context)}`;
 }
 
-function mediaViewer (course, lesson, obj) {
+function mediaViewer (course, lesson, obj, context, itemRoute) {
 	const itemId = getURLPart(obj);
-	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/items/${itemId}/viewer/${itemId}/`;
+	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}${itemRoute}/viewer/${itemId}/`;
 }
 
 const MODAL_ROUTE_BUILDERS = {

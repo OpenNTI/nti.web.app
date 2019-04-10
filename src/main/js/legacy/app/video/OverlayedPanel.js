@@ -278,6 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	openMediaViewer: function () {
 		var v = this.playlist[0],
 			bundleContent = this.up('bundle-content'),
+			contentViewer = this.up('content-viewer'),
 			location = this.reader && this.reader.getLocation && this.reader.getLocation() || {},
 			path;
 
@@ -289,6 +290,8 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			if (path && path.route && bundleContent.handleContentNavigation) {
 				bundleContent.handleContentNavigation(path.title, path.route);
 			}
+		} else if (contentViewer && contentViewer.showMediaViewerForVideo) {
+			contentViewer.showMediaViewerForVideo(v);
 		}
 	},
 

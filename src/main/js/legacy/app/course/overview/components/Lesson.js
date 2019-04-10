@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			(MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']) :
 			(ROUTE_BUILDERS[object.MimeType]);
 
-		return builder ? builder(this.bundle, this.currentOutlineNode, object, context) : null;
+		return builder ? builder(this.bundle, this.currentOutlineNode, object, context, this.activeItemRoute) : null;
 	},
 
 
@@ -270,6 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		try {
 			const course = await this.bundle.getInterfaceInstance();
 
+			this.activeItemRoute = itemRoute;
 			this.itemFlyout.setProps({
 				course,
 				lesson,

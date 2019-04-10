@@ -4,6 +4,7 @@ import classnames from 'classnames/bind';
 import {Loading, Layouts} from '@nti/web-commons';
 import {rawContent} from '@nti/lib-commons';
 import {Notes} from '@nti/web-discussions';
+import {LinkTo} from '@nti/web-routing';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
 import PageInfo from 'legacy/model/PageInfo';
@@ -84,6 +85,10 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		notes: PropTypes.array
 	}
 
+	static contextTypes = {
+		router: PropTypes.object
+	}
+
 	state = {}
 
 	attachContentRef = (node) => {
@@ -134,7 +139,15 @@ class NTIWebAppLessonItemsReading extends React.Component {
 				this.setState({submitting: false});
 			},
 			contentOnly: true,
-			doNotAssumeBodyScrollParent: true
+			doNotAssumeBodyScrollParent: true,
+			showMediaViewerForVideo: (playlistItem) => {
+				const mockVideo = {
+					MimeType: 'application/vnd.nextthought.ntivideo',
+					getID: () => playlistItem.getId()
+				};
+
+				LinkTo.Object.routeTo(this.context.router, mockVideo, {mediaViewer: true});
+			}
 		});
 
 		this.contentViewer.on({
