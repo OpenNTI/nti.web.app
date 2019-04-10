@@ -1,3 +1,24 @@
 .webinar-sidebar {
 	background: white;
 }
+
+.registration-button button {
+	width: 100%;
+	border-radius: 0;
+	border: none;
+}
+
+.details {
+	padding: 1.25rem 1rem 2.125rem;
+	color: var(--secondary-grey);
+	font-size: 0.875rem;
+	line-height: 19px;
+}
+
+.instructions {
+	margin-bottom: 1rem;
+}
+
+.availability {
+	justify-content: center;
+}
