@@ -1,0 +1,11 @@
+.image img {
+	width: 100%;
+}
+
+.description {
+	color: var(--secondary-grey);
+	font-size: 14px;
+	line-height: 24px;
+	margin: 24px 0;
+	white-space: pre-line;
+}

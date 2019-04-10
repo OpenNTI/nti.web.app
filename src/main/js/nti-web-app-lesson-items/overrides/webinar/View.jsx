@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DateTime, Layouts} from '@nti/web-commons';
+import {Layouts} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
 import TypeRegistry from '../Registry';
 
+import Body from './Body';
+import Header from './Header';
 import Sidebar from './Sidebar';
 import styles from './View.css';
 
@@ -34,18 +36,14 @@ class NTIWebLessonItemsWebinar extends React.Component {
 
 	render () {
 		const {course, location} = this.props;
-		const {item, item: {webinar}} = location || {};
-		const nearestSession = webinar.getNearestSession();
-		const startTime = nearestSession.getStartTime();
-
+		const {item} = location || {};
+		
 		return (
 			<div>
-				<Aside component={Sidebar} course={course} />
+				<Aside component={Sidebar} course={course} item={item} />
 				<section className={cx('webinar-container')}>
-					<header className={cx('header')}>
-						<DateTime.DateIcon minimal date={startTime} className={cx('start-date')}/>
-						<h1 className={cx('title')}>{item.title}</h1>
-					</header>
+					<Header item={item} />
+					<Body item={item} />
 				</section>
 			</div>
 		);

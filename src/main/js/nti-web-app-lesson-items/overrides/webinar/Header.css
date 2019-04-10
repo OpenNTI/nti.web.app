@@ -1,0 +1,31 @@
+.header {
+	font-size: 1.875rem;
+	padding-left: 42px;
+	position: relative;
+	margin-bottom: 1.5rem;
+}
+
+.title {
+	font-weight: 300;
+	margin: 0;
+	font-size: inherit;
+}
+
+.start-date {
+	position: absolute;
+	left: 0;
+	top: 1px;
+}
+
+.start-date :global(.day) {
+	font-weight: 300;
+}
+
+.start-date :global(.month) {
+	position: absolute;
+	top: -1em;
+	font-size: 10px;
+	width: 100%;
+	left: 0;
+	right: 0;
+}
