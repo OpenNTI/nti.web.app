@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Sidebar from '../../components/Sidebar';
 
 import Timed from './sidebar-parts/Timed';
+import Instructions from './sidebar-parts/Instructions';
 
 
 export default class AssignmentSidebar extends React.Component {
@@ -22,25 +23,9 @@ export default class AssignmentSidebar extends React.Component {
 
 		return (
 			<Sidebar>
-				{activeHistoryItemModel && this.renderHistoryItem()}
-				{!activeHistoryItemModel && !available && this.renderUnavailable()}
-				{!activeHistoryItemModel && available && timed && this.renderTimer()}
-				{!activeHistoryItemModel && available && !timed && this.renderNotTimed()}
+				{!activeHistoryItemModel && available && timed && (<Timed {...this.props} />)}
+				<Instructions {...this.props} />
 			</Sidebar>
 		);
-	}
-
-
-	renderUnavailable () {}
-
-
-	renderHistoryItem () {
-	}
-
-	renderTimer () {
-		return (<Timed {...this.props} />);
-	}
-
-	renderNotTimed () {
 	}
 }

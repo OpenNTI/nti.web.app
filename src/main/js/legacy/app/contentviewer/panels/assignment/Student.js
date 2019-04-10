@@ -292,8 +292,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			}).catch(function () {
 				return [null, null];
 			}).then(function ([h, container]) {
-				if (this.setActiveHistoryItem) {
-					this.setActiveHistoryItem(h, container);
+				if (me.setActiveHistoryItem) {
+					me.setActiveHistoryItem(h, container);
 				}
 
 				readerAssessment.setAssignmentFromStudentProspective(assignment, h);
@@ -326,6 +326,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		var header = this.getToolbar(),
 			readerContent = this.getReaderContent(),
 			assessment = readerContent.getAssessment();
+
+		if (this.setActiveHistoryItem) {
+			this.setActiveHistoryItem(h, container);
+		}
 
 		assessment.updateAssignmentHistoryItem(h);
 		header.setHistory(h, container);

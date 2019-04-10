@@ -2,14 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {DateTime} from '@nti/web-commons';
+import {scoped} from '@nti/lib-locale';
 
 import Styles from './CountDownTimer.css';
+import TimerIcon from './assets/TimerIcon';
 
 const WARN_PERCENT = 0.2;
 const DANGER_PERCENT = 0.1;
 const DANGER_CUTOFF = 30000;//30 seconds
 
 const cx = classnames.bind(Styles);
+
+const t = scoped('NTIWebAppLessonItems.overrides.assignment.sidebar-parts.CountDownTimer', {
+	overtime: 'Over Time',
+	timeExpired: 'Time Expired'
+});
 
 export default class AssignmentCountDownTimer extends React.Component {
 	static propTypes = {
@@ -38,6 +45,13 @@ export default class AssignmentCountDownTimer extends React.Component {
 		const {duration} = clock || {};
 
 		return remainingTime - (duration || 0);
+	}
+
+	get overdueTime () {
+		const {remainingTime, clock} = this.props;
+		const {duration} = clock || {};
+
+		return (-1 * remainingTime) + (duration || 0);
 	}
 
 
@@ -75,13 +89,20 @@ export default class AssignmentCountDownTimer extends React.Component {
 	}
 
 
-	renderOverdue () {
-	}
-
-
 	renderExpired () {
+		return (
+			<div className={cx('expired')}>
+				<TimerIcon className={cx('timer-icon')} />
+				<span className={cx('expired-label')}>{t('timeExpired')}</span>
+			</div>
+		);
 	}
 
+	renderOverdue () {
+		const {overdueTime} = this;
+
+		return this.renderTimer(overdueTime, 100, cx('overdue'), t('overtime'));
+	}
 
 	renderRemaining () {
 		const {remainingTime} = this;
@@ -92,11 +113,20 @@ export default class AssignmentCountDownTimer extends React.Component {
 
 		const warn = remainingTime < (maxTime * WARN_PERCENT);
 		const danger = remainingTime < DANGER_CUTOFF || remainingTime < (maxTime * DANGER_PERCENT);
+		const cls = danger ? cx('danger') : (warn && cx('warn'));
 
+		return this.renderTimer(remainingTime, percentDone, cls);
+	}
+
+
+	renderTimer (duration, percentDone, cls, label) {
 		return (
-			<div className={cx('time-remaining', {warn, danger})}>
-				<i className="icon-clock" />
-				{this.renderDuration(remainingTime)}
+			<div className={cx('timer', cls)}>
+				<TimerIcon className={cx('timer-icon')} />
+				<div className={cx('duration-container')}>
+					{this.renderDuration(duration)}
+					{label && (<span className={cx('label')}>{label}</span>)}
+				</div>
 				<div className={cx('progress-bar')} style={{width: `${percentDone}%`}} />
 			</div>
 		);

@@ -1,0 +1,7 @@
+.timer-icon {
+	background: url('./timer.svg');
+	background-size: cover;
+	width: 28px;
+	height: 28px;
+	display: inline-block;
+}

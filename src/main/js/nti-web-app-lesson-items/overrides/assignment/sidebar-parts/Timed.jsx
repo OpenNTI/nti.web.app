@@ -6,14 +6,15 @@ import {DateTime, Button, Timer} from '@nti/web-commons';
 
 import Styles from './Timed.css';
 import CountDownTimer from './CountDownTimer';
+import TimerIcon from './assets/TimerIcon';
 
 const cx = classnames.bind(Styles);
 
 const t = scoped('NTIWebAppLessonItems.overrides.assignment.sidebar-parts.Timed', {
 	notStarted: {
-		message: 'You have %(duration)s to complete this assignment.',
+		timeLimit: 'Time Limit',
 		warning: 'Once you\'ve started, the timer will not stop.',
-		start: 'Start assignment'
+		start: 'Start Assignment'
 	},
 	started: {
 
@@ -49,7 +50,7 @@ export default class TimedAssignmentSidebar extends React.Component {
 		const started = assignmentModel.isStarted();
 
 		return (
-			<div>
+			<div className={cx('timed-assignment')}>
 				{!started && this.renderNotStarted()}
 				{started && this.renderStarted()}
 			</div>
@@ -64,13 +65,17 @@ export default class TimedAssignmentSidebar extends React.Component {
 
 		return (
 			<div className={cx('not-started', {starting})}>
-				<div className={cx('container')}>
-					<div className={cx('message')}>{t('notStarted.message', {duration})}</div>
-					<div className={cx('warning')}>{t('notStarted.warning')}</div>
-				</div>
 				<Button onClick={this.doStart}>
+					<TimerIcon className={cx('not-started-icon')}/>
 					<span className="text">{t('notStarted.start')}</span>
 				</Button>
+				<div className={cx('container')}>
+					<div className={cx('time-limit')}>
+						<span className={cx('limit')}>{duration}</span>
+						<span className={cx('label')}>{t('notStarted.timeLimit')}</span>
+					</div>
+					<div className={cx('warning')}>{t('notStarted.warning')}</div>
+				</div>
 			</div>
 		);
 	}
