@@ -119,8 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 	},
 
 	onKeyPress: function (e) {
-		var key = e.key || e.keyCode;
-		if (key === Ext.EventObject.ESC) {
+		if (e.key === Ext.EventObject.ESC || e.keyCode === Ext.EventObject.ESC) {
 			this.closeAllWindows();
 		}
 	},

@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const Commons = require('@nti/web-commons');
 
 require('legacy/common/StateStore');
 
@@ -158,6 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 
 		this.fireEvent('lock-body-height');
 
+		Commons.Prompt.Manager.suspendEscapeListener();
 		html.classList.add('window-open');
 		// viewport.style.paddingRight = Ext.getScrollBarWidth() + 'px';
 	},
@@ -172,6 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 
 		this.fireEvent('unlock-body-height');
 
+		Commons.Prompt.Manager.resumeEscapeListener();
 		html.classList.remove('window-open');
 		// viewport.style.paddingRight = null;
 	}
