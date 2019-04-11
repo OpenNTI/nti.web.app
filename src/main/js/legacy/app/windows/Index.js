@@ -119,6 +119,10 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 	},
 
 	onKeyPress: function (e) {
+		const html = this.WindowStore.getHTML();
+
+		if (html.classList.contains('prompt-open')) { return; }
+
 		if (e.key === Ext.EventObject.ESC || e.keyCode === Ext.EventObject.ESC) {
 			this.closeAllWindows();
 		}

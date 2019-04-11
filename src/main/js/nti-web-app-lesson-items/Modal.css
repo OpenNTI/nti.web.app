@@ -1,6 +1,6 @@
 .nti-web-app-lesson-items-modal {
 	justify-content: flex-start;
-	padding: 20px 0;
+	padding: 20px 0 0;
 	top: 70px;/*height of the header*/
 
 	--course-content-viewer-header-sticky-top: -20px;
