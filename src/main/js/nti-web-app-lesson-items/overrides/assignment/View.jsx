@@ -93,14 +93,28 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 			renderTo,
 			contentOnly: true,
 			bundle: courseModel,
-			setActiveHistoryItem: (item) => {
-				this.setState({activeHistoryItemModel: item});
+			setActiveHistoryItem: (item, container, assignment) => {
+				if (!item) {
+					this.setState({
+						activeHistoryItemModel: null,
+						activeAssignmentModel: assignment || this.state.activeAssignmentModel
+					});
+					return;
+				}
+
+				this.setState({
+					activeHistoryItemModel: item,
+					activeAssignmentModel: assignment || this.state.activeAssignmentModel,
+					remainingTime: null,
+					maxTime: null
+				});
 			},
-			showRemainingTime: (time, max, getSubmitFn) => {
+			showRemainingTime: (time, max) => {
+				if (this.state.activeHistoryItemModel) { return; }
+
 				this.setState({
 					remainingTime: time,
-					maxTime: max,
-					getSubmitFn
+					maxTime: max
 				});
 			},
 			handleNavigation: (title, route, precache) => {
@@ -140,16 +154,19 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 
 
 	render () {
-		const {loading, error, assignmentModel} = this.props;
+		const {loading, error} = this.props;
+		const {activeAssignmentModel, activeHistoryItemModel, maxTime, remainingTime} = this.state;
+		const timerProps = activeHistoryItemModel ? {} : {maxTime, remainingTime};
 		// const {submitting} = this.state;
 
 		return (
 			<div className={cx('assignment-view')}>
 				<Aside
 					component={Sidebar}
-					assignmentModel={assignmentModel}
+					assignmentModel={activeAssignmentModel}
 					doStart={this.doStart}
-					{...this.state}
+					activeHistoryItemModel={activeHistoryItemModel}
+					{...timerProps}
 				/>
 				{loading && (
 					<div>

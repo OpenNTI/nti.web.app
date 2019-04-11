@@ -270,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 		function maybeSetActiveHistoryItem (h ,container) {
 			if (me.setActiveHistoryItem) {
-				me.setActiveHistoryItem(h, container);
+				me.setActiveHistoryItem(h, container, assignment);
 			}
 		}
 
@@ -335,9 +335,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			readerContent = this.getReaderContent(),
 			assessment = readerContent.getAssessment();
 
-		if (this.setActiveHistoryItem) {
-			this.setActiveHistoryItem(h, container);
-		}
+		const attempt = h.get('MetadataAttemptItem');
+
+		attempt.getAssignment()
+			.then((assignment) => {
+				this.assignmentOverride = assignment;
+				if (this.setActiveHistoryItem) {
+					this.setActiveHistoryItem(h, container, assignment);
+				}
+			});
+
 
 		assessment.updateAssignmentHistoryItem(h);
 		header.setHistory(h, container);
