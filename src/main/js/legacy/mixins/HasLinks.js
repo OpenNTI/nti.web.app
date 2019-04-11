@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 
 	getLink: function (rel, raw) {
 		var links = this.get('Links') || Ext.data.Types.LINKS.convert((this.raw && this.raw.Links) || []),
-			ref = links ? links.getRelHref(rel, raw === true) : null;//raw is only ever true if and only if passing litterally "true" to the param. Not 'truthy'
+			ref = links ? links.getRelHref(rel, raw === true) : null;//raw is only ever true if and only if passing literally "true" to the param. Not 'truthy'
 		return ref ? getURL(ref) : null;
 	},
 
