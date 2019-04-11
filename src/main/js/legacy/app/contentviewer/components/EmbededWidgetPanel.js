@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 
 		Ext.apply(config, {
-			layout: 'fit',
+			layout: 'none',
 			items: [{
 				xtype: 'overlay-content-embeded-widget-frame',
 				data: DomUtils.parseDomObject(config.contentElement),
