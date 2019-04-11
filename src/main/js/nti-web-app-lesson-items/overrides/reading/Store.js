@@ -1,11 +1,12 @@
 import {Stores} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
 import {UserDataThreader} from '@nti/lib-interfaces';
+import {isNTIID} from '@nti/lib-ntiids';
 
 import BaseModel from 'legacy/model/Base';
 
 async function resolvePageInfo (page, course) {
-	const id = page['target-NTIID'] || page['Target-NTIID'] || page.getID();
+	const id = isNTIID(page.href) ? page.href : (page['target-NTIID'] || page['Target-NTIID'] || page.getID());
 
 	try {
 		const service = await getService();
@@ -17,7 +18,7 @@ async function resolvePageInfo (page, course) {
 
 		return BaseModel.interfaceToModel(pageInfo);
 	} catch (e) {
-		return BaseModel.interfaceToModel(page);
+		return page.isContent ? null : BaseModel.interfaceToModel(page);
 	}
 }
 
@@ -46,12 +47,22 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 			loading: true,
 			bundle: null,
 			page: null,
-			notes: null
+			notes: null,
+			notFound: false
 		});
 
 		try {
 			const bundle = BaseModel.interfaceToModel(course);
 			const pageInfo = await resolvePageInfo(page, course);
+
+			if (!pageInfo) {
+				this.set({
+					loading: false,
+					bundle,
+					notFound: true
+				});
+			}
+
 			const contentPackage = pageInfo && pageInfo.getContentPackage ? await pageInfo.getContentPackage() : null;
 
 			if (contentPackage) {

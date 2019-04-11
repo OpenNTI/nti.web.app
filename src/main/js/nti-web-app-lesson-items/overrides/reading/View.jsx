@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Loading, Layouts} from '@nti/web-commons';
-import {rawContent} from '@nti/lib-commons';
+import {Loading, Layouts, EmptyState} from '@nti/web-commons';
 import {Notes} from '@nti/web-discussions';
 import {LinkTo} from '@nti/web-routing';
+import {scoped} from '@nti/lib-locale';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
 import PageInfo from 'legacy/model/PageInfo';
@@ -17,11 +17,11 @@ import Styles from './View.css';
 import Store from './Store';
 
 const cx = classnames.bind(Styles);
+const t = scoped('NTIWebAppLessonItems.overrides.reading.View', {
+	notFound: 'Unable to load reading.'
+});
 
 const {Aside} = Layouts;
-
-const DATA_ATTR = 'data-reading-content-placeholder';
-const PLACEHOLDER_TPL = `<div ${DATA_ATTR}></div>`;
 
 const MIME_TYPES = {
 	'application/vnd.nextthought.ltiexternaltoolasset': true,
@@ -46,6 +46,8 @@ export default
 @Store.connect([
 	'loading',
 	'error',
+
+	'notFound',
 
 	'page',
 	'contentPackage',
@@ -76,6 +78,8 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		loading: PropTypes.bool,
 		error: PropTypes.any,
 
+		notFound: PropTypes.bool,
+
 		page: PropTypes.object,
 		contentPackage: PropTypes.object,
 		rootId: PropTypes.string,
@@ -91,36 +95,12 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 	state = {}
 
-	attachContentRef = (node) => {
-		if (!this.node && node) {
-			this.node = node;
-			this.setupReading();
-		} else if (this.node && !node) {
-			this.node = null;
-			this.tearDownReading();
-		}
-	}
 
 
-	componentDidUpdate (prev) {
-		const {page} = this.props;
-		const {page:prevPage} = prev;
-
-		if (page !== prevPage) {
-			this.setupReading();
-		}
-	}
-
-	componentWillUnmount () {
-		this.tearDownReading();
-	}
-
-
-	setupReading () {
+	setupReading = (renderTo) => {
 		this.tearDownReading();
 
 		const {page, contentPackage, rootId, bundle, setNotes} = this.props;
-		const renderTo = this.node && this.node.querySelector(`[${DATA_ATTR}]`);
 
 		if (!renderTo || !page) { return; }
 
@@ -173,7 +153,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 	}
 
 
-	tearDownReading () {
+	tearDownReading = () => {
 		if (this.contentViewer) {
 			this.contentViewer.destroy();
 			delete this.contentViewer;
@@ -202,15 +182,23 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 	renderError () {
 		//TODO: figure this out
-		return null;
+		return this.renderNotFound();
 	}
 
 	renderContent () {
+		const {notFound} = this.props;
+
+		if (notFound) {
+			return this.renderNotFound();
+		}
+
 		return (
-			<div
-				ref={this.attachContentRef}
-				{...rawContent(PLACEHOLDER_TPL)}
-			/>
+			<Layouts.Uncontrolled onMount={this.setupReading} onUnmount={this.tearDownReading} />
 		);
+	}
+
+
+	renderNotFound () {
+		return (<EmptyState header={t('notFound')} />);
 	}
 }
