@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 		const regenerate = this.pageInfo.regenerate ? this.pageInfo.regenerate(assignment) : Promise.resolve(this.pageInfo);
 
-		regenerate
+		return regenerate
 			.then((pageInfo) => {
 				this.pageInfo = pageInfo;
 				this.showReader()
@@ -174,11 +174,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	async onTryAgain () {
 		const config = await this.getToolbarAndReaderConfig(true);
 
-		await this.applyReaderConfigs(config);
-
 		if (this.rendered) {
 			this.showAssignment({noHistory: true});
 		}
+
+		await this.applyReaderConfigs(config);
+
 	},
 
 
@@ -267,6 +268,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		reader.getScroll().lock();
 		reader.hidePageWidgets();
 
+		function maybeSetActiveHistoryItem (h ,container) {
+			if (me.setActiveHistoryItem) {
+				me.setActiveHistoryItem(h, container);
+			}
+		}
+
 		function done () {
 			reader.getScroll().unlock();
 			me.beginViewedAnalytics();
@@ -285,16 +292,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 		this.getAssignmentHistory(config)
 			.then(function (h) {
-				if (!h) { return [null, null]; }
+				if (!h) {
+					maybeSetActiveHistoryItem(null, null);
+					return [null, null];
+				}
 
 				return h.resolveFullContainer()
 					.then(container => [h, container]);
-			}).catch(function () {
+			}).catch(function (e) {
 				return [null, null];
 			}).then(function ([h, container]) {
-				if (me.setActiveHistoryItem) {
-					me.setActiveHistoryItem(h, container);
-				}
+				maybeSetActiveHistoryItem(h, container);
 
 				readerAssessment.setAssignmentFromStudentProspective(assignment, h);
 				header.setHistory(h, container);
