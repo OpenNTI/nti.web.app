@@ -64,7 +64,7 @@ export default class NTIWebAppLessonItemsAssignmentStore extends Stores.BoundSto
 			const historyModel = BaseModel.interfaceToModel(history);
 			const container = await historyModel.resolveFullContainer();
 
-			assignments.updateHistoryItem(submittedId, historyModel);
+			assignments.updateHistoryItem(submittedId, container);
 
 			this.set({
 				historyModel
