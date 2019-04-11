@@ -75,6 +75,8 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		}),
 		course: PropTypes.object.isRequired,
 
+		handleNavigation: PropTypes.func,
+
 		loading: PropTypes.bool,
 		error: PropTypes.any,
 
@@ -127,6 +129,13 @@ class NTIWebAppLessonItemsReading extends React.Component {
 				};
 
 				LinkTo.Object.routeTo(this.context.router, mockVideo, {mediaViewer: true});
+			},
+			handleNavigation: (title, route, precache) => {
+				const {handleNavigation} = this.props;
+
+				if (handleNavigation) {
+					handleNavigation(title, `/content${route}`, precache);
+				}
 			}
 		});
 

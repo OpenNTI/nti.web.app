@@ -264,6 +264,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				xtype: 'react',
 				component: Modal,
 				getRouteFor: this.getRouteForModal.bind(this),
+				handleNavigation: this.handleModalNavigation.bind(this),
 				addHistory: true,
 				baseroute: '/'
 			});
@@ -283,6 +284,11 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		} catch (e) {
 			console.error(e);
 		}
+	},
+
+
+	handleModalNavigation (title, route, precache) {
+		this.pushRoute(title, route, precache);
 	},
 
 

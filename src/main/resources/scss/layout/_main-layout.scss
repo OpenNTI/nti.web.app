@@ -242,6 +242,13 @@ body.media-viewer-open .window-container {
 	}
 }
 
+html.nti-course-content-open .nti-control-bar-mount {
+	&.assignment-control-bar-container,
+	&.content-control-bar-container {
+		z-index: 1000 !important;
+	}
+}
+
 .nti-control-bar-mount {
 	z-index: 151 !important;
 }

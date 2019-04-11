@@ -20,6 +20,7 @@ require('legacy/mixins/FillScreen');
 require('legacy/mixins/Router');
 require('legacy/util/Parsing');
 
+require('../assessment/components/editing/AssignmentEditor');
 require('../../contentviewer/Index');
 require('../../content/content/Index');
 require('../../mediaviewer/Index');
@@ -59,6 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		this.addRoute('/:lesson/content/:id/:page', this.showContent.bind(this));
 		this.addRoute('/:lesson/content/:id/video/', this.showMediaViewer.bind(this));
 		this.addRoute('/:lesson/assignment/:id', this.showAssignment.bind(this));
+		this.addRoute('/:lesson/assignment/:id/edit', this.showAssignmentEditor.bind(this));
 		this.addRoute('/:lesson/video/', this.showMediaViewer.bind(this));
 		this.addRoute('/:lesson/slidedeck/', this.showMediaViewer.bind(this));
 
@@ -349,6 +351,58 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 				return Promise.reject(reason);
 			});
+	},
+
+
+	showAssignmentEditor (route, subRoute) {
+		const lessonId = decodeFromURI(route.params.lesson || '');
+		const assignmentId = decodeFromURI(route.params.id || '');
+
+		if (this.rendered) {
+			this.fillScreen(this.el.dom, 10);
+			this.el.mask('Loading...');
+		}
+
+		if (this.reader) {
+			Ext.destroy(this.reader);
+			delete this.reader;
+		}
+
+		if (this.activeMediaWindow) {
+			Ext.destroy(this.activeMediaWindow);
+			delete this.activeMediaWindow;
+		}
+
+		if (this.assignmentViewer) {
+			Ext.destroy(this.assignmentViewer);
+			delete this.assignmentViewer;
+		}
+
+		return Promise.all([
+			this.currentBundle.getAssignments()
+				.then(assignments => assignments.getItem(assignmentId))
+		]).then(([assignment]) => {
+			this.assignmentViewer = this.add({
+				xtype: 'assignment-editor',
+				assignmentId,
+				assignment,
+				courseId: this.currentBundle.getId(),
+				bundle: this.currentBundle,
+				pageSource: {next: null, previous: null},
+				gotoRoot: () => {
+					this.pushRoute('', `/${encodeForURI(lessonId)}`);
+				},
+				previewAssignment: (id) => {
+					this.pushRoute('', `/${encodeForURI(lessonId)}/items/${encodeForURI(id)}`);
+				}
+			});
+
+			this.getLayout().setActiveItem(this.assignmentViewer);
+		}).finally(() => {
+			if (this.el) {
+				this.el.unmask();
+			}
+		});
 	},
 
 

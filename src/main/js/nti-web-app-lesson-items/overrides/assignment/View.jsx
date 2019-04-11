@@ -59,6 +59,8 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 		}),
 		course: PropTypes.object.isRequired,
 
+		handleNavigation: PropTypes.func,
+
 		loading: PropTypes.bool,
 		error: PropTypes.any,
 
@@ -101,8 +103,13 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 					getSubmitFn
 				});
 			},
-			handleNavigation: () => {},
-			handleEdit: () => {},
+			handleNavigation: (title, route, precache) => {
+				const {handleNavigation} = this.props;
+
+				if (handleNavigation) {
+					handleNavigation(title, `/assignment/${route}`, precache);
+				}
+			},
 			onAssignmentSubmitted: async (submittedId, historyItemLink) => {
 				const result = await updateHistoryItem(submittedId, historyItemLink);
 				const {historyModel:updatedHistory, container} = result || {};
