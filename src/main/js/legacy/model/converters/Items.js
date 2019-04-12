@@ -8,8 +8,6 @@ function maybeAdd (stores, r) {
 
 	if (!found) {
 		stores.push(r);
-	} else {
-		console.log('PREVENTING DUPLICATE STORE');
 	}
 }
 
