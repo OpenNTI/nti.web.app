@@ -174,12 +174,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	async onTryAgain () {
 		const config = await this.getToolbarAndReaderConfig(true);
 
+		await this.applyReaderConfigs(config);
+
 		if (this.rendered) {
 			this.showAssignment({noHistory: true});
 		}
-
-		await this.applyReaderConfigs(config);
-
 	},
 
 
