@@ -32,6 +32,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 	isThreadable: true,
 	canReply: true,
+	isNoteModel: true,
 
 	fields: [
 		{ name: 'ReferencedByCount', type: 'int'},

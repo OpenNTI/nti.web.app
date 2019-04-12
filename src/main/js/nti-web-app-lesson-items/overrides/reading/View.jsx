@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {Loading, Layouts, EmptyState} from '@nti/web-commons';
 import {Notes} from '@nti/web-discussions';
-import {LinkTo} from '@nti/web-routing';
+import {LinkTo, Router} from '@nti/web-routing';
 import {scoped} from '@nti/lib-locale';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
@@ -170,21 +170,34 @@ class NTIWebAppLessonItemsReading extends React.Component {
 	}
 
 
+	getRouteFor = (obj, context) => {
+		const store = this.contentViewer && this.contentViewer.reader && this.contentViewer.reader.flatPageStore;
+
+		if (obj.MimeType === 'application/vnd.nextthought.note' && store) {
+			const noteModel = store.getById(obj.getID());
+
+			return this.context.router.getRouteFor(noteModel, context);
+		}
+	}
+
+
 	render () {
 		const {loading, error, notes} = this.props;
 		const {submitting} = this.state;
 
 		return (
-			<div className={cx('reading-view', {submitting})}>
-				<Aside component={Notes.Sidebar} notes={notes} fillToBottom sticky />
-				{loading && (
-					<div className={cx('loading-container')}>
-						<Loading.Spinner.Large />
-					</div>
-				)}
-				{!loading && error && this.renderError()}
-				{!loading && !error && this.renderContent()}
-			</div>
+			<Router.RouteForProvider getRouteFor={this.getRouteFor}>
+				<div className={cx('reading-view', {submitting})}>
+					<Aside component={Notes.Sidebar} notes={notes} fillToBottom sticky />
+					{loading && (
+						<div className={cx('loading-container')}>
+							<Loading.Spinner.Large />
+						</div>
+					)}
+					{!loading && error && this.renderError()}
+					{!loading && !error && this.renderContent()}
+				</div>
+			</Router.RouteForProvider>
 		);
 	}
 

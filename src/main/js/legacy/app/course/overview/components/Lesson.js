@@ -21,7 +21,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	ui: 'course',
 
 	statics: {
-		useModal: () => isFeature('course-content-modal')
+		useModal: () => true//isFeature('course-content-modal')
 	},
 
 	mixins: {
@@ -122,6 +122,12 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				this.WindowActions = this.WindowActions || WindowActions.create();
 
 				this.WindowActions.pushWindow(BaseModel.interfaceToModel(object));
+			};
+		} else if (object.isNoteModel) {
+			return () => {
+				this.WindowActions = this.WindowActions || WindowActions.create();
+
+				this.WindowActions.pushWindow(object);
 			};
 		}
 
