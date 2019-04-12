@@ -1,0 +1,8 @@
+.note-editor-wrapper {
+	position: absolute;
+	z-index: 1;
+}
+
+.note-editor-wrapper :global(.x-component-editor.in-gutter) {
+	position: static !important;
+}
