@@ -138,6 +138,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	},
 
 
+	getTimedPlaceholder () {
+		return this.down('assignment-timedplaceholder');
+	},
+
+
 	doStartAssignment () {
 		const assignment = this.assignmentOverride || this.assignment;
 
@@ -177,7 +182,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		await this.applyReaderConfigs(config);
 
 		if (this.rendered) {
-			this.showAssignment({noHistory: true});
+			if (this.getReaderContent()) {
+				this.showAssignment({noHistory: true});
+			} else if (this.getTimedPlaceholder()) {
+				this.updateActiveAssignment();
+			}
 		}
 	},
 
@@ -247,6 +256,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				return this.assignment.getHistory();
 			})
 			.catch(() => this.assignmentHistory);
+	},
+
+
+	updateActiveAssignment () {
+		if (this.setActiveHistoryItem) {
+			this.setActiveHistoryItem(null, null, this.assignmentOverride || this.assignment);
+		}
 	},
 
 
