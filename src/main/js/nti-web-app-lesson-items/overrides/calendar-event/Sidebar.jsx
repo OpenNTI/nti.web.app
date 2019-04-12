@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {CalendarEvents, getAvailableCalendars} from '@nti/web-calendar';
+import {Router} from '@nti/web-routing';
+import {CalendarEvents, Event, getAvailableCalendars} from '@nti/web-calendar';
 import {FillToBottom} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
@@ -34,13 +35,26 @@ export default class CalendarEventSidebar extends React.Component {
 			.then(calendars => calendars.find(c => (c.CatalogEntry || {}).CourseNTIID === courseId));
 	}
 
+	getRouteFor = viewEvent => {
+		if ((viewEvent || {}).MimeType === 'application/vnd.nextthought.courseware.coursecalendarevent') {
+			return () => {
+				this.setState({viewEvent});
+			};
+		}
+	}
+
+	dismissViewer = () => this.setState({viewEvent: undefined})
+
 	render () {
-		const {calendar} = this.state;
+		const {calendar, viewEvent} = this.state;
 
 		return !calendar ? null : (
-			<FillToBottom limit className={cx('calendar-event-sidebar')}>
-				<CalendarEvents calendar={calendar} />
-			</FillToBottom>
+			<Router.RouteForProvider getRouteFor={this.getRouteFor} >
+				<FillToBottom limit className={cx('calendar-event-sidebar')}>
+					<CalendarEvents calendar={calendar} />
+				</FillToBottom>
+				{viewEvent && <Event.View event={viewEvent} onDismiss={this.dismissViewer} />}
+			</Router.RouteForProvider>
 		);
 	}
 }
