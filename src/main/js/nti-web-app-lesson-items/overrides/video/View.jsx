@@ -9,6 +9,7 @@ import Editor from 'legacy/editor/Editor';
 import MediaViewerStore from 'legacy/app/mediaviewer/StateStore';
 import UserDataActions from 'legacy/app/userdata/Actions';
 import SharingUtils from 'legacy/util/Sharing';
+import AnalyticsUtils from 'legacy/util/Analytics';
 import DomUtils from 'legacy/util/Dom';
 import BaseModel from 'legacy/model/Base';
 
@@ -37,6 +38,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 			item: PropTypes.object
 		}),
 		course: PropTypes.object,
+		lessonInfo: PropTypes.object,
 		firstSelection: PropTypes.bool
 	}
 
@@ -170,6 +172,15 @@ class NTIWebLessonItemsVideo extends React.Component {
 	}
 
 
+	getAnalyticsData = () => {
+		const {course, lessonInfo} = this.props;
+
+		return {
+			context: [course.getID(), lessonInfo.id]
+		};
+	}
+
+
 	render () {
 		const {newNote} = this.state;
 		const {location, course, firstSelection} = this.props;
@@ -180,7 +191,13 @@ class NTIWebLessonItemsVideo extends React.Component {
 		return (
 			<Router.RouteForProvider getRouteFor={this.getRouteFor} >
 				<div className="nti-web-lesson-items-video" ref={this.attachRef}>
-					<TranscriptedVideo course={course} videoId={item.getID()} disableNoteCreation={!!newNote} autoPlay={firstSelection} />
+					<TranscriptedVideo
+						course={course}
+						videoId={item.getID()}
+						disableNoteCreation={!!newNote}
+						autoPlay={firstSelection}
+						analyticsData={this.getAnalyticsData()}
+					/>
 					{newNote && (
 						<Layouts.Uncontrolled
 							onMount={this.showEditor}
