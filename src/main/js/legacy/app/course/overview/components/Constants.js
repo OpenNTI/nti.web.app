@@ -1,5 +1,6 @@
-
 const { encodeForURI } = require('@nti/lib-ntiids');
+
+const Globals = require('legacy/util/Globals');
 
 function getURLPart (obj) {
 	return encodeForURI(obj.getId ? obj.getId() : obj.getID ? obj.getID() : obj.NTIID);
@@ -87,8 +88,9 @@ const MODAL_ROUTE_BUILDERS = {
 
 	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context) => {
 		const href = MODAL_ROUTE_BUILDERS.default(course, lesson, obj, context);
+		const openInApp = Globals.shouldOpenInApp(obj.NTIID, obj.href, null, obj.targetMimeType);
 
-		if (obj.isExternal && !obj.isEmbeddableDocument && context !== 'discussions') {
+		if (!openInApp && context !== 'discussions') {
 			return {
 				href: href,
 				onClick: () => {
