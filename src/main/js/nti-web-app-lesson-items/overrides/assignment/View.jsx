@@ -154,7 +154,7 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 
 
 	render () {
-		const {loading, error} = this.props;
+		const {loading, error, assignmentModel} = this.props;
 		const {activeAssignmentModel, activeHistoryItemModel, maxTime, remainingTime} = this.state;
 		const timerProps = activeHistoryItemModel ? {} : {maxTime, remainingTime};
 		// const {submitting} = this.state;
@@ -163,7 +163,7 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 			<div className={cx('assignment-view')}>
 				<Aside
 					component={Sidebar}
-					assignmentModel={activeAssignmentModel}
+					assignmentModel={activeAssignmentModel || assignmentModel}
 					doStart={this.doStart}
 					activeHistoryItemModel={activeHistoryItemModel}
 					{...timerProps}
