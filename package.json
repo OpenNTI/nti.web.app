@@ -50,7 +50,7 @@
     "@nti/web-client": "^1.1.1",
     "@nti/web-commons": "0.x.x",
     "@nti/web-contacts": "0.x.x",
-    "@nti/web-content": "^1.22.2",
+    "@nti/web-content": "^1.38.0",
     "@nti/web-course": "^1.44.0",
     "@nti/web-discussions": "0.x.x",
     "@nti/web-integrations": "^1.0.0-alpha.20180711160926",

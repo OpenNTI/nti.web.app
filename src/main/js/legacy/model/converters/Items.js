@@ -3,6 +3,13 @@ const Ext = require('@nti/extjs');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
+function maybeAdd (stores, r) {
+	const found = stores.find(store => store === r);
+
+	if (!found) {
+		stores.push(r);
+	}
+}
 
 module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 	override: 'Ext.data.Types',
@@ -14,7 +21,8 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 			if (v instanceof Object) {
 				v = !v ? null : lazy.ParseUtils.parseItems([v])[0];
 				if (v) {
-					v.stores.push(r);//make store updates bubble up to this owner record.
+					maybeAdd(v.stores, r);
+					// v.stores.push(r);//make store updates bubble up to this owner record.
 				}
 				return v;
 			}
@@ -34,10 +42,20 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 				if (this.limit !== undefined && result.length > this.limit) {
 					console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
 					result = result.slice(0, this.limit);
-					result.forEach(function (a) {if (a) {a.stores.push(r);}});
+					result.forEach(function (a) {
+						if (a) {
+							maybeAdd(a.stores, r);
+							// a.stores.push(r);
+						}
+					});
 				}
 				else {
-					result.forEach(function (a) {if (a) {a.stores.push(r);}});
+					result.forEach(function (a) {
+						if (a) {
+							maybeAdd(a.stores, r);
+							// a.stores.push(r);
+						}
+					});
 				}
 				return result;
 			}
@@ -66,7 +84,12 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 					}
 				}
 				result = lazy.ParseUtils.parseItems(values);
-				result.forEach(function (a) {if (a) {a.stores.push(r);}});
+				result.forEach(function (a) {
+					if (a) {
+						maybeAdd(a.stores, r);
+						// a.stores.push(r);
+					}
+				});
 				result.INDEX_KEYMAP = keys;
 				return result;
 			}
