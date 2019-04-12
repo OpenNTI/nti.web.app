@@ -3,7 +3,13 @@ const { encodeForURI } = require('@nti/lib-ntiids');
 const Globals = require('legacy/util/Globals');
 
 function getURLPart (obj) {
-	return encodeForURI(obj.getId ? obj.getId() : obj.getID ? obj.getID() : obj.NTIID);
+	try {
+		return encodeForURI(obj.getId ? obj.getId() : obj.getID ? obj.getID() : obj.NTIID);
+	}
+	catch (e) {
+		console.error(e, obj);
+		throw e;
+	}
 }
 
 function getAssignmentRoute (course, lesson, obj) {

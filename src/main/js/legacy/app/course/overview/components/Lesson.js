@@ -7,6 +7,7 @@ const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
 const WindowActions = require('legacy/app/windows/Actions');
 const BaseModel = require('legacy/model/Base');
+const CalendarRoutes = require('legacy/app/CalendarRoutes');
 
 const { ROUTE_BUILDERS, MODAL_ROUTE_BUILDERS } = require('./Constants');
 require('legacy/app/mediaviewer/Index');
@@ -36,6 +37,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		this.callParent(arguments);
 
 		this.useModal = Lesson.useModal();
+		this.calendarRoutes = CalendarRoutes(this);
 	},
 
 	afterRender: function () {
@@ -123,12 +125,16 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 				this.WindowActions.pushWindow(BaseModel.interfaceToModel(object));
 			};
-		} else if (object.isNoteModel) {
+		}
+		else if (object.isNoteModel) {
 			return () => {
 				this.WindowActions = this.WindowActions || WindowActions.create();
 
 				this.WindowActions.pushWindow(object);
 			};
+		}
+		else if (object.MimeType === 'application/vnd.nextthought.webinar.webinarcalendarevent') {
+			return this.calendarRoutes(object, context);
 		}
 
 		const builder = this.useModal ?
