@@ -258,9 +258,10 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 				this.fireEvent('player-command-activate');
 				this.maybeSyncHeight();
 
-				if (!this.doNotAutoPlay) {
-					this.analytics.start(this.queryPlayer());
-				}
+				// NTI-7776 - rely on the video to tell us when playback starts
+				// if (!this.doNotAutoPlay) {
+				// 	this.analytics.start(this.queryPlayer());
+				// }
 			});
 	},
 
