@@ -31,7 +31,8 @@ class NTIWebLessonItemsVideo extends React.Component {
 		location: PropTypes.shape({
 			item: PropTypes.object
 		}),
-		course: PropTypes.object
+		course: PropTypes.object,
+		firstSelection: PropTypes.bool
 	}
 
 	state = {}
@@ -156,7 +157,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 
 	render () {
 		const {newNote} = this.state;
-		const {location, course} = this.props;
+		const {location, course, firstSelection} = this.props;
 		const {item} = location || {};
 
 		if (!item) { return null; }
@@ -164,7 +165,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 		return (
 			<Router.RouteForProvider getRouteFor={this.getRouteFor} >
 				<div className="nti-web-lesson-items-video">
-					<TranscriptedVideo course={course} videoId={item.getID()} disableNoteCreation={!!newNote} />
+					<TranscriptedVideo course={course} videoId={item.getID()} disableNoteCreation={!!newNote} autoPlay={firstSelection} />
 					{newNote && (<Layouts.Uncontrolled onMount={this.showEditor} onUnmount={this.hideEditor} />)}
 				</div>
 			</Router.RouteForProvider>

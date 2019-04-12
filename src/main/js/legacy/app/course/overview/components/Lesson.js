@@ -259,6 +259,8 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 	async maybeShowContent (lesson, route, subRoute) {
 		const [itemRoute, viewerRoute] = !subRoute ? [] : subRoute.split('/viewer/');
+		const hasEmptyItemRoute = !this.activeItemRoute || this.activeItemRoute === '/';
+		const wasMounted = !!this.itemFlyout;
 
 		if (!this.maybeAddMediaViewer(viewerRoute, lesson, itemRoute)) {
 			this.remove(this.mediaViewer, true);
@@ -285,7 +287,8 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				lesson,
 				requiredOnly: Overview.isFilteredToRequired(),
 				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, lesson),
-				path: itemRoute
+				path: itemRoute,
+				firstSelection: hasEmptyItemRoute && wasMounted
 			}, true);
 		} catch (e) {
 			console.error(e);
