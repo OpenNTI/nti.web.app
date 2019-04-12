@@ -242,6 +242,7 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 					component: Video,
 					src: video,
 					autoPlay: !this.doNotAutoPlay,
+					deferred: this.deferred,
 					width: this.playerWidth,
 					height: this.playerHeight,
 					onSeeked: (e) => this.onSeeked(e),

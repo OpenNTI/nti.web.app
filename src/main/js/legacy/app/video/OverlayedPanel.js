@@ -97,6 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 					playlist: playlist,
 					video: playlist[0],
 					doNotAutoPlay: true,
+					deferred: true,
 					contentElement: dom,
 					listeners: {
 						'height-change': () => {
