@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
 import {TranscriptedVideo} from '@nti/web-content';
 import {Router} from '@nti/web-routing';
 import {Layouts} from '@nti/web-commons';
@@ -12,6 +13,10 @@ import DomUtils from 'legacy/util/Dom';
 import BaseModel from 'legacy/model/Base';
 
 import Registry from '../Registry';
+
+import Styles from './View.css';
+
+const cx = classnames.bind(Styles);
 
 const MIME_TYPES = {
 	'application/vnd.nextthought.ntivideo': true
@@ -37,6 +42,8 @@ class NTIWebLessonItemsVideo extends React.Component {
 
 	state = {}
 
+	attachRef = x => this.node = x;
+
 	getRouteFor = (obj) => {
 		if (obj.isNote && !obj.NTIID) {
 			return (e) => {
@@ -49,15 +56,14 @@ class NTIWebLessonItemsVideo extends React.Component {
 	}
 
 
-	showEditor = () => {
+	showEditor = (renderTo) => {
 		const {course} = this.props;
 		const {newNote} = this.state;
 		const courseModel = BaseModel.interfaceToModel(course);
 
 		if (!this.editor) {
 			this.editor = Editor.create({
-				floating: true,
-				renderTo: document.body,
+				renderTo: renderTo,
 				enableShareControls: true,
 				enableTitle: true,
 				enableFileUpload: true,
@@ -70,7 +76,6 @@ class NTIWebLessonItemsVideo extends React.Component {
 					}
 				}
 			}).addCls('in-gutter');
-			document.addEventListener('scroll', this.realignEditor, true);
 		}
 
 		this.mediaStore = this.mediaStore || MediaViewerStore.getInstance();
@@ -107,6 +112,11 @@ class NTIWebLessonItemsVideo extends React.Component {
 
 
 	realignEditor = () => {
+		if (!this.node) {
+			return;
+		}
+
+		const offsets = this.node.getBoundingClientRect();
 		const {alignTo, newNote} = this.state;
 		let left = alignTo.left;
 		let top = alignTo.top;
@@ -117,7 +127,12 @@ class NTIWebLessonItemsVideo extends React.Component {
 			//swallow
 		}
 
-		this.editor.showAt(left, top);
+		const mark = this.editor.renderTo;
+
+		mark.style.top = `${top - offsets.top + 50}px`;
+		mark.style.left = `${left - offsets.left + 20}px`;
+
+		// this.editor.showAt(left, top);
 	}
 
 
@@ -164,9 +179,15 @@ class NTIWebLessonItemsVideo extends React.Component {
 
 		return (
 			<Router.RouteForProvider getRouteFor={this.getRouteFor} >
-				<div className="nti-web-lesson-items-video">
+				<div className="nti-web-lesson-items-video" ref={this.attachRef}>
 					<TranscriptedVideo course={course} videoId={item.getID()} disableNoteCreation={!!newNote} autoPlay={firstSelection} />
-					{newNote && (<Layouts.Uncontrolled onMount={this.showEditor} onUnmount={this.hideEditor} />)}
+					{newNote && (
+						<Layouts.Uncontrolled
+							onMount={this.showEditor}
+							onUnmount={this.hideEditor}
+							attributes={{class: cx('note-editor-wrapper')}}
+						/>
+					)}
 				</div>
 			</Router.RouteForProvider>
 		);
