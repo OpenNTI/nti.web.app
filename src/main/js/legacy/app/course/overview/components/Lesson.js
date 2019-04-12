@@ -21,7 +21,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	ui: 'course',
 
 	statics: {
-		useModal: () => true//isFeature('course-content-modal')
+		useModal: () => isFeature('course-content-modal')
 	},
 
 	mixins: {
