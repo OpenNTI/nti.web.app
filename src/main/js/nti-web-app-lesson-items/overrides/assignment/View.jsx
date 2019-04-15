@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {Loading, Layouts} from '@nti/web-commons';
+import {Prompt as RoutePrompt} from '@nti/web-routing';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
 
@@ -153,6 +154,21 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 	}
 
 
+	onRoute = async (cont, stop) => {
+		if (!this.contentViewer || !this.contentViewer.allowNavigation) {
+			cont();
+			return;
+		}
+
+		try {
+			await this.contentViewer.allowNavigation();
+			cont();
+		} catch (e) {
+			stop();
+		}
+	}
+
+
 	render () {
 		const {loading, error, assignmentModel} = this.props;
 		const {activeAssignmentModel, activeHistoryItemModel, maxTime, remainingTime} = this.state;
@@ -168,6 +184,7 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 					activeHistoryItemModel={activeHistoryItemModel}
 					{...timerProps}
 				/>
+				<RoutePrompt onRoute={this.onRoute} when />
 				{loading && (
 					<div>
 						<Loading.Spinner.Large />

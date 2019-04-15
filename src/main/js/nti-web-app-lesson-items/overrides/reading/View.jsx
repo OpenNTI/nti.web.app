@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {Loading, Layouts, EmptyState} from '@nti/web-commons';
 import {Notes} from '@nti/web-discussions';
-import {LinkTo, Router} from '@nti/web-routing';
+import {LinkTo, Router, Prompt as RoutePrompt} from '@nti/web-routing';
 import {scoped} from '@nti/lib-locale';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
@@ -181,6 +181,20 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		}
 	}
 
+	onRoute = async (cont, stop) => {
+		if (!this.contentViewer || !this.contentViewer.allowNavigation) {
+			cont();
+			return;
+		}
+
+		try {
+			await this.contentViewer.allowNavigation();
+			cont();
+		} catch (e) {
+			stop();
+		}
+	}
+
 
 	render () {
 		const {loading, error, notes} = this.props;
@@ -190,6 +204,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 			<Router.RouteForProvider getRouteFor={this.getRouteFor}>
 				<div className={cx('reading-view', {submitting})}>
 					<Aside component={Notes.Sidebar} notes={notes} fillToBottom sticky />
+					<RoutePrompt onRoute={this.onRoute} when />
 					{loading && (
 						<div className={cx('loading-container')}>
 							<Loading.Spinner.Large />
