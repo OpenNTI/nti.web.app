@@ -499,7 +499,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 	},
 
 	saveProgress: function (progress) {
-		if (this.isInstructor) {
+		if (this.isInstructor || !this.questionSet.associatedAssignment) {
 			return Promise.reject();
 		}
 

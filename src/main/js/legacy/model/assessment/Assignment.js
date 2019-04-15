@@ -115,7 +115,9 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 				return lazy.ParseUtils.parseItems(response)[0];
 			})
 			.catch(function (reason) {
-				console.error('Failed to get the assignment save point: ', reason);
+				if (reason.status !== 404) {
+					console.error('Failed to get the assignment save point: ', reason);
+				}
 			});
 	},
 
