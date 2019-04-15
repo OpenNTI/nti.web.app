@@ -136,6 +136,9 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		else if (object.MimeType === 'application/vnd.nextthought.webinar.webinarcalendarevent') {
 			return this.calendarRoutes(object, context);
 		}
+		else if (object.isUser) {
+			return null;
+		}
 
 		const builder = this.useModal ?
 			(MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']) :
