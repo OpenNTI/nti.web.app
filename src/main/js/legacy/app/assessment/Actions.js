@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Events} = require('@nti/web-session');
 
 const AssessmentQuestionSetSubmission = require('legacy/model/assessment/QuestionSetSubmission');
 const AssessmentAssignmentSubmission = require('legacy/model/assessment/AssignmentSubmission');
@@ -101,6 +102,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
+					questionSet.getInterfaceInstance()
+						.then(q => Events.emit(Events.ASSESSMENT_SUBMITTED, q));
+
 					fulfill(result);
 				},
 				failure: function () {
@@ -196,6 +200,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 						itemLink = pendingAssessment.getLink('AssignmentHistoryItem');
 
 					assignment.setHistoryLink(itemLink);
+
+					assignment.getInterfaceInstance()
+						.then(a => Events.emit(Events.ASSIGNMENT_SUBMITTED, a));
 
 					fulfill({
 						result: result,
