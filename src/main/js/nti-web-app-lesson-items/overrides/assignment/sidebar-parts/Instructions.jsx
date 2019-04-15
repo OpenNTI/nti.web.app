@@ -25,8 +25,7 @@ const t = scoped('NTIWebAppLessonItems.overrides.assignment.sidebar-parts.Instru
 		message: 'You can always return here to review your work.'
 	},
 	support: {
-		message: 'For support, contact ',
-		link: 'help@nextthought.com'
+		link: 'Contact Support'
 	}
 });
 
@@ -97,7 +96,6 @@ export default class AssignmentSidebarInstructions extends React.Component {
 
 		return (
 			<div className={cx('support')}>
-				<span className={cx('message')}>{t('support.message')}</span>
 				<span className={cx('link')} onClick={this.contactUs}>{t('support.link')}</span>
 			</div>
 		);
