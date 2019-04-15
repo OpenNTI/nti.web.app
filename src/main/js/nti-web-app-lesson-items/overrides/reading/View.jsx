@@ -27,6 +27,7 @@ const MIME_TYPES = {
 	'application/vnd.nextthought.ltiexternaltoolasset': true,
 	'application/vnd.nextthought.relatedworkref': true,
 	'application/vnd.nextthought.questionsetref': true,
+	'application/vnd.nextthought.naquestionset': true,
 	'application/vnd.nextthought.surveyref': true
 };
 
