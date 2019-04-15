@@ -1,7 +1,5 @@
 const { encodeForURI } = require('@nti/lib-ntiids');
 
-const Globals = require('legacy/util/Globals');
-
 function getURLPart (obj) {
 	try {
 		return encodeForURI(obj.getId ? obj.getId() : obj.getID ? obj.getID() : obj.NTIID);
@@ -90,26 +88,6 @@ const MODAL_ROUTE_BUILDERS = {
 		return () => {
 			console.log(obj, context);
 		};
-	},
-
-	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context) => {
-		const href = MODAL_ROUTE_BUILDERS.default(course, lesson, obj, context);
-		const openInApp = Globals.shouldOpenInApp(obj.NTIID, obj.href, null, obj.targetMimeType);
-
-		if (!openInApp && context !== 'discussions') {
-			return {
-				href: href,
-				onClick: () => {
-					if (context && (context.isNextLink || context.isPrevLink)) { return; }
-
-					setTimeout(() => {
-						window.open(obj.href, '_blank');
-					}, 1000);
-				}
-			};
-		}
-
-		return href;
 	},
 
 	'default': modalDefault
