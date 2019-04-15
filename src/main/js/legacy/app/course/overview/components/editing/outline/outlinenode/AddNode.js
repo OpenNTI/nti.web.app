@@ -171,8 +171,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				else {
 					wait()
 						.then(function () {
-							if (this.editor.setSuggestTitle) {
-								this.editor.setSuggestTitle();
+							const {editor} = this;
+							if (editor && editor.setSuggestTitle) {
+								editor.setSuggestTitle();
 							}
 						});
 				}
