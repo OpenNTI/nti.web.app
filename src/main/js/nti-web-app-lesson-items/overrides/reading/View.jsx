@@ -5,7 +5,9 @@ import {Loading, Layouts, EmptyState} from '@nti/web-commons';
 import {Notes} from '@nti/web-discussions';
 import {LinkTo, Router, Prompt as RoutePrompt} from '@nti/web-routing';
 import {scoped} from '@nti/lib-locale';
+import {Events, Hooks} from '@nti/web-session';
 
+import BaseModel from 'legacy/model/Base';
 import ContentViewer from 'legacy/app/contentviewer/Index';
 import PageInfo from 'legacy/model/PageInfo';
 import RelatedWorkRef from 'legacy/model/RelatedWork';
@@ -58,6 +60,7 @@ export default
 	'setNotes',
 	'notes'
 ])
+@Hooks.onEvent(Events.NOTE_DELETED, 'onNoteDeleted')
 class NTIWebAppLessonItemsReading extends React.Component {
 	static deriveBindingFromProps (props) {
 		const {location = {}} = props;
@@ -98,6 +101,17 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 	state = {}
 
+	onNoteDeleted (note) {
+		const store = this.contentViewer && this.contentViewer.reader && this.contentViewer.reader.flatPageStore;
+
+		if (!store) { return; }
+
+		const found = store.findRecord('ID', note.getID());
+
+		if (found) {
+			store.remove(BaseModel.interfaceToModel(note));
+		}
+	}
 
 
 	setupReading = (renderTo) => {
