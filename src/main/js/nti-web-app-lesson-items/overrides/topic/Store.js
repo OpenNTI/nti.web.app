@@ -28,7 +28,7 @@ async function getActiveUsers (topic) {
 		const resolved = await Promise.all(
 			users.map(async (user) => {
 				try {
-					return User.resolve({entity: user});
+					return await User.resolve({entity: user});
 				} catch (e) {
 					return null;
 				}
