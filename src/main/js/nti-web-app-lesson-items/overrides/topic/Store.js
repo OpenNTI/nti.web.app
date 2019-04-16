@@ -7,7 +7,7 @@ const MAX_ACTIVE_USERS = 5;
 const ACTIVE_USER_PARAMS = {
 	batchSize: 50,
 	sortOn: 'CreatedTime',
-	sortOrder: 'ascending'
+	sortOrder: 'descending'
 };
 
 async function getActiveUsers (topic) {
