@@ -47,6 +47,7 @@ export default class AssignmentSidebarInstructions extends React.Component {
 		if (!assignmentModel) { return null; }
 
 		const available = assignmentModel && assignmentModel.isAvailable();
+		const noSubmit = assignmentModel && assignmentModel.isNoSubmit();
 		const submitted = !!activeHistoryItemModel;
 
 		return (
@@ -54,9 +55,9 @@ export default class AssignmentSidebarInstructions extends React.Component {
 				<div className={cx('header')}>
 					{t('header')}
 				</div>
-				{!available && this.renderUnavailable(assignmentModel, activeHistoryItemModel)}
-				{available && !submitted && this.renderAvailable(assignmentModel, activeHistoryItemModel)}
-				{available && submitted && this.renderSubmitted(assignmentModel, activeHistoryItemModel)}
+				{!available && !noSubmit && this.renderUnavailable(assignmentModel, activeHistoryItemModel)}
+				{available && !noSubmit && !submitted && this.renderAvailable(assignmentModel, activeHistoryItemModel)}
+				{available && !noSubmit && submitted && this.renderSubmitted(assignmentModel, activeHistoryItemModel)}
 				{this.renderSupport()}
 			</div>
 		);

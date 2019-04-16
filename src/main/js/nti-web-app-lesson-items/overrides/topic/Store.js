@@ -25,10 +25,17 @@ async function getActiveUsers (topic) {
 		}
 
 		const users = Array.from(activeSet);
-
-		return Promise.all(
-			users.map(user => User.resolve({entity: user}))
+		const resolved = await Promise.all(
+			users.map(async (user) => {
+				try {
+					return User.resolve({entity: user});
+				} catch (e) {
+					return null;
+				}
+			})
 		);
+
+		return resolved.filter(u => !!u);
 	} catch (e) {
 		return [];
 	}
