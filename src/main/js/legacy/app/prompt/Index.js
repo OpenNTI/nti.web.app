@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const Commons = require('@nti/web-commons');
 
 const PromptStateStore = require('./StateStore');
 
@@ -29,12 +30,15 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 	addOpenCls: function () {
 		if (this.HTML_ELEMENT) {
 			this.HTML_ELEMENT.classList.add('prompt-open');
+			Commons.Prompt.Manager.suspendEscapeListener();
 		}
+
 	},
 
 	removeOpenCls: function () {
 		if (this.HTML_ELEMENT) {
 			this.HTML_ELEMENT.classList.remove('prompt-open');
+			Commons.Prompt.Manager.resumeEscapeListener();
 		}
 	},
 

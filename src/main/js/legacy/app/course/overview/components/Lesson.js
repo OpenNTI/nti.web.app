@@ -165,6 +165,11 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				this.itemFlyout.onRouteDeactivate();
 			}
 
+			if (this.mediaViewer) {
+				this.mediaViewer.destroy();
+				delete this.mediaViewer;
+			}
+
 			this.deactivated = true;
 			delete this.deactivating;
 		}, 100);

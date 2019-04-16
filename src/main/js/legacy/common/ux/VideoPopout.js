@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const Commons = require('@nti/web-commons');
 const {wait} = require('@nti/lib-commons');
 
 
@@ -56,6 +57,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
 	},
 
 	destroy: function () {
+		Commons.Prompt.Manager.resumeEscapeListener();
 		Ext.TaskManager.stop(this.task);
 		this.callParent(arguments);
 	},
@@ -72,6 +74,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
 			scope: this,
 			click: this.close
 		});
+
+		Commons.Prompt.Manager.suspendEscapeListener();
 
 		wait()
 			.then(this.syncSize.bind(this));
