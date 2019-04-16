@@ -143,6 +143,30 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent(arguments);
 	},
 
+	getSavePayload () {
+		const {img} = this;
+
+		const data = {
+			'MimeType': 'application/vnd.nextthought.webinarasset',
+			'webinar': this.webinar.webinarKey,
+			'organizerKey': this.webinar.organizerKey
+		};
+
+		// if we're sending an image we'll use FormData; otherwise json
+		// for handling of null values. (FormData sends null as "null")
+		if (img) {
+			const formData = new FormData();
+			Object.entries(data).forEach(([key, value]) => formData.append(key, value));
+			formData.append('icon', img || null);
+			return formData;
+		}
+
+		return {
+			...data,
+			icon: null
+		};
+	},
+
 	onSave: function () {
 		let originalPosition = {};
 
@@ -166,22 +190,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			index: this.selectedRank
 		};
 
-		const formData = new FormData();
-
-		formData.append('MimeType', 'application/vnd.nextthought.webinarasset');
-		formData.append('webinar', this.webinar.webinarKey);
-		formData.append('organizerKey', this.webinar.organizerKey);
-
-		if(this.img !== undefined) {
-			formData.append('icon', this.img || null);
-		}
+		const payload = this.getSavePayload();
 
 		return getService().then(service => {
 			if(this.record) {
-				return service.put(this.record.getLink('edit'), formData);
+				return service.put(this.record.getLink('edit'), payload);
 			}
 
-			return service.post(this.selectedParent.getLink('ordered-contents') + '/index/' + this.selectedRank, formData);
+			return service.post(this.selectedParent.getLink('ordered-contents') + '/index/' + this.selectedRank, payload);
 		}).then(() => {
 			if(this.record) {
 				return this.EditingActions.__moveRecord(this.record, originalPosition, currentPosition, this.rootRecord);
