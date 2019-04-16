@@ -950,6 +950,10 @@ $experimental-support-for-svg: true;
 	z-index: 199 !important;
 	backface-visibility: hidden;
 
+	html.msg-bar-open & {
+		top: 40px !important;
+	}
+
 	&.ready {
 		display: block;
 
@@ -976,7 +980,7 @@ $experimental-support-for-svg: true;
 	}
 
 	.header{
-		position: fixed;
+		position: absolute;
 		top: 0; left: 0;
 		width: 100%;
 
