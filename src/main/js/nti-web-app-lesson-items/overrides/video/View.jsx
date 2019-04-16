@@ -9,7 +9,6 @@ import Editor from 'legacy/editor/Editor';
 import MediaViewerStore from 'legacy/app/mediaviewer/StateStore';
 import UserDataActions from 'legacy/app/userdata/Actions';
 import SharingUtils from 'legacy/util/Sharing';
-import AnalyticsUtils from 'legacy/util/Analytics';
 import DomUtils from 'legacy/util/Dom';
 import BaseModel from 'legacy/model/Base';
 
@@ -70,6 +69,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 				enableTitle: true,
 				enableFileUpload: true,
 				width: 325,
+				htmlCls: 'inline-note-editor',
 				listeners: {
 					'no-title-content': () => true,
 					save: (...args) => this.saveEditor(...args),

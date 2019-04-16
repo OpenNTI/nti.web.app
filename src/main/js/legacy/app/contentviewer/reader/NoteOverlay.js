@@ -229,6 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 				enableFileUpload: true,
 				enableTitle: true,
 				preventBringToFront: true,
+				htmlCls: 'inline-note-editor',
 				listeners: {
 					'deactivated-editor': 'destroy',
 					'no-title-content': function () {return true;},//require title if notepad is a feature

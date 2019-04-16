@@ -875,6 +875,7 @@ body.white-shade-mask .chat-gutter-window {
   	background-color: rgba(35, 35, 35, 0.70);
 	border-radius: 5px;
 	padding-bottom: 60px;
+	transition: right 0.5s;
 
 	html.msg-bar-open & {
 		top: 140px;
@@ -883,6 +884,13 @@ body.white-shade-mask .chat-gutter-window {
 	.nti-course-content-open & {
 		z-index: 1001;
 	}
+
+	@media only screen and (max-width: 1335px) {
+		html.nti-course-content-open.inline-note-editor & {
+			right: -400px;
+		}
+	}
+
 
 	@media #{$hide-chat-break-point} {
 		.chat-container:not(.show-gutter) & {
