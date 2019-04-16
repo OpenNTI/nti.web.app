@@ -2,6 +2,8 @@
 	--side-padding: 1rem;
 
 	background: white;
+	position: sticky;
+	top: -18px;
 }
 
 .active-users > :global(.empty-state-component) {
