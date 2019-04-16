@@ -8,7 +8,7 @@
 
 .error {
 	position: relative;
-	padding: 2rem 1rem 2rem 200px;
+	padding: 2rem;
 	min-height: 200px;
 	color: var(--tertiary-grey);
 }
