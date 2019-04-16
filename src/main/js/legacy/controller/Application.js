@@ -40,6 +40,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 	MARK_ROUTE: [
 		/^course\/.*\/video.*$/,
+		/^course\/.*\/viewer.*$/,
 		/^search/,
 		/^notifications/,
 		/^user/,
