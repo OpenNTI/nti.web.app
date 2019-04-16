@@ -233,6 +233,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	maybeShowAllowedTime () {
 		if (this.hasTimedPlaceholder) {
 			this.showAllowedTime();
+			this.updateActiveAssignment();
 		} else {
 			this.showAssignment();
 		}
