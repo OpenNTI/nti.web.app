@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const Mime = require('mime-types');
+const Commons = require('@nti/web-commons');
 const {wait} = require('@nti/lib-commons');
 
 const AnnotationUtils = require('legacy/util/Annotations');
@@ -389,6 +390,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		if (this.enableFileUpload) {
 			this.on('destroy', this.clearAttachmentFilesParts.bind(this));
 		}
+
+		Commons.Prompt.Manager.suspendEscapeListener();
+		this.on('destroy', () => {
+			Commons.Prompt.Manager.resumeEscapeListener();
+		});
+
 	},
 
 	showTitle: function () {
