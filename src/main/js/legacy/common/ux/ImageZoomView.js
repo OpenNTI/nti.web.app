@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const Commons = require('@nti/web-commons');
 
 const SlideDeck = require('./SlideDeck');
 
@@ -119,6 +120,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 	},
 
 	destroy: function () {
+		Commons.Prompt.Manager.resumeEscapeListener();
 		Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
 		var n = Ext.query('.nav-helper').first();
 		if (n) { Ext.fly(n).show(); }
@@ -168,6 +170,8 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
 
 		Ext.defer(this.el.focus, 100, this.el);
 		Ext.EventManager.onWindowResize(this.viewportMonitor, this, undefined);
+
+		Commons.Prompt.Manager.suspendEscapeListener();
 	},
 
 	viewportMonitor: function () {
