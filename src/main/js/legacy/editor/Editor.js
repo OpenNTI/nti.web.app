@@ -396,6 +396,15 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 			Commons.Prompt.Manager.resumeEscapeListener();
 		});
 
+		if (this.htmlCls) {
+			const html = document.documentElement;
+			html.classList.add(this.htmlCls);
+
+			this.on('destroy', () => {
+				html.classList.remove(this.htmlCls);
+			});
+		}
+
 	},
 
 	showTitle: function () {

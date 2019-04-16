@@ -5,3 +5,33 @@
 	justify-content: center;
 	align-items: center;
 }
+
+.error {
+	position: relative;
+	padding: 2rem 1rem 2rem 200px;
+	min-height: 200px;
+	color: var(--tertiary-grey);
+}
+
+.error .icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 200px;
+	height: 200px;
+}
+
+.error .title {
+	font-size: 31px;
+	font-weight: 200;
+	margin-bottom: 0.5em;
+}
+
+.error .message {
+	background: var(--tertiary-grey);
+	display: inline-block;
+	border-radius: 30px;
+	padding: 0.375em 1.5em;
+	color: white;
+	font-size: 0.875rem;
+}
