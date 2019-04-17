@@ -47,7 +47,7 @@ export default class AssignmentSidebarInstructions extends React.Component {
 		if (!assignmentModel) { return null; }
 
 		const available = assignmentModel && assignmentModel.isAvailable();
-		const noSubmit = assignmentModel && assignmentModel.isNoSubmit();
+		const noSubmit = assignmentModel && (assignmentModel.isNoSubmit() || !assignmentModel.getQuestionCount());
 		const submitted = !!activeHistoryItemModel;
 
 		return (
