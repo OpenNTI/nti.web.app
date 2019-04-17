@@ -37,6 +37,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 		location: PropTypes.shape({
 			item: PropTypes.object
 		}),
+		activeObjectId: PropTypes.string,
 		course: PropTypes.object,
 		lessonInfo: PropTypes.object,
 		firstSelection: PropTypes.bool
@@ -192,7 +193,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 
 	render () {
 		const {newNote} = this.state;
-		const {location, course, firstSelection} = this.props;
+		const {location, course, firstSelection, activeObjectId} = this.props;
 		const {item} = location || {};
 		const hit = this.getSearchHit(item);
 		const startTime = hit && hit.get('StartMilliSecs');
@@ -205,6 +206,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 					<TranscriptedVideo
 						course={course}
 						videoId={item.getID()}
+						scrolledTo={activeObjectId}
 						disableNoteCreation={!!newNote}
 						autoPlay={firstSelection || hit}
 						analyticsData={this.getAnalyticsData()}
