@@ -24,8 +24,12 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 		if (!this.contentElement) {return;}
 		var ctTop = this.el.up('.x-reader-pane').getY(),
 			top = (10 + ctTop);
-		this.el.setY(top);
-		this.viewportMonitor();
+
+		if (top !== this.cachedTop) {
+			this.cachedTop = top;
+			this.el.setY(top);
+			this.viewportMonitor();
+		}
 
 		return top;
 	},
@@ -165,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 		try {
 
 			var margin = 15,
-				y = this.getY(),
+				y = this.cachedY,
 				h = (Ext.dom.Element.getViewportHeight() - y) - margin;
 
 			if (this.getHeight() !== h) {
@@ -179,6 +183,9 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 
 	afterRender: function () {
 		this.callParent(arguments);
+
+		this.cachedY = this.getY();
+
 		this.viewportMonitor();
 		//	this.mon(Ext.get(Ext.DomHelper.append(this.el,{cls:'back-button'})),{
 		//		click: function(){
