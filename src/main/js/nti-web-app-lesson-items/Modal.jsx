@@ -40,6 +40,10 @@ function pathToSelection (path) {
 }
 
 export default class NTIWebAppLessonItems extends React.Component {
+	static pathToSelection (path) {
+		return pathToSelection(path);
+	}
+
 	static propTypes = {
 		course: PropTypes.object,
 		lesson: PropTypes.string,
@@ -47,7 +51,8 @@ export default class NTIWebAppLessonItems extends React.Component {
 		path: PropTypes.string,
 		requiredOnly: PropTypes.bool,
 		handleNavigation: PropTypes.func,
-		firstSelection: PropTypes.bool
+		firstSelection: PropTypes.bool,
+		activeObjectId: PropTypes.string
 	}
 
 	static contextTypes = {
@@ -90,7 +95,15 @@ export default class NTIWebAppLessonItems extends React.Component {
 
 
 	render () {
-		const {course, lesson, dismissPath, requiredOnly, handleNavigation, firstSelection} = this.props;
+		const {
+			course,
+			lesson,
+			dismissPath,
+			requiredOnly,
+			handleNavigation,
+			firstSelection,
+			activeObjectId
+		} = this.props;
 		const {selection} = this.state;
 
 		if (!selection || !course || !lesson) {
@@ -111,6 +124,7 @@ export default class NTIWebAppLessonItems extends React.Component {
 					requiredOnly={requiredOnly}
 					handleNavigation={handleNavigation}
 					firstSelection={firstSelection}
+					activeObjectId={activeObjectId ? decodeFromURI(activeObjectId) : null}
 
 					dismissPath={dismissPath}
 					overrides={overrides}

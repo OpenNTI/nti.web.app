@@ -21,14 +21,16 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	getContext () {
 		var ContextSS = ContextStateStore.getInstance(),
 			contextObjects = ContextSS.getContext(),
-			contextStrings = [];
+			context = [];
 
-		function mapContextObjectToAnalyticContextString (contextPart) {
+		function mapContextObjectToAnalyticContext (contextPart) {
 			var contextObject = contextPart && contextPart.obj,
 				contextCmp = contextPart && contextPart.cmp,
 				contextStr = null;
 
-			if (contextObject && Ext.isFunction(contextObject.get)) {
+			if (contextObject && contextObject.contentIds) {
+				contextStr = contextObject.contentIds;
+			}else if (contextObject && Ext.isFunction(contextObject.get)) {
 				contextStr = contextObject.get('NTIID');
 			}
 			if (!contextStr) {
@@ -38,9 +40,11 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			return contextStr;
 		}
 
-		contextStrings = Ext.Array.map(contextObjects, mapContextObjectToAnalyticContextString);
-		contextStrings = Ext.Array.filter(contextStrings, function (str) {return !Ext.isEmpty(str);});
-		return contextStrings || [];
+		context = Ext.Array.map(contextObjects, mapContextObjectToAnalyticContext);
+		context = context.reduce((acc, c) => acc.concat(c), []);
+		context = Ext.Array.filter(context, function (str) {return !Ext.isEmpty(str);});
+
+		return context || [];
 	},
 
 

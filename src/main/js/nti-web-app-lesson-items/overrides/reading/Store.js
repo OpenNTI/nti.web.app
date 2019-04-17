@@ -22,6 +22,20 @@ async function resolvePageInfo (page, course) {
 	}
 }
 
+
+async function resolveActiveObject (id) {
+	if (!id) { return null; }
+
+	try {
+		const service = await getService();
+		const object = await service.getObject(id);
+
+		return BaseModel.interfaceToModel(object);
+	} catch (e) {
+		return null;
+	}
+}
+
 function getRootId (parents = [], page) {
 	for (let parent of parents) {
 		const id = parent.getID && parent.getID();
@@ -34,7 +48,30 @@ function getRootId (parents = [], page) {
 
 export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore {
 
-	async load () {
+	load () {
+		this.loadPage();
+		this.loadActiveObject();
+	}
+
+	async loadActiveObject () {
+		const {activeObjectId} = this.binding;
+
+		if (activeObjectId === this.activeObjectId) { return; }
+
+		this.activeObjectId = activeObjectId;
+
+		try {
+			const activeObject = await resolveActiveObject(activeObjectId);
+
+			this.set({
+				activeObject
+			});
+		} catch (e) {
+			//swallow
+		}
+	}
+
+	async loadPage () {
 		const {course, page, parents} = this.binding;
 
 		if (this.course === course && this.page === page) { return; }

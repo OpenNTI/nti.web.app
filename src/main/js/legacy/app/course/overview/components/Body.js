@@ -137,6 +137,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
+	getActiveItem () {
+		return this.getEditor() || this.getLesson();
+	},
+
 	getLesson: function (addIfNotThere) {
 		var lesson = this.down('course-overview-lesson[isLessonView]');
 
@@ -248,6 +253,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const lesson = this.getLesson(true);
 
 		return lesson.maybeShowContent(id, route, subRoute);
+	},
+
+	isShowingContent () {
+		const lesson = this.getLesson();
+
+		return lesson && lesson.isShowingContent();
 	},
 
 	showOutlineNode: function (record, doNotCache, subRoute) {
