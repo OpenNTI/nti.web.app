@@ -1,5 +1,11 @@
 @import "~@nti/style-common";
 
+.course-overview-control-bar-container {
+	html.nti-course-content-open & {
+		display: none;
+	}
+}
+
 .course-overview-control-bar {
 	display: flex;
 	align-items: center;

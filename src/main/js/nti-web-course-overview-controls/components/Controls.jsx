@@ -82,7 +82,7 @@ export default class CourseOverviewControls extends React.Component {
 		const cls = cx('course-overview-control-bar', {disabled});
 
 		return (
-			<ControlBar visible={!hide}>
+			<ControlBar visible={!hide} className="course-overview-control-bar-container">
 				<div className={cls}>
 					{isEditing && this.renderResourceControl()}
 					{isPreview && this.renderMessage()}
