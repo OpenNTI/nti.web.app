@@ -22,6 +22,8 @@ function pathToSelection (path) {
 		for (let part of parts) {
 			if (part === 'items') {
 				started = true;
+			} else if (part === 'object') {
+				break;
 			} else if (part) {
 				if (!started) { return null; }
 

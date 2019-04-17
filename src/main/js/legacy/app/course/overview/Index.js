@@ -189,8 +189,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			delete this.assignmentViewer;
 		}
 
+		let path = Globals.trimRoute(route.path);
 
-		return lessons.handleRoute(route.path, route.precache);
+		if (route.object && route.object.id) {
+			path = `${path}/object`;
+
+			if (route.object.mimeType) {
+				path = `${path}/${route.object.mimeType}`;
+			}
+
+			path = `${path}/${route.object.id}`;
+		}
+
+
+		return lessons.handleRoute(path, route.precache);
 	},
 
 	showContent: function (route/*, subRoute*/) {
