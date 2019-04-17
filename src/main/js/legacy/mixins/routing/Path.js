@@ -284,8 +284,13 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		} else if (this.defaultRouteHandler) {
 			val = this.defaultRouteHandler.call(null, {
 				path: '/' + route.path,
+				hash: route.hash,
 				queryParams: Ext.Object.fromQueryString(route.query || ''),
-				precache: precache
+				precache: precache,
+				object: {
+					id: (object && object.id) || null,
+					mimeType: (object && object.mimeType) || null
+				}
 			});
 		} else if (this.defaultRoutePath) {
 			val = this.handleRoute(this.defaultRoutePath, precache);
