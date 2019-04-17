@@ -46,6 +46,24 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		this.maybeMask();
 	},
 
+	getContext () {
+		const itemRoute = this.activeItemRoute && Modal.pathToSelection(this.activeItemRoute);
+		const video = this.mediaViewer && this.mediaViewer.video && this.mediaViewer.video.getId();
+		const ids = video ? [...itemRoute, video] : itemRoute;
+
+		return {
+			contentIds: ids,
+			get: (prop) => {
+				if (prop === 'NTIID') {
+					return ids[0];
+				}
+			},
+			getId: () => {
+				return ids[0];
+			}
+		};
+	},
+
 	setActiveBundle: function (bundle) {
 		this.bundle = bundle;
 	},
@@ -243,6 +261,11 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 
+	isShowingContent () {
+		return this.activeItemRoute || this.mediaViewer;
+	},
+
+
 	maybeAddMediaViewer (viewerRoute, lesson, returnPath) {
 		if (!viewerRoute) {
 			return;
@@ -302,7 +325,8 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				requiredOnly: Overview.isFilteredToRequired(),
 				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, lesson),
 				path: itemRoute,
-				firstSelection: hasEmptyItemRoute && wasMounted
+				firstSelection: hasEmptyItemRoute && wasMounted,
+				activeObjectId: route && route.object && route.object.id
 			}, true);
 		} catch (e) {
 			console.error(e);

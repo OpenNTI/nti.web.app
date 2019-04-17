@@ -104,7 +104,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		rootId: PropTypes.string,
 		bundle: PropTypes.object,
 
-		activeObject: PropTypes.string,
+		activeObject: PropTypes.object,
 		setNotes: PropTypes.func,
 		notes: PropTypes.array
 	}

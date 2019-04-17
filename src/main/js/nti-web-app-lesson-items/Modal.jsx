@@ -40,6 +40,10 @@ function pathToSelection (path) {
 }
 
 export default class NTIWebAppLessonItems extends React.Component {
+	static pathToSelection (path) {
+		return pathToSelection(path);
+	}
+
 	static propTypes = {
 		course: PropTypes.object,
 		lesson: PropTypes.string,

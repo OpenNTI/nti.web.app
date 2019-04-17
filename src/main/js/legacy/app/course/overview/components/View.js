@@ -113,8 +113,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getActiveLesson: function () {
-		return this.activeLesson;
+		return this.activeLesson || this.activeNode;
 	},
+
 
 	gotoResources () {
 		if (this.gotoResources) {
@@ -335,6 +336,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	getActiveItem: function () {
+		if (this.body.isShowingContent()) {
+			return this.body;
+		}
+
+
 		return this.navigation.getActiveItem();
 	},
 
