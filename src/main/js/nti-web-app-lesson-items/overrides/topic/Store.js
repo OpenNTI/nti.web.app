@@ -1,5 +1,5 @@
 import {Stores} from '@nti/lib-store';
-import {User} from '@nti/web-client';
+import {User, getAppUsername} from '@nti/web-client';
 
 import BaseModel from 'legacy/model/Base';
 
@@ -12,12 +12,19 @@ const ACTIVE_USER_PARAMS = {
 
 async function getActiveUsers (topic) {
 	try {
+		const appUsername = getAppUsername();
 		const batch = await topic.fetchLink('contents', ACTIVE_USER_PARAMS);
 		const {Items:comments} = batch;
 		const activeSet = new Set();
 
 		for (let comment of comments) {
-			activeSet.add(comment.Creator);
+			const {Creator:creator} = comment;
+			const isMe = typeof creator === 'string' ? creator === appUsername : creator.getID();
+
+
+			if (!isMe) {
+				activeSet.add(comment.Creator);
+			}
 
 			if (activeSet.size > MAX_ACTIVE_USERS) {
 				break;

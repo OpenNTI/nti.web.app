@@ -11,7 +11,8 @@
 }
 
 .reading-view :global(.content-viewer) {
-	padding: 0 0 20px;
+	padding: 0;
+	margin-bottom: -80px;
 }
 
 .reading-view :global(.reader-container.navigation-panel .center .x-reader-pane) {
