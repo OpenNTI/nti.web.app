@@ -12,6 +12,7 @@
 
 .reading-view :global(.content-viewer) {
 	padding: 0;
+	min-height: 80px;
 	margin-bottom: -80px;
 }
 

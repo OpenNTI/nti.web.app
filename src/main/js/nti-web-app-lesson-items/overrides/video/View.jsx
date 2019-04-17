@@ -11,6 +11,7 @@ import UserDataActions from 'legacy/app/userdata/Actions';
 import SharingUtils from 'legacy/util/Sharing';
 import DomUtils from 'legacy/util/Dom';
 import BaseModel from 'legacy/model/Base';
+import SearchStore from 'legacy/app/search/StateStore';
 
 import Registry from '../Registry';
 
@@ -36,6 +37,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 		location: PropTypes.shape({
 			item: PropTypes.object
 		}),
+		activeObjectId: PropTypes.string,
 		course: PropTypes.object,
 		lessonInfo: PropTypes.object,
 		firstSelection: PropTypes.bool
@@ -181,10 +183,20 @@ class NTIWebLessonItemsVideo extends React.Component {
 	}
 
 
+	getSearchHit = (video) => {
+		this.SearchStore = this.SearchStore || SearchStore.getInstance();
+
+		const {hit} = this.SearchStore.getHitForContainer(video.getID()) || {};
+		return hit;
+	}
+
+
 	render () {
 		const {newNote} = this.state;
-		const {location, course, firstSelection} = this.props;
+		const {location, course, firstSelection, activeObjectId} = this.props;
 		const {item} = location || {};
+		const hit = this.getSearchHit(item);
+		const startTime = hit && hit.get('StartMilliSecs');
 
 		if (!item) { return null; }
 
@@ -194,9 +206,11 @@ class NTIWebLessonItemsVideo extends React.Component {
 					<TranscriptedVideo
 						course={course}
 						videoId={item.getID()}
+						scrolledTo={activeObjectId}
 						disableNoteCreation={!!newNote}
-						autoPlay={firstSelection}
+						autoPlay={firstSelection || hit}
 						analyticsData={this.getAnalyticsData()}
+						startTime={(startTime || 0) / 1000}
 					/>
 					{newNote && (
 						<Layouts.Uncontrolled

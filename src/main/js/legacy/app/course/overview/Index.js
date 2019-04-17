@@ -125,6 +125,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
+	getActiveLesson () {
+		const lessons = this.getLessons();
+
+		return this.activeLesson || lessons.getActiveLesson();
+	},
+
+
 	getContext: function () {
 		var lessons = this.getLessons(), item = this.getLayout().getActiveItem();
 
@@ -556,7 +563,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 	getPageInfoRoute: function (obj) {
-		var lesson = obj.parent || this.activeLesson,
+		var lesson = obj.parent || this.getActiveLesson(),
 			lessonId = lesson && lesson.getId(),
 			label = obj.get ? obj.get('label') : obj.label,
 			pageInfo = obj.getId ? obj.getId() : obj.NTIID;
