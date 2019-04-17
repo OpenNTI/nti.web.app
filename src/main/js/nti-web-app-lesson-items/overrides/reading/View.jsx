@@ -44,6 +44,16 @@ const handles = (obj) => {
 	return item && MIME_TYPES[item.MimeType] ;
 };
 
+function alreadyPointingToContent (contentViewer, page) {
+	const pageId = page.getId();
+
+	return contentViewer && (
+		contentViewer.page.getId() === pageId ||
+		contentViewer.relatedWork.getId() === pageId ||
+		contentViewer.externalToolAsset.getId() === pageId
+	);
+}
+
 export default
 @Registry.register(handles)
 @Store.connect([
@@ -57,6 +67,7 @@ export default
 	'rootId',
 	'bundle',
 
+	'activeObject',
 	'setNotes',
 	'notes'
 ])
@@ -68,7 +79,8 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		return {
 			page: location.item,
 			parents: location.items,
-			course: props.course
+			course: props.course,
+			activeObjectId: props.activeObjectId
 		};
 	}
 
@@ -78,6 +90,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 			items: PropTypes.array
 		}),
 		course: PropTypes.object.isRequired,
+		activeObjectId: PropTypes.string,
 
 		handleNavigation: PropTypes.func,
 
@@ -91,6 +104,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		rootId: PropTypes.string,
 		bundle: PropTypes.object,
 
+		activeObject: PropTypes.string,
 		setNotes: PropTypes.func,
 		notes: PropTypes.array
 	}
@@ -114,66 +128,86 @@ class NTIWebAppLessonItemsReading extends React.Component {
 	}
 
 
-	setupReading = (renderTo) => {
-		this.tearDownReading();
+	componentDidUpdate (prevProps) {
+		const {activeObject} = this.props;
+		const {activeObject:prevObject} = prevProps;
 
-		const {page, contentPackage, rootId, bundle, setNotes} = this.props;
+		if (activeObject !== prevObject && activeObject && this.contentViewer) {
+			this.contentViewer.goToNote(activeObject);
+		}
+	}
+
+
+	setupReading = (renderTo) => {
+		const {page, contentPackage, rootId, bundle, setNotes, activeObject} = this.props;
 
 		if (!renderTo || !page) { return; }
 
-		this.contentViewer = ContentViewer.create({
-			pageInfo: page instanceof PageInfo ? page : null,
-			relatedWork: page instanceof RelatedWorkRef ? page : null,
-			externalToolAsset: page instanceof ExternalToolAsset ? page : null,
-			contentPackage,
-			bundle,
-			rootId,
-			renderTo,
-			beforeSubmit: () => {
-				this.setState({submitting: true});
-			},
-			afterSubmit: () => {
-				this.setState({submitting: false});
-			},
-			contentOnly: true,
-			doNotAssumeBodyScrollParent: true,
-			showMediaViewerForVideo: (playlistItem) => {
-				const mockVideo = {
-					MimeType: 'application/vnd.nextthought.ntivideo',
-					getID: () => playlistItem.getId()
-				};
+		if (!alreadyPointingToContent(this.contentViewer, page)) {
+			this.tearDownReading();
+			this.contentViewer = ContentViewer.create({
+				pageInfo: page instanceof PageInfo ? page : null,
+				relatedWork: page instanceof RelatedWorkRef ? page : null,
+				externalToolAsset: page instanceof ExternalToolAsset ? page : null,
+				contentPackage,
+				bundle,
+				rootId,
+				renderTo,
+				beforeSubmit: () => {
+					this.setState({submitting: true});
+				},
+				afterSubmit: () => {
+					this.setState({submitting: false});
+				},
+				contentOnly: true,
+				doNotAssumeBodyScrollParent: true,
+				showMediaViewerForVideo: (playlistItem) => {
+					const mockVideo = {
+						MimeType: 'application/vnd.nextthought.ntivideo',
+						getID: () => playlistItem.getId()
+					};
 
-				LinkTo.Object.routeTo(this.context.router, mockVideo, {mediaViewer: true});
-			},
-			handleNavigation: (title, route, precache) => {
-				const {handleNavigation} = this.props;
+					LinkTo.Object.routeTo(this.context.router, mockVideo, {mediaViewer: true});
+				},
+				handleNavigation: (title, route, precache) => {
+					const {handleNavigation} = this.props;
 
-				if (handleNavigation) {
-					handleNavigation(title, `/content${route}`, precache);
+					if (handleNavigation) {
+						handleNavigation(title, `/content${route}`, precache);
+					}
 				}
-			}
-		});
+			});
 
-		this.contentViewer.on({
-			single: true,
-			'reader-set': () => {
-				const reader = this.contentViewer.reader;
-				const store = reader.flatPageStore;
-				const updateStore = () => {
+			this.contentViewer.on({
+				single: true,
+				'reader-set': () => {
+					const reader = this.contentViewer.reader;
+					const store = reader.flatPageStore;
+					const updateStore = () => {
+						setNotes(store.getRange());
+					};
+
+					this.storeMons = store.on({
+						destroyable: true,
+						load: () => updateStore(),
+						add: () => updateStore(),
+						remove: () => updateStore(),
+						filterchange: () => updateStore()
+					});
+
 					setNotes(store.getRange());
-				};
 
-				this.storeMons = store.on({
-					destroyable: true,
-					load: () => updateStore(),
-					add: () => updateStore(),
-					remove: () => updateStore(),
-					filterchange: () => updateStore()
-				});
-
-				setNotes(store.getRange());
+					if (activeObject) {
+						this.contentViewer.goToNote(activeObject);
+					}
+				}
+			});
+		} else {
+			if (activeObject) {
+				this.contentViewer.goToNote(activeObject);
 			}
-		});
+		}
+
 	}
 
 
