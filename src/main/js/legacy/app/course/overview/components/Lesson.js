@@ -48,7 +48,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 	getContext () {
 		const itemRoute = (this.activeItemRoute && Modal.pathToSelection(this.activeItemRoute)) || [];
-		const video = this.mediaViewer && this.mediaViewer.video && this.mediaViewer.video.getId();
+		const video = this.mediaViewer && this.mediaViewer.mediaId;
 		const ids = video ? [...itemRoute, video] : itemRoute;
 
 		return {
@@ -183,10 +183,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				this.itemFlyout.onRouteDeactivate();
 			}
 
-			if (this.mediaViewer) {
-				this.mediaViewer.destroy();
-				delete this.mediaViewer;
-			}
+			this.cleanUpMediaViewer();
 
 			this.deactivated = true;
 			delete this.deactivating;
@@ -266,6 +263,14 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 
+	cleanUpMediaViewer () {
+		if (this.mediaViewer) {
+			this.mediaViewer.destroy();
+			delete this.mediaViewer;
+		}
+	},
+
+
 	maybeAddMediaViewer (viewerRoute, lesson, returnPath) {
 		if (!viewerRoute) {
 			return;
@@ -296,7 +301,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		return true;
 	},
 
-	async handleMediaClose (returnPath) {
+	handleMediaClose (returnPath) {
 		this.pushRoute(null, returnPath);
 	},
 
@@ -306,8 +311,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		const wasMounted = !!this.itemFlyout;
 
 		if (!this.maybeAddMediaViewer(viewerRoute, lesson, itemRoute)) {
-			this.remove(this.mediaViewer, true);
-			delete this.mediaViewer;
+			this.cleanUpMediaViewer();
 		}
 
 		if (!this.itemFlyout) {
