@@ -1488,6 +1488,10 @@ $experimental-support-for-svg: true;
 			position: fixed !important;
 			//z-index: 30000 !important;
 		}
+
+		html.msg-bar-open & {
+			top: 117px !important;
+		}
 	}
 }
 
