@@ -16,7 +16,7 @@ require('./mode/Split');
 require('./mode/FullVideo');
 require('./mode/SmallVideo');
 
-
+let addedCls = 0;
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.View', {
 	extend: 'Ext.container.Container',
@@ -158,10 +158,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 				me.removeCls('showing');
 			});
 
-		if (!Ext.getBody().hasCls('media-viewer-open')) {
-			wait(100)
-				.then(me.animateIn.bind(me));
-		}
+		wait(100)
+			.then(() => this.addClsToBody());
 
 		this.toolbar = Ext.widget({
 			xtype: 'media-toolbar',
@@ -208,6 +206,31 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			'store-set': 'listStoreSet'
 		});
 	},
+
+
+	addClsToBody () {
+		addedCls += 1;
+
+		Ext.getBody().addCls('media-viewer-open');
+		this.didAddCls = true;
+
+		if (this.parentContainer && this.parentContainer.maybeUnmask) {
+			this.parentContainer.maybeUnmask();
+		}
+	},
+
+
+	removeClsFromBody () {
+		if (!this.didAddCls) { return; }
+
+		addedCls -= 1;
+		this.didAddCls = false;
+
+		if (addedCls === 0) {
+			Ext.getBody().removeCls('media-viewer-open');
+		}
+	},
+
 
 	setState: function (state) {
 		return this.applyState(state);
@@ -264,7 +287,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 	},
 
 	cleanup: function () {
-		Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
+		Ext.getBody().removeCls('media-viewer-closing');
+		this.removeClsFromBody();
 		Ext.EventManager.removeResizeListener(this.adjustOnResize, this);
 	},
 
@@ -274,18 +298,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		}
 	},
 
-	animateIn: function () {
-
-		if (!this.rendered) {
-			this.on('afterrender', 'animateIn', this);
-			return;
-		}
-
-		Ext.getBody().addCls('media-viewer-open');
-		if (this.parentContainer && this.parentContainer.maybeUnmask) {
-			this.parentContainer.maybeUnmask();
-		}
-	},
 
 	adjustOnResize: function () {
 		var toolbarHeight = this.toolbar.el && this.toolbar.getHeight() || 0,
@@ -311,7 +323,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 
 
 	beforeClose: function () {
-		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
+		this.removeClsFromBody();
+		Ext.getBody().addCls('media-viewer-closing');
 		this.removeCls('ready');
 		this.addCls('closing');
 
