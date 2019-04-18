@@ -48,7 +48,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 	getContext () {
 		const itemRoute = (this.activeItemRoute && Modal.pathToSelection(this.activeItemRoute)) || [];
-		const video = this.mediaViewer && this.mediaViewer.video && this.mediaViewer.video.getId();
+		const video = this.mediaViewer && this.mediaViewer.mediaId;
 		const ids = video ? [...itemRoute, video] : itemRoute;
 
 		return {
