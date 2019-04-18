@@ -42,6 +42,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.body.openAuditLog = this.openAuditLog.bind(this);
 		this.body.gotoResources = this.gotoResources.bind(this);
 
+		this.body.handleMediaViewerRoute = (...args) => {
+			if (this.parentHandleMediaViewerRoute) {
+				this.parentHandleMediaViewerRoute(...args);
+			}
+		};
+
 		this.navigation.selectOutlineNode = this.selectOutlineNode.bind(this);
 		this.body.navigateToOutlineNode = this.selectOutlineNode.bind(this);
 

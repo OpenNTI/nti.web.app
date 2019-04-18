@@ -47,7 +47,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 	getContext () {
-		const itemRoute = this.activeItemRoute && Modal.pathToSelection(this.activeItemRoute);
+		const itemRoute = (this.activeItemRoute && Modal.pathToSelection(this.activeItemRoute)) || [];
 		const video = this.mediaViewer && this.mediaViewer.video && this.mediaViewer.video.getId();
 		const ids = video ? [...itemRoute, video] : itemRoute;
 
@@ -271,12 +271,18 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			return;
 		}
 
+		const lessonCmp = this;
+
 		if (!this.mediaViewer) {
 			this.mediaViewer = this.add({
 				xtype: 'media-window-view',
 				currentBundle: this.bundle,
 				autoShow: true,
-				handleNavigation:  () => {}, //this.handleNavigation.bind(this),
+				handleNavigation:  (...args) => {
+					if (lessonCmp.handleMediaViewerRoute) {
+						lessonCmp.handleMediaViewerRoute(...args);
+					}
+				},
 				handleClose: this.handleMediaClose.bind(this, returnPath)
 			});
 		}
