@@ -314,6 +314,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
 		this.removeCls('ready');
 		this.addCls('closing');
+
+		if (this.viewer) {
+			this.viewer.beforeClose();
+		}
+
+		return wait(500);
 	},
 
 	allowNavigation: function () {

@@ -938,6 +938,22 @@ $experimental-support-for-svg: true;
 	}
 }
 
+body.media-viewer-open {
+	.main-body,
+	& > .nti-control-bar-mount,
+	& > .modal{
+		@include animate($name: fadeOut, $duration: 0.3s, $delay: 0s);
+	}
+}
+
+body.media-viewer-closing {
+	.main-body,
+	& > .nti-control-bar-mount,
+	& > .modal {
+		@include animate($name: fadeIn, $duration: 0.3s, $delay: 0s);
+	}
+}
+
 .x-container-media{
 	position: fixed !important;
 	top: 0 !important;
@@ -945,7 +961,7 @@ $experimental-support-for-svg: true;
 	right: 0 !important;
 	left: 0 !important;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
-	background: $slidedeck-controls-background !important;
+	background: rgba(0, 0, 0, 0.7) !important;
 	display: none;
 	z-index: 199 !important;
 	backface-visibility: hidden;
@@ -965,7 +981,7 @@ $experimental-support-for-svg: true;
 	}
 
 	&.showing {
-		@include animate(FullScreenSlideInRight);
+		@include animate($name: fadeIn, $duration: 0.3s, $delay: 0s);
 
 		.x-gecko &{
 			animation: none;
@@ -973,7 +989,7 @@ $experimental-support-for-svg: true;
 	}
 
 	&.closing {
-		@include animate(FullScreenSlideOutRight);
+		@include animate($name: fadeOut, $duration: 0.3s, $delay: 0s);
 		.x-gecko &{
 			animation: none;
 		}
