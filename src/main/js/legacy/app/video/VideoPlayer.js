@@ -207,6 +207,12 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 		monitor(this);
 	},
 
+	isPlaying: function () {
+		const {state} = this.queryPlayer() || {};
+
+		return state === 1;
+	},
+
 
 	maybeActivatePlayer (e) {
 		if (!this.isVisible(true)) { return; }

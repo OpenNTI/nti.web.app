@@ -359,5 +359,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			this.videoplayer.resumePlayback();
 			delete this.didPauseVideoPlayer;
 		}
+	},
+
+
+	beforeClose () {
+		if (this.videoplayer.isPlaying()) {
+			this.videoplayer.pausePlayback();
+		}
 	}
 });
