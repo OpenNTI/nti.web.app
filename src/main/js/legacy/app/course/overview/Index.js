@@ -73,6 +73,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		this.lessons = this.down('course-overview-view');
 
+		this.lessons.parentHandleMediaViewerRoute = (...args) => this.pushRoute(...args);
+
 		this.lessons.gotoResources = () => {
 			if (this.gotoResources) {
 				this.gotoResources();

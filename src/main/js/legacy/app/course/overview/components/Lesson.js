@@ -271,12 +271,18 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			return;
 		}
 
+		const lessonCmp = this;
+
 		if (!this.mediaViewer) {
 			this.mediaViewer = this.add({
 				xtype: 'media-window-view',
 				currentBundle: this.bundle,
 				autoShow: true,
-				handleNavigation:  () => {}, //this.handleNavigation.bind(this),
+				handleNavigation:  (...args) => {
+					if (lessonCmp.handleMediaViewerRoute) {
+						lessonCmp.handleMediaViewerRoute(...args);
+					}
+				},
 				handleClose: this.handleMediaClose.bind(this, returnPath)
 			});
 		}

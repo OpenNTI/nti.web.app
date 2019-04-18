@@ -148,7 +148,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (!lesson && addIfNotThere) {
 			lesson = this.add({
 				xtype: 'course-overview-lesson',
-				bundle: this.currentBundle
+				bundle: this.currentBundle,
+				handleMediaViewerRoute: this.handleMediaViewerRoute
 			});
 
 			this.addChildRouter(lesson);
