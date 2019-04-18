@@ -5,6 +5,7 @@
 
 	--course-content-viewer-header-sticky-top: -20px;
 	--note-sidebar-sticky-top: -18px;
+	--transcripted-video-sticky-top: 39px;
 }
 
 .nti-web-app-lesson-items-modal :global(.modal-content) {
