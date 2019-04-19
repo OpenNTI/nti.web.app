@@ -150,6 +150,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 	},
 
 	configureVideoPlayer: function () {
+		if (this.isDestroyed) { return; }
+
 		var width = this.self.getTargetVideoWidth(this.getEl(), this.transcriptRatio),
 			startTimeSeconds = (this.startAtMillis || 0) / 1000;
 
@@ -363,7 +365,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 
 
 	beforeClose () {
-		if (this.videoplayer.isPlaying()) {
+		if (this.videoplayer && this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 		}
 	}

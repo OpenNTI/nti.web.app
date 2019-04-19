@@ -76,8 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 
 		me.on({
 			pickerEl: { click: 'showVideoPlayerPicker' },
-			gridEl: { click: 'showGridPicker' },
-			exitEl: { click: function () { me.fireEvent('exit-viewer'); } }
+			gridEl: { click: 'showGridPicker' }
 		});
 	},
 
@@ -110,6 +109,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 		this.callParent(arguments);
 		this.pickerEl.removeCls('video-focus').addCls(this.currentType);
 		this.pickerEl.update(this.clsToName(this.currentType));
+
+		this.mon(this.exitEl, 'click', () => {
+			this.fireEvent('exit-viewer');
+		});
 	},
 
 

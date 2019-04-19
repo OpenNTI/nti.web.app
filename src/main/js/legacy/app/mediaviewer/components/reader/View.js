@@ -230,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 				return done;
 			});
 
-			if (done) {
+			if (done && !me.isDestroyed) {
 				me.ownerCt.slidesReady = true;
 
 				if (me.hasSlides) {
