@@ -210,6 +210,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			path = `${path}/${route.object.id}`;
 		}
 
+		if (route.hash) {
+			path = `${path}#${route.hash}`;
+		}
+
 
 		return lessons.handleRoute(path, route.precache);
 	},

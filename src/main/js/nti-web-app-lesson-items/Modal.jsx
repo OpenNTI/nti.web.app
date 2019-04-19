@@ -11,8 +11,10 @@ import overrides from './overrides';
 
 const cx = classnames.bind(Styles);
 
-function pathToSelection (path) {
-	if (!path) { return null; }
+function pathToSelection (route) {
+	if (!route) { return null; }
+
+	const [path] = route.split('#');
 
 	try {
 		const parts = path.split('/');
@@ -52,7 +54,8 @@ export default class NTIWebAppLessonItems extends React.Component {
 		requiredOnly: PropTypes.bool,
 		handleNavigation: PropTypes.func,
 		firstSelection: PropTypes.bool,
-		activeObjectId: PropTypes.string
+		activeObjectId: PropTypes.string,
+		activeHash: PropTypes.string
 	}
 
 	static contextTypes = {
@@ -102,7 +105,8 @@ export default class NTIWebAppLessonItems extends React.Component {
 			requiredOnly,
 			handleNavigation,
 			firstSelection,
-			activeObjectId
+			activeObjectId,
+			activeHash
 		} = this.props;
 		const {selection} = this.state;
 
@@ -125,6 +129,7 @@ export default class NTIWebAppLessonItems extends React.Component {
 					handleNavigation={handleNavigation}
 					firstSelection={firstSelection}
 					activeObjectId={activeObjectId ? decodeFromURI(activeObjectId) : null}
+					activeHash={activeHash}
 
 					dismissPath={dismissPath}
 					overrides={overrides}

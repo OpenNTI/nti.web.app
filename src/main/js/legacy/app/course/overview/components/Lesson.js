@@ -337,7 +337,8 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, lesson),
 				path: itemRoute,
 				firstSelection: hasEmptyItemRoute && wasMounted,
-				activeObjectId: route && route.object && route.object.id
+				activeObjectId: route && route.object && route.object.id,
+				activeHash: route && route.hash
 			}, true);
 		} catch (e) {
 			console.error(e);
