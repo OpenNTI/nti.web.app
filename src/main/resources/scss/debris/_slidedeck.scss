@@ -941,7 +941,7 @@ $experimental-support-for-svg: true;
 body.media-viewer-open {
 	.main-body,
 	& > .nti-control-bar-mount,
-	& > .modal{
+	& > .modal .modal-mask {
 		@include animate($name: fadeOut, $duration: 0.3s, $delay: 0s);
 	}
 }
@@ -949,7 +949,7 @@ body.media-viewer-open {
 body.media-viewer-closing {
 	.main-body,
 	& > .nti-control-bar-mount,
-	& > .modal {
+	& > .modal .modal-mask {
 		@include animate($name: fadeIn, $duration: 0.3s, $delay: 0s);
 	}
 }
