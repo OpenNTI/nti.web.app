@@ -1,7 +1,7 @@
 import {Stores} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
 import {UserDataThreader} from '@nti/lib-interfaces';
-import {isNTIID} from '@nti/lib-ntiids';
+import {isNTIID, decodeFromURI} from '@nti/lib-ntiids';
 
 import BaseModel from 'legacy/model/Base';
 
@@ -36,6 +36,21 @@ async function resolveActiveObject (id) {
 	}
 }
 
+async function resolveActiveHash (hash) {
+	const ntiid = isNTIID(hash) ? hash : decodeFromURI(hash);
+
+	if (!isNTIID(ntiid)) { return null; }
+
+	try {
+		const service = await getService();
+		const object = await service.getObject(ntiid);
+
+		return BaseModel.interfaceToModel(object);
+	} catch (e) {
+		return null;
+	}
+}
+
 function getRootId (parents = [], page) {
 	for (let parent of parents) {
 		const id = parent.getID && parent.getID();
@@ -54,14 +69,15 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 	}
 
 	async loadActiveObject () {
-		const {activeObjectId} = this.binding;
+		const {activeObjectId, activeHash} = this.binding;
 
-		if (activeObjectId === this.activeObjectId) { return; }
+		if (activeObjectId === this.activeObjectId && activeHash === this.activeHash) { return; }
 
 		this.activeObjectId = activeObjectId;
+		this.activeHash = this.activeHash;
 
 		try {
-			const activeObject = await resolveActiveObject(activeObjectId);
+			const activeObject = activeObjectId ? await resolveActiveObject(activeObjectId) : await resolveActiveHash(activeHash);
 
 			this.set({
 				activeObject

@@ -80,7 +80,8 @@ class NTIWebAppLessonItemsReading extends React.Component {
 			page: location.item,
 			parents: location.items,
 			course: props.course,
-			activeObjectId: props.activeObjectId
+			activeObjectId: props.activeObjectId,
+			activeHash: props.activeHash
 		};
 	}
 
@@ -91,6 +92,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		}),
 		course: PropTypes.object.isRequired,
 		activeObjectId: PropTypes.string,
+		activeHash: PropTypes.string,
 
 		handleNavigation: PropTypes.func,
 
@@ -139,7 +141,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 
 	setupReading = (renderTo) => {
-		const {page, contentPackage, rootId, bundle, setNotes, activeObject} = this.props;
+		const {page, contentPackage, rootId, bundle, setNotes, activeObject, activeHash} = this.props;
 
 		if (!renderTo || !page) { return; }
 
@@ -199,12 +201,16 @@ class NTIWebAppLessonItemsReading extends React.Component {
 
 					if (activeObject) {
 						this.contentViewer.goToNote(activeObject);
+					} else if (activeHash) {
+						this.contentViewer.goToFragment(activeHash);
 					}
 				}
 			});
 		} else {
 			if (activeObject) {
 				this.contentViewer.goToNote(activeObject);
+			} else if (activeHash) {
+				this.contentViewer.goToFragment(activeHash);
 			}
 		}
 
