@@ -16,6 +16,8 @@ require('legacy/mixins/Router');
 require('./types/Content');
 require('./types/Toc');
 
+const CALENDAR_EVENT = /calendarevent$/;
+
 const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-overview-lesson',
@@ -151,7 +153,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				this.WindowActions.pushWindow(object);
 			};
 		}
-		else if (object.MimeType === 'application/vnd.nextthought.webinar.webinarcalendarevent') {
+		else if (CALENDAR_EVENT.test(object.MimeType)) {
 			return this.calendarRoutes(object, context);
 		}
 		else if (object.isUser) {
