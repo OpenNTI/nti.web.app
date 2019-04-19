@@ -170,6 +170,8 @@ module.exports = exports = Ext.define('NextThought.app.video.VideoPlayer', {
 
 
 	maybeSyncHeight () {
+		if (this.isDestroyed) { return; }
+
 		const height = this.getHeight();
 
 		if (height !== this.lastHeight) {

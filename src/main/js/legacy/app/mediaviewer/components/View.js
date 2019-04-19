@@ -16,7 +16,7 @@ require('./mode/Split');
 require('./mode/FullVideo');
 require('./mode/SmallVideo');
 
-let addedCls = 0;
+const ADDED_CLS_SET = new Set();
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.View', {
 	extend: 'Ext.container.Container',
@@ -73,6 +73,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 	},
 
 	setContent: function (video, transcript, options) {
+		if (this.isDestroyed) { return; }
+
 		var me = this;
 
 		if (!this.rendered) {
@@ -109,6 +111,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 	},
 
 	setSlidedeckContent: function (slidedeck, videos, resourceList, options) {
+		if (this.isDestroyed) { return; }
+
 		var me = this;
 
 		if (!this.rendered) {
@@ -155,11 +159,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 
 		wait(1500)
 			.then(function () {
-				me.removeCls('showing');
+				if (me.isRendered && !me.isDestroyed) {
+					me.removeCls('showing');
+				}
 			});
 
-		wait(100)
-			.then(() => this.addClsToBody());
+		this.addClsToBody();
 
 		this.toolbar = Ext.widget({
 			xtype: 'media-toolbar',
@@ -209,10 +214,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 
 
 	addClsToBody () {
-		addedCls += 1;
+		if (ADDED_CLS_SET.has(this)) { return; }
 
+		ADDED_CLS_SET.add(this);
+		console.log('Adding open class');
 		Ext.getBody().addCls('media-viewer-open');
-		this.didAddCls = true;
 
 		if (this.parentContainer && this.parentContainer.maybeUnmask) {
 			this.parentContainer.maybeUnmask();
@@ -221,12 +227,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 
 
 	removeClsFromBody () {
-		if (!this.didAddCls) { return; }
+		if (!ADDED_CLS_SET.has(this)) { return; }
 
-		addedCls -= 1;
-		this.didAddCls = false;
+		ADDED_CLS_SET.delete(this);
 
-		if (addedCls === 0) {
+		if (ADDED_CLS_SET.size === 0) {
+			console.trace('Removing open class');
 			Ext.getBody().removeCls('media-viewer-open');
 		}
 	},
@@ -323,7 +329,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 
 
 	beforeClose: function () {
-		this.removeClsFromBody();
+		console.log('Before Close called');
 		Ext.getBody().addCls('media-viewer-closing');
 		this.removeCls('ready');
 		this.addCls('closing');
@@ -332,7 +338,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			this.viewer.beforeClose();
 		}
 
-		return wait(500);
+		return wait(100);
 	},
 
 	allowNavigation: function () {

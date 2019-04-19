@@ -302,6 +302,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 	handleMediaClose (returnPath) {
+		this.cleanUpMediaViewer();
 		this.pushRoute(null, returnPath);
 	},
 

@@ -110,6 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	__presentVideo: function (videoId, basePath, options) {
+		if (this.isDestroyed) { return; }
 		var me = this, prec = Promise.resolve();
 
 		if(options.rec) {
@@ -131,6 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	__presentSlidedeck: function (slidedeckId, slidedeck, options) {
+		if (this.isDestroyed) { return; }
 		var me = this,
 			p = slidedeck && slidedeck.isModel ? Promise.resolve(slidedeck) : Service.getObject(slidedeckId),
 			prec = Promise.resolve();
@@ -186,6 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	destroy: function () {
+		this.activeMediaView.beforeClose();
 		this.activeMediaView.destroy();
 		this.callParent(arguments);
 	},
@@ -262,11 +265,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 	},
 
 	exitViewer: function () {
-		if (this.handleClose && !this.activeMediaView) {
+		if (this.activeMediaView) {
+			this.activeMediaView.beforeClose();
+		}
+
+		if (this.handleClose) {
 			return this.handleClose();
-		} else if (this.handleClose) {
-			this.activeMediaView.beforeClose()
-				.then(() => this.handleClose());
 		}
 
 		const route = this.Router.root.ContextStore.getCurrentRoute();
