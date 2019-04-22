@@ -8,3 +8,11 @@ body > .fly-wrapper > .flyout {
 	//it's effective z plus one... this is for default (no-effective z) of flyouts in ExtJS land.
 	z-index: 151; //main-navigation's z-index is 150.
 }
+
+body.full-screen-video {
+	.main-viewport {
+		visibility: hidden;
+		opacity: 0;
+		pointer-events: none;
+	}
+}
