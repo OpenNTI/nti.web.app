@@ -954,7 +954,7 @@ body.media-viewer-closing {
 	}
 }
 
-.x-container-media{
+.x-container-media {
 	position: fixed !important;
 	top: 0 !important;
 	bottom: 0 !important;
@@ -993,6 +993,10 @@ body.media-viewer-closing {
 		.x-gecko &{
 			animation: none;
 		}
+	}
+
+	&.x-layer {
+		overflow: initial;
 	}
 
 	.header{
