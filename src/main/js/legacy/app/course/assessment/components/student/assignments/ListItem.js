@@ -13,8 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{cls: 'edit-assignment', html: 'Edit'}
 		]},
 		{ cls: 'name-container', cn: [
-			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}'},
-			{ tag: 'strong', cls: 'points', html: '{points}'}
+			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}'}
 		]},
 		{ cls: 'status-container'}
 	]),
@@ -30,8 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.assignment.get('title'),
-			canEdit: this.assignment.canEdit(),
-			points: this.assignment.getTotalPointsLabel()
+			canEdit: this.assignment.canEdit()
 		});
 	},
 
