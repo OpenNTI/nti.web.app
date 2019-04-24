@@ -201,33 +201,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 	afterRender: function () {
 		this.callParent(arguments);
-		const me = this;
 
 		this.maybeShowAllowedTime();
-		this.assignment.on('refresh', () => {
-			const regenerate = this.pageInfo && this.pageInfo.regenerate ? this.pageInfo.regenerate(this.assignment) : Promise.resolve(this.pageInfo);
-
-			regenerate
-				.then((pageInfo) => {
-					this.pageInfo = pageInfo;
-
-					this.showReader()
-						.then(() => {
-							this.showReader();
-							this.maybeShowAllowedTime();
-						});
-
-				});
-		});
-
-		this.assignment.on('deleted', () => {
-			me.showReader();
-			me.bundle.getAssignments()
-				.then((assignments) => {
-					assignments.updateAssignments(true);
-					this.handleNavigation('Assignments', '/', undefined, true);
-				});
-		});
 	},
 
 	maybeShowAllowedTime () {
@@ -266,6 +241,59 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 	},
 
+
+	monitorAssignment (assignment) {
+		Ext.destroy(this.assignmentMonitors);
+
+		const updateAssignment = (override) => {
+			const regenerate = this.pageInfo && this.pageInfo.regenerate ?
+				this.pageInfo.regenerate(assignment) :
+				Promise.resolve(this.pageInfo);
+
+			regenerate
+				.then((pageInfo) => {
+					this.pageInfo = pageInfo;
+
+					this.showReader()
+						.then(() => {
+							this.showReader();
+							this.maybeShowAllowedTime();
+						});
+				});
+		};
+
+		this.assignmentMonitors = assignment.on({
+			destroyable: true,
+			'refresh': updateAssignment,
+			'deleted': () => {
+				this.bundle.getAssignments()
+					.then((assignments) => {
+						assignments.updateAssignments(true);
+
+						const newAssignment = assignments.findItem(assignment.getId());
+
+						if (!newAssignment) {
+							this.handleNavigtion('', '/', undefined, true);
+						} else {
+							assignment.syncWith(newAssignment);
+						}
+					});
+			}
+		});
+	},
+
+
+	async addClassesForAssignment (assignmentModel) {
+		const assignment = await assignmentModel.getInterfaceInstance();
+
+		if (!this.rendered) { return; }
+
+		if (assignment.isOutsideSubmissionBuffer() && !assignment.hasLink('PracticeSubmission')) {
+			this.addCls('out-side-submission-buffer');
+		} else {
+			this.removeCls('out-side-submission-buffer');
+		}
+	},
 
 	showAssignment: function (config) {
 		const header = this.getToolbar();
@@ -322,6 +350,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 				readerAssessment.setAssignmentFromStudentProspective(assignment, h);
 				header.setHistory(h, container);
+
+				me.monitorAssignment(assignment);
+				me.addClassesForAssignment(assignment);
 
 				if (savepoint) {
 					savepoint.then(function (point) {

@@ -54,6 +54,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'no_submit', type: 'boolean'},
 		{ name: 'version', type: 'string'},
 		{ name: 'total_points', type: 'string'},
+		{ name: 'submission_buffer', type: 'int'},
 		// Timed assignment variables
 		{ name: 'IsTimedAssignment', type: 'bool'},
 		{ name: 'MaximumTimeAllowed', type: 'int'}, //this is in seconds
@@ -78,6 +79,22 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 		return !start || start < now;
 	},
+
+	isOutsideSubmissionBuffer () {
+		const now = new Date();
+		const due = this.getDueDate();
+		const submissionBuffer = this.get('submission_buffer');
+
+		//If there is no submission buffer or due date we aren't after the submission buffer
+		if ((!submissionBuffer && submissionBuffer !== 0) || !due) {
+			return false;
+		}
+
+		const latest = new Date(due.getTime() + ((submissionBuffer || 0) * 1000));
+
+		return latest < now;
+	},
+
 
 	containsId: function (id) {
 		var parts = this.get('parts') || [],

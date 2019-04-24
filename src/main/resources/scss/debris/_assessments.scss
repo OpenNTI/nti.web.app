@@ -374,6 +374,23 @@ body.dragging * {
 		}
 	}
 
+	&.question.not-available {
+		border-color: #f0f0f0;
+		box-shadow: 0 1px 12px 1px rgba(127, 127, 127, 0.08);
+
+		&::before {
+			content: '';
+			position: absolute;
+			background: #fdfdfd;
+			top: 0;
+			bottom: 0;
+			right: 0;
+			left: 0;
+			opacity: 0.5;
+			z-index: 10;
+		}
+	}
+
 	&.question { //main frame of the question
 		background: $panel-background;
 		border: 1px solid #e2e2e2;

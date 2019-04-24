@@ -88,10 +88,14 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 			} else {
 				this.inflightSavepoint = this.saveProgressHandler()
 					.then((result) => {
-						if(result.status === 403) {
+						if (result.status === 403) {
 							const respJson = Ext.decode(result.responseText);
+							const pastDueCodes = {
+								'SubmissionPastDueDateError': true,
+								'CannotSubmitAssignmentError': true
+							};
 
-							if(respJson.code === 'SubmissionPastDueDateError') {
+							if (pastDueCodes[respJson.code]) {
 								this.onSaveProgress();
 
 								this.set('isPastDue', true);

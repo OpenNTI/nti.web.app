@@ -26,6 +26,10 @@ const t = scoped('NTIWebAppLessonItems.overrides.assignment.sidebar-parts.Instru
 	},
 	support: {
 		link: 'Contact Support'
+	},
+	outsideSubmissionBuffer: {
+		header: 'Currently Unavailable',
+		message: 'Your assignment is no longer available for submission.'
 	}
 });
 
@@ -48,6 +52,7 @@ export default class AssignmentSidebarInstructions extends React.Component {
 
 		const available = assignmentModel && assignmentModel.isAvailable();
 		const noSubmit = assignmentModel && (assignmentModel.isNoSubmit() || !assignmentModel.getQuestionCount());
+		const outsideBuffer = assignmentModel && assignmentModel.isOutsideSubmissionBuffer();
 		const submitted = !!activeHistoryItemModel;
 
 		return (
@@ -56,8 +61,9 @@ export default class AssignmentSidebarInstructions extends React.Component {
 					{t('header')}
 				</div>
 				{!available && !noSubmit && this.renderUnavailable(assignmentModel, activeHistoryItemModel)}
-				{available && !noSubmit && !submitted && this.renderAvailable(assignmentModel, activeHistoryItemModel)}
-				{available && !noSubmit && submitted && this.renderSubmitted(assignmentModel, activeHistoryItemModel)}
+				{available && !noSubmit && outsideBuffer && this.renderOutsideBuffer(assignmentModel, activeHistoryItemModel)}
+				{available && !noSubmit && !outsideBuffer && !submitted && this.renderAvailable(assignmentModel, activeHistoryItemModel)}
+				{available && !noSubmit && !outsideBuffer && submitted && this.renderSubmitted(assignmentModel, activeHistoryItemModel)}
 				{this.renderSupport()}
 			</div>
 		);
@@ -79,6 +85,10 @@ export default class AssignmentSidebarInstructions extends React.Component {
 
 	renderSubmitted () {
 		return this.renderState(t('submitted.header'), t('submitted.message'));
+	}
+
+	renderOutsideBuffer () {
+		return this.renderState(t('outsideSubmissionBuffer.header'), t('outsideSubmissionBuffer.message'));
 	}
 
 

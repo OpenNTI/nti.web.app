@@ -22,3 +22,20 @@
 .assignment-view :global(.timed-placeholder .nti-alert .alert-container ) {
 	display: none;
 }
+
+.assignment-view :global(.assignment-reader.out-side-submission-buffer .x-panel-assessment.question::before) {
+	content: '';
+	position: absolute;
+	background: #fdfdfd;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	opacity: 0.5;
+	z-index: 10;
+}
+
+.assignment-view :global(.assignment-reader.out-side-submission-buffer .submission-panel) {
+	pointer-events: none;
+	opacity: 0.5;
+}
