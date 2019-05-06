@@ -27,12 +27,21 @@ const FIELDS = [
 ];
 const MAX_ROWS = 5;
 
+RowNumber.propTypes = {
+	item: PropTypes.shape({
+		RowNumber: PropTypes.number
+	})
+};
+RowNumber.cssClassName = 'row-number';
 function RowNumber ({item: {RowNumber: number} = {}} = {}) {
 	return number == null ? null : <div>{t('rowNumber', {number})}</div>;
 }
 
-RowNumber.cssClassName = 'row-number';
 
+RowErrorMessage.propTypes = {
+	item: PropTypes.object
+};
+RowErrorMessage.cssClassName = 'row-error-message';
 function RowErrorMessage ({item = {}} = {}) {
 	return Object.entries(item)
 		.filter(([k, v]) => FIELDS.includes(k))
@@ -41,7 +50,6 @@ function RowErrorMessage ({item = {}} = {}) {
 		));
 }
 
-RowErrorMessage.cssClassName = 'row-error-message';
 
 
 export default class InvalidRowsError extends React.Component {
