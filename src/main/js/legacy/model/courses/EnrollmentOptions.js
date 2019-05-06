@@ -40,5 +40,21 @@ module.exports = exports = Ext.define('NextThought.model.courses.EnrollmentOptio
 		}
 
 		return true;
+	},
+
+
+	isEnrollable () {
+		const items = this.get('Items') || {};
+		const types = Object.keys(items);
+
+		for (let name of types) {
+			const option = items[name];
+
+			if (option.IsAvailable) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 });

@@ -331,6 +331,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		return enrollmentOptions && enrollmentOptions.isDroppable && enrollmentOptions.isDroppable();
 	},
 
+	isEnrollable: function () {
+		var enrollmentOptions = this.get('EnrollmentOptions');
+
+		return enrollmentOptions && enrollmentOptions && enrollmentOptions.isEnrollable();
+	},
+
 	isExpired: function () {
 		var d, s, duration, endDate, now;
 		try {

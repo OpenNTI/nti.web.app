@@ -97,10 +97,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 	 */
 	enrollCourse: function (course, callback) {
 		const me = this;
-		const enrollment = me.CourseStore.findEnrollmentForCourse(course.getId());
 
 		//if we trying to enroll, and we are already enrolled no need to enroll again
-		if (enrollment) {
+		if (!course.isEnrollable()) {
 			callback.call(null, true, false);
 			return;
 		}
