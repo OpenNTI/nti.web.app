@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Router} from '@nti/web-routing';
-import {CalendarEvents, Event, getAvailableCalendars} from '@nti/web-calendar';
+import {CalendarEvents, Event, getCourseCalendar} from '@nti/web-calendar';
 import {FillToBottom} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
@@ -31,8 +31,7 @@ export default class CalendarEventSidebar extends React.Component {
 		const {course} = this.props;
 		const courseId = course && course.getID();
 
-		return !courseId ? null : await getAvailableCalendars()
-			.then(calendars => calendars.find(c => (c.CatalogEntry || {}).CourseNTIID === courseId));
+		return !courseId ? null : await getCourseCalendar(courseId);
 	}
 
 	getRouteFor = viewEvent => {
