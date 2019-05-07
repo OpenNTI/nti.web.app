@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {default: Logger} = require('@nti/util-logger');
 
 const DomUtils = require('legacy/util/Dom');
 const PlaylistItem = require('legacy/model/PlaylistItem');
@@ -9,7 +10,7 @@ const LibraryActions = require('../library/Actions');
 require('../contentviewer/overlay/Panel');
 require('./Video');
 
-
+const logger = Logger.get('NextThought.app.video.OverlayedPanel');
 
 module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
@@ -72,6 +73,10 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.getVideo(bundle, content)
 			.then((index) => {
+				if (me.isDestroyed || !me.dom) {
+					throw new Error('No dom element. Might’ve unmounted before the video request came back.');
+				}
+
 				playlist.push(this.createPlaylistItem(index));
 
 				this.playlist = playlist;
@@ -221,13 +226,18 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			return;
 		}
 
-		this.down('box').getEl().setStyle({
-			backgroundSize: 'contain',
-			backgroundColor: 'black',
-			backgroundPosition: 'center center'
-		});
+		try {
+			this.down('box').getEl().setStyle({
+				backgroundSize: 'contain',
+				backgroundColor: 'black',
+				backgroundPosition: 'center center'
+			});
 
-		this.down('box').getEl().down('.error').update(error);
+			this.down('box').getEl().down('.error').update(error);
+		}
+		catch (e) {
+			logger.error('Unable to set error. %o', error);
+		}
 	},
 
 	setBackground: function (src, label) {
