@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 		if (!me.manager) {
 			//TODO what to actually do here.  Throw exception? this wont work without a manager
-			console.log('No mananger supplied for annotation.  Expect issues', me, c);
+			console.log('No manager supplied for annotation. Expect issues', me, c);
 		}
 
 		if (r.data.sharedWith !== undefined) {
