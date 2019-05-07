@@ -219,12 +219,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getLessonTop: function () {
 		var lesson = this.getLesson(),
 			editor = this.getEditor(),
+			empty = this.getEmptyState(),
 			rect;
 
 		if (lesson && lesson.isVisible()) {
 			rect = lesson && lesson.el && lesson.el.dom && lesson.el.dom.getBoundingClientRect();
 		} else if (editor && editor.isVisible()) {
 			rect = editor && editor.el && editor.el.dom && editor.el.dom.getBoundingClientRect();
+		} else if (empty && empty.isVisible()) {
+			rect = empty && empty.el && empty.el.dom && empty.el.dom.getBoundingClientRect();
 		}
 
 		return rect ? rect.top : 0;
