@@ -146,10 +146,6 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		this.setHeaderForCollection(collection);
 		this.setFooterForCollection(collection);
 
-		if (this.updateMonitor) {
-			Ext.destroy(this.updateMonitor);
-		}
-
 		if (this.autoUpdate) {
 			this.addCollectionMonitors(collection);
 		}
@@ -163,7 +159,16 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		this.afterSetCollection(collection);
 	},
 
+	removeCollectionMonitors () {
+		if (this.updateMonitor) {
+			Ext.destroy(this.updateMonitor);
+			delete this.updateMonitor;
+		}
+	},
+
 	addCollectionMonitors (collection) {
+		this.removeCollectionMonitors();
+
 		this.updateMonitor = this.mon(collection, {
 			single: true,
 			destroyable: true,

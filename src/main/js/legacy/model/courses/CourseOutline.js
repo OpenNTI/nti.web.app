@@ -240,12 +240,35 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 			});
 	},
 
+
+	async updateHeaders () {
+		try {
+			const resp = await Service.request({
+				url: this.get('href'),
+				method: 'HEAD'
+			});
+
+			this.set('ContentsLastModified', resp.getResponseHeader('Last-Modified'));
+			this.set('ContentsHash', resp.getResponseHeader('etag'));
+			this.fireEvent('update');
+		} catch (e) {
+			//swallow
+		}
+	},
+
+
 	onItemUpdated: function () {
 		OutlineInterface.fillInDepths(this);
+		this.updateHeaders();
 	},
 
 	onItemAdded: function () {
 		OutlineInterface.fillInDepths(this);
+		this.updateHeaders();
+	},
+
+	onItemRemoved () {
+		this.updateHeaders();
 	},
 
 	onSync: function () {

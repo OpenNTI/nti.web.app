@@ -188,6 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		//If we have an outline, its the same outline as what we are setting, and the contents haven't changed
 		if (this.outline && this.outline.getId() === outline.getId() && this.outlineContentsHash === outline.get('ContentsHash') && this.outlineWasEditing === this.isEditing) {
+			this.addCollectionMonitors(this.outline);
 			return;
 		}
 
