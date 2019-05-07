@@ -459,19 +459,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	getTitle: function () {
-		var bundle = this.getBundle();
-
-		return bundle.getTitle && bundle.getTitle();
-	},
-
-
-	getBreadCrumbTitle () {
-		return this.prepareData()
-			.then(() => {
-				const catalogEntry = this.getCourseCatalogEntry();
-
-				return catalogEntry.get('title');
-			});
+		return this.getLinkProperty('CourseCatalogEntry', 'title');
 	},
 
 	getIcon: function () {

@@ -12,6 +12,14 @@ module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 	},
 
 
+	getLinkProperty (rel, prop) {
+		const links = this.get('Links');
+		const link = links && links.getRelLink(rel);
+
+		return link && link[prop];
+	},
+
+
 	getLinkFragment: function (rel) {
 		return (this.getLink(rel, true) || '').split('#')[1];
 	},
