@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 						{
 							tag: 'body',
 							cn: {
-								cls: 'page-contents no-padding',
+								cls: 'page-contents',
 								cn: Ext.applyIf(
 									{
 										tag: 'object',
