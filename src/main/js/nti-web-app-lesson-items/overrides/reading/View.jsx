@@ -143,7 +143,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 	setupReading = (renderTo) => {
 		const {page, contentPackage, rootId, bundle, setNotes, activeObject, activeHash} = this.props;
 
-		if (!renderTo || !page) { return; }
+		if (!renderTo || !page || !document.contains(renderTo)) { return; }
 
 		if (!alreadyPointingToContent(this.contentViewer, page)) {
 			this.tearDownReading();
