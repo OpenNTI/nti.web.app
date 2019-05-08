@@ -208,7 +208,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 						videoId={item.getID()}
 						scrolledTo={activeObjectId}
 						disableNoteCreation={!!newNote}
-						autoPlay={firstSelection || hit}
+						autoPlay={firstSelection}
 						analyticsData={this.getAnalyticsData()}
 						startTime={(startTime || 0) / 1000}
 					/>
