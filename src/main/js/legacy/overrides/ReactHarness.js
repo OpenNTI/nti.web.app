@@ -31,6 +31,10 @@ const GROUP_MIME_TYPE = 'application/vnd.nextthought.dynamicfriendslist';
 const COMMUNITY_MIME_TYPE = 'application/vnd.nextthought.community';
 
 function getRouteFor (obj, context) {
+	if (!obj) {
+		return null;
+	}
+
 	if (obj.isUser) {
 		if (context === 'open-chat') {
 			return () => {
