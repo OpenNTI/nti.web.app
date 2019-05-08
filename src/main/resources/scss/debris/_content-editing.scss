@@ -878,10 +878,7 @@ input[type=number]{
 		}
 
 		> .new-node {
-			position: absolute;
-			bottom: 0;
-			right: 0;
-			left: 0;
+			flex: 0 0 auto;
 			background-color: #ffffff;
 
 			.title {
