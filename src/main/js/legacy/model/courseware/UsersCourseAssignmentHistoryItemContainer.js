@@ -49,6 +49,13 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 					AssignmentId: oldId
 				});
 			}
+		}).then(() => {
+			const grade = historyItem.get('Grade');
+			const items = this.get('Items');
+
+			for (let item of items) {
+				item.set('Grade', grade);
+			}
 		});
 	},
 
