@@ -152,6 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			getRouteFor: this.getRouteFor.bind(this),
 			addHistory: true,
 			editMode: true,
+			noProgress: true,
 			onRequirementChange
 		}, rawItem);
 	},
