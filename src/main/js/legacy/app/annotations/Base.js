@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		var me = this,
 			c = config.reader,
 			r = config.record,
-			container = c.body.dom;
+			container = (c.body || {}).dom;
 
 		me.mixins.observable.constructor.call(this);
 		me.mixins.shareable.constructor.call(this);
