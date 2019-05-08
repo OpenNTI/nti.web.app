@@ -73,8 +73,9 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.getVideo(bundle, content)
 			.then((index) => {
-				if (me.isDestroyed || !me.dom) {
-					throw new Error('No dom element. Might’ve unmounted before the video request came back.');
+				if (me.isDestroyed || !me.dom || !me.isMountedInReader(me.dom)) {
+					console.warn('Weird dom state. Might’ve unmounted before the video request came back. Bailing.');
+					return;
 				}
 
 				playlist.push(this.createPlaylistItem(index));
@@ -152,6 +153,16 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 				this.syncTop();
 				this.setError(error);
 			});
+	},
+
+	isMountedInReader: function (elem) {
+		try {
+			return this.reader.getIframe().getDocumentElement().documentElement.contains(elem);
+		}
+		catch {
+			//
+		}
+		return false;
 	},
 
 	createPlaylistItem: function () {
