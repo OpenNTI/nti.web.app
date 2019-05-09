@@ -307,11 +307,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 
 	adjustOnResize: function () {
 		var toolbarHeight = this.toolbar.el && this.toolbar.getHeight() || 0,
+			messageBarHeight = document.documentElement && document.documentElement.classList.contains('msg-bar-open') ? 40 : 0,
 			availableHeight, paddingHeight = 0, availableWidth,
 			activeItem = this.getLayout().getActiveItem();
 
 		if (activeItem && activeItem.adjustOnResize) {
-			availableHeight = Ext.Element.getViewportHeight() - toolbarHeight - paddingHeight;
+			availableHeight = Ext.Element.getViewportHeight() - toolbarHeight - paddingHeight - messageBarHeight;
 			availableWidth = Ext.Element.getViewportWidth();
 
 			activeItem.adjustOnResize(availableHeight, availableWidth);
