@@ -7,6 +7,7 @@ const PathActions = require('legacy/app/navigation/path/Actions');
 const LibraryActions = require('legacy/app/library/Actions');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const WindowsActions = require('legacy/app/windows/Actions');
+const BaseModel = require('legacy/model/Base');
 const {isFeature} = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
@@ -69,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 				navigateToSearchHit: (record, hit, frag, containerId) => {
 					let windowOpened = false;
 
-					record = lazy.ParseUtils.parseItems(record)[0];
+					record = BaseModel.interfaceToModel(record);
 					hit = lazy.ParseUtils.parseItems(hit)[0];
 
 					if (record.get('MimeType') === 'application/vnd.nextthought.messageinfo') {
