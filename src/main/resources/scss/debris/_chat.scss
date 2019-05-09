@@ -867,7 +867,7 @@ body.white-shade-mask .chat-gutter-window {
 
 .chat-gutter-window, .chat-gutter-list-window, .gutter-calendar-window {
 	position: fixed;
-	top: 100px;
+	top: 90px;
 	bottom: 60px;
 	right: 15px;
 	z-index: 200;
@@ -878,7 +878,7 @@ body.white-shade-mask .chat-gutter-window {
 	transition: right 0.5s;
 
 	html.msg-bar-open & {
-		top: 140px;
+		top: 130px;
 	}
 
 	.nti-course-content-open & {
