@@ -56,10 +56,15 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Gu
 
 		if (!presence) { return; }
 
-		this.presence.toggleCls(currentStatus || '');
-		this.presence.toggleCls(presence.getName());
-		this.avatar.toggleCls(currentActiveStatus || '');
-		this.avatar.addCls(presence.getName());
+		if ((this.presence || {}).toggleCls) {
+			this.presence.toggleCls(currentStatus || '');
+			this.presence.toggleCls(presence.getName());
+		}
+
+		if ((this.avatar || {}).toggleCls) {
+			this.avatar.toggleCls(currentActiveStatus || '');
+			this.avatar.addCls(presence.getName());
+		}
 	},
 
 
