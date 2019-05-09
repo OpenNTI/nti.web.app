@@ -215,7 +215,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			this.achievements.hide();
 
 			if (isMe) {
-				this.loadWorkSpace(Service.getWorkspace('Badges'));
+				if (link) {
+					Service.request(link)
+						.then(this.loadWorkSpace.bind(this));
+				} else {
+					this.loadWorkSpace();
+				}
 			} else {
 				this.currentCourses.hide();
 
@@ -224,7 +229,6 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 						.then(this.loadWorkSpace.bind(this));
 				} else {
 					this.finishLoading();
-					this.setEmptyState();
 				}
 			}
 
