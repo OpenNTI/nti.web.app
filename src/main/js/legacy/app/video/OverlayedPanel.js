@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.getVideo(bundle, content)
 			.then((index) => {
-				if (me.isDestroyed || !me.dom || !me.isMountedInReader(me.dom)) {
+				if (me.isDestroyed || !me.dom || !me.readerMounted() || !me.isMountedInReader(me.dom)) {
 					console.warn('Weird dom state. Might’ve unmounted before the video request came back. Bailing.');
 					return;
 				}
@@ -155,6 +155,16 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			});
 	},
 
+	readerMounted: function () {
+		try {
+			return document.contains(this.reader.el.dom);
+		}
+		catch (e) {
+			//
+		}
+		return false;
+	},
+
 	isMountedInReader: function (elem) {
 		try {
 			return this.reader.getIframe().getDocumentElement().documentElement.contains(elem);
@@ -174,12 +184,18 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	},
 
 	afterRender: function () {
-		this.callParent(arguments);
-
-		this.el.setStyle({
-			left: this.size.left + 'px',
-			width: this.size.parentWidth + 'px'
-		});
+		try {
+			this.callParent(arguments);
+	
+			this.el.setStyle({
+				left: this.size.left + 'px',
+				width: this.size.parentWidth + 'px'
+			});
+		}
+		catch (e) {
+			console.error(e);
+			throw e;
+		}
 	},
 
 	getSize: function (dom, desiredWidth) {
