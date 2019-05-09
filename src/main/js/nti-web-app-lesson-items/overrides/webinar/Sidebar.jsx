@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Event} from '@nti/web-calendar';
 import {Overview} from '@nti/web-course';
 import {scoped} from '@nti/lib-locale';
 
@@ -38,32 +37,16 @@ export default class WebinarSidebar extends React.Component {
 		const {
 			props: {
 				item: {
-					webinar,
-					completed,
-					expired
+					webinar
 				}
 			},
 			state: {status}
 		} = this;
 
-		const nearestSession = webinar.getNearestSession();
-		const startTime = nearestSession.getStartTime();
-		const endTime = nearestSession.getEndTime();
-
 		return (
 			<div className={cx('webinar-sidebar')}>
 				<div className={cx('details')}>
 					<div className={cx('instructions')}>{textForStatus(status)}</div>
-					<Event.Availability
-						{...{
-							startTime,
-							endTime,
-							completed,
-							expired,
-							minimal: true,
-							className:  cx('availability')
-						}}
-					/>
 				</div>
 				<Button className={cx('registration-button')} webinar={webinar} onStatusChange={this.onStatusChange} />
 			</div>
