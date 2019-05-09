@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.getVideo(bundle, content)
 			.then((index) => {
-				if (me.isDestroyed || !me.dom || !me.readerMounted() || !me.isMountedInReader(me.dom)) {
+				if (!me.checkDomState()) {
 					console.warn('Weird dom state. Might’ve unmounted before the video request came back. Bailing.');
 					return;
 				}
@@ -153,6 +153,10 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 				this.syncTop();
 				this.setError(error);
 			});
+	},
+
+	checkDomState: function () {
+		return !this.isDestroyed && this.dom && this.readerMounted() && this.isMountedInReader(this.dom);
 	},
 
 	readerMounted: function () {
