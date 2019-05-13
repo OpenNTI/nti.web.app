@@ -8,6 +8,7 @@ const { Error } = require('@nti/web-commons');
 const {encodeForURI} = require ('@nti/lib-ntiids');
 const {getHistory, LinkTo} = require('@nti/web-routing');
 
+const AccountActions = require('legacy/app/account/Actions');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const ParsingUtils = require('legacy/util/Parsing');
 const User = require('legacy/model/User');
@@ -33,6 +34,14 @@ const COMMUNITY_MIME_TYPE = 'application/vnd.nextthought.community';
 function getRouteFor (obj, context) {
 	if (!obj) {
 		return null;
+	}
+
+	if (obj.type === 'contact-support') {
+		return () => {
+			const actions = AccountActions.create();
+
+			actions.showContactUs();
+		};
 	}
 
 	if (obj.isUser) {
