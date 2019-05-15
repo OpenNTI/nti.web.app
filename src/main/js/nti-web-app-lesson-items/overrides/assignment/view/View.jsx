@@ -6,8 +6,6 @@ import {Prompt as RoutePrompt} from '@nti/web-routing';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
 
-import Registry from '../Registry';
-
 import Styles from './View.css';
 import Sidebar from './Sidebar';
 import Store from './Store';
@@ -16,22 +14,7 @@ const cx = classnames.bind(Styles);
 
 const {Aside, Uncontrolled} = Layouts;
 
-const MIME_TYPES = {
-	'application/vnd.nextthought.assessment.discussionassignment': true,
-	'application/vnd.nextthought.assessment.timedassignment': true,
-	'application/vnd.nextthought.assessment.assignment': true,
-	'application/vnd.nextthought.assignmentref': true
-};
-
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
-
-	return item && MIME_TYPES[item.MimeType];
-};
-
 export default
-@Registry.register(handles)
 @Store.connect([
 	'loading',
 	'error',
@@ -44,7 +27,7 @@ export default
 
 	'updateHistoryItem'
 ])
-class NTIWebAppLessonItemsAssignment extends React.Component {
+class NTIWebAppLessonItemsAssignmentView extends React.Component {
 	static deriveBindingFromProps (props) {
 		const {location = {}} = props;
 

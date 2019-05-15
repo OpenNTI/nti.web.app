@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {Layouts} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
-import TypeRegistry from '../Registry';
-
 import Body from './Body';
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -13,20 +11,9 @@ import styles from './View.css';
 const cx = classnames.bind(styles);
 
 const {Aside} = Layouts;
-const MIME_TYPES = {
-	'application/vnd.nextthought.webinarasset': true
-};
-
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
-
-	return item && MIME_TYPES[item.MimeType];
-};
 
 export default
-@TypeRegistry.register(handles)
-class NTIWebLessonItemsWebinar extends React.Component {
+class NTIWebLessonItemsWebinarView extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
 			item: PropTypes.object
@@ -37,7 +24,7 @@ class NTIWebLessonItemsWebinar extends React.Component {
 	render () {
 		const {course, location} = this.props;
 		const {item} = location || {};
-		
+
 		return (
 			<div>
 				<Aside component={Sidebar} course={course} item={item} />

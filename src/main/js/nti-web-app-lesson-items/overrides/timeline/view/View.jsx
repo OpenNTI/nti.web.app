@@ -5,17 +5,7 @@ import {rawContent} from '@nti/lib-commons';
 
 import AnalyticsUtil from 'legacy/util/Analytics';
 
-import Registry from '../Registry';
-
 const ASPECT_RATIO = 1.333;//4:3
-
-const MIME_TYPE = 'application/vnd.nextthought.ntitimeline';
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
-
-	return item && item.MimeType === MIME_TYPE;
-};
 
 const DATA_ATTR = 'data-timeline-placeholder';
 const PLACEHOLDER_TPL = (item) => {
@@ -23,8 +13,7 @@ const PLACEHOLDER_TPL = (item) => {
 };
 
 export default
-@Registry.register(handles)
-class NTIWebAppLessonItemsTimeline extends React.Component {
+class NTIWebAppLessonItemsTimelineView extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
 			item: PropTypes.object

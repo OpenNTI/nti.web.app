@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Sidebar from '../../components/Sidebar';
+import Sidebar from '../../../components/Sidebar';
 
 import Timed from './sidebar-parts/Timed';
 import Instructions from './sidebar-parts/Instructions';

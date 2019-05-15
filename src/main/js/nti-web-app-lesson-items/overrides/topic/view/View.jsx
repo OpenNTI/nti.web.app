@@ -7,8 +7,6 @@ import {scoped} from '@nti/lib-locale';
 
 import TopicViewer from 'legacy/app/forums/components/topic/Window';
 
-import Registry from '../Registry';
-
 import Styles from './View.css';
 import Store from './Store';
 import ActiveUsers from './ActiveUsers';
@@ -23,19 +21,9 @@ const {Aside} = Layouts;
 const DATA_ATTR = 'data-topic-content-placeholder';
 const PLACEHOLDER_TPL = `<div ${DATA_ATTR}></div>`;
 
-const MIME_TYPES = {
-	'application/vnd.nextthought.discussionref': true,
-	'application/vnd.nextthought.discussion': true
-};
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
 
-	return item && MIME_TYPES[item.MimeType];
-};
 
 export default
-@Registry.register(handles)
 @Store.connect(['loading', 'error', 'topicModel', 'topicRef', 'activeUsers'])
 class NTIWebAppLessonItemsTopic extends React.Component {
 	static deriveBindingFromProps (props) {

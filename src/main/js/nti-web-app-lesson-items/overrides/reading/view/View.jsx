@@ -13,8 +13,6 @@ import PageInfo from 'legacy/model/PageInfo';
 import RelatedWorkRef from 'legacy/model/RelatedWork';
 import ExternalToolAsset from 'legacy/model/LTIExternalToolAsset';
 
-import Registry from '../Registry';
-
 import Styles from './View.css';
 import Store from './Store';
 
@@ -25,24 +23,7 @@ const t = scoped('NTIWebAppLessonItems.overrides.reading.View', {
 
 const {Aside} = Layouts;
 
-const MIME_TYPES = {
-	'application/vnd.nextthought.ltiexternaltoolasset': true,
-	'application/vnd.nextthought.relatedworkref': true,
-	'application/vnd.nextthought.questionsetref': true,
-	'application/vnd.nextthought.naquestionset': true,
-	'application/vnd.nextthought.surveyref': true
-};
 
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
-
-	if (item && item.isTableOfContentsNode && item.isTopic()) {
-		return true;
-	}
-
-	return item && MIME_TYPES[item.MimeType] ;
-};
 
 function alreadyPointingToContent (contentViewer, page) {
 	const pageId = page.getId();
@@ -55,7 +36,6 @@ function alreadyPointingToContent (contentViewer, page) {
 }
 
 export default
-@Registry.register(handles)
 @Store.connect([
 	'loading',
 	'error',
@@ -72,7 +52,7 @@ export default
 	'notes'
 ])
 @Hooks.onEvent(Events.NOTE_DELETED, 'onNoteDeleted')
-class NTIWebAppLessonItemsReading extends React.Component {
+class NTIWebAppLessonItemsReadingView extends React.Component {
 	static deriveBindingFromProps (props) {
 		const {location = {}} = props;
 

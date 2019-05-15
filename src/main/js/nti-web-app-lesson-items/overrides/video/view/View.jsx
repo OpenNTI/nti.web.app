@@ -13,26 +13,12 @@ import DomUtils from 'legacy/util/Dom';
 import BaseModel from 'legacy/model/Base';
 import SearchStore from 'legacy/app/search/StateStore';
 
-import Registry from '../Registry';
-
 import Styles from './View.css';
 
 const cx = classnames.bind(Styles);
 
-const MIME_TYPES = {
-	'application/vnd.nextthought.ntivideo': true
-};
-
-const handles = (obj) => {
-	const {location} = obj || {};
-	const {item} = location || {};
-
-	return item && MIME_TYPES[item.MimeType];
-};
-
 export default
-@Registry.register(handles)
-class NTIWebLessonItemsVideo extends React.Component {
+class NTIWebLessonItemsVideoView extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
 			item: PropTypes.object
