@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Registry from '../Registry';
 
+import Editor from './editor';
 import View from './view';
 
 const MIME_TYPES = {
@@ -18,7 +20,26 @@ const handles = (obj) => {
 export default
 @Registry.register(handles)
 class NTIWebLessonItemsVideo extends React.Component {
+	static propTypes = {
+		editing: PropTypes.bool
+	}
+
 	render () {
+		const {editing} = this.props;
+
+		return editing ? this.renderEditor() : this.renderView();
+
+	}
+
+
+	renderEditor () {
+		return (
+			<Editor {...this.props} />
+		);
+	}
+
+
+	renderView () {
 		return (
 			<View {...this.props} />
 		);

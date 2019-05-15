@@ -55,7 +55,8 @@ export default class NTIWebAppLessonItems extends React.Component {
 		handleNavigation: PropTypes.func,
 		firstSelection: PropTypes.bool,
 		activeObjectId: PropTypes.string,
-		activeHash: PropTypes.string
+		activeHash: PropTypes.string,
+		editing: PropTypes.bool
 	}
 
 	static contextTypes = {
@@ -106,7 +107,8 @@ export default class NTIWebAppLessonItems extends React.Component {
 			handleNavigation,
 			firstSelection,
 			activeObjectId,
-			activeHash
+			activeHash,
+			editing
 		} = this.props;
 		const {selection} = this.state;
 
@@ -130,6 +132,7 @@ export default class NTIWebAppLessonItems extends React.Component {
 					firstSelection={firstSelection}
 					activeObjectId={activeObjectId ? decodeFromURI(activeObjectId) : null}
 					activeHash={activeHash}
+					editing={editing}
 
 					dismissPath={dismissPath}
 					overrides={overrides}

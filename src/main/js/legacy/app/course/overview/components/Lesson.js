@@ -362,7 +362,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 	maybeShowEditContent (lesson, route, subRoute) {
-		return this.maybeShowContent(lesson, route, subRoute, {edit: true});
+		return this.maybeShowContent(lesson, route, subRoute, {editing: true});
 	},
 
 	async maybeShowContent (lesson, route, subRoute, extraProps) {
