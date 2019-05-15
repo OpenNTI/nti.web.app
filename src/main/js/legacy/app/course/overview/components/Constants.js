@@ -57,10 +57,11 @@ function getOverviewPart (obj, context) {
 	return getURLPart(obj);
 }
 
-function modalDefault (course, lesson, obj, context) {
+function modalDefault (course, lesson, obj, context, itemRoute, edit) {
 	const {lesson:lessonOverride} = context || {};
+	const editPart = edit ? '/edit' : '';
 
-	return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}/items/${getOverviewPart(obj, context)}`;
+	return `/app/course/${getURLPart(course)}/lessons/${getURLPart(lessonOverride || lesson)}${editPart}/items/${getOverviewPart(obj, context)}`;
 }
 
 function mediaViewer (course, lesson, obj, context, itemRoute) {
@@ -98,7 +99,7 @@ const ROUTE_BUILDERS = {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/video/${getURLPart(obj)}/`;
 	},
 
-	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context, editMode) => {
+	'application/vnd.nextthought.relatedworkref': (course, lesson, obj, context, route, editMode) => {
 		if (obj.isExternal && !obj.isEmbeddableDocument && context !== 'discussions') {
 			return {
 				href: obj.href,
@@ -114,7 +115,7 @@ const ROUTE_BUILDERS = {
 	},
 
 
-	'application/vnd.nextthought.ltiexternaltoolasset': (course, lesson, obj, context, editMode) => {
+	'application/vnd.nextthought.ltiexternaltoolasset': (course, lesson, obj, context, route, editMode) => {
 		const editPath = editMode ? 'edit/' : '';
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj.NTIID)}/${editPath}`;
 	},

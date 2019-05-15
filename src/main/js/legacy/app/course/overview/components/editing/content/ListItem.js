@@ -7,7 +7,7 @@ const MoveInfo = require('legacy/model/app/MoveInfo');
 
 const getTargetId = require('../../../../util/get-target-id');
 const saveRequireStatus = require('../../../../util/save-require-status');
-const { ROUTE_BUILDERS } = require('../../Constants');
+const { MODAL_ROUTE_BUILDERS } = require('../../Constants');
 
 const ContentPrompt = require('./Prompt');
 
@@ -107,11 +107,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	getRouteFor (object, context) {
-		const builder = ROUTE_BUILDERS[object.MimeType];
+		const builder = MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default'];
 
 		// pass true for editMode.  Types that support going to edit straight from overview edit
 		// should honor this flag.. other types will ignore it
-		return builder ? builder(this.course, this.currentOutlineNode, object, context, true) : null;
+		return builder ? builder(this.course, this.currentOutlineNode, object, context, '', true) : null;
 	},
 
 	getPreview: async function (record) {

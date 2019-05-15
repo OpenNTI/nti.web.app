@@ -149,7 +149,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			lesson = this.add({
 				xtype: 'course-overview-lesson',
 				bundle: this.currentBundle,
-				handleMediaViewerRoute: this.handleMediaViewerRoute
+				handleMediaViewerRoute: this.handleMediaViewerRoute,
+				navigateToOutlineNode: this.navigateToOutlineNode
 			});
 
 			this.addChildRouter(lesson);
@@ -259,6 +260,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return lesson.maybeShowContent(id, route, subRoute);
 	},
 
+
+	maybeShowEditContent (id, route, subRoute) {
+		const lesson = this.getLesson(true);
+
+		return lesson.maybeShowEditContent(id, route, subRoute);
+	},
+
 	isShowingContent () {
 		const lesson = this.getLesson();
 
@@ -284,21 +292,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	editOutlineNode: function (record) {
-		var editor = this.getEditor(true),
-			lesson = this.getLesson(),
-			emptyState = this.getEmptyState();
-
-		if (lesson) {
-			lesson.hide();
-		}
+		const lesson = this.getLesson(true);
+		const emptyState = this.getEmptyState();
 
 		if (emptyState) {
 			emptyState.hide();
 		}
 
-		editor.show();
+		lesson.show();
 
-		return editor.editOutlineNode(record, this.currentOutline, this.outlineInterface);
+		return lesson.editOutlineNode(record, this.currentOutline, this.outlineInterface);
 	},
 
 	showEmptyState: function () {

@@ -8,6 +8,8 @@ const {getString} = require('legacy/util/Localization');
 const WindowActions = require('legacy/app/windows/Actions');
 const BaseModel = require('legacy/model/Base');
 const CalendarRoutes = require('legacy/app/CalendarRoutes');
+const lazy = require('legacy/util/lazy-require')
+	.get('Editor', ()=> require('legacy/app/course/overview/components/editing/Index'));
 
 const { ROUTE_BUILDERS, MODAL_ROUTE_BUILDERS } = require('./Constants');
 require('legacy/app/mediaviewer/Index');
@@ -164,7 +166,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			(MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']) :
 			(ROUTE_BUILDERS[object.MimeType]);
 
-		return builder ? builder(this.bundle, this.currentOutlineNode, object, context, this.activeItemRoute) : null;
+		return builder ? builder(this.bundle, this.currentOutlineNode, object, context, this.activeItemRoute, !!this.currentEditor) : null;
 	},
 
 
@@ -209,9 +211,60 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		}
 	},
 
+	async editOutlineNode (record, currentOutline, outlineInterface) {
+		try {
+			this.buildingOverview = true;
+
+			if (this.currentOverview) {
+				this.currentOverview.destroy();
+				delete this.currentOverview;
+			}
+
+			if (this.currentEditor) {
+				if (record.getId() === this.activeRecord.getId()) {
+					return;
+				} else {
+					this.currentEditor.destroy();
+				}
+			}
+
+			this.activeRecord = record;
+
+			this.currentEditor = this.add(lazy.Editor.create({
+				xtype: 'overview-editing',
+				bundle: this.bundle,
+				navigateToOutlineNode: this.navigateToOutlineNode
+			}));
+
+			const course = await this.bundle.getInterfaceInstance();
+			let outline = await course.getOutline({force: false});
+			let node = outline.getNode(record.get('ContentNTIID'));
+
+			if (!node) {
+				outline = await course.getOutline({force: true});
+				node = outline.getNode(record.get('ContentNTIID'));
+			}
+
+			//If another lesson got rendered while we were loading, don't do anything
+			if (this.activeRecord.getId() !== record.getId()) { return; }
+
+			this.currentOutlineNode = node;
+
+			return this.currentEditor.editOutlineNode(record, currentOutline, outlineInterface);
+		} catch (e) {
+			console.error(e);
+		}
+	},
+
+
 	async renderLesson (record, doNotCache, subRoute) {
 		try {
 			this.buildingOverview = true;
+
+			if (this.currentEditor) {
+				this.currentEditor.destroy();
+				delete this.currentEditor;
+			}
 
 			if (this.currentOverview) {
 				if (!doNotCache && record.getId() === this.activeRecord.getId()) {
@@ -308,7 +361,11 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 		this.pushRoute(null, returnPath);
 	},
 
-	async maybeShowContent (lesson, route, subRoute) {
+	maybeShowEditContent (lesson, route, subRoute) {
+		return this.maybeShowContent(lesson, route, subRoute, {edit: true});
+	},
+
+	async maybeShowContent (lesson, route, subRoute, extraProps) {
 		const [itemRoute, viewerRoute] = !subRoute ? [] : subRoute.split('/viewer/');
 		const hasEmptyItemRoute = !this.activeItemRoute || this.activeItemRoute === '/';
 		const wasMounted = !!this.itemFlyout;
@@ -335,6 +392,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			this.itemFlyout.setProps({
 				course,
 				lesson,
+				...extraProps,
 				requiredOnly: Overview.isFilteredToRequired(),
 				dismissPath: MODAL_ROUTE_BUILDERS['dismiss'](this.bundle, lesson),
 				path: itemRoute,

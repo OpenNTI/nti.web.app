@@ -1,7 +1,5 @@
 const Ext = require('@nti/extjs');
 
-require('../../Lesson');
-
 require('./lessonoverview/Index');
 
 function getOutlineFromNode (outlineNode) {

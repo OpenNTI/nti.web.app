@@ -434,7 +434,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	showEditOutlineNode: function (route/*, subRoute*/) {
+	showEditOutlineNode: function (route, subRoute) {
 		this.alignNavigation();
 		this.navigation.startEditing();
 		this.body.showEditing();
@@ -445,6 +445,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const changedEditing = !this.isEditing;
 
 		this.isEditing = true;
+
+		if (id) {
+			this.body.maybeShowEditContent(id, route, subRoute);
+		}
 
 		return this.__getRecord(id, route.precache.outlineNode, true, changedEditing)
 			.then(record => {
