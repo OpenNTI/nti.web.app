@@ -26,22 +26,10 @@ class NTIWebLessonItemsVideo extends React.Component {
 
 	render () {
 		const {editing} = this.props;
+		const Cmp = editing ? Editor : View;
 
-		return editing ? this.renderEditor() : this.renderView();
-
-	}
-
-
-	renderEditor () {
 		return (
-			<Editor {...this.props} />
-		);
-	}
-
-
-	renderView () {
-		return (
-			<View {...this.props} />
+			<Cmp {...this.props} />
 		);
 	}
 }
