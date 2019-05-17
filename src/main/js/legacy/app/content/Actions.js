@@ -472,7 +472,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	 * @param  {Object}   defaultPackage	(optional) default values used when creating new package
 	 * @return	{Promise}					promise created after package creation
 	 */
-	createContent: function (bundle, defaultPackage) {
+	createReading: function (bundle, defaultPackage) {
 		const link = bundle.getLink('Library');
 
 		let req = null;
