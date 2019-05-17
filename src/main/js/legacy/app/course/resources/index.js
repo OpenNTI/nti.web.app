@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 		}
 
 		this.ContentActions
-			.createContent(this.currentBundle)
+			.createReading(this.currentBundle)
 			.then((pack) => {
 				this.gotoReading(pack);
 				this.setTitle('Untitled Reading');
