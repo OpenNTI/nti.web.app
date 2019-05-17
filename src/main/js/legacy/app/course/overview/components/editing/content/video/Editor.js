@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.addVideoBtn = me.add({
 			xtype: 'box',
-			autoEl: {tag: 'div', cls: 'create-video-overview-editing', html: 'Create Video'},
+			autoEl: {tag: 'div', cls: 'create-video-overview-editing', html: 'Add Video'},
 			listeners: {
 				click: {
 					element: 'el',
