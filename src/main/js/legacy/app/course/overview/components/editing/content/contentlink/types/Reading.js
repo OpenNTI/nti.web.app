@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		let me = this;
 		this.createContentBtn = this.add({
 			xtype: 'box',
-			autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: 'Create Content'},
+			autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: 'Create Reading'},
 			listeners: {
 				click: {
 					element: 'el',
