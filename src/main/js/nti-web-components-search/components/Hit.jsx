@@ -42,7 +42,7 @@ export default class Hit extends React.Component {
 		let clickHandler = () => { this.navigate(hit, fragments, navigateToSearchHit); };
 
 		return (
-			<div className="search-result-react">
+			<div className="search-result-react" data-target-mimetype={hit.TargetMimeType}>
 				<div className="hit-title" onClick={clickHandler}>{this.props.title}</div>
 				<Fragments fragments={this.props.fragments} hit={this.props.hit} navigateToSearchHit={this.props.navigateToSearchHit} />
 				<Path pathObject={this.state.path} />
