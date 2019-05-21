@@ -24,7 +24,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					category: 'content',
 					iconCls: 'reading',
 					description: '',
-					editor: this
+					editor: this,
+					isAvailable: async (bundle) => {
+						if (bundle.hasLink('Library')) {
+							return true;
+						}
+
+						try {
+							const readings = await ContentUtils.getReadings(bundle);
+
+							return readings && readings.length > 0;
+						} catch (e) {
+							return false;
+						}
+					}
 				}
 			];
 		},

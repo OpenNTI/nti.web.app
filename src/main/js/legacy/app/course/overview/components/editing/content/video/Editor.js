@@ -32,7 +32,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					category: 'Video',
 					iconCls: 'video',
 					description: '',
-					editor: this
+					editor: this,
+					isAvailable: (bundle) => {
+						return bundle.hasLink('assets');
+					}
 				}
 			];
 		},

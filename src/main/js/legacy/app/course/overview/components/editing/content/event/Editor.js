@@ -32,7 +32,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					hideFooter: true,
 					description: '',
 					editor: this,
-					customHTML: getEventSVG((new Date()).getDate())
+					customHTML: getEventSVG((new Date()).getDate()),
+					isAvailable: async (bundle) => {
+						return bundle.hasLink('CourseCalendar');
+					}
 				}
 			];
 		}

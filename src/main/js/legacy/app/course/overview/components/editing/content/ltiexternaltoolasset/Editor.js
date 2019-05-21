@@ -28,7 +28,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					category: 'ltiexternaltoolasset',
 					iconCls: 'ltitools',
 					description: '',
-					editor: this
+					editor: this,
+					isAvailable: (bundle) => {
+						return bundle.hasLink('lti-configured-tools');
+					}
 				}
 			];
 		}

@@ -27,7 +27,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					advanced: false,
 					iconCls: 'survey',
 					description: '',
-					editor: this
+					editor: this,
+					isAvailable: async (bundle) => {
+						try {
+							const surveys = await bundle.getAllSurveys();
+
+							return surveys && surveys.length > 0;
+						} catch (e) {
+							return false;
+						}
+					}
 				}
 			];
 		},

@@ -29,7 +29,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					advanced: false,
 					iconCls: 'assignment',
 					description: '',
-					editor: this
+					editor: this,
+					isAvailable: async (bundle) => {
+						if (bundle.hasLink('CourseEvaluations')) {
+							return true;
+						}
+
+						try {
+							const assignments = await bundle.getAllAssignments();
+
+							return assignments && assignments.length > 0;
+						} catch (e) {
+							return false;
+						}
+					}
 				}
 			];
 		},

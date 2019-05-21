@@ -2,6 +2,18 @@ const Ext = require('@nti/extjs');
 
 require('./Type');
 
+async function getAvailableTypes (types, bundle) {
+	const availableTypes = await Promise.all(
+		types.map(async (type) => {
+			const available = type.isAvailable ? await type.isAvailable(bundle) : true;
+
+			return available ? type : null;
+		})
+	);
+
+	return availableTypes.filter(Boolean);
+}
+
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.creation.TypeList', {
 	extend: 'Ext.container.Container',
@@ -12,10 +24,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	initComponent: function () {
 		this.callParent(arguments);
+		this.addTypes();
+	},
 
-		var showEditor = this.showEditorForType.bind(this),
-			parentRecord = this.parentRecord,
-			rootRecord = this.rootRecord;
+
+	async addTypes () {
+		const showEditor = this.showEditorForType.bind(this);
+		const parentRecord = this.parentRecord;
+		const rootRecord = this.rootRecord;
+		const bundle = this.bundle;
 
 		this.types = this.types || [];
 
@@ -24,18 +41,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		this.add(this.types.reduce(function (acc, type) {
-			if (!type.advanced || Service.canDoAdvancedEditing()) {
-				acc.push({
-					xtype: 'overview-editing-type',
-					showEditor: showEditor,
-					typeConfig: type,
-					parentRecord: parentRecord,
-					rootRecord: rootRecord
-				});
-			}
+		const availableTypes = await getAvailableTypes(this.types, bundle);
 
-			return acc;
+		this.add(availableTypes.map((type) => {
+			return {
+				xtype: 'overview-editing-type',
+				showEditor: showEditor,
+				typeConfig: type,
+				parentRecord: parentRecord,
+				rootRecord: rootRecord
+			};
 		}, []));
+
 	}
 });

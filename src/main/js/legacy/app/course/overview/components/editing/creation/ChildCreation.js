@@ -117,6 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			types: types,
 			parentRecord: this.parentRecord,
 			rootRecord: this.rootRecord,
+			bundle: this.bundle,
 			showEditorForType: this.showEditorForType.bind(this)
 		});
 
