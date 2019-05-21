@@ -17,9 +17,15 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 
 	statics: {
 		buildContentsStoreFromData: function (id, data) {
-			var store;
+			const existing = Ext.getStore(id);
 
-			store = Ext.getStore(id) || NTI.create({
+			if (existing) {
+				existing.add(data);
+				StoreUtils.fillInUsers(existing);
+				return existing;
+			}
+
+			const store = NTI.create({
 				storeId: id,
 				data: data,
 				sorters: [{

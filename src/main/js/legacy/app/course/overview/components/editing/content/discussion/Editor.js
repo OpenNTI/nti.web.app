@@ -65,6 +65,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
+	beforeDestroy () {
+		if (this.selectionCmp) {
+			this.selectionCmp.destroy();
+		}
+	},
+
+
 	showEditor: function () {
 		if (this.record) {
 			this.showDiscussionEditor();
@@ -79,6 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 		}
 	},
+
 
 	maybeEnableBack: function (text) {
 		if (!this.record && this.enableBack) {
