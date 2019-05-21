@@ -113,14 +113,21 @@ module.exports = exports = Ext.define('NextThought.app.video.Picker', {
 	},
 
 
-	onNewVideoSelect (source) {
-		const { data } = this.Prompt;
-		const link = data && data.bundle && data.bundle.getLink('assets');
+	async onNewVideoSelect (source) {
+		const {data} = this.Prompt;
+		const bundle = data && data.bundle;
 
-		createMediaSourceFromUrl(getCanonicalUrlFrom(source))
-			.then(media => createVideoJSON(media))
-			.then((video) => getService().then((service) => service.postParseResponse(link, video)))
-			.then((video) => this.editVideo(video));
+		if (!bundle) {
+			throw new Error('No Bundle to add Video to.');
+		}
+
+		const course = await bundle.getInterfaceInstance();
+		const mediaSource = await createMediaSourceFromUrl(getCanonicalUrlFrom(source));
+		const videoJSON = await createVideoJSON(mediaSource);
+
+		const video = await course.createAsset(videoJSON);
+
+		this.editVideo(video);
 	},
 
 
