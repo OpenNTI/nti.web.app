@@ -139,7 +139,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	getRouteFor (object, context) {
-		if (!object) {
+		if (!object || object.isUser) {
 			return null;
 		}
 
@@ -150,18 +150,17 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				this.WindowActions.pushWindow(BaseModel.interfaceToModel(object));
 			};
 		}
-		else if (object.isNoteModel) {
+
+		if (object.isNoteModel) {
 			return () => {
 				this.WindowActions = this.WindowActions || WindowActions.create();
 
 				this.WindowActions.pushWindow(object);
 			};
 		}
-		else if (CALENDAR_EVENT.test(object.MimeType)) {
+
+		if (CALENDAR_EVENT.test(object.MimeType)) {
 			return this.calendarRoutes(object, context);
-		}
-		else if (object.isUser) {
-			return null;
 		}
 
 		const builder = this.useModal ?
