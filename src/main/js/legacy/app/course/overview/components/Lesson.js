@@ -139,6 +139,10 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	getRouteFor (object, context) {
+		if (!object) {
+			return null;
+		}
+
 		if (object.MimeType === 'application/vnd.nextthought.note') {
 			return () => {
 				this.WindowActions = this.WindowActions || WindowActions.create();
