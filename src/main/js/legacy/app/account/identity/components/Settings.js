@@ -54,7 +54,8 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 			handler: this.showAbout.bind(this),
 			text: getString('NextThought.view.menus.Settings.about'),
 			href: Service.getSupportLinks().about,
-			target: '_blank'
+			target: '_blank',
+			cls: 'settings-menu-about-item'
 		});
 
 		//disable help because there are now 3 seperate help documents for different environments.	ugh!
@@ -68,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 
 		items.push({handler: this.showTerms.bind(this), text: getString('NextThought.view.menus.Settings.terms')});
 
-		contactItem = {handler: this.contactUs.bind(this), text: getString('NextThought.view.menus.Settings.contact')};
+		contactItem = {handler: this.contactUs.bind(this), text: getString('NextThought.view.menus.Settings.contact'), cls: 'settings-menu-contact-item'};
 		items.push(contactItem);
 
 		if (!Ext.isEmpty(Service.getSupportLinks().supportEmail)) {
