@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					editor: this,
 					isAvailable: async (bundle) => {
 						try {
-							const assessments = bundle.getAllAssessments();
+							const assessments = await bundle.getAllAssessments();
 
 							return assessments && assessments.length > 0;
 						} catch (e) {
