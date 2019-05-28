@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const {Overview} = require('@nti/web-course');
 const {getService} = require('@nti/web-client');
-const {GotoWebinar} = require('@nti/web-integrations');
+// const {GotoWebinar} = require('@nti/web-integrations');
 
 const WebinarAsset = require('legacy/model/WebinarAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
