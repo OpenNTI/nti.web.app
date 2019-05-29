@@ -171,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 	isMountedInReader: function (elem) {
 		try {
-			return this.reader.getIframe().getDocumentElement().documentElement.contains(elem);
+			return this.reader.getIframe().getDocumentElement().body.contains(elem);
 		}
 		catch {
 			//
