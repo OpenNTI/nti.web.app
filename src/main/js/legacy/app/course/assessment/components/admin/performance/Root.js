@@ -207,7 +207,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.stateRestored = true;
 
-		this.studentFilter = state.studentFilter = state.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit');
+		this.studentFilter = state.studentFilter = state.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'All');
 		this.itemFilter = state.itemFilter = state.itemFilter || 'all';
 		this.searchKey = state.searchKey = state.searchKey || '';
 		state.currentPage = state.currentPage || 1;
@@ -339,7 +339,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	],
 
 	createStudentMenu: function () {
-		var type = this.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit'),
+		var type = this.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'All'),
 			items = this.STUDENT_FILTERS.map(function (filter) {
 				filter.checked = type === filter.type;
 				return filter;

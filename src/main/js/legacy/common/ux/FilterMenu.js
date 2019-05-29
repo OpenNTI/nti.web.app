@@ -50,11 +50,10 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 		this.on({
 			buffer: 10,
 			commit: 'onSearch',
-			changed: 'onSearch',
-			checkchange: 'onFilter'
+			changed: 'onSearch'
 		});
 
-		this.on({commit: 'hide'});
+		this.on({commit: 'hide', checkchange: 'onFilter'});
 	},
 
 	setState: function (filter, search) {

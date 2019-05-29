@@ -347,7 +347,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			if (!store.loading && store.loaded) {
 				loaded(store);
 			} else {
-				store.on({single: true, loaded: loaded});
+				store.on({single: true, load: loaded});
 			}
 		}
 	},
@@ -518,6 +518,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.pageHeader.setDisabled();
 		grid.setDisabled();
+		this.fireEvent('state-enabled');
 	},
 
 	setEnabled: function () {
@@ -530,6 +531,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.pageHeader.setEnabled();
 		grid.setEnabled();
+		this.fireEvent('state-enabled');
 	},
 
 	applyState: function (state) {
@@ -667,7 +669,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var state = this.currentState || {},
 			newPage = state.currentPage !== this.currentPage;
 
-		if (this.stateDisabled) { return; }
+		if (this.stateDisabled) {
+			this.on({single: true, 'state-enabled': 'updateFilter'});
+			return;
+		}
 
 		if (this.currentFilter) {
 			state.filter = this.currentFilter;
