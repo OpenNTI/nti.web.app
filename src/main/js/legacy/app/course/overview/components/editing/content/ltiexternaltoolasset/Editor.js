@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
-const { ContentSelection } = require('@nti/web-course');
+const React = require('react');
+const { Prompt } = require('@nti/web-commons');
+const { ContentSelection, LTIContent } = require('@nti/web-course');
 
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
@@ -85,6 +87,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			delete me.itemSelectionCmp;
 		}
 
+		if (this.addToolBtn) {
+			this.addToolBtn.destroy();
+			delete this.addToolBtn;
+		}
+
 		if (me.itemEditorCmp) {
 			me.itemEditorCmp.destroy();
 			delete me.itemEditorCmp;
@@ -93,6 +100,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.removeAll(true);
 		me.maybeEnableBack(me.backText);
 
+		me.addToolBtn = me.add({
+			xtype: 'box',
+			autoEl: {tag: 'div', cls: 'create-ltitool-overview-editing', html: 'Create LTI Tool'},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: me.showToolModal.bind(me)
+				}
+			}
+		});
 
 		me.itemSelectionCmp = me.add({
 			xtype: this.LIST_XTYPE,
@@ -105,6 +122,45 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(function (items) {
 				me.itemSelectionCmp.setSelectionItems(items.Items);
 			});
+	},
+
+	showToolModal: function () {
+		var me = this;
+		me.dialog = Prompt.modal(
+			<LTIContent
+				title="Add Tool"
+				onSubmit={this.onToolModalSubmit.bind(this)}
+				onBeforeDismiss={this.onToolModalDismission.bind(this)} />
+		);
+
+	},
+
+	onToolModalSubmit: async function (item) {
+		const me = this;
+		try {
+			const inst = await this.bundle.getInterfaceInstance();
+			await inst.postToLink('lti-configured-tools', item);
+
+			if (me.dialog) {
+				me.dialog.dismiss();
+			}
+
+			me.getItemList()
+				.then(function (items) {
+					me.itemSelectionCmp.setSelectionItems(items.Items);
+					me.itemSelectionCmp.clearSearch();
+				});
+
+		} catch (err) {
+			console.log(err);
+		}
+	},
+
+	onToolModalDismission: function () {
+		const me = this;
+		if (me.dialog) {
+			me.dialog.dismiss();
+		}
 	},
 
 	getSelectionFromRecord: function (record) {
@@ -137,6 +193,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	showItemEditor: function () {
+		if (this.addToolBtn) {
+			this.addToolBtn.destroy();
+			delete this.addToolBtn;
+		}
+
 		if (this.itemEditorCmp) {
 			this.itemEditorCmp.destroy();
 			delete this.itemEditorCmp;
