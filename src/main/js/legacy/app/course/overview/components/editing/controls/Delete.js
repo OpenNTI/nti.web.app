@@ -45,10 +45,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	confirm: function () {
+		const msg = this.messageOverride || 'Deleted items cannot be recovered.';
+
 		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
-				msg: 'Deleted items cannot be recovered.',
+				msg,
 				icon: 'warning-red',
 				buttons: {
 					primary: {

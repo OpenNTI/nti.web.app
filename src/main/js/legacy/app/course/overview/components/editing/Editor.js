@@ -246,7 +246,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				record: this.record,
 				parentRecord: this.parentRecord,
 				onDelete: this.onDelete.bind(this),
-				afterDelete: this.afterDelete.bind(this)
+				afterDelete: this.afterDelete.bind(this),
+				messageOverride: this.getDeleteMessage ? this.getDeleteMessage() : ''
 			});
 		}
 	},

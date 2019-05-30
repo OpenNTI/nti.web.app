@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const OverviewGroup = require('legacy/model/courses/overview/Group');
 
@@ -6,6 +7,14 @@ const ParentSelection = require('./ParentSelection');
 
 require('../../Editor');
 require('./InlineEditor');
+
+const t = scoped('nti-web-app.course.overview.editing.content.overviewgroup.Editor', {
+	deleteMessage: {
+		zero: 'Deleting this section cannot be undone.',
+		one: 'This section contains 1 item that will also be deleted. This action cannot be undone.',
+		other: 'This section contains %(count)s items that will also be deleted. This action cannot be undone.'
+	}
+});
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Editor', {
@@ -55,6 +64,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return Promise.reject(reason);
 			});
+	},
+
+
+	getDeleteMessage () {
+		const items = this.record.get('Items');
+
+		return t('deleteMessage', {
+			count: items.length
+		});
 	},
 
 	addParentSelection: function (record, parentRecord, rootRecord, onChange) {
