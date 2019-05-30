@@ -3,6 +3,7 @@ const React = require('react');
 const { Prompt } = require('@nti/web-commons');
 const { ContentSelection, LTIContent } = require('@nti/web-course');
 
+const { isFeature } = require('legacy/util/Globals');
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
 
@@ -87,11 +88,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			delete me.itemSelectionCmp;
 		}
 
-		if (this.addToolBtn) {
-			this.addToolBtn.destroy();
-			delete this.addToolBtn;
-		}
-
 		if (me.itemEditorCmp) {
 			me.itemEditorCmp.destroy();
 			delete me.itemEditorCmp;
@@ -100,16 +96,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.removeAll(true);
 		me.maybeEnableBack(me.backText);
 
-		me.addToolBtn = me.add({
-			xtype: 'box',
-			autoEl: {tag: 'div', cls: 'create-ltitool-overview-editing', html: 'Create LTI Tool'},
-			listeners: {
-				click: {
-					element: 'el',
-					fn: me.showToolModal.bind(me)
-				}
+		if (me.maybeShowCreateButton()) {
+			if (this.addToolBtn) {
+				this.addToolBtn.destroy();
+				delete this.addToolBtn;
 			}
-		});
+
+			me.addToolBtn = me.add({
+				xtype: 'box',
+				autoEl: {tag: 'div', cls: 'create-ltitool-overview-editing', html: 'Create LTI Tool'},
+				listeners: {
+					click: {
+						element: 'el',
+						fn: me.showToolModal.bind(me)
+					}
+				}
+			});
+		}
 
 		me.itemSelectionCmp = me.add({
 			xtype: this.LIST_XTYPE,
@@ -122,6 +125,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(function (items) {
 				me.itemSelectionCmp.setSelectionItems(items.Items);
 			});
+	},
+
+	maybeShowCreateButton: function () {
+		return isFeature('show-create-ltitool-button');
 	},
 
 	showToolModal: function () {
@@ -193,17 +200,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	showItemEditor: function () {
-		if (this.addToolBtn) {
-			this.addToolBtn.destroy();
-			delete this.addToolBtn;
-		}
-
-		if (this.itemEditorCmp) {
-			this.itemEditorCmp.destroy();
-			delete this.itemEditorCmp;
-		}
-
 		var me = this;
+
+		if (me.maybeShowCreateButton()) {
+			if (this.addToolBtn) {
+				this.addToolBtn.destroy();
+				delete this.addToolBtn;
+			}
+		}
+
+		if (me.itemEditorCmp) {
+			me.itemEditorCmp.destroy();
+			delete me.itemEditorCmp;
+		}
 
 		me.loading = true;
 

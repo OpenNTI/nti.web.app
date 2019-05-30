@@ -40,7 +40,8 @@
 			"use-new-search":true,
 			"show-notebook-tab": true,
 			"use-new-user-list": true,
-			"course-content-modal": true
+			"course-content-modal": true,
+			"show-create-ltitool-button": true
 		},
 
 		"server-host": "",
