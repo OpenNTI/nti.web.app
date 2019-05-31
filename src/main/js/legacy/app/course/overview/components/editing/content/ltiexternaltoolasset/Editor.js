@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const React = require('react');
 const { Prompt } = require('@nti/web-commons');
-const { ContentSelection, LTIContent } = require('@nti/web-course');
+const { ContentSelection, LTIAddTool, LTIStore } = require('@nti/web-course');
 
 const { isFeature } = require('legacy/util/Globals');
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
@@ -131,42 +131,35 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return isFeature('show-create-ltitool-button');
 	},
 
-	showToolModal: function () {
-		var me = this;
+	showToolModal: async function () {
+		const me = this;
+		const inst = await this.bundle.getInterfaceInstance();
+
+		const store = new LTIStore();
+		store.setCourse(inst);
+
 		me.dialog = Prompt.modal(
-			<LTIContent
-				title="Add Tool"
-				onSubmit={this.onToolModalSubmit.bind(this)}
+			<LTIAddTool
+				store={store}
+				modal={true}
 				onBeforeDismiss={this.onToolModalDismission.bind(this)} />
 		);
 
 	},
 
-	onToolModalSubmit: async function (item) {
+	onToolModalDismission: function (item) {
 		const me = this;
-		try {
-			const inst = await this.bundle.getInterfaceInstance();
-			await inst.postToLink('lti-configured-tools', item);
 
-			if (me.dialog) {
-				me.dialog.dismiss();
-			}
+		if (me.dialog) {
+			me.dialog.dismiss();
+		}
 
+		if (item) {
 			me.getItemList()
 				.then(function (items) {
 					me.itemSelectionCmp.setSelectionItems(items.Items);
 					me.itemSelectionCmp.clearSearch();
 				});
-
-		} catch (err) {
-			console.log(err);
-		}
-	},
-
-	onToolModalDismission: function () {
-		const me = this;
-		if (me.dialog) {
-			me.dialog.dismiss();
 		}
 	},
 
