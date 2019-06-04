@@ -23,6 +23,7 @@
 			"badges":true,
 			"bulk-resolve-users": true,
 			"course-reports": false,
+			"course-content-modal": true,
 			"disable-context-in-activity": false,
 			"do-not-save-progress": false,
 			"email-verification":true,
@@ -40,7 +41,6 @@
 			"use-new-search":true,
 			"show-notebook-tab": true,
 			"use-new-user-list": true,
-			"course-content-modal": true,
 			"show-create-ltitool-button": true
 		},
 
