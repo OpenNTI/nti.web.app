@@ -24,7 +24,12 @@ module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseA
 		if (!link) { return Promise.reject('No Assignment Link'); }
 
 		return Service.request(link)
-			.then(response => lazy.ParseUtils.parseItems(response)[0]);
+			.then(response => lazy.ParseUtils.parseItems(response)[0])
+			.then((assignment) => {
+				assignment.setFetchOverride(() => Service.request(link));
+
+				return assignment;
+			});
 	},
 
 

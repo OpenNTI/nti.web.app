@@ -356,12 +356,23 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	},
 
 
+	setFetchOverride (fn) {
+		this.fetchOverride = fn;
+	},
+
+
 	fetchFromServer () {
 		const link = this.getLinkForUpdate();
 		let update;
 
+		if (this.fetchOverride) {
+			update = this.fetchOverride()
+				.then((resp) => {
+					this.syncWithResponse(resp);
 
-		if (link) {
+					return this;
+				});
+		} else if (link) {
 			update = Service.request(link)
 				.then((response) => {
 					this.syncWithResponse(response);
