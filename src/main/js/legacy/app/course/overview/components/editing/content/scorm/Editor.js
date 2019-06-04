@@ -52,9 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	showItemEditor () {
-		debugger;	
-	},
+	showItemEditor () {},
 
 
 	async showItemList () {
