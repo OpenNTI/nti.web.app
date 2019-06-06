@@ -949,24 +949,35 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return p;
 	},
 
-	getAllSurveys: function () {
-		const link = this.getLink('Inquiries') + '?accept=application/vnd.nextthought.nasurvey';
+	getAllSurveys: function (batchSize, batchStart) {
+		var link = this.getLink('Inquiries'),
+			config;
 
-		//TODO: Add a model for a survey collection. Casper Shepard.
-
-		if (link) {
-			return Service.request(link)
-				.then(function (response) {
-					let json = JSON.parse(response);
-					let surveys = [];
-					json.Items.forEach(function (item) {
-						surveys.push(lazy.ParseUtils.parseItems(item)[0]);
-					});
-					return surveys;
-				});
+		if (!link) {
+			return Promise.reject('Survey request failed.');
 		}
 
-		return Promise.reject('Survey request failed.');
+		config = {
+			url: link,
+			method: 'GET',
+			params: { accept: 'application/vnd.nextthought.nasurvey' }
+		};
+
+		if (batchSize) {
+			config.params.batchSize = batchSize;
+			config.params.batchStart = batchStart || 0;
+		}
+
+		//TODO: Add a model for a survey collection. Casper Shepard.
+		return Service.request(config)
+			.then(function (response) {
+				let json = JSON.parse(response);
+				let surveys = [];
+				json.Items.forEach(function (item) {
+					surveys.push(lazy.ParseUtils.parseItems(item)[0]);
+				});
+				return surveys;
+			});
 	},
 
 	getAllAssignments: function () {
@@ -999,7 +1010,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		});
 	},
 
-	__getAssets: function (type) {
+	__getAssets: function (type, batchSize, batchStart) {
 		var link = this.getLink('assets'),
 			config;
 
@@ -1010,13 +1021,17 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		config = {
 			url: link,
-			method: 'GET'
+			method: 'GET',
+			params: {}
 		};
 
 		if (type) {
-			config.params = {
-				accept: type
-			};
+			config.params.accept = type;
+		}
+
+		if (batchSize) {
+			config.params.batchSize = batchSize;
+			config.params.batchStart = batchStart || 0;
 		}
 
 		return Service.request(config)
@@ -1036,8 +1051,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__getAssets(Video.mimeType);
 	},
 
-	getTimelineAssets: function () {
-		return this.__getAssets(Timeline.mimeType);
+	getTimelineAssets: function (batchSize, batchStart) {
+		return this.__getAssets(Timeline.mimeType, batchSize, batchStart);
 	},
 
 	getDiscussionAssets: function () {

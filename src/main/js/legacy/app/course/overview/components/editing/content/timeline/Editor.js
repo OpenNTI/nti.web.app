@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					editor: this,
 					isAvailable: async (bundle) => {
 						try {
-							const timelines = await bundle.getTimelineAssets();
+							const timelines = await bundle.getTimelineAssets(1);
 
 							return timelines && timelines.length;
 						} catch (e) {
