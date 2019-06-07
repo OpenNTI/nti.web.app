@@ -10,6 +10,7 @@ const EventListItem = require('../event/ListItem');
 const LTIExternalToolAssetItem = require('../ltiexternaltoolasset/ListItem');
 const PollListItem = require('../poll/ListItem');
 const QuestionsetListItem = require('../questionset/ListItem');
+const ScormListItem = require('../scorm/ListItem');
 const SurveyListItem = require('../survey/ListItem');
 const TimelineListItem = require('../timeline/ListItem');
 const VideoListItem = require('../video/ListItem');
@@ -52,6 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				LTIExternalToolAssetItem,
 				PollListItem,
 				QuestionsetListItem,
+				ScormListItem,
 				SurveyListItem,
 				TimelineListItem,
 				VideoListItem,

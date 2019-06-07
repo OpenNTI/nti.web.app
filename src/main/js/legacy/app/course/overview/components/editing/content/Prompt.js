@@ -11,6 +11,7 @@ const DiscussionEditor = require('./discussion/Editor');
 const LTIExternalToolAssetEditor = require('./ltiexternaltoolasset/Editor');
 const PollEditor = require('./poll/Editor');
 const QuestionsetEditor = require('./questionset/Editor');
+const ScormEditor = require('./scorm/Editor');
 const SurveyEditor = require('./survey/Editor');
 const TimelineEditor = require('./timeline/Editor');
 const WebinarEditor = require('./webinar/Editor');
@@ -43,6 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				LTIExternalToolAssetEditor,
 				PollEditor,
 				QuestionsetEditor,
+				ScormEditor,
 				SurveyEditor,
 				TimelineEditor,
 				WebinarEditor,
