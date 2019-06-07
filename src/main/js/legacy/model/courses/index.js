@@ -1,3 +1,4 @@
+require('./scorm/SCORMReference');
 require('./AssignmentCollection');
 require('./CompletionPolicy');
 require('./CourseAwardableCredit');

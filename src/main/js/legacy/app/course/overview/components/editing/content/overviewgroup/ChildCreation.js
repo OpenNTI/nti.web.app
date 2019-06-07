@@ -9,6 +9,7 @@ const EventEditor = require('../event/Editor');
 const LTIExternalToolAssetEditor = require('../ltiexternaltoolasset/Editor');
 const QuestionsetEditor = require('../questionset/Editor');
 const TimelineEditor = require('../timeline/Editor');
+const ScormEditor = require('../scorm/Editor');
 const SurveyEditor = require('../survey/Editor');
 const WebinarEditor = require('../webinar/Editor');
 
@@ -40,7 +41,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				TimelineEditor,
 				SurveyEditor,
 				WebinarEditor,
-				EventEditor
+				EventEditor,
+				ScormEditor
 			];
 
 			if (bundle && bundle.hasLink('lti-configured-tools')) {
