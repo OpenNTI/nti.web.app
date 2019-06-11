@@ -13,6 +13,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.scorm.SCORMRefe
 	fields: [
 		{name: 'scorm_id', type: 'string'},
 		{name: 'title', type: 'string'},
-		{name: 'description', type: 'string'}
+		{name: 'description', type: 'string'},
+		{name: 'icon', type: 'string'}
 	]
 });

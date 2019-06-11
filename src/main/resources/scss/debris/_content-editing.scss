@@ -65,8 +65,64 @@
 			}
 		}
 
-		&.scorm-ref-editor {
+		&.scorm-list-editor {
 			padding: 0;
+		}
+
+		&.scorm-ref-editor {
+			.common-form {
+				box-shadow: none;
+
+				.group.card {
+					padding: 0;
+					border: 1px solid #E2E2E2;
+					background-color: #fcfcfc;
+					box-shadow: 0 1px 4px 0 rgba(0,0,0,0.13);
+					border-radius: 5px;
+
+					.meta {
+						padding: 0.5rem 1.25rem 0;
+						background: none;
+						box-shadow: inset 1px 0 0 0 #d8d8d8;
+					}
+
+					.field.icon.image {
+						min-height: 128px;
+						margin-right: 0;
+						border-right: 0;
+					}
+
+					.field.title,
+					.field.description {
+						textarea {
+							margin: 0;
+							padding: 2px 0.5em;
+							resize: none;
+							width: 100%;
+							border: none;
+							box-shadow: 0 0 0 1px #d8d8d8;
+						}
+					}
+
+					.field.title {
+						textarea {
+							font-size: 1rem;
+							font-weight: 400;
+							line-height: 1.3;
+							height: 50px;
+						}
+					}
+
+					.field.description {
+						textarea {
+							font-size: 0.875rem;
+							font-weight: 300;
+							line-height: 1.3;
+							height: 57px;
+						}
+					}
+				}
+			}
 		}
 	}
 }

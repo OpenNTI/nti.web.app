@@ -18,8 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{type: 'group', name: 'card', inputs: [
 				{name: 'icon', type: 'image', height: 125, width: 100},
 				{type: 'group', name: 'meta', inputs: [
-					{name: 'title', type: 'text', placeholder: 'Title', required: true, maxLength: EditingActions.MAX_TITLE_LENGTH},
-					{name: 'byline', type: 'text', placeholder: 'Author'},
+					{name: 'title', type: 'textarea', placeholder: 'Title', required: true, maxLength: EditingActions.MAX_TITLE_LENGTH},
 					{name: 'description', type: 'textarea', placeholder: 'Description'}
 				]}
 			]},
@@ -27,17 +26,29 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		];
 	},
 
-
 	getDefaultValues () {
-		const instance = this.interfaceInstance;
+		if (this.record) {
+			return {
+				MimeType: 'application/vnd.nextthought.scormcontentref',
+				title: this.record.get('title'),
+				description: this.record.get('description'),
+				icon: this.record.get('icon'),
+				'scorm_id': this.record.get('scorm_id')
+			};
+		}
 
-		return {
-			MimeType: 'application/vnd.nextthought.scormcontentref',
-			title: instance.title,
-			description: instance.description,
-			byline: instance.byline,
-			icon: instance.icon,
-			'scorm_id': instance.scormId
-		};
+		if (this.interfaceInstance) {
+			const instance = this.interfaceInstance;
+
+			return {
+				MimeType: 'application/vnd.nextthought.scormcontentref',
+				title: instance.title,
+				description: instance.description,
+				icon: instance.icon,
+				'scorm_id': instance.scormId
+			};
+		}
+
+		return {};
 	}
 });

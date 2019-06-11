@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	cls: 'content-editor content-link lti-tools scorm-ref-editor',
+	cls: 'content-editor content-link lti-tools scorm-list-editor',
 
 	maybeEnableBack (text) {
 		if (!this.record && this.enableBack) {
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				this.onSelectionChange(null);
 			} else {
 				selected.add(id);
-				this.onSelectionChange(id);
+				this.onSelectionChange(obj);
 			}
 
 			this.itemListCmp.setProps({
