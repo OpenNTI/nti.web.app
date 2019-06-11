@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getTypes () {
 			return [
 				{
-					title: 'Scorm Package',
+					title: 'SCORM Package',
 					category: 'scorm-package',
 					iconCls: 'scorm-package-icon',
 					description: '',
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	cls: 'content-editor content-link lti-tools',
+	cls: 'content-editor content-link lti-tools scorm-ref-editor',
 
 	maybeEnableBack (text) {
 		if (!this.record && this.enableBack) {
@@ -100,30 +100,32 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.maybeEnableBack(this.backText);
 		this.setSaveText('Select');
 
+		const selectPackage = (obj) => {
+			const id = obj.scormId;
+
+			if (selected.has(id)) {
+				selected.delete(id);
+				this.onSelectionChange(null);
+			} else {
+				selected.add(id);
+				this.onSelectionChange(id);
+			}
+
+			this.itemListCmp.setProps({
+				selected
+			});
+		};
+
 		this.itemListCmp = this.add({
 			xtype: 'react',
 			component: ScormCollection,
 			selected,
 			course,
 			addHistory: true,
+			onPackageUploaded: selectPackage,
 			getRouteFor: (obj) => {
 				if (obj.MimeType === ScormContentMimeType) {
-					return () => {
-						const id = obj.scormId;
-
-						if (selected.has(id)) {
-							selected.delete(id);
-							this.onSelectionChange(null);
-						} else {
-							selected.add(id);
-							this.onSelectionChange(obj);
-						}
-
-						this.itemListCmp.setProps({
-							selected
-						});
-
-					};
+					return () => selectPackage(obj);
 				}
 			}
 		});
@@ -167,5 +169,4 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	}
 });
-
 
