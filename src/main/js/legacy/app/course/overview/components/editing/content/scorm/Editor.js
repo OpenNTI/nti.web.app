@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	async showItemList () {
 		const course = await this.bundle.getInterfaceInstance();
-		const selected = new Set();
+		let selected = new Set();
 	
 		this.removeAll(true);
 		this.maybeEnableBack(this.backText);
@@ -103,8 +103,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const selectPackage = (obj) => {
 			const id = obj.scormId;
 
+			selected = new Set();
+
 			if (selected.has(id)) {
-				selected.delete(id);
 				this.onSelectionChange(null);
 			} else {
 				selected.add(id);
