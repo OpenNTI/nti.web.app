@@ -138,6 +138,13 @@ const ROUTE_BUILDERS = {
 
 	'application/vnd.nextthought.surveyref': (course, lesson, obj) => {
 		return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/content/${encodeForURI(obj['Target-NTIID'] || obj.NTIID)}`;
+	},
+
+	'application/vnd.nextthought.scormcontentref': (course, lesson, obj) => {
+		return {
+			href: obj.getLink('LaunchSCORM'),
+			target: '_blank'
+		};
 	}
 };
 
