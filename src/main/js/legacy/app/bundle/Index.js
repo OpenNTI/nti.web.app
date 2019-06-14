@@ -1,4 +1,6 @@
 const Ext = require('@nti/extjs');
+const {Navigation} = require('@nti/web-content');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const {getString} = require('legacy/util/Localization');
 const PageInfo = require('legacy/model/PageInfo');
@@ -97,7 +99,41 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		return me.getActiveBundle;
 	},
 
-	applyState: function (state) {
+	applyState () {
+		if (!this.activeBundle) { return; }
+
+		this.activeBundle.getInterfaceInstance()
+			.then((content) => {
+				if (this.navigationCmp && this.navigationCmp.content === content) {
+					return;
+				}
+
+				this.renderNavigationCmp(Navigation.BookTabs, {
+					content,
+					baseroute: this.getBaseRoute(),
+					getRouteFor: (obj, context) => {
+						if (obj !== content) { return; }
+
+						const base = `/app/course/${encodeForURI(content.getID())}/`;
+						let part = '';
+
+						if (context === 'content') {
+							part = 'content';
+						} else if (context === 'discussions') {
+							part = 'discussions';
+						} else if (context === 'notebook') {
+							part = 'notebook';
+						}
+
+						return `${base}${part}/`;
+					}
+				});
+			});
+
+		this.navigation.useCommonTabs();
+	},
+
+	xapplyState: function (state) {
 		var bundle = this.activeBundle,
 			active = state.active,
 			tabs = [];
