@@ -95,10 +95,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	async showItemList () {
 		const course = await this.bundle.getInterfaceInstance();
 		let selected = new Set();
-	
-		this.removeAll(true);
+		
+		if (this.itemEditorCmp) {
+			this.itemEditorCmp.destroy();
+			delete this.itemEditorCmp;
+		}
+
 		this.maybeEnableBack(this.backText);
 		this.setSaveText('Select');
+		this.disableSave();
 
 		const selectPackage = (obj) => {
 			const id = obj.scormId;
