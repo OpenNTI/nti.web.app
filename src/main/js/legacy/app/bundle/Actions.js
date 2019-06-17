@@ -1,12 +1,13 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
-
-const Globals = require('legacy/util/Globals');
+const {Navigation} = require('@nti/web-content');
 
 const BundleStateStore = require('./StateStore');
 
 require('legacy/common/Actions');
 
+const APP_REGEX = /^\/app/;
+const stripApp = route => route.replace(APP_REGEX, '');
 
 module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -24,26 +25,9 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
 	 * @return {Promise}			fulfills with the route for the bundle, once the animation is done
 	 */
 	transitionToBundle: function (bundle, libraryCard) {
-		if(typeof bundle === 'string') {
-			let route = this.getRootRouteForId(bundle);
-			let subRoute = this.StateStore.getRouteFor(bundle);
+		const rememberedRoute = Navigation.RememberedRoutes.getRememberedRoute([bundle.get ? bundle.get('NTIID') : bundle]);
 
-			if (subRoute) {
-				route = route + '/' + Globals.trimRoute(subRoute);
-			}
-
-			return Promise.resolve(route);
-		} else {
-			var ntiid = bundle.get('NTIID'),
-				route = this.getRootRouteForId(ntiid),
-				subRoute = this.StateStore.getRouteFor(ntiid);
-
-			if (subRoute) {
-				route = route + '/' + Globals.trimRoute(subRoute);
-			}
-
-			return Promise.resolve(route);
-		}
+		return Promise.resolve(stripApp(rememberedRoute || this.getRootRouteForId(bundle)));
 	},
 
 	getRootRouteForId: function (id) {

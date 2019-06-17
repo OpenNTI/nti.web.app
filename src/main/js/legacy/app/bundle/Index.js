@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const {Navigation} = require('@nti/web-content');
 const { encodeForURI } = require('@nti/lib-ntiids');
 
 const {getString} = require('legacy/util/Localization');
@@ -12,6 +11,7 @@ const NotebookIndex = require('../content/notebook/Index');
 const ContentStateStore = require('../library/content/StateStore');
 
 const BundleStateStore = require('./StateStore');
+const BundleNavigation = require('./Tabs');
 
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
@@ -105,16 +105,17 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.activeBundle.getInterfaceInstance()
 			.then((content) => {
 				if (this.navigationCmp && this.navigationCmp.content === content) {
+					this.navigationCmp.componentInstance.forceUpdate();
 					return;
 				}
 
-				this.renderNavigationCmp(Navigation.BookTabs, {
+				this.renderNavigationCmp(BundleNavigation, {
 					content,
 					baseroute: this.getBaseRoute(),
 					getRouteFor: (obj, context) => {
 						if (obj !== content) { return; }
 
-						const base = `/app/course/${encodeForURI(content.getID())}/`;
+						const base = `/app/bundle/${encodeForURI(content.getID())}/`;
 						let part = '';
 
 						if (context === 'content') {
