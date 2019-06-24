@@ -7,7 +7,7 @@ require('./RefEditor');
 
 
 const RefMimeType = 'application/vnd.nextthought.scormcontentref';
-const ScormContentMimeType = 'application/vnd.nextthought.courseware_scorm.scormcontentinfo';
+const ScormContentMimeType = 'application/vnd.nextthought.scorm.scormcontentinfo';
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.scorm.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
