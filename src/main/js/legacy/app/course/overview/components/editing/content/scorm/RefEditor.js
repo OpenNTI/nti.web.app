@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	getFormSchema () {
 		return [
 			{name: 'MimeType', type: 'hidden'},
-			{name: 'scorm_id', type: 'hidden'},
+			{name: 'target', type: 'hidden'},
 			{type: 'group', name: 'card', inputs: [
 				{name: 'icon', type: 'image', height: 125, width: 100},
 				{type: 'group', name: 'meta', inputs: [
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				title: this.record.get('title'),
 				description: this.record.get('description'),
 				icon: this.record.get('icon'),
-				'scorm_id': this.record.get('scorm_id')
+				target: this.record.get('target')
 			};
 		}
 
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				title: instance.title,
 				description: instance.description,
 				icon: instance.icon,
-				'scorm_id': instance.scormId
+				target: instance.getID()
 			};
 		}
 

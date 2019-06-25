@@ -142,7 +142,7 @@ const ROUTE_BUILDERS = {
 
 	'application/vnd.nextthought.scormcontentref': (course, lesson, obj) => {
 		return {
-			href: obj.getLink('LaunchSCORM'),
+			href: obj.ScormContentInfo && obj.ScormContentInfo.getLink('LaunchSCORM'),
 			target: '_blank'
 		};
 	}
