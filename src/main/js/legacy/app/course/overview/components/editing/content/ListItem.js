@@ -136,8 +136,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 
 			saveRequireStatus(this.course, id, value).then(() => {
-				record.set('IsCompletionDefaultState', value === DEFAULT);
-				record.set('CompletionRequired', value === REQUIRED || (value === DEFAULT && record.get('CompletionDefaultState')));
+				if (target && target.refresh && target.onChange) {
+					target.refresh().then(() => target.onChange);
+				} else {
+					record.set('IsCompletionDefaultState', value === DEFAULT);
+					record.set('CompletionRequired', value === REQUIRED || (value === DEFAULT && record.get('CompletionDefaultState')));
+				}
+
 			});
 		};
 
