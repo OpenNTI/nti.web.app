@@ -299,11 +299,6 @@
 			padding-right: 0;
 			font: 11pt $font;
 			width: 100%;
-
-			&::-webkit-input-placeholder ,
-			&::-moz-placeholder { /* Firefox 18- */
-				   color: red;
-			}
 		}
 
 		a.trigger {
