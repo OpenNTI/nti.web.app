@@ -16,6 +16,14 @@
 	margin-bottom: -80px;
 }
 
+.reading-view :global(div.no-content-splash) {
+	bottom: 45px;
+}
+
+.reading-view :global(div.no-content-splash .x-component-resource-not-found) {
+	padding: 0;
+}
+
 .reading-view :global(.reader-container.navigation-panel .center .x-reader-pane) {
 	margin-top: 0;
 }
