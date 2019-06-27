@@ -108,13 +108,25 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const selectPackage = (obj) => {
 			const id = obj.scormId;
 
-			selected = new Set();
-
 			if (selected.has(id)) {
+				selected = new Set();
 				this.onSelectionChange(null);
 			} else {
-				selected.add(id);
+				selected = new Set([id]);
 				this.onSelectionChange(obj);
+			}
+
+			this.itemListCmp.setProps({
+				selected
+			});
+		};
+
+		const unselectPackage = (obj) => {
+			const id = obj.scormId;
+
+			if (selected.has(id)) {
+				selected = new Set();
+				this.onSelectionChange(null);
 			}
 
 			this.itemListCmp.setProps({
@@ -128,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			selected,
 			course,
 			addHistory: true,
-			onPackageUploaded: selectPackage,
+			onPackageDeleted: unselectPackage,
 			getRouteFor: (obj) => {
 				if (obj.MimeType === ScormContentMimeType) {
 					return () => selectPackage(obj);
