@@ -36,7 +36,7 @@ export default class Header extends React.Component {
 					{...{
 						eventType: t('type'),
 						startTime,
-						endTime
+						endTime,
 						completed,
 						expired
 					}}
