@@ -19,7 +19,6 @@ export default class Header extends React.Component {
 			item: {
 				title,
 				webinar,
-				icon,
 				completed,
 				expired
 			}
@@ -37,8 +36,7 @@ export default class Header extends React.Component {
 					{...{
 						eventType: t('type'),
 						startTime,
-						endTime,
-						icon,
+						endTime
 						completed,
 						expired
 					}}
@@ -54,7 +52,6 @@ Header.propTypes = {
 		webinar: PropTypes.shape({
 			getNearestSession: PropTypes.func.isRequired
 		}).isRequired,
-		icon: PropTypes.string,
 		completed: PropTypes.bool,
 		expired: PropTypes.bool
 	}).isRequired
