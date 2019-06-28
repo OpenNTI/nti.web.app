@@ -362,6 +362,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		//this.transcriptView.syncTranscriptWithVideo(videoState);
 	},
 
+	hideAnnotations () {
+		if (this.annotationView && this.annotationView.isVisible()) {
+			this.annotationView.hide();
+		}
+	},
+
 	showAnnotations: function (annotations, line, store) {
 		var s = store;
 

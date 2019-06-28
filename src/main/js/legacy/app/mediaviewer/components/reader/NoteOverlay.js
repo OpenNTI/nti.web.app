@@ -515,10 +515,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	showAnnotationsAtLine: function (e) {
+
 		let t = e && e.getTarget('.count', null, true);
 		let line = t && t.getAttribute('data-line');
 
 		if (!line) { return;}
+
+		if (t.hasCls('active')) {
+			t.removeCls('active');
+			this.reader.hideAnnotations();
+			return;
+		}
+
 		t.addCls('active');
 		line = parseInt(line, 10);
 		let annotations = this.getAnnotationsAtLine(line);
