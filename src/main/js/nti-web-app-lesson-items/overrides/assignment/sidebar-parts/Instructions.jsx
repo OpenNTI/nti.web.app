@@ -51,7 +51,8 @@ export default class AssignmentSidebarInstructions extends React.Component {
 		if (!assignmentModel) { return null; }
 
 		const available = assignmentModel && assignmentModel.isAvailable();
-		const noSubmit = assignmentModel && (assignmentModel.isNoSubmit() || !assignmentModel.getQuestionCount());
+		const noSubmit = assignmentModel && assignmentModel.isNoSubmit();
+		const noQuestions = assignmentModel && (assignmentModel.isNoSubmit() || !assignmentModel.getQuestionCount());
 		const outsideBuffer = assignmentModel && assignmentModel.isOutsideSubmissionBuffer();
 		const submitted = !!activeHistoryItemModel;
 
@@ -61,9 +62,9 @@ export default class AssignmentSidebarInstructions extends React.Component {
 					{t('header')}
 				</div>
 				{!available && !noSubmit && this.renderUnavailable(assignmentModel, activeHistoryItemModel)}
-				{available && !noSubmit && outsideBuffer && this.renderOutsideBuffer(assignmentModel, activeHistoryItemModel)}
-				{available && !noSubmit && !outsideBuffer && !submitted && this.renderAvailable(assignmentModel, activeHistoryItemModel)}
-				{available && !noSubmit && !outsideBuffer && submitted && this.renderSubmitted(assignmentModel, activeHistoryItemModel)}
+				{available && !noQuestions && outsideBuffer && this.renderOutsideBuffer(assignmentModel, activeHistoryItemModel)}
+				{available && !noQuestions && !outsideBuffer && !submitted && this.renderAvailable(assignmentModel, activeHistoryItemModel)}
+				{available && !noQuestions && !outsideBuffer && submitted && this.renderSubmitted(assignmentModel, activeHistoryItemModel)}
 				{this.renderSupport()}
 			</div>
 		);
