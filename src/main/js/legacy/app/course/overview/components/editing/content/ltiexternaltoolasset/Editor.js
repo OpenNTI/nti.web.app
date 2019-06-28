@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			me.addToolBtn = me.add({
 				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'create-ltitool-overview-editing', html: 'Create LTI Tool'},
+				autoEl: {tag: 'div', cls: 'create-ltitool-overview-editing', html: 'Add LTI Tool'},
 				listeners: {
 					click: {
 						element: 'el',
