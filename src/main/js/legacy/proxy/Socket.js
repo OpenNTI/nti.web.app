@@ -3,7 +3,9 @@ const Ext = require('@nti/extjs');
 
 const Globals = require('legacy/util/Globals');
 
-const {$AppConfig = {}} = global;
+if (!global.$AppConfig) {
+	global.$AppConfig = {};
+}
 
 global.Socket =
 module.exports = exports = Ext.define('NextThought.proxy.Socket', {

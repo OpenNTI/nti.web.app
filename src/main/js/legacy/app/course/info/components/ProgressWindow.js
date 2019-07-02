@@ -9,13 +9,13 @@ const WindowActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
 const ContextStore = require('legacy/app/context/StateStore');
 
-const MimeType = 'application/vnd.nextthought.webapp.roster-progress';
+const ProgressMimeType = 'application/vnd.nextthought.webapp.roster-progress';
 
 function getWindowObject (course, index, currentFilter, filterProperty, filterValue, sortOn, sortDirection) {
 	const obj = {
 		isModel: true,
 		addMimeTypeToRoute: true,
-		mimeType: MimeType,
+		mimeType: ProgressMimeType,
 		courseId: course.getId ? course.getId() : course.getID(),
 		index,
 		currentFilter,
@@ -122,8 +122,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		global.history.go(-1);
 	}
 }, function () {
-	WindowsStateStore.register(MimeType, this);
-	WindowsStateStore.registerCustomResolver(MimeType, async function (id) {
+	WindowsStateStore.register(ProgressMimeType, this);
+	WindowsStateStore.registerCustomResolver(ProgressMimeType, async function (id) {
 		const {specific: {type: data} = {}} = parseNTIID(id) || {};
 
 		if (!data) {

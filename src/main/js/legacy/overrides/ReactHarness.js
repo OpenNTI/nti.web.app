@@ -4,7 +4,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService, reportError} = require('@nti/web-client');
-const { Error } = require('@nti/web-commons');
+const { Error: ErrorCmp } = require('@nti/web-commons');
 const {encodeForURI} = require ('@nti/lib-ntiids');
 const {getHistory, LinkTo} = require('@nti/web-routing');
 
@@ -172,7 +172,7 @@ const Bridge = createReactClass({
 
 	render () {
 		if (this.state.hasError) {
-			return React.createElement(Error, this.state, 'Something went wrong.');
+			return React.createElement(ErrorCmp, this.state, 'Something went wrong.');
 		}
 
 		return React.Children.only(this.props.children);

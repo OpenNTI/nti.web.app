@@ -21,7 +21,7 @@ const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('legacy/app/Index');
 
-const history = getHistory();
+const routeHistory = getHistory();
 
 module.exports = exports = Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		// 	me.handleCurrentState();
 		// });
 
-		history.listen(this.maybeSyncToHistory.bind(this));
+		routeHistory.listen(this.maybeSyncToHistory.bind(this));
 	},
 
 
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	maybeSyncToHistory () {
 		if (!this.currentMyRoute) { return; }
 
-		const {pathname} = history.location;
+		const {pathname} = routeHistory.location;
 		const currentPathname = decodeURI(Globals.getURLParts(this.currentMyRoute).pathname);
 		const pendingPathname = this.pendingRoute ? decodeURI(Globals.getURLParts(this.pendingRoute).pathname) : '';
 
@@ -369,7 +369,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		function finish () {
 			me.pendingRoute = myRoute;
 
-			const remove = history.listen((_, action) => {
+			const remove = routeHistory.listen((_, action) => {
 				if (me.pendingRoute !== myRoute) { return; }
 				if (fn === 'push' && action !== 'PUSH') { return; }
 				if (fn === 'replace' && action !== 'REPLACE') { return; }
@@ -390,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 				remove();
 			});
 
-			history[fn](myRoute, state || (window.history.state && window.history.state.state) || window.history.state);
+			routeHistory[fn](myRoute, state || (window.history.state && window.history.state.state) || window.history.state);
 		}
 
 		function stopNav () {

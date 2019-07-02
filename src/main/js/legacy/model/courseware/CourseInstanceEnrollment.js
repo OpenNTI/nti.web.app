@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.CourseInstan
 				return inst;
 			} catch (e) {
 				delete this.__instance;
-				throw new Error(e);
+				throw e;
 			}
 		};
 

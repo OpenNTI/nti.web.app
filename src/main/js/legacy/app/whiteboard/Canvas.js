@@ -6,7 +6,7 @@ const Circle = require('./shapes/Circle');
 const Line = require('./shapes/Line');
 const Path = require('./shapes/Path');
 const Polygon = require('./shapes/Polygon');
-const Text = require('./shapes/Text');
+const TextCmp = require('./shapes/Text');
 const Url = require('./shapes/Url');
 
 const SHAPES = {
@@ -14,7 +14,7 @@ const SHAPES = {
 	Line,
 	Path,
 	Polygon,
-	Text,
+	TextCmp,
 	Url,
 };
 

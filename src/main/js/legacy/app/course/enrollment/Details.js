@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
-const {Presentation} = require('@nti/web-commons');
+const {Presentation: PresentationAssets} = require('@nti/web-commons');
 const {Enrollment} = require('@nti/web-course');
 const {encodeForURI} = require('@nti/lib-ntiids');
 
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		me.course.getBackgroundImage()
 			.then(function (img) {
-				const resolved = img ? img : Presentation.Asset.getDefaultURLForType('background');
+				const resolved = img ? img : PresentationAssets.Asset.getDefaultURLForType('background');
 
 				me.el.setStyle({
 					backgroundImage: 'url(' + resolved + ')'

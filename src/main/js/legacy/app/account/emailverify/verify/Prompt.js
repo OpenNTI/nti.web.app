@@ -4,7 +4,7 @@ const PromptStore = require('legacy/app/prompt/StateStore');
 
 const view = require('./Index');
 
-const prompt = module.exports = exports = Ext.define('NextThought.app.account.verify.Prompt', {
+const verifyPrompt = module.exports = exports = Ext.define('NextThought.app.account.verify.Prompt', {
 	extend: 'Ext.container.Container',
 
 	layout: 'none',
@@ -30,4 +30,4 @@ const prompt = module.exports = exports = Ext.define('NextThought.app.account.ve
 	}
 });
 
-PromptStore.register('verify-email', prompt);
+PromptStore.register('verify-email', verifyPrompt);

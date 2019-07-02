@@ -16,7 +16,7 @@ function getData ({data}) {
 }
 
 
-let prompt = module.exports = exports = Ext.define('NextThought.app.account.registration.Prompt', {
+let registerPrompt = module.exports = exports = Ext.define('NextThought.app.account.registration.Prompt', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.registration-prompt',
 
@@ -73,4 +73,4 @@ let prompt = module.exports = exports = Ext.define('NextThought.app.account.regi
 	}
 });
 
-PromptStateStore.register('account-registration', prompt);
+PromptStateStore.register('account-registration', registerPrompt);

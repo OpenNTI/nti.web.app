@@ -14,7 +14,7 @@ const LoginStateStore = require('legacy/login/StateStore');
 const ModelService = require('legacy/model/Service');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
-const {location} = global;
+const {location: locationHref} = global;
 
 module.exports = exports = Ext.define('NextThought.login.Actions', {
 	constructor: function () {
@@ -33,12 +33,12 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		if (username) {
 			params = Ext.Object.toQueryString({
 				username: username,
-				success: location.pathname
+				success: locationHref.pathname
 			});
 
 			url = Ext.String.urlAppend(url, params);
 
-			location.replace(url);
+			locationHref.replace(url);
 		}
 	},
 
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				Socket.tearDownSocket();
 				me.store.fireEvent('session-closed');
 			} finally {
-				location.replace(url);
+				locationHref.replace(url);
 			}
 		}
 
@@ -145,8 +145,8 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		var o = {},
 			url = $AppConfig.login;
 
-		if (location.pathname !== '/' || location.hash || location.search) {
-			o['return'] = location.href;
+		if (locationHref.pathname !== '/' || locationHref.hash || locationHref.search) {
+			o['return'] = locationHref.href;
 		}
 
 		if (reason === 'timedout') {
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 
 		url = Ext.String.urlAppend(url, Ext.Object.toQueryString(o));
-		location.replace(url);
+		locationHref.replace(url);
 
 		return Promise.reject();
 	},

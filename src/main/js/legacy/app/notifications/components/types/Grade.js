@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const {getService} = require('@nti/web-client');
-const {Presentation} = require('@nti/web-commons');
+const {Presentation: PresentationAssets} = require('@nti/web-commons');
 
 require('./Base');
 
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		const catalogEntry = await resolveCatalogEntry(id);
 		CATALOG_CACHE[id] = catalogEntry;
 
-		const asset = Presentation.Asset.getPresentationAsset(catalogEntry, 'thumb');
+		const asset = PresentationAssets.Asset.getPresentationAsset(catalogEntry, 'thumb');
 		const img = Ext.DomHelper.markup({cls: 'avatar-container', cn: [{cls: 'profile avatar-pic', style: {backgroundImage: 'url(' + asset + ')'}}]});
 
 		if(me.iconEl) {

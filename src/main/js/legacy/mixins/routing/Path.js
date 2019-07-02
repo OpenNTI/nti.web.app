@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {String} = require('@nti/lib-commons');
+const {String: StringUtils} = require('@nti/lib-commons');
 
 const Globals = require('legacy/util/Globals');
 const Base = require('legacy/model/Base');
@@ -492,7 +492,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		const route = this.currentFullRoute;
 		const parts = Globals.getURLParts(route);
 		const base = window.location.pathname;
-		const regex = new RegExp(`${String.escapeForRegExp(parts.pathname)}/?$`);
+		const regex = new RegExp(`${StringUtils.escapeForRegExp(parts.pathname)}/?$`);
 
 		return base.replace(regex, '');
 	},

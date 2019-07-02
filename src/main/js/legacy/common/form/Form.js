@@ -6,7 +6,7 @@ const FilePicker = require('legacy/common/form/fields/FilePicker');
 const ImagePicker = require('legacy/common/form/fields/ImagePicker');
 const EmailTokenField = require('legacy/common/form/fields/EmailTokenField');
 const Progress = require('legacy/common/form/fields/Progress');
-const URL = require('legacy/common/form/fields/URL');
+const URLCmp = require('legacy/common/form/fields/URL');
 const ErrorMessages = require('legacy/common/form/ErrorMessages');
 
 
@@ -377,7 +377,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	},
 
 	buildUrlInput: function (schema, inputEl) {
-		this.__buildComponent(URL, schema, inputEl);
+		this.__buildComponent(URLCmp, schema, inputEl);
 	},
 
 	buildTagInput (schema, inputEl) {
