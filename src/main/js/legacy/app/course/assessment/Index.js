@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		return loaded
 			.then(() => {
-				assignmentLoad = assignmentLoad || view.assignmentCollection.fetchAssignment(id);
+				assignmentLoad = view.assignmentCollection.fetchAssignment(id);
 
 				if (this.assignment && this.assignment.reader && this.assignment.reader.el) {
 					this.assignment.reader.el.mask('Loading...');
@@ -327,7 +327,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						pageSource: pageSource,
 						assignment: assignment,
 						student: $AppConfig.userObject,
-						assignmentHistory: view.assignmentCollection.getHistoryItem(assignment.getId(), true),
+						assignmentHistory: view.assignmentCollection.getHistoryItem(assignment.getId()),
 						instructorProspective: view.isAdmin,
 						fragment: route.hash
 					};
