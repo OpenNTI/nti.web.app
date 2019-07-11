@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 
 const EditingActions = require('../../Actions');
 
+const PLACEHOLDER_ICON = '/app/resources/images/file-icons/scorm-icon.svg';
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.scorm.RefEditor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -24,6 +25,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			]},
 			{type: 'saveprogress'}
 		];
+	},
+
+
+	afterRender () {
+		this.callParent(arguments);
+
+		this.formCmp.setPlaceholder('icon', PLACEHOLDER_ICON);
 	},
 
 	getDefaultValues () {
