@@ -449,10 +449,17 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			this.annotationView.show().hide();
 			this.on('destroy', 'destroy', this.annotationView);
 
+			const html = document.documentElement;
+			const htmlCls = 'inline-note-editor';
+
 			this.annotationView.on({
 				scope: this,
-				show: function () { me.fireEvent('will-show-annotation', me.annotationView, this); },
+				show: function () {
+					html.classList.add(htmlCls);
+					me.fireEvent('will-show-annotation', me.annotationView, this);
+				},
 				hide: function () {
+					html.classList.remove(htmlCls);
 					if (me.el.down('.count.active')) {
 						me.el.down('.count.active').removeCls('active');
 					}

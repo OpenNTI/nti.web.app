@@ -51,7 +51,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		id = decodeFromURI(route.params.id);
 
 		if (Ext.isEmpty(basePath)) {
-			basePath = this.currentBundle.getContentRoots()[0];
+			const roots = this.currentBundle.getContentRoots();
+			basePath = roots ? roots[0] : basePath;
 		}
 
 		if (this.activeMediaView && (this.mediaId === id)) {

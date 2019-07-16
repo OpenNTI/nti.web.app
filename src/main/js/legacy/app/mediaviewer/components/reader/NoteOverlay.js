@@ -71,6 +71,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		this.data = {};
 
+		const html = document.documentElement;
+		const htmlCls = 'inline-note-editor';
+
 		this.editor = Ext.widget('nti-editor', {
 			ownerCt: this.reader,
 			floating: true,
@@ -83,10 +86,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 				'deactivated-editor': function () {
 					me.fireEvent('editorDeactivated');
 					me.reader.suspendMoveEvents = false;
+					html.classList.remove(htmlCls);
 				},
 				'activated-editor': function () {
 					me.fireEvent('editorActivated');
 					me.reader.suspendMoveEvents = true;
+					html.classList.add(htmlCls);
 				},
 				'no-title-content': function () {return true;},//require title if notepad is a feature
 				grew: function () {
