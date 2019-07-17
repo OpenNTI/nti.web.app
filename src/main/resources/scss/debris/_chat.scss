@@ -881,13 +881,16 @@ body.white-shade-mask .chat-gutter-window {
 		top: 130px;
 	}
 
+	html.media-viewer-notes-open & {
+		right: -400px;
+	}
+
 	.nti-course-content-open & {
 		z-index: 1001;
 	}
 
 	@media only screen and (max-width: 1335px) {
-		html.nti-course-content-open.inline-note-editor &,
-		html.media-viewer-open.inline-note-editor & {
+		html.nti-course-content-open.inline-note-editor & {
 			right: -400px;
 		}
 	}

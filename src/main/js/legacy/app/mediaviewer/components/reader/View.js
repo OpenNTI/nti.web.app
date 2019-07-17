@@ -450,7 +450,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			this.on('destroy', 'destroy', this.annotationView);
 
 			const html = document.documentElement;
-			const htmlCls = 'inline-note-editor';
+			const htmlCls = 'media-viewer-notes-open';
 
 			this.annotationView.on({
 				scope: this,
