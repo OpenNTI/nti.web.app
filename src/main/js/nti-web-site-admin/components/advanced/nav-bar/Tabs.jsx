@@ -5,7 +5,7 @@ import {LinkTo} from '@nti/web-routing';// eslint-disable-line
 const DEFAULT_TEXT = {
 	sync: 'Sync',
 	transcripts: 'Transcripts',
-	integrations: 'Integrations'
+	integrations: 'GoToWebinar'
 };
 
 const t = scoped('site-admin.advanced.nav-bar.Tabs', DEFAULT_TEXT);
