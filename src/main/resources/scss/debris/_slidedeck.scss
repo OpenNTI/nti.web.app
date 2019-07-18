@@ -1674,7 +1674,7 @@ body.media-viewer-closing {
 	.x-component-video-title{
 		margin-top: 40px;
 		color: $secondary-grey;
-		font: 14px normal $font;
+		padding-right: 60px;//leave room for the note gutter
 
 		.control-container{
 			position: absolute;
