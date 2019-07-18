@@ -262,11 +262,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			this.videoPlayerEl.setStyle('left', vl + 'px');
 			this.getTargetEl().setStyle('left', vl + 'px');
 		}
+
+		this.realignSyncVideo();
 	},
 
 	willHideAnnotation: function (annotationView) {
 		this.videoPlayerEl.setStyle('left', '10px');
 		this.getTargetEl().setStyle('left', '0px');
+		this.realignSyncVideo();
 	},
 
 	unSyncVideo: function () {
@@ -276,6 +279,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			this.syncEl.setLeft(this.resourceView.getX());
 			this.syncEl.setWidth(this.resourceView.getWidth());
 			this.syncEl.show();
+		}
+	},
+
+	realignSyncVideo () {
+		if (this.syncEl && this.resourceView && this.syncEl.isVisible()) {
+			this.syncEl.setLeft(this.resourceView.getX());
+			this.syncEl.setWidth(this.resourceView.getWidth());
 		}
 	},
 
