@@ -1,9 +1,16 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const {getFormattedString} = require('legacy/util/Localization');
 const UserRepository = require('legacy/cache/UserRepository');
 const {isMe} = require('legacy/util/Globals');
-const {getString} = require('legacy/util/Localization');
+
+const t = scoped('nti-web-app.course.assessment.components.student.Activity',  {
+	'gradereceived': 'Grade Received',
+	'newassignment': 'New Assignment:',
+	'lateassignment': 'Assignment Past Due:',
+	'submittedassignment': 'Assignment Submitted:'
+});
 
 require('legacy/mixins/Router');
 
@@ -257,19 +264,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		if (grade && grade.get('value')) {
-			me.addEvent(me.getEventConfig(getString('NextThought.view.courseware.assessment.Activity.gradereceived'), assignment, grade.get('Last Modified')));
+			me.addEvent(me.getEventConfig(t('gradereceived'), assignment, grade.get('Last Modified')));
 		}
 
 		if (dateOpens < now) {
-			me.addEvent(me.getEventConfig(getString('NextThought.view.courseware.assessment.Activity.newassignment'), assignment, dateOpens));
+			me.addEvent(me.getEventConfig(t('newassignment'), assignment, dateOpens));
 		}
 
 		if (dateDue < now && (!dateCompleted || dateCompleted > dateDue) && hasParts) {
-			me.addEvent(me.getEventConfig(getString('NextThought.view.courseware.assessment.Activity.lateassignment'), assignment, dateDue));
+			me.addEvent(me.getEventConfig(t('lateassignment'), assignment, dateDue));
 		}
 
 		if (dateCompleted && submission && (submission.get('parts') || []).length > 0) {
-			me.addEvent(me.getEventConfig(getString('NextThought.view.courseware.assessment.Activity.submittedassignment'), assignment, dateCompleted));
+			me.addEvent(me.getEventConfig(t('submittedassignment'), assignment, dateCompleted));
 		}
 	},
 

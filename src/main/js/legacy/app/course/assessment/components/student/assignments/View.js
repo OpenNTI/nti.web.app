@@ -1,11 +1,17 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const {wait} = require('@nti/lib-commons');
+const {scoped} = require('@nti/lib-locale');
 
 const {guidGenerator} = require('legacy/util/Globals');
-const {getString, getFormattedString} = require('legacy/util/Localization');
+const {getString} = require('legacy/util/Localization');
 const {naturalSortComparator} = require('legacy/util/Globals');
 const PathActions = require('legacy/app/navigation/path/Actions');
+
+const t = scoped('nti-web-app.course.assessment.components.student.assignments.View', {
+	available: 'This assignment will be available on %(date)s',
+	otherAssignments: 'Other Assignments'
+});
 
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
@@ -323,7 +329,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			date = Ext.Date.format(openDate, 'l F j \\a\\t g:i A');
 
 		if (!assignment.isOpen() && !assignment.hasLink('PracticeSubmission')) {
-			alert(getFormattedString('NextThought.view.courseware.assessment.assignments.View.available', { date: date}));
+			alert(t('available', { date: date}));
 		} else {
 			this.showAssignment(assignment);
 		}
@@ -581,7 +587,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				id: id,
 				canEdit: assignment.canEdit(),
 				containerId: assignment.get('containerId'),
-				lesson: node ? node.getId() : 'Other Assignments',
+				lesson: node ? node.getId() : t('otherAssignments'),
 				isDuplicate: !!actualId,
 				actualId: actualId,
 				outlineNode: node,

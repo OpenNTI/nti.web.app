@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {encodeForURI, decodeFromURI} = require('@nti/lib-ntiids');
+const {scoped} = require('@nti/lib-locale');
 
 const Globals = require('legacy/util/Globals');
 const UserRepository = require('legacy/cache/UserRepository');
-const {getString} = require('legacy/util/Localization');
 const AssessmentActions = require('legacy/app/course/assessment/Actions');
 const User = require('legacy/model/User');
 
@@ -21,6 +21,14 @@ require('./admin/performance/View');
 require('./student/assignments/View');
 require('./student/Activity');
 require('./student/Performance');
+
+const t = scoped('nti-web-app.course.assessment.components.View', {
+	empty: 'No assignments available at this time.',
+	create: 'Create an Assignment',
+	activity: 'Activity & Notifications',
+	assignments: 'Assignments',
+	grades: 'Grades & Performance'
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.View', {
 	extend: 'NextThought.common.components.NavPanel',
@@ -49,6 +57,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.on('activate', this.onActivate.bind(this));
 	},
+
+	getAssignmentsTabLabel () { return t('assignments'); },
+	getGradesTabLabel () { return t('grades'); },
+	getActivityTabLabel () { return t('activity'); },
 
 	bundleChanged: function (bundle, force) {
 		var me = this,
@@ -151,13 +163,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	createEmptyConfig (bundle) {
 		let cn = [
-			{cls: 'header', html: getString('NextThought.view.courseware.assessment.View.empty')}
+			{cls: 'header', html: t('empty')}
 		];
 
 		if (bundle && bundle.canAddAssignment && bundle.canAddAssignment()) {
 			cn.push({
 				cls: 'header sub link create',
-				html: 'Create an Assignment'
+				html: t('create')
 			});
 		}
 
@@ -319,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.isAdmin = true;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-admin-activity',
-			title: getString('NextThought.view.courseware.assessment.View.activity'),
+			title: t('activity'),
 			activityFeedURL: getLink('CourseActivity'),
 			route: 'notifications',
 			alignNavigation: this.alignNavigation.bind(this)
@@ -327,7 +339,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.assignmentsView = this.body.add({
 			xtype: 'course-assessment-admin-assignments',
-			title: getString('NextThought.view.courseware.assessment.View.assignments'),
+			title: t('assignments'),
 			route: '/',
 			alignNavigation: this.alignNavigation.bind(this),
 			createAssignment: this.createAssignment.bind(this),
@@ -336,7 +348,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.performanceView = this.body.add({
 			xtype: 'course-assessment-admin-performance',
-			title: getString('NextThought.view.courseware.assessment.View.grades'),
+			title: t('grades'),
 			route: '/performance',
 			alignNavigation: this.alignNavigation.bind(this)
 		});
@@ -374,14 +386,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.isAdmin = false;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-activity',
-			title: getString('NextThought.view.courseware.assessment.View.activity'),
+			title: t('activity'),
 			route: 'notifications',
 			alignNavigation: this.alignNavigation.bind(this)
 		});
 
 		this.assignmentsView = this.body.add({
 			xtype: 'course-assessment-assignments',
-			title: getString('NextThought.view.courseware.assessment.View.assignments'),
+			title: t('assignments'),
 			route: '/',
 			alignNavigation: this.alignNavigation.bind(this),
 			createAssignment: this.createAssignment.bind(this),
@@ -390,7 +402,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.performanceView = this.body.add({
 			xtype: 'course-assessment-performance',
-			title: getString('NextThought.view.courseware.assessment.View.grades'),
+			title:t('grades'),
 			route: '/performance',
 			alignNavigation: this.alignNavigation.bind(this)
 		});

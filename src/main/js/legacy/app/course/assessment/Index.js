@@ -1,6 +1,7 @@
 const Path = require('path');
 
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
 
 const UserRepository = require('legacy/cache/UserRepository');
@@ -16,6 +17,9 @@ require('./components/View');
 require('./components/Assignment');
 require('./components/editing/AssignmentEditor');
 
+const t = scoped('nti-web-app.course.assessment.Index', {
+	title: 'Assignments'
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.Index', {
 	extend: 'Ext.container.Container',
@@ -26,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 	},
 
 	layout: 'card',
-	title: 'Assignments',
+	title: t('title'),
 
 	statics: {
 		showTab: function (bundle) {
@@ -57,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 		this.add({
 			xtype: 'course-assessment',
-			title: this.title,
+			title: t('title'),
 			root: this,
 			changeRoute: this.changeRoute.bind(this)
 		});
@@ -97,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 	},
 
 	onActivate: function () {
-		this.setTitle(this.title);
+		this.setTitle(t('title'));
 	},
 
 
@@ -118,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 
 
 	getRouteTitle: function () {
-		return this.title;
+		return t('title');
 	},
 
 
@@ -289,8 +293,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 					}
 
 					path.push({
-						label: 'Assignments',
-						title: 'Assignments',
+						label: view.getAssignmentsTabLabel(),
+						title: view.getAssignmentsTabLabel(),
 						route: '/'
 					});
 
@@ -595,8 +599,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						});
 
 						path.push({
-							label: 'Assignments',
-							title: 'Assignments',
+							label: view.getAssignmentsTabLabel(),
+							title: view.getAssignmentsTabLabel(),
 							route: '/'
 						});
 
@@ -706,8 +710,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 						});
 
 						path.push({
-							label: 'Grades & Performance',
-							title: 'Grades & Performance',
+							label: view.getGradesTabLabel(),
+							title: view.getGradesTabLabel(),
 							route: '/performance',
 							precache: {
 								student: student

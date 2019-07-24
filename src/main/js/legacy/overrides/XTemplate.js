@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {default: translate} = require('@nti/lib-locale');
 
 const {getString} = require('legacy/util/Localization');
 
@@ -21,7 +22,7 @@ Ext.override(Ext.XTemplateCompiler, {
 
 		return function (m, key) {
 			var def = {},
-				s = getString(key, def);
+				s = translate.isMissing(key) ? getString(key, def) : translate(key);
 			//Its written like this to prevent executing throwaway work.
 			// Only calculate the escaped key if the default token is returend.
 			return s !== def ? s : m.replace(escapRe, escapeFn);
