@@ -12,6 +12,7 @@ const SettingsWindow = require('legacy/app/account/settings/Window');
 const Header = require('./Tabs');
 
 require('./components/activity/Index');
+require('./components/achievements/Index');
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	extend: 'Ext.container.Container',
