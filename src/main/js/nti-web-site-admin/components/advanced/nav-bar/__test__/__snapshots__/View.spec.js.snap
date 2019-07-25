@@ -16,7 +16,7 @@ exports[`Site admin advanced nav bar test Basic render test 1`] = `
       className="nti-link-to-path"
       to="./integrations"
     >
-      GoToWebinar
+      Webinars
     </div>
   </li>
 </ul>
