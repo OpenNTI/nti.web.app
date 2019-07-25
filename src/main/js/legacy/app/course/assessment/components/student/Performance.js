@@ -4,7 +4,7 @@ const {scoped} = require('@nti/lib-locale');
 const Globals = require('legacy/util/Globals');
 const {getString, getFormattedString} = require('legacy/util/Localization');
 
-const t = scoped('nti-web-app.course.assesment.components.student.Performance', {
+const t = scoped('nti-web-app.course.assessment.components.student.Performance', {
 	coursegrade: 'Course Grade',
 	completed: 'Assignments Completed',
 	assignmentName: 'Assignment',
