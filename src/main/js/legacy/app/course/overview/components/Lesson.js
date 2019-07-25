@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Overview} = require('@nti/web-course');
 
-const { isFeature } = require('legacy/util/Globals');
 const {Modal} = require('nti-web-app-lesson-items');
 const ContentUtils = require('legacy/util/Content');
 const {getString} = require('legacy/util/Localization');
@@ -9,7 +8,7 @@ const WindowActions = require('legacy/app/windows/Actions');
 const BaseModel = require('legacy/model/Base');
 const CalendarRoutes = require('legacy/app/CalendarRoutes');
 
-const { ROUTE_BUILDERS, MODAL_ROUTE_BUILDERS } = require('./Constants');
+const { MODAL_ROUTE_BUILDERS } = require('./Constants');
 require('legacy/app/mediaviewer/Index');
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
@@ -23,10 +22,6 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	alias: 'widget.course-overview-lesson',
 	ui: 'course',
 
-	statics: {
-		useModal: () => isFeature('course-content-modal')
-	},
-
 	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
@@ -38,7 +33,6 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 	initComponent () {
 		this.callParent(arguments);
 
-		this.useModal = Lesson.useModal();
 		this.calendarRoutes = CalendarRoutes(this);
 	},
 
@@ -163,9 +157,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 			return this.calendarRoutes(object, context);
 		}
 
-		const builder = this.useModal ?
-			(MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']) :
-			(ROUTE_BUILDERS[object.MimeType]);
+		const builder = (MODAL_ROUTE_BUILDERS[object.MimeType] || MODAL_ROUTE_BUILDERS['default']);
 
 		return builder ? builder(this.bundle, this.currentOutlineNode, object, context, this.activeItemRoute) : null;
 	},
@@ -236,7 +228,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				layout: Overview.Lesson.List,
 				baseroute: '/',
 				getRouteFor: this.getRouteFor.bind(this),
-				doNotPlayVideosInline: this.useModal
+				doNotPlayVideosInline: true
 			});
 
 

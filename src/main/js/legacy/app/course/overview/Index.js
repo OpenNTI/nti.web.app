@@ -25,7 +25,6 @@ require('../../contentviewer/Index');
 require('../../content/content/Index');
 require('../../mediaviewer/Index');
 require('./components/View');
-const LessonCmp = require('./components/Lesson');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
@@ -689,31 +688,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 
 	getRouteForRoot: function (root, subPath, lesson) {
-		if (LessonCmp.useModal()) {
-			const modalRoute = this.getRouteForRootModal(root, subPath, lesson);
+		const modalRoute = this.getRouteForRootModal(root, subPath, lesson);
 
-			if (modalRoute) { return modalRoute; }
-		}
+		if (modalRoute) { return modalRoute; }
 
 		let route;
-		if (root instanceof QuestionSetRef) {
-			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
-			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof SurveyRef) {
-			route = this.getRouteForSurveyPath(root, subPath, lesson);
-			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof RelatedWork) {
-			route = this.getRouteForRelatedWorkPath(root, subPath, lesson);
-			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof PageInfo) {
+
+		if (root instanceof PageInfo) {
 			route = this.getRouteForPageInfoPath(root, subPath);
 			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof Video) {
-			route = this.getRouteForVideoPath(root, subPath);
 		} else if (root instanceof Slidedeck) {
 			route = this.getRouteForSlidedeckPath(root, subPath);
-		} else if (root instanceof LTIExternalToolAsset) {
-			route = this.getRouteForLTIExternalTool(root, subPath);
 		} else if (root instanceof Lesson || root instanceof WebinarAsset) {
 			route = {
 				path: '',
@@ -754,66 +739,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
-	getRouteForRelatedWorkPath: function (relatedWork, path, lesson) {
-		var page = path[0],
-			pageId = page && page instanceof PageInfo ? page.getId() : null,
-			relatedWorkId = relatedWork && relatedWork.get('target'),
-			urlPath = '',
-			subPath = path.slice(1), subRoute;
-
-		if (subPath[0] instanceof Video) {
-			subRoute = this.getRouteForRoot(subPath[0], subPath.slice(1));
-		}
-
-		if (pageId === lesson.getId() || pageId === lesson.get('ContentNTIID') || !pageId) {
-			pageId = null;
-			relatedWorkId = relatedWork && relatedWork.getId();
-		}
-
-		pageId = pageId && encodeForURI(pageId);
-		relatedWorkId = relatedWorkId && encodeForURI(relatedWorkId);
-
-		if (relatedWorkId) {
-			urlPath = relatedWorkId;
-
-			if (pageId && pageId !== relatedWorkId) {
-				urlPath += '/' + pageId;
-			}
-		}
-
-		if (subRoute && subRoute.path) {
-			urlPath += '/' + subRoute.path;
-		}
-
-		return {
-			path: urlPath,
-			isFull: true
-		};
-	},
-
-	getRouteForQuestionSetPath: function (questionSetRef, path/*, lesson*/) {
-		var page = path[0],
-			pageId = page && page.getId();
-
-		pageId = pageId && encodeForURI(pageId);
-
-		return {
-			path: pageId,
-			isFull: true
-		};
-	},
-
-	getRouteForSurveyPath: function (survey/*, path, lesson*/) {
-		var surveyId = survey.get('Target-NTIID');
-
-		surveyId = surveyId && encodeForURI(surveyId);
-
-		return {
-			path: surveyId,
-			isFull: true
-		};
-	},
-
 	getRouteForPageInfoPath: function (pageInfo/*, path*/) {
 		var pageId = pageInfo && pageInfo.getId();
 
@@ -825,16 +750,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-	getRouteForVideoPath: function (video/*, path*/) {
-		var videoId = video && video.getId();
-
-		videoId = video && encodeForURI(videoId);
-
-		return {
-			path: 'video/' + videoId,
-			isFull: true
-		};
-	},
 
 	getRouteForSlidedeckPath: function (slidedeck/*, path*/) {
 		var slidedeckId = slidedeck && slidedeck.getId();
@@ -847,17 +762,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			precache: {
 				slidedeck: slidedeck
 			}
-		};
-	},
-
-	getRouteForLTIExternalTool: function (externalTool) {
-		var externalToolId = externalTool && externalTool.getId();
-
-		externalToolId = externalTool && encodeForURI(externalToolId);
-
-		return {
-			path: 'content/' + externalToolId,
-			isFull: true
 		};
 	}
 });
