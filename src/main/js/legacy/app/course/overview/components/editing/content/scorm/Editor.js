@@ -30,8 +30,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					iconCls: 'scorm-package-icon',
 					description: '',
 					editor: this,
-					isAvailable: (bundle) => {
-						return bundle.hasLink('SCORMInstances');
+					isAvailable: async (bundle) => {
+						const available = await bundle.getAvailableContentSummary();
+
+						return available[ScormContentMimeType];
 					}
 				}
 			];

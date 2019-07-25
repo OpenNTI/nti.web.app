@@ -10,6 +10,8 @@ require('legacy/app/course/assessment/components/CreateMenu');
 
 const getEventSVG = require('./eventIconUtil.js');
 
+const Type = 'application/vnd.nextthought.courseware.coursecalendarevent';
+
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.event.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-event',
@@ -34,7 +36,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					editor: this,
 					customHTML: getEventSVG((new Date()).getDate()),
 					isAvailable: async (bundle) => {
-						return bundle.hasLink('CourseCalendar');
+						const available = await bundle.getAvailableContentSummary();
+
+						return available[Type];
 					}
 				}
 			];

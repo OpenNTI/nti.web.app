@@ -4,6 +4,7 @@ const RelatedWork = require('legacy/model/RelatedWork');
 
 require('./Base');
 
+const Type = 'application/vnd.nextthought.relatedworkref';
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.URL', {
 	extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
@@ -17,7 +18,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					category: 'content',
 					iconCls: 'link',
 					description: 'External links are used for',
-					editor: this
+					editor: this,
+					isAvailable: async (bundle) => {
+						const available = await bundle.getAvailableContentSummary();
+
+						return available[Type];
+					}
 				}
 			];
 		},

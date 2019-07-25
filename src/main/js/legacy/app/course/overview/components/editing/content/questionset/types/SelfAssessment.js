@@ -8,6 +8,8 @@ require('../SelfAssessmentEditor');
 require('./Assignment');
 
 
+const Type = 'application/vnd.nextthought.naquestionset';
+
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.SelfAssessment', {
 	extend: 'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment',
 	alias: 'widget.overview-editing-questionset-self-assessment',
@@ -29,13 +31,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					description: '',
 					editor: this,
 					isAvailable: async (bundle) => {
-						try {
-							const assessments = await bundle.getAllAssessments();
+						const available = await bundle.getAvailableContentSummary();
 
-							return assessments && assessments.length > 0;
-						} catch (e) {
-							return false;
-						}
+						return available[Type];
 					}
 				}
 			];

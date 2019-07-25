@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 
 const SurveyRef = require('legacy/model/SurveyRef');
+const Type = 'application/vnd.nextthought.nasurvey';
 
 require('../questionset/types/Assignment');
 require('./SurveySelection');
@@ -29,13 +30,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					description: '',
 					editor: this,
 					isAvailable: async (bundle) => {
-						try {
-							const surveys = await bundle.getAllSurveys(1);
+						const available = await bundle.getAvailableContentSummary();
 
-							return surveys && surveys.length > 0;
-						} catch (e) {
-							return false;
-						}
+						return available[Type];
 					}
 				}
 			];

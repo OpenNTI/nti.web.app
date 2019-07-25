@@ -17,6 +17,8 @@ const t = scoped('nti-web-app.course.overview.components.editing.content.questio
 	create: 'Create Assignment'
 });
 
+const Type = 'application/vnd.nextthought.assessment.assignment';
+
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.Assignment', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-questionset-assignment',
@@ -38,17 +40,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					description: '',
 					editor: this,
 					isAvailable: async (bundle) => {
-						if (bundle.hasLink('CourseEvaluations')) {
-							return true;
-						}
+						const available = await bundle.getAvailableContentSummary();
 
-						try {
-							const assignments = await bundle.getAllAssignments();
-
-							return assignments && assignments.length > 0;
-						} catch (e) {
-							return false;
-						}
+						return available[Type];
 					}
 				}
 			];

@@ -1575,5 +1575,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		return Service.request(link)
 			.then(response => lazy.ParseUtils.parseItems(JSON.parse(response).Items));
+	},
+
+
+	getAvailableContentSummary () {
+		return this.getInterfaceInstance()
+			.then(x => x.getAvailableContentSummary());
 	}
 });

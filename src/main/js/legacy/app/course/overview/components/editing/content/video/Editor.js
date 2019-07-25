@@ -10,6 +10,8 @@ require('./VideoEditor');
 
 require('legacy/app/video/Picker');
 
+const Type = 'application/vnd.nextthought.ntivideo';
+
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -33,8 +35,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					iconCls: 'video',
 					description: '',
 					editor: this,
-					isAvailable: (bundle) => {
-						return bundle.hasLink('assets');
+					isAvailable: async (bundle) => {
+						const available = await bundle.getAvailableContentSummary();
+
+						return available[Type];
 					}
 				}
 			];

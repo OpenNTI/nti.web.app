@@ -12,6 +12,8 @@ require('./LTIExternalToolAssetSelection');
 require('./LTIExternalToolAssetEditor');
 require('legacy/app/course/assessment/components/CreateMenu');
 
+const Type = 'application/vnd.nextthought.ims.consumer.configuredtool';
+
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ltiexternaltoolasset.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-ltiexternaltoolasset',
@@ -32,8 +34,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					iconCls: 'ltitools',
 					description: '',
 					editor: this,
-					isAvailable: (bundle) => {
-						return bundle.hasLink('lti-configured-tools');
+					isAvailable: async (bundle) => {
+						const available = await bundle.getAvailableContentSummary();
+
+						return available[Type];
 					}
 				}
 			];

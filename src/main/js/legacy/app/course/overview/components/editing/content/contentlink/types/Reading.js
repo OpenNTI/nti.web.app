@@ -10,6 +10,7 @@ require('../ReadingEditor');
 require('../ReadingSelection');
 require('./Base');
 
+const Type = 'application/vnd.nextthought.relatedworkref';
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Reading', {
 	extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
@@ -26,17 +27,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					description: '',
 					editor: this,
 					isAvailable: async (bundle) => {
-						if (bundle.hasLink('Library')) {
-							return true;
-						}
+						const available = await bundle.getAvailableContentSummary();
 
-						try {
-							const readings = await ContentUtils.getReadings(bundle);
-
-							return readings && readings.length > 0;
-						} catch (e) {
-							return false;
-						}
+						return available[Type];
 					}
 				}
 			];

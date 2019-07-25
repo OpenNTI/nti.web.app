@@ -9,6 +9,12 @@ require('../Editor');
 require('./ItemSelection');
 require('./DiscussionEditor');
 
+const Types = [
+	'application/vnd.nextthought.forums.topic',
+	'application/vnd.nextthought.forums.headlinetopic',
+	'application/vnd.nextthought.forums.communityheadlinetopic'
+];
+
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-discussion',
@@ -29,7 +35,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					category: 'Discussion',
 					iconCls: 'discussion',
 					description: '',
-					editor: this
+					editor: this,
+					isAvailable: async (bundle) => {
+						const available = await bundle.getAvailableContentSummary();
+
+						return Types.some(t => available[t]);
+					}
 				}
 			];
 		}

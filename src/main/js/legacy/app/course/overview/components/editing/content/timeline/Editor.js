@@ -6,6 +6,8 @@ require('../Editor');
 require('./ItemSelection');
 require('./TimelineEditor');
 
+const Type = 'application/vnd.nextthought.ntitimeline';
+
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -28,13 +30,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					description: '',
 					editor: this,
 					isAvailable: async (bundle) => {
-						try {
-							const timelines = await bundle.getTimelineAssets(1);
+						const available = await bundle.getAvailableContentSummary();
 
-							return timelines && timelines.length;
-						} catch (e) {
-							return false;
-						}
+						return available[Type];
 					}
 				}
 			];
