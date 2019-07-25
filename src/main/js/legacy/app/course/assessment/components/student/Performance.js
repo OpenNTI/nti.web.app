@@ -8,7 +8,8 @@ const t = scoped('nti-web-app.course.assessment.components.student.Performance',
 	coursegrade: 'Course Grade',
 	completed: 'Assignments Completed',
 	assignmentName: 'Assignment',
-	assigned: 'Assigned'
+	assigned: 'Assigned',
+	allGrades: 'All Grades'
 });
 
 require('legacy/mixins/Router');
@@ -122,7 +123,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				{ xtype: 'box', cls: 'label', get html () { return t('completed'); } }
 			]
 		},
-		{xtype: 'grouping', title: 'All Grades',
+		{xtype: 'grouping',
+			get title () { return t('allGrades'); },
 			anchor: '0 -200', layout: 'none',
 			cls: 'grades scrollable', items: [
 				{
