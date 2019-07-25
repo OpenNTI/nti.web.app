@@ -1,10 +1,15 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
 require('legacy/model/assessment/Assignment');
 require('legacy/model/assessment/DiscussionAssignment');
+
+const t = scoped('nti-web-app.course.assessment.Actions', {
+	untitled: 'Untitled Assignment'
+});
 
 const ASSIGNMENT_TPL = {
 	'Class': 'Assignment',
@@ -43,13 +48,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Actions
 	createAssignmentIn (bundle) {
 		const link = bundle.getLink('CourseEvaluations');
 
-		return createAssignmentWithData(link, ASSIGNMENT_TPL);
+		return createAssignmentWithData(link, {...ASSIGNMENT_TPL, title: t('untitled')});
 	},
 
 
 	createDiscussionAssignmentIn (bundle) {
 		const link = bundle.getLink('CourseEvaluations');
 
-		return createAssignmentWithData(link, DISCUSSION_TPL);
+		return createAssignmentWithData(link, {...DISCUSSION_TPL, title: t('untitled')});
 	}
 });
