@@ -1,7 +1,5 @@
 const Ext = require('@nti/extjs');
 
-const {isFeature} = require('legacy/util/Globals');
-
 module.exports = exports = Ext.define('NextThought.app.search.components.AdvancedOptions', {
 	extend: 'Ext.Component',
 	alias: 'widget.search-advanced-menu',
@@ -47,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 		}
 	},
 
-	cls: 'search-advanced-menu',
+	cls: 'search-advanced-menu search-advanced-menu-react',
 
 
 	renderTpl: Ext.DomHelper.markup({
@@ -77,10 +75,6 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 
 	afterRender: function () {
 		this.callParent(arguments);
-
-		if (isFeature('use-new-search')) {
-			this.addCls('search-advanced-menu-react');
-		}
 
 		this.mon(this.el, 'click', this.doClick.bind(this));
 	},

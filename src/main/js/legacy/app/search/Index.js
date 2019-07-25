@@ -8,7 +8,6 @@ const LibraryActions = require('legacy/app/library/Actions');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const WindowsActions = require('legacy/app/windows/Actions');
 const BaseModel = require('legacy/model/Base');
-const {isFeature} = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 
@@ -18,7 +17,6 @@ const SearchStateStore = require('./StateStore');
 require('legacy/mixins/Router');
 require('legacy/overrides/ReactHarness');
 require('./components/AdvancedOptions');
-require('./components/Results');
 
 module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	extend: 'Ext.container.Container',
@@ -36,93 +34,79 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		//Init the page caches
 		this.clearPages();
 
-		this.useNewSearch = isFeature('use-new-search');
-
 		this.ChatActions = ChatActions.create();
 		this.PathActions = PathActions.create();
 		this.WindowActions = WindowsActions.create();
 
-		if(this.useNewSearch) {
-			this.filtersWidget = this.add({
-				xtype: 'search-advanced-menu',
-				changeFilter: this.changeFilter.bind(this)
-			});
+		this.filtersWidget = this.add({
+			xtype: 'search-advanced-menu',
+			changeFilter: this.changeFilter.bind(this)
+		});
 
-			this.resultsWidget = this.add({
-				xtype: 'react',
-				component: Search,
-				getBreadCrumb: (obj) => {
-					let rec;
-					if(typeof obj.toJSON === 'function') {
-						rec = lazy.ParseUtils.parseItems(obj.toJSON())[0];
-					} else {
-						rec = lazy.ParseUtils.parseItems(obj)[0];
-					}
+		this.resultsWidget = this.add({
+			xtype: 'react',
+			component: Search,
+			getBreadCrumb: (obj) => {
+				let rec;
+				if(typeof obj.toJSON === 'function') {
+					rec = lazy.ParseUtils.parseItems(obj.toJSON())[0];
+				} else {
+					rec = lazy.ParseUtils.parseItems(obj)[0];
+				}
 
-					return this.PathActions.getBreadCrumb(rec)
-						.then((path) => {
-							return path;
-						});
-				},
-				onResultsLoaded: () => {
+				return this.PathActions.getBreadCrumb(rec)
+					.then((path) => {
+						return path;
+					});
+			},
+			onResultsLoaded: () => {
+				this.filtersWidget.show();
+			},
+			navigateToSearchHit: (record, hit, frag, containerId) => {
+				let windowOpened = false;
+
+				record = BaseModel.interfaceToModel(record);
+				hit = lazy.ParseUtils.parseItems(hit)[0];
+
+				if (record.get('MimeType') === 'application/vnd.nextthought.messageinfo') {
+					this.handleChatNavigation(record, hit);
+					return;
+				}
+
+				this.SearchStore.setHitForContainer(containerId, hit, frag);
+
+				const failedNavigate = () => {
+					this.resultsWidget.setState({ navigating: false });
+					this.removeLoading();
 					this.filtersWidget.show();
-				},
-				navigateToSearchHit: (record, hit, frag, containerId) => {
-					let windowOpened = false;
 
-					record = BaseModel.interfaceToModel(record);
-					hit = lazy.ParseUtils.parseItems(hit)[0];
+					if (this.WindowActions.hasWindow(record)) {
+						if (!windowOpened) {
+							windowOpened = true;
+							this.WindowActions.pushWindow(record);
+						}
 
-					if (record.get('MimeType') === 'application/vnd.nextthought.messageinfo') {
-						this.handleChatNavigation(record, hit);
 						return;
 					}
 
-					this.SearchStore.setHitForContainer(containerId, hit, frag);
+					alert('Could not navigate to search result.');
+				};
 
-					const failedNavigate = () => {
-						this.resultsWidget.setState({ navigating: false });
-						this.removeLoading();
-						this.filtersWidget.show();
+				this.Router.root.attemptToNavigateToObject(record, {
+					onFailedToGetFullPath: failedNavigate
+				});
 
-						if (this.WindowActions.hasWindow(record)) {
-							if (!windowOpened) {
-								windowOpened = true;
-								this.WindowActions.pushWindow(record);
-							}
+				this.filtersWidget.hide();
+			},
+			showNext: () => {
+				this.loadNextPage();
+			},
+			loadPage: (page) => {
+				this.loadSearchPage(page);
+			},
+			numPages: 1
+		});
 
-							return;
-						}
-
-						alert('Could not navigate to search result.');
-					};
-
-					this.Router.root.attemptToNavigateToObject(record, {
-						onFailedToGetFullPath: failedNavigate
-					});
-
-					this.filtersWidget.hide();
-				},
-				showNext: () => {
-					this.loadNextPage();
-				},
-				loadPage: (page) => {
-					this.loadSearchPage(page);
-				},
-				numPages: 1
-			});
-		} else {
-			this.add([
-				{
-					xtype: 'search-advanced-menu',
-					changeFilter: this.changeFilter.bind(this)
-				},
-				{
-					xtype: 'search-results',
-					navigateToSearchHit: this.navigateToSearchHit.bind(this)
-				}
-			]);
-		}
 
 		this.LibraryActions = LibraryActions.create();
 		this.NavActions = NavigationActions.create();
@@ -144,11 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.OptionMenu = this.down('search-advanced-menu');
 
-		if(this.useNewSearch) {
-			this.Results = this.down('react');
-		} else {
-			this.Results = this.down('search-results');
-		}
+		this.Results = this.down('react');
 	},
 
 	getActiveItem: function () {
@@ -196,8 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	showSearch: function (route, subRoute) {
-		var navActions = this.NavActions,
-			params = route.queryParams,
+		var params = route.queryParams,
 			term = params.q,
 			bundle = params.s,
 			page = params.p,
@@ -219,16 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			this.SearchActions.syncTerm(term);
 		}
 
-		if (!bundle) {
-			this.NavActions.setActiveContent(null, this.useNewSearch, this.useNewSearch);
-		} else {
-			if(this.useNewSearch) {
-				this.NavActions.setActiveContent(null, this.useNewSearch, this.useNewSearch);
-			} else {
-				this.LibraryActions.findBundle(bundle)
-					.then(bundle2 => void navActions.setActiveContent(bundle2, true));
-			}
-		}
+		this.NavActions.setActiveContent(null, true, true);
 
 		this.currentSearch = {
 			term: term,
@@ -273,11 +243,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.clearResults();
 
-		if(this.useNewSearch) {
-			this.Results.setProps({
-				numPages: 1
-			});
-		}
+		this.Results.setProps({
+			numPages: 1
+		});
 
 		this.loadSearchPage(1);
 	},
@@ -294,13 +262,9 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	clearResults: function () {
 		this.clearPages();
 
-		if(this.useNewSearch) {
-			this.Results.setProps({
-				hits: []
-			});
-		} else {
-			this.Results.removeResults();
-		}
+		this.Results.setProps({
+			hits: []
+		});
 	},
 
 	getAcceptFilter: function (filter) {
@@ -308,72 +272,48 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 	},
 
 	showLoading: function () {
-		if(this.useNewSearch) {
-			this.filtersWidget.hide();
+		this.filtersWidget.hide();
 
-			this.Results.setProps({
-				showLoading: true
-			});
-		} else {
-			this.Results.showLoading();
-		}
+		this.Results.setProps({
+			showLoading: true
+		});
 	},
 
 	removeLoading: function () {
-		if(this.useNewSearch) {
-			this.Results.setProps({
-				showLoading: false
-			});
-		} else {
-			this.Results.removeLoading();
-		}
+		this.Results.setProps({
+			showLoading: false
+		});
 	},
 
 	showError: function () {
-		if(this.useNewSearch) {
-			const text = 'Error loading search results.';
+		const text = 'Error loading search results.';
 
-			this.Results.setProps({
-				errorLoadingText: text,
-				showMoreButton: false
-			});
-		} else {
-			this.Results.showError();
-		}
+		this.Results.setProps({
+			errorLoadingText: text,
+			showMoreButton: false
+		});
 	},
 
 	showNext: function () {
-		if(this.useNewSearch) {
-			this.Results.setProps({
-				showMoreButton: true
-			});
-		} else {
-			this.Results.showNext(this.loadNextPage.bind(this));
-		}
+		this.Results.setProps({
+			showMoreButton: true
+		});
 	},
 
 	removeNext: function () {
-		if(this.useNewSearch) {
-			this.Results.setProps({
-				showMoreButton: false
-			});
-		} else {
-			this.Results.removeNext();
-		}
+		this.Results.setProps({
+			showMoreButton: false
+		});
 	},
 
 	showEmpty: function () {
-		if(this.useNewSearch) {
-			const text = this.Results.getProps().hits.length > 0 ? 'No more results found.' : 'No results found.';
+		const text = this.Results.getProps().hits.length > 0 ? 'No more results found.' : 'No results found.';
 
-			if(typeof this.Results.getProps().emptyText === 'undefined') {
-				this.Results.setProps({
-					emptyText: text,
-					errorLoadingText: undefined
-				});
-			}
-		} else {
-			this.Results.showEmpty();
+		if(typeof this.Results.getProps().emptyText === 'undefined') {
+			this.Results.setProps({
+				emptyText: text,
+				errorLoadingText: undefined
+			});
 		}
 	},
 
@@ -456,47 +396,38 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		}
 
 		if (!isEmptyState) {
-			if(this.useNewSearch) {
-				// if there are results with the new search, the onResultsLoaded
-				// handler will unhide the filters widget when those results
-				// have been loaded
-				this.Results.setProps({
-					hits: batch.Items,
-					errorLoadingText: undefined,
-					emptyText: undefined,
-					currentPage: this.currentPage,
-					currentTab: this.currentSearch.filter,
-					updateRoute: (filter) => {
-						this.currentSearch.filter = filter;
-						this.updateRoute();
-					},
-					numPages
-				});
-			} else {
-				this.Results.addResults(batch.Items);
-			}
+			// if there are results with the new search, the onResultsLoaded
+			// handler will unhide the filters widget when those results
+			// have been loaded
+			this.Results.setProps({
+				hits: batch.Items,
+				errorLoadingText: undefined,
+				emptyText: undefined,
+				currentPage: this.currentPage,
+				currentTab: this.currentSearch.filter,
+				updateRoute: (filter) => {
+					this.currentSearch.filter = filter;
+					this.updateRoute();
+				},
+				numPages
+			});
 		} else if(this.knownPages > 1) {
 			// no items but there are known pages, so we don't want to just hide
 			// everything (page controls, etc)
 			this.filtersWidget.show();
 
-			if(this.useNewSearch) {
-				this.Results.setProps({
-					hits: batch.Items,
-					errorLoadingText: undefined,
-					emptyText: 'End of search results',
-					currentPage: this.currentPage,
-					currentTab: this.currentSearch.filter,
-					updateRoute: (filter) => {
-						this.currentSearch.filter = filter;
-						this.updateRoute();
-					},
-					numPages: numPages
-				});
-			}
-			else {
-				this.showEmpty();
-			}
+			this.Results.setProps({
+				hits: batch.Items,
+				errorLoadingText: undefined,
+				emptyText: 'End of search results',
+				currentPage: this.currentPage,
+				currentTab: this.currentSearch.filter,
+				updateRoute: (filter) => {
+					this.currentSearch.filter = filter;
+					this.updateRoute();
+				},
+				numPages: numPages
+			});
 		}
 		else {
 			// need to make sure to unhide the filters widget if there

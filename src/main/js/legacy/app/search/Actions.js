@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const {getService} = require('@nti/web-client');
 
-const {isFeature} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
@@ -108,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 			}
 		}
 
-		return StoreUtils.loadBatch(url, cachedHref ? {} : params, null, null, isFeature('use-new-search')).then((result) =>{
+		return StoreUtils.loadBatch(url, cachedHref ? {} : params, null, null, true).then((result) =>{
 			if(result.Items && userList) {
 				result.Items.push(userList);
 			}
