@@ -26,9 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 				onSave: function (catalogEntry) {
 					me.onSave && me.onSave(catalogEntry);
 				}
-			},
-			{ xtype: 'course-info-roster', itemId: 'roster' },
-			{ xtype: 'course-info-reports', itemId: 'report'}
+			}
 		];
 
 		me.add(items);
@@ -37,8 +35,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 	setContent: function (info, status, showRoster, bundle, showReports, showAdvanced) {
 		this.onceContentSet = Promise.all([
 			this.getComponent('info').setContent(info, status, bundle, showRoster, showReports, showAdvanced),
-			this.getComponent('roster').setContent(showRoster && bundle),
-			this.getComponent('report').setContent(showRoster && bundle)
 		]);
 	},
 
