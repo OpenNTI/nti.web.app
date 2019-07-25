@@ -1,6 +1,12 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const {getString} = require('legacy/util/Localization');
+
+scoped('nti-web-app.course.assessment.components.student.assignments.FilterBar', {
+	allassignments: 'All Assignments',
+	searchplaceholder: 'Search Assignments'
+});
 
 require('legacy/app/course/assessment/components/CreateMenu');
 
@@ -12,13 +18,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'dropmenu disabled cell', cn: [
-			{ cls: 'label', html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.allassignments}}}' }
+			{ cls: 'label', html: '{{{nti-web-app.course.assessment.components.student.assignments.FilterBar.allassignments}}}' }
 		] },
 		{ cls: 'dropmenu groupBy cell', cn: [
 			{ cls: 'label', html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.alllessons}}}' }
 		] },
 		{ cls: 'search cell', cn: [
-			{ tag: 'input', type: 'text', placeholder: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.searchplaceholder}}}', required: 'required' },
+			{ tag: 'input', type: 'text', placeholder: '{{{nti-web-app.course.assessment.components.student.assignments.FilterBar.searchplaceholder}}}', required: 'required' },
 			{ cls: 'clear' }
 		] },
 		{ cls: 'create-assignment cell', html: 'Create'}

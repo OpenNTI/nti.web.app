@@ -1,7 +1,15 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const Globals = require('legacy/util/Globals');
 const {getString, getFormattedString} = require('legacy/util/Localization');
+
+const t = scoped('nti-web-app.course.assesment.components.student.Performance', {
+	coursegrade: 'Course Grade',
+	completed: 'Assignments Completed',
+	assignmentName: 'Assignment',
+	assigned: 'Assigned'
+});
 
 require('legacy/mixins/Router');
 require('legacy/common/chart/Grade');
@@ -85,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				{
 					xtype: 'box',
 					cls: 'label',
-					html: getString('NextThought.view.courseware.assessment.Performance.coursegrade'),
+					get html () { return t('coursegrade'); },
 					gradeLabel: true,
 					disclaimerTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 						cls: 'disclaimer', 'data-qtip': '{qtip}'
@@ -111,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				},
 
 				{ xtype: 'box', cls: 'assignments-completed', html: '', msgTpl: getString('NextThought.view.courseware.assessment.Performance.outof') },
-				{ xtype: 'box', cls: 'label', html: getString('NextThought.view.courseware.assessment.Performance.completed') }
+				{ xtype: 'box', cls: 'label', get html () { return t('completed'); } }
 			]
 		},
 		{xtype: 'grouping', title: 'All Grades',
@@ -121,8 +129,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					xtype: 'grid',
 					width: 709,
 					columns: [
-						{ text: 'Assignment Name', dataIndex: 'name', flex: 1, resizable: false},
-						{ text: 'Assigned', dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d', resizable: false },
+						{ get text () { return t('assignmentName'); }, dataIndex: 'name', flex: 1, resizable: false},
+						{ get text () { return t('assigned'); }, dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d', resizable: false },
 						{ text: 'Due', dataIndex: 'due', xtype: 'datecolumn', width: 70, format: 'm/d', resizable: false },
 						{ text: 'Completed', dataIndex: 'completed', width: 80, resizable: false, renderer: function (v) {
 							return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
@@ -239,7 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var me = this,
 			currentBundle = me.currentBundle,
 			tpl = me.tempCount.msgTpl,
-			t = me.store.getCount(),
+			count = me.store.getCount(),
 			c = me.store.getRange().filter(complete).length,
 			values;
 
@@ -261,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			me.tempGrade.update(Ext.DomHelper.markup(elements));
 		}
 
-		me.tempCount.update(Ext.String.format(tpl, c, t));
+		me.tempCount.update(Ext.String.format(tpl, c, count));
 
 		if (me.finalGrade && !me.finalGrade.isEmpty()) {
 			values = me.finalGrade.getValues();
