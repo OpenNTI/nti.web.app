@@ -3,7 +3,6 @@ const React = require('react');
 const { Prompt } = require('@nti/web-commons');
 const { ContentSelection, LTIAddTool, LTIStore } = require('@nti/web-course');
 
-const { isFeature } = require('legacy/util/Globals');
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
 
@@ -132,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	maybeShowCreateButton: function () {
-		return isFeature('show-create-ltitool-button');
+		return true;
 	},
 
 	showToolModal: async function () {
