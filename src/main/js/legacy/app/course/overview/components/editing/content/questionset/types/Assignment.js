@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {encodeForURI} = require('@nti/lib-ntiids');
+const {scoped} = require('@nti/lib-locale');
 
 const AssignmentRef = require('legacy/model/AssignmentRef');
 const AssessmentActions = require('legacy/app/course/assessment/Actions');
@@ -9,6 +10,12 @@ const NavigationActions = require('legacy/app/navigation/Actions');
 require('../../Editor');
 require('../AssignmentSelection');
 require('legacy/app/course/assessment/components/CreateMenu');
+
+const t = scoped('nti-web-app.course.overview.components.editing.content.questionset.types.Assignment', {
+	title: 'Assignment',
+	backToList: 'Assignments',
+	create: 'Create Assignment'
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.Assignment', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -24,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getTypes: function () {
 			return [
 				{
-					title: 'Assignment',
+					get title () { return t('title'); },
 					category: 'question-set',
 					advanced: false,
 					iconCls: 'assignment',
@@ -56,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	isAssignment: true,
 	LIST_XTYPE: 'overview-editing-assignment-selection',
 	EDITOR_XTYPE: 'overview-editing-assignment-editor',
-	backToList: 'Assignments',
+	get backToList () { return t('backToList'); },
 	SWITCHED: 'switched',
 	cls: 'content-editor questionset assignment',
 
@@ -115,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if(this.isAssignment) {
 			me.createAssignmentBtn = me.add({
 				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: 'Create Assignment'},
+				autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: t('create')},
 				listeners: {
 					click: {
 						element: 'el',
