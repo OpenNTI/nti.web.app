@@ -1,10 +1,15 @@
 const Ext = require('@nti/extjs');
 const {getService} = require('@nti/web-client');
 const {Presentation: PresentationAssets} = require('@nti/web-commons');
+const {scoped} = require('@nti/lib-locale');
 
 require('./Base');
 
 const CATALOG_CACHE = {};
+
+const t = scoped('nti-web-app.notifications.components.types.Grade', {
+	label: 'graded <span class="title">%(assignment)s</span>'
+});
 
 async function resolveCatalogEntry (id) {
 	const service = await getService();
@@ -75,7 +80,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		return Service.getObject(assignmentId)
 			.then(function (assignment) {
 				if (me.wordingEl && me.wordingEl.dom) {
-					me.wordingEl.dom.innerHTML = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
+					me.wordingEl.dom.innerHTML = t('label', {assignment: assignment.get('title')});
+					// me.wordingEl.dom.innerHTML = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
 				}
 			});
 	}
