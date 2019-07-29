@@ -1,7 +1,13 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const DISCUSSION_ASSIGNMENT = 'discussion-assignment';
 const PLAIN_ASSIGNMENT = 'plain-assignment';
+
+const t = scoped('nti-web-app.course.assessment.components.CreateMenu', {
+	assignment: 'Assignment',
+	discussionAssignment: 'Discussion Assignment'
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.CreateMenu', {
 	extend: 'Ext.menu.Menu',
@@ -17,13 +23,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.add({cls: 'discussion', text: 'Discussion Assignment', assignmentType: DISCUSSION_ASSIGNMENT, listeners: {
+		this.add({cls: 'discussion', text: t('discussionAssignment'), assignmentType: DISCUSSION_ASSIGNMENT, listeners: {
 			scope: this,
 			'click': (item) => {
 				this.onDiscussionAssignmentCreate(item);
 			}
 		}});
-		this.add({cls: 'plain', text: 'Assignment', assignmentType: PLAIN_ASSIGNMENT, listeners: {
+		this.add({cls: 'plain', text: t('assignment'), assignmentType: PLAIN_ASSIGNMENT, listeners: {
 			scope: this,
 			'click': (item) => {
 				this.onPlainAssignmentCreate(item);
