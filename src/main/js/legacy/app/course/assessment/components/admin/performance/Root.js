@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {scoped} = require('@nti/lib-locale');
 
 const {getString} = require('legacy/util/Localization');
 const User = require('legacy/model/User');
@@ -11,6 +12,22 @@ require('legacy/mixins/State');
 require('../PagedGrid');
 require('../ListHeader');
 
+const t = scoped('nti-web-app.course.assessment.components.admin.performance.Root', {
+	ungraded: {
+		one: '%(count)s Ungraded Assignment',
+		other: '%(count)s Ungraded Assignments'
+	},
+	overdue: {
+		one: '%(count)s Assignment Overdue',
+		other: '%(count)s) Assignments Overdue'
+	},
+	itemFilters: {
+		alloption: 'All Items',
+		actionoption: 'Actionable Items',
+		overoption: 'Overdue Items',
+		unoption: 'Ungraded Items'
+	}
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Root', {
 	extend: 'Ext.container.Container',
@@ -69,15 +86,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 								{cls: 'name', html: '{[this.displayName(values)]}'},
 								{cls: 'action-items', cn: [
 									{tag: 'tpl', 'if': 'OverdueAssignmentCount &gt; 0', cn:
-										{cls: 'overdue', html: '{OverdueAssignmentCount:plural("Assignment")} Overdue'}
+										{cls: 'overdue', html: '{[this.displayOverdue(values)]}'}
 									},
 									{tag: 'tpl', 'if': 'UngradedAssignmentCount &gt; 0', cn:
-										{cls: 'overdue', html: '{UngradedAssignmentCount:plural("Ungraded Assignment")}'}
+										{cls: 'overdue', html: '{[this.displayUngraded(values)]}'}
 									}
 								]}
 							]}
 						]}
 					]), {
+						displayOverdue (values) {
+							return t('overdue', {count: values.OverdueAssignmentCount});
+						},
+						displayUngraded (values) {
+							return t('ungraded', {count: values.UngradedAssignmentCount});
+						},
 						displayName: function (values) {
 							if (!values.User || !values.User.isModel) {
 								return 'Resolving';
@@ -470,10 +493,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	ITEM_FILTERS: [
-		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.alloption'), type: 'all'},
-		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.actionoption'), type: 'actionable'},
-		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.overoption'), type: 'overdue'},
-		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.unoption'), type: 'ungraded'}
+		{ get text () { return t('itemFilters.alloption'); }, type: 'all'},
+		{ get text () { return t('itemFilters.actionoption'); }, type: 'actionable'},
+		{ get text () { return t('itemFilters.overoption'); }, type: 'overdue'},
+		{ get text () { return t('itemFilters.unoption'); }, type: 'ungraded'}
 	],
 
 	createItemMenu: function () {
