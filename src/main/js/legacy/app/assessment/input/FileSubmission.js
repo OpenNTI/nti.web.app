@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {AssetIcon, ProgressBar} = require('@nti/web-commons');
+const {scoped} = require('@nti/lib-locale');
 
 const Globals = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');
@@ -8,6 +9,10 @@ const FilePicker = require('legacy/common/form/fields/FilePicker');
 require('legacy/app/MessageBox');
 require('legacy/common/form/fields/FilePicker');
 require('./Base');
+
+const t = scoped('nti-web-app.assessment.input.FileSubmission', {
+	noFile: 'Submitted Assignment Without Adding a File'
+});
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubmission', {
@@ -66,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	emptySubmissionTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'empty-submission', cn: [
 			{cls: 'icon'},
-			{cls: 'title', html: 'Submitted Assignment Without Adding a File'}
+			{cls: 'title', get html () { return t('noFile'); }}
 		]}
 	])),
 

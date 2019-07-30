@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 const {ControlBar, NavigationBar} = require('@nti/web-assignment-editor');
 const { encodeForURI } = require('@nti/lib-ntiids');
+const {scoped} = require('@nti/lib-locale');
 
 const ChatStateStore = require('legacy/app/chat/StateStore');
 const AssignmentStatus = require('legacy/app/course/assessment/AssignmentStatus');
@@ -9,7 +10,6 @@ const Grade = require('legacy/model/courseware/Grade');
 const Email = require('legacy/model/Email');
 const ReactHarness = require('legacy/overrides/ReactHarness');
 const {isFeature} = require('legacy/util/Globals');
-const {getString} = require('legacy/util/Localization');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
 const TimeUtils = require('legacy/util/Time');
@@ -18,6 +18,10 @@ require('legacy/overrides/ReactHarness');
 require('legacy/mixins/ProfileLinks');
 require('legacy/mixins/ChatLinks');
 require('../Base');
+
+const t = scoped('nti-web-app.contentviewer.navigation.assignment.Admin', {
+	gradeTitle: 'Assignment Grade'
+});
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
@@ -39,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			{cls: 'value', html: '{predicted}'}
 		]},
 		{ cls: 'grade', cn: [
-			{ cls: 'label', html: '{gradeTitle} {{{NextThought.view.courseware.assessment.admin.Header.grade}}}'},
+			{ cls: 'label', html: '{gradeTitle}'},
 			{ cls: 'gradebox', cn: [
 				{ tag: 'input', size: 3, type: 'text', value: '{grade}'},
 				{ tag: 'tpl', 'if': 'totalPoints', cn: [
@@ -110,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.student.toString(),
 			Username: this.showingUsername ? Username : '',
-			gradeTitle: this.gradeTitle || getString('NextThought.view.courseware.assessment.admin.Header.assignment'),
+			gradeTitle: this.gradeTitle || t('gradeTitle'),
 			creator: this.student,
 			presence: this.student.getPresence().getName(),
 			excused: this.__getExcusedTpl(),
