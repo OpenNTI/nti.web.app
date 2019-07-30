@@ -273,7 +273,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							));
 						} else {
 							groupStore.groupName = 'Other Assignments';
-							group.setTitle('Other Assignments');
+							group.setTitle(t('otherAssignments'));
 						}
 					}
 

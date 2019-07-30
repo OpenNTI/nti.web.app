@@ -1,7 +1,24 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const TimeUtils = require('legacy/util/Time');
 
+const t = scoped('nti-web-app.course.assessment.AssignmentStatus', {
+	status: {
+		completed: {
+			graded: 'graded'
+		},
+		excused: {
+			label: 'Excused Grade',
+			tooltip: 'This assignment will NOT count towards your grade'
+		}
+	},
+	actions: {
+		reset: 'Reset Assignment',
+		excuse: 'Excused Grade',
+		unexcuse: 'Unexcuse Grade'
+	}
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
 	statics: {
@@ -114,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 			};
 
 			if (data.isNoSubmitAssignment) {
-				d.html = 'graded';
+				d.html = t('status.completed.graded');
 			}
 			//if due is undefined this will be false
 			if (data.completed < data.due) {
@@ -159,8 +176,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 			if (!data.isExcused) { return null; }
 
 			return {
-				html: 'Excused Grade',
-				qtip: 'This assignment will NOT count towards your grade'
+				html: t('status.excused.label'),
+				qtip: t('status.excused.tooltip')
 			};
 		},
 
@@ -236,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 
 			if (record.get('submission')) {
 				menu.add(new Ext.Action({
-					text: 'Reset Assignment',
+					text: t('actions.reset'),
 					scope: this,
 					handler: () => {
 						if(containerRecord.hasLink('Reset')) {
@@ -260,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 			grade = record.get('Grade');
 
 			if (grade && grade.isExcusable()) {
-				txt = grade.get('IsExcused') ? 'Unexcuse Grade' : 'Excuse Grade';
+				txt = grade.get('IsExcused') ? t('actions.unexcuse') : t('actions.excuse');
 
 				menu.add(new Ext.Action({
 					text: txt,
