@@ -15,7 +15,7 @@ const t = scoped('nti-web-app.course.assessment.AssignmentStatus', {
 	},
 	actions: {
 		reset: 'Reset Assignment',
-		excuse: 'Excused Grade',
+		excuse: 'Excuse Grade',
 		unexcuse: 'Unexcuse Grade'
 	}
 });
