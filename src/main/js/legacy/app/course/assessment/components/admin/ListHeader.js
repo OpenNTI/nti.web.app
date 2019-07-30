@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {scoped} = require('@nti/lib-locale');
 
 const {getString} = require('legacy/util/Localization');
 const Email = require('legacy/model/Email');
@@ -13,6 +14,11 @@ const ComponentsAssignmentStatus = require('../AssignmentStatus');
 require('legacy/common/menus/LabeledSeparator');
 require('./email/Window');
 
+
+const t = scoped('nti-web-app.course.assessment.components.admin.ListHeader', {
+	viewAssignment: 'View Assignment',
+	editAssignment: 'Edit Assignment'
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	extend: 'Ext.Component',
@@ -36,8 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{cls: 'assignment', cn: [
 				{cls: 'title', html: '{assignmentTitle}'},
 				{cls: 'extras meta', cn: [
-					{tag: 'span', cls: 'link raw', html: '{{{NextThought.view.courseware.assessment.admin.ListHeader.rawAssignment}}}'},
-					{tag: 'span', cls: 'link edit', html: 'Edit Assignment'}
+					{tag: 'span', cls: 'link raw', get html () { return t('viewAssignment'); }},
+					{tag: 'span', cls: 'link edit', get html () { return t('editAssignment'); }}
 				]},
 				{cls: 'meta', cn: [
 					{tag: 'span', cls: 'due link', html: ''},
