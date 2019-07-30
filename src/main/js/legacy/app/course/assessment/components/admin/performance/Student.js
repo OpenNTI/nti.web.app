@@ -1,12 +1,17 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');
+const {scoped} = require('@nti/lib-locale');
 
 const {getString} = require('legacy/util/Localization');
 
 require('legacy/mixins/State');
 require('../Grid');
 require('./Header');
+
+const t = scoped('nti-web-app.course.assessment.components.admin.performance.Student', {
+	root: 'Grades & Performance'
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
 	extend: 'Ext.container.Container',
@@ -21,8 +26,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	cls: 'course-assessment-admin assignment-item',
 
 	pathRoot: {
-		label: 'Grades & Performance',
-		title: 'Grades & Performance',
+		get label () {return t('root'); },
+		get title () { return t('root'); },
 		route: 'performance'
 	},
 
