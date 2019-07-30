@@ -9,7 +9,8 @@ const Globals = require('legacy/util/Globals');
 const AssignmentStatus = require('../../AssignmentStatus');
 
 const t = scoped('nti-web-app.course.assessment.components.admin.Grid', {
-	assignment: 'Assignment'
+	assignment: 'Assignment',
+	graded: 'Graded %(date)s'
 });
 
 require('legacy/mixins/grid-feature/GradeInputs');
@@ -126,8 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 						return Ext.DomHelper.markup({
 							cls: 'ontime',
 							cn: [
-								{tag: 'span', html: 'Graded '},
-								{tag: 'span', html: Ext.Date.format(s, 'm/d')}
+								{tag: 'span', html: t('graded', {date: Ext.Date.format(s, 'm/d')})}
 							]
 						});
 					}
