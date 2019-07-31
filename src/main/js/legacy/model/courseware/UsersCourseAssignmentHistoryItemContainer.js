@@ -1,6 +1,14 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 require('../Base');
+
+const t = scoped('nti-web-app.model.courseware.UsersCourseAssignmentHistoryItemContainer', {
+	resetWarning: {
+		self: 'This will reset the assignment. All work will be deleted and is not recoverable.',
+		other: 'This will reset this assignment for this student. It is not recoverable. \nFeedback and work will be deleted.'
+	}
+});
 
 module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemContainer', {
 	extend: 'NextThought.model.Base',
@@ -79,10 +87,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		let msg;
 
 		if (!isMine) {
-			msg = 'This will reset this assignment for this student. It is not recoverable.' +
-					'\nFeedback and work will be deleted.';
+			msg = t('resetWarning.other');
 		} else {
-			msg = 'This will reset the assignment. All work will be deleted and is not recoverable.';
+			msg = t('resetWarning.self');
 		}
 
 		return new Promise(function (fulfill, reject) {

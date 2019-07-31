@@ -20,7 +20,8 @@ require('legacy/mixins/ChatLinks');
 require('../Base');
 
 const t = scoped('nti-web-app.contentviewer.navigation.assignment.Admin', {
-	gradeTitle: 'Assignment Grade'
+	gradeTitle: 'Assignment Grade',
+	graded: 'Graded'
 });
 
 
@@ -400,7 +401,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 					this.completedEl.dom.setAttribute('data-qtip', status.completed.date);
 				}
 
-				this.completedEl.update('Graded');
+				this.completedEl.update(t('graded'));
 			} else if (status.overdue) {
 				this.completedEl.addCls('late');
 
