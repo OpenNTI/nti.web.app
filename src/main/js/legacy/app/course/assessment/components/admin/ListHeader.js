@@ -15,7 +15,7 @@ require('legacy/common/menus/LabeledSeparator');
 require('./email/Window');
 
 
-const t = scoped('nti-web-app.course.assessment.components.admin.ListHeader', {
+scoped('nti-web-app.course.assessment.components.admin.ListHeader', {
 	viewAssignment: 'View Assignment',
 	editAssignment: 'Edit Assignment'
 });
@@ -42,8 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			{cls: 'assignment', cn: [
 				{cls: 'title', html: '{assignmentTitle}'},
 				{cls: 'extras meta', cn: [
-					{tag: 'span', cls: 'link raw', get html () { return t('viewAssignment'); }},
-					{tag: 'span', cls: 'link edit', get html () { return t('editAssignment'); }}
+					{tag: 'span', cls: 'link raw', html: '{{{nti-web-app.course.assessment.components.admin.ListHeader.viewAssignment}}}'},
+					{tag: 'span', cls: 'link edit', html: '{{{nti-web-app.course.assessment.components.admin.ListHeader.editAssignment}}}'}
 				]},
 				{cls: 'meta', cn: [
 					{tag: 'span', cls: 'due link', html: ''},
