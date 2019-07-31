@@ -1,10 +1,10 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');
+const {scoped} = require('@nti/lib-locale');
 
 const {getString, getFormattedString} = require('legacy/util/Localization');
 const User = require('legacy/model/User');
-
 
 require('legacy/common/ux/FilterMenu');
 require('legacy/layout/component/CustomTemplate');
@@ -12,6 +12,9 @@ require('legacy/util/Parsing');
 require('../ListHeader');
 require('../PagedGrid');
 
+const t = scoped('nti-web-app.course.assessment.components.admin.assignments.Assignment', {
+	root: 'Assignments'
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assignment', {
 	extend: 'Ext.container.Container',
@@ -23,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	componentLayout: 'customtemplate',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
-	pathRoot: 'Assignments',
+	get pathRoot () { return t('root'); },
 
 	renderTpl: Ext.DomHelper.markup([
 		//toolbar
