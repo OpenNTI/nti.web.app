@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {scoped} = require('@nti/lib-locale');
 
 const TimeUtils = require('legacy/util/Time');
 const {getString, getFormattedString} = require('legacy/util/Localization');
@@ -9,6 +10,9 @@ const AssignmentStatus = require('../../AssignmentStatus');
 require('legacy/model/User');
 require('legacy/mixins/grid-feature/GradeInputs');
 
+const t = scoped('nti-web-app.course.assessment.components.admin.PagedGrid', {
+	graded: 'Graded %(date)s'
+});
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 	extend: 'Ext.grid.Panel',
@@ -172,8 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					return Ext.DomHelper.markup({
 						cls: 'ontime',
 						cn: [
-							{tag: 'span', html: 'Graded '},
-							{tag: 'span', html: Ext.Date.format(submitted, dateFormat)}
+							{tag: 'span', html: t('graded', {date: Ext.Date.format(submitted, dateFormat)})}
 						]
 					});
 				}

@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const Duration = require('durationjs');
+const {scoped} = require('@nti/lib-locale');
 
 const lazy = require('legacy/util/lazy-require')
 	.get('UserDataActions', () => require('legacy/app/userdata/Actions'))
@@ -10,6 +11,13 @@ const Grade = require('./Grade');
 
 require('../assessment/UsersCourseAssignmentAttemptMetadataItem');
 require('../Base');
+
+const t = scoped('nti-web-app.model.courseware.UsersCourseAssignmentHistoryItem', {
+	resetWarning: {
+		self: 'This will reset the assignment. All work will be deleted and is not recoverable.',
+		other: 'This will reset this assignment for this student. It is not recoverable. \nFeedback and work will be deleted.'
+	}
+});
 
 module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
@@ -272,10 +280,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		//let store = this.store;
 
 		if (!isMine) {
-			msg = 'This will reset this assignment for this student. It is not recoverable.' +
-					'\nFeedback and work will be deleted.';
+			msg = t('resetWarning.other');
 		} else {
-			msg = 'This will reset the assignment. All work will be deleted and is not recoverable.';
+			msg = t('resetWarning.self');
 		}
 
 		return new Promise(function (fulfill, reject) {
@@ -368,8 +375,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		return new Promise ((fulfill, reject) => {
 			Ext.MessageBox.alert({
 				title: 'Are you sure?',
-				msg: 'This will reset this assignment for this student. It is not recoverable.' +
-					'\nFeedback and work will be deleted.',
+				msg: t('resetWarning.other'),
 				icon: 'warning-red',
 				buttonText: true,
 				buttons: {
