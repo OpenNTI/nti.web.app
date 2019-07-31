@@ -12,8 +12,8 @@ require('legacy/util/Parsing');
 require('../ListHeader');
 require('../PagedGrid');
 
-const t = scoped('nti-web-app.course.assessment.components.admin.assignments.Assignment', {
-	root: 'Assignments'
+scoped('nti-web-app.course.assessment.components.admin.assignments.Assignment', {
+	root: 'Assignment'
 });
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assignment', {
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	componentLayout: 'customtemplate',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
-	get pathRoot () { return t('root'); },
+	pathRoot: 'Assignment',
 
 	renderTpl: Ext.DomHelper.markup([
 		//toolbar
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				{
 					cls: 'assignment-breadcrumb-path',
 					cn: [
-						{ tag: 'span', cls: 'path part root', html: '{pathRoot}'},
+						{ tag: 'span', cls: 'path part root', html: '{{{nti-web-app.course.assessment.components.admin.assignments.Assignment.root}}}'},
 						' / ',
 						{ tag: 'span', cls: 'path part current', html: '{pathBranch}'}
 					]
