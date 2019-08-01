@@ -622,8 +622,18 @@ canvas.x-component-course-assessment {
 			.status time.completed { display: block; }
 			.status time.due { display: none; }
 
-			&::after {
+			&:not(.failed)::after {
 				@include sprite($check_green);
+			}
+
+			&.failed::after {
+				background-image: url('../images/assignment-icons/fail.svg');
+				background-position: center center;
+				background-size: contain;
+				width: 30px;
+				height: 30px;
+				left: 18px;
+				top: 15px;
 			}
 
 		}

@@ -38,6 +38,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		const attempt = this.history && this.history.getMostRecentHistoryItem();
 		const completed = attempt && attempt.get('completed');
 
+		this.assignment.getInterfaceInstance()
+			.then((assignment) => {
+				if (assignment.CompletedItem && !assignment.CompletedItem.Success) {
+					this.addCls('failed');
+				}
+			});
+
 		if (!this.assignment.isOpen()) {
 			cls.push('closed');
 		}
