@@ -163,7 +163,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			container: me,
 			pageSource: pageSource.load(),
 			pushRoute: me.pushRoute.bind(me),
-			path: 'student'
+			path: 'student',
+			currentBundle: me.currentBundle
 		});
 
 		me.getStudentEnrollment(record)

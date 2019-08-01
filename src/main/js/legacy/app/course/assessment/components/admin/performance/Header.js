@@ -74,6 +74,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.gradeBoxEl.show();
 	},
 
+	//Override base methods to prevent multiple windows from opening
+	setupEmail () {},
+	openEmail () {},
+
 
 	setupCourseEmail: function (emailLink) {
 		var emailEl = this.el.down('.email');

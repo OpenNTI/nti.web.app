@@ -57,7 +57,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			student: this.student,
 			status: this.status,
 			pageSource: this.pageSource,
-			doNavigation: this.doNavigation.bind(this)
+			doNavigation: this.doNavigation.bind(this),
+			currentBundle: this.currentBundle
 		});
 
 
