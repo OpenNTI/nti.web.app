@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 
 	getRouteForPath: function (path, bundle) {
 		var root = path[0] || {},
-			isAccessible = this.ContentStore.hasContent(bundle),
+			isAccessible = !!bundle,//this.ContentStore.hasContent(bundle),
 			subPath = path.slice[1],
 			route;
 
