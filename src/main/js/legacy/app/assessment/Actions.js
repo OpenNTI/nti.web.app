@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Events} = require('@nti/web-session');
+const {scoped} = require('@nti/lib-locale');
 
 const AssessmentQuestionSetSubmission = require('legacy/model/assessment/QuestionSetSubmission');
 const AssessmentAssignmentSubmission = require('legacy/model/assessment/AssignmentSubmission');
@@ -11,6 +12,43 @@ const ContextStateStore = require('../context/StateStore');
 
 require('legacy/common/Actions');
 require('legacy/model/assessment/UsersCourseInquiryItemResponse');
+
+const t = scoped('nti-web-app.assessment.Actions', {
+	assignments: {
+		errors: {
+			alreadySubmitted: {
+				title: 'This assignment has already been submitted',
+				msg: 'Clicking OK will reload the assignment and show the submission',
+				button: 'OK'
+			},
+			pastDue: {
+				title: 'This assignment is past due',
+				msg: 'You can continue to view this assignment, but it cannot be submitted.',
+				button: 'OK'
+			},
+			conflict: {
+				title: 'This assignment has changed',
+				msg: 'Clicking OK will reload the assignment.',
+				button: 'OK'
+			},
+			unavailable: {
+				title: 'This assignment is no longer available',
+				msg: 'Clicking OK will exit the assignment.',
+				button: 'OK'
+			},
+			deletion: {
+				title: 'This assignment no longer exists',
+				msg: 'Clicking OK will exit the assignment.',
+				button: 'OK'
+			},
+			fileupload: {
+				title: 'A file upload question has changed',
+				msg: 'Clicking OK will reload the assignment.',
+				button: 'OK'
+			}
+		}
+	}
+});
 
 
 
@@ -229,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	saveProgress: function (questionSet, submissionData, startTime) {
+	saveProgress: function (questionSet, submissionData, startTime, onSubmitted) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),
 			qsetSubmission, assignmentSubmission,
 			assignment = questionSet.associatedAssignment;
@@ -244,11 +282,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			version: assignment.get('version')
 		});
 
-		return this.doSaveProgress(assignmentSubmission, assignment);
+		return this.doSaveProgress(assignmentSubmission, assignment, onSubmitted);
 	},
 
 
-	doSaveProgress: function (assignmentSubmission, assignment) {
+	doSaveProgress: function (assignmentSubmission, assignment, onSubmitted) {
 		const url = assignment && assignment.getLink('Savepoint');
 		const me = this;
 
@@ -278,23 +316,67 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 						}
 					} else if (err && err.status === 404) {
 						me.handleDeletionError(assignment);
+					} else if (err && err.status === 422) {
+						if (err.responseJson && err.responseJson.code === 'MissingMetadataAttemptInProgressError') {
+							me.handleNoAttemptInProgress(assignment, onSubmitted);
+						}
 					}
+
 					fulfill(err);
 				}
 			});
 		});
 	},
 
-	handlePastDueError: function (assignment) {
+
+	handleNoAttemptInProgress (assignment, onSubmitted) {
 		Ext.MessageBox.alert({
-			title: 'This assignment is past due',
-			msg: 'You can continue to view this assignment, but it cannot be submitted.',
+			title: t('assignments.errors.alreadySubmitted.title'),
+			msg: t('assignments.errors.alreadySubmitted.msg'),
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: 'OK'
+					text: t('assignments.errors.alreadySubmitted.button')
+				}
+			},
+			fn: (button) => {
+				if (button === 'yes' && assignment) {
+					assignment.updateFromServer()
+						.then(async () => {
+							try {
+								const history = await assignment.getHistory();
+								const pendingAssessment = history.get('pendingAssessment');
+								const result = pendingAssessment.get('parts')[0];
+
+								if (onSubmitted) {
+									onSubmitted({
+										result,
+										itemLink: assignment.getLink('History'),
+										assignmentId: assignment.getId()
+									});
+								}
+							} catch (e) {
+								//swallow
+							}
+						});
+				}
+			}
+		});
+	},
+
+
+	handlePastDueError: function (assignment) {
+		Ext.MessageBox.alert({
+			title: t('assignments.errors.pastDue.title'),
+			msg: t('assignments.errors.pastDue.msg'),
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: t('assignments.errors.pastDue.button')
 				}
 			},
 			fn: function (button) {
@@ -305,14 +387,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 	handleConflictError: function (assignment) {
 		Ext.MessageBox.alert({
-			title: 'This assignment has changed',
-			msg: 'Clicking OK will reload the assignment',
+			title: t('assignments.errors.conflict.title'),
+			msg: t('assignments.errors.conflict.msg'),
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: 'OK'
+					text: t('assignments.errors.conflict.button')
 				}
 			},
 			fn: function (button) {
@@ -353,14 +435,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 	handleUnavailableError (assignment) {
 		Ext.MessageBox.alert({
-			title: 'This assignment is no longer available.',
-			msg: 'Clicking OK will exit the assignment',
+			title: t('assignments.errors.unavailable.title'),
+			msg: t('assignments.errors.unavailable.msg'),
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: 'OK'
+					text: t('assignments.errors.unavailable.button')
 				}
 			},
 			fn: function (button) {
@@ -374,14 +456,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 	handleDeletionError: function (assignment) {
 		Ext.MessageBox.alert({
-			title: 'This assignment no longer exists',
-			msg: 'Clicking OK will exit the assignment',
+			title: t('assignments.errors.deletion.title'),
+			msg: t('assignments.errors.deletion.msg'),
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: 'OK'
+					text: t('assignments.errors.deletion.button')
 				}
 			},
 			fn: function (button) {
@@ -394,14 +476,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 
 	handleFileUploadError: function (assignment) {
 		Ext.MessageBox.alert({
-			title: 'A file upload question has changed',
-			msg: 'Clicking OK will reload the assignment',
+			title: t('assignments.errors.fileupload.title'),
+			msg: t('assignments.errors.fileupload.msg'),
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
 				primary: {
 					name: 'yes',
-					text: 'OK'
+					text: t('assignments.errors.fileupload.button')
 				}
 			},
 			fn: function (button) {

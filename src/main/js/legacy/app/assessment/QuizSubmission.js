@@ -510,7 +510,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 
 		if(!this.isDestroyed || progress) {
-			return this.AssessmentActions.saveProgress(this.questionSet, submission, this.startTimestamp);
+			return this.AssessmentActions.saveProgress(
+				this.questionSet,
+				submission,
+				this.startTimestamp,
+				({result, assignmentId, itemLink}) => {
+					this.setGradingResult(result);
+					this.reader.fireEvent('assignment-submitted', assignmentId, itemLink);
+				}
+			);
 		}
 	},
 
