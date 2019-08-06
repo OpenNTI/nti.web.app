@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -7,14 +8,16 @@ const Email = require('legacy/model/Email');
 
 require('legacy/app/contentviewer/navigation/assignment/Admin');
 
+const t = scoped('nti-web-app.course.assessment.components.admin.performance.Header', {
+	gradeTitle: 'Course Grade',
+});
+
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Header', {
 	extend: 'NextThought.app.contentviewer.navigation.assignment.Admin',
 	alias: 'widget.course-assessment-admin-performance-header',
 
 	cls: 'performance-header',
-
-	gradeTitle: 'Course',
 
 	renderSelectors: {
 		gradebodEl: '.header > .grade'
@@ -23,6 +26,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.gradeTitle = t('gradeTitle');
 
 		this.WindowActions = WindowsActions.create();
 		this.WindowStore = WindowsStateStore.getInstance();
