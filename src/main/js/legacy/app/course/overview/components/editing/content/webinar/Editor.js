@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const {Overview} = require('@nti/web-course');
 const {getService} = require('@nti/web-client');
-// const {GotoWebinar} = require('@nti/web-integrations');
+const {GotoWebinar} = require('@nti/web-integrations');
 
 const WebinarAsset = require('legacy/model/WebinarAsset');
 const EditingActions = require('legacy/app/course/overview/components/editing/Actions');
@@ -31,7 +31,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					iconCls: 'webinar',
 					hideFooter: true,
 					description: '',
-					editor: this
+					editor: this,
+					isAvailable: async (bundle) => {
+						try {
+							const instance = await bundle.getInterfaceInstance();
+							const isConnected = await GotoWebinar.isConnected(instance);
+
+							if (isConnected) { return true; }
+
+							const canConnect = await GotoWebinar.canConnect(instance);
+
+							return canConnect;
+						} catch (e) {
+							return false;
+						}
+					}
 				}
 			];
 		}
