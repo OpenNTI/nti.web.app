@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 
 const {isMe} = require('legacy/util/Globals');
 
@@ -6,6 +7,14 @@ require('../../navigation/assignment/Student');
 require('../../components/assignment/TimedPlaceholder');
 require('../../components/assignment/NotStartedPlaceholder');
 require('../Reader');
+
+const t = scoped('nti-web-app.contentviewer.panels.assignment.Student', {
+	alreadyStarted: {
+		'title': 'Attempt in Progress',
+		'msg': 'There is an ongoing attempt in progress. Clicking OK will continue that attempt.',
+		'button': 'OK'
+	}
+});
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 	extend: 'NextThought.app.contentviewer.panels.Reader',
@@ -114,6 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 					xtype: 'assignment-timedplaceholder',
 					assignment: this.assignmentOverride || assignment,
 					startAssignment: this.startTimed.bind(this),
+					startFailed: this.startFailed.bind(this),
 					flex: 1
 				}
 			];
@@ -149,7 +159,35 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		const assignment = this.assignmentOverride || this.assignment;
 
 		return assignment.start()
-			.then((started) => this.startTimed(started));
+			.then((started) => this.startTimed(started))
+			.catch(err => this.startFailed(err));
+	},
+
+
+	startFailed (error) {
+		if (error.status !== 422) { return; }
+
+		const assignment = this.assignmentOverride || this.assignment;
+		let refresh = assignment.updateFromServer();
+
+		Ext.MessageBox.alert({
+			title: t('alreadyStarted.title'),
+			msg: t('alreadyStarted.msg'),
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				primary: {
+					name: 'yes',
+					text: t('alreadyStarted.button')
+				}
+			},
+			fn: (button) => {
+				if (button === 'yes') {
+					refresh
+						.then(started => this.startTimed(started));
+				}
+			}
+		});
 	},
 
 

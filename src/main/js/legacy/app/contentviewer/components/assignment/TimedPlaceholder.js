@@ -113,6 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	start: function () {
 		this.assignment.start()
-			.then(this.startAssignment.bind(this));
+			.then(this.startAssignment.bind(this))
+			.catch(this.startFailed.bind(this));
 	}
 });

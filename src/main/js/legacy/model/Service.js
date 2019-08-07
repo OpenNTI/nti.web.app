@@ -54,7 +54,8 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 					const e = new Error(`${r.status}: ${r.statusText}\n${asPlain(r.responseText)}`);
 					reject(Object.assign(e, r, {
-						stack: e.stack + '\n' + String(stack).split('\n').slice(1).join('\n')
+						stack: e.stack + '\n' + String(stack).split('\n').slice(1).join('\n'),
+						status: r.status
 					}));
 					return;
 				}
