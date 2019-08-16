@@ -24,6 +24,7 @@ const ForumIndex = require('../content/forum/Index');
 
 const AssessmentIndex = require('./assessment/Index');
 const CourseStateStore = require('./StateStore');
+const CommunityIndex = require('./community/Index.js');
 const DashboardIndex = require('./dashboard/Index');
 const InfoIndex = require('./info/Index');
 const OverviewIndex = require('./overview/Index');
@@ -43,6 +44,7 @@ require('../content/timeline/Window');
 require('./resources/index');
 require('./admin/Index');
 
+const COMMUNITY = 'course-community';
 const DASHBOARD = 'course-dashboard';
 const OVERVIEW = 'course-overview';
 const ASSESSMENT = 'course-assessment-container';
@@ -67,6 +69,10 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 
 	items: [
+		{
+			xtype: COMMUNITY,
+			id: COMMUNITY
+		},
 		{
 			xtype: DASHBOARD,
 			id: DASHBOARD
@@ -119,6 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		//Get a "handled" rejected promise.
 		this.getActiveCourse = ((x) => (x = Promise.reject(), x.catch(()=>{}), x)());
 
+		this.addRoute('/community', this.showCommunity.bind(this));
 		this.addRoute('/activity', this.showDashboard.bind(this));
 		this.addRoute('/lessons', this.showOverview.bind(this));
 		this.addRoute('/assignments', this.showAssignments.bind(this));
@@ -280,6 +287,8 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 						if (context === 'activity') {
 							part = 'activity';
+						} else if (context === 'community') {
+							part = 'community';
 						} else if (context === 'lessons') {
 							part = 'lessons';
 						} else if (context === 'assignments') {
@@ -313,6 +322,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	setActiveView: function (active, inactive, tab, navBarConfig, whiteMask) {
 		var bundle = this.activeBundle,
 			tabs = [
+				CommunityIndex,
 				DashboardIndex,
 				OverviewIndex,
 				ScormIndex,
@@ -360,6 +370,23 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			throw new Error('Not an admin.');
 		}
 	},
+
+
+	showCommunity (route, subRoute) {
+		return this.setActiveView(COMMUNITY, [
+			OVERVIEW,
+			SCORM,
+			ASSESSMENT,
+			FORUM,
+			REPORTS,
+			INFO
+		]).then((item) => {
+			if (item && item.handleRoute) {
+				return item.handleRoute(subRoute);
+			}
+		});
+	},
+
 
 	showDashboard: function (route, subRoute) {
 		this.setCmpRouteState(DASHBOARD, subRoute);
