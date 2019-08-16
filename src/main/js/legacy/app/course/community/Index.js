@@ -1,6 +1,8 @@
 const Ext = require('@nti/extjs');
 const {Community} = require('@nti/web-course');
 
+const CommunityOverrides = require('nti-web-community-overrides');
+
 require('legacy/overrides/ReactHarness');
 
 module.exports = exports = Ext.define('NextThought.app.course.community.Index', {
@@ -46,6 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.course.community.Index', 
 			this.communityCmp = this.add({
 				xtype: 'react',
 				component: Community,
+				overrides: CommunityOverrides.Overrides,
 				course,
 				baseroute,
 				setTitle: (title) => this.setTitle(title)
