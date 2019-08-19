@@ -49,6 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.community.Index', 
 				xtype: 'react',
 				component: Community,
 				overrides: CommunityOverrides.Overrides,
+				topicWindowClassName: CommunityOverrides.topicWindowClassName,
 				course,
 				baseroute,
 				setTitle: (title) => this.setTitle(title)

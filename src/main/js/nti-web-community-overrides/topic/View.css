@@ -1,3 +1,8 @@
 .topic {
 	background: white;
+	padding-bottom: 2rem;
+}
+
+.topic :global(.topic-window .window-header) {
+	display: none;
 }
