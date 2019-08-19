@@ -1,0 +1,11 @@
+.community-override-paging-window {
+	justify-content: flex-start;
+	padding: 20px 0 0;
+	top: 70px;/*height of the header*/
+
+	--prompt-paging-window-header-sticky-top: -20px;
+}
+
+:global(html.msg-bar-open) .community-override-paging-window {
+	top: 110px; /*height of the header with a message*/
+}
