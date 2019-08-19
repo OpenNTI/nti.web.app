@@ -45,7 +45,18 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	addNewTopic (rec) {
+	async addNewTopic (rec) {
+		const {channel} = this.props;
+
+		if (!channel) { return; }
+
+		try {
+			const topic = await rec.getInterfaceInstance();
+
+			channel.emit('item-added', topic);
+		} catch (e) {
+			//swallow
+		}
 	}
 
 	async updateTopic (rec) {
