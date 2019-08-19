@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Events} = require('@nti/web-session');
 
 const UserdataActions = require('legacy/app/userdata/Actions');
 const UserdataStateStore = require('legacy/app/userdata/StateStore');
@@ -118,6 +119,24 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			.catch(resason => {
 				post.set(original);
 				return Promise.reject(resason);
+			})
+			.then((resp) => {
+				try {
+					const json = JSON.parse(resp);
+
+					Events.emit(
+						isEdit ? Events.TOPIC_UPDATED : Events.TOPIC_CREATED,
+						{
+							NTIID: record.getId(),
+							title: json.title,
+							headline: json
+						}
+					);
+				} catch (e) {
+					//swallow
+				}
+
+				return resp;
 			})
 			.then (function (response) {
 				var entry = isEdit ? record : lazy.ParseUtils.parseItems(response)[0];

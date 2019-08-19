@@ -45,10 +45,37 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
+	addNewTopic (rec) {
+	}
+
+	async updateTopic (rec) {
+		const {topic} = this.props;
+
+		try {
+			const title = rec.get('title');
+			const headline = await rec.get('headline').getInterfaceInstance;
+
+			await topic.refresh({
+				NTIID: topic.NTIID,
+				title,
+				headline
+			});
+
+			topic.onChange();
+		} catch (e) {
+			//swallow
+		}
+	}
+
 	setupTopic = (renderTo) => {
 		const {topic, channel, focusComment} = this.props;
-		const topicModel = topic.isNewTopic ? null : BaseModel.interfaceToModel(topic);
+		const isNewTopic = topic.isNewTopic;
+		const topicModel = isNewTopic ? null : BaseModel.interfaceToModel(topic);
 		const forum = channel.backer ? BaseModel.interfaceToModel(channel.backer) : null;
+
+		if (this.topicCmp) {
+			this.topicCmp.destroy();
+		}
 
 		this.topicCmp = TopicWindow.create({
 			renderTo,
@@ -56,7 +83,16 @@ class NTIWebCommunityTopic extends React.Component {
 			precache: { forum },
 			onClose: () => this.onDismiss(),
 			doClose: () => this.onDismiss(),
-			doNavigate: () => {}
+			doNavigate: () => {},
+			monitors: {
+				afterSave: (rec) => {
+					if (isNewTopic) {
+						this.addNewTopic(rec);
+					} else {
+						this.updateTopic(rec);
+					}
+				}
+			}
 		});
 
 		if (focusComment) {
