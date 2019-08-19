@@ -46,15 +46,16 @@ class NTIWebCommunityTopic extends React.Component {
 	}
 
 	setupTopic = (renderTo) => {
-		const {topic, focusComment} = this.props;
-		const topicModel = BaseModel.interfaceToModel(topic);
+		const {topic, channel, focusComment} = this.props;
+		const topicModel = topic.isNewTopic ? null : BaseModel.interfaceToModel(topic);
+		const forum = channel.backer ? BaseModel.interfaceToModel(channel.backer) : null;
 
 		this.topicCmp = TopicWindow.create({
 			renderTo,
 			record: topicModel,
-			precache: {},
-			onClose: () => {},
-			doClose: () => {},
+			precache: { forum },
+			onClose: () => this.onDismiss(),
+			doClose: () => this.onDismiss(),
 			doNavigate: () => {}
 		});
 

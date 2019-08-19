@@ -1,5 +1,8 @@
 .topic {
 	background: white;
+}
+
+.topic :global(.topic-window .forum-comment-thread) {
 	padding-bottom: 2rem;
 }
 
