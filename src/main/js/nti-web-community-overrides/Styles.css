@@ -9,3 +9,11 @@
 :global(html.msg-bar-open) .community-override-paging-window {
 	top: 110px; /*height of the header with a message*/
 }
+
+.community-view-override {
+	--community-sidebar-top-offset: 90px;
+}
+
+:global(html.msg-bar-open) .community-view-override {
+		--community-sidebar-top-offset: 130px;
+}

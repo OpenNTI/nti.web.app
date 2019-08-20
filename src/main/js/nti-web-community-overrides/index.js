@@ -7,5 +7,6 @@ import './topic';
 
 const cx = classnames.bind(Styles);
 
+export const viewClassName = cx('community-view-override');
 export const topicWindowClassName = cx('community-override-paging-window');
 export const Overrides = Registry.getInstance();

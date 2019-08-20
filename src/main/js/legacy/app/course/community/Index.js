@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.course.community.Index', 
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-community',
 
-	cls: 'course-community',
+	cls: `course-community ${CommunityOverrides.viewClassName}`,
 
 	mixins: {
 		Router: 'NextThought.mixins.Router'
