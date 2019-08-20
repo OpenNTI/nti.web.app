@@ -123,7 +123,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -189,7 +189,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -255,7 +255,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -321,7 +321,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -387,7 +387,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -533,7 +533,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -599,7 +599,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -665,7 +665,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -731,7 +731,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -797,7 +797,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -863,7 +863,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -929,7 +929,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -995,7 +995,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1061,7 +1061,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1127,7 +1127,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1193,7 +1193,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1259,7 +1259,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1325,7 +1325,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1391,7 +1391,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1457,7 +1457,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1523,7 +1523,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1589,7 +1589,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1655,7 +1655,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1721,7 +1721,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1787,7 +1787,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1853,7 +1853,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1919,7 +1919,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -1985,7 +1985,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -2051,7 +2051,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
@@ -2117,7 +2117,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="value"
+                className="nti-text value"
                 dateTime="2017-10-30T00:00:00-05:00"
               >
                 Oct 30, 2017
