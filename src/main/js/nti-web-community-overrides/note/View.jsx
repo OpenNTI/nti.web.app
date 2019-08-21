@@ -1,0 +1,116 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
+import {Layouts, Loading, Prompt} from '@nti/web-commons';
+import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
+
+import NoteWindow from 'legacy/app/annotations/note/Window';
+import BaseModel from 'legacy/model/Base';
+
+import Registry from '../Registry';
+
+import Styles from './View.css';
+
+const cx = classnames.bind(Styles);
+const handles = (obj) => obj &&  obj.isNote;
+const {Uncontrolled} = Layouts;
+
+export default
+@Registry.register(handles)
+class NTIWebCommunityNote extends React.Component {
+	static propTypes = {
+		loading: PropTypes.bool,
+		topic: PropTypes.object.isRequired,
+		channel: PropTypes.object.isRequired,
+		focusComment: PropTypes.bool
+	}
+
+	static contextTypes = {
+		router: PropTypes.object
+	}
+
+	componentDidUpdate (prevProps) {
+		const {focusComment} = this.props;
+		const {focusComment: prevFocus} = prevProps;
+
+		if (focusComment && !prevFocus) {
+			this.doFocusComment();
+		}
+	}
+
+	doFocusComment () {
+		if (this.noteCmp) {
+			this.noteCmp.showNewReply();
+		}
+	}
+
+	setupNote = (renderTo) => {
+		const {topic, focusComment} = this.props;
+		const noteModel = BaseModel.interfaceToModel(topic);
+
+		if (this.noteCmp) {
+			this.noteCmp.destroy();
+		}
+
+		this.noteCmp = NoteWindow.create({
+			renderTo,
+			record: noteModel,
+			doClose: () => this.onDismiss(),
+			doNavigate: () => {}
+		});
+
+		if (focusComment) {
+			this.doFocusComment();
+		}
+	}
+
+	tearDownNote = () => {
+		if (this.noteCmp) {
+			this.noteCmp.destroy();
+			delete this.noteCmp;
+		}
+	}
+
+
+	onDismiss = (e) => {
+		const {channel} = this.props;
+
+		if (e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
+
+		return LinkTo.Object.routeTo(this.context.router, channel);
+	}
+
+
+	onRoute = async (cont, stop) => {
+		if (!this.noteCmp || !this.noteCmp.allowNavigation) {
+			cont();
+			return;
+		}
+
+		try {
+			await this.noteCmp.allowNavigation();
+			cont();
+		} catch (e) {
+			stop();
+		}
+	}
+
+	render () {
+		const {channel, topic, loading} = this.props;
+
+		return (
+			<Prompt.PagingWindow
+				onDismiss={this.onDismiss}
+				title={channel.title}
+			>
+				<Loading.Placeholder loading={loading || !topic} fallback={(<Loading.Spinner.Large />)}>
+					<Uncontrolled className={cx('note')} onMount={this.setupNote} onUnmount={this.tearDownNote} />
+				</Loading.Placeholder>
+				<RoutePrompt onRoute={this.onRoute} when />
+			</Prompt.PagingWindow>
+		);
+	}
+}

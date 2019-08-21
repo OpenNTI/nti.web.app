@@ -1,0 +1,7 @@
+.note :global(.note-window .title) {
+	display: none;
+}
+
+.note :global(.note-window .note.main-view) {
+	padding-bottom: 2rem;
+}

@@ -58,6 +58,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 			scrollingParent: this.scrollingParent,
 			scrollToId: record.getId() !== this.record.getId() ? this.record.getId() : null
 		});
+
+		this.fireEvent('note-panel-set');
 	},
 
 	loadRoot: function () {
@@ -80,6 +82,19 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		if (!panel) { return true; }
 
 		return panel.allowNavigation();
+	},
+
+	showNewReply () {
+		const notePanel = this.down('note-main-view');
+
+		if (!notePanel) {
+			this.on({
+				single: true,
+				'note-panel-set': () => this.showNewReply()
+			});
+		} else {
+			notePanel.activateReplyEditor();
+		}
 	}
 }, function () {
 	WindowsStateStore.register(Note.mimeType, this);
