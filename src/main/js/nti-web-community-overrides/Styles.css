@@ -22,8 +22,3 @@
 :global(html.msg-bar-open) .community-view-override {
 		--community-sidebar-top-offset: 130px;
 }
-
-:global(html.community-content-open) .community-view-override,
-:global(html.msg-bar-open.community-content-open) .community-view-override {
-	--community-sidebar-top-offset: 0;
-}

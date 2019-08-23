@@ -62,6 +62,10 @@ body.x-body {
 	.make-white {
 		background: white;
 	}
+
+	.scroll-lock > & {
+		overflow: visible !important;
+	}
 }
 
 #view {
