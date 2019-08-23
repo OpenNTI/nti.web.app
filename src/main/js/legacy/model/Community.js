@@ -77,9 +77,7 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 	getDefaultForum: function () {
 		return this.getForumList()
 			.then(function (forums) {
-				forums = forums.filter(function (forum) {
-					return forum.get('title') === 'Forum';
-				});
+				forums = forums.filter((forum) => forum.get('IsDefaultForum'));
 
 				return forums[0];
 			});
@@ -89,9 +87,7 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 	getForums: function () {
 		return this.getForumList()
 			.then(function (forums) {
-				return forums.filter(function (forum) {
-					return forum.get('title') !== 'Forum';
-				});
+				return forums.filter((forum) => !forum.get('IsDefaultForum'));
 			});
 	},
 

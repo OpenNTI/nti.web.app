@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 
 		var title = forum && forum.getTitle();
 
-		if (title === 'Forum') {
+		if (forum.get('IsDefaultForum')) {
 			title = null;
 		}
 
