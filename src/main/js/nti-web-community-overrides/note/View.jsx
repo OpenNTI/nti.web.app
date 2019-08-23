@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Layouts, Loading, Prompt} from '@nti/web-commons';
+import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
 import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
 
 import NoteWindow from 'legacy/app/annotations/note/Window';
@@ -17,6 +17,7 @@ const {Uncontrolled} = Layouts;
 
 export default
 @Registry.register(handles)
+@Decorators.addClassToRoot('community-content-open')
 class NTIWebCommunityNote extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
