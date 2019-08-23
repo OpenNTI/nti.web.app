@@ -1,4 +1,4 @@
-.note :global(.note-window .title) {
+.note :global(.note-window .window-header) {
 	display: none;
 }
 
