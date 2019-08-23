@@ -11,6 +11,10 @@
 	top: 110px; /*height of the header with a message*/
 }
 
+:global(html.prompt-open) .community-override-paging-window {
+	z-index: 100;
+}
+
 .community-view-override {
 	--community-sidebar-top-offset: 90px;
 }
