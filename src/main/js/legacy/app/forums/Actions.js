@@ -199,6 +199,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				success: function () {
 					me.ForumStore.onTopicDeleted(record);
 
+					Events.emit(Events.TOPIC_DELETED, {	NTIID: record.getId() });
+
 					me.UserDataStore.applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
 					//Delete anything left that we know of
