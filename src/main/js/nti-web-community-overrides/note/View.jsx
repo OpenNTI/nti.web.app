@@ -6,6 +6,7 @@ import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
 
 import NoteWindow from 'legacy/app/annotations/note/Window';
 import BaseModel from 'legacy/model/Base';
+import ContextStateStore from 'legacy/app/context/StateStore';
 
 import Registry from '../Registry';
 
@@ -57,7 +58,17 @@ class NTIWebCommunityNote extends React.Component {
 			renderTo,
 			record: noteModel,
 			doClose: () => this.onDismiss(),
-			doNavigate: () => {}
+			doNavigate: (obj) => {
+				const store = ContextStateStore.getInstance();
+				const context = store.getContext();
+				const parts = context.reverse();
+
+				for (let part of parts) {
+					if (part.cmp && part.cmp.navigateToObject) {
+						return part.cmp.navigateToObject(obj);
+					}
+				}
+			}
 		});
 
 		if (focusComment) {
