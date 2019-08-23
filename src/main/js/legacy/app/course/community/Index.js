@@ -30,7 +30,11 @@ module.exports = exports = Ext.define('NextThought.app.course.community.Index', 
 		if (bundle === this.activeBundle) { return; }
 
 		this.activeBundle = bundle;
-		//TODO: see if we need to update the existing component
+
+		if (this.communityCmp) {
+			this.communityCmp.destroy();
+			delete this.communityCmp;
+		}
 	},
 
 
@@ -42,18 +46,16 @@ module.exports = exports = Ext.define('NextThought.app.course.community.Index', 
 			throw new Error('Course does not have a community');
 		}
 
-		if (this.communityCmp) {
-			this.communityCmp.destroy();
+		if (!this.communityCmp) {
+			this.communityCmp = this.add({
+				xtype: 'react',
+				component: Community,
+				overrides: CommunityOverrides.Overrides,
+				topicWindowClassName: CommunityOverrides.topicWindowClassName,
+				course,
+				baseroute,
+				setTitle: (title) => this.setTitle(title)
+			});
 		}
-
-		this.communityCmp = this.add({
-			xtype: 'react',
-			component: Community,
-			overrides: CommunityOverrides.Overrides,
-			topicWindowClassName: CommunityOverrides.topicWindowClassName,
-			course,
-			baseroute,
-			setTitle: (title) => this.setTitle(title)
-		});
 	}
 });
