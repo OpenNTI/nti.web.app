@@ -118,7 +118,18 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			record.set({'title': title});
 		}
 
-		return post.saveData({url: isEdit ? undefined : forum && forum.getLink('add')})
+		const url = isEdit ? undefined : forum && forum.getLink('add');
+
+		if (!isEdit && !url) {
+			return Promise.reject({
+				code: 'MissingLink',
+				forum: forum.raw,
+				message: 'Forum missing "add" link.',
+				responseText: null // don't blow up a consumer
+			});
+		}
+
+		return post.saveData({url})
 			.catch(resason => {
 				post.set(original);
 				return Promise.reject(resason);
