@@ -93,16 +93,16 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
-				title: 'Attention!',
+				title: 'Are you sure?',
 				msg: msg,
 				buttons: {
 					primary: {
-						text: 'Leave',
+						text: 'Leave Anyway',
 						cls: 'caution',
 						handler: fulfill
 					},
 					secondary: {
-						text: 'Stay',
+						text: 'Cancel',
 						handler: reject
 					}
 				}

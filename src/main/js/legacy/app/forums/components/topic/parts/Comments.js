@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			return true;
 		}
 
-		const title = 'Attention!';
+		const title = 'Are you sure?';
 		let msg = 'You are currently creating a topic. Would you like to leave without saving?';
 
 		if (this.editor.record) {
@@ -232,12 +232,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				msg: msg,
 				buttons: {
 					primary: {
-						text: 'Leave',
+						text: 'Leave Anyway',
 						cls: 'caution',
 						handler: fulfill
 					},
 					secondary: {
-						text: 'Stay',
+						text: 'Cancel',
 						handler: reject
 					}
 				}
