@@ -323,7 +323,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 	onCancel: function (e) {
 		e.stopEvent();
-
-		this.fireEvent('cancel');
+		this.allowNavigation()
+			.then(() => this.fireEvent('cancel'))
+			.catch(() => {});
 	}
 });
