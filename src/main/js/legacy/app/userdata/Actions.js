@@ -856,6 +856,10 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		return replyRecord.saveData({url: url})
 			.then(function (response) {
 				var rec = lazy.ParseUtils.parseItems(response)[0];
+
+				rec.getInterfaceInstance()
+					.then(note => Events.emit(Events.NOTE_CREATED, note));
+
 				me.incomingCreatedChange({}, rec, {});
 				recordRepliedTo.fireEvent('child-added', rec);
 				return rec;

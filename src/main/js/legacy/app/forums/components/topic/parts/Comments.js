@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {Events} = require('@nti/web-session');
 
 const TemplatesForNotes = require('legacy/app/annotations/note/Templates');
 const ContentviewerActions = require('legacy/app/contentviewer/Actions');
@@ -647,6 +648,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 						url: href,
 						method: 'DELETE'
 					}).then(function () {
+						record.getInterfaceInstance()
+							.then((obj) => Events.emit(Events.TOPIC_COMMENT_DELETED, obj));
+
 						record.convertToPlaceholder();
 						record.set({
 							'depth': depth,

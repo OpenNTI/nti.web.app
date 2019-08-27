@@ -50,6 +50,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			.then(function (response) {
 				var rec = isEdit ? comment : lazy.ParseUtils.parseItems(response)[0];
 
+				rec.getInterfaceInstance()
+					.then((obj) => Events.emit(isEdit ? Events.TOPIC_COMMENT_UPDATED : Events.TOPIC_COMMENT_CREATED, obj));
+
 				//TODO: increment PostCount in topic the same way we increment reply count in notes.
 				if (!isEdit) {
 					topic.set('PostCount', topic.get('PostCount') + 1);
