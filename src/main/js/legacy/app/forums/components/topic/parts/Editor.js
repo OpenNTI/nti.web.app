@@ -85,6 +85,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 	allowNavigation: function () {
+		if (this.isEmpty()) {
+			return Promise.resolve();
+		}
+
 		var msg = 'You are currently creating a topic. Would you like to leave without saving?';
 
 		if (this.record) {
@@ -168,6 +172,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		return this.record ? this.record.get('MimeType') :  Post.mimeType;
 	},
 
+	isEmpty () {
+		const {body, title, tags} = this.getValue() || {};
+		const re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+		const str = x => (Array.isArray(x) ? x : [x]).join('').replace(re, '');
+		return Ext.isEmpty(title)
+			&& Ext.isEmpty(str(tags))
+			&& Ext.isEmpty(str(body));
+	},
 
 	isValid: function () {
 		var me = this,
