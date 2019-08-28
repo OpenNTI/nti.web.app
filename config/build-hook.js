@@ -58,7 +58,7 @@ function getLatest (dir) {
 			}
 		}
 
-	} catch {
+	} catch (e) {
 		return -1;
 	}
 
