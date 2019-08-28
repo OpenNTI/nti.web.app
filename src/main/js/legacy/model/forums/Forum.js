@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {HREF} = require('@nti/lib-ntiids');
 
 require('./Base');
 
@@ -38,6 +39,15 @@ module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 		{ name: 'EmailNotifications', type: 'bool'},
 		{ name: 'IsDefaultForum', type: 'bool'}
 	],
+
+	getId () {
+		if (this.get('IsDefaultForum')) {
+			//NOTE: the href in the data is getting resolved by the field client side, not matching what the server is sending
+			return HREF.encodeIdFrom(this.rawData.href);
+		}
+
+		return this.callParent(arguments);
+	},
 
 	buildContentsStore: function (idSuffix, cfg, extraParams) {
 		var ntiid = this.get('NTIID'),
