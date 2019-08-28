@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		return this.getForumList()
 			.then(function (forums) {
 				forums = forums.filter(function (forum) {
-					return forum.get('title') === 'Forum';
+					return forum.get('IsDefaultForum');
 				});
 
 				return forums[0];
