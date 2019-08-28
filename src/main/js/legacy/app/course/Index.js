@@ -758,6 +758,24 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	},
 
 
+	getRouteForForum (forum, path) {
+		const forumPart = encodeForURI(forum.getId());
+		const topic = path && path[0];
+
+		let route = `/community/${forumPart}`;
+
+		if (topic) {
+			route = `${route}/${encodeForURI(topic.getId())}`;
+		}
+
+		return {
+			path: route,
+			noWindow: true,
+			isFull: true
+		};
+	},
+
+
 	getCourseMediaRoute (path) {
 		let videoId;
 

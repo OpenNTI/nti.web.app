@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 
 		objId = objId && (isNTIID(objId) ? encodeForURI(objId) : encodeURIComponent(objId));
 
-		if (hasWindow) {
+		if (hasWindow && !route.noWindow) {
 			path = Globals.trimRoute(path) + '/' + Globals.trimRoute(windowRoute);
 		}
 
