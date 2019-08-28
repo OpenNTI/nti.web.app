@@ -43,17 +43,23 @@ call('postcss', ['--use', 'autoprefixer', '-r', CSS + '/*.css']);
 function getLatest (dir) {
 	let latest = 0;
 
-	for (let file of fs.readdirSync(dir)) {
-		const fullpath = path.join(dir, file);
-		const s = fs.statSync(fullpath);
+	try {
 
-		if (s.isDirectory()) {
-			latest = getLatest(fullpath);
+		for (let file of fs.readdirSync(dir)) {
+			const fullpath = path.join(dir, file);
+			const s = fs.statSync(fullpath);
+
+			if (s.isDirectory()) {
+				latest = getLatest(fullpath);
+			}
+
+			else if (s.mtime > latest) {
+				latest = s.mtime;
+			}
 		}
 
-		else if (s.mtime > latest) {
-			latest = s.mtime;
-		}
+	} catch {
+		return -1;
 	}
 
 	return latest;
