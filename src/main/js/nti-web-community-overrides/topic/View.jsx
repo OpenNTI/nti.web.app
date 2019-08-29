@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+import {scoped} from '@nti/lib-locale';
 import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
 import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
 
@@ -12,6 +13,12 @@ import Registry from '../Registry';
 import Styles from './View.css';
 
 const cx = classnames.bind(Styles);
+const t = scoped('nti-web-community-overrides.topic.View', {
+	title: {
+		newTopic: 'Posting in %(channelName)s',
+		existingTopic: 'Posted in %(channelName)s'
+	}
+});
 
 const handles = (obj) => !obj || obj.isTopic;
 const {Uncontrolled} = Layouts;
@@ -145,13 +152,24 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
+	getTitle () {
+		const {topic, channel} = this.props;
+
+		if (!topic) { return ''; }
+
+		return topic.isNewTopic ?
+			t('title.newTopic', {channelName: channel.title}) :
+			t('title.existingTopic', {channelName: topic.ContainerTitle});
+	}
+
 	render () {
-		const {channel, topic, loading} = this.props;
+		const {topic, loading} = this.props;
+		const title = this.getTitle();
 
 		return (
 			<Prompt.PagingWindow
 				onDismiss={this.onDismiss}
-				title={channel.title}
+				title={title}
 			>
 				<Loading.Placeholder loading={loading || !topic} fallback={(<Loading.Spinner.Large />)}>
 					<Uncontrolled className={cx('topic')} onMount={this.setupTopic} onUnmount={this.tearDownTopic} />

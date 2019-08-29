@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+import {scoped} from '@nti/lib-locale';
 import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
 import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
 
@@ -15,6 +16,9 @@ import Styles from './View.css';
 const cx = classnames.bind(Styles);
 const handles = (obj) => obj &&  obj.isNote;
 const {Uncontrolled} = Layouts;
+const t = scoped('nti-web-community-overrides.note.View', {
+	title: 'Posted in %(channelName)s'
+});
 
 export default
 @Registry.register(handles)
@@ -111,12 +115,13 @@ class NTIWebCommunityNote extends React.Component {
 	}
 
 	render () {
-		const {channel, topic, loading} = this.props;
+		const {topic, loading} = this.props;
+		const title = topic ? t('title', {channelName: topic.ContainerTitle}) : '';
 
 		return (
 			<Prompt.PagingWindow
 				onDismiss={this.onDismiss}
-				title={channel.title}
+				title={title}
 			>
 				<Loading.Placeholder loading={loading || !topic} fallback={(<Loading.Spinner.Large />)}>
 					<Uncontrolled className={cx('note')} onMount={this.setupNote} onUnmount={this.tearDownNote} />
