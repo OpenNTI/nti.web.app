@@ -9,7 +9,8 @@ const cx = classnames.bind(styles);
 export default class WebinarBody extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
-
+			description: PropTypes.any,
+			icon: PropTypes.string,
 		}).isRequired
 	}
 
