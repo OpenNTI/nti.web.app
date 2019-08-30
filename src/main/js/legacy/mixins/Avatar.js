@@ -94,6 +94,17 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		}
 	},
 
+	onceAvatarResolved () {
+		return new Promise((fulfill) => {
+			if (this.avatarIsResolved) { fulfill(); }
+
+			this.on({
+				single: true,
+				avatarResolved: () => fulfill()
+			});
+		});
+	},
+
 	initAvatar: function () {
 		var me = this;
 
@@ -117,6 +128,9 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 				// Since this promise fulfills asynchronously, the view that requested
 				// it could be rendered when it fulfills within the next even loop.
 				me.fireEvent('avatarChanged', me);
+
+				me.avatarIsResolved = true;
+				me.fireEvent('avatarResolved', me);
 			});
 	},
 

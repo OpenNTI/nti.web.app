@@ -343,8 +343,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 	fillInUser: function (user) {
 		this.user = user;
 		this.renderData.user = user;
-		this.avatar.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
-		this.name.update(user.getName());
+
+		user.onceAvatarResolved()
+			.then(() => {
+				this.avatar.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
+				this.name.update(user.getName());
+			});
 
 		//NOTE: this is probably not the best place where to set the more options menu.
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, user, this.record);
