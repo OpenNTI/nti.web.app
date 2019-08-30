@@ -761,11 +761,16 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	getRouteForForum (forum, path) {
 		const forumPart = encodeForURI(forum.getId());
 		const topic = path && path[0];
+		const comment = path && path[1];
 
 		let route = `/community/${forumPart}`;
 
 		if (topic) {
 			route = `${route}/${encodeForURI(topic.getId())}`;
+		}
+
+		if (comment) {
+			route = `${route}/#${encodeForURI(comment.getId())}`;
 		}
 
 		return {

@@ -22,6 +22,10 @@ function setObjHash (route, obj) {
 	return route;
 }
 
+function shouldAddObjectForCommunityCase (path, obj) {
+	return path[0].isCourse && path[1].isBoard && path[2].isForum && path[3].isTopic && obj.isComment;
+}
+
 
 module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	mixins: {
@@ -155,6 +159,10 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		resolve
 			.then(function (path) {
 				if (!me.Router.WindowActions.hasWindow(obj)) {
+					path.push(obj);
+				}
+
+				if (shouldAddObjectForCommunityCase(path, obj)) {
 					path.push(obj);
 				}
 
