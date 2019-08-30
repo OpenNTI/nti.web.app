@@ -57,7 +57,7 @@
     "@nti/web-library": "^1.6.0",
     "@nti/web-login": "^2019.0.0",
     "@nti/web-payments": "^1.0.0",
-    "@nti/web-profiles": "^1.21.0",
+    "@nti/web-profiles": "^1.31.0",
     "@nti/web-reports": "0.x.x",
     "@nti/web-routing": "0.x.x",
     "@nti/web-search": "0.x.x",

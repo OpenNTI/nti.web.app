@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				{cls: 'favorite'},
 				{cls: 'like'}
 			]},
-			'{headline.Creator:avatar}',
+			{cls: 'avatar-wrapper', cn: ['{headline.Creator:avatar}']},
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'meta', cn: [
 				{ tag: 'tpl', 'if': 'showName', cn: { tag: 'span', cls: 'name link', html: '{headline.Creator}'}},
@@ -87,6 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	]),
 
 	renderSelectors: {
+		avatarWrapperEl: '.avatar-wrapper',
 		avatarEl: '.avatar',
 		bodyEl: '.body',
 		nameEl: '.meta .name',
@@ -146,12 +147,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		r.headline = r.headline.getData();
 
 		UserRepository.getUser(r.headline.Creator, function (u) {
-			r.headline.Creator = u;
-			me.user = u;
-			if (me.rendered) {
-				me.nameEl.update(u.getName());
-				me.avatarEl.setStyle({ backgroundImage: 'url(' + u.get('avatarURL') + ')'});
-			}
+			u.onceAvatarResolved()
+				.then(() => {
+					r.headline.Creator = u;
+					me.user = u;
+					if (me.rendered) {
+						me.nameEl.update(u.getName());
+						me.avatarWrapperEl.update(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: u}));
+					}
+				});
 		});
 	},
 
