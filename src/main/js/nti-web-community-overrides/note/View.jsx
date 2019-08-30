@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
+import {getScrollParent} from '@nti/lib-dom';
 import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
 import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
 
@@ -28,7 +29,8 @@ class NTIWebCommunityNote extends React.Component {
 		loading: PropTypes.bool,
 		topic: PropTypes.object.isRequired,
 		channel: PropTypes.object.isRequired,
-		focusComment: PropTypes.bool
+		selectedComment: PropTypes.string,
+		focusNewComment: PropTypes.bool
 	}
 
 	static contextTypes = {
@@ -36,22 +38,42 @@ class NTIWebCommunityNote extends React.Component {
 	}
 
 	componentDidUpdate (prevProps) {
-		const {focusComment} = this.props;
-		const {focusComment: prevFocus} = prevProps;
+		const {focusNewComment, selectedComment} = this.props;
+		const {focusNewComment: prevFocus, selectedComment: prevComment} = prevProps;
 
-		if (focusComment && !prevFocus) {
-			this.doFocusComment();
+		if (focusNewComment && !prevFocus) {
+			this.doFocusNewComment();
+		}
+
+		if (selectedComment !== prevComment) {
+			this.doSelectComment(selectedComment);
 		}
 	}
 
-	doFocusComment () {
+	doFocusNewComment () {
 		if (this.noteCmp) {
 			this.noteCmp.showNewReply();
 		}
 	}
 
+	async doSelectComment (comment) {
+		if (!this.noteCmp) { return; }
+
+		try {
+			const cmp = await this.noteCmp.getReplyCmp(comment);
+
+			if (cmp && cmp.el && cmp.el.dom) {
+				const scroll = getScrollParent(this.noteCmp.el.dom);
+
+				cmp.el.scrollCompletelyIntoView(Ext.get(scroll));//eslint-disable-line
+			}
+		} catch (e) {
+			//swallow
+		}
+	}
+
 	setupNote = (renderTo) => {
-		const {topic, focusComment} = this.props;
+		const {topic, focusNewComment, selectedComment} = this.props;
 		const noteModel = BaseModel.interfaceToModel(topic);
 
 		if (this.noteCmp) {
@@ -75,8 +97,12 @@ class NTIWebCommunityNote extends React.Component {
 			}
 		});
 
-		if (focusComment) {
-			this.doFocusComment();
+		if (focusNewComment) {
+			this.doFocusNewComment();
+		}
+
+		if (selectedComment) {
+			this.doSelectComment(selectedComment);
 		}
 	}
 

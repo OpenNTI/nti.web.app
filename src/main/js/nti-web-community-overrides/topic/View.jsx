@@ -31,7 +31,8 @@ class NTIWebCommunityTopic extends React.Component {
 		loading: PropTypes.bool,
 		topic: PropTypes.object,
 		channel: PropTypes.object.isRequired,
-		focusComment: PropTypes.bool
+		selectedComment: PropTypes.string,
+		focusNewComment: PropTypes.bool
 	}
 
 	static contextTypes = {
@@ -39,17 +40,38 @@ class NTIWebCommunityTopic extends React.Component {
 	}
 
 	componentDidUpdate (prevProps) {
-		const {focusComment} = this.props;
-		const {focusComment: prevFocus} = prevProps;
+		const {focusNewComment, selectedComment} = this.props;
+		const {focusNewComment: prevFocus, selectedComment: prevComment} = prevProps;
 
-		if (focusComment && !prevFocus) {
-			this.doFocusComment();
+		if (focusNewComment && !prevFocus) {
+			this.doFocusNewComment();
+		}
+
+		if (selectedComment !== prevComment) {
+			this.doSelectComment(selectedComment);
 		}
 	}
 
-	doFocusComment () {
+	doFocusNewComment () {
 		if (this.topicCmp) {
 			this.topicCmp.showNewComment();
+		}
+	}
+
+	async doSelectComment (comment) {
+		if (!this.topicCmp) { return; }
+
+		this.selectingComment = comment;
+
+		try {
+			const commentModel = await Service.getObject(comment);//eslint-disable-line
+				
+			if (this.selectingComment !== comment) { return; }
+			if (this.topicCmp) {
+				this.topicCmp.selectComment(commentModel);
+			}
+		} catch (e) {
+			//swallow
 		}
 	}
 
@@ -87,7 +109,7 @@ class NTIWebCommunityTopic extends React.Component {
 	}
 
 	setupTopic = (renderTo) => {
-		const {topic, channel, focusComment} = this.props;
+		const {topic, channel, focusNewComment, selectedComment} = this.props;
 		const isNewTopic = topic.isNewTopic;
 		const topicModel = isNewTopic ? null : BaseModel.interfaceToModel(topic);
 		const forum = channel.backer ? BaseModel.interfaceToModel(channel.backer) : null;
@@ -114,8 +136,12 @@ class NTIWebCommunityTopic extends React.Component {
 			}
 		});
 
-		if (focusComment) {
-			this.doFocusComment();
+		if (focusNewComment) {
+			this.doFocusNewComment();
+		}
+
+		if (selectedComment) {
+			this.doSelectComment(selectedComment);
 		}
 	}
 

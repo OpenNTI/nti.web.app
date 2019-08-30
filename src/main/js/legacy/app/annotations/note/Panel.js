@@ -714,6 +714,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
+
+	getReplyCmp (replyId) {
+		const prefix = this.getRoot().replyIdPrefix();
+		const cmp = Ext.getCmp(IdCache.getComponentId(replyId, null, prefix));
+
+		return cmp;
+	},
+
+
 	setContent: function (text) {
 		if (!this.rendered) {
 			this.on({
@@ -996,6 +1005,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 
 		this.add(toAdd);
 		Ext.defer(this.maybeOpenReplyEditor, 1, this);
+		
+		setTimeout(() => {
+			this.repliesHaveBeenAdded = true;
+			this.fireEvent('replies-added');
+		}, 1);
+
 	},
 
 	rootToCountComponentsFrom: function () {

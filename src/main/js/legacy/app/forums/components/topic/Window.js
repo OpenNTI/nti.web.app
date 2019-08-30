@@ -172,6 +172,26 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		}
 	},
 
+
+	selectComment (comment) {
+		const commentCmp = this.down('forums-topic-comment-thread');
+
+		if (commentCmp && commentCmp.ready) {
+			commentCmp.goToComment(comment);
+		} else if (commentCmp) {
+			this.mon(commentCmp, {
+				single: true,
+				ready: () => this.selectComment(comment)
+			});
+		} else {
+			this.on({
+				single: true,
+				'topic-setup': () => this.selectComment(comment)
+			});
+		}
+	},
+
+
 	showTopic: function (topic, forum, activeComment) {
 		var topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
