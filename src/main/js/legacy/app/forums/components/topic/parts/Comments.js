@@ -649,7 +649,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 						method: 'DELETE'
 					}).then(function () {
 						record.getInterfaceInstance()
-							.then((obj) => Events.emit(Events.TOPIC_COMMENT_DELETED, obj));
+							.then((obj) => {
+								const event = obj.isBlogComment ? Events.BLOG_COMMENT_DELETED : Events.TOPIC_COMMENT_DELETED;
+
+								Events.emit(event, obj);
+							});
 
 						record.convertToPlaceholder();
 						record.set({

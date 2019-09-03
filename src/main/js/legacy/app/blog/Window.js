@@ -29,11 +29,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 
 		this.WindowActions = WindowsActions.create();
 
-		this.headerCmp = this.add({
-			xtype: 'window-header',
-			doClose: this.onClose.bind(this),
-			doNavigate: this.doNavigate.bind(this)
-		});
+		if (!this.hideHeader) {
+			this.headerCmp = this.add({
+				xtype: 'window-header',
+				doClose: this.onClose.bind(this),
+				doNavigate: this.doNavigate.bind(this)
+			});
+		}
 
 		this.loadingEl = this.add({xtype: 'window-loading'});
 

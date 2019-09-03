@@ -1,0 +1,16 @@
+.topic {
+	background: white;
+}
+
+.topic :global(.topic-window .forum-comment-thread) {
+	padding-bottom: 2rem;
+}
+
+.topic :global(.topic-window .window-header) {
+	display: none;
+}
+
+.topic :global(.topic-window .forums-topic-editor-box .forums-topic-editor .editor .main .content) {
+	max-height: 300px;
+	padding: 20px 15px;
+}

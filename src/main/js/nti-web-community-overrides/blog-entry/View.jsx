@@ -4,8 +4,8 @@ import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
 import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
 import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
+import BlogWindow from 'legacy/app/forums/components/blog/Window';
 
-import TopicWindow from 'legacy/app/forums/components/topic/Window';
 import BaseModel from 'legacy/model/Base';
 
 import Registry from '../Registry';
@@ -20,7 +20,7 @@ const t = scoped('nti-web-community-overrides.topic.View', {
 	}
 });
 
-const handles = (obj) => !obj || obj.isTopic;
+const handles = (obj) => obj && obj.isBlogEntry;
 const {Uncontrolled} = Layouts;
 
 export default
@@ -75,64 +75,28 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	async addNewTopic (rec) {
-		const {channel} = this.props;
-
-		if (!channel) { return; }
-
-		try {
-			const topic = await rec.getInterfaceInstance();
-
-			channel.emit('item-added', topic);
-		} catch (e) {
-			//swallow
-		}
-	}
-
 	async updateTopic (rec) {
-		const {topic} = this.props;
-
-		try {
-			const title = rec.get('title');
-			const headline = await rec.get('headline').getInterfaceInstance;
-
-			await topic.refresh({
-				NTIID: topic.NTIID,
-				title,
-				headline
-			});
-
-			topic.onChange();
-		} catch (e) {
-			//swallow
-		}
+		debugger;
 	}
 
 	setupTopic = (renderTo) => {
-		const {topic, channel, focusNewComment, selectedComment} = this.props;
-		const isNewTopic = topic.isNewTopic;
-		const topicModel = isNewTopic ? null : BaseModel.interfaceToModel(topic);
-		const forum = channel.backer ? BaseModel.interfaceToModel(channel.backer) : null;
+		const {topic, focusNewComment, selectedComment} = this.props;
+		const topicModel = BaseModel.interfaceToModel(topic);
 
 		if (this.topicCmp) {
 			this.topicCmp.destroy();
 		}
 
-		this.topicCmp = TopicWindow.create({
+		this.topicCmp = BlogWindow.create({
 			renderTo,
 			record: topicModel,
-			precache: { forum },
 			hideHeader: true,
 			onClose: () => this.onDismiss(),
 			doClose: () => this.onDismiss(),
 			doNavigate: () => {},
 			monitors: {
 				afterSave: (rec) => {
-					if (isNewTopic) {
-						this.addNewTopic(rec);
-					} else {
-						this.updateTopic(rec);
-					}
+					this.updateTopic(rec);
 				}
 			}
 		});

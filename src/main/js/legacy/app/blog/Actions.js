@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Events} = require('@nti/web-session');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
@@ -74,6 +75,9 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		return post.saveData({url: isEdit ? undefined : blog && blog.getLink('add')})
 			.then (response => {
 				var entry = isEdit ? record : lazy.ParseUtils.parseItems(response)[0];
+
+				entry.getInterfaceInstance()
+					.then(obj => Events.emit(isEdit ? Events.BLOG_ENTRY_UPDATED : Events.BLOG_ENTRY_CREATED, obj));
 
 				//the first argument is the record...problem is, it was a post, and the response from the server is
 				// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
@@ -169,6 +173,12 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		return commentPost.saveData({url: isEdit ? undefined : blogPost && blogPost.getLink('add')})
 			.then(function (response) {
 				var rec = isEdit ? commentPost : lazy.ParseUtils.parseItems(response)[0];
+
+				rec.getInterfaceInstance()
+					.then((obj) => {
+						Events.emit(isEdit ? Events.BLOG_COMMENT_UPDATED : Events.BLOG_COMMENT_CREATED, obj);
+					});
+
 				if (!isEdit) {
 					blogPost.set('PostCount', blogPost.get('PostCount') + 1);
 				}
@@ -234,6 +244,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		return new Promise(function (fulfill, reject) {
 			record.destroy({
 				success: function () {
+					Events.emit(Events.BLOG_ENTRY_DELETED, {NTIID: record.getId()});
+
 					me.UserDataActions.applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
 					//Delete anything left that we know of
