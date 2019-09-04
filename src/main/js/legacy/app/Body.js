@@ -371,7 +371,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			id = route.params.id,
 			wasHandled = false;
 
-		function doNavigate (obj, {path}) {
+		function doNavigate (obj, {path, noWindow}) {
 			if (wasHandled) { return; }
 
 			wasHandled = true;
@@ -381,7 +381,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 			objId = encodeForURI(objId);
 
-			if (hasWindow) {
+			if (hasWindow && !noWindow) {
 				path = Globals.trimRoute(path) + '/object/' + objId;
 			}
 
