@@ -75,10 +75,6 @@ class NTIWebCommunityTopic extends React.Component {
 		}
 	}
 
-	async updateTopic (rec) {
-		debugger;
-	}
-
 	setupTopic = (renderTo) => {
 		const {topic, focusNewComment, selectedComment} = this.props;
 		const topicModel = BaseModel.interfaceToModel(topic);
@@ -93,12 +89,7 @@ class NTIWebCommunityTopic extends React.Component {
 			hideHeader: true,
 			onClose: () => this.onDismiss(),
 			doClose: () => this.onDismiss(),
-			doNavigate: () => {},
-			monitors: {
-				afterSave: (rec) => {
-					this.updateTopic(rec);
-				}
-			}
+			doNavigate: () => {}
 		});
 
 		if (focusNewComment) {
