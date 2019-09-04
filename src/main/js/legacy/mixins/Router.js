@@ -23,7 +23,7 @@ function setObjHash (route, obj) {
 }
 
 function shouldAddObjectForCommunityCase (path, obj) {
-	return path[0].isCourse && path[1].isBoard && path[2].isForum && path[3].isTopic && obj.isComment;
+	return path[0].isCourse && path[1].isBoard;
 }
 
 
