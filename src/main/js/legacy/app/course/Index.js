@@ -765,7 +765,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 		let route = `/community/${forumPart}`;
 
-		if (topic) {
+		if (topic && topic.isTopic) {
 			route = `${route}/${encodeForURI(topic.getId())}`;
 		}
 
