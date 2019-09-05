@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 	getRouteForPath: function (path, bundle) {
 		var root = path[0] || {},
 			isAccessible = !!bundle,//this.ContentStore.hasContent(bundle),
-			subPath = path.slice[1],
+			subPath = path.slice(1),
 			route;
 
 		if (root.isBoard) {
@@ -215,5 +215,27 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		route.isAccessible = route.isAccessible === false ? false : isAccessible;
 
 		return route;
+	},
+
+	getRouteForForum (forum, path) {
+		const forumPart = encodeForURI(forum.getId());
+		const topic = path && path[0];
+		const comment = path && path[1];
+
+		let route = `/community/${forumPart}`;
+
+		if (topic && topic.isTopic) {
+			route = `${route}/${encodeForURI(topic.getId())}`;
+		}
+
+		if (comment) {
+			route = `${route}/#${encodeForURI(comment.getId())}`;
+		}
+
+		return {
+			path: route,
+			noWindow: true,
+			isFull: true
+		};
 	}
 });
