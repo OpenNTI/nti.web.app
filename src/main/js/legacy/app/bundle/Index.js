@@ -1,18 +1,17 @@
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 
-const {getString} = require('legacy/util/Localization');
 const PageInfo = require('legacy/model/PageInfo');
-const { isFeature } = require('legacy/util/Globals');
 
-const ContentIndex = require('../content/content/Index');
-const ForumIndex = require('../content/forum/Index');
-const NotebookIndex = require('../content/notebook/Index');
 const ContentStateStore = require('../library/content/StateStore');
 
 const BundleStateStore = require('./StateStore');
 const BundleNavigation = require('./Tabs');
 
+require('../content/content/Index');
+require('../content/forum/Index');
+require('../content/notebook/Index');
+require('./community/Index.js');
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
 
@@ -41,6 +40,10 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		{
 			xtype: 'bundle-notebook',
 			id: 'bundle-notebook'
+		},
+		{
+			xtype: 'bundle-community',
+			id: 'bundle-community'
 		}
 	],
 
@@ -57,6 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.addRoute('/content', this.showContent.bind(this));
 		this.addRoute('/discussions', this.showDiscussions.bind(this));
 		this.addRoute('/notebook', this.showNotebook.bind(this));
+		this.addRoute('/community', this.showCommunity.bind(this));
 
 		this.addDefaultRoute('/content');
 	},
@@ -124,6 +128,8 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 							part = 'discussions';
 						} else if (context === 'notebook') {
 							part = 'notebook';
+						} else if (context === 'community') {
+							part = 'community';
 						}
 
 						return `${base}${part}/`;
@@ -134,52 +140,6 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.navigation.useCommonTabs();
 	},
 
-	xapplyState: function (state) {
-		var bundle = this.activeBundle,
-			active = state.active,
-			tabs = [];
-
-		/**
-		 * Wether or not a view should show its tab
-		 * if the view doesn't have a static showTab then show it,
-		 * otherwise return the value of showTab
-		 * @param  {Object} index the view to check
-		 * @return {Boolean}	  show the tab or not
-		 */
-		function showTab (index) {
-			return !index.showTab || index.showTab(bundle);
-		}
-
-		if (showTab(ContentIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.booktab', 'Book'),
-				route: 'content',
-				subRoute: this.contentRoute,
-				title: 'Book',
-				active: active === 'bundle-content'
-			});
-		}
-
-		if (showTab(ForumIndex)) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
-				route: 'discussions',
-				subRoute: this.discussionsRoute,
-				active: active === 'bundle-forum'
-			});
-		}
-
-		if(showTab(NotebookIndex) && isFeature('show-notebook-tab')) {
-			tabs.push({
-				text: getString('NextThought.view.content.View.notebooktab', 'Notebook'),
-				route: 'notebook',
-				subRoute: this.notebookRoute,
-				active: active === 'bundle-notebook'
-			});
-		}
-
-		this.navigation.setTabs(tabs);
-	},
 
 	showContent: function (route, subRoute) {
 		this.contentRoute = subRoute;
@@ -212,6 +172,18 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			'bundle-forum'
 		]).then(item => {
 			if(item.handleRoute) {
+				item.handleRoute(subRoute, route);
+			}
+		});
+	},
+
+	showCommunity (route, subRoute) {
+		this.communityRoute = subRoute;
+
+		return this.setActiveView('bundle-community', [
+			'bundle-forum'
+		]).then((item) => {
+			if (item.handleRoute) {
 				item.handleRoute(subRoute, route);
 			}
 		});
