@@ -84,8 +84,8 @@ export default class CreateCourse extends Component {
 					/>
 					<Option
 						className="import-course"
+						iconClassName="icon-upload"
 						title={getString('NextThought.view.courseware.assessment.admin.createCourse.import')}
-						description={getString('NextThought.view.courseware.assessment.admin.createCourse.import.description')}
 						onClick={() => this.launchCourseWizard(Templates.Import)}
 					/>
 					{this.state.canCreateScorm && (
