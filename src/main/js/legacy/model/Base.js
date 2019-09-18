@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			const service = await getService();
 			const instance = await service.getObject(this.updatedRaw || this.rawData || this.initialData);
 			
-			if (!Object.hasOwnProperty(instance, INTERFACE_INSTANCE_BACKER)) {
+			if (!(INTERFACE_INSTANCE_BACKER in instance)) {
 				Object.defineProperties(instance, {
 					[INTERFACE_INSTANCE_BACKER]: {
 						writable: false,
