@@ -101,18 +101,26 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 
 	getRouteForPath: function (path, community) {
-		const [/*index*/, forum] = path;
-		const forumId = encodeForURI(forum.getId());
+		const [/*board*/, forum, topic, comment] = path;
 
-		path = '/';
+		let route = '';
 
-		if (!community.isDefaultForum(forum)) {
-			path = '/topic/' + forumId;
+		if (forum) {
+			route = `${route}/${encodeForURI(forum.getId())}`;
+		}
+
+		if (topic) {
+			route = `${route}/${encodeForURI(topic.getId())}`;
+		}
+
+		if (comment) {
+			route = `${route}/#${encodeForURI(comment.getId())}`;
 		}
 
 		return {
-			isFull: true,
-			path: path
+			path: route,
+			noWindow: true,
+			isFull: true
 		};
 	}
 });
