@@ -63,7 +63,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			return Promise.resolve(this.precache.forum);
 		}
 
-		return Service.getObject(topic.get('ContainerId'));
+		return Service.getObject(topic.get('ContainerId'))
+			.catch(() => {
+				return {
+					isMockForum: true,
+					getId: () => topic && topic.get('ContainerId')
+				};
+			});
 	},
 
 	loadTopic: function () {
