@@ -73,6 +73,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		this.NavActions.updateNavBar({
 			hideBranding: true
 		});
+
+		this.NavActions.setActiveContent(null, false, false);
 	},
 
 
