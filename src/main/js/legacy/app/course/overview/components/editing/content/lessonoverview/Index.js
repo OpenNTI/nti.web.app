@@ -91,11 +91,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	beforeSetCollection: function (collection) {
 		this.lessonOverview = collection;
 		this.disableOrderingContainer();
-		this.cacheHeight();
+		// this.cacheHeight();
 	},
 
 	afterSetCollection: function () {
-		this.uncacheHeight();
+		// this.uncacheHeight();
 		this.enableOrderingContainer();
 	},
 
