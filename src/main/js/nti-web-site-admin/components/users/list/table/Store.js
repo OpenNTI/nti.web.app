@@ -104,6 +104,13 @@ class UserListStore extends Stores.BoundStore {
 		}
 	}
 
+	applySearchTerm (term) {
+		this.set({
+			searchTerm: term,
+			pageNumber: 0
+		});
+	}
+
 	async load () {
 		this.set('loading', true);
 
@@ -152,7 +159,6 @@ class UserListStore extends Stores.BoundStore {
 
 			if(this.searchTerm) {
 				params.searchTerm = this.searchTerm;
-				params.batchStart = 0;
 			}
 
 			const siteUsers = await service.getBatch(link, params);
