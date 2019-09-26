@@ -93,26 +93,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onInputChange (value, valid) {
-		if (!valid || !this.rendered) {
-			delete this.lastValid;
-			return;
-		}
+		this.resolveMeta.cancel();
 
-		this.lastValid = value;
-		if (!this.hasValues()) {
-			this.resolveMeta();
+		const blank = this.el && this.el.select('.group.card').hasCls('blocked');
+
+		if (this.reallyRendered && valid && blank) {
+			this.resolveMeta(value);
 		}
 	},
 
-	resolveMeta: buffer(1000, async function () {
-		const uri = this.lastValid;
+	resolveMeta: buffer(1000, async function (uri) {
 		if (!uri) { return; }
-
-		delete this.lastValid;
 		this.setLoading(true);
 		try {
 			const data = await (await getService()).getMetadataFor(uri);
-			this.applyMetadata(data);
+			await this.applyMetadata(data);
 		} finally {
 			this.el.select('.group.card').removeCls('blocked');
 			this.el.select('.group.card input').set({disabled: void 0});
@@ -121,14 +116,26 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	}),
 
-	applyMetadata (data) {
+	async applyMetadata (data) {
 		const { images: [image], title, creator, contentLocation: uri, description } = data;
-		const { url: imageUrl } = image || {};
 		const form = this.getForm();
 		form.setValue('label', title);
 		form.setValue('byline', creator || new URL(uri).host);
 		form.setValue('description', description);
 
-		console.log(imageUrl);
+		if (image) {
+			const service = await getService();
+			const blob = await service.get({url:image.getLink('safeimage'), blob: true});
+
+			const filename = new URL(image.url).pathname.split('/').pop();
+
+			const icon = form.getInputForField('icon');
+			icon.setPreviewFromValue(blob);
+			icon.croppedImage = Object.assign(new File([], filename), {
+				cleanUp: () => {},
+				getBlob: () => blob,
+				getName: () => filename
+			});
+		}
 	}
 });
