@@ -115,8 +115,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.applyMetadata(data);
 		} finally {
 			this.el.select('.group.card').removeCls('blocked');
-			this.el.select('.group.card input').set({disabled: null});
-			this.el.select('.group.card textarea').set({disabled: null});
+			this.el.select('.group.card input').set({disabled: void 0});
+			this.el.select('.group.card textarea').set({disabled: void 0});
 			this.setLoading(false);
 		}
 	}),
