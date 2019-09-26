@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
-	onInputChange: function () {
+	onInputChange: function (e) {
 		const input = this.getInput();
 		const value = this.syncValidator(input.value);
 		const isValid = this.isValid();
@@ -172,7 +172,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 			this.onChange();
 		}
 
-		if (this.schema.onChange) {
+		//only call this when we have an event
+		if (this.schema.onChange && e) {
 			this.schema.onChange.call(this, value, isValid);
 		}
 
