@@ -109,9 +109,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setLoading(true);
 		try {
 			const data = await (await getService()).getMetadataFor(uri);
-			this.el.select('.group.card').removeCls('blocked');
 			this.applyMetadata(data);
 		} finally {
+			this.el.select('.group.card').removeCls('blocked');
 			this.setLoading(false);
 		}
 	}),
