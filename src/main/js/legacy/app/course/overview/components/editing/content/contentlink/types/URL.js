@@ -50,13 +50,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const { href } = this.getForm().getValues();
 		if (href === 'http://' || !this.hasValues()) {
 			this.el.select('.group.card').addCls('blocked');
-		}
+			this.el.select('.group.card input').set({disabled: true});
+			this.el.select('.group.card textarea').set({disabled: true});		}
+
+		this.reallyRendered = true;
 	},
 
 	hasValues () {
 		const form = this.getForm();
 		const { label, byline, description } = form.getValues();
-		return Boolean(label || byline || description);
+		return !Ext.isEmpty(label) || !Ext.isEmpty(byline) || !Ext.isEmpty(description);
 	},
 
 
@@ -112,6 +115,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.applyMetadata(data);
 		} finally {
 			this.el.select('.group.card').removeCls('blocked');
+			this.el.select('.group.card input').set({disabled: null});
+			this.el.select('.group.card textarea').set({disabled: null});
 			this.setLoading(false);
 		}
 	}),
