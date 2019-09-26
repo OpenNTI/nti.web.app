@@ -144,7 +144,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 
 		if (input) {
 			input.addEventListener('change', this.onInputChange.bind(this));
-			// input.addEventListener('keyup', this.onInputChange.bind(this));
+			input.addEventListener('paste', this.onInputChange.bind(this));
+			input.addEventListener('keyup', this.onInputChange.bind(this));
+
 			input.addEventListener('focus', this.onInputFocus.bind(this));
 			input.addEventListener('blur', this.onInputBlur.bind(this));
 		}

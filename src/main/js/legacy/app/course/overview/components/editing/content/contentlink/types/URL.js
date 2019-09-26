@@ -90,7 +90,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onInputChange (value, valid) {
-		console.log(value);
 		if (!valid || !this.rendered) {
 			delete this.lastValid;
 			return;
@@ -119,11 +118,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	applyMetadata (data) {
 		const { images: [image], title, creator, contentLocation: uri, description } = data;
+		const { url: imageUrl } = image || {};
 		const form = this.getForm();
 		form.setValue('label', title);
 		form.setValue('byline', creator || new URL(uri).host);
 		form.setValue('description', description);
 
-		console.log(image);
+		console.log(imageUrl);
 	}
 });
