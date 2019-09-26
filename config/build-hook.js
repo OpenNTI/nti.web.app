@@ -10,10 +10,11 @@ const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const CSS = path.resolve(paths.assetsRoot, 'resources/css');
 const SCSS = path.resolve(paths.assetsRoot, 'resources/scss');
 
+const SPRITE_VARS = path.resolve(paths.assetsRoot, 'resources/scss/utils/_icons.scss');
 const CSSMOD = getLatest(CSS);
 const SCSSMOD = getLatest(SCSS);
 
-if (CSSMOD > SCSSMOD && !(isCI || process.env.NODE_ENV === 'production')) {
+if (CSSMOD >= SCSSMOD && !(isCI || process.env.NODE_ENV === 'production')) {
 	console.log('Legacy styles not modified. skipping.');
 	return;
 }
@@ -26,7 +27,7 @@ if (!checkRequiredFiles([SCSS])) {
 }
 
 fs.removeSync(CSS);
-fs.removeSync(path.resolve(paths.assetsRoot, 'resources/scss/utils/_icons.scss'));
+fs.removeSync(SPRITE_VARS);
 fs.removeSync(path.resolve(paths.assetsRoot, 'resources/images/sprite.png'));
 
 //@spritesmith
@@ -38,19 +39,18 @@ call('sass', f`nti-override`);
 // @postcss --use autoprefixer -r $(SRC)main/resources/css/*.css
 call('postcss', ['--use', 'autoprefixer', '-r', CSS + '/*.css']);
 
+mark(CSS, SCSSMOD);
 
-
-function getLatest (dir) {
-	let latest = 0;
-
+function getLatest (dir, latest = 0) {
 	try {
 
 		for (let file of fs.readdirSync(dir)) {
 			const fullpath = path.join(dir, file);
+			if (fullpath === SPRITE_VARS) {continue;}
 			const s = fs.statSync(fullpath);
 
 			if (s.isDirectory()) {
-				latest = getLatest(fullpath);
+				latest = getLatest(fullpath, latest);
 			}
 
 			else if (s.mtime > latest) {
@@ -63,4 +63,23 @@ function getLatest (dir) {
 	}
 
 	return latest;
+}
+
+
+async function mark (dir, time) {
+	const pending = [];
+
+	for (let file of await fs.readdir(dir)) {
+		const fullpath = path.join(dir, file);
+		const s = await fs.stat(fullpath);
+
+		if (s.isDirectory()) {
+			pending.push(mark(fullpath, time));
+			continue;
+		}
+
+		pending.push(fs.utimes(fullpath, time, time));
+	}
+
+	await Promise.all(pending);
 }
