@@ -10,6 +10,9 @@ $slidedeck-selected-background: rgba(41, 41, 41, 0.5);
 
 $experimental-support-for-svg: true;
 
+$inactive-text-color: rgba(255, 255, 255, 0.6);
+$active-text-color: rgba(255, 255, 255, 1);
+
 @mixin slide-button {
 	padding: 5px 16px;
 	border-radius: 3px;
@@ -758,7 +761,7 @@ $experimental-support-for-svg: true;
 		}
 		padding-left: 108px;
 		width: 860px;
-		color: $secondary-grey;
+		color: $inactive-text-color;
 		font: 14px normal $font;
 
 		.control-container{
@@ -961,7 +964,7 @@ body.media-viewer-closing {
 	right: 0 !important;
 	left: 0 !important;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
-	background: rgba(0, 0, 0, 0.7) !important;
+	background: rgba(0, 0, 0, 0.8) !important;
 	display: none;
 	z-index: 199 !important;
 	backface-visibility: hidden;
@@ -1579,7 +1582,7 @@ body.media-viewer-closing {
 
 		.cue{
 			padding: 3px;
-			color: $secondary-grey;
+			color: $inactive-text-color;
 			font: 14px normal $font;
 			cursor: pointer;
 
@@ -1589,7 +1592,7 @@ body.media-viewer-closing {
 			&.active, &.current, &:active, &:hover{
 				background: #313233;
 				border-radius: 3px;
-				color: $tertiary-grey;
+				color: $active-text-color;
 			}
 		}
 
@@ -1673,7 +1676,7 @@ body.media-viewer-closing {
 
 	.x-component-video-title{
 		margin-top: 40px;
-		color: $secondary-grey;
+		color: $inactive-text-color;
 		padding-right: 60px;//leave room for the note gutter
 
 		.control-container{
