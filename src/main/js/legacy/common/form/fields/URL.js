@@ -143,7 +143,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 		var input = this.getInput();
 
 		if (input) {
-			input.addEventListener('keyup', this.onInputChange.bind(this));
+			input.addEventListener('change', this.onInputChange.bind(this));
+			// input.addEventListener('keyup', this.onInputChange.bind(this));
 			input.addEventListener('focus', this.onInputFocus.bind(this));
 			input.addEventListener('blur', this.onInputBlur.bind(this));
 		}
@@ -161,14 +162,19 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 
 
 	onInputChange: function () {
-		var input = this.getInput(),
-			value = this.syncValidator(input.value);
+		const input = this.getInput();
+		const value = this.syncValidator(input.value);
+		const isValid = this.isValid();
 
 		if (this.onChange) {
 			this.onChange();
 		}
 
-		if (this.isValid()) {
+		if (this.schema.onChange) {
+			this.schema.onChange.call(this, value, isValid);
+		}
+
+		if (isValid) {
 			this.urlField.addCls('valid');
 			this.previewEl.dom.setAttribute('href', value);
 		} else {

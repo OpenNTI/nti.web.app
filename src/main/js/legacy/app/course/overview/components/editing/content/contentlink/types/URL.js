@@ -1,4 +1,6 @@
 const Ext = require('@nti/extjs');
+const {getService} = require('@nti/web-client');
+const {buffer} = require('@nti/lib-commons');
 
 const RelatedWork = require('legacy/model/RelatedWork');
 
@@ -44,6 +46,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent(arguments);
 
 		this.formCmp.setPlaceholder('icon', RelatedWork.getIconForURL());
+
+		const { href } = this.getForm().getValues();
+		if (href === 'http://' || !this.hasValues()) {
+			this.el.select('.group.card').addCls('blocked');
+		}
+	},
+
+	hasValues () {
+		const form = this.getForm();
+		const { label, byline, description } = form.getValues();
+		return Boolean(label || byline || description);
 	},
 
 
@@ -70,9 +83,47 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		base.push({type: 'hidden', name: 'targetMimeType'});
 
 		if (!this.record || this.record.hasLink('edit-target')) {
-			base.unshift({type: 'url', name: 'href', required: true});
+			base.unshift({type: 'url', name: 'href', required: true, onChange: this.onInputChange.bind(this)});
 		}
 
 		return base;
+	},
+
+	onInputChange (value, valid) {
+		console.log(value);
+		if (!valid || !this.rendered) {
+			delete this.lastValid;
+			return;
+		}
+
+		this.lastValid = value;
+		if (!this.hasValues()) {
+			this.resolveMeta();
+		}
+	},
+
+	resolveMeta: buffer(1000, async function () {
+		const uri = this.lastValid;
+		if (!uri) { return; }
+
+		delete this.lastValid;
+		this.setLoading(true);
+		try {
+			const data = await (await getService()).getMetadataFor(uri);
+			this.el.select('.group.card').removeCls('blocked');
+			this.applyMetadata(data);
+		} finally {
+			this.setLoading(false);
+		}
+	}),
+
+	applyMetadata (data) {
+		const { images: [image], title, creator, contentLocation: uri, description } = data;
+		const form = this.getForm();
+		form.setValue('label', title);
+		form.setValue('byline', creator || new URL(uri).host);
+		form.setValue('description', description);
+
+		console.log(image);
 	}
 });
