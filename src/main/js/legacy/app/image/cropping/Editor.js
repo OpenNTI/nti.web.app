@@ -40,8 +40,8 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Editor', {
 			]
 		});
 
-		if (this.img) {
-			this.canvas.setImage(this.img);
+		if (this.image) {
+			this.canvas.setImage(this.image);
 		} else if (this.src) {
 			this.canvas.loadImage(this.src);
 		}
