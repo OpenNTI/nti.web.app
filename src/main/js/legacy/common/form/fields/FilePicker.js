@@ -272,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 	},
 
 
-	selectCourseResource (e) {
+	async selectCourseResource (e) {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -282,11 +282,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		const accept = x => !x.isFolder && (!this.acceptsContentFileFilter || this.acceptsContentFileFilter(x));
 		const filter = x => !this.contentFileFilter || this.contentFileFilter(x);
 
-		ContentResources.selectFrom(sourceID, accept, filter)
-			.then(file => {
-				this.currentFile = file.getID();
-				this.onFileChange(file);
-			});
+		try {
+			const file = await ContentResources.selectFrom(sourceID, accept, filter);
+			this.currentFile = file.getID();
+			this.onFileChange(file);
+		} catch {
+			// Cancled
+		}
 	},
 
 
