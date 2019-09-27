@@ -1,3 +1,5 @@
+const path = require('path');
+
 const Ext = require('@nti/extjs');
 
 const PromptActions = require('legacy/app/prompt/Actions');
@@ -110,31 +112,32 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		return this.callParent(arguments);
 	},
 
-	onFileChange: function (file) {
-		var me = this,
-			url = file.url || me.createObjectURL(file);
+	async onFileChange (file, auto) {
+		const url = file.url || this.createObjectURL(file);
 
-		me.PromptActions.prompt('image-cropping', {
-			src: url,
-			name: file.name,
-			crop: {
-				minWidth: me.schema.width,
-				minHeight: me.schema.height,
-				aspectRatio: me.schema.width / me.schema.height
-			}
-		})
-			.then(function (blob) {
-				me.croppedImage = blob;
-				me.setPreviewFromCrop(blob);
-			})
-			.catch(function () {
-				me.onClearImage();
-			})
-			.always(function () {
-				if (!file.url) {
-					me.cleanUpObjectURL(url);
+		try {
+			const blob = await this.PromptActions.prompt('image-cropping', {
+				src: url,
+				name: file.name,
+				auto,
+				crop: {
+					minWidth: this.schema.width,
+					minHeight: this.schema.height,
+					aspectRatio: this.schema.width / this.schema.height,
 				}
 			});
+
+			this.croppedImage = blob;
+			this.setPreviewFromCrop(blob);
+		}
+		catch {
+			this.onClearImage();
+		}
+		finally {
+			if (!file.url) {
+				this.cleanUpObjectURL(url);
+			}
+		}
 	},
 
 	setPreviewURL: function (url) {
@@ -159,6 +162,22 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		else {
 			this.updateTooltip(true);
 		}
+	},
+
+	setValueFromBlob ( blob, src ) {
+		src = new URL(src || 'blob', global.location.href);
+
+		this.onFileChange(blob, true);
+		/*
+		const filename = path.basename(src.pathname);
+		this.setPreviewFromValue(blob);
+		this.fileContainer.removeCls('no-file');
+		this.fileContainer.addCls('has-file');
+		this.croppedImage = Object.assign(new File([], filename), {
+			cleanUp: () => {},
+			getBlob: () => blob,
+			getName: () => filename
+		});*/
 	},
 
 	setPreviewFromValue: function (value) {

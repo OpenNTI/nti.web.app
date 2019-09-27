@@ -732,6 +732,18 @@ form.common-form {
 			margin-top: -4px;
 		}
 	}
+
+	&.loading a {
+		position: relative;
+		color: rgba(0,0,0,0);
+		text-indent: -500px;
+		pointer-events: none;
+
+		&::after {
+			margin: 0;
+			@include loadingSpinner($top: 6px, $left: 34px);
+		}
+	}
 }
 
 

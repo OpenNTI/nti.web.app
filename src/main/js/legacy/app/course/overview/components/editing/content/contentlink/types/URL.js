@@ -94,25 +94,40 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	onInputChange (value, valid) {
 		this.resolveMeta.cancel();
-
-		const blank = this.el && this.el.select('.group.card').hasCls('blocked');
-
-		if (this.reallyRendered && valid && blank) {
+		if (this.reallyRendered && valid) {
 			this.resolveMeta(value);
 		}
 	},
 
 	resolveMeta: buffer(1000, async function (uri) {
-		if (!uri) { return; }
-		this.setLoading(true);
+		this.matadataCache = this.matadataCache || {};
+
+		const blank = this.el.select('.group.card').hasCls('blocked');
+
+		if (!uri || !blank || this.matadataCache[uri]) { return; }
+
+
+		const nonce = {};
+
 		try {
-			const data = await (await getService()).getMetadataFor(uri);
-			await this.applyMetadata(data);
+			this.el.select('.group.card').addCls('blocked');
+			this.el.select('.url-field').addCls('loading');
+			this.resolveNonce = nonce;
+
+			const data = this.matadataCache[uri] = await (await getService()).getMetadataFor(uri);
+
+			if (this.resolveNonce === nonce) {
+				await this.applyMetadata(data);
+			}
+
 		} finally {
-			this.el.select('.group.card').removeCls('blocked');
-			this.el.select('.group.card input').set({disabled: void 0});
-			this.el.select('.group.card textarea').set({disabled: void 0});
-			this.setLoading(false);
+			if (this.resolveNonce === nonce) {
+				delete this.resolveNonce;
+				this.el.select('.url-field').removeCls('loading');
+				this.el.select('.group.card').removeCls('blocked');
+				this.el.select('.group.card input').set({disabled: void 0});
+				this.el.select('.group.card textarea').set({disabled: void 0});
+			}
 		}
 	}),
 
@@ -127,15 +142,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			const service = await getService();
 			const blob = await service.get({url:image.getLink('safeimage'), blob: true});
 
-			const filename = new URL(image.url).pathname.split('/').pop();
-
-			const icon = form.getInputForField('icon');
-			icon.setPreviewFromValue(blob);
-			icon.croppedImage = Object.assign(new File([], filename), {
-				cleanUp: () => {},
-				getBlob: () => blob,
-				getName: () => filename
-			});
+			form.getInputForField('icon')
+				.setValueFromBlob(blob, image.url);
 		}
 	}
 });
