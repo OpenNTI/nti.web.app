@@ -80,6 +80,18 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		};
 	},
 
+	calculateAspect (imageInfo) {
+		return this.aspectLocked || (imageInfo.width / imageInfo.height);
+	},
+
+	calculateSelectionWidth (h, imageInfo) {
+		return Math.ceil(this.calculateAspect(imageInfo) * h);
+	},
+
+	calculateSelectionHeight (w, imageInfo) {
+		return Math.ceil(w / this.calculateAspect(imageInfo));
+	},
+
 	getSelection: function (x, y, width, height, imageInfo) {
 		var minWidth = this.crop.minWidth || Infinity,
 			minHeight = this.crop.minHeight || Infinity,
@@ -100,42 +112,34 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 			};
 		}
 
-		function getHeight (w) {
-			return Math.ceil(w / aspectRatio);
-		}
-
-		function getWidth (h) {
-			return Math.ceil(aspectRatio * h);
-		}
-
 		if (!width && !height) {
 			width = imageInfo.width;
 		}
 
 		if (width && !height) {
-			height = getHeight(width);
+			height = this.calculateSelectionHeight(width, imageInfo);
 		} else if (height) {
-			width = getWidth(height);
+			width = this.calculateSelectionWidth(height, imageInfo);
 		}
 
 		if (x + width > imageInfo.width) {
 			width = imageInfo.width - x;
-			height = getHeight(width);
+			height = this.calculateSelectionHeight(width, imageInfo);
 		}
 
 		if (y + height > imageInfo.height) {
 			height = imageInfo.height - y;
-			width = getWidth(height);
+			width = this.calculateSelectionWidth(height, imageInfo);
 		}
 
 		if (width < minWidth) {
 			width = minWidth;
-			height = getHeight(width);
+			height = this.calculateSelectionHeight(width, imageInfo);
 		}
 
 		if (height < minHeight) {
 			height = minHeight;
-			width = getWidth(height);
+			width = this.calculateSelectionWidth(height, imageInfo);
 		}
 
 		return {
@@ -223,9 +227,13 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		};
 
 		if (imgSize.height > imgSize.width) {
-			selection = this.getSelection(0, 0, imgSize.width, null, this.imageInfo);
+			let h = this.calculateSelectionHeight(imgSize.width, this.imageInfo);
+			y = Math.round((imgSize.height - h) / 2);
+			selection = this.getSelection(0, y, imgSize.width, null, this.imageInfo);
 		} else {
-			selection = this.getSelection(0, 0, null, imgSize.height, this.imageInfo);
+			let w = this.calculateSelectionWidth(imgSize.height, this.imageInfo);
+			x = Math.round((imgSize.width - w) / 2);
+			selection = this.getSelection(x, 0, null, imgSize.height, this.imageInfo);
 		}
 
 		this.selection = selection;
