@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Editor', {
 	cls: 'image-cropping-editor',
 	items: [],
 
-	initComponent: function () {
+	initComponent () {
 		this.callParent(arguments);
 
 		this.canvas = this.add({
@@ -40,20 +40,20 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Editor', {
 			]
 		});
 
-		if (this.image) {
-			this.canvas.setImage(this.image);
-		} else if (this.src) {
-			this.canvas.loadImage(this.src);
-		}
+		this.imageReady = (this.image)
+			? this.canvas.setImage(this.image)
+			: this.src
+				? this.canvas.loadImage(this.src)
+				: Promise.reject('No Source');
 	},
 
-	doRotate: function () {
+	doRotate () {
 		if (this.canvas) {
 			this.canvas.rotate();
 		}
 	},
 
-	onSave: function () {
+	onSave () {
 		if (this.canvas) {
 			return this.canvas.getValue();
 		}

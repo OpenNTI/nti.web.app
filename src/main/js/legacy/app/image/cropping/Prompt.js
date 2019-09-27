@@ -25,8 +25,12 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
 		this.Prompt.Footer.enableSave();
 	},
 
-	load (src) {
+	async load (src) {
 		this.editor = this.add({ xtype: 'image-cropping-editor', ...src });
+		if (src.auto) {
+			await this.editor.imageReady;
+			this.Prompt.doSave();
+		}
 	},
 
 	showError () {

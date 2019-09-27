@@ -69,6 +69,8 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 			scrollingParent: this.el,
 			cmp: cmp,
 			data: data,
+			hidden: data.auto,
+			hideMode: 'visibility',
 			onSubmit: function (value) {
 				close()
 					.then(function () {

@@ -40,10 +40,11 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		}
 
 		this.mon(this.el, {
-			mousedown: this.onMouseDown.bind(this),
-			mouseup: this.onMouseUp.bind(this),
-			mousemove: this.onMouseMove.bind(this),
-			mouseout: this.onMouseOut.bind(this)
+			scope: this,
+			mousedown: 'onMouseDown',
+			mouseup: 'onMouseUp',
+			mousemove: 'onMouseMove',
+			mouseout: 'onMouseOut'
 		});
 	},
 
@@ -183,16 +184,20 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		this.loadImage(c.toDataURL('image/png'));
 	},
 
-	loadImage: function (src) {
-		var img = new Image();
+	async loadImage (src) {
+		const img = await new Promise((loaded, error) => {
+			var x = new Image();
 
-		img.onerror = this.clear.bind(this);
-		img.onload = this.setImage.bind(this, img);
+			x.onerror = error;
+			x.onload = () => loaded(x);
 
-		img.src = src;
+			x.src = src;
+		});
+
+		return this.setImage(img);
 	},
 
-	setImage: function (img) {
+	async setImage (img) {
 		if (!this.rendered) {
 			this.image = img;
 			return;
