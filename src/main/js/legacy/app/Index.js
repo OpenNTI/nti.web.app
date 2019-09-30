@@ -20,7 +20,8 @@ Commons.Prompt.Manager.setAllowedExternalFocus((target) => {
 	return el && (
 		el.findParent('.window-container') ||
 		el.findParent('.search-field') ||
-		el.findParent('.prompt-container')
+		el.findParent('.prompt-container') ||
+		el.findParent('.recovery-email-view')
 	);
 });
 
