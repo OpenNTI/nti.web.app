@@ -218,6 +218,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
+	onReactivated () {
+		delete this.initialLoad;
+		this.applyState(this.getStoreState());
+	},
+
 	restoreState: function (state, fromAfterRender) {
 		//if this is coming form after render and we've already restored
 		//a state don't overwrite it. The main reason this is here is so

@@ -94,6 +94,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (root !== active) {
 			layout.setActiveItem(root);
+
+			if (this.items.length > 1) {
+				root.onReactivated();
+			}
+
 			Ext.destroy(this.items.getRange(1));
 		}
 	},
