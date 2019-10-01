@@ -18,7 +18,8 @@ const cx = classnames.bind(Styles);
 const handles = (obj) => obj &&  obj.isNote;
 const {Uncontrolled} = Layouts;
 const t = scoped('nti-web-community-overrides.note.View', {
-	title: 'Posted in %(channelName)s'
+	title: 'Posted in %(channelName)s',
+	deletedChannel: 'Deleted Item'
 });
 
 export default
@@ -142,7 +143,7 @@ class NTIWebCommunityNote extends React.Component {
 
 	render () {
 		const {topic, loading} = this.props;
-		const title = topic ? t('title', {channelName: topic.ContainerTitle}) : '';
+		const title = topic ? t('title', {channelName: topic.ContainerTitle || t('deletedChannel')}) : '';
 
 		return (
 			<Prompt.PagingWindow
