@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		if (!newState.cmps.length && this.emptyText) {
 			newState.cmps.push(me.getEmptyState());
 			this.clearCollection();
-			body.add(newState.cmps);
+			newState.cmps = body.add(newState.cmps);
 			return newState;
 		}
 
@@ -284,7 +284,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 			}
 
 			if (newCmp) {
-				body.insert(i, newCmp);
+				newState.cmps[i] = body.insert(i, newCmp);
 			}
 		}
 
@@ -313,7 +313,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 
 		body.suspendEvents();
-		body.add(state.cmps);
+		state.cmps = body.add(state.cmps);
 		body.resumeEvents();
 
 		return state;
