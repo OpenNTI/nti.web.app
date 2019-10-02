@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 
 	inputTpl: Ext.DomHelper.markup({ cls: 'multi-choice {choice-style}', cn: [{
 		tag: 'tpl', 'for': 'choices', cn: [{
-			cls: 'choice', role: 'button', tabIndex: '{[xindex-1+parent.tabIndex]}', 'data-index': '{[xindex-1]}',//xindex is 1 based
+			cls: 'choice', role: 'button', tabIndex: '1', 'data-index': '{[xindex-1]}',//xindex is 1 based
 			cn: [
 				{ tag: 'span', cls: 'control tabable'},
 				{ tag: 'span', cls: 'label', html: '{[String.fromCharCode(64+xindex)]}.' },
