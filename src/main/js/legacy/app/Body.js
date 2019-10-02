@@ -615,7 +615,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		}
 
 		route.path = Globals.trimRoute(route.path);
-		route.path = '/community/' + id + '/' + route.path;
+		route.path = '/community/' + encodeURIComponent(id) + '/' + route.path;
 
 		return route;
 	},
