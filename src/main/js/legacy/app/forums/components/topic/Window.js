@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
+const {scoped} = require('@nti/lib-locale');
 const {Forums} = require('@nti/web-discussions');
+const {Prompt} = require('@nti/web-commons');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const WindowsStateStore = require('legacy/app/windows/StateStore');
@@ -20,6 +22,10 @@ require('./parts/Editor');
 require('./parts/Pager');
 require('./parts/Topic');
 require('./parts/CommentControls');
+
+const text = scoped('nti-web-app.app.forums.components.topic.Window', {
+	notFound: 'Unable to load item.'
+});
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.Window', {
@@ -58,6 +64,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		this.doClose(this.activeTopic);
 	},
 
+	onNoAccess () {
+		this.doClose();
+		Prompt.alert(text('notFound'));
+	},
+
 	loadForum: function (topic) {
 		if (this.precache.forum) {
 			return Promise.resolve(this.precache.forum);
@@ -85,7 +96,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 				if (me.headerCmp) {
 					me.headerCmp.showPathFor(me.record, me.record.get('title'));
 				}
-			});
+			})
+			.catch(() => this.onNoAccess());
 	},
 
 	loadComment: function () {
@@ -107,7 +119,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 				if (me.headerCmp) {
 					me.headerCmp.showPathFor(topic);
 				}
-			});
+			})
+			.catch(() => this.onNoAccess());
 	},
 
 	loadPost: function () {
