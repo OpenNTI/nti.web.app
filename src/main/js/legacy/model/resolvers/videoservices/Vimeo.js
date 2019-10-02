@@ -5,6 +5,9 @@ const BatchExecution = require('legacy/util/BatchExecution');
 
 const schedular = new BatchExecution({batchSize: 5});
 
+const domain = global.location ? '' : `&domain=${encodeURIComponent(global.location.hostname)}`;
+const size = '&width=960';
+
 module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 	alias: 'resolvers.videoservices.vimeo',
 
@@ -14,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 		RESOLVED: {},
 
 		//URL: '//vimeo.com/api/v2/video/{0}.json',
-		URL: 'https://vimeo.com/api/oembed.json?url=http%3A//vimeo.com/{0}',
+		URL: `https://vimeo.com/api/oembed.json?url=http%3A//vimeo.com/{0}${domain}${size}`,
 
 		getVideo (id) {
 			const url = Ext.String.format(this.URL, id);
