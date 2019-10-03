@@ -513,7 +513,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.addCls('not-submitted');
 		this.showPreview();
 		this.setPreviewFromInput(v);
-		this.setDownloadButton(v.download_url || v.url);
+		this.setDownloadButton(v.url || v.download_url);
 	},
 
 
@@ -525,7 +525,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.setPreviewFromInput(v);
 		this.removeCls('not-submitted');
 
-		const url = v.download_url || v.url;
+		const url = v.url || v.download_url;
 		this.setDownloadButton(url);
 		if (!url) {
 			this.previewLinkEl.hide();
