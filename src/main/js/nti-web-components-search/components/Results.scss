@@ -1,7 +1,6 @@
 @import "~@nti/style-common";
 
 .hit-fragment {
-	margin-bottom: 5px;
 	display: inline;
 }
 
@@ -26,7 +25,7 @@
 	font-family: "Open Sans";
 	font-size: 14px;
 	line-height: 25px;
-	color: #B8B8B8;
+	color: #b8b8b8;
 }
 
 .hit-title {
@@ -34,15 +33,15 @@
 	font-size: 18px;
 	font-weight: 500;
 	line-height: 24px;
-	color: #3FB3F6;
+	color: #3fb3f6;
 	cursor: pointer;
 }
 
 .search-advanced-menu-react.search-advanced-menu {
 	margin: 20px 0;
 	height: 50px;
-	background-color: #FBFBFB;
-	box-shadow: inset 0 -1px 0 0 #E2E2E2;
+	background-color: #fbfbfb;
+	box-shadow: inset 0 -1px 0 0 #e2e2e2;
 }
 
 .search-advanced-menu-react.search-advanced-menu > .search-option {
@@ -57,8 +56,8 @@
 	margin-right: 0;
 
 	&.active {
-		color: #3FB3F6;
-		box-shadow: inset 0 -1px 0 0 #3FB3F6;
+		color: #3fb3f6;
+		box-shadow: inset 0 -1px 0 0 #3fb3f6;
 	}
 }
 
@@ -90,18 +89,18 @@
 }
 
 .pagination-item {
-	border: 1px solid #EFEFEF;
+	border: 1px solid #efefef;
 	display: inline-block;
 	margin-right: 10px;
-	color: #B8B8B8;
+	color: #b8b8b8;
 	line-height: 19px;
 	height: 40px;
 	width: 40px;
 	cursor: pointer;
 
 	&.active {
-		color: #FFFFFF;
-		background-color: #3FB3F6;
+		color: #fff;
+		background-color: #3fb3f6;
 	}
 }
 
@@ -127,7 +126,7 @@
 
 .next-results-page {
 	display: inline-block;
-	color: #B8B8B8;
+	color: #b8b8b8;
 	line-height: 19px;
 	height: 40px;
 	width: 40px;
@@ -136,7 +135,7 @@
 .next-results-page-button {
 	display: inline-block;
 	cursor: pointer;
-	color: #3FB3F6;
+	color: #3fb3f6;
 	font-size: 14px;
 	font-weight: bold;
 	white-space: nowrap;
@@ -157,7 +156,7 @@
 
 .prev-results-page {
 	display: inline-block;
-	color: #B8B8B8;
+	color: #b8b8b8;
 	line-height: 19px;
 	height: 40px;
 	width: 20px;
