@@ -4,10 +4,10 @@ const {ControlBar} = require('@nti/web-content');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { StickyToolbar } = require('@nti/web-content');
 const {wait} = require('@nti/lib-commons');
-const {getService} = require('@nti/web-client');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 const SearchStateStore = require('legacy/app/search/StateStore');
+const BaseModel = require('legacy/model/Base');
 
 require('legacy/common/menus/JumpTo');
 require('./TableOfContents');
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 				const container = Containers[0];
 				const frag = Fragments[0];
 
-				this.SearchStore.setHitForContainer(container, obj, frag);
+				this.SearchStore.setHitForContainer(container, BaseModel.interfaceToModel(obj), BaseModel.interfaceToModel(frag));
 				this.doNavigation(obj.ContainerTitle, encodeForURI(container));
 			};
 		}
