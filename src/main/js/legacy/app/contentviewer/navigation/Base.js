@@ -4,8 +4,10 @@ const {ControlBar} = require('@nti/web-content');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const { StickyToolbar } = require('@nti/web-content');
 const {wait} = require('@nti/lib-commons');
+const {getService} = require('@nti/web-client');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
+const SearchStateStore = require('legacy/app/search/StateStore');
 
 require('legacy/common/menus/JumpTo');
 require('./TableOfContents');
@@ -94,6 +96,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		data.renderTpl = data.renderTpl.replace('{headerContents}', data.headerTpl || '');
 	},
 
+
+	initComponent () {
+		this.callParent(arguments);
+
+		this.SearchStore = SearchStateStore.getInstance();
+	},
+
+
 	beforeRender: function () {
 		this.callParent(arguments);
 
@@ -148,6 +158,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 				parts[0] = encodeForURI(parts[0]);
 
 				this.doNavigation('', parts.join('#'));
+			};
+		} else if (obj.isContentUnitSearchHit) {
+			return () => {
+				const {Containers, Fragments} = obj;
+				const container = Containers[0];
+				const frag = Fragments[0];
+
+				this.SearchStore.setHitForContainer(container, obj, frag);
+				this.doNavigation(obj.ContainerTitle, encodeForURI(container));
 			};
 		}
 	},
