@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 	cls: 'identity x-menu',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'profile-pic', 'data-qtip': '{user:displayName}', cn: [
+		{cls: 'profile-pic', 'data-qtip': '{user:displayName}', tabindex: '0', title: '{user:displayName}', tag:'a' ,cn: [
 			'{user:avatar}',
 			{cls: 'presence'}
 		]}
@@ -48,6 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 					if (profile) {
 						a = NTIFormat.avatar(r);
 						profile.dom.innerHTML = a;
+						profile.dom.setAttribute('aria-hidden', 'true');
 						profile.set({'data-qtip': r.getName()});
 					}
 
