@@ -24,8 +24,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'back-container', cn: [
-			{cls: 'branding', tabindex: '0', title: 'Home', tag: 'a'},
-			{cls: 'back', tabindex: '0', title: 'Back', tag: 'a', cn: [
+			{cls: 'branding', tabindex: '0', 'aria-label': 'Home', tag: 'a'},
+			{cls: 'back', tabindex: '0', 'aria-label': 'Back', tag: 'a', cn: [
 				{ cls: 'icon-remove' }
 			]}
 		]},

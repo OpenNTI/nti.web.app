@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 			{
 				cls: 'search-field',
 				tabindex: '0',
-				title: 'search',
+				'aria-label': 'search',
 				tag: 'a',
 				cn: [
 					{cls: 'input-container'},
