@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ta
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'chat-notifications-icon', role: 'button', tabindex: '0', title: 'Chat Notifications'}
+		{cls: 'chat-notifications-icon', role: 'button', tabindex: '0', 'aria-label': 'Chat Notifications'}
 	]),
 
 	afterRender: function () {
