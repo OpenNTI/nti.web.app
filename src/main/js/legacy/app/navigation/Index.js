@@ -24,16 +24,16 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'back-container', cn: [
-			{cls: 'branding', tag: 'a', title: 'Home', tabIndex: '1'},
-			{cls: 'back', cn: [
+			{cls: 'branding', tabindex: '0', title: 'Home', tag: 'a'},
+			{cls: 'back', tabindex: '0', title: 'Back', tag: 'a', cn: [
 				{ cls: 'icon-remove' }
 			]}
 		]},
 		{cls: 'nav-container'},
 		{cls: 'search-container collapsed'},
 		{cls: 'icons', cn: [
-			{cls: 'chat-notification-container', tag: 'a', title: 'Chat Notifications', tabindex: '0'},
-			{cls: 'notification-container', tag: 'a', title: 'Notifications', tabindex: '0'},
+			{cls: 'chat-notification-container'},
+			{cls: 'notification-container'},
 			{cls: 'identity-container'}
 		]}
 	]),

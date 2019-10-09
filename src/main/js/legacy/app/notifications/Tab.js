@@ -8,7 +8,11 @@ require('./components/TabView');
 module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 	extend: 'Ext.Component',
 	alias: 'widget.notifications-tab',
-	cls: 'notifications-icon',
+
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'notifications-icon', role: 'button', tabindex: '0', title: 'Notifications'}
+	]),
 
 	initComponent: function () {
 		this.callParent(arguments);

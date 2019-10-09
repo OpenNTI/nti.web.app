@@ -8,7 +8,10 @@ const NavigationStateStore = require('legacy/app/navigation/StateStore');
 module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Tab', {
 	extend: 'Ext.Component',
 
-	cls: 'chat-notifications-icon',
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'chat-notifications-icon', role: 'button', tabindex: '0', title: 'Chat Notifications'}
+	]),
 
 	afterRender: function () {
 		this.callParent(arguments),

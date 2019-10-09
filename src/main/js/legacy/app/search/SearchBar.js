@@ -32,9 +32,12 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		cn: [
 			{
 				cls: 'search-field',
+				tabindex: '0',
+				title: 'search',
+				tag: 'a',
 				cn: [
 					{cls: 'input-container'},
-					{tag: 'a', href: '#', cls: 'trigger'},
+					{cls: 'trigger'},
 					{cls: 'search-icon'}
 				]
 			}
