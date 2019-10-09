@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		bundle = bundle && bundle.isModel ? bundle.getId() : bundle;
 		location = location && location.isModel ? location.getId() : location;
 
-		location = location || bundle || Globals.CONTENT_ROOT;
+		location = Globals.CONTENT_ROOT;
 
 		url = cachedHref || [rootUrl, location, '/', term].join('');
 
