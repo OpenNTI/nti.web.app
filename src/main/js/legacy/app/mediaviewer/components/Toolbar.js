@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([{
 		cls: 'left', cn: [
-			{cls: 'control back-button', 'data-qtip': 'Exit', tabindex: '1', title: 'Exit'},
+			{cls: 'control back-button', 'data-qtip': 'Exit', tabindex: '1', title: 'Exit', tag: 'a'},
 			{cls: 'navigation', cn: [
 				'{[this.splitNumberFromTitle(values)]}',
 				{tag: 'tpl', 'if': 'sectionNumber', cn: [

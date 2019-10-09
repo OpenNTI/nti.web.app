@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 	cls: 'identity x-menu',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'profile-pic', 'data-qtip': '{user:displayName}', tabindex: '0', title: '{user:displayName}', tag:'a' ,cn: [
+		{cls: 'profile-pic', 'data-qtip': '{user:displayName}', tabindex: '0', title: '{user:displayName}', role: 'button' ,cn: [
 			'{user:avatar}',
 			{cls: 'presence'}
 		]}
