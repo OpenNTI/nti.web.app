@@ -163,9 +163,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			return () => {
 				const {Containers, Fragments} = obj;
 				const container = Containers[0];
-				const frag = Fragments[0];
+				const frag = Fragments && Fragments[0];
 
-				this.SearchStore.setHitForContainer(container, BaseModel.interfaceToModel(obj), BaseModel.interfaceToModel(frag));
+				if (frag) {
+					this.SearchStore.setHitForContainer(container, BaseModel.interfaceToModel(obj), BaseModel.interfaceToModel(frag));
+				}
+
 				this.doNavigation(obj.ContainerTitle, encodeForURI(container));
 			};
 		}
