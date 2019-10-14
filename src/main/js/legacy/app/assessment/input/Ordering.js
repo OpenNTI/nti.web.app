@@ -12,12 +12,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		{'tag': 'tpl', 'for': 'ordinals', cn: [{
 			cls: 'ordinal', cn: [
 				{ cls: 'label', 'data-part': '{[xindex-1]}', html: '{label}' },
-				{ cls: 'draggable-area', 'data-ordinal': '{[xindex-1]}', cn: [
+				{ cls: 'draggable-area', 'data-ordinal': '{[xindex-1]}', tabindex: '1', cn: [
 					{cls: 'controls', cn: [
 						{ tag: 'span', cls: 'control'},
 						{ tag: 'span', cls: 'drag-control'}
 					]},
-					{ cls: 'text', html: '{value}' }
+					{ cls: 'text', html: '{value}'}
 				]}
 			]}
 		]}
@@ -68,6 +68,42 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		me.initializeDragZone();
 		me.initializeDropZone();
 		dragzoneEl.dom.id = Ext.id();
+
+		this.addFocusListener();
+		console.log('adding focus listeners');
+	},
+
+	//CLEAN UP AND TEST WITH MORE THAN 2 ORDERING LISTS!!!!!!
+	addFocusListener: function () {
+		//get all draggable elements
+		var elements = document.getElementsByClassName('draggable-area');
+
+		var _OutOfX = [];
+
+		var i = 1;
+		for(i; i < elements.length; i++) {
+			var currNum = 0;
+			if(parseInt(elements[i].getAttribute('data-ordinal'), 10) < parseInt(elements[i - 1].getAttribute('data-ordinal'), 10)) {
+				currNum = _OutOfX[_OutOfX.length - 1] || 0;
+				for(currNum; currNum < i; currNum++) {
+					_OutOfX.push(i);
+				}
+			}
+			if(i === elements.length - 1) {
+				var w = parseInt(elements.length, 10) - parseInt((_OutOfX[_OutOfX.length - 1]), 10);
+				var whatever = 0;
+				for(whatever; whatever < parseInt((_OutOfX[_OutOfX.length - 1]), 10); whatever++) {
+					_OutOfX.push(w);
+				}
+			}
+		}
+
+		elements.forEach(function (e, k) {
+			e.setAttribute('aria-label', e.childNodes[1].innerHTML + ' position ' + (parseInt(e.getAttribute('data-ordinal'), 10) + 1) + ' of ' + _OutOfX[k] + ' in orderable list' );
+			e.addEventListener('keydown', (f) => {
+				//console.log(f.key);
+			});
+		});
 	},
 
 	getDragzoneEl: function () {
@@ -288,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			ap = ad.up('.ordinal'),
 			bp = bd.up('.ordinal');
 
-		//		console.log('Will swap draggable parts of index: ', a, ' ', b);
+		console.log('Will swap draggable parts of index: ', a, ' ', b);
 		ap.select('.draggable-area').remove();
 		bp.select('.draggable-area').remove();
 		ap.dom.appendChild(bd.dom);
