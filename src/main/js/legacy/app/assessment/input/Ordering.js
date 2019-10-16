@@ -68,6 +68,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		me.initializeDragZone();
 		me.initializeDropZone();
 		dragzoneEl.dom.id = Ext.id();
+
+		this.addAriaLabel();
+		this.addListeners();
 	},
 
 	addAriaLabel: function () {
@@ -103,6 +106,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 
 		elements.forEach(function (e, index) {
 			e.setAttribute('aria-label', e.childNodes[1].innerHTML + ', Position ' + (parseInt(e.getAttribute('data-ordinal'), 10) + 1) + ' of ' + _OutOfX[index] + ' in orderable list' );
+		});
+	},
+
+	addListeners: function() {
+		var elements = document.getElementsByClassName('draggable-area');
+
+		elements.forEach(function (e, index) {
+			e.addEventListener('keydown', (f) => {
+				console.log(f.key);
+			});
 		});
 	},
 
