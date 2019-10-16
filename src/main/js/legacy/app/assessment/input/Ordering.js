@@ -68,41 +68,41 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		me.initializeDragZone();
 		me.initializeDropZone();
 		dragzoneEl.dom.id = Ext.id();
-
-		this.addFocusListener();
-		console.log('adding focus listeners');
 	},
 
-	//CLEAN UP AND TEST WITH MORE THAN 2 ORDERING LISTS!!!!!!
-	addFocusListener: function () {
-		//get all draggable elements
+	addAriaLabel: function () {
+
+		//get all draggable elements in assignment
 		var elements = document.getElementsByClassName('draggable-area');
 
 		var _OutOfX = [];
 
-		var i = 1;
-		for(i; i < elements.length; i++) {
-			var currNum = 0;
-			if(parseInt(elements[i].getAttribute('data-ordinal'), 10) < parseInt(elements[i - 1].getAttribute('data-ordinal'), 10)) {
-				currNum = _OutOfX[_OutOfX.length - 1] || 0;
-				for(currNum; currNum < i; currNum++) {
-					_OutOfX.push(i);
-				}
-			}
-			if(i === elements.length - 1) {
-				var w = parseInt(elements.length, 10) - parseInt((_OutOfX[_OutOfX.length - 1]), 10);
-				var whatever = 0;
-				for(whatever; whatever < parseInt((_OutOfX[_OutOfX.length - 1]), 10); whatever++) {
-					_OutOfX.push(w);
+		for(var i = 0; i < elements.length; i++) {
+			//skip first element
+			if(i !== 0) {
+				//for the last question, we need to push 1 extra time
+				var lastEl = (i === elements.length - 1);
+				//check if current 'data-ordinal' is lower than the previous element or last element
+				if(elements[i].getAttribute('data-ordinal') < elements[i - 1].getAttribute('data-ordinal') || lastEl) {
+					var currLength = _OutOfX.length;
+					var currIndex = i - currLength;
+					if(lastEl) {currIndex++;}
+					for(var count = 0; count < currIndex; count++) {
+						_OutOfX.push(currIndex);
+					}
 				}
 			}
 		}
 
-		elements.forEach(function (e, k) {
-			e.setAttribute('aria-label', e.childNodes[1].innerHTML + ' position ' + (parseInt(e.getAttribute('data-ordinal'), 10) + 1) + ' of ' + _OutOfX[k] + ' in orderable list' );
-			e.addEventListener('keydown', (f) => {
-				//console.log(f.key);
-			});
+		//if there was only one question
+		if(_OutOfX.length === 0) {
+			for(count = 0; count < elements.length; count++) {
+				_OutOfX.push(elements.length);
+			}
+		}
+
+		elements.forEach(function (e, index) {
+			e.setAttribute('aria-label', e.childNodes[1].innerHTML + ', Position ' + (parseInt(e.getAttribute('data-ordinal'), 10) + 1) + ' of ' + _OutOfX[index] + ' in orderable list' );
 		});
 	},
 
