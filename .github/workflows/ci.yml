@@ -13,6 +13,7 @@ on:
 
 env:
   CI: true
+  NTI_THREADED_BUILD: true
 
 jobs:
   build:
@@ -34,6 +35,8 @@ jobs:
       # Skip post-install scripts here, as a malicious
       # script could steal NODE_AUTH_TOKEN.
       run: |
+        npm install -g @nti/ci-scripts --ignore-scripts
+        ci-scripts prepare
         npm install --ignore-scripts
         npm install @nti/gen-docs --no-save --ignore-scripts
       env:
