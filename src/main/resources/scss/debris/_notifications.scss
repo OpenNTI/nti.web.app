@@ -17,6 +17,10 @@
 		text-indent: 0;
 		line-height: 1em;
 		width: auto;
+
+		.main-navigation.dark-nav & {
+			border: 2px solid #313131;
+		}
 	}
 }
 
@@ -36,24 +40,6 @@
 		@include icon($rhp-notification_active, $side: after, $top: 50%, $left: 50%);
 	}
 
-	&[data-badge]:not([data-badge="0"])::before {
-		content: attr(data-badge);
-		background-color: $primary-red;
-		font-size: 0.55em;
-		font-weight: 500;
-		color: white;
-		padding: 0.3em 0.5em;
-		border: 2px solid white;
-		position: absolute;
-		top: 13px;
-		left: 25px;
-		border-radius: 10em;
-		z-index: 2;
-		text-indent: 0;
-		line-height: 1em;
-		width: auto;
-	}
-
 	&.menu-showing {
 		transition: background-color 0.3s, box-shadow 0.3s;
 	}
@@ -67,10 +53,6 @@
 
 		&:hover::after {
 			opacity: 1;
-		}
-
-		&[data-badge]:not([data-badge="0"])::before {
-			border: 2px solid #313131;
 		}
 	}
 }
