@@ -82,7 +82,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -125,7 +125,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -168,7 +168,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -211,7 +211,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -254,7 +254,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -349,7 +349,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -392,7 +392,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -435,7 +435,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -478,7 +478,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -521,7 +521,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -564,7 +564,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -607,7 +607,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -650,7 +650,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -693,7 +693,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -736,7 +736,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -779,7 +779,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -822,7 +822,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -865,7 +865,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -908,7 +908,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -951,7 +951,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -994,7 +994,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1037,7 +1037,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1080,7 +1080,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1123,7 +1123,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1166,7 +1166,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1209,7 +1209,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1252,7 +1252,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1295,7 +1295,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1338,7 +1338,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
@@ -1381,7 +1381,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
             >
               <time
                 className="nti-text value"
-                dateTime="2017-10-30T00:00:00-05:00"
+                dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>

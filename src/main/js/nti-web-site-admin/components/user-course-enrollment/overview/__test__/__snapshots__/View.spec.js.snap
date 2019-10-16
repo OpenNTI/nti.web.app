@@ -23,7 +23,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
         >
           <time
             className="nti-text date"
-            dateTime="2017-10-20T00:00:00-05:00"
+            dateTime="2017-10-20T00:00:00+00:00"
           >
             October 20, 2017
           </time>
@@ -46,7 +46,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
         >
           <time
             className="nti-text date"
-            dateTime="2017-10-30T00:00:00-05:00"
+            dateTime="2017-10-30T00:00:00+00:00"
           >
             Oct 30, 2017 12:00 AM
           </time>
@@ -89,7 +89,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#efefef",
+                "backgroundColor": "#3182bd",
               }
             }
           />
@@ -97,7 +97,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#efefef",
+                "backgroundColor": "#6baed6",
               }
             }
           />
@@ -105,7 +105,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#efefef",
+                "backgroundColor": "#6baed6",
               }
             }
           />
@@ -113,15 +113,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#efefef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#efefef",
+                "backgroundColor": "#3182bd",
               }
             }
           />
@@ -138,6 +130,14 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             style={
               Object {
                 "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#6baed6",
               }
             }
           />
@@ -178,23 +178,23 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#efefef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#efefef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
                 "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#3182bd",
               }
             }
           />
@@ -259,7 +259,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#efefef",
+                "backgroundColor": "#9ecae1",
               }
             }
           />
@@ -324,7 +324,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#efefef",
+                "backgroundColor": "#3182bd",
               }
             }
           />
@@ -357,7 +357,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#3182bd",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -365,7 +365,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#dfdfef",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -373,7 +373,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#6baed6",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -381,7 +381,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#9ecae1",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -438,7 +438,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#9ecae1",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -446,7 +446,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#9ecae1",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -487,15 +487,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#08306b",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#efefef",
+                "backgroundColor": "#dfdfef",
               }
             }
           />
@@ -511,7 +503,15 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#9ecae1",
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -552,6 +552,22 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
+                "backgroundColor": "#9ecae1",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
                 "backgroundColor": "#6baed6",
               }
             }
@@ -560,23 +576,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#efefef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#efefef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#efefef",
+                "backgroundColor": "#6baed6",
               }
             }
           />
@@ -617,31 +617,31 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
                 "backgroundColor": "#dfdfef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#efefef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#efefef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#6baed6",
               }
             }
           />
@@ -674,79 +674,6 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#9ecae1",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#6baed6",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#9ecae1",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#3182bd",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#efefef",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#9ecae1",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#3182bd",
-              }
-            }
-          />
-          <div
-            className="time-label"
-          >
-            6 pm
-          </div>
-        </div>
-        <div
-          className="active-blocks"
-        >
-          <div
-            className="active-block"
-            style={
-              Object {
-                "backgroundColor": "#9ecae1",
-              }
-            }
-          />
-          <div
-            className="active-block"
-            style={
-              Object {
                 "backgroundColor": "#efefef",
               }
             }
@@ -763,6 +690,14 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
                 "backgroundColor": "#dfdfef",
               }
             }
@@ -771,6 +706,71 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
+                "backgroundColor": "#dfdfef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="time-label"
+          >
+            6 pm
+          </div>
+        </div>
+        <div
+          className="active-blocks"
+        >
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#dfdfef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
+                "backgroundColor": "#efefef",
+              }
+            }
+          />
+          <div
+            className="active-block"
+            style={
+              Object {
                 "backgroundColor": "#9ecae1",
               }
             }
@@ -779,7 +779,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#6baed6",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -787,7 +787,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#9ecae1",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -836,7 +836,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
             className="active-block"
             style={
               Object {
-                "backgroundColor": "#3182bd",
+                "backgroundColor": "#efefef",
               }
             }
           />
@@ -915,9 +915,9 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
         >
           Monday
           , 
-          12 pm
+          6 pm
            – 
-          2 pm
+          8 pm
         </div>
       </div>
     </div>

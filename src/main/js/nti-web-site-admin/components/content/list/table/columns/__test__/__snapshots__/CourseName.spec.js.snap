@@ -46,7 +46,7 @@ exports[`Site admin content table course name column test Test name 1`] = `
             </span>
             <time
               className="nti-text value"
-              dateTime="2017-02-01T00:00:00-06:00"
+              dateTime="2017-02-01T00:00:00+00:00"
             >
               Feb 1, 2017
             </time>
@@ -61,7 +61,7 @@ exports[`Site admin content table course name column test Test name 1`] = `
             </span>
             <time
               className="nti-text value"
-              dateTime="2017-04-05T00:00:00-05:00"
+              dateTime="2017-04-05T00:00:00+00:00"
             >
               Apr 5, 2017
             </time>

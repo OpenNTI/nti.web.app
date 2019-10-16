@@ -6,7 +6,7 @@ exports[`Site admin content table start date column test Test date is many days 
 >
   <time
     className="nti-text value"
-    dateTime="2017-10-31T00:00:00-05:00"
+    dateTime="2017-10-31T00:00:00+00:00"
   >
     Oct 31, 2017
   </time>
