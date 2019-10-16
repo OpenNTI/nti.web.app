@@ -4,16 +4,15 @@ on:
   push:
     branches:
       - master
-      - maint*
-  pull_request:
-    branches:
-      - master
-  schedule:
-    - cron: 0 2 * * 1-5
+  #     - maint*
+  # pull_request:
+  #   branches:
+  #     - master
+  # schedule:
+  #   - cron: 0 2 * * 1-5
 
 env:
   CI: true
-  NTI_THREADED_BUILD: true
 
 jobs:
   build:
@@ -50,8 +49,14 @@ jobs:
         npm rebuild
         npm run prepare --if-present
 
-    - name: Testing/Linting/Building
-      run: npm pack
+    - name: Lint
+      run: npm run check --if-present
+
+    - name: Tests
+      run: npm test
+
+    - name: Bundle
+      run: npm run prepack --if-present -- --skip-checks
 
     # TODO: Setup code coverage/test result reporting?
     # TODO: Publish Docs?
