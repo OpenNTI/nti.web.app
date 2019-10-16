@@ -1,0 +1,52 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+      - maint*
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron: 0 2 * * 1-5
+
+env:
+  CI: true
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: 'https://npm.nextthought.com'
+    - name: dependency resolve/download
+      # Skip post-install scripts here, as a malicious
+      # script could steal NODE_AUTH_TOKEN.
+      run: |
+        npm install --ignore-scripts
+        npm install @nti/gen-docs --no-save --ignore-scripts
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    # `npm rebuild` will run all those post-install scritps for us
+    - name: dependency setup
+      run: |
+        npm rebuild
+        npm run prepare --if-present
+
+    - name: Testing/Linting/Building
+      run: npm pack
+
+    # TODO: Setup code coverage/test result reporting?
+    # TODO: Publish Docs?
