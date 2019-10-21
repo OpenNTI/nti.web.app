@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
+const { wait } = require('@nti/lib-commons');
 
 require('./Base');
 
@@ -8,24 +8,33 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: 'widget.question-input-orderingpart',
 
-	inputTpl: Ext.DomHelper.markup({ cls: 'ordering-dd-zone', cn: [
-		{'tag': 'tpl', 'for': 'ordinals', cn: [{
-			cls: 'ordinal', cn: [
-				{ cls: 'label', 'data-part': '{[xindex-1]}', html: '{label}' },
-				{ cls: 'draggable-area', 'data-ordinal': '{[xindex-1]}', tabindex: '1', cn: [
-					{cls: 'controls', cn: [
-						{ tag: 'span', cls: 'control'},
-						{ tag: 'span', cls: 'drag-control'}
-					]},
-					{ cls: 'text', html: '{value}'}
-				]}
-			]}
-		]}
-	]}),
+	inputTpl: Ext.DomHelper.markup({
+		cls: 'ordering-dd-zone', cn: [
+			{
+				'tag': 'tpl', 'for': 'ordinals', cn: [{
+					cls: 'ordinal', cn: [
+						{ cls: 'label', 'data-part': '{[xindex-1]}', html: '{label}' },
+						{
+							cls: 'draggable-area', 'data-ordinal': '{[xindex-1]}', 'data-grabbed': 'false', tabindex: '1', cn: [
+								{
+									cls: 'controls', cn: [
+										{ tag: 'span', cls: 'control' },
+										{ tag: 'span', cls: 'drag-control' }
+									]
+								},
+								{ cls: 'text', html: '{value}' }
+							]
+						}
+					]
+				}
+				]
+			}
+		]
+	}),
 
 	solTpl: Ext.DomHelper.createTemplate({
 		cls: 'ordering-solution',
-		cn: [{ tag: 'span', html: '{0}'},{tag: 'span', cls: 'solution-ordering-text', html: '{1}'}]
+		cn: [{ tag: 'span', html: '{0}' }, { tag: 'span', cls: 'solution-ordering-text', html: '{1}' }]
 	}).compile(),
 
 	renderSelectors: {
@@ -53,6 +62,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	},
 
 	afterRender: function () {
+
+		console.log('after render called');
+
 		this.callParent(arguments);
 
 		var me = this,
@@ -61,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		wait()
 			.then(function () {
 				if (me.rendered) {
-					dragzoneEl.setStyle({'width': '100%'});
+					dragzoneEl.setStyle({ 'width': '100%' });
 				}
 			});
 
@@ -75,22 +87,22 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 
 	addAriaLabel: function () {
 
-		//get all draggable elements in assignment
-		var elements = document.getElementsByClassName('draggable-area');
+		//get all ordering elements in assignment
+		var elements = document.getElementsByClassName('ordinal');
 
 		var _OutOfX = [];
 
-		for(var i = 0; i < elements.length; i++) {
+		for (var i = 0; i < elements.length; i++) {
 			//skip first element
-			if(i !== 0) {
+			if (i !== 0) {
 				//for the last question, we need to push 1 extra time
 				var lastEl = (i === elements.length - 1);
 				//check if current 'data-ordinal' is lower than the previous element or last element
-				if(elements[i].getAttribute('data-ordinal') < elements[i - 1].getAttribute('data-ordinal') || lastEl) {
+				if (elements[i].childNodes[0].getAttribute('data-part') < elements[i - 1].childNodes[0].getAttribute('data-part') || lastEl) {
 					var currLength = _OutOfX.length;
 					var currIndex = i - currLength;
-					if(lastEl) {currIndex++;}
-					for(var count = 0; count < currIndex; count++) {
+					if (lastEl) { currIndex++; }
+					for (var count = 0; count < currIndex; count++) {
 						_OutOfX.push(currIndex);
 					}
 				}
@@ -98,24 +110,69 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		}
 
 		//if there was only one question
-		if(_OutOfX.length === 0) {
-			for(count = 0; count < elements.length; count++) {
+		if (_OutOfX.length === 0) {
+			for (count = 0; count < elements.length; count++) {
 				_OutOfX.push(elements.length);
 			}
 		}
 
 		elements.forEach(function (e, index) {
-			e.setAttribute('aria-label', e.childNodes[1].innerHTML + ', Position ' + (parseInt(e.getAttribute('data-ordinal'), 10) + 1) + ' of ' + _OutOfX[index] + ' in orderable list' );
+			e.childNodes[1].setAttribute('aria-label', e.childNodes[1].childNodes[1].innerHTML + ' matching with ' + e.childNodes[0].innerHTML + ', Position ' + (parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + _OutOfX[index] + ' in orderable list');
+			e.childNodes[1].setAttribute('role', 'button');
 		});
 	},
 
-	addListeners: function() {
+	addListeners: function () {
 		var elements = document.getElementsByClassName('draggable-area');
 
-		elements.forEach(function (e, index) {
-			e.addEventListener('keydown', (f) => {
-				console.log(f.key);
-			});
+		elements.forEach(function (el, index) {
+			if(el.hasAttribute('data-hasListener')) {
+				//if element already has listener, do nothing, otherwise add listener
+			}
+			else{
+				console.log('adding attributes');
+				el.setAttribute('data-hasListener', 'true');
+				el.addEventListener('keydown', (event) => {
+					switch (event.key) {
+					case ' ':
+						event.preventDefault();
+						if(el.getAttribute('data-grabbed') === 'true') {
+							el.setAttribute('data-grabbed', 'false');
+							console.log(el.childNodes[1].innerHTML + ' dropped');
+						}
+						else {
+							el.setAttribute('data-grabbed', 'true');
+							console.log(el.childNodes[1].innerHTML + ' grabbed');
+						}
+						break;
+
+					case 'w':
+						event.preventDefault();
+						if(el.getAttribute('data-grabbed') === 'true') {
+							const currIndex = parseInt(el.parentElement.childNodes[0].getAttribute('data-part'), 10);
+							if(currIndex === 0) {
+								console.log('already at top');
+							}
+							else {
+								console.log(currIndex);
+								//why isnt this being called
+								this.swap(currIndex, currIndex - 1);
+							}
+						}
+						break;
+
+					case 's':
+						event.preventDefault();
+						if(el.getAttribute('data-grabbed') === 'true') {
+							console.log('move down');
+						}
+						break;
+
+					default:
+						break;
+					}
+				}, true);
+			}
 		});
 	},
 
@@ -141,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			return;
 		}
 		var ordinal, text, label;
-		if (!val) {return;}
+		if (!val) { return; }
 		for (ordinal in val) {
 			if (val.hasOwnProperty(ordinal)) {
 				text = this.el.down('.draggable-area[data-ordinal="' + val[ordinal] + '"]');
@@ -238,18 +295,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		// Otherwise, it will force its child elements to be each have a width of 50%, which alters the flex layout. --Pacifique M.
 		var dragzoneEl = this.getDragzoneEl();
 
-		dragzoneEl.setStyle({'width': undefined});
+		dragzoneEl.setStyle({ 'width': undefined });
 		this.callParent();
-		dragzoneEl.setStyle({'width': '100%'});
+		dragzoneEl.setStyle({ 'width': '100%' });
 		this.mark();
 	},
 
 	markIncorrect: function () {
 		var dragzoneEl = this.getDragzoneEl();
 
-		dragzoneEl.setStyle({'width': undefined});
+		dragzoneEl.setStyle({ 'width': undefined });
 		this.callParent();
-		dragzoneEl.setStyle({'width': '100%'});
+		dragzoneEl.setStyle({ 'width': '100%' });
 		this.mark();
 	},
 
@@ -313,24 +370,25 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 
 		this.inputBox.dom.innerHTML = '';
 
-		tpl.append(this.inputBox, {ordinals: m});
+		tpl.append(this.inputBox, { ordinals: m });
 
 		dragzoneEl = this.getDragzoneEl();
 
-		dragzoneEl.setStyle({'width': '100%'});
+		dragzoneEl.setStyle({ 'width': '100%' });
 		dragzoneEl.dom.id = Ext.id();
 	},
 
 	hideSolution: function () {
 		var dragzoneEl = this.getDragzoneEl();
 
-		dragzoneEl.setStyle({'width': undefined});
+		dragzoneEl.setStyle({ 'width': undefined });
 		this.callParent();
-		dragzoneEl.setStyle({'width': '100%'});
+		dragzoneEl.setStyle({ 'width': '100%' });
 	},
 
 
 	swap: function (a, b) {
+		console.log('swap called');
 		if (a === b) { return; }
 		var ad = this.el.down('.draggable-area[data-ordinal=' + a + ']'),
 			bd = this.el.down('.draggable-area[data-ordinal=' + b + ']'),
@@ -342,6 +400,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		bp.select('.draggable-area').remove();
 		ap.dom.appendChild(bd.dom);
 		bp.dom.appendChild(ad.dom);
+
+		//reset aria labels
+		this.addAriaLabel();
 	},
 
 	swapNodes: function (target, dd) {
@@ -411,7 +472,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 					leftMargin = e.getX() + 6;
 
 				this.initPageX = this.lastPageX = this.startPageX =
-				this.minX = this.maxX = leftMargin;
+					this.minX = this.maxX = leftMargin;
 
 				if (el) {
 					el.setStyle({
