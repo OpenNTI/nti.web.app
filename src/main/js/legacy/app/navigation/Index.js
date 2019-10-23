@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const classname = require('classnames/bind');
 const {wait} = require('@nti/lib-commons');
 
 const IdentityIndex = require('../account/identity/Index');
@@ -7,9 +8,12 @@ const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
 
 const NavigationStateStore = require('./StateStore');
+const Styles = require('./Index.css');
 
 require('legacy/mixins/State');
 require('../chat/Index');
+
+const cx = classname.bind(Styles);
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
@@ -20,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		State: 'NextThought.mixins.State'
 	},
 
-	cls: 'main-navigation',
+	cls: `main-navigation ${cx('navbar')}`,
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'back-container', cn: [
