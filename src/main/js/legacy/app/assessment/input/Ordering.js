@@ -28,7 +28,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 					]
 				}
 				]
-			}
+			},
+			{ cls: 'ariaLiveText', 'aria-live': 'assertive', style: {position: 'absolute', margin: '-1', border: '0', padding: '0', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0 0 0 0)'}},
 		]
 	}),
 
@@ -88,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	addAriaLabel: function () {
 
 		//get all ordering elements in assignment
-		var elements = document.getElementsByClassName('ordinal');
+		var elements = document.querySelectorAll('.ordinal');
 
 		var _OutOfX = [];
 
@@ -110,49 +111,57 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		}
 
 		elements.forEach(function (e, index) {
-			e.childNodes[1].setAttribute('aria-label', e.childNodes[1].childNodes[1].innerHTML + ' matching with ' + e.childNodes[0].innerHTML + ', Position ' + (parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + _OutOfX[index] + ' in orderable list');
 			e.childNodes[1].setAttribute('role', 'button');
+			e.childNodes[1].setAttribute('aria-label',
+				e.childNodes[1].childNodes[1].innerHTML +
+				' matching with ' + e.childNodes[0].innerHTML + ', Position ' +
+				(parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + _OutOfX[index] +
+				' in orderable list. Press SpaceBar to ' +
+				(e.childNodes[1].getAttribute('data-grabbed') === 'true' ? 'drop' : 'grab'));
 		});
 	},
 
 	addListeners: function () {
-		var elements = document.getElementsByClassName('draggable-area');
+		const elements = document.querySelectorAll('.draggable-area');
+		console.log(elements);
 
-		var me = this;
-
-		elements.forEach(function (el, index) {
-			if(el.hasAttribute('data-hasListener')) {
+		elements.forEach((e, index) => {
+			if(e.hasAttribute('data-hasListener')) {
 				//if element already has listener, do nothing, otherwise add listener
 			}
 			else{
-				console.log('adding attributes');
-				el.setAttribute('data-hasListener', 'true');
-				el.addEventListener('keydown', (event) => {
+				e.setAttribute('data-hasListener', 'true');
+				e.addEventListener('keydown', (event) => {
 					switch (event.key) {
 					case ' ':
 					case 'Enter':
 						event.preventDefault();
-						if(el.getAttribute('data-grabbed') === 'true') {
-							el.setAttribute('data-grabbed', 'false');
-							console.log(el.childNodes[1].innerHTML + ' dropped');
+						if(e.getAttribute('data-grabbed') === 'true') {
+							e.setAttribute('data-grabbed', 'false');
+							this.el.down('.ariaLiveText').dom.innerHTML = (e.childNodes[1].innerHTML + ' dropped, currently matching with ' + e.parentElement.childNodes[0].innerHTML).toString();
 						}
 						else {
-							el.setAttribute('data-grabbed', 'true');
-							console.log(el.childNodes[1].innerHTML + ' grabbed');
+							e.setAttribute('data-grabbed', 'true');
+							this.el.down('.ariaLiveText').dom.innerHTML = (e.childNodes[1].innerHTML + ' grabbed, currently matching with ' + e.parentElement.childNodes[0].innerHTML).toString();
 						}
 						break;
 
 					case 'w':
 					case 'W':
 						event.preventDefault();
-						if(el.getAttribute('data-grabbed') === 'true') {
-							if(el.parentElement.previousSibling) {
-								const currEl = parseInt(el.getAttribute('data-ordinal'), 10);
-								const prevEl = parseInt(el.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-								me.swap(currEl, prevEl);
+						if(e.getAttribute('data-grabbed') === 'true') {
+							if(e.parentElement.previousSibling) {
+								const currEl = parseInt(e.getAttribute('data-ordinal'), 10);
+								const prevEl = parseInt(e.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+								this.swap(currEl, prevEl);
 							}
 							else {
 								console.log('already at top');
+							}
+						}
+						else{
+							if(e.parentElement.previousSibling) {
+								e.parentElement.previousSibling.childNodes[1].focus();
 							}
 						}
 						break;
@@ -160,15 +169,27 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 					case 's':
 					case 'S':
 						event.preventDefault();
-						if(el.getAttribute('data-grabbed') === 'true') {
-							if(el.parentElement.nextSibling) {
-								const currEl = parseInt(el.getAttribute('data-ordinal'), 10);
-								const nextEl = parseInt(el.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-								me.swap(currEl, nextEl);
+						if(e.getAttribute('data-grabbed') === 'true') {
+							if(e.parentElement.nextSibling) {
+								const currEl = parseInt(e.getAttribute('data-ordinal'), 10);
+								const nextEl = parseInt(e.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+								this.swap(currEl, nextEl);
 							}
 							else {
 								console.log('already at bottom');
 							}
+						}
+						else{
+							if(e.parentElement.nextSibling) {
+								e.parentElement.nextSibling.childNodes[1].focus();
+							}
+						}
+						break;
+
+					case 'Tab':
+					case 'tab':
+						if(e.getAttribute('data-grabbed') === 'true') {
+							event.preventDefault();
 						}
 						break;
 
