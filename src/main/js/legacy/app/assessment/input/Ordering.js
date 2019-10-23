@@ -81,8 +81,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		me.initializeDropZone();
 		dragzoneEl.dom.id = Ext.id();
 
-		this.addAriaLabel();
-		this.addListeners();
+		me.addAriaLabel();
+		me.addListeners();
 	},
 
 	addAriaLabel: function () {
@@ -109,13 +109,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			}
 		}
 
-		//if there was only one question
-		if (_OutOfX.length === 0) {
-			for (count = 0; count < elements.length; count++) {
-				_OutOfX.push(elements.length);
-			}
-		}
-
 		elements.forEach(function (e, index) {
 			e.childNodes[1].setAttribute('aria-label', e.childNodes[1].childNodes[1].innerHTML + ' matching with ' + e.childNodes[0].innerHTML + ', Position ' + (parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + _OutOfX[index] + ' in orderable list');
 			e.childNodes[1].setAttribute('role', 'button');
@@ -124,6 +117,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 
 	addListeners: function () {
 		var elements = document.getElementsByClassName('draggable-area');
+
+		var me = this;
 
 		elements.forEach(function (el, index) {
 			if(el.hasAttribute('data-hasListener')) {
@@ -135,6 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 				el.addEventListener('keydown', (event) => {
 					switch (event.key) {
 					case ' ':
+					case 'Enter':
 						event.preventDefault();
 						if(el.getAttribute('data-grabbed') === 'true') {
 							el.setAttribute('data-grabbed', 'false');
@@ -147,24 +143,32 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 						break;
 
 					case 'w':
+					case 'W':
 						event.preventDefault();
 						if(el.getAttribute('data-grabbed') === 'true') {
-							const currIndex = parseInt(el.parentElement.childNodes[0].getAttribute('data-part'), 10);
-							if(currIndex === 0) {
-								console.log('already at top');
+							if(el.parentElement.previousSibling) {
+								const currEl = parseInt(el.getAttribute('data-ordinal'), 10);
+								const prevEl = parseInt(el.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+								me.swap(currEl, prevEl);
 							}
 							else {
-								console.log(currIndex);
-								//why isnt this being called
-								this.swap(currIndex, currIndex - 1);
+								console.log('already at top');
 							}
 						}
 						break;
 
 					case 's':
+					case 'S':
 						event.preventDefault();
 						if(el.getAttribute('data-grabbed') === 'true') {
-							console.log('move down');
+							if(el.parentElement.nextSibling) {
+								const currEl = parseInt(el.getAttribute('data-ordinal'), 10);
+								const nextEl = parseInt(el.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+								me.swap(currEl, nextEl);
+							}
+							else {
+								console.log('already at bottom');
+							}
 						}
 						break;
 
@@ -388,7 +392,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 
 
 	swap: function (a, b) {
-		console.log('swap called');
 		if (a === b) { return; }
 		var ad = this.el.down('.draggable-area[data-ordinal=' + a + ']'),
 			bd = this.el.down('.draggable-area[data-ordinal=' + b + ']'),
@@ -400,6 +403,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		bp.select('.draggable-area').remove();
 		ap.dom.appendChild(bd.dom);
 		bp.dom.appendChild(ad.dom);
+		bp.dom.childNodes[1].focus();
 
 		//reset aria labels
 		this.addAriaLabel();
