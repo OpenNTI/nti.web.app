@@ -1,14 +1,18 @@
 const Ext = require('@nti/extjs');
+const classnames = require('classnames/bind');
 
 const NTIFormat = require('legacy/util/Format');
 
+const Styles = require('./Index.css');
+
 require('./components/Settings');
 
+const cx = classnames.bind(Styles);
 
 module.exports = exports = Ext.define('NextThought.app.account.identity.Index', {
 	extend: 'Ext.Component',
 	alias: 'widget.identity',
-	cls: 'identity x-menu',
+	cls: `identity x-menu ${cx('identity')}`,
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'profile-pic', 'data-qtip': '{user:displayName}', tabindex: '0', 'aria-label': '{user:displayName}', role: 'button' ,cn: [
