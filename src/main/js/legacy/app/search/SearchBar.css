@@ -8,6 +8,13 @@
 	background: rgba(245, 245, 245, 0.19);
 }
 
+:global(.main-navigation) .dark :global(.search-field-wrap .search-field .search-icon::after),
+:global(.main-navigation) .dark :global(.search-field-wrap .search-field .search-icon:hover::after) {
+	background-image: url('./assets/search-nav-white.svg');
+	background-position: center center;
+	opacity: 1;
+}
+
 :global(.main-navigation) .dark :global(.search-field-wrap .search-field .nti-text-input::placeholder) {
 	color: rgba(255, 255, 255, 0.6);
 }
@@ -24,6 +31,13 @@
 
 :global(.main-navigation) .light :global(.search-field-wrap .search-field .search-icon) {
 	background: #f5f5f5;
+}
+
+:global(.main-navigation) .light :global(.search-field-wrap .search-field .search-icon::after),
+:global(.main-navigation) .light :global(.search-field-wrap .search-field .search-icon:hover::after) {
+	background-image: url('./assets/search-nav-dark.svg');
+	background-position: center center;
+	opacity: 1;
 }
 
 :global(.main-navigation) .light :global(.search-field-wrap .search-field .nti-text-input::placeholder) {
