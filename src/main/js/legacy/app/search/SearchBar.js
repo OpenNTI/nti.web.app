@@ -1,16 +1,21 @@
 const Ext = require('@nti/extjs');
+const classnames = require('classnames/bind');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const {wait} = require('@nti/lib-commons');
 const {Store, Input} = require('@nti/web-search');
 
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
+const Styles = require('./SearchBar.css');
 
 require('legacy/overrides/ReactHarness');
 require('./components/AdvancedOptions');
 
 const SearchStore = Store.getGlobal();
+const cx = classnames.bind(Styles);
 
+const darkCls = cx('dark');
+const lightCls = cx('light');
 
 module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	extend: 'Ext.Component',
@@ -98,6 +103,19 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 			click: this.searchClicked.bind(this)
 		});
 
+	},
+
+	setTheme (theme) {
+		if (theme === 'dark') {
+			this.removeCls(lightCls);
+			this.addCls(darkCls);
+		} else if (theme === 'light') {
+			this.addCls(lightCls);
+			this.removeCls(darkCls);
+		} else {
+			this.removeCls(lightCls);
+			this.removeCls(darkCls);
+		}
 	},
 
 	syncTerm: function (term) {

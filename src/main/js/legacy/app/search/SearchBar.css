@@ -1,0 +1,35 @@
+:global(.main-navigation) .dark :global(.search-field-wrap .search-field) {
+	background: rgba(255, 255, 255, 0.15);
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.29);
+}
+
+:global(.main-navigation) .dark :global(.search-field-wrap .search-field .search-icon) {
+	background: rgba(245, 245, 245, 0.19);
+}
+
+:global(.main-navigation) .dark :global(.search-field-wrap .search-field .nti-text-input::placeholder) {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+:global(.main-navigation) .dark :global(.search-field-wrap .search-field .nti-text-input) {
+	color: white;
+}
+
+:global(.main-navigation) .light :global(.search-field-wrap .search-field) {
+	background: white;
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.29);
+}
+
+:global(.main-navigation) .light :global(.search-field-wrap .search-field .search-icon) {
+	background: #f5f5f5;
+}
+
+:global(.main-navigation) .light :global(.search-field-wrap .search-field .nti-text-input::placeholder) {
+	color: rgba(0, 0, 0, 0.38);
+}
+
+:global(.main-navigation) .light :global(.search-field-wrap .search-field .nti-text-input) {
+	color: var(--primary-grey);
+}
