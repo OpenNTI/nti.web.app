@@ -247,6 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			el.style.removeProperty('--nav-background-color');
 		}
 
+		this.identityCmp.setTheme(theme.identity);
 		this.searchCmp.setTheme(theme.search);
 	},
 
