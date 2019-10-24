@@ -200,6 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			}
 		}
 
+		this.setTheme(config.theme);
 		this.resizeNavCmp();
 	},
 
@@ -231,6 +232,22 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 				brandingEl.setStyle({backgroundImage: null, width: null});
 			});
 	},
+
+
+	setTheme (theme = {}) {
+		const el = this.el && this.el.dom;
+
+		if (!el) { return; }
+
+		if (theme.backgroundColor) {
+			el.style.setProperty('background-color', theme.backgroundColor);
+			el.style.setProperty('--nav-background-color', theme.backgroundColor);
+		} else {
+			el.style.removeProperty('background-color');
+			el.style.removeProperty('--nav-background-color');
+		}
+	},
+
 
 	setActiveContent: function (bundle) {
 		if (!this.rendered) {

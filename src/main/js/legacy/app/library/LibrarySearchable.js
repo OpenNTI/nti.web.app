@@ -1,9 +1,12 @@
 const Ext = require('@nti/extjs');
 const {View:LibrarySearchableView} = require('@nti/web-library');
+const {Theme} = require('@nti/web-commons');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 const BundleActions = require('legacy/app/bundle/Actions');
 const CourseActions = require('legacy/app/course/Actions');
+
+const GlobalTheme = Theme.getGlobalTheme();
 
 require('legacy/mixins/Router');
 
@@ -39,9 +42,14 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 	},
 
 	showLibrary (route) {
+		const LibraryTheme = GlobalTheme.scope('library');
+		const {background} = LibraryTheme;
+		const dark = background == null ? true : background === 'dark';
+
 		this.NavigationActions.updateNavBar({
 			noLibraryLink: false,
-			darkStyle: true
+			darkStyle: dark,
+			theme: LibraryTheme.scope('navigation')
 		});
 
 		if(this.deactivateTimeout) {
@@ -49,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 			delete this.deactivateTimeout;
 		}
 
-		this.NavigationActions.setActiveContent(null);
+		this.NavigationActions.setActiveContent(null, !dark, !dark);
 
 		const baseroute = this.getBaseRoute();
 
