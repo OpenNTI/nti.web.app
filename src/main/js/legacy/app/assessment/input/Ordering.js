@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 					cls: 'ordinal', cn: [
 						{ cls: 'label', 'data-part': '{[xindex-1]}', html: '{label}' },
 						{
-							cls: 'draggable-area', 'data-ordinal': '{[xindex-1]}', 'data-grabbed': 'false', tabindex: '1', cn: [
+							cls: 'draggable-area', 'data-ordinal': '{[xindex-1]}', 'aria-grabbed': 'false', tabindex: '1', cn: [
 								{
 									cls: 'controls', cn: [
 										{ tag: 'span', cls: 'control' },
@@ -63,9 +63,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	},
 
 	afterRender: function () {
-
-		console.log('after render called');
-
 		this.callParent(arguments);
 
 		var me = this,
@@ -117,87 +114,87 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 				' matching with ' + e.childNodes[0].innerHTML + ', Position ' +
 				(parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + _OutOfX[index] +
 				' in orderable list. Press SpaceBar to ' +
-				(e.childNodes[1].getAttribute('data-grabbed') === 'true' ? 'drop' : 'grab'));
+				(e.childNodes[1].getAttribute('aria-grabbed') === 'true' ? 'drop' : 'grab'));
 		});
 	},
 
 	addListeners: function () {
 		const elements = document.querySelectorAll('.draggable-area');
-		console.log(elements);
 
-		elements.forEach((e, index) => {
-			if(e.hasAttribute('data-hasListener')) {
-				//if element already has listener, do nothing, otherwise add listener
-			}
-			else{
-				e.setAttribute('data-hasListener', 'true');
-				e.addEventListener('keydown', (event) => {
-					switch (event.key) {
-					case ' ':
-					case 'Enter':
-						event.preventDefault();
-						if(e.getAttribute('data-grabbed') === 'true') {
-							e.setAttribute('data-grabbed', 'false');
-							this.el.down('.ariaLiveText').dom.innerHTML = (e.childNodes[1].innerHTML + ' dropped, currently matching with ' + e.parentElement.childNodes[0].innerHTML).toString();
-						}
-						else {
-							e.setAttribute('data-grabbed', 'true');
-							this.el.down('.ariaLiveText').dom.innerHTML = (e.childNodes[1].innerHTML + ' grabbed, currently matching with ' + e.parentElement.childNodes[0].innerHTML).toString();
-						}
-						break;
+		const keyDownListener = (event) => {
+			switch (event.key) {
+			case ' ':
+			case 'Enter':
+				event.preventDefault();
+				if(event.target.getAttribute('aria-grabbed') === 'true') {
+					event.target.setAttribute('aria-grabbed', 'false');
+					this.el.down('.ariaLiveText').dom.innerHTML = (event.target.childNodes[1].innerHTML + ' dropped, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString();
+				}
+				else {
+					event.target.setAttribute('aria-grabbed', 'true');
+					this.el.down('.ariaLiveText').dom.innerHTML = (event.target.childNodes[1].innerHTML + ' grabbed, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString() + ', use W or S to move item up or down';
+				}
+				break;
 
-					case 'w':
-					case 'W':
-						event.preventDefault();
-						if(e.getAttribute('data-grabbed') === 'true') {
-							if(e.parentElement.previousSibling) {
-								const currEl = parseInt(e.getAttribute('data-ordinal'), 10);
-								const prevEl = parseInt(e.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-								this.swap(currEl, prevEl);
-							}
-							else {
-								console.log('already at top');
-							}
-						}
-						else{
-							if(e.parentElement.previousSibling) {
-								e.parentElement.previousSibling.childNodes[1].focus();
-							}
-						}
-						break;
-
-					case 's':
-					case 'S':
-						event.preventDefault();
-						if(e.getAttribute('data-grabbed') === 'true') {
-							if(e.parentElement.nextSibling) {
-								const currEl = parseInt(e.getAttribute('data-ordinal'), 10);
-								const nextEl = parseInt(e.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-								this.swap(currEl, nextEl);
-							}
-							else {
-								console.log('already at bottom');
-							}
-						}
-						else{
-							if(e.parentElement.nextSibling) {
-								e.parentElement.nextSibling.childNodes[1].focus();
-							}
-						}
-						break;
-
-					case 'Tab':
-					case 'tab':
-						if(e.getAttribute('data-grabbed') === 'true') {
-							event.preventDefault();
-						}
-						break;
-
-					default:
-						break;
+			case 'w':
+			case 'W':
+			case 'ArrowUp':
+			case 'ArrowLeft':
+				event.preventDefault();
+				if(event.target.getAttribute('aria-grabbed') === 'true') {
+					if(event.target.parentElement.previousSibling) {
+						const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
+						const prevEl = parseInt(event.target.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+						this.swap(currEl, prevEl);
 					}
-				}, true);
+				}
+				else if(event.target.parentElement.previousSibling) {
+					event.target.parentElement.previousSibling.childNodes[1].focus();
+				}
+				break;
+
+			case 's':
+			case 'S':
+			case 'ArrowDown':
+			case 'ArrowRight':
+				event.preventDefault();
+				if(event.target.getAttribute('aria-grabbed') === 'true') {
+					if(event.target.parentElement.nextSibling) {
+						const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
+						const nextEl = parseInt(event.target.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+						this.swap(currEl, nextEl);
+					}
+				}
+				else if(event.target.parentElement.nextSibling) {
+					event.target.parentElement.nextSibling.childNodes[1].focus();
+				}
+				break;
+
+			case 'Tab':
+				if(event.target.getAttribute('aria-grabbed') === 'true') {
+					event.preventDefault();
+				}
+				break;
+
+			default:
+				break;
 			}
+		};
+
+		elements.forEach((e) => {
+			if(e.getAttribute('data-hasListener') === 'true') {
+				//do nothing if e already has event listener
+			}
+			else {
+				e.addEventListener('keydown', keyDownListener, true);
+				e.setAttribute('data-hasListener', 'true');
+			}
+		});
+
+		this.on('beforeDestroy', () => {
+			elements.forEach((e) => {
+				e.removeEventListener('keydown', keyDownListener, true);
+			});
 		});
 	},
 
