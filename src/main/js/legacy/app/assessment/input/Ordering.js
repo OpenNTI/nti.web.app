@@ -3,7 +3,6 @@ const { wait } = require('@nti/lib-commons');
 
 require('./Base');
 
-
 module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: 'widget.question-input-orderingpart',
@@ -118,85 +117,174 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		});
 	},
 
-	addListeners: function () {
-		const elements = document.querySelectorAll('.draggable-area');
-
-		const keyDownListener = (event) => {
-			switch (event.key) {
-			case ' ':
-			case 'Enter':
-				event.preventDefault();
-				if(event.target.getAttribute('aria-grabbed') === 'true') {
-					event.target.setAttribute('aria-grabbed', 'false');
-					this.el.down('.ariaLiveText').dom.innerHTML = (event.target.childNodes[1].innerHTML + ' dropped, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString();
-				}
-				else {
-					event.target.setAttribute('aria-grabbed', 'true');
-					this.el.down('.ariaLiveText').dom.innerHTML = (event.target.childNodes[1].innerHTML + ' grabbed, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString() + ', use W or S to move item up or down';
-				}
-				break;
-
-			case 'w':
-			case 'W':
-			case 'ArrowUp':
-			case 'ArrowLeft':
-				event.preventDefault();
-				if(event.target.getAttribute('aria-grabbed') === 'true') {
-					if(event.target.parentElement.previousSibling) {
-						const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
-						const prevEl = parseInt(event.target.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-						this.swap(currEl, prevEl);
-					}
-				}
-				else if(event.target.parentElement.previousSibling) {
-					event.target.parentElement.previousSibling.childNodes[1].focus();
-				}
-				break;
-
-			case 's':
-			case 'S':
-			case 'ArrowDown':
-			case 'ArrowRight':
-				event.preventDefault();
-				if(event.target.getAttribute('aria-grabbed') === 'true') {
-					if(event.target.parentElement.nextSibling) {
-						const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
-						const nextEl = parseInt(event.target.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-						this.swap(currEl, nextEl);
-					}
-				}
-				else if(event.target.parentElement.nextSibling) {
-					event.target.parentElement.nextSibling.childNodes[1].focus();
-				}
-				break;
-
-			case 'Tab':
-				if(event.target.getAttribute('aria-grabbed') === 'true') {
-					event.preventDefault();
-				}
-				break;
-
-			default:
-				break;
-			}
-		};
-
-		elements.forEach((e) => {
-			if(e.getAttribute('data-hasListener') === 'true') {
-				//do nothing if e already has event listener
+	keyDownListeners: function (event) {
+		console.log(this);
+		console.log(event);
+		switch (event.key) {
+		case ' ':
+		case 'Enter':
+			event.preventDefault();
+			var arialive = event.target.parentElement.parentElement.childNodes[event.target.parentElement.parentElement.childElementCount - 1];
+			if(event.target.getAttribute('aria-grabbed') === 'true') {
+				event.target.setAttribute('aria-grabbed', 'false');
+				arialive.innerHTML = (event.target.childNodes[1].innerHTML + ' dropped, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString();
 			}
 			else {
-				e.addEventListener('keydown', keyDownListener, true);
+				event.target.setAttribute('aria-grabbed', 'true');
+				arialive.innerHTML = (event.target.childNodes[1].innerHTML + ' grabbed, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString() + ', use W or S to move item up or down';
+			}
+			break;
+
+		case 'w':
+		case 'W':
+		case 'ArrowUp':
+		case 'ArrowLeft':
+			event.preventDefault();
+			if(event.target.getAttribute('aria-grabbed') === 'true') {
+				if(event.target.parentElement.previousSibling) {
+					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
+					const prevEl = parseInt(event.target.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+					// this.swap(currEl, prevEl);
+				}
+			}
+			else if(event.target.parentElement.previousSibling) {
+				event.target.parentElement.previousSibling.childNodes[1].focus();
+			}
+			break;
+
+		case 's':
+		case 'S':
+		case 'ArrowDown':
+		case 'ArrowRight':
+			event.preventDefault();
+			if(event.target.getAttribute('aria-grabbed') === 'true') {
+				if(event.target.parentElement.nextSibling) {
+					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
+					const nextEl = parseInt(event.target.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+					// event.currentTarget.swap(currEl, nextEl);
+				}
+			}
+			else if(event.target.parentElement.nextSibling) {
+				event.target.parentElement.nextSibling.childNodes[1].focus();
+			}
+			break;
+
+		case 'Tab':
+			if(event.target.getAttribute('aria-grabbed') === 'true') {
+				event.preventDefault();
+			}
+			break;
+
+		default:
+			break;
+		}
+	},
+
+	addListeners: function () {
+		const elements = document.querySelectorAll('.draggable-area');
+		elements.forEach((e) => {
+			//do nothing if e already has event listener
+			if(e.getAttribute('data-hasListener') !== 'true') {
+				e.addEventListener('keydown', this.keyDownListeners.bind(this), true);
 				e.setAttribute('data-hasListener', 'true');
 			}
 		});
+	},
 
-		this.on('beforeDestroy', () => {
-			elements.forEach((e) => {
-				e.removeEventListener('keydown', keyDownListener, true);
-			});
+	removeListeners: function () {
+		console.log('removing listners');
+		const elements = document.querySelectorAll('.draggable-area');
+		elements.forEach((e) => {
+			e.removeEventListener('keydown', this.keyDownListeners, true);
 		});
 	},
+
+	// addListeners: function (listeners) {
+	// 	const elements = document.querySelectorAll('.draggable-area');
+
+	// 	const keyDownListener = (event) => {
+	// 		switch (event.key) {
+	// 		case ' ':
+	// 		case 'Enter':
+	// 			event.preventDefault();
+	// 			if(event.target.getAttribute('aria-grabbed') === 'true') {
+	// 				event.target.setAttribute('aria-grabbed', 'false');
+	// 				this.el.down('.ariaLiveText').dom.innerHTML = (event.target.childNodes[1].innerHTML + ' dropped, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString();
+	// 			}
+	// 			else {
+	// 				event.target.setAttribute('aria-grabbed', 'true');
+	// 				this.el.down('.ariaLiveText').dom.innerHTML = (event.target.childNodes[1].innerHTML + ' grabbed, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString() + ', use W or S to move item up or down';
+	// 			}
+	// 			break;
+
+	// 		case 'w':
+	// 		case 'W':
+	// 		case 'ArrowUp':
+	// 		case 'ArrowLeft':
+	// 			event.preventDefault();
+	// 			if(event.target.getAttribute('aria-grabbed') === 'true') {
+	// 				if(event.target.parentElement.previousSibling) {
+	// 					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
+	// 					const prevEl = parseInt(event.target.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+	// 					this.swap(currEl, prevEl);
+	// 				}
+	// 			}
+	// 			else if(event.target.parentElement.previousSibling) {
+	// 				event.target.parentElement.previousSibling.childNodes[1].focus();
+	// 			}
+	// 			break;
+
+	// 		case 's':
+	// 		case 'S':
+	// 		case 'ArrowDown':
+	// 		case 'ArrowRight':
+	// 			event.preventDefault();
+	// 			if(event.target.getAttribute('aria-grabbed') === 'true') {
+	// 				if(event.target.parentElement.nextSibling) {
+	// 					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
+	// 					const nextEl = parseInt(event.target.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+	// 					this.swap(currEl, nextEl);
+	// 				}
+	// 			}
+	// 			else if(event.target.parentElement.nextSibling) {
+	// 				event.target.parentElement.nextSibling.childNodes[1].focus();
+	// 			}
+	// 			break;
+
+	// 		case 'Tab':
+	// 			if(event.target.getAttribute('aria-grabbed') === 'true') {
+	// 				event.preventDefault();
+	// 			}
+	// 			break;
+
+	// 		default:
+	// 			break;
+	// 		}
+	// 	};
+
+	// 	elements.forEach((e) => {
+	// 		if(listeners) {
+	// 			if(e.getAttribute('data-hasListener') === 'true') {
+	// 				//do nothing if e already has event listener
+	// 			}
+	// 			else {
+	// 				console.log('adding listeners');
+	// 				e.addEventListener('keydown', keyDownListener, true);
+	// 				e.setAttribute('data-hasListener', 'true');
+	// 			}
+	// 		}
+	// 		else {
+	// 			console.log('removing listeners');
+	// 			e.removeEventListener('keydown', keyDownListener, true);
+	// 		}
+	// 	});
+
+	// 	this.on('beforeDestroy', () => {
+	// 		elements.forEach((e) => {
+	// 			e.removeEventListener('keydown', keyDownListener, true);
+	// 		});
+	// 	});
+	// },
 
 	getDragzoneEl: function () {
 		return this.el && this.el.down('.ordering-dd-zone');
@@ -333,6 +421,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	},
 
 	lockDnD: function () {
+		console.log('locking');
 		if (this.dropZone && this.dropZone.lock) {
 			this.dropZone.lock();
 		}
@@ -340,9 +429,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		if (this.dragZone && this.dragZone.lock) {
 			this.dragZone.lock();
 		}
+
+		this.removeListeners();
 	},
 
 	unlockDnD: function () {
+		console.log('unlocking');
 		if (this.dropZone && this.dropZone.unlock) {
 			this.dropZone.unlock();
 		}
@@ -350,6 +442,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		if (this.dragZone && this.dragZone.unlock) {
 			this.dragZone.unlock();
 		}
+
+		this.addListeners();
 	},
 
 	reset: function (keepAnswers) {
@@ -416,7 +510,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			ap = ad.up('.ordinal'),
 			bp = bd.up('.ordinal');
 
-		console.log('Will swap draggable parts of index: ', a, ' ', b);
+		//console.log('Will swap draggable parts of index: ', a, ' ', b);
 		ap.select('.draggable-area').remove();
 		bp.select('.draggable-area').remove();
 		ap.dom.appendChild(bd.dom);
