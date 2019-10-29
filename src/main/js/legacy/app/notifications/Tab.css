@@ -1,0 +1,9 @@
+.icon.icon::after {
+	background-image: url('./assets/icon-dark.svg');
+	background-position: center;
+	opacity: 1;
+}
+
+.dark .icon::after {
+	background-image: url('./assets/icon-white.svg');
+}

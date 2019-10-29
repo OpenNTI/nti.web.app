@@ -249,6 +249,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 		this.identityCmp.setTheme(theme.identity);
 		this.searchCmp.setTheme(theme.search);
+		this.chatCmp.setTheme(theme.icon);
+		this.notificationCmp.setTheme(theme.icon);
 	},
 
 

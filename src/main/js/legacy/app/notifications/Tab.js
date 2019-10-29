@@ -1,9 +1,15 @@
 const Ext = require('@nti/extjs');
+const classnames = require('classnames/bind');
 
+const Styles = require('./Tab.css');
 const NotificationsStateStore = require('./StateStore');
 
 require('./components/TabView');
 
+const cx = classnames.bind(Styles);
+
+const lightCls = cx('light');
+const darkCls = cx('dark');
 
 module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 	extend: 'Ext.Component',
@@ -11,8 +17,21 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'notifications-icon', role: 'button', tabindex: '0', 'aria-label': 'Notifications'}
+		{cls: cx('notifications-icon', 'icon'), role: 'button', tabindex: '0', 'aria-label': 'Notifications'}
 	]),
+
+	setTheme (theme) {
+		if (theme === 'light') {
+			this.addCls(lightCls);
+			this.removeCls(darkCls);
+		} else if (theme === 'dark') {
+			this.removeCls(lightCls);
+			this.addCls(darkCls);
+		} else {
+			this.removeCls(lightCls);
+			this.removeCls(darkCls);
+		}
+	},
 
 	initComponent: function () {
 		this.callParent(arguments);
