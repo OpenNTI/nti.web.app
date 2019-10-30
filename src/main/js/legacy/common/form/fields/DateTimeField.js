@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 			upperBound.setFullYear(upperBound.getFullYear() + this.YEARS_IN_FUTURE, 0, 1);
 		}
 
-		this.currentDate = this.currentDate;
+		// this.currentDate = this.currentDate;
 		this.lowerBound = this.lowerBound || lowerBound;
 		this.upperBound = this.upperBound || upperBound;
 

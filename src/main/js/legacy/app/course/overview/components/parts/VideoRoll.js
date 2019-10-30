@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent(arguments);
 		this.videoRoll = this.record;
 
-		this.locationInfo = this.locationInfo;
+		// this.locationInfo = this.locationInfo;
 
 		this.createVideoList();
 		var firstVideo = this.videoRoll.getItems()[0];

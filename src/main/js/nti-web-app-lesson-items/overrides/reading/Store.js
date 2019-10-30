@@ -74,7 +74,7 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 		if (activeObjectId === this.activeObjectId && activeHash === this.activeHash) { return; }
 
 		this.activeObjectId = activeObjectId;
-		this.activeHash = this.activeHash;
+		this.activeHash = activeHash;
 
 		try {
 			const activeObject = activeObjectId ? await resolveActiveObject(activeObjectId) : await resolveActiveHash(activeHash);

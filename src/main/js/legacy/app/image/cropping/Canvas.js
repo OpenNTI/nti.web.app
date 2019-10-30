@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 	clear: function () {
 		if (!this.rendered) { return; }
 
-		this.el.dom.width = this.el.dom.width;
+		this.el.dom.width = this.el.dom.width;//eslint-disable-line
 		delete this.imageInfo;
 	},
 
