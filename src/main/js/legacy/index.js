@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Theme} = require('@nti/web-commons');
 Ext.Loader.setConfig({enabled: false});
 
 const {getURL, validateConfig, loadScript} = require('./util/Globals');
@@ -19,6 +20,8 @@ window.Blob = window.Blob || window.webkitBlob;
 Ext.USE_NATIVE_JSON = true;
 
 function applyBranding (siteBrand = {}) {
+	Theme.setGlobalThemeOverrides(Theme.siteBrandToTheme(siteBrand));
+
 	const name = siteBrand['brand_name'];
 
 	if (name != null) {
