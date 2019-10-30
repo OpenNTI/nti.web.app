@@ -6,6 +6,7 @@
 
 :global(.main-navigation) .dark :global(.search-field-wrap .search-field .search-icon) {
 	background: rgba(245, 245, 245, 0.19);
+	border-color: rgba(0, 0, 0, 0.09);
 }
 
 :global(.main-navigation) .dark :global(.search-field-wrap .search-field .search-icon::after),
@@ -31,6 +32,7 @@
 
 :global(.main-navigation) .light :global(.search-field-wrap .search-field .search-icon) {
 	background: #f5f5f5;
+	border-color: rgba(0, 0, 0, 0.09);
 }
 
 :global(.main-navigation) .light :global(.search-field-wrap .search-field .search-icon::after),
