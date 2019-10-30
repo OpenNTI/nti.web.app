@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 		this.monitorUser($AppConfig.userObject);
 	},
 
-	setTheme (theme) {
+	setTheme (theme = {}) {
 		if (theme.presence === 'light') {
 			this.addCls(lightPresenceCls);
 			this.removeCls(darkPresenceCls);

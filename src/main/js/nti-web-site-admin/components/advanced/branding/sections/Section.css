@@ -1,0 +1,15 @@
+.section-root {
+	--header-font-family: var(--body-font-family);
+
+	color: var(--primary-grey, #494949);
+	padding: 2rem 0;
+}
+
+.section-root header {
+	margin-bottom: 2rem;
+}
+
+.section-root .title {
+	font: normal 300 2rem/1.3 var(--header-font-family);
+	margin-bottom: 0;
+}
