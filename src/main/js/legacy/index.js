@@ -18,6 +18,14 @@ window.Blob = window.Blob || window.webkitBlob;
 
 Ext.USE_NATIVE_JSON = true;
 
+function applyBranding (siteBrand = {}) {
+	const name = siteBrand['brand_name'];
+
+	if (name != null) {
+		global.NTIStrings['application.title-bar-prefix'] = name;
+	}
+}
+
 
 Ext.application({
 	name: 'NextThought',
@@ -31,6 +39,9 @@ Ext.application({
 
 	launch () {
 		console.debug('launching');
+
+		applyBranding($AppConfig.branding);
+
 		let me = this;
 		let ios;
 		let reasons = [];
