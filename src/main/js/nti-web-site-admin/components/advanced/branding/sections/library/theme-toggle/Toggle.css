@@ -1,0 +1,31 @@
+.root {
+	display: inline-block;
+	position: relative;
+}
+
+.toggler, .on .toggler {
+	background: #fbfbfb;
+	border-color: #e2e2e2;
+}
+
+.button {
+	background-color: #ffa515;
+}
+
+.off .button {
+	background-color: #4419ce;
+}
+
+.icon {
+	opacity: 0.5;
+}
+
+.off .icon-off {
+	fill: white;
+	opacity: 1;
+}
+
+.on .icon-on {
+	fill: white;
+	opacity: 1;
+}

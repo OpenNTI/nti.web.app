@@ -7,10 +7,10 @@ import styles from './View.css';
 
 const cx = classnames.bind(styles);
 
-export default function Preview (props) {
+export default function Preview ({theme}) {
 	return (
 		<div className={cx('preview-root')}>
-			<Header />
+			<Header theme={theme} />
 		</div>
 	);
 }

@@ -6,7 +6,6 @@ import BulkImport from './bulkimport';
 
 const t = scoped('web-site-admin.components.advanced.transcripts.View', {
 	creditTypes: 'Credit Types',
-	save: 'Save'
 });
 
 export default class AdminTranscripts extends React.Component {

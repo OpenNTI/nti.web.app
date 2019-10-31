@@ -3,6 +3,7 @@
 
 	color: var(--primary-grey, #494949);
 	padding: 2rem 0;
+	position: relative;
 }
 
 .section-root header {
