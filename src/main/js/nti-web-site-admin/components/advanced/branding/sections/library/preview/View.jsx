@@ -1,6 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+
+import {libraryTheme} from '../prop-types';
 
 import Header from './Header';
 import styles from './View.css';
@@ -14,3 +15,7 @@ export default function Preview ({theme}) {
 		</div>
 	);
 }
+
+Preview.propTypes = {
+	...libraryTheme
+};

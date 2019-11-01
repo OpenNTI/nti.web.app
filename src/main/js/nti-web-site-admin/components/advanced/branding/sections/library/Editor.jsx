@@ -4,6 +4,7 @@ import classnames from 'classnames/bind';
 import {Input} from '@nti/web-commons';
 import {Color} from '@nti/lib-commons';
 
+import {libraryTheme} from './prop-types';
 import ThemeToggle from './theme-toggle';
 import styles from './Editor.css';
 
@@ -23,7 +24,7 @@ export default function Editor ({theme, onChange}) {
 
 	const change = v => onChange({
 		navigation: {
-			backgroundColor: v
+			backgroundColor: v.hex.toString()
 		}
 	});
 
@@ -48,3 +49,8 @@ export default function Editor ({theme, onChange}) {
 		</div>
 	);
 }
+
+Editor.propTypes = {
+	...libraryTheme,
+	onChange: PropTypes.func
+};

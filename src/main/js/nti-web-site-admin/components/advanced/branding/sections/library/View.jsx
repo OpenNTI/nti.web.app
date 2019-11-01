@@ -4,6 +4,7 @@ import {scoped} from '@nti/lib-locale';
 
 import Section from '../Section';
 
+import {libraryTheme} from './prop-types';
 import Editor from './Editor';
 import Preview from './preview';
 
@@ -20,3 +21,8 @@ export default function Library ({theme, onChange}) {
 		</Section>
 	);
 }
+
+Library.propTypes = {
+	...libraryTheme,
+	onChange: PropTypes.func
+};

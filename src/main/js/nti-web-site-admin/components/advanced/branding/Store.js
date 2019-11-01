@@ -15,7 +15,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 	onThemePropsChange = newProps => {
 		const th = this.get(theme);
-		th.setOverrides({...th.getValues(), ...newProps});
+		th.setOverrides(newProps);
 		this.set(theme, th);
 	}
 
