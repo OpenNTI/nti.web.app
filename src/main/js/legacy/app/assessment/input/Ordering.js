@@ -105,61 +105,60 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	},
 
 	keyDownListeners: function (event) {
+		const element = event.target.that.el;
 		switch (event.key) {
 		case ' ':
-		case 'Enter':
+		case 'Enter': {
 			event.preventDefault();
-			var arialive = event.target.parentElement.parentElement.childNodes[event.target.parentElement.parentElement.childElementCount - 1];
-			if (event.target.getAttribute('aria-grabbed') === 'true') {
-				event.target.setAttribute('aria-grabbed', 'false');
-				arialive.innerHTML = (event.target.childNodes[1].innerHTML + ' dropped, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString();
-			}
-			else {
-				event.target.setAttribute('aria-grabbed', 'true');
-				arialive.innerHTML = (event.target.childNodes[1].innerHTML + ' grabbed, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString() + ', use W or S to move item up or down';
-			}
+			const arialive = element.down('.ariaLiveText').dom;
+			const grabbed = (event.target.getAttribute('aria-grabbed') === 'true');
+			event.target.setAttribute('aria-grabbed', grabbed ? 'false' : 'true');
+			arialive.innerHTML = (event.target.childNodes[1].innerHTML + (grabbed ? ' dropped' : ' grabbed') + ', currently matching with ' +
+			event.target.parentElement.childNodes[0].innerHTML).toString() + (grabbed ? '' : ', use W or S to move item up or down');
 			break;
-
+		}
 		case 'w':
 		case 'W':
 		case 'ArrowUp':
-		case 'ArrowLeft':
+		case 'ArrowLeft': {
 			event.preventDefault();
-			console.log();
+			const prevSib = event.target.parentElement.previousSibling;
 			if (event.target.getAttribute('aria-grabbed') === 'true') {
-				if (event.target.parentElement.previousSibling) {
+				if (prevSib) {
 					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
-					const prevEl = parseInt(event.target.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+					const prevEl = parseInt(prevSib.childNodes[1].getAttribute('data-ordinal'), 10);
 					event.target.that.swap(currEl, prevEl);
 				}
 			}
-			else if (event.target.parentElement.previousSibling) {
-				event.target.parentElement.previousSibling.childNodes[1].focus();
+			else if (prevSib) {
+				prevSib.childNodes[1].focus();
 			}
 			break;
-
+		}
 		case 's':
 		case 'S':
 		case 'ArrowDown':
-		case 'ArrowRight':
+		case 'ArrowRight': {
 			event.preventDefault();
+			const nextSib = event.target.parentElement.nextSibling;
 			if (event.target.getAttribute('aria-grabbed') === 'true') {
-				if (event.target.parentElement.nextSibling) {
+				if (nextSib) {
 					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
-					const nextEl = parseInt(event.target.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
+					const nextEl = parseInt(nextSib.childNodes[1].getAttribute('data-ordinal'), 10);
 					event.target.that.swap(currEl, nextEl);
 				}
 			}
-			else if (event.target.parentElement.nextSibling) {
-				event.target.parentElement.nextSibling.childNodes[1].focus();
+			else if (nextSib) {
+				nextSib.childNodes[1].focus();
 			}
 			break;
-
-		case 'Tab':
+		}
+		case 'Tab': {
 			if (event.target.getAttribute('aria-grabbed') === 'true') {
 				event.preventDefault();
 			}
 			break;
+		}
 
 		default:
 			break;
@@ -177,6 +176,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 				e.that = this;
 				e.addEventListener('keydown', listener, false);
 			}
+		});
+
+		this.on('beforeDestroy', () => {
+			elements.forEach((e) => {
+				e.removeEventListener('keydown', listener, false);
+			});
 		});
 	},
 
@@ -267,7 +272,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		var s = (this.part.get('solutions') || [])[0],
 			c = (s && s.get('value')) || {}, i = 0,
 			me = this;
-
 
 		this.getEl().select('.ordinal').removeCls(['correct', 'incorrect']);
 
