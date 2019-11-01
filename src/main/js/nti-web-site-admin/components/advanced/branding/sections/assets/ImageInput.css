@@ -1,0 +1,21 @@
+.image-input {
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	appearance: none;
+	border: none;
+	font-size: inherit;
+	font-weight: inherit;
+	color: var(--primary-blue);
+	padding: 0;
+	cursor: pointer;
+}
+
+.image-input input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	opacity: 0;
+}

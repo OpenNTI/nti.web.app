@@ -1,0 +1,11 @@
+.asset-item {
+	display: flex;
+}
+
+.asset-item > * {
+	flex: 1;
+}
+
+.asset-item > .preview {
+	flex: 0 0 auto;
+}

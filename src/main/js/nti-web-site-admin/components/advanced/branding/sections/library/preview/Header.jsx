@@ -9,7 +9,7 @@ const cx = classnames.bind(styles);
 
 export default function PreviewHeader ({theme}) {
 	const color = get(theme, 'navigation.backgroundColor');
-	const hex = color.isColor ? color.hex.toString() : color;
+	const hex = (color && color.isColor) ? color.hex.toString() : color;
 	const props = hex ? {
 		style: {
 			backgroundColor: hex

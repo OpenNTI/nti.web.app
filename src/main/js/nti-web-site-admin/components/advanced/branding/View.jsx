@@ -6,7 +6,7 @@ import {Theme} from '@nti/web-commons';
 import Card from '../../common/Card';
 
 import {scopes} from './constants';
-import getSection from './sections/';
+import {default as getSection, Library, Assets, Site} from './sections/';
 import style from './View.css';
 import Store from './Store';
 
@@ -17,7 +17,7 @@ class SiteAdminBranding extends React.Component {
 	static deriveBindingFromProps = () => Theme.getGlobalTheme()
 
 	changeHandler = scope => newProps => {
-		this.props.onThemePropsChange({
+		this.props.setThemeProps({
 			[scope]: { ...newProps }
 		});
 	}
@@ -25,15 +25,19 @@ class SiteAdminBranding extends React.Component {
 	onSave = () => this.props.save();
 
 	render () {
-		const {theme} = this.props;
+		const {theme, setAsset} = this.props;
+
 		return !theme ? null : (
 			<Card className={cx('branding-root')}>
-				{scopes.map(scope => {
+				<Library theme={theme.library} onChange={this.changeHandler('library')} />
+				<Assets onChange={setAsset} />
+				<Site />
+				{/* {scopes.map(scope => {
 					const Widget = getSection(scope);
 					return (
 						<Widget key={scope} theme={theme[scope]} onChange={this.changeHandler(scope)} />
 					);
-				})}
+				})} */}
 				<button onClick={this.onSave}>Save</button>
 			</Card>
 		);
@@ -41,9 +45,15 @@ class SiteAdminBranding extends React.Component {
 }
 
 SiteAdminBranding.propTypes = {
-	onThemePropsChange: PropTypes.func.isRequired,
+	setAsset: PropTypes.func.isRequired,
+	setThemeProps: PropTypes.func.isRequired,
 	theme: PropTypes.object,
 	save: PropTypes.func.isRequired,
 };
 
-export default Store.connect(['theme', 'onThemePropsChange', 'save'])(SiteAdminBranding);
+export default Store.connect([
+	'theme',
+	'setThemeProps',
+	'setAsset',
+	'save'
+])(SiteAdminBranding);
