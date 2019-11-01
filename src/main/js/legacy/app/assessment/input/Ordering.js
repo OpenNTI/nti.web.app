@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 				}
 				]
 			},
-			{ cls: 'ariaLiveText', 'aria-live': 'assertive', style: {position: 'absolute', margin: '-1', border: '0', padding: '0', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0 0 0 0)'}},
+			{ cls: 'ariaLiveText', 'aria-live': 'assertive', style: { position: 'absolute', margin: '-1', border: '0', padding: '0', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0 0 0 0)' } },
 		]
 	}),
 
@@ -77,55 +77,40 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		me.initializeDragZone();
 		me.initializeDropZone();
 		dragzoneEl.dom.id = Ext.id();
-
-		me.addAriaLabel();
-		me.addListeners();
 	},
 
-	addAriaLabel: function () {
-
-		//get all ordering elements in assignment
-		var elements = document.querySelectorAll('.ordinal');
-
-		var _OutOfX = [];
-
-		for (var i = 0; i < elements.length; i++) {
-			//skip first element
-			if (i !== 0) {
-				//for the last question, we need to push 1 extra time
-				var lastEl = (i === elements.length - 1);
-				//check if current 'data-ordinal' is lower than the previous element or last element
-				if (elements[i].childNodes[0].getAttribute('data-part') < elements[i - 1].childNodes[0].getAttribute('data-part') || lastEl) {
-					var currLength = _OutOfX.length;
-					var currIndex = i - currLength;
-					if (lastEl) { currIndex++; }
-					for (var count = 0; count < currIndex; count++) {
-						_OutOfX.push(currIndex);
-					}
-				}
-			}
-		}
-
-		elements.forEach(function (e, index) {
+	addOrderableAriaLabel: function () {
+		const elements = this.el.dom.querySelectorAll('.ordinal');
+		elements.forEach((e) => {
 			e.childNodes[1].setAttribute('role', 'button');
 			e.childNodes[1].setAttribute('aria-label',
 				e.childNodes[1].childNodes[1].innerHTML +
 				' matching with ' + e.childNodes[0].innerHTML + ', Position ' +
-				(parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + _OutOfX[index] +
+				(parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + elements.length +
 				' in orderable list. Press SpaceBar to ' +
 				(e.childNodes[1].getAttribute('aria-grabbed') === 'true' ? 'drop' : 'grab'));
 		});
 	},
 
+	addGradedAriaLabel: function () {
+		const elements = this.el.dom.querySelectorAll('.ordinal');
+		elements.forEach((e) => {
+			e.childNodes[1].setAttribute('role', 'group');
+			e.childNodes[1].setAttribute('aria-label',
+				(e.childNodes[1].classList.contains('incorrect') ? 'Incorrect. ' : 'Correct. ') +
+				e.childNodes[1].childNodes[1].innerHTML +
+				' matching with ' + e.childNodes[0].innerHTML + ', Position ' +
+				(parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + elements.length);
+		});
+	},
+
 	keyDownListeners: function (event) {
-		console.log(this);
-		console.log(event);
 		switch (event.key) {
 		case ' ':
 		case 'Enter':
 			event.preventDefault();
 			var arialive = event.target.parentElement.parentElement.childNodes[event.target.parentElement.parentElement.childElementCount - 1];
-			if(event.target.getAttribute('aria-grabbed') === 'true') {
+			if (event.target.getAttribute('aria-grabbed') === 'true') {
 				event.target.setAttribute('aria-grabbed', 'false');
 				arialive.innerHTML = (event.target.childNodes[1].innerHTML + ' dropped, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString();
 			}
@@ -140,14 +125,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		case 'ArrowUp':
 		case 'ArrowLeft':
 			event.preventDefault();
-			if(event.target.getAttribute('aria-grabbed') === 'true') {
-				if(event.target.parentElement.previousSibling) {
+			console.log();
+			if (event.target.getAttribute('aria-grabbed') === 'true') {
+				if (event.target.parentElement.previousSibling) {
 					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
 					const prevEl = parseInt(event.target.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-					// this.swap(currEl, prevEl);
+					event.target.that.swap(currEl, prevEl);
 				}
 			}
-			else if(event.target.parentElement.previousSibling) {
+			else if (event.target.parentElement.previousSibling) {
 				event.target.parentElement.previousSibling.childNodes[1].focus();
 			}
 			break;
@@ -157,20 +143,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		case 'ArrowDown':
 		case 'ArrowRight':
 			event.preventDefault();
-			if(event.target.getAttribute('aria-grabbed') === 'true') {
-				if(event.target.parentElement.nextSibling) {
+			if (event.target.getAttribute('aria-grabbed') === 'true') {
+				if (event.target.parentElement.nextSibling) {
 					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
 					const nextEl = parseInt(event.target.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-					// event.currentTarget.swap(currEl, nextEl);
+					event.target.that.swap(currEl, nextEl);
 				}
 			}
-			else if(event.target.parentElement.nextSibling) {
+			else if (event.target.parentElement.nextSibling) {
 				event.target.parentElement.nextSibling.childNodes[1].focus();
 			}
 			break;
 
 		case 'Tab':
-			if(event.target.getAttribute('aria-grabbed') === 'true') {
+			if (event.target.getAttribute('aria-grabbed') === 'true') {
 				event.preventDefault();
 			}
 			break;
@@ -180,111 +166,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		}
 	},
 
-	addListeners: function () {
-		const elements = document.querySelectorAll('.draggable-area');
+	//add or remove event listeners
+	addListeners: function (add) {
+		const listener = this.keyDownListeners;
+		const elements = this.el.dom.querySelectorAll('.draggable-area');
 		elements.forEach((e) => {
-			//do nothing if e already has event listener
-			if(e.getAttribute('data-hasListener') !== 'true') {
-				e.addEventListener('keydown', this.keyDownListeners.bind(this), true);
-				e.setAttribute('data-hasListener', 'true');
+			e.removeEventListener('keydown', listener, false);
+			if (add) {
+				//get a reference to this so we can call swap in listener
+				e.that = this;
+				e.addEventListener('keydown', listener, false);
 			}
 		});
 	},
-
-	removeListeners: function () {
-		console.log('removing listners');
-		const elements = document.querySelectorAll('.draggable-area');
-		elements.forEach((e) => {
-			e.removeEventListener('keydown', this.keyDownListeners, true);
-		});
-	},
-
-	// addListeners: function (listeners) {
-	// 	const elements = document.querySelectorAll('.draggable-area');
-
-	// 	const keyDownListener = (event) => {
-	// 		switch (event.key) {
-	// 		case ' ':
-	// 		case 'Enter':
-	// 			event.preventDefault();
-	// 			if(event.target.getAttribute('aria-grabbed') === 'true') {
-	// 				event.target.setAttribute('aria-grabbed', 'false');
-	// 				this.el.down('.ariaLiveText').dom.innerHTML = (event.target.childNodes[1].innerHTML + ' dropped, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString();
-	// 			}
-	// 			else {
-	// 				event.target.setAttribute('aria-grabbed', 'true');
-	// 				this.el.down('.ariaLiveText').dom.innerHTML = (event.target.childNodes[1].innerHTML + ' grabbed, currently matching with ' + event.target.parentElement.childNodes[0].innerHTML).toString() + ', use W or S to move item up or down';
-	// 			}
-	// 			break;
-
-	// 		case 'w':
-	// 		case 'W':
-	// 		case 'ArrowUp':
-	// 		case 'ArrowLeft':
-	// 			event.preventDefault();
-	// 			if(event.target.getAttribute('aria-grabbed') === 'true') {
-	// 				if(event.target.parentElement.previousSibling) {
-	// 					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
-	// 					const prevEl = parseInt(event.target.parentElement.previousSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-	// 					this.swap(currEl, prevEl);
-	// 				}
-	// 			}
-	// 			else if(event.target.parentElement.previousSibling) {
-	// 				event.target.parentElement.previousSibling.childNodes[1].focus();
-	// 			}
-	// 			break;
-
-	// 		case 's':
-	// 		case 'S':
-	// 		case 'ArrowDown':
-	// 		case 'ArrowRight':
-	// 			event.preventDefault();
-	// 			if(event.target.getAttribute('aria-grabbed') === 'true') {
-	// 				if(event.target.parentElement.nextSibling) {
-	// 					const currEl = parseInt(event.target.getAttribute('data-ordinal'), 10);
-	// 					const nextEl = parseInt(event.target.parentElement.nextSibling.childNodes[1].getAttribute('data-ordinal'), 10);
-	// 					this.swap(currEl, nextEl);
-	// 				}
-	// 			}
-	// 			else if(event.target.parentElement.nextSibling) {
-	// 				event.target.parentElement.nextSibling.childNodes[1].focus();
-	// 			}
-	// 			break;
-
-	// 		case 'Tab':
-	// 			if(event.target.getAttribute('aria-grabbed') === 'true') {
-	// 				event.preventDefault();
-	// 			}
-	// 			break;
-
-	// 		default:
-	// 			break;
-	// 		}
-	// 	};
-
-	// 	elements.forEach((e) => {
-	// 		if(listeners) {
-	// 			if(e.getAttribute('data-hasListener') === 'true') {
-	// 				//do nothing if e already has event listener
-	// 			}
-	// 			else {
-	// 				console.log('adding listeners');
-	// 				e.addEventListener('keydown', keyDownListener, true);
-	// 				e.setAttribute('data-hasListener', 'true');
-	// 			}
-	// 		}
-	// 		else {
-	// 			console.log('removing listeners');
-	// 			e.removeEventListener('keydown', keyDownListener, true);
-	// 		}
-	// 	});
-
-	// 	this.on('beforeDestroy', () => {
-	// 		elements.forEach((e) => {
-	// 			e.removeEventListener('keydown', keyDownListener, true);
-	// 		});
-	// 	});
-	// },
 
 	getDragzoneEl: function () {
 		return this.el && this.el.down('.ordering-dd-zone');
@@ -388,7 +282,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 				d = Ext.fly(e).down('.draggable-area'),
 				valueIndex = parseInt(d.getAttribute('data-ordinal'), 10),
 				cls = (labelIndex === i && valueIndex === c[i]) ? 'correct' : 'incorrect';
-
 			d.addCls(cls);
 			i++;
 		});
@@ -397,6 +290,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			me.updateLayout();
 			me.syncElementHeight();
 		}, 1);
+
+		this.addGradedAriaLabel();
 	},
 
 	markCorrect: function () {
@@ -421,7 +316,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	},
 
 	lockDnD: function () {
-		console.log('locking');
 		if (this.dropZone && this.dropZone.lock) {
 			this.dropZone.lock();
 		}
@@ -430,11 +324,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			this.dragZone.lock();
 		}
 
-		this.removeListeners();
+		this.addListeners(false);
 	},
 
 	unlockDnD: function () {
-		console.log('unlocking');
 		if (this.dropZone && this.dropZone.unlock) {
 			this.dropZone.unlock();
 		}
@@ -443,7 +336,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			this.dragZone.unlock();
 		}
 
-		this.addListeners();
+		this.addOrderableAriaLabel();
+		this.addListeners(true);
 	},
 
 	reset: function (keepAnswers) {
@@ -518,7 +412,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		bp.dom.childNodes[1].focus();
 
 		//reset aria labels
-		this.addAriaLabel();
+		this.addOrderableAriaLabel();
 	},
 
 	swapNodes: function (target, dd) {
