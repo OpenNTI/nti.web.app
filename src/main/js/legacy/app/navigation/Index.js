@@ -1,6 +1,9 @@
 const Ext = require('@nti/extjs');
 const classname = require('classnames/bind');
 const {wait} = require('@nti/lib-commons');
+const {Theme} = require('@nti/web-commons');
+
+const ReactHarness = require('legacy/overrides/ReactHarness');
 
 const IdentityIndex = require('../account/identity/Index');
 const NotificationsTab = require('../notifications/Tab');
@@ -10,10 +13,12 @@ const GutterTab = require('../chat/components/gutter/Tab');
 const NavigationStateStore = require('./StateStore');
 const Styles = require('./Index.css');
 
+
 require('legacy/mixins/State');
 require('../chat/Index');
 
 const cx = classname.bind(Styles);
+const DefaultAsset = 'assets.logo';
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
@@ -28,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'back-container', cn: [
-			{cls: 'branding', tabindex: '0', 'aria-label': 'Home', tag: 'a'},
+			{cls: cx('branding-container'), tabindex: '0', 'aria-label': 'Home', tag: 'a'},
 			{cls: 'back', tabindex: '0', 'aria-label': 'Back', tag: 'a', cn: [
 				{ cls: 'icon-remove' }
 			]}
@@ -44,6 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 	renderSelectors: {
 		brandingEl: '.back-container .branding',
+		brandingContainerEl: '.back-container .branding-container',
 		backEl: '.back-container .back',
 		navContainerEl: '.nav-container',
 		identityEl: '.identity-container',
@@ -205,32 +211,32 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	},
 
 	__removeVendorIcon: function () {
-		this.brandingEl.removeCls('custom-vendor');
-		this.brandingEl.setStyle({backgroundImage: undefined, width: undefined});
+		// this.brandingEl.removeCls('custom-vendor');
+		// this.brandingEl.setStyle({backgroundImage: undefined, width: undefined});
 	},
 
 	__setVendorIcon: function (url) {
-		const img = new Image();
-		const {brandingEl} = this;
+		// const img = new Image();
+		// const {brandingEl} = this;
 
-		const work = url && new Promise(function (fulfill, reject) {
-			img.onload = fulfill;
-			img.onerror = reject;
-			img.src = url;
-		});
+		// const work = url && new Promise(function (fulfill, reject) {
+		// 	img.onload = fulfill;
+		// 	img.onerror = reject;
+		// 	img.src = url;
+		// });
 
-		return (work || Promise.reject())
-			.then(() => {
-				const aspect = img.width / img.height,
-					width = aspect * 70;
+		// return (work || Promise.reject())
+		// 	.then(() => {
+		// 		const aspect = img.width / img.height,
+		// 			width = aspect * 70;
 
-				brandingEl.addCls('custom-vendor');
-				brandingEl.setStyle({backgroundImage: 'url(' + url + ')', width: width + 'px'});
-			})
-			.catch(() => {
-				brandingEl.removeCls('custom-vendor');
-				brandingEl.setStyle({backgroundImage: null, width: null});
-			});
+		// 		brandingEl.addCls('custom-vendor');
+		// 		brandingEl.setStyle({backgroundImage: 'url(' + url + ')', width: width + 'px'});
+		// 	})
+		// 	.catch(() => {
+		// 		brandingEl.removeCls('custom-vendor');
+		// 		brandingEl.setStyle({backgroundImage: null, width: null});
+		// 	});
 	},
 
 
@@ -272,6 +278,12 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	afterRender: function () {
 		this.callParent(arguments);
 
+		this.brandingCmp = ReactHarness.create({
+			component: Theme.Asset,
+			name: DefaultAsset,
+			className: cx('navigation-branding-asset')
+		});
+
 		this.identityCmp = IdentityIndex.create({
 			setMenuOpen: this.setState.bind(this, {active: 'identityCmp'}),
 			setMenuClosed: this.setState.bind(this, {}),
@@ -303,6 +315,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this)
 		});
 
+		this.brandingCmp.render(this.brandingContainerEl);
 		this.identityCmp.render(this.identityEl);
 		this.notificationCmp.render(this.notificationEl);
 		this.searchCmp.render(this.searchEl);
@@ -310,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 		this.on('destroy', 'destroy', this.identityCmp);
 
-		this.mon(this.brandingEl, 'click', this.gotoLibrary.bind(this));
+		this.mon(this.brandingContainerEl, 'click', this.gotoLibrary.bind(this));
 		this.mon(this.backEl, 'click', this.goBack.bind(this));
 		this.mon(this.searchEl, 'click', this.expandSearch.bind(this));
 
@@ -323,7 +336,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 	resizeNavCmp: function () {
 		var width = this.navContainerEl.getWidth(),
-			bar = Ext.Element.getViewportWidth() - this.brandingEl.getWidth();
+			bar = Ext.Element.getViewportWidth() - this.brandingContainerEl.getWidth();
 
 		if (this.navCmp && this.navCmp.maybeCollapse) {
 			this.navCmp.maybeCollapse(width, bar);
