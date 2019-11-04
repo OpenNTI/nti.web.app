@@ -5,8 +5,7 @@ import {Theme} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 
-import {scopes} from './constants';
-import {default as getSection, Library, Assets, Site} from './sections/';
+import {Library, Assets, Site} from './sections/';
 import style from './View.css';
 import Store from './Store';
 
@@ -25,12 +24,12 @@ class SiteAdminBranding extends React.Component {
 	onSave = () => this.props.save();
 
 	render () {
-		const {theme, setAsset} = this.props;
+		const {theme, assets, setAsset} = this.props;
 
 		return !theme ? null : (
 			<Card className={cx('branding-root')}>
 				<Library theme={theme.library} onChange={this.changeHandler('library')} />
-				<Assets onChange={setAsset} />
+				<Assets assets={assets} onChange={setAsset} />
 				<Site />
 				{/* {scopes.map(scope => {
 					const Widget = getSection(scope);
@@ -45,6 +44,7 @@ class SiteAdminBranding extends React.Component {
 }
 
 SiteAdminBranding.propTypes = {
+	assets: PropTypes.object,
 	setAsset: PropTypes.func.isRequired,
 	setThemeProps: PropTypes.func.isRequired,
 	theme: PropTypes.object,
@@ -53,6 +53,7 @@ SiteAdminBranding.propTypes = {
 
 export default Store.connect([
 	'theme',
+	'assets',
 	'setThemeProps',
 	'setAsset',
 	'save'

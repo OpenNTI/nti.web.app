@@ -11,3 +11,9 @@ export const scopes = [
 	assets,
 	site,
 ];
+
+export const MimeTypes = {
+	SiteBrand: 'application/vnd.nextthought.sitebrand',
+	Assets: 'application/vnd.nextthought.sitebrandassets',
+	Image: 'application/vnd.nextthought.sitebrandimage',
+};

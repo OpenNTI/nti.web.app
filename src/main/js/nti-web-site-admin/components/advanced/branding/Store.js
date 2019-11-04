@@ -7,6 +7,7 @@ import {
 	brandColor,
 	siteBrand,
 	theme,
+	MimeTypes,
 } from './constants';
 
 const Load = Symbol('load');
@@ -22,17 +23,20 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	/**
 	 * Sets a site asset
 	 * @param {String} type - One of: 'email', 'favicon', 'full_logo', 'icon', 'logo'
-	 * @param {String} source - Source image in 'data:image/png;base64' format
-	 * @param {String} filename - The filename to associate with the image
+	 * @param {Object} item - An object representing the asset
+	 * @param {String} item.source - Source image in 'data:image/png;base64' format
+	 * @param {String} item.filename - The filename to associate with the image
 	 * @returns {undefined}
 	 */
-	setAsset = (type, source, filename) => {
+	setAsset = (type, item) => {
+		const {source, filename} = item || {};
 		this.set(assets, {
+			MimeType: MimeTypes.Assets,
 			...(this.get(assets) || {}),
 			[type]: {
 				source,
 				filename,
-				MimeType: 'application/vnd.nextthought.sitebrandimage',
+				MimeType: MimeTypes.Image,
 			}
 		});
 	}
@@ -67,14 +71,24 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 		const brand = await (this[Loading] = getService()
 			.then(s => s.getWorkspace('SiteAdmin'))
-			.then(w => w.fetchLink('SiteBrand')));
+			.then(w => w.fetchLinkParsed('SiteBrand')));
 
 		delete this[Loading];
 		this.set(siteBrand, brand);
+		this.set(assets, (brand || {}).assets);
 		this.set(theme, Theme.buildTheme(void 0, (brand || {}).theme || {}));
 	}
 
 	save = async () => {
-		console.log('store.save');
+		const brand = this.get(siteBrand);
+		if (!brand) {
+			throw new Error('Unable to save.'); // no link
+		}
+		const payload = {
+			assets: this.get(assets),
+			theme: this.get(theme)
+		};
+
+		return brand.putToLink('edit', payload);
 	}
 }
