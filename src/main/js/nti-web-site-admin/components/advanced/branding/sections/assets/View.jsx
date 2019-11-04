@@ -37,10 +37,10 @@ const t = scoped('nti-web-app.admin.branding.logo', {
 	}
 });
 
-export default function Assets ({assets = {}, onChange}) {
+export default function Assets ({assets, onChange}) {
 
 	const changeHandler = type => item => onChange(type, item);
-	const getSrc = type => (assets[type] || {}).source;
+	const getSrc = type => ((assets || {})[type] || {}).source;
 
 	return (
 		<Section text={t}>
