@@ -12,33 +12,44 @@ import Store from './Store';
 const cx = classnames.bind(style);
 
 class SiteAdminBranding extends React.Component {
-	
-	static deriveBindingFromProps = () => Theme.getGlobalTheme()
 
-	changeHandler = scope => newProps => {
-		this.props.setThemeProps({
-			[scope]: { ...newProps }
-		});
+	constructor (props) {
+		super(props);
+		this.form = React.createRef();
 	}
 
-	onSave = () => this.props.save();
+	static deriveBindingFromProps = () => Theme.getGlobalTheme()
+
+	themeChangeHandler = newProps => {
+		this.props.setThemeProps(newProps);
+	}
+
+	onSave = e => {
+		e.preventDefault();
+		e.stopPropagation();
+		this.props.save(this.form.current);
+	}
 
 	render () {
-		const {theme, assets, setAsset} = this.props;
+		const {
+			theme,
+			assets,
+			setAsset,
+			setBrandColor,
+			setSiteInfo,
+		} = this.props;
 
 		return !theme ? null : (
-			<Card className={cx('branding-root')}>
-				<Library theme={theme.library} onChange={this.changeHandler('library')} />
-				<Assets assets={assets} onChange={setAsset} />
-				<Site />
-				{/* {scopes.map(scope => {
-					const Widget = getSection(scope);
-					return (
-						<Widget key={scope} theme={theme[scope]} onChange={this.changeHandler(scope)} />
-					);
-				})} */}
-				<button onClick={this.onSave}>Save</button>
-			</Card>
+			<Theme.Apply theme={theme}>
+				<form ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
+					<Card className={cx('branding-root')}>
+						<Library onChange={this.themeChangeHandler} onColorChange={c => setBrandColor(c)} />
+						<Site onChange={setSiteInfo} />
+						<Assets assets={assets} onChange={setAsset} />
+						<button onClick={this.onSave}>Save</button>
+					</Card>
+				</form>
+			</Theme.Apply>
 		);
 	}
 }
@@ -46,7 +57,10 @@ class SiteAdminBranding extends React.Component {
 SiteAdminBranding.propTypes = {
 	assets: PropTypes.object,
 	setAsset: PropTypes.func.isRequired,
+	setBrandColor: PropTypes.func.isRequired,
 	setThemeProps: PropTypes.func.isRequired,
+	siteInfo: PropTypes.object,
+	setSiteInfo: PropTypes.func.isRequired,
 	theme: PropTypes.object,
 	save: PropTypes.func.isRequired,
 };
@@ -56,5 +70,7 @@ export default Store.connect([
 	'assets',
 	'setThemeProps',
 	'setAsset',
+	'setBrandColor',
+	'setSiteInfo',
 	'save'
 ])(SiteAdminBranding);

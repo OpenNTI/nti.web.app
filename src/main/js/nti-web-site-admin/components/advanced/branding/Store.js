@@ -3,15 +3,17 @@ import {Theme} from '@nti/web-commons';
 import { getService } from '@nti/web-client';
 
 import {
-	assets,
-	brandColor,
-	siteBrand,
-	theme,
+	ASSETS,
+	BRAND_COLOR,
+	SITE_BRAND,
+	SITE_INFO,
+	THEME,
 	MimeTypes,
 } from './constants';
 
 const Load = Symbol('load');
 const Loading = Symbol('loading');
+const RebuildTheme = Symbol('rebuild theme');
 
 export default class ThemeEditorStore extends Stores.SimpleStore {
 
@@ -30,9 +32,9 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	 */
 	setAsset = (type, item) => {
 		const {source, filename} = item || {};
-		this.set(assets, {
+		this.set(ASSETS, {
 			MimeType: MimeTypes.Assets,
-			...(this.get(assets) || {}),
+			...(this.get(ASSETS) || {}),
 			[type]: {
 				source,
 				filename,
@@ -47,10 +49,14 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	 * @returns {undefined}
 	 */
 	setBrandColor = color => {
-		this.set(siteBrand, {
-			...(this.get(siteBrand) || {}),
-			[brandColor]: color
-		});
+		const brand = this.get(SITE_BRAND);
+		brand[BRAND_COLOR] = color;
+		this[RebuildTheme]();
+	}
+
+	setSiteInfo = o => {
+		const brand = this.get(SITE_BRAND);
+		this[RebuildTheme](Object.assign(brand, o));
 	}
 
 	/**
@@ -59,9 +65,15 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	 * @return {undefined}
 	 */
 	setThemeProps = newProps => {
-		const th = this.get(theme);
-		th.setOverrides(newProps);
-		this.set(theme, th);
+		const {theme} = this.get(SITE_BRAND);
+		// theme.setOverrides(newProps);
+		// this.set(THEME, th);
+	}
+
+	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
+		const theme = Theme.buildTheme();
+		theme.setOverrides(Theme.siteBrandToTheme(brand));
+		this.set(THEME, theme);
 	}
 
 	[Load] = async () => {
@@ -74,21 +86,19 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			.then(w => w.fetchLinkParsed('SiteBrand')));
 
 		delete this[Loading];
-		this.set(siteBrand, brand);
-		this.set(assets, (brand || {}).assets);
-		this.set(theme, Theme.buildTheme(void 0, (brand || {}).theme || {}));
+		this.set(SITE_BRAND, brand);
+		this[RebuildTheme](brand);
 	}
 
-	save = async () => {
-		const brand = this.get(siteBrand);
+	save = async (form) => {
+		const brand = this.get(SITE_BRAND);
 		if (!brand) {
 			throw new Error('Unable to save.'); // no link
 		}
-		const payload = {
-			assets: this.get(assets),
-			theme: this.get(theme)
-		};
 
-		return brand.putToLink('edit', payload);
+		const formData = new FormData(form);
+		formData.append('__json__', JSON.stringify(this.get(THEME)));
+
+		return brand.putToLink('edit', formData);
 	}
 }

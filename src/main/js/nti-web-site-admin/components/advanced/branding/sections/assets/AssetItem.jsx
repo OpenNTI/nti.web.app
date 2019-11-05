@@ -7,7 +7,7 @@ import ImageInput from './ImageInput';
 
 const cx = classnames.bind(styles);
 
-export default function AssetItem ({onChange, getText, filename, src}) {
+export default function AssetItem ({onChange, getText, name, filename, src}) {
 
 	const [imgSrc, setImgSrc] = React.useState(src);
 	const [fname, setName] = React.useState(filename);
@@ -37,7 +37,7 @@ export default function AssetItem ({onChange, getText, filename, src}) {
 				<div>{getText('description')}</div>
 				<div>
 					{fname && <span>{fname}</span>}
-					<ImageInput onChange={change}>Change</ImageInput>
+					<ImageInput name={name} onChange={change}>Change</ImageInput>
 				</div>
 			</div>
 			<div className={cx('preview')}>
@@ -51,5 +51,6 @@ AssetItem.propTypes = {
 	onChange: PropTypes.func,
 	getText: PropTypes.func,
 	filename: PropTypes.string,
+	name: PropTypes.string,
 	src: PropTypes.string
 };

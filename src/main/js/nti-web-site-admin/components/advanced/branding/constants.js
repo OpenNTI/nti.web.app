@@ -1,19 +1,22 @@
-export const library = 'library';
-export const assets = 'assets';
-export const site = 'site';
-export const theme = 'theme';
-export const siteBrand = 'siteBrand';
-export const brandColor = 'brand_color';
+export const ASSETS = 'assets';
+export const BRAND_COLOR = 'brand_color';
+export const BRAND_IMAGE = 'brandImage';
+export const BRAND_NAME = 'brand_name';
+export const LIBRARY = 'library';
+export const SITE = 'site';
+export const SITE_BRAND = 'siteBrand';
+export const SITE_INFO = 'siteInfo';
+export const THEME = 'theme';
 
 export const scopes = [
-	brandColor,
-	library,
-	assets,
-	site,
+	BRAND_COLOR,
+	LIBRARY,
+	ASSETS,
+	SITE,
 ];
 
 export const MimeTypes = {
-	SiteBrand: 'application/vnd.nextthought.sitebrand',
-	Assets: 'application/vnd.nextthought.sitebrandassets',
-	Image: 'application/vnd.nextthought.sitebrandimage',
+	[SITE_BRAND]: 'application/vnd.nextthought.sitebrand',
+	[ASSETS]: 'application/vnd.nextthought.sitebrandassets',
+	[BRAND_IMAGE]: 'application/vnd.nextthought.sitebrandimage',
 };

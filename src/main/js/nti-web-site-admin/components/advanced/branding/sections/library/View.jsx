@@ -13,11 +13,11 @@ const t = scoped('nti-web-app.admin.branding.Library', {
 	description: 'Branding can make your site more custom and familiar to your audience.'
 });
 
-export default function Library ({theme, onChange}) {
+export default function Library ({theme, onChange, onColorChange}) {
 	return (
 		<Section text={t}>
 			<Preview theme={theme} />
-			<Editor theme={theme} onChange={onChange} />
+			<Editor theme={theme} onChange={onChange} onColorChange={onColorChange} />
 		</Section>
 	);
 }

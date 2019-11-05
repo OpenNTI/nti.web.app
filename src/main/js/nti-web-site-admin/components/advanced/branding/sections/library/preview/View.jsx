@@ -1,21 +1,18 @@
 import React from 'react';
 import classnames from 'classnames/bind';
-
-import {libraryTheme} from '../prop-types';
+import {Theme} from '@nti/web-commons';
 
 import Header from './Header';
 import styles from './View.css';
 
 const cx = classnames.bind(styles);
 
-export default function Preview ({theme}) {
+export default function Preview () {
 	return (
-		<div className={cx('preview-root')}>
-			<Header theme={theme} />
-		</div>
+		<Theme.Scope scope="library">
+			<div className={cx('preview-root')}>
+				<Header />
+			</div>
+		</Theme.Scope>
 	);
 }
-
-Preview.propTypes = {
-	...libraryTheme
-};
