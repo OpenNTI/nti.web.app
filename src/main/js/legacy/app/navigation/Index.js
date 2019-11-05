@@ -253,10 +253,23 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			el.style.removeProperty('--nav-background-color');
 		}
 
+		if (theme.branding) {
+			this.brandingCmp.setProps({
+				property: theme.branding,
+				name: null
+			});
+		} else {
+			this.brandingCmp.setProps({
+				property: null,
+				name: DefaultAsset
+			});
+		}
+
 		this.identityCmp.setTheme(theme.identity);
 		this.searchCmp.setTheme(theme.search);
 		this.chatCmp.setTheme(theme.icon);
 		this.notificationCmp.setTheme(theme.icon);
+
 	},
 
 

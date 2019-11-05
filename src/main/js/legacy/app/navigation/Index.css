@@ -5,6 +5,9 @@
 .navbar:global(.main-navigation .back-container .branding-container) {
 	max-width: 300px;
 	overflow: hidden;
+	margin-right: 15px;
+	cursor: pointer;
+	display: inline-block;
 }
 
 .navigation-branding-asset {
