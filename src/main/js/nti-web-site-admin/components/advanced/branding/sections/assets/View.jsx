@@ -1,27 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
-import {Theme} from '@nti/web-commons';
 
 import Section from '../Section';
 
 import {types} from './constants';
 import AssetItem from './AssetItem';
 
-const TypeToTheme = {
-	'full_logo': 'fullLogo'
-};
-
 const t = scoped('nti-web-app.admin.branding.logo', {
 	title: 'Logo Assets',
 	types: {
-		[types.icon]: {
+		[types.logo]: {
 			title: 'Square Format',
 			description: 'We recommend this asset be close to a square in proportion.'
-		},
-		[types.logo]: {
-			title: 'Logo',
-			description: 'The wider orientation has space for your icon and company name.'
 		},
 		[types.fullLogo]: {
 			title: 'Wide Format',
@@ -43,13 +34,8 @@ const t = scoped('nti-web-app.admin.branding.logo', {
 });
 
 export default function Assets ({assets, onChange}) {
-	const theme = Theme.useTheme() || {assets: {}};
 	const changeHandler = type => item => onChange(type, item);
-	const getSrc = type => {
-		const asset = theme.assets[TypeToTheme[type] || type] || {};
 
-		return asset.href || asset.source;
-	};
 
 	return (
 		<Section text={t}>
@@ -58,7 +44,6 @@ export default function Assets ({assets, onChange}) {
 					<AssetItem
 						key={type}
 						name={type}
-						src={getSrc(type)}
 						onChange={changeHandler(type)}
 						getText={k => t(['types', type, k])}
 					/>

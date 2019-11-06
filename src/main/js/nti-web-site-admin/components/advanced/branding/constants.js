@@ -8,6 +8,10 @@ export const SITE_BRAND = 'siteBrand';
 export const SITE_INFO = 'siteInfo';
 export const THEME = 'theme';
 
+export const AssetTypeMap = {
+	'fullLogo': 'full_logo'
+};
+
 export const scopes = [
 	BRAND_COLOR,
 	LIBRARY,

@@ -9,6 +9,7 @@ import {
 	SITE_BRAND,
 	THEME,
 	MimeTypes,
+	AssetTypeMap
 } from './constants';
 
 const CHANGED = '_changed';
@@ -16,9 +17,6 @@ const Load = Symbol('load');
 const Loading = Symbol('loading');
 const RebuildTheme = Symbol('rebuild theme');
 
-const AssetTypeMap = {
-	'fullLogo': 'full_logo'
-};
 
 export default class ThemeEditorStore extends Stores.SimpleStore {
 
