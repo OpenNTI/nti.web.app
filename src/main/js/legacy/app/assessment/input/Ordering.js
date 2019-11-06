@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			const grabbed = (event.target.getAttribute('aria-grabbed') === 'true');
 			event.target.setAttribute('aria-grabbed', grabbed ? 'false' : 'true');
 			arialive.innerHTML = (event.target.childNodes[1].innerHTML + (grabbed ? ' dropped' : ' grabbed') + ', currently matching with ' +
-			event.target.parentElement.childNodes[0].innerHTML).toString() + (grabbed ? '' : ', use W or S to move item up or down');
+			event.target.parentElement.childNodes[0].innerHTML).toString() + (grabbed ? '' : ', use arrow keys to move item up or down');
 			break;
 		}
 		case 'w':
