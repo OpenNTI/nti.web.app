@@ -8,4 +8,9 @@
 
 .asset-item > .preview {
 	flex: 0 0 auto;
+	height: 70px;
+}
+
+.preview img {
+	max-height: 100%;
 }
