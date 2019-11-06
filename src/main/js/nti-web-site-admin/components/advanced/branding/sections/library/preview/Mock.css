@@ -1,0 +1,11 @@
+.mock-root {
+	background: #343434;
+	height: 480px;
+	margin-right: -2rem; /* counter container padding to get flush right edge */
+	transition: background-color 0.2s;
+}
+
+.mock-root.light {
+	background: white;
+	box-shadow: inset 1px 0 0 1px rgba(0, 0, 0, 0.07);
+}
