@@ -1,5 +1,6 @@
 import {Stores} from '@nti/lib-store';
 import {Theme} from '@nti/web-commons';
+import {Events} from '@nti/web-session';
 import { getService } from '@nti/web-client';
 
 import {
@@ -113,6 +114,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			...(this.get(CHANGED) || {})
 		}));
 
-		return brand.putToLink('edit', formData);
+		const resp = await brand.putToLink('edit', formData);
+		debugger;
+		Events.emit(Events.THEME_UPDATED, resp);
+
+		return resp;
 	}
 }

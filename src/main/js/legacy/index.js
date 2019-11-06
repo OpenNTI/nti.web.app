@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Theme} = require('@nti/web-commons');
+const Session = require('@nti/web-session');
 Ext.Loader.setConfig({enabled: false});
 
 const {getURL, validateConfig, loadScript} = require('./util/Globals');
@@ -19,7 +20,7 @@ window.Blob = window.Blob || window.webkitBlob;
 
 Ext.USE_NATIVE_JSON = true;
 
-function applyBranding (siteBrand = {}) {
+const applyBranding = (siteBrand = {}) => {
 	Theme.setGlobalThemeOverrides(Theme.siteBrandToTheme(siteBrand));
 
 	const name = siteBrand['brand_name'];
@@ -27,7 +28,7 @@ function applyBranding (siteBrand = {}) {
 	if (name != null) {
 		global.NTIStrings['application.title-bar-prefix'] = name;
 	}
-}
+};
 
 
 Ext.application({
@@ -44,6 +45,8 @@ Ext.application({
 		console.debug('launching');
 
 		applyBranding($AppConfig.branding);
+
+		Session.Events.addListener(Session.Events.THEME_UPDATED, applyBranding);
 
 		let me = this;
 		let ios;
