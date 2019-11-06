@@ -1,1 +1,12 @@
-.color-picker {}
+.color-picker {
+	padding: 0.5rem;
+}
+
+.brand-color-preview {
+	display: inline-block;
+	margin: 0.625rem 0;
+	width: 32px;
+	height: 32px;
+	border-radius: 32px;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+}
