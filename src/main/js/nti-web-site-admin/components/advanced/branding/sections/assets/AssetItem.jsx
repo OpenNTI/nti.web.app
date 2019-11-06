@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+import {Theme} from '@nti/web-commons';
 
 import styles from './AssetItem.css';
 import ImageInput from './ImageInput';
@@ -8,7 +9,7 @@ import ImageInput from './ImageInput';
 const cx = classnames.bind(styles);
 
 export default function AssetItem ({onChange, getText, name, filename, src}) {
-
+	const fill = Theme.useThemeProperty('brandColor');
 	const [imgSrc, setImgSrc] = React.useState(src);
 	const [fname, setName] = React.useState(filename);
 
@@ -30,6 +31,12 @@ export default function AssetItem ({onChange, getText, name, filename, src}) {
 		}
 	};
 
+	const inputProps = {};
+
+	if (fname) {
+		inputProps.name = name;
+	}
+
 	return (
 		<div className={cx('asset-item')}>
 			<div>
@@ -37,10 +44,10 @@ export default function AssetItem ({onChange, getText, name, filename, src}) {
 				<div>{getText('description')}</div>
 				<div>
 					{fname && <span>{fname}</span>}
-					<ImageInput name={name} onChange={change}>Change</ImageInput>
+					<ImageInput {...inputProps} onChange={change}>Change</ImageInput>
 				</div>
 			</div>
-			<div className={cx('preview')}>
+			<div className={cx('preview')} style={{backgroundColor: fill}}>
 				{imgSrc && <img src={imgSrc} />}
 			</div>
 		</div>

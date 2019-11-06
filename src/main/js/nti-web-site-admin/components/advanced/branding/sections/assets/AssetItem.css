@@ -1,5 +1,6 @@
 .asset-item {
 	display: flex;
+	align-items: center;
 	padding: 1rem 0;
 	border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -10,7 +11,7 @@
 
 .asset-item > .preview {
 	flex: 0 0 auto;
-	height: 70px;
+	max-height: 70px;
 }
 
 .preview img {

@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
+import {Theme} from '@nti/web-commons';
 
 import Section from '../Section';
 
 import {types} from './constants';
 import AssetItem from './AssetItem';
+
+const TypeToTheme = {
+	'full_logo': 'fullLogo'
+};
 
 const t = scoped('nti-web-app.admin.branding.logo', {
 	title: 'Logo Assets',
@@ -38,9 +43,13 @@ const t = scoped('nti-web-app.admin.branding.logo', {
 });
 
 export default function Assets ({assets, onChange}) {
-
+	const theme = Theme.useTheme() || {assets: {}};
 	const changeHandler = type => item => onChange(type, item);
-	const getSrc = type => ((assets || {})[type] || {}).source;
+	const getSrc = type => {
+		const asset = theme.assets[TypeToTheme[type] || type] || {};
+
+		return asset.href || asset.source;
+	};
 
 	return (
 		<Section text={t}>
