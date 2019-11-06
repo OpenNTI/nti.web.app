@@ -16,6 +16,10 @@ const Load = Symbol('load');
 const Loading = Symbol('loading');
 const RebuildTheme = Symbol('rebuild theme');
 
+const AssetTypeMap = {
+	'fullLogo': 'full_logo'
+};
+
 export default class ThemeEditorStore extends Stores.SimpleStore {
 
 	constructor () {
@@ -33,14 +37,11 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	 */
 	setAsset = (type, item) => {
 		const {source, filename} = item || {};
-		this.set(ASSETS, {
-			MimeType: MimeTypes.Assets,
-			...(this.get(ASSETS) || {}),
-			[type]: {
-				source,
-				filename,
-				MimeType: MimeTypes.Image,
-			}
+		this.setBrandProp(`${ASSETS}.${AssetTypeMap[type] || type}`, {
+			source,
+			href: source,
+			filename,
+			MimeType: MimeTypes.Image,
 		});
 	}
 
