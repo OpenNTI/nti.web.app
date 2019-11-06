@@ -9,7 +9,11 @@ const cx = classnames.bind(style);
 
 export default function Section ({text, className, children, ...props}) {
 
-	const t = typeof text === 'function' ? k => text(k) : k => props[k];
+	const t = typeof text === 'function'
+		? k => text.isMissing(k)
+			? null
+			: text(k)
+		: k => props[k];
 
 	const title = t('title');
 	const description = t('description');
