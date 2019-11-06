@@ -1,0 +1,25 @@
+.avatar-root {
+	width: 42px;
+	height: 42px;
+	position: relative;
+}
+
+.avatar-root svg {
+	border-radius: 50%;
+}
+
+.presence {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 11px;
+	height: 11px;
+	background: white;
+	border-radius: 50%;
+}
+
+.presence > * {
+	position: relative;
+	top: 2px;
+	left: 2px;
+}

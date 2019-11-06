@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {Theme} from '@nti/web-commons';
 
+import Avatar from './Avatar';
+import NotificationsIcon from './NotificationsIcon';
 import styles from './Header.css';
 
 const cx = classnames.bind(styles);
@@ -19,6 +21,10 @@ export default function PreviewHeader () {
 	return (
 		<div className={cx('root')} {...props}>
 			<Theme.Asset name="navigation.branding" className={cx('logo')} />
+			<div className={cx('icons')}>
+				<NotificationsIcon />
+				<Avatar />
+			</div>
 		</div>
 	);
 }

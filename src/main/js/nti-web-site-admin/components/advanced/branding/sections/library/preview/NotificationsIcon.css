@@ -1,0 +1,23 @@
+.notifications-icon.notifications-icon {
+	min-height: 70px;
+	position: relative;
+	flex: 0 0 70px;
+}
+
+.notifications-icon::after {
+	content: '';
+	background-image: url('../../../../../../../legacy/app/notifications/assets/icon-dark.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 42px 48px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	opacity: 1;
+}
+
+.dark.notifications-icon::after {
+	background-image: url('../../../../../../../legacy/app/notifications/assets/icon-white.svg');
+}

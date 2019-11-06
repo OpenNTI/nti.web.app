@@ -1,7 +1,26 @@
 .root {
 	height: 70px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-right: 1rem;
+}
+
+.root > * {
+	flex: 0 0 auto;
 }
 
 .logo {
 	height: 100%;
+}
+
+.icons {
+	display: flex;
+	flex: 1 0 auto;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.icons > * {
+	flex: 0 0 auto;
 }
