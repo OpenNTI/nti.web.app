@@ -6,8 +6,6 @@ import { getService } from '@nti/web-client';
 
 import {
 	ASSETS,
-	BRAND_COLOR,
-	BRAND_NAME,
 	SITE_BRAND,
 	THEME,
 	MimeTypes,
@@ -51,31 +49,6 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		ObjectUtils.set(brand, path, value);
 		this.set(CHANGED, ObjectUtils.set(this.get(CHANGED) || {}, path, value));
 		this[RebuildTheme]();
-	}
-
-	/**
-	 * Set the brand color
-	 * @param {String} color - the new brand color as a CSS string
-	 * @returns {undefined}
-	 */
-	setBrandColor = color => this.setBrandProp(BRAND_COLOR, color)
-
-	/**
-	 * Set the brand name
-	 * @param {String} name - the new brand name
-	 * @returns {undefined}
-	 */
-	setBrandName = name => this.setBrandProp(BRAND_NAME, name)
-
-	/**
-	 * Applies the given value to the theme at path
-	 * @param {String} path - The path, e.g. 'library.navigation.background'
-	 * @param {String} value - The new value to be stored at path
-	 * @return {undefined}
-	 */
-	setThemeProp = (path, value) => {
-		const {theme = {}} = this.get(SITE_BRAND) || {};
-		this.setBrandProp(THEME, ObjectUtils.set(theme, path, value));
 	}
 
 	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
