@@ -80,7 +80,16 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			throw new Error('Unable to save.'); // no link
 		}
 
-		const formData = new FormData(form);
+		const formData = new FormData();
+
+		const assets = form.querySelectorAll('input[type="file"]');
+
+		for (let asset of assets) {
+			if (asset.files && asset.files.length > 0 && asset.name) {
+				formData.append(asset.name, asset.files[0]);
+			}
+		}
+
 		formData.append('__json__', JSON.stringify({
 			...(this.get(CHANGED) || {}),
 			...(this.get(THEME) || {})
