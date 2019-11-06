@@ -42,13 +42,17 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			href: source,
 			filename,
 			MimeType: MimeTypes.Image,
-		});
+		}, true);
 	}
 
-	setBrandProp = (path, value) => {
+	setBrandProp = (path, value, doNotTrackChange) => {
 		const brand = this.get(SITE_BRAND);
 		ObjectUtils.set(brand, path, value);
-		this.set(CHANGED, ObjectUtils.set(this.get(CHANGED) || {}, path, value));
+
+		if (!doNotTrackChange) {
+			this.set(CHANGED, ObjectUtils.set(this.get(CHANGED) || {}, path, value));
+		}
+
 		this[RebuildTheme]();
 	}
 
@@ -81,7 +85,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		const formData = new FormData(form);
 		formData.append('__json__', JSON.stringify({
 			...(this.get(CHANGED) || {}),
-			...(this.get(THEME) || {}),
+			...(this.get(THEME) || {})
 		}));
 
 		const resp = await brand.putToLink('edit', formData);
