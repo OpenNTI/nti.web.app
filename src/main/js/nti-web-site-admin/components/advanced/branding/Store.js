@@ -1,4 +1,5 @@
 import {Stores} from '@nti/lib-store';
+import {ObjectUtils} from '@nti/lib-commons';
 import {Theme} from '@nti/web-commons';
 import {Events} from '@nti/web-session';
 import { getService } from '@nti/web-client';
@@ -45,13 +46,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		});
 	}
 
-	setBrandProp = (prop, value) => {
+	setBrandProp = (path, value) => {
 		const brand = this.get(SITE_BRAND);
-		brand[prop] = value;
-		this.set(CHANGED, {
-			...(this.get(CHANGED) || {}),
-			[prop]: value,
-		});
+		ObjectUtils.set(brand, path, value);
+		this.set(CHANGED, ObjectUtils.set(this.get(CHANGED) || {}, path, value));
 		this[RebuildTheme]();
 	}
 
@@ -70,16 +68,14 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	setBrandName = name => this.setBrandProp(BRAND_NAME, name)
 
 	/**
-	 * Merges the specified object into the theme
-	 * @param {Object} newProps - The object to merge
+	 * Applies the given value to the theme at path
+	 * @param {String} path - The path, e.g. 'library.navigation.background'
+	 * @param {String} value - The new value to be stored at path
 	 * @return {undefined}
 	 */
-	setThemeProps = newProps => {
-		const {theme} = this.get(SITE_BRAND) || {};
-		this.setBrandProp(THEME, {
-			...theme,
-			...newProps
-		});
+	setThemeProp = (path, value) => {
+		const {theme = {}} = this.get(SITE_BRAND) || {};
+		this.setBrandProp(THEME, ObjectUtils.set(theme, path, value));
 	}
 
 	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
@@ -110,8 +106,8 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 		const formData = new FormData(form);
 		formData.append('__json__', JSON.stringify({
+			...(this.get(CHANGED) || {}),
 			...(this.get(THEME) || {}),
-			...(this.get(CHANGED) || {})
 		}));
 
 		const resp = await brand.putToLink('edit', formData);

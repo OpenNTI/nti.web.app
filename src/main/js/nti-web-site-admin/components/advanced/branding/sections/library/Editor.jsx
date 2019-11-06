@@ -3,35 +3,28 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {Theme} from '@nti/web-commons';
 
-import {libraryTheme} from './prop-types';
+import {BRAND_COLOR, THEME} from '../../constants';
+
 import BrandColor from './BrandColor';
 import ThemeToggle from './theme-toggle';
 import styles from './Editor.css';
 
 const cx = classnames.bind(styles);
 
-export default function Editor ({onChange, onColorChange}) {
-	const background = Theme.useThemeProperty('library.navigation.background');
+const BG_PATH = 'library.background';
 
-	const change = v => onColorChange(v.hex.toString());
-
-	const onThemeChange = v => {
-		onChange({
-			background: v ? 'light' : 'dark'
-		});
-	};
-
+export default function Editor ({onChange}) {
+	const background = Theme.useThemeProperty(BG_PATH);
+	const change = what => value => onChange(what, value);
 	const lightMode = background === 'light';
-
 	return (
 		<div className={cx('editor-root')}>
-			<ThemeToggle onChange={onThemeChange} checked={lightMode}/>
-			<BrandColor onChange={change} />
+			<ThemeToggle onChange={value => change(`${THEME}.${BG_PATH}`)(value ? 'light' : 'dark')} checked={lightMode} />
+			<BrandColor onChange={color => change(BRAND_COLOR)(color.hex.toString())} />
 		</div>
 	);
 }
 
 Editor.propTypes = {
-	...libraryTheme,
 	onChange: PropTypes.func
 };

@@ -5,7 +5,6 @@ import {Theme} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 
-import {BRAND_COLOR} from './constants';
 import {Library, Assets, Site} from './sections/';
 import style from './View.css';
 import Store from './Store';
@@ -43,7 +42,7 @@ class SiteAdminBranding extends React.Component {
 			<Theme.Apply theme={theme}>
 				<form ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
 					<Card className={cx('branding-root')}>
-						<Library onChange={this.themeChangeHandler} onColorChange={c => setBrandProp(BRAND_COLOR, c)} />
+						<Library onChange={setBrandProp} />
 						<Site onChange={setBrandProp} />
 						<Assets assets={assets} onChange={setAsset} />
 						<button onClick={this.onSave}>Save</button>
@@ -66,7 +65,6 @@ SiteAdminBranding.propTypes = {
 export default Store.connect([
 	'theme',
 	'assets',
-	'setThemeProps',
 	'setAsset',
 	'setBrandProp',
 	'save'
