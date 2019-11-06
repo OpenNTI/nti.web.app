@@ -6,11 +6,11 @@ import {
 	ASSETS,
 	BRAND_COLOR,
 	SITE_BRAND,
-	SITE_INFO,
 	THEME,
 	MimeTypes,
 } from './constants';
 
+const CHANGED = '_changed';
 const Load = Symbol('load');
 const Loading = Symbol('loading');
 const RebuildTheme = Symbol('rebuild theme');
@@ -23,7 +23,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	}
 
 	/**
-	 * Sets a site asset
+	 * Sets a site asset for previewing
 	 * @param {String} type - One of: 'email', 'favicon', 'full_logo', 'icon', 'logo'
 	 * @param {Object} item - An object representing the asset
 	 * @param {String} item.source - Source image in 'data:image/png;base64' format
@@ -51,6 +51,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	setBrandColor = color => {
 		const brand = this.get(SITE_BRAND);
 		brand[BRAND_COLOR] = color;
+		this.set(CHANGED, {
+			...(this.get(CHANGED) || {}),
+			[BRAND_COLOR]: color,
+		});
 		this[RebuildTheme]();
 	}
 
@@ -97,7 +101,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}
 
 		const formData = new FormData(form);
-		formData.append('__json__', JSON.stringify(this.get(THEME)));
+		formData.append('__json__', JSON.stringify({
+			...(this.get(THEME) || {}),
+			...(this.get(CHANGED) || {})
+		}));
 
 		return brand.putToLink('edit', formData);
 	}
