@@ -4,7 +4,6 @@ import {scoped} from '@nti/lib-locale';
 
 import Section from '../Section';
 
-import {libraryTheme} from './prop-types';
 import Editor from './Editor';
 import Preview from './preview';
 
@@ -13,16 +12,16 @@ const t = scoped('nti-web-app.admin.branding.Library', {
 	description: 'Branding can make your site more custom and familiar to your audience.'
 });
 
-export default function Library ({theme, onChange, onColorChange}) {
+export default function Library ({onChange, onColorChange}) {
 	return (
 		<Section text={t}>
-			<Preview theme={theme} />
-			<Editor theme={theme} onChange={onChange} onColorChange={onColorChange} />
+			<Preview />
+			<Editor onChange={onChange} onColorChange={onColorChange} />
 		</Section>
 	);
 }
 
 Library.propTypes = {
-	...libraryTheme,
-	onChange: PropTypes.func
+	onChange: PropTypes.func,
+	onColorChange: PropTypes.func
 };

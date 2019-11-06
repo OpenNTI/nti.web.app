@@ -5,6 +5,7 @@ import {Theme} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 
+import {BRAND_COLOR} from './constants';
 import {Library, Assets, Site} from './sections/';
 import style from './View.css';
 import Store from './Store';
@@ -35,16 +36,15 @@ class SiteAdminBranding extends React.Component {
 			theme,
 			assets,
 			setAsset,
-			setBrandColor,
-			setSiteInfo,
+			setBrandProp,
 		} = this.props;
 
 		return !theme ? null : (
 			<Theme.Apply theme={theme}>
 				<form ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
 					<Card className={cx('branding-root')}>
-						<Library onChange={this.themeChangeHandler} onColorChange={c => setBrandColor(c)} />
-						<Site onChange={setSiteInfo} />
+						<Library onChange={this.themeChangeHandler} onColorChange={c => setBrandProp(BRAND_COLOR, c)} />
+						<Site onChange={setBrandProp} />
 						<Assets assets={assets} onChange={setAsset} />
 						<button onClick={this.onSave}>Save</button>
 					</Card>
@@ -57,10 +57,8 @@ class SiteAdminBranding extends React.Component {
 SiteAdminBranding.propTypes = {
 	assets: PropTypes.object,
 	setAsset: PropTypes.func.isRequired,
-	setBrandColor: PropTypes.func.isRequired,
+	setBrandProp: PropTypes.func.isRequired,
 	setThemeProps: PropTypes.func.isRequired,
-	siteInfo: PropTypes.object,
-	setSiteInfo: PropTypes.func.isRequired,
 	theme: PropTypes.object,
 	save: PropTypes.func.isRequired,
 };
@@ -70,7 +68,6 @@ export default Store.connect([
 	'assets',
 	'setThemeProps',
 	'setAsset',
-	'setBrandColor',
-	'setSiteInfo',
+	'setBrandProp',
 	'save'
 ])(SiteAdminBranding);

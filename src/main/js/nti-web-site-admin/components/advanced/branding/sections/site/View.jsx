@@ -13,7 +13,7 @@ const t = scoped('nti-web-app.admin.branding.Site', {
 
 export default function Site ({onChange}) {
 	const brandName = Theme.useThemeProperty('brandName'); // 'brandName' in theme, 'brand_name' in SiteBrand
-	const changeHandler = fieldName => v => onChange({[fieldName]: v});
+	const changeHandler = fieldName => v => onChange(fieldName, v);
 	return (
 		<Section title={t('title')}>
 			<Input.Text value={brandName} onChange={changeHandler(BRAND_NAME)} />

@@ -5,6 +5,7 @@ import { getService } from '@nti/web-client';
 import {
 	ASSETS,
 	BRAND_COLOR,
+	BRAND_NAME,
 	SITE_BRAND,
 	THEME,
 	MimeTypes,
@@ -43,25 +44,29 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		});
 	}
 
+	setBrandProp = (prop, value) => {
+		const brand = this.get(SITE_BRAND);
+		brand[prop] = value;
+		this.set(CHANGED, {
+			...(this.get(CHANGED) || {}),
+			[prop]: value,
+		});
+		this[RebuildTheme]();
+	}
+
 	/**
 	 * Set the brand color
 	 * @param {String} color - the new brand color as a CSS string
 	 * @returns {undefined}
 	 */
-	setBrandColor = color => {
-		const brand = this.get(SITE_BRAND);
-		brand[BRAND_COLOR] = color;
-		this.set(CHANGED, {
-			...(this.get(CHANGED) || {}),
-			[BRAND_COLOR]: color,
-		});
-		this[RebuildTheme]();
-	}
+	setBrandColor = color => this.setBrandProp(BRAND_COLOR, color)
 
-	setSiteInfo = o => {
-		const brand = this.get(SITE_BRAND);
-		this[RebuildTheme](Object.assign(brand, o));
-	}
+	/**
+	 * Set the brand name
+	 * @param {String} name - the new brand name
+	 * @returns {undefined}
+	 */
+	setBrandName = name => this.setBrandProp(BRAND_NAME, name)
 
 	/**
 	 * Merges the specified object into the theme
@@ -69,9 +74,11 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	 * @return {undefined}
 	 */
 	setThemeProps = newProps => {
-		const {theme} = this.get(SITE_BRAND);
-		// theme.setOverrides(newProps);
-		// this.set(THEME, th);
+		const {theme} = this.get(SITE_BRAND) || {};
+		this.setBrandProp(THEME, {
+			...theme,
+			...newProps
+		});
 	}
 
 	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
