@@ -115,7 +115,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}));
 
 		const resp = await brand.putToLink('edit', formData);
-		debugger;
+
 		Events.emit(Events.THEME_UPDATED, resp);
 
 		return resp;
