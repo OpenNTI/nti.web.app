@@ -6,6 +6,7 @@ import {Theme} from '@nti/web-commons';
 import Card from '../../common/Card';
 
 import Apply from './Apply';
+import Reset from './Reset';
 import {Library, Assets, Site} from './sections/';
 import style from './View.css';
 import Store from './Store';
@@ -46,6 +47,7 @@ class SiteAdminBranding extends React.Component {
 						<Library onChange={setBrandProp} />
 						<Site onChange={setBrandProp} />
 						<Assets assets={assets} onChange={setAsset} />
+						<Reset hasChanges={hasChanges} onReset={reset} />
 					</Card>
 				</form>
 			</Theme.Apply>
@@ -58,6 +60,7 @@ SiteAdminBranding.propTypes = {
 	setAsset: PropTypes.func.isRequired,
 	setBrandProp: PropTypes.func.isRequired,
 	theme: PropTypes.object,
+	hasChanges: PropTypes.bool,
 	save: PropTypes.func.isRequired,
 	cancel: PropTypes.func.isRequired,
 	reset: PropTypes.func.isRequired,

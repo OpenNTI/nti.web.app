@@ -81,6 +81,16 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 	cancel = this[Load]
 
+	reset = async () => {
+		const brand = this.get(SITE_BRAND);
+
+		if (!brand) {
+			throw new Error('Unable to reset.'); // no link
+		}
+
+		return brand.requestLink('delete', 'delete').then(this[Load]);
+	}
+
 	save = async (form) => {
 		const brand = this.get(SITE_BRAND);
 		if (!brand) {
