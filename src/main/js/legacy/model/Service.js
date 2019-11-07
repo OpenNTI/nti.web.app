@@ -276,6 +276,13 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 	},
 
 
+	getWorkspaceLink (name, rel) {
+		const workspace = this.getWorkspace(name);
+
+		return workspace && workspace.Links && this.getLinkFrom(workspace.Links, rel);
+	},
+
+
 	getLibrary: function (name) {
 		var libs = this.getWorkspace('Library') || {},
 			items = libs.Items || [],
