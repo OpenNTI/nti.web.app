@@ -1,11 +1,30 @@
 .mock-root {
 	background: #343434;
 	height: 480px;
+	max-width: 768px;
+	overflow: hidden;
 	margin-right: -2rem; /* counter container padding to get flush right edge */
 	transition: background-color 0.2s;
+	position: relative;
+}
+
+.mock-root::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	pointer-events: none;
+	height: 170px;
+	background: linear-gradient(180deg, rgba(50, 50, 50, 0) 0%, #323232 100%);
+	transition: background 0.2s;
 }
 
 .mock-root.light {
 	background: white;
 	box-shadow: inset 1px 0 0 1px rgba(0, 0, 0, 0.07);
+}
+
+.mock-root.light::after {
+	background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.31) 100%);
 }

@@ -1,0 +1,31 @@
+.collection {
+	margin-bottom: 30px;
+}
+
+.collection ul {
+	list-style: none;
+	padding: 0;
+	margin: 0 -8px;
+	display: flex;
+}
+
+.collection ul li {
+	width: 242px;
+	background: white;
+	margin: 7px 9px;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+	flex: 0 0 auto;
+}
+
+.title {
+	font: normal 300 1.25em/2em "Open Sans", sans-serif;
+	color: white;
+	font-size: 20px;
+	margin: 0;
+	white-space: nowrap;
+	transition: color 0.2s;
+}
+
+.light .title {
+	color: var(--secondary-grey);
+}
