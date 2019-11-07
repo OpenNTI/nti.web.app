@@ -32,6 +32,7 @@ export default function Editor ({onChange}) {
 	const icon = Theme.useThemeProperty(ICON_PATH);
 
 	const change = what => value => onChange(what, value);
+
 	return (
 		<div className={cx('editor-bar')}>
 			<div className={cx('editor-root')}>
@@ -42,10 +43,10 @@ export default function Editor ({onChange}) {
 					<BrandColor onChange={color => change(BRAND_COLOR)(color.hex.toString())} />
 				</InputContainer>
 				<InputContainer label={t('searchBar')} className={cx('input')}>
-					<ThemeOptions value={search} onChange={theme => change(`${THEME}.${SEARCH_PATH}`, theme)} />
+					<ThemeOptions value={search} onChange={theme => change(`${THEME}.${SEARCH_PATH}`)(theme)} />
 				</InputContainer>
 				<InputContainer label={t('navIcons')} className={cx('input')}>
-					<ThemeOptions value={icon} onChange={theme => change(`${THEME}.${ICON_PATH}`, theme)} />
+					<ThemeOptions value={icon} onChange={theme => change(`${THEME}.${ICON_PATH}`)(theme)} />
 				</InputContainer>
 			</div>
 		</div>

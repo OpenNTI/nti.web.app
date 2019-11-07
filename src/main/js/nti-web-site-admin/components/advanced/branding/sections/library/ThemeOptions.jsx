@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
 import {Select} from '@nti/web-commons';
 
+import Styles from './ThemeOptions.css';
+
+const cx = classnames.bind(Styles);
 const t = scoped('nti-web-site-admin.components.advanced.branding.sections.library.ThemeOptions', {
 	auto: 'Auto',
 	dark: 'Dark',
@@ -21,12 +25,14 @@ ThemeOptions.propTypes = {
 };
 export default function ThemeOptions ({value, onChange}) {
 	return (
-		<Select value={value} onChange={onChange}>
-			{options.map((o, i) => {
-				return (
-					<option key={i} value={o.value}>{o.label}</option>
-				);
-			})}
-		</Select>
+		<div className={cx('theme-options')}>
+			<Select value={value} onChange={e => onChange(e.target.value)} >
+				{options.map((o, i) => {
+					return (
+						<option key={i} value={o.value}>{o.label}</option>
+					);
+				})}
+			</Select>
+		</div>
 	);
 }
