@@ -20,10 +20,6 @@ class SiteAdminBranding extends React.Component {
 
 	static deriveBindingFromProps = () => Theme.getGlobalTheme()
 
-	themeChangeHandler = newProps => {
-		this.props.setThemeProps(newProps);
-	}
-
 	onSave = e => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -57,7 +53,6 @@ SiteAdminBranding.propTypes = {
 	assets: PropTypes.object,
 	setAsset: PropTypes.func.isRequired,
 	setBrandProp: PropTypes.func.isRequired,
-	setThemeProps: PropTypes.func.isRequired,
 	theme: PropTypes.object,
 	save: PropTypes.func.isRequired,
 };
