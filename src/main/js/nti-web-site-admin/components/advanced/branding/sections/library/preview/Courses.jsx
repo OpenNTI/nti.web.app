@@ -9,13 +9,13 @@ const cx = classnames.bind(styles);
 
 const courses = [
 	{
-		title: 'Town Square',
+		title: 'Intro to Chemistry',
 	},
 	{
-		title: 'Town Square',
+		title: 'Advanced Calculus',
 	},
 	{
-		title: 'Town Square',
+		title: 'Statistics',
 	},
 ];
 

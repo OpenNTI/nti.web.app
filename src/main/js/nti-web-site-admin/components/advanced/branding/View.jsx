@@ -5,6 +5,7 @@ import {Theme} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 
+import Apply from './Apply';
 import {Library, Assets, Site} from './sections/';
 import style from './View.css';
 import Store from './Store';
@@ -32,16 +33,19 @@ class SiteAdminBranding extends React.Component {
 			assets,
 			setAsset,
 			setBrandProp,
+			cancel,
+			hasChanges,
+			reset
 		} = this.props;
 
 		return !theme ? null : (
 			<Theme.Apply theme={theme}>
 				<form ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
 					<Card className={cx('branding-root')}>
+						<Apply hasChanges={hasChanges} onSave={this.onSave} onCancel={cancel} />
 						<Library onChange={setBrandProp} />
 						<Site onChange={setBrandProp} />
 						<Assets assets={assets} onChange={setAsset} />
-						<button onClick={this.onSave}>Save</button>
 					</Card>
 				</form>
 			</Theme.Apply>
@@ -55,6 +59,8 @@ SiteAdminBranding.propTypes = {
 	setBrandProp: PropTypes.func.isRequired,
 	theme: PropTypes.object,
 	save: PropTypes.func.isRequired,
+	cancel: PropTypes.func.isRequired,
+	reset: PropTypes.func.isRequired,
 };
 
 export default Store.connect([
@@ -62,5 +68,8 @@ export default Store.connect([
 	'assets',
 	'setAsset',
 	'setBrandProp',
-	'save'
+	'hasChanges',
+	'cancel',
+	'save',
+	'reset'
 ])(SiteAdminBranding);

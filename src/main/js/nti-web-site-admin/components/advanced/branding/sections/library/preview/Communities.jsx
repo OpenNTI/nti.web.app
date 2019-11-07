@@ -1,14 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Text} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
+import Avatar from './Avatar';
+import Collection from './Collection';
 import styles from './Communities.css';
 
 const cx = classnames.bind(styles);
 
-import Avatar from './Avatar';
-import Collection from './Collection';
 
 const communities = [
 	{
@@ -16,7 +15,7 @@ const communities = [
 	}
 ];
 
-export default function Communities (props) {
+export default function Communities () {
 	return (
 		<Collection title="Communities">
 			<ul className={cx('items')}>

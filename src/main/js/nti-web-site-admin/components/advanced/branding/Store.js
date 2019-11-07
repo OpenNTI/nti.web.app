@@ -54,6 +54,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		this[RebuildTheme]();
 	}
 
+	get hasChanges () {
+		return !!Object.keys(this.get(CHANGED) || {}).length;
+	}
+
 	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
 		const theme = Theme.buildTheme();
 		theme.setOverrides(Theme.siteBrandToTheme(brand));
@@ -71,8 +75,11 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 		delete this[Loading];
 		this.set(SITE_BRAND, brand);
+		this.set(CHANGED, undefined);
 		this[RebuildTheme](brand);
 	}
+
+	cancel = this[Load]
 
 	save = async (form) => {
 		const brand = this.get(SITE_BRAND);
