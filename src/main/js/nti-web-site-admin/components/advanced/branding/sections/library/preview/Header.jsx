@@ -6,6 +6,7 @@ import {Theme} from '@nti/web-commons';
 import Avatar from './Avatar';
 import NotificationsIcon from './NotificationsIcon';
 import styles from './Header.css';
+import SearchBar from './SearchBar';
 
 const cx = classnames.bind(styles);
 
@@ -21,6 +22,7 @@ export default function PreviewHeader () {
 	return (
 		<div className={cx('root')} {...props}>
 			<Theme.Asset name="navigation.branding" className={cx('logo')} />
+			<SearchBar />
 			<div className={cx('icons')}>
 				<NotificationsIcon />
 				<Avatar />
