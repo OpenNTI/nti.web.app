@@ -4,13 +4,20 @@
 
 .navbar:global(.main-navigation .back-container .branding-container) {
 	max-width: 300px;
+	height: 100%;
 	overflow: hidden;
 	margin-right: 15px;
 	cursor: pointer;
+	display: inline-flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.navbar:global(.main-navigation .back-container .branding-container) > * {
 	display: inline-block;
 }
 
 .navigation-branding-asset {
-	height: 70px;
+	max-height: 70px;
 	width: auto;
 }
