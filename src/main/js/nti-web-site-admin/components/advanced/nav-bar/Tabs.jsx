@@ -17,7 +17,7 @@ export default function SiteAdminAdvancedTabs () {
 			<li>
 				<LinkTo.Path to="./" exact activeClassName="active">{t('transcripts')}</LinkTo.Path>
 				<LinkTo.Path to="./integrations" activeClassName="active">{t('integrations')}</LinkTo.Path>
-				{global.Service.getWorkspaceLink('SiteAdmin', 'SiteBrand') ?
+				{global.Service && global.Service.getWorkspaceLink('SiteAdmin', 'SiteBrand') ?
 					(<LinkTo.Path to="./branding" exact activeClassName="active">{t('branding')}</LinkTo.Path>) :
 					null
 				}
