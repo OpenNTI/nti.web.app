@@ -1,4 +1,5 @@
 .notifications-icon.notifications-icon {
+	width: 70px;
 	min-height: 70px;
 	position: relative;
 	flex: 0 0 70px;
@@ -6,7 +7,7 @@
 
 .notifications-icon::after {
 	content: '';
-	background-image: url('../../../../../../../legacy/app/notifications/assets/icon-dark.svg');
+	background-image: url('../../../../../../../legacy/app/notifications/assets/icon-white.svg');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 42px 48px;
@@ -19,5 +20,5 @@
 }
 
 .dark.notifications-icon::after {
-	background-image: url('../../../../../../../legacy/app/notifications/assets/icon-white.svg');
+	background-image: url('../../../../../../../legacy/app/notifications/assets/icon-dark.svg');
 }
