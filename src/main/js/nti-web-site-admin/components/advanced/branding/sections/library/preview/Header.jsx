@@ -25,7 +25,7 @@ export default function PreviewHeader () {
 			<SearchBar />
 			<div className={cx('icons')}>
 				<NotificationsIcon />
-				<Avatar />
+				<Avatar presence />
 			</div>
 		</div>
 	);
