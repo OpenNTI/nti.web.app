@@ -3,10 +3,29 @@
 	align-items: center;
 	padding: 1rem 0;
 	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	font-size: 0.875rem;
 }
 
 .asset-item > * {
 	flex: 1;
+}
+
+.title {
+	font-size: 1rem;
+}
+
+.file-info {
+	margin-top: 1rem;
+	display: flex;
+}
+
+.file-info > * {
+	flex: 0 0 auto;
+	margin-right: 0.5em;
+}
+
+.filename {
+	color: #757474;
 }
 
 .asset-item > .preview {

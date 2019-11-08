@@ -38,12 +38,14 @@ export default function AssetItem ({onChange, getText, name}) {
 
 	return (
 		<div className={cx('asset-item')}>
-			<div>
-				<div>{getText('title')}</div>
+			<div className={cx('info')}>
+				<div className={cx('title')}>{getText('title')}</div>
 				<div>{getText('description')}</div>
-				{asset.filename && <span>{asset.filename}</span>}
-				<div>
-					<ImageInput name={name} onChange={change}>Change</ImageInput>
+				<div className={cx('file-info')}>
+					{asset.filename && <span className={cx('filename')}>{asset.filename}</span>}
+					<div>
+						<ImageInput name={name} onChange={change}>Change</ImageInput>
+					</div>
 				</div>
 			</div>
 			<div className={cx('preview')}>
