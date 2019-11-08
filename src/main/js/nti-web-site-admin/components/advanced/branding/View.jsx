@@ -53,6 +53,9 @@ class SiteAdminBranding extends React.Component {
 						<Site onChange={setBrandProp} />
 						<Assets assets={assets} onChange={setAsset} />
 						<Reset onReset={reset} />
+						<div className={cx('footer')}>
+							<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
+						</div>
 					</Card>
 				</form>
 			</Theme.Apply>
