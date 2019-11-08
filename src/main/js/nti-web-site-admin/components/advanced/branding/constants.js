@@ -2,6 +2,7 @@ export const ASSETS = 'assets';
 export const BRAND_COLOR = 'brand_color';
 export const BRAND_IMAGE = 'brandImage';
 export const BRAND_NAME = 'brand_name';
+export const ERROR = 'error';
 export const LIBRARY = 'library';
 export const SITE = 'site';
 export const SITE_BRAND = 'siteBrand';

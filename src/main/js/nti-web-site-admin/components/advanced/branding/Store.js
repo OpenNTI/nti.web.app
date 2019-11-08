@@ -6,6 +6,7 @@ import { getService } from '@nti/web-client';
 
 import {
 	ASSETS,
+	ERROR,
 	SITE_BRAND,
 	THEME,
 	MimeTypes,
@@ -71,54 +72,61 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			return;
 		}
 
-		const brand = await (this[Loading] = getService()
-			.then(s => s.getWorkspace('SiteAdmin'))
-			.then(w => w.fetchLinkParsed('SiteBrand')));
-
-		delete this[Loading];
-		this.set(SITE_BRAND, brand);
-		this.set(MODIFIED, false);
-		this.set(CHANGED, undefined);
-		this[RebuildTheme](brand);
+		try {
+			this.set(ERROR, undefined);
+			const brand = await (this[Loading] = getService()
+				.then(s => s.getWorkspace('SiteAdmin'))
+				.then(w => w.fetchLinkParsed('SiteBrand')));
+	
+			delete this[Loading];
+			this.set(SITE_BRAND, brand);
+			this.set(MODIFIED, false);
+			this.set(CHANGED, undefined);
+			this[RebuildTheme](brand);
+		}
+		catch (e) {
+			this.set(ERROR, e);
+		}
 	}
 
 	cancel = this[Load]
 
 	reset = async () => {
 		const brand = this.get(SITE_BRAND);
-
-		if (!brand) {
-			throw new Error('Unable to reset.'); // no link
+		try {
+			return brand.requestLink('delete', 'delete').then(this[Load]);
 		}
-
-		return brand.requestLink('delete', 'delete').then(this[Load]);
+		catch (e) {
+			this.set(ERROR, e);
+		}
 	}
 
 	save = async (form) => {
-		const brand = this.get(SITE_BRAND);
-		if (!brand) {
-			throw new Error('Unable to save.'); // no link
-		}
-
-		const formData = new FormData();
-
-		const assets = form.querySelectorAll('input[type="file"]');
-
-		for (let asset of assets) {
-			if (asset.files && asset.files.length > 0 && asset.name) {
-				formData.append(asset.name, asset.files[0]);
+		try {
+			const brand = this.get(SITE_BRAND);
+			const formData = new FormData();
+	
+			const assets = form.querySelectorAll('input[type="file"]');
+	
+			for (let asset of assets) {
+				if (asset.files && asset.files.length > 0 && asset.name) {
+					formData.append(asset.name, asset.files[0]);
+				}
 			}
+	
+			formData.append('__json__', JSON.stringify({
+				...(this.get(CHANGED) || {}),
+				...(this.get(THEME) || {})
+			}));
+	
+			const resp = await brand.putToLink('edit', formData);
+	
+			Events.emit(Events.THEME_UPDATED, resp);
+	
+			return resp;
 		}
-
-		formData.append('__json__', JSON.stringify({
-			...(this.get(CHANGED) || {}),
-			...(this.get(THEME) || {})
-		}));
-
-		const resp = await brand.putToLink('edit', formData);
-
-		Events.emit(Events.THEME_UPDATED, resp);
-
-		return resp;
+		catch (e) {
+			this.set(ERROR, e);
+		}
 	}
 }
