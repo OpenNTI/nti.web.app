@@ -4,6 +4,7 @@ import classnames from 'classnames/bind';
 import {Theme} from '@nti/web-commons';
 
 import {ASSETS} from '../../constants';
+import {Title, Description} from '../../ParameterText';
 
 import styles from './AssetItem.css';
 import ImageInput from './ImageInput';
@@ -39,8 +40,8 @@ export default function AssetItem ({onChange, getText, name}) {
 	return (
 		<div className={cx('asset-item')}>
 			<div className={cx('info')}>
-				<div className={cx('title')}>{getText('title')}</div>
-				<div>{getText('description')}</div>
+				<Title>{getText('title')}</Title>
+				<Description>{getText('description')}</Description>
 				<div className={cx('file-info')}>
 					{asset.filename && <span className={cx('filename')}>{asset.filename}</span>}
 					<div>
