@@ -113,7 +113,7 @@ const OutlineNode = module.exports = exports = Ext.define('NextThought.app.cours
 			classes.push('disabled');
 		}
 
-		items.push({cls: 'label', html: collection.getTitle()});
+		items.push({cls: 'label', html: collection.getTitle(), tabindex: '0', role: collection.get('type') === 'unit heading' ? 'group' : 'button'});
 
 		if (this.shouldShowDates && startDate) {
 			items.push({
@@ -207,6 +207,7 @@ const OutlineNode = module.exports = exports = Ext.define('NextThought.app.cours
 
 		if (record.getId() === this.outlineNode.getId()) {
 			header.addCls('selected');
+			header.el.down('.label').el.dom.setAttribute('aria-label', this.outlineNode.getTitle() + ' selected');
 
 			if (bodyListEl && scrollTo) {
 				this.el.scrollIntoView(bodyListEl);
@@ -214,6 +215,7 @@ const OutlineNode = module.exports = exports = Ext.define('NextThought.app.cours
 		} else {
 			header.removeCls('selected');
 			header.removeCls('out-of-view');
+			header.el.down('.label').el.dom.setAttribute('aria-label', this.outlineNode.getTitle());
 		}
 
 		body.items.each(function (item) {
