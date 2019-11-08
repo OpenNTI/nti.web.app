@@ -9,3 +9,14 @@
 :global(.main-navigation) .dark :global(.notifications-icon).icon::after {
 	background-image: url('./assets/icon-dark.svg');
 }
+
+
+:global(.main-navigation.dark-nav .notification-container [data-badge]:not([data-badge="0"])).no-knockout::before,
+:global(.main-navigation.dark-nav .notification-container [data-badge]:not([data-badge="0"])).no-knockout::before {
+	border-color: white;
+}
+
+:global(.main-navigation.dark-nav .notification-container [data-badge]:not([data-badge="0"])).knockout::before,
+:global(.main-navigation.dark-nav .notification-container [data-badge]:not([data-badge="0"])).knockout::before {
+	border-color: var(--nav-background-color, #313131);;
+}

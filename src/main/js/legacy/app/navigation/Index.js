@@ -253,6 +253,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			el.style.removeProperty('--nav-background-color');
 		}
 
+		const knockout = theme.badges ? theme.badges.knockout : null;
+
 		if (theme.branding) {
 			this.brandingCmp.setProps({
 				property: theme.branding,
@@ -265,10 +267,10 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			});
 		}
 
-		this.identityCmp.setTheme(theme.identity);
+		this.identityCmp.setTheme(theme.identity, knockout);
 		this.searchCmp.setTheme(theme.search);
 		this.chatCmp.setTheme(theme.icon);
-		this.notificationCmp.setTheme(theme.icon);
+		this.notificationCmp.setTheme(theme.icon, knockout);
 
 	},
 

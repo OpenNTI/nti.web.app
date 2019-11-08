@@ -9,8 +9,8 @@ require('./components/Settings');
 
 const cx = classnames.bind(Styles);
 
-const lightPresenceCls = cx('light-presence');
-const darkPresenceCls = cx('dark-presence');
+const knockOut = cx('knockout');
+const noKnockOut = cx('no-knockout');
 
 module.exports = exports = Ext.define('NextThought.app.account.identity.Index', {
 	extend: 'Ext.Component',
@@ -43,16 +43,16 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 		this.monitorUser($AppConfig.userObject);
 	},
 
-	setTheme (theme = {}) {
-		if (theme.presence === 'light') {
-			this.addCls(lightPresenceCls);
-			this.removeCls(darkPresenceCls);
-		} else if (theme.presence === 'dark') {
-			this.removeCls(lightPresenceCls);
-			this.addCls(darkPresenceCls);
+	setTheme (theme = {}, knockout) {
+		if (knockout) {
+			this.addCls(knockOut);
+			this.removeCls(noKnockOut);
+		} else if (knockout === false) {
+			this.removeCls(knockOut);
+			this.addCls(noKnockOut);
 		} else {
-			this.removeCls(lightPresenceCls);
-			this.removeCls(darkPresenceCls);
+			this.removeCls(knockOut);
+			this.removeCls(noKnockOut);
 		}
 	},
 

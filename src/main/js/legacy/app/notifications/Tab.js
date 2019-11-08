@@ -10,6 +10,8 @@ const cx = classnames.bind(Styles);
 
 const lightCls = cx('light');
 const darkCls = cx('dark');
+const knockOut = cx('knockout');
+const noKnockOut = cx('no-knockout');
 
 module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 	extend: 'Ext.Component',
@@ -20,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 		{cls: cx('notifications-icon', 'icon'), role: 'button', tabindex: '0', 'aria-label': 'Notifications'}
 	]),
 
-	setTheme (theme) {
+	setTheme (theme, knockout) {
 		if (theme === 'light') {
 			this.addCls(lightCls);
 			this.removeCls(darkCls);
@@ -30,6 +32,17 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 		} else {
 			this.removeCls(lightCls);
 			this.removeCls(darkCls);
+		}
+
+		if (knockout) {
+			this.addCls(knockOut);
+			this.removeCls(noKnockOut);
+		} else if (knockout === false) {
+			this.removeCls(knockOut);
+			this.addCls(noKnockOut);
+		} else {
+			this.removeCls(knockOut);
+			this.removeCls(noKnockOut);
 		}
 	},
 
