@@ -13,6 +13,7 @@ import {
 } from './constants';
 
 const CHANGED = '_changed';
+const MODIFIED = '_modified';
 const Load = Symbol('load');
 const Loading = Symbol('loading');
 const RebuildTheme = Symbol('rebuild theme');
@@ -46,6 +47,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	setBrandProp = (path, value, doNotTrackChange) => {
 		const brand = this.get(SITE_BRAND);
 		ObjectUtils.set(brand, path, value);
+		this.set(MODIFIED, true);
 
 		if (!doNotTrackChange) {
 			this.set(CHANGED, ObjectUtils.set(this.get(CHANGED) || {}, path, value));
@@ -55,7 +57,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	}
 
 	get hasChanges () {
-		return !!Object.keys(this.get(CHANGED) || {}).length;
+		return !!this.get(MODIFIED);
 	}
 
 	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
@@ -75,6 +77,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 		delete this[Loading];
 		this.set(SITE_BRAND, brand);
+		this.set(MODIFIED, false);
 		this.set(CHANGED, undefined);
 		this[RebuildTheme](brand);
 	}
