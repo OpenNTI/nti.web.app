@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Theme} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
+import {ObjectUtils} from '@nti/lib-commons';
+import {Theme} from '@nti/web-commons';
 
 import {BRAND_COLOR, THEME} from '../../constants';
 
@@ -25,11 +26,14 @@ const SEARCH_PATH = 'library.navigation.search';
 const ICON_PATH = 'library.navigation.icon';
 
 export default function Editor ({onChange}) {
+	const theme = Theme.useTheme();
+	const themeValues = theme.getValues();
+
 	const background = Theme.useThemeProperty(BG_PATH);
 	const lightMode = background === 'light';
 
-	const search = Theme.useThemeProperty(SEARCH_PATH);
-	const icon = Theme.useThemeProperty(ICON_PATH);
+	const search = ObjectUtils.get(themeValues || {}, SEARCH_PATH) || null;
+	const icon = ObjectUtils.get(themeValues || {}, ICON_PATH) || null;
 
 	const change = what => value => onChange(what, value);
 
@@ -43,10 +47,10 @@ export default function Editor ({onChange}) {
 					<BrandColor onChange={color => change(BRAND_COLOR)(color.hex.toString())} />
 				</InputContainer>
 				<InputContainer label={t('searchBar')} className={cx('input')}>
-					<ThemeOptions value={search} onChange={theme => change(`${THEME}.${SEARCH_PATH}`)(theme)} />
+					<ThemeOptions value={search} onChange={value => change(`${THEME}.${SEARCH_PATH}`)(value)} />
 				</InputContainer>
 				<InputContainer label={t('navIcons')} className={cx('input')}>
-					<ThemeOptions value={icon} onChange={theme => change(`${THEME}.${ICON_PATH}`)(theme)} />
+					<ThemeOptions value={icon} onChange={value => change(`${THEME}.${ICON_PATH}`)(value)} />
 				</InputContainer>
 			</div>
 		</div>

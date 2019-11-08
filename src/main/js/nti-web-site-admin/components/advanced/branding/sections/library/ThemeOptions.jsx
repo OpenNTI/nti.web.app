@@ -13,8 +13,10 @@ const t = scoped('nti-web-site-admin.components.advanced.branding.sections.libra
 	light: 'Light'
 });
 
+const auto = 'auto';
+
 const options = [
-	{value: null, label: t('auto')},
+	{value: auto, label: t('auto')},
 	{value: 'dark', label: t('dark')},
 	{value: 'light', label: t('light')}	
 ];
@@ -24,9 +26,19 @@ ThemeOptions.propTypes = {
 	onChange: PropTypes.func
 };
 export default function ThemeOptions ({value, onChange}) {
+	const change = (e) => {
+		if (!onChange) { return; }
+
+		if (e.target.value === auto) {
+			onChange(null);
+		} else {
+			onChange(e.target.value);
+		}
+	};
+
 	return (
 		<div className={cx('theme-options')}>
-			<Select value={value} onChange={e => onChange(e.target.value)} >
+			<Select value={value || auto} onChange={change} >
 				{options.map((o, i) => {
 					return (
 						<option key={i} value={o.value}>{o.label}</option>
