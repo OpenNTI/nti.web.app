@@ -1,0 +1,69 @@
+.root {
+	height: 70px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-right: 1rem;
+	background: white;
+}
+
+.root > * {
+	flex: 0 0 auto;
+}
+
+.logo {
+	height: 100%;
+	margin-right: 1rem;
+}
+
+.course-info {
+	color: var(--primary-grey, #494949);
+	align-self: flex-end;
+}
+
+.course-nav.course-nav {
+	display: flex;
+	align-items: flex-end;
+	align-self: flex-end;
+}
+
+.course-nav > * {
+	margin-right: 1.5rem;
+	padding-bottom: 2px;
+}
+
+.course-nav :first-child {
+	color: var(--primary-blue);
+	font-weight: 600;
+	background: linear-gradient(to top, currentColor 2px, transparent 3px);
+}
+
+.course-label {
+	font: normal 700 11px/15px "Open Sans", sans-serif;
+	text-transform: uppercase;
+	color: #787878;
+	margin-bottom: -3px;
+}
+
+.course-title {
+	font: 500 1.375em/1.4em "Open Sans", sans-serif;
+}
+
+.icons {
+	display: flex;
+	flex: 1 0 auto;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.icons > * {
+	flex: 0 0 auto;
+}
+
+.search {
+	align-self: stretch;
+	width: 24px;
+	opacity: 0.65;
+	background: url('../../../../../../legacy/app/search/assets/search-nav-dark.svg') no-repeat center;
+	background-size: 24px;
+}

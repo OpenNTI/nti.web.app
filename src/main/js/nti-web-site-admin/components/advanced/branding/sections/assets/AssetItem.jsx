@@ -4,6 +4,7 @@ import classnames from 'classnames/bind';
 import {Theme} from '@nti/web-commons';
 
 import {ASSETS} from '../../constants';
+import {Title, Description} from '../../ParameterText';
 
 import styles from './AssetItem.css';
 import ImageInput from './ImageInput';
@@ -14,7 +15,7 @@ const NameToTheme = {
 	'full_logo': 'fullLogo'
 };
 
-export default function AssetItem ({onChange, getText, name}) {
+export default function AssetItem ({onChange, getText, name, onThumbClick}) {
 	const asset = Theme.useThemeProperty(`${ASSETS}.${NameToTheme[name] || name}`);
 
 	const change = e => {
@@ -39,8 +40,8 @@ export default function AssetItem ({onChange, getText, name}) {
 	return (
 		<div className={cx('asset-item')}>
 			<div className={cx('info')}>
-				<div className={cx('title')}>{getText('title')}</div>
-				<div>{getText('description')}</div>
+				<Title>{getText('title')}</Title>
+				<Description>{getText('description')}</Description>
 				<div className={cx('file-info')}>
 					{asset.filename && <span className={cx('filename')}>{asset.filename}</span>}
 					<div>
@@ -49,7 +50,7 @@ export default function AssetItem ({onChange, getText, name}) {
 				</div>
 			</div>
 			<div className={cx('preview')}>
-				<Theme.Asset property={asset} />
+				<Theme.Asset property={asset} onClick={onThumbClick} />
 			</div>
 		</div>
 	);

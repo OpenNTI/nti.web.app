@@ -1,6 +1,6 @@
 export const types = {
-	logo: 'logo',
 	fullLogo: 'full_logo',
+	logo: 'logo',
 	email: 'email',
 	// favicon: 'favicon'
 };

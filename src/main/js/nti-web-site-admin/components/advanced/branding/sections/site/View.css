@@ -1,0 +1,18 @@
+.site-params ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.site-params li {
+	display: flex;
+	align-items: flex-start;
+}
+
+.site-params li > * {
+	flex: 1 1 auto;
+}
+
+.site-params input {
+	height: 40px;
+}
