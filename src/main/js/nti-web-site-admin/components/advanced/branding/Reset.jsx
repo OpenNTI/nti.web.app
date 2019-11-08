@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DialogButtons, Prompt} from '@nti/web-commons';
+import {Button, Prompt} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
 import styles from './Reset.css';
@@ -14,14 +14,8 @@ const f = fn => e => {
 };
 
 export default function Reset ({onReset}) {
-	const buttons = [
-		{
-			label: 'Reset to Defaults',
-			onClick: f(onReset)
-		}
-	];
 	return (
-		<DialogButtons flat buttons={buttons} className={cx('reset')} />
+		<Button onClick={f(onReset)} className={cx('reset')}>Reset to Defaults</Button>
 	);
 }
 
