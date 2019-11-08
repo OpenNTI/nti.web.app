@@ -56,6 +56,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.mon(body.el, 'scroll', this.onScroll.bind(this));
 
 		if (this.SYNCED_TOP) { this.syncTop(this.SYNCED_TOP); }
+
+		//adding role: navigation allows users to exit out of lesson list with a screen reader
+		const navOutline = this.el.dom;
+		navOutline.setAttribute('role', 'navigation');
 	},
 
 
