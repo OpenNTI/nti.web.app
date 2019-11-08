@@ -65,7 +65,7 @@ class SiteAdminBranding extends React.Component {
 							<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
 						</div>
 					</Card>
-					{showPreview && <Preview onSave={this.onSave} onClose={this.togglePreview} />}
+					{showPreview && <Preview onSave={modified ? this.onSave : null} onClose={this.togglePreview} />}
 				</form>
 			</Theme.Apply>
 		);
