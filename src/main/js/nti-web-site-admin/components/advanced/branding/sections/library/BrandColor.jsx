@@ -20,7 +20,7 @@ const Presets = [
 export default function BrandColor ({onChange}) {
 	const brandColor = Theme.useThemeProperty('brandColor'); // 'brand_color' in SiteBrand (server), 'brandColor' in theme.
 	const color = (brandColor == null || brandColor.isColor) ? brandColor : Color.fromCSS(brandColor);
-	const trigger = (<span role="button" className={cx('brand-color-preview')} style={{backgroundColor: brandColor}} />);
+	const trigger = (<span role="button" className={cx('brand-color-preview')} style={{background: brandColor}} />);
 
 	return (
 		<Flyout.Triggered

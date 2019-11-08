@@ -1,4 +1,6 @@
 .branding-root {
+	--checkerboard: #efefef;
+
 	padding: 2rem;
 	padding-bottom: 0;
 	position: relative;
