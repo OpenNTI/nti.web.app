@@ -1,5 +1,5 @@
-:global(.main-navigation.dark-nav) :global(.notifications-icon).icon::after,
-:global(.main-navigation) :global(.notifications-icon).icon::after {
+:global(.main-navigation.dark-nav) .light :global(.notifications-icon).icon::after,
+:global(.main-navigation) .light :global(.notifications-icon).icon::after {
 	background-image: url('./assets/icon-white.svg');
 	background-position: center;
 	opacity: 1;

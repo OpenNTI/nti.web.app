@@ -1,5 +1,5 @@
-:global(.main-navigation.dark-nav) :global(.chat-notifications-icon).icon::after,
-:global(.main-navigation) :global(.chat-notifications-icon).icon::after {
+:global(.main-navigation.dark-nav) .light :global(.chat-notifications-icon).icon::after,
+:global(.main-navigation) .light :global(.chat-notifications-icon).icon::after {
 	background-image: url('./assets/icon-white.svg');
 	background-position: center;
 	opacity: 1;
