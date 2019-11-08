@@ -5,7 +5,7 @@ import {Errors, Theme} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 
-import {ERROR} from './constants';
+import {ERROR, MODIFIED} from './constants';
 import Apply from './Apply';
 import Reset from './Reset';
 import {Library, Assets, Site} from './sections/';
@@ -32,12 +32,12 @@ class SiteAdminBranding extends React.Component {
 	render () {
 		const {
 			[ERROR]: error,
+			[MODIFIED]: modified,
 			theme,
 			assets,
 			setAsset,
 			setBrandProp,
 			cancel,
-			hasChanges,
 			reset
 		} = this.props;
 
@@ -46,7 +46,7 @@ class SiteAdminBranding extends React.Component {
 				<form ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
 					<Card className={cx('branding-root')}>
 						<div className={cx('header')}>
-							<Apply hasChanges={hasChanges} onSave={this.onSave} onCancel={cancel} />
+							<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
 							{error && <Errors.Bar error={error} className={cx('errorbar')}/>}
 						</div>
 						<Library onChange={setBrandProp} />
@@ -65,7 +65,7 @@ SiteAdminBranding.propTypes = {
 	setAsset: PropTypes.func.isRequired,
 	setBrandProp: PropTypes.func.isRequired,
 	theme: PropTypes.object,
-	hasChanges: PropTypes.bool,
+	[MODIFIED]: PropTypes.bool,
 	[ERROR]: PropTypes.object,
 	save: PropTypes.func.isRequired,
 	cancel: PropTypes.func.isRequired,
@@ -74,11 +74,11 @@ SiteAdminBranding.propTypes = {
 
 export default Store.connect([
 	ERROR,
+	MODIFIED,
 	'theme',
 	'assets',
 	'setAsset',
 	'setBrandProp',
-	'hasChanges',
 	'cancel',
 	'save',
 	'reset'

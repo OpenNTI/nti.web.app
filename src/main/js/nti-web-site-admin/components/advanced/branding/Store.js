@@ -7,6 +7,7 @@ import { getService } from '@nti/web-client';
 import {
 	ASSETS,
 	ERROR,
+	MODIFIED,
 	SITE_BRAND,
 	THEME,
 	MimeTypes,
@@ -14,7 +15,6 @@ import {
 } from './constants';
 
 const CHANGED = '_changed';
-const MODIFIED = '_modified';
 const Load = Symbol('load');
 const Loading = Symbol('loading');
 const RebuildTheme = Symbol('rebuild theme');
@@ -55,10 +55,6 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}
 
 		this[RebuildTheme]();
-	}
-
-	get hasChanges () {
-		return !!this.get(MODIFIED);
 	}
 
 	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
@@ -122,7 +118,9 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			const resp = await brand.putToLink('edit', formData);
 	
 			Events.emit(Events.THEME_UPDATED, resp);
-	
+
+			this.set(MODIFIED, false);
+
 			return resp;
 		}
 		catch (e) {

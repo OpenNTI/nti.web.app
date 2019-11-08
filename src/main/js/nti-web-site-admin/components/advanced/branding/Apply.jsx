@@ -13,8 +13,7 @@ const f = fn => e => {
 	fn(e);
 };
 
-export default function Apply ({hasChanges, onSave, onCancel}) {
-	const disabled = !hasChanges;
+export default function Apply ({disabled, onSave, onCancel}) {
 	const buttons = [
 		{
 			label: 'Cancel',
@@ -35,5 +34,5 @@ export default function Apply ({hasChanges, onSave, onCancel}) {
 Apply.propTypes = {
 	onCancel: PropTypes.func,
 	onSave: PropTypes.func,
-	hasChanges: PropTypes.bool
+	disabled: PropTypes.bool
 };
