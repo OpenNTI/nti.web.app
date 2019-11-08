@@ -7,6 +7,7 @@ import Card from '../../common/Card';
 
 import {ERROR, MODIFIED} from './constants';
 import Apply from './Apply';
+import Preview from './preview';
 import Reset from './Reset';
 import {Library, Assets, Site} from './sections/';
 import style from './View.css';
@@ -21,13 +22,18 @@ class SiteAdminBranding extends React.Component {
 		this.form = React.createRef();
 	}
 
+	state = {}
+
 	static deriveBindingFromProps = () => Theme.getGlobalTheme()
 
 	onSave = e => {
 		e.preventDefault();
 		e.stopPropagation();
-		this.props.save(this.form.current);
+		this.props.save(this.form.current)
+			.then(() => this.setState({showPreview: false}));
 	}
+
+	togglePreview = () => this.setState({showPreview: !this.state.showPreview});
 
 	render () {
 		const {
@@ -41,6 +47,8 @@ class SiteAdminBranding extends React.Component {
 			reset
 		} = this.props;
 
+		const {showPreview} = this.state;
+
 		return !theme ? null : (
 			<Theme.Apply theme={theme}>
 				<form ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
@@ -51,12 +59,13 @@ class SiteAdminBranding extends React.Component {
 						</div>
 						<Library onChange={setBrandProp} />
 						<Site onChange={setBrandProp} />
-						<Assets assets={assets} onChange={setAsset} />
+						<Assets assets={assets} onChange={setAsset} onThumbClick={this.togglePreview} />
 						<Reset onReset={reset} />
 						<div className={cx('footer')}>
 							<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
 						</div>
 					</Card>
+					{showPreview && <Preview onSave={this.onSave} onClose={this.togglePreview} />}
 				</form>
 			</Theme.Apply>
 		);

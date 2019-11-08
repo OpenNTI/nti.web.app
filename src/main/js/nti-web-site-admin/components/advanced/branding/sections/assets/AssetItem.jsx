@@ -15,7 +15,7 @@ const NameToTheme = {
 	'full_logo': 'fullLogo'
 };
 
-export default function AssetItem ({onChange, getText, name}) {
+export default function AssetItem ({onChange, getText, name, onThumbClick}) {
 	const asset = Theme.useThemeProperty(`${ASSETS}.${NameToTheme[name] || name}`);
 
 	const change = e => {
@@ -50,7 +50,7 @@ export default function AssetItem ({onChange, getText, name}) {
 				</div>
 			</div>
 			<div className={cx('preview')}>
-				<Theme.Asset property={asset} />
+				<Theme.Asset property={asset} onClick={onThumbClick} />
 			</div>
 		</div>
 	);
