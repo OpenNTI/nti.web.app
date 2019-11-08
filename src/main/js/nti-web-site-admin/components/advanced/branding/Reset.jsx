@@ -13,7 +13,7 @@ const f = fn => e => {
 	Prompt.areYouSure('Reset everything to defaults?').then(fn);
 };
 
-export default function Reset ({hasChanges, onReset}) {
+export default function Reset ({onReset}) {
 	const buttons = [
 		{
 			label: 'Reset to Defaults',
@@ -27,5 +27,4 @@ export default function Reset ({hasChanges, onReset}) {
 
 Reset.propTypes = {
 	onReset: PropTypes.func,
-	hasChanges: PropTypes.bool
 };

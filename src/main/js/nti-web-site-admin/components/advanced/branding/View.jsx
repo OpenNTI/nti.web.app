@@ -47,7 +47,7 @@ class SiteAdminBranding extends React.Component {
 						<Library onChange={setBrandProp} />
 						<Site onChange={setBrandProp} />
 						<Assets assets={assets} onChange={setAsset} />
-						<Reset hasChanges={hasChanges} onReset={reset} />
+						<Reset onReset={reset} />
 					</Card>
 				</form>
 			</Theme.Apply>
