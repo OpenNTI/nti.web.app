@@ -23,10 +23,20 @@ Ext.USE_NATIVE_JSON = true;
 const applyBranding = (siteBrand = {}) => {
 	Theme.setGlobalThemeOverrides(Theme.siteBrandToTheme(siteBrand));
 
+	const theme = Theme.getGlobalTheme();
 	const name = siteBrand['brand_name'];
 
 	if (name != null) {
 		global.NTIStrings['application.title-bar-prefix'] = name;
+	}
+
+	const link = document.getElementById('favicon');
+
+	if (link) {
+		const {favicon} = theme.assets || {};
+		const {href, cacheBust} = favicon;
+		
+		link.href = cacheBust ? `${href}?v=${cacheBust}` : href;
 	}
 };
 
