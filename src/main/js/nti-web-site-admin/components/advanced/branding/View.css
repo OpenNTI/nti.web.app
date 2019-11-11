@@ -1,18 +1,12 @@
-.branding-root {
+.branding-content {
 	--checkerboard: #efefef;
 
 	padding: 2rem;
-	padding-bottom: 0;
-	position: relative;
 }
 
 .header {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-}
-
-.footer {
-	margin: 4rem -2rem 0;
+	position: sticky;
+	top: 70px;
+	z-index: 1;
+	background: white;
 }
