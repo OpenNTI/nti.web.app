@@ -29,4 +29,4 @@ export default Router.for([
 		}
 	}),
 	Route({path: '/', component: List, name: 'site-admin.courses'})
-]);
+], {title: 'Content'});

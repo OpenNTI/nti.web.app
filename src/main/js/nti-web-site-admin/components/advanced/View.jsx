@@ -9,4 +9,4 @@ export default Router.for([
 	Route({path: '/integrations', component: Integrations, name: 'site-admin.advanced.integrations'}),
 	Route({path: '/branding', component: Branding, name: 'site-admin.advanced.branding'}),
 	Route({path: '/', component: Transcripts, name: 'site-admin.transcripts'})
-], {frame: Frame});
+], {frame: Frame, title: 'Advanced'});

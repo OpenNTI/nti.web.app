@@ -1,5 +1,6 @@
 import React from 'react';
 import { Widgets } from '@nti/web-reports';
+import { View as RouterView } from '@nti/web-routing';
 
 import ActiveSessions from './widgets/ActiveSessions';
 import ActiveTimes from './widgets/ActiveTimes';
@@ -17,23 +18,25 @@ export default class View extends React.Component {
 
 	renderWidgets () {
 		return (
-			<div className="admin-dashboard-widgets">
-				<div className="widget-row">
-					<ActiveSessions/>
-					<PopularCourses/>
-					<ActiveUsers/>
-				</div>
-				<div className="widget-row">
-					<ActiveTimes/>
-					<div>
-						<RecentlyCreatedUsers/>
-						<RecentSessions/>
+			<RouterView.WithTitle title="Dashboard">
+				<div className="admin-dashboard-widgets">
+					<div className="widget-row">
+						<ActiveSessions/>
+						<PopularCourses/>
+						<ActiveUsers/>
+					</div>
+					<div className="widget-row">
+						<ActiveTimes/>
+						<div>
+							<RecentlyCreatedUsers/>
+							<RecentSessions/>
+						</div>
+					</div>
+					<div className="widget-row">
+						<ActiveDays/>
 					</div>
 				</div>
-				<div className="widget-row">
-					<ActiveDays/>
-				</div>
-			</div>
+			</RouterView.WithTitle>
 		);
 	}
 
