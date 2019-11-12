@@ -53,16 +53,17 @@ class SiteAdminBranding extends React.Component {
 			<Theme.Apply theme={theme}>
 				<form ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
 					<Card className={cx('branding-root')}>
-						<div className={cx('header')}>
-							<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
-							{error && <Errors.Bar error={error} className={cx('errorbar')}/>}
-						</div>
-						<Library onChange={setBrandProp} />
-						<Site onChange={setBrandProp} />
-						<Assets assets={assets} onChange={setAsset} onThumbClick={this.togglePreview} />
-						<Reset onReset={reset} />
-						<div className={cx('footer')}>
-							<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
+						{(modified || error) && (
+							<div className={cx('header')}>
+								<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
+								{error && <Errors.Bar error={error} className={cx('errorbar')}/>}
+							</div>
+						)}
+						<div className={cx('branding-content')}>
+							<Library onChange={setBrandProp} />
+							<Site onChange={setBrandProp} />
+							<Assets assets={assets} onChange={setAsset} onThumbClick={this.togglePreview} />
+							<Reset onReset={reset} />
 						</div>
 					</Card>
 					{showPreview && <Preview onSave={modified ? this.onSave : null} onClose={this.togglePreview} />}

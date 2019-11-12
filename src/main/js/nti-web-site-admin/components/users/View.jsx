@@ -13,4 +13,4 @@ export default Router.for([
 		component: User
 	}),
 	Route({path: '/', component: FiterableUserList, name: 'site-admin.users'})
-]);
+], {title: 'People'});

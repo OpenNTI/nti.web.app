@@ -1,6 +1,7 @@
 import React from 'react';
 import {getService} from '@nti/web-client';
 import {List} from '@nti/web-reports';
+import { View as RouterView } from '@nti/web-routing';
 
 export default class View extends React.Component {
 	constructor (props) {
@@ -26,9 +27,11 @@ export default class View extends React.Component {
 
 	render () {
 		return (
-			<div className="admin-reports">
-				{this.renderContent()}
-			</div>
+			<RouterView.WithTitle title="Reports">
+				<div className="admin-reports">
+					{this.renderContent()}
+				</div>
+			</RouterView.WithTitle>
 		);
 	}
 }

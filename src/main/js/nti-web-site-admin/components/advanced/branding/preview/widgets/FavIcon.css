@@ -1,0 +1,13 @@
+.browser-root {
+	position: relative;
+}
+
+.favicon {
+	position: absolute;
+	top: 40px;
+	left: 67px;
+	transform: translate(-50%, -50%);
+	min-width: 24px;
+	max-width: 32px;
+	max-height: 100%;
+}

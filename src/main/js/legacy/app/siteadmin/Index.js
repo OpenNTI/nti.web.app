@@ -8,12 +8,6 @@ require('legacy/common/components/Navigation');
 require('legacy/overrides/ReactHarness');
 require('legacy/login/StateStore');
 
-const CONTENT_ACTIVE = /^\/content/;
-const USERS_ACTIVE = /^\/people/;
-const DASHBOARD_ACTIVE = /^\/dashboard/;
-const REPORTS_ACTIVE = /^\/reports/;
-const ADVANCED_ACTIVE = /^\/advanced/;
-
 module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.site-admin-index',
@@ -56,7 +50,30 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 				xtype: 'react',
 				component: SiteAdminView,
 				baseroute: baseroute,
-				setTitle: (title) => {this.setTitle(title); }
+				workspace: Service.getWorkspace('SiteAdmin'),
+				getRouteFor: (obj, context) => {
+					if (!obj || obj.Class !== 'Workspace' || obj.Title !== 'SiteAdmin') { return; }
+
+					const base = '/app/siteadmin/';
+					let part = '';
+
+					if (context === 'dashboard') {
+						part = 'dashboard';
+					} else if (context === 'people') {
+						part = 'people';
+					} else if (context === 'content') {
+						part = 'content';
+					} else if (context === 'reports') {
+						part = 'reports';
+					} else if (context === 'advanced') {
+						part = 'advanced';
+					}
+
+					return part ? `${base}${part}/` : base;
+				},
+				setTitle: (title) => {
+					this.setTitle(title);
+				}
 			});
 		}
 
@@ -67,44 +84,8 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 	setUpNavigation (baseroute, path) {
 		const navigation = this.getNavigation();
 
-
 		navigation.updateTitle('Site Administration');
-
-		const tabs = [
-			{
-				text: 'Dashboard',
-				route: '/dashboard',
-				active: DASHBOARD_ACTIVE.test(path)
-			},
-			{
-				text: 'People',
-				route: '/people',
-				active: USERS_ACTIVE.test(path)
-			},
-			{
-				text: 'Content',
-				route: '/content',
-				active: CONTENT_ACTIVE.test(path)
-			},
-			{
-				text: 'Reports',
-				route: '/reports',
-				active: REPORTS_ACTIVE.test(path)
-			}
-		];
-
-		// as of now, the only thing that exists on the advanced tab is the
-		// credit definitions maangement tool.  Without that link, no need to show
-		// the advanced tab at all
-		if(Service.getCollection('CreditDefinitions', 'Global')) {
-			tabs.push({
-				text: 'Advanced',
-				route: '/advanced',
-				active: ADVANCED_ACTIVE.test(path)
-			});
-		}
-
-		navigation.setTabs(tabs);
+		navigation.useCommonTabs();
 
 		this.NavigationActions.setActiveContent(null, true, true);
 		this.NavigationActions.updateNavBar({

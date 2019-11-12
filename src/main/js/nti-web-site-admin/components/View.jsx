@@ -1,6 +1,7 @@
 // import React from 'react';
 import {Router, Route} from '@nti/web-routing';// eslint-disable-line
 
+import Frame from './Frame';
 import Advanced from './advanced';
 import Content from './content';
 import Dashboard from './dashboard';
@@ -15,4 +16,4 @@ export default Router.for([
 	Route({path: '/reports', component: Reports}),
 	Route({path: '/advanced', component: Advanced}),
 	Route({path: '/', component: Dashboard})
-], null, 'Site Administration');
+], {title: 'Site Administration', frame: Frame});
