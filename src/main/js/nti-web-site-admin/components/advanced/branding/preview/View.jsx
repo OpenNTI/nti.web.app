@@ -5,8 +5,8 @@ import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
 
 import t2 from '../sections/assets/strings';
-import {types} from '../sections/assets/constants';
 
+import {types} from './constants';
 import getWidget from './widgets';
 import styles from './View.css';
 
