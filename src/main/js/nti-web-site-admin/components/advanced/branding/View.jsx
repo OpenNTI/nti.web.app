@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Errors, Theme} from '@nti/web-commons';
+import {Errors, Loading, Theme} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 
-import {ERROR, MODIFIED} from './constants';
-import Apply from './Apply';
+import {ERROR, LOADING, MODIFIED} from './constants';
+import Controls from './Controls';
 import Preview from './preview';
 import Reset from './Reset';
 import {Library, Assets, Site} from './sections/';
@@ -29,8 +29,8 @@ class SiteAdminBranding extends React.Component {
 	onSave = e => {
 		e.preventDefault();
 		e.stopPropagation();
-		this.props.save(this.form.current)
-			.then(() => this.setState({showPreview: false}));
+		this.setState({showPreview: false});
+		this.props.save(this.form.current);
 	}
 
 	togglePreview = () => this.setState({showPreview: !this.state.showPreview});
@@ -38,6 +38,7 @@ class SiteAdminBranding extends React.Component {
 	render () {
 		const {
 			[ERROR]: error,
+			[LOADING]: loading,
 			[MODIFIED]: modified,
 			theme,
 			assets,
@@ -51,12 +52,12 @@ class SiteAdminBranding extends React.Component {
 
 		return !theme ? null : (
 			<Theme.Apply theme={theme}>
-				<form ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
-					<Card className={cx('branding-root')}>
+				<form className={cx('branding-root')} ref={this.form} onSubmit={this.onSave} encType="multipart/form-data">
+					<Card>
 						{(modified || error) && (
 							<div className={cx('header')}>
 								<div className={cx('header-content')}>
-									<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
+									<Controls onPreview={this.togglePreview} onCancel={cancel} />
 									{error && <Errors.Bar error={error} className={cx('errorbar')}/>}
 								</div>
 							</div>
@@ -69,6 +70,7 @@ class SiteAdminBranding extends React.Component {
 						</div>
 					</Card>
 					{showPreview && <Preview onSave={modified ? this.onSave : null} onClose={this.togglePreview} />}
+					<Loading.Overlay large loading={loading} />
 				</form>
 			</Theme.Apply>
 		);
@@ -89,6 +91,7 @@ SiteAdminBranding.propTypes = {
 
 export default Store.connect([
 	ERROR,
+	LOADING,
 	MODIFIED,
 	'theme',
 	'assets',
