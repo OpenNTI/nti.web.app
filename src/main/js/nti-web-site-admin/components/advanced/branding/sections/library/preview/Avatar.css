@@ -8,6 +8,11 @@
 	border-radius: 50%;
 }
 
+.avatar-root img {
+	border-radius: 50%;
+	max-width: 100%;
+}
+
 .presence {
 	position: absolute;
 	bottom: 0;

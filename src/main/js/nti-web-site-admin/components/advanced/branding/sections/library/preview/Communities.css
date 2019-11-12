@@ -27,3 +27,7 @@
 .community-avatar svg {
 	border-radius: 0;
 }
+
+.community-avatar img {
+	max-width: 100%;
+}
