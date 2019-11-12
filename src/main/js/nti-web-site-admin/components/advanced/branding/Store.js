@@ -7,6 +7,7 @@ import { getService } from '@nti/web-client';
 import {
 	ASSETS,
 	ERROR,
+	LOADING,
 	MODIFIED,
 	SITE_BRAND,
 	THEME,
@@ -69,7 +70,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}
 
 		try {
-			this.set(ERROR, undefined);
+			this.set({
+				[ERROR]: undefined,
+				[LOADING]: true,
+			});
 			const brand = await (this[Loading] = getService()
 				.then(s => s.getWorkspace('SiteAdmin'))
 				.then(w => w.fetchLinkParsed('SiteBrand')));
@@ -82,6 +86,9 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}
 		catch (e) {
 			this.set(ERROR, e);
+		}
+		finally {
+			this.set(LOADING, false);
 		}
 	}
 
@@ -99,6 +106,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 	save = async (form) => {
 		try {
+			this.set(LOADING, true);
 			const brand = this.get(SITE_BRAND);
 			const formData = new FormData();
 	
@@ -125,6 +133,9 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}
 		catch (e) {
 			this.set(ERROR, e);
+		}
+		finally {
+			this.set(LOADING, false);
 		}
 	}
 }
