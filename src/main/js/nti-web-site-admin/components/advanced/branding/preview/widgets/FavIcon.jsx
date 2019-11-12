@@ -7,6 +7,8 @@ import styles from './FavIcon.css';
 const cx = classnames.bind(styles);
 
 export default function Browser () {
+	const brandName = Theme.useThemeProperty('brandName');
+
 	return (
 		<div className={cx('browser-root')}>
 			<svg width="780px" height="127px" viewBox="0 0 780 127" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -45,7 +47,7 @@ export default function Browser () {
 					</g>
 					{/* <circle id="favicon" fill="#FF5744" cx="66.5" cy="40.5" r="14.5"></circle> */}
 					<text id="Zenefits-Learning" fontFamily="OpenSans, Open Sans" fontSize="18" fontWeight="normal" fill="#757474">
-						<tspan x="91" y="48">Zenefits Learning</tspan>
+						<tspan x="91" y="48">{brandName}</tspan>
 					</text>
 					<rect id="Rectangle" strokeOpacity="0.292722902" stroke="#979797" fill="#FFFFFF" x="92.5" y="75.5" width="666" height="33"></rect>
 					<g id="Mask" transform="translate(25.250000, 86.062500)">
