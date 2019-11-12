@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Roster, Enrollment} from '@nti/web-course';
-import {Loading, Button} from '@nti/web-commons';
+import {List, Loading, Button} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
 
@@ -73,7 +73,7 @@ export default class SiteAdminCourseRoster extends React.Component {
 	renderItems (items) {
 		return (
 			<Card>
-				<ul>
+				<List.Unadorned>
 					{items.map((item, index) => {
 						return (
 							<li key={index}>
@@ -83,7 +83,7 @@ export default class SiteAdminCourseRoster extends React.Component {
 							</li>
 						);
 					})}
-				</ul>
+				</List.Unadorned>
 			</Card>
 		);
 	}

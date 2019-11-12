@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {LinkTo} from '@nti/web-routing';
-import {User, EmptyState} from '@nti/web-commons';
+import {User, EmptyState, List} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 
 import Styles from './ActiveUsers.css';
@@ -30,7 +30,7 @@ export default class ActiveUsers extends React.Component {
 				{empty && (<EmptyState subHeader={t('empty')} />)}
 				{!empty && (<div className={cx('heading')}>{t('heading')}</div>)}
 				{!empty && (
-					<ul className={cx('user-list')}>
+					<List.Unadorned className={cx('user-list')}>
 						{activeUsers.map((user, index) => {
 							return (
 								<li key={index}>
@@ -41,7 +41,7 @@ export default class ActiveUsers extends React.Component {
 								</li>
 							);
 						})}
-					</ul>
+					</List.Unadorned>
 				)}
 			</div>
 		);

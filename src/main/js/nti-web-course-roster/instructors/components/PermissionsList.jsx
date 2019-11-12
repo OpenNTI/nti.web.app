@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
+import {List} from '@nti/web-commons';
 
 import PermissionsListItem from './PermissionsListItem';
 
@@ -27,7 +28,7 @@ export default function PermissionsList ({permissionsList = [], course, updating
 				{showInstructors && (<div className="instructor-label">{t('instructor')}</div>)}
 				{showEditors && (<div className="editor-label">{t('editor')}</div>)}
 			</div>
-			<ul>
+			<List.Unadorned>
 				{permissionsList.map((p) => {
 					return (
 						<li key={p.id}>
@@ -35,7 +36,7 @@ export default function PermissionsList ({permissionsList = [], course, updating
 						</li>
 					);
 				})}
-			</ul>
+			</List.Unadorned>
 		</div>
 	);
 }

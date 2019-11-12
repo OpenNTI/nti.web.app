@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import {ContextIndicator} from '@nti/web-search';
-import {Loading, EmptyState} from '@nti/web-commons';
+import {List, Loading, EmptyState} from '@nti/web-commons';
 
 import LoadMore from './LoadMore';
 import ErrorMessage from './ErrorMessage';
@@ -61,7 +61,7 @@ export default class SearchablePagedView extends React.Component {
 		}
 
 		return (
-			<ul>
+			<List.Unadorned>
 				{items.map((item, index) => {
 					return (
 						<li key={index}>
@@ -69,7 +69,7 @@ export default class SearchablePagedView extends React.Component {
 						</li>
 					);
 				})}
-			</ul>
+			</List.Unadorned>
 		);
 	}
 

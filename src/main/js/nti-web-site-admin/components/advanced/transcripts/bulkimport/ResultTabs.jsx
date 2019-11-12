@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import {Table as T} from '@nti/web-commons';
+import {List, Table as T} from '@nti/web-commons';
 
 export default class ResultTabs extends React.Component {
 
@@ -29,11 +29,11 @@ export default class ResultTabs extends React.Component {
 
 		return (tabs || []).length === 0 ? null : (
 			<div className="result-tabs">
-				<ul className="tabs">
+				<List.Unadorned className="tabs">
 					{tabs.map(({label},i) => (
 						<Tab key={i} index={i} onClick={this.onTabClick} className={cx({active: active === i})}>{label}</Tab>
 					))}
-				</ul>
+				</List.Unadorned>
 				<div className="tab-content">
 					<T.Table items={activeTab.data} columns={activeTab.columns} />
 					{activeTab.footer && <div className="footer">{activeTab.footer}</div>}

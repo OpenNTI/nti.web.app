@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Prompt} from '@nti/web-commons';
+import {Button, List, Prompt} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
 
@@ -21,7 +21,7 @@ export default function Preview ({onSave, onClose}) {
 		<Prompt.Dialog>
 			<div className={cx('preview-dialog')}>
 				<span className="icon-light-x" onClick={onClose} />
-				<ul>
+				<List.Unadorned>
 					{
 						Object.values(types).map(type => {
 							const Widget = getWidget(type);
@@ -33,7 +33,7 @@ export default function Preview ({onSave, onClose}) {
 							);
 						})
 					}
-				</ul>
+				</List.Unadorned>
 				{ onSave && (
 					<div className={cx('controls')}>
 						<Button onClick={onSave}>{t('save')}</Button>

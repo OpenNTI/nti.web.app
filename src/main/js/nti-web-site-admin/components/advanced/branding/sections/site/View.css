@@ -1,9 +1,3 @@
-.site-params ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
 .site-params li {
 	display: flex;
 	align-items: flex-start;

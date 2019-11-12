@@ -1,6 +1,7 @@
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';// eslint-disable-line
+import {List} from '@nti/web-commons';
 
 const DEFAULT_TEXT = {
 	progress: 'Progress',
@@ -12,13 +13,13 @@ const t = scoped('nti-site-admin.users.user-book-enrollment.nav-bar.Tabs', DEFAU
 
 export default function SiteAdminUserBookTabs () {
 	return (
-		<ul className="site-admin-user-tabs">
+		<List.Unadorned className="site-admin-user-tabs">
 			<li>
 				<LinkTo.Path to="./" activeClassName="active" exact>{t('overview')}</LinkTo.Path>
 			</li>
 			<li>
 				<LinkTo.Path to="./reports" activeClassName="active">{t('reports')}</LinkTo.Path>
 			</li>
-		</ul>
+		</List.Unadorned>
 	);
 }

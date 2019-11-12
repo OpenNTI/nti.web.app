@@ -1,6 +1,7 @@
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
 import {rawContent} from '@nti/lib-commons';
+import {List} from '@nti/web-commons';
 import cx from 'classnames';
 
 import Collapsible from './Collapsible';
@@ -41,7 +42,7 @@ export default function Instructions () {
 			<a className="download-sample" href={SAMPLE} download="sample.csv">{t('downloadsample')}</a>
 			<Collapsible label={t('showdetails')} labelOpened={t('hidedetails')}>
 				<div className="field-descriptions-heading">{t('fieldsheading')}</div>
-				<ul className="field-descriptions">
+				<List.Unadorned className="field-descriptions">
 					{Object.keys(t('fielddescriptions')).map(field => {
 						const required = REQUIRED.includes(field);
 
@@ -52,7 +53,7 @@ export default function Instructions () {
 							</li>
 						);
 					})}
-				</ul>
+				</List.Unadorned>
 			</Collapsible>
 		</div>
 	);

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
-import {Input, Theme} from '@nti/web-commons';
+import {Input, List, Theme} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
 import {BRAND_NAME} from '../../constants';
@@ -25,7 +25,7 @@ export default function Site ({onChange}) {
 	const changeHandler = fieldName => v => onChange(fieldName, v);
 	return (
 		<Section className={cx('site-params')} title={t('title')}>
-			<ul>
+			<List.Unadorned>
 				<li>
 					<div>
 						<Title>{t(['siteName', 'title'])}</Title>
@@ -33,7 +33,7 @@ export default function Site ({onChange}) {
 					</div>
 					<Input.Text value={brandName} onChange={changeHandler(BRAND_NAME)} />
 				</li>
-			</ul>
+			</List.Unadorned>
 		</Section>
 	);
 }
