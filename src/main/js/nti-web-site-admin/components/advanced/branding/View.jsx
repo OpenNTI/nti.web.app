@@ -55,8 +55,10 @@ class SiteAdminBranding extends React.Component {
 					<Card className={cx('branding-root')}>
 						{(modified || error) && (
 							<div className={cx('header')}>
-								<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
-								{error && <Errors.Bar error={error} className={cx('errorbar')}/>}
+								<div className={cx('header-content')}>
+									<Apply disabled={!modified} onSave={this.onSave} onCancel={cancel} />
+									{error && <Errors.Bar error={error} className={cx('errorbar')}/>}
+								</div>
 							</div>
 						)}
 						<div className={cx('branding-content')}>
