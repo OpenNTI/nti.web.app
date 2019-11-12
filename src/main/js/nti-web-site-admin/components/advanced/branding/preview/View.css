@@ -19,7 +19,7 @@
 	margin: 0.5em 0;
 }
 
-:global(.icon-light-x) {
+.preview-dialog :global(.icon-light-x) {
 	background: white;
 	border-radius: 50%;
 	font-size: 1.75rem;
