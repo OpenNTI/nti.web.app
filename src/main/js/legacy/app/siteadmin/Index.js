@@ -39,6 +39,19 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 		this.NavigationActions = NavigationActions.create();
 	},
 
+	onRouteDeactivate () {
+		this.deactivateTimeout = setTimeout(() => {
+			if (this.siteAdmin) {
+				this.siteAdmin.destroy();
+				delete this.siteAdmin;
+			}
+		}, 100);
+	},
+
+	onRouteActivate () {
+		clearTimeout(this.deactivateTimeout);
+	},
+
 
 	showSiteAdmin (route) {
 		const baseroute = this.getBaseRoute();
