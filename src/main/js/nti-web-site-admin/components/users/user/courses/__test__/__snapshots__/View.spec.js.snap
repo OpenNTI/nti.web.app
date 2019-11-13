@@ -25,7 +25,9 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
   <div
     className="site-admin-card"
   >
-    <ul>
+    <ul
+      className="unadorned-list"
+    >
       <li>
         <div
           className="nti-link-to-path"

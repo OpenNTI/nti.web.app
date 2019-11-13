@@ -33,7 +33,7 @@ exports[`Site admin user info nav bar test Basic render test (has no transcript 
     </div>
   </div>
   <ul
-    className="site-admin-tabs"
+    className="unadorned-list site-admin-tabs"
   >
     <li>
       <div
@@ -92,7 +92,7 @@ exports[`Site admin user info nav bar test Basic render test (has transcript lin
     </div>
   </div>
   <ul
-    className="site-admin-tabs"
+    className="unadorned-list site-admin-tabs"
   >
     <li>
       <div

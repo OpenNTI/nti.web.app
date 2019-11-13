@@ -7,7 +7,9 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
   <div
     className="site-admin-card"
   >
-    <ul>
+    <ul
+      className="unadorned-list"
+    >
       <li>
         <div
           className="nti-link-to-path"

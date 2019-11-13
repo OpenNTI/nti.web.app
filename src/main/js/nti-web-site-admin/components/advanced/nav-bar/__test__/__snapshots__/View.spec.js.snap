@@ -2,7 +2,7 @@
 
 exports[`Site admin advanced nav bar test Basic render test 1`] = `
 <ul
-  className="site-admin-advanced-tabs"
+  className="unadorned-list site-admin-advanced-tabs"
 >
   <li>
     <div

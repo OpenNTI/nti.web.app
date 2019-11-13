@@ -60,7 +60,7 @@ exports[`Site admin user frame test Basic render test 1`] = `
           </div>
         </div>
         <ul
-          className="site-admin-tabs"
+          className="unadorned-list site-admin-tabs"
         >
           <li>
             <div

@@ -19,7 +19,9 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
   <div
     className="site-admin-card"
   >
-    <ul>
+    <ul
+      className="unadorned-list"
+    >
       <li>
         <div
           className="nti-link-to-path"
@@ -152,7 +154,9 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
   <div
     className="site-admin-card"
   >
-    <ul>
+    <ul
+      className="unadorned-list"
+    >
       <li>
         <div
           className="nti-link-to-path"
