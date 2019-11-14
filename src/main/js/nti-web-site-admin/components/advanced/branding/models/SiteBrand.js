@@ -12,5 +12,6 @@ class SiteBrand extends Models.Base {
 		theme:       { type: 'object' },
 		brand_name:  { type: 'string' },
 		brand_color: { type: 'string' },
+		UneditableEmailImage: { type: 'boolean'}
 	}
 }
