@@ -11,6 +11,7 @@ import {
 	MODIFIED,
 	SITE_BRAND,
 	THEME,
+	CAN_EDIT_EMAIL_ASSET,
 	MimeTypes,
 	AssetTypeMap
 } from './constants';
@@ -80,6 +81,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	
 			delete this[Loading];
 			this.set(SITE_BRAND, brand);
+			this.set(CAN_EDIT_EMAIL_ASSET, !brand.UneditableEmailImage);
 			this.set(MODIFIED, false);
 			this.set(CHANGED, undefined);
 			this[RebuildTheme](brand);

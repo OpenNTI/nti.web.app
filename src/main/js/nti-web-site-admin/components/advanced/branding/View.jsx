@@ -5,7 +5,7 @@ import {Errors, Loading, Theme} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 
-import {ERROR, LOADING, MODIFIED} from './constants';
+import {ERROR, LOADING, MODIFIED, CAN_EDIT_EMAIL_ASSET} from './constants';
 import Controls from './Controls';
 import Preview from './preview';
 import Reset from './Reset';
@@ -40,6 +40,7 @@ class SiteAdminBranding extends React.Component {
 			[ERROR]: error,
 			[LOADING]: loading,
 			[MODIFIED]: modified,
+			[CAN_EDIT_EMAIL_ASSET]: canEditEmail,
 			theme,
 			assets,
 			setAsset,
@@ -65,7 +66,7 @@ class SiteAdminBranding extends React.Component {
 						<div className={cx('branding-content')}>
 							<Library onChange={setBrandProp} />
 							<Site onChange={setBrandProp} />
-							<Assets assets={assets} onChange={setAsset} onThumbClick={this.togglePreview} />
+							<Assets assets={assets} onChange={setAsset} onThumbClick={this.togglePreview} canEditEmail={canEditEmail} />
 							<Reset onReset={reset} />
 						</div>
 					</Card>
@@ -84,6 +85,7 @@ SiteAdminBranding.propTypes = {
 	theme: PropTypes.object,
 	[MODIFIED]: PropTypes.bool,
 	[ERROR]: PropTypes.object,
+	[CAN_EDIT_EMAIL_ASSET]: PropTypes.bool,
 	save: PropTypes.func.isRequired,
 	cancel: PropTypes.func.isRequired,
 	reset: PropTypes.func.isRequired,
@@ -93,6 +95,7 @@ export default Store.connect([
 	ERROR,
 	LOADING,
 	MODIFIED,
+	CAN_EDIT_EMAIL_ASSET,
 	'theme',
 	'assets',
 	'setAsset',

@@ -10,6 +10,7 @@ export const SITE = 'site';
 export const SITE_BRAND = 'siteBrand';
 export const SITE_INFO = 'siteInfo';
 export const THEME = 'theme';
+export const CAN_EDIT_EMAIL_ASSET = 'can-edit-email';
 
 export const AssetTypeMap = {
 	'fullLogo': 'full_logo'
