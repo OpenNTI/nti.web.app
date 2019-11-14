@@ -6,10 +6,14 @@ import styles from './ImageInput.css';
 
 const cx = classnames.bind(styles);
 
+const AcceptsOverrides = {
+	'favicon': 'image/png'
+};
+
 export default function ImageInput ({onChange, name, children}) {
 	return (
 		<button role="button" className={cx('image-input')}>
-			<input type="file" name={name} onChange={onChange} accept="image/*" />
+			<input type="file" name={name} onChange={onChange} accept={AcceptsOverrides[name] || 'image/*'} />
 			{children}
 		</button>
 	);
