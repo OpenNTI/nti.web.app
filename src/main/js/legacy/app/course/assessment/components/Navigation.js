@@ -70,6 +70,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			delete this.showControlOnRender;
 			delete this.hideControlOnRender;
 		}
+
+		//adding role: navigation allows users to exit out of lesson list with a screen reader
+		const navOutline = this.el.dom;
+		navOutline.setAttribute('role', 'navigation');
 	},
 
 	showOptionsMenu: function (e) {
