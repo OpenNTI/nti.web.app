@@ -168,7 +168,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				frameBorder: 0,
 				scrolling: 'no',
 				seamless: true,
-				style: 'overflow: hidden; z-index: 1;'
+				style: 'overflow: hidden; z-index: 1;',
+				title: 'content',
+				role: 'iframe'
 			},
 			listeners: {
 				afterRender: function () {

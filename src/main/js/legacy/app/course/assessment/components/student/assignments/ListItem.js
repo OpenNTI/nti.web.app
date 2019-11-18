@@ -10,10 +10,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'tpl', 'if': 'canEdit', cn: [
-			{cls: 'edit-assignment', html: 'Edit'}
+			{cls: 'edit-assignment', html: 'Edit', 'aria-label': 'Edit ' + '{name:htmlEncode}', role: 'button', tabindex: 0}
 		]},
 		{ cls: 'name-container', cn: [
-			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}'}
+			{ tag: 'span', cls: 'name', html: '{name:htmlEncode}', tabindex: 0}
 		]},
 		{ cls: 'status-container'}
 	]),
