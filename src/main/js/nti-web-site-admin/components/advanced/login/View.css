@@ -1,0 +1,24 @@
+.login-root {
+	position: relative;
+}
+
+.login-content {
+	--checkerboard: #efefef;
+
+	padding: 4rem 2rem;
+}
+
+.header {
+	position: sticky;
+	top: 70px;
+	z-index: 1;
+	background: white;
+}
+
+.header-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: white;
+}

@@ -60,7 +60,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	}
 
 	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
-		const theme = Theme.buildTheme();
+		const theme = Theme.buildTheme(this.ThemeProperties);
 		theme.setOverrides(Theme.siteBrandToTheme(brand));
 		this.set(THEME, theme);
 	}

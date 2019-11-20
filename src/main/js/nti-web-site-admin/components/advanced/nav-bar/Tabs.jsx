@@ -7,7 +7,8 @@ const DEFAULT_TEXT = {
 	sync: 'Sync',
 	transcripts: 'Transcripts',
 	integrations: 'Webinars',
-	branding: 'Brand & Style'
+	branding: 'Brand & Style',
+	login: 'Login'
 };
 
 const t = scoped('site-admin.advanced.nav-bar.Tabs', DEFAULT_TEXT);
@@ -20,6 +21,10 @@ export default function SiteAdminAdvancedTabs () {
 				<LinkTo.Path to="./integrations" activeClassName="active">{t('integrations')}</LinkTo.Path>
 				{global.Service && global.Service.getWorkspaceLink('SiteAdmin', 'SiteBrand') ?
 					(<LinkTo.Path to="./branding" exact activeClassName="active">{t('branding')}</LinkTo.Path>) :
+					null
+				}
+				{global.Service && global.Service.getWorkspaceLink('SiteAdmin', 'SiteBrand') ?
+					(<LinkTo.Path to="./login" exact activeClassName="active">{t('login')}</LinkTo.Path>) :
 					null
 				}
 			</li>
