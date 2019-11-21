@@ -8,6 +8,13 @@
 	padding: 1.5rem 0;
 }
 
+.no-border {
+	background: none;
+	box-shadow: none;
+	padding: 0;
+	display: block;
+}
+
 .dimensions {
 	position: absolute;
 	top: 100%;

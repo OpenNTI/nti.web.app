@@ -15,12 +15,14 @@ const t = scoped('nti-web-app.admin.login.commons.AssetInput', {
 
 AssetInput.propTypes = {
 	asset: PropTypes.shape({
+		href: PropTypes.string,
 		filename: PropTypes.string
 	}).isRequired,
 	name: PropTypes.string,
-	setAsset: PropTypes.func
+	setAsset: PropTypes.func,
+	notSet: PropTypes.string
 };
-function AssetInput ({asset, name, setAsset}) {
+function AssetInput ({asset, name, setAsset, notSet}) {
 	const onChange = (e) => {
 		const {target: {files = []} = {}} = e;
 
@@ -44,8 +46,8 @@ function AssetInput ({asset, name, setAsset}) {
 
 	return (
 		<Input.FileInputWrapper  name={name} className={cx('asset-input')} onChange={onChange} >
-			<Text.Base className={cx('file-name')}>{asset.filename}</Text.Base>
-			<Text.Base className={cx('change')}>{t('change')}</Text.Base>
+			{asset.href && (<Text.Base className={cx('file-name')}>{asset.filename}</Text.Base>)}
+			<Text.Base className={cx('change')}>{asset.href || !notSet ? t('change') : notSet}</Text.Base>
 		</Input.FileInputWrapper>
 	);
 }
