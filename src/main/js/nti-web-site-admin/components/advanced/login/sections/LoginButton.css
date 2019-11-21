@@ -6,13 +6,25 @@
 
 .login-button-text {
 	flex: 1 1 auto;
-	height: 3.125rem;
+	text-align: center;
+	border-radius: 5px;
+	padding: 0.625rem;
+}
+
+.login-button-text :global(.nti-text-input) {
 	font-size: 1.125rem;
 	font-weight: 600;
 	line-height: 1.3;
 	color: white;
 	text-align: center;
-	border-radius: 5px;
+	background: rgba(0, 0, 0, 0.14);
+	box-sizing: inset 0 0 0 1px rgba(0, 0, 0, 0.11);
+	border: none;
+}
+
+.login-button-text .dark {
+	background: rgba(255, 255, 255, 0.14);
+	color: rgba(0, 0, 0, 0.8);
 }
 
 .color-trigger {

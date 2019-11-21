@@ -32,6 +32,8 @@ function LoginButton ({setBrandProp}) {
 	const buttonBackground = Theme.useThemeProperty('login.buttonBackground');
 	const buttonTheme = Theme.useThemeProperty('login.buttonTheme');
 
+	const [text, setText] = React.useState(buttonText);
+
 	const backgroundColor = (buttonBackground == null || buttonBackground.isColor) ? buttonBackground : Color.fromCSS(buttonBackground);
 
 	const styles = {};
@@ -40,8 +42,9 @@ function LoginButton ({setBrandProp}) {
 		styles.backgroundColor = backgroundColor.hex.toString();
 	}
 
-	const onButtonText = (text) => {
-		setBrandProp('theme.login.buttonText', text);
+	const onButtonText = (changed) => {
+		setBrandProp('theme.login.buttonText', changed);
+		setText(changed);
 	};
 
 	const onColorChange = (color) => {
@@ -61,7 +64,9 @@ function LoginButton ({setBrandProp}) {
 			</Property.Description>
 			<Property.Preview>
 				<div className={cx('login-button')}>
-					<Input.Text className={cx('login-button-text', buttonTheme)} style={styles} value={buttonText} onChange={onButtonText} />
+					<div className={cx('login-button-text')} style={styles}>
+						<Input.Text className={cx(buttonTheme)} value={text} onChange={onButtonText} />
+					</div>
 					<Flyout.Triggered
 						trigger={trigger}
 						arrow
