@@ -19,7 +19,7 @@ export default class LoginStore extends BrandingStore {
 	static Cancel = 'cancel';
 	static Reset = 'reset';
 	static SetAsset = 'setAsset';
-	static SetBrandProp = 'SetBrandProp';
+	static SetBrandProp = 'setBrandProp';
 
 	ThemeProperties = Theme.Properties
 }

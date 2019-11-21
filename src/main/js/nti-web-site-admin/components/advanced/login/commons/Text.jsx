@@ -30,5 +30,6 @@ export default {
 	Base: Factory(),
 	Title: Factory('title'),
 	Description: Factory('description'),
-	Small: Factory('small')
+	Small: Factory('small'),
+	Badge: Factory('badge')
 };
