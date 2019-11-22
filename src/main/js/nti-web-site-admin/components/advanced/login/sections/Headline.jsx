@@ -19,7 +19,7 @@ export default function Headline () {
 				<Text.Description>{t('description')}</Text.Description>
 			</Property.Description>
 			<Property.Preview>
-				<TextInput value={title} name="theme.login.title" type="headline" />
+				<TextInput value={title} name="theme.login.title" type="headline" maxLength={30} />
 			</Property.Preview>
 		</Property>
 	);

@@ -20,7 +20,7 @@ export default function Subtext () {
 				<Text.Description>{t('description')}</Text.Description>
 			</Property.Description>
 			<Property.Preview>
-				<TextInput value={disclaimer} name="theme.login.disclaimer" type="disclaimer" />
+				<TextInput value={disclaimer} name="theme.login.disclaimer" type="disclaimer" maxLength={30} />
 			</Property.Preview>
 		</Property>
 	);

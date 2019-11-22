@@ -19,7 +19,7 @@ export default function Description () {
 				<Text.Description>{t('description')}</Text.Description>
 			</Property.Description>
 			<Property.Preview>
-				<TextInput value={description} name="theme.login.description" type="description" />
+				<TextInput value={description} name="theme.login.description" type="description" maxLength={140} />
 			</Property.Preview>
 		</Property>
 	);

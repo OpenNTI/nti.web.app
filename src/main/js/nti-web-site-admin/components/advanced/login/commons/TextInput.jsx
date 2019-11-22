@@ -1,21 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+import {scoped} from '@nti/lib-locale';
 import {Input} from '@nti/web-commons';
 
 import Store from '../Store';
 
 import Styles from './TextInput.css';
+import Text from './Text';
 
 const cx = classnames.bind(Styles);
+const t = scoped('nti-web-app.admin.login.common.TextInput', {
+	remaining: {
+		one: '%(count)s Character Left',
+		other: '%(count)s Characters Left'
+	}
+});
 
 TextInput.propTypes = {
 	value: PropTypes.string,
 	name: PropTypes.string,
 	type: PropTypes.string,
-	setBrandProp: PropTypes.func
+	setBrandProp: PropTypes.func,
+	maxLength: PropTypes.number
 };
-function TextInput ({value, name, type, setBrandProp}) {
+function TextInput ({value, name, type, setBrandProp, maxLength = Infinity}) {
 	/*
 		There is a react update priority issue here, where just broadcasting the change to
 		the store is causing the inputs to re-render and move focus to the end. To counteract
@@ -24,6 +33,10 @@ function TextInput ({value, name, type, setBrandProp}) {
 	const [text, setText] = React.useState(value);
 
 	const onChange = (change) => {
+		if (maxLength && change.length > maxLength) {
+			change = change.substr(0, maxLength);
+		}
+
 		setBrandProp(name, change);
 		setText(change);
 	};
@@ -35,6 +48,11 @@ function TextInput ({value, name, type, setBrandProp}) {
 				onChange={onChange}
 				autoGrow
 			/>
+			{maxLength && (
+				<Text.Small className={cx('remaining')}>
+					{t('remaining', {count: maxLength - text.length})}
+				</Text.Small>
+			)}
 		</div>
 	);
 }
