@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
-import {Input, Text} from '@nti/web-commons';
+import {Input, Text, Theme} from '@nti/web-commons';
 
 import Store from '../Store';
 
@@ -14,15 +14,18 @@ const t = scoped('nti-web-app.admin.login.commons.AssetInput', {
 });
 
 AssetInput.propTypes = {
-	asset: PropTypes.shape({
-		href: PropTypes.string,
-		filename: PropTypes.string
-	}).isRequired,
 	name: PropTypes.string,
 	setAsset: PropTypes.func,
+	setBrandProp: PropTypes.func,
+	hideFlag: PropTypes.string,
 	notSet: PropTypes.string
 };
-function AssetInput ({asset, name, setAsset, notSet}) {
+function AssetInput ({name, setAsset, setBrandProp, hideFlag, notSet}) {
+	const asset = Theme.useThemeProperty(`assets.${name}`);
+
+	const hide = hideFlag && Theme.useThemeProperty(hideFlag);
+	const href = !hide && asset.href;
+
 	const onChange = (e) => {
 		const {target: {files = []} = {}} = e;
 
@@ -38,6 +41,10 @@ function AssetInput ({asset, name, setAsset, notSet}) {
 					source
 
 				});
+
+				if (hideFlag) {
+					setBrandProp(hideFlag, false);
+				}
 			};
 
 			reader.readAsDataURL(file);
@@ -46,13 +53,14 @@ function AssetInput ({asset, name, setAsset, notSet}) {
 
 	return (
 		<Input.FileInputWrapper  name={name} className={cx('asset-input')} onChange={onChange} >
-			{asset.href && (<Text.Base className={cx('file-name')}>{asset.filename}</Text.Base>)}
-			<Text.Base className={cx('change')}>{asset.href || !notSet ? t('change') : notSet}</Text.Base>
+			{href && (<Text.Base className={cx('file-name')}>{asset.filename}</Text.Base>)}
+			<Text.Base className={cx('change')}>{href || !notSet ? t('change') : notSet}</Text.Base>
 		</Input.FileInputWrapper>
 	);
 }
 
 export default Store
 	.monitor({
-		[Store.SetAsset]: 'setAsset'
+		[Store.SetAsset]: 'setAsset',
+		[Store.SetBrandProp]: 'setBrandProp'
 	})(AssetInput);

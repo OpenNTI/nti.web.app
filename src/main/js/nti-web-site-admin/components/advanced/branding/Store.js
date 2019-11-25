@@ -47,6 +47,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}, true);
 	}
 
+	setThemeProp = (path, value) => {
+		this.setBrandProp(`theme.${path}`, value);
+	}
+
 	setBrandProp = (path, value, doNotTrackChange) => {
 		const brand = this.get(SITE_BRAND);
 		ObjectUtils.set(brand, path, value);
