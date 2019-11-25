@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 			{cls: 'content', cn: [
 				{cls: 'active-content', cn: [
 					{cls: 'label'},
-					{cls: 'title'}
+					{cls: 'title', 'aria-label': 'recent courses'}
 				]},
 				{cls: 'wrapper', cn: [
 					{cls: 'tab-container'}
