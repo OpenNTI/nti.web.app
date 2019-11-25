@@ -126,7 +126,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	
 			formData.append('__json__', JSON.stringify({
 				...(this.get(CHANGED) || {}),
-				...(this.get(THEME) || {})
+				theme: {...brand.theme}
 			}));
 	
 			const resp = await brand.putToLink('edit', formData);
