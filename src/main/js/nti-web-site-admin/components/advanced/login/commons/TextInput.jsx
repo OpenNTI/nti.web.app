@@ -32,6 +32,12 @@ function TextInput ({value, name, type, setBrandProp, maxLength = Infinity}) {
 	 */
 	const [text, setText] = React.useState(value);
 
+	React.useEffect(() => {
+		if (text !== value) {
+			setText(value);
+		}
+	}, [value]);
+
 	const onChange = (change) => {
 		if (maxLength && change.length > maxLength) {
 			change = change.substr(0, maxLength);

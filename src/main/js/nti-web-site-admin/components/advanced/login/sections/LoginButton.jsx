@@ -34,6 +34,12 @@ function LoginButton ({setBrandProp}) {
 
 	const [text, setText] = React.useState(buttonText);
 
+	React.useEffect(() => {
+		if (text !== buttonText) {
+			setText(buttonText);
+		}
+	}, [buttonText]);
+
 	const backgroundColor = (buttonBackground == null || buttonBackground.isColor) ? buttonBackground : Color.fromCSS(buttonBackground);
 
 	const styles = {};
