@@ -1,7 +1,6 @@
 import React from 'react';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
-import {Theme} from '@nti/web-commons';
 
 import {Property, Text, AssetInput, AssetPreview} from '../commons';
 
@@ -21,7 +20,8 @@ const t = scoped('nti-web-app.login.sections.Logo', {
 		title: 'Overlay',
 		optional: 'Optional',
 		description: 'Secondary image that overlaps the background.',
-		notSet: 'Add an Overlay',
+		notSetHeader: 'No Overlay Set',
+		notSetLabel: 'Add an Overlay',
 		recommended: {
 			title: 'Overlay',
 			size: '600 x 400px'
@@ -29,29 +29,40 @@ const t = scoped('nti-web-app.login.sections.Logo', {
 	}
 });
 
-export default function Assets () {
-	const background = Theme.useThemeProperty('assets.login_background');
-	const feature = Theme.useThemeProperty('assets.login_featured_callout');
+const featureHideFlag = 'login.noFeature';
 
+export default function Assets () {
 	return (
 		<Property>
 			<Property.Description>
 				<div className={cx('asset')}>
 					<Text.Title>{t('background.title')}</Text.Title>
 					<Text.Description>{t('background.description')}</Text.Description>
-					<AssetInput asset={background} name="login_background" />
+					<AssetInput name="login_background" />
 				</div>
 				<div className={cx('asset')}>
 					<Text.Title>{t('feature.title')} <Text.Badge>{t('feature.optional')}</Text.Badge></Text.Title>
 					<Text.Description>{t('feature.description')}</Text.Description>
-					<AssetInput asset={feature} name="login_featured_callout" notSet={t('feature.notSet')}/>
+					<AssetInput
+						name="login_featured_callout"
+						notSet={t('feature.notSetLabel')}
+						hideFlag={featureHideFlag}
+					/>
 				</div>
 			</Property.Description>
 			<Property.Preview>
 				<div className={cx('assets-preview')}>
-					<AssetPreview className={cx('background-preview')} property={background} noBorder maxHeight={280} />
+					<AssetPreview className={cx('background-preview')} name="login_background" noBorder maxHeight={280} />
 					<div className={cx('feature-overlay')}>
-						<AssetPreview className={cx('featured-preview')} property={feature} noBorder maxHeight={200} />
+						<AssetPreview
+							className={cx('featured-preview')}
+							name="login_featured_callout"
+							notSetHeader={t('feature.notSetHeader')}
+							notSetLabel={t('feature.notSetLabel')}
+							hideFlag={featureHideFlag}
+							noBorder
+							maxHeight={200}
+						/>
 					</div>
 					<div className={cx('sizes')}>
 						<div className={cx('size')}>

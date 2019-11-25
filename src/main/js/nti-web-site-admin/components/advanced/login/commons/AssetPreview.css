@@ -15,6 +15,21 @@
 	display: block;
 }
 
+.no-border .not-set {
+	background: rgba(0, 0, 0, 0.75);
+	padding: 2rem 1rem;
+	border-radius: 10px;
+}
+
+.no-border .clear .icon {
+	background: rgba(0, 0, 0, 0.7);
+	box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.7);
+}
+
+.no-border span.not-set-header {
+	color: white;
+}
+
 .dimensions {
 	position: absolute;
 	top: 100%;
