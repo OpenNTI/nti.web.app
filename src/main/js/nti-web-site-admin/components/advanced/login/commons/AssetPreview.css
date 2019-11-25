@@ -63,5 +63,5 @@ span.not-set-label {
 	background: var(--secondary-grey);
 	border: 2px solid white;
 	border-radius: 20px;
-	box-shadow: 0 0 3px 1px var(--secondary-grey);
+	box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
 }
