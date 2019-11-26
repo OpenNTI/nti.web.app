@@ -13,6 +13,10 @@
 	justify-content: center;
 }
 
+.navbar:global(.main-navigation .back-container .branding-container .x-selectable) {
+	cursor: inherit;
+}
+
 .navbar:global(.main-navigation .back-container .branding-container) > * {
 	display: inline-block;
 }
