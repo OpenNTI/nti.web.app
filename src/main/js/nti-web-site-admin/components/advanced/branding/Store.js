@@ -103,7 +103,11 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	reset = async () => {
 		const brand = this.get(SITE_BRAND);
 		try {
-			return brand.requestLink('delete', 'delete').then(this[Load]);
+			await brand.requestLink('delete', 'delete').then(this[Load]);
+
+			const newBrand = this.get(SITE_BRAND);
+
+			Events.emit(Events.THEME_UPDATED, newBrand);
 		}
 		catch (e) {
 			this.set(ERROR, e);
