@@ -7,7 +7,7 @@ import styles from './ImageInput.css';
 const cx = classnames.bind(styles);
 
 const AcceptsOverrides = {
-	'favicon': 'image/png'
+	'favicon': 'image/png, image/gif, image/x-icon'
 };
 
 export default function ImageInput ({onChange, name, children}) {
