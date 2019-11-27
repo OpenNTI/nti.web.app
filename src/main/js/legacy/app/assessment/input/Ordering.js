@@ -84,8 +84,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		elements.forEach((e) => {
 			e.childNodes[1].setAttribute('role', 'button');
 			e.childNodes[1].setAttribute('aria-label',
-				e.childNodes[1].childNodes[1].innerHTML +
-				' matching with ' + e.childNodes[0].innerHTML + ', Position ' +
+				(e.childNodes[1].childNodes[1].textContent || e.childNodes[1].childNodes[1].innerText).toString() +
+				' matching with ' + (e.childNodes[0].textContent || e.childNodes[0].innerText).toString() + ', Position ' +
 				(parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + elements.length +
 				' in orderable list. Press SpaceBar to ' +
 				(e.childNodes[1].getAttribute('aria-grabbed') === 'true' ? 'drop' : 'grab'));
@@ -98,8 +98,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			e.childNodes[1].setAttribute('role', 'group');
 			e.childNodes[1].setAttribute('aria-label',
 				(e.childNodes[1].classList.contains('incorrect') ? 'Incorrect. ' : 'Correct. ') +
-				e.childNodes[1].childNodes[1].innerHTML +
-				' matching with ' + e.childNodes[0].innerHTML + ', Position ' +
+				(e.childNodes[1].childNodes[1].textContent || e.childNodes[1].childNodes[1].innerText).toString() +
+				' matching with ' + (e.childNodes[0].textContent || e.childNodes[0].innerText).toString() + ', Position ' +
 				(parseInt(e.childNodes[0].getAttribute('data-part'), 10) + 1) + ' of ' + elements.length);
 		});
 	},
@@ -113,8 +113,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 			const arialive = element.down('.ariaLiveText').dom;
 			const grabbed = (event.target.getAttribute('aria-grabbed') === 'true');
 			event.target.setAttribute('aria-grabbed', grabbed ? 'false' : 'true');
-			arialive.innerHTML = (event.target.childNodes[1].innerHTML + (grabbed ? ' dropped' : ' grabbed') + ', currently matching with ' +
-			event.target.parentElement.childNodes[0].innerHTML).toString() + (grabbed ? '' : ', use W or S to move item up or down');
+			const currText = event.target.childNodes[1];
+			const currLabel = event.target.parentElement.childNodes[0];
+			arialive.innerHTML = ((currText.textContent || currText.innerText).toString() + (grabbed ? ' dropped' : ' grabbed') + ', currently matching with ' +
+			currLabel.textContent || currLabel.innerText).toString() + (grabbed ? '' : ', use W or S to move item up or down');
 			break;
 		}
 		case 'w':
