@@ -1,10 +1,18 @@
 import React from 'react';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
+import {ImageEditor} from '@nti/web-whiteboard';//eslint-disable-line
 
 import {Property, Text, AssetInput, AssetPreview} from '../commons';
 
 import Styles from './Assets.css';
+
+const BackgroundAspectRatio = 3 / 2;
+const BackgroundFormat = {
+	crop: {aspectRatio: BackgroundAspectRatio},
+	blur: {radius: 50},
+	darken: {color: '#000', opacity: 0.3}
+};
 
 const cx = classnames.bind(Styles);
 const t = scoped('nti-web-app.login.sections.Logo', {
@@ -38,7 +46,16 @@ export default function Assets () {
 				<div className={cx('asset')}>
 					<Text.Title>{t('background.title')}</Text.Title>
 					<Text.Description>{t('background.description')}</Text.Description>
-					<AssetInput name="login_background" />
+					<AssetInput
+						name="login_background"
+						useAssetEditor
+						aspectRatio={BackgroundAspectRatio}
+						format={BackgroundFormat}
+						controls={[
+							ImageEditor.Editor.Controls.Blur,
+							ImageEditor.Editor.Controls.Darken
+						]}
+					/>
 				</div>
 				<div className={cx('asset')}>
 					<Text.Title>{t('feature.title')} <Text.Badge>{t('feature.optional')}</Text.Badge></Text.Title>

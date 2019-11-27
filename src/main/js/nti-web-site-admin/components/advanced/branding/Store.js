@@ -43,7 +43,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			source,
 			href: source,
 			filename,
-			MimeType: MimeTypes.Image,
+			MimeType: MimeTypes.Image
 		}, true);
 	}
 
@@ -120,9 +120,19 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			const brand = this.get(SITE_BRAND);
 			const formData = new FormData();
 	
-			const assets = form.querySelectorAll('input[type="file"]');
+			const fileAssets = form.querySelectorAll('input[type="file"]');
+			const assetEditors = form.querySelectorAll('[data-asset-editor]');
+
+			for (let asset of assetEditors) {
+				const name = asset.getAttribute('data-asset-editor');
+				const brandAsset = brand.assets[name];
+
+				if (brandAsset && brandAsset.source) {
+					formData.append(name, brandAsset.source);
+				}
+			}
 	
-			for (let asset of assets) {
+			for (let asset of fileAssets) {
 				if (asset.files && asset.files.length > 0 && asset.name) {
 					formData.append(asset.name, asset.files[0]);
 				}
