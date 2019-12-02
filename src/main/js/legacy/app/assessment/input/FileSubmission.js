@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 							]},
 							{cls: 'controls', cn: [
 								{tag: 'span', cls: 'link preview-link', cn: [
-									{tag: 'a', href: '', target: '_blank', html: 'Preview'}
+									{tag: 'a', href: '', target: '_blank', html: 'Download'}
 								]},
 								{tag: 'span', cls: 'link change-link', html: 'Change', cn: [
 									{tag: 'input', type: 'file', cls: 'hidden', title: 'Change File', tabindex: '1'}
@@ -525,7 +525,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.setPreviewFromInput(v);
 		this.removeCls('not-submitted');
 
-		const url = v.url || v.download_url;
+		const url = v.download_url || v.url;
 		this.setDownloadButton(url);
 		if (!url) {
 			this.previewLinkEl.hide();
