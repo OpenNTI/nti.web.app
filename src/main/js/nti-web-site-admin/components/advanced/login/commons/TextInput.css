@@ -5,6 +5,7 @@
 .text-input :global(.textarea-text) {
 	min-height: 0;
 	padding: 0.625rem;
+	white-space: pre-wrap;
 }
 
 .remaining {
