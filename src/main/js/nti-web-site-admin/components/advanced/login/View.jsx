@@ -14,6 +14,7 @@ import Description from './sections/Description';
 import SubText from './sections/SubText';
 import LoginButton from './sections/LoginButton';
 import Assets from './sections/Assets';
+import Preview from './preview';
 
 const cx = classnames.bind(Styles);
 
@@ -29,22 +30,35 @@ AdvancedLogin.propTypes = {
 function AdvancedLogin ({error, loading, modified, theme, save, cancel, reset}) {
 	if (!theme) { return null; }
 
+	const [preview, setPreview] = React.useState(false);
 	const form = React.createRef();
 
-	const onSave = (e) => {
-		e.preventDefault();
-		e.stopPropagation();
+	const showPreview = (e) => {
+		if (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+		}
+
+		setPreview(true);
+		// save(form.current);
+	};
+
+	const hidePreview = () => setPreview(false);
+
+	const onSave = () => {
+		setPreview(false);
 		save(form.current);
 	};
 
 	return (
 		<Theme.Apply theme={theme}>
-			<form className={cx('login-root')} ref={form} onSubmit={onSave}>
+			<form className={cx('login-root')} ref={form} onSubmit={showPreview}>
 				<Card>
 					{(modified || error) && (
 						<div className={cx('header')}>
 							<div className={cx('header-content')}>
-								<Controls onPreview={onSave} onCancel={cancel} />
+								<Controls onPreview={showPreview} onCancel={cancel} />
 								{error && <Errors.Bar error={error} className={cx('errorbar')}/>}
 							</div>
 						</div>
@@ -57,6 +71,7 @@ function AdvancedLogin ({error, loading, modified, theme, save, cancel, reset}) 
 						<LoginButton />
 						<Assets />
 					</div>
+					{preview && (<Preview onCancel={hidePreview} onSave={onSave} />)}
 				</Card>
 				<Loading.Overlay large loading={loading} />
 			</form>
