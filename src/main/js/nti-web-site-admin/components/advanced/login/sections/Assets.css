@@ -1,3 +1,7 @@
+.asset-property {
+	margin-bottom: 5rem;
+}
+
 .asset + .asset {
 	border-top: 1px solid var(--border-grey-light);
 	padding-top: 1rem;

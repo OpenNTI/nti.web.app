@@ -33,7 +33,7 @@ const featureHideFlag = 'login.noFeature';
 
 export default function Assets () {
 	return (
-		<Property>
+		<Property className={cx('asset-property')}>
 			<Property.Description>
 				<div className={cx('asset')}>
 					<Text.Title>{t('background.title')}</Text.Title>

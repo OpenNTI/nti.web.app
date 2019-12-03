@@ -32,6 +32,6 @@ Property.propTypes = {
 };
 export default function Property ({className, ...otherProps}) {
 	return (
-		<div className={cx('property')} {...otherProps} />
+		<div className={cx('property', className)} {...otherProps} />
 	);
 }
