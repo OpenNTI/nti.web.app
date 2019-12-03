@@ -18,6 +18,7 @@ LoginPreview.propTypes = {
 };
 export default function LoginPreview ({onSave, onCancel}) {
 	const background = Theme.useThemeProperty('login.background');
+	const disclaimer = Theme.useThemeProperty('login.disclaimer');
 
 	const containerStyles = {};
 
@@ -42,12 +43,16 @@ export default function LoginPreview ({onSave, onCancel}) {
 							<div className={cx('header')}>
 								<Theme.Asset name="login.logo" />
 							</div>
-							<div className={cx('login')}>
+							<div className={cx('login', {'has-disclaimer': !!disclaimer})}>
 								<Text.H1>{Theme.useThemeProperty('login.title')}</Text.H1>
 								<Text.Large>{Theme.useThemeProperty('login.description')}</Text.Large>
+								{disclaimer && (
+									<Text.Disclaimer>{disclaimer}</Text.Disclaimer>
+								)}
 								<div className={cx('form')}>
 									<div className={cx('input')} />
 									<div className={cx('input')} />
+									<div className={cx('recover')} />
 									<div className={cx('button', Theme.useThemeProperty('login.buttonThemes'))} style={buttonStyle}>
 										{Theme.useThemeProperty('login.buttonText')}
 									</div>
