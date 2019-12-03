@@ -15,6 +15,7 @@ const t = scoped('nti-web-app.admin.login.sections.LoginButton', {
 	title: 'Login Button'
 });
 
+const MaxLength = 17;
 const Presets = [
 	{color: Color.fromHex('#000000'), title: 'Black'},
 	{color: Color.fromHex('#ffffff'), title: 'White'},
@@ -49,8 +50,10 @@ function LoginButton ({setBrandProp}) {
 	}
 
 	const onButtonText = (changed) => {
-		setBrandProp('theme.login.buttonText', changed);
-		setText(changed);
+		const newText = changed.substr(0, MaxLength);
+
+		setBrandProp('theme.login.buttonText', newText);
+		setText(newText);
 	};
 
 	const onColorChange = (color) => {
