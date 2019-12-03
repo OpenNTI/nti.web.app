@@ -54,14 +54,16 @@
 
 		ga('create',
 			'<[cfg:analyticsKey]>',
-			'auto' // replace auto with {'cookieDomain': 'none'} for testing on localhost
+			{
+				// cookieDomain: 'none' //  for testing on localhost
+				userId: '<[cfg:username]>',
+				clientId: '<[cfg:siteName]>',
+				appName: '<[cfg:appName]>',
+				appId: '<[cfg:appId]>',
+				appVersion: '<[cfg:appVersion]>',
+				appInstallerId: navigator.standalone ? 'homescreen':'browser'
+			}
 		);
-		ga('set', {
-			appName: '<[cfg:appName]>',
-			appId: '<[cfg:appId]>',
-			appVersion: '<[cfg:appVersion]>',
-			appInstallerId: navigator.standalone ? 'homescreen':'browser'
-		});
 		ga('send', 'pageview');
 	</script>
 	<!-- End Google Analytics -->
