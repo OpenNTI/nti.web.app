@@ -272,3 +272,33 @@ exports[`Site admin user course list test (no courses) Basic render test 1`] = `
   </div>
 </div>
 `;
+
+exports[`Site admin user course list test (no courses) Basic render test 2`] = `
+<div
+  className="site-admin-user-transcripts"
+>
+  <div
+    className="user-transcript-controls"
+  >
+    <div
+      className="nti-course-enrollment-admin-prompt-trigger"
+      onClick={[Function]}
+    >
+      <a
+        className="nti-button primary rounded"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        role="button"
+        tabIndex="0"
+      >
+        Manage Courses
+      </a>
+    </div>
+  </div>
+  <div
+    className="empty-state"
+  >
+    This user is not enrolled in any courses
+  </div>
+</div>
+`;
