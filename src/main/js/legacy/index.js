@@ -27,6 +27,14 @@ const applyBranding = (siteBrand = {}) => {
 	const name = siteBrand['brand_name'];
 
 	if (name != null) {
+		const oldName = global.NTIStrings['application.title-bar-prefix'];
+
+		if (oldName !== name) {
+			const newTitle = document.title.replace(`${oldName}:`, `${name}:`);
+
+			document.title = newTitle;
+		}
+
 		global.NTIStrings['application.title-bar-prefix'] = name;
 	}
 
