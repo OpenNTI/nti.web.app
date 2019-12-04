@@ -10,7 +10,7 @@ const cx = classnames.bind(styles);
 const title = 'Reset everything to defaults?';
 const message = `
 	This will undo any branding overrides that have been set in the platform and login app.
-	For a child site the branding will be set to the parent sites' branding. Otherwise it
+	For a child site the branding will be set to the parent site's branding. Otherwise it
 	will be set to NextThought branding.
 `;
 
