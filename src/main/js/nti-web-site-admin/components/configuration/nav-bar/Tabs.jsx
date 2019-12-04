@@ -9,8 +9,8 @@ const DEFAULT_TEXT = {
 	sync: 'Sync',
 	transcripts: 'Transcripts & Course Credit',
 	integrations: 'Webinars',
-	branding: 'Site Branding',
-	login: 'Login Branding'
+	branding: 'Library Branding',
+	login: 'Sign In Branding'
 };
 
 const t = scoped('site-admin.advanced.nav-bar.Tabs', DEFAULT_TEXT);
