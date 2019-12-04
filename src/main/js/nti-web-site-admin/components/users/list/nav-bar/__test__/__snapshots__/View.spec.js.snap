@@ -8,44 +8,53 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
     className="site-admin-card"
   >
     <div
-      className="header"
+      className="site-admin-tabs-container"
     >
-      People
-    </div>
-    <ul
-      className="unadorned-list site-admin-tabs"
-    >
-      <li>
-        <div
-          className="nti-link-to-path"
-          exact={true}
-          to="./"
-        >
-          Learners
-        </div>
-      </li>
-      <li>
-        <div
-          className="nti-link-to-path"
-          to="./admins"
-        >
-          Admins
-        </div>
-      </li>
-      <li>
-        <div
-          className="nti-link-to-path"
-          to="./invitations"
-        >
-          Invitations
+      <div
+        className="site-admin-tabs-header"
+      >
+        <span
+          className="site-admin-tabs-toc-icon"
+        />
+        <span>
+          People
+        </span>
+      </div>
+      <ul
+        className="unadorned-list site-admin-tabs"
+      >
+        <li>
           <div
-            className="invitations-count"
+            className="nti-link-to-path"
+            exact={true}
+            to="./"
           >
-            5
+            Learners
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./admins"
+          >
+            Admins
+          </div>
+        </li>
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./invitations"
+          >
+            Invitations
+            <div
+              className="invitations-count"
+            >
+              5
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
   <div
     className="site-admin-card"
@@ -71,44 +80,53 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
     className="site-admin-card"
   >
     <div
-      className="header"
+      className="site-admin-tabs-container"
     >
-      People
-    </div>
-    <ul
-      className="unadorned-list site-admin-tabs"
-    >
-      <li>
-        <div
-          className="nti-link-to-path"
-          exact={true}
-          to="./"
-        >
-          Learners
-        </div>
-      </li>
-      <li>
-        <div
-          className="nti-link-to-path"
-          to="./admins"
-        >
-          Admins
-        </div>
-      </li>
-      <li>
-        <div
-          className="nti-link-to-path"
-          to="./invitations"
-        >
-          Invitations
+      <div
+        className="site-admin-tabs-header"
+      >
+        <span
+          className="site-admin-tabs-toc-icon"
+        />
+        <span>
+          People
+        </span>
+      </div>
+      <ul
+        className="unadorned-list site-admin-tabs"
+      >
+        <li>
           <div
-            className="invitations-count"
+            className="nti-link-to-path"
+            exact={true}
+            to="./"
           >
-            5
+            Learners
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./admins"
+          >
+            Admins
+          </div>
+        </li>
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./invitations"
+          >
+            Invitations
+            <div
+              className="invitations-count"
+            >
+              5
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
   <div
     className="site-admin-card"
