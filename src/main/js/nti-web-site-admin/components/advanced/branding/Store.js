@@ -12,6 +12,7 @@ import {
 	SITE_BRAND,
 	THEME,
 	CAN_EDIT_EMAIL_ASSET,
+	CAN_RESET,
 	MimeTypes,
 	AssetTypeMap
 } from './constants';
@@ -19,10 +20,10 @@ import {
 const CHANGED = '_changed';
 const Load = Symbol('load');
 const Loading = Symbol('loading');
+const RebuildTheme = Symbol('rebuild theme');
 
 
 export default class ThemeEditorStore extends Stores.SimpleStore {
-	static CHANGED = CHANGED;
 
 	constructor () {
 		super();
@@ -38,10 +39,6 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	 * @returns {undefined}
 	 */
 	setAsset = (type, item) => {
-		const toRemove = this.get('assetsToRemove') || [];
-
-		this.set('assetsToRemove', toRemove.filter(t => (AssetTypeMap[type] || type) !== t));
-
 		const {source, filename} = item || {};
 		this.setBrandProp(`${ASSETS}.${AssetTypeMap[type] || type}`, {
 			source,
@@ -64,10 +61,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			this.set(CHANGED, ObjectUtils.set(this.get(CHANGED) || {}, path, value));
 		}
 
-		this.rebuildTheme();
+		this[RebuildTheme]();
 	}
 
-	rebuildTheme = (brand = this.get(SITE_BRAND)) => {
+	[RebuildTheme] = (brand = this.get(SITE_BRAND)) => {
 		const theme = Theme.buildTheme(this.ThemeProperties);
 		theme.setOverrides(Theme.siteBrandToTheme(brand));
 		this.set(THEME, theme);
@@ -92,7 +89,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			this.set(CAN_EDIT_EMAIL_ASSET, !brand.UneditableEmailImage);
 			this.set(MODIFIED, false);
 			this.set(CHANGED, undefined);
-			this.rebuildTheme(brand);
+			this[RebuildTheme](brand);
 		}
 		catch (e) {
 			this.set(ERROR, e);
@@ -102,37 +99,29 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}
 	}
 
-	cancel = this[Load]
-
-	reset = () => {
+	get [CAN_RESET] () {
 		const brand = this.get(SITE_BRAND);
 
-		if (brand.theme) {
-			delete brand.theme.library;
-		}
-
-		brand['brand_name'] = null;
-		brand['brand_color'] = null;
-
-		if (brand.assets) {
-			delete brand.assets.logo;
-			delete brand.assets['full_logo'];
-			delete brand.assets.email;
-			delete brand.assets.favicon;
-
-			this.set('assetsToRemove', [
-				'logo',
-				'full_logo',
-				'email',
-				'favicon'
-			]);
-		}
-
-		this.set(CHANGED, {'brand_name': null, 'brand_color': null});
-		this.set(MODIFIED, true);
-		this.rebuildTheme(brand);
+		return brand && brand.hasLink('delete');
 	}
 
+
+	cancel = this[Load]
+
+
+	reset = async () => {
+		const brand = this.get(SITE_BRAND);
+		try {
+			await brand.requestLink('delete', 'delete').then(this[Load]);
+
+			const newBrand = this.get(SITE_BRAND);
+
+			Events.emit(Events.THEME_UPDATED, newBrand);
+		}
+		catch (e) {
+			this.set(ERROR, e);
+		}
+	}
 
 	save = async (form) => {
 		try {
@@ -141,16 +130,13 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			const formData = new FormData();
 	
 			const assets = form.querySelectorAll('input[type="file"]');
-			const assetsToRemove = this.get('assetsToRemove') || [];
 	
 			for (let asset of assets) {
-				if (assetsToRemove.includes(asset.name)) {
-					formData.append(asset.name, '');
-				} else if (asset.files && asset.files.length > 0 && asset.name) {
+				if (asset.files && asset.files.length > 0 && asset.name) {
 					formData.append(asset.name, asset.files[0]);
 				}
 			}
-
+	
 			formData.append('__json__', JSON.stringify({
 				...(this.get(CHANGED) || {}),
 				theme: {...brand.theme}

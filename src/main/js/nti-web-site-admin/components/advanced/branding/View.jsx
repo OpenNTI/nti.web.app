@@ -5,7 +5,7 @@ import {Errors, Loading, Theme} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 
-import {ERROR, LOADING, MODIFIED, CAN_EDIT_EMAIL_ASSET} from './constants';
+import {ERROR, LOADING, MODIFIED, CAN_EDIT_EMAIL_ASSET, CAN_RESET} from './constants';
 import Controls from './Controls';
 import Preview from './preview';
 import Reset from './Reset';
@@ -41,6 +41,7 @@ class SiteAdminBranding extends React.Component {
 			[LOADING]: loading,
 			[MODIFIED]: modified,
 			[CAN_EDIT_EMAIL_ASSET]: canEditEmail,
+			[CAN_RESET]: canReset,
 			theme,
 			assets,
 			setAsset,
@@ -67,7 +68,7 @@ class SiteAdminBranding extends React.Component {
 							<Library onChange={setBrandProp} />
 							<Site onChange={setBrandProp} />
 							<Assets assets={assets} onChange={setAsset} onThumbClick={this.togglePreview} canEditEmail={canEditEmail} />
-							<Reset onReset={reset} />
+							<Reset onReset={reset} canReset={canReset} />
 						</div>
 					</Card>
 					{showPreview && <Preview onSave={modified ? this.onSave : null} onClose={this.togglePreview} />}
@@ -96,6 +97,7 @@ export default Store.connect([
 	LOADING,
 	MODIFIED,
 	CAN_EDIT_EMAIL_ASSET,
+	CAN_RESET,
 	'theme',
 	'assets',
 	'setAsset',
