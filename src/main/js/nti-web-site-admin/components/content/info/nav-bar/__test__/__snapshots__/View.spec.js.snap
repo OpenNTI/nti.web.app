@@ -41,28 +41,32 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has n
       </div>
     </div>
   </div>
-  <ul
-    className="unadorned-list site-admin-tabs"
+  <div
+    className="site-admin-tabs-container"
   >
-    <li>
-      <div
-        className="nti-link-to-path"
-        exact={true}
-        to="./"
-      >
-        Overview
-      </div>
-    </li>
-    <li />
-    <li>
-      <div
-        className="nti-link-to-path"
-        to="./reports"
-      >
-        Reports
-      </div>
-    </li>
-  </ul>
+    <ul
+      className="unadorned-list site-admin-tabs"
+    >
+      <li>
+        <div
+          className="nti-link-to-path"
+          exact={true}
+          to="./"
+        >
+          Overview
+        </div>
+      </li>
+      <li />
+      <li>
+        <div
+          className="nti-link-to-path"
+          to="./reports"
+        >
+          Reports
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
 `;
 
@@ -107,34 +111,38 @@ exports[`Site admin user course enrollment nav bar test Basic render test (has r
       </div>
     </div>
   </div>
-  <ul
-    className="unadorned-list site-admin-tabs"
+  <div
+    className="site-admin-tabs-container"
   >
-    <li>
-      <div
-        className="nti-link-to-path"
-        exact={true}
-        to="./"
-      >
-        Overview
-      </div>
-    </li>
-    <li>
-      <div
-        className="nti-link-to-path"
-        to="./roster"
-      >
-        Roster
-      </div>
-    </li>
-    <li>
-      <div
-        className="nti-link-to-path"
-        to="./reports"
-      >
-        Reports
-      </div>
-    </li>
-  </ul>
+    <ul
+      className="unadorned-list site-admin-tabs"
+    >
+      <li>
+        <div
+          className="nti-link-to-path"
+          exact={true}
+          to="./"
+        >
+          Overview
+        </div>
+      </li>
+      <li>
+        <div
+          className="nti-link-to-path"
+          to="./roster"
+        >
+          Roster
+        </div>
+      </li>
+      <li>
+        <div
+          className="nti-link-to-path"
+          to="./reports"
+        >
+          Reports
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
 `;
