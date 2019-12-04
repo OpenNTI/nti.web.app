@@ -68,6 +68,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		const theme = Theme.buildTheme(this.ThemeProperties);
 		theme.setOverrides(Theme.siteBrandToTheme(brand));
 		this.set(THEME, theme);
+		this.set(ERROR, null);
 	}
 
 	[Load] = async () => {
