@@ -10,21 +10,13 @@
 	border-radius: 5px;
 	padding: 0.625rem;
 	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-}
-
-.login-button-text :global(.nti-text-input) {
 	font-size: 1.125rem;
 	font-weight: 600;
 	line-height: 1.3;
 	color: white;
-	text-align: center;
-	background: rgba(0, 0, 0, 0.14);
-	box-sizing: inset 0 0 0 1px rgba(0, 0, 0, 0.11);
-	border: none;
 }
 
-.login-button-text .dark {
-	background: rgba(255, 255, 255, 0.14);
+.login-button-text.dark {
 	color: rgba(0, 0, 0, 0.8);
 }
 

@@ -15,7 +15,6 @@ const t = scoped('nti-web-app.admin.login.sections.LoginButton', {
 	title: 'Login Button'
 });
 
-const MaxLength = 17;
 const Presets = [
 	{color: Color.fromHex('#000000'), title: 'Black'},
 	{color: Color.fromHex('#ffffff'), title: 'White'},
@@ -33,13 +32,6 @@ function LoginButton ({setBrandProp}) {
 	const buttonBackground = Theme.useThemeProperty('login.buttonBackground');
 	const buttonTheme = Theme.useThemeProperty('login.buttonTheme');
 
-	const [text, setText] = React.useState(buttonText);
-
-	React.useEffect(() => {
-		if (text !== buttonText) {
-			setText(buttonText);
-		}
-	}, [buttonText]);
 
 	const backgroundColor = (buttonBackground == null || buttonBackground.isColor) ? buttonBackground : Color.fromCSS(buttonBackground);
 
@@ -48,13 +40,6 @@ function LoginButton ({setBrandProp}) {
 	if (backgroundColor) {
 		styles.backgroundColor = backgroundColor.hex.toString();
 	}
-
-	const onButtonText = (changed) => {
-		const newText = changed.substr(0, MaxLength);
-
-		setBrandProp('theme.login.buttonText', newText);
-		setText(newText);
-	};
 
 	const onColorChange = (color) => {
 		setBrandProp('theme.login.buttonBackground', color.hex.toString());
@@ -73,8 +58,8 @@ function LoginButton ({setBrandProp}) {
 			</Property.Description>
 			<Property.Preview>
 				<div className={cx('login-button')}>
-					<div className={cx('login-button-text')} style={styles}>
-						<Input.Text className={cx(buttonTheme)} value={text} onChange={onButtonText} />
+					<div className={cx('login-button-text', buttonTheme)} style={styles}>
+						{buttonText}
 					</div>
 					<Flyout.Triggered
 						trigger={trigger}
