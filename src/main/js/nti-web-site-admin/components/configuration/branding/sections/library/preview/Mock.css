@@ -1,7 +1,7 @@
 .mock-root {
 	background: #343434;
 	height: 480px;
-	max-width: 768px;
+	max-width: 726px;
 	overflow: hidden;
 	margin-right: -2rem; /* counter container padding to get flush right edge */
 	transition: background-color 0.2s;

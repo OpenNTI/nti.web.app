@@ -1,24 +1,50 @@
 @import '~@nti/style-common';
 
-.site-admin-tabs {
-	li {
-		box-shadow: 0 -1px 0 0 $border-grey-light;
-		margin: 0;
-		padding: 0;
 
-		a {
-			display: block;
-			padding: 0.5rem 1rem;
-			text-decoration: none;
-			color: $secondary-grey;
+.site-admin-tabs-container {
+	.site-admin-tabs-header {
+		color: $tertiary-grey;
+		box-shadow: 0 1px 0 0 #e2e2e2;
+		height: 52px;
+		line-height: 52px;
+		padding: 0.5rem 1rem;
+		font-size: 14px;
+		margin-bottom: 10px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 
-			&:not(.active):hover {
-				background: $panel-background;
-			}
+		.site-admin-tabs-toc-icon {
+			width: 24px;
+			height: 24px;
+			margin-right: 0.5rem;
 
-			&.active {
-				background: $primary-blue;
-				color: white;
+			background-image: url('./assets/toc.svg');
+			background-size: cover;
+			background-repeat: no-repeat;
+		}
+	}
+
+	.site-admin-tabs {
+		li {
+			margin: 0;
+			padding: 0;
+
+			a {
+				display: block;
+				padding: 0.5rem 1rem;
+				text-decoration: none;
+				color: $secondary-grey;
+
+				&:not(.active):hover {
+					background: $panel-background;
+				}
+
+				&.active {
+					box-shadow: inset 4px 0 0 0 #168fe7;
+					background: $primary-blue;
+					color: white;
+				}
 			}
 		}
 	}

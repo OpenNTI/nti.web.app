@@ -56,8 +56,7 @@ class UserListNavBar extends React.Component {
 		return (
 			<div className="site-admin-user-list-nav-bar">
 				<Card>
-					<div className="header">{t('people')}</div>
-					<Tabs>
+					<Tabs header={t('people')}>
 						<LinkTo.Path to="./" activeClassName="active" exact>{t('learners')}</LinkTo.Path>
 						<LinkTo.Path to="./admins" activeClassName="active">{t('admins')}</LinkTo.Path>
 						<LinkTo.Path to="./invitations" activeClassName="active">

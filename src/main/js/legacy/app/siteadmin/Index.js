@@ -78,8 +78,8 @@ module.exports = exports = Ext.define('NextThought.app.siteadmin.Index', {
 						part = 'content';
 					} else if (context === 'reports') {
 						part = 'reports';
-					} else if (context === 'advanced') {
-						part = 'advanced';
+					} else if (context === 'configuration') {
+						part = 'configuration';
 					}
 
 					return part ? `${base}${part}/` : base;

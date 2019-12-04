@@ -8,7 +8,7 @@ const t = scoped('nti-web-site-admin.Frame', {
 	people: 'People',
 	content: 'Content',
 	reports: 'Reports',
-	advanced: 'Advanced'
+	configuration: 'Configuration'
 });
 
 const tabs = [
@@ -16,7 +16,7 @@ const tabs = [
 	{ id: 'people', label: t('people')},
 	{ id: 'content', label: t('content')},
 	{ id: 'reports', label: t('reports')},
-	{ id: 'advanced', label: t('advanced')}
+	{ id: 'configuration', label: t('configuration')}
 ];
 
 SiteAdminFame.propTypes = {

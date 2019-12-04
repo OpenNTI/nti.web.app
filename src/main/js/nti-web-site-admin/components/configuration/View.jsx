@@ -8,7 +8,7 @@ import Frame from './Frame';
 
 export default Router.for([
 	Route({path: '/integrations', component: Integrations, name: 'site-admin.advanced.integrations'}),
-	Route({path: '/branding', component: Branding, name: 'site-admin.advanced.branding'}),
+	Route({path: '/transcripts', component: Transcripts, name: 'site-admin.transcripts'}),
 	Route({path: '/login', component: Login, name: 'site-admin.advanced.login'}),
-	Route({path: '/', component: Transcripts, name: 'site-admin.transcripts'})
+	Route({path: '/', component: Branding, name: 'site-admin.advanced.branding'})
 ], {frame: Frame, title: 'Advanced'});

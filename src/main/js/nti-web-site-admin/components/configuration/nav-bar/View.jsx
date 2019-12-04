@@ -1,9 +1,13 @@
 import React from 'react';
 
+import Card from '../../common/Card';
+
 import Tabs from './Tabs';
 
 export default function SiteAdminAdvancedNav (props) {
 	return (
-		<Tabs {...props} />
+		<Card>
+			<Tabs {...props} />
+		</Card>
 	);
 }

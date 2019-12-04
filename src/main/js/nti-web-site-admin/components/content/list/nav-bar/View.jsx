@@ -17,8 +17,7 @@ export default class ContentListNavBar extends React.Component {
 	render () {
 		return (
 			<Card className="site-admin-content-list-nav-bar">
-				<div className="header">{t('content')}</div>
-				<Tabs>
+				<Tabs header={t('content')}>
 					<LinkTo.Path to="./" activeClassName="active" exact>{t('courses')}</LinkTo.Path>
 					<LinkTo.Path to="./books" activeClassName="active">{t('books')}</LinkTo.Path>
 				</Tabs>

@@ -2,7 +2,7 @@
 import {Router, Route} from '@nti/web-routing';// eslint-disable-line
 
 import Frame from './Frame';
-import Advanced from './advanced';
+import Configuration from './configuration';
 import Content from './content';
 import Dashboard from './dashboard';
 import Reports from './reports';
@@ -14,6 +14,6 @@ export default Router.for([
 	Route({path: '/users', component: Users}),
 	Route({path: '/people', component: Users}),
 	Route({path: '/reports', component: Reports}),
-	Route({path: '/advanced', component: Advanced}),
+	Route({path: '/configuration', component: Configuration}),
 	Route({path: '/', component: Dashboard})
 ], {title: 'Site Administration', frame: Frame});
