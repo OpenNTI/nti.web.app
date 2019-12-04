@@ -7,10 +7,10 @@ import Tabs from '../../common/Tabs';
 const DEFAULT_TEXT = {
 	header: 'Configuration',
 	sync: 'Sync',
-	transcripts: 'Transcripts',
+	transcripts: 'Transcripts & Course Credit',
 	integrations: 'Webinars',
 	branding: 'Site Branding',
-	login: 'Login'
+	login: 'Login Branding'
 };
 
 const t = scoped('site-admin.advanced.nav-bar.Tabs', DEFAULT_TEXT);
