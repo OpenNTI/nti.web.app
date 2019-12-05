@@ -16,11 +16,11 @@ const t = scoped('nti-web-app.admin.login.commons.AssetInput', {
 AssetInput.propTypes = {
 	name: PropTypes.string,
 	setAsset: PropTypes.func,
-	setBrandProp: PropTypes.func,
+	setThemeProp: PropTypes.func,
 	hideFlag: PropTypes.string,
 	notSet: PropTypes.string
 };
-function AssetInput ({name, setAsset, setBrandProp, hideFlag, notSet}) {
+function AssetInput ({name, setAsset, setThemeProp, hideFlag, notSet}) {
 	const asset = Theme.useThemeProperty(`assets.${name}`);
 
 	const hide = hideFlag && Theme.useThemeProperty(hideFlag);
@@ -35,7 +35,7 @@ function AssetInput ({name, setAsset, setBrandProp, hideFlag, notSet}) {
 
 			reader.onload = () => {
 				const {result: source} = reader;
-			
+
 				setAsset(name, {
 					filename: file.name,
 					source
@@ -43,7 +43,7 @@ function AssetInput ({name, setAsset, setBrandProp, hideFlag, notSet}) {
 				});
 
 				if (hideFlag) {
-					setBrandProp(hideFlag, false);
+					setThemeProp(hideFlag, false);
 				}
 			};
 
@@ -62,5 +62,5 @@ function AssetInput ({name, setAsset, setBrandProp, hideFlag, notSet}) {
 export default Store
 	.monitor({
 		[Store.SetAsset]: 'setAsset',
-		[Store.SetBrandProp]: 'setBrandProp'
+		[Store.SetThemeProp]: 'setThemeProp'
 	})(AssetInput);

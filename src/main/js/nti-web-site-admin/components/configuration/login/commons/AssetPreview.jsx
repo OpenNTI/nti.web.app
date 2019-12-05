@@ -44,6 +44,16 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 	};
 
 	if (inputMode) {
+
+		containerProps.onClick = (e) => {
+			const associatedInput = document.querySelector(`input[type=file][name=${name}]`);
+			if (associatedInput) {
+				e.preventDefault();
+				e.stopPropagation();
+				associatedInput.click();
+			}
+		};
+
 		containerProps.onChange = async (e) => {
 			const {target: {files = []} = {}} = e;
 			const file = files[0];
@@ -52,7 +62,7 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 
 			try {
 				const source = await readFile(file);
-				
+
 				setAsset(name, {
 					filename: file.name,
 					source
