@@ -52,7 +52,7 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 
 			try {
 				const source = await readFile(file);
-				
+
 				setAsset(name, {
 					filename: file.name,
 					source
@@ -90,11 +90,11 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 					)}
 				</div>
 			)}
-			{!inputMode && hideFlag && (
+			{/*!inputMode && hideFlag && (
 				<div className={cx('clear')} role="button" onClick={clearAsset}>
 					<i className={cx('icon-bold-x', 'icon')} />
 				</div>
-			)}
+			)*/}
 			{recommendedSize && (<Text.Small className={cx('dimensions')}>{recommendedSize}</Text.Small>)}
 		</Container>
 	);
