@@ -148,15 +148,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 				knownFiles.add(file);
 			};
 
-			//TODO: Replace the below anonymous block with:
-			// data = ObjectUtils.filter(data, fileFilter, true);
-			{
-				data = JSON.parse(JSON.stringify(data, fileFilter));
-				if (data.assets && Object.keys(data.assets).length === 0) {
-					delete data.assets;
-				}
-			}
-
+			data = ObjectUtils.filter(data, fileFilter, true);
 
 			formData.append('__json__', JSON.stringify(data));
 
