@@ -27,6 +27,8 @@ function AssetInput ({name, setAsset, setThemeProp, hideFlag, notSet}) {
 	const href = !hide && asset.href;
 
 	const onChange = (e) => {
+		e.preventDefault(); // Allow reselecting
+
 		const {target: {files = []} = {}} = e;
 
 		if (files[0]) {
@@ -37,6 +39,7 @@ function AssetInput ({name, setAsset, setThemeProp, hideFlag, notSet}) {
 				const {result: source} = reader;
 
 				setAsset(name, {
+					file,
 					filename: file.name,
 					source
 
