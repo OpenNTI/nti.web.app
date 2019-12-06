@@ -39,25 +39,27 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	 * @returns {undefined}
 	 */
 	setAsset = (type, item) => {
-		const {source, filename} = item || {};
+		const {source, filename, file} = item || {};
+		const track = !!file;
 		this.setBrandProp(`${ASSETS}.${AssetTypeMap[type] || type}`, {
 			source,
+			file,
 			href: source,
 			filename,
 			MimeType: MimeTypes.Image,
-		}, true);
+		}, track);
 	}
 
 	setThemeProp = (path, value) => {
 		this.setBrandProp(`theme.${path}`, value);
 	}
 
-	setBrandProp = (path, value, doNotTrackChange) => {
+	setBrandProp = (path, value, trackChange = true) => {
 		const brand = this.get(SITE_BRAND);
 		ObjectUtils.set(brand, path, value);
 		this.set(MODIFIED, true);
 
-		if (!doNotTrackChange) {
+		if (trackChange) {
 			this.set(CHANGED, ObjectUtils.set(this.get(CHANGED) || {}, path, value));
 		}
 
@@ -84,7 +86,7 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			const brand = await (this[Loading] = getService()
 				.then(s => s.getWorkspace('SiteAdmin'))
 				.then(w => w.fetchLinkParsed('SiteBrand')));
-	
+
 			delete this[Loading];
 			this.set(SITE_BRAND, brand);
 			this.set(CAN_EDIT_EMAIL_ASSET, !brand.UneditableEmailImage);
@@ -129,22 +131,45 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			this.set(LOADING, true);
 			const brand = this.get(SITE_BRAND);
 			const formData = new FormData();
-	
+			const knownFiles = new Set();
 			const assets = form.querySelectorAll('input[type="file"]');
-	
-			for (let asset of assets) {
-				if (asset.files && asset.files.length > 0 && asset.name) {
-					formData.append(asset.name, asset.files[0]);
+			let data = {
+				...this.get(CHANGED),
+				theme: {...brand.theme}
+			};
+
+			const fileFilter = (key, value) => {
+				const {file, ...v} = value || {};
+				if (!file || v.MimeType !== MimeTypes.Image) {
+					return value;
+				}
+
+				formData.append(key, file);
+				knownFiles.add(file);
+			};
+
+			//TODO: Replace the below anonymous block with:
+			// data = ObjectUtils.filter(data, fileFilter, true);
+			{
+				data = JSON.parse(JSON.stringify(data, fileFilter));
+				if (data.assets && Object.keys(data.assets).length === 0) {
+					delete data.assets;
 				}
 			}
-	
-			formData.append('__json__', JSON.stringify({
-				...(this.get(CHANGED) || {}),
-				theme: {...brand.theme}
-			}));
-	
+
+
+			formData.append('__json__', JSON.stringify(data));
+
+			for (let asset of assets) {
+				const [file] = asset.files || [];
+				if (file && asset.name && !knownFiles.has(file)) {
+					formData.append(asset.name, file);
+				}
+			}
+
+
 			const resp = await brand.putToLink('edit', formData);
-	
+
 			Events.emit(Events.THEME_UPDATED, resp);
 
 			this.set(MODIFIED, false);
