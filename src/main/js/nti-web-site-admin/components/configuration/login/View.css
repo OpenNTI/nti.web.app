@@ -6,6 +6,7 @@
 	--checkerboard: #efefef;
 
 	padding: 4rem 2rem;
+	max-width: 758px;
 }
 
 .header {

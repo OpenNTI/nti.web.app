@@ -6,6 +6,7 @@
 
 .file-name {
 	color: var(--secondary-grey);
+	max-width: 220px;
 }
 
 .file-name:not(:empty) {

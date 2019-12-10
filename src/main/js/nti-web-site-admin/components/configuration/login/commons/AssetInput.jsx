@@ -7,6 +7,7 @@ import {Input, Text, Theme} from '@nti/web-commons';
 import Store from '../Store';
 
 import Styles from './AssetInput.css';
+import Filename from './Filename';
 
 const cx = classnames.bind(Styles);
 const t = scoped('nti-web-app.admin.login.commons.AssetInput', {
@@ -56,7 +57,7 @@ function AssetInput ({name, setAsset, setThemeProp, hideFlag, notSet}) {
 
 	return (
 		<Input.FileInputWrapper  name={name} className={cx('asset-input')} onChange={onChange} >
-			{href && (<Text.Base className={cx('file-name')}>{asset.filename}</Text.Base>)}
+			{href && (<Filename className={cx('file-name')} file={asset.filename} />)}
 			<Text.Base className={cx('change')}>{href || !notSet ? t('change') : notSet}</Text.Base>
 		</Input.FileInputWrapper>
 	);
