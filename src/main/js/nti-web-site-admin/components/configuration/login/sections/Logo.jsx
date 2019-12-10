@@ -6,7 +6,7 @@ import {Property, Text, AssetPreview, AssetInput} from '../commons';
 const t = scoped('nti-web-app.admin.login.sections.Logo', {
 	title: 'Logo',
 	description: 'Your logo will appear above the username and password fields.',
-	recommendedSize: '530 x 150px',
+	recommendedSize: 'Assets over 500px wide or 100px tall will be scaled.',
 	notSetLabel: 'Add a Logo',
 	notSetHeader: 'No Logo Set'
 });
