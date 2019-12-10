@@ -66,14 +66,14 @@
 .header {
 	width: 100%;
 	text-align: center;
-	min-height: 100px;
+	height: 110px;
 	padding-top: 0.625rem;
 }
 
 .header img {
-	display: inline-block;
-	max-height: 100px;
-	width: auto;
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
 }
 
 .login {
