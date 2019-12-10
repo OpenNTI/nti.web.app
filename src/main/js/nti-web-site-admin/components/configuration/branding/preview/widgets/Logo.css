@@ -21,6 +21,12 @@
 	align-self: flex-end;
 }
 
+.course-nav {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
 .course-nav.course-nav {
 	display: flex;
 	align-items: flex-end;

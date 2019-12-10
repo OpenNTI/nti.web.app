@@ -13,7 +13,7 @@ const t = scoped('nti-web-app.login.sections.Logo', {
 		description: 'Opportunity to represent your brand before users enter the site.',
 		recommended: {
 			title: 'Background',
-			size: '1200 x 720px'
+			size: '1200px Wide by 720px Tall'
 		}
 	},
 	feature: {
@@ -24,7 +24,7 @@ const t = scoped('nti-web-app.login.sections.Logo', {
 		notSetLabel: 'Add an Overlay',
 		recommended: {
 			title: 'Overlay',
-			size: '600 x 400px'
+			size: '600px Wide by 400px Tall'
 		}
 	}
 });

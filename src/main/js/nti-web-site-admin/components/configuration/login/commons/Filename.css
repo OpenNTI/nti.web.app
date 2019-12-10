@@ -1,0 +1,15 @@
+.file-name {
+	display: inline-flex;
+	overflow: hidden;
+}
+
+.name {
+	flex: 1 1 auto;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.ext {
+	flex: 0 0 auto;
+}
