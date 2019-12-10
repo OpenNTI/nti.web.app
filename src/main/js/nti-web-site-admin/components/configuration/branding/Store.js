@@ -131,8 +131,6 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			this.set(LOADING, true);
 			const brand = this.get(SITE_BRAND);
 			const formData = new FormData();
-			const knownFiles = new Set();
-			const assets = form.querySelectorAll('input[type="file"]');
 			let data = {
 				...this.get(CHANGED),
 				theme: {...brand.theme}
@@ -145,20 +143,11 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 				}
 
 				formData.append(key, file);
-				knownFiles.add(file);
 			};
 
 			data = ObjectUtils.filter(data, fileFilter, true);
 
 			formData.append('__json__', JSON.stringify(data));
-
-			for (let asset of assets) {
-				const [file] = asset.files || [];
-				if (file && asset.name && !knownFiles.has(file)) {
-					formData.append(asset.name, file);
-				}
-			}
-
 
 			const resp = await brand.putToLink('edit', formData);
 
