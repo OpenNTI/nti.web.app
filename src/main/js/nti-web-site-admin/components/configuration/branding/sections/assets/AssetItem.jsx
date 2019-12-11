@@ -29,7 +29,8 @@ export default function AssetItem ({onChange, getText, name, onThumbClick}) {
 
 				onChange({
 					filename: file.name,
-					source
+					source,
+					file
 				});
 			};
 			reader.readAsDataURL(file);
@@ -60,5 +61,6 @@ AssetItem.propTypes = {
 	onChange: PropTypes.func,
 	getText: PropTypes.func,
 	name: PropTypes.string,
-	edit: PropTypes.object
+	edit: PropTypes.object,
+	onThumbClick: PropTypes.func
 };
