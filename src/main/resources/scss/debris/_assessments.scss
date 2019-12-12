@@ -1454,6 +1454,7 @@ body.dragging * {
 
 							.name {
 								color: $primary-grey;
+								text-decoration: underline;
 								padding-right: 15px;
 							}
 
@@ -1469,7 +1470,7 @@ body.dragging * {
 							.link {
 								font-weight: 600;
 								color: $primary-blue;
-								text-decoration: underline;
+								text-decoration: none;
 								padding-right: 15px;
 								cursor: pointer;
 

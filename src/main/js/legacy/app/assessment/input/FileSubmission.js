@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 						{cls: 'thumbnail'},
 						{cls: 'meta', cn: [
 							{cls: 'text', cn: [
-								{tag:'span', cls: 'name', html: 'Name'},
+								{tag:'a', href: '', target: '_blank', cls: 'name', html: 'Name'},
 								{tag: 'span', cls: 'size', html: 'Size'}
 							]},
 							{cls: 'controls', cn: [
@@ -332,6 +332,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		// const href = this.createObjectURL(file);
 
 		this.previewNameEl.update(file.filename || file.name);
+		this.previewNameEl.set({
+			href: file.url || file.download_url
+		});
+
 		this.previewSizeEl.update('(' + size + ')');
 
 		// Remove current content.
@@ -513,7 +517,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		this.addCls('not-submitted');
 		this.showPreview();
 		this.setPreviewFromInput(v);
-		this.setDownloadButton(v.url || v.download_url);
+		this.setDownloadButton(v.download_url || v.url);
 	},
 
 
