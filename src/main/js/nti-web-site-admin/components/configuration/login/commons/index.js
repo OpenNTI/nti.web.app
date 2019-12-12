@@ -1,3 +1,4 @@
+export AssetEditorLauncher from './AssetEditorLauncher';
 export AssetInput from './AssetInput';
 export AssetPreview from './AssetPreview';
 export Property from './Property';

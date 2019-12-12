@@ -1,8 +1,9 @@
 import React from 'react';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
+import {AssetEditor} from '@nti/web-whiteboard';
 
-import {Property, Text, AssetInput, AssetPreview} from '../commons';
+import {Property, Text, AssetInput, AssetPreview, AssetEditorLauncher} from '../commons';
 
 import Styles from './Assets.css';
 
@@ -31,6 +32,8 @@ const t = scoped('nti-web-app.login.sections.Logo', {
 
 const featureHideFlag = 'login.noFeature';
 
+const backgroundAspectRatio = 5 / 3;
+
 export default function Assets () {
 	return (
 		<Property className={cx('asset-property')}>
@@ -38,7 +41,17 @@ export default function Assets () {
 				<div className={cx('asset')}>
 					<Text.Title>{t('background.title')}</Text.Title>
 					<Text.Description>{t('background.description')}</Text.Description>
-					<AssetInput name="login_background" />
+					<AssetEditorLauncher name="login_background">
+						<AssetEditor.Image
+							format={{
+								crop: {aspectRatio: backgroundAspectRatio},
+								blur: {radius: 50, minBlur: 0, maxBlur: 50},
+								darken: {color: '#000', opacity: 0.3}
+							}}
+						/>
+						<AssetEditor.SolidColor format={{aspectRatio: backgroundAspectRatio}} />
+						<AssetEditor.LinearGradient format={{aspectRatio: backgroundAspectRatio}} />
+					</AssetEditorLauncher>
 				</div>
 				<div className={cx('asset')}>
 					<Text.Title>{t('feature.title')} <Text.Badge>{t('feature.optional')}</Text.Badge></Text.Title>

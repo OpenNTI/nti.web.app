@@ -137,12 +137,12 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			};
 
 			const fileFilter = (key, value) => {
-				const {file, ...v} = value || {};
+				const {file, filename, ...v} = value || {};
 				if (!file || v.MimeType !== MimeTypes.Image) {
 					return value;
 				}
 
-				formData.append(key, file);
+				formData.append(key, file, filename);
 			};
 
 			data = ObjectUtils.filter(data, fileFilter, true);
