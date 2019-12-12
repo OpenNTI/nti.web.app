@@ -1,7 +1,9 @@
 {
 	"development": {
+
 		"apps": [
 			{
+				"public": true,
 				"package": "@nti/web-login",
 				"basepath": "/login/"
 			}
