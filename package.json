@@ -29,8 +29,7 @@
   },
   "dependencies": {
     "@nti/lib-decorators": "^1.4.0",
-    "@nti/util-logger": "^1.0.2",
-    "@nti/web-whiteboard": "^0.9.0"
+    "@nti/util-logger": "^1.0.2"
   },
   "devDependencies": {
     "@nti/app-scripts": "^2.0.6",
@@ -64,6 +63,7 @@
     "@nti/web-search": "0.x.x",
     "@nti/web-session": "^1.0.0",
     "@nti/web-video": "^1.42.0",
+    "@nti/web-whiteboard": "^0.9.0",
     "@pandell/spritesmith-cli": "^2.0.0",
     "clamp-js": "^0.7.0",
     "classnames": "^2.2.3",
