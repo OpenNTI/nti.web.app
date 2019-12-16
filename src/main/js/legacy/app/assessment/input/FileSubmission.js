@@ -582,7 +582,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 
 
 	reset: function () {
-		var dontSetBack;
 
 		this.setNotUploaded();
 
@@ -591,10 +590,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 		this.clearView();
 
-		dontSetBack = true;
-
 		this.callParent(arguments);
 
-		return dontSetBack;
+		return true;
 	}
 });
