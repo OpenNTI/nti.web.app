@@ -188,7 +188,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 
 			return service.post(this.selectedParent.getLink('ordered-contents') + '/index/' + this.selectedRank, formData);
-		}).then(() => {
+		}).then((raw) => {
+			if (this.record) {
+				this.record.syncWithResponse(raw);
+			}
+
 			if(this.record) {
 				return this.EditingActions.__moveRecord(this.record, originalPosition, currentPosition, this.rootRecord);
 			}
