@@ -12,6 +12,8 @@ const TimelineEditor = require('../timeline/Editor');
 const ScormEditor = require('../scorm/Editor');
 const SurveyEditor = require('../survey/Editor');
 const WebinarEditor = require('../webinar/Editor');
+const VideoQuote = require('../quotes/VideoQuote');
+const ContentQuote = require('../quotes/ContentQuote');
 
 require('../../creation/ChildCreation');
 
@@ -42,12 +44,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				SurveyEditor,
 				WebinarEditor,
 				EventEditor,
-				ScormEditor
+				ScormEditor,
 			];
 
 			if (bundle && bundle.hasLink('lti-configured-tools')) {
 				editors.push(LTIExternalToolAssetEditor);
 			}
+
+			editors.push({ getTypes: () => (
+				[{ isDivider: true, text: 'NextThought Can Help—Get a Quote!', isAvailable: () => true }]
+			)});
+			editors.push(VideoQuote);
+			editors.push(ContentQuote);
 
 			return editors;
 		}

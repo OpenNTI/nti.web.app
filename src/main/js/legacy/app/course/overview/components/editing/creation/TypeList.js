@@ -44,6 +44,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const availableTypes = await getAvailableTypes(this.types, bundle);
 
 		this.add(availableTypes.map((type) => {
+			/**
+			 * Adding a divider for cross-selling quotes
+			 */
+
+			if (type.isDivider) {
+				return {
+					xtype: 'box',
+					autoEl: { cls: 'quote-header', html: type.text }
+				};
+			}
+
 			return {
 				xtype: 'overview-editing-type',
 				showEditor: showEditor,
