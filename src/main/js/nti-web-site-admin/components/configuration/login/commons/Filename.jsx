@@ -12,7 +12,9 @@ Filename.propTypes = {
 	file: PropTypes.string
 };
 export default function Filename ({className, file}) {
-	const [name, ext] = file.split('.') || '';
+	const parts = file.split('.');
+	const ext = parts.pop();
+	const name = parts.join('.');
 
 	return (
 		<Text.Base className={cx('file-name', className)}>
