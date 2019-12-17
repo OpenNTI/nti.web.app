@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 
+require('./BaseQuote');
+
 module.exports = exports = Ext.define(
 	'NextThought.app.course.overview.components.editing.content.quotes.ContentQuote',
 	{
