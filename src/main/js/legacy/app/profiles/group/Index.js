@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { encodeForURI } = require('@nti/lib-ntiids');
 
 const {isMe} = require('legacy/util/Globals');
 const GroupsActions = require('legacy/app/groups/Actions');
@@ -8,6 +9,7 @@ require('../user/components/membership/Index');
 require('./components/Header');
 require('./components/activity/Index');
 require('./components/membership/Index');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
@@ -112,6 +114,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 					secondary: 'No'
 				}
 			});
+		}
+	},
+
+	getRouteForPath (path) {
+		const topic = path.find(p => p.isTopic);
+
+		if (topic) {
+			return {
+				path: `/info/object/${encodeForURI(topic.getId())}`,
+				isFull: true
+			};
 		}
 	}
 });
