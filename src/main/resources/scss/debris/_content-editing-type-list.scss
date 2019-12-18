@@ -4,6 +4,7 @@
 		min-height: 430px; // Changed the height due to the addition of the ad titles and header
 		background-color: white;
 		box-sizing: content-box;
+		overflow: hidden;
 
 		.new-type {
 			cursor: pointer;
