@@ -31,7 +31,10 @@ function AssetEditorLauncher ({name, setAsset, setThemeProp, hideFlag, notSet, .
 	const hide = hideFlag && Theme.useThemeProperty(hideFlag);
 	const href = !hide && asset.href;
 
-	const closeAssetEditor = () => setShow(false);
+	const closeAssetEditor = (e) => {
+		if (e && e.stopPropagation) { e.stopPropagation(); }
+		setShow(false);
+	};
 	const openAssetEditor = () => setShow(true);
 
 	const onSave = async (blob) => {
@@ -55,7 +58,7 @@ function AssetEditorLauncher ({name, setAsset, setThemeProp, hideFlag, notSet, .
 			{href && (<Filename className={cx('file-name')} file={asset.filename} />)}
 			<Text.Base className={cx('change')}>{href || !notSet ? t('change') : notSet}</Text.Base>
 			{show && (
-				<Prompt.Dialog onBeforeDismiss={closeAssetEditor}>
+				<Prompt.Dialog onBeforeDismiss={closeAssetEditor} closeOnMaskClick={false}>
 					<AssetEditor asset={href} {...otherProps} onSave={onSave} onCancel={closeAssetEditor} />
 				</Prompt.Dialog>
 			)}
