@@ -436,6 +436,14 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 					obj = obj.getItem();
 				}
 
+				if (obj.isCourse) {
+					return doNavigate(obj, {path: `/course/${encodeForURI(obj.getId())}`});
+				}
+
+				if (obj.isBundle) {
+					return doNavigate(obj, {path: `/bundle/${encodeForURI(obj.getId())}`});
+				}
+
 				me.attemptToNavigateToObject(obj, {
 					doNavigateToFullPath: doNavigate,
 					onFailedToGetFullPath: failedNavigate
