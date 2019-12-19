@@ -10,7 +10,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'icon {iconCls}', html: '{customHTML}'},
-		{cls: 'title', html: '{title}'}
+		{cls: 'title', html: '{title}'},
+		{ tag: 'tpl', 'if': 'isQuote', cn: [
+			{ tag: 'div', cls: 'learn-more', html: 'Learn More'}
+		]},
 	]),
 
 
@@ -21,7 +24,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.renderData = Ext.apply(this.renderData || {}, {
 			iconCls: this.typeConfig.iconCls,
 			title: this.typeConfig.title,
-			customHTML: this.typeConfig.customHTML
+			customHTML: this.typeConfig.customHTML,
+			isQuote: this.typeConfig.isQuote
 		});
 	},
 
