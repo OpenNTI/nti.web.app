@@ -7,7 +7,11 @@
 	</noscript>
 	<script>
 		if (/android|blackberry|iphone|ipod|mobile|webos/i.test(navigator.userAgent) ){
-			location.replace('/mobile/' + ('?p=' + location.pathname) + (location.hash ? ('&q='+location.hash.replace(/^#!/,'')) : ''));
+			var legacyHashRegex = /^\#\!/;
+			var legacyHash = location.hash && legacyHashRegex.test(location.hash) ? location.hash.replace(legacyHashRegex, '') : '';
+			var fragment = location.hash && !legacyHash ? location.hash.replace(/^#/, '') : '';
+
+			location.replace('/mobile/' + ('?p=' + location.pathname) + (legacyHash ? ('&q=' + legacyHash) : '') + (fragment ? ('&f=' + fragment) : ''));
 		}
 	</script>
 	<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
