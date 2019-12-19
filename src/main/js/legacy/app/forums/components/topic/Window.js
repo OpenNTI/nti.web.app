@@ -10,6 +10,7 @@ const DFLHeadlineTopic = require('legacy/model/forums/DFLHeadlineTopic');
 const CommunityHeadlineTopic = require('legacy/model/forums/CommunityHeadlineTopic');
 const ContentHeadlineTopic = require('legacy/model/forums/ContentHeadlineTopic');
 const CommunityHeadlinePost = require('legacy/model/forums/CommunityHeadlinePost');
+const DFLHeadlinePost = require('legacy/model/forums/DFLHeadlinePost');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const {isFeature} = require('legacy/util/Globals');
 
@@ -53,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			this.loadEditor();
 		} else if (this.record instanceof CommentPost) {
 			this.loadComment();
-		} else if (this.record instanceof CommunityHeadlinePost) {
+		} else if (this.record instanceof CommunityHeadlinePost || this.record instanceof DFLHeadlinePost) {
 			this.loadPost();
 		} else {
 			this.loadTopic();
@@ -350,5 +351,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 	WindowsStateStore.register(CommunityHeadlineTopic.mimeType, this);
 	WindowsStateStore.register(DFLHeadlineTopic.mimeType, this);
 	WindowsStateStore.register(CommunityHeadlinePost.mimeType, this);
+	WindowsStateStore.register(DFLHeadlinePost.mimeType, this);
 	WindowsStateStore.register('new-topic', this);
 });
