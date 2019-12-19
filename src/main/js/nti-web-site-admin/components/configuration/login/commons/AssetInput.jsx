@@ -27,11 +27,7 @@ function AssetInput ({name, setAsset, setThemeProp, hideFlag, notSet}) {
 	const hide = hideFlag && Theme.useThemeProperty(hideFlag);
 	const href = !hide && asset.href;
 
-	const onChange = (e) => {
-		e.preventDefault(); // Allow reselecting
-
-		const {target: {files = []} = {}} = e;
-
+	const onChange = (files = [], e) => {
 		if (files[0]) {
 			const file = files[0];
 			const reader = new FileReader();

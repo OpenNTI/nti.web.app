@@ -45,10 +45,7 @@ function AssetPreview ({className, name, hideFlag, noBorder, recommendedSize, no
 
 	if (inputMode) {
 
-		containerProps.onChange = async (e) => {
-			e.preventDefault(); // Allow reselecting
-
-			const {target: {files = []} = {}} = e;
+		containerProps.onChange = async (files, e) => {
 			const file = files[0];
 
 			if (!file) { return; }
