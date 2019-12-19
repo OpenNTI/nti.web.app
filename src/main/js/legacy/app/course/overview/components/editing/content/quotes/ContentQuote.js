@@ -24,7 +24,7 @@ module.exports = exports = Ext.define(
 						editor: this,
 						hideFooter: true,
 						isAvailable: () => true,
-						isQuote: true
+						subtitle: 'Learn More'
 					}
 				];
 			}
