@@ -23,7 +23,8 @@ module.exports = exports = Ext.define(
 						description: '',
 						editor: this,
 						hideFooter: true,
-						isAvailable: () => true
+						isAvailable: () => true,
+						isQuote: true
 					}
 				];
 			}
