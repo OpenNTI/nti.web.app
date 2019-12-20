@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const { encodeForURI } = require('@nti/lib-ntiids');
 
 const {isMe} = require('legacy/util/Globals');
 const GroupsActions = require('legacy/app/groups/Actions');
