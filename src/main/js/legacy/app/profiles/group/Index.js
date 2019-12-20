@@ -118,13 +118,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 	},
 
 	getRouteForPath (path) {
-		const topic = path.find(p => p.isTopic);
-
-		if (topic) {
-			return {
-				path: `/info/object/${encodeForURI(topic.getId())}`,
-				isFull: true
-			};
-		}
+		return {
+			path: '/info/',
+			isFull: true
+		};
 	}
 });
