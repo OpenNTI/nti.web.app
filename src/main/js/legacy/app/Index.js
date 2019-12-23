@@ -25,6 +25,22 @@ Commons.Prompt.Manager.setAllowedExternalFocus((target) => {
 	);
 });
 
+const IE_ALERT_EXPIRATIONS = [
+	'January 22, 2020',
+	'Febuary 5, 2020',
+	'Febuary 19, 2020',
+	'March 4, 2020',
+	'March 11, 2020',
+	'March 18, 2020',
+	'March 25, 2020',
+	'March 26, 2020',
+	'March 27, 2020',
+	'March 28, 2020',
+	'March 29, 2020',
+	'March 30, 2020',
+	'March 31, 2020'
+];
+
 module.exports = exports = Ext.define('NextThought.app.Index', {
 	extend: 'Ext.container.Viewport',
 	alias: 'widget.master-view',
