@@ -3,8 +3,14 @@
 }
 
 .ie-alert {
-	max-width: 500px;
+	max-width: 580px;
 	padding: 0.5rem 1.25rem;
+	font-family: var(--body-font-family);
+}
+
+.ie-alert a {
+	text-decoration: none;
+	color: var(--primary-blue);
 }
 
 .ie-alert h1 {
