@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const DetectZoom = require('detect-zoom');
 const Commons = require('@nti/web-commons');
-const {getAppUserScopedStorage} = require('@nti/web-client');
 
 const {IEAlert} = require('nti-web-react-components');
 
@@ -27,52 +26,6 @@ Commons.Prompt.Manager.setAllowedExternalFocus((target) => {
 		el.findParent('.recovery-email-view')
 	);
 });
-
-const IEAlertExpirations = [
-	'January 22, 2020',
-	'Febuary 5, 2020',
-	'Febuary 19, 2020',
-	'March 4, 2020',
-	'March 11, 2020',
-	'March 18, 2020',
-	'March 25, 2020',
-	'March 26, 2020',
-	'March 27, 2020',
-	'March 28, 2020',
-	'March 29, 2020',
-	'March 30, 2020',
-	'March 31, 2020'
-];
-
-const IEAlertFlag = 'has-seen-ie-alert';
-const userStorage = getAppUserScopedStorage();
-
-function maybeAlertIE () {
-	const now = new Date();
-	const lastAlert = new Date(IEAlertExpirations[IEAlertExpirations.length - 1]);
-
-	//If we're past the last alert expiration don't do anything
-	if (now > lastAlert) { return; }
-
-	//If its not IE there's no need to alert.
-	const ua = global.navigator.userAgent;
-	const isIE = (ua.indexOf('MSIE') > 0) || (ua.indexOf('Trident/') > 0);
-	const hasSeenAlert = userStorage.decodeExpiryValue(userStorage.getItem(IEAlertFlag));
-
-	if (!isIE || hasSeenAlert) { return; }
-
-	IEAlert.show();
-
-	for (let expirations of IEAlertExpirations) {
-		const date = new Date(expirations);
-
-		if (date > now) {
-			userStorage.setItem(IEAlertFlag, userStorage.encodeExpiryValue(true, date));
-			break;
-		}
-	}
-
-}
 
 
 module.exports = exports = Ext.define('NextThought.app.Index', {
@@ -109,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 				: 70;
 		};
 
-		maybeAlertIE();
+		IEAlert.maybeShow();
 	},
 
 	constructor: function () {

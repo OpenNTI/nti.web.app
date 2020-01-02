@@ -1,11 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
-import {Prompt, Text} from '@nti/web-commons';
+import {Prompt} from '@nti/web-commons';
+import {getAppUserScopedStorage} from '@nti/web-client';
 
 import Styles from './IEAlert.css';
 
 const cx = classnames.bind(Styles);
+
+const IEAlertFlag = 'has-seen-ie-alert';
+const userStorage = getAppUserScopedStorage();
+const IEAlertExpirations = [
+	'January 22, 2020',
+	'Febuary 5, 2020',
+	'Febuary 19, 2020',
+	'March 4, 2020',
+	'March 11, 2020',
+	'March 18, 2020',
+	'March 25, 2020',
+	'March 26, 2020',
+	'March 27, 2020',
+	'March 28, 2020',
+	'March 29, 2020',
+	'March 30, 2020',
+	'March 31, 2020'
+];
 
 const rel = 'noopener noreferrer';
 const target = '_blank';
@@ -18,11 +37,32 @@ const Links = {
 	Edge: { href: 'http://www.microsoft.com/edge', rel, target }
 };
 
-IEAlert.show = () => {
-	Prompt.modal(
-		(<IEAlert />),
-		{className: cx('ie-alert-dialog')}
-	);
+
+
+IEAlert.maybeShow = () => {
+	const now = new Date();
+	const lastAlert = new Date(IEAlertExpirations[IEAlertExpirations.length - 1]);
+
+	//If we're past the last alert expiration don't do anything
+	if (now > lastAlert) { return; }
+
+	//If its not IE there's no need to alert
+	const ua = global.navigator.userAgent;
+	const isIE = (ua.indexOf('MSIE') > 0) || (ua.indexOf('Trident/') > 0);
+	const hasSeenAlert = userStorage.decodeExpiryValue(userStorage.getItem(IEAlertFlag));
+
+	if (!isIE || hasSeenAlert) { return; }
+
+	Prompt.modal((<IEAlert />), {className: cx('ie-alert-dialog')});
+
+	for (let expirations of IEAlertExpirations) {
+		const date = new Date(expirations);
+
+		if (date > now) {
+			userStorage.setItem(IEAlertFlag, userStorage.encodeExpiryValue(true, date));
+			break;
+		}
+	}
 };
 IEAlert.propTypes = {
 	onDismiss: PropTypes.func
@@ -37,8 +77,8 @@ export default function IEAlert ({onDismiss}) {
 			<div className={cx('ie-alert')}>
 				<h1>Internet Explorer - No Longer Supported</h1>
 				<p>
-					Effective March 31, 2020 the NextThought LMS will no longer support Internet Explorer (IE). The NextThought LMS will continue to support 
-					<a {...Links.SupportedBrowsers}>all modern browsers</a>, such as <a {...Links.Chrome}>Chrome</a>, <a {...Links.Firefox}>Firefox</a>, 
+					Effective March 31, 2020 the NextThought LMS will no longer support Internet Explorer (IE). The NextThought LMS will continue to support&nbsp;
+					<a {...Links.SupportedBrowsers}>all modern browsers</a>, such as <a {...Links.Chrome}>Chrome</a>, <a {...Links.Firefox}>Firefox</a>,&nbsp;
 					<a {...Links.Safari}>Safari</a> and <a {...Links.Edge}>Edge.</a> Users attempting to access the NextThought LMS from IE after March 31, 2020 
 					will be prompted to switch browsers.
 				</p>
