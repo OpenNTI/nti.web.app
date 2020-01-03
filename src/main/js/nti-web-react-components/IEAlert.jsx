@@ -43,8 +43,15 @@ IEAlert.maybeShow = () => {
 	const now = new Date();
 	const lastAlert = new Date(IEAlertExpirations[IEAlertExpirations.length - 1]);
 
-	//If we're past the last alert expiration don't do anything
-	if (now > lastAlert) { return; }
+	const show = () => {
+		Prompt.modal((<IEAlert />), {className: cx('ie-alert-dialog')});
+	};
+
+	//If we're past the last alert expiration always alert
+	if (now > lastAlert) {
+		show();
+		return;
+	}
 
 	//If its not IE there's no need to alert
 	const ua = global.navigator.userAgent;
@@ -53,7 +60,7 @@ IEAlert.maybeShow = () => {
 
 	if (!isIE || hasSeenAlert) { return; }
 
-	Prompt.modal((<IEAlert />), {className: cx('ie-alert-dialog')});
+	show();
 
 	for (let expirations of IEAlertExpirations) {
 		const date = new Date(expirations);
