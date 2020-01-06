@@ -40,6 +40,11 @@ const Links = {
 
 
 IEAlert.maybeShow = () => {
+	const ua = global.navigator.userAgent;
+	const isIE = (ua.indexOf('MSIE') > 0) || (ua.indexOf('Trident/') > 0);
+
+	if (!isIE) { return; }
+
 	const now = new Date();
 	const lastAlert = new Date(IEAlertExpirations[IEAlertExpirations.length - 1]);
 
@@ -54,11 +59,9 @@ IEAlert.maybeShow = () => {
 	}
 
 	//If its not IE there's no need to alert
-	const ua = global.navigator.userAgent;
-	const isIE = (ua.indexOf('MSIE') > 0) || (ua.indexOf('Trident/') > 0);
 	const hasSeenAlert = userStorage.decodeExpiryValue(userStorage.getItem(IEAlertFlag));
 
-	if (!isIE || hasSeenAlert) { return; }
+	if (hasSeenAlert) { return; }
 
 	show();
 
