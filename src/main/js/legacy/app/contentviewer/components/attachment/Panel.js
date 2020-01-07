@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	TEMPLATES: {
 		image: new Ext.XTemplate(Ext.DomHelper.markup([
-			{tag: 'img', src: '{url}'}
+			{tag: 'img', src: '{url}', style: {'max-width': '100%', margin: '0 auto'}}
 		])),
 
 		document: new Ext.XTemplate(Ext.DomHelper.markup([
