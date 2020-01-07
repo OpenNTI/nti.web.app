@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 
-// require('legacy/app/video/VideoPlayer');
+require('legacy/app/video/VideoPlayer');
 
 const WhiteboardCanvas = require('legacy/app/whiteboard/Canvas');
 const Video = require('legacy/app/video/Video');
@@ -258,10 +258,10 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			url = node.getAttribute('data-url');
 
 		p = Ext.widget({
-			xtype: 'content-video',
-			url: url,
+			xtype: 'content-video-player',
+			src: url,
 			renderTo: node,
-			playerWidth: width,
+			playerWidth: `${width}px`,
 			floatParent: owner,
 			doNotDeactivateOtherPlayers: true
 		});

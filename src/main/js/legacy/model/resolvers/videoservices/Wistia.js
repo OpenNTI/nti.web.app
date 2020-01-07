@@ -13,6 +13,13 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 		RESOLVED: {},
 
+		getIdFromURL (url) {
+			const regEx = /https:\/\/fast\.wistia\.com\/embed\/iframe\/([^./?]*)/;
+			const match = url.match(regEx);
+
+			return (match && match[2]) || null;
+		},
+
 		async resolvePosterForID (id) {
 			if (this.RESOLVED[id]) { return this.RESOLVED[id]; }
 

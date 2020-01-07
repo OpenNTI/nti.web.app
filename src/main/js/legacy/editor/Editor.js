@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 const Mime = require('mime-types');
 const Commons = require('@nti/web-commons');
 const {wait} = require('@nti/lib-commons');
+const {EmbedInput} = require('@nti/web-video');
 
 const AnnotationUtils = require('legacy/util/Annotations');
 const DomUtils = require('legacy/util/Dom');
@@ -1500,14 +1501,12 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		if (!data || e) {
-			Ext.widget('embedvideo-window', {
-				url: (data || {}).embedURL,
-				onEmbed: function (eData) {
-					var part = me.createVideoPart(eData.embedURL, eData.type);
-					me.insertObjectThumbnail(me.el.down('.content'), guid, part, eData, append/*, true*/);
+			EmbedInput.show((data || {}).embedURL)
+				.then((source) => {
+					const part = this.createVideoPart(source.href, source.service);
 
-				}
-			}).show();
+					this.insertObjectThumbnail(this.el.down('.content'), guid, part, append);
+				});
 		}
 		else {
 			this.insertObjectThumbnail(me.el.down('.content'), guid, data, append);

@@ -8,6 +8,7 @@ const VideoPosters = require('legacy/model/resolvers/VideoPosters');
 const Vimeo = require('legacy/model/resolvers/videoservices/Vimeo');
 const Youtube = require('legacy/model/resolvers/videoservices/Youtube');
 const Kaltura = require('legacy/model/resolvers/videoservices/Kaltura');
+const Wistia = require('legacy/model/resolvers/videoservices/Wistia');
 const HTML5Player = require('legacy/util/media/HTML5Player');
 const HTML5VideoPlayer = require('legacy/util/media/HTML5VideoPlayer');
 const KalturaPlayer = require('legacy/util/media/KalturaPlayer');
@@ -109,6 +110,8 @@ module.exports = exports = Ext.define('NextThought.app.video.Video', {
 				id = Vimeo.getIdFromURL(url);
 			} else if (type === PosterResolver.KALTURA) {
 				id = Kaltura.getIdFromURL(url);
+			} else if (type === PosterResolver.WISTIA) {
+				id = Wistia.getIdFromURL(url);
 			} else {
 				return Promise.resolve(Globals.CANVAS_BROKEN_IMAGE.src);
 			}
