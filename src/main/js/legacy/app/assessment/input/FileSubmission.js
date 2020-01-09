@@ -545,6 +545,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 	},
 
+	onNoProgress () {
+		if (this.questionSet) {
+			if (!this.questionSet.fireEvent('answered', this.question, this.part, this.getAnsweredCount(), true)) {
+				this.submissionDisabled = true;
+			}
+		}
+	},
+
 
 	markCorrect: Ext.emptyFn,
 	markIncorrect: Ext.emptyFn,

@@ -608,6 +608,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 
 		if (!this.submitted && this.questionSet && hasSavepointLink) {
 			this.questionSet.saveProgress(this.question, this);
+		} else if (assignment && !this.submitted && this.onNoProgress) {
+			this.onNoProgress();
 		}
 	},
 
