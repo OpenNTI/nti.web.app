@@ -261,9 +261,10 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			xtype: 'content-video-player',
 			src: url,
 			renderTo: node,
-			playerWidth: `${width}px`,
+			playerWidth: parseInt(width, 10),
 			floatParent: owner,
-			doNotDeactivateOtherPlayers: true
+			doNotDeactivateOtherPlayers: true,
+			doNotAutoPlay: true
 		});
 
 		return p;
