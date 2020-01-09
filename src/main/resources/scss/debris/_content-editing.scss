@@ -1770,7 +1770,7 @@ input[type=number]{
 				text-transform: uppercase;
 				color: $tertiary-grey;
 
-				&:not(:first-of-type)::after {
+				span:not(:first-of-type)::after {
 					content: ',';
 					margin-right: 0.5em;
 				}
