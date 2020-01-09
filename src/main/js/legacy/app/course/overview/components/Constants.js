@@ -1,4 +1,4 @@
-const { encodeForURI } = require('@nti/lib-ntiids');
+const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
 function getURLPart (obj) {
 	try {
@@ -24,7 +24,7 @@ function getAssessmentRoute (course, lesson, obj) {
 }
 
 function getDiscussionRefRoute (course, lesson, obj) {
-	if (!obj.target || !lesson.NTIID) { return '#'; }
+	if (!obj.target || !isNTIID(obj.target) || !lesson.NTIID) { return '#'; }
 
 	return `/app/course/${getURLPart(course)}/lessons/${encodeForURI(lesson.NTIID)}/object/${encodeForURI(obj.target)}`;
 }
