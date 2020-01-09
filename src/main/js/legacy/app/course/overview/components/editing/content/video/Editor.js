@@ -151,7 +151,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			selectedItems: selectedItems,
 			editItem: (...args) => this.pickVideo(...args, onEdit),
 			getExcludedVideos: (...args) => this.__getExcludedVideos(...args),
-			lockBodyHeight: this.lockBodyHeight
+			lockBodyHeight: this.lockBodyHeight,
+			unlockBodyHeight: this.unlockBodyHeight
 		});
 
 		me.bundle.getVideoAssets()

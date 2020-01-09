@@ -135,5 +135,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.lockBodyHeight) {
 			this.lockBodyHeight();
 		}
+	},
+
+
+	beforeDestroy () {
+		if (this.unlockBodyHeight) {
+			this.unlockBodyHeight();
+		}
 	}
 });
