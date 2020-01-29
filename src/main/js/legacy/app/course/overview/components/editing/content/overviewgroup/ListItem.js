@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	afterSetCollection: function () {
 		this.enableOrderingContainer();
-		this.uncacheHeight();
+		setImmediate(() => this.uncacheHeight());
 
 		if (this.reenableDragging) {
 			delete this.reenableDragging;

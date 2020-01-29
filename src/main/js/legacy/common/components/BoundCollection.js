@@ -243,7 +243,9 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 			merged = this.mergeItems(state.items, items),
 			body = this.getBodyContainer();
 
-		newState = merged.reduce(function (acc, item, index) {
+		this.clearCollection();
+
+		newState = merged.reduce(function (acc, item) {
 			var cmp = item && me.getCmpForRecord(item.record, item.type, item.oldRecord);
 
 			if (cmp) {
@@ -256,37 +258,9 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 
 		if (!newState.cmps.length && this.emptyText) {
 			newState.cmps.push(me.getEmptyState());
-			this.clearCollection();
-			newState.cmps = body.add(newState.cmps);
-			return newState;
 		}
 
-		if (!state.cmps) {
-			this.clearCollection();
-			body.add(newState.cmps);
-			return newState;
-		}
-
-		const updateCount = Math.max(newState.cmps.length, state.cmps.length);
-
-		for (let i = 0; i < updateCount; i++) {
-			const oldCmp = state.cmps[i];
-			const type = merged[i].type;
-			const newCmp = newState.cmps[i];
-
-			if (type === '') {
-				newState.cmps[i] = oldCmp;
-				continue;
-			}
-
-			if (oldCmp) {
-				body.remove(oldCmp, true);
-			}
-
-			if (newCmp) {
-				newState.cmps[i] = body.insert(i, newCmp);
-			}
-		}
+		body.add(newState.cmps);
 
 		return newState;
 	},
