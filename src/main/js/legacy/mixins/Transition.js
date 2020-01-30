@@ -70,10 +70,6 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 				.then(cleanUp);
 		}
 
-		if (transition.scrollIntoView && el) {
-			el.scrollIntoView();
-		}
-
 		this.addCls('after');
 		this.removeCls('before');
 	},

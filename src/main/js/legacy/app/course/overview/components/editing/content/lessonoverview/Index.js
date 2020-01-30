@@ -110,7 +110,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					name: 'Add Section',
 					parentRecord: this.lessonOverview,
 					root: this.lessonOverview,
-					onPromptClose: () => this.updateLessonOverview()
+					onPromptOpen: () => this.suspendUpdates(),
+					onPromptClose: () => {
+						this.updateLessonOverview()
+							.then(() => this.resumeUpdates());
+					}
 				}
 			]
 		};
@@ -167,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		};
 
-		this.record.getContents().then(contents => {
+		return this.record.getContents().then(contents => {
 			this.contents.syncWith(contents);
 
 			unmask();
