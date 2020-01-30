@@ -83,7 +83,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 				payload.append('source', file);
 			} else {
 				payload = {
-					invitations: emails.map(x => { return { 'receiver': x, 'receiver_name': x }; }),
+					invitations: emails.map(x => { return { 'receiver': x }; }),
 					message,
 					MimeType: isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType
 				};
