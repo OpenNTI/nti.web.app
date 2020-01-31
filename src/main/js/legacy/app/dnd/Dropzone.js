@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 			dataTransfer = new DataTransferStore({dataTransfer: e.dataTransfer}),
 			handlers = this.getHandlersForDataTransfer(dataTransfer);
 
-		this.dragEnterCounter = this.dragEnterCounter || 0;
+		this.dragEnterCounter = this.__makePositiveOrZero(this.dragEnterCounter, 0);
 
 		this.dragEnterCounter += 1;
 
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 
 		var el = this.getDropzoneTarget();
 
-		this.dragEnterCounter = this.dragEnterCounter || 1;
+		this.dragEnterCounter = this.__makePositiveOrZero(this.dragEnterCounter, 1);
 
 		this.dragEnterCounter -= 1;
 
@@ -286,5 +286,10 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 				handlers[key](data, dataTransfer, e);
 			}
 		});
+	},
+
+	__makePositiveOrZero: function (value, defaultValue) {
+		value = value ?? defaultValue;
+		return value < 0 ? defaultValue : value;
 	}
 });

@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const {wait} = require('@nti/lib-commons');
 
 const DndInfo = require('legacy/model/app/DndInfo');
 const DataTransferStore = require('legacy/store/DataTransfer');
@@ -175,8 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		}
 
 		if (el) {
-			wait(100)
-				.then(() => el.classList.add('dragging'));
+			setImmediate(() => el.classList.add('dragging'));
 		}
 
 		this.DnDActions.startDrag(this);
