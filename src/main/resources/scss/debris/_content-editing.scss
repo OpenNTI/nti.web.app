@@ -894,8 +894,14 @@ input[type=number]{
 
 			.body {
 
+				.outline-group.dragging {
+					border-bottom: none;
+					overflow: hidden;
+					max-height: 0;
+				}
+
 				> .outline-group {
-				    padding-top: 0.313em;
+					padding-top: 0.313em;
 
 					> .items {
 						padding: 5px;
