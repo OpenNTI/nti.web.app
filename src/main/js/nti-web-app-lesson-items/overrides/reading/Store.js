@@ -108,7 +108,7 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 			const bundle = BaseModel.interfaceToModel(course);
 			const pageInfo = await resolvePageInfo(page, course);
 
-			if (!pageInfo) {
+			if (!pageInfo || (pageInfo.isRelatedWorkRef && !page.get('href'))) {
 				this.set({
 					loading: false,
 					bundle,
