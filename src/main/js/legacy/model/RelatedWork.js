@@ -168,6 +168,8 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return (contentFile && contentFile.getSrc ()) || this.get('href');
 	},
 
+	isRelatedWorkRef: true,
+
 	/**
 	 * If the ref is pointing to content.
 	 *
