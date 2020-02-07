@@ -1,9 +1,10 @@
 import {Stores} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
-import {UserDataThreader} from '@nti/lib-interfaces';
+import {UserDataThreader, Models} from '@nti/lib-interfaces';
 import {isNTIID, decodeFromURI} from '@nti/lib-ntiids';
 
 import BaseModel from 'legacy/model/Base';
+import RelatedWork from 'legacy/model/RelatedWork';
 
 async function resolvePageInfo (page, course) {
 	const id = isNTIID(page.href) ? page.href : (page['target-NTIID'] || page['Target-NTIID'] || page.getID());
@@ -108,7 +109,7 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 			const bundle = BaseModel.interfaceToModel(course);
 			const pageInfo = await resolvePageInfo(page, course);
 
-			if (!pageInfo || (pageInfo.isRelatedWorkRef && !page.get('href'))) {
+			if (!pageInfo || !isValidRelatedWork(pageInfo)) {
 				this.set({
 					loading: false,
 					bundle,
@@ -189,4 +190,11 @@ function flattenArray (arr) {
 
 		return acc.concat(flat);
 	}, []);
+}
+
+function isValidRelatedWork (pageInfo) {
+	let isRelatedWork = pageInfo instanceof Models.content.RelatedWorkReference || pageInfo instanceof RelatedWork;
+	let href = pageInfo.href ?? pageInfo.getHref();
+
+	return isRelatedWork && href;
 }
