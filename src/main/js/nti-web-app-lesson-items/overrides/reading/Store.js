@@ -109,7 +109,8 @@ export default class NTIWebAppLessonItemsReadingStore extends Stores.BoundStore 
 			const bundle = BaseModel.interfaceToModel(course);
 			const pageInfo = await resolvePageInfo(page, course);
 
-			if (!pageInfo || !isValidRelatedWork(pageInfo)) {
+
+			if (!pageInfo || (isRelatedWork(pageInfo) && !isValidRelatedWork(pageInfo))) {
 				this.set({
 					loading: false,
 					bundle,
@@ -192,9 +193,10 @@ function flattenArray (arr) {
 	}, []);
 }
 
-function isValidRelatedWork (pageInfo) {
-	let isRelatedWork = pageInfo instanceof Models.content.RelatedWorkReference || pageInfo instanceof RelatedWork;
-	let href = pageInfo.href ?? pageInfo.getHref();
+function isRelatedWork (pageInfo) {
+	return pageInfo instanceof Models.content.RelatedWorkReference || pageInfo instanceof RelatedWork;
+}
 
-	return isRelatedWork && href;
+function isValidRelatedWork (pageInfo) {
+	return isRelatedWork(pageInfo) && (pageInfo.href ?? pageInfo.getHref());
 }
