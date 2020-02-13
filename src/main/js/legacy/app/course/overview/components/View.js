@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	onRouteActivate: function () {
-		this.updateOutline(this.isEditing, true);
+		this.getNewestOutline(this.isEditing);
 
 		this.alignNavigation();
 		this.isActive = true;
@@ -262,6 +262,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.body.hideEditControls();
 	},
 
+	getNewestOutline (editing) {
+		const cacheKey = editing ? 'newest-outline-editing-cache' : 'newest-outline-cache';
+
+		if (this[cacheKey]) { return this[cacheKey]; }
+
+		this[cacheKey] = this.updateOutline(editing, true);
+
+		setTimeout(() => {
+			delete this[cacheKey];
+		}, 100);
+
+
+		return this[cacheKey];
+	},
+
 	updateOutline: function (editing, doNotCache) {
 		if (!this.rendered) {
 			this.on('afterrender', () => this.updateOutline(editing, doNotCache), this, {single: true});
@@ -379,9 +394,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				// In case, we have no record, get the first available record.
 				// TODO: should we check if it's not in edit mode?
 				if (!rec) {
-					rec = builtOutline.findNodeBy(function (r) {
-						return r.get('type') === 'lesson' && r.get('NTIID') && r.get('isAvailable');
-					});
+					const newestOutline = this.getNewestOutline(editing);
+
+					return newestOutline.onceBuilt()
+						.then(builtNewest => {
+							return builtNewest.findNodeBy((r) => {
+								return r.get('type') === 'lesson' && r.get('NTIID') && r.get('isAvailable');
+							});
+						});
 				}
 
 				return rec;
