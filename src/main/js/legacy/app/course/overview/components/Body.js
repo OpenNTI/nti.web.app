@@ -93,10 +93,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	showEditControls: function () {
+		this.hasEditingControls = true;
+
 		if (!this.editingControlsCmp.isHidden() || !this.isActive) { return; }
 
 		this.addCls('has-editing-controls');
-		this.hasEditingControls = true;
 		this.editingControlsCmp.show();
 		this.editingControlsCmp.showNotEditing();
 
