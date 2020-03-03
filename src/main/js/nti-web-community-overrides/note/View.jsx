@@ -31,7 +31,8 @@ class NTIWebCommunityNote extends React.Component {
 		topic: PropTypes.object.isRequired,
 		channel: PropTypes.object.isRequired,
 		selectedComment: PropTypes.string,
-		focusNewComment: PropTypes.bool
+		focusNewComment: PropTypes.bool,
+		editMode: PropTypes.bool
 	}
 
 	static contextTypes = {
@@ -39,8 +40,8 @@ class NTIWebCommunityNote extends React.Component {
 	}
 
 	componentDidUpdate (prevProps) {
-		const {focusNewComment, selectedComment} = this.props;
-		const {focusNewComment: prevFocus, selectedComment: prevComment} = prevProps;
+		const {focusNewComment, selectedComment, editMode} = this.props;
+		const {focusNewComment: prevFocus, selectedComment: prevComment, editMode:prevEdit} = prevProps;
 
 		if (focusNewComment && !prevFocus) {
 			this.doFocusNewComment();
@@ -49,11 +50,21 @@ class NTIWebCommunityNote extends React.Component {
 		if (selectedComment !== prevComment) {
 			this.doSelectComment(selectedComment);
 		}
+
+		if (editMode && !prevEdit) {
+			this.doShowEditMode();
+		}
 	}
 
 	doFocusNewComment () {
 		if (this.noteCmp) {
 			this.noteCmp.showNewReply();
+		}
+	}
+
+	doShowEditMode () {
+		if (this.noteCmp) {
+			this.noteCmp.showEditMode();
 		}
 	}
 
@@ -74,7 +85,7 @@ class NTIWebCommunityNote extends React.Component {
 	}
 
 	setupNote = (renderTo) => {
-		const {topic, focusNewComment, selectedComment} = this.props;
+		const {topic, focusNewComment, selectedComment, editMode} = this.props;
 		const noteModel = BaseModel.interfaceToModel(topic);
 
 		if (this.noteCmp) {
@@ -104,6 +115,10 @@ class NTIWebCommunityNote extends React.Component {
 
 		if (selectedComment) {
 			this.doSelectComment(selectedComment);
+		}
+
+		if (editMode) {
+			this.doShowEditMode();
 		}
 	}
 

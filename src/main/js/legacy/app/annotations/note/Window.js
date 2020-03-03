@@ -97,6 +97,19 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		}
 	},
 
+	showEditMode () {
+		const notePanel = this.down('note-main-view');
+
+		if (!notePanel) {
+			this.on({
+				single: true,
+				'note-panel-set': () => this.showEditMode()
+			});
+		} else {
+			notePanel.onEdit();
+		}
+	},
+
 	getReplyCmp (replyId) {
 		const notePanel = this.down('note-main-view');
 

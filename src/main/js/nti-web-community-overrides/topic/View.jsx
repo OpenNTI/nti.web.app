@@ -32,7 +32,8 @@ class NTIWebCommunityTopic extends React.Component {
 		topic: PropTypes.object,
 		channel: PropTypes.object.isRequired,
 		selectedComment: PropTypes.string,
-		focusNewComment: PropTypes.bool
+		focusNewComment: PropTypes.bool,
+		editMode: PropTypes.bool
 	}
 
 	static contextTypes = {
@@ -40,8 +41,8 @@ class NTIWebCommunityTopic extends React.Component {
 	}
 
 	componentDidUpdate (prevProps) {
-		const {focusNewComment, selectedComment} = this.props;
-		const {focusNewComment: prevFocus, selectedComment: prevComment} = prevProps;
+		const {focusNewComment, selectedComment, editMode} = this.props;
+		const {focusNewComment: prevFocus, selectedComment: prevComment, editMode: prevEdit} = prevProps;
 
 		if (focusNewComment && !prevFocus) {
 			this.doFocusNewComment();
@@ -50,11 +51,21 @@ class NTIWebCommunityTopic extends React.Component {
 		if (selectedComment !== prevComment) {
 			this.doSelectComment(selectedComment);
 		}
+
+		if (editMode && !prevEdit) {
+			this.doShowEditMode();
+		}
 	}
 
 	doFocusNewComment () {
 		if (this.topicCmp) {
 			this.topicCmp.showNewComment();
+		}
+	}
+
+	doShowEditMode () {
+		if (this.topicCmp) {
+			this.topicCmp.showEditMode();
 		}
 	}
 
@@ -109,7 +120,7 @@ class NTIWebCommunityTopic extends React.Component {
 	}
 
 	setupTopic = (renderTo) => {
-		const {topic, channel, focusNewComment, selectedComment} = this.props;
+		const {topic, channel, focusNewComment, selectedComment, editMode} = this.props;
 		const isNewTopic = topic.isNewTopic;
 		const topicModel = isNewTopic ? null : BaseModel.interfaceToModel(topic);
 		const forum = channel.backer ? BaseModel.interfaceToModel(channel.backer) : null;
@@ -143,6 +154,10 @@ class NTIWebCommunityTopic extends React.Component {
 
 		if (selectedComment) {
 			this.doSelectComment(selectedComment);
+		}
+
+		if (editMode) {
+			this.doShowEditMode();
 		}
 	}
 

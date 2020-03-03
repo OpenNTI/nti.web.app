@@ -212,6 +212,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 	},
 
 
+	showEditMode () {
+		this.loadEditor();
+	},
+
 	showTopic: function (topic, forum, activeComment) {
 		var topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
