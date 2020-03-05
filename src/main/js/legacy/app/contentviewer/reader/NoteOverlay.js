@@ -326,12 +326,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		this.editor.fireEvent('grew');
 	},
 
+	showContainerNoteEditor () {
+		this.openEditor(204);
+	},
+
+
 	syncHeight: function (h) {
 		var c = this.container;
 		if (c) {
 			c.setHeight(h);
 		}
 	},
+
+
 
 	saveNewNote: function (editor, r, v) {
 		var me = this,

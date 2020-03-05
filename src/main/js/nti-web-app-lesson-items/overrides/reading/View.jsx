@@ -235,6 +235,11 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		}
 	}
 
+	onNewNote = () => {
+		this.contentViewer.onceReadyForSearch()
+			.then(() => this.contentViewer.showContainerNoteEditor());
+	}
+
 	onRoute = async (cont, stop) => {
 		if (!this.contentViewer || !this.contentViewer.allowNavigation) {
 			cont();
@@ -257,7 +262,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		return (
 			<Router.RouteForProvider getRouteFor={this.getRouteFor}>
 				<div className={cx('reading-view', {submitting})}>
-					<Aside component={Notes.Sidebar} notes={notes} fillToBottom sticky />
+					<Aside component={Notes.Sidebar} notes={notes} onNewNote={this.onNewNote} fillToBottom sticky />
 					<RoutePrompt onRoute={this.onRoute} when />
 					{loading && (
 						<div className={cx('loading-container')}>

@@ -231,6 +231,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 	},
 
 
+	showContainerNoteEditor () {
+		this.reader.showContainerNoteEditor();
+	},
+
+
 	resolvePageInfo: function () {
 		var p;
 

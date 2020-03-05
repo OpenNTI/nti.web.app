@@ -152,6 +152,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return toast;
 	},
 
+	showContainerNoteEditor () {
+		return this.getNoteOverlay()?.showContainerNoteEditor();
+	},
+
 	//endregion
 
 

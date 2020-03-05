@@ -337,6 +337,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 		}
 	},
 
+
+	showContainerNoteEditor () {
+		const reader = this.getReaderContent();
+
+		if (reader) {
+			reader.showContainerNoteEditor();
+		}
+	},
+
+
 	beforeDeactivate: function () {
 		var reader = this.down('reader-content');
 		return !reader || reader.getNoteOverlay().onNavigation();
