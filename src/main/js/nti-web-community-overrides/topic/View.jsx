@@ -105,7 +105,7 @@ class NTIWebCommunityTopic extends React.Component {
 
 		try {
 			const title = rec.get('title');
-			const headline = await rec.get('headline').getInterfaceInstance;
+			const headline = await rec.get('headline').getInterfaceInstance();
 
 			await topic.refresh({
 				NTIID: topic.NTIID,
