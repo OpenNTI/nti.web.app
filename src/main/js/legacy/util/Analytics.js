@@ -135,6 +135,28 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	},
 
 
+	updateEvent (resourceId, data) {
+		if (typeof data === 'string') {
+			data = {type: data};
+		}
+
+		const {type} = data;
+		const Event = this.manager[type];
+
+		if (!Event) {
+			console.error('%o does not resolve to an event.', type);
+			return;
+		}
+
+		if (!Event.update) {
+			console.error('Attempting to update "%s" event, but it does not have an update method.', type);
+			return;
+		}
+
+		Event.update(resourceId, data);
+	},
+
+
 	stopEvent (resourceId, type, data) {
 		const Event = this.manager[type];
 		if (!Event) {

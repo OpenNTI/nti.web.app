@@ -25,6 +25,7 @@ function getAnalyticMethods (doNotAllow, hasTranscript, configuration) {
 				withTranscript: hasTranscript,
 				'player_configuration': configuration,
 				videoStartTime: time,
+				videoTime: time,
 				duration: duration,
 				playSpeed: speed
 			});
@@ -39,6 +40,7 @@ function getAnalyticMethods (doNotAllow, hasTranscript, configuration) {
 
 			AnalyticsUtil.stopEvent(video, 'VideoWatch', {
 				videoEndTime: time,
+				videoTime: time,
 				duration: duration
 			});
 
@@ -51,6 +53,13 @@ function getAnalyticMethods (doNotAllow, hasTranscript, configuration) {
 
 			const {video, time, state:playerState} = state;
 			const diff = lastTime ? (time - lastTime) : 0;
+
+			if (hasWatch) {
+				AnalyticsUtil.updateEvent(video, {
+					type: 'VideoWatch',
+					videoTime: time
+				});
+			}
 
 			if (diff > TIME_CHANGE_THRESHOLD || diff < 0) {
 				this.stop(state);
