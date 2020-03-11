@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {rawContent} from '@nti/lib-commons';
-import {Input, List, Theme, Text} from '@nti/web-commons';
+import {Input, List, Theme} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
 import {BRAND_NAME} from '../../constants';
@@ -21,8 +21,7 @@ const t = scoped('nti-web-app.admin.branding.Site', {
 	},
 	domain: {
 		title: 'Domain',
-		description: 'Customize the web address that learners will use to find your site.',
-		change: 'To change contact <a href="mailto:support@nextthought.com">support@nextthought.com</a>'
+		description: 'Customize the web address that learners will use to find your site. <br />To change contact <a href="mailto:support@nextthought.com">support@nextthought.com</a>',
 	}
 });
 
@@ -46,10 +45,7 @@ export default function Site ({onChange}) {
 						<Title>{t('domain.title')}</Title>
 						<Description {...rawContent(t('domain.description'))} />
 					</div>
-					<div>
-						<Input.Text value={getDomainName()} disabled />
-						<Text.Base className={cx('change-domain')}>{t('domain.change')}</Text.Base>
-					</div>
+					<Input.Text value={getDomainName()} disabled />
 				</li>
 			</List.Unadorned>
 		</Section>
