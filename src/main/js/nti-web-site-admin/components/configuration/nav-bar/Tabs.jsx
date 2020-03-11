@@ -9,7 +9,7 @@ const DEFAULT_TEXT = {
 	sync: 'Sync',
 	transcripts: 'Transcripts & Course Credit',
 	integrations: 'Webinars',
-	branding: 'Library Branding',
+	branding: 'Site Branding',
 	login: 'Sign In Branding'
 };
 

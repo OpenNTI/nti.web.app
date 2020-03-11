@@ -65,8 +65,8 @@ class SiteAdminBranding extends React.Component {
 							</div>
 						)}
 						<div className={cx('branding-content')}>
-							<Library onChange={setBrandProp} />
 							<Site onChange={setBrandProp} />
+							<Library onChange={setBrandProp} />
 							<Assets assets={assets} onChange={setAsset} onThumbClick={this.togglePreview} canEditEmail={canEditEmail} />
 							<Reset onReset={reset} canReset={canReset} />
 						</div>
