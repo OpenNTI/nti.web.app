@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {LinkTo} from '@nti/web-routing';// eslint-disable-line
-import {Layouts} from '@nti/web-commons';
+import {Layouts, FixedElement} from '@nti/web-commons';
+
 
 import NavBar from './nav-bar';
 
@@ -25,7 +26,9 @@ export default class SiteAdminAdvancedView extends React.Component {
 		return (
 			<Layouts.NavContent.Container>
 				<Layouts.NavContent.Nav className="nav-bar">
-					<NavBar/>
+					<FixedElement>
+						<NavBar/>
+					</FixedElement>
 				</Layouts.NavContent.Nav>
 				<Layouts.NavContent.Content className="content">
 					{React.Children.map(children, (item) => {

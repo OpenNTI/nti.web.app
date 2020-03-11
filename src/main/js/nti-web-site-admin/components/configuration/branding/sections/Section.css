@@ -6,6 +6,10 @@
 	position: relative;
 }
 
+.section-root:first-of-type {
+	padding-bottom: 0;
+}
+
 .section-root header {
 	margin-bottom: 2rem;
 }

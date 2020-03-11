@@ -7,6 +7,34 @@
 	flex: 1 1 auto;
 }
 
+.site-params li > * + * {
+	flex: 0 0 auto;
+	width: 202px;
+}
+
+.site-params li > *:not(input) input {
+	width: 100%;
+}
+
+
+.site-params li + li {
+	margin-top: 1rem;
+}
+
 .site-params input {
 	height: 40px;
+}
+
+.site-params input:disabled {
+	opacity: 0.7;
+}
+
+.site-params a {
+	color: var(--primary-blue);
+	text-decoration: none;
+}
+
+.change-domain {
+	display: block;
+	font-size: 0.875rem;
 }
