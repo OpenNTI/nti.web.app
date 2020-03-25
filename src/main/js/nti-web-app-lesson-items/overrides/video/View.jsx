@@ -191,6 +191,35 @@ class NTIWebLessonItemsVideo extends React.Component {
 	}
 
 
+	onNewNote = () => {
+		const videoId = this?.props?.location?.item?.getID();
+		const alignTo = this?.node?.querySelector('[data-anchor-id] h1');
+
+		if (!alignTo || !videoId) { return; }
+
+		const rect = alignTo.getBoundingClientRect();
+
+		this.setState({
+			alignTo: {
+				top: rect.top,
+				left: rect.right + 36,
+				right: rect.right + 53,
+				bottom: rect.top + 53
+			},
+			newNote: {
+				MimeType: 'application/vnd.nextthought.note',
+				isNote: true,
+				NTIID: null,
+				body: null,
+				title: '',
+				selectedText: '',
+				ContainerId: videoId,
+				applicableRange: {Class: 'ContentRangeDescription'}
+			}
+		});
+	}
+
+
 	render () {
 		const {newNote} = this.state;
 		const {location, course, firstSelection, activeObjectId} = this.props;
@@ -211,6 +240,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 						autoPlay={firstSelection}
 						analyticsData={this.getAnalyticsData()}
 						startTime={(startTime || 0) / 1000}
+						onNewNote={this.onNewNote}
 					/>
 					{newNote && (
 						<Layouts.Uncontrolled
