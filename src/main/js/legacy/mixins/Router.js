@@ -23,7 +23,7 @@ function setObjHash (route, obj) {
 }
 
 function shouldAddObjectForCommunityCase (path, obj) {
-	return (path[0].isBundle && path[1].isBoard) || path[0].isCommunity;
+	return (path[0].isBundle && path[1]?.isBoard) || path[0].isCommunity;
 }
 
 
