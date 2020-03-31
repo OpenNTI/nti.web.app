@@ -345,5 +345,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	onDrop: function (record, newIndex, moveInfo) {
 		return this.outline.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
+	},
+
+
+	showNewUnit () {
+		if (this.addNodeCmp) {
+			this.addNodeCmp.showEditor();
+		}
 	}
 });

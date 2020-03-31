@@ -41,6 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.body.closeEditing = this.closeEditing.bind(this);
 		this.body.openAuditLog = this.openAuditLog.bind(this);
 		this.body.gotoResources = this.gotoResources.bind(this);
+		this.body.showNewUnit = this.showNewUnit.bind(this);
 
 		this.body.handleMediaViewerRoute = (...args) => {
 			if (this.parentHandleMediaViewerRoute) {
@@ -128,6 +129,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.gotoResources();
 		}
 	},
+
+
+	showNewUnit: function () {
+		this.navigation.showNewUnit();
+	},
+
 
 	openEditing: function () {
 		var me = this,

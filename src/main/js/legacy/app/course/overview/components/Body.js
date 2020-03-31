@@ -204,8 +204,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						click: {
 							element: 'el',
 							fn: function (e) {
-								if (e.getTarget('.edit') && me.openEditing) {
-									me.openEditing();
+								if (!e.getTarget('.edit')) { return; }
+
+								if (me.isEditing) {
+									if (me.showNewUnit) { me.showNewUnit(); }
+								} else {
+									if (me.openEditing) { me.openEditing(); }
 								}
 							}
 						}
