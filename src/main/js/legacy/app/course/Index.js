@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			me.clearRouteStates();
 			me.isCourseDirty = false;
 
-			me.getActiveCourse = new Promise((fulfill) => {
+			me.getActiveCourse = new Promise((fulfill, reject) => {
 				if (course) {
 					fulfill(course);
 				} else {
@@ -227,7 +227,17 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 						})
 						.then(c => c.prepareData())
 						.then(fulfill)
-						.catch(() => fulfill(null));
+						.catch((resp) => {
+							if (resp) {
+								const [,error] = resp;
+
+								if (error.status === 0) {
+									return reject(error);
+								}
+							}
+
+							fulfill(null);
+						});
 				}
 			}).then((current) => {
 				if (!current) {

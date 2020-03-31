@@ -1,6 +1,7 @@
 @import "~@nti/style-common/all";
 //Workarond ExtJS legacy z-index-happy bull$#!+ >.<
-body > .modal .modal-mask {
+body > .modal .modal-mask,
+body > .global-toast-root > * {
 	z-index: 1000;
 }
 

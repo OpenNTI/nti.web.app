@@ -255,7 +255,12 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return courseView.setActiveCourse(ntiid, course)
 			.then(courseView.handleRoute.bind(courseView, subRoute, route.precache))
-			.catch(function () {
+			.catch(function (err) {
+				if (err && err.status === 0) {
+					me.replaceRoute('', '/library');
+					return;
+				}
+
 				//If we have a sub route that fails try setting the root of the course
 				if (Globals.trimRoute(subRoute)) {
 					me.replaceRoute('', '/course/' + route.params.id);
