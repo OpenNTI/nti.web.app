@@ -1,0 +1,11 @@
+.overview-group {
+	outline: 1px solid pink;
+
+	&:global(.dragging) {
+		opacity: 0;
+		max-height: 0;
+		max-width: 0;
+		float: left;
+		clear: none;
+	}
+}

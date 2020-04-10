@@ -1502,6 +1502,14 @@ input[type=number]{
 	.overview-section {
 		margin-bottom: 10px;
 		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+
+		&.dragging {
+			opacity: 0;
+			max-height: 0;
+			max-width: 0;
+			float: left;
+			clear: none;
+		}
 	}
 
 	.overview-group-header {

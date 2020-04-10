@@ -147,7 +147,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.suspendUpdates();
 
 		return this.contents.moveToFromContainer(group, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.contents)
-			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then(this.resumeUpdates.bind(this));
 	},
 
