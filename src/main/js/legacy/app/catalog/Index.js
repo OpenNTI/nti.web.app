@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
-const CatalogView = require('@nti/web-catalog');
+const CatalogView = require('@nti/web-catalog').default;
 const {getService} = require('@nti/web-client');
+const {Router, Route} = require('@nti/web-routing');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
 const Globals = require('legacy/util/Globals');
@@ -36,6 +37,10 @@ function getPathname (a) {
 	return pathname;
 }
 
+const Catalog = Router.for([
+	Route({path: '/', component: CatalogView})
+]);
+
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.catalog-component',
@@ -46,6 +51,13 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 	layout: 'none',
+	items: [],
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'navigation-container'},
+		{id: '{id}-body', cn: ['{%this.renderContainer(out,values)%}']}
+	]),
+
 	initComponent: function () {
 		this.callParent(arguments);
 
@@ -59,62 +71,18 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		this.NavigationActions = NavigationActions.create();
 	},
 
-	afterRender () {
-		this.callParent(arguments);
-
-		this.mon(this.el, 'click', this.onClick.bind(this));
-	},
-
-
-	onRouteActivate () {
-		clearTimeout(this.routeDeactivateTimeout);
-	},
-
-
-	onRouteDeactivate () {
-		clearTimeout(this.routeDeactivateTimeout);
-
-		this.routeDeactivateTimeout = setTimeout(() => {
-			if (this.availableWin) {
-				this.availableWin.destroy();
-				delete this.availableWin;
-			}
-		}, 100);
-	},
-
-
-	onDestroy () {
-		if (this.availableWin) {
-			this.availableWin.destroy();
-		}
-	},
-
-
-	onClick (e) {
-		const a = e.getTarget('a[href]');
-		const path = a && getPathname(a);
-		const route = path && path.replace(/^\/?app\/?/, '');
-
-		if (route) {
-			this.pushRootRoute('', route, {});
-			e.stopEvent();
-		}
-	},
 
 	showCatalog (route) {
 		const baseroute = this.getBaseRoute();
-		const categoryMatch = route.path.match(CATEGORY_NAME);
-
-		this.category = categoryMatch[1] !== 'nti-course-catalog-entry' ? categoryMatch[1] : '';
-
 
 		if (this.catalog) {
 			this.catalog.setBaseRoute(baseroute);
 		} else {
 			this.catalog = this.add({
 				xtype: 'react',
-				component: CatalogView,
+				component: Catalog,
 				baseroute: baseroute,
+				setTitle: title => this.setTitle(title),
 				getRouteFor: (obj) => {
 					if (obj.isCourseCatalogEntry) {
 						return `${this.category || '.'}/nti-course-catalog-entry/${obj.getID()}`;
@@ -122,14 +90,30 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				}
 			});
 		}
-		const title = this.getTitleFromRoute(route.path);
-		this.setTitle(title);
 
 		this.setUpNavigation(baseroute, route.path);
-		return this.maybeShowCatalogEntry(route, this.category);
 	},
 
-	getTitleFromRoute (route) {
+	setUpNavigation () {
+		if (!this.navigation || this.navigation.isDestroyed) {
+			this.navigation = ComponentsNavigation.create({
+				bodyView: this
+			});
+		}
+
+		this.navigation.updateTitle('Catalog');
+		this.navigation.useCommonTabs();
+
+		this.NavigationActions.setActiveContent(null, true, true);
+		this.NavigationActions.updateNavBar({
+			cmp: this.navigation,
+			noLibraryLink: false,
+			hideBranding: true,
+			onBack: () => this.pushRootRoute('Library', '/library')
+		});
+	},
+
+	xgetTitleFromRoute (route) {
 		if (route === '/') {
 			return 'Catalog';
 		}
@@ -144,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		return decodeTitle.substr(1).toUpperCase();
 	},
 
-	setUpNavigation (baseroute, path) {
+	xsetUpNavigation (baseroute, path) {
 		const navigation = this.getNavigation();
 
 
@@ -184,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 
-	getNavigation: function () {
+	xgetNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = ComponentsNavigation.create({
 				bodyView: this
@@ -194,12 +178,12 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		return this.navigation;
 	},
 
-	onTabChange: function (title, route, subroute, tab) {
+	xonTabChange: function (title, route, subroute, tab) {
 		this.pushRoute(title, route, subroute);
 	},
 
 
-	loadCatalogEntry (param, rest) {
+	xloadCatalogEntry (param, rest) {
 		if (rest === 'paymentcomplete') {
 			const enrolledURL = Service.getCollection('EnrolledCourses', 'Courses').href;
 
@@ -231,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 
-	maybeShowCatalogEntry (route, category) {
+	xmaybeShowCatalogEntry (route, category) {
 		const {path} = route;
 		const matches = path && path.match(CATALOG_ENTRY_ROUTE);
 
