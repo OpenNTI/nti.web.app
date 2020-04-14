@@ -113,11 +113,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 			trigger: 'instructors'
 		});
 
-		me.itemTpl.append(me.menuEl, {
-			title: getString('NextThought.view.courseware.info.outline.Menu.support'),
-			trigger: 'support'
-		});
-
 		if (this.showRoster || this.showReports || this.showAdvanced) {
 			me.itemTpl.append(me.menuEl, {
 				title: 'Admin Tools',
