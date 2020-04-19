@@ -8,7 +8,7 @@ const DEFAULT_TEXT = {
 	header: 'Configuration',
 	sync: 'Sync',
 	transcripts: 'Transcripts & Course Credit',
-	integrations: 'Webinars',
+	integrations: 'Integrations',
 	branding: 'Site Branding',
 	login: 'Sign In Branding'
 };
