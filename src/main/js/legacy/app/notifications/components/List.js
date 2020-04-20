@@ -75,10 +75,10 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 		//fill this in here so hopefully it will be cached when the
 		//user tries to navigate
-		this.PathActions.getPathToObject(record)
-			.then(data => {
-				record[Symbol.for('path')] = data;
-			});
+		// this.PathActions.getPathToObject(record)
+		// 	.then(data => {
+		// 		record[Symbol.for('path')] = data;
+		// 	});
 
 		if (!group) {
 			group = this.addGroup(groupName, groupValue, prepend);
