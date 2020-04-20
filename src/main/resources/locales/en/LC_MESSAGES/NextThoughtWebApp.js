@@ -29,8 +29,8 @@ NTIStrings['forum_sharing_label'] = 'Share with all students.';
 NTIStrings['forums.empty_boards_header'] = 'Oh no! It\'s empty!';
 NTIStrings['forums.empty_boards_sub'] = 'There are no forum boards yet.';
 
-NTIStrings['contact_us_title'] = 'Contact Us...';
-NTIStrings['contact_us_message'] = 'Please use the form below to share your comments, report an issue, or suggest new features.  If you need help or have a question about the features, please take a look at the <a class="link" target="_blank" href="http://help.nextthought.com">NextThought Help Site</a>.  We may already have content there to help you.';
+NTIStrings['contact_us_title'] = 'Technical Support';
+NTIStrings['contact_us_message'] = 'Please use the form below to send a question to our support team. If you have a question about course content, please contact your Administrator or Instructor. If you need help or have a question about the features, please take a look at the <a class="link" target="_blank" href="http://help.nextthought.com">NextThought Help Site</a>.  We may already have content there to help you.';
 
 NTIStrings['alias_request_title'] = 'Request Name Change';
 NTIStrings['alias_request_message'] = 'Please use the form below to request a change in the way your name is displayed. Submit the name you would like to use and the reason for making this change.';
