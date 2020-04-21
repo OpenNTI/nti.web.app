@@ -70,6 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 	onClicked: function () {
 		if (this.navigateToItem) {
+			this.el.mask('Navigating...');
 			this.navigateToItem(this.record);
 		}
 	},
