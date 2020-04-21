@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const NTIFormat = require('legacy/util/Format');
+const PathActions = require('legacy/app/navigation/path/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Base', {
@@ -46,6 +47,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	beforeRender: function () {
 		this.callParent(arguments);
 
+		this.PathActions = PathActions.create();
+
 		var time = this.getDisplayTime();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -71,7 +74,15 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	onClicked: function () {
 		if (this.navigateToItem) {
 			this.el.mask('Navigating...');
-			this.navigateToItem(this.record);
+			this.PathActions.getPathToObject(this.record)
+				.then(data => {
+					this.record[Symbol.for('path')] = data;
+
+					this.navigationToItem(this.record);
+				})
+				.catch(() => {
+					this.navigateToItem(this.record);
+				});
 		}
 	},
 
