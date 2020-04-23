@@ -15,6 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	extend: 'NextThought.app.course.enrollment.options.Base',
 
 	NAME: 'StoreEnrollment',
+	display: 'One-Time Purchase',
 	displayKey: 'course-info.pricing-widget.store-enrolled',
 	isBase: true,
 

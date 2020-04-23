@@ -25,17 +25,23 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				{tag: 'span', cls: 'label', html: 'Enrollment Type'},
 				{tag: 'span', html: '{enrollmentType}'}
 			]},
-			{cls: 'detail', cn: [
-				{tag: 'span', cls: 'label', html: 'Credit Hours:'},
-				{tag: 'span', html: '{credit}'}
+			{tag: 'tpl', 'if': 'credit', cn: [
+				{cls: 'detail', cn: [
+					{tag: 'span', cls: 'label', html: 'Credit Hours:'},
+					{tag: 'span', html: '{credit}'}
+				]}
 			]},
-			{cls: 'detail', cn: [
-				{tag: 'span', cls: 'label', html: 'Begins:'},
-				{tag: 'span', html: '{begins}'}
+			{tag: 'tpl', 'if': 'begins', cn: [
+				{cls: 'detail', cn: [
+					{tag: 'span', cls: 'label', html: 'Begins:'},
+					{tag: 'span', html: '{begins}'}
+				]}
 			]},
-			{cls: 'detail', cn: [
-				{tag: 'span', cls: 'label', html: 'Ends:'},
-				{tag: 'span', html: '{ends}'}
+			{tag: 'tpl', 'if': 'ends', cn: [
+				{cls: 'detail', cn: [
+					{tag: 'span', cls: 'label', html: 'Ends:'},
+					{tag: 'span', html: '{ends}'}
+				]}
 			]},
 			{tag: 'tpl', 'if': 'refunds', cn: [
 				{cls: 'detail', cn: [
@@ -102,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			title: course.get('title'),
 			author: course.getAuthorLine(),
 			enrollmentType: this.enrollmentOption.display || getString(this.enrollmentOption.displayKey),
-			credit: hours && this.enrollmentOption.hasCredit ? Ext.util.Format.plural(hours, 'Credit Hour') : 'No College Credit',
+			credit: hours && this.enrollmentOption.hasCredit ? Ext.util.Format.plural(hours, 'Credit Hour') : '',
 			begins: Ext.Date.format(begins, format),
 			ends: Ext.Date.format(ends, format),
 			coupons: !!this.enrollmentOption.Purchasable && !this.hidePrice,
