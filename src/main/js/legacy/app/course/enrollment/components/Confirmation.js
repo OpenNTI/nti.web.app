@@ -64,10 +64,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			prompt = confirmationText.subtitle && getFormattedString(confirmationText.subtitle, {course: c.get('Title')});
 
 		if (!prompt) {
-			prompt = getFormattedString('NextThought.view.courseware.enrollment.Confirmation.ClassStartInfo', {
-				date: Ext.Date.format(start, 'F j, Y'),
-				course: c.get('Title')
-			});
+			if (start) {
+				prompt = getFormattedString('NextThought.view.courseware.enrollment.Confirmation.ClassStartInfo', {
+					date: Ext.Date.format(start, 'F j, Y'),
+					course: c.get('Title')
+				});
+			} else {
+				prompt = getFormattedString(
+					'{course} is available now!',
+					{course: c.get('Title')}
+				);
+			}
 		}
 
 		for (i = 1; i <= 3; i++) {
