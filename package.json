@@ -51,7 +51,7 @@
     "@nti/web-commons": "0.x.x",
     "@nti/web-contacts": "0.x.x",
     "@nti/web-content": "^1.51.0",
-    "@nti/web-course": "^1.69.0",
+    "@nti/web-course": "^1.76.0",
     "@nti/web-discussions": "0.x.x",
     "@nti/web-integrations": "^1.9.0",
     "@nti/web-library": "^1.6.0",
