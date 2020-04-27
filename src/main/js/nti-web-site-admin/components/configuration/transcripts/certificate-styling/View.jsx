@@ -8,6 +8,8 @@ import Card from '../../../common/Card';
 import Store from './Store';
 import Styles from './Styles.css';
 import InlinePreview from './preview/Inline';
+import Pill from './sections/Pill';
+import Label from './sections/Label';
 
 const cx = classnames.bind(Styles);
 const t = scoped('web-site-admin.components.advanced.transcripts.certificate-styling.View', {
@@ -46,7 +48,6 @@ function CertificateStyling () {
 		if (e) {
 			e.preventDefault();
 			e.stopPropagation();
-		
 		}
 
 		setPreview(true);
@@ -54,15 +55,19 @@ function CertificateStyling () {
 
 	return (
 		<Theme.Apply theme={theme}>
-			<form className={cx('certificate-styling')} ref={form} onSubmit={showPreview}>
-				<Card>
+			<Card>
+				<form className={cx('certificate-styling')} ref={form} onSubmit={showPreview}>
 					<div className={cx('header')}>
 						<Text.Base as="h2" className={cx('title')}>{t('title')}</Text.Base>
 						<Text.Base as="p" className={cx('description')}>{t('description')}</Text.Base>
 					</div>
 					<InlinePreview loading={loading} />
-				</Card>
-			</form>
+					<div className={cx('controls')}>
+						<Pill />
+						<Label />
+					</div>
+				</form>
+			</Card>
 		</Theme.Apply>
 	);
 }
