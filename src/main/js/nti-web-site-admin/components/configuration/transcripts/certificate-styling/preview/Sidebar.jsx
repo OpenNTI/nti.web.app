@@ -22,6 +22,9 @@ export default function CertificatePreviewSidebar () {
 
 	return (
 		<div className={cx('side-bar')} style={styles}>
+			{hasImage && (
+				<Theme.Asset property={image} className={cx('side-bar-image')} />
+			)}
 			{!hasImage && (
 				<Theme.Asset name="sidebar.logo" className={cx('side-bar-logo')} />
 			)}
