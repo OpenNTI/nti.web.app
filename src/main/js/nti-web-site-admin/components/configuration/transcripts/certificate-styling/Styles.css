@@ -1,6 +1,4 @@
 .certificate-styling {
-	padding-bottom: var(--side-padding, 2rem);
-
 	& .header {
 		padding: var(--side-padding, 2rem);
 		color: var(--primary-grey);
@@ -24,5 +22,15 @@
 
 	& .controls {
 		padding: 0 var(--side-padding, 2rem);
+	}
+}
+
+.footer {
+	min-height: 83px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	
+	& .footer-content {
 	}
 }

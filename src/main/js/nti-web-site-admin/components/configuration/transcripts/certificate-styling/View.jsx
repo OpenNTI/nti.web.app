@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
-import {Theme, Text, Loading, Errors} from '@nti/web-commons';
+import {Theme, Text, Loading, Errors, DialogButtons} from '@nti/web-commons';
 
 import Card from '../../../common/Card';
 
@@ -11,10 +11,14 @@ import InlinePreview from './preview/Inline';
 import Pill from './sections/Pill';
 import Label from './sections/Label';
 
+const stop = e => (e.stopPropagation(), e.preventDefault());
+
 const cx = classnames.bind(Styles);
 const t = scoped('web-site-admin.components.advanced.transcripts.certificate-styling.View', {
 	title: 'Certificate Styling',
-	description: 'You can customize your certificate to reflect your brand.'
+	description: 'You can customize your certificate to reflect your brand.',
+	cancel: 'Cancel',
+	previewApply: 'Preview and Apply'
 });
 
 const propMap = {
@@ -56,15 +60,31 @@ function CertificateStyling () {
 	return (
 		<Theme.Apply theme={theme}>
 			<Card>
-				<form className={cx('certificate-styling')} ref={form} onSubmit={showPreview}>
-					<div className={cx('header')}>
-						<Text.Base as="h2" className={cx('title')}>{t('title')}</Text.Base>
-						<Text.Base as="p" className={cx('description')}>{t('description')}</Text.Base>
+				<form ref={form} onSubmit={showPreview}>
+					<div className={cx('certificate-styling')}>
+						<div className={cx('header')}>
+							<Text.Base as="h2" className={cx('title')}>{t('title')}</Text.Base>
+							<Text.Base as="p" className={cx('description')}>{t('description')}</Text.Base>
+						</div>
+						<InlinePreview loading={loading} />
+						<div className={cx('controls')}>
+							<Pill />
+							<Label />
+						</div>
 					</div>
-					<InlinePreview loading={loading} />
-					<div className={cx('controls')}>
-						<Pill />
-						<Label />
+					<div className={cx('footer', {error, modified})}>
+						<div className={cx('footer-content')}>
+							{error && (<Errors.Bar error={error} />)}
+							{(modified || error) && (
+								<DialogButtons
+									flat
+									buttons={[
+										{label: t('cancel'), onClick: e => (stop(e), cancel())},
+										{label: t('previewApply'), onClick: showPreview}
+									]}
+								/>
+							)}
+						</div>
 					</div>
 				</form>
 			</Card>
