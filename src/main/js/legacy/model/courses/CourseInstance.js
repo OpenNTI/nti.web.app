@@ -887,6 +887,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__getLTIConfiguredToolsPromise;
 	},
 
+
+	hasAssignments () { return Boolean(this.__getAssignmentsPromise); },
+
 	/**
 	 * Return an assignment collection for this course
 	 * @return {AssignmentCollection} the assignment collection

@@ -151,9 +151,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		var item = this.getLayout().getActiveItem(),
 			lessons = this.getLessons();
 		if (bundle && this.currentBundle !== bundle) {
+			const hadAssignments = bundle.hasAssignments();
+
 			bundle.getAssignments()
 				.then((collection) => {
-					if (collection && collection.updateAssignments) {
+					if (hadAssignments && collection && collection.updateAssignments) {
 						collection.updateAssignments(true);
 					}
 				});
