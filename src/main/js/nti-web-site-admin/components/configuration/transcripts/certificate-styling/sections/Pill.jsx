@@ -30,9 +30,11 @@ const Part = HOC.Variant('div', {className: cx('part')});
 const Label = HOC.Variant(Text.Base, {className: cx('label')});
 
 const AssetWrapper = HOC.Variant('div', {className: cx('asset-wrapper')});
+const File = HOC.Variant('div', {className: cx('file')});
 const FileDisplay = HOC.Variant(Filename, {className: cx('file-name')});
 const ChangeFile = HOC.Variant(Text.Base, {className: cx('change-file')});
 const FileInput = HOC.Variant(Input.FileInputWrapper, {className: cx('file-input')});
+const ClearFile = HOC.Variant('i', {className: cx('clear-file', 'icon-bold-x')});
 
 const Presets = [
 	{color: Color.fromHex('#000000'), title: 'Black'},
@@ -48,9 +50,11 @@ const CustomName = 'certificate_sidebar_image';
 
 const CustomAspectRatio = 26 / 85;
 
+const stop = e => (e.stopPropagation(), e.preventDefault());
+
 
 export default function CertificateStylingPill () {
-	const {setBrandProp, setAsset} = Store.useMonitor(['setBrandProp', 'setAsset']);
+	const {setBrandProp, setAsset, clearAsset} = Store.useMonitor(['setBrandProp', 'setAsset', 'clearAsset']);
 
 	const [editCustom, setEditCustom] = React.useState(false);
 
@@ -73,6 +77,7 @@ export default function CertificateStylingPill () {
 		<span className={cx('color-trigger')} style={styles} />
 	);
 
+	const removeAsset = (name) => clearAsset(name);
 	const saveAsset = async (name, file) => {
 		if (file) {
 			const source = await readFile(file);
@@ -108,8 +113,11 @@ export default function CertificateStylingPill () {
 					{Boolean(logoAsset) && (
 						<FileInput onChange={(files = []) => saveAsset(LogoName, files[0])}>
 							<AssetWrapper>
-								<FileDisplay file={logoAsset?.filename || ''} />
-								<ChangeFile>{logoAsset?.href ? t('logoAsset.change') : t('logoAsset.empty')}</ChangeFile>
+								<File>
+									{logoAsset?.filename && (<FileDisplay file={logoAsset?.filename || ''} />)}
+									{logoAsset?.filename && (<ClearFile onClick={(e) => (stop(e), removeAsset(LogoName))} />)}
+								</File>
+								<ChangeFile>{logoAsset?.filename ? t('logoAsset.change') : t('logoAsset.empty')}</ChangeFile>
 							</AssetWrapper>
 						</FileInput>
 					)}
@@ -118,7 +126,10 @@ export default function CertificateStylingPill () {
 					<Label localized>{t('customImage.label')}</Label>
 					{Boolean(customAsset) && (
 						<AssetWrapper onClick={() => setEditCustom(true)}>
-							<FileDisplay file={customAsset?.filename || ''} />
+							<File>
+								{customAsset?.href && (<FileDisplay file={customAsset?.filename || ''} />)}
+								{customAsset?.href && (<ClearFile onClick={(e) => (stop(e), removeAsset(CustomName))} />)}
+							</File>
 							<ChangeFile>{customAsset?.href ? t('customImage.change') : t('customImage.empty')}</ChangeFile>
 						</AssetWrapper>
 					)}

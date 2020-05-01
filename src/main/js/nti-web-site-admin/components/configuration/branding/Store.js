@@ -21,6 +21,7 @@ const CHANGED = '_changed';
 const Load = Symbol('load');
 const Loading = Symbol('loading');
 const RebuildTheme = Symbol('rebuild theme');
+const DeletedAssets = Symbol('deleted assets');
 
 
 export default class ThemeEditorStore extends Stores.SimpleStore {
@@ -41,6 +42,11 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 	setAsset = (type, item) => {
 		const {source, filename, file} = item || {};
 		const track = !!file;
+
+		if (this[DeletedAssets]?.[type]) {
+			delete this[DeletedAssets][type];
+		}
+
 		this.setBrandProp(`${ASSETS}.${AssetTypeMap[type] || type}`, {
 			source,
 			file,
@@ -48,6 +54,19 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 			filename,
 			MimeType: MimeTypes.Image,
 		}, track);
+	}
+
+	clearAsset = (type) => {
+		this[DeletedAssets] = this[DeletedAssets] || {};
+		this[DeletedAssets][type] = true;
+
+		this.setBrandProp(`${ASSETS}.${AssetTypeMap[type] || type}`, {
+			source: null,
+			file: null,
+			href: null,
+			filename: null,
+			MimeType: MimeTypes.Image
+		});
 	}
 
 	setThemeProp = (path, value) => {
@@ -138,11 +157,20 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 			const fileFilter = (key, value) => {
 				const {file, filename, ...v} = value || {};
-				if (!file || v.MimeType !== MimeTypes.Image) {
+				const deleted = this[DeletedAssets]?.[key];
+
+				//If its not an image don't filter it
+				if (file === undefined || v.MimeType !== MimeTypes.Image) {
 					return value;
 				}
 
-				formData.append(key, file, filename);
+				//if the asset was deleted append null
+				if (deleted) {
+					formData.append(key, '');
+				} else {
+					formData.append(key, file, filename);
+				}
+
 			};
 
 			data = ObjectUtils.filter(data, fileFilter, true);

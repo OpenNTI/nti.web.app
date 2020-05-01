@@ -56,16 +56,35 @@
 		overflow: hidden;
 	}
 
-	& .file-name {
-		max-width: 100%;
-		font-size: 0.75rem;
-		font-weight: bold;
-		color: var(--secondary-grey);
+	& .file {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 
-		&:empty + .change-file {
+		& .file-name {
+			flex: 0 0 auto;
+			max-width: 85%;
+			font-size: 0.75rem;
+			font-weight: bold;
+			color: var(--secondary-grey);
+
+		}
+
+		& .clear-file {
+			flex: 0 0 auto;
+			color: var(--secondary-grey);
+			padding: 2px;
+			cursor: pointer;
+			position: relative;
+			z-index: 2;
+		}
+
+		&:empty ~ .change-file {
 			margin-top: 12px;
 		}
 	}
+
 
 	& .asset-wrapper {
 		max-width: 100%;
