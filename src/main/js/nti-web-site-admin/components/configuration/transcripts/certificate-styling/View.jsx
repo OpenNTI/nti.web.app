@@ -8,6 +8,7 @@ import Card from '../../../common/Card';
 import Store from './Store';
 import Styles from './Styles.css';
 import InlinePreview from './preview/Inline';
+import ModalPreview from './preview/Dialog';
 import Pill from './sections/Pill';
 import Label from './sections/Label';
 
@@ -40,8 +41,8 @@ function CertificateStyling () {
 		theme,
 		save,
 		cancel,
-		reset,
-		canReset
+		// reset,
+		// canReset
 	} = Store.useMonitor(propMap);
 
 	const [preview, setPreview] = React.useState(false);
@@ -60,7 +61,7 @@ function CertificateStyling () {
 	return (
 		<Theme.Apply theme={theme}>
 			<Card>
-				<form ref={form} onSubmit={showPreview}>
+				<form className={cx('certificate-styling-form')} ref={form} onSubmit={showPreview}>
 					<div className={cx('certificate-styling')}>
 						<div className={cx('header')}>
 							<Text.Base as="h2" className={cx('title')}>{t('title')}</Text.Base>
@@ -86,6 +87,8 @@ function CertificateStyling () {
 							)}
 						</div>
 					</div>
+					{preview && (<ModalPreview onCancel={hidePreview} onSave={() => (save(form.current), setPreview(false))}/>)}
+					<Loading.Overlay large loading={loading} />
 				</form>
 			</Card>
 		</Theme.Apply>

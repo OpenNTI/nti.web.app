@@ -57,7 +57,7 @@ export default function CertificateStylingPill () {
 	const background = Theme.useThemeProperty('certificates.sidebar.backgroundColor');
 	const color = (background == null || background.isColor) ? background : Color.fromCSS(background);
 	const onColorChange = (newColor) => {
-		setBrandProp('certificate_color', newColor.hex.toString());
+		setBrandProp('certificate_brand_color', newColor.hex.toString());
 	};
 
 	const logoAsset = Theme.useThemeProperty(`assets.${LogoName}`);

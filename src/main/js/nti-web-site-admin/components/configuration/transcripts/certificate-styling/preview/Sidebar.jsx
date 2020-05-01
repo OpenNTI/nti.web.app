@@ -14,16 +14,14 @@ export default function CertificatePreviewSidebar () {
 
 	const styles = {};
 
-	if (hasImage) {
-		styles.backgroundImage = `url(${image.cacheBustHREF})`;
-	} else if (backgroundColor) {
+	if (!hasImage && backgroundColor) {
 		styles.backgroundColor = backgroundColor;
 	}
 
 	return (
 		<div className={cx('side-bar')} style={styles}>
 			{hasImage && (
-				<Theme.Asset property={image} className={cx('side-bar-image')} />
+				<Theme.Asset name="sidebar.image" className={cx('side-bar-image')} />
 			)}
 			{!hasImage && (
 				<Theme.Asset name="sidebar.logo" className={cx('side-bar-logo')} />

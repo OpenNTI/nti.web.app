@@ -1,3 +1,7 @@
+.certificate-styling-form {
+	position: relative;
+}
+
 .certificate-styling {
 	& .header {
 		padding: var(--side-padding, 2rem);
