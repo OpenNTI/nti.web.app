@@ -4,6 +4,7 @@ import {scoped} from '@nti/lib-locale';
 import {Theme, Text, Loading, Errors, DialogButtons} from '@nti/web-commons';
 
 import Card from '../../../common/Card';
+import Reset from '../../branding/Reset';
 
 import Store from './Store';
 import Styles from './Styles.css';
@@ -41,8 +42,8 @@ function CertificateStyling () {
 		theme,
 		save,
 		cancel,
-		// reset,
-		// canReset
+		reset,
+		canReset
 	} = Store.useMonitor(propMap);
 
 	const [preview, setPreview] = React.useState(false);
@@ -71,6 +72,7 @@ function CertificateStyling () {
 						<div className={cx('controls')}>
 							<Pill />
 							<Label />
+							<Reset reset={reset} canReset={canReset} />
 						</div>
 					</div>
 					<div className={cx('footer', {error, modified})}>
