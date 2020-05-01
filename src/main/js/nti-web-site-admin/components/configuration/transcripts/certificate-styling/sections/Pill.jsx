@@ -111,7 +111,7 @@ export default function CertificateStylingPill () {
 				<Part>
 					<Label localized>{t('logoAsset.label')}</Label>
 					{Boolean(logoAsset) && (
-						<FileInput onChange={(files = []) => saveAsset(LogoName, files[0])}>
+						<FileInput onChange={(files = []) => saveAsset(LogoName, files[0])} accept="image/*">
 							<AssetWrapper>
 								<File>
 									{logoAsset?.filename && (<FileDisplay file={logoAsset?.filename || ''} />)}
