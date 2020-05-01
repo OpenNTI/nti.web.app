@@ -72,7 +72,7 @@ function CertificateStyling () {
 						<div className={cx('controls')}>
 							<Pill />
 							<Label />
-							<Reset reset={reset} canReset={canReset} />
+							<Reset onReset={reset} canReset={canReset} />
 						</div>
 					</div>
 					<div className={cx('footer', {error, modified})}>
