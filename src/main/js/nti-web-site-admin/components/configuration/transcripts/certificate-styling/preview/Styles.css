@@ -88,12 +88,13 @@
 	}
 
 	& .preview-container {
-		width: 90vw;
+		max-width: 1100px;
 		overflow: auto;
 
 		& .inline-certificate-preview {
 			--cert-scale: 1;
 			width: 1100px;
+			margin: 0;
 		}
 	}
 
