@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.util.Scrolling', {
 		}
 
 		if (this.dragScrollStartTimeout) {
-			clearTimeout(this.dragScrollTimeout);
+			clearTimeout(this.dragScrollStartTimeout);
 		}
 	},
 
