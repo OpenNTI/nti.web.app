@@ -827,9 +827,9 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	getRouteForLesson: function (lesson, path) {
-		var cmp = this.down(OVERVIEW),
-			route = cmp.getRouteForPath(path, lesson);
+	getRouteForLesson: async function (lesson, path) {
+		const cmp = this.down(OVERVIEW);
+		const route = await cmp.getRouteForPath(path, lesson);
 
 		route.path = '/lessons/' + Globals.trimRoute(route.path);
 

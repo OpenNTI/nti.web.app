@@ -15,6 +15,7 @@ const Slidedeck = require('legacy/model/Slidedeck');
 const Video = require('legacy/model/Video');
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const WebinarAsset = require('legacy/model/WebinarAsset');
+const {ROUTE_BUILDERS} = require('./components/Constants');
 
 require('legacy/mixins/FillScreen');
 require('legacy/mixins/Router');
@@ -673,7 +674,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		this.pushRoute(null, '/');
 	},
 
-	getRouteForPath: function (path, lesson) {
+	getRouteForPath: async function (path, lesson) {
 		var root = path[0],
 			subPath = path.slice(1),
 			route,
@@ -681,11 +682,41 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 
 		lessonId = encodeForURI(lessonId);
 
-		route = this.getRouteForRoot(root, subPath, lesson);
+		route = lesson.isPublished() ? this.getRouteForRoot(root, subPath, lesson) : await this.getRouteForUnpublished(root, subPath, lesson);
 
 		route.path = lessonId + '/' + Globals.trimRoute(route.path);
 
 		return route;
+	},
+
+
+	async getRouteForUnpublished (root, subPath, lesson) {
+		const objs = await Promise.all(([root, ...subPath]).map(o => o.getInterfaceInstance()));
+
+		let path = null;
+
+		for (let obj of objs) {
+			const builder = ROUTE_BUILDERS[obj.MimeType];
+
+			if (builder) {
+				path = builder(
+					{NTIID: 'tag:nextthought.com,2011-10:fake-ntiid'},
+					{NTIID: lesson.get('NTIID')},
+					obj
+				);
+			}
+		}
+
+		//remove up to the lesson id from the url, since that will be prepended by the rest of the routeForPath process
+		const parts = path.split('/');
+		const route = parts
+			.slice(parts.indexOf('lessons') + 2) 
+			.join('/');
+
+		return {
+			path: route,
+			isFull: true
+		};
 	},
 
 

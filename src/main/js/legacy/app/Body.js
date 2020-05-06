@@ -589,11 +589,11 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-	getRouteForCourse: function (course, path) {
-		var cmp = this.getCmp('course-view-container'),
-			route = cmp.getRouteForPath && cmp.getRouteForPath(path, course),
-			id = course.getId();
+	getRouteForCourse: async function (course, path) {
+		const cmp = this.getCmp('course-view-container');
+		const route = await cmp?.getRouteForPath(path, course);
 
+		let id = course.getId();
 		id = encodeForURI(id);
 
 		route.path = Globals.trimRoute(route.path);
