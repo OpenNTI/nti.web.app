@@ -59,6 +59,8 @@ function CertificateStyling () {
 		setPreview(true);
 	};
 
+	if (!theme) { return null; }
+
 	return (
 		<Theme.Apply theme={theme}>
 			<Card>
