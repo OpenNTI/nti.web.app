@@ -36,6 +36,7 @@ const ChangeFile = HOC.Variant(Text.Base, {className: cx('change-file')});
 const FileInput = HOC.Variant(Input.FileInputWrapper, {className: cx('file-input')});
 const ClearFile = HOC.Variant('i', {className: cx('clear-file', 'icon-bold-x')});
 
+const White = Color.fromHex('#ffffff');
 const Presets = [
 	{color: Color.fromHex('#000000'), title: 'Black'},
 	{color: Color.fromHex('#ffffff'), title: 'White'},
@@ -60,8 +61,11 @@ export default function CertificateStylingPill () {
 
 	const background = Theme.useThemeProperty('certificates.sidebar.backgroundColor');
 	const color = (background == null || background.isColor) ? background : Color.fromCSS(background);
-	const onColorChange = (newColor) => {
-		setBrandProp('certificate_brand_color', newColor.hex.toString());
+	const onColorChange = (newColor) => setBrandProp('certificate_brand_color', newColor.hex.toString());
+	const ensureBackground = () => {
+		if (!color) {
+			setBrandProp('certificate_brand_color', White.hex.toString());
+		}
 	};
 
 	const logoAsset = Theme.useThemeProperty(`assets.${LogoName}`);
@@ -111,7 +115,7 @@ export default function CertificateStylingPill () {
 				<Part>
 					<Label localized>{t('logoAsset.label')}</Label>
 					{Boolean(logoAsset) && (
-						<FileInput onChange={(files = []) => saveAsset(LogoName, files[0])} accept="image/*">
+						<FileInput onChange={(files = []) => (saveAsset(LogoName, files[0]), ensureBackground())} accept="image/*">
 							<AssetWrapper>
 								<File>
 									{logoAsset?.filename && (<FileDisplay file={logoAsset?.filename || ''} />)}
