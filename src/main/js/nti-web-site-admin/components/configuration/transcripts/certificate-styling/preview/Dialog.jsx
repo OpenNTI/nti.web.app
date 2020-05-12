@@ -2,10 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
-import {Prompt, Button} from '@nti/web-commons';
+import {Prompt, Button, Hooks, Loading, Errors} from '@nti/web-commons';
+
+import Store from '../Store';
 
 import Styles from './Styles.css';
-import Inline from './Inline';
+
+const {useResolver} = Hooks;
+const {isPending, isErrored, isResolved} = useResolver;
 
 const cx = classnames.bind(Styles);
 const t = scoped('web-site-admin.components.advanced.transcripts.certificate-styling.preview.Dialog', {
@@ -17,6 +21,26 @@ CertificatePreviewModal.propTypes = {
 	onCancel: PropTypes.func
 };
 export default function CertificatePreviewModal ({onSave, onCancel}) {
+	const {getPreviewBlob} = Store.useMonitor(['getPreviewBlob']);
+
+	const resolver = useResolver(() => getPreviewBlob(), [getPreviewBlob]);
+
+	const loading = isPending(resolver);
+	const error = isErrored(resolver) ? resolver : null;
+	const blob = isResolved(resolver) ? resolver : null;
+
+	const [objectURL, setObjectURL] = React.useState(null);
+
+	React.useEffect(() => {
+		if (!blob) { return; }
+
+		const url = URL.createObjectURL(blob);
+
+		setObjectURL(url);
+
+		return () => URL.revokeObjectURL(url);
+	}, [blob]);
+
 	return (
 		<Prompt.Dialog>
 			<div className={cx('certificate-preview-modal')}>
@@ -24,7 +48,16 @@ export default function CertificatePreviewModal ({onSave, onCancel}) {
 					<i className={cx('close', 'icon-light-x')} onClick={onCancel} />
 				</div>
 				<div className={cx('preview-container')}>
-					<Inline />
+					<Loading.Placeholder loading={loading} fallback={<Loading.Spinner.Large />}>
+						{error && (
+							<div className={cx('preview-modal-error')}>
+								<Errors.Message error={error} />
+							</div>
+						)}
+						{objectURL && (
+							<iframe src={objectURL} />
+						)}
+					</Loading.Placeholder>
 				</div>
 				{onSave && (
 					<div className={cx('controls')}>

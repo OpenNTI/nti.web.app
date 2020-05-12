@@ -145,37 +145,44 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 		}
 	}
 
+	getFormData () {
+		const brand = this.get(SITE_BRAND);
+		const formData = new FormData();
+		let data = {
+			...this.get(CHANGED),
+			theme: {...brand.theme}
+		};
+
+		const fileFilter = (key, value) => {
+			const {file, filename, ...v} = value || {};
+			const deleted = this[DeletedAssets]?.[key];
+
+			//If its not an image don't filter it
+			if (file === undefined || v.MimeType !== MimeTypes.Image) {
+				return value;
+			}
+
+			//if the asset was deleted append null
+			if (deleted) {
+				formData.append(key, '');
+			} else {
+				formData.append(key, file, filename);
+			}
+
+		};
+
+		data = ObjectUtils.filter(data, fileFilter, true);
+
+		formData.append('__json__', JSON.stringify(data));
+		
+		return formData;
+	}
+
 	save = async (form) => {
 		try {
 			this.set(LOADING, true);
 			const brand = this.get(SITE_BRAND);
-			const formData = new FormData();
-			let data = {
-				...this.get(CHANGED),
-				theme: {...brand.theme}
-			};
-
-			const fileFilter = (key, value) => {
-				const {file, filename, ...v} = value || {};
-				const deleted = this[DeletedAssets]?.[key];
-
-				//If its not an image don't filter it
-				if (file === undefined || v.MimeType !== MimeTypes.Image) {
-					return value;
-				}
-
-				//if the asset was deleted append null
-				if (deleted) {
-					formData.append(key, '');
-				} else {
-					formData.append(key, file, filename);
-				}
-
-			};
-
-			data = ObjectUtils.filter(data, fileFilter, true);
-
-			formData.append('__json__', JSON.stringify(data));
+			const formData = this.getFormData();
 
 			const resp = await brand.putToLink('edit', formData);
 
