@@ -41,13 +41,11 @@ class SiteAdminBranding extends React.Component {
 			[LOADING]: loading,
 			[MODIFIED]: modified,
 			[CAN_EDIT_EMAIL_ASSET]: canEditEmail,
-			[CAN_RESET]: canReset,
 			theme,
 			assets,
 			setAsset,
 			setBrandProp,
-			cancel,
-			reset
+			cancel
 		} = this.props;
 
 		const {showPreview} = this.state;
@@ -68,7 +66,6 @@ class SiteAdminBranding extends React.Component {
 							<Site onChange={setBrandProp} />
 							<Library onChange={setBrandProp} />
 							<Assets assets={assets} onChange={setAsset} onThumbClick={this.togglePreview} canEditEmail={canEditEmail} />
-							<Reset onReset={reset} canReset={canReset} />
 						</div>
 					</Card>
 					{showPreview && <Preview onSave={modified ? this.onSave : null} onClose={this.togglePreview} />}

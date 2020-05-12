@@ -25,11 +25,9 @@ AdvancedLogin.propTypes = {
 	modified: PropTypes.bool,
 	theme: PropTypes.object,
 	save: PropTypes.func,
-	cancel: PropTypes.func,
-	reset: PropTypes.func,
-	canReset: PropTypes.bool
+	cancel: PropTypes.func
 };
-function AdvancedLogin ({error, loading, modified, theme, save, cancel, reset, canReset}) {
+function AdvancedLogin ({error, loading, modified, theme, save, cancel}) {
 	if (!theme) { return null; }
 
 	const [preview, setPreview] = React.useState(false);
@@ -72,7 +70,6 @@ function AdvancedLogin ({error, loading, modified, theme, save, cancel, reset, c
 						<SubText />
 						<LoginButton />
 						<Assets />
-						<Reset onReset={reset} canReset={canReset} />
 					</div>
 					{preview && (<Preview onCancel={hidePreview} onSave={onSave} />)}
 				</Card>
@@ -89,7 +86,5 @@ export default Store
 		[Store.Modified]: 'modified',
 		[Store.Theme]: 'theme',
 		[Store.Save]: 'save',
-		[Store.Cancel]: 'cancel',
-		[Store.Reset]: 'reset',
-		[Store.CanReset]: 'canReset'
+		[Store.Cancel]: 'cancel'
 	})(AdvancedLogin);

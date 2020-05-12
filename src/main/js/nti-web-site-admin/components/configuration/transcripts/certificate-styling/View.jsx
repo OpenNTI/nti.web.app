@@ -41,9 +41,7 @@ function CertificateStyling () {
 		modified,
 		theme,
 		save,
-		cancel,
-		reset,
-		canReset
+		cancel
 	} = Store.useMonitor(propMap);
 
 	const [preview, setPreview] = React.useState(false);
@@ -74,7 +72,6 @@ function CertificateStyling () {
 						<div className={cx('controls')}>
 							<Pill />
 							<Label />
-							<Reset onReset={reset} canReset={canReset} />
 						</div>
 					</div>
 					<div className={cx('footer', {error, modified})}>
