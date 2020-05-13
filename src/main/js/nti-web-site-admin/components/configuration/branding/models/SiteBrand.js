@@ -12,6 +12,9 @@ class SiteBrand extends Models.Base {
 		theme:       { type: 'object' },
 		brand_name:  { type: 'string' },
 		brand_color: { type: 'string' },
+		certificate_label: {type: 'string' },
+		certificate_brand_color: { type: 'string' },
+		suppress_certificate_logo: {type: 'boolean'},
 		UneditableEmailImage: { type: 'boolean'}
 	}
 }

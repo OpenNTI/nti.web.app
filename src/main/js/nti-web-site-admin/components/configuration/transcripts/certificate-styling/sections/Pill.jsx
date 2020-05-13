@@ -13,14 +13,15 @@ import Styles from './Pill.css';
 
 const cx = classnames.bind(Styles);
 const t = scoped('web-site-admin.components.advanced.transcripts.certificate-styling.sections.Pill', {
-	certificateColor: 'Certificate Color',
+	backgroundColor: 'Background Color',
 	logoAsset: {
-		label: 'Logo Asset',
+		label: 'Brand Image',
+		defaultFile: 'logo.png',
 		empty: 'Change',
 		change: 'Change'
 	},
 	customImage: {
-		label: 'Custom Image',
+		label: 'Background Image',
 		empty: 'Add your own',
 		change: 'Change'
 	}
@@ -36,7 +37,6 @@ const ChangeFile = HOC.Variant(Text.Base, {className: cx('change-file')});
 const FileInput = HOC.Variant(Input.FileInputWrapper, {className: cx('file-input')});
 const ClearFile = HOC.Variant('i', {className: cx('clear-file', 'icon-bold-x')});
 
-const White = Color.fromHex('#ffffff');
 const Presets = [
 	{color: Color.fromHex('#000000'), title: 'Black'},
 	{color: Color.fromHex('#ffffff'), title: 'White'},
@@ -46,6 +46,7 @@ const Presets = [
 	{color: Color.fromHex('#9cc2cb'), title: 'Teal'}
 ];
 
+const HideLogo = 'suppress_certificate_logo';
 const LogoName = 'certificate_logo';
 const CustomName = 'certificate_sidebar_image';
 
@@ -59,14 +60,10 @@ export default function CertificateStylingPill () {
 
 	const [editCustom, setEditCustom] = React.useState(false);
 
+	const hideLogo = Theme.useTheme()?.getRoot()?.surpressCertificateLogo;
 	const background = Theme.useThemeProperty('certificates.sidebar.backgroundColor');
 	const color = (background == null || background.isColor) ? background : Color.fromCSS(background);
 	const onColorChange = (newColor) => setBrandProp('certificate_brand_color', newColor.hex.toString());
-	const ensureBackground = () => {
-		if (!color) {
-			setBrandProp('certificate_brand_color', White.hex.toString());
-		}
-	};
 
 	const logoAsset = Theme.useThemeProperty(`assets.${LogoName}`);
 	const customAsset = Theme.useThemeProperty(`assets.${CustomName}`);
@@ -81,8 +78,15 @@ export default function CertificateStylingPill () {
 		<span className={cx('color-trigger')} style={styles} />
 	);
 
-	const removeAsset = (name) => clearAsset(name);
-	const saveAsset = async (name, file) => {
+	const removeAsset = (name, hideFlag) => {
+		clearAsset(name);
+
+		if (hideFlag) {
+			setBrandProp(hideFlag, true);
+		}
+	};
+
+	const saveAsset = async (name, file, hideFlag) => {
 		if (file) {
 			const source = await readFile(file);
 
@@ -91,6 +95,10 @@ export default function CertificateStylingPill () {
 				filename: file.name,
 				source
 			});
+
+			if (hideFlag) {
+				setBrandProp(hideFlag, false);
+			}
 		}
 	};
 
@@ -98,7 +106,7 @@ export default function CertificateStylingPill () {
 		<div className={cx('certificate-styling-pill')}>
 			<div className={cx('pill')}>
 				<Part>
-					<Label localized>{t('certificateColor')}</Label>
+					<Label localized>{t('backgroundColor')}</Label>
 					<Flyout.Triggered
 						trigger={trigger}
 						arrow
@@ -111,20 +119,6 @@ export default function CertificateStylingPill () {
 							<Input.Color.PresetSwatches swatched={Presets} selected={color} onSelect={onColorChange} />
 						</div>
 					</Flyout.Triggered>
-				</Part>
-				<Part>
-					<Label localized>{t('logoAsset.label')}</Label>
-					{Boolean(logoAsset) && (
-						<FileInput onChange={(files = []) => (saveAsset(LogoName, files[0]), ensureBackground())} accept="image/*">
-							<AssetWrapper>
-								<File>
-									{logoAsset?.filename && (<FileDisplay file={logoAsset?.filename || ''} />)}
-									{logoAsset?.filename && (<ClearFile onClick={(e) => (stop(e), removeAsset(LogoName))} />)}
-								</File>
-								<ChangeFile>{logoAsset?.filename ? t('logoAsset.change') : t('logoAsset.empty')}</ChangeFile>
-							</AssetWrapper>
-						</FileInput>
-					)}
 				</Part>
 				<Part>
 					<Label localized>{t('customImage.label')}</Label>
@@ -155,6 +149,20 @@ export default function CertificateStylingPill () {
 								<AssetEditor.LinearGradient format={{aspectRatio: CustomAspectRatio}} />
 							</AssetEditor>
 						</Prompt.Dialog>
+					)}
+				</Part>
+				<Part>
+					<Label localized>{t('logoAsset.label')}</Label>
+					{Boolean(logoAsset) && (
+						<FileInput onChange={(files = []) => saveAsset(LogoName, files[0], HideLogo)} accept="image/*">
+							<AssetWrapper>
+								<File>
+									{!hideLogo && (<FileDisplay file={logoAsset?.filename || t('logoAsset.defaultFile')} />)}
+									{!hideLogo && (<ClearFile onClick={(e) => (stop(e), removeAsset(LogoName, HideLogo))} />)}
+								</File>
+								<ChangeFile>{logoAsset?.filename ? t('logoAsset.change') : t('logoAsset.empty')}</ChangeFile>
+							</AssetWrapper>
+						</FileInput>
 					)}
 				</Part>
 			</div>
