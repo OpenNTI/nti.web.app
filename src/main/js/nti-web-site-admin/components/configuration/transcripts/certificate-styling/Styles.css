@@ -29,6 +29,10 @@
 	}
 }
 
+.iframe-preview {
+	padding: 0 var(--side-padding, 2rem);
+}
+
 .footer {
 	min-height: 83px;
 	display: flex;

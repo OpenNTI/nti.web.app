@@ -11,6 +11,7 @@ import {
 } from '../../branding/constants';
 
 const PreviewRel = 'certificate_preview';
+const CanEditCertificate = 'can-edit-certificate';
 
 export default class CertificateStylingStore extends BrandingStore {
 	static Error = ERROR;
@@ -25,6 +26,13 @@ export default class CertificateStylingStore extends BrandingStore {
 	static SetAsset = 'setAsset';
 	static SetBrandProp = 'setBrandProp';
 	static SetThemeProp = 'setThemeProp';
+	static CanEditCertificate = CanEditCertificate;
+
+	get [CanEditCertificate] () {
+		const brand = this.get(SITE_BRAND);
+
+		return !brand?.HideCertificateStyling;
+	}
 
 	async getPreviewBlob () {
 		const brand = this.get(SITE_BRAND);

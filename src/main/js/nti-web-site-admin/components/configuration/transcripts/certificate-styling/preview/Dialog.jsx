@@ -7,6 +7,8 @@ import {Prompt, Button, Hooks, Loading, Errors} from '@nti/web-commons';
 import Store from '../Store';
 
 import Styles from './Styles.css';
+import Iframe from './Iframe';
+
 
 const {useResolver} = Hooks;
 const {isPending, isErrored, isResolved} = useResolver;
@@ -47,18 +49,7 @@ export default function CertificatePreviewModal ({onSave, onCancel}) {
 				<div className={cx('header')}>
 					<i className={cx('close', 'icon-light-x')} onClick={onCancel} />
 				</div>
-				<div className={cx('preview-container')}>
-					<Loading.Placeholder loading={loading} fallback={<Loading.Spinner.Large />}>
-						{error && (
-							<div className={cx('preview-modal-error')}>
-								<Errors.Message error={error} />
-							</div>
-						)}
-						{objectURL && (
-							<iframe src={objectURL} />
-						)}
-					</Loading.Placeholder>
-				</div>
+				<Iframe />
 				{onSave && (
 					<div className={cx('controls')}>
 						<Button onClick={onSave}>{t('save')}</Button>

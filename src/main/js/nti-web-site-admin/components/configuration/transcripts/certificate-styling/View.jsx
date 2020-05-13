@@ -4,11 +4,11 @@ import {scoped} from '@nti/lib-locale';
 import {Theme, Text, Loading, Errors, DialogButtons} from '@nti/web-commons';
 
 import Card from '../../../common/Card';
-import Reset from '../../branding/Reset';
 
 import Store from './Store';
 import Styles from './Styles.css';
 import InlinePreview from './preview/Inline';
+import IframePreview from './preview/Iframe';
 import ModalPreview from './preview/Dialog';
 import Pill from './sections/Pill';
 import Label from './sections/Label';
@@ -18,7 +18,10 @@ const stop = e => (e.stopPropagation(), e.preventDefault());
 const cx = classnames.bind(Styles);
 const t = scoped('web-site-admin.components.advanced.transcripts.certificate-styling.View', {
 	title: 'Certificate Styling',
-	description: 'You can customize your certificate to reflect your brand.',
+	description: {
+		edit: 'Customize your certificate to reflect your brand.',
+		noEdit: 'Preview your certificates.'
+	},
 	cancel: 'Cancel',
 	previewApply: 'Preview and Apply'
 });
@@ -31,7 +34,8 @@ const propMap = {
 	[Store.Save]: 'save',
 	[Store.Cancel]: 'cancel',
 	[Store.Reset]: 'reset',
-	[Store.CanReset]: 'canReset'
+	[Store.CanReset]: 'canReset',
+	[Store.CanEditCertificate]: 'canEdit'
 };
 
 function CertificateStyling () {
@@ -41,7 +45,8 @@ function CertificateStyling () {
 		modified,
 		theme,
 		save,
-		cancel
+		cancel,
+		canEdit
 	} = Store.useMonitor(propMap);
 
 	const [preview, setPreview] = React.useState(false);
@@ -59,6 +64,7 @@ function CertificateStyling () {
 
 	if (!theme) { return null; }
 
+
 	return (
 		<Theme.Apply theme={theme}>
 			<Card>
@@ -66,13 +72,24 @@ function CertificateStyling () {
 					<div className={cx('certificate-styling')}>
 						<div className={cx('header')}>
 							<Text.Base as="h2" className={cx('title')}>{t('title')}</Text.Base>
-							<Text.Base as="p" className={cx('description')}>{t('description')}</Text.Base>
+							<Text.Base as="p" className={cx('description')}>
+								{canEdit ? t('description.edit') : t('description.noEdit')}
+							</Text.Base>
 						</div>
-						<InlinePreview loading={loading} />
-						<div className={cx('controls')}>
-							<Pill />
-							<Label />
-						</div>
+						{canEdit && (
+							<>
+								<InlinePreview loading={loading} />
+								<div className={cx('controls')}>
+									<Pill />
+									<Label />
+								</div>
+							</>
+						)}
+						{!canEdit && (
+							<div className={cx('iframe-preview')}>
+								<IframePreview />
+							</div>
+						)}
 					</div>
 					<div className={cx('footer', {error, modified})}>
 						<div className={cx('footer-content')}>
