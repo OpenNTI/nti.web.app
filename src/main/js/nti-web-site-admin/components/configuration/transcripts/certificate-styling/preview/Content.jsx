@@ -14,12 +14,14 @@ const t = scoped('web-site-admin.components.advanced.transcripts.certificate-sty
 });
 
 export default function CertificateInlinePreviewContent () {
+	const brandName = Theme.useTheme()?.getRoot?.()?.brandName;// 'brandName' in theme, 'brand_name' in SiteBrand
+
 	const label = Theme.useThemeProperty('label');
 	const date = DateTime.format(Date.now(), 'MMMM D, YYYY');
 
 	return (
 		<div className={cx('content')}>
-			<Text.Base className={cx('label')}>{label}</Text.Base>
+			<Text.Base className={cx('label')}>{brandName} {label}</Text.Base>
 			<Text.Base className={cx('recipient')}>{t('recipientName')}</Text.Base>
 			<Text.Base className={cx('course-id')}>{t('courseId')}</Text.Base>
 			<Text.Base className={cx('course-name')}>{t('courseName')}</Text.Base>
