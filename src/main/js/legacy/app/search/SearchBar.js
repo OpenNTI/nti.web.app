@@ -4,6 +4,8 @@ const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const {wait} = require('@nti/lib-commons');
 const {Store, Input} = require('@nti/web-search');
 
+const {default:Search} = require('nti-web-components-search');
+
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
 const Styles = require('./SearchBar.css');
@@ -214,6 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 
 		route += Ext.Object.toQueryString(params);
 
+		Search.setupSearchContext(val);
 		this.pushRootRoute('Search', route);
 	},
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import {contextual, Store} from '@nti/web-search';
 
 import {
 	initComponent,
@@ -12,6 +13,8 @@ import {
 import Hit from './Hit';
 import Pager from './Pager';
 import UserList from './UserList';
+
+const SearchContext = 'web-search-page';
 
 function loadHitData (hit, getBreadCrumb) {
 
@@ -30,7 +33,11 @@ function loadHitData (hit, getBreadCrumb) {
 	});
 }
 
-export default class SearchResults extends React.Component {
+class SearchResults extends React.Component {
+	static setupSearchContext (term) {
+		Store.getGlobal().setupTermForContext(term, SearchContext);
+	}
+
 	static propTypes = {
 		hits: PropTypes.arrayOf(PropTypes.object),
 		getBreadCrumb: PropTypes.func,
@@ -151,3 +158,6 @@ export default class SearchResults extends React.Component {
 		);
 	}
 }
+
+
+export default contextual('', () => SearchContext)(SearchResults);
