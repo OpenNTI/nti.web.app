@@ -3,6 +3,10 @@
 	position: relative;
 }
 
+.toggler input[type=checkbox] {
+	z-index: 1;
+}
+
 .toggler, .on .toggler {
 	background: #fbfbfb;
 	border-color: #e2e2e2;
