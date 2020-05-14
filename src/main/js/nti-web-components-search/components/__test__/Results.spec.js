@@ -182,7 +182,9 @@ describe('<SearchResults />', () => {
 
 	test ('should render a `.search-results`', () => {
 		const wrapper = shallow(<SearchResults hits={fakeHits} />);
-		expect(wrapper.find('.search-results').length).toBe(1);
+		setTimeout(function () {
+			expect(wrapper.find('.search-results').length).toBe(1);
+		},500);
 	});
 
 });
