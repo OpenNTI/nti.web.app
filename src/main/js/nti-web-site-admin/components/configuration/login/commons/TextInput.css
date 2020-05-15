@@ -34,3 +34,10 @@
 	color: var(--secondary-grey);
 	text-transform: uppercase;
 }
+
+.certificate-label :global(.textarea-text) {
+	font-size: 0.75rem;
+	font-weight: bold;
+	line-height: 1.3;
+	color: var(--secondary-grey);
+}

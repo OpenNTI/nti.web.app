@@ -20,7 +20,7 @@ export default function CertificateStylingLabel () {
 				<Text.Title>{t('title')}</Text.Title>
 			</Property.Description>
 			<Property.Preview>
-				<TextInput value={label || ''} name="certificate_label" type="disclaimer" maxLength={30} setBrandProp={setBrandProp} />
+				<TextInput value={label || ''} name="certificate_label" type="certificate-label" maxLength={30} setBrandProp={setBrandProp} />
 			</Property.Preview>
 		</Property>
 	);
