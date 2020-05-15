@@ -23,9 +23,9 @@ export default function CertificateInlinePreviewContent () {
 		<div className={cx('content')}>
 			<Text.Base className={cx('label')}>{brandName} {label}</Text.Base>
 			<Text.Base className={cx('recipient')}>{t('recipientName')}</Text.Base>
+			<Text.Base className={cx('date')}>{t('date', {date})}</Text.Base>
 			<Text.Base className={cx('course-id')}>{t('courseId')}</Text.Base>
 			<Text.Base className={cx('course-name')}>{t('courseName')}</Text.Base>
-			<Text.Base className={cx('date')}>{t('date', {date})}</Text.Base>
 		</div>
 	);
 }
