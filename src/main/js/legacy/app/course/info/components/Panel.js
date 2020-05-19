@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 
 		this.InfoCmp = this.add({
 			xtype: 'react',
-			component: Info,
+			component: Info.Inline,
 			catalogEntry,
 			onSave: (savedEntry) => {
 				this.CourseStore.fireEvent('modified-course', savedEntry);

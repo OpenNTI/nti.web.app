@@ -9,6 +9,7 @@ const PersonalBlog = require('legacy/model/forums/PersonalBlog');
 const AnalyticsUtil = require('legacy/util/Analytics');
 const SettingsWindow = require('legacy/app/account/settings/Window');
 
+
 const Header = require('./Tabs');
 
 require('./components/activity/Index');

@@ -3,6 +3,8 @@ html.x-viewport {
 	overflow-y: auto !important;
 	padding-top: $header-height;
 
+	--nt-app-top-offset: #{$header-height};
+
 	&.window-open, &.scroll-lock {
 		overflow: hidden !important;
 	}
@@ -23,6 +25,7 @@ html.x-viewport {
 
 	&.msg-bar-open {
 		--msg-bar-height: #{$msg-bar-height};
+		--nt-app-top-offset: calc(#{$msg-bar-height} + #{$header-height});
 
 		padding-top: $header-height-withbar;
 
