@@ -1,6 +1,8 @@
 const Ext = require('@nti/extjs');
 const {Info} = require('@nti/web-course');
 
+const CoursesStateStore = require('legacy/app/library/courses/StateStore');
+
 const StudentInfo = require('./ExtInfo');
 
 require('legacy/mixins/Router');
@@ -19,6 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.ReactInfo', 
 
 	initComponent () {
 		this.callParent(arguments);
+
+		this.CourseStore = CoursesStateStore.getInstance();
 
 		this.initRouter();
 		this.addDefaultRoute(this.showCourseInfo.bind(this));
@@ -49,7 +53,12 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.ReactInfo', 
 			this.adminInfo = this.add({
 				xtype: 'react',
 				component: Info.Page,
-				course
+				course,
+				setTitle: t => this.setTitle(t),
+				onSave: (savedEntry) => {
+					this.CourseStore.fireEvent('modified-course', savedEntry);
+					this.onSave?.(savedEntry);
+				}
 			});
 		} else {
 			this.adminInfo.setProps({course});
