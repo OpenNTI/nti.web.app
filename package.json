@@ -74,7 +74,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "formatter.js": "^0.1.5",
-    "moment": "2.24.0",
+    "moment": "2.26.0",
     "natural-orderby": "^2.0.3",
     "postcss-cli": "^7.1.0",
     "prop-types": "^15.5.8",
