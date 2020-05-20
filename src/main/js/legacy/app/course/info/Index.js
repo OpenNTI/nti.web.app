@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.ReactInfo', 
 
 		this.onceBundleSetup = bundle.getInterfaceInstance()
 			.then((courseInterface) => {
-				if (courseInterface.isAdministrative) {
+				if (courseInterface?.PreferredAccess?.isAdministrative) {
 					this.setupAdminInfo(courseInterface);
 				} else {
 					this.setupStudentInfo(bundle);
