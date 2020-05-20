@@ -35,7 +35,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	updateCourse (course) {
+	updateCourse (course, isEditing) {
+		if (this.isEditing && !isEditing) {
+			this.removeHeader();
+			this.addHeader();
+		}
+
+		this.isEditing = isEditing;
 		this.course = course;
 
 		if (this.header) {

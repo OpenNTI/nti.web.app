@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if(showProgress) {
 			if(this.progressHeader) {
 				// if already showing progress header, just update
-				this.progressHeader.updateCourse(course);
+				this.progressHeader.updateCourse(course, this.isEditing);
 			}
 			else {
 				// otherwise, add a new progress header since one doesn't exist
