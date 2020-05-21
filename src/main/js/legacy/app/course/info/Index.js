@@ -2,6 +2,8 @@ const Ext = require('@nti/extjs');
 const {Info} = require('@nti/web-course');
 
 const CoursesStateStore = require('legacy/app/library/courses/StateStore');
+const WindowsActions = require('legacy/app/windows/Actions');
+const Email = require('legacy/model/Email');
 
 const StudentInfo = require('./ExtInfo');
 
@@ -23,6 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.ReactInfo', 
 		this.callParent(arguments);
 
 		this.CourseStore = CoursesStateStore.getInstance();
+		this.WindowActions = WindowsActions.create();
 
 		this.initRouter();
 		this.addDefaultRoute(this.showCourseInfo.bind(this));
@@ -58,6 +61,20 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.ReactInfo', 
 				onSave: (savedEntry) => {
 					this.CourseStore.fireEvent('modified-course', savedEntry);
 					this.onSave?.(savedEntry);
+				},
+				getRouteFor: (object, context) => {
+					const {type, filter, scopes} = (context || {});
+					object = object || {};
+
+					if (type === 'email') {
+						if (object.hasLink && object.hasLink('Mail') && object.username) {
+							return () => this.showIndividualEmailEditor(object.getLink('Mail'), object.username);
+						}
+
+						if (object.isCourse && object.canEmailEnrollees) {
+							return () => this.showCourseEmailEditor(object, filter, scopes);
+						}
+					}
 				}
 			});
 		} else {
@@ -88,5 +105,30 @@ module.exports = exports = Ext.define('NextThought.app.course.admin.ReactInfo', 
 		} else if (this.studentInfo) {
 			return this.studentInfo.handleRoute(subRoute);
 		}
-	}
+	},
+
+	showIndividualEmailEditor: function (url, receiver) {
+		const emailRecord = new Email();
+
+		// Set the link to post the email to
+		emailRecord.set('url', url);
+		emailRecord.set('Receiver', receiver);
+
+		this.WindowActions.showWindow('new-email', null, null, null, {
+			record: emailRecord
+		});
+	},
+
+	showCourseEmailEditor: function (course, scope = 'All', scopes) {
+		const emailRecord = new Email();
+
+		// Set the link to post the email to
+		emailRecord.set('url', course && course.getLink('Mail'));
+		emailRecord.set('scope', scope);
+		emailRecord.set('scopes', scopes);
+
+		this.WindowActions.showWindow('new-email', null, null, null, {
+			record: emailRecord
+		});
+	},
 });
