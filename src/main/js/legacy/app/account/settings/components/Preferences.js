@@ -32,6 +32,16 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				'aria-role': 'button',
 				'data-preference-path': 'PushNotifications/Email',
 				'data-preference-key': 'email_a_summary_of_interesting_changes'
+			},
+			{
+				tag: 'span',
+				cls: 'not-ready nti-checkbox email',
+				html: 'Send me email notifications when I am replied to.',
+				tabIndex: 0,
+				role: 'button',
+				'aria-role': 'button',
+				'data-preference-path': 'PushNotifications/Email',
+				'data-preference-key': 'immediate_threadable_reply'
 			}
 		]}
 		},
@@ -103,6 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		prefs.then(function (pref) {
 			pref.set(key, state);
 			pref.save({
+				onlyChanges: true,
 				callback: function () {
 					if (key === 'useHighContrast') {
 						Ext.util.Cookies.clear('use-accessibility-mode');
