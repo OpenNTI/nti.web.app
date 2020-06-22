@@ -22,18 +22,22 @@ module.exports = exports = Ext.define('NextThought.model.preference.Base', {
 	},
 
 	save: function (ops) {
+		let { callback = null, onlyChanges = false, ...opsWithoutCallback } = ops || {};
 		var me = this,
 			url = me.getResourceUrl(),
+			updated = onlyChanges ? me.getChanges() : me.asJSON(),
 			request = Ext.apply({
 				url: url,
 				method: 'PUT',
-				jsonData: me.asJSON(),
+				jsonData: updated,
 				callback: function (req, success) {
 					if (success) {
+						me.commit();
 						me.fireEvent('changed', me);
+						Ext.callback(callback || null);
 					}
 				}
-			}, ops);
+			}, opsWithoutCallback);
 
 		Ext.Ajax.request(request);
 	}
