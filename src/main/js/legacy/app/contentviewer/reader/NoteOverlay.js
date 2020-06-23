@@ -9,6 +9,7 @@ const SharingUtils = require('legacy/util/Sharing');
 const WBUtils = require('../../whiteboard/Utils');
 const UserdataActions = require('../../userdata/Actions');
 
+require('../components/editor/DiscussionEditor');
 require('legacy/util/Line');
 require('legacy/editor/Editor');
 
@@ -188,7 +189,67 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return false;
 	},
 
-	openEditor: function (top) {
+
+	openEditor (top) {
+		if (this.disabled) { return Promise.reject(); }
+
+		const tabPanel = this.getTabPanel();
+		const location = this.reader.getLocation();
+		const lineInfo = this.data.box.activeLineInfo;
+		const targetEl = this.reader.getEl().up('.x-container-reader.reader-container');
+
+		if (!this.allowOpenEditor() || !tabPanel) {
+			return Promise.reject();
+		}
+
+		this.mouseOut();
+		this.suspendMoveEvents = true;
+
+		tabPanel.mask();
+
+		this.editor = Ext.widget('reading-discussion-editor', {
+			ownerCmp: this.reader,
+			floating: true,
+			renderTo: targetEl,
+
+			location,
+			lineInfo,
+			rangeInfo: this.rangeForLineInfo(lineInfo, lineInfo.style || 'suppressed'),
+
+			afterSave: () => { debugger; },
+			onCancel: () => { debugger; }
+		});
+
+		this.editor.toFront();
+
+		const annotationOffsets = this.reader.getAnnotationOffsets();
+		const readerRect = annotationOffsets.rect;
+		const viewWidth = Ext.Element.getViewportWidth();
+
+		//20 px left of the right side of the reader
+		let left = readerRect.right - 20;
+
+		if (!annotationOffsets.isBodyScroll) {
+			top += annotationOffsets.scrollTop - annotationOffsets.viewTop;
+			left -= annotationOffsets.left;
+		}
+
+		const editorWidth = this.editor.getWidth();
+
+		if (left + editorWidth >= viewWidth - 20) {
+			left = viewWidth - 20 - editorWidth;
+		}
+
+		this.editor.el.setStyle({
+			top: `${top}px`,
+			left: `${left}px`
+		});
+
+		this.editor.mon(tabPanel, 'resize', 'syncEditorWidth', this);
+		this.syncEditorWidth(tabPanel, tabPanel.getWidth());
+	},
+
+	xopenEditor: function (top) {
 		if (this.disabled) { return Promise.reject(); }
 
 		var me = this,

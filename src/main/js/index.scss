@@ -1,4 +1,13 @@
 @import "~@nti/style-common/all";
+
+html {
+	--nt-app-top-offset: 70px;
+
+	&.msg-bar-open {
+		--nt-app-top-offset: 110px;
+	}
+}
+
 //Workarond ExtJS legacy z-index-happy bull$#!+ >.<
 body > .modal .modal-mask,
 body > .global-toast-root > * {
