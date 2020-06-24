@@ -207,6 +207,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 		tabPanel.mask();
 
+		const closeEditor = () => {
+			this.editor.destroy();
+			delete this.editor;
+
+			tabPanel.unmask();
+			this.suspendMoveEvents = false;
+		};
+
 		this.editor = Ext.widget('reading-discussion-editor', {
 			ownerCmp: this.reader,
 			floating: true,
@@ -216,8 +224,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			lineInfo,
 			rangeInfo: this.rangeForLineInfo(lineInfo, lineInfo.style || 'suppressed'),
 
-			afterSave: () => { debugger; },
-			onCancel: () => { debugger; }
+			afterSave: () => closeEditor(),
+			onCancel: () => closeEditor()
 		});
 
 		this.editor.toFront();
@@ -245,6 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			left: `${left}px`
 		});
 
+		this.editor.on('destroy', 'unmask', tabPanel);
 		this.editor.mon(tabPanel, 'resize', 'syncEditorWidth', this);
 		this.syncEditorWidth(tabPanel, tabPanel.getWidth());
 	},

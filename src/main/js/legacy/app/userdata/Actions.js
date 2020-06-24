@@ -722,6 +722,15 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		console.warn('Exception Message:', response.responseText);
 	},
 
+	onDiscussionNote (rec) {
+		this.incomingCreatedChange({}, rec, {});
+
+		rec.getInterfaceInstance()
+			.then((note) => {
+				Events.emit(Events.NOTE_CREATED, note);
+			});
+	},
+
 	__saveNote: function (applicableRange, body, title, ContainerId, shareWith, selectedText, style/*, callback*/) {
 		var me = this,
 			noteRecord = Note.create({
