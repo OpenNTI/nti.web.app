@@ -1,8 +1,11 @@
 const Ext = require('@nti/extjs');
+const {Viewer} = require('@nti/web-discussions');
 
 const WindowsStateStore = require('legacy/app/windows/StateStore');
 const ContainerContext = require('legacy/app/context/ContainerContext');
 const Note = require('legacy/model/Note');
+
+require('legacy/overrides/ReactHarness');
 
 require('legacy/app/windows/components/Header');
 require('legacy/app/windows/components/Loading');
@@ -33,7 +36,26 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		}
 	},
 
-	loadNote: function (record) {
+	async loadNote (record) {
+		const note = await record.getInterfaceInstance();
+
+		if (this.loadingEl) {
+			this.remove(this.loadingEl, true);
+			delete this.loadingEl;
+		}
+
+		this.headerCmp.showPathFor(record, null, 3);
+
+		this.add({
+			baseroute: global?.location?.pathname.replace(/\/?$/, ''),
+			// addHistory: true,
+			xtype: 'react',
+			component: Viewer,
+			discussion: note
+		});
+	},
+
+	xloadNote: function (record) {
 		var context = ContainerContext.create({
 			container: record.get('ContainerId'),
 			range: record.get('applicableRange'),
@@ -82,62 +104,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		if (!panel) { return true; }
 
 		return panel.allowNavigation();
-	},
-
-	showNewReply () {
-		const notePanel = this.down('note-main-view');
-
-		if (!notePanel) {
-			this.on({
-				single: true,
-				'note-panel-set': () => this.showNewReply()
-			});
-		} else {
-			notePanel.activateReplyEditor();
-		}
-	},
-
-	showEditMode () {
-		const notePanel = this.down('note-main-view');
-
-		if (!notePanel) {
-			this.on({
-				single: true,
-				'note-panel-set': () => this.showEditMode()
-			});
-		} else {
-			notePanel.onEdit();
-		}
-	},
-
-	getReplyCmp (replyId) {
-		const notePanel = this.down('note-main-view');
-
-		if (notePanel && notePanel.repliesHaveBeenAdded) {
-			return Promise.resolve(notePanel.getReplyCmp(replyId));
-		}
-
-		if (notePanel) {
-			return new Promise((fulfill, reject) => {
-				notePanel.on({
-					single: true,
-					'replies-added': () => {
-						this.getReplyCmp(replyId)
-							.then(fulfill, reject);
-					}
-				});
-			});
-		}
-
-		return new Promise((fulfill, reject) => {
-			this.on({
-				single: true,
-				'note-panel-set': () => {
-					this.getReplyCmp(replyId)
-						.then(fulfill, reject);
-				}
-			});
-		});
 	}
 }, function () {
 	WindowsStateStore.register(Note.mimeType, this);
