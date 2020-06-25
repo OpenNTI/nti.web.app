@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 		const tabPanel = this.getTabPanel();
 		const location = this.reader.getLocation();
-		const lineInfo = this.data.box.activeLineInfo;
+		const lineInfo = this.data.box.activeLineInfo || {};
 		const targetEl = this.reader.getEl().up('.x-container-reader.reader-container');
 
 		if (!this.allowOpenEditor() || !tabPanel) {
@@ -222,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 			location,
 			lineInfo,
-			rangeInfo: this.rangeForLineInfo(lineInfo, lineInfo.style || 'suppressed'),
+			rangeInfo: this.rangeForLineInfo(lineInfo, lineInfo?.style || 'suppressed'),
 
 			afterSave: () => closeEditor(),
 			onCancel: () => closeEditor()
