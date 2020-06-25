@@ -132,6 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 				});
 
 				pageInfo.hideControls = true;
+				pageInfo.isMock = true;
 
 				return pageInfo;
 			});
@@ -199,6 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 		pageInfo.hideControls = true;
 		pageInfo.doNotSendAnalytics = true;
+		pageInfo.isMock = true;
 
 		return Promise.resolve(pageInfo);
 	},

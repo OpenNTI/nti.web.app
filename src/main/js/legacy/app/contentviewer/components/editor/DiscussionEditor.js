@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Editor} = require('@nti/web-discussions');
+const {getService} = require('@nti/web-client');
 
 const Anchors = require('legacy/util/Anchors');
 const ContextStore = require('legacy/app/context/StateStore');
@@ -34,7 +35,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	async setupEditor () {
 		const {location, lineInfo, rangeInfo} = this;
 
-		const page = await location.pageInfo.getInterfaceInstance();
+		const page = await this.getPage();
+
+		if (!page) {
+			alert('Unable to create a note');
+			this.onCancel?.();
+			return;
+		}
+
 		const bundle = await location.currentBundle.getInterfaceInstance();
 		const pagesURL = this.getPagesURL();
 
@@ -48,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				pagesURL,
 				applicableRange: this.getApplicableRange(),
 				ContainerId: rangeInfo.container || page.getID(),
-				style: lineInfo.style || 'suppressed',
+				style: lineInfo?.style || 'suppressed',
 				selectedText: rangeInfo?.range ? rangeInfo?.range.toString() : ''
 			},
 			afterSave: (newNote) => {
@@ -57,6 +65,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			},
 			onCancel: () => this.onCancel?.()
 		});
+	},
+
+	async getPage () {
+		const page = this.location?.pageInfo;
+
+		if (!page) { return null; }
+		if (!page.isMock) { return page.getInterfaceInstance(); }
+
+		try {
+			const service = await getService();
+
+			return service.getObject(page.get('NTIID'));
+		} catch (e) {
+			return null;
+		}
 	},
 
 	getPagesURL () {
