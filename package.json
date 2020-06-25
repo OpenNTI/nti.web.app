@@ -37,7 +37,7 @@
     "@nti/lib-commons": "^2.34.0",
     "@nti/lib-dispatcher": "^1.0.0",
     "@nti/lib-dom": "^1.2.3",
-    "@nti/lib-interfaces": "^1.127.0",
+    "@nti/lib-interfaces": "^1.134.1",
     "@nti/lib-locale": "^1.7.0",
     "@nti/lib-ntiids": "^1.0.2",
     "@nti/lib-store": "^1.15.0",
