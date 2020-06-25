@@ -1,6 +1,9 @@
 const Ext = require('@nti/extjs');
 const {Theme} = require('@nti/web-commons');
 const Session = require('@nti/web-session');
+
+const DiscussionOverrides = require('nti-web-discussion-overrides');
+
 Ext.Loader.setConfig({enabled: false});
 
 const {getURL, validateConfig, loadScript} = require('./util/Globals');
@@ -19,6 +22,8 @@ window.URL = window.URL || window.webkitURL;
 window.Blob = window.Blob || window.webkitBlob;
 
 Ext.USE_NATIVE_JSON = true;
+
+DiscussionOverrides.setupOverrides();
 
 const applyBranding = (siteBrand = {}) => {
 	Theme.setGlobalThemeOverrides(Theme.siteBrandToTheme(siteBrand));
