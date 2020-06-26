@@ -4,9 +4,9 @@ import classnames from 'classnames/bind';
 import {TranscriptedVideo} from '@nti/web-content';
 import {Router} from '@nti/web-routing';
 import {Layouts} from '@nti/web-commons';
+import {getViewportWidth} from '@nti/lib-dom';
 
-import Editor from 'legacy/editor/Editor';
-import MediaViewerStore from 'legacy/app/mediaviewer/StateStore';
+import DiscussionEditor from 'legacy/app/contentviewer/components/editor/DiscussionEditor';
 import UserDataActions from 'legacy/app/userdata/Actions';
 import SharingUtils from 'legacy/util/Sharing';
 import DomUtils from 'legacy/util/Dom';
@@ -58,51 +58,35 @@ class NTIWebLessonItemsVideo extends React.Component {
 		}
 	}
 
-
 	showEditor = (renderTo) => {
-		const {course} = this.props;
+		const {course, location} = this.props;
 		const {newNote} = this.state;
+
 		const courseModel = BaseModel.interfaceToModel(course);
+		const page = location?.item ? BaseModel.interfaceToModel(location.item) : null;
+
+		const clear = () => this.setState({newNote: null, alignTo: null});
 
 		if (!this.editor) {
-			this.editor = Editor.create({
+			this.editor = DiscussionEditor.create({
 				renderTo: renderTo,
-				enableShareControls: true,
-				enableTitle: true,
-				enableFileUpload: true,
-				width: 325,
 				htmlCls: 'inline-note-editor',
-				listeners: {
-					'no-title-content': () => true,
-					save: (...args) => this.saveEditor(...args),
-					'canceling-editor': () => {
-						this.setState({newNote: null, alignTo: null});
-					}
-				}
+				location: {
+					currentBundle: courseModel,
+					pageInfo: page
+				},
+				applicableRange: newNote.applicableRange,
+				selectedText: newNote.selectedText,
+
+				afterSave: clear,
+				onCancel: clear
 			}).addCls('in-gutter');
 		}
 
-		this.mediaStore = this.mediaStore || MediaViewerStore.getInstance();
-
-		this.mediaStore.getSharingPreferences(newNote.ContainerId, courseModel)
-			.then((prefs) => {
-				const sharing = prefs && prefs.sharing;
-				const sharedWith = sharing && sharing.sharedWith;
-
-				return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), courseModel);
-			})
-			.then((shareInfo) => {
-				if (this.editor) {
-					this.editor.setSharedWith(shareInfo);
-				}
-			});
-
 		this.realignEditor();
 
-		this.editor.activate();
 		this.editor.show();
 		this.editor.toFront();
-		this.editor.focus();
 	}
 
 
@@ -122,6 +106,9 @@ class NTIWebLessonItemsVideo extends React.Component {
 
 		const offsets = this.node.getBoundingClientRect();
 		const {alignTo, newNote} = this.state;
+		const editorWidth = this?.editor?.getWidth() ?? 400;
+		const viewWidth = getViewportWidth();
+
 		let left = alignTo.left;
 		let top = alignTo.top;
 
@@ -129,6 +116,10 @@ class NTIWebLessonItemsVideo extends React.Component {
 			top = newNote.getYPositionInTranscript();
 		} catch (e) {
 			//swallow
+		}
+
+		if (left + editorWidth + 10 > viewWidth) {
+			left = viewWidth - 20 - editorWidth;
 		}
 
 		const mark = this.editor.renderTo;

@@ -28,6 +28,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.setupEditor();
 	},
 
+	afterRender () {
+		this.callParent(arguments);
+	
+		if (this.htmlCls) {
+			const html = document.documentElement;
+			html.classList.add(this.htmlCls);
+
+			this.on('destroy', () => {
+				html.classList.remove(this.htmlCls);
+			});
+		}
+	},
+
 	isActive () {
 		return !this.isDestroyed();
 	},
@@ -56,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			extraData: {
 				pagesURL,
 				applicableRange: this.getApplicableRange(),
-				ContainerId: rangeInfo.container || page.getID(),
+				ContainerId: rangeInfo?.container || page.getID(),
 				style: lineInfo?.style || 'suppressed',
 				selectedText: rangeInfo?.range ? rangeInfo?.range.toString() : ''
 			},
@@ -94,6 +107,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 	getApplicableRange () {
+		if (this.applicableRange) { return this.applicableRange; }
+
 		const range = this?.rangeInfo?.range;
 
 		const doc = range ? range.commonAncestorContainer.ownerDocument : null;
