@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {Editor} = require('@nti/web-discussions');
+const {Create} = require('@nti/web-discussions');
 const {getService} = require('@nti/web-client');
 
 const Anchors = require('legacy/util/Anchors');
@@ -49,8 +49,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 		this.add({
 			xtype: 'react',
-			component: Editor,
+			component: Create,
 			discussion: null,
+			small: true,
 			container: [bundle, page],
 			extraData: {
 				pagesURL,
@@ -63,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				this.UserData.onDiscussionNote(BaseModel.interfaceToModel(newNote));
 				this.afterSave?.();
 			},
-			onCancel: () => this.onCancel?.()
+			onClose: () => this.onCancel?.()
 		});
 	},
 

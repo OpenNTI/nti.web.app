@@ -21,12 +21,6 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.headerCmp = this.add({
-			xtype: 'window-header',
-			doClose: this.doClose.bind(this),
-			doNavigate: this.doNavigate.bind(this)
-		});
-
 		this.loadingEl = this.add({xtype: 'window-loading'});
 
 		if (this.record.get('inReplyTo')) {
@@ -44,14 +38,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 			delete this.loadingEl;
 		}
 
-		this.headerCmp.showPathFor(record, null, 3);
-
 		this.add({
 			baseroute: global?.location?.pathname.replace(/\/?$/, ''),
 			// addHistory: true,
 			xtype: 'react',
 			component: Viewer,
-			discussion: note
+			discussion: note,
+			dialog: true,
+			onClose: this.doClose.bind(this)
 		});
 	},
 
