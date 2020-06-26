@@ -302,8 +302,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 			...rangeProps,
 
-			afterSave: () => this.deactivateEditor,
-			onCancel: () => this.deactivateEditor
+			afterSave: () => this.deactivateEditor(),
+			onCancel: () => this.deactivateEditor()
 		});
 	},
 
