@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 
 const LocationMeta = require('legacy/cache/LocationMeta');
+const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 const ContentUtils = require('legacy/util/Content');
 const DomUtils = require('legacy/util/Dom');
 const Globals = require('legacy/util/Globals');
@@ -11,7 +12,7 @@ const UserDataActions = require('legacy/app/userdata/Actions');
 const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
 const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
 
-
+require('legacy/app/contentviewer/components/editor/DiscussionEditor');
 require('legacy/util/Line');
 require('legacy/app/whiteboard/Utils');
 require('legacy/editor/Editor');
@@ -71,45 +72,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		this.data = {};
 
-		const html = document.documentElement;
-		const htmlCls = 'inline-note-editor';
-
-		this.editor = Ext.widget('nti-editor', {
-			ownerCt: this.reader,
-			floating: true,
-			renderTo: Ext.getBody(),
-			enableShareControls: true,
-			enableTitle: true,
-			enableFileUpload: true,
-			width: 325,//match the content note window's width...a bit hackish, but this will get it from growing wider for now.
-			listeners: {
-				'deactivated-editor': function () {
-					me.fireEvent('editorDeactivated');
-					me.reader.suspendMoveEvents = false;
-					html.classList.remove(htmlCls);
-				},
-				'activated-editor': function () {
-					me.fireEvent('editorActivated');
-					me.reader.suspendMoveEvents = true;
-					html.classList.add(htmlCls);
-				},
-				'no-title-content': function () {return true;},//require title if notepad is a feature
-				grew: function () {
-					let h = this.getHeight();
-					let b = h + this.getY();
-					let v = Ext.Element.getViewportHeight();
-					if (b > v) {
-						this.setY(v - h);
-					}
-				}
-			}
-		}).addCls('in-gutter');
-
-		me.editorEl = me.editor.el;
-		me.editor.setWidth(325);
-		me.mon(me.editor, 'save', 'editorSaved', me);
-		me.mon(me.editorEl.down('.cancel'), { scope: me, click: me.editorCanceled });
-		me.editorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		me.reader.relayEvents(me, ['save-new-note', 'save-new-series-note']);
 		me.reader.fireEvent('uses-page-preferences', this);
@@ -279,7 +241,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	editorCanceled: function () {
-		if (this.editor.closeCallback) {
+		if (this.editor?.closeCallback) {
 			Ext.callback(this.editor.closeCallback);
 		}
 	},
@@ -304,26 +266,55 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return this.readerHeight + 'px';
 	},
 
-	activateEditor: function (info, cb) {
+	activateEditor: function (info = {}, cb) {
 		if (this.editor) {
-			this.data = info; //Ext.apply(this.data || {}, cueInfo);
-			this.editor.reset();
-
-			if (Ext.isFunction(cb)) {
-				this.editor.closeCallback = cb;
-			}
-
-			this.setDefaultSharingFor((info || {}).containerId);
-			this.editor.activate();
+			this.editor.destroy();
 		}
+
+		const data = info || {};
+		const range = info?.range;
+		const rangeProps = {
+			rangeInfo: info
+		};
+
+		if (!data.isDomRange) {
+			const doc = range ? range.commonAncestorContainer.ownerDocument : null;
+			const rangeDescription = AnchorResolver.createRangeDescriptionFromRange(range, doc, data);
+
+			rangeProps.applicableRange = rangeDescription.description;
+		}
+
+
+		this.editor = Ext.widget('reading-discussion-editor', {
+			ownerCmp: this,
+			floating: true,
+			renderTo: Ext.getBody(),
+
+			htmlCls: 'inline-note-editor',
+
+			location: {
+				currentBundle: this.reader.currentBundle,
+				pageInfo: {
+					isMock: true,
+					get: (...args) => this.reader.video.get(...args)
+				}
+			},
+
+			...rangeProps,
+
+			afterSave: () => this.deactivateEditor,
+			onCancel: () => this.deactivateEditor
+		});
 	},
 
 	deactivateEditor: function () {
-		if (this.editor.closeCallback) {
+		if (this.editor?.closeCallback) {
 			Ext.callback(this.editor.closeCallback);
 			delete this.editor.closeCallback;
 		}
-		this.editor.deactivate();
+
+		this.editor.destroy();
+		delete this.editor;
 	},
 
 	showEditorByEl: function (cueInfo, el, cb) {
