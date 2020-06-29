@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 
 		location = Globals.CONTENT_ROOT;
 
-		url = cachedHref || [rootUrl, location, '/', term].join('');
+		url = cachedHref || [rootUrl, encodeURIComponent(location), '/', encodeURIComponent(term)].join('');
 
 		accepts = (accepts || []).map(function (mime) {
 			return 'application/vnd.nextthought.' + mime;
