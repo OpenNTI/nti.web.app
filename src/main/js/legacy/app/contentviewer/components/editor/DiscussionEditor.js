@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 const {Create} = require('@nti/web-discussions');
 const {getService} = require('@nti/web-client');
+const {getHistory} = require('@nti/web-routing');
 
 const Anchors = require('legacy/util/Anchors');
 const ContextStore = require('legacy/app/context/StateStore');
@@ -66,6 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			discussion: null,
 			small: true,
 			container: [bundle, page],
+			addHistory: true,
 			extraData: {
 				pagesURL,
 				applicableRange: this.getApplicableRange(),
@@ -77,7 +79,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				this.UserData.onDiscussionNote(BaseModel.interfaceToModel(newNote));
 				this.afterSave?.();
 			},
-			onClose: () => this.onCancel?.()
+			onClose: async () => {
+				try {
+					await getHistory().awaitUserConfirmation();
+					this.onCancel?.();
+				} catch (e) {
+					//swallow
+				}
+			}
 		});
 	},
 
