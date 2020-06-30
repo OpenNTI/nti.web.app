@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	alias: 'widget.reading-discussion-editor',
 
 	cls: 'nti-reading-discussion-editor',
-	
+
 	layout: 'none',
 	items: [],
 
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	afterRender () {
 		this.callParent(arguments);
-	
+
 		if (this.htmlCls) {
 			const html = document.documentElement;
 			html.classList.add(this.htmlCls);
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 	isActive () {
-		return !this.isDestroyed();
+		return !this.isDestroyed;
 	},
 
 	async setupEditor () {

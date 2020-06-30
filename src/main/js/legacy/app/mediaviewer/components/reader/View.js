@@ -503,7 +503,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	allowNavigation: function () {
-		if (this.noteOverlay && this.noteOverlay.editor.isActive()) {
+		if (this?.noteOverlay?.editor?.isActive()) {
 			return this.noteOverlay.allowNavigation();
 		} else {
 			return Promise.resolve();
