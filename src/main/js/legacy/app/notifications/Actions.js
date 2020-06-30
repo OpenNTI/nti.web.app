@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 					return;
 				}
 
-				if (change.get('ChangeType') !== 'Modified') {
+				if (change.get('ChangeType') !== 'Modified' || change.get('IsNewlyMentioned')) {
 					me.NotificationsStore.addRecord(change);
 				}
 			}
