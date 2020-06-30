@@ -1,0 +1,5 @@
+.discussion-context-override {
+	& :global(.note.main-view) {
+		padding-left: 0;
+	}
+}
