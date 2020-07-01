@@ -244,8 +244,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 		const editorWidth = this.editor.getWidth();
 
-		if (left + editorWidth >= viewWidth - 20) {
-			left = viewWidth - 20 - editorWidth;
+		if (left + editorWidth >= viewWidth - 70) {
+			left = viewWidth - 70 - editorWidth;
 		}
 
 		this.editor.el.setStyle({
