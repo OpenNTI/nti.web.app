@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Viewer} = require('@nti/web-discussions');
+const {UserDataThreader} = require('@nti/lib-interfaces');
 
 const WindowsStateStore = require('legacy/app/windows/StateStore');
 const ContainerContext = require('legacy/app/context/ContainerContext');
@@ -10,6 +11,32 @@ require('legacy/overrides/ReactHarness');
 require('legacy/app/windows/components/Header');
 require('legacy/app/windows/components/Loading');
 require('./Main');
+
+function getReplies (record) {
+	return (record?.children || [])
+		.reduce((acc, child) => {
+			const replies = getReplies(child);
+
+			if (child.placeholder) { return [...acc, ...replies]; }
+
+			return [...acc, child, ...replies];
+		}, []);
+}
+
+async function getRootNote (record) {
+	if (!record.placeholder) { return record.getInterfaceInstance(); }
+
+	const replies = getReplies(record);
+
+	if (replies.length === 0) {
+		throw new Error('No note thread');
+	}
+
+	const interfaces = await Promise.all(replies.map(x => x.getInterfaceInstance()));
+	const thread = UserDataThreader.thread(interfaces);
+
+	return thread[0];
+}
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Window', {
@@ -31,22 +58,27 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 	},
 
 	async loadNote (record) {
-		const note = await record.getInterfaceInstance();
+		try {
+			const note = await getRootNote(record);
 
-		if (this.loadingEl) {
-			this.remove(this.loadingEl, true);
-			delete this.loadingEl;
+			if (this.loadingEl) {
+				this.remove(this.loadingEl, true);
+				delete this.loadingEl;
+			}
+
+			this.add({
+				baseroute: global?.location?.pathname.replace(/\/?$/, ''),
+				// addHistory: true,
+				xtype: 'react',
+				component: Viewer,
+				discussion: note,
+				dialog: true,
+				onClose: this.doClose.bind(this)
+			});
+		} catch (e) {
+			alert('Unable to open note.');
+			this.doClose();
 		}
-
-		this.add({
-			baseroute: global?.location?.pathname.replace(/\/?$/, ''),
-			// addHistory: true,
-			xtype: 'react',
-			component: Viewer,
-			discussion: note,
-			dialog: true,
-			onClose: this.doClose.bind(this)
-		});
 	},
 
 	xloadNote: function (record) {
