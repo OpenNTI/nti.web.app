@@ -34,6 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		this.mon(this.reader, {
 			scope: this,
 			destroy: 'destroy',
+			'beforedestroy': 'onBeforeDestroy',
 			afterRender: 'insertOverlay',
 			'scroll':	'onScroll',
 			'content-updated': 'onContentUpdate',
@@ -131,6 +132,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 	getAnnotationOffsets: function () {
 		return this.reader.getAnnotationOffsets();
+	},
+
+	onBeforeDestroy () {
+		this.editor?.destroy?.();
+		delete this.editor;
 	},
 
 	onNavigation: function () {
@@ -411,6 +417,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 
 	saveNewNote: function (editor, r, v) {
+
 		var me = this,
 			note = v.body,
 			title = v.title,
