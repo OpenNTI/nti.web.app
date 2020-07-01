@@ -41,7 +41,9 @@ export default function WebappDiscussion ({item}) {
 	return (
 		<div className={cx('note-window', 'discussion-context-override')}>
 			<div className="note main-view">
-				<Layouts.Uncontrolled className="context" onMount={onMount} onUnmount={onUnmount} />
+				<div className="context">
+					<Layouts.Uncontrolled as="span" className="text" onMount={onMount} onUnmount={onUnmount} />
+				</div>
 			</div>
 		</div>
 	);
