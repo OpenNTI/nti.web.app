@@ -652,7 +652,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		//the enrollment instance shouldn't change so we can cache this logic
 		if (!me.__findWrapper) {
-			me.__findWrapper = new Promise((fulfill) => {
+			me.__findWrapper = new Promise((fulfill, reject) => {
 				const enrollment = this.getEnrollment();
 
 				if (enrollment) {
@@ -661,7 +661,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					Service.request(me.getLink('UserCoursePreferredAccess'))
 						.then((resp) => {
 							fulfill(lazy.ParseUtils.parseItems(JSON.parse(resp))[0]);
-						});
+						}).catch(reject);
 				} else {
 					me.stores.forEach(function (obj) {
 						if (obj.isModel) {
