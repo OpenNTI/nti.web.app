@@ -125,7 +125,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		const found = store.findRecord('ID', note.getID());
 
 		if (found) {
-			store.remove(BaseModel.interfaceToModel(note));
+			found?.stores?.forEach(s => s.remove(found));
 		}
 	}
 
