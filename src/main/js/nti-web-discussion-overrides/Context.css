@@ -2,4 +2,8 @@
 	& :global(.note.main-view) {
 		padding-left: 0;
 	}
+
+	&:global(.note-window .note.main-view .context img) {
+		height: auto !important;
+	}
 }
