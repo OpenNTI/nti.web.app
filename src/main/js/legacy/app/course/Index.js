@@ -779,7 +779,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			route = `${route}/${encodeForURI(topic.getId())}`;
 		}
 
-		if (comment) {
+		if (comment && comment.isComment) {
 			route = `${route}/#${encodeForURI(comment.getId())}`;
 		}
 
