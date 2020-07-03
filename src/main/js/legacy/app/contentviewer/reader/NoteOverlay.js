@@ -225,6 +225,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			ownerCmp: this.reader,
 			floating: true,
 			renderTo: targetEl,
+			htmlCls: 'inline-note-editor',
 
 			location,
 			lineInfo,
@@ -241,7 +242,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		const viewWidth = Ext.Element.getViewportWidth();
 
 		//20 px left of the right side of the reader
-		let left = readerRect.right - 20;
+		let left = readerRect.right - 40;
+
+		this.editor.setBodyScroll(annotationOffsets.isBodyScroll);
 
 		if (!annotationOffsets.isBodyScroll) {
 			top += annotationOffsets.scrollTop - annotationOffsets.viewTop;

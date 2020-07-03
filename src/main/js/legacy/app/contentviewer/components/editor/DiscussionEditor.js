@@ -10,6 +10,8 @@ const BaseModel = require('legacy/model/Base');
 
 require('legacy/overrides/ReactHarness');
 
+const BodyScrollClass = 'nti-reading-discussion-editor-body-scroll';
+
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.editor.DiscussionEditor', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.reading-discussion-editor',
@@ -39,6 +41,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			this.on('destroy', () => {
 				html.classList.remove(this.htmlCls);
 			});
+		}
+	},
+
+	setBodyScroll (isBodyScroll) {
+		if (isBodyScroll) {
+			this.addCls(BodyScrollClass);
+		} else {
+			this.removeCls(BodyScrollClass);
 		}
 	},
 
