@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			left: `${left}px`
 		});
 
-		this.editor.on('destroy', 'unmask', tabPanel);
+		// this.editor.on('destroy', 'unmask', tabPanel);
 		this.editor.mon(tabPanel, 'resize', 'syncEditorWidth', this);
 		this.syncEditorWidth(tabPanel, tabPanel.getWidth());
 	},
