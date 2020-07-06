@@ -75,7 +75,11 @@ function getRouteFor (obj, context) {
 	}
 
 	if (obj.MimeType === COMMUNITY_MIME_TYPE) {
-		return `/app/community/${encodeURIComponent(obj.Username)}`;
+		if (obj.isCourseCommunity) {
+			return `/app/course/${encodeForURI(obj.courseId)}/community`;
+		} else {
+			return `/app/community/${encodeURIComponent(obj.Username)}`;
+		}
 	}
 }
 
