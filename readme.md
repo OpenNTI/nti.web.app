@@ -1,6 +1,7 @@
-
-
 ### Requirements
+
+![Build Status](https://github.com/NextThought/nti.web.app/workflows/Project%20Health/badge.svg)
+
 
 You'll need to have the following items installed before continuing.
 
