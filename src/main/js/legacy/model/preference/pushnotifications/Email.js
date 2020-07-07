@@ -8,7 +8,8 @@ module.exports = exports = Ext.define('NextThought.model.preference.pushnotifica
 
 	fields: [
 		{name: 'email_a_summary_of_interesting_changes', type: 'bool'},
-		{name: 'immediate_threadable_reply', type: 'bool'}
+		{name: 'immediate_threadable_reply', type: 'bool'},
+		{name: 'notify_on_mention', type: 'bool'}
 	],
 
 

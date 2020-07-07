@@ -36,6 +36,16 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			{
 				tag: 'span',
 				cls: 'not-ready nti-checkbox email',
+				html: 'Send me email when I am offline and someone @mentions me.',
+				tabIndex: 0,
+				role: 'button',
+				'aria-role': 'button',
+				'data-preference-path': 'PushNotifications/Email',
+				'data-preference-key': 'notify_on_mention'
+			},
+			{
+				tag: 'span',
+				cls: 'not-ready nti-checkbox email',
 				html: 'Send me email notifications when I am replied to.',
 				tabIndex: 0,
 				role: 'button',
