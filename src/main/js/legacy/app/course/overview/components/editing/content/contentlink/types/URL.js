@@ -132,7 +132,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	}),
 
 	async applyMetadata (data) {
-		const { images: [image], title, creator, contentLocation: uri, description } = data;
+		const { images = [], title, creator, contentLocation, sourceLocation, description } = data;
+		const [image] = images;
+		const uri = contentLocation || sourceLocation;
 		const form = this.getForm();
 		form.setValue('label', title);
 		form.setValue('byline', creator || new URL(uri).host);
