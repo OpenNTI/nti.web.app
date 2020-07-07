@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			extraData: {
 				pagesURL,
 				applicableRange: this.getApplicableRange(),
-				ContainerId: rangeInfo?.container || page.getID(),
+				ContainerId: rangeInfo?.container || rangeInfo?.containerId || page.getID(),
 				style: lineInfo?.style || 'suppressed',
 				selectedText: rangeInfo?.range ? rangeInfo?.range.toString() : ''
 			},
