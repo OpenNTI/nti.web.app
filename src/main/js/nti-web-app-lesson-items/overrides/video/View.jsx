@@ -76,7 +76,10 @@ class NTIWebLessonItemsVideo extends React.Component {
 					pageInfo: page
 				},
 				applicableRange: newNote.applicableRange,
-				selectedText: newNote.selectedText,
+				rangeInfo: {
+					containerId: newNote.ContainerId,
+					toString: () => newNote.selectedText
+				},
 
 				afterSave: clear,
 				onCancel: clear
