@@ -5,9 +5,7 @@ import {Loading, Layouts, EmptyState} from '@nti/web-commons';
 import {Notes} from '@nti/web-discussions';
 import {LinkTo, Router, Prompt as RoutePrompt} from '@nti/web-routing';
 import {scoped} from '@nti/lib-locale';
-import {Events, Hooks} from '@nti/web-session';
 
-import BaseModel from 'legacy/model/Base';
 import ContentViewer from 'legacy/app/contentviewer/Index';
 import PageInfo from 'legacy/model/PageInfo';
 import RelatedWorkRef from 'legacy/model/RelatedWork';
