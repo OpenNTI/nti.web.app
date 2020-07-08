@@ -384,7 +384,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			var objId = obj.getId(),
 				hasWindow = me.Router.WindowActions.hasWindow(obj);
 
-			objId = encodeForURI(objId);
+			objId = isNTIID(objId) ? encodeForURI(objId) : objId;
 
 			if (hasWindow && !noWindow) {
 				path = Globals.trimRoute(path) + '/object/' + objId;
