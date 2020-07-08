@@ -71,7 +71,6 @@ export default
 	'setNotes',
 	'notes'
 ])
-@Hooks.onEvent(Events.NOTE_DELETED, 'onNoteDeleted')
 class NTIWebAppLessonItemsReading extends React.Component {
 	static deriveBindingFromProps (props) {
 		const {location = {}} = props;
@@ -116,18 +115,6 @@ class NTIWebAppLessonItemsReading extends React.Component {
 	}
 
 	state = {}
-
-	onNoteDeleted (note) {
-		const store = this.contentViewer && this.contentViewer.reader && this.contentViewer.reader.flatPageStore;
-
-		if (!store) { return; }
-
-		const found = store.findRecord('ID', note.getID());
-
-		if (found) {
-			found?.stores?.forEach(s => s.remove(found));
-		}
-	}
 
 
 	componentDidUpdate (prevProps) {

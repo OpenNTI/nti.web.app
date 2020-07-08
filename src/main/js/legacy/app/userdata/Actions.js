@@ -22,6 +22,7 @@ const StorePageItem = require('legacy/store/PageItem');
 const Note = require('legacy/model/Note');
 const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDescription');
 const FilePicker = require('legacy/common/form/fields/FilePicker');
+const BaseModel = require('legacy/model/Base');
 
 const UserdataStateStore = require('./StateStore');
 
@@ -58,6 +59,22 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		});
 
 		this.UserDataStore.setLoaded();
+
+	
+		const onCreated = (item) => {
+			const record = BaseModel.interfaceToModel(item);
+
+			this.incomingCreatedChange({}, record);
+		};
+
+		const onDeleted = (item) => {
+			const record = BaseModel.interfaceToModel(item);
+
+			this.incomingDeletedChange({}, record);
+		};
+
+		Events.addListener(Events.NOTE_CREATED, onCreated);
+		Events.addListener(Events.NOTE_DELETED, onDeleted);
 	},
 
 	changeActionMap: {
@@ -723,8 +740,6 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	},
 
 	onDiscussionNote (rec) {
-		this.incomingCreatedChange({}, rec, {});
-
 		rec.getInterfaceInstance()
 			.then((note) => {
 				Events.emit(Events.NOTE_CREATED, note);
