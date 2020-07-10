@@ -42,7 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.course.community.Index', 
 		const course = await this.activeBundle.getInterfaceInstance();
 		const baseroute = this.getBaseRoute();
 
-		if (!course || !course.hasCommunity) {
+		if (!course || !course.hasCommunity()) {
+			alert('Unable to access course community.');
 			throw new Error('Course does not have a community');
 		}
 
