@@ -38,6 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 	},
 
 	onRouteDeactivate () {
+		clearTimeout(this.deactivateTimeout);
 		this.deactivateTimeout = setTimeout(() => {
 			if (this.communityCmp) {
 				this.communityCmp.destroy();
