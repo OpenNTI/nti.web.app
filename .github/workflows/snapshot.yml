@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-    paths-ignore:
-      - '*.yml'
   repository_dispatch:
     types: [snapshot]
 
@@ -29,6 +27,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "14.x"
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: configure npm
         env:
