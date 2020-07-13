@@ -133,6 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	showEditor: function () {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
+		this.headerCmp = this.addHeaderCmp();
 		this.formCmp = this.addFormCmp();
 
 		if (this.record) {
@@ -222,6 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	addPreview: function () {},
 	addParentSelection: function (record, parentRecord, rootRecord, onChange) {},
 
+	addHeaderCmp() {},
 
 	addFormCmp: function () {
 		var values = this.getDefaultValues();

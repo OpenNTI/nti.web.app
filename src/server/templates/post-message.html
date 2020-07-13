@@ -5,11 +5,12 @@
 </head>
 <body>
 	<script type="text/javascript">
-		var data = {DATA};
+		var data = <[cfg:DATA]>;
 
 		if (window.opener) {
 			window.opener.postMessage({
-				data: data
+				data: data,
+				hash: location.hash
 			}, '*');
 			window.close();
 		}

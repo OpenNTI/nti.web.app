@@ -4,6 +4,7 @@ const TypeSwitcher = require('./TypeSwitcher');
 const TypesDoc = require('./types/Doc');
 const TypesReading = require('./types/Reading');
 const TypesURL = require('./types/URL');
+const TypesGoogleDrive = require('./types/GoogleDrive');
 
 require('../../EditorGroup');
 
@@ -17,7 +18,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return [
 				TypesDoc,
 				TypesReading,
-				TypesURL
+				TypesURL,
+				TypesGoogleDrive
 			];
 		},
 
