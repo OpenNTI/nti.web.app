@@ -8,9 +8,9 @@ WebappWhiteboardEditor.propTypes = {
 	data: PropTypes.any,
 	setData: PropTypes.func,
 
-	close: PropTypes.func,
+	onClose: PropTypes.func,
 };
-export default function WebappWhiteboardEditor ({data, setData, close}) {
+export default function WebappWhiteboardEditor ({data, setData, onClose}) {
 	const windowRef = React.useRef(null);
 
 	const onUnmount = () => {
@@ -30,7 +30,7 @@ export default function WebappWhiteboardEditor ({data, setData, close}) {
 
 		wbWin.on({
 			save: (win, wb) => setData?.(wb.getValue()),
-			cancel: () => close?.()
+			cancel: () => onClose?.()
 		});
 
 		wbWin.show();
