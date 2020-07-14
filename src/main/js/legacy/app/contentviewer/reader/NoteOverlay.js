@@ -8,8 +8,8 @@ const SharingUtils = require('legacy/util/Sharing');
 
 const WBUtils = require('../../whiteboard/Utils');
 const UserdataActions = require('../../userdata/Actions');
+const DiscussionEditor = require('../components/editor/DiscussionEditor');
 
-require('../components/editor/DiscussionEditor');
 require('legacy/util/Line');
 require('legacy/editor/Editor');
 
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 	},
 
 
-	openEditor (top) {
+	openEditor (top, initialContent) {
 		if (this.disabled) { return Promise.reject(); }
 
 		const tabPanel = this.getTabPanel();
@@ -226,6 +226,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			floating: true,
 			renderTo: targetEl,
 			htmlCls: 'inline-note-editor',
+
+			initialContent,
 
 			location,
 			lineInfo,
@@ -265,6 +267,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		// this.editor.on('destroy', 'unmask', tabPanel);
 		this.editor.mon(tabPanel, 'resize', 'syncEditorWidth', this);
 		this.syncEditorWidth(tabPanel, tabPanel.getWidth());
+
+		return Promise.resolve();
 	},
 
 	xopenEditor: function (top) {
@@ -474,10 +478,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		});
 	},
 
-	noteHere: function (range, rect, style, top) {
+	noteHere: function (range, rect, style, top, initialState) {
 		this.positionInputBox(Ext.apply(this.lineInfoForRangeAndRect(range, rect), {style: style}));
 
-		return this.openEditor(top)
+		return this.openEditor(top, initialState)
 			.catch(function () {
 				alert(getString('NextThought.view.content.reader.NoteOverlay.inprogress'));
 				return Promise.reject();
@@ -486,7 +490,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 	contentDefinedAnnotationAction: function (dom, action) {
 		var d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
-			me = this,
 			img = d && d.is('img') ? d.dom : null,
 			doc = dom ? dom.ownerDocument : null,
 			readerRect = this.reader.getAnnotationOffsets().rect,
@@ -499,15 +502,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 			top = rect ? rect.top + readerRect.top : 0;
 
-			this.noteHere(range, rect, null, top)
-				.then(function () {
-					WBUtils.createFromImage(img, function (data) {
-						me.editor.reset();
-						me.editor.setValue('');
-						me.editor.addWhiteboard(data);
-						me.editor.focus(true);
-					});
-				});
+			DiscussionEditor.getInitialStateForImage(img)
+				.then((initialState) => this.noteHere(range, rect, null, top, initialState));
+
+			// this.noteHere(range, rect, null, top)
+			// 	.then(function () {
+			// 		WBUtils.createFromImage(img, function (data) {
+			// 			me.editor.reset();
+			// 			me.editor.setValue('');
+			// 			me.editor.addWhiteboard(data);
+			// 			me.editor.focus(true);
+			// 		});
+			// 	});
 		}
 	},
 
