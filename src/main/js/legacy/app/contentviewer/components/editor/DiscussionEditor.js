@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Editor} = require('@nti/web-modeled-content');
 const {Create} = require('@nti/web-discussions');
 const {getService} = require('@nti/web-client');
 const {getHistory} = require('@nti/web-routing');
@@ -20,6 +21,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	layout: 'none',
 	items: [],
+
+	statics: {
+		getInitialStateForImage (img) {
+			return Editor.getContentForImage(img);
+		}
+	},
 
 
 	initComponent () {
@@ -78,6 +85,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			small: true,
 			container: [bundle, page],
 			addHistory: true,
+
+			initialContent: this.initialContent,
 			extraData: {
 				pagesURL,
 				applicableRange: this.getApplicableRange(),
