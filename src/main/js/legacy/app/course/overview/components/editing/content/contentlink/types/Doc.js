@@ -12,6 +12,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-contentlink-doc',
 
 	statics: {
+		specificity: 10,
+
 		getTypes: function () {
 			return [
 				{

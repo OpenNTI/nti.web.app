@@ -17,9 +17,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getSubEditors: function () {
 			return [
 				TypesDoc,
+				TypesGoogleDrive,
 				TypesReading,
-				TypesURL,
-				TypesGoogleDrive
+				TypesURL
 			];
 		},
 

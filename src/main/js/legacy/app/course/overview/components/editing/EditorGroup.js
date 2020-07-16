@@ -94,16 +94,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		getEditorForRecord: function (record) {
 			var editors = this.getEditors() || [],
 				canHandle;
+			
+			canHandle = editors
+				.sort((a, b) => {//sort the editors in from most specific to least
+					const aSpec = a.specificity || 0;
+					const bSpec = b.specificity || 0;
 
-			canHandle = editors.reduce(function (acc, editor) {
-				var e = editor.getEditorForRecord ? editor.getEditorForRecord(record) : null;
+					return aSpec - bSpec;
+				})
+				.reduce(function (acc, editor) {
+					var e = editor.getEditorForRecord ? editor.getEditorForRecord(record) : null;
 
-				if (e) {
-					acc.push(e);
-				}
+					if (e) {
+						acc.push(e);
+					}
 
-				return acc;
-			}, []);
+					return acc;
+				}, []);
 
 			if (canHandle.length > 1) {
 				console.warn('More than one editor for record, picking the first one.');

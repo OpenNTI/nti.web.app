@@ -97,7 +97,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 
 
 	getValue: function () {
-		if (this.croppedImage) {
+		if (typeof this.croppedImage === 'string') {
+			return this.croppedImage;
+		} else if (this.croppedImage) {
 			return this.croppedImage.getBlob();
 		}
 
@@ -105,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	},
 
 	getValueName: function () {
-		if (this.croppedImage) {
+		if (this.croppedImage?.getName) {
 			return this.croppedImage.getName();
 		}
 
@@ -162,6 +164,16 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		else {
 			this.updateTooltip(true);
 		}
+	},
+
+	setValueFromURL (url) {
+		this.setPlaceholder(url);
+		this.updateTooltip(true);
+
+		this.fileContainer.removeCls('no-file');
+		this.fileContainer.addCls('has-file');
+
+		this.croppedImage = url;
 	},
 
 	setValueFromBlob ( blob, src ) {
@@ -245,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 	},
 
 	cleanUpCroppedImage: function () {
-		if (this.croppedImage) {
+		if (this.croppedImage?.cleanUp) {
 			this.croppedImage.cleanUp();
 		}
 
