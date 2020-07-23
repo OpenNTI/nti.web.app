@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{
 					title: 'Google Drive',
 					category: 'content',
-					iconCls: 'upload',
+					iconCls: 'google-drive',
 					editor: this,
 					isAvailable: async (bundle) => {
 						const available = await bundle.getAvailableContentSummary();
@@ -45,6 +45,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (!this.record) {
 			this.blockForm();
+		} else {
+			this.formCmp.setPlaceholder('icon', AssetIcon.getGoogleAppAsset(this.record.get('targetMimeType')));
 		}
 	},
 

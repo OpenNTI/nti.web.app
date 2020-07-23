@@ -91,6 +91,11 @@
 				&.ad-content {
 					background-image: url(/app/resources/images/overview-type-icons/ad-content.svg);
 				}
+
+				&.google-drive {
+					background-image: url(/app/resources/images/overview-type-icons/google-drive.svg);
+					background-size: 100%;
+				}
 			}
 
 			.title {
