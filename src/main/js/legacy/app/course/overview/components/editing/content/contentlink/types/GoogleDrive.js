@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {Drive} = require('@nti/web-integrations');
+const {AssetIcon} = require('@nti/web-commons');
 
 const RelatedWork = require('legacy/model/RelatedWork');
 
@@ -86,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		form.setValue('label', doc.name);
 		form.setValue('href', doc.url);
 		form.setValue('targetMimeType', doc.mimeType);
-		form.getInputForField('icon').setValueFromURL(doc.iconUrl);
+		form.setPlaceholder('icon', AssetIcon.getGoogleAppAsset(doc.mimeType));
 
 		this.unblockForm();
 	},
