@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		let responseJSON;
 
 		assignmentSubmission.getProxy().on('exception', (proxy, response) => {
-			responseJSON = Ext.JSON.decode(response.responseText);
+			responseJSON = Ext.JSON.decode(response.responseText, true);
 		}, this);
 
 		return new Promise(function (fulfill, reject) {
