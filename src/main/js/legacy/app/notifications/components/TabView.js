@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 	onBodyClick: function (e) {
-		if (!e.getTarget('.notifications-icon') && !e.getTarget('.notifications-view')) {
+		if (!e.getTarget('.notifications-icon') && !e.getTarget('.notifications-view') && !e.getTarget('.nti-notifications-tab-container')) {
 			this.close();
 		}
 	},

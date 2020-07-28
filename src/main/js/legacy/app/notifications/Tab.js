@@ -17,6 +17,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 	extend: 'Ext.Component',
 	alias: 'widget.notifications-tab',
 
+	cls: 'nti-notifications-tab-container',
+
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: cx('notifications-icon', 'icon'), role: 'button', tabindex: '0', 'aria-label': 'Notifications'}
