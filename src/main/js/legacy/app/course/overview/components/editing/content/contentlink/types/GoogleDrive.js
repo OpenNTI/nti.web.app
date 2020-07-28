@@ -74,7 +74,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			component: Drive.Picker.Bar,
 			autoLaunch: !selectedDoc,
 			value: selectedDoc,
-			onChange: (docs) => (this.addDocumentData(docs[0]), picker.setProps({value: docs[0]})),
+			onChange: (docs) => {
+				if (!docs || !docs[0]) { return; }
+
+				this.addDocumentData(docs[0]);
+				picker.setProps({value: docs[0]});
+			},
 			onError: () => {
 				alert('Unable to get Drive document');
 			}
