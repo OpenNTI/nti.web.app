@@ -22,3 +22,7 @@
 :global(.main-navigation.dark-nav .notification-container [data-badge]:not([data-badge="0"])).knockout::before {
 	border-color: var(--nav-background-color, #313131);;
 }
+
+:global(.nti-notifications-tab-container) {
+	cursor: pointer;
+}
