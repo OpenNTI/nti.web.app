@@ -26,14 +26,12 @@
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
-  "dependencies": {
-    "@nti/lib-decorators": "NextThought/nti.lib.decorators",
-    "@nti/util-logger": "NextThought/nti.util.logger"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@nti/app-scripts": "^2.22.0",
     "@nti/extjs": "4.2.0",
     "@nti/lib-commons": "NextThought/nti.lib.commons",
+    "@nti/lib-decorators": "NextThought/nti.lib.decorators",
     "@nti/lib-dispatcher": "NextThought/nti.lib.dispatcher",
     "@nti/lib-dom": "NextThought/nti.lib.dom",
     "@nti/lib-interfaces": "NextThought/nti.lib.interfaces",
@@ -42,6 +40,7 @@
     "@nti/lib-store": "NextThought/nti.lib.store",
     "@nti/lib-store-connector": "NextThought/nti.lib.store.connector",
     "@nti/style-common": "NextThought/nti.style.common",
+    "@nti/util-logger": "NextThought/nti.util.logger",
     "@nti/web-assignment-editor": "NextThought/nti.web.assignment-editor",
     "@nti/web-calendar": "NextThought/nti.web.calendar",
     "@nti/web-catalog": "NextThought/nti.web.catalog",
