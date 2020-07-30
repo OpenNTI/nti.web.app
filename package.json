@@ -26,6 +26,9 @@
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
+  "bundledDependencies": [
+    "@nti/lib-logger"
+  ],
   "dependencies": {},
   "devDependencies": {
     "@nti/app-scripts": "^2.22.0",
