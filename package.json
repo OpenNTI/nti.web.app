@@ -27,7 +27,7 @@
     "registry": "https://npm.nextthought.com"
   },
   "bundledDependencies": [
-    "@nti/lib-logger"
+    "@nti/util-logger"
   ],
   "dependencies": {},
   "devDependencies": {
