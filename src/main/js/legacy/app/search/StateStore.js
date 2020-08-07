@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {ContentHighlighting} = require('@nti/web-commons');
 
 require('legacy/common/StateStore');
 require('legacy/store/Hit');
@@ -31,6 +32,8 @@ module.exports = exports = Ext.define('NextThought.app.search.StateStore', {
 	},
 
 	setHitForContainer: function (containerId, hit, frag) {
+		setHit(containerId, hit, frag);
+
 		this.HIT_MAP[containerId] = {
 			hit: hit,
 			fragment: frag
@@ -42,6 +45,21 @@ module.exports = exports = Ext.define('NextThought.app.search.StateStore', {
 	},
 
 	clearHitForContainer: function (containerId) {
+		clearHit(containerId);
 		delete this.HIT_MAP[containerId];
 	}
 });
+
+async function setHit (container, hit, frag) {
+	try {
+		const hitInstance = await hit.getInterfaceInstance();
+
+		ContentHighlighting.Strategies.SearchHitStore.setHitForContainer(container, hitInstance, frag, hit.get('PhraseSearch'));
+	} catch (e) {
+		//swallow
+	}
+}
+
+function clearHit (container) {
+	ContentHighlighting.Strategies.SearchHitStore.clearHitForContainer(container);
+}
