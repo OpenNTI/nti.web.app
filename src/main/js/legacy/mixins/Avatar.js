@@ -28,18 +28,19 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		AVATAR_CACHE: {},
 
 		getValidAvatarURL: function (url) {
-			if (!this.AVATAR_CACHE[url]) {
-				this.AVATAR_CACHE[url] = new Promise(function (fulfill, reject) {
-					var img = new Image();
+			return url || null;
+			// if (!this.AVATAR_CACHE[url]) {
+			// 	this.AVATAR_CACHE[url] = new Promise(function (fulfill, reject) {
+			// 		var img = new Image();
 
-					img.onload = fulfill.bind(null, url);
-					img.onerror = fulfill.bind(null, null);
+			// 		img.onload = fulfill.bind(null, url);
+			// 		img.onerror = fulfill.bind(null, null);
 
-					img.src = url;
-				});
-			}
+			// 		img.src = url;
+			// 	});
+			// }
 
-			return this.AVATAR_CACHE[url];
+			// return this.AVATAR_CACHE[url];
 		},
 
 
