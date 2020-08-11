@@ -12,6 +12,10 @@ html {
 body > .modal .modal-mask,
 body > .global-toast-root > * {
 	z-index: 1000;
+
+	&.nti-lightbox-dialog {
+		z-index: 1003;
+	}
 }
 
 body > .fly-wrapper > .flyout {
