@@ -92,6 +92,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		const form = this.getForm();
 
 		form.setValue('label', doc.name);
+		form.setValue('byline', '');
+		form.setValue('description', '');
 		form.setValue('href', doc.url);
 		form.setValue('targetMimeType', doc.mimeType);
 		form.setPlaceholder('icon', AssetIcon.getGoogleAppAsset(doc.mimeType));
