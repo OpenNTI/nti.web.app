@@ -475,6 +475,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return this.__getRecord(id, route.precache.outlineNode, true, changedEditing)
 			.then(record => {
+				this.body.showEditing();
+
 				if (!record) {
 					console.error('No valid outline node to edit');
 					this.unmask();
