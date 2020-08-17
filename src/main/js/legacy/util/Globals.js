@@ -278,16 +278,15 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			return false;
 		}
 
+		// Allow these properties to be drooped from the config. `.server` is the only config.
+		Object.assign($AppConfig, {
+			'server-host': location.protocol + '//' + location.host,
+			'server-path': new URL($AppConfig.server || '', 'file:///dataserver2/').pathname
+		});
+
 		if ($AppConfig.login === undefined) {
 			alert('Bad or no login configuration.');
 			return false;
-		}
-
-		if (!HOST_PATTERN.test($AppConfig['server-host'])) {
-			if ($AppConfig['server-host']) {
-				console.warn(`Bad host config', ${$AppConfig['server-host']} using domain`, document.domain);
-			}
-			$AppConfig['server-host'] = location.protocol + '//' + location.host;
 		}
 
 		if (!/^\/.+\/$/.test($AppConfig['server-path'])) {
