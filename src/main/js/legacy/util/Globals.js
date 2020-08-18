@@ -267,13 +267,13 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 
 	validateConfig: function () {
-		const HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i;
+		// const HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i;
 		// const HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1;
 		// const HOST_PATTERN_DOMAIN_MATCH_GROUP = 3;
 		// const HOST_PATTERN_PORT_MATCH_GROUP = 5;
 		const {location, $AppConfig} = global;
 
-		if ($AppConfig === undefined || $AppConfig['server-path'] === undefined) {
+		if ($AppConfig === undefined || $AppConfig.server === undefined) {
 			alert('Bad or no configuration.');
 			return false;
 		}
