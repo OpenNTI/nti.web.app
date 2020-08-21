@@ -1,3 +1,4 @@
+import './ActiveSessions.scss';
 import React from 'react';
 import {NumericValue, UpdateWithFrequency} from '@nti/web-charts';
 import {getService} from '@nti/web-client';

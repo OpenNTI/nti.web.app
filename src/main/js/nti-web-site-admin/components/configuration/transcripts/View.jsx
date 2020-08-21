@@ -1,3 +1,4 @@
+import './View.scss';
 import React from 'react';
 import {ManageTranscriptCredits} from '@nti/web-course';
 import {scoped} from '@nti/lib-locale';

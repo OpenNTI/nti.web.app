@@ -1,3 +1,4 @@
+import './ActiveTimes.scss';
 import React from 'react';
 import {getService} from '@nti/web-client';
 import {getLink} from '@nti/lib-interfaces';

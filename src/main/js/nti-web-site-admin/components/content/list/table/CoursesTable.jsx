@@ -1,3 +1,4 @@
+import './CoursesTable.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Table, Loading} from '@nti/web-commons';

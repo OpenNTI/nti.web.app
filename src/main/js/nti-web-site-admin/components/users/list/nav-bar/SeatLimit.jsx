@@ -1,3 +1,4 @@
+import './SeatLimit.scss';
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
 import {getService} from '@nti/web-client';

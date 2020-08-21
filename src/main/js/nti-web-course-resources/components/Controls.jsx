@@ -1,3 +1,4 @@
+import './Controls.scss';
 import React from 'react';
 import {Button} from '@nti/web-commons';
 import PropTypes from 'prop-types';

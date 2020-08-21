@@ -1,3 +1,4 @@
+import './Select.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Checkbox} from  '@nti/web-commons';

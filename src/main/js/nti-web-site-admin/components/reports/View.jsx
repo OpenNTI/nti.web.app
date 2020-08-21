@@ -1,3 +1,4 @@
+import './View.scss';
 import React from 'react';
 import {getService} from '@nti/web-client';
 import {List} from '@nti/web-reports';

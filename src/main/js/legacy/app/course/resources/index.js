@@ -1,3 +1,4 @@
+require('./index.scss');
 const Ext = require('@nti/extjs');
 const {getService} = require('@nti/web-client');
 

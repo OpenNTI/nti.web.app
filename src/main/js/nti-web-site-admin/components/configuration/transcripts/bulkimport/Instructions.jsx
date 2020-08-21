@@ -1,3 +1,4 @@
+import './Instructions.scss';
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
 import {rawContent} from '@nti/lib-commons';

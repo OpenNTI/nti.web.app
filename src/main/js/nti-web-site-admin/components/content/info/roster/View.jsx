@@ -1,3 +1,4 @@
+import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Roster, Enrollment} from '@nti/web-course';

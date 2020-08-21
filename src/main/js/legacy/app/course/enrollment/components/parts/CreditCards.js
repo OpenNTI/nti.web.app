@@ -1,3 +1,4 @@
+require('./CreditCards.scss');
 const Ext = require('@nti/extjs');
 const {CreditCard} = require('@nti/web-payments');
 

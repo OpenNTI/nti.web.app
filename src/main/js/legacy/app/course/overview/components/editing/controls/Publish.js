@@ -1,3 +1,4 @@
+require('./Publish.scss');
 const Ext = require('@nti/extjs');
 const {Publish} = require('@nti/web-commons');
 

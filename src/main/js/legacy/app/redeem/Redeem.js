@@ -1,3 +1,4 @@
+require('./Redeem.scss');
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 

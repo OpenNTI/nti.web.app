@@ -1,3 +1,4 @@
+import './UsersTable.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Table, Loading, Prompt} from '@nti/web-commons';

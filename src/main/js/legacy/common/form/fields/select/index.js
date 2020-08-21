@@ -1,3 +1,4 @@
+require('./index.scss');
 const Ext = require('@nti/extjs');
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.Select', {

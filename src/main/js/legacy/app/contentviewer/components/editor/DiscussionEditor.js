@@ -1,3 +1,4 @@
+require('./DiscussionEditor.scss');
 const Ext = require('@nti/extjs');
 const {Editor} = require('@nti/web-modeled-content');
 const {Create} = require('@nti/web-discussions');

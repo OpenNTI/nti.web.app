@@ -1,3 +1,4 @@
+require('./Assignment.scss');
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const { encodeForURI } = require('@nti/lib-ntiids');

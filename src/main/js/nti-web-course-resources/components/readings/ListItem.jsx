@@ -1,3 +1,4 @@
+import './ListItem.scss';
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
 import {DateTime} from '@nti/web-commons';
