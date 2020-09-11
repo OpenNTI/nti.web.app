@@ -29,9 +29,7 @@
   "bundledDependencies": [
     "@nti/util-logger"
   ],
-  "dependencies": {
-    "@nti/web-assessment": "github:NextThought/nti.web.assessment"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@nti/app-scripts": "^2.26.2-alpha.5",
     "@nti/extjs": "4.2.0",
@@ -46,6 +44,7 @@
     "@nti/lib-store-connector": "NextThought/nti.lib.store.connector",
     "@nti/style-common": "NextThought/nti.style.common",
     "@nti/util-logger": "NextThought/nti.util.logger",
+    "@nti/web-assessment": "github:NextThought/nti.web.assessment",
     "@nti/web-assignment-editor": "NextThought/nti.web.assignment-editor",
     "@nti/web-calendar": "NextThought/nti.web.calendar",
     "@nti/web-catalog": "NextThought/nti.web.catalog",
