@@ -29,9 +29,11 @@
   "bundledDependencies": [
     "@nti/util-logger"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@nti/web-assessment": "github:NextThought/nti.web.assessment"
+  },
   "devDependencies": {
-    "@nti/app-scripts": "^2.22.0",
+    "@nti/app-scripts": "^2.26.2-alpha.5",
     "@nti/extjs": "4.2.0",
     "@nti/lib-commons": "NextThought/nti.lib.commons",
     "@nti/lib-decorators": "NextThought/nti.lib.decorators",
@@ -57,8 +59,8 @@
     "@nti/web-integrations": "NextThought/nti.web.integrations",
     "@nti/web-library": "NextThought/nti.web.library",
     "@nti/web-login": "latest",
-    "@nti/web-payments": "NextThought/nti.web.payments",
     "@nti/web-modeled-content": "NextThought/nti.web.modeled-content",
+    "@nti/web-payments": "NextThought/nti.web.payments",
     "@nti/web-profiles": "NextThought/nti.web.profiles",
     "@nti/web-reports": "NextThought/nti.web.reports",
     "@nti/web-routing": "NextThought/nti.web.routing",

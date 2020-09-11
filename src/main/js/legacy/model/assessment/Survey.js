@@ -9,6 +9,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Survey', {
 	mimeType: 'application/vnd.nextthought.nasurvey',
 
 	isSurvey: true,
+	isPage: true,
 
 	fields: [
 		{name: 'isClosed', type: 'Boolean'},

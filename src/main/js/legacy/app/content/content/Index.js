@@ -1,6 +1,9 @@
 const Ext = require('@nti/extjs');
+const React = require('react');
 const { encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
+const {Survey} = require('@nti/web-assessment');
 const {getService} = require('@nti/web-client');
+const {Page} = require('@nti/web-commons');
 const {Editor} = require('@nti/web-content');
 
 const ContentviewerIndex = require('legacy/app/contentviewer/Index');
@@ -17,6 +20,22 @@ require('legacy/common/components/ResourceNotFound');
 require('legacy/app/contentviewer/StateStore');
 
 require('legacy/overrides/ReactHarness');
+
+function SurveyEditorPage (props) {
+	return React.createElement(
+		Page,
+		{},
+		[
+			React.createElement(
+				Page.Content,
+				{card: false},
+				[
+					React.createElement(Survey.Editor, props)
+				]
+			)
+		]
+	);
+}
 
 module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	extend: 'Ext.container.Container',
@@ -162,38 +181,24 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			});
 	},
 
+	__showSurveyEditor (page, parent, breadcrumb, pageSource) {
+		return Promise.all([
+			page.getInterfaceInstance(),
+			this.currentBundle.getInterfaceInstance()
+		]).then(([survey, course]) => {
+			this.editor = this.add({
+				xtype: 'react',
+				component: SurveyEditorPage,
+				survey,
+				container: course,
+				pageSource,
+				breadcrumb
+			});
+		});
+	},
 
-	showEditor (page, parent, pageSource) {
-		if (!this.rendered) {
-			this.on('afterrender', this.showEditor.bind(this, page));
-			return;
-		}
-
+	__showReadingEditor (page, parent, breadcrumb, pageSource) {
 		const packageId = page.get ? page.get('ContentPackageNTIID') : page;
-		let breadcrumb;
-
-		this.el.mask('Loading...');
-
-		if (this.notFound) {
-			this.notFound.destroy();
-		}
-
-		if (this.editor) {
-			this.editor.destroy();
-		}
-
-		if (this.reader) {
-			this.reader.destroy();
-		}
-
-		if (parent) {
-			breadcrumb = [{
-				label: parent.label,
-				handleRoute: () => {
-					this.handleNavigation(parent.title, parent.route);
-				}
-			}];
-		}
 
 		return getService()
 			.then((service) => service.getObject(this.currentBundle.getId()))
@@ -248,20 +253,58 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 					onDelete: onDelete,
 					gotoResources: gotoResources
 				});
-			})
-			.always(() => {
-				if(page.get) {
-					this.setTitle(page.get('Title'));
-				}
-				else {
-					// specifically for the case of creating a new reading
-					// since there is no title, setting it to blank removes
-					// the "Loading..." title and defaults to the lesson name
-					this.setTitle('');
-				}
-
-				this.el.unmask();
 			});
+	},
+
+
+	showEditor (page, parent, pageSource) {
+		if (!this.rendered) {
+			this.on('afterrender', this.showEditor.bind(this, page));
+			return;
+		}
+
+		let breadcrumb;
+
+		this.el.mask('Loading...');
+
+		if (this.notFound) {
+			this.notFound.destroy();
+		}
+
+		if (this.editor) {
+			this.editor.destroy();
+		}
+
+		if (this.reader) {
+			this.reader.destroy();
+		}
+
+		if (parent) {
+			breadcrumb = [{
+				label: parent.label,
+				handleRoute: () => {
+					this.handleNavigation(parent.title, parent.route);
+				}
+			}];
+		}
+
+		return (
+			page.isSurvey ?
+				this.__showSurveyEditor(page, parent, breadcrumb, pageSource) :
+				this.__showReadingEditor(page, parent, breadcrumb, pageSource)
+		).always(() => {
+			if(page.get) {
+				this.setTitle(page.get('Title'));
+			}
+			else {
+				// specifically for the case of creating a new reading
+				// since there is no title, setting it to blank removes
+				// the "Loading..." title and defaults to the lesson name
+				this.setTitle('');
+			}
+
+			this.el.unmask();
+		});
 	},
 
 

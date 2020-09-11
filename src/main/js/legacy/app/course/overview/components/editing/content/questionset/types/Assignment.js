@@ -97,6 +97,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.bundle.getAllAssignments();
 	},
 
+
+	addCreateButton () {
+		if(this.isAssignment) {
+			return this.add({
+				xtype: 'box',
+				autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: t('create')},
+				listeners: {
+					click: {
+						element: 'el',
+						fn: this.createAssignment.bind(this)
+					}
+				}
+			});
+		}
+	},
+
 	showItemList: function (selectedItems) {
 		var me = this;
 
@@ -113,19 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.removeAll(true);
 		me.maybeEnableBack(me.backText);
 
-		if(this.isAssignment) {
-			me.createAssignmentBtn = me.add({
-				xtype: 'box',
-				autoEl: {tag: 'div', cls: 'create-assignment-overview-editing', html: t('create')},
-				listeners: {
-					click: {
-						element: 'el',
-						fn: me.createAssignment.bind(me)
-					}
-				}
-			});
-		}
-
+		this.createButton = this.addCreateButton();
 
 		me.itemSelectionCmp = me.add({
 			xtype: this.LIST_XTYPE,
@@ -147,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			onPlainAssignmentCreate: (item) => { this.doCreation(); }
 		});
 
-		this.assignmentTypeMenu.showBy(this.createAssignmentBtn, 'tr-br');
+		this.assignmentTypeMenu.showBy(this.createButton, 'tr-br');
 	},
 
 	doCreation (isDiscussion) {
@@ -230,9 +234,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			delete this.itemEditorCmp;
 		}
 
-		if(this.createAssignmentBtn) {
-			this.createAssignmentBtn.destroy();
-			delete this.createAssignmentBtn;
+		if(this.createButton) {
+			this.createButton.destroy();
+			delete this.createButton;
 		}
 
 		var me = this;

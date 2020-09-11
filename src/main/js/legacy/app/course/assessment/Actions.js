@@ -8,7 +8,8 @@ require('legacy/model/assessment/Assignment');
 require('legacy/model/assessment/DiscussionAssignment');
 
 const t = scoped('nti-web-app.course.assessment.Actions', {
-	untitled: 'Untitled Assignment'
+	untitled: 'Untitled Assignment',
+	untitledSurvey: 'Untitled Survey'
 });
 
 const ASSIGNMENT_TPL = {
@@ -26,7 +27,14 @@ const DISCUSSION_TPL = {
 	'title': 'Untitled Assignment'
 };
 
-function createAssignmentWithData (link, data) {
+const SurveyTpl = {
+	'Class': 'Survey',
+	'MimeType': 'application/vnd.nextthought.nasurvey',
+	'contents': '',
+	'title': 'Untitled Survey'
+};
+
+function createWithData (link, data) {
 	if (!link) {
 		return Promise.reject('No Link');
 	}
@@ -48,13 +56,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Actions
 	createAssignmentIn (bundle) {
 		const link = bundle.getLink('CourseEvaluations');
 
-		return createAssignmentWithData(link, {...ASSIGNMENT_TPL, title: t('untitled')});
+		return createWithData(link, {...ASSIGNMENT_TPL, title: t('untitled')});
 	},
 
 
 	createDiscussionAssignmentIn (bundle) {
 		const link = bundle.getLink('CourseEvaluations');
 
-		return createAssignmentWithData(link, {...DISCUSSION_TPL, title: t('untitled')});
+		return createWithData(link, {...DISCUSSION_TPL, title: t('untitled')});
+	},
+
+	createSurveyIn (bundle) {
+		const link = bundle.getLink('CourseEvaluations');
+
+		return createWithData(link, {...SurveyTpl, title: t('untitledSurvey')});
 	}
 });
