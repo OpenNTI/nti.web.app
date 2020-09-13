@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {Survey} = require('@nti/web-assessment');
 
 const PromptActions = require('legacy/app/prompt/Actions');
 const PageInfo = require('legacy/model/PageInfo');
@@ -347,6 +348,37 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		return assignment.isDiscussion
 			? this.getDiscussionAssignmentPageInfo(assignment, bundle, student)
 			: this.getRegularAssignmentPageInfo(assignment, bundle);
+	},
+
+
+	async getSurveyPageInfo (surveyModel, bundleModel) {
+		const survey = await surveyModel.getInterfaceInstance();
+		const bundle = await bundleModel.getInterfaceInstance();
+
+		const raw = await Survey.Viewer.Utils.createPageInfo(survey, bundle);
+
+		const ntiid = surveyModel.get('NTIID');
+		const pageURI = encodeURIComponent('Pages(' + ntiid + ')');
+		const userURI = encodeURIComponent($AppConfig.username);
+
+		const pageInfo = PageInfo.create({
+			ID: ntiid,
+			NTIID: ntiid,
+			AssessmentItems: [surveyModel],
+			isFakePageInfo: true,
+			content: raw.content,
+			Links: [
+				{
+					Class: 'Link',
+					href: `/dataserver2/users/${userURI}/${pageURI}/UserGeneratedData`,
+					rel: 'UserGeneratedData'
+				}
+			]
+		});
+
+		pageInfo.isMock = true;
+
+		return pageInfo;
 	},
 
 	showAttachmentInPreviewMode: function (contentFile, parentRecord) {

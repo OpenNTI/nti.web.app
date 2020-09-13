@@ -6,6 +6,17 @@ import {isNTIID, decodeFromURI} from '@nti/lib-ntiids';
 import BaseModel from 'legacy/model/Base';
 import RelatedWork from 'legacy/model/RelatedWork';
 
+async function resolveSurvey (ref, course) {
+	try {
+		const service = await getService();
+		const survey = await service.getObject(ref.target);
+
+		return BaseModel.interfaceToModel(survey);
+	} catch (e) {
+		return null;
+	}
+}
+
 async function resolvePageInfo (page, course) {
 	const id = isNTIID(page.href) ? page.href : (page['target-NTIID'] || page['Target-NTIID'] || page.getID());
 
@@ -19,6 +30,11 @@ async function resolvePageInfo (page, course) {
 
 		return BaseModel.interfaceToModel(pageInfo);
 	} catch (e) {
+		if (isSurveyRef(page)) {
+			return resolveSurvey(page, course);
+		}
+
+
 		return page.isContent ? null : BaseModel.interfaceToModel(page);
 	}
 }
@@ -191,6 +207,10 @@ function flattenArray (arr) {
 
 		return acc.concat(flat);
 	}, []);
+}
+
+function isSurveyRef (pageInfo) {
+	return pageInfo instanceof Models.assessment.survey.SurveyReference;
 }
 
 function isRelatedWork (pageInfo) {

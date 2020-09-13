@@ -250,6 +250,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			p = Service.getPageInfo(this.contentId, null, null, null, this.bundle);
 		} else if (this.externalToolAsset) {
 			p = this.ContentViewerActions.getExternalToolAssetPageInfo(this.externalToolAsset, this.bundle);
+		} else if (this.survey) {
+			p = this.resolveSurveyPageInfo(this.survey, this.bundle);
 		}
 
 		return p;
@@ -261,6 +263,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 			.catch(() => {
 				return Service.getObject(assignment.getId(), null, null, null, null, this.bundle)
 					.then(a => this.ContentViewerActions.getAssignmentPageInfo(a, bundle, this.student));
+			});
+	},
+
+
+	resolveSurveyPageInfo (survey, bundle) {
+		return Service.getPageInfo(survey.getId(), null, null, null, bundle)
+			.catch(() => {
+				return this.ContentViewerActions.getSurveyPageInfo(survey, bundle);
 			});
 	},
 

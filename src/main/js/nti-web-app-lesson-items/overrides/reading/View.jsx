@@ -10,6 +10,7 @@ import ContentViewer from 'legacy/app/contentviewer/Index';
 import PageInfo from 'legacy/model/PageInfo';
 import RelatedWorkRef from 'legacy/model/RelatedWork';
 import ExternalToolAsset from 'legacy/model/LTIExternalToolAsset';
+import SurveyModel from 'legacy/model/assessment/Survey';
 
 import Registry from '../Registry';
 
@@ -136,6 +137,7 @@ class NTIWebAppLessonItemsReading extends React.Component {
 				pageInfo: page instanceof PageInfo ? page : null,
 				relatedWork: page instanceof RelatedWorkRef ? page : null,
 				externalToolAsset: page instanceof ExternalToolAsset ? page : null,
+				survey: page instanceof SurveyModel ? page : null,
 				contentPackage,
 				bundle,
 				rootId,
