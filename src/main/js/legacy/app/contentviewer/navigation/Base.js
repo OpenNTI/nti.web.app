@@ -243,6 +243,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	maybeAddControlbarForPageInfo (pageInfo) {
 		const contentPackageId = pageInfo.get('ContentPackageNTIID');
 
+		if (pageInfo.get('isFakePageInfo') && pageInfo.backedBy?.hasLink('edit')) {
+			this.controlBar = ReactHarness.create({
+				component: ControlBar,
+				renderTo: this.controlBarEl,
+				doEdit: () => {
+					const route = this.rootRoute ? this.rootRoute : `/${encodeForURI(this.activeNTIID)}/`;
+
+					this.doNavigation('', `${route}edit`);
+				}
+			});
+
+			this.on('destroy', () => {
+				if (!this.controlBar) {
+					this.controlBar.destroy();
+				}
+			});
+
+			return;
+		}
+
+
 		if (pageInfo.get('isFakePageInfo') || !contentPackageId) { return; }
 
 		if (!this.rendered) {

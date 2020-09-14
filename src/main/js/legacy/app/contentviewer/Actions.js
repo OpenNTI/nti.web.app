@@ -377,6 +377,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		});
 
 		pageInfo.isMock = true;
+		pageInfo.backedBy = surveyModel;
 
 		return pageInfo;
 	},
