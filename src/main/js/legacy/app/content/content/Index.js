@@ -183,6 +183,15 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	},
 
 	__showSurveyEditor (page, parent, breadcrumb, pageSource) {
+		const onDelete = () => {
+			this.currentBundle.updateFromServer()
+				.then(() => {
+					if (this.onDelete) {
+						this.onDelete();
+					}
+				});
+		};
+
 		return Promise.all([
 			page.getInterfaceInstance(),
 			this.currentBundle.getInterfaceInstance()
@@ -193,7 +202,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				survey,
 				container: course,
 				pageSource,
-				breadcrumb
+				breadcrumb,
+				onDelete
 			});
 		});
 	},
