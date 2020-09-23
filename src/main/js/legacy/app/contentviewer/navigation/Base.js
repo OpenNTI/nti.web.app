@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			});
 
 			this.on('destroy', () => {
-				if (!this.controlBar) {
+				if (this.controlBar) {
 					this.controlBar.destroy();
 				}
 			});
