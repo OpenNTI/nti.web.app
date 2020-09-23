@@ -17,7 +17,7 @@ const t = scoped('nti-web-app.assessment.input.FileSubmission', {
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubmission', {
 	extend: 'NextThought.app.assessment.input.Base',
-	alias: 'widget.question-input-filepart',
+	alias: ['widget.question-input-filepart', 'widget.question-input-qfilepart'],
 
 	cls: 'file-submission-part',
 
