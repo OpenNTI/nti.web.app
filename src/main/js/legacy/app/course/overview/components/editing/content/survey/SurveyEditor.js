@@ -44,8 +44,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		return {
 			MimeType: SurveyRef.mimeType,
-			label: item.get('title'),
-			title: item.get('title'),
 			'Target-NTIID': item.get('NTIID')
 		};
 	},
@@ -54,8 +52,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var changed = false;
 
 		if (!this.record) {
-			changed = true;
-		} else if (this.record.get('label') !== values.label) {
 			changed = true;
 		} else if (this.record.get('Target-NTIID') !== values['Target-NTIID']) {
 			changed = true;

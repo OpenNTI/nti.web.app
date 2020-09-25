@@ -115,8 +115,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			const survey = await this.AssessmentActions.createSurveyIn(this.bundle);
 			const ref = {
 				MimeType: SurveyRef.mimeType,
-				label: survey.get('title'),
-				title: survey.get('title'),
 				'Target-NTIID': survey.get('NTIID')
 			};
 
