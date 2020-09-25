@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		this.reader.on('set-content', 'injectAssessments', this);
 	},
 
-	makeAssessmentPoll: function (p, set) {
+	makeAssessmentPoll: function (p, set, index) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', p.getId()),
 			o = this.reader.getComponentOverlay();
 
@@ -47,7 +47,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			questionSet: set || null,
 			survey: set || null,
 			tabIndexTracker: o.tabIndexer,
-			contentElement: contentElement
+			contentElement: contentElement,
+			questionIndex: index
 		}));
 
 		if (contentElement) {
@@ -97,8 +98,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			tabIndexTracker: o.tabIndexer
 		}));
 
-		questions.forEach(function (poll) {
-			me.makeAssessmentPoll(poll, survey);
+		questions.forEach(function (poll, index) {
+			me.makeAssessmentPoll(poll, survey, index);
 		});
 
 		survey.on('refresh', function () {
