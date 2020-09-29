@@ -247,6 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			this.controlBar = ReactHarness.create({
 				component: ControlBar,
 				renderTo: this.controlBarEl,
+				type: pageInfo.backedBy?.isSurvey ? 'survey' : 'reading',
 				doEdit: () => {
 					const route = this.rootRoute ? this.rootRoute : `/${encodeForURI(this.activeNTIID)}/`;
 
