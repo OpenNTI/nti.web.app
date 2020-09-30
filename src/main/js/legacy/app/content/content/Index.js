@@ -203,7 +203,15 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				container: course,
 				pageSource,
 				breadcrumb,
-				onDelete
+				onDelete,
+				navigateToPublished: () => {
+					if(this.handleContentNavigation) {
+						this.handleContentNavigation('', encodeForURI(survey.getID()));
+					}
+					else {
+						this.pushRoute('', encodeForURI(survey.getID()));
+					}
+				}
 			});
 		});
 	},
