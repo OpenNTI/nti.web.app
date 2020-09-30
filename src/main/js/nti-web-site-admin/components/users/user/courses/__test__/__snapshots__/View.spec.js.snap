@@ -12,7 +12,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
       onClick={[Function]}
     >
       <a
-        className="nti-button primary rounded"
+        className="nti-button button primary rounded"
         onClick={[Function]}
         onKeyDown={[Function]}
         role="button"
@@ -255,7 +255,7 @@ exports[`Site admin user course list test (no courses) Basic render test 1`] = `
       onClick={[Function]}
     >
       <a
-        className="nti-button primary rounded"
+        className="nti-button button primary rounded"
         onClick={[Function]}
         onKeyDown={[Function]}
         role="button"
