@@ -2,3 +2,6 @@
 /node_modules/
 /reports/
 /docs/
+/src/main/resources/css
+/src/main/resources/images/sprite.png
+/src/main/resources/scss/utils/_icons.scss
