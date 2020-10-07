@@ -5,6 +5,7 @@ const lazy = require('legacy/util/lazy-require')
 const {isFeature} = require('legacy/util/Globals');
 
 require('./types/Content');
+require('./types/Poll');
 require('./types/Question');
 require('./types/RelatedWork');
 require('./types/Slide');
