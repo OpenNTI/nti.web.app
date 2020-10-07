@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork
 		type: 'relatedwork',
 
 		canHandle: function (obj) {
-			return obj && obj.get && (obj.get('Class') === 'RelatedWork' || obj.get('Class') === 'NTICard');
+			return obj && obj.get && (obj.get('Class') === 'RelatedWork' || obj.get('Class') === 'NTICard' || obj.get('Class') === 'Survey');
 		}
 	},
 
@@ -33,7 +33,9 @@ module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork
 		}
 
 		return this.PathActions.getPathToObject(obj)
-			.then(path => this.PathActions.getRootBundleFromPath(path));
+			.then(path => {
+				return this.PathActions.getRootBundleFromPath(path);
+			});
 	},
 
 	parse: function (obj, kind) {

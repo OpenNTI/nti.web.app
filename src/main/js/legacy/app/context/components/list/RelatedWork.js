@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.R
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.snippetEl.update(this.content.get('label'));
+		this.snippetEl.update(this.content.get('label') || this.content.get('title'));
 	},
 
 	getContentRootFor: function (path) {
