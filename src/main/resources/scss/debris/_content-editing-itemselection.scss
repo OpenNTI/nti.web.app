@@ -592,7 +592,7 @@
 
 	.content-package-item {
 		display: flex;
-		background-color: $panel-background-blue;
+		background-color: var(--panel-background-blue);
 		margin-bottom: 1rem;
 		box-shadow: 0 0 0 1px rgba(63, 179, 246, 0.3);
 
