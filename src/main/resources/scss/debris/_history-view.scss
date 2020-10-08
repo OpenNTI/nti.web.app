@@ -75,7 +75,7 @@
 		border-top: 1px solid gainsboro !important;
 		padding-top: 6px;
 		.x-header-text{							
-			color: #B8B8B8;
+			color: var(--tertiary-grey);
 			font: normal 600 10px/20px $font;
 			margin: 10px 0 0 15px;
 			text-transform: uppercase;
