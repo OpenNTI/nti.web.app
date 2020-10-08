@@ -46,9 +46,9 @@
 	.whiteboard-color-button{
 		@include color-button-base;
 		background-image: linear-gradient(to right bottom,
-							#f9f9f9 45%,
+							var(--quad-grey) 45%,
 							rgba(244, 82, 82, 0.7) 50%,
-							#f9f9f9 55%
+							var(--quad-grey) 55%
 						);
 
 		span.whiteboard-color-inner{display: none;}

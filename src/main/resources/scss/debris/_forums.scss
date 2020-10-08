@@ -188,7 +188,7 @@
 @mixin topic-list-item {
 
 	.topic-list-header-item {
-		background-color: #f8f8f8;
+		background-color: var(--quad-grey);
 		height: 30px !important;
 		cursor: default !important;
 		font: normal 400 0.8em/30px $font;
@@ -974,7 +974,7 @@
 
 			.toolbar {
 				border-top: 1px solid #dcdcdc;
-				background: #f9f9f9;
+				background: var(--quad-grey);
 				padding: 0 15px;
 			}
 
@@ -1194,7 +1194,7 @@
 			}
 			.foot {
 				padding: 14px 20px;
-				background: #f9f9f9;
+				background: var(--quad-grey);
 			}
 		}
 
@@ -1598,7 +1598,7 @@
 
 				&:hover, &:not(.x-item-selected):hover {
 					box-shadow: none;
-					background-color: $quad-grey;
+					background-color: var(--quad-grey);
 				}
 			}
 
@@ -1731,7 +1731,7 @@
 			.topic-list-header{
 				height: 90px;
 				padding: 29px 15px;
-				background-color: #f8f8f8;
+				background-color: var(--quad-grey);
 				box-shadow: inset 0 -2px 0px 0px rgba(0,0,0,0.06);
 
 				.new-topic{

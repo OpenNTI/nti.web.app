@@ -440,7 +440,7 @@
 	.grouping {
 		padding: 0;
 		& > .header {
-			background: #f8f8f8;
+			background: var(--quad-grey);
 			position: relative;
 			padding: 15px 30px;
 			border-bottom: 1px solid #dddddd;
@@ -969,7 +969,7 @@
 			}
 
 			.sub {
-				color: $quad-grey;
+				color: var(--quad-grey);
 				font-size: 1.4em;
 				font-weight: 300;
 				opacity: 0.8;
@@ -985,7 +985,7 @@
 					position: relative;
 					display: block;
 					padding: 7px 0 7px 32px;
-					color: $quad-grey;
+					color: var(--quad-grey);
 					text-transform: uppercase;
 					font-size: 0.8em;
 
@@ -1020,12 +1020,12 @@
 
 			> span{
 				font-size: 0.9em;
-				color: $quad-grey;
+				color: var(--quad-grey);
 				font-style: italic;
 				margin: 10px;
 
 				a.button{
-					border-bottom: 1px solid $quad-grey;
+					border-bottom: 1px solid var(--quad-grey);
 					cursor: pointer;
 				}
 			}

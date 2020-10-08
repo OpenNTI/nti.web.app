@@ -14,7 +14,7 @@
 	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3),
 	0 0 0 110px transparent;
 
-	background-color: $quad-grey;
+	background-color: var(--quad-grey);
 
 	.account-header-view {
 		margin: 24px 0;
@@ -544,14 +544,14 @@
 		}
 
 		.group-code{
-			background-color: $quad-grey;
+			background-color: var(--quad-grey);
 
 			input{
 				cursor: text;
 			}
 
 			input, input:focus{
-				background-color: $quad-grey;
+				background-color: var(--quad-grey);
 				box-shadow: -4px 0 0 0 $primary_green;
 			}
 		}

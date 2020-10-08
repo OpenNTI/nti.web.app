@@ -386,7 +386,7 @@
 }
 
 
-@mixin bottom-etch( $dark: #ebebeb, $light: #f8f8f8 ){
+@mixin bottom-etch( $dark: #ebebeb, $light: var(--quad-grey) ){
 	box-shadow: inset 0px -1px 0px 0px $dark;
 	border: 1px solid $light;
 	border-width: 0;
@@ -394,7 +394,7 @@
 }
 
 
-@mixin top-etch( $dark: #ebebeb, $light: #f8f8f8 ){
+@mixin top-etch( $dark: #ebebeb, $light: var(--quad-grey) ){
 	box-shadow: inset 0px 1px 0px 0px $light;
 	border-top: 1px solid $dark !important;
 }

@@ -510,7 +510,7 @@
 	&.purchasable {
 		.bookcover {
 			background: {
-				color: #f9f9f9;
+				color: var(--quad-grey);
 				size: cover;
 				position: center-center;
 				repeat: no-repeat;

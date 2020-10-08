@@ -125,7 +125,7 @@
 			z-index: 999;
 
 			content: attr(data-error-tip);
-			color: $quad-grey;
+			color: var(--quad-grey);
 			background: $primary-red;
 			border: 1px solid $secondary-red;
 			box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.1);

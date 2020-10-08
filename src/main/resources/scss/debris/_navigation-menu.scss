@@ -15,7 +15,7 @@
 					inset 2px 0 0 0 #ffffff,
 					-1px 0 3px 0 rgba(0, 0, 0, 0.2);
 
-		background: #f9f9f9 !important;
+		background: var(--quad-grey) !important;
 		border: 0px solid #99c14f;
 		border-right-width: 3px !important;*/
 
@@ -52,7 +52,7 @@
 
 .x-component-navigation-collection {
 	//&.x-menu-item{}
-	background: #f9f9f9;
+	background: var(--quad-grey);
 	border: 1px solid #d2d2d2 !important;
 	border-top-width: 0 !important;
 	border-right-width: 0 !important;

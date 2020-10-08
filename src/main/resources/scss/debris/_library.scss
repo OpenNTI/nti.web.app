@@ -939,7 +939,7 @@ li.library-grid-item {
 
 	.header{
 		position: relative;
-		background-color: $quad-grey;
+		background-color: var(--quad-grey);
 		font: normal 600 1em/1.2em $font;
 		padding: 10px 50px 10px 10px;
 		border-bottom: 1px solid #e5e5e5;
@@ -978,7 +978,7 @@ li.library-grid-item {
 
 	.footer {
 		height: 40px;
-		background-color: $quad-grey;
+		background-color: var(--quad-grey);
 		position: relative;
 
 		.button {
@@ -995,7 +995,7 @@ li.library-grid-item {
 			}
 
 			&.secondary {
-				background-color: $quad-grey;
+				background-color: var(--quad-grey);
 				color: var(--primary-grey);
 				font-style: italic;
 			}

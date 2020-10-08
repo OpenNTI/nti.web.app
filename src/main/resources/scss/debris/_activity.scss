@@ -148,7 +148,7 @@
 
 			.topic-comment-container{
 				padding: 0 0 0 10px;
-				background-color: #f9f9f9;
+				background-color: var(--quad-grey);
 
 				&[data-depth='0'] {
 					padding-left: 0px;
@@ -157,7 +157,7 @@
 
 			.topic-comment{
 				padding-left: 40px;
-				background-color: #f9f9f9;
+				background-color: var(--quad-grey);
 
 				.foot {
 					padding: 5px;
@@ -261,7 +261,7 @@
 		}
 
 		.foot, .replies, .respond {
-			background: #f9f9f9;
+			background: var(--quad-grey);
 			padding:{ left: 15px; right: 15px; }
 		}
 
@@ -755,7 +755,7 @@
 			height: 80px;
 			left: 0;
 			right: 0;
-			background-color: $quad-grey;
+			background-color: var(--quad-grey);
 			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
 			clip: rect(80px, auto, 300px, auto);
 			border-radius: 250em / 3em;

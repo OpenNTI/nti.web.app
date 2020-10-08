@@ -123,7 +123,7 @@
 				&.unavailable {
 					cursor: pointer;
 					color: var(--tertiary-grey);
-					background-color: #f8f8f8;
+					background-color: var(--quad-grey);
 					padding-left: 60px;
 					opacity: 0.7;
 
@@ -404,7 +404,7 @@
 			position: absolute;
 			left: 0; bottom: 0;
 			width: 180px;
-			background-color: $quad-grey;
+			background-color: var(--quad-grey);
 			border-right: 1px solid #f0f0f0;
 
 			.avatar {
@@ -606,7 +606,7 @@
 				cursor: pointer;
 				float: left;
 				position: relative;
-				background-color: $quad-grey;
+				background-color: var(--quad-grey);
 				border: 1px solid #f0f0f0;
 
 				&.disabled {
@@ -682,7 +682,7 @@
 			.nav-outline{
 				position: relative;
 				max-height: 100%;
-				background-color: $quad-grey;
+				background-color: var(--quad-grey);
 				border-top: 1px solid #f0f0f0;
 				overflow: {
 					x: hidden;
@@ -697,7 +697,7 @@
 					text-transform: uppercase;
 
 					&:not(.x-item-selected) {
-						background-color: $quad-grey;
+						background-color: var(--quad-grey);
 					}
 
 					&:not(.disabled).x-item-selected{
@@ -2401,8 +2401,8 @@
 					display: block;
 
 					&:hover + .entry {
-						background-color: #f8f8f8;
-						  box-shadow: 20px 0 0 6px #f8f8f8, -10px 0 0 6px #f8f8f8;
+						background-color: var(--quad-grey);
+						  box-shadow: 20px 0 0 6px var(--quad-grey), -10px 0 0 6px var(--quad-grey);
 					}
 				}
 			}

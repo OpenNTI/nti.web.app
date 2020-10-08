@@ -865,7 +865,7 @@ canvas.x-component-course-assessment {
 
 .course-assessment-header, .course-assessment-admin {
 	.admin-list-header {
-		background: $quad-grey;
+		background: var(--quad-grey);
 		position: relative;
 		border-bottom: 1px solid #dddddd;
 
@@ -2031,7 +2031,7 @@ canvas.x-component-course-assessment {
 		}
 
 		&:not(.student-reader-header) .header {
-			background: #f8f8f8;
+			background: var(--quad-grey);
 			position: relative;
 			padding: 15px 30px;
 			border-bottom: 1px solid #dddddd;

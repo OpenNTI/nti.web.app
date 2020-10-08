@@ -689,7 +689,7 @@ input[type=number]{
 }
 
 .outline-items {
-	background: $quad-grey;
+	background: var(--quad-grey);
 	padding: 30px 20px;
 
 	.header {
@@ -921,7 +921,7 @@ input[type=number]{
 
 								&.selected {
 									.label {
-										color: $quad-grey;
+										color: var(--quad-grey);
 									}
 								}
 							}
@@ -1067,7 +1067,7 @@ input[type=number]{
 		&.published {
 			.label {
 				color: $primary-blue;
-				background: #f8f8f8;
+				background: var(--quad-grey);
 				@include icon($dropdown-blue, $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
 		}
@@ -1108,7 +1108,7 @@ input[type=number]{
 				}
 
 				.option {
-					border-bottom: 1px solid $quad-grey;
+					border-bottom: 1px solid var(--quad-grey);
 					color: var(--secondary-grey);
 
 					.text {

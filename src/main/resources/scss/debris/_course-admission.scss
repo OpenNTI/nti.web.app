@@ -532,7 +532,7 @@
 			&.nested {
 				display: inline-block;
 				padding-right: 20px;
-				background-color: #f9f9f9;
+				background-color: var(--quad-grey);
 
 				.enrollment-input {
 					width: 675px;
@@ -545,7 +545,7 @@
 				}
 
 				.label {
-					background-color: #f9f9f9;
+					background-color: var(--quad-grey);
 					margin: 0;
 					line-height: 40px;
 					padding-left: 40px;
@@ -720,7 +720,7 @@
 			}
 
 			&.dark {
-				background-color: #f9f9f9;
+				background-color: var(--quad-grey);
 			}
 
 			&.error {
@@ -830,7 +830,7 @@
 					}
 
 					input[type=radio]:not(:checked) + label {
-						background-color: #f9f9f9;
+						background-color: var(--quad-grey);
 					}
 				}
 				label {
@@ -1044,7 +1044,7 @@
 
 		&.nested {
 			padding: 20px;
-			background-color: #f9f9f9;
+			background-color: var(--quad-grey);
 		}
 
 		p {
@@ -1067,7 +1067,7 @@
 
 		&.nested {
 			display: inline-block;
-			background-color: #f9f9f9;
+			background-color: var(--quad-grey);
 			margin-top: -5px;
 			width: 675px;
 			padding: 0 30px;
@@ -1383,7 +1383,7 @@
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		background-color: #f9f9f9;
+		background-color: var(--quad-grey);
 	}
 
 	.legal {
@@ -1400,7 +1400,7 @@
 
 	.subscribe {
 		font: normal 600 0.9em/20px $font;
-		background-color: #f9f9f9;
+		background-color: var(--quad-grey);
 		clear: both;
 		cursor: pointer;
 

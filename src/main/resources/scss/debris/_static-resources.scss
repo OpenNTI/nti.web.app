@@ -1,6 +1,6 @@
 .resource-not-found{
 	position: relative;
-	background-color: $quad-grey;
+	background-color: var(--quad-grey);
 	border: 1px solid $border-grey;
 	border-radius: 3px;
 	.body{

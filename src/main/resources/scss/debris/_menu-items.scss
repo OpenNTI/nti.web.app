@@ -241,7 +241,7 @@ label.x-menu-item-cmp {
 
 .x-menu-item-cmp.search-box {
 	border-top: 1px solid #F1F1F1;
-	background: #f8f8f8;
+	background: var(--quad-grey);
 	height: 61px;
 	overflow: hidden;
 	@include icon($rhp-search,$top:21px,$left:19px);

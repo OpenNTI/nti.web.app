@@ -3,7 +3,7 @@
 	@include reset-window-border-radius(3px);
 	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3), 0 0 0 110px transparent;
 
-	background: #f8f8f8;
+	background: var(--quad-grey);
 
 
 	.error {

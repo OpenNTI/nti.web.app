@@ -778,7 +778,7 @@ div.contact-buttons {
         border-bottom: 1px solid var(--tertiary-grey-alt);
         box-shadow: inset 0 1px 0 0 white;
         height: 60px;
-        background: $quad-grey;
+        background: var(--quad-grey);
         padding: 15px 30px;
 
         .title{
@@ -844,7 +844,7 @@ div.contact-buttons {
                     padding: 10px 25px;
                     height: 38px;
                     color: var(--secondary-grey);
-                    background: $quad-grey;
+                    background: var(--quad-grey);
                     border-radius: 5px;
                     border: 1px solid $border-grey;
                     cursor: pointer;
@@ -869,7 +869,7 @@ div.contact-buttons {
         position: relative;
         color: var(--tertiary-grey);
         height: 40px;
-        background-color: $quad-grey;
+        background-color: var(--quad-grey);
 
         &:after {
             content: '';
@@ -1341,7 +1341,7 @@ div.contact-buttons {
 		.show-more{
 			cursor: pointer;
 			position: relative;
-			background: #f8f8f8;
+			background: var(--quad-grey);
 			width: 140px; height: 140px;
 			float: left;
 			text-align: center;
