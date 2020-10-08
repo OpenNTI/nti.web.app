@@ -402,7 +402,7 @@
 
 			.error-field {
 				text-transform: capitalize;
-				color: $secondary-red;
+				color: var(--secondary-red);
 				text-align: right;
 				float: left;
 				width: 85px;
