@@ -629,7 +629,7 @@
 
 			&.active {
 				cursor: pointer;
-				background-color: #3fb34f;
+				background-color: var(--secondary-green);
 			}
 		}
 	}
@@ -718,7 +718,7 @@
 		}
 
 		.seats:not(.full) {
-			color: $secondary-green;
+			color: var(--secondary-green);
 		}
 
 		.link {
@@ -745,7 +745,7 @@
 				max-width: 75px;
 				font-size: 1.2em;
 				margin-bottom: 10px;
-				color: $secondary-green;
+				color: var(--secondary-green);
 			}
 
 			.info {
@@ -753,7 +753,7 @@
 			}
 
 			.enrolled {
-				color: $secondary-green;
+				color: var(--secondary-green);
 				text-transform: uppercase;
 				font-size: 0.8em;
 				line-height: 1.5em;
@@ -914,7 +914,7 @@
 			}
 
 			&.paid {
-				background-color: $secondary-green;
+				background-color: var(--secondary-green);
 			}
 
 			&.drop {
@@ -929,7 +929,7 @@
 }
 
 .complete-enrollment-layer, .welcome-card {
-	background: $secondary-green;
+	background: var(--secondary-green);
 	opacity: 0.97;
 	position: absolute;
 	top: 0;

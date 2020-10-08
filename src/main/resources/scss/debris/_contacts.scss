@@ -850,7 +850,7 @@ div.contact-buttons {
                     cursor: pointer;
 
                     &:hover{
-                        background: $secondary-green;
+                        background: var(--secondary-green);
                         color: #ffffff;
                         border: none;
                     }
@@ -1056,7 +1056,7 @@ div.contact-buttons {
 						overflow: hidden;
 						font: normal 300 0.85em/36px $font;
 						box-shadow: 0 1px 0 0 rgba(255,255,255,0.1);
-						background: $secondary-green;
+						background: var(--secondary-green);
                     }
                 }
             }

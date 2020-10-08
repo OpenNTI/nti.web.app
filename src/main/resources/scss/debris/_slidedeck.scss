@@ -1320,7 +1320,7 @@ body.media-viewer-closing {
 					right: 5px;
 					padding: 0px 10px 0 30px;
 					color: white;
-					background-color: $secondary-green;
+					background-color: var(--secondary-green);
 					z-index: 1;
 					border-radius: 20px;
 				}

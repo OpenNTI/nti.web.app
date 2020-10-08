@@ -65,7 +65,7 @@ canvas.x-component-course-assessment {
 		}
 
 		.title {
-			color: $secondary-green;
+			color: var(--secondary-green);
 		}
 
 		.bold {
@@ -381,7 +381,7 @@ canvas.x-component-course-assessment {
 			margin-right: 0.3em;
 
 			&.ontime {
-				color: $secondary-green;
+				color: var(--secondary-green);
 			}
 		}
 
@@ -1691,7 +1691,7 @@ canvas.x-component-course-assessment {
 		}
 
 		&.max-time .time {
-			background-color: $secondary-green;
+			background-color: var(--secondary-green);
 		}
 
 		.time {
@@ -1701,7 +1701,7 @@ canvas.x-component-course-assessment {
 			font-weight: 300;
 			font-size: 1.2em;
 			overflow: hidden;
-			background-color: $secondary-green;
+			background-color: var(--secondary-green);
 
 			.loading-bar {
 				position: absolute;
@@ -1879,7 +1879,7 @@ canvas.x-component-course-assessment {
 					}
 
 					&.saved {
-						color: $secondary-green;
+						color: var(--secondary-green);
 					}
 
 					&.error {
@@ -2106,7 +2106,7 @@ canvas.x-component-course-assessment {
 					}
 
 					.ontime {
-						color: $secondary-green;
+						color: var(--secondary-green);
 					}
 
                     .excused{

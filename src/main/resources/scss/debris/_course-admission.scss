@@ -94,7 +94,7 @@
 					}
 
 					&.success {
-						color: $secondary-green;
+						color: var(--secondary-green);
 					}
 
 					&.loading {
@@ -146,7 +146,7 @@
 				.amount {
 					font-size: 1.5em;
 					font-weight: 400;
-					color: $secondary-green;
+					color: var(--secondary-green);
 				}
 			}
 		}
@@ -207,10 +207,10 @@
 				border-right-width: 1px;
 
 				&:not(.failed) {
-					color: $secondary-green;
+					color: var(--secondary-green);
 
 					&::before {
-						border-color: $secondary-green;
+						border-color: var(--secondary-green);
 					}
 				}
 			}
@@ -1086,7 +1086,7 @@
 	}
 
 	.main {
-		color: $secondary-green;
+		color: var(--secondary-green);
 		font-size: 1.5em;
 		line-height: 1.7em;
 		font-weight: 300;
@@ -1151,7 +1151,7 @@
 				position: absolute;
 				line-height: 40px;
 				color: white;
-				background-color: $secondary-green;
+				background-color: var(--secondary-green);
 				font-size: 1.2em;
 				right: 20px;
 				top: 24px;
@@ -1201,7 +1201,7 @@
 					line-height: 1.5em;
 
 					&.green {
-						color: $secondary-green;
+						color: var(--secondary-green);
 						font-weight: 600;
 					}
 				}
@@ -1307,7 +1307,7 @@
 
 	.title {
 		font-size: 1.5em;
-		color: $secondary-green;
+		color: var(--secondary-green);
 		margin-bottom: 10px;
 
 		@include icon($assignment_ontime_small, $left: -35px);

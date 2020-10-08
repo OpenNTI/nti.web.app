@@ -272,7 +272,7 @@
 			}
 
 			&.accept {
-				background-color: $secondary-green;
+				background-color: var(--secondary-green);
 			}
 
 			&.decline, &.caution {
