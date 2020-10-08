@@ -1,24 +1,24 @@
 //colors
-var(--primary-grey): #000000;
-var(--secondary-grey): #4c4c4c;
-var(--secondary-grey-alt): #8e8e8e;
-var(--tertiary-grey): #747474;
-var(--tertiary-grey-alt): var(--tertiary-grey-alt);
-var(--quad-grey): var(--quad-grey);
+$primary-grey: #000000;
+$secondary-grey: #4c4c4c;
+$secondary-grey-alt: #8e8e8e;
+$tertiary-grey: #747474;
+$tertiary-grey-alt: #d1d1d1;
+$quad-grey: #f8f8f8;
 
-var(--primary-red): #e41717;
-var(--secondary-red): #500000;
+$primary-red: #e41717;
+$secondary-red: #500000;
 $primary-orange: #FA8700;
-var(--primary-blue): #2a76a3;
-var(--primary-green): #577f02;
-var(--secondary-green): #148524;
+$primary-blue: #2a76a3;
+$primary-green: #577f02;
+$secondary-green: #148524;
 
-var(--border-blue): var(--border-blue);
-var(--border-grey): var(--border-grey);
-var(--border-red): var(--primary-red);
-var(--text-red): #c64817;
+$border-blue: #39a1dd;
+$border-grey: #dbdbdb;
+$border-red: #f35252;
+$text-red: #c64817;
 
-var(--panel-background): var(--panel-background);
+$panel-background: #fbfbfb;
 
 $toast-border-top: #78caf9;
 
