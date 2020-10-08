@@ -124,7 +124,7 @@
 			}
 		}
 		.title {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font: normal 300 2.25em/1.15em $font;
 		}
 
@@ -143,7 +143,7 @@
 
 		&:hover {
 			z-index: 2;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			background: #f0f0f0;
 			border-top-color: none;
 			border-bottom-color: none;
@@ -195,7 +195,7 @@
 
 			.title {
 				font: italic 500 1.125em/1.5em $font;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				overflow: hidden;
 				@include ellipse;
 			}
@@ -274,7 +274,7 @@
 			}
 
 			.title {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
 				overflow: hidden;
 				//@include ellipse();
@@ -389,7 +389,7 @@
 			.title {
 				display: inline-block;
 				vertical-align: middle;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font-size: 1.125em;
 				max-width: 515px;
 				margin-bottom: 1em;

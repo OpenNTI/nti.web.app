@@ -55,7 +55,7 @@ $over-color: #f4f3f3;
 				@include ellipse();
 				overflow: hidden;
 				font: normal 600 12px/15px $font;
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 			.status {
 				@include ellipse();
@@ -616,7 +616,7 @@ $over-color: #f4f3f3;
 					background: #fafafa;
 
 					font: normal 400 14px/25px $font;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					height: 40px;
 					top: 0; left: 30px; right: 26px;
 					opacity: 0;
@@ -663,7 +663,7 @@ $over-color: #f4f3f3;
 		padding: 15px;
 
 		.disabled-title{
-			color: $primary-grey;
+			color: var(--primary-grey);
 			padding-bottom: 3px;
 			font-size: 16px;
 			font-style: italic;
@@ -941,7 +941,7 @@ div.contact-buttons {
                         right: 0;
                         width: 40px;
                         height: 214px;
-                        background-color: $primary-grey;
+                        background-color: var(--primary-grey);
                         opacity: 0.6;
 						visibility: hidden;
 
@@ -998,7 +998,7 @@ div.contact-buttons {
 					padding-top: 118px;
 					text-align: center;
 					font-style: normal !important;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					font-size: 14px;
 					margin-left: 25px;
 
@@ -1198,7 +1198,7 @@ div.contact-buttons {
 			margin: 15px 0 0 160px;
 
 			[data-field],.separator{
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font: normal 500 14px/25px $font;
 			}
 
@@ -1329,7 +1329,7 @@ div.contact-buttons {
 			span{
 				white-space: nowrap;
 				font: normal 300 26px/35px $font;
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 
 			span.count{
@@ -1563,7 +1563,7 @@ div.contact-buttons {
 								background: #fafafa;
 
 								font: normal 400 14px/25px $font;
-								color: $primary-grey;
+								color: var(--primary-grey);
 								height: 40px;
 								top: 0; left: 30px; right: 26px;
 								opacity: 0;

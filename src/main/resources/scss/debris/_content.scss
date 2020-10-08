@@ -142,7 +142,7 @@
 		.active-content{
 			display: inline-block;
 			line-height: 0;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			-webkit-font-smoothing: antialiased;
 			opacity: 1;
 			left: 0;
@@ -509,7 +509,7 @@ body .modal ~ .simple-popover-widget {
 
 		&.active,
 		&.over {
-			.label { color: $primary-grey; }
+			.label { color: var(--primary-grey); }
 			.menu {
 				span {
 					background-image: url(../images/elements/menu-arrow-down-active.png);
@@ -530,7 +530,7 @@ body .modal ~ .simple-popover-widget {
 	}
 	.menu {
 		max-width: 450px;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font-size: 11pt;
 		font-weight: 400;
 		font-style: normal;
@@ -576,7 +576,7 @@ body .modal ~ .simple-popover-widget {
     	bottom: 4px;
     	z-index: 10;
     	background-color: white;
-    	color: $primary-grey;
+    	color: var(--primary-grey);
     	max-width: 300px;
     	font: normal 600 1em/1.2 $font;
     	padding: 3px;

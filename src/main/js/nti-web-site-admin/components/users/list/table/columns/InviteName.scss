@@ -23,7 +23,7 @@
 
 				.invite-email {
 					font-size: 14px;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					white-space: nowrap;
 					text-overflow: ellipsis;
 					overflow: hidden;

@@ -164,7 +164,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 				white-space: normal;
 				word-wrap: break-word;
 				word-break: break-word;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font-size: 20px;
 				font-weight: bold;
 				line-height: 22px;

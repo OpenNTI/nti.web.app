@@ -37,7 +37,7 @@
 			display: block;
 			font-size: 16px;
 			font-weight: 600;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.image-caption {
@@ -260,7 +260,7 @@
 			font: italic 400 16px/25px $font;
 			margin: 0 0 10px -10px;
 			padding-left: 10px;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			text-overflow: ellipsis;
 			word-wrap: break-word;
 
@@ -838,7 +838,7 @@
 			&.shared-with-me {
 				&,.math {
 					background: none;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					border-bottom: 1px solid #9fd9fa;
 				}
 

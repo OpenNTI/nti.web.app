@@ -49,7 +49,7 @@
 
 			.loading {
 				position: absolute;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				line-height: 24px;//height of the spinner
 				padding-left: 30px;//width of the spinner + 6px
 				top: 50%; left: 50%;
@@ -386,7 +386,7 @@
 // 			.fragments, .noresults {
 // 				white-space: normal;
 // 				margin-top: 2px;
-// 				color: $primary-grey;
+// 				color: var(--primary-grey);
 // 				font-style: italic;
 // 				font-size: 15px;
 // 				.fragment{

@@ -30,7 +30,7 @@
 		overflow: hidden;
 
 		&.current {
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		&::after {
@@ -118,14 +118,14 @@
 		border-bottom-width: 1px;
 
 		.title {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font: normal 300 28px/40px $font;
 			padding-bottom: 5px;
 			@include ellipse;
 			overflow: hidden;
 		}
 		.description {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font: normal normal 14px/1.8em $font;
 		}
 		.meta {
@@ -264,7 +264,7 @@
 			}
 
 			.title {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font: normal 400 1.25em/1.5 $font;
 				width: 600px;
 				@include ellipse;
@@ -360,7 +360,7 @@
 		@include like-and-favorite;
 	}
 	.title {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font: normal 300 28px/40px $font;
 		padding-bottom: 5px;
 		@include ellipse;
@@ -443,7 +443,7 @@
 	.body {
 		@include text-content;
 		margin: 20px 0;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font: normal 400 14px/28px $font;
 
 		.video-placeholder {
@@ -680,7 +680,7 @@
 			line-height: 2.5rem;
 			text-align: center;
 			font-size: 0.75rem;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		&[data-depth='0'].loading {
@@ -1509,7 +1509,7 @@
 						font: italic 400 1.2em/1.1em "Open Sans", sans-serif;
 						margin: 0 0 10px -10px;
 						padding-left: 10px;
-						color: #494949;
+						color: var(--primary-grey);
 						text-overflow: ellipsis;
 						word-wrap: break-word;
 					}
@@ -1696,7 +1696,7 @@
 				line-height: 49px;
 				display: inline-block;
 				font-style: italic;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				margin-right: 25px;
 				span {
 					font-weight: 600;
@@ -1761,7 +1761,7 @@
 
 
 					.position {
-						color: $primary-grey;
+						color: var(--primary-grey);
 						font: italic 400 0.8em/35px $font;
   						display: inline-block;
 					    width: 120px;

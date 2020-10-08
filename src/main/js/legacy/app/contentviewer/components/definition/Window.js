@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 					{
 						cls: 'dictonary-error',
 						cn: [
-							{ tag: 'p', style: 'margin-top: 1rem;text-align: center;color: #494949;', html: 'Unable to find term.' }
+							{ tag: 'p', style: 'margin-top: 1rem;text-align: center;color: var(--primary-grey);', html: 'Unable to find term.' }
 						]
 					}
 				]);

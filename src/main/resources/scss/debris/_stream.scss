@@ -15,7 +15,7 @@
 				background: white;
 
 				.load-text {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					top: 25%;
 				}
 			}
@@ -56,7 +56,7 @@
 
 		.loading {
 			position: absolute;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			line-height: 24px;//height of the spinner
 			padding-left: 30px;//width of the spinner + 6px
 			top: 50%; left: 50%;
@@ -107,7 +107,7 @@
 				.title {
 					cursor: pointer;
 					font: normal 300 1.75em/35px $font;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					max-width: 100%;
 					overflow: hidden;
 					margin-bottom: 5px;
@@ -149,7 +149,7 @@
 		.body {
 			margin: 20px 0;
 			font: normal 400 1em/1 $font;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 	}
 

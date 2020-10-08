@@ -650,7 +650,7 @@
 }
 
 
-@mixin arrow($pointFrom:bottom,$width:7px,$height:4px,$color:$primary-grey){
+@mixin arrow($pointFrom:bottom,$width:7px,$height:4px,$color:var(--primary-grey)){
 	//In Internet Explorer, The"border-style: dashed" will never be
 	// rendered unless "(width * 5) >= border-width" is true.
 	// Since "width" is set to "0", the "dashed-border" remains

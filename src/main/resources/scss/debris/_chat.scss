@@ -517,7 +517,7 @@
 			left: 0;
 			text-align: right;
 			font-weight: normal;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.wrap {
@@ -531,7 +531,7 @@
 			}
 
 			.body {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				word-wrap: break-word;
 				word-break: break-word;
 				.body-divider {
@@ -767,7 +767,7 @@
 			@include ellipse;
 			overflow: hidden;
 			font: normal 600 12px/16px $font;
-			color: $primary-grey;
+			color: var(--primary-grey);
 
 			&.overflown::before{
 				content: "(" attr(data-count) ")";
@@ -801,7 +801,7 @@
 #chat-history {
 	.x-panel-header{
 		background: #f1f1f1;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		text-transform: uppercase;
 		font: normal 700 10px/30px $font;
 
@@ -1004,7 +1004,7 @@ body.white-shade-mask .chat-gutter-window {
 		width: 220px;
 
 		.header {
-			border-bottom: 1px solid $primary-grey;
+			border-bottom: 1px solid var(--primary-grey);
 			padding: 5px 10px;
 			position: relative;
 
@@ -1076,7 +1076,7 @@ body.white-shade-mask .chat-gutter-window {
 			bottom: 0;
 			left: 0;
 			right: 0;
-			border-top: 1px solid $primary-grey;
+			border-top: 1px solid var(--primary-grey);
 			padding: 0;
 
 			.show-contacts {

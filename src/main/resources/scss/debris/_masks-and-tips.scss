@@ -24,7 +24,7 @@ body > .x-mask {
     border: none !important;
     box-shadow: none !important;
 	background: transparent;
-	color: $primary-grey;
+	color: var(--primary-grey);
 
 	&.enrollment-mask {
 		.x-mask-msg-text {
@@ -231,9 +231,9 @@ body > .x-mask {
 		position: relative;
 		//top: 3px;
 		line-height: normal;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		text-decoration: underline;
-		//border-bottom: 1px dotted $primary-grey;
+		//border-bottom: 1px dotted var(--primary-grey);
 	}
 
 	.remember{

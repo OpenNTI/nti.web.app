@@ -1,7 +1,7 @@
 .section-root {
 	--header-font-family: var(--body-font-family);
 
-	color: var(--primary-grey, #494949);
+	color: var(--primary-grey);
 	padding: 2rem 0;
 	position: relative;
 }

@@ -116,7 +116,7 @@
 				&.open {
 					.menu-label.selected {
 						background: white;
-						color: $primary-grey;
+						color: var(--primary-grey);
 					}
 				}
 			}

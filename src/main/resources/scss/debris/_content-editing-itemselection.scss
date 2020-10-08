@@ -222,7 +222,7 @@
     				height: 100%;
 
     				.title {
-						color: $primary-grey;
+						color: var(--primary-grey);
 						font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
 						overflow: hidden;
 						height: 64px;
@@ -332,7 +332,7 @@
 		box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.15);
 		line-height: 40px;
 		font-size: 0.875rem;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		padding: 0 1em;
 
 		.expand, .icon, .label {
@@ -497,7 +497,7 @@
 
 		.title {
 			font-style: normal;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.description {
@@ -563,7 +563,7 @@
 					max-height: 40px;
 					overflow: hidden;
 					margin-bottom: 5px;
-					color: $primary-grey;
+					color: var(--primary-grey);
 				}
 
 				.description {
@@ -572,7 +572,7 @@
 					overflow: hidden;
 					margin-top: 5px;
 					font: normal normal 12px/1 $font;
-					color: $primary-grey;
+					color: var(--primary-grey);
 				}
 			}
 		}
@@ -615,7 +615,7 @@
 		.wrap {
 			flex: 1 1 auto;
 			padding: 1rem 1.25rem;
-			color: $primary-grey;
+			color: var(--primary-grey);
 
 			.title {
 				font-size: 1rem;

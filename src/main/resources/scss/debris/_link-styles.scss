@@ -51,7 +51,7 @@
 			max-height: 40px; //line-height is 20px, max-height is 40px for two line limit.
 			overflow: hidden;
 			margin-bottom: 5px;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 		.byline {
 			font: normal 600 10px/10px $font;
@@ -63,7 +63,7 @@
 			text-overflow: ellipsis;
 		}
 		.description {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font: normal normal 12px/1rem $font;
 			margin-top: 5px;
 			max-height: 2rem; //line-height is 1rem, 2rem max-height limits this to two lines.

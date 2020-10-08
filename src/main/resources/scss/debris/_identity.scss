@@ -182,7 +182,7 @@
 
 				.label{
 					font: normal 600 14px/30px $font;
-					color: #494949;
+					color: var(--primary-grey);
 				}
 			}
 
@@ -200,7 +200,7 @@
 
 				.label{
 					font: normal 600 14px/30px $font;
-					color: #494949;					
+					color: var(--primary-grey);					
 				}
 
 				.edit{

@@ -109,7 +109,7 @@
 				word-break: break-all;
 
 				&:not(.link) {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					font-style: italic;
 				}
 
@@ -163,7 +163,7 @@
 					font-family: $font;
 					font-size: 14px;
 					font-weight: normal;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					word-wrap: break-word;
 
 					position: relative;
@@ -231,7 +231,7 @@
 					font-size: 1.11em;
 					font-weight: 500;
 					text-transform: none;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					font-style: italic;
 				}
 			}

@@ -63,7 +63,7 @@
 		}
 
 		.affiliation {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font: normal 500 14px/25px $font;
 			margin-left: 2px;
 		}
@@ -215,12 +215,12 @@
 					line-height: 30px !important;
 				}
 				.affiliation {
-					color:$primary-grey !important;
+					color:var(--primary-grey) !important;
 					font: { size: 12px; weight: 400; }
 					margin-left: 2px;
 				}
 				.meta-role{
-					color:$primary-grey;
+					color:var(--primary-grey);
 					font-size: 12px;
 					font-weight: 400;
 					overflow: hidden;
@@ -228,7 +228,7 @@
 					padding-right: 10px;
 				}
 				.location{
-					color:$primary-grey;
+					color:var(--primary-grey);
 					font-size: 12px;
 					font-weight: 400;
 					padding-right: 10px;

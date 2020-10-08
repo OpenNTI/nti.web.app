@@ -141,7 +141,7 @@
 			.name {
 				font-size: 18px;
 				font-weight: 600;
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 
 			.identities{
@@ -194,7 +194,7 @@
 						style: normal;
 						weight: normal;
 					}
-					color: $primary-grey;
+					color: var(--primary-grey);
 					padding-right: 2px;
 				}
 
@@ -346,7 +346,7 @@
 		}
 
 		.cant-change{
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font-size: 24px;
 			font-weight: 400;
 			font-style: italic;
@@ -455,7 +455,7 @@
 
 		.title {
 			font: normal 300 18px/1 $font;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.email {
@@ -466,7 +466,7 @@
 
 		.sub {
 			font-weight: 300;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			margin-top: 15px;
 			display: inline-block;
 			margin-bottom: 5px;
@@ -614,7 +614,7 @@
 			font: normal 400 0.9em/40px $font;
 			text-align: center;
 			min-width: 90px;
-			color: $primary-grey;
+			color: var(--primary-grey);
 
 			&.confirm {
 				background-color: $primary-blue;
@@ -746,7 +746,7 @@
     	}
 
     	.email {
-    		color: $primary-grey;
+    		color: var(--primary-grey);
     		padding: 5px 0;
     		font-style: italic;
     	}

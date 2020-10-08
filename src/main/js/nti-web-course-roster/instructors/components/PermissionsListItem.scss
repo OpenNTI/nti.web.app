@@ -31,7 +31,7 @@
 		}
 
 		.meta {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			flex: 0 0 auto;
 			font-size: .75rem;
 			text-overflow: ellipsis;

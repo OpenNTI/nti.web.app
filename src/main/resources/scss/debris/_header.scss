@@ -40,7 +40,7 @@
 			margin-top: -0.2em;
 			font: normal 700 1.1em/1.5 'Open Sans Condensed';
 			text-transform: uppercase;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			overflow: hidden;
 			@include ellipse();
 		}

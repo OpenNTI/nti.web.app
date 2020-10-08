@@ -16,7 +16,7 @@
 	& > .x-panel-body-image-roll,
 	& > .x-panel-body-video-roll {
 		padding: 0;
-		color: $primary-grey;
+		color: var(--primary-grey);
 
 		.carousel {
 			background: none;

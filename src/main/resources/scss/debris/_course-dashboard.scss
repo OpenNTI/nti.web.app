@@ -319,7 +319,7 @@
 						max-width: 215px;
 
 						.name {
-							color: $primary-grey;
+							color: var(--primary-grey);
 							font-size: 1.1em;
 							font-weight: 300;
 							margin-bottom: -7px;
@@ -343,7 +343,7 @@
 				}
 
 				.post {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					padding: 5px 15px;
 					font: normal 400 0.9em/1.2em $font;
 
@@ -380,7 +380,7 @@
 				}
 
 				.meta {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					font-size: 0.9em;
 					overflow: hidden;
 					padding-top: 5px;

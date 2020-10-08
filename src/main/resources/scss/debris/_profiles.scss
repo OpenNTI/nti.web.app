@@ -198,7 +198,7 @@
 				content: '';
 				width: 30px;
 				height: 30px;
-				background-color: $primary-grey;
+				background-color: var(--primary-grey);
 				top: 3px;
 				right: 3px;
 				position: absolute;
@@ -413,7 +413,7 @@
 			}
 
 			.fixed-name {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				line-height: 40px;
 				margin-left: 45px;
 				overflow: hidden;
@@ -487,7 +487,7 @@
 					content: '';
 					width: 30px;
 					height: 30px;
-					background-color: $primary-grey;
+					background-color: var(--primary-grey);
 					top: 3px;
 					right: 3px;
 					position: absolute;
@@ -499,7 +499,7 @@
 
 			.name:not(.read-only){
 				cursor: pointer;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				z-index: 1000;
 				background: #f4f4f4;
 				padding-right: 20px;
@@ -535,7 +535,7 @@
 					background: none;
 					border: none;
 					font-weight: 500;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					font-style: normal;
 				}
 
@@ -562,7 +562,7 @@
 			.name {
 				position: relative;
 				padding-right: 15px;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				display: inline;
 				overflow: hidden;
 				@include ellipse();
@@ -894,7 +894,7 @@
 			margin: 0 0 0 75px;
 			color: $tertiary-grey;
 			.title{
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font: normal 300 20px/30px $font;
 			}
 			.counts {
@@ -935,7 +935,7 @@
 		}
 
 		.wrap {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			padding-left: 26px;
 			margin-bottom: 15px;
 			width: 620px;
@@ -1111,7 +1111,7 @@
 				position: relative;
 				overflow: hidden;
 				font: normal 400 20px "Open Sans",sans-serif;
-				color: #494949;
+				color: var(--primary-grey);
 				display: block;
 				height: 50px;
 				bottom: 5px;
@@ -1177,7 +1177,7 @@
 					position: relative;
 					overflow: hidden;
 					font: normal 400 16px $font;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					display: block;
 					height: 48px;
 
@@ -1306,7 +1306,7 @@
 
 			.subject, .name.no-subject {
 				display: block;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font: normal 300 28px/35px $font;
 				max-width: 570px;
 				overflow: hidden;
@@ -1332,7 +1332,7 @@
 		.body{
 			margin: 20px 0;
 			font: normal 400 16px $font;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			@include text-pre-wrap;
 			@include attachment();
 		}
@@ -1415,7 +1415,7 @@
 		}
 
 		.body {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			margin-top: 5px;
 			font: normal 500 14px/20px $font;
 
@@ -1657,7 +1657,7 @@
 			border-radius: 0;
 			border-width: 0;
 			box-shadow: none;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font: normal 300 20px/1 $font;
 			padding-top: 0;
 			padding-bottom: 0;
@@ -2023,7 +2023,7 @@
 
 
 		.title {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			padding: 0 3px;
 			max-height: 20px;
 			position: absolute;
@@ -2092,7 +2092,7 @@
 	&.read-only {
 		.fieldset {
 			.empty-text {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				cursor: initial;
 			}
 		}
@@ -2110,7 +2110,7 @@
 	}
 
 	h2 {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		margin: 0;
 		font-weight: 300;
 		padding-bottom: 5px;
@@ -2197,7 +2197,7 @@
 
 		.editable {
 			&[contenteditable="true"] {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				border: 1px solid #e8e8e8;
 				line-height: 1.5em;
 				padding: 0.25em;
@@ -2233,7 +2233,7 @@
 		}
 
 		.field.about {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font-size: 0.875em;
 			word-wrap: break-word;
 
@@ -2315,7 +2315,7 @@
 
 	.groupset {
 		font-size: 0.875em;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		word-wrap: break-word;
 
 		.entry-container {
@@ -2502,7 +2502,7 @@
 		.title {
 			font-size: 1.5em;
 			font-weight: 300;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			margin-bottom: 20px;
 		}
 
@@ -2590,7 +2590,7 @@
 			font-size: 1.25em;
 			font-weight: 300;
 			margin-bottom: 10px;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.entry {
@@ -2749,7 +2749,7 @@
 		.loading {
 			clear: both;
 			background-color: white;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			border-radius: 5px;
 			margin-bottom: 10px;
 
@@ -2787,7 +2787,7 @@
 		}
 
 		.loading {
-			color: $primary-grey;
+			color: var(--primary-grey);
 
 			&::before {
 				left: 260px;
@@ -2870,7 +2870,7 @@
 	background-color: white;
 	padding-top: 5px;
 	margin-bottom: 5px;
-	color: $primary-grey;
+	color: var(--primary-grey);
 
 	ul {
 		list-style: none;
@@ -2925,7 +2925,7 @@
 
 			&:hover {
 				background-color: #F0F0F0;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				box-shadow: inset 4px 0 0 0 #CFCFCF;
 			}
 		}

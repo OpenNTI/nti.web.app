@@ -170,7 +170,7 @@
 	}
 
 	.message-container {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		padding-left: 80px;
 		font: normal 300 1em/1.3 $font;
 		min-height: 47px;
@@ -258,7 +258,7 @@
 
 			&.secondary {
 				font-weight: 300;
-				color: $primary-grey;
+				color: var(--primary-grey);
 
 				&:hover {
 					background-color: white;
@@ -323,7 +323,7 @@
 	.error-text {
 		font: normal 500 1.1em/1.3 $font;
 		padding: 60px;
-		color: $primary-grey;
+		color: var(--primary-grey);
 	}
 }
 
@@ -480,7 +480,7 @@
 		font-size: 0.75em;
 
 		.title{
-			color: #494949;
+			color: var(--primary-grey);
 			margin-left: 15px;
 			line-height: 44px;
 			max-width: 675px;

@@ -22,7 +22,7 @@
 
 		.loading {
 			position: absolute;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			line-height: 24px;//height of the spinner
 			padding-left: 30px;//width of the spinner + 6px
 			top: 50%; left: 50%;

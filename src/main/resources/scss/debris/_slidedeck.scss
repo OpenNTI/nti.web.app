@@ -524,7 +524,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 					cursor: text;
 					font: 600 italic 16px/36px $font;
 					padding: 0 10px;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					background: $slidedeck-controls-background;
 					border: 1px solid #323232;
 
@@ -1574,7 +1574,7 @@ body.media-viewer-closing {
 	.content-video-transcript{
 		position: relative;
 		margin: 50px 20px 20px 100px;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font-size: 14px;
 		font-weight: normal;
 		line-height: 2.2em;
@@ -1629,7 +1629,7 @@ body.media-viewer-closing {
 				cursor: pointer;
 
 				&:hover {
-					color: #494949 !important;
+					color: var(--primary-grey) !important;
 					background-color: #ebf7fd;
 				}
 			}

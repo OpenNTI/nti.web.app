@@ -15,7 +15,7 @@
 
 			.option-icon {
 				flex: 0 0 auto;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				margin-right: 0.625rem;
 			}
 
@@ -27,7 +27,7 @@
 				font-size: 14px;
 				line-height: 19px;
 				font-weight: 600;
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 
 			.option-description {

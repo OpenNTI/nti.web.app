@@ -201,7 +201,7 @@
 	&.description-fields {
 		background: #fff;
 		padding: 1.5em;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font: normal 400 0.85em/1.95em $font;
 
 		.body {
@@ -292,7 +292,7 @@
 			weight: 300;
 			size: 2em;
 		}
-		color: $primary-grey;
+		color: var(--primary-grey);
 		position: relative;
 		top: -0.1em;
 	}
@@ -300,7 +300,7 @@
 	.photo {
 		float: left;
 		background: {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			size: cover;
 			position: center center;
 			repeat: no-repeat;
@@ -332,7 +332,7 @@
 	position: relative;
 	overflow: hidden;
 	background: #fff;
-	color: $primary-grey;
+	color: var(--primary-grey);
 	font: normal 400 0.85em/1.95em $font;
 
 
@@ -521,7 +521,7 @@
 	padding: 7px 15px 15px 20px;
 	background-color: #efefef;
 	background-size: cover;
-	color: $primary-grey;
+	color: var(--primary-grey);
 	max-height: 100%;
 
 	.course-inline-editor {
@@ -689,7 +689,7 @@
 		.enroll-option, .drop:not(.button) {
 			padding: 15px;
 			font: normal 300 1em/1 $font;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.refund {
@@ -845,7 +845,7 @@
 			}
 
 			&.enrolled .title {
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 
 			&.rejected, &.pending {

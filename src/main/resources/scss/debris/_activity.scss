@@ -45,7 +45,7 @@
 			margin: 0 18px 0 20px;
 			padding: 12px 0 12px 0;
 			font: italic normal 12px/20px $font;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			overflow: hidden;
 
 			//&::after {
@@ -318,7 +318,7 @@
 					position: relative;
 					overflow: hidden;
 					font: normal 400 14px/20px $font;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					display: block;
 					height: 40px;
 					img { max-width: 50% !important; }
@@ -419,7 +419,7 @@
 
 			.subject, .name.no-subject {
 				display: block;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				overflow: hidden;
 				padding-bottom: 3px;
 				@include ellipse;
@@ -461,7 +461,7 @@
 			position: relative;
 			margin: 10px 0 25px 0;
 			font: normal 400 14px/19px $font;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			max-height: 57px;
 			overflow: hidden;
 
@@ -603,7 +603,7 @@
 				}
 
 				.body {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					margin:{ top: 5px; bottom: 5px; }
 					font: normal 500 14px/20px $font;
 					max-height: 300px;
@@ -642,7 +642,7 @@
 	}
 
 	.wrap {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		float: left;
 		width: 278px;
 		max-height: 400px;
@@ -728,7 +728,7 @@
 			float: left;
 
 			.name {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font: normal 600 1em/1.1em $font;
 			}
 

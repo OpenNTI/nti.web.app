@@ -335,7 +335,7 @@
 			line-height: default;
 			font-family: $font;
 
-			color: $primary-grey;
+			color: var(--primary-grey);
 			@include note-body;
 			@include attachment();
 
@@ -477,7 +477,7 @@
 				height: 55px;
 				max-width: 600px;
 				font-size: 40px;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font-family: 'Open Sans Condensed', $font;
 				word-wrap: nowrap;
 				overflow: hidden;
@@ -616,7 +616,7 @@
 			& > span.text{
 			  	position: relative;
 			  	z-index: 1;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font-size: 14px;
 				line-height: 32px;
 				white-space:normal;

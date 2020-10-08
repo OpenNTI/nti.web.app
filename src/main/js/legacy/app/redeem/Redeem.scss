@@ -7,7 +7,7 @@
 
 	.redeemLabel {
 	    flex: 0 1 100%;
-		color: #494949;
+		color: var(--primary-grey);
 	    float: left;
 	    font: normal 300 1.125em/1 "Open Sans", sans-serif;
 	    margin-bottom: 10px;
@@ -38,7 +38,7 @@
 			padding: 0.65em;
 		    font-family: "Open Sans", sans-serif;
 		    font-style: italic;
-		    color: #494949;
+		    color: var(--primary-grey);
 		    border: none;
 		    box-shadow: 0 0 0 1px #d8d8d8;
 		    border-radius: 2px;

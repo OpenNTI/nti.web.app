@@ -125,7 +125,7 @@
 	.quantity, .price {
 		float: right;
 		white-space: nowrap;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font: normal 600 16px/30px $font;
 		min-width: 75px;
 		text-align: center;
@@ -156,7 +156,7 @@
 		min-height: 70px;
 
 		.title, .byline {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font: normal 600 14px/20px $font;
 			overflow: hidden;
 			//@include ellipse;
@@ -398,7 +398,7 @@
 
 		&.final-price {
 			.price {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				&::before {
 					display: none;
 				}
@@ -854,7 +854,7 @@
 		min-width: 60px;
 		margin: 35px 40px 0 0;
 		font: normal normal 14px/20px $font;
-		color: $primary-grey;
+		color: var(--primary-grey);
 
 		&:empty {
 			display: none;
@@ -899,7 +899,7 @@
 
 	h3 {
 		margin: 0;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font: normal 400 21px/30px $font;
 	}
 

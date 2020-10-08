@@ -419,7 +419,7 @@ body.x-body {margin:0;}
 	}
 
 	.page-contents {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		margin-top: 50px;
 		font-size: 14px;
 		font-weight: normal;
@@ -615,7 +615,7 @@ body.x-body {margin:0;}
 	}
 
 	#footnotes {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		margin-top: 2em;
 		font-size: small;
 		font-weight: normal;

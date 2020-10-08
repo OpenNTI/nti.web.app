@@ -98,7 +98,7 @@ span.tab{
 
 				.title {
 					display: block;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					border-bottom: none;
 					font-size: 14px;
 					font-weight: 600;
@@ -279,7 +279,7 @@ span.tab{
 					border: 0;
 					margin: 5px 0;
 					width: 100%;
-					color: $primary-grey;
+					color: var(--primary-grey);
 
 					&[type=text]:not([value]),
 					&[type=text][value=""]{

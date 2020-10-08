@@ -330,7 +330,7 @@ span.nti-radiobutton {
 		border-top-width: 0;
 		z-index: 3;
 		overflow: auto;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		backface-visibility: hidden;
 
 		ul {
@@ -714,7 +714,7 @@ form.common-form {
 		@include flexItem(0 0 auto);
 		pointer-events: none;
 		width: 93px;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font-size: 0.75em;
 		font-weight: 700;
 		line-height: 35px;

@@ -17,7 +17,7 @@
 }
 
 .course-info {
-	color: var(--primary-grey, #494949);
+	color: var(--primary-grey);
 	align-self: flex-end;
 }
 

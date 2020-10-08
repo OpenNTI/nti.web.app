@@ -108,7 +108,7 @@
 				max-width: 650px;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font: normal 400 1.5em/1.5 $font;
 				-webkit-font-smoothing: antialiased;
 			}

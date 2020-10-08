@@ -39,7 +39,7 @@
 			margin: 0;
 
 			&[data-sub]::after {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				content: attr(data-value) "% - " attr(data-sub);
 				display: block;
 				line-height: 1em;

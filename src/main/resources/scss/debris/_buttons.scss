@@ -108,7 +108,7 @@ $button-text-weights: 500,500,600,500;
 				style: normal;
 				weight: normal;
 			}
-			color: $primary-grey;
+			color: var(--primary-grey);
 			padding-right: 2px;
 		}
 	}

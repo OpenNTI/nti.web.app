@@ -29,7 +29,7 @@
 	.enrollment-info {
 		padding: 1em;
 		font-size: 0.9em;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		max-width: 240px;
 
 		.course-title {

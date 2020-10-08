@@ -171,7 +171,7 @@
 		}
 
 		.label {
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.page-count {
@@ -277,7 +277,7 @@
 			    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
 			    margin: 2px 0 2px 9px;
 			    padding: 0 22px 0 10px;
-			    color: $primary-grey;
+			    color: var(--primary-grey);
 			    text-transform: capitalize;
 			    position: relative;
 			    cursor: pointer;
@@ -318,7 +318,7 @@
 		    	.options {
 		    		.option {
 		    			line-height: 36px;
-    					color: $primary-grey;
+    					color: var(--primary-grey);
 					    font-weight: 400;
 					    padding: 0 15px;
 					    text-align: left;
@@ -587,7 +587,7 @@ input[type=number]{
 
 
 	.title {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font: normal 300 2.25em/1.15em $font;
 	}
 
@@ -791,7 +791,7 @@ input[type=number]{
 				top: 50%;
 				transform: translateY(-50%);
 				width: 415px;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font-size: 14px;
 				font-weight: 600;
 				cursor: pointer;
@@ -818,7 +818,7 @@ input[type=number]{
 		padding: 0.35em;
 		font-family: $font;
 		font-style: italic;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		border: none;
 		box-shadow: 0 0 0 1px #d8d8d8;
 
@@ -912,7 +912,7 @@ input[type=number]{
 							> .outline-row {
 								border-bottom: 1px solid $tertiary-grey-alt;
 								.label {
-									color: $primary-grey;
+									color: var(--primary-grey);
 								}
 
 								&.lesson:not(.heading) {
@@ -1271,7 +1271,7 @@ input[type=number]{
 					.text {
 						position: relative;
 						padding-right: 50px;
-					    color: #494949;
+					    color: var(--primary-grey);
 					    font-style: normal;
 					}
 
@@ -1418,7 +1418,7 @@ input[type=number]{
 
 					.x-datepicker-date {
 						background-color: $tertiary-grey;
-						color: #494949;
+						color: var(--primary-grey);
 						border-radius: 90px;
 					}
 				}

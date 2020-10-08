@@ -431,7 +431,7 @@ body.dragging * {
 				float: right;
 			}
 			background: #ffffff;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			overflow: hidden;
 			position: relative;
 
@@ -474,7 +474,7 @@ body.dragging * {
 					margin: 9px 10px 0 0;
 					padding: 0 0 0 26px;
 					cursor: pointer;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					float: right;
 					font-size: 14px;
 					font-weight: normal;
@@ -726,7 +726,7 @@ body.dragging * {
 		}
 
 		.message {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font: {
 				weight: normal;
 				size: 18px;
@@ -808,7 +808,7 @@ body.dragging * {
 						display: block;
 						left: -20px;
 						font-weight: 600;
-						color: $primary-grey;
+						color: var(--primary-grey);
 					}
 					.content {
 						font-weight: normal;
@@ -831,7 +831,7 @@ body.dragging * {
 		border: 1px solid $tertiary-grey;
 
 		.inputbox {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			min-height: 38px;
 
 			@include icon($circle-x-red-18,$top: 10px, $left: 10px);
@@ -905,7 +905,7 @@ body.dragging * {
 
 			input.answer-field {
 				@extend .assessment-content;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				margin: 5px 10px 4px;
 				border: none;
 				padding: 0;
@@ -949,7 +949,7 @@ body.dragging * {
 			@extend .assessment-content;
 			cursor: pointer;
 			position: relative;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			vertical-align: middle;
 			min-height: 38px;
 			background: #ffffff;
@@ -1045,7 +1045,7 @@ body.dragging * {
 				@extend .assessment-content;
 				position: relative;
 				display: table-row;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				vertical-align: middle;
 				background: #ffffff;
 				border: 0 solid $tertiary-grey;
@@ -1172,7 +1172,7 @@ body.dragging * {
 						display: inline-block;
 						padding-right: 20px;
 						vertical-align: middle;
-						color: $primary-grey;
+						color: var(--primary-grey);
 
 						img {
 							max-width: 300px !important;
@@ -1203,7 +1203,7 @@ body.dragging * {
 					input.answer-field {
 						background: $panel-background;
 						opacity: 1;
-						color: #494949;
+						color: var(--primary-grey);
 					}
 				}
 
@@ -1220,7 +1220,7 @@ body.dragging * {
 					background: $panel-background;
 					opacity: 1;
 					.content {
-						color: #494949;
+						color: var(--primary-grey);
 					}
 					:hover {
 						cursor: default;
@@ -1338,7 +1338,7 @@ body.dragging * {
 		}
 
 		.indexed-content {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font-size: 1.2em;
 		}
 
@@ -1453,7 +1453,7 @@ body.dragging * {
 							@include ellipse();
 
 							.name {
-								color: $primary-grey;
+								color: var(--primary-grey);
 								text-decoration: underline;
 								padding-right: 15px;
 							}
@@ -1690,7 +1690,7 @@ body.dragging * {
 
 		.label {
 			font: normal 500 1.5em/1 $font;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			word-break: break-all;
 		}
 		.due {
@@ -1984,7 +1984,7 @@ input.preview[readonly] {
 .x-dd-drag-ghost{
 	@include draggable-zone;
 	top: -30px;
-	color: $primary-grey;
+	color: var(--primary-grey);
 	vertical-align: middle;
 	background: transparent;
 
@@ -2074,7 +2074,7 @@ input.preview[readonly] {
 	.survey-history {
 		@include flexItem(1 1 auto);
 		font-size: 1.5em;
-		color: $primary-grey;
+		color: var(--primary-grey);
 	}
 
 	.survey-report {
@@ -2149,7 +2149,7 @@ input.preview[readonly] {
 			display: block;
 			left: 40px;
 			font-weight: 600;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 		.content {
 			font-weight: normal;
@@ -2264,7 +2264,7 @@ input.preview[readonly] {
 					transform: translateX(-50%);
 					background-color: #fbfbfb;
 					white-space: nowrap;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					padding: 10px;
 					box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
 

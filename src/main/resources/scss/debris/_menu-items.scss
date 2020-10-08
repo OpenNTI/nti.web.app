@@ -254,7 +254,7 @@ label.x-menu-item-cmp {
 		border: 1px solid #dcdcdc;
 
 		font: normal 400 1em/1.5 $font;
-		color: $primary-grey;
+		color: var(--primary-grey);
 
 		height: 40px;
 		width: 92%;//fallback...
