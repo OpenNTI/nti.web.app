@@ -470,7 +470,7 @@
 
 		&.overdue {
 			.due-date {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 

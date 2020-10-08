@@ -74,7 +74,7 @@ canvas.x-component-course-assessment {
 
 		.red {
 			font-weight: 500;
-			color: $primary-red;
+			color: var(--primary-red);
 		}
 
 		&::after {
@@ -230,7 +230,7 @@ canvas.x-component-course-assessment {
 	.contents > .error {
 		font-size: 0.875em;
 		line-height: 40px;
-		color: $primary-red;
+		color: var(--primary-red);
 	}
 
 	.footer {
@@ -305,7 +305,7 @@ canvas.x-component-course-assessment {
 		font-weight: 100;
 		font-size: 0.875rem;
 		font-family: $font;
-		background-color: #F35252;
+		background-color: var(--primary-red);
 		width: 140px;
 		cursor: pointer;
 	}
@@ -386,14 +386,14 @@ canvas.x-component-course-assessment {
 		}
 
 		.completed-errors {
-			color: $primary-red;
+			color: var(--primary-red);
 			margin-right: 0.3em;
 		}
 	}
 
     .excused{
         padding-left: 6px;
-        color: $primary-red;
+        color: var(--primary-red);
     }
 
 	.due{
@@ -402,7 +402,7 @@ canvas.x-component-course-assessment {
 		}
 
 		&.late {
-			color: $primary-red;
+			color: var(--primary-red);
 		}
 
 		&.nosubmit {
@@ -668,7 +668,7 @@ canvas.x-component-course-assessment {
 			float: left;
 
 			&.due {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 
 			.completed { display: none; }
@@ -770,15 +770,15 @@ canvas.x-component-course-assessment {
 
 				&.late {
 					&:hover {
-						color: $primary-red;
+						color: var(--primary-red);
 
 						&::after {
-							border-top-color: $primary-red;
+							border-top-color: var(--primary-red);
 						}
 					}
 
 					&:not(.nosubmit)::after {
-					    border-top-color: $primary-red;
+					    border-top-color: var(--primary-red);
 					}
 				}
 			}
@@ -1261,7 +1261,7 @@ canvas.x-component-course-assessment {
 		& > div {
 			color: $primary-blue;
 			display: inline-block;
-			&.overdue { color: $primary-red; }
+			&.overdue { color: var(--primary-red); }
 
 			&::before {
 				content: '\00B7';
@@ -1629,7 +1629,7 @@ canvas.x-component-course-assessment {
 		&.warning-red,
 		&.over-time {
 			.time{
-				background-color: $primary-red;
+				background-color: var(--primary-red);
 				color: white;
 			}
 		}
@@ -1763,7 +1763,7 @@ canvas.x-component-course-assessment {
 				line-height: 20px;
 				height: 20px;
 				text-align: left;
-				color: $primary-red;
+				color: var(--primary-red);
 
 				&.good {
 					color: $primary-green;
@@ -1883,7 +1883,7 @@ canvas.x-component-course-assessment {
 					}
 
 					&.error {
-						color: $primary-red;
+						color: var(--primary-red);
 					}
 				}
 
@@ -2102,7 +2102,7 @@ canvas.x-component-course-assessment {
 					}
 
 					.late {
-						color: $primary-red;
+						color: var(--primary-red);
 					}
 
 					.ontime {
@@ -2112,7 +2112,7 @@ canvas.x-component-course-assessment {
                     .excused{
                         &.on{
                             display: block;
-                            color: $primary-red;
+                            color: var(--primary-red);
                         }
 
                         &.off{
@@ -2151,7 +2151,7 @@ canvas.x-component-course-assessment {
 					text-align: right;
 					width: 10em;
 					line-height: 3;
-					color: $primary-red;
+					color: var(--primary-red);
 
 					&.good{
 						color: $primary-green;
@@ -2384,7 +2384,7 @@ canvas.x-component-course-assessment {
 			font-weight: 600;
 		}
 		.late {
-			color: $primary-red;
+			color: var(--primary-red);
 		}
 		.ontime {
 			color: $primary-green;
@@ -2406,7 +2406,7 @@ canvas.x-component-course-assessment {
 
                     &.on{
                         display: block;
-                        color: $primary-red;
+                        color: var(--primary-red);
                     }
                 }
             }

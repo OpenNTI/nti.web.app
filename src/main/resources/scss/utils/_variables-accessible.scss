@@ -6,7 +6,7 @@ var(--tertiary-grey): #747474;
 var(--tertiary-grey-alt): var(--tertiary-grey-alt);
 var(--quad-grey): var(--quad-grey);
 
-$primary-red: #e41717;
+var(--primary-red): #e41717;
 $secondary-red: #500000;
 $primary-orange: #FA8700;
 $primary-blue: #2a76a3;
@@ -15,7 +15,7 @@ $secondary-green: #148524;
 
 $border-blue: #39a1dd;
 $border-grey: #dbdbdb;
-$border-red: #f35252;
+$border-red: var(--primary-red);
 $text-red: #c64817;
 
 $panel-background: #fbfbfb;

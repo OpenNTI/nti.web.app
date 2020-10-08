@@ -142,7 +142,7 @@
 		.error-box {
 			position: relative;
 			overflow: hidden;
-			background-color: $primary-red;
+			background-color: var(--primary-red);
 			font-weight: 600;
 			font-size: 12px;
 
@@ -740,7 +740,7 @@
 		}
 
 		&:hover {
-			background: $primary-red;
+			background: var(--primary-red);
 
 			&::after{ @include sprite($rhp-close-chat_hover); }
 			&::before {display: none;}
@@ -935,7 +935,7 @@ body.white-shade-mask .chat-gutter-window {
   			&[data-badge]:not([data-badge="0"]) {
   				&::before {
 					content: attr(data-badge);
-					background-color: $primary-red;
+					background-color: var(--primary-red);
 					font-size: 0.55em;
 					font-weight: 500;
 					color: white;
@@ -973,7 +973,7 @@ body.white-shade-mask .chat-gutter-window {
 				}
 				&.DnD,&.dnd {
 					.avatar-pic {
-						border: 2px solid #F35252;
+						border: 2px solid var(--primary-red);
 					}
 				}
   			}
@@ -1126,7 +1126,7 @@ body.white-shade-mask .chat-gutter-window {
 
 	&[data-badge]:not([data-badge="0"])::before {
 		content: attr(data-badge);
-		background-color: $primary-red;
+		background-color: var(--primary-red);
 		font-size: 0.55em;
 		font-weight: 500;
 		color: white;

@@ -1100,7 +1100,7 @@ li.library-grid-item {
 		}
 
 		&.error {
-			background-color: $primary-red;
+			background-color: var(--primary-red);
 		}
 
 		&.link {
@@ -1229,7 +1229,7 @@ li.library-grid-item {
 	}
 
 	.drop {
-		color: $primary-red;
+		color: var(--primary-red);
 	}
 }
 
@@ -1379,7 +1379,7 @@ li.library-grid-item {
 
 	.error-cmp {
 		text-align: center;
-		color: $primary-red;
+		color: var(--primary-red);
 		font-size: 1.25em;
 	}
 }

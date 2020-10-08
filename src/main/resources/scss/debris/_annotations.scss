@@ -781,7 +781,7 @@
 					z-index: 1;
 
 					&.delete{
-						background-color: $primary-red;
+						background-color: var(--primary-red);
 						box-shadow: inset 0 0 0 1px #D14646 !important;
 						&::after{ @include sprite($redactions-trashcan_hover); }
 					}

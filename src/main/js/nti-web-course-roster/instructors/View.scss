@@ -8,7 +8,7 @@
 	}
 
 	.error {
-		background: $primary-red;
+		background: var(--primary-red);
 		color: white;
 		line-height: 1.25rem;
 		text-align: center;

@@ -266,7 +266,7 @@
 				}
 
 				&.declinde, &.caution {
-					color: $primary-red;
+					color: var(--primary-red);
 				}
 
 			}
@@ -276,7 +276,7 @@
 			}
 
 			&.decline, &.caution {
-				background-color: $primary-red;
+				background-color: var(--primary-red);
 			}
 
 		}

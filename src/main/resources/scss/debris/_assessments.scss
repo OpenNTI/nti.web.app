@@ -455,7 +455,7 @@ body.dragging * {
 			padding: 11px 10px 6px 10px;
 
 			&.correct{ font-style: italic; color: #8eb737; }
-			&.incorrect{ font-style: italic; color: #f35252; }
+			&.incorrect{ font-style: italic; color: var(--primary-red); }
 
 			.title, .status {
 				display: inline;
@@ -599,8 +599,8 @@ body.dragging * {
 			cursor: pointer;
 			@include icon($circle-x-red-18,26px,11px);
 			.target.drag {
-				background: #f35252;
-				border-color: #f35252;
+				background: var(--primary-red);
+				border-color: var(--primary-red);
 				color: #fff;
 				box-shadow: none;
 				cursor: default;
@@ -621,7 +621,7 @@ body.dragging * {
 		}
 
 		.status {
-			color: #f35252;
+			color: var(--primary-red);
 			padding-left: 0;
 			font: {
 				size: 14px;
@@ -884,7 +884,7 @@ body.dragging * {
 			}
 
 			&.incorrect {
-				&, input.answer-field { color: #f35252; }
+				&, input.answer-field { color: var(--primary-red); }
 				&::after { @include sprite($circle-x-red-18); }
 			}
 
@@ -1003,7 +1003,7 @@ body.dragging * {
 
 				&.incorrect .control{
 					&,&.checked{
-						border-color: #f35252;
+						border-color: var(--primary-red);
 						@include icon($circle-x-red-18,$top:10px,$left:9px, $position:absolute);
 					}
 				}
@@ -1298,7 +1298,7 @@ body.dragging * {
 					}
 
 					&.wrong {
-						background: #F35252;
+						background: var(--primary-red);
 						border-color: #d84343;
 					}
 
@@ -1651,7 +1651,7 @@ body.dragging * {
 		}
 
 		&.late {
-			.due {color: $primary-red;}
+			.due {color: var(--primary-red);}
 			&::after {
 				@include sprite($assignment_late);
 			}
@@ -2121,7 +2121,7 @@ input.preview[readonly] {
 
 	.message {
 		font-size: 0.875rem;
-		color: $primary-red;
+		color: var(--primary-red);
 	}
 
 	.error {
@@ -2129,7 +2129,7 @@ input.preview[readonly] {
 		border-top-width: 1px !important;
 		padding: 20px 20px 0;
 		font-size: 0.875rem;
-		color: $primary-red;
+		color: var(--primary-red);
 	}
 }
 

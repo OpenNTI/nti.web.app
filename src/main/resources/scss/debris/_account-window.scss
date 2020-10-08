@@ -267,7 +267,7 @@
 
 				&.error {
 					&, &:focus {
-						box-shadow: -4px 0 0 0 $primary-red;
+						box-shadow: -4px 0 0 0 var(--primary-red);
 					}
 				}
 				//TODO - is not working
@@ -333,7 +333,7 @@
 				color: $primary-green;
 				vertical-align: middle;
 				&.error {
-					color: $primary-red;
+					color: var(--primary-red);
 				}
 			}
 
@@ -496,7 +496,7 @@
 				}
 
 				&.error {
-					color: $primary-red;
+					color: var(--primary-red);
 					cursor: default;
 					font-style: italic;
 				}
@@ -561,18 +561,18 @@
 		}
 
 		&.error {
-			border-color: $primary-red;
+			border-color: var(--primary-red);
 
 			input {
-				color: $primary-red;
-				box-shadow: -4px 0 0 0 $primary-red;
+				color: var(--primary-red);
+				box-shadow: -4px 0 0 0 var(--primary-red);
 			}
 		}
 	}
 
 	.error-msg {
 		visibility: hidden;
-		color: $primary-red;
+		color: var(--primary-red);
 		margin: 10px 15px;
 		font: normal 300 15px/1 $font;
 		line-height: 20px;
@@ -670,7 +670,7 @@
 				color: var(--secondary-grey);
 
 				.title{
-					color: $primary-red;
+					color: var(--primary-red);
 				}
 
 				&::after {

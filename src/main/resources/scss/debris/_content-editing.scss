@@ -207,7 +207,7 @@
 
 		&.overdue {
 			.due-date {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 
@@ -501,7 +501,7 @@ input[type=number]{
 				}
 
 				&.error {
-					box-shadow: 0 0 0 1px $primary-red;
+					box-shadow: 0 0 0 1px var(--primary-red);
 				}
 			}
 
@@ -682,7 +682,7 @@ input[type=number]{
 			@include experimental-value(width, calc(100% - 20px));
 
 			&.error {
-				border: 1px solid $primary-red;
+				border: 1px solid var(--primary-red);
 			}
 		}
 	}
@@ -823,7 +823,7 @@ input[type=number]{
 		box-shadow: 0 0 0 1px #d8d8d8;
 
 		&.error {
-			box-shadow: 0 0 0 1px $primary-red;
+			box-shadow: 0 0 0 1px var(--primary-red);
 		}
 	}
 
@@ -1210,7 +1210,7 @@ input[type=number]{
 
 				.container {
 					> .error {
-						color: $primary-red;
+						color: var(--primary-red);
 						font: italic 500 12px/17px $font;
 						margin: 5px;
 						text-align: center;
@@ -1444,7 +1444,7 @@ input[type=number]{
 			color: var(--secondary-grey);
 
 			&.has-error {
-				border: 1px solid $primary-red;
+				border: 1px solid var(--primary-red);
 			}
 		}
 
@@ -1455,7 +1455,7 @@ input[type=number]{
 		}
 
 		.error {
-			color: $primary-red;
+			color: var(--primary-red);
 			font: italic 500 12px $font;
 			min-height: 12px;
 			margin-bottom: 5px;

@@ -124,7 +124,7 @@
 		.badge.red {
 			position: absolute;
 			border-radius: 10em;
-			background: $primary-red;
+			background: var(--primary-red);
 			color: #fff;
 
 			top: 6px;

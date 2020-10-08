@@ -91,7 +91,7 @@
 		background: #ebcd25;
 	}
 	&.DnD,&.dnd {
-		background: #F35252;
+		background: var(--primary-red);
 	}
 }
 
@@ -121,7 +121,7 @@
 	}
 	&.DnD,&.dnd {
 		&::#{$side}{
-			background: #F35252;
+			background: var(--primary-red);
 		}
 	}
 }

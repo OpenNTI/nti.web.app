@@ -13,7 +13,7 @@
 		&.invalid {
 			&, &[data-required="true"] {
 				border-left-width: 0;
-				box-shadow: inset 5px 0 0 0 $primary-red;
+				box-shadow: inset 5px 0 0 0 var(--primary-red);
 			}
 		}
 
@@ -412,7 +412,7 @@
 		left: 0;
 		right: 0;
 		overflow: hidden;
-		background: #f35252;
+		background: var(--primary-red);
 		font: normal 600 12px $font;
 
 		.label {
@@ -535,7 +535,7 @@
 				}
 
 				&.red{
-					background: $primary-red;
+					background: var(--primary-red);
 					outline: 1px solid $border-red;
 				}
 			}
@@ -613,7 +613,7 @@
 			div {
 				padding-left: 15px;
 				width: 60px;
-				color: $primary-red;
+				color: var(--primary-red);
 
 				&::after {
 					content: '';
@@ -700,7 +700,7 @@
 
 			tr.failed {
 				td:first-of-type {
-					color: $primary-red;
+					color: var(--primary-red);
 				}
 
 				td:not(:first-of-type){

@@ -19,7 +19,7 @@
 
 
 	.error-label {
-	    color: #F35252;
+	    color: var(--primary-red);
 	    font: 200 14px 'Open Sans';
 	}
 
@@ -70,7 +70,7 @@
 		    	pointer-events: none;
 			}
 			input[name="invitation_codes"] {
-			    box-shadow: 0 0 0 1px #F35252;
+			    box-shadow: 0 0 0 1px var(--primary-red);
 			}
 		}
 	}

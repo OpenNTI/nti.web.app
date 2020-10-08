@@ -32,7 +32,7 @@
     		padding: 8px 0px 8px 15px;
 			font: 100 14px 'Open Sans';
 			&.error {
-				background-color: #F35252;
+				background-color: var(--primary-red);
 			}
 		}
 		&.hidden {
@@ -187,8 +187,8 @@
 				}
 
 				&.invalid {
-					color: #F35252;
-					border-color: #F35252;
+					color: var(--primary-red);
+					border-color: var(--primary-red);
 
 					.x {
 

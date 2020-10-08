@@ -29,7 +29,7 @@
 		color: $primary-blue;
 
 		&.error {
-			color: $primary-red;
+			color: var(--primary-red);
 		}
 
 		&.load-more {

@@ -91,7 +91,7 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 	line-height: 5;
 	font-style: italic;
 	font-weight: 600;
-	color: $primary-red;
+	color: var(--primary-red);
 }
 
 .admin-toolbar {

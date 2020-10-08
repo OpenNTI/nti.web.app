@@ -378,7 +378,7 @@
 			cursor: pointer;
 			color: $primary-blue;
 			&.only.me, &.private {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 
@@ -394,7 +394,7 @@
 		.link {
 			color: $primary-blue;
 			cursor: pointer;
-			&.on{ color: $primary-red; }
+			&.on{ color: var(--primary-red); }
 		}
 
 		.comment-count {
@@ -1742,7 +1742,7 @@
 				}
 
 				.delete-forum, .edit-forum {
-					color: $primary-red;
+					color: var(--primary-red);
 					float: left;
 					line-height: 35px;
 					margin-left: 10px;

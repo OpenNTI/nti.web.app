@@ -10,7 +10,7 @@
 		$green: #4aaf37;
 		$orange: #f65b24;
 		$yellow: #ffaf44;
-		$red: #f35252;
+		$red: var(--primary-red);
 		$gap: 0.625rem;
 		$icon-width: 125px;
 		color: $grey;

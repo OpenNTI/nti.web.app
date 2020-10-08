@@ -28,36 +28,36 @@
 			border-radius: 0;
 
 			.missing-all & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 
 		.name-input {
 			.missing-name & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 
 		.card-input .card-number {
 			.missing-number & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 
 		.card-input .card-expiry {
 			.missing-expiry & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 
 		.card-input .card-cvc {
 			.missing-cvc & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 	}

@@ -610,7 +610,7 @@ body .modal ~ .simple-popover-widget {
     	}
 
     	&.error {
-    		background-color: $primary-red;
+    		background-color: var(--primary-red);
     		color: white;
     	}
     }

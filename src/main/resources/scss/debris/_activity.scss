@@ -559,7 +559,7 @@
 						cursor: pointer;
 
 						&.flag.on{
-							color: $primary-red;
+							color: var(--primary-red);
 							display: block;
 						}
 				  	}
@@ -744,7 +744,7 @@
 			}
 
 			.meta .turned-in {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 

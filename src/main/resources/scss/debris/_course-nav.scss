@@ -106,7 +106,7 @@
 		.date {
 			color: var(--tertiary-grey);
 			&.expired {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 			&.nosubmit {
 				color: var(--tertiary-grey);

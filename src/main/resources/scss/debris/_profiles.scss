@@ -82,7 +82,7 @@
 
 			&.cancel {
 				padding: 0 1.5em;
-				background-color: $primary-red;
+				background-color: var(--primary-red);
 			}
 
 			&.join {
@@ -111,7 +111,7 @@
 			}
 
 			&.unfollow {
-				background-color: $primary-red;
+				background-color: var(--primary-red);
 				@include icon($rhp-delete-contact_hover, $top: 10px, $left: 1.5em);
 			}
 
@@ -1372,7 +1372,7 @@
 				}
 
 				&.flag.on{
-					color: $primary-red !important;
+					color: var(--primary-red) !important;
 				}
 			}
 		}
@@ -2120,7 +2120,7 @@
 
 	.error-message {
 		margin-top: 5px;
-		background-color: $primary-red;
+		background-color: var(--primary-red);
 		color: white;
 		line-height: 40px;
 		text-align: center;
@@ -2162,7 +2162,7 @@
 
 			&.required::after {
 				content: '*';
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 
@@ -2189,7 +2189,7 @@
 		}
 
 		.error-msg {
-			color: #F35252;
+			color: var(--primary-red);
 			font-size: 0.625em;
 			text-transform: uppercase;
 			font-weight: 800;
@@ -2215,7 +2215,7 @@
 				}
 
 				&.error {
-					border: 1px solid $primary-red;
+					border: 1px solid var(--primary-red);
 				}
 			}
 		}
@@ -2762,7 +2762,7 @@
 			clear: both;
 			line-height: 40px;
 			text-align: center;
-			background-color: $primary-red;
+			background-color: var(--primary-red);
 			color: white;
 			border-radius: 5px;
 		}

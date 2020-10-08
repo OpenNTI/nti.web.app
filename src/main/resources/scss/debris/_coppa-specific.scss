@@ -144,9 +144,9 @@
 				}
 
 				&.invalid{
-					span, .validation-message{ color: $primary-red; }
+					span, .validation-message{ color: var(--primary-red); }
 					input[data-required=true], .selectbox{
-						box-shadow: inset 5px 0 0 0 $primary-red !important;
+						box-shadow: inset 5px 0 0 0 var(--primary-red) !important;
 					}
 				}
 				&.valid{
@@ -300,7 +300,7 @@
 		.hidden {display: none;}
 
 		textarea.input-box.error{
-			box-shadow: -4px 0 0 0 $primary-red;
+			box-shadow: -4px 0 0 0 var(--primary-red);
 		}
 
 		.input-box, .combo-box {
@@ -313,7 +313,7 @@
 
 			&.error {
 				input, input:focus {
-					box-shadow: -4px 0 0 0 $primary-red;
+					box-shadow: -4px 0 0 0 var(--primary-red);
 				}
 			}
 
@@ -395,7 +395,7 @@
 		.error-box {
 			position: relative;
 			overflow: hidden;
-			background-color: $primary-red;
+			background-color: var(--primary-red);
 			margin-top: 40px;
 			font-weight: 600;
 			font-size: 14px;

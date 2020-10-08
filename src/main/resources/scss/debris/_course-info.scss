@@ -714,7 +714,7 @@
 		}
 
 		.warning, .seats.full {
-			color: $primary-red;
+			color: var(--primary-red);
 		}
 
 		.seats:not(.full) {
@@ -833,7 +833,7 @@
 
 			&.pending, &.rejected, &.enrolled {
 				.title {
-					color: $primary-red;
+					color: var(--primary-red);
 					width: 100%;
 
 					span { display: none; }
@@ -918,7 +918,7 @@
 			}
 
 			&.drop {
-				background-color: $primary-red;
+				background-color: var(--primary-red);
 			}
 		}
 	}
