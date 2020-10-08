@@ -57,7 +57,7 @@
 			padding: 15px;
 
 			.detail {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				.label {
 					font-weight: 600;
 					margin-right: 0.5em;
@@ -180,15 +180,15 @@
 			}
 
 			&.enabled {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 
 			&.enabled.number {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				@include icon($check_progress, $side: after, $top: 13px, $left: 11px);
 
 				&::before {
-					border-color: $secondary-grey;
+					border-color: var(--secondary-grey);
 				}
 			}
 
@@ -450,7 +450,7 @@
 
 
 		textarea {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			width: 100%;
 			min-height: 100px;
 			resize: vertical;
@@ -580,7 +580,7 @@
 				.token-help {
 					width: 690px;
 					margin-left: -10px;
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					font-style: italic;
 
 					.bold {
@@ -848,7 +848,7 @@
 					font-size: 0.84em;
 					line-height: 1.4em;
 					font-weight: 300;
-					color: #757474;
+					color: var(--secondary-grey);
 					padding: 4px 10px 10px 46px;
 
 					a {
@@ -1050,7 +1050,7 @@
 		p {
 			margin: 10px 0 0 0;
 			font: normal 300 1em/1.5em $font;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		a {
@@ -1389,7 +1389,7 @@
 	.legal {
 		font-size: 0.74em;
 		line-height: 1.4em;
-		color: #757474;
+		color: var(--secondary-grey);
 		padding: 4px 10px 10px 46px;
 
 		a {

@@ -218,13 +218,13 @@ body.dragging * {
 
 		h1{
 			font: normal 200 1.6em/1 $font;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			margin: 0;
 		}
 
 		.message{
 			font: normal 500 1.1em/2.5 $font;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			margin-bottom: 10px;
 		}
 
@@ -272,7 +272,7 @@ body.dragging * {
 
 			.wrap {
 				font: normal normal 1.1em/1.6 $font;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				margin: 0 0 0 $m;
 
 				.meta > * { margin-right: 0.5em; }
@@ -617,7 +617,7 @@ body.dragging * {
 			display: inline-block;
 			padding: 15px 20px;
 			text-decoration: none;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		.status {
@@ -695,7 +695,7 @@ body.dragging * {
 				cursor: pointer;
 				position: relative;
 				float: right;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font:{
 					family: $font;
 					size: 11px;
@@ -812,7 +812,7 @@ body.dragging * {
 					}
 					.content {
 						font-weight: normal;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 					}
 				}
 			}
@@ -1187,7 +1187,7 @@ body.dragging * {
 				}
 			}
 			.explanation {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 		}
 	}
@@ -1279,7 +1279,7 @@ body.dragging * {
 			}
 
 			.action {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				cursor: pointer;
 				padding: 12px 20px;
 				font: {
@@ -1459,7 +1459,7 @@ body.dragging * {
 							}
 
 							.size {
-								color: $secondary-grey;
+								color: var(--secondary-grey);
 								padding-right: 15px;
 							}
 						}
@@ -1731,7 +1731,7 @@ body.dragging * {
 
 			&.disabled {
 				background: $tertiary-grey;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				cursor: default;
 			}
 
@@ -1839,7 +1839,7 @@ body.dragging * {
 		input {
 			text-align: center;
 			font: normal normal 1em/1 $font;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			display: inline-block;
 			padding:x 0; margin: 0 0.2em;
 			border: 1px solid $border-grey;
@@ -2153,7 +2153,7 @@ input.preview[readonly] {
 		}
 		.content {
 			font-weight: normal;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 	}
 
@@ -2179,7 +2179,7 @@ input.preview[readonly] {
 			font-size: 0.75rem;
 			padding: 0 0.5em;
 			background: white;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			cursor: pointer;
 			box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
 
@@ -2379,7 +2379,7 @@ input.preview[readonly] {
 		min-height: 200px;
 		max-height: 350px;
 		overflow: scroll;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 	}
 }
 

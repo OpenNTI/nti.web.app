@@ -278,7 +278,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 			padding: 15px 0 15px 45px;
 			margin-right: 150px;
 			position: relative;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: {
 				family: $font;
 				size: 14px;
@@ -688,7 +688,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 							color: $primary-blue;
 						}
 						.name{
-							color: $secondary-grey;
+							color: var(--secondary-grey);
 						}
 						.controls {
 							top: 1px;
@@ -1051,7 +1051,7 @@ body.media-viewer-closing {
 						float: left;
 						padding: 10px 0 10px 15px;
 						font: 200 normal 44px/46px $font;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 					}
 
 					.wrap{
@@ -1065,7 +1065,7 @@ body.media-viewer-closing {
 						}
 
 						.section-name{
-							color: $secondary-grey;
+							color: var(--secondary-grey);
 							font: 400 normal 10px/14px $font;
 							text-transform: uppercase;
 							overflow: hidden;
@@ -1251,7 +1251,7 @@ body.media-viewer-closing {
 				padding: 0 0.5em 0 0;
 
 				&.number {
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					width: $indent;
 					text-align: right;
 				}
@@ -1381,7 +1381,7 @@ body.media-viewer-closing {
 		}
 
 		.body{
-			@include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
+			@include scrollbar($track:$slidedeck-controls-background, $nib:var(--secondary-grey));
 		 	@include flexItem($flex: 1 1 auto);
 			/*margin: 10px 0 0 1000px;*/
 			overflow:{

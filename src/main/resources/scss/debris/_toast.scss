@@ -32,7 +32,7 @@
 		font-family: $font;
 		font-size: 18px;
 		font-style: italic;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 	}
 
 	.message {
@@ -40,7 +40,7 @@
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 600;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 		a,span {
 			&,&:link,&:active,&:visited {

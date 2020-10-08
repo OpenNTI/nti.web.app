@@ -227,7 +227,7 @@
 
 			&.closed {
 				background: $tertiary-grey-alt;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				border-color: $tertiary-grey;
 				box-shadow: none;
 				cursor: default;
@@ -267,7 +267,7 @@
 
 			.label {
 				font: normal 600 0.6em/1.6em $font;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				text-transform: uppercase;
 				overflow: hidden;
 				@include ellipse();
@@ -684,7 +684,7 @@
 
 						.comments, .viewed, .required-value {
 							font: normal 700 0.6em/1.3em $font;
-							color: $secondary-grey;
+							color: var(--secondary-grey);
 							text-transform: uppercase;
 						}
 

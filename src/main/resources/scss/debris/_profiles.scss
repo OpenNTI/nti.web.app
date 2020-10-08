@@ -555,7 +555,7 @@
 				overflow: hidden;
 				@include ellipse;
 
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font: normal 400 0.9em/1.6em $font;
 			}
 
@@ -615,7 +615,7 @@
 			}
 
 			.edit {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				padding: 0 20px 0 45px;
 
 				@include icon($notepad_active, $top: 10px, $left: 20px);
@@ -1686,7 +1686,7 @@
 			float: left;
 			background: #ebebeb;
 			border: 1px solid #dbdbdb;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			cursor: pointer;
 		}
 
@@ -1730,7 +1730,7 @@
 
 	.meta {
 		font: normal 500 14px/24px $font;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 		.placeholder{
 			color: $tertiary-grey !important;
@@ -2459,7 +2459,7 @@
 	&.condensed {
 		.header {
 
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			.title {
 				font-size: 18px;
 				font-weight: normal;
@@ -2769,7 +2769,7 @@
 
 		.empty-text {
 			background: white;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			text-align: center;
 			padding: 50px 0;
 			border-radius: 5px;

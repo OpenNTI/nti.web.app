@@ -192,7 +192,7 @@
 		height: 30px !important;
 		cursor: default !important;
 		font: normal 400 0.8em/30px $font;
-		color: $secondary-grey-alt;
+		color: var(--secondary-grey-alt);
 		border: 0 solid #f1f1f1;
 		border-bottom-width: 1px;
 		padding-top: 0 !important;
@@ -434,7 +434,7 @@
 				height: 20px;
 				text-transform: uppercase;
 				vertical-align: baseline;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font: normal 700 10px/20px $font;
 			}
 		}
@@ -1588,7 +1588,7 @@
 					background: #fafafa !important;
 					font-weight: 600;
 					box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					text-transform: uppercase;
 
 					&:hover, &:not(.x-item-selected):hover {
@@ -1608,7 +1608,7 @@
 
 			.outline-row {
 				background: #ffffff;
-				color: #757474;
+				color: var(--secondary-grey);
 				font: normal 400 0.9em/2.8em "Open Sans", sans-serif;
 				padding: 0 10px 0 20px;
 				cursor: pointer;
@@ -1627,7 +1627,7 @@
 
 			.new-forum{
 				cursor: pointer;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font: normal 500 0.9em/50px $font;
 				height: 50px;
 				padding-left: 40px;
@@ -1664,7 +1664,7 @@
 			}
 
 			.header {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				cursor: pointer;
 				display: block !important;
 				background: #fff;

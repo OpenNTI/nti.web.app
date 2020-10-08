@@ -26,7 +26,7 @@
 			line-height: 35px;
 			font-size: 1.125rem;
 			font-weight: 700;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			@include flexItem(1 1 auto);
 		}
 
@@ -94,7 +94,7 @@
 
 	.empty {
 		text-align: center;
-    	color: $secondary-grey;
+    	color: var(--secondary-grey);
     	font-style: italic;
 	}
 }
@@ -501,7 +501,7 @@
 		}
 
 		.description {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		i.icon-fallback.icon-hyperlink {

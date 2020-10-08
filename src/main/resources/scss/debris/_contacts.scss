@@ -321,12 +321,12 @@ $over-color: #f4f3f3;
 
 			li.selection-list-item {
 				padding: 5px 5px 5px 35px;
-				color: $secondary-grey !important;
+				color: var(--secondary-grey) !important;
 				@include icon($check_box, $top: 7px, $left: 12px);
 
 				&.selection-item-over{
 					background-color: $over-color;
-					color: $secondary-grey !important;
+					color: var(--secondary-grey) !important;
 					pointer: default;
 				}
 
@@ -355,9 +355,9 @@ $over-color: #f4f3f3;
 
 				a {
 					&:active, &:visited, &:link{
-						border: 0 dotted $secondary-grey;
+						border: 0 dotted var(--secondary-grey);
 						border-bottom-width: 2px;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 						display: inline-block;
 						font-style: italic;
 						padding: 0px 2px;
@@ -477,7 +477,7 @@ $over-color: #f4f3f3;
 			right: 0;
 			font: normal normal 14px/45px $font;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			cursor: pointer;
 			@include experimental(transition, all 0.5s);
 
@@ -656,7 +656,7 @@ $over-color: #f4f3f3;
 
 .disabled-contacts-view{
 	padding-top: 0px;
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 
 	.disabled-message-div{
 		background-color: #f1f1f1;
@@ -690,9 +690,9 @@ div.add-group-action{
 	padding: 0 0 30px 15px;
 	a {
 		&:active, &:visited, &:link{
-			border: 0 dotted $secondary-grey;
+			border: 0 dotted var(--secondary-grey);
 			border-bottom-width: 2px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			display: inline-block;
 			font-style: italic;
 			padding: 0px 2px;
@@ -731,7 +731,7 @@ div.contact-buttons {
 		font-size: 10px;
 		color: $tertiary-grey;
 		&:hover{
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 	}
 
@@ -774,7 +774,7 @@ div.contact-buttons {
 
     .header{
         position: relative;
-        color: $secondary-grey;
+        color: var(--secondary-grey);
         border-bottom: 1px solid $tertiary-grey-alt;
         box-shadow: inset 0 1px 0 0 white;
         height: 60px;
@@ -822,11 +822,11 @@ div.contact-buttons {
                 height: 48px;
                 margin-top: 5px;
 				font: normal 400 12px/16px $font;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 
                 .name{
 					cursor: default;
-                    color: $secondary-grey;
+                    color: var(--secondary-grey);
                     font: normal 600 14px/18px $font;
                     text-transform: capitalize;
                 }
@@ -843,7 +843,7 @@ div.contact-buttons {
                 a.button{
                     padding: 10px 25px;
                     height: 38px;
-                    color: $secondary-grey;
+                    color: var(--secondary-grey);
                     background: $quad-grey;
                     border-radius: 5px;
                     border: 1px solid $border-grey;
@@ -892,7 +892,7 @@ div.contact-buttons {
             line-height: 40px;
             font-size: 14px;
             text-align: center;
-            color: $secondary-grey;
+            color: var(--secondary-grey);
             margin: 0;
             padding: 0 1.5em;
             float: right;
@@ -1084,7 +1084,7 @@ div.contact-buttons {
                     border-radius: 4px;
                     border: 1px solid $tertiary-grey-alt;
                     font-size: 1em;
-                    color: #757474;
+                    color: var(--secondary-grey);
                 }
 
                 textarea{
@@ -1223,7 +1223,7 @@ div.contact-buttons {
 			.actions {
 				margin: 0;
 				text-transform: uppercase;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				white-space: nowrap;
 				font: normal 700 10px/25px $font;
 

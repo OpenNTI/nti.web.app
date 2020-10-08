@@ -48,7 +48,7 @@
 		}
 
 		&.x-active {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			.x-tab-icon-el {
 				&.notepad::after { @include sprite($notepad_active); }

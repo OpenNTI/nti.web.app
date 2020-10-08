@@ -183,7 +183,7 @@ a[href] {
 
 			padding: 0 5em;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			.link {
 				color: $primary-blue;

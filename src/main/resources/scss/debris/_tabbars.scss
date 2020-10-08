@@ -58,7 +58,7 @@
 			}
 			.x-tab-wrap {padding: 0 15px;}
 			.x-tab-inner {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font: 12px/32px $font !important;
 				text-transform: uppercase;
 			}

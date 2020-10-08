@@ -43,7 +43,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			}
 
 			.view-all {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 		}
 
@@ -75,7 +75,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			align-items: baseline;
 
 			p {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font-size: 14px;
 				line-height: 19px;
 			}
@@ -266,7 +266,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			cursor: pointer;
 
 			p {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				padding-right: 10px;
 			}
 

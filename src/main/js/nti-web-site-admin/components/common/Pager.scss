@@ -13,7 +13,7 @@
 		line-height: 40px;
 		text-align: center;
 		border: 1px solid #e2e2e2;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		margin: 0 5px;
 
 		&.selected {

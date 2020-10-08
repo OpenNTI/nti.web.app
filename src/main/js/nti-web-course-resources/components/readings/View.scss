@@ -14,7 +14,7 @@
 			.name, .publish, .last-modified {
 				font-size: 0.625rem;
 				font-weight: bold;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 
 			.sort-inactive {
@@ -22,7 +22,7 @@
 			}
 
 			.sort-active {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 
 			.sort-default::after {
@@ -69,7 +69,7 @@
 			font-size: 1em;
 			margin-top: 5px;
 			margin-bottom: 2px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		.published-inline {

@@ -31,7 +31,7 @@
 		text-transform: uppercase;
 		border: 1px solid #ececec;
 		background: #ececec;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		vertical-align: middle;
 
 		&.person, &.public, &.group, &.list{

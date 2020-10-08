@@ -192,7 +192,7 @@
 
 	.x-grid-row .x-grid-cell {
 		font: normal 300 0.85em/3 $font;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 
 		&.x-grid-cell-selected {

@@ -1,6 +1,6 @@
 @mixin meta-row-window {
 	.meta {
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		font-size: 12px;
 		font-weight: 300;
 
@@ -66,7 +66,7 @@
 @mixin reply-options {
 	.reply-options {
 		opacity: 0.4;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 		.reply, .share, .more {
 			display: inline-block;
@@ -145,7 +145,7 @@
 			background: #343434 !important;
 
 			.x-menu-item {
-				color: $secondary-grey !important;
+				color: var(--secondary-grey) !important;
 
 				&.edit::after{ @include sprite($edit-dark); }
 				&.flag::after{ @include sprite($flag-dark); }
@@ -726,7 +726,7 @@
 		right: 0 !important;
 		margin: -0.8em 0 0 0;
 		background: #fbfbfb;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 
 		&.collide {

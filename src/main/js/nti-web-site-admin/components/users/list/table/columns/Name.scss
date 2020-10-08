@@ -29,7 +29,7 @@
 				.email {
 					font-size: 14px;
 					line-height: 19px;
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					white-space: nowrap;
 					text-overflow: ellipsis;
 					overflow: hidden;

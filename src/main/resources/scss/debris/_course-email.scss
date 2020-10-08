@@ -2,7 +2,7 @@
 	.window-header {
 		.title {
 			font: normal 300 18px/44px $font;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 	}
 
@@ -61,7 +61,7 @@
 								border: 0;
 								margin: 0;
 								width: 100%;
-								color: $secondary-grey;
+								color: var(--secondary-grey);
 								height: 28px;
 							}
 						}
@@ -87,7 +87,7 @@
 								text-align: right;
 
 								.toggle {
-									color: $secondary-grey;
+									color: var(--secondary-grey);
 
 									input[type=checkbox]+label {
 										min-height: 38px;
@@ -178,7 +178,7 @@
 					float: left;
 
 					.toggle {
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 					    padding-right: 10px;
 					    font-weight: 400;
 					    font-size: 0.875em;

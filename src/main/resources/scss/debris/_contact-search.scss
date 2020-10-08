@@ -19,7 +19,7 @@
 			color: $primary-blue;
 		}
 		.affiliation {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: { size: 12px; weight: 400; }
 			margin-left: 2px;
 		}

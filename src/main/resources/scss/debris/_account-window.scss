@@ -49,7 +49,7 @@
 		.x-btn-inner {
 			text-transform: uppercase;
 			font: normal 600 12px/35px $font;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			padding: 0 10px;
 		}
 	}
@@ -136,7 +136,7 @@
 			margin: 15px 0 0 100px;
 			font-size: 14px;
 			font-weight: 400;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			.name {
 				font-size: 18px;
@@ -283,7 +283,7 @@
 				}
 
 				//vertical-align: bottom;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font-size: 14px;
 				font-weight: 500;
 				line-height: 25px;
@@ -369,7 +369,7 @@
 				cursor: default;
 			}
 
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: normal normal 0.9em/2 $font;
 		}
 
@@ -379,7 +379,7 @@
 		}
 
 		legend {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: normal 600 0.9em $font;
 		}
 	}
@@ -410,7 +410,7 @@
 
 		.header {
 			margin: 16px 26px 5px 26px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			.title {
 				font: normal 300 19px/1 $font;
@@ -423,7 +423,7 @@
 
 		.meta {
 			margin: 20px 34px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: normal 300 18px/24px $font;
 
 			.link {
@@ -450,7 +450,7 @@
 
 	.header {
 		margin: 10px 15px;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		font: normal 400 14px/1 $font;
 
 		.title {
@@ -531,7 +531,7 @@
 		position: relative;
 
 		input{
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: normal 500 14px/25px $font;
 			border: 0;
 			background: #ffffff;
@@ -547,7 +547,7 @@
 			&:focus {
 				outline: none;
 				box-shadow: -4px 0 0 0 $tertiary-grey;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 		}
 
@@ -667,7 +667,7 @@
 
 		&.pending-wrapper{
 			.text{
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 
 				.title{
 					color: $primary-red;
@@ -742,7 +742,7 @@
     	border-bottom: 1px solid #d9d9d9;
 
     	.msg {
-    		color: $secondary-grey;
+    		color: var(--secondary-grey);
     	}
 
     	.email {

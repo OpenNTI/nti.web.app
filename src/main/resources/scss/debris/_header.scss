@@ -31,7 +31,7 @@
 			position: relative;
 			text-transform: uppercase;
 			font: normal bold 0.6em/1.3em $font;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			overflow: hidden;
 			@include ellipse();
 		}
@@ -251,7 +251,7 @@
 
 		div {
 			display: inline-block;
-			background: $secondary-grey;
+			background: var(--secondary-grey);
 			border-radius: 5px;
 			width: 5px;
 			height: 5px;

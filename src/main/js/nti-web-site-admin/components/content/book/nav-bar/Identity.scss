@@ -16,7 +16,7 @@
 
 		.title {
 			font: normal 700 1rem/1.1 $header-font-family;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			text-transform: uppercase;
 			text-overflow: ellipsis;
 			overflow: hidden;

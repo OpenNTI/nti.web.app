@@ -26,7 +26,7 @@
 		font-size: 12px;
 		font-family: $font;
 		font-weight: normal;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 	}
 }
 
@@ -200,7 +200,7 @@
 
 				padding: 12px 0 12px 0;
 				font-size: 12px;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				overflow: hidden;
 
 				.author{

@@ -76,7 +76,7 @@ $button-text-weights: 500,500,600,500;
 					box-shadow: none;
 					text-shadow: none;
 					font-weight: lighter;
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 				}
 			}
 			&.x-pressed {
@@ -144,7 +144,7 @@ $button-text-weights: 500,500,600,500;
 		border-radius: 4px;
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		padding: 5px 11px 5px 22px;
 		cursor: pointer;
 		border: 1px solid rgba(151, 151, 151, 0.31);
@@ -196,7 +196,7 @@ $button-text-weights: 500,500,600,500;
 		cursor: pointer;
 		background-color: white;
 		background-image: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		border-radius: 3px;
 		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
 		text-align: center;

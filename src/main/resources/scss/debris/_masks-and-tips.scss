@@ -208,7 +208,7 @@ body > .x-mask {
 }
 
 .message-bar{
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 	background-color: #fffbe3;
 	border-width: 0;
 	border-bottom: 3px solid #f5e28a;

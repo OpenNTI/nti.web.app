@@ -670,7 +670,7 @@
 			}
 
 			.reply {
-				color: $secondary-grey-alt;
+				color: var(--secondary-grey-alt);
 				font-weight: bold;
 
 				&::after{

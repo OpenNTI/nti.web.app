@@ -21,7 +21,7 @@
 }
 
 .filename {
-	color: #757474;
+	color: var(--secondary-grey);
 }
 
 .asset-item > .preview {

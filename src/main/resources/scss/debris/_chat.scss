@@ -336,7 +336,7 @@
 						display: none;
 					}
 					.body-text {
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 					}
 					&::before {
 						left: inherit;
@@ -579,7 +579,7 @@
 	box-shadow: 0 -1px #dbdbdb, inset 0 1px #fcfcfc;
 	border-bottom: 1px solid #dfdfdf;
 	border-bottom-width: 1px !important;
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 	text-shadow: 0 1px rgba(255,255,255,0.7);
 	font: italic 700 14px/36px $font;
 	background-image: linear-gradient(to top, #d3d3d3 0%, #f3f3f3 100%);

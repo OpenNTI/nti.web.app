@@ -34,7 +34,7 @@
 				display: block;
 				padding: 0.5rem 1rem;
 				text-decoration: none;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 
 				&:not(.active):hover {
 					background: $panel-background;

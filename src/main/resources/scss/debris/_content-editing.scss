@@ -175,7 +175,7 @@
 		}
 
 		.page-count {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		.change {
@@ -259,7 +259,7 @@
 			padding: 2px 0;
 			.title {
 		    	display: inline-block;
-			    color: $secondary-grey;
+			    color: var(--secondary-grey);
 			    font: normal 500 14px/1 $font;
 			    text-transform: capitalize;
 			    margin-bottom: 0;
@@ -678,7 +678,7 @@ input[type=number]{
 			margin: 5px 10px;
 			padding: 5px 10px;
 			font: normal 400 0.9em/1.5em $font;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			@include experimental-value(width, calc(100% - 20px));
 
 			&.error {
@@ -695,7 +695,7 @@ input[type=number]{
 	.header {
 		> * {
 			display: inline-block;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			text-transform: uppercase;
 			font-weight: 300;
 			font-size: 12px;
@@ -1109,7 +1109,7 @@ input[type=number]{
 
 				.option {
 					border-bottom: 1px solid $quad-grey;
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 
 					.text {
 						padding: 10px 10px 10px 37px;
@@ -1198,7 +1198,7 @@ input[type=number]{
 						border: 1px solid rgba(150,150,150,0.3);
 						text-align: center;
 						line-height: 36px;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 
 						&.selected {
 							color: #ffffff;
@@ -1263,7 +1263,7 @@ input[type=number]{
 					display: none;
 
 					&:hover {
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 					}
 				}
 
@@ -1326,13 +1326,13 @@ input[type=number]{
 		.x-datepicker-header {
 			background-color: #ffffff;
 			background-image: none;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			margin: 10px 0;
 
 			.x-datepicker-month {
 
 				.x-btn-inner {
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					font-size: 14px;
 					font-family: $font;
 				}
@@ -1356,7 +1356,7 @@ input[type=number]{
 			.x-datepicker-column-header {
 				background: none;
 				border: none;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font-weight: 500;
 				font-size: 14px;
 				text-align: center;
@@ -1365,7 +1365,7 @@ input[type=number]{
 
 			.x-datepicker-cell {
 				.x-datepicker-date {
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					padding: 3px;
 					background: none;
 					font-size: 13px;
@@ -1441,7 +1441,7 @@ input[type=number]{
 
 		input {
 			font-size: 13px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			&.has-error {
 				border: 1px solid $primary-red;
@@ -1470,7 +1470,7 @@ input[type=number]{
 			padding: 5px 15px 5px 5px;
 			border: 1px solid $tertiary-grey-alt;
 			position: relative;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			@include icon($dropdown-am-pm-icon, $side: after, $top: 11px, $left: auto, $right: 5px);
 		}
@@ -1629,7 +1629,7 @@ input[type=number]{
 				display: inline-block;
 				font-size: 0.85rem;
 		    	font-weight: 600;
-		    	color: $secondary-grey;
+		    	color: var(--secondary-grey);
 		    	padding: 5px 11px 5px 22px;
 			}
 		}

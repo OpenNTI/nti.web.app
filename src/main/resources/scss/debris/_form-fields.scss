@@ -380,7 +380,7 @@ span.nti-radiobutton {
 		}
 
 		&:hover::after {
-			border-top-color: $secondary-grey;
+			border-top-color: var(--secondary-grey);
 		}
 	}
 }
@@ -494,7 +494,7 @@ form.common-form {
 
 		.size {
 			font-weight: 600;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		.preview-link {
@@ -540,7 +540,7 @@ form.common-form {
 
 			.drop {
 				text-align: center;
-				color: $secondary-grey-alt;
+				color: var(--secondary-grey-alt);
 				font-weight: 600;
 				font-size: 0.875em;
 				margin-bottom: 0.7em;
@@ -779,7 +779,7 @@ form.common-form {
 		pointer-events: none;
 
 		input {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 	}
 
@@ -913,7 +913,7 @@ form.common-form {
 		text-transform: uppercase;
 		font-size: 0.625rem;
 		font-weight: 600;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 		&.error {
 			font-size: 0.625rem;

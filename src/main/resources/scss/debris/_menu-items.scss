@@ -79,7 +79,7 @@ label.x-menu-item-cmp {
 }
 
 .x-menu-item {
-	color: $secondary-grey !important;
+	color: var(--secondary-grey) !important;
 	font-size: 1em;
 	font-weight: 400;
 	background: none;

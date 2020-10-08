@@ -101,7 +101,7 @@
 	.outline-row {
 		position: relative;
 		background: #ffffff;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		font: normal 400 0.9em/2.8em $font;
 		padding: 0 0.35em 0 1.39em;
 		cursor: pointer;
@@ -239,14 +239,14 @@
 				font-weight: 600;
 				box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
 				margin-bottom: 0.5em;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				//.label {
 					//border-top: 1px dotted #e5e5e5;
 				//}
 			}
 
 			&.heading {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font: normal 100 1.5em/2.1 "Open Sans Condensed", $font;
 				text-transform: none;
 				padding: 1.25em 0.42em 0 0.84em;

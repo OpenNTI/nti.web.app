@@ -203,7 +203,7 @@
 
 			&.disabled {
 				opacity: 0.4;
-				background-color: $secondary-grey;
+				background-color: var(--secondary-grey);
 			}
 		}
 	}

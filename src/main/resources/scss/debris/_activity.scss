@@ -63,7 +63,7 @@
 				&::after{display: none;}
 				text-align: center;
 				font-style: italic;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				padding: 0px;
 				margin: 0px;
 				border-top: none;
@@ -179,7 +179,7 @@
 						overflow-x: hidden;
 						vertical-align: bottom;
 						@include ellipse;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 						&::before{
 							color: $tertiary-grey;
 							font-weight: 600;

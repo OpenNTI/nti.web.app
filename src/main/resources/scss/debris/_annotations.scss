@@ -43,7 +43,7 @@
 		.image-caption {
 			font-size: 14px;
 			font-weight: normal;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		.bar-cell {
@@ -82,7 +82,7 @@
 				}
 
 				&:hover {
-					color: $secondary-grey-alt;
+					color: var(--secondary-grey-alt);
 					&::after {
 						@include sprite($add-comment-19x17_hover);
 					}
@@ -337,7 +337,7 @@
 
 			.name{
 				font-weight: 700 !important;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 
 			.snippet{
@@ -711,7 +711,7 @@
 			border: 1px solid $border-grey;
 			background: white;
 			//text-transform: uppercase;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font-weight: 600;
 			margin-left: 3px;
 			padding: 4px 6px;
@@ -876,12 +876,12 @@
 					display: none;
 				}
 				background: #efefef;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				border-bottom: 0px;
 			}
 
 			&.counter {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font-family: $font !important;
 				font-weight: bold;
 

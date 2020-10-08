@@ -58,7 +58,7 @@
 			line-height: 45px;
 			font-size: 14px;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			margin: -1px;
 			padding: 0 1.5em;
 
@@ -105,7 +105,7 @@
 		input {
 			background: #ffffff;
 			padding: 5px;
-			color: #757474;
+			color: var(--secondary-grey);
 			font-size: 18px;
 			font-weight: 300;
 			height: auto;
@@ -126,7 +126,7 @@
 			top:0; bottom: 0; left:0; right:0;
 			padding: 15% 2em;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: normal 300 14px/18px $font;
 			background: white;
 

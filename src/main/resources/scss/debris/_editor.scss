@@ -248,7 +248,7 @@ span.tab{
 			height: 24px;
 			cursor: pointer;
 			display: inline-block;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			&:focus {
 				&::after{
@@ -352,7 +352,7 @@ span.tab{
 				@include experimental(transition, all 0.5s);
 				cursor: text;
 				padding: 2px 5px 0;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font: 14px $font;
 				overflow:{
 					x: hidden;
@@ -443,7 +443,7 @@ span.tab{
 				line-height: 45px;
 				font-size: 14px;
 				text-align: center;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				margin: -1px;
 				@include experimental(transition, all 0.5s);
 

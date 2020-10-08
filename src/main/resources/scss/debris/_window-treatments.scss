@@ -378,7 +378,7 @@
 		white-space: nowrap;
 		background-color: #efefef;
 		border-top: 1px solid #dcdcdc;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		font: normal 600 14px/42px $font;
 		position: relative;
 		margin-top: 10px;
@@ -400,7 +400,7 @@
 			line-height: 45px;
 			font-size: 14px;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			cursor: pointer;
 		}
 
@@ -531,7 +531,7 @@
 		}
 
 		span {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			line-height: 1.5em;
 			font-weight: 300;
 			font-size: 1.5em;

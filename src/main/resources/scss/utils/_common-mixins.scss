@@ -412,7 +412,7 @@
 @mixin text-box-style {
 	background: #ffffff;
 	padding: 5px;
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 	height: 30px;
 	font-family: $font;
 	//font-size: 15pt;
@@ -441,7 +441,7 @@
 @mixin divider {
 	.divider {
 		position: relative;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		background-color: #F1F1F1;
 		font: {
 			size: 10px;
@@ -502,7 +502,7 @@
 
 
 @mixin menu-label-text-treatment {
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 	font-size: 10px;
 	font-weight: 600;
 	overflow: hidden;
@@ -512,14 +512,14 @@
 
 
 @mixin system-link-def {
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 	text-decoration: underline;
 	cursor: pointer;
 }
 
 
 @mixin content-link-def{
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 
 	@include accessibility-option(text-decoration, none, underline);
 
@@ -571,7 +571,7 @@
 	.add-to-contacts {
 		cursor: pointer;
 		vertical-align: top;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		line-height: 26px;
 		font-weight: 700;
 		display: inline-block;
@@ -717,7 +717,7 @@
 
 	&:hover,&.over {
 		&:not(.disabled){
-			.label{ color: #757474; }
+			.label{ color: var(--secondary-grey); }
 		}
 	}
 }

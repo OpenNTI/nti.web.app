@@ -5,7 +5,7 @@
 }
 
 .hit-fragment .hit {
-	color: #757474;
+	color: var(--secondary-grey);
 	font-weight: 700;
 	font-style: normal;
 }
@@ -16,7 +16,7 @@
 	font-family: "Open Sans";
 	font-size: 14px;
 	line-height: 25px;
-	color: #757474;
+	color: var(--secondary-grey);
 	text-align: left;
 	width: 600px;
 }
@@ -51,7 +51,7 @@
 	line-height: 50px;
 	display: inline-block;
 	height: 50px;
-	color: #757474;
+	color: var(--secondary-grey);
 	padding: 0 15px;
 	margin-right: 0;
 

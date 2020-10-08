@@ -33,7 +33,7 @@
 			height: 345px;
 			
 			.container-empty {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				text-align: center;
 				top: 50%;
 				transform: translateY(-50%);

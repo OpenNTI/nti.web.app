@@ -3,7 +3,7 @@
 		display: inline-block;
 		height: 36px;
 		font: normal normal 14px/20px $font;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		background: #fff;
 		padding: 0 12px;
 		border: 1px solid #dcdcdc;
@@ -70,7 +70,7 @@
 			white-space: normal;
 			font-size: 14px;
 			font-style: normal;
-			color: #757474;
+			color: var(--secondary-grey);
 			padding: 10px 30px;
 			z-index: 100000;
 
@@ -302,9 +302,9 @@
 
 				&:first-of-type.visited,
 				&.visited {
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					&::before {
-						border-color: $secondary-grey;
+						border-color: var(--secondary-grey);
 					}
 					&[data-order]::after {
 						content: '';
@@ -458,7 +458,7 @@
 			height: 45px;
 			display: none;
 			text-align: left;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: normal normal 11px/45px $font;
 
 			&.active {
@@ -511,7 +511,7 @@
 			line-height: 45px;
 			font-size: 14px;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			margin: -1px;
 			padding: 0 1.5em;
 
@@ -641,7 +641,7 @@
 			border: 0 solid $border-grey;
 			border-bottom-width: 1px;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: normal 600 16px/45px $font;
 
 			div {
@@ -718,7 +718,7 @@
 	padding-bottom: 100px;
 	margin-right: -14px;
 
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 
 	a {
 		display: block;
@@ -772,7 +772,7 @@
 
 	legend {
 		display: inline-block;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		font: normal 700 14px/20px $font;
 
 		&.card, &.location {
@@ -881,7 +881,7 @@
 .x-component-purchasecomplete-panel {
 	padding: 0 15px 20px 80px;
 	font: normal 400 14/25px $font;
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 
 	.gap {
 		margin-top: 30px;
@@ -911,7 +911,7 @@
 		display: inline-block;
 		min-width: 250px;
 		font: normal 600 14px/30px $font;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		background: #eeeeee;
 		border-radius: 3px;
 		padding: 1px 10px;
