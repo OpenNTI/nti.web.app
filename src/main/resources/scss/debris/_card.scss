@@ -5,7 +5,7 @@
 
 @mixin file-custom-icon() {
 	.icon {
-		$grey: $tertiary-grey;
+		$grey: var(--tertiary-grey);
 		$blue: #15a2e0;
 		$green: #4aaf37;
 		$orange: #f65b24;

@@ -3,7 +3,7 @@
 .users-table-container {
 	.empty-state {
 		font-size: 2rem;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		text-align: center;
 		margin-top: 1.75rem;
 	}

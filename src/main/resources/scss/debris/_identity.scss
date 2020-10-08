@@ -146,7 +146,7 @@
 				@include ellipse;
 				font: normal 400 14px/30px $font;
 				width: 200px;
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 			}
 
 			.presence{

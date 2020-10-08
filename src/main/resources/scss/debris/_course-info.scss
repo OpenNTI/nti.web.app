@@ -29,7 +29,7 @@
 
 	.col-left {
 		.label {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-transform: uppercase;
 			font: { size: 0.45em; weight: 600; }
 		}
@@ -116,7 +116,7 @@
 	}
 
 	:not(.outline-row) > .label {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		text-transform: uppercase;
 		font: { size: 0.7em; weight: 600; }
 		padding-right: 1em;
@@ -279,7 +279,7 @@
 
 .course-info-instructors {
 	background: #fff;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 	font: normal 400 0.85em/1.95em $font;
 
 	.instructor {
@@ -373,7 +373,7 @@
 	}
 
 	.heading {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		text-transform: uppercase;
 		font: { size: 0.7em; weight: 600; }
 	}
@@ -557,7 +557,7 @@
 		}
 
 		.sub {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font-size: 0.75em;
 		}
 	}
@@ -614,7 +614,7 @@
 
 		.header {
 			font: normal 500 0.8em/35px $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			margin: 0;
 			background-color: white;
 			padding: 0 10px;
@@ -667,7 +667,7 @@
 			.sub {
 				font-size: 0.6em;
 				font-weight: 400;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				text-transform: uppercase;
 			}
 
@@ -695,7 +695,7 @@
 		.refund {
 			font-size: 0.7em;
 			font-weight: 400;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			line-height: 1.8em;
 		}
 

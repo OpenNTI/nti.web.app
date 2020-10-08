@@ -519,7 +519,7 @@ body .modal ~ .simple-popover-widget {
 	}
 
 	.label {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font-size: 10px;
 		font-weight: 800;
 		font-style: normal;
@@ -555,7 +555,7 @@ body .modal ~ .simple-popover-widget {
 
 .x-reader-pane {
 	.x-panel-body-reader {
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 	}
 
     iframe[name$="content"] {

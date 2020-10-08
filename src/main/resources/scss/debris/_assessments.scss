@@ -2,7 +2,7 @@
 	.draggable-area{
 		display: table-cell;
 		min-width: 54px;
-		border: 0px solid $tertiary-grey-alt;
+		border: 0px solid var(--tertiary-grey-alt);
 		border-bottom-width: 1px;
 		padding-left: 15px;
 		position: relative;
@@ -16,7 +16,7 @@
 		}
 
 		&:hover{
-			outline: 1px solid $tertiary-grey;
+			outline: 1px solid var(--tertiary-grey);
 			&::after{
 				@include sprite($drag-controls-hover);
 			}
@@ -283,7 +283,7 @@ body.dragging * {
 				}
 
 				time {
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 
 				.message {
@@ -303,7 +303,7 @@ body.dragging * {
 					span {
 						display: inline-block;
 						&::after{
-							color: $tertiary-grey;
+							color: var(--tertiary-grey);
 							font: normal 500 12px/20px $font;
 							text-decoration: none !important;
 							position: static;
@@ -339,7 +339,7 @@ body.dragging * {
 			&:not(.editor-active)::before{
 				content: 'Add a comment';
 				margin-left: 10px;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				font: italic normal 1em/39px $font;
 			}
 		}
@@ -535,7 +535,7 @@ body.dragging * {
 
 	.drop-hover {
 		.dropzone {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 
@@ -746,7 +746,7 @@ body.dragging * {
 
 				&.correct { color: #94b61a; }
 				&.incorrect { color: #e95a57; }
-				&.questions{ padding: 0; color: $tertiary-grey; font-weight: 400; }
+				&.questions{ padding: 0; color: var(--tertiary-grey); font-weight: 400; }
 
 				&.correct {
 					@include icon($check_progress_grn,$top: 3px);
@@ -828,7 +828,7 @@ body.dragging * {
 		position: relative;
 		min-height: 38px;
 		background: #ffffff;
-		border: 1px solid $tertiary-grey;
+		border: 1px solid var(--tertiary-grey);
 
 		.inputbox {
 			color: var(--primary-grey);
@@ -953,7 +953,7 @@ body.dragging * {
 			vertical-align: middle;
 			min-height: 38px;
 			background: #ffffff;
-			border: 0px solid $tertiary-grey;
+			border: 0px solid var(--tertiary-grey);
 			border-bottom-width: 1px;
 			&:last-of-type { border-bottom-width: 0px; }
 			padding-left: 54px;
@@ -1048,7 +1048,7 @@ body.dragging * {
 				color: var(--primary-grey);
 				vertical-align: middle;
 				background: #ffffff;
-				border: 0 solid $tertiary-grey;
+				border: 0 solid var(--tertiary-grey);
 				border-bottom-width: 1px;
 				&:last-of-type {
 					border-bottom-width: 0px;
@@ -1073,7 +1073,7 @@ body.dragging * {
 					padding-right: 20px;
 					font-weight: bold;
 					background-color: rgba(209,209,209, 0.6);
-					border: 0 solid $tertiary-grey-alt;
+					border: 0 solid var(--tertiary-grey-alt);
 					border-bottom-width: 1px;
 					border-right-width: 1px;
 					vertical-align: middle;
@@ -1394,7 +1394,7 @@ body.dragging * {
 					padding-top: 45px;
 					font-size: 16px;
 					font-weight: 600;
-					color: #b8b8b8;
+					color: var(--tertiary-grey);
 				}
 
 				.button-container {
@@ -1615,7 +1615,7 @@ body.dragging * {
 			    top: 40px;
 			    width: 150px;
 			    margin: 0 auto;
-			    color: $tertiary-grey;
+			    color: var(--tertiary-grey);
 			    font-size: 14px;
 			}
 		}
@@ -1696,7 +1696,7 @@ body.dragging * {
 		.due {
 			font: normal 700 0.8em/3 $font;
 			text-transform: uppercase;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 		.delete {
@@ -1706,7 +1706,7 @@ body.dragging * {
 			cursor: pointer;
 
 			&::before {
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 				font-weight: 600;
 				position: static;
 				content: '\00B7';
@@ -1730,7 +1730,7 @@ body.dragging * {
 			float: right;
 
 			&.disabled {
-				background: $tertiary-grey;
+				background: var(--tertiary-grey);
 				color: var(--secondary-grey);
 				cursor: default;
 			}
@@ -1866,7 +1866,7 @@ body.dragging * {
 		opacity: 0.5;
 		background: #fff;
 		border: 1px solid $border-grey;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		cursor: default;
 		pointer-events: none;
 	}
@@ -2208,16 +2208,16 @@ input.preview[readonly] {
 .result.chart {
 	.graph {
 		background: #ffffff;
-		border: 1px solid #b8b8b8;
+		border: 1px solid var(--tertiary-grey);
 	}
 
 	.row {
 		&:not(:last-of-type) {
-			border-bottom: 1px solid #d1d1d1;
+			border-bottom: 1px solid var(--tertiary-grey-alt);
 		}
 
 		div.label {
-			box-shadow: 1px 0 0 0 #d1d1d1;
+			box-shadow: 1px 0 0 0 var(--tertiary-grey-alt);
 			display: inline-block;
 			vertical-align: top;
 			width: 30%;
@@ -2374,7 +2374,7 @@ input.preview[readonly] {
 	.content {
 		background: #fff;
 		padding: 2px 5px;
-		border: 1px solid $tertiary-grey;
+		border: 1px solid var(--tertiary-grey);
 		font: normal 400 0.875rem/1 $font;
 		min-height: 200px;
 		max-height: 350px;
@@ -2396,18 +2396,18 @@ input.preview[readonly] {
 	table {
 		background: white;
 		width: 100%;
-		border: 1px solid #d1d1d1;
+		border: 1px solid var(--tertiary-grey-alt);
 		border-collapse: collapse;
 
 		thead {
 			tr {
-				border-bottom: 1px solid #d1d1d1;
+				border-bottom: 1px solid var(--tertiary-grey-alt);
 			}
 		}
 
 		tbody {
 			tr {
-				border-bottom: 1px solid #d1d1d1;
+				border-bottom: 1px solid var(--tertiary-grey-alt);
 
 				&:last-of-type {
 					border-bottom: none;

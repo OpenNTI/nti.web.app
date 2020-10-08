@@ -1,7 +1,7 @@
 @mixin dot-separated-list{
 	span{
 		&::after{
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font: normal 500 10px/20px $font;
 
 			position: static;
@@ -34,7 +34,7 @@
 .activity-view{
 	@include side-panel-view-title;
 	.activity-panel {
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 
 		.activity {
 			cursor: pointer;
@@ -93,7 +93,7 @@
 			}
 
 			.name, .with { color: $primary-blue; }
-			.verb {color: $tertiary-grey; }
+			.verb {color: var(--tertiary-grey); }
 		}
 
 		.center-button{
@@ -181,7 +181,7 @@
 						@include ellipse;
 						color: var(--secondary-grey);
 						&::before{
-							color: $tertiary-grey;
+							color: var(--tertiary-grey);
 							font-weight: 600;
 							position: static;
 							content: '\00B7';
@@ -302,7 +302,7 @@
 			.location {
 				text-transform: uppercase;
 				font: normal 600 10px/20px $font;
-				color: $tertiary-grey !important;
+				color: var(--tertiary-grey) !important;
 				height: 20px;
 				overflow: hidden;
 				@include ellipse;
@@ -346,7 +346,7 @@
 
 
 		.path {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-transform: uppercase;
 			padding: 0 20px;
 			font: normal 700 10px/40px $font;
@@ -399,7 +399,7 @@
 				margin: 20px 70px 0 80px;
 				min-height: 60px;
 				font: normal 400 12px $font;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 
 			.stamp {
@@ -597,7 +597,7 @@
 					}
 
 					.time{
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						text-transform: uppercase;
 					}
 				}
@@ -677,7 +677,7 @@
 		text-transform: uppercase;
 		font-weight: 600;
 		cursor: pointer;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		max-width: 185px;
 		width: 50%;
 		position: relative;
@@ -688,7 +688,7 @@
 
 		&::after {
 			content: ' /  ';
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font-weight: 400;
 			position: absolute;
 			right: 0;

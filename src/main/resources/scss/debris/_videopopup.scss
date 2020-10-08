@@ -30,7 +30,7 @@
 				cursor: pointer;
 				padding: 0px;
 				margin: 15px 10px;
-				border: 1px solid $tertiary-grey-alt;
+				border: 1px solid var(--tertiary-grey-alt);
 				box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
 
 				&.x-item-selected {

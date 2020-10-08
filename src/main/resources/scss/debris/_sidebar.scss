@@ -1,7 +1,7 @@
 .rhp-empty-list {
 	padding: 20px 0 !important;
 	font: italic 300 14px/28px $font !important;
-	color: $tertiary-grey !important;
+	color: var(--tertiary-grey) !important;
 	text-align: center !important;
 }
 
@@ -9,7 +9,7 @@
 	padding: 15px 0 0 100px;
 	height: 100px;
 	font: italic 300 14px/18px $font !important;
-	color: $tertiary-grey !important;
+	color: var(--tertiary-grey) !important;
 	@include icon($add_contacts_card);
 
 	* { position: relative; z-index: 1; }

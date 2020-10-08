@@ -58,7 +58,7 @@
 }
 
 .user-data-panel {
-	@include scrollbar(#ffffff, $tertiary-grey);
+	@include scrollbar(#ffffff, var(--tertiary-grey));
 
 	@include divider;
 
@@ -90,7 +90,7 @@
 			text-transform: uppercase;
 			padding: 3px 12px 20px 20px;
 			font: normal 700 0.65em $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 
 			.verb {
 				&::before{
@@ -138,7 +138,7 @@
 				margin: 0 20px;
 
 				.path,.location, .tags, .title{
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					font-family: $font;
 				}
 
@@ -220,7 +220,7 @@
 				text-transform: uppercase;
 				padding: 3px 12px 20px 20px;
 				font: normal 700 0.65em $font;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 
 				.link {
 					color: $primary-blue;
@@ -240,7 +240,7 @@
 				text-transform: uppercase;
 				padding: 3px 12px 20px 20px;
 				font: normal 700 0.65em $font;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 
 				.link {
 					font-size: 1.11em;
@@ -269,7 +269,7 @@
 		}
 
 		&.nothing{
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-align: center;
 			font-family: $font;
 			font-size: 10px;

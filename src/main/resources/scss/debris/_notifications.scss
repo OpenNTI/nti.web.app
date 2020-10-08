@@ -307,7 +307,7 @@
 		time {
 			font: normal 600 0.625em/1 $font;
 			text-transform: uppercase;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 }

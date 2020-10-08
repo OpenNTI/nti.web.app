@@ -3,7 +3,7 @@
 	max-width: 100%;
 
 	.empty-text {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font: normal 300 2em $font;
 		margin: 2em auto;
 		width: 530px;
@@ -207,7 +207,7 @@ li.library-grid-item {
 
 	.courseName, .semester {
 		text-transform: uppercase;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		display: inline-block;
 	}
 
@@ -491,7 +491,7 @@ li.library-grid-item {
 						cursor: pointer;
 						float: left;
 
-						@include accessibility-option(color, $tertiary-grey, #fff);
+						@include accessibility-option(color, var(--tertiary-grey), #fff);
 
 						margin: 11px 5px;
 						height: 28px;
@@ -551,7 +551,7 @@ li.library-grid-item {
 			width: 1024px !important;
 
 			.empty-text {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				font: normal 300 2em $font;
 				margin: 2em auto;
 				width: 530px;
@@ -646,7 +646,7 @@ li.library-grid-item {
 				}
 				.courseName {
 					text-transform: uppercase;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					@include ellipse();
 				}
 
@@ -830,7 +830,7 @@ li.library-grid-item {
 			}
 			.courseName {
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				@include ellipse();
 			}
 
@@ -962,13 +962,13 @@ li.library-grid-item {
 
 		.identifier {
 			font-size: 10px;
-			color: #b8b8b8;
+			color: var(--tertiary-grey);
 			font-weight: 400;
 		}
 
 		.label {
 			font-size: 0.7em;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 		.name {
@@ -1130,7 +1130,7 @@ li.library-grid-item {
 	}
 
 	.empty-text {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font: normal 300 2em $font;
 		text-align: center;
 		padding-top: 2em;
@@ -1291,7 +1291,7 @@ li.library-grid-item {
 	max-width: 100%;
 
 	.empty-text {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font: normal 300 2em $font;
 		margin: 2em auto;
 		width: 530px;

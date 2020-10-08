@@ -27,7 +27,7 @@
 			margin-top: 0.75rem;
 			margin-left: 1.25rem;
 			font-size: 14px;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			width: 2rem;
 		}
 
@@ -75,7 +75,7 @@
 					margin: 0.1875rem;
 
 					i.icon-bold-x {
-						color: #b8b8b8;
+						color: var(--tertiary-grey);
 						cursor: pointer;
 						margin-left:  0.375rem;
 					}

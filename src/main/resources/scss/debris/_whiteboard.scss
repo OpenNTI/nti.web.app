@@ -580,7 +580,7 @@
 		padding: 0px;
 		margin: 3px;
 		margin-bottom: 8px;
-		border: 1px solid $tertiary-grey-alt;
+		border: 1px solid var(--tertiary-grey-alt);
 		box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
 
 		.whiteboard-wrapper {
@@ -627,7 +627,7 @@
 			left: 0; right: 0;
 			overflow: hidden;
 			background: #fafafa;
-			border-top: 1px solid $tertiary-grey-alt;
+			border-top: 1px solid var(--tertiary-grey-alt);
 
 			.include,.reply {
 				color: #a8a8a8;

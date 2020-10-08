@@ -13,7 +13,7 @@
 	}
 
 	 & > .label {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font: normal 600 0.625em/1 $font;
 		text-transform: uppercase;
 		margin-bottom: 0.5em;
@@ -27,7 +27,7 @@
 		&::before {
 			content: attr(data-label);
 			display: block;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font: normal 600 0.625em/1 $font;
 			text-transform: uppercase;
 			margin-bottom: 0.5em;

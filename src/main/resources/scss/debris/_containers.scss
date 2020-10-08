@@ -11,7 +11,7 @@
 
 		.subtitle {
 			font: normal 600 0.6em/1 $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-transform: uppercase;
 		}
 
@@ -34,7 +34,7 @@
 				&::before {
 					content: '\00B7';
 					margin: 0.5em;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 
 				&:first-of-type::before {

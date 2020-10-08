@@ -181,8 +181,8 @@
 			}
 
 			&.disabled{
-				background: $tertiary-grey;
-				border: 1px solid $tertiary-grey;
+				background: var(--tertiary-grey);
+				border: 1px solid var(--tertiary-grey);
 			}
 		}
 

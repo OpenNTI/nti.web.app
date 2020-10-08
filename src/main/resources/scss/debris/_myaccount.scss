@@ -19,7 +19,7 @@
 	a.item {
 		cursor: pointer;
 
-		&:hover { color: $tertiary-grey; }
+		&:hover { color: var(--tertiary-grey); }
 		&:active { color: #424242; }
 
 		&:last-of-type {

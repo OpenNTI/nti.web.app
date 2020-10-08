@@ -104,12 +104,12 @@
 		}
 
 		.date {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			&.expired {
 				color: $primary-red;
 			}
 			&.nosubmit {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 			font: normal 700 0.6em/1.2em $font;
 			text-transform: uppercase;
@@ -202,7 +202,7 @@
 
 			span {
 				font: normal 0.75em/1em $font;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 
 			.responses:not(:empty)::before, .report:not(:empty)::before {
@@ -226,9 +226,9 @@
 			margin-top: -20px;
 
 			&.closed {
-				background: $tertiary-grey-alt;
+				background: var(--tertiary-grey-alt);
 				color: var(--secondary-grey);
-				border-color: $tertiary-grey;
+				border-color: var(--tertiary-grey);
 				box-shadow: none;
 				cursor: default;
 				opacity: 0.7;
@@ -289,7 +289,7 @@
 
 			.comments{
 				font: normal 600 0.6em/1.6em $font;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 		}
 	}
@@ -327,7 +327,7 @@
 
 		.require-control-option {
 			font-weight: 400;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-transform: uppercase;
 		}
 	}
@@ -338,7 +338,7 @@
 		background: #ffffff;
 		overflow: hidden;
 		min-height: 50px;
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 
 		.course-overview-lesson-content {
 			label.grid {
@@ -575,7 +575,7 @@
 
 					.require-control-value {
 						background: none;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						text-transform: uppercase;
 						font-family: "Open Sans", sans-serif;
 						padding: 0;
@@ -598,7 +598,7 @@
 
 							.menu-label.selected {
 								background: none;
-								color: $tertiary-grey;
+								color: var(--tertiary-grey);
 								text-transform: uppercase;
 								font-family: "Open Sans", sans-serif;
 								font-size: 10px;
@@ -619,7 +619,7 @@
 
 								.option-label {
 									font-weight: 400;
-									color: $tertiary-grey;
+									color: var(--tertiary-grey);
 									text-transform: uppercase;
 
 									&.selected {
@@ -631,7 +631,7 @@
 											font-size: 14px;
 											position: absolute;
 											left: 8px;
-											color: $tertiary-grey;
+											color: var(--tertiary-grey);
 										}
 									}
 								}
@@ -858,7 +858,7 @@
 				cursor: pointer;
 
 				&::after {
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					font: normal 500 1.2em $font;
 					text-decoration: none !important;
 					position: static;

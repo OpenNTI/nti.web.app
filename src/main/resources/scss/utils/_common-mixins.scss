@@ -245,7 +245,7 @@
 		cursor: pointer;
 		padding: 0px;
 		margin: 5px 2px;
-		border: 1px solid $tertiary-grey-alt;
+		border: 1px solid var(--tertiary-grey-alt);
 		box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
 
 		&:hover {
@@ -376,7 +376,7 @@
 
 @mixin placeholder-style(){
 	font-style: italic !important;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 }
 
 
@@ -402,7 +402,7 @@
 
 @mixin side-panel-view-title{
 	.view-title {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font:{size: 30px; style: italic; weight: 300;}
 		padding: 20px 18px 15px;
 	}
@@ -712,7 +712,7 @@
 		white-space: nowrap;
 		font: normal bold 10px/20px $font;
 		text-transform: uppercase;
-		color: #b8b8b8;
+		color: var(--tertiary-grey);
 	}
 
 	&:hover,&.over {

@@ -73,7 +73,7 @@ li.x-menu-item {
 
 label.x-menu-item-cmp {
 	text-transform: uppercase;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 	font: normal 700 0.6em/1 $font;
 	padding: 12px 10px 8px 15px;
 }

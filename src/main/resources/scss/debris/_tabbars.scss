@@ -13,7 +13,7 @@
 			pointer-events: auto;
 
 			.x-tab-inner {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				font: $font;
 				text-transform: uppercase;
 				padding: 0 6px;

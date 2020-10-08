@@ -190,7 +190,7 @@ a[href] {
 			}
 
 			.message {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				font: normal 300 2em/4em "Open Sans Condensed", $font;
 			}
 		}

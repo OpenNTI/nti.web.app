@@ -11,7 +11,7 @@
 
 	.limit {
 		font: normal 600 0.75rem/1.3 $body-font-family;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		text-transform: uppercase;
 	}
 }

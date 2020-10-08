@@ -228,14 +228,14 @@ body.media-viewer-open .window-container {
 
 					&:after {
 					    content: ' / ';
-					    color: #b8b8b8;
+					    color: var(--tertiary-grey);
 					}
 
 					&:last-of-type:after {
 					    content: '';
 					}
 					&:last-of-type {
-					    color: #b8b8b8;
+					    color: var(--tertiary-grey);
 					}
 				}
 			}

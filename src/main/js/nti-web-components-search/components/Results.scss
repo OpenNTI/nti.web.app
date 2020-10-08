@@ -25,7 +25,7 @@
 	font-family: "Open Sans";
 	font-size: 14px;
 	line-height: 25px;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 }
 
 .hit-title {
@@ -92,7 +92,7 @@
 	border: 1px solid #efefef;
 	display: inline-block;
 	margin-right: 10px;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 	line-height: 19px;
 	height: 40px;
 	width: 40px;
@@ -126,7 +126,7 @@
 
 .next-results-page {
 	display: inline-block;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 	line-height: 19px;
 	height: 40px;
 	width: 40px;
@@ -156,7 +156,7 @@
 
 .prev-results-page {
 	display: inline-block;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 	line-height: 19px;
 	height: 40px;
 	width: 20px;

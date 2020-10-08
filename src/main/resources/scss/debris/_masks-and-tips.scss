@@ -157,7 +157,7 @@ body > .x-mask {
 
 	p {
 		font: normal 500 1.3em/1.5 $font;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		text-transform: none;
 		margin: 5px 0;
 	}

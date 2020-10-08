@@ -43,7 +43,7 @@
 						.label {
 							font: normal italic 16px/30px $font;
 							padding: 0;
-							color: $tertiary-grey;
+							color: var(--tertiary-grey);
 							position: absolute;
 							top: 10px;
 							left: 15px;

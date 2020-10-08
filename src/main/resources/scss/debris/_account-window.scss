@@ -76,7 +76,7 @@
 			left: 155px;
 			width: 132px;
 			height: 1px;
-			background: #b8b8b8;
+			background: var(--tertiary-grey);
 			display: block;
 			overflow: hidden;
 			z-index: 1;
@@ -461,7 +461,7 @@
 		.email {
 			font-style: italic;
 			margin: 0 0 5px 0;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 		.sub {
@@ -492,7 +492,7 @@
 				position: relative;
 
 				&.sending {
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 
 				&.error {
@@ -505,7 +505,7 @@
 					content: "|";
 					position: absolute;
 					right: 0;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					width: 3px;
 					font-size: 14px;
 				}
@@ -524,7 +524,7 @@
 	}
 
 	.input-box {
-		border: 1px solid $tertiary-grey;
+		border: 1px solid var(--tertiary-grey);
 		padding-right: 30px;
 		background: #ffffff;
 		margin: 0 34px 0 15px;
@@ -541,12 +541,12 @@
 			width: calc(100% - 8px);
 			position: relative;
 			left: 4px;
-			box-shadow: -4px 0 0 0 $tertiary-grey;
+			box-shadow: -4px 0 0 0 var(--tertiary-grey);
 			outline: none;
 
 			&:focus {
 				outline: none;
-				box-shadow: -4px 0 0 0 $tertiary-grey;
+				box-shadow: -4px 0 0 0 var(--tertiary-grey);
 				color: var(--secondary-grey);
 			}
 		}
@@ -631,7 +631,7 @@
 			}
 
 			&.disabled {
-				background-color: $tertiary-grey-alt;
+				background-color: var(--tertiary-grey-alt);
 				box-shadow: inset 1px 0 0 0 $border-grey;
 			}
 		}

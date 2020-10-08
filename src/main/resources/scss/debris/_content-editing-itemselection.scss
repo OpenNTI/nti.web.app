@@ -177,7 +177,7 @@
 				font-size: 0.625em;
 				font-weight: 700;
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 
 				span:not(:first-of-type) {
 					content: ',';
@@ -486,7 +486,7 @@
 
 		.question-count {
 			font-size: 0.75em;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 }

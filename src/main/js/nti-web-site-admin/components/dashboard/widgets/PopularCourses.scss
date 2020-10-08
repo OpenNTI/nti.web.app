@@ -62,7 +62,7 @@
 		.items-header {
 			display: flex;
 			position: relative;
-			color: #b8b8b8;
+			color: var(--tertiary-grey);
 			font-size: 14px;
 			margin-bottom: 10px;
 
@@ -79,7 +79,7 @@
 
 			.rank {
 				font-size: 12px;
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 				padding-top: 10px;
 				margin-right: 10px;
 				min-width: 20px;
@@ -110,7 +110,7 @@
 
 				.description {
 					font-size: 12px;
-					color: #b8b8b8;
+					color: var(--tertiary-grey);
 				}
 			}
 

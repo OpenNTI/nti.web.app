@@ -81,7 +81,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			}
 
 			.learn-more {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				font-size: 14px;
 				line-height: 19px;
 				margin-left: 15px;
@@ -176,7 +176,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			}
 
 			.friend-stt {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				font-size: 10px;
 				font-weight: bold;
 				line-height: 14px;

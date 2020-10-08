@@ -45,7 +45,7 @@
 
 	.published, .modified {
 		flex: 0 0 150px;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font-size: 0.875rem;
 		line-height: 50px;
 		vertical-align: middle;

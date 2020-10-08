@@ -122,12 +122,12 @@
 
 		.list-item {
 			float: left;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font-size: 0.875em;
 
 			&:not(:first-of-type)::before {
 				content: '\00B7';
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				display: inline;
 				margin: 0 0.5em;
 			}

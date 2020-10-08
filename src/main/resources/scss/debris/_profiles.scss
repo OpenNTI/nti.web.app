@@ -122,7 +122,7 @@
 
 				&.unavailable {
 					cursor: pointer;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					background-color: #f8f8f8;
 					padding-left: 60px;
 					opacity: 0.7;
@@ -155,7 +155,7 @@
 			display: inline-block;
 			line-height: 35px;//180 - 145
 			padding: 0 2em;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.4);
 			font-size: 0.875em;
 			cursor: pointer;
@@ -640,7 +640,7 @@
 					position: absolute;
 					right: 2px;
 					top: 18px;
-					@include arrow($pointFrom: top, $color: $tertiary-grey);
+					@include arrow($pointFrom: top, $color: var(--tertiary-grey));
 				}
 			}
 
@@ -843,10 +843,10 @@
 			}
 			.time{
 				font: normal 400 12px/20px $font;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				span{
 					&::after{
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						font: normal 500 12px/20px $font;
 						text-decoration: none !important;
 						position: static;
@@ -892,7 +892,7 @@
 
 		.meta {
 			margin: 0 0 0 75px;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			.title{
 				color: var(--primary-grey);
 				font: normal 300 20px/30px $font;
@@ -901,7 +901,7 @@
 				font: normal 400 12px/20px $font;
 				span{
 					&::after{
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						font: normal 500 12px/20px $font;
 						text-decoration: none !important;
 						position: static;
@@ -951,7 +951,7 @@
 			.date {
 				font-size: 0.63em;
 				font-weight: 600;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				margin-bottom: 10px;
 			}
 
@@ -1148,7 +1148,7 @@
 			.location {
 				text-transform: uppercase;
 				font: normal 600 10px/20px $font;
-				color: $tertiary-grey !important;
+				color: var(--tertiary-grey) !important;
 				overflow: hidden;
 				@include ellipse;
 
@@ -1212,7 +1212,7 @@
 		}
 
 		.path {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-transform: uppercase;
 			padding: 0 20px;
 			font: normal 700 10px/40px $font;
@@ -1276,7 +1276,7 @@
 				margin: 20px 70px 0 80px;
 				min-height: 60px;
 				font: normal 400 12px $font;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 
 			.stamp {
@@ -1288,7 +1288,7 @@
 
 				span{
 					&::after{
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						font: normal 500 12px/20px $font;
 
 						position: static;
@@ -1403,7 +1403,7 @@
 
 		.meta {
 			.time{
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				text-transform: uppercase;
 				font: normal 600 10px $font;
 			}
@@ -1455,7 +1455,7 @@
 			.reply-options {
 				div {
 					opacity: 0.6;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					display: inline-block;
 					font: normal 600 10px $font;
 					text-transform: uppercase;
@@ -1549,7 +1549,7 @@
 				width: 0 0 1px 0;
 			}
 			font: normal 500 14px/38px $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 		.box {
@@ -1598,7 +1598,7 @@
 					.label {
 						overflow: hidden;
 						@include ellipse;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						font: normal 600 10px/30px $font;
 						text-transform: uppercase;
 						cursor: pointer;
@@ -1733,7 +1733,7 @@
 		color: var(--secondary-grey);
 
 		.placeholder{
-			color: $tertiary-grey !important;
+			color: var(--tertiary-grey) !important;
 			font-style: italic !important;
 		}
 
@@ -1847,7 +1847,7 @@
 		margin-top: 5px;
 
 		.empty-achievements-text {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font: normal 300 2em $font;
 			margin: 2em auto;
 			width: 500px;
@@ -1977,7 +1977,7 @@
 		}
 
 		.header {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font: normal bold 10px $font;
 			text-transform: uppercase;
 			float: left;
@@ -1986,7 +1986,7 @@
 		}
 
 		.nti-checkbox {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font: normal 600 0.6em/14px $font;
 			text-transform: uppercase;
 			float: right;
@@ -1995,7 +1995,7 @@
 		}
 
 		.empty-badge-text {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font: italic 400 0.9em/20px $font;
 			margin-top: 20px;
 			padding: 0 8px;
@@ -2132,7 +2132,7 @@
 		text-align: center;
 		line-height: 200px;
 		font-size: 1.25em;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font-weight: 300;
 	}
 
@@ -2156,7 +2156,7 @@
 			font-size: 0.625em;
 			font-weight: 600;
 			text-transform: uppercase;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			display: block;
 			margin-top: 1em;
 
@@ -2206,7 +2206,7 @@
 				min-height: 34px;
 
 				&:focus {
-					border-color: $tertiary-grey;
+					border-color: var(--tertiary-grey);
 				}
 
 				&.multi-line {
@@ -2290,7 +2290,7 @@
 				max-height: 40px;
 
 				&:focus {
-					box-shadow: 0 0 0 1px $tertiary-grey;
+					box-shadow: 0 0 0 1px var(--tertiary-grey);
 				}
 			}
 
@@ -2508,7 +2508,7 @@
 
 		.empty-text {
 			text-align: center;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font-size: 1.75em;
 			font-weight: 300;
 		}
@@ -2825,7 +2825,7 @@
 		border-radius: 5px;
 		box-shadow: 0 0 0 1px #dfe1e5;
 		padding: 0 15px;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font-style: italic;
 		font-weight: 300;
 		font-size: 0.875em;
@@ -2884,7 +2884,7 @@
 
 	.name {
 		font-size: 0.625rem;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		text-transform: uppercase;
 		line-height: 35px;
 		padding: 0 20px;

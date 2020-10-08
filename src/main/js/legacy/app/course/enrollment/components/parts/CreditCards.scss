@@ -21,8 +21,8 @@
 		.card-input .card-number,
 		.card-input .card-expiry,
 		.card-input .card-cvc {
-			border: 1px solid #b8b8b8;
-			box-shadow: inset 4px 0 0 0 #b8b8b8;
+			border: 1px solid var(--tertiary-grey);
+			box-shadow: inset 4px 0 0 0 var(--tertiary-grey);
 			border-left-width: 0;
 			background: white;
 			border-radius: 0;

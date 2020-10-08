@@ -68,7 +68,7 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 .empty-state{
 	text-align: center;
 	font: normal 300 2em $font;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 	margin-top: 2em;
 
 	.link {

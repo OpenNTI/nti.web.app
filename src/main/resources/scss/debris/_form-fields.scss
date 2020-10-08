@@ -83,7 +83,7 @@
 		line-height: 20px;
 		padding: 2px 25px 2px 5px;
 		height: 26px !important;;
-		border: 1px solid $tertiary-grey;
+		border: 1px solid var(--tertiary-grey);
 		border-right-width: 0;
 		border-radius: 1px 0 0 1px;
 		vertical-align: top;
@@ -104,7 +104,7 @@
 
 		&.save-button-disabled {
 			background-color: #E4E4E4;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			cursor: default;
 			border: 1px solid #E4E4E4;
 		}
@@ -292,7 +292,7 @@ span.nti-radiobutton {
 		width: 100%;
 		height: 100%;
 		box-shadow: none;
-		border: 1px solid $tertiary-grey;
+		border: 1px solid var(--tertiary-grey);
 		background: none;
 		position: relative;
 		z-index: 1;
@@ -310,7 +310,7 @@ span.nti-radiobutton {
 		padding: 6px 10px;
 		background: #fff;
 		border: 1px solid white;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 
 		.hidden {
 			visibility: hidden;
@@ -326,7 +326,7 @@ span.nti-radiobutton {
 		position: fixed;
 		top: 100%;
 		background-color: white;
-		border: 1px solid $tertiary-grey;
+		border: 1px solid var(--tertiary-grey);
 		border-top-width: 0;
 		z-index: 3;
 		overflow: auto;
@@ -372,7 +372,7 @@ span.nti-radiobutton {
 
 		&::after {
 			content: '';
-			@include arrow($pointFrom: top, $color: $tertiary-grey);
+			@include arrow($pointFrom: top, $color: var(--tertiary-grey));
 			position: absolute;
 			top: 50%;
 			margin-top: -2px;
@@ -431,7 +431,7 @@ form.common-form {
 		padding: 6px 10px;
 		height: 100%;
 		box-shadow: none;
-		border: 1px solid $tertiary-grey;
+		border: 1px solid var(--tertiary-grey);
 		background: #ffffff;
 	}
 	input.date-field-input {
@@ -509,7 +509,7 @@ form.common-form {
 			margin-right: 0.5em;
 			width: 1px;
 			height: 20px;
-			background: $tertiary-grey;
+			background: var(--tertiary-grey);
 		}
 	}
 
@@ -535,7 +535,7 @@ form.common-form {
 
 		.no-file {
 			padding: 100px 0;
-			border: 2px dashed #b8b8b8;
+			border: 2px dashed var(--tertiary-grey);
 			border-radius: 5px;
 
 			.drop {
@@ -763,7 +763,7 @@ form.common-form {
 
 	.out-of {
 		font-size: 0.625rem;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 
 		span {
 			margin-right: 0.3em;
@@ -787,7 +787,7 @@ form.common-form {
 		font-family: $font;
 		background: white;
 		border: none;
-		box-shadow: 0 0 0 1px $tertiary-grey;
+		box-shadow: 0 0 0 1px var(--tertiary-grey);
 		height: 37px;
 
 

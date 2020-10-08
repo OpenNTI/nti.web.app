@@ -17,7 +17,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 	padding: 5px 16px;
 	border-radius: 3px;
 	border: 1px solid black;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 	background-image: linear-gradient(to bottom,
 						$slidedeck-exit-button-gradient-top 0%,
 						$slidedeck-exit-button-gradient-bottom 100%);
@@ -70,11 +70,11 @@ $active-text-color: rgba(255, 255, 255, 1);
 			}
 
 			.token-input-wrap span.token-input-sizer{
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 			}
 
 			input{
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 				background-color: #161616;
 			}
 		}
@@ -1074,7 +1074,7 @@ body.media-viewer-closing {
 						}
 						.title{
 							font: 200 normal 20px/24px $font;
-							color: $tertiary-grey-alt;
+							color: var(--tertiary-grey-alt);
 							text-transform: uppercase;
 							white-space: nowrap;
 							overflow: hidden;
@@ -1242,7 +1242,7 @@ body.media-viewer-closing {
 			margin: 50px 0 0 (-$indent);
 			display: block;
 			font: normal 300 24px/50px $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			clear: both;
 			float: none;
 
@@ -1287,7 +1287,7 @@ body.media-viewer-closing {
 						size: 10px;
 						weight: 600;
 					}
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					span:not(:empty)::after{
 						text-decoration: none !important;
 						position: static;
@@ -1359,7 +1359,7 @@ body.media-viewer-closing {
 			span {
 				font: normal 600 0.65em/1 $font;
 				background-color: #2a2a2a;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				cursor: pointer;
 				z-index: 1;
 				text-transform: uppercase;
@@ -1535,7 +1535,7 @@ body.media-viewer-closing {
 
 .share-search-mask.slide-comment-header{
 	background: #343434;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 }
 
 .x-container-transcript, .x-panel-transcript{

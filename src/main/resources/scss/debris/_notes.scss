@@ -152,7 +152,7 @@
 				&.delete::after{ @include sprite($trash-can-dark); }
 
 				&.x-menu-item-active {
-					color: $tertiary-grey !important;
+					color: var(--tertiary-grey) !important;
 					background: #3d3d3d !important;
 
 					&.edit::after{ @include sprite($edit-dark_hover); }
@@ -368,7 +368,7 @@
 			}
 
 			.time {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				position: absolute;
 				right: 0px;
 				top: 8px;
@@ -675,7 +675,7 @@
 
 
 	.note-footer, .note-content-container.scrollbody {
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 		//background: #FBFBFB;
 	}
 
@@ -684,7 +684,7 @@
 		height: 200px;
 		text-align: center;
 		padding: 20px;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 
 		&::after{
 			content: 'End';
@@ -707,7 +707,7 @@
 		font: italic 400 0.9em/2.1em $font;
 		padding: 0.5em;
 		margin: -0.8em 0 0 0;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		background: #fff;
 		z-index: 2;
 		box-sizing: content-box;

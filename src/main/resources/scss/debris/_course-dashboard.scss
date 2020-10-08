@@ -32,14 +32,14 @@
 
 		.title {
 			font: normal 300  22px/30px $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-align: center;
 			margin-top: 2em;
 		}
 
 		.sub {
 			text-align: center;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 
@@ -70,7 +70,7 @@
 		}
 
 		.dashboard-header {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			display: inline-block;
 			margin-bottom: 10px;
 			text-transform: uppercase;
@@ -120,7 +120,7 @@
 			.path {
 				font: normal 600 0.65em/1.3em $font;
 				text-transform: uppercase;
-				color: $tertiary-grey-alt;
+				color: var(--tertiary-grey-alt);
 			}
 
 			.title {
@@ -141,7 +141,7 @@
 
 			.bullets {
 				font: normal 600 0.75em/1.3em $font;
-				color: $tertiary-grey-alt;
+				color: var(--tertiary-grey-alt);
 			}
 
 			.footer {
@@ -170,7 +170,7 @@
 				background-color: white;
 				border-bottom: 1px solid #efefef;
 				font: normal 400 0.6em/1.3em $font;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				text-transform: uppercase;
 				padding: 4px 15px;
 				min-height: 33px;
@@ -272,7 +272,7 @@
 			.list-item {
 				display: inline-block;
 				font-size: 0.75em;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 
 				&::before {
 					content: '\a0\b7\a0';
@@ -425,7 +425,7 @@
 				padding: 0 15px;
 				font-size: 0.8em;
 				font-style: italic;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 		}
 	}

@@ -124,7 +124,7 @@ canvas.x-component-course-assessment {
 					position: relative;
 					min-height: 38px;
 					background: #ffffff;
-					border: 1px solid #b8b8b8;
+					border: 1px solid var(--tertiary-grey);
 
 					.answer {
 						position: relative;
@@ -132,7 +132,7 @@ canvas.x-component-course-assessment {
 						vertical-align: middle;
 						min-height: 38px;
 						background: #ffffff;
-						border: 0px solid #b8b8b8;
+						border: 0px solid var(--tertiary-grey);
 						border-bottom-width: 1px;
 						padding-left: 54px;
 
@@ -327,7 +327,7 @@ canvas.x-component-course-assessment {
 				margin-right: 1rem;
 				padding: 5px;
 				padding: 0.25rem;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 		}
 	}
@@ -346,7 +346,7 @@ canvas.x-component-course-assessment {
 		padding: 5px;
 		padding: 0.25rem;
 		margin-left: 2rem;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		display: inline-block;
 		margin-bottom: 1rem;
 	}
@@ -355,7 +355,7 @@ canvas.x-component-course-assessment {
 .assignment-status {
 	font: normal 600 0.6rem/1 $font;
 	text-transform: uppercase;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 	line-height: 20px;
 
 	* {
@@ -406,7 +406,7 @@ canvas.x-component-course-assessment {
 		}
 
 		&.nosubmit {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 }
@@ -482,7 +482,7 @@ canvas.x-component-course-assessment {
 		}
 
 		.empty-text {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font: normal 300 2em $font;
 			margin: 2em auto;
 			width: 500px;
@@ -513,7 +513,7 @@ canvas.x-component-course-assessment {
 				time {
 					float: right;
 					width: 5em;//allow this to line up as if it were a 'left aligned column'.
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					font: normal 300 1em/3 $font;
 				}
 
@@ -558,7 +558,7 @@ canvas.x-component-course-assessment {
 			top: -2.5em;
 			font-size: 0.6em;
 			font-weight: 600;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			width: 10.77em;
 		}
 
@@ -664,7 +664,7 @@ canvas.x-component-course-assessment {
 		.status {
 			text-transform: uppercase;
 			font: normal 600 0.6em/1 $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			float: left;
 
 			&.due {
@@ -694,7 +694,7 @@ canvas.x-component-course-assessment {
 		.score {
 			white-space: nowrap;
 			font: normal 400 0.875em/3 $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			width: 8em;
 			float: right;
 
@@ -764,7 +764,7 @@ canvas.x-component-course-assessment {
 
 				&::after {
 					content: '';
-					@include arrow($pointFrom: top, $color: $tertiary-grey);
+					@include arrow($pointFrom: top, $color: var(--tertiary-grey));
 					margin-top: 2px;
 				}
 
@@ -921,7 +921,7 @@ canvas.x-component-course-assessment {
 			.meta {
 				font: normal 600 0.6em/1 $font;
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				margin-top: 1em;
 
 				span {
@@ -931,7 +931,7 @@ canvas.x-component-course-assessment {
 					&::before {
 						content: '\00B7';
 						margin: 0.5em;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 					}
 					&:first-of-type::before {
 						content: none;
@@ -1081,7 +1081,7 @@ canvas.x-component-course-assessment {
 		background-color: $panel-background;
 		text-align: center;
 		height: 60px;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font-size: 1.25em;
 		cursor: pointer;
 
@@ -1254,7 +1254,7 @@ canvas.x-component-course-assessment {
 		font: normal 600 0.7em/2 $font;
 		text-transform: uppercase;
 		&:empty {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			&::after { content: 'No Action Items'; }
 		}
 
@@ -2098,7 +2098,7 @@ canvas.x-component-course-assessment {
 					}
 
 					.nosubmit {
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 					}
 
 					.late {
@@ -2159,7 +2159,7 @@ canvas.x-component-course-assessment {
 				}
 
 				.label {
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					font: normal 700 0.8em/3 $font;
 					text-transform: uppercase;
 				}
@@ -2238,7 +2238,7 @@ canvas.x-component-course-assessment {
 			.subtitle {
 				font: normal 600 0.6em/1 $font;
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				margin-top: 1em;
 
 				&.actions {
@@ -2255,7 +2255,7 @@ canvas.x-component-course-assessment {
 					&::before {
 						content: '\00B7';
 						margin: 0.5em;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 					}
 					&:first-of-type::before {
 						content: none;
@@ -2331,7 +2331,7 @@ canvas.x-component-course-assessment {
 		top: 28px;
 		left: 30px;
 		font: normal 700 0.6em/1 $font;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		text-transform: uppercase;
 		z-index: 1;
 
@@ -2390,7 +2390,7 @@ canvas.x-component-course-assessment {
 			color: $primary-green;
 		}
 		.incomplete {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
         &.feedback{

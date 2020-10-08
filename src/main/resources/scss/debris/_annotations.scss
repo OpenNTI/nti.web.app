@@ -68,7 +68,7 @@
 				line-height: 19px;
 				font-size: 12px;
 				font-weight: bold;
-				color: $tertiary-grey-alt;
+				color: var(--tertiary-grey-alt);
 				padding-left: 24px;
 				display: block;
 				margin: 10px 0 -13px 0;
@@ -218,7 +218,7 @@
 }
 
 .x-component-annotation-view {
-	@include scrollbar(#fbfbfb, $tertiary-grey);
+	@include scrollbar(#fbfbfb, var(--tertiary-grey));
 	overflow: {
 		x: hidden;
 		y: auto; //scroll;
@@ -277,7 +277,7 @@
 		}
 		.footer {
 			font: normal 400 10px/15px $font;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 
 			span{
 				&::after{
@@ -308,7 +308,7 @@
 				box-shadow: none;
 
 				.name{
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 
 				.snippet{
@@ -316,7 +316,7 @@
 				}
 
 				.footer{
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 			}
 
@@ -342,7 +342,7 @@
 
 			.snippet{
 				font-weight: 600 !important;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 
 			.footer{
@@ -396,7 +396,7 @@
 	.snippet {
 		margin: 10px;
 		font-size: 8pt;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		padding: 0 0 0 25px;
 
 		.comment & {
@@ -533,7 +533,7 @@
 
 			.byline {
 				font-weight: 600;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 
 			.button {

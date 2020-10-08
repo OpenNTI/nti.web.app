@@ -39,7 +39,7 @@
 			cursor: pointer;
 
 			&.none {
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 			}
 
 			svg {
