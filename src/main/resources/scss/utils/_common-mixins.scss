@@ -84,7 +84,7 @@
 	background: #747474;
 
 	&.Online,&.online,&.available {
-		background: #8eb737;
+		background: var(--primary-green);
 	}
 	&.idle {}
 	&.away{
@@ -110,7 +110,7 @@
 
 	&.Online,&.available {
 		&::#{$side}{
-			background: #8eb737;
+			background: var(--primary-green);
 		}
 	}
 	&.idle {}

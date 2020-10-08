@@ -20,7 +20,7 @@
 		&.valid {
 			&, &[data-required="true"] {
 				border-left-width: 0;
-				box-shadow: inset 5px 0 0 0 $primary-green;
+				box-shadow: inset 5px 0 0 0 var(--primary-green);
 			}
 		}
 
@@ -139,7 +139,7 @@
 
 		&::before {
 			content: '';
-			background: $primary-green;
+			background: var(--primary-green);
 			position: absolute;
 			top: 0;
 			bottom: 0;
@@ -319,9 +319,9 @@
 				}
 
 				&.active {
-					color: $primary-green;
+					color: var(--primary-green);
 					&::before {
-						border-color: #8eb737;
+						border-color: var(--primary-green);
 					}
 				}
 
@@ -745,7 +745,7 @@
 	.coupon {
 		text-transform: uppercase;
 		font: normal 600 10px/20px $font;
-		color: $primary-green;
+		color: var(--primary-green);
 		display: block;
 		margin-top: 10px;
 	}

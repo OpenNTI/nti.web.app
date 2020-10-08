@@ -6,7 +6,7 @@
 	border: 1px solid $border-grey-light;
 
 	.heading {
-		background-color: $primary-green;
+		background-color: var(--primary-green);
 		color: white;
 		font-size: 0.875rem;
 		padding: 1rem;

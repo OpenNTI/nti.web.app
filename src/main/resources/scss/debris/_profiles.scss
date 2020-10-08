@@ -663,7 +663,7 @@
 
 			.add-contact {
 				width: 140px;
-				background-color: $primary-green;
+				background-color: var(--primary-green);
 				color: white;
 				padding-left: 50px;
 				@include icon($ico_profile_add_contact, $top: 12px, $left: 25px)

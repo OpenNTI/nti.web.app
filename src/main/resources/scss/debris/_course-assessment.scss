@@ -577,7 +577,7 @@ canvas.x-component-course-assessment {
 			}
 
 			.score .completed:not(.c0) {
-				color: $primary-green;
+				color: var(--primary-green);
 			}
 		}
 	}
@@ -699,7 +699,7 @@ canvas.x-component-course-assessment {
 			float: right;
 
 			.correct {
-				color: $primary-green;
+				color: var(--primary-green);
 			}
 		}
 
@@ -1766,7 +1766,7 @@ canvas.x-component-course-assessment {
 				color: var(--primary-red);
 
 				&.good {
-					color: $primary-green;
+					color: var(--primary-green);
 				}
 			}
 
@@ -2154,7 +2154,7 @@ canvas.x-component-course-assessment {
 					color: var(--primary-red);
 
 					&.good{
-						color: $primary-green;
+						color: var(--primary-green);
 					}
 				}
 
@@ -2387,7 +2387,7 @@ canvas.x-component-course-assessment {
 			color: var(--primary-red);
 		}
 		.ontime {
-			color: $primary-green;
+			color: var(--primary-green);
 		}
 		.incomplete {
 			color: var(--tertiary-grey);

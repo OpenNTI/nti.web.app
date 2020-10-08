@@ -454,7 +454,7 @@ body.dragging * {
 			border-bottom-width: 1px !important;
 			padding: 11px 10px 6px 10px;
 
-			&.correct{ font-style: italic; color: #8eb737; }
+			&.correct{ font-style: italic; color: var(--primary-green); }
 			&.incorrect{ font-style: italic; color: var(--primary-red); }
 
 			.title, .status {
@@ -587,8 +587,8 @@ body.dragging * {
 			cursor: pointer;
 			@include icon($circle-check-green-18,26px,11px);
 			.target.drag {
-				background: #8eb737;
-				border-color: #8eb737;
+				background: var(--primary-green);
+				border-color: var(--primary-green);
 				color: #fff;
 				box-shadow: none;
 				cursor: default;
@@ -628,7 +628,7 @@ body.dragging * {
 				style: italic;
 				weight: normal;
 			}
-			&.ready { color: #8eb737; }
+			&.ready { color: var(--primary-green); }
 		}
 
 		.buttons {
@@ -890,7 +890,7 @@ body.dragging * {
 
 			&.correct{
 				&, input.answer-field {
-					color: #8eb737;
+					color: var(--primary-green);
 					font-weight: normal;
 				}
 
@@ -1160,7 +1160,7 @@ body.dragging * {
 
 			.answer {
 				font-weight: 600;
-				color: #8eb737;
+				color: var(--primary-green);
 
 				.solution-choice-text {
 					font-weight: normal;
@@ -1181,7 +1181,7 @@ body.dragging * {
 						}
 
 						&.solution-ordering-text{
-							color: $primary-green;
+							color: var(--primary-green);
 						}
 					}
 				}
@@ -1658,7 +1658,7 @@ body.dragging * {
 		}
 		&.good {
 			.due {
-				color: $primary-green;
+				color: var(--primary-green);
 			}
 			&::after {
 				@include sprite($assignment_ontime);
@@ -2431,7 +2431,7 @@ input.preview[readonly] {
 				font: normal 300 1rem/40px $font;
 
 				&.max {
-					color: $primary-green;
+					color: var(--primary-green);
 				}
 			}
 

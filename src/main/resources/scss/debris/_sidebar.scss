@@ -19,7 +19,7 @@
 	}
 
 	a.button {
-		color: $primary-green;
+		color: var(--primary-green);
 		font: normal 400 14px/18px $font !important;
 
 		&::before {

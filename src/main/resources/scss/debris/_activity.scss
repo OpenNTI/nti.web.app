@@ -733,7 +733,7 @@
 			}
 
 			.turned-in {
-				color: $primary-green;
+				color: var(--primary-green);
 				font: normal 600 0.7em/2em $font;
 			}
 		}

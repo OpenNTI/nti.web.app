@@ -150,9 +150,9 @@
 					}
 				}
 				&.valid{
-					span, .validation-message{ color: $primary-green; }
+					span, .validation-message{ color: var(--primary-green); }
 					input[data-required=true], .selectbox{
-						box-shadow: inset 5px 0 0 0 $primary-green !important;
+						box-shadow: inset 5px 0 0 0 var(--primary-green) !important;
 					}
 				}
 			}
@@ -177,7 +177,7 @@
 			&.submitted{
 				background: none;
 				border: none;
-				color: $primary-green;
+				color: var(--primary-green);
 			}
 
 			&.disabled{

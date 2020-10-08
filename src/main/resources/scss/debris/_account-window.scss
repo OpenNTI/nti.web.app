@@ -273,7 +273,7 @@
 				//TODO - is not working
 				&.valid {
 					&, &:focus {
-						box-shadow: -4px 0 0 0 $primary-green;
+						box-shadow: -4px 0 0 0 var(--primary-green);
 					}
 				}
 
@@ -330,7 +330,7 @@
 			.text {
 				display: table-cell;
 				text-align: center;
-				color: $primary-green;
+				color: var(--primary-green);
 				vertical-align: middle;
 				&.error {
 					color: var(--primary-red);
@@ -583,7 +583,7 @@
 		}
 
 		&.success {
-			color: $primary-green;
+			color: var(--primary-green);
 		}
 	}
 

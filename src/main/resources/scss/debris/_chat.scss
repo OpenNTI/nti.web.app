@@ -961,7 +961,7 @@ body.white-shade-mask .chat-gutter-window {
 
   				&.Online,&.online,&.available {
 					.avatar-pic {
-	  					border: 2px solid #8eb737;
+	  					border: 2px solid var(--primary-green);
 	  				}
 
 				}

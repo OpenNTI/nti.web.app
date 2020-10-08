@@ -605,7 +605,7 @@ body .modal ~ .simple-popover-widget {
     	}
 
     	&.saved {
-    		background-color: $primary-green;
+    		background-color: var(--primary-green);
     		color: white;
     	}
 

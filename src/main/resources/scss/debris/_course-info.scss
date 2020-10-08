@@ -56,7 +56,7 @@
 		@include icon($enroll, $position: absolute, $top: 10px, $left: 10px);
 		display: block;
 		z-index: 10;
-		background: $primary-green;
+		background: var(--primary-green);
 		color: #fff;
 		right: 10px;
 		top: 11px;
@@ -387,7 +387,7 @@
 		line-height: 3.5em;
 
 		.registered {
-			color: $primary-green;
+			color: var(--primary-green);
 			font-weight: 500;
 			padding-left: 30px;
 			@include icon($circle-check-green,$top: 1em);
