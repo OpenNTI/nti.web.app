@@ -100,7 +100,7 @@
 
 							.reply-option {
 								float: right;
-								color: $primary-blue;
+								color: var(--primary-blue);
 
 								.empty {
 									display: none;
@@ -136,7 +136,7 @@
 						&.receiver {
 							.field {
 								top: 10px;
- 							    color: $primary-blue;
+ 							    color: var(--primary-blue);
     							text-transform: capitalize;
     							width: 350px;
     							position: relative;

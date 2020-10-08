@@ -180,7 +180,7 @@
 
 		.change {
 			border-left: 1px solid var(--tertiary-grey);
-			color: $primary-blue;
+			color: var(--primary-blue);
 			text-decoration: underline;
 			padding-left: 0.5rem;
 			cursor: pointer;
@@ -250,7 +250,7 @@
 			top: 17px;
 			right: 25px;
 			font: normal 600 14px/20px $font;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 			text-align: right;
 		}
@@ -326,7 +326,7 @@
 					    text-transform: capitalize;
 
 					    &.selected {
-					    	color: $primary-blue;
+					    	color: var(--primary-blue);
 					    }
 		    		}
 		    	}
@@ -497,7 +497,7 @@ input[type=number]{
 			.field.byline input, .field.label input, .field.description textarea {
 				&:focus {
 					background: white;
-					box-shadow: 0 0 0 1px $primary-blue;
+					box-shadow: 0 0 0 1px var(--primary-blue);
 				}
 
 				&.error {
@@ -574,7 +574,7 @@ input[type=number]{
 		    line-height: 30px;
 		    font-size: 0.875em;
 		    font-weight: 600;
-		    color: #3fb3f6;
+		    color: var(--primary-blue);
 		}
 	}
 }
@@ -666,7 +666,7 @@ input[type=number]{
 	> .title {
 		text-align: center;
 		font: normal 600 16px/42px $font;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		background-color: #e8e8e8;
 		cursor: pointer;
 	}
@@ -964,7 +964,7 @@ input[type=number]{
 			background-color: #ffffff;
 
 			.title {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				color: #ffffff;
 
 				&:before {
@@ -1052,7 +1052,7 @@ input[type=number]{
 				padding: 9px 10px;
 				margin: 10px;
 				border-radius: 5px;
-				background: $primary-blue;
+				background: var(--primary-blue);
 				color: #ffffff;
 				font-size: 14px;
 				position: relative;
@@ -1066,7 +1066,7 @@ input[type=number]{
 
 		&.published {
 			.label {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				background: var(--quad-grey);
 				@include icon($dropdown-blue, $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
@@ -1080,7 +1080,7 @@ input[type=number]{
 			padding: 0 1.5em;
 			border-radius: 3px;
 			color: white;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			cursor: pointer;
 
 			&.disabled {
@@ -1376,7 +1376,7 @@ input[type=number]{
 					font-family: $font;
 
 					&:hover {
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 				}
 
@@ -1406,7 +1406,7 @@ input[type=number]{
 					background: none;
 					border: none;
 					.x-datepicker-date {
-						background-color: $primary-blue;
+						background-color: var(--primary-blue);
 						color: #ffffff;
 						border-radius: 90px;
 					}
@@ -1424,7 +1424,7 @@ input[type=number]{
 				}
 
 				.x-datepicker-date::hover {
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 		}
@@ -1700,7 +1700,7 @@ input[type=number]{
 			line-height: 30px;
 			font-size: 0.875em;
 			font-weight: 600;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 
@@ -1710,7 +1710,7 @@ input[type=number]{
 		left: 10px; right: 10px;
 
 		.nt-button.add {
-			background: $primary-blue;
+			background: var(--primary-blue);
 			line-height: 46px;
 			font-size: 0.875em;
 			font-weight: 600;
@@ -1731,7 +1731,7 @@ input[type=number]{
 
 		.add {
 			float: right;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			text-decoration: underline;
 			cursor: pointer;
 			font-size: 0.875rem;
@@ -1797,7 +1797,7 @@ input[type=number]{
 .create-assignment-overview-editing, .create-video-overview-editing, .create-ltitool-overview-editing {
     float: left;
     color: white;
-    background: #3fb3f6;
+    background: var(--primary-blue);
     padding: 6.5px;
     border-radius: 3px;
 	cursor: pointer;

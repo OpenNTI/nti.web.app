@@ -16,7 +16,7 @@
 
 		.name {
 			@include menu-label-text-treatment;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 		.affiliation {
 			color: var(--secondary-grey);
@@ -54,7 +54,7 @@
 			margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
 			margin-bottom: 5px;
 			font: italic 300 30px/40px $font;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			overflow: hidden;
 			@include ellipse;
 			text-transform: none;
@@ -353,7 +353,7 @@
 				a.button{
 					width: 90px;
 					outline: 1px solid $border-blue;
-					background: $primary-blue;
+					background: var(--primary-blue);
 				}
 				&.disabled a.button{
 					cursor: default;

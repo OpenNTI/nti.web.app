@@ -461,7 +461,7 @@
 	}
 
 	.like{
-		color: $primary-blue;
+		color: var(--primary-blue);
 		margin: 8px;
 		padding: 0 0 0 20px;
 		white-space: nowrap;

@@ -248,7 +248,7 @@ canvas.x-component-course-assessment {
 		}
 
 		.save {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 		}
 	}
@@ -449,7 +449,7 @@ canvas.x-component-course-assessment {
 				border-radius: 10em;
 				padding: 0.4em 0.8em 0.3em;
 				color: #fff;
-				background: $primary-blue;
+				background: var(--primary-blue);
 
 				&.hidden {
 					display: none
@@ -462,10 +462,10 @@ canvas.x-component-course-assessment {
 			}
 
 			&.x-item-selected {
-				background: $primary-blue;
+				background: var(--primary-blue);
 
 				.count {
-					color: $primary-blue;
+					color: var(--primary-blue);
 					background: #fff;
 				}
 			}
@@ -501,7 +501,7 @@ canvas.x-component-course-assessment {
 					font-weight: 600;
 					&::before {
 						content: '';
-						background: $primary-blue;
+						background: var(--primary-blue);
 						position: absolute;
 						overflow: hidden;
 						border-radius: 10em;
@@ -518,7 +518,7 @@ canvas.x-component-course-assessment {
 				}
 
 				.target {
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 		}
@@ -529,7 +529,7 @@ canvas.x-component-course-assessment {
 			text-align: center;
 			text-transform: uppercase;
 			text-decoration: none;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			margin: 2em;
 			cursor: pointer;
 		}
@@ -679,14 +679,14 @@ canvas.x-component-course-assessment {
 			margin-left: 0.5em;
 			text-transform: uppercase;
 			font: normal 600 0.6em/1 $font;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			float: left;
 		}
 
 		.edit-assignment {
 			float: right;
 			font: normal 300 0.875rem/3 $font;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			padding-right: 1rem;
 			cursor: pointer;
 		}
@@ -838,11 +838,11 @@ canvas.x-component-course-assessment {
 	}
 
 	.x-menu-item.x-menu-item-checked:not(.avatar-toggle) {
-		background-color: $primary-blue;
+		background-color: var(--primary-blue);
 		color: white !important;
 
 		&.x-menu-item-active {
-			background-color: $primary-blue !important;
+			background-color: var(--primary-blue) !important;
 		}
 	}
 
@@ -926,7 +926,7 @@ canvas.x-component-course-assessment {
 
 				span {
 					display: inline-block;
-					&.link { color: $primary-blue; cursor: pointer; }
+					&.link { color: var(--primary-blue); cursor: pointer; }
 
 					&::before {
 						content: '\00B7';
@@ -951,7 +951,7 @@ canvas.x-component-course-assessment {
 				}
 
 				.status-item {
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 
@@ -1205,7 +1205,7 @@ canvas.x-component-course-assessment {
 		display: inline-block;
 		text-decoration: none;
 		cursor: pointer;
-		background: $primary-blue;
+		background: var(--primary-blue);
 		border-radius: 3px;
 		font: italic 600 0.9em/1 $font;
 		color: #fff;
@@ -1259,7 +1259,7 @@ canvas.x-component-course-assessment {
 		}
 
 		& > div {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			display: inline-block;
 			&.overdue { color: var(--primary-red); }
 
@@ -1281,7 +1281,7 @@ canvas.x-component-course-assessment {
 			right: 1em;
 			padding: 0.8em 0;
 			font: normal 300 0.9em/1 $font;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 		}
 	}
@@ -1346,7 +1346,7 @@ canvas.x-component-course-assessment {
 			line-height: 1.35em;
 
 			&:focus{
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				color: white;
 			}
 
@@ -1390,7 +1390,7 @@ canvas.x-component-course-assessment {
 
 	.create-assignment {
 		flex: 0 0 125px;
-		background-color: $primary-blue;
+		background-color: var(--primary-blue);
 		color: white;
 		cursor: pointer;
 		padding-left: 50px;
@@ -1481,13 +1481,13 @@ canvas.x-component-course-assessment {
 
 			&.x-menu-item-checked{
 				color: white !important;
-				background: $primary-blue !important;
+				background: var(--primary-blue) !important;
 				box-shadow: inset 0px 0 1px 1px $border-blue,
 					inset 3px 0 0 0 $border-blue;
 				@include icon($arrow-course-dropdown-white, $top:1.5em, $left:auto, $right:1em);
 
 				&.x-menu-item-active {
-					background: $primary-blue !important;
+					background: var(--primary-blue) !important;
 				}
 			}
 
@@ -1530,7 +1530,7 @@ canvas.x-component-course-assessment {
 
 			&.x-menu-item-active{
 				color: #fff !important;
-				background: $primary-blue;
+				background: var(--primary-blue);
 			}
 		}
 	}
@@ -1556,7 +1556,7 @@ canvas.x-component-course-assessment {
 			display: inline-block;
 			margin-left: 30px;
 			cursor: pointer;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font: normal 500 0.9em/1em $font;
 		}
 	}
@@ -1745,7 +1745,7 @@ canvas.x-component-course-assessment {
 		.help {
 			line-height: 3em;
 			padding: 0 1em;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font-size: 0.9em;
 			cursor: pointer;
 		}
@@ -1776,7 +1776,7 @@ canvas.x-component-course-assessment {
 				line-height: 40px;
 				margin-top: 10px;
 				text-align: center;
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				cursor: pointer;
 				border-radius: 3px;
 				font-style: italic;
@@ -1893,7 +1893,7 @@ canvas.x-component-course-assessment {
 			.path.part {
 				font-weight: 600;
 				cursor: pointer;
-				color: $primary-blue;
+				color: var(--primary-blue);
 
 				&.current {
 					color: var(--primary-grey);
@@ -2249,7 +2249,7 @@ canvas.x-component-course-assessment {
 				}
 
 				span {
-					&.link { color: $primary-blue; cursor: pointer; }
+					&.link { color: var(--primary-blue); cursor: pointer; }
 
 
 					&::before {

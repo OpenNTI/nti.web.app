@@ -2,7 +2,7 @@
     padding-top: 2em;
 
     .load-more{
-        background: #3fb3f6;
+        background: var(--primary-blue);
         color: #fff;
         cursor: pointer;
         font-size: 0.875em;
@@ -74,7 +74,7 @@
 
 
 	.username {
-		color: $primary-blue;
+		color: var(--primary-blue);
 		margin-right: 5px;
 	}
 

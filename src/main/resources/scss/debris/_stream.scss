@@ -133,7 +133,7 @@
 			}
 
 			&.blue {
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 
 			&.link {
@@ -163,7 +163,7 @@
 			cursor: pointer;
 			padding: 0 10px;
 			background: white;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font: italic 400 0.875em/37px $font;
 			border: 1px solid #dcdcdc;
 		}

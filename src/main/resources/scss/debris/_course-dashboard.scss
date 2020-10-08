@@ -186,7 +186,7 @@
 
 				.current {
 					overflow: hidden;
-					color: $primary-blue;
+					color: var(--primary-blue);
 					@include ellipsis;
 				}
 			}
@@ -411,7 +411,7 @@
 
 				.actions {
 					.comments {
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 				}
 			}

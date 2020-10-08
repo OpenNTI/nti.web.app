@@ -46,7 +46,7 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 		border-radius: 90px;
 		width: 4px; height: 4px;
 		margin: 2px;
-		background: $primary-blue;
+		background: var(--primary-blue);
 	}
 }
 
@@ -73,7 +73,7 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 
 	.link {
 		cursor: pointer;
-		color: $primary-blue;
+		color: var(--primary-blue);
 	}
 
 	.sub{

@@ -18,7 +18,7 @@
 
 	.occupants {
 		@include menu-label-text-treatment;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		line-height: 20px;
 	}
 
@@ -119,7 +119,7 @@
 			}
 
 			.link {
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 		}
 
@@ -207,7 +207,7 @@
 					font-style: normal;
 					font-size: 10px;
 					font-weight: bold;
-					color: $primary-blue;
+					color: var(--primary-blue);
 					text-transform: uppercase;
 				}
 
@@ -223,7 +223,7 @@
 				color: var(--tertiary-grey);
 
 				.link {
-					color: $primary-blue;
+					color: var(--primary-blue);
 					text-transform: uppercase !important;
 				}
 
@@ -246,7 +246,7 @@
 					font-size: 1.11em;
 					font-weight: 500;
 					text-transform: none;
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 

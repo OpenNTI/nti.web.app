@@ -81,7 +81,7 @@
 		&.selected, &.x-item-selected {
 			color: #ffffff;
 			font-weight: 600;
-			background: $primary-blue;
+			background: var(--primary-blue);
 			box-shadow: inset 3px 0 0 0 #107eed;
 
 			.report-icon {

@@ -54,7 +54,7 @@
 				font-size: 0.635em;
 				font-weight: 700;
 				text-transform: uppercase;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				line-height: 35px;
 				position: absolute;
 				top: 0; right: 40px;
@@ -124,7 +124,7 @@
 			}
 
 			&.selected {
-				box-shadow: 0 0 0 3px $primary-blue;
+				box-shadow: 0 0 0 3px var(--primary-blue);
 			}
 
 			&.filtered {
@@ -378,7 +378,7 @@
 	}
 
 	.selected {
-		background: $primary-blue;
+		background: var(--primary-blue);
 
 		.reading-item {
 			color: white;
@@ -447,7 +447,7 @@
 .assignment-item-selection, .assessment-item-selection, .survey-item-selection {
 	.selected {
 		.assignment-item, .self-assessment-item, .survey-item {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 
 			&.overdue .due-date, .question-count {
@@ -523,7 +523,7 @@
 .timeline-item-selection{
 	.selection-item {
 		&.selected {
-			box-shadow: 0 0 0 3px $primary-blue;
+			box-shadow: 0 0 0 3px var(--primary-blue);
 		}
 	}
 	.overview-timeline {
@@ -583,7 +583,7 @@
 .content-package-item-selection {
 
 	.selected .content-package-item {
-		box-shadow: 0 0 0 2px $primary-blue;
+		box-shadow: 0 0 0 2px var(--primary-blue);
 	}
 
 	.filtered {

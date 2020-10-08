@@ -285,7 +285,7 @@
 			}
 
 			.log-entry {
-				background: $primary-blue;
+				background: var(--primary-blue);
 				border-radius: 5px;
 				float: left;
 				overflow: visible;
@@ -524,7 +524,7 @@
 			margin-left: 70px;
 			.name {
 				@include menu-label-text-treatment;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				.me {
 					color: var(--tertiary-grey);
 				}
@@ -619,7 +619,7 @@
 #chat-dock-placeholder.notice-me,
 #chat-dock.notice-me > .x-panel-header
 {
-	background-color: #3fb3f6;
+	background-color: var(--primary-blue);
 	box-shadow: 0 -1px #d9d9d9, inset 0 1px #95ddfb;
 	border-bottom-color: #30a1f4;
 	background-image: linear-gradient(to top, #30a1f4 0%, #4ec6f8 100%);
@@ -816,7 +816,7 @@
 			text-align: center;
 			font-size: 14px;
 			padding: 5px 0px 5px 0px;
-			color: #3fb3f6;
+			color: var(--primary-blue);
 			cursor: pointer;
 
 			&::after{
@@ -1065,7 +1065,7 @@ body.white-shade-mask .chat-gutter-window {
 			&.active {
 				.profile-pic {
 					.avatar-pic {
-						// border: 2px solid $primary-blue;
+						// border: 2px solid var(--primary-blue);
 					}
 				}
 			}

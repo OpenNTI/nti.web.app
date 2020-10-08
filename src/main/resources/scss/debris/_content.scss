@@ -177,7 +177,7 @@
 			&.has-switcher {
 				.title {
 					&:hover {
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 
 					&::after {
@@ -236,7 +236,7 @@
 
 		.active-tab {
 			height: 2px;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			bottom: 0px;
 			position: absolute;
 			opacity: 1;
@@ -271,7 +271,7 @@
 		&.active, &:hover {
 			&::before {
 				font-weight: 600;
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 		}
 	}
@@ -345,7 +345,7 @@
 		}
 
 		&.active, &:hover {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font-weight: 600;
 		}
 

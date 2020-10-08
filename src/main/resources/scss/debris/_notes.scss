@@ -5,7 +5,7 @@
 		font-weight: 300;
 
 		.name {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font-size: 24px;
 			cursor: pointer;
 		}
@@ -238,7 +238,7 @@
 				.title{display: none; }
 				.name{
 					font-size: 14px;
-					color: $primary-blue;
+					color: var(--primary-blue);
 					display: inline-block;
 					max-width: 40em;
 					overflow: hidden;
@@ -499,7 +499,7 @@
 				}
 
 				.name{
-					color: $primary-blue;
+					color: var(--primary-blue);
 					margin-right: 5px;
 					display: inline-block;
 					max-width: 200px;
@@ -508,7 +508,7 @@
 				}
 
 				.shared-to{
-					color: $primary-blue;
+					color: var(--primary-blue);
 					name[data-profile-idx]:not([data-profile-idx=""]){
 						cursor: pointer;
 					}
@@ -541,7 +541,7 @@
 			max-height: 30em;
 
 			.see-more {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				display: inline;
 				position: relative;
 				bottom: -20px;

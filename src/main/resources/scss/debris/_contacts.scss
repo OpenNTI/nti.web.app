@@ -182,7 +182,7 @@ $over-color: #f4f3f3;
 
 	.name {
 		@include menu-label-text-treatment;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		cursor: pointer;
 	}
 	.status {
@@ -680,7 +680,7 @@ $over-color: #f4f3f3;
 		}
 		.resend-consent {
 			cursor: pointer;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 }
@@ -856,7 +856,7 @@ div.contact-buttons {
                     }
 
                     &.remove-contact, &.selected{
-                        color: #3fb3f6;
+                        color: var(--primary-blue);
                         background: none;
                         border: none;
                     }
@@ -899,7 +899,7 @@ div.contact-buttons {
 
             &.confirm{
                 color: #ffffff;
-                background: $primary-blue;
+                background: var(--primary-blue);
             }
 
             &.disabled{
@@ -1003,7 +1003,7 @@ div.contact-buttons {
 					margin-left: 25px;
 
 					.link{
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
                 }
 
@@ -1210,7 +1210,7 @@ div.contact-buttons {
 				margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
 				margin-bottom: 5px;
 				font: italic 300 30px/40px $font;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				overflow: hidden;
 				@include ellipse;
 				text-transform: none;
@@ -1345,7 +1345,7 @@ div.contact-buttons {
 			width: 140px; height: 140px;
 			float: left;
 			text-align: center;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font: italic 300 16px/30px $font;
 
 			.dots {
@@ -1353,7 +1353,7 @@ div.contact-buttons {
 				margin-top: 50px;
 				div {
 					display: inline-block;
-					background: $primary-blue;
+					background: var(--primary-blue);
 					border-radius: 90px;
 					width: 7px;
 					height: 7px;

@@ -172,7 +172,7 @@
 
 		.button {
 			display: inline-block;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font: normal 500 12px/20px $font;
 			white-space: nowrap;
 			cursor: pointer;
@@ -466,7 +466,7 @@
 			}
 
 			a:link, a:visited, a:active {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				text-decoration: none;
 			}
 
@@ -524,7 +524,7 @@
 				background: #75bc30;
 
 				&.alt {
-					background: $primary-blue;
+					background: var(--primary-blue);
 					outline: 1px solid $border-blue;
 				}
 
@@ -693,7 +693,7 @@
 
 			tr.bulk {
 				td:first-of-type {
-					color: $primary-blue;
+					color: var(--primary-blue);
 					cursor: text;
 				}
 			}
@@ -726,7 +726,7 @@
 		text-decoration: none;
 
 		&, &:link, &:active, &:visited {
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 
@@ -893,7 +893,7 @@
 		text-decoration: none;
 
 		&, &:link, &:active, &:visited {
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 

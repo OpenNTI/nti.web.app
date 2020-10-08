@@ -92,7 +92,7 @@
 				text-transform: uppercase;
 			}
 
-			.name, .with { color: $primary-blue; }
+			.name, .with { color: var(--primary-blue); }
 			.verb {color: var(--tertiary-grey); }
 		}
 
@@ -166,7 +166,7 @@
 				.foot, .meta{
 					.link {
 						cursor: pointer;
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 
 					.name {
@@ -406,7 +406,7 @@
 				margin-top: 5px;
 				.name {
 					font: normal 600 10px/20px $font;
-					color: $primary-blue;
+					color: var(--primary-blue);
 					text-transform: uppercase;
 					cursor: pointer;
 					&::after{
@@ -452,7 +452,7 @@
 				border-radius: 90px;
 				width: 4px; height: 4px;
 				margin: 2px;
-				background: $primary-blue;
+				background: var(--primary-blue);
 			}
 
 		}
@@ -474,7 +474,7 @@
 			clear: both;
 			opacity: 1;
 			padding: 15px;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			.comments {
 				cursor: pointer;
@@ -587,7 +587,7 @@
 						vertical-align: bottom;
 						@include ellipse();
 
-						color: $primary-blue;
+						color: var(--primary-blue);
 						cursor: pointer;
 						text-transform: uppercase;
 						&::after{
@@ -764,7 +764,7 @@
 
 	.show-more {
 		background-color: $panel-background;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		font: normal 500 0.8em/20px $font;
 		padding: 10px 0 0 20px;
 

@@ -76,13 +76,13 @@
 		&.active {
 			color: #fff;
 			border-color: $border-blue;
-			background: $primary-blue;
+			background: var(--primary-blue);
 		}
 
 		&:hover {
 			color: #fff;
 			border-color: $border-blue;
-			background: $primary-blue;
+			background: var(--primary-blue);
 
 			padding: 0 7px 0 10px;
 			margin-right: -9px;
@@ -264,7 +264,7 @@
 				text-transform: none;
 				color: #fff;
 				border-color: #39a1dd;
-				background: #3fb3f6;
+				background: var(--primary-blue);
 				position: relative;
 				z-index: 2;
 

@@ -15,7 +15,7 @@
 		}
 
 		&.selected {
-			box-shadow: inset 4px 0 0 0 $primary-blue;
+			box-shadow: inset 4px 0 0 0 var(--primary-blue);
 			&::after {
 				content: ' ';
 				position: absolute;
@@ -47,7 +47,7 @@
 				font-size: 14px;
 			}
 			div, a, a:link, a:visited, a:active {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				font-size: 12px;
 				text-decoration: none;
 			}

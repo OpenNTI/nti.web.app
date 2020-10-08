@@ -147,7 +147,7 @@
 			}
 
 			.price {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				font-style: italic;
 				line-height: 30px;
 			}

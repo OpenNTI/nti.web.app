@@ -34,7 +34,7 @@
 	}
 
 	.resources {
-		color: $primary-blue;
+		color: var(--primary-blue);
 		cursor: pointer;
 		display: flex;
 		align-items: center;

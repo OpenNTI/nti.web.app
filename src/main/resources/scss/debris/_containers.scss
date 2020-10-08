@@ -27,7 +27,7 @@
 			.tool {
 
 				&.link {
-					color: $primary-blue;
+					color: var(--primary-blue);
 					cursor: pointer;
 				}
 

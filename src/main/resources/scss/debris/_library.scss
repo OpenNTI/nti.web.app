@@ -216,7 +216,7 @@ li.library-grid-item {
 	}
 
 	.author {
-		color: $primary-blue;
+		color: var(--primary-blue);
 	}
 
 	.title {
@@ -378,7 +378,7 @@ li.library-grid-item {
 }
 
 .load-archived-button {
-	background-color: #3fb3f6;
+	background-color: var(--primary-blue);
 	color: white;
 	font-size: 16px;
 	font-family: "Open Sans", sans-serif;
@@ -651,7 +651,7 @@ li.library-grid-item {
 				}
 
 				.author {
-					color: $primary-blue;
+					color: var(--primary-blue);
 					margin-bottom: 5px;
 				}
 
@@ -835,7 +835,7 @@ li.library-grid-item {
 			}
 
 			.author {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				@include ellipse();
 			}
 
@@ -984,7 +984,7 @@ li.library-grid-item {
 		.button {
 			cursor: pointer;
 			float: right;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 			padding: 0 30px;
 			font: normal 500 0.9em/40px $font;
@@ -1060,7 +1060,7 @@ li.library-grid-item {
 			@include ellipsis();
 
 			&.back {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				padding-left: 22px;
 				cursor: pointer;
 
@@ -1193,7 +1193,7 @@ li.library-grid-item {
 
 					&.active, &.active:hover{
 						color: white;
-						background-color: $primary-blue;
+						background-color: var(--primary-blue);
 						box-shadow: -1px 0 0 0 #e3e3e3,
 							1px 0 0 0 #e3e3e3;
 					}
@@ -1210,7 +1210,7 @@ li.library-grid-item {
 
 .course-setting-options {
 	padding: 20px 40px;
-	color: $primary-blue;
+	color: var(--primary-blue);
 	font: normal 500 1em/1.5em $font;
 
 	.enrollment {
@@ -1223,7 +1223,7 @@ li.library-grid-item {
 	.contact, .support, .report, .drop {
 		display: block;
 		cursor: pointer;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		font-size: 0.8em;
 		text-decoration: none;
 	}
@@ -1264,7 +1264,7 @@ li.library-grid-item {
 
 			&.x-tab-active, &.x-tab-active:hover{
 				color: white;
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				box-shadow: -1px 0 0 0 #e3e3e3,
 					1px 0 0 0 #e3e3e3;
 			}
@@ -1422,7 +1422,7 @@ li.library-grid-item {
 			}
 
 			.add {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 				font: normal 600 0.875em/2em $font;
 

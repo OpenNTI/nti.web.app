@@ -227,7 +227,7 @@ label.x-menu-item-cmp {
 .blue-menu-items {
 	&.no-checkboxes .x-menu-item-checked,
 	&:not(.no-checkboxes) .x-menu-item-active {
-		background: $primary-blue;
+		background: var(--primary-blue);
 		color: #fff !important;
 		font-weight: 600;
 	}

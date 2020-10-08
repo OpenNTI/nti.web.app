@@ -350,7 +350,7 @@
 
 			&:focus {
 				outline: none;
-				box-shadow: -4px 0 0 0 $primary-blue;
+				box-shadow: -4px 0 0 0 var(--primary-blue);
 			}
 
 			&.empty,
@@ -429,7 +429,7 @@
 
 			.privacyLink, .policy-link{
 				text-decoration: none;
-				color: #3FB3F6;
+				color: var(--primary-blue);
 				font-size: 12px;
 				top:5px !important;
 				cursor: pointer;

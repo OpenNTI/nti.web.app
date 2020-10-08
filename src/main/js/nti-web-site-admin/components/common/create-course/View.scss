@@ -43,7 +43,7 @@
 .admin-create-button {
 	height: 40px;
 	width: 115px;
-	background-color: #3fb3f6;
+	background-color: var(--primary-blue);
 	border-radius: 30px;
 	color: white;
 	padding: 4px 4px 4px 7px;
@@ -55,7 +55,7 @@
 		border-radius: 12px;
 		width: 24px;
 		height: 24px;
-		color: #3fb3f6;
+		color: var(--primary-blue);
 		padding: 1px 0 0 3px;
 		margin: 4px 10px 0 3px;
 		font-size: 18px;

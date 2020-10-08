@@ -18,11 +18,11 @@
 
 		.edit {
 			padding: 5px 10px;
-    		color: #3fb3f6;
+    		color: var(--primary-blue);
     		margin: 5px;
 
     		&:hover {
-    			background-color: #3fb3f6;
+    			background-color: var(--primary-blue);
     			color: #fff;
     			border-radius: 5px;
     		}
@@ -56,7 +56,7 @@
 		.byline {
 			font: normal 600 10px/10px $font;
 			text-transform: uppercase;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			white-space: nowrap;
 			overflow: hidden;
@@ -90,7 +90,7 @@ a[href] {
 	#NTIContent &, #profile .profile-head &{
 		@include content-link-def;
 		line-height: inherit;
-		color: $primary-blue;
+		color: var(--primary-blue);
 	}
 }
 
@@ -134,7 +134,7 @@ a[href] {
 			.launcher-button {
 				margin: 5px 0px;
 				padding: 0px 10px 0px 40px;
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				border: 1px solid $border-blue;
 				font: italic 500 14px/30px $font;
 				border-radius: 3px;
@@ -186,7 +186,7 @@ a[href] {
 			color: var(--secondary-grey);
 
 			.link {
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 
 			.message {

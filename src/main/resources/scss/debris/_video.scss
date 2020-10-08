@@ -43,11 +43,11 @@
 
 		 	.edit {
 			    padding: 5px 10px;
-			    color: #3fb3f6;
+			    color: var(--primary-blue);
 			    margin: 5px;
 
 				&:hover {
-				    background-color: #3fb3f6;
+				    background-color: var(--primary-blue);
 				    color: #fff;
 				    border-radius: 5px;
 				}

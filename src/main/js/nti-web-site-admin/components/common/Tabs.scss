@@ -42,7 +42,7 @@
 
 				&.active {
 					box-shadow: inset 4px 0 0 0 #168fe7;
-					background: $primary-blue;
+					background: var(--primary-blue);
 					color: white;
 				}
 			}

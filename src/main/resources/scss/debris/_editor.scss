@@ -126,7 +126,7 @@ span.tab{
 				top: 32px;
 				left: auto;
 				right: 5px;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 				font-size: 10px;
 				margin: 0 !important;
@@ -142,7 +142,7 @@ span.tab{
 
 				a {
 					text-decoration: none;
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 		}
@@ -252,7 +252,7 @@ span.tab{
 
 			&:focus {
 				&::after{
-					outline: 1px dotted $primary-blue;
+					outline: 1px dotted var(--primary-blue);
 					outline-offset: 1px;
 				}
 			}
@@ -632,7 +632,7 @@ span.tab{
 					color: #ffffff;
 					border: 1px solid $border-blue;
 					padding: 0 0 0 24px;
-					background: $primary-blue;
+					background: var(--primary-blue);
 					position: relative;
 
 

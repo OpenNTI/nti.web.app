@@ -33,7 +33,7 @@
 	font-size: 18px;
 	font-weight: 500;
 	line-height: 24px;
-	color: #3fb3f6;
+	color: var(--primary-blue);
 	cursor: pointer;
 }
 
@@ -56,8 +56,8 @@
 	margin-right: 0;
 
 	&.active {
-		color: #3fb3f6;
-		box-shadow: inset 0 -1px 0 0 #3fb3f6;
+		color: var(--primary-blue);
+		box-shadow: inset 0 -1px 0 0 var(--primary-blue);
 	}
 }
 
@@ -67,7 +67,7 @@
 }
 
 .show-more-button {
-	background: #3fb3f6;
+	background: var(--primary-blue);
 	color: #fff;
 	cursor: pointer;
 	font-size: 0.875em;
@@ -100,7 +100,7 @@
 
 	&.active {
 		color: #fff;
-		background-color: #3fb3f6;
+		background-color: var(--primary-blue);
 	}
 }
 
@@ -135,7 +135,7 @@
 .next-results-page-button {
 	display: inline-block;
 	cursor: pointer;
-	color: #3fb3f6;
+	color: var(--primary-blue);
 	font-size: 14px;
 	font-weight: bold;
 	white-space: nowrap;

@@ -16,7 +16,7 @@
 				position: relative;
 				padding-right: 18px;
 			    &, a:link, a:visited, a:active {
-			   	   color: $primary-blue;
+			   	   color: var(--primary-blue);
 			   	   font-style: normal !important;
 			   	   font: 14px $font !important;
 			   	   font-weight: 300 !important;

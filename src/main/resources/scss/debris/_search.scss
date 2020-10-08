@@ -10,7 +10,7 @@
 		cursor: pointer;
 
 		&.active {
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 }
@@ -26,14 +26,14 @@
 		height: 75px;
 		line-height: 75px;
 		text-align: center;
-		color: $primary-blue;
+		color: var(--primary-blue);
 
 		&.error {
 			color: var(--primary-red);
 		}
 
 		&.load-more {
-			background: $primary-blue;
+			background: var(--primary-blue);
 			color: #fff;
 			cursor: pointer;
 			font-size: 0.875em;
@@ -118,7 +118,7 @@
 
 				.fragment {
 					box-shadow: 1px 1px 10px -1px #999;
-					background-color: $primary-blue;
+					background-color: var(--primary-blue);
 					float: left;
 					position: relative;
 					border-radius: 5px;
@@ -172,7 +172,7 @@
 			font-size: 0.625em;
 			font-weight: 600;
 			text-transform: uppercase;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			display: inline-block;
 			margin-bottom: 10px;
 		}
@@ -412,7 +412,7 @@
 // 		}
 
 // 		.see-all, .see-all a {
-// 			color: $primary-blue;
+// 			color: var(--primary-blue);
 // 			text-decoration: none;
 // 			font-size: 11pt;
 // 		}

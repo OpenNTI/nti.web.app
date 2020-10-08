@@ -92,7 +92,7 @@
 			height: 40px;
 			line-height: 40px;
 			padding-left: 20px;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 
 			@include flexItem(0 0 150px);
@@ -194,7 +194,7 @@
 		}
 
 		.save {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 
 			&:focus {

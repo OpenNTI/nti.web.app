@@ -224,7 +224,7 @@ body.media-viewer-open .window-container {
 		.window-header{
 			.title {
 				span{
-					color: #3fb3f6;
+					color: var(--primary-blue);
 
 					&:after {
 					    content: ' / ';

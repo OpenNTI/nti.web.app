@@ -66,14 +66,14 @@
 						margin-right: 1rem;
 
 						&.selected {
-							border-color: $primary-blue;
+							border-color: var(--primary-blue);
 							position: relative;
 
 							.inner {
 								width: 16px;
 								height: 16px;
 								border-radius: 50%;
-								background-color: $primary-blue;
+								background-color: var(--primary-blue);
 								position: absolute;
 								top: 4px;
 								left: 4px;

@@ -24,7 +24,7 @@
 			font-size: 0.875em;
 			line-height: 3.5em;
 			padding-right: 0.5em;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			float: right;
 			cursor: pointer;
 		}
@@ -98,7 +98,7 @@
 
 			span {
 				font-size: 0.875em;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 			}
 		}
@@ -133,7 +133,7 @@
 	&.overview-topic{
 		position: relative;
 		cursor: pointer;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		font: normal 400 1em/3.15em $font;
 		border:{
 			style: solid;
@@ -211,7 +211,7 @@
 			}
 
 			.report {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 			}
 		}
@@ -311,7 +311,7 @@
 		min-height: 22rem;
 
 		a.edit {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 		}
 	}
@@ -854,7 +854,7 @@
 				display: inline-block;
 				font: normal 700 0.6em/1.6em $font;
 				text-transform: uppercase;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 
 				&::after {
@@ -885,7 +885,7 @@
 		padding: 0 30px 0 10px;
 
 		&.x-menu-item-checked {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white !important;
 
 			&::after {
@@ -893,7 +893,7 @@
 			}
 
 			&.x-menu-item-active {
-				background-color: $primary-blue !important;
+				background-color: var(--primary-blue) !important;
 			}
 		}
 	}

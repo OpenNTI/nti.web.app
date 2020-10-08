@@ -28,7 +28,7 @@
 
 	.controls {
 		span {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			margin-right: 10px;
 			cursor: pointer;
 		}

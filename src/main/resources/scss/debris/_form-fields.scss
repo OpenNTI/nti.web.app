@@ -98,7 +98,7 @@
 		height: 26px !important;
 		line-height: 24px;
 		display: inline-block;
-		background: $primary-blue;
+		background: var(--primary-blue);
 		border: 1px solid $border-blue;
 		color: #fff;
 
@@ -393,7 +393,7 @@ form.common-form {
 		&.simple {
 			&:focus {
 				background: white;
-				box-shadow: 0 0 3px 0 $primary-blue, 0 0 0 1px #d8d8d8;
+				box-shadow: 0 0 3px 0 var(--primary-blue), 0 0 0 1px #d8d8d8;
 			}
 
 			&.error {
@@ -499,7 +499,7 @@ form.common-form {
 
 		.preview-link {
 			font-weight: 600;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 
 		&::after {
@@ -528,7 +528,7 @@ form.common-form {
 				vertical-align: middle;
 				font-size: 0.875em;
 				font-weight: 600;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				text-decoration: underline;
 			}
 		}
@@ -562,7 +562,7 @@ form.common-form {
 				line-height: 2em;
 				color: white;
 				border-radius: 5px;
-				background: $primary-blue;
+				background: var(--primary-blue);
 				text-transform: capitalize;
 			}
 		}
@@ -593,7 +593,7 @@ form.common-form {
 	}
 
 	&.focused {
-		box-shadow: 0 0 0 1px $primary-blue;
+		box-shadow: 0 0 0 1px var(--primary-blue);
 	}
 
 	&.no-file {
@@ -679,7 +679,7 @@ form.common-form {
 	&.valid {
 		a {
 			pointer-events: all;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			@include icon($preview-blue, $side: after, $top: 50%, $left: auto, $right: 1em);
 		}
@@ -696,7 +696,7 @@ form.common-form {
 	}
 
 	&.focused {
-		box-shadow: 0 0 1px 0 $primary-blue;
+		box-shadow: 0 0 1px 0 var(--primary-blue);
 	}
 
 	input[type=url] { display: none; }
@@ -755,7 +755,7 @@ form.common-form {
 
 		.bar {
 			height: 10px;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			width: 0;
 			transition: width 0.3s;
 		}
@@ -792,7 +792,7 @@ form.common-form {
 
 
 		&:focus {
-			box-shadow: inset 0 0 1px 0 $primary-blue, 0 0 0 1px $primary-blue;
+			box-shadow: inset 0 0 1px 0 var(--primary-blue), 0 0 0 1px var(--primary-blue);
 			position: relative;
 			z-index: 2;
 		}
@@ -834,7 +834,7 @@ form.common-form {
 		padding-left: 0.5em;
 
 		.link {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 		}
 	}

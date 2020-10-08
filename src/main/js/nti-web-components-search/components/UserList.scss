@@ -38,7 +38,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			cursor: pointer;
 
 			p {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				padding-right: 10px;
 			}
 
@@ -127,7 +127,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			cursor: pointer;
 
 			i {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				font-size: 25px;
 				text-align: center;
 				line-height: 2;
@@ -271,7 +271,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			}
 
 			.view-all {
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 		}
 

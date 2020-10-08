@@ -17,9 +17,9 @@
 		margin: 0 5px;
 
 		&.selected {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
-			border: 1px solid $primary-blue;
+			border: 1px solid var(--primary-blue);
 		}
 	}
 }

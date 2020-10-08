@@ -42,7 +42,7 @@
 		&.x-pressed {
 			.x-btn-inner {
 				color: white;
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 			}
 		}
 
@@ -216,7 +216,7 @@
 			}
 			cursor: pointer;
 			.x-btn-button {
-				background: $primary-blue;
+				background: var(--primary-blue);
 				border: 1px solid $border-blue;
 				padding: 12px 20px;
 
@@ -262,7 +262,7 @@
 			input {
 				&:focus {
 					outline: none;
-					box-shadow: -4px 0 0 0 $primary-blue;
+					box-shadow: -4px 0 0 0 var(--primary-blue);
 				}
 
 				&.error {
@@ -427,7 +427,7 @@
 			font: normal 300 18px/24px $font;
 
 			.link {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				padding: 0 7px;
 				cursor: pointer;
 			}
@@ -474,7 +474,7 @@
 			.support {
 				.link a{
 					text-decoration: none;
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 		}
@@ -486,7 +486,7 @@
 			.link{
 				float: left;
 				padding: 0 7px 0 9px;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 				font: normal 300 14px/1 $font;
 				position: relative;
@@ -617,7 +617,7 @@
 			color: var(--primary-grey);
 
 			&.confirm {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				color: white;
 				box-shadow: inset 1px 0 0 0 $border-blue;
 

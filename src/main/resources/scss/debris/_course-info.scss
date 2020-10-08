@@ -45,7 +45,7 @@
 
 		.edit {
 			font-size: 0.65em;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 			font-weight: 300;
 			margin: 0 1em;
@@ -254,7 +254,7 @@
 
 				.enroll-for-credit {
 					a {
-						color: $primary-blue;
+						color: var(--primary-blue);
 						text-decoration: none;
 					}
 				}
@@ -321,7 +321,7 @@
 	}
 
 	.manage-button {
-		color: $primary-blue;
+		color: var(--primary-blue);
 		text-align: center;
 		cursor: pointer;
 		display: none;
@@ -350,7 +350,7 @@
 	}
 
 	a,a:link,a:visited,a:active {
-		color: $primary-blue;
+		color: var(--primary-blue);
 		text-decoration: none;
 	}
 }
@@ -395,7 +395,7 @@
 
 		.edit {
 			cursor: pointer;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			position: absolute;
 			right: 1em;
 			top: 0;
@@ -495,7 +495,7 @@
 					    font: normal 600 14px/35px $font;
 					    padding: 0 15px 0 15px;
 					    color: #ffffff;
-					    background: $primary-blue;
+					    background: var(--primary-blue);
 					    border-radius: 3px;
 					    cursor: pointer;
 					    z-index: 10;
@@ -660,7 +660,7 @@
 			}
 
 			.title {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				line-height: 1.5em;
 			}
 
@@ -723,7 +723,7 @@
 
 		.link {
 			display: block;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			text-decoration: none;
 			margin: 10px 0;
 			font-size: 0.9em;
@@ -910,7 +910,7 @@
 			}
 
 			&.free {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 			}
 
 			&.paid {

@@ -71,7 +71,7 @@
 			cursor: pointer;
 
 			&.edit {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				@include icon($notepad_active_white, $top: 8px, $left: 1.5em);
 			}
 
@@ -116,7 +116,7 @@
 			}
 
 			&.presence {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				padding-left: 50px;//1.5em + with of icon + padding
 				@include icon($chat_active, $top: 10px, $left: 1.5em);
 
@@ -166,7 +166,7 @@
 			}
 
 			&.active {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 			}
 
 			&::after {
@@ -282,7 +282,7 @@
 
 		.field.homepage {
 			text-decoration: none;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			&::before {
 				content: "|";
@@ -524,7 +524,7 @@
 			.controls {
 				.save {
 					padding: 0 15px;
-					background-color: $primary-blue;
+					background-color: var(--primary-blue);
 					color: white;
 					display: inline-block;
 				}
@@ -764,7 +764,7 @@
 	}
 
 	.link {
-		color: $primary-blue;
+		color: var(--primary-blue);
 		cursor: pointer;
 	}
 
@@ -838,7 +838,7 @@
 				font-size: 17px !important;
 
 				.name{
-					color: #3FB3F6;
+					color: var(--primary-blue);
 				}
 			}
 			.time{
@@ -1181,7 +1181,7 @@
 					display: block;
 					height: 48px;
 
-					a { color: $primary-blue; text-decoration: none; }
+					a { color: var(--primary-blue); text-decoration: none; }
 					img { max-width: 50% !important; }
 					p{ margin: 0; }
 				}
@@ -1342,7 +1342,7 @@
 			clear: both;
 			opacity: 1;
 			padding: 0;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			div {
 				font: normal 400 14px/20px $font;
@@ -1409,7 +1409,7 @@
 			}
 			.name {
 				font: normal 400 14px $font;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 			}
 		}
@@ -1691,8 +1691,8 @@
 		}
 
 		.save {
-			border-color: $primary-blue;
-			background: $primary-blue;
+			border-color: var(--primary-blue);
+			background: var(--primary-blue);
 			color: #fff;
 		}
 	}
@@ -1755,7 +1755,7 @@
 			min-height: 38px;
 
 			&:focus {
-				border-color: $primary-blue;
+				border-color: var(--primary-blue);
 			}
 
 			&[data-field=affiliation] {
@@ -1788,7 +1788,7 @@
 			}
 
 			.email-not-verified {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				padding: 0 7px;
 				cursor: pointer;
 			}
@@ -2142,7 +2142,7 @@
 		background-color: white;
 
 		.empty-text {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 			font-size: 0.875rem;
 			font-weight: 300;
@@ -2225,7 +2225,7 @@
 		.field.alias.request {
 			display: inline-block;
 			line-height: 15px;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			padding-right: 20px;
 			cursor: pointer;
 
@@ -2388,7 +2388,7 @@
 			padding: 0 2em;
 			margin-top: 1em;
 			line-height: 40px;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 			text-align: center;
 		}
@@ -2469,7 +2469,7 @@
 			.see-all {
 				font-size: 10px;
 				font-weight: bold;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 				text-transform: uppercase;
 				float: right;
@@ -2617,7 +2617,7 @@
 
 		.see-all {
 			text-align: center;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font-size: 0.875em;
 			line-height: 2em;
 			cursor: pointer;
@@ -2683,7 +2683,7 @@
 
 			.see-membership {
 				padding: 0 20px 10px;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				font-size: 0.875em;
 				cursor: pointer;
 			}
@@ -2707,7 +2707,7 @@
 
 
 				&.active {
-					background-color: $primary-blue;
+					background-color: var(--primary-blue);
 				}
 
 				&:not(:last-of-type) {
@@ -2737,7 +2737,7 @@
 
 			.see-all {
 				display: inline;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				text-transform: uppercase;
 				font-size: 0.75em;
 				cursor: pointer;
@@ -2803,7 +2803,7 @@
 			border: 1px solid #e8e8e8;
 			border-radius: 3px;
 			cursor: pointer;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			&.hidden {
 				display: none;

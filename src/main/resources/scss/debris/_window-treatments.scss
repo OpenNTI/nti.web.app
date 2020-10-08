@@ -197,7 +197,7 @@
 
 		a {
 			text-decoration: none;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 
@@ -243,7 +243,7 @@
 			}
 
 			&.primary {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				color: white;
 				box-shadow: inset 1px 0 0 0 $border-blue;
 
@@ -361,7 +361,7 @@
 			display: block;
 			font-size: 0.9em;
 			text-decoration: none;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			overflow: hidden;
 			@include ellipse;
 		}
@@ -553,7 +553,7 @@
 			float: right;
 			font: italic 600 0.875em/40px $font;
 			color: white;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			padding: 0 2em;
 		}
 	}

@@ -148,7 +148,7 @@
 		}
 
 		&.selected {
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 }
@@ -160,13 +160,13 @@
 		border-bottom: 1px solid rgb(234, 233, 233);
 
 		&.selected {
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 
 		&.new-item {
 			cursor: pointer;
 			font-size: 0.875em;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			&:before {
 				content: "+";
@@ -208,7 +208,7 @@
 		}
 
 		.save {
-			background-color: #3fb3f6;
+			background-color: var(--primary-blue);
 			color: white;
 		}
 		.back, .save {

@@ -205,7 +205,7 @@
 			font-weight: 600;
 		}
 		&.x-grid-cell-first {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 		}
 

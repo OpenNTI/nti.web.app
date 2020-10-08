@@ -17,7 +17,7 @@
 		cursor: pointer;
 
 		&.active {
-			border-bottom: solid 3px #3fb3f6;
+			border-bottom: solid 3px var(--primary-blue);
 		}
 	}
 }

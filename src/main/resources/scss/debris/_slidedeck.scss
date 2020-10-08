@@ -685,7 +685,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 
 						.title{
 							font-size: 24px;
-							color: $primary-blue;
+							color: var(--primary-blue);
 						}
 						.name{
 							color: var(--secondary-grey);
@@ -1337,7 +1337,7 @@ body.media-viewer-closing {
 
 				.meta {
 					.title {
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 				}
 			}
@@ -1556,7 +1556,7 @@ body.media-viewer-closing {
 			position: absolute;
 			left: 0;
 			font: normal bold 9px/19px $font;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			padding: 0 10px 0 7px;
 			margin: 0;
 			width: 20px;
@@ -1565,7 +1565,7 @@ body.media-viewer-closing {
 
 			&:hover,
 			&.active, .active {
-				background: $primary-blue;
+				background: var(--primary-blue);
 				color: #fff;
 			}
 		}

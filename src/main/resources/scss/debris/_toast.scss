@@ -44,7 +44,7 @@
 
 		a,span {
 			&,&:link,&:active,&:visited {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				text-decoration: none;
 				cursor: none;
 			}

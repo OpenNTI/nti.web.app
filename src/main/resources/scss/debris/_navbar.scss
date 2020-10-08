@@ -245,7 +245,7 @@
 		.button {
 			float: left;
 			padding: 0 13px 0 15px;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font-size: 14px;
 			line-height: 40px;
 			cursor: pointer;
