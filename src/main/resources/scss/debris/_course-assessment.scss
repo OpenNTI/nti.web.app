@@ -398,7 +398,7 @@ canvas.x-component-course-assessment {
 
 	.due{
 		&.today {
-		 color: $primary-orange;
+		 color: var(--primary-orange);
 		}
 
 		&.late {
@@ -1635,7 +1635,7 @@ canvas.x-component-course-assessment {
 		}
 
 		&.warning-orange .time{
-			background-color: $primary-orange;
+			background-color: var(--primary-orange);
 			color: white;
 		}
 
@@ -1868,7 +1868,7 @@ canvas.x-component-course-assessment {
 					font-weight: 600;
 					padding: 4px;
 					padding-left: 11px;
-					color: #fa8700;
+					color: var(--primary-orange);
 					line-height: 1.2em;
 					opacity: 0;
 					transition-property: opacity;

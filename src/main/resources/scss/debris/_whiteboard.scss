@@ -77,7 +77,7 @@
 	&.red {em.button,.whiteboard-color-button	{ background: #d34f39; border-color: #c6452f; }}
 	&.blue {em.button,.whiteboard-color-button   { background: #2b89c5; border-color: #2880b9; }}
 	&.green {em.button,.whiteboard-color-button  { background: #a0c94c; border-color: #82a835; }}
-	&.orange {em.button,.whiteboard-color-button { background: #fa8700; border-color: #d97704; }}
+	&.orange {em.button,.whiteboard-color-button { background: var(--primary-orange); border-color: #d97704; }}
 	&.magenta {em.button,.whiteboard-color-button{ background: #b42789; border-color: #b42789; }}
 	&.purple {em.button,.whiteboard-color-button { background: #6f3d93; border-color: #6f3d93; }}
 	&.yellow {em.button,.whiteboard-color-button { background: #fff02a; border-color: #d9d15d; div {opacity: 0.93;} }}
