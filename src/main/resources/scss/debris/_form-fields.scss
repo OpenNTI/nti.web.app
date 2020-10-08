@@ -99,7 +99,7 @@
 		line-height: 24px;
 		display: inline-block;
 		background: var(--primary-blue);
-		border: 1px solid $border-blue;
+		border: 1px solid var(--border-blue);
 		color: #fff;
 
 		&.save-button-disabled {

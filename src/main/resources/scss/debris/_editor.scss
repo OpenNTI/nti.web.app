@@ -630,7 +630,7 @@ span.tab{
 					font-weight: bold;
 					font-style: italic;
 					color: #ffffff;
-					border: 1px solid $border-blue;
+					border: 1px solid var(--border-blue);
 					padding: 0 0 0 24px;
 					background: var(--primary-blue);
 					position: relative;

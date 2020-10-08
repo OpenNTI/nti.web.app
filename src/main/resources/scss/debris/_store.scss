@@ -525,7 +525,7 @@
 
 				&.alt {
 					background: var(--primary-blue);
-					outline: 1px solid $border-blue;
+					outline: 1px solid var(--border-blue);
 				}
 
 				&.disabled {

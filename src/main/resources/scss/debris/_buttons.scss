@@ -121,7 +121,7 @@ $button-text-weights: 500,500,600,500;
 		padding: 8px 20px;
 		letter-spacing: 0.1em;
 		background: var(--primary-blue);
-		border: 1px solid #39a1dd;
+		border: 1px solid var(--border-blue);
 		border-radius: 3px;
 		cursor: pointer;
 		z-index: 10;

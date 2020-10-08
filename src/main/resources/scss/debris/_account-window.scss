@@ -217,7 +217,7 @@
 			cursor: pointer;
 			.x-btn-button {
 				background: var(--primary-blue);
-				border: 1px solid $border-blue;
+				border: 1px solid var(--border-blue);
 				padding: 12px 20px;
 
 				.x-btn-inner{
@@ -619,7 +619,7 @@
 			&.confirm {
 				background-color: var(--primary-blue);
 				color: white;
-				box-shadow: inset 1px 0 0 0 $border-blue;
+				box-shadow: inset 1px 0 0 0 var(--border-blue);
 
 				&:hover {
 					opacity: 0.9;

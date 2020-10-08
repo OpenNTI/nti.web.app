@@ -352,7 +352,7 @@
 				width: 90px;
 				a.button{
 					width: 90px;
-					outline: 1px solid $border-blue;
+					outline: 1px solid var(--border-blue);
 					background: var(--primary-blue);
 				}
 				&.disabled a.button{

@@ -245,7 +245,7 @@
 			&.primary {
 				background-color: var(--primary-blue);
 				color: white;
-				box-shadow: inset 1px 0 0 0 $border-blue;
+				box-shadow: inset 1px 0 0 0 var(--border-blue);
 
 				&:hover {
 					opacity: 0.9;

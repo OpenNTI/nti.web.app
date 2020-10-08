@@ -1482,8 +1482,8 @@ canvas.x-component-course-assessment {
 			&.x-menu-item-checked{
 				color: white !important;
 				background: var(--primary-blue) !important;
-				box-shadow: inset 0px 0 1px 1px $border-blue,
-					inset 3px 0 0 0 $border-blue;
+				box-shadow: inset 0px 0 1px 1px var(--border-blue),
+					inset 3px 0 0 0 var(--border-blue);
 				@include icon($arrow-course-dropdown-white, $top:1.5em, $left:auto, $right:1em);
 
 				&.x-menu-item-active {
