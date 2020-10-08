@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		this.ContextStore = ContextStateStore.getInstance();
 
 		this.renderData = Ext.applyIf(this.renderData || {}, {
-			title: this.content && this.content.get('label'),
+			title: this.content && (this.content.get('label') || this.content.get('title')),
 			author: this.content && this.content.get('byline'),
 			description: this.content && this.content.get('description')
 		});
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 	 */
 	setContent: function () {
 		var root = this.course && this.course.getContentRoots && this.course.getContentRoots()[0],
-			icon = this.content.getIcon(root),
+			icon = this.content.getIcon?.(root),
 			url = (icon && typeof icon !== 'string') ? icon.url : icon;
 
 		const type = this.content.get('targetMimeType');
