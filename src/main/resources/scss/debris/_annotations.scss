@@ -632,7 +632,7 @@
 
 		&.head{
 			position: relative;
-			border-top: 1px solid $border-grey;
+			border-top: 1px solid var(--border-grey);
 			overflow: visible;
 
 			&.redacted {
@@ -708,7 +708,7 @@
 		span.editableSpan {
 			display: inline-block;
 			position: relative;
-			border: 1px solid $border-grey;
+			border: 1px solid var(--border-grey);
 			background: white;
 			//text-transform: uppercase;
 			color: var(--secondary-grey);
@@ -741,7 +741,7 @@
 				width: 25px;
 				cursor: pointer;
 				background: #ffffff;
-				box-shadow: inset 0 0 0 1px $border-grey;
+				box-shadow: inset 0 0 0 1px var(--border-grey);
 
 				&::after {
 					background: url(../images/old_sprites/spr_redaction.png) 0 0 no-repeat;

@@ -96,7 +96,7 @@
 		&.x-docked-left {
 			padding-top: 2px;
 			border-radius: 5px 0 0 5px;
-			border: 1px solid $border-grey;
+			border: 1px solid var(--border-grey);
 			border-width: 0;
 			border-right-width: 1px !important;
 		}
@@ -576,7 +576,7 @@
 #chat-dock-placeholder,
 #chat-dock > .x-panel-header{
 	background-color: $panel-background;
-	box-shadow: 0 -1px #dbdbdb, inset 0 1px #fcfcfc;
+	box-shadow: 0 -1px var(--border-grey), inset 0 1px #fcfcfc;
 	border-bottom: 1px solid #dfdfdf;
 	border-bottom-width: 1px !important;
 	color: var(--secondary-grey);

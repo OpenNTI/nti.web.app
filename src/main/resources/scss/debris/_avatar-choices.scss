@@ -8,7 +8,7 @@
 		display: block;
 		position: relative;
 		overflow: hidden;
-		border-bottom: 1px solid $border-grey;
+		border-bottom: 1px solid var(--border-grey);
 		&:last-child {
 			border-bottom: none;
 			border-radius: 0 0 3px 3px;

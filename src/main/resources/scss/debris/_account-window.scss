@@ -288,7 +288,7 @@
 				font-weight: 500;
 				line-height: 25px;
 
-				border: 1px solid $border-grey;//#dcdcdc;
+				border: 1px solid var(--border-grey);//#dcdcdc;
 				border-left-width: 0px;
 				background: #ffffff;
 				padding: 6px 10px;
@@ -302,7 +302,7 @@
 
 				position: relative;
 				left: 4px;
-				box-shadow: -4px 0 0 0 $border-grey;
+				box-shadow: -4px 0 0 0 var(--border-grey);
 			}
 			.clear {
 				top: 10px;
@@ -341,7 +341,7 @@
 
 		.footer {
 			margin-top: 40px;
-			border-top: 1px solid $border-grey !important;
+			border-top: 1px solid var(--border-grey) !important;
 			overflow: hidden;
 		}
 
@@ -374,7 +374,7 @@
 		}
 
 		fieldset {
-			border: 1px solid $border-grey;
+			border: 1px solid var(--border-grey);
 			margin: 20px 0 40px;
 		}
 
@@ -632,7 +632,7 @@
 
 			&.disabled {
 				background-color: var(--tertiary-grey-alt);
-				box-shadow: inset 1px 0 0 0 $border-grey;
+				box-shadow: inset 1px 0 0 0 var(--border-grey);
 			}
 		}
 	}

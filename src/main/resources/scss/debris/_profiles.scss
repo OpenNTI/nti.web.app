@@ -1648,7 +1648,7 @@
 .meta-editor,
 .name-editor{
 	overflow: visible;
-	border: 1px solid #dbdbdb;
+	border: 1px solid var(--border-grey);
 	background: #fff;
 
 	.input-wrap, .textbox-base {
@@ -1685,7 +1685,7 @@
 			display: block;
 			float: left;
 			background: #ebebeb;
-			border: 1px solid #dbdbdb;
+			border: 1px solid var(--border-grey);
 			color: var(--secondary-grey);
 			cursor: pointer;
 		}

@@ -53,7 +53,7 @@
 		.desc {
 			box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.1);
 			background-color: #fcfcfc;
-			border: 1px solid $border-grey;
+			border: 1px solid var(--border-grey);
 			border-radius: 5px;
 
 			pointer-events: none;
@@ -638,7 +638,7 @@
 				display: block;
 			}
 			padding: 0 5px;
-			border: 0 solid $border-grey;
+			border: 0 solid var(--border-grey);
 			border-bottom-width: 1px;
 			text-align: center;
 			color: var(--secondary-grey);

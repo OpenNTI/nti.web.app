@@ -801,7 +801,7 @@ div.contact-buttons {
         .contact-card{
             position: relative;
             width: 310px;
-            border-bottom: 1px solid $border-grey;
+            border-bottom: 1px solid var(--border-grey);
             margin: 0 0 0 30px;
             float: left;
 			cursor: default;
@@ -846,7 +846,7 @@ div.contact-buttons {
                     color: var(--secondary-grey);
                     background: var(--quad-grey);
                     border-radius: 5px;
-                    border: 1px solid $border-grey;
+                    border: 1px solid var(--border-grey);
                     cursor: pointer;
 
                     &:hover{

@@ -5,7 +5,7 @@
 		padding-left: 1rem;
 		display: flex;
 		background: $light-green;
-		border-bottom: 1px solid $border-grey-light;
+		border-bottom: 1px solid var(--border-grey)-light;
 
 		> * {
 			min-width: 66px;

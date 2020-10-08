@@ -8,7 +8,7 @@
 
 		.create-item {
 			padding: 1rem 0.5rem 1rem 1.25rem;
-			border-bottom: 1px solid $border-grey-light;
+			border-bottom: 1px solid var(--border-grey)-light;
 			display: flex;
 			flex-direction: row;
 			align-items: center;

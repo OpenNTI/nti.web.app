@@ -3,7 +3,7 @@
 .status-report {
 	font-size: 0.875rem;
 	margin-bottom: 2.75rem;
-	border: 1px solid $border-grey-light;
+	border: 1px solid var(--border-grey)-light;
 
 	.heading {
 		background-color: var(--primary-green);

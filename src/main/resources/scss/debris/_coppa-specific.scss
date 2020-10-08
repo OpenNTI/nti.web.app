@@ -317,7 +317,7 @@
 				}
 			}
 
-			border: 1px solid $border-grey;//#dcdcdc;
+			border: 1px solid var(--border-grey);//#dcdcdc;
 			padding-right: 30px;
 			background: #ffffff;
 
@@ -376,7 +376,7 @@
 			}
 			position: relative;
 			left: 4px;
-			box-shadow: -4px 0 0 0 $border-grey;
+			box-shadow: -4px 0 0 0 var(--border-grey);
 		}
 
 		.combo-box {
@@ -454,9 +454,9 @@
 		.input-box {
 			input {
 				outline: none;
-				box-shadow: -4px 0 0 0 $border-grey;
+				box-shadow: -4px 0 0 0 var(--border-grey);
 				&:focus{
-					box-shadow: -4px 0 0 0 $border-grey;
+					box-shadow: -4px 0 0 0 var(--border-grey);
 				}
 			}
 		}
@@ -466,11 +466,11 @@
 			width: 402px;
 			height: 134px;
 			outline: none;
-			box-shadow: -4px 0 0 0 $border-grey;
-			border: solid 1px $border-grey;
+			box-shadow: -4px 0 0 0 var(--border-grey);
+			border: solid 1px var(--border-grey);
 			border-left: 0px;
 			&:focus{
-				box-shadow: -4px 0 0 0 $border-grey;
+				box-shadow: -4px 0 0 0 var(--border-grey);
 			}
 		}
 	}

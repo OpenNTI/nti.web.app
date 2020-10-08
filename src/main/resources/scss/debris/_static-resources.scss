@@ -1,7 +1,7 @@
 .resource-not-found{
 	position: relative;
 	background-color: var(--quad-grey);
-	border: 1px solid $border-grey;
+	border: 1px solid var(--border-grey);
 	border-radius: 3px;
 	.body{
 		padding-top: 6px;

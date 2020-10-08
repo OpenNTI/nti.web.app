@@ -1,6 +1,6 @@
 @mixin tabbar($ui, $font, $border-widths){
 	.nti-#{$ui}-tabbar {
-		border: 0 solid $border-grey;
+		border: 0 solid var(--border-grey);
 		border-width: $border-widths !important;
 		pointer-events: auto;
 
