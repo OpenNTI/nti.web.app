@@ -84,7 +84,7 @@ canvas.x-component-course-assessment {
 
 	.fake-questions {
 		.question {
-			background: #fbfbfb;
+			background: var(--panel-background);
 			border: 1px solid #e2e2e2;
 			border-radius: 3px;
 			box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
@@ -1078,7 +1078,7 @@ canvas.x-component-course-assessment {
 	}
 
 	td.page-row {
-		background-color: $panel-background;
+		background-color: var(--panel-background);
 		text-align: center;
 		height: 60px;
 		color: var(--tertiary-grey);
@@ -1364,7 +1364,7 @@ canvas.x-component-course-assessment {
 
 .assignment-filterbar {
 	box-shadow: inset 0 -1px 0 0 #f1f1f1;
-	background: #fbfbfb;
+	background: var(--panel-background);
 	color: var(--secondary-grey);
 	z-index: 2;
 	position: relative;
@@ -1477,7 +1477,7 @@ canvas.x-component-course-assessment {
 			line-height: 40px;
 			color: var(--secondary-grey);
 			padding: 4px 5px 5px 2em;
-			background: #fbfbfb;
+			background: var(--panel-background);
 
 			&.x-menu-item-checked{
 				color: white !important;

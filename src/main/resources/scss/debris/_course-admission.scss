@@ -1110,7 +1110,7 @@
 	}
 
 	.info {
-		background-color: $panel-background;
+		background-color: var(--panel-background);
 		border: 1px solid #efefef;
 
 		&.hidden {

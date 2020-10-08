@@ -18,7 +18,7 @@ var(--border-grey): var(--border-grey);
 var(--border-red): var(--primary-red);
 var(--text-red): #c64817;
 
-$panel-background: #fbfbfb;
+var(--panel-background): var(--panel-background);
 
 $toast-border-top: #78caf9;
 

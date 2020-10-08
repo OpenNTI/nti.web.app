@@ -8,7 +8,7 @@
 }
 
 .toggler, .on .toggler {
-	background: #fbfbfb;
+	background: var(--panel-background);
 	border-color: #e2e2e2;
 }
 

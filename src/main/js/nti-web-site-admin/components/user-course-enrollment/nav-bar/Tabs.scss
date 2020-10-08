@@ -11,7 +11,7 @@
 			color: var(--secondary-grey);
 
 			&:not(.active):hover {
-				background: $panel-background;
+				background: var(--panel-background);
 			}
 
 			&.active {

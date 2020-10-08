@@ -78,12 +78,12 @@
 
 	.field.emails {
 		overflow: hidden;
-	    background-color: #fbfbfb;
+	    background-color: var(--panel-background);
 	}
 
 	.unstyled-tokens {
     	height: 50px;
-	    background: #FBFBFB;
+	    background: var(--panel-background);
 	    overflow: hidden;
 		visibility: visible;
 		display: flex;
@@ -214,7 +214,7 @@
 			flex: 1 1 auto;
 
 			input[type="text"] {
-				background-color: #fbfbfb;
+				background-color: var(--panel-background);
 				text-transform: none;
 				font: normal 300 14px "Open Sans", sans-serif !important;
 			}

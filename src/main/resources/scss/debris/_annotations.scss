@@ -218,7 +218,7 @@
 }
 
 .x-component-annotation-view {
-	@include scrollbar(#fbfbfb, var(--tertiary-grey));
+	@include scrollbar(var(--panel-background), var(--tertiary-grey));
 	overflow: {
 		x: hidden;
 		y: auto; //scroll;

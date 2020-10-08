@@ -676,7 +676,7 @@
 
 	.note-footer, .note-content-container.scrollbody {
 		@include scrollbar(#ffffff, var(--tertiary-grey));
-		//background: #FBFBFB;
+		//background: var(--panel-background);
 	}
 
 	.note-footer {
@@ -725,7 +725,7 @@
 		left: 0 !important;
 		right: 0 !important;
 		margin: -0.8em 0 0 0;
-		background: #fbfbfb;
+		background: var(--panel-background);
 		color: var(--secondary-grey);
 
 

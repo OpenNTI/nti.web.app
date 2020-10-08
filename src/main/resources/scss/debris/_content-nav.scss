@@ -4,7 +4,7 @@
 
 .x-panel-notes-and-discussion {
 	&,.x-panel-body-default{
-		background: #fbfbfb;
+		background: var(--panel-background);
 	}
 	border-left: 1px solid #ededed;
 	border-left-width: 1px !important;

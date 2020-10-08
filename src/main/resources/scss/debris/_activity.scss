@@ -339,7 +339,7 @@
 					position: absolute;
 					left: 0; right: 0;
 					bottom: 0; height: 10px;
-					background-image: linear-gradient(to bottom, rgba(251, 251, 251, 0) 0%, #fbfbfb 100%);
+					background-image: linear-gradient(to bottom, rgba(251, 251, 251, 0) 0% 100%);
 				}
 			}
 		}
@@ -763,7 +763,7 @@
 	}
 
 	.show-more {
-		background-color: $panel-background;
+		background-color: var(--panel-background);
 		color: var(--primary-blue);
 		font: normal 500 0.8em/20px $font;
 		padding: 10px 0 0 20px;

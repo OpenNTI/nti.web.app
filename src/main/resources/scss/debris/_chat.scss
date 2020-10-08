@@ -575,7 +575,7 @@
 
 #chat-dock-placeholder,
 #chat-dock > .x-panel-header{
-	background-color: $panel-background;
+	background-color: var(--panel-background);
 	box-shadow: 0 -1px var(--border-grey), inset 0 1px #fcfcfc;
 	border-bottom: 1px solid #dfdfdf;
 	border-bottom-width: 1px !important;

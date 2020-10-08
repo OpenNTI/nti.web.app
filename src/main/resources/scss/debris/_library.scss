@@ -1145,7 +1145,7 @@ li.library-grid-item {
 	& > .body-container {
 		height: 90%;
 		@include experimental-value(height, calc(100% - 100px));
-		background-color: $panel-background;
+		background-color: var(--panel-background);
 		position: relative;
 		z-index: 10 !important;
 		overflow: hidden;
@@ -1240,7 +1240,7 @@ li.library-grid-item {
 }
 
 .available-courses-tabpanel {
-	background-color: $panel-background;
+	background-color: var(--panel-background);
 	max-height: 100%;
 
 	.available-courses-tabbar {

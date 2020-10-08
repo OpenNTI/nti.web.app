@@ -50,7 +50,7 @@
 .x-container.nti-header {
 	position: relative;
 	width: 769px; height: 200px;
-	background: #fbfbfb;
+	background: var(--panel-background);
 	box-shadow: 0 1px 0 0 #e0e0e0, 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
 	line-height: 0;
 	z-index: 2;
