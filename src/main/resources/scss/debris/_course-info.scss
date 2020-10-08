@@ -264,7 +264,7 @@
 						style: italic;
 					}
 					.red {
-						color: $text-red;
+						color: var(--text-red);
 					}
 				}
 			}
@@ -420,7 +420,7 @@
 			}
 
 			&.red {
-				color: $text-red;
+				color: var(--text-red);
 			}
 		}
 	}
