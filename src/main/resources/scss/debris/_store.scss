@@ -536,7 +536,7 @@
 
 				&.red{
 					background: var(--primary-red);
-					outline: 1px solid $border-red;
+					outline: 1px solid var(--border-red);
 				}
 			}
 		}
