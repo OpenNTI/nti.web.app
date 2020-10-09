@@ -121,7 +121,7 @@
 			padding: 0;
 			padding-left: -3px;
 			text-indent: 3px;
-			font: normal 700 10px/20px $font !important;
+			font: normal 700 10px/20px var(--body-font-family) !important;
 			position: absolute;
 			background: #fff;
 			top: 0; left: 0;
@@ -225,7 +225,7 @@
 				.placeholder {
 					position: absolute;
 					top: 7px;
-					font: italic normal 14px/20px $font !important;
+					font: italic normal 14px/20px var(--body-font-family) !important;
 					padding-left: 5px;
 					display: inline-block;
 					max-width: 256px;
@@ -240,14 +240,14 @@
 				.token-input-wrap{
 					position: relative;
 					input {
-						font: italic normal 14px/20px $font !important;
+						font: italic normal 14px/20px var(--body-font-family) !important;
 						text-transform: none;
 						background: transparent;
 						//padding: 5px 0;
 					}
 					.token-input-sizer{
 						position: relative;
-						font: italic normal 14px/30px $font !important;
+						font: italic normal 14px/30px var(--body-font-family) !important;
 						margin-left: 10px;
 						font-style: italic;
 						text-transform: none;

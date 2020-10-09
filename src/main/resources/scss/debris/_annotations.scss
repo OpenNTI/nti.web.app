@@ -612,7 +612,7 @@
 
 	#footnotes{
 		.redacted-text{
-			color: $tertiary_grey;
+			color: var(--tertiary-grey);
 			text-decoration: line-through;
 			display: none;
 		}
@@ -763,7 +763,7 @@
 						width: auto;
 						content: 'Save Title';
 						background: none;
-						font-family: $font !important;
+						font-family: var(--body-font-family) !important;
 						font-size: 10px;
 						font-weight: 700;
 						line-height: 14px;
@@ -882,7 +882,7 @@
 
 			&.counter {
 				color: var(--secondary-grey);
-				font-family: $font !important;
+				font-family: var(--body-font-family) !important;
 				font-weight: bold;
 
 				background: transparent;
@@ -958,7 +958,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 
 .nt-annotation-menu {
 	$transition-duration:.1s;
-	background: $annotations-menu-bg;
+	background: var(--annotations-menu-bg);
 	border-radius:6px;
 	position: fixed !important;
 	opacity: 0.01; // so we can show the menu, compute its width, and center it. (can't get the width until it's rendered in the dom.)
@@ -978,7 +978,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 		height: 0;
 		background: none;
 		border: $arrow-size solid transparent;
-		border-top-color: $annotations-menu-bg;
+		border-top-color: var(--annotations-menu-bg);
 		left: 50%;
 		margin-left: -$arrow-size;
 		bottom: -($arrow-size * 2);

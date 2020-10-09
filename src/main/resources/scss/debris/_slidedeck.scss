@@ -1724,7 +1724,7 @@ body.media-viewer-closing {
 			background: #282828 !important;
 			outline: 0 !important;
 			border: 0 !important;
-			font: 600 normal 12px $font !important;
+			font: 600 normal 12px var(--body-font-family) !important;
 
 
 			&.selection-item-over,

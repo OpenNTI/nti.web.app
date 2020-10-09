@@ -14,7 +14,7 @@
 
 			.x-tab-inner {
 				color: var(--tertiary-grey);
-				font: var(--body-font-family);
+				font: $font;
 				text-transform: uppercase;
 				padding: 0 6px;
 			}
@@ -36,8 +36,8 @@
 	}
 }
 
-@include tabbar(contacts,normal 600 14px/50px $font, 0 0 1px);
-@include tabbar(profile, italic 500 18px/50px $font, 1px 0 1px);
+@include tabbar(contacts,normal 600 14px/50px var(--body-font-family), 0 0 1px);
+@include tabbar(profile, italic 500 18px/50px var(--body-font-family), 1px 0 1px);
 
 
 .nti-content-tabbar {
@@ -59,7 +59,7 @@
 			.x-tab-wrap {padding: 0 15px;}
 			.x-tab-inner {
 				color: var(--secondary-grey);
-				font: 12px/32px $font !important;
+				font: 12px/32px var(--body-font-family) !important;
 				text-transform: uppercase;
 			}
 

@@ -536,10 +536,10 @@
 			}
 
 			input {
-				box-shadow: -4px 0 0 0 $primary_green;
+				box-shadow: -4px 0 0 0 var(--primary-green);
 			}
 			input.empty{
-				box-shadow: -4px 0 0 0 $border_grey;
+				box-shadow: -4px 0 0 0 var(--border-grey);
 			}
 		}
 
@@ -552,7 +552,7 @@
 
 			input, input:focus{
 				background-color: var(--quad-grey);
-				box-shadow: -4px 0 0 0 $primary_green;
+				box-shadow: -4px 0 0 0 var(--primary-green);
 			}
 		}
 

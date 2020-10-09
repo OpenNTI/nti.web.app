@@ -2039,13 +2039,13 @@ input.preview[readonly] {
 		&.answer-title{
 			font-weight: bold !important;
 			font-size: 11px !important;
-			font-family: $font !important;
+			font-family: var(--body-font-family) !important;
 			color: #8A8989 !important;
 			padding: 10px 0 10px 15px !important;
 		}
 		&.no-answer-history{
 			font-size: 11px !important;
-			font-family: $font !important;
+			font-family: var(--body-font-family) !important;
 			padding: 10px 0 10px 15px !important;
 		}
 	}

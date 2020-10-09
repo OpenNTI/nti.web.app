@@ -215,7 +215,7 @@ $black_50: rgba(0, 0, 0, 0.5);
 			cursor: pointer;
 
 			&.incorrect {
-				background-color: $incorrect;
+				background-color: var(--incorrect);
 			}
 
 			.icon-add-user {

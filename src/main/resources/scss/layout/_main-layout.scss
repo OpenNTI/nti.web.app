@@ -56,8 +56,7 @@ body.x-body {
 	// below the frame need to extend the scroll area) If something breaks because of this, don't revert
 	// this, reflow the styles with the thing that breaks.
 	overflow: visible !important;
-	background: white;
-	background: #343434;
+	background: var(--primary-background);
 	background-size: cover;
 	background-attachment: fixed;
 	position: relative;

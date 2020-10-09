@@ -18,7 +18,7 @@
 			    &, a:link, a:visited, a:active {
 			   	   color: var(--primary-blue);
 			   	   font-style: normal !important;
-			   	   font: 14px $font !important;
+			   	   font: 14px var(--body-font-family) !important;
 			   	   font-weight: 300 !important;
 			   	   text-decoration: none;
 			 	   &:hover {
@@ -29,7 +29,7 @@
 
 				&::after{
 					color: var(--tertiary-grey);
-					font: 24px $font !important;
+					font: 24px var(--body-font-family) !important;
 					font-weight: 300 !important;
 					font-style: italic !important;
 					content: ".";
@@ -51,14 +51,14 @@
 
 		.heading{
 			color: var(--tertiary-grey);
-			font: 24px $font !important;
+			font: 24px var(--body-font-family) !important;
 			font-weight: 300 !important;
 			font-style: italic !important;
 		}
 
 		.subtext{
 			color: var(--primary-grey);
-			font: 14px $font !important;
+			font: 14px var(--body-font-family) !important;
 			font-style: normal !important;
 		}
 	}

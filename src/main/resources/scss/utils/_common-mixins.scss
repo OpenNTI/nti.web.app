@@ -270,7 +270,7 @@
 			}
 
 			.edit{
-				font: normal 600 11px/15px $font !important;
+				font: normal 600 11px/15px var(--body-font-family) !important;
 				position: relative;
 				top: -15px;
 				left: -50%;
@@ -293,6 +293,12 @@
 }
 
 @mixin highlight-colors($onParentSelector: true, $selector:'', $nibselector:null) {
+	$highlight-colors: (
+		// (name, menu color, hover)
+		('yellow',var(--highlight-colors-yellow-menu),var(--highlight-colors-yellow-hover)),
+		('green',var(--highlight-colors-green-menu),var(--highlight-colors-green-hover)),
+		('blue',var(--highlight-colors-blue-menu),var(--highlight-colors-blue-hover))
+	);
 	@each $item in $highlight-colors {
 		$name: nth($item,1);
 		$menu_color: nth($item,2);

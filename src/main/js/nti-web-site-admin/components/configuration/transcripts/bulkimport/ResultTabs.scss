@@ -4,7 +4,7 @@
 	.tabs {
 		padding-left: 1rem;
 		display: flex;
-		background: $light-green;
+		background: var(--light-green);
 		border-bottom: 1px solid var(--border-grey-light);
 
 		> * {
