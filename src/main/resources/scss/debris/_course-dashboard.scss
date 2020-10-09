@@ -31,7 +31,7 @@
 		margin-top: 0;
 
 		.title {
-			font: normal 300  22px/30px $font;
+			font: normal 300  22px/30px var(--body-font-family);
 			color: var(--tertiary-grey);
 			text-align: center;
 			margin-top: 2em;
@@ -118,13 +118,13 @@
 			}
 
 			.path {
-				font: normal 600 0.65em/1.3em $font;
+				font: normal 600 0.65em/1.3em var(--body-font-family);
 				text-transform: uppercase;
 				color: var(--tertiary-grey-alt);
 			}
 
 			.title {
-				font: italic 300 1.5em/1.4em $font;
+				font: italic 300 1.5em/1.4em var(--body-font-family);
 				height: 4.2em;
 				max-height: 4.2em;
 				color: var(--quad-grey);
@@ -140,7 +140,7 @@
 			}
 
 			.bullets {
-				font: normal 600 0.75em/1.3em $font;
+				font: normal 600 0.75em/1.3em var(--body-font-family);
 				color: var(--tertiary-grey-alt);
 			}
 
@@ -169,7 +169,7 @@
 			.location {
 				background-color: white;
 				border-bottom: 1px solid #efefef;
-				font: normal 400 0.6em/1.3em $font;
+				font: normal 400 0.6em/1.3em var(--body-font-family);
 				color: var(--tertiary-grey);
 				text-transform: uppercase;
 				padding: 4px 15px;
@@ -236,7 +236,7 @@
 						right: 0;
 						overflow: hidden;
 						padding: 0.2em 15px;
-						font: italic 300 1.1em/1.6em $font;
+						font: italic 300 1.1em/1.6em var(--body-font-family);
 
 						* {
 							display: inline;
@@ -264,7 +264,7 @@
 
 					.meta {
 						margin-left: 110px;
-						font: italic 300 1.1em/1.6em $font;
+						font: italic 300 1.1em/1.6em var(--body-font-family);
 					}
 				}
 			}
@@ -345,7 +345,7 @@
 				.post {
 					color: var(--primary-grey);
 					padding: 5px 15px;
-					font: normal 400 0.9em/1.2em $font;
+					font: normal 400 0.9em/1.2em var(--body-font-family);
 
 					.title {
 						font-weight: 600;

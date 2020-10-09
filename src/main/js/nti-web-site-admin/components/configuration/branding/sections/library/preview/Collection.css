@@ -18,7 +18,7 @@
 }
 
 .title {
-	font: normal 300 1.25em/2em "Open Sans", sans-serif;
+	font: normal 300 1.25em/2em var(--body-font-family);
 	color: white;
 	font-size: 20px;
 	margin: 0;

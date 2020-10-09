@@ -30,7 +30,7 @@
 		.provider-bottom {
 			position: relative;
 			text-transform: uppercase;
-			font: normal bold 0.6em/1.3em $font;
+			font: normal bold 0.6em/1.3em var(--body-font-family);
 			color: var(--secondary-grey);
 			overflow: hidden;
 			@include ellipse();
@@ -38,7 +38,7 @@
 
 		.title {
 			margin-top: -0.2em;
-			font: normal 700 1.1em/1.5 'Open Sans Condensed';
+			font: normal 700 1.1em/1.5 var(--header-font-family);
 			text-transform: uppercase;
 			color: var(--primary-grey);
 			overflow: hidden;

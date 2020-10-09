@@ -53,7 +53,7 @@
 			padding-left: 10px;
 			margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
 			margin-bottom: 5px;
-			font: italic 300 30px/40px $font;
+			font: italic 300 30px/40px var(--body-font-family);
 			color: var(--primary-blue);
 			overflow: hidden;
 			@include ellipse;
@@ -64,7 +64,7 @@
 
 		.affiliation {
 			color: var(--primary-grey);
-			font: normal 500 14px/25px $font;
+			font: normal 500 14px/25px var(--body-font-family);
 			margin-left: 2px;
 		}
 	}
@@ -103,7 +103,7 @@
 
 	.empty-list{
 		padding: 20px 0;
-		font: italic 300 14px/28px "Open Sans", sans-serif;
+		font: italic 300 14px/28px var(--body-font-family);
 		text-align: center;
 		color: var(--tertiary-grey);
 	}
@@ -210,7 +210,7 @@
 				padding-left: 15px;
 
 				.name {
-					font: normal 300 22px/26px "Open Sans Condensed", "Open Sans", sans-serif !important;
+					font: normal 300 22px/26px var(--header-font-family) !important;
 					text-transform: none;
 					line-height: 30px !important;
 				}
@@ -335,7 +335,7 @@
 				display: block;
 				height: 44px;
 				line-height: 45px;
-				font: italic 500 14px/45px $font;
+				font: italic 500 14px/45px var(--body-font-family);
 				text-align: center;
 				color: #ffffff;
 				width: 105px;

@@ -2,7 +2,7 @@
 	span{
 		&::after{
 			color: var(--tertiary-grey);
-			font: normal 500 10px/20px $font;
+			font: normal 500 10px/20px var(--body-font-family);
 
 			position: static;
 			content: '\00B7';
@@ -23,7 +23,7 @@
 		border: 1px solid #dcdcdc;
 		color: #dcdcdc;
 		background: white;
-		font: italic 400 14px/37px $font;
+		font: italic 400 14px/37px var(--body-font-family);
 		padding: 0 10px;
 		.editor {
 			margin-bottom: 10px;
@@ -44,7 +44,7 @@
 
 			margin: 0 18px 0 20px;
 			padding: 12px 0 12px 0;
-			font: italic normal 12px/20px $font;
+			font: italic normal 12px/20px var(--body-font-family);
 			color: var(--primary-grey);
 			overflow: hidden;
 
@@ -88,7 +88,7 @@
 			}
 
 			.name, .with, .verb {
-				font: normal bold 10px $font;
+				font: normal bold 10px var(--body-font-family);
 				text-transform: uppercase;
 			}
 
@@ -247,7 +247,7 @@
 		.thought-label {
 			position: absolute;
 			color: #8fbc30;
-			font: normal bold 10px $font;
+			font: normal bold 10px var(--body-font-family);
 			text-transform: uppercase;
 			left: 20px;
 			top: 20px;
@@ -301,7 +301,7 @@
 
 			.location {
 				text-transform: uppercase;
-				font: normal 600 10px/20px $font;
+				font: normal 600 10px/20px var(--body-font-family);
 				color: var(--tertiary-grey) !important;
 				height: 20px;
 				overflow: hidden;
@@ -317,7 +317,7 @@
 				& > .text {
 					position: relative;
 					overflow: hidden;
-					font: normal 400 14px/20px $font;
+					font: normal 400 14px/20px var(--body-font-family);
 					color: var(--primary-grey);
 					display: block;
 					height: 40px;
@@ -349,7 +349,7 @@
 			color: var(--tertiary-grey);
 			text-transform: uppercase;
 			padding: 0 20px;
-			font: normal 700 10px/40px $font;
+			font: normal 700 10px/40px var(--body-font-family);
 			height: 40px;
 			overflow: hidden;
 			@include ellipse;
@@ -398,14 +398,14 @@
 			.meta {
 				margin: 20px 70px 0 80px;
 				min-height: 60px;
-				font: normal 400 12px $font;
+				font: normal 400 12px var(--body-font-family);
 				color: var(--tertiary-grey);
 			}
 
 			.stamp {
 				margin-top: 5px;
 				.name {
-					font: normal 600 10px/20px $font;
+					font: normal 600 10px/20px var(--body-font-family);
 					color: var(--primary-blue);
 					text-transform: uppercase;
 					cursor: pointer;
@@ -423,7 +423,7 @@
 				overflow: hidden;
 				padding-bottom: 3px;
 				@include ellipse;
-				font: normal 300 28px/30px "Open Sans Condensed", $font;
+				font: normal 300 28px/30px var(--header-font-family);
 				cursor: pointer;
 				&::after{
 					content: '';
@@ -460,7 +460,7 @@
 		.body{
 			position: relative;
 			margin: 10px 0 25px 0;
-			font: normal 400 14px/19px $font;
+			font: normal 400 14px/19px var(--body-font-family);
 			color: var(--primary-grey);
 			max-height: 57px;
 			overflow: hidden;
@@ -481,7 +481,7 @@
 			}
 
 			div {
-				font: normal 600 12px/15px $font;
+				font: normal 600 12px/15px var(--body-font-family);
 				//cursor: pointer;
 				display: inline-block;
 				//opacity: 0.75;
@@ -489,7 +489,7 @@
 				margin: 0;
 				//&:hover { opacity: 1; &::after{opacity: 0.75;} }
 				&::after{
-					font: normal 600 14px/20px $font;
+					font: normal 600 14px/20px var(--body-font-family);
 					position: static;
 					content: '\00B7';
 					vertical-align: middle;
@@ -578,7 +578,7 @@
 				}
 
 				.meta {
-					font: normal 600 10px $font;
+					font: normal 600 10px var(--body-font-family);
 
 					.name {
 						max-width: 100%;
@@ -605,7 +605,7 @@
 				.body {
 					color: var(--primary-grey);
 					margin:{ top: 5px; bottom: 5px; }
-					font: normal 500 14px/20px $font;
+					font: normal 500 14px/20px var(--body-font-family);
 					max-height: 300px;
 
 					.whiteboard-container{ cursor: pointer; }
@@ -650,11 +650,11 @@
 		padding: 20px 10px 10px 0;
 
 		.name {
-			font: normal 700 1em/1.4em 'Open Sans Condensed',$font;
+			font: normal 700 1em/1.4em var(--header-font-family);
 		}
 
 		.description {
-			font: normal 500 0.9em/1.4em $font;
+			font: normal 500 0.9em/1.4em var(--body-font-family);
 			font-size: 0.9em;
 			margin: 4px 0;
 		}
@@ -664,7 +664,7 @@
 .feedback-preview {
 	.path {
 		display: inline-block;
-		font: normal 400 0.6em/40px $font;
+		font: normal 400 0.6em/40px var(--body-font-family);
 		height: 40px;
 		width: 400px;
 		padding: 0 15px 0 15px;
@@ -729,12 +729,12 @@
 
 			.name {
 				color: var(--primary-grey);
-				font: normal 600 1em/1.1em $font;
+				font: normal 600 1em/1.1em var(--body-font-family);
 			}
 
 			.turned-in {
 				color: var(--primary-green);
-				font: normal 600 0.7em/2em $font;
+				font: normal 600 0.7em/2em var(--body-font-family);
 			}
 		}
 
@@ -765,7 +765,7 @@
 	.show-more {
 		background-color: var(--panel-background);
 		color: var(--primary-blue);
-		font: normal 500 0.8em/20px $font;
+		font: normal 500 0.8em/20px var(--body-font-family);
 		padding: 10px 0 0 20px;
 
 		.more-text {

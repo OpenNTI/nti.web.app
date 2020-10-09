@@ -40,11 +40,11 @@
 				position: relative;
 				
 				.title {
-					font: normal 300 1.75em/35px $font;
+					font: normal 300 1.75em/35px var(--body-font-family);
 				}
 				
 				.subtitle {
-					font: normal 300 1em/35px $font;
+					font: normal 300 1em/35px var(--body-font-family);
 				}
 			}
 		}
@@ -106,7 +106,7 @@
 
 				.title {
 					cursor: pointer;
-					font: normal 300 1.75em/35px $font;
+					font: normal 300 1.75em/35px var(--body-font-family);
 					color: var(--primary-grey);
 					max-width: 100%;
 					overflow: hidden;
@@ -148,7 +148,7 @@
 
 		.body {
 			margin: 20px 0;
-			font: normal 400 1em/1 $font;
+			font: normal 400 1em/1 var(--body-font-family);
 			color: var(--primary-grey);
 		}
 	}
@@ -164,7 +164,7 @@
 			padding: 0 10px;
 			background: white;
 			color: var(--primary-blue);
-			font: italic 400 0.875em/37px $font;
+			font: italic 400 0.875em/37px var(--body-font-family);
 			border: 1px solid #dcdcdc;
 		}
 	}

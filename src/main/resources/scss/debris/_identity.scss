@@ -31,7 +31,7 @@
 
 		.content{
 			margin-left: 75px;
-			font: normal 400 0.9em/2 $font;
+			font: normal 400 0.9em/2 var(--body-font-family);
 			padding: 8px 0 0 0;
 
 			.username{
@@ -127,7 +127,7 @@
 .presence-menu{
 	.header{
 		color: var(--tertiary-grey);
-		font: normal 600 10px/20px $font;
+		font: normal 600 10px/20px var(--body-font-family);
 		margin: 10px 0 0 15px;
 	}
 
@@ -144,7 +144,7 @@
 				padding-left: 30px;
 				overflow: hidden;
 				@include ellipse;
-				font: normal 400 14px/30px $font;
+				font: normal 400 14px/30px var(--body-font-family);
 				width: 200px;
 				color: var(--tertiary-grey);
 			}
@@ -181,7 +181,7 @@
 				@include icon($rhp-status-checkmark, $top:8px, $left:15px, $side:'before');
 
 				.label{
-					font: normal 600 14px/30px $font;
+					font: normal 600 14px/30px var(--body-font-family);
 					color: var(--primary-grey);
 				}
 			}
@@ -199,7 +199,7 @@
 				background-color: #efefef;
 
 				.label{
-					font: normal 600 14px/30px $font;
+					font: normal 600 14px/30px var(--body-font-family);
 					color: var(--primary-grey);					
 				}
 

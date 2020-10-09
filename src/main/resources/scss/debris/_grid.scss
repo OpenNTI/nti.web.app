@@ -64,7 +64,7 @@
 	}
 	text-shadow: none;
 	color: var(--tertiary-grey);
-	font: normal 700 0.6em/3 $font;
+	font: normal 700 0.6em/3 var(--body-font-family);
 	text-transform: uppercase;
 	background: none !important;
 
@@ -191,7 +191,7 @@
 	}
 
 	.x-grid-row .x-grid-cell {
-		font: normal 300 0.85em/3 $font;
+		font: normal 300 0.85em/3 var(--body-font-family);
 		color: var(--secondary-grey);
 
 
@@ -294,7 +294,7 @@
 			}
 
 			input {
-				font: normal normal 1em/1 'Open Sans';
+				font: normal normal 1em/1 var(--body-font-family);
 				width: 45%;
 				padding: 0.7em 0.3em 0.7em 1.0em;
 				margin-left: -0.3em;
@@ -365,7 +365,7 @@
 .x-grid {
 	.x-grid-cell-editor{
 		input{
-			font: normal 300 0.8em/1 $font;
+			font: normal 300 0.8em/1 var(--body-font-family);
 			height: 40px !important;
 			border: 1px solid #dcdcdc;
 			background-image: none;

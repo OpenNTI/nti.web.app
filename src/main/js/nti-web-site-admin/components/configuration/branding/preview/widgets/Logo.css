@@ -45,14 +45,14 @@
 }
 
 .course-label {
-	font: normal 700 11px/15px "Open Sans", sans-serif;
+	font: normal 700 11px/15px var(--body-font-family);
 	text-transform: uppercase;
 	color: var(--secondary-grey-alt);
 	margin-bottom: -3px;
 }
 
 .course-title {
-	font: 500 1.375em/1.4em "Open Sans", sans-serif;
+	font: 500 1.375em/1.4em var(--body-font-family);
 }
 
 .icons {

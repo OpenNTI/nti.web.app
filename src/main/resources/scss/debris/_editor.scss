@@ -275,7 +275,7 @@ span.tab{
 				}
 				input {
 					display: block;
-					font: normal 300 25px/40px $font;
+					font: normal 300 25px/40px var(--body-font-family);
 					border: 0;
 					margin: 5px 0;
 					width: 100%;
@@ -305,7 +305,7 @@ span.tab{
 				padding: 0px 5px;
 
 				input{
-					font: normal italic 14px/30px $font;
+					font: normal italic 14px/30px var(--body-font-family);
 					font-style: italic;
 					text-transform: none;
 				}
@@ -339,7 +339,7 @@ span.tab{
 
 			.aux+.title, .title.small{
 				input{
-					font: italic 14px/20px $font;
+					font: italic 14px/20px var(--body-font-family);
 					padding-left: 5px;
 				}
 			}
@@ -353,7 +353,7 @@ span.tab{
 				cursor: text;
 				padding: 2px 5px 0;
 				color: var(--secondary-grey);
-				font: 14px $font;
+				font: 14px var(--body-font-family);
 				overflow:{
 					x: hidden;
 					y: auto; //scroll;

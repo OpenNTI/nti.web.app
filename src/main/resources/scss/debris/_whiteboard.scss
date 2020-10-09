@@ -632,7 +632,7 @@
 			.include,.reply {
 				color: #a8a8a8;
 				cursor: pointer;
-				font-family: $font;
+				font-family: var(--body-font-family);
 				font-size: 12px;
 				font-weight: 500;
 				line-height: 34px;

@@ -14,7 +14,7 @@
 
 			.x-tab-inner {
 				color: var(--tertiary-grey);
-				font: $font;
+				font: var(--body-font-family);
 				text-transform: uppercase;
 				padding: 0 6px;
 			}
@@ -125,7 +125,7 @@
 			line-height: 28px;
 			font-weight: 600;
 			font-style: normal;
-			font-family: $font;
+			font-family: var(--body-font-family);
 		}
 
 		&:first-of-type {

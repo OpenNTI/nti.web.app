@@ -24,7 +24,7 @@
 
 	.time {
 		font-size: 12px;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		font-weight: normal;
 		color: var(--secondary-grey);
 	}
@@ -89,7 +89,7 @@
 		&.notification {
 			text-transform: uppercase;
 			padding: 3px 12px 20px 20px;
-			font: normal 700 0.65em $font;
+			font: normal 700 0.65em var(--body-font-family);
 			color: var(--tertiary-grey);
 
 			.verb {
@@ -139,7 +139,7 @@
 
 				.path,.location, .tags, .title{
 					color: var(--tertiary-grey);
-					font-family: $font;
+					font-family: var(--body-font-family);
 				}
 
 				.path, .title{
@@ -160,7 +160,7 @@
 				.body {
 					padding: 0 15px 32px 32px;
 					margin-left: -20px;
-					font-family: $font;
+					font-family: var(--body-font-family);
 					font-size: 14px;
 					font-weight: normal;
 					color: var(--primary-grey);
@@ -219,7 +219,7 @@
 			&.comment {
 				text-transform: uppercase;
 				padding: 3px 12px 20px 20px;
-				font: normal 700 0.65em $font;
+				font: normal 700 0.65em var(--body-font-family);
 				color: var(--tertiary-grey);
 
 				.link {
@@ -239,7 +239,7 @@
 			&.grade {
 				text-transform: uppercase;
 				padding: 3px 12px 20px 20px;
-				font: normal 700 0.65em $font;
+				font: normal 700 0.65em var(--body-font-family);
 				color: var(--tertiary-grey);
 
 				.link {
@@ -271,7 +271,7 @@
 		&.nothing{
 			color: var(--tertiary-grey);
 			text-align: center;
-			font-family: $font;
+			font-family: var(--body-font-family);
 			font-size: 10px;
 			font-weight: 600;
 		}

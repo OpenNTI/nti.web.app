@@ -182,7 +182,7 @@ body.dragging * {
 	}
 
 	.target.drag {
-		font: normal normal 1.3em/2em $font;
+		font: normal normal 1.3em/2em var(--body-font-family);
 		border: 1px solid var(--primary-blue);
 		border-radius: 3px;
 		box-shadow: 0px 0px 7px -2px rgba(0, 0, 0, 0.5);
@@ -217,13 +217,13 @@ body.dragging * {
 		border-bottom: 1px solid #f0f0f0;
 
 		h1{
-			font: normal 200 1.6em/1 $font;
+			font: normal 200 1.6em/1 var(--body-font-family);
 			color: var(--secondary-grey);
 			margin: 0;
 		}
 
 		.message{
-			font: normal 500 1.1em/2.5 $font;
+			font: normal 500 1.1em/2.5 var(--body-font-family);
 			color: var(--secondary-grey);
 			margin-bottom: 10px;
 		}
@@ -271,7 +271,7 @@ body.dragging * {
 			}
 
 			.wrap {
-				font: normal normal 1.1em/1.6 $font;
+				font: normal normal 1.1em/1.6 var(--body-font-family);
 				color: var(--secondary-grey);
 				margin: 0 0 0 $m;
 
@@ -304,7 +304,7 @@ body.dragging * {
 						display: inline-block;
 						&::after{
 							color: var(--tertiary-grey);
-							font: normal 500 12px/20px $font;
+							font: normal 500 12px/20px var(--body-font-family);
 							text-decoration: none !important;
 							position: static;
 							content: '\00B7';
@@ -340,7 +340,7 @@ body.dragging * {
 				content: 'Add a comment';
 				margin-left: 10px;
 				color: var(--tertiary-grey);
-				font: italic normal 1em/39px $font;
+				font: italic normal 1em/39px var(--body-font-family);
 			}
 		}
 	}
@@ -445,7 +445,7 @@ body.dragging * {
 			color: #737373;
 			border-radius: 3px 3px 0 0;
 			font: {
-				family: $font;
+				family: var(--body-font-family);
 				weight: bold;
 				size: 14px;
 				style: normal;
@@ -556,7 +556,7 @@ body.dragging * {
 		box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2);
 		display: inline-block;
 		padding: 0 15px;
-		font: normal normal 1em/2 $font;
+		font: normal normal 1em/2 var(--body-font-family);
 		margin: 15px 5px 15px 0;
 		@include experimental-value(cursor,grab);
 
@@ -679,7 +679,7 @@ body.dragging * {
 			box-shadow: 0 1px 0 0 #ffffff;
 			padding: 6px 10px;
 			font: {
-				family: $font;
+				family: var(--body-font-family);
 				weight: bold;
 				size: 10px;
 				style: normal;
@@ -697,7 +697,7 @@ body.dragging * {
 				float: right;
 				color: var(--secondary-grey);
 				font:{
-					family: $font;
+					family: var(--body-font-family);
 					size: 11px;
 					style: normal;
 					weight: 700;
@@ -719,7 +719,7 @@ body.dragging * {
 			padding: 0 10px;
 			top: 17px !important;
 			font: {
-				family: $font;
+				family: var(--body-font-family);
 				weight: normal;
 				style: italic;
 			}
@@ -842,7 +842,7 @@ body.dragging * {
 			.mathquill-editable,
 			.mathquill-rendered-math {
 				font: {
-					family: $font;
+					family: var(--body-font-family);
 					weight: normal;
 					size: 14px;
 					style: normal;
@@ -1689,18 +1689,18 @@ body.dragging * {
 		}
 
 		.label {
-			font: normal 500 1.5em/1 $font;
+			font: normal 500 1.5em/1 var(--body-font-family);
 			color: var(--primary-grey);
 			word-break: break-all;
 		}
 		.due {
-			font: normal 700 0.8em/3 $font;
+			font: normal 700 0.8em/3 var(--body-font-family);
 			text-transform: uppercase;
 			color: var(--tertiary-grey);
 		}
 
 		.delete {
-			font: normal 700 0.8em/3 $font;
+			font: normal 700 0.8em/3 var(--body-font-family);
 			text-transform: uppercase;
 			color: var(--primary-blue);
 			cursor: pointer;
@@ -1723,7 +1723,7 @@ body.dragging * {
 			overflow: hidden;
 			background: var(--primary-blue);
 			border-radius: 3px;
-			font: italic 600 1.2em/1 $font;
+			font: italic 600 1.2em/1 var(--body-font-family);
 			color: #fff;
 			padding: 1em 2em;
 			margin-right: 5px;
@@ -1838,7 +1838,7 @@ body.dragging * {
 		}
 		input {
 			text-align: center;
-			font: normal normal 1em/1 $font;
+			font: normal normal 1em/1 var(--body-font-family);
 			color: var(--secondary-grey);
 			display: inline-block;
 			padding:x 0; margin: 0 0.2em;
@@ -2221,7 +2221,7 @@ input.preview[readonly] {
 			display: inline-block;
 			vertical-align: top;
 			width: 30%;
-			font: normal 400 0.875rem/40px $font;
+			font: normal 400 0.875rem/40px var(--body-font-family);
 			padding: 0 10px;
 			overflow: hidden;
 			@include ellipse;
@@ -2375,7 +2375,7 @@ input.preview[readonly] {
 		background: #fff;
 		padding: 2px 5px;
 		border: 1px solid var(--tertiary-grey);
-		font: normal 400 0.875rem/1 $font;
+		font: normal 400 0.875rem/1 var(--body-font-family);
 		min-height: 200px;
 		max-height: 350px;
 		overflow: scroll;
@@ -2428,7 +2428,7 @@ input.preview[readonly] {
 			}
 
 			td {
-				font: normal 300 1rem/40px $font;
+				font: normal 300 1rem/40px var(--body-font-family);
 
 				&.max {
 					color: var(--primary-green);
@@ -2436,7 +2436,7 @@ input.preview[readonly] {
 			}
 
 			th, td:first-of-type {
-				font: normal 400 0.875rem/40px $font;
+				font: normal 400 0.875rem/40px var(--body-font-family);
 				overflow: hidden;
 				@include ellipsis;
 			}

@@ -133,7 +133,7 @@
 
 			.title, .author, .price {
 				color: var(--primary-grey);
-				font: normal bold 12px/18px $font;
+				font: normal bold 12px/18px var(--body-font-family);
 				@include ellipse;
 				overflow: hidden;
 			}
@@ -157,7 +157,7 @@
 				color: #fff;
 				background: var(--primary-green);
 				display: inline-block;
-				font: normal 600 10px/16px $font;
+				font: normal 600 10px/16px var(--body-font-family);
 				padding: 0 5px;
 				margin: 5px 0;
 			}

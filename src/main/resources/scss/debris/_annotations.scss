@@ -179,7 +179,7 @@
 			}
 
 			.count {
-				font: normal bold 9px/19px $font;
+				font: normal bold 9px/19px var(--body-font-family);
 				color: var(--primary-blue);
 				margin: 0 10px;
 			}
@@ -247,7 +247,7 @@
 		}
 
 		.name {
-			font: normal 600 10px/15px $font;
+			font: normal 600 10px/15px var(--body-font-family);
 			text-transform: uppercase;
 			color: var(--primary-blue);
 			overflow: hidden;
@@ -257,7 +257,7 @@
 			min-height: 50px;
 			max-height: 5em;
 			overflow: hidden;//because this is allowing line wrapping, we can't ellipse the text overflow.
-			font: italic 400 16px/25px $font;
+			font: italic 400 16px/25px var(--body-font-family);
 			margin: 0 0 10px -10px;
 			padding-left: 10px;
 			color: var(--primary-grey);
@@ -276,7 +276,7 @@
 			@include attachment-small();
 		}
 		.footer {
-			font: normal 400 10px/15px $font;
+			font: normal 400 10px/15px var(--body-font-family);
 			color: var(--tertiary-grey);
 
 			span{
@@ -544,7 +544,7 @@
 		}
 
 		.no-access {
-			font: normal 500 0.9em/1 $font;
+			font: normal 500 0.9em/1 var(--body-font-family);
 			color: #FD817F;
 		}
 	}

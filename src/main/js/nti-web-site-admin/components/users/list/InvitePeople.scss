@@ -6,7 +6,7 @@
 
 	.invite-error {
 		padding: rem-calc(8px 30px);
-		font: normal 400 0.875rem/1.25rem $body-font-family;
+		font: normal 400 0.875rem/1.25rem var(--body-font-family);
 		color: white;
 		background: var(--primary-red);
 

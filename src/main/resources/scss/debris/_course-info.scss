@@ -104,7 +104,7 @@
 
 				.invite-header {
 					color: var(--secondary-grey);
-					font: normal 400 14px $font;
+					font: normal 400 14px var(--body-font-family);
 				}
 
 				.code {
@@ -134,7 +134,7 @@
 		background: #000;
 		position: relative;
 		min-height: 1.75em;
-		font: normal 700 2em/1 "Open Sans Condensed" $font;
+		font: normal 700 2em/1 var(--header-font-family);
 
 		.video > * {
 			margin: 0 auto;
@@ -202,7 +202,7 @@
 		background: #fff;
 		padding: 1.5em;
 		color: var(--primary-grey);
-		font: normal 400 0.85em/1.95em $font;
+		font: normal 400 0.85em/1.95em var(--body-font-family);
 
 		.body {
 			margin: 0 0 4em;
@@ -280,7 +280,7 @@
 .course-info-instructors {
 	background: #fff;
 	color: var(--tertiary-grey);
-	font: normal 400 0.85em/1.95em $font;
+	font: normal 400 0.85em/1.95em var(--body-font-family);
 
 	.instructor {
 		position: relative;
@@ -333,7 +333,7 @@
 	overflow: hidden;
 	background: #fff;
 	color: var(--primary-grey);
-	font: normal 400 0.85em/1.95em $font;
+	font: normal 400 0.85em/1.95em var(--body-font-family);
 
 
 	.photo {
@@ -359,7 +359,7 @@
 	background: #fff;
 	padding: 0 18px 20px;
 	color: var(--secondary-grey);
-	font: normal 300 0.85em/1.95em $font;
+	font: normal 300 0.85em/1.95em var(--body-font-family);
 
 	&.open {
 		padding-top: 0;
@@ -480,7 +480,7 @@
 					}
 
 					&.title-filter {
-						font: normal 300 1.8em/2.1 $font;
+						font: normal 300 1.8em/2.1 var(--body-font-family);
 						text-transform: capitalize;
 					}
 
@@ -492,7 +492,7 @@
 						vertical-align: middle;
 						height: 35px;
 					    white-space: nowrap;
-					    font: normal 600 14px/35px $font;
+					    font: normal 600 14px/35px var(--body-font-family);
 					    padding: 0 15px 0 15px;
 					    color: #ffffff;
 					    background: var(--primary-blue);
@@ -597,7 +597,7 @@
 	}
 
 	.description {
-		font: normal 400 0.9em/1.7em $font;
+		font: normal 400 0.9em/1.7em var(--body-font-family);
 	}
 
 	.right {
@@ -613,7 +613,7 @@
 		}
 
 		.header {
-			font: normal 500 0.8em/35px $font;
+			font: normal 500 0.8em/35px var(--body-font-family);
 			color: var(--tertiary-grey);
 			margin: 0;
 			background-color: white;
@@ -622,7 +622,7 @@
 		}
 
 		.enrollment-confirm {
-			font: normal 300 1.2em/50px $font;
+			font: normal 300 1.2em/50px var(--body-font-family);
 			text-align: center;
 			background-color: var(--secondary-grey);
 			color: white;
@@ -652,7 +652,7 @@
 			padding: 0 15px 0 10px;
 			height: 40px;
 			display: none;
-			font: normal 300 1em/1 $font;
+			font: normal 300 1em/1 var(--body-font-family);
 			cursor: pointer;
 
 			&.show {
@@ -688,7 +688,7 @@
 	.enroll-card {
 		.enroll-option, .drop:not(.button) {
 			padding: 15px;
-			font: normal 300 1em/1 $font;
+			font: normal 300 1em/1 var(--body-font-family);
 			color: var(--primary-grey);
 		}
 

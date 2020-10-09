@@ -432,7 +432,7 @@
 						//Make it transparent
 						background-color: rgba(35,35,35,0.0);
 						height: 30px;
-						font-family: $font;
+						font-family: var(--body-font-family);
 						font-size: 14px;
 						width: 100%;
 						border: none;
@@ -581,7 +581,7 @@
 	border-bottom-width: 1px !important;
 	color: var(--secondary-grey);
 	text-shadow: 0 1px rgba(255,255,255,0.7);
-	font: italic 700 14px/36px $font;
+	font: italic 700 14px/36px var(--body-font-family);
 	background-image: linear-gradient(to top, #d3d3d3 0%, #f3f3f3 100%);
 
 	.x-header-text-container {
@@ -601,7 +601,7 @@
 		min-width: 29px;
 		border-radius: 8px;
 		background: #299bdc;
-		font: normal 600 12px/17px $font;
+		font: normal 600 12px/17px var(--body-font-family);
 		color: #ffffff;
 		box-shadow: 0 1px rgba(255,255,255,0.3),
 				inset 0 1px rgba(0,0,0,0.15),
@@ -713,7 +713,7 @@
 		min-width: 24px;
 		border-radius: 8px;
 		background: #299bdc;
-		font: normal 600 12px/17px $font;
+		font: normal 600 12px/17px var(--body-font-family);
 		color: #ffffff;
 	}
 
@@ -759,14 +759,14 @@
 		height: 50px;
 
 		.status {
-			font: italic normal 12px/16px $font;
+			font: italic normal 12px/16px var(--body-font-family);
 			color: var(--tertiary-grey);
 		}
 
 		.names{
 			@include ellipse;
 			overflow: hidden;
-			font: normal 600 12px/16px $font;
+			font: normal 600 12px/16px var(--body-font-family);
 			color: var(--primary-grey);
 
 			&.overflown::before{
@@ -803,7 +803,7 @@
 		background: #f1f1f1;
 		color: var(--primary-grey);
 		text-transform: uppercase;
-		font: normal 700 10px/30px $font;
+		font: normal 700 10px/30px var(--body-font-family);
 
 		.x-header-text-container {
 			padding: 0 0 0 10px;
@@ -827,7 +827,7 @@
 		.no-history{
 			background-color: white;
 			padding: 5px 0px 5px 0px;
-			font: italic 300 14px/28px $font;
+			font: italic 300 14px/28px var(--body-font-family);
 			text-align: center;
 			color: var(--tertiary-grey);
 		}

@@ -99,7 +99,7 @@
 			}
 
 			.title {
-				font: normal 600 0.625em/20px "Open Sans", sans-serif;
+				font: normal 600 0.625em/20px var(--body-font-family);
 				text-transform: uppercase;
 				text-align: center;
 				color: var(--tertiary-grey);

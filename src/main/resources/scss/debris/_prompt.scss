@@ -109,13 +109,13 @@
 				overflow: hidden;
 				text-overflow: ellipsis;
 				color: var(--primary-grey);
-				font: normal 400 1.5em/1.5 $font;
+				font: normal 400 1.5em/1.5 var(--body-font-family);
 				-webkit-font-smoothing: antialiased;
 			}
 
 			.sub {
 				color: var(--tertiary-grey);
-				font: normal 600 0.625em/1 $font;
+				font: normal 600 0.625em/1 var(--body-font-family);
 				text-transform: uppercase;
 			}
 		}

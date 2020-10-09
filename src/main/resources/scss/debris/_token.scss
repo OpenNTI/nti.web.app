@@ -4,7 +4,7 @@
 	position: relative;
 	overflow: hidden;
 
-	font: normal 400 12px/30px $font;
+	font: normal 400 12px/30px var(--body-font-family);
 
 	.x-gecko & {
 		padding-top: 1px;
@@ -22,7 +22,7 @@
 	}
 
 	.token {
-		font: normal 400 10px/17px $font;
+		font: normal 400 10px/17px var(--body-font-family);
 		display: inline-block;
 		white-space: normal;
 		padding: 0 10px 0 10px;
@@ -157,7 +157,7 @@
 
 		span.token-input-sizer{
 			display: inline-block;
-			font: normal 700 10px/30px $font;
+			font: normal 700 10px/30px var(--body-font-family);
 			visibility: hidden;
 			background: #fff;
 			color: #fff;
@@ -260,7 +260,7 @@
 			}
 
 			.token{
-				font: normal 700 10px/18px $font;
+				font: normal 700 10px/18px var(--body-font-family);
 				text-transform: none;
 				color: #fff;
 				border-color: var(--border-blue);

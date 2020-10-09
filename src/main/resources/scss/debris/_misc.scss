@@ -20,7 +20,7 @@ body {
 		weight: normal;
 		style: normal;
 		size: 1em;
-		family: $font;
+		family: var(--body-font-family);
 	}
 	//@include experimental(font-smoothing, antialiased);
 }
@@ -67,7 +67,7 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 
 .empty-state{
 	text-align: center;
-	font: normal 300 2em $font;
+	font: normal 300 2em var(--body-font-family);
 	color: var(--tertiary-grey);
 	margin-top: 2em;
 

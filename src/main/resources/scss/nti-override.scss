@@ -273,7 +273,7 @@ body.x-body {margin:0;}
 	}
 
 	.injected-related-items {
-		font-family: $font;
+		font-family: var(--body-font-family);
 		margin: 15px 0 0 0;
 
 		font-size: 14px;

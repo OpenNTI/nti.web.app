@@ -13,7 +13,7 @@
 .hit-fragments {
 	cursor: pointer;
 	margin: 5px 0;
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	line-height: 25px;
 	color: var(--secondary-grey);
@@ -22,14 +22,14 @@
 }
 
 .hit-path {
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	line-height: 25px;
 	color: var(--tertiary-grey);
 }
 
 .hit-title {
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 18px;
 	font-weight: 500;
 	line-height: 24px;
@@ -45,7 +45,7 @@
 }
 
 .search-advanced-menu-react.search-advanced-menu > .search-option {
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 50px;
@@ -107,7 +107,7 @@
 .page-num {
 	height: 19px;
 	width: 8px;
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	font-weight: bold;
 	display: inline-block;
@@ -117,7 +117,7 @@
 .page-num-large {
 	height: 19px;
 	width: 16px;
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	font-weight: bold;
 	display: inline-block;

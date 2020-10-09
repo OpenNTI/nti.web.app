@@ -72,7 +72,7 @@
 		margin: 0 10px 20px 100px;
 
 		.legend{
-			font: normal 400 14px/22px $font;
+			font: normal 400 14px/22px var(--body-font-family);
 			margin-bottom: 5px;
 		}
 		.fields{
@@ -88,7 +88,7 @@
 			input, .selectbox{
 				vertical-align: bottom;
 				color: var(--secondary-grey);
-				font: italic 500 14px/25px $font;
+				font: italic 500 14px/25px var(--body-font-family);
 				border: 1px solid #dcdcdc;
 				background: #ffffff;
 				padding: 6px 10px;
@@ -210,7 +210,7 @@
 
 			label {
 				position: relative;
-				font: normal normal 11px/45px $font;
+				font: normal normal 11px/45px var(--body-font-family);
 
 				input[type=checkbox] {
 					position: absolute;
@@ -360,7 +360,7 @@
 
 			//vertical-align: bottom;
 			color: var(--secondary-grey);
-			font: normal 500 14px/25px $font;
+			font: normal 500 14px/25px var(--body-font-family);
 
 			border: 0;
 

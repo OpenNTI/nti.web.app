@@ -9,7 +9,7 @@
 	    flex: 0 1 100%;
 		color: var(--primary-grey);
 	    float: left;
-	    font: normal 300 1.125em/1 "Open Sans", sans-serif;
+	    font: normal 300 1.125em/1 var(--body-font-family);
 	    margin-bottom: 10px;
 	}
 
@@ -20,7 +20,7 @@
 
 	.error-label {
 	    color: var(--primary-red);
-	    font: 200 14px 'Open Sans';
+	    font: 200 14px var(--body-font-family);
 	}
 
 	.form-container {
@@ -36,7 +36,7 @@
 			font-size: 14px;
 			margin-bottom: 1.25em;
 			padding: 0.65em;
-		    font-family: "Open Sans", sans-serif;
+		    font-family: var(--body-font-family);
 		    font-style: italic;
 		    color: var(--primary-grey);
 		    border: none;
@@ -49,7 +49,7 @@
 		    color: white;
 		    font-size: 14px;
 		    display: inline-block;
-		    font-family: "Open Sans", sans-serif;
+		    font-family: var(--body-font-family);
 		    font-weight: 500;
 		    border-radius: 2px;
 		    cursor: pointer;

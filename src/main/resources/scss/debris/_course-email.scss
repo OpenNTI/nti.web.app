@@ -1,7 +1,7 @@
 .email-window {
 	.window-header {
 		.title {
-			font: normal 300 18px/44px $font;
+			font: normal 300 18px/44px var(--body-font-family);
 			color: var(--secondary-grey);
 		}
 	}
@@ -41,7 +41,7 @@
 						}
 
 						.label {
-							font: normal italic 16px/30px $font;
+							font: normal italic 16px/30px var(--body-font-family);
 							padding: 0;
 							color: var(--tertiary-grey);
 							position: absolute;
@@ -57,7 +57,7 @@
 
 							input {
 								display: block;
-								font: normal 300 16px/30px $font;
+								font: normal 300 16px/30px var(--body-font-family);
 								border: 0;
 								margin: 0;
 								width: 100%;
@@ -162,7 +162,7 @@
 
 				.title {
 					input {
-					    font: normal 300 18px/30px $font;
+					    font: normal 300 18px/30px var(--body-font-family);
 					    padding-left: 0;
 					}
 				}

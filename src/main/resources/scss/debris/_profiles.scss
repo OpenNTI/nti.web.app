@@ -43,7 +43,7 @@
 		margin-top: 40px;
 		margin-bottom: 10px;
 		font-size: 1.875em;
-		font-family: $condensed-font;
+		font-family: var(--header-font-family);
 		font-weight: 700;
 		-webkit-font-smoothing: antialiased;
 		max-width: 600px;
@@ -556,7 +556,7 @@
 				@include ellipse;
 
 				color: var(--secondary-grey);
-				font: normal 400 0.9em/1.6em $font;
+				font: normal 400 0.9em/1.6em var(--body-font-family);
 			}
 
 			.name {
@@ -567,7 +567,7 @@
 				overflow: hidden;
 				@include ellipse();
 				margin: 0;
-				font: normal 600 1.6em/35px 'Open Sans Condensed', $font;
+				font: normal 600 1.6em/35px var(--header-font-family);
 
 				@include presence-style-sudo($x:0px, $y:15px, $xSide:'right', $side: 'before');
 				&.no-presence::before{
@@ -602,7 +602,7 @@
 			.button {
 				border-radius: 5px;
 				display: inline-block;
-				font: italic 600 0.9em/40px $font;
+				font: italic 600 0.9em/40px var(--body-font-family);
 				cursor: pointer;
 				float: left;
 				position: relative;
@@ -834,7 +834,7 @@
 		.meta{
 			margin-left: 45px;
 			.title{
-				font: normal 300 20px/30px $font;
+				font: normal 300 20px/30px var(--body-font-family);
 				font-size: 17px !important;
 
 				.name{
@@ -842,12 +842,12 @@
 				}
 			}
 			.time{
-				font: normal 400 12px/20px $font;
+				font: normal 400 12px/20px var(--body-font-family);
 				color: var(--tertiary-grey);
 				span{
 					&::after{
 						color: var(--tertiary-grey);
-						font: normal 500 12px/20px $font;
+						font: normal 500 12px/20px var(--body-font-family);
 						text-decoration: none !important;
 						position: static;
 						content: '\00B7';
@@ -895,14 +895,14 @@
 			color: var(--tertiary-grey);
 			.title{
 				color: var(--primary-grey);
-				font: normal 300 20px/30px $font;
+				font: normal 300 20px/30px var(--body-font-family);
 			}
 			.counts {
-				font: normal 400 12px/20px $font;
+				font: normal 400 12px/20px var(--body-font-family);
 				span{
 					&::after{
 						color: var(--tertiary-grey);
-						font: normal 500 12px/20px $font;
+						font: normal 500 12px/20px var(--body-font-family);
 						text-decoration: none !important;
 						position: static;
 						content: '\00B7';
@@ -939,7 +939,7 @@
 			padding-left: 26px;
 			margin-bottom: 15px;
 			width: 620px;
-			font: normal 500 1em/1 $font;
+			font: normal 500 1em/1 var(--body-font-family);
 			display: inline-block;
 			vertical-align: middle;
 
@@ -1039,7 +1039,7 @@
 				background: white;
 				border: 1px solid #dcdcdc;
 				color: #dcdcdc;
-				font: italic 400 14px/37px $font;
+				font: italic 400 14px/37px var(--body-font-family);
 				padding: 0 10px;
 				.editor {
 					margin: 10px 0;
@@ -1110,7 +1110,7 @@
 			&.context .meta {
 				position: relative;
 				overflow: hidden;
-				font: normal 400 20px "Open Sans",sans-serif;
+				font: normal 400 20px var(--body-font-family);
 				color: var(--primary-grey);
 				display: block;
 				height: 50px;
@@ -1147,7 +1147,7 @@
 
 			.location {
 				text-transform: uppercase;
-				font: normal 600 10px/20px $font;
+				font: normal 600 10px/20px var(--body-font-family);
 				color: var(--tertiary-grey) !important;
 				overflow: hidden;
 				@include ellipse;
@@ -1176,7 +1176,7 @@
 				& > .text {
 					position: relative;
 					overflow: hidden;
-					font: normal 400 16px $font;
+					font: normal 400 16px var(--body-font-family);
 					color: var(--primary-grey);
 					display: block;
 					height: 48px;
@@ -1215,7 +1215,7 @@
 			color: var(--tertiary-grey);
 			text-transform: uppercase;
 			padding: 0 20px;
-			font: normal 700 10px/40px $font;
+			font: normal 700 10px/40px var(--body-font-family);
 			min-height: 40px;
 			overflow: hidden;
 			@include ellipse;
@@ -1275,7 +1275,7 @@
 			.meta {
 				margin: 20px 70px 0 80px;
 				min-height: 60px;
-				font: normal 400 12px $font;
+				font: normal 400 12px var(--body-font-family);
 				color: var(--tertiary-grey);
 			}
 
@@ -1289,7 +1289,7 @@
 				span{
 					&::after{
 						color: var(--tertiary-grey);
-						font: normal 500 12px/20px $font;
+						font: normal 500 12px/20px var(--body-font-family);
 
 						position: static;
 						content: '\00B7';
@@ -1307,7 +1307,7 @@
 			.subject, .name.no-subject {
 				display: block;
 				color: var(--primary-grey);
-				font: normal 300 28px/35px $font;
+				font: normal 300 28px/35px var(--body-font-family);
 				max-width: 570px;
 				overflow: hidden;
 				white-space: nowrap;
@@ -1331,7 +1331,7 @@
 
 		.body{
 			margin: 20px 0;
-			font: normal 400 16px $font;
+			font: normal 400 16px var(--body-font-family);
 			color: var(--primary-grey);
 			@include text-pre-wrap;
 			@include attachment();
@@ -1345,7 +1345,7 @@
 			color: var(--primary-blue);
 
 			div {
-				font: normal 400 14px/20px $font;
+				font: normal 400 14px/20px var(--body-font-family);
 				cursor: pointer;
 				display: inline-block;
 				height: 20px;
@@ -1354,7 +1354,7 @@
 				margin: 0;
 				&:hover { opacity: 1; &::after{opacity: 0.75;} }
 				&::after{
-					font: normal 600 14px/20px $font;
+					font: normal 600 14px/20px var(--body-font-family);
 					position: static;
 					content: '\00B7';
 					text-decoration: none !important;
@@ -1405,10 +1405,10 @@
 			.time{
 				color: var(--tertiary-grey);
 				text-transform: uppercase;
-				font: normal 600 10px $font;
+				font: normal 600 10px var(--body-font-family);
 			}
 			.name {
-				font: normal 400 14px $font;
+				font: normal 400 14px var(--body-font-family);
 				color: var(--primary-blue);
 				cursor: pointer;
 			}
@@ -1417,7 +1417,7 @@
 		.body {
 			color: var(--primary-grey);
 			margin-top: 5px;
-			font: normal 500 14px/20px $font;
+			font: normal 500 14px/20px var(--body-font-family);
 
 			img {
 				max-width: 95%;
@@ -1457,7 +1457,7 @@
 					opacity: 0.6;
 					color: var(--tertiary-grey);
 					display: inline-block;
-					font: normal 600 10px $font;
+					font: normal 600 10px var(--body-font-family);
 					text-transform: uppercase;
 
 					&.link {
@@ -1474,7 +1474,7 @@
 					&::after {
 						content: '-';
 						text-decoration: none !important;
-						font: normal 600 14px/20px $font;
+						font: normal 600 14px/20px var(--body-font-family);
 						display: inline;
 						padding: 0.5em;
 					}
@@ -1548,7 +1548,7 @@
 				color: #eaeaea;
 				width: 0 0 1px 0;
 			}
-			font: normal 500 14px/38px $font;
+			font: normal 500 14px/38px var(--body-font-family);
 			color: var(--tertiary-grey);
 		}
 
@@ -1599,7 +1599,7 @@
 						overflow: hidden;
 						@include ellipse;
 						color: var(--tertiary-grey);
-						font: normal 600 10px/30px $font;
+						font: normal 600 10px/30px var(--body-font-family);
 						text-transform: uppercase;
 						cursor: pointer;
 					}
@@ -1613,7 +1613,7 @@
 							// color: #076da7;
 							// background-color: #e1f4fe;
 							word-break: break-all;
-							font: normal 400 14px/16px $font;
+							font: normal 400 14px/16px var(--body-font-family);
 							& > span {
 								position: relative;
 								display: inline-block;
@@ -1658,7 +1658,7 @@
 			border-width: 0;
 			box-shadow: none;
 			color: var(--primary-grey);
-			font: normal 300 20px/1 $font;
+			font: normal 300 20px/1 var(--body-font-family);
 			padding-top: 0;
 			padding-bottom: 0;
 			padding-right: 25px;
@@ -1704,7 +1704,7 @@
 
 	.input-wrap, .textbox-base{
 		input{
-			font: normal 600 1.6em/35px 'Open Sans Condensed', $font;
+			font: normal 600 1.6em/35px var(--header-font-family);
 			height: 40px;
 			padding-left: 20px;
 			padding-right: 30px;
@@ -1729,7 +1729,7 @@
 	position: relative;
 
 	.meta {
-		font: normal 500 14px/24px $font;
+		font: normal 500 14px/24px var(--body-font-family);
 		color: var(--secondary-grey);
 
 		.placeholder{
@@ -1848,7 +1848,7 @@
 
 		.empty-achievements-text {
 			color: var(--tertiary-grey);
-			font: normal 300 2em $font;
+			font: normal 300 2em var(--body-font-family);
 			margin: 2em auto;
 			width: 500px;
 			text-align: center;
@@ -1978,7 +1978,7 @@
 
 		.header {
 			color: var(--tertiary-grey);
-			font: normal bold 10px $font;
+			font: normal bold 10px var(--body-font-family);
 			text-transform: uppercase;
 			float: left;
 			clear: both;
@@ -1987,7 +1987,7 @@
 
 		.nti-checkbox {
 			color: var(--tertiary-grey);
-			font: normal 600 0.6em/14px $font;
+			font: normal 600 0.6em/14px var(--body-font-family);
 			text-transform: uppercase;
 			float: right;
 			margin: 0 10px;
@@ -1996,7 +1996,7 @@
 
 		.empty-badge-text {
 			color: var(--tertiary-grey);
-			font: italic 400 0.9em/20px $font;
+			font: italic 400 0.9em/20px var(--body-font-family);
 			margin-top: 20px;
 			padding: 0 8px;
 		}
@@ -2029,7 +2029,7 @@
 			position: absolute;
 			bottom: 0px;
 			left: 0px; right: 0px;
-			font: normal 600 0.9em/20px $font;
+			font: normal 600 0.9em/20px var(--body-font-family);
 			text-align: center;
 			background-color: rgba(255,255,255,0.95);
 			overflow: hidden;
@@ -2920,7 +2920,7 @@
 		label {
 			display: block;
 			padding: 0 20px;
-			font: normal 400 0.875rem/40px $font;
+			font: normal 400 0.875rem/40px var(--body-font-family);
 			cursor: pointer;
 
 			&:hover {
@@ -2936,7 +2936,7 @@
 			display: block;
 			cursor: pointer;
 			box-shadow: 0 -1px 0 0 #ededed;
-			font: normal 400 0.875rem/40px $font;
+			font: normal 400 0.875rem/40px var(--body-font-family);
 			padding: 0 20px;
 
 			input[type="checkbox"] {

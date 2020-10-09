@@ -284,7 +284,7 @@ canvas.x-component-course-assessment {
 		display: block;
 		font-size: 0.875rem;
 		color: var(--primary-grey);
-		font-family: $font;
+		font-family: var(--body-font-family);
 		margin: 0 1.25rem 0.25rem 0;
 	}
 	.publish-reset-text {
@@ -304,7 +304,7 @@ canvas.x-component-course-assessment {
 		line-height: 2rem;
 		font-weight: 100;
 		font-size: 0.875rem;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		background-color: var(--primary-red);
 		width: 140px;
 		cursor: pointer;
@@ -319,7 +319,7 @@ canvas.x-component-course-assessment {
 
 		.required-container {
 			.required-label {
-				font: normal 600 0.6rem/1 "Open Sans", sans-serif;
+				font: normal 600 0.6rem/1 var(--body-font-family);
 				text-transform: uppercase;
 				border: 1px solid #e2e2e2;
 				border-radius: 3px;
@@ -339,7 +339,7 @@ canvas.x-component-course-assessment {
 	}
 
 	.required-label {
-		font: normal 600 0.6rem/1 "Open Sans", sans-serif;
+		font: normal 600 0.6rem/1 var(--body-font-family);
 		text-transform: uppercase;
 		border: 1px solid #e2e2e2;
 		border-radius: 3px;
@@ -353,7 +353,7 @@ canvas.x-component-course-assessment {
 }
 
 .assignment-status {
-	font: normal 600 0.6rem/1 $font;
+	font: normal 600 0.6rem/1 var(--body-font-family);
 	text-transform: uppercase;
 	color: var(--tertiary-grey);
 	line-height: 20px;
@@ -478,12 +478,12 @@ canvas.x-component-course-assessment {
 		color: var(--primary-grey);
 		padding: 10px 30px;
 		.header {
-			font: normal 300 1.5em/2 $font;
+			font: normal 300 1.5em/2 var(--body-font-family);
 		}
 
 		.empty-text {
 			color: var(--tertiary-grey);
-			font: normal 300 2em $font;
+			font: normal 300 2em var(--body-font-family);
 			margin: 2em auto;
 			width: 500px;
 			text-align: center;
@@ -495,7 +495,7 @@ canvas.x-component-course-assessment {
 			.item {
 				cursor: pointer;
 				position: relative;
-				font: normal 400 0.9em/3 $font;
+				font: normal 400 0.9em/3 var(--body-font-family);
 
 				&.unread {
 					font-weight: 600;
@@ -514,7 +514,7 @@ canvas.x-component-course-assessment {
 					float: right;
 					width: 5em;//allow this to line up as if it were a 'left aligned column'.
 					color: var(--tertiary-grey);
-					font: normal 300 1em/3 $font;
+					font: normal 300 1em/3 var(--body-font-family);
 				}
 
 				.target {
@@ -525,7 +525,7 @@ canvas.x-component-course-assessment {
 		.more {
 			&.hidden {visibility: hidden;}
 			display: block;
-			font: normal 600 0.7em/2 $font;
+			font: normal 600 0.7em/2 var(--body-font-family);
 			text-align: center;
 			text-transform: uppercase;
 			text-decoration: none;
@@ -651,19 +651,19 @@ canvas.x-component-course-assessment {
 
 		.points {
 			color: var(--primary-grey);
-			font: normal 600 0.9em/2 $font;
+			font: normal 600 0.9em/2 var(--body-font-family);
 			display: inline-block;
 		}
 
 		.name {
-			font: normal 500 0.9em/2 $font;
+			font: normal 500 0.9em/2 var(--body-font-family);
 			color: var(--primary-grey);
 			margin-right: 0.5em;
 		}
 
 		.status {
 			text-transform: uppercase;
-			font: normal 600 0.6em/1 $font;
+			font: normal 600 0.6em/1 var(--body-font-family);
 			color: var(--tertiary-grey);
 			float: left;
 
@@ -678,14 +678,14 @@ canvas.x-component-course-assessment {
 		.timed {
 			margin-left: 0.5em;
 			text-transform: uppercase;
-			font: normal 600 0.6em/1 $font;
+			font: normal 600 0.6em/1 var(--body-font-family);
 			color: var(--primary-blue);
 			float: left;
 		}
 
 		.edit-assignment {
 			float: right;
-			font: normal 300 0.875rem/3 $font;
+			font: normal 300 0.875rem/3 var(--body-font-family);
 			color: var(--primary-blue);
 			padding-right: 1rem;
 			cursor: pointer;
@@ -693,7 +693,7 @@ canvas.x-component-course-assessment {
 
 		.score {
 			white-space: nowrap;
-			font: normal 400 0.875em/3 $font;
+			font: normal 400 0.875em/3 var(--body-font-family);
 			color: var(--tertiary-grey);
 			width: 8em;
 			float: right;
@@ -734,7 +734,7 @@ canvas.x-component-course-assessment {
 }
 
 .assignment-list-empty {
-	font: italic 300 1.5em/1.5 $font;
+	font: italic 300 1.5em/1.5 var(--body-font-family);
 	color: var(--primary-grey);
 	text-align: center;
 	margin-top: 50px;
@@ -908,7 +908,7 @@ canvas.x-component-course-assessment {
 			max-width: 420px;
 
 			.title {
-				font: normal 300 1.3em/1.5 $font;
+				font: normal 300 1.3em/1.5 var(--body-font-family);
 				color: var(--primary-grey);
 				overflow: hidden;
 				@include ellipsis();
@@ -919,7 +919,7 @@ canvas.x-component-course-assessment {
 			}
 
 			.meta {
-				font: normal 600 0.6em/1 $font;
+				font: normal 600 0.6em/1 var(--body-font-family);
 				text-transform: uppercase;
 				color: var(--tertiary-grey);
 				margin-top: 1em;
@@ -1207,7 +1207,7 @@ canvas.x-component-course-assessment {
 		cursor: pointer;
 		background: var(--primary-blue);
 		border-radius: 3px;
-		font: italic 600 0.9em/1 $font;
+		font: italic 600 0.9em/1 var(--body-font-family);
 		color: #fff;
 		padding: 0.8em 1.5em;
 		right: 15px;
@@ -1251,7 +1251,7 @@ canvas.x-component-course-assessment {
 	}
 
 	.action-items {
-		font: normal 600 0.7em/2 $font;
+		font: normal 600 0.7em/2 var(--body-font-family);
 		text-transform: uppercase;
 		&:empty {
 			color: var(--tertiary-grey);
@@ -1280,7 +1280,7 @@ canvas.x-component-course-assessment {
 			top: 1em;
 			right: 1em;
 			padding: 0.8em 0;
-			font: normal 300 0.9em/1 $font;
+			font: normal 300 0.9em/1 var(--body-font-family);
 			color: var(--primary-blue);
 			cursor: pointer;
 		}
@@ -1324,10 +1324,10 @@ canvas.x-component-course-assessment {
 		display: none;
 		margin: 11px 0 9px;
 		width: 10.7em;
-		font: normal 500 1em/1 $font;
+		font: normal 500 1em/1 var(--body-font-family);
 		border: 1px solid #dcdcdc;
 		& > * {
-			font: normal 500 1em/1 $font;
+			font: normal 500 1em/1 var(--body-font-family);
 			padding: 0.7em 1em;
 			margin: 0;
 			background: #fff;
@@ -1368,7 +1368,7 @@ canvas.x-component-course-assessment {
 	color: var(--secondary-grey);
 	z-index: 2;
 	position: relative;
-	font: normal 500 0.875em/3.5em $font;
+	font: normal 500 0.875em/3.5em var(--body-font-family);
 	display: flex;
 
 	&.disabled, .disabled & {
@@ -1399,7 +1399,7 @@ canvas.x-component-course-assessment {
 	}
 
 	input {
-		font: normal 500 1em/2 $font;
+		font: normal 500 1em/2 var(--body-font-family);
 		color: var(--secondary-grey);
 		background: none;
 		border: 0;
@@ -1473,7 +1473,7 @@ canvas.x-component-course-assessment {
 	.x-menu-body{
 		padding: 0;
 		.x-menu-item.group-by-option{
-			font: normal 500 0.9em/3.5em $font;
+			font: normal 500 0.9em/3.5em var(--body-font-family);
 			line-height: 40px;
 			color: var(--secondary-grey);
 			padding: 4px 5px 5px 2em;
@@ -1507,7 +1507,7 @@ canvas.x-component-course-assessment {
 		padding: 0;
 
 		.x-menu-item.letter-grade-option{
-			font: normal 500 0.8em/1 $font;
+			font: normal 500 0.8em/1 var(--body-font-family);
 			line-height: 25px;
 			padding: 4px 5px 5px 13px;
 			background: rgba(255,255,255,1);
@@ -1557,7 +1557,7 @@ canvas.x-component-course-assessment {
 			margin-left: 30px;
 			cursor: pointer;
 			color: var(--primary-blue);
-			font: normal 500 0.9em/1em $font;
+			font: normal 500 0.9em/1em var(--body-font-family);
 		}
 	}
 
@@ -1812,7 +1812,7 @@ canvas.x-component-course-assessment {
 	&.assignment-item {
 
 		.toolbar {
-			font: normal normal 12px $font;
+			font: normal normal 12px var(--body-font-family);
 			color: var(--primary-grey);
 			height: 50px;
 			white-space: nowrap;
@@ -2089,7 +2089,7 @@ canvas.x-component-course-assessment {
 				padding-right: 0.5em;
 
 				.status-item{
-					font: normal 600 0.6em/1 $font;
+					font: normal 600 0.6em/1 var(--body-font-family);
 					text-transform: uppercase;
 					text-align: right;
 
@@ -2160,7 +2160,7 @@ canvas.x-component-course-assessment {
 
 				.label {
 					color: var(--tertiary-grey);
-					font: normal 700 0.8em/3 $font;
+					font: normal 700 0.8em/3 var(--body-font-family);
 					text-transform: uppercase;
 				}
 
@@ -2168,10 +2168,10 @@ canvas.x-component-course-assessment {
 					overflow: hidden;
 					height: 2.859em;
 					width: 10.5em;
-					font: normal 500 1em/1 $font;
+					font: normal 500 1em/1 var(--body-font-family);
 					background: #fff;
 					& > * {
-						font: normal 500 1em/1 $font;
+						font: normal 500 1em/1 var(--body-font-family);
 						padding: 0.7em 1em;
 						margin: 0;
 						background: #fff;
@@ -2216,12 +2216,12 @@ canvas.x-component-course-assessment {
 			}
 
 			.title {
-				font: normal 300 1.3em/1 $font;
+				font: normal 300 1.3em/1 var(--body-font-family);
 				color: var(--primary-grey);
 
 				&.name {
 					text-transform: uppercase;
-					font: normal bold 1.2em/1 'Open Sans Condensed', $font;
+					font: normal bold 1.2em/1 var(--header-font-family);
 					display: inline-block;
 					position: relative;
 					max-width: 100%;
@@ -2236,7 +2236,7 @@ canvas.x-component-course-assessment {
 			}
 
 			.subtitle {
-				font: normal 600 0.6em/1 $font;
+				font: normal 600 0.6em/1 var(--body-font-family);
 				text-transform: uppercase;
 				color: var(--tertiary-grey);
 				margin-top: 1em;
@@ -2330,7 +2330,7 @@ canvas.x-component-course-assessment {
 		position: absolute;
 		top: 28px;
 		left: 30px;
-		font: normal 700 0.6em/1 $font;
+		font: normal 700 0.6em/1 var(--body-font-family);
 		color: var(--tertiary-grey);
 		text-transform: uppercase;
 		z-index: 1;
@@ -2349,7 +2349,7 @@ canvas.x-component-course-assessment {
 		top: 3.125em;
 		left: 30px;
 
-		font: italic normal 1em/1 $font;
+		font: italic normal 1em/1 var(--body-font-family);
 		color: var(--secondary-grey);
 	}
 

@@ -249,7 +249,7 @@
 			position: absolute;
 			top: 17px;
 			right: 25px;
-			font: normal 600 14px/20px $font;
+			font: normal 600 14px/20px var(--body-font-family);
 			color: var(--primary-blue);
 			cursor: pointer;
 			text-align: right;
@@ -260,7 +260,7 @@
 			.title {
 		    	display: inline-block;
 			    color: var(--secondary-grey);
-			    font: normal 500 14px/1 $font;
+			    font: normal 500 14px/1 var(--body-font-family);
 			    text-transform: capitalize;
 			    margin-bottom: 0;
 
@@ -359,7 +359,7 @@ input[type=number]{
 
 			textarea {
 				padding: 2px;
-			    font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
+			    font: normal 300 1.6em/1.2em var(--header-font-family);
 				width: 100%;
 				height: 64px;
 				resize: none;
@@ -433,19 +433,19 @@ input[type=number]{
 
 		// Style the place holder
 		textarea {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 		::-webkit-input-placeholder {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 		:-moz-placeholder {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 		::-moz-placeholder {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 		:-ms-input-placeholder {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 
 		.group.card {
@@ -521,7 +521,7 @@ input[type=number]{
 
 			.field.label, .field.title {
 				input {
-					font: normal 600 0.9375rem/26px $font;
+					font: normal 600 0.9375rem/26px var(--body-font-family);
 				}
 			}
 
@@ -588,7 +588,7 @@ input[type=number]{
 
 	.title {
 		color: var(--primary-grey);
-		font: normal 300 2.25em/1.15em $font;
+		font: normal 300 2.25em/1.15em var(--body-font-family);
 	}
 
 	.controls {
@@ -665,7 +665,7 @@ input[type=number]{
 .new-node {
 	> .title {
 		text-align: center;
-		font: normal 600 16px/42px $font;
+		font: normal 600 16px/42px var(--body-font-family);
 		color: var(--primary-blue);
 		background-color: #e8e8e8;
 		cursor: pointer;
@@ -677,7 +677,7 @@ input[type=number]{
 		input {
 			margin: 5px 10px;
 			padding: 5px 10px;
-			font: normal 400 0.9em/1.5em $font;
+			font: normal 400 0.9em/1.5em var(--body-font-family);
 			color: var(--secondary-grey);
 			@include experimental-value(width, calc(100% - 20px));
 
@@ -816,7 +816,7 @@ input[type=number]{
 		font-size: 0.875em;
 		margin-bottom: 1.25em;
 		padding: 0.35em;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		font-style: italic;
 		color: var(--primary-grey);
 		border: none;
@@ -945,7 +945,7 @@ input[type=number]{
 									}
 							}
 							.title {
-								font: normal 600 16px/42px $font;
+								font: normal 600 16px/42px var(--body-font-family);
 								background-color: #e2e2e2;
 							    padding-bottom: 3px;
 
@@ -1010,13 +1010,13 @@ input[type=number]{
 			background: #AFAFAF;
 			color: white;
 			border-radius: 0;
-			font: normal 700 10px/14px $font;
+			font: normal 700 10px/14px var(--body-font-family);
 			padding: 1px 2px;
 		}
 
 		.day {
 			color: #AFAFAF;
-			font: normal 600 12px/15px $font;
+			font: normal 600 12px/15px var(--body-font-family);
 			border-radius: 0;
 		}
 
@@ -1211,7 +1211,7 @@ input[type=number]{
 				.container {
 					> .error {
 						color: var(--primary-red);
-						font: italic 500 12px/17px $font;
+						font: italic 500 12px/17px var(--body-font-family);
 						margin: 5px;
 						text-align: center;
 					}
@@ -1246,7 +1246,7 @@ input[type=number]{
 					border: 1px solid var(--tertiary-grey-alt);
 					padding: 0 10px;
 					cursor: pointer;
-					font: italic 500 12px/32px $font;
+					font: italic 500 12px/32px var(--body-font-family);
 
 					@include icon($dropdown-am-pm-icon, $side: after, $top: 14px, $left: auto, $right: -13px);
 				}
@@ -1257,7 +1257,7 @@ input[type=number]{
 					right: 10px;
 					color: var(--tertiary-grey);
 					text-transform: uppercase;
-					font: normal 700 10px/34px $font;
+					font: normal 700 10px/34px var(--body-font-family);
 					z-index: 10;
 					cursor: pointer;
 					display: none;
@@ -1334,7 +1334,7 @@ input[type=number]{
 				.x-btn-inner {
 					color: var(--secondary-grey);
 					font-size: 14px;
-					font-family: $font;
+					font-family: var(--body-font-family);
 				}
 			}
 
@@ -1360,7 +1360,7 @@ input[type=number]{
 				font-weight: 500;
 				font-size: 14px;
 				text-align: center;
-				font-family: $font;
+				font-family: var(--body-font-family);
 			}
 
 			.x-datepicker-cell {
@@ -1373,7 +1373,7 @@ input[type=number]{
 					text-align: center;
 					margin: 4px 3px;
 					width: 26px;
-					font-family: $font;
+					font-family: var(--body-font-family);
 
 					&:hover {
 						color: var(--primary-blue);
@@ -1456,7 +1456,7 @@ input[type=number]{
 
 		.error {
 			color: var(--primary-red);
-			font: italic 500 12px $font;
+			font: italic 500 12px var(--body-font-family);
 			min-height: 12px;
 			margin-bottom: 5px;
 		}
@@ -1540,7 +1540,7 @@ input[type=number]{
 	}
 
 	.overview-group-title {
-		font: normal 400 1.5rem/2.8rem $condensed-font;
+		font: normal 400 1.5rem/2.8rem var(--header-font-family);
 		color: white;
 	}
 
@@ -1559,7 +1559,7 @@ input[type=number]{
 			padding-top: 2rem;
 			background: rgba(255, 255, 255, 0.9);
 			color: var(--tertiary-grey);
-			font: normal 700 0.625rem/1.3 $font;
+			font: normal 700 0.625rem/1.3 var(--body-font-family);
 			text-transform: uppercase;
 			text-align: center;
 		}

@@ -69,7 +69,7 @@
 	}
 
 	.username, .message {
-		font: normal 400 0.875em/1.36 $font;
+		font: normal 400 0.875em/1.36 var(--body-font-family);
 	}
 
 
@@ -83,7 +83,7 @@
 	}
 
 	.date {
-		font: normal 600 0.625em/1 "Open Sans", sans-serif;
+		font: normal 600 0.625em/1 var(--body-font-family);
 		margin-top: 0.6em;
 		text-transform: uppercase;
 		color: var(--tertiary-grey);

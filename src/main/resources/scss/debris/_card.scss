@@ -42,7 +42,7 @@
 				text-transform: uppercase;
 				text-align: center;
 				font-weight: bold;
-				font-family: $condensed-font;
+				font-family: var(--header-font-family);
 				font-size: 1.1625rem;
 				overflow: hidden;
 				text-overflow: ellipsis;

@@ -29,14 +29,14 @@
 	}
 
 	.title {
-		font-family: $font;
+		font-family: var(--body-font-family);
 		font-size: 18px;
 		font-style: italic;
 		color: var(--secondary-grey);
 	}
 
 	.message {
-		font-family: $font;
+		font-family: var(--body-font-family);
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 600;
@@ -64,7 +64,7 @@
 			display: inline-block;
 			white-space: nowrap;
 			text-transform: uppercase;
-			font-family: $font;
+			font-family: var(--body-font-family);
 			font-size: 12px;
 			font-style: normal;
 			font-weight: 600;

@@ -59,12 +59,12 @@
 				color: black;
 				border-radius: 0;
 				padding-bottom: 1px;
-				font: normal 700 0.7em/1.1em $font;
+				font: normal 700 0.7em/1.1em var(--body-font-family);
 			}
 
 			div:last-child {
 				color: white;
-				font: normal 500 0.8em/1.3em $font;
+				font: normal 500 0.8em/1.3em var(--body-font-family);
 				border-radius: 0;
 			}
 		}
@@ -111,7 +111,7 @@
 			&.nosubmit {
 				color: var(--tertiary-grey);
 			}
-			font: normal 700 0.6em/1.2em $font;
+			font: normal 700 0.6em/1.2em var(--body-font-family);
 			text-transform: uppercase;
 
 			&.start, &.course {
@@ -125,7 +125,7 @@
 		}
 		.title {
 			color: var(--primary-grey);
-			font: normal 300 2.25em/1.15em $font;
+			font: normal 300 2.25em/1.15em var(--body-font-family);
 		}
 
 	}
@@ -134,7 +134,7 @@
 		position: relative;
 		cursor: pointer;
 		color: var(--primary-blue);
-		font: normal 400 1em/3.15em $font;
+		font: normal 400 1em/3.15em var(--body-font-family);
 		border:{
 			style: solid;
 			color: #ededed;
@@ -194,14 +194,14 @@
 			margin: 15px 0;
 
 			.title {
-				font: italic 500 1.125em/1.5em $font;
+				font: italic 500 1.125em/1.5em var(--body-font-family);
 				color: var(--primary-grey);
 				overflow: hidden;
 				@include ellipse;
 			}
 
 			span {
-				font: normal 0.75em/1em $font;
+				font: normal 0.75em/1em var(--body-font-family);
 				color: var(--tertiary-grey);
 			}
 
@@ -266,7 +266,7 @@
 			height: 50%;
 
 			.label {
-				font: normal 600 0.6em/1.6em $font;
+				font: normal 600 0.6em/1.6em var(--body-font-family);
 				color: var(--secondary-grey);
 				text-transform: uppercase;
 				overflow: hidden;
@@ -275,7 +275,7 @@
 
 			.title {
 				color: var(--primary-grey);
-				font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
+				font: normal 300 1.6em/1.2em var(--header-font-family);
 				overflow: hidden;
 				//@include ellipse();
 				height: 64px;
@@ -288,7 +288,7 @@
 			}
 
 			.comments{
-				font: normal 600 0.6em/1.6em $font;
+				font: normal 600 0.6em/1.6em var(--body-font-family);
 				color: var(--tertiary-grey);
 			}
 		}
@@ -321,7 +321,7 @@
 	.flyout-inner {
 		background-color: rgb(15, 45, 53);
 		font-size: 10px;
-		font-family: "Open Sans", sans-serif;
+		font-family: var(--body-font-family);
 		cursor: pointer;
 		padding: 0 20px;
 
@@ -515,7 +515,7 @@
 				&::before {
 					content: 'viewed';
 					text-transform: uppercase;
-					font: normal 500 0.6em/24px "Open Sans",sans-serif;
+					font: normal 500 0.6em/24px var(--body-font-family);
 					position: absolute;
 					top: 5px;
 					right: 5px;
@@ -577,7 +577,7 @@
 						background: none;
 						color: var(--tertiary-grey);
 						text-transform: uppercase;
-						font-family: "Open Sans", sans-serif;
+						font-family: var(--body-font-family);
 						padding: 0;
 						cursor: pointer;
 						border: none;
@@ -600,7 +600,7 @@
 								background: none;
 								color: var(--tertiary-grey);
 								text-transform: uppercase;
-								font-family: "Open Sans", sans-serif;
+								font-family: var(--body-font-family);
 								font-size: 10px;
 								padding: 0;
 								cursor: pointer;
@@ -613,7 +613,7 @@
 							ul {
 								background-color: rgb(15, 45, 53);
 								font-size: 10px;
-								font-family: "Open Sans", sans-serif;
+								font-family: var(--body-font-family);
 								cursor: pointer;
 								padding: 0 20px;
 
@@ -668,7 +668,7 @@
 						cursor: pointer;
 						color: #ebebeb;
 						padding: 8px 10px;
-						font: normal 400 1.1em 'Open Sans Condensed', $font;
+						font: normal 400 1.1em var(--header-font-family);
 						min-height: 53px;
 						border:{
 							color: #0f2d35;
@@ -683,7 +683,7 @@
 						}
 
 						.comments, .viewed, .required-value {
-							font: normal 700 0.6em/1.3em $font;
+							font: normal 700 0.6em/1.3em var(--body-font-family);
 							color: var(--secondary-grey);
 							text-transform: uppercase;
 						}
@@ -719,7 +719,7 @@
 
 	h2 {
 		margin: 5em 0 0 -3.05em;
-		font: normal 600 0.6em/2em $font;
+		font: normal 600 0.6em/2em var(--body-font-family);
 		color: #fff;
 		text-transform: uppercase;
 
@@ -852,14 +852,14 @@
 
 			div {
 				display: inline-block;
-				font: normal 700 0.6em/1.6em $font;
+				font: normal 700 0.6em/1.6em var(--body-font-family);
 				text-transform: uppercase;
 				color: var(--primary-blue);
 				cursor: pointer;
 
 				&::after {
 					color: var(--tertiary-grey);
-					font: normal 500 1.2em $font;
+					font: normal 500 1.2em var(--body-font-family);
 					text-decoration: none !important;
 					position: static;
 					content: '\00B7';

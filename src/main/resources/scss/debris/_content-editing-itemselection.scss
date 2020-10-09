@@ -223,7 +223,7 @@
 
     				.title {
 						color: var(--primary-grey);
-						font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
+						font: normal 300 1.6em/1.2em var(--header-font-family);
 						overflow: hidden;
 						height: 64px;
 						margin-bottom: 6px;
@@ -559,7 +559,7 @@
 				padding: 10px 45px 10px 0;
 
 				.title {
-					font: normal 600 15px/20px $font;
+					font: normal 600 15px/20px var(--body-font-family);
 					max-height: 40px;
 					overflow: hidden;
 					margin-bottom: 5px;
@@ -571,7 +571,7 @@
 					max-height: 3em;
 					overflow: hidden;
 					margin-top: 5px;
-					font: normal normal 12px/1 $font;
+					font: normal normal 12px/1 var(--body-font-family);
 					color: var(--primary-grey);
 				}
 			}

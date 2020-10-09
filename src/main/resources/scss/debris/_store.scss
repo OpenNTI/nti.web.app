@@ -2,7 +2,7 @@
 	input[type=text] {
 		display: inline-block;
 		height: 36px;
-		font: normal normal 14px/20px $font;
+		font: normal normal 14px/20px var(--body-font-family);
 		color: var(--secondary-grey);
 		background: #fff;
 		padding: 0 12px;
@@ -126,7 +126,7 @@
 		float: right;
 		white-space: nowrap;
 		color: var(--primary-grey);
-		font: normal 600 16px/30px $font;
+		font: normal 600 16px/30px var(--body-font-family);
 		min-width: 75px;
 		text-align: center;
 		margin: 2px 8px 0 0;
@@ -157,7 +157,7 @@
 
 		.title, .byline {
 			color: var(--primary-grey);
-			font: normal 600 14px/20px $font;
+			font: normal 600 14px/20px var(--body-font-family);
 			overflow: hidden;
 			//@include ellipse;
 		}
@@ -173,7 +173,7 @@
 		.button {
 			display: inline-block;
 			color: var(--primary-blue);
-			font: normal 500 12px/20px $font;
+			font: normal 500 12px/20px var(--body-font-family);
 			white-space: nowrap;
 			cursor: pointer;
 		}
@@ -244,7 +244,7 @@
 				cursor: pointer;
 				padding: 0 15px;
 				display: inline-block;
-				font: normal 700 10px/36px $font;
+				font: normal 700 10px/36px var(--body-font-family);
 				text-transform: uppercase;
 				white-space: nowrap;
 
@@ -340,7 +340,7 @@
 
 			div {
 				display: inline-block;
-				font: normal 600 10px/15px $font;
+				font: normal 600 10px/15px var(--body-font-family);
 				text-transform: uppercase;
 				color: var(--tertiary-grey);
 				padding-top: 25px;
@@ -413,7 +413,7 @@
 		right: 0;
 		overflow: hidden;
 		background: var(--primary-red);
-		font: normal 600 12px $font;
+		font: normal 600 12px var(--body-font-family);
 
 		.label {
 			float: left;
@@ -459,7 +459,7 @@
 			display: none;
 			text-align: left;
 			color: var(--secondary-grey);
-			font: normal normal 11px/45px $font;
+			font: normal normal 11px/45px var(--body-font-family);
 
 			&.active {
 				display: block;
@@ -550,7 +550,7 @@
 			y: auto; //scroll;
 		}
 
-		font: normal 400 14px/25px $font;
+		font: normal 400 14px/25px var(--body-font-family);
 	}
 
 	&.activation-complete {
@@ -577,7 +577,7 @@
 
 .missing-context-msg {
 	padding: 10px 18px 0;
-	font: normal 600 10px/30px $font;
+	font: normal 600 10px/30px var(--body-font-family);
 	color: #FD817F;
 	box-shadow: inset 0 -1px 0 0 #ededed;
 	text-transform: uppercase;
@@ -642,10 +642,10 @@
 			border-bottom-width: 1px;
 			text-align: center;
 			color: var(--secondary-grey);
-			font: normal 600 16px/45px $font;
+			font: normal 600 16px/45px var(--body-font-family);
 
 			div {
-				font: normal 400 12px/20px $font;
+				font: normal 400 12px/20px var(--body-font-family);
 				color: var(--tertiary-grey);
 				margin: -10px 0 10px;
 				cursor: default;
@@ -662,7 +662,7 @@
 		}
 
 		th {
-			font: normal 600 10px/30px $font;
+			font: normal 600 10px/30px var(--body-font-family);
 			color: var(--tertiary-grey);
 			text-transform: uppercase;
 			vertical-align: bottom;
@@ -735,7 +735,7 @@
 		top: 5px;
 		left: 15px;
 		right: 0;
-		font: italic normal 14px/36px $font;
+		font: italic normal 14px/36px var(--body-font-family);
 	}
 
 	div.message {
@@ -744,7 +744,7 @@
 
 	.coupon {
 		text-transform: uppercase;
-		font: normal 600 10px/20px $font;
+		font: normal 600 10px/20px var(--body-font-family);
 		color: var(--primary-green);
 		display: block;
 		margin-top: 10px;
@@ -773,7 +773,7 @@
 	legend {
 		display: inline-block;
 		color: var(--secondary-grey);
-		font: normal 700 14px/20px $font;
+		font: normal 700 14px/20px var(--body-font-family);
 
 		&.card, &.location {
 			position: relative;
@@ -797,7 +797,7 @@
 
 	label {
 		display: block;
-		font: normal normal 14px/30px $font;
+		font: normal normal 14px/30px var(--body-font-family);
 
 		input[type=text] {
 			margin: 5px 10px 0 0;
@@ -853,7 +853,7 @@
 		display: inline-block;
 		min-width: 60px;
 		margin: 35px 40px 0 0;
-		font: normal normal 14px/20px $font;
+		font: normal normal 14px/20px var(--body-font-family);
 		color: var(--primary-grey);
 
 		&:empty {
@@ -880,7 +880,7 @@
 
 .x-component-purchasecomplete-panel {
 	padding: 0 15px 20px 80px;
-	font: normal 400 14/25px $font;
+	font: normal 400 14/25px var(--body-font-family);
 	color: var(--secondary-grey);
 
 	.gap {
@@ -900,7 +900,7 @@
 	h3 {
 		margin: 0;
 		color: var(--primary-grey);
-		font: normal 400 21px/30px $font;
+		font: normal 400 21px/30px var(--body-font-family);
 	}
 
 	[data-label] {
@@ -910,7 +910,7 @@
 		position: relative;
 		display: inline-block;
 		min-width: 250px;
-		font: normal 600 14px/30px $font;
+		font: normal 600 14px/30px var(--body-font-family);
 		color: var(--secondary-grey);
 		background: #eeeeee;
 		border-radius: 3px;

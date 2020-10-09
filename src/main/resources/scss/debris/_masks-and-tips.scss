@@ -56,7 +56,7 @@ body > .x-mask {
 	.x-mask-msg-text {
 		padding: 10px 10px 10px 32px;
 		color: #555;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		border: none;
 		background: none !important;
 
@@ -151,12 +151,12 @@ body > .x-mask {
 
 	h2 {
 		margin: 0;
-		font: normal 600 1.45em/1 'Open Sans Condensed', $font;
+		font: normal 600 1.45em/1 var(--header-font-family);
 		text-transform: uppercase;
 	}
 
 	p {
-		font: normal 500 1.3em/1.5 $font;
+		font: normal 500 1.3em/1.5 var(--body-font-family);
 		color: var(--tertiary-grey);
 		text-transform: none;
 		margin: 5px 0;
@@ -294,7 +294,7 @@ body > .x-mask {
 		left: 0; right: 0;
 		background-color: rgba(245,245,245,0.96);
 		color: #555;
-		font-family: $font;
+		font-family: var(--body-font-family);
 	}
 	&::after {
 		z-index: 11;

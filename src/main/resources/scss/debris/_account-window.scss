@@ -48,7 +48,7 @@
 
 		.x-btn-inner {
 			text-transform: uppercase;
-			font: normal 600 12px/35px $font;
+			font: normal 600 12px/35px var(--body-font-family);
 			color: var(--secondary-grey);
 			padding: 0 10px;
 		}
@@ -370,7 +370,7 @@
 			}
 
 			color: var(--secondary-grey);
-			font: normal normal 0.9em/2 $font;
+			font: normal normal 0.9em/2 var(--body-font-family);
 		}
 
 		fieldset {
@@ -380,7 +380,7 @@
 
 		legend {
 			color: var(--secondary-grey);
-			font: normal 600 0.9em $font;
+			font: normal 600 0.9em var(--body-font-family);
 		}
 	}
 
@@ -413,18 +413,18 @@
 			color: var(--secondary-grey);
 
 			.title {
-				font: normal 300 19px/1 $font;
+				font: normal 300 19px/1 var(--body-font-family);
 			}
 
 			.sub{
-				font: normal 300 14px/1 $font;
+				font: normal 300 14px/1 var(--body-font-family);
 			}
 		}
 
 		.meta {
 			margin: 20px 34px;
 			color: var(--secondary-grey);
-			font: normal 300 18px/24px $font;
+			font: normal 300 18px/24px var(--body-font-family);
 
 			.link {
 				color: var(--primary-blue);
@@ -451,10 +451,10 @@
 	.header {
 		margin: 10px 15px;
 		color: var(--secondary-grey);
-		font: normal 400 14px/1 $font;
+		font: normal 400 14px/1 var(--body-font-family);
 
 		.title {
-			font: normal 300 18px/1 $font;
+			font: normal 300 18px/1 var(--body-font-family);
 			color: var(--primary-grey);
 		}
 
@@ -488,7 +488,7 @@
 				padding: 0 7px 0 9px;
 				color: var(--primary-blue);
 				cursor: pointer;
-				font: normal 300 14px/1 $font;
+				font: normal 300 14px/1 var(--body-font-family);
 				position: relative;
 
 				&.sending {
@@ -532,7 +532,7 @@
 
 		input{
 			color: var(--secondary-grey);
-			font: normal 500 14px/25px $font;
+			font: normal 500 14px/25px var(--body-font-family);
 			border: 0;
 			background: #ffffff;
 			padding: 6px 10px;
@@ -574,7 +574,7 @@
 		visibility: hidden;
 		color: var(--primary-red);
 		margin: 10px 15px;
-		font: normal 300 15px/1 $font;
+		font: normal 300 15px/1 var(--body-font-family);
 		line-height: 20px;
 		min-height: 20px;
 
@@ -611,7 +611,7 @@
 			float: right;
 			padding: 0 20px;
 			cursor: pointer;
-			font: normal 400 0.9em/40px $font;
+			font: normal 400 0.9em/40px var(--body-font-family);
 			text-align: center;
 			min-width: 90px;
 			color: var(--primary-grey);
@@ -651,10 +651,10 @@
 			color: var(--secondary-green);
 			position: relative;
 			padding: 48px 20px 5px 20px;
-			font: normal 300 16px/1 $font;
+			font: normal 300 16px/1 var(--body-font-family);
 
 			.title{
-				font: normal 300 21px/1 $font;
+				font: normal 300 21px/1 var(--body-font-family);
 			}
 
 			&::after{

@@ -47,14 +47,14 @@
 		margin-left: $thumbWidth+15px;
 
 		.title {
-			font: normal 600 15px/20px $font;
+			font: normal 600 15px/20px var(--body-font-family);
 			max-height: 40px; //line-height is 20px, max-height is 40px for two line limit.
 			overflow: hidden;
 			margin-bottom: 5px;
 			color: var(--primary-grey);
 		}
 		.byline {
-			font: normal 600 10px/10px $font;
+			font: normal 600 10px/10px var(--body-font-family);
 			text-transform: uppercase;
 			color: var(--primary-blue);
 
@@ -64,7 +64,7 @@
 		}
 		.description {
 			color: var(--primary-grey);
-			font: normal normal 12px/1rem $font;
+			font: normal normal 12px/1rem var(--body-font-family);
 			margin-top: 5px;
 			max-height: 2rem; //line-height is 1rem, 2rem max-height limits this to two lines.
 		}
@@ -136,7 +136,7 @@ a[href] {
 				padding: 0px 10px 0px 40px;
 				background-color: var(--primary-blue);
 				border: 1px solid var(--border-blue);
-				font: italic 500 14px/30px $font;
+				font: italic 500 14px/30px var(--body-font-family);
 				border-radius: 3px;
 				color: white;
 				position: relative;
@@ -191,7 +191,7 @@ a[href] {
 
 			.message {
 				color: var(--tertiary-grey);
-				font: normal 300 2em/4em "Open Sans Condensed", $font;
+				font: normal 300 2em/4em var(--header-font-family);
 			}
 		}
 
@@ -228,7 +228,7 @@ a[href] {
 				font-size: 12px;
 
 				.message {
-					font: normal 300 1.8em/2.7em "Open Sans Condensed", $font;
+					font: normal 300 1.8em/2.7em var(--header-font-family);
 				}
 			}
 		}

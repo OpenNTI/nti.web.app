@@ -131,7 +131,7 @@ $button-text-weights: 500,500,600,500;
 				size: 14px;
 				style: italic;
 				weight: 600;
-				family: $font;
+				family: var(--body-font-family);
 			}
 			color: #ffffff;
 			padding-right: 2px;

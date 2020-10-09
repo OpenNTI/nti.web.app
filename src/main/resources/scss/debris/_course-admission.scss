@@ -31,7 +31,7 @@
 				bottom: 0;
 				color: white;
 				background-color: rgba(0, 0, 0, 0.6);
-				font: normal 400 0.9em/1.2em $font;
+				font: normal 400 0.9em/1.2em var(--body-font-family);
 
 				.number {
 					font-size: 0.7em;
@@ -39,7 +39,7 @@
 				}
 
 				.title {
-					font: normal 600 1.2em/1.2em "Open Sans Condensed", $font;
+					font: normal 600 1.2em/1.2em var(--header-font-family);
 					overflow: hidden;
 					@include ellipsis();
 				}
@@ -53,7 +53,7 @@
 		}
 
 		.details {
-			font: normal 300 0.75em/1.6em $font;
+			font: normal 300 0.75em/1.6em var(--body-font-family);
 			padding: 15px;
 
 			.detail {
@@ -154,7 +154,7 @@
 
 	.header {
 		background-color: #efefef;
-		font: normal 600 0.6em/35px $font;
+		font: normal 600 0.6em/35px var(--body-font-family);
 		text-transform: uppercase;
 		color: var(--tertiary-grey);
 		height: 36px;
@@ -241,7 +241,7 @@
 	.admission-group {
 		padding-right: 280px;
 		.label {
-			font: normal 300 1.7em/2em $font;
+			font: normal 300 1.7em/2em var(--body-font-family);
 			color: var(--tertiary-grey);
 
 			&.error {
@@ -426,7 +426,7 @@
 
 		textarea {
 			background-color: white;
-			font-family: $font;
+			font-family: var(--body-font-family);
 		}
 
 		textarea::-webkit-input-placeholder {
@@ -435,17 +435,17 @@
 
 		textarea:-moz-placeholder {
 		    /* FF 4-18 */
-	    font: normal 300 1.3em/1 $font;
+	    font: normal 300 1.3em/1 var(--body-font-family);
 		}
 
 		textarea::-moz-placeholder {
 		    /* FF 19+ */
-		    font: normal 300 1.3em/1 $font;
+		    font: normal 300 1.3em/1 var(--body-font-family);
 		}
 
 		textarea:-ms-input-placeholder {
 		    /* IE 10+ */
-		    font: normal 300 1em/1 $font;
+		    font: normal 300 1em/1 var(--body-font-family);
 		}
 
 
@@ -503,7 +503,7 @@
 				border: 2px solid var(--primary-blue);
 				border-radius: 5px;
 				box-shadow: 0 0 15px 0 rgba(0,0,0,0.3);
-				font: normal 300 1em/1 $font;
+				font: normal 300 1em/1 var(--body-font-family);
 
 				.title {
 					font-size: 1.3em;
@@ -684,7 +684,7 @@
 		}
 
 		.enrollment-input {
-			font: normal 600 0.9em/20px $font;
+			font: normal 600 0.9em/20px var(--body-font-family);
 			display: inline-block;
 			color: var(--primary-grey);
 			margin: 2px 0;
@@ -1049,7 +1049,7 @@
 
 		p {
 			margin: 10px 0 0 0;
-			font: normal 300 1em/1.5em $font;
+			font: normal 300 1em/1.5em var(--body-font-family);
 			color: var(--secondary-grey);
 		}
 
@@ -1060,7 +1060,7 @@
 	}
 
 	.enrollment-link {
-		font: normal 400 0.9em/40px $font;
+		font: normal 400 0.9em/40px var(--body-font-family);
 		color: var(--primary-blue);
 		cursor: pointer;
 		display: inline;
@@ -1079,7 +1079,7 @@
 	color: var(--primary-grey);
 	padding: 0 230px 110px 0;
 	position: relative;
-	font: normal 300 1em/1 $font;
+	font: normal 300 1em/1 var(--body-font-family);
 
 	.subscribe-container {
 		right: 230px;
@@ -1303,7 +1303,7 @@
 .enrollment-gift-confirmation {
 	padding-right: 280px;
 	color: var(--primary-grey);
-	font: normal 300 1em/1 $font;
+	font: normal 300 1em/1 var(--body-font-family);
 
 	.title {
 		font-size: 1.5em;
@@ -1399,7 +1399,7 @@
 	}
 
 	.subscribe {
-		font: normal 600 0.9em/20px $font;
+		font: normal 600 0.9em/20px var(--body-font-family);
 		background-color: var(--quad-grey);
 		clear: both;
 		cursor: pointer;
@@ -1461,7 +1461,7 @@
 }
 
 .payment-verification {
-	font: normal 300 1em/1 $font;
+	font: normal 300 1em/1 var(--body-font-family);
 	color: var(--primary-grey);
 	overflow: hidden;
 	padding: 0 300px 140px 0;

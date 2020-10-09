@@ -9,7 +9,7 @@
 }
 
 @mixin icon-font() {
-	font-family: $icon-font;
+	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -414,7 +414,7 @@
 	padding: 5px;
 	color: var(--secondary-grey);
 	height: 30px;
-	font-family: $font;
+	font-family: var(--body-font-family);
 	//font-size: 15pt;
 	width: 100%;
 	border-radius: 3px;
@@ -710,7 +710,7 @@
 	.label{
 		margin-left: 25px;
 		white-space: nowrap;
-		font: normal bold 10px/20px $font;
+		font: normal bold 10px/20px var(--body-font-family);
 		text-transform: uppercase;
 		color: var(--tertiary-grey);
 	}

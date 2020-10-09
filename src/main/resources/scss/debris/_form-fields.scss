@@ -784,7 +784,7 @@ form.common-form {
 	}
 
 	input {
-		font-family: $font;
+		font-family: var(--body-font-family);
 		background: white;
 		border: none;
 		box-shadow: 0 0 0 1px var(--tertiary-grey);

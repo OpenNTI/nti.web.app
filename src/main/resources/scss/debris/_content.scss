@@ -195,7 +195,7 @@
 			}
 
 			.title {
-				font: 600 1.375em/1.4em $font;
+				font: 600 1.375em/1.4em var(--body-font-family);
 				display: inline-block;
 				max-width: 100%;
 				overflow: hidden;
@@ -206,7 +206,7 @@
 
 			.label {
 				white-space: nowrap;
-				font: normal 700 11px/15px $font;
+				font: normal 700 11px/15px var(--body-font-family);
 				text-transform: uppercase;
 				color: var(--secondary-grey-alt);
 				margin-bottom: -3px;
@@ -461,7 +461,7 @@ body .modal ~ .simple-popover-widget {
 	position: fixed;
 	background-color: #ffffff;
 	color: var(--secondary-grey);
-	font: normal 14px/22px $font;
+	font: normal 14px/22px var(--body-font-family);
 	padding: 15px;
 	border: 1px solid #dcdcdc;
 	border-radius: 3px;
@@ -523,7 +523,7 @@ body .modal ~ .simple-popover-widget {
 		font-size: 10px;
 		font-weight: 800;
 		font-style: normal;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		overflow: hidden;
 		text-transform: uppercase;
 		@include ellipse;
@@ -534,7 +534,7 @@ body .modal ~ .simple-popover-widget {
 		font-size: 11pt;
 		font-weight: 400;
 		font-style: normal;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		overflow: hidden;
 		@include ellipse;
 		margin-bottom: 6px;
@@ -578,7 +578,7 @@ body .modal ~ .simple-popover-widget {
     	background-color: white;
     	color: var(--primary-grey);
     	max-width: 300px;
-    	font: normal 600 1em/1.2 $font;
+    	font: normal 600 1em/1.2 var(--body-font-family);
     	padding: 3px;
     	box-shadow: 0 0 2px 0 rgba(0,0,0,0.35);
     	@include experimental(transition, all 0.5s);

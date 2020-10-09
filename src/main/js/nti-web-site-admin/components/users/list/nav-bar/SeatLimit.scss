@@ -5,12 +5,12 @@
 	border-bottom: 1px solid var(--border-grey-light);
 
 	.active {
-		font: normal 400 1.125rem/1.3 $body-font-family;
+		font: normal 400 1.125rem/1.3 var(--body-font-family);
 		color: var(--primary-grey);
 	}
 
 	.limit {
-		font: normal 600 0.75rem/1.3 $body-font-family;
+		font: normal 600 0.75rem/1.3 var(--body-font-family);
 		color: var(--tertiary-grey);
 		text-transform: uppercase;
 	}

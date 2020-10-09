@@ -172,7 +172,7 @@
 	.message-container {
 		color: var(--primary-grey);
 		padding-left: 80px;
-		font: normal 300 1em/1.3 $font;
+		font: normal 300 1em/1.3 var(--body-font-family);
 		min-height: 47px;
 		margin: 0 10px 30px 10px;
 
@@ -234,7 +234,7 @@
 			float: right;
 			padding: 0 20px;
 			cursor: pointer;
-			font: normal 400 0.9em/40px $font;
+			font: normal 400 0.9em/40px var(--body-font-family);
 			text-align: center;
 			min-width: 90px;
 
@@ -321,7 +321,7 @@
 	}
 
 	.error-text {
-		font: normal 500 1.1em/1.3 $font;
+		font: normal 500 1.1em/1.3 var(--body-font-family);
 		padding: 60px;
 		color: var(--primary-grey);
 	}
@@ -379,7 +379,7 @@
 		background-color: #efefef;
 		border-top: 1px solid #dcdcdc;
 		color: var(--secondary-grey);
-		font: normal 600 14px/42px $font;
+		font: normal 600 14px/42px var(--body-font-family);
 		position: relative;
 		margin-top: 10px;
 
@@ -551,7 +551,7 @@
 			cursor: pointer;
 			display: inline-block;
 			float: right;
-			font: italic 600 0.875em/40px $font;
+			font: italic 600 0.875em/40px var(--body-font-family);
 			color: white;
 			background-color: var(--primary-blue);
 			padding: 0 2em;

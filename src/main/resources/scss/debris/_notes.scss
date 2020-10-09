@@ -333,7 +333,7 @@
 			margin-left: 45px;
 			font-size: 14px;
 			line-height: default;
-			font-family: $font;
+			font-family: var(--body-font-family);
 
 			color: var(--primary-grey);
 			@include note-body;
@@ -478,7 +478,7 @@
 				max-width: 600px;
 				font-size: 40px;
 				color: var(--primary-grey);
-				font-family: 'Open Sans Condensed', $font;
+				font-family: var(--header-font-family);
 				word-wrap: nowrap;
 				overflow: hidden;
 				@include ellipsis;
@@ -663,7 +663,7 @@
 		}
 
 		.body {
-			font: 16px/24px $font;
+			font: 16px/24px var(--body-font-family);
 			margin-left: auto;
 		}
 
@@ -704,7 +704,7 @@
 		left: 0 !important;
 		right: 0 !important;
 		position: absolute;
-		font: italic 400 0.9em/2.1em $font;
+		font: italic 400 0.9em/2.1em var(--body-font-family);
 		padding: 0.5em;
 		margin: -0.8em 0 0 0;
 		color: var(--tertiary-grey);
@@ -820,7 +820,7 @@
 		overflow-wrap: break-word;
 		word-wrap: break-word;
 		word-break: break-word;
-		font: italic 400 0.9em/2.1em $font;
+		font: italic 400 0.9em/2.1em var(--body-font-family);
 		padding: 0.4em 0.5em;
 
 		&:not(.inline-editor):hover {

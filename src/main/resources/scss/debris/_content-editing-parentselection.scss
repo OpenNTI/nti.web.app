@@ -14,7 +14,7 @@
 
 	 & > .label {
 		color: var(--tertiary-grey);
-		font: normal 600 0.625em/1 $font;
+		font: normal 600 0.625em/1 var(--body-font-family);
 		text-transform: uppercase;
 		margin-bottom: 0.5em;
 	}
@@ -28,7 +28,7 @@
 			content: attr(data-label);
 			display: block;
 			color: var(--tertiary-grey);
-			font: normal 600 0.625em/1 $font;
+			font: normal 600 0.625em/1 var(--body-font-family);
 			text-transform: uppercase;
 			margin-bottom: 0.5em;
 		}
@@ -96,7 +96,7 @@
 			display: inline-block;
 			vertical-align: middle;
 			width: 200px;
-			font: normal 400 0.875rem/40px $font;
+			font: normal 400 0.875rem/40px var(--body-font-family);
 			overflow: hidden;
 			@include ellipse();
 		}
@@ -135,7 +135,7 @@
 	}
 
 	li {
-		font: normal 400 0.875em/20px $font;
+		font: normal 400 0.875em/20px var(--body-font-family);
 		padding: 8px;
 
 		&.current {
@@ -182,7 +182,7 @@
 			display: inline-block;
 			vertical-align: middle;
 			width: 200px;
-			font: normal 400 0.875rem/40px $font;
+			font: normal 400 0.875rem/40px var(--body-font-family);
 			overflow: hidden;
 			@include ellipse();
 		}

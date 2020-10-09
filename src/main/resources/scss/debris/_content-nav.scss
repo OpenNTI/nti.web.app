@@ -22,7 +22,7 @@
 
 		text-transform: uppercase;
 		color: var(--tertiary-grey);
-		font: normal 600 12px/59px $font;
+		font: normal 600 12px/59px var(--body-font-family);
 
 		.x-tab-icon-el {
 			width: 21px;
