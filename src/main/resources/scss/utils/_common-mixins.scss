@@ -349,12 +349,12 @@
 
 	}
 
-	scrollbar-face-color: opacify($nib,1);
-	scrollbar-highlight-color: opacify($nib,1);
-	scrollbar-3dlight-color: opacify($nib,1);
-	scrollbar-darkshadow-color: opacify($nib,1);
-	scrollbar-shadow-color: opacify($nib,1);
-	scrollbar-arrow-color: opacify($nib,1);
+	scrollbar-face-color: rgba($nib,1);
+	scrollbar-highlight-color: rgba($nib,1);
+	scrollbar-3dlight-color: rgba($nib,1);
+	scrollbar-darkshadow-color: rgba($nib,1);
+	scrollbar-shadow-color: rgba($nib,1);
+	scrollbar-arrow-color: rgba($nib,1);
 
 	@if $track == transparent {
 		$track: #fff;

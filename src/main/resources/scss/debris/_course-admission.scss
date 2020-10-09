@@ -249,7 +249,7 @@
 			}
 		}
 		.error-detail {
-			background-color:transparentize(var(--primary-red),.85);
+			background-color: rgba(var(--primary-red), 0.85);
 			border-radius:3px;
 			p {
 				padding:.5em 1em;
