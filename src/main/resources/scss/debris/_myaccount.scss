@@ -1,7 +1,7 @@
 
 
 .account-view {
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 	font: {size: 16px; style: normal; weight: 4;}
 	line-height: 25px;
 	@include side-panel-view-title;
@@ -13,13 +13,13 @@
 		min-height: 25px;
 		margin-left: 20px;
 
-		&.x-item-disabled { opacity: 0.5; cursor: default; &:hover{color:$secondary-grey;}}
+		&.x-item-disabled { opacity: 0.5; cursor: default; &:hover{color:var(--secondary-grey);}}
 		.x-mask { display: none; }
 	}
 	a.item {
 		cursor: pointer;
 
-		&:hover { color: $tertiary-grey; }
+		&:hover { color: var(--tertiary-grey); }
 		&:active { color: #424242; }
 
 		&:last-of-type {
@@ -47,7 +47,7 @@
 			color: #747474;
 			margin-left: 18px;
 			&:hover {
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 		}
 
@@ -61,7 +61,7 @@
 			border-left: 3px solid #f0f0f0;
 
 			&.unread {
-				border-left-color: $primary-blue;
+				border-left-color: var(--primary-blue);
 			}
 
 			&.loading {
@@ -72,7 +72,7 @@
 				line-height: normal;
 				font-size: 10px;
 				font-weight: 800;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				text-transform: uppercase;
 				@include ellipse;
 				overflow: hidden;

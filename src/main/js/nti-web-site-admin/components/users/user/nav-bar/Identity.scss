@@ -15,7 +15,7 @@
 		text-align: center;
 		font-size: 1.125rem;
 		margin-top: 0.5rem;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		max-width: 220px;
 		word-wrap: break-word;
 	}
@@ -27,7 +27,7 @@
 
 		a {
 			text-decoration: none;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 }

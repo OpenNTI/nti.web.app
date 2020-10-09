@@ -38,7 +38,7 @@ canvas.x-component-course-assessment {
 	margin-top: 70px;
 
 	.header {
-		color: #494949;
+		color: var(--primary-grey);
 		display: block;
 		font-size: 31px;
 		font-weight: 200;
@@ -65,7 +65,7 @@ canvas.x-component-course-assessment {
 		}
 
 		.title {
-			color: $secondary-green;
+			color: var(--secondary-green);
 		}
 
 		.bold {
@@ -74,7 +74,7 @@ canvas.x-component-course-assessment {
 
 		.red {
 			font-weight: 500;
-			color: $primary-red;
+			color: var(--primary-red);
 		}
 
 		&::after {
@@ -84,7 +84,7 @@ canvas.x-component-course-assessment {
 
 	.fake-questions {
 		.question {
-			background: #fbfbfb;
+			background: var(--panel-background);
 			border: 1px solid #e2e2e2;
 			border-radius: 3px;
 			box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
@@ -92,7 +92,7 @@ canvas.x-component-course-assessment {
 
 			.prompt {
 				background: #ffffff;
-				color: #494949;
+				color: var(--primary-grey);
 				overflow: hidden;
 				position: relative;
 				padding: 17px 40px 15px 40px;
@@ -124,15 +124,15 @@ canvas.x-component-course-assessment {
 					position: relative;
 					min-height: 38px;
 					background: #ffffff;
-					border: 1px solid #b8b8b8;
+					border: 1px solid var(--tertiary-grey);
 
 					.answer {
 						position: relative;
-						color: #494949;
+						color: var(--primary-grey);
 						vertical-align: middle;
 						min-height: 38px;
 						background: #ffffff;
-						border: 0px solid #b8b8b8;
+						border: 0px solid var(--tertiary-grey);
 						border-bottom-width: 1px;
 						padding-left: 54px;
 
@@ -186,7 +186,7 @@ canvas.x-component-course-assessment {
 	.inline-publish-editor > .label, .inline-due-date-editor > .label {
 		font-size: 0.875em;
 		line-height: 14px;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		margin: 0.5em 0 0 -25px;
 
 		&.available-now {
@@ -230,7 +230,7 @@ canvas.x-component-course-assessment {
 	.contents > .error {
 		font-size: 0.875em;
 		line-height: 40px;
-		color: $primary-red;
+		color: var(--primary-red);
 	}
 
 	.footer {
@@ -243,12 +243,12 @@ canvas.x-component-course-assessment {
 			line-height: 40px;
 			padding: 0 1.75em;
 			font-size: 0.875em;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			cursor: pointer;
 		}
 
 		.save {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 		}
 	}
@@ -283,15 +283,15 @@ canvas.x-component-course-assessment {
 	.publish-reset-label {
 		display: block;
 		font-size: 0.875rem;
-		color: #494949;
-		font-family: $font;
+		color: var(--primary-grey);
+		font-family: var(--body-font-family);
 		margin: 0 1.25rem 0.25rem 0;
 	}
 	.publish-reset-text {
 		display: block;
 		font-size: 0.75rem;
 		line-height: 1.3;
-		color: #757474;
+		color: var(--secondary-grey);
 		margin: 0 1.25rem 1.25rem 0;
 	}
 	.publish-reset {
@@ -304,8 +304,8 @@ canvas.x-component-course-assessment {
 		line-height: 2rem;
 		font-weight: 100;
 		font-size: 0.875rem;
-		font-family: $font;
-		background-color: #F35252;
+		font-family: var(--body-font-family);
+		background-color: var(--primary-red);
 		width: 140px;
 		cursor: pointer;
 	}
@@ -319,7 +319,7 @@ canvas.x-component-course-assessment {
 
 		.required-container {
 			.required-label {
-				font: normal 600 0.6rem/1 "Open Sans", sans-serif;
+				font: normal 600 0.6rem/1 var(--body-font-family);
 				text-transform: uppercase;
 				border: 1px solid #e2e2e2;
 				border-radius: 3px;
@@ -327,7 +327,7 @@ canvas.x-component-course-assessment {
 				margin-right: 1rem;
 				padding: 5px;
 				padding: 0.25rem;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 		}
 	}
@@ -339,23 +339,23 @@ canvas.x-component-course-assessment {
 	}
 
 	.required-label {
-		font: normal 600 0.6rem/1 "Open Sans", sans-serif;
+		font: normal 600 0.6rem/1 var(--body-font-family);
 		text-transform: uppercase;
 		border: 1px solid #e2e2e2;
 		border-radius: 3px;
 		padding: 5px;
 		padding: 0.25rem;
 		margin-left: 2rem;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		display: inline-block;
 		margin-bottom: 1rem;
 	}
 }
 
 .assignment-status {
-	font: normal 600 0.6rem/1 $font;
+	font: normal 600 0.6rem/1 var(--body-font-family);
 	text-transform: uppercase;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 	line-height: 20px;
 
 	* {
@@ -381,32 +381,32 @@ canvas.x-component-course-assessment {
 			margin-right: 0.3em;
 
 			&.ontime {
-				color: $secondary-green;
+				color: var(--secondary-green);
 			}
 		}
 
 		.completed-errors {
-			color: $primary-red;
+			color: var(--primary-red);
 			margin-right: 0.3em;
 		}
 	}
 
     .excused{
         padding-left: 6px;
-        color: $primary-red;
+        color: var(--primary-red);
     }
 
 	.due{
 		&.today {
-		 color: $primary-orange;
+		 color: var(--primary-orange);
 		}
 
 		&.late {
-			color: $primary-red;
+			color: var(--primary-red);
 		}
 
 		&.nosubmit {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 }
@@ -431,7 +431,7 @@ canvas.x-component-course-assessment {
 		.header {
 			background: none;
 			box-shadow: inset 0 -1px 0 0 #e0e0e0;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		.outline-list {
@@ -449,7 +449,7 @@ canvas.x-component-course-assessment {
 				border-radius: 10em;
 				padding: 0.4em 0.8em 0.3em;
 				color: #fff;
-				background: $primary-blue;
+				background: var(--primary-blue);
 
 				&.hidden {
 					display: none
@@ -462,10 +462,10 @@ canvas.x-component-course-assessment {
 			}
 
 			&.x-item-selected {
-				background: $primary-blue;
+				background: var(--primary-blue);
 
 				.count {
-					color: $primary-blue;
+					color: var(--primary-blue);
 					background: #fff;
 				}
 			}
@@ -475,15 +475,15 @@ canvas.x-component-course-assessment {
 
 	&.course-assessment-activity {
 		overflow: {x: hidden; y: auto;}
-		color: $primary-grey;
+		color: var(--primary-grey);
 		padding: 10px 30px;
 		.header {
-			font: normal 300 1.5em/2 $font;
+			font: normal 300 1.5em/2 var(--body-font-family);
 		}
 
 		.empty-text {
-			color: $tertiary-grey;
-			font: normal 300 2em $font;
+			color: var(--tertiary-grey);
+			font: normal 300 2em var(--body-font-family);
 			margin: 2em auto;
 			width: 500px;
 			text-align: center;
@@ -495,13 +495,13 @@ canvas.x-component-course-assessment {
 			.item {
 				cursor: pointer;
 				position: relative;
-				font: normal 400 0.9em/3 $font;
+				font: normal 400 0.9em/3 var(--body-font-family);
 
 				&.unread {
 					font-weight: 600;
 					&::before {
 						content: '';
-						background: $primary-blue;
+						background: var(--primary-blue);
 						position: absolute;
 						overflow: hidden;
 						border-radius: 10em;
@@ -513,23 +513,23 @@ canvas.x-component-course-assessment {
 				time {
 					float: right;
 					width: 5em;//allow this to line up as if it were a 'left aligned column'.
-					color: $tertiary-grey;
-					font: normal 300 1em/3 $font;
+					color: var(--tertiary-grey);
+					font: normal 300 1em/3 var(--body-font-family);
 				}
 
 				.target {
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 		}
 		.more {
 			&.hidden {visibility: hidden;}
 			display: block;
-			font: normal 600 0.7em/2 $font;
+			font: normal 600 0.7em/2 var(--body-font-family);
 			text-align: center;
 			text-transform: uppercase;
 			text-decoration: none;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			margin: 2em;
 			cursor: pointer;
 		}
@@ -558,7 +558,7 @@ canvas.x-component-course-assessment {
 			top: -2.5em;
 			font-size: 0.6em;
 			font-weight: 600;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			width: 10.77em;
 		}
 
@@ -577,7 +577,7 @@ canvas.x-component-course-assessment {
 			}
 
 			.score .completed:not(.c0) {
-				color: $primary-green;
+				color: var(--primary-green);
 			}
 		}
 	}
@@ -650,25 +650,25 @@ canvas.x-component-course-assessment {
 		}
 
 		.points {
-			color: $primary-grey;
-			font: normal 600 0.9em/2 $font;
+			color: var(--primary-grey);
+			font: normal 600 0.9em/2 var(--body-font-family);
 			display: inline-block;
 		}
 
 		.name {
-			font: normal 500 0.9em/2 $font;
-			color: $primary-grey;
+			font: normal 500 0.9em/2 var(--body-font-family);
+			color: var(--primary-grey);
 			margin-right: 0.5em;
 		}
 
 		.status {
 			text-transform: uppercase;
-			font: normal 600 0.6em/1 $font;
-			color: $tertiary-grey;
+			font: normal 600 0.6em/1 var(--body-font-family);
+			color: var(--tertiary-grey);
 			float: left;
 
 			&.due {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 
 			.completed { display: none; }
@@ -678,28 +678,28 @@ canvas.x-component-course-assessment {
 		.timed {
 			margin-left: 0.5em;
 			text-transform: uppercase;
-			font: normal 600 0.6em/1 $font;
-			color: $primary-blue;
+			font: normal 600 0.6em/1 var(--body-font-family);
+			color: var(--primary-blue);
 			float: left;
 		}
 
 		.edit-assignment {
 			float: right;
-			font: normal 300 0.875rem/3 $font;
-			color: $primary-blue;
+			font: normal 300 0.875rem/3 var(--body-font-family);
+			color: var(--primary-blue);
 			padding-right: 1rem;
 			cursor: pointer;
 		}
 
 		.score {
 			white-space: nowrap;
-			font: normal 400 0.875em/3 $font;
-			color: $tertiary-grey;
+			font: normal 400 0.875em/3 var(--body-font-family);
+			color: var(--tertiary-grey);
 			width: 8em;
 			float: right;
 
 			.correct {
-				color: $primary-green;
+				color: var(--primary-green);
 			}
 		}
 
@@ -734,8 +734,8 @@ canvas.x-component-course-assessment {
 }
 
 .assignment-list-empty {
-	font: italic 300 1.5em/1.5 $font;
-	color: $primary-grey;
+	font: italic 300 1.5em/1.5 var(--body-font-family);
+	color: var(--primary-grey);
 	text-align: center;
 	margin-top: 50px;
 }
@@ -755,30 +755,30 @@ canvas.x-component-course-assessment {
 
 				&:hover {
 					background-color: #EAEAEA;
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 
 					&::after {
-						border-top-color: $secondary-grey;
+						border-top-color: var(--secondary-grey);
 					}
 				}
 
 				&::after {
 					content: '';
-					@include arrow($pointFrom: top, $color: $tertiary-grey);
+					@include arrow($pointFrom: top, $color: var(--tertiary-grey));
 					margin-top: 2px;
 				}
 
 				&.late {
 					&:hover {
-						color: $primary-red;
+						color: var(--primary-red);
 
 						&::after {
-							border-top-color: $primary-red;
+							border-top-color: var(--primary-red);
 						}
 					}
 
 					&:not(.nosubmit)::after {
-					    border-top-color: $primary-red;
+					    border-top-color: var(--primary-red);
 					}
 				}
 			}
@@ -838,11 +838,11 @@ canvas.x-component-course-assessment {
 	}
 
 	.x-menu-item.x-menu-item-checked:not(.avatar-toggle) {
-		background-color: $primary-blue;
+		background-color: var(--primary-blue);
 		color: white !important;
 
 		&.x-menu-item-active {
-			background-color: $primary-blue !important;
+			background-color: var(--primary-blue) !important;
 		}
 	}
 
@@ -865,7 +865,7 @@ canvas.x-component-course-assessment {
 
 .course-assessment-header, .course-assessment-admin {
 	.admin-list-header {
-		background: $quad-grey;
+		background: var(--quad-grey);
 		position: relative;
 		border-bottom: 1px solid #dddddd;
 
@@ -908,8 +908,8 @@ canvas.x-component-course-assessment {
 			max-width: 420px;
 
 			.title {
-				font: normal 300 1.3em/1.5 $font;
-				color: $primary-grey;
+				font: normal 300 1.3em/1.5 var(--body-font-family);
+				color: var(--primary-grey);
 				overflow: hidden;
 				@include ellipsis();
 			}
@@ -919,19 +919,19 @@ canvas.x-component-course-assessment {
 			}
 
 			.meta {
-				font: normal 600 0.6em/1 $font;
+				font: normal 600 0.6em/1 var(--body-font-family);
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				margin-top: 1em;
 
 				span {
 					display: inline-block;
-					&.link { color: $primary-blue; cursor: pointer; }
+					&.link { color: var(--primary-blue); cursor: pointer; }
 
 					&::before {
 						content: '\00B7';
 						margin: 0.5em;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 					}
 					&:first-of-type::before {
 						content: none;
@@ -951,7 +951,7 @@ canvas.x-component-course-assessment {
 				}
 
 				.status-item {
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 
@@ -1040,7 +1040,7 @@ canvas.x-component-course-assessment {
 				border-radius: 3px;
 				font-weight: 400;
 				font-size: 0.875em;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				padding: 0 15px 0 10px;
 
 				.empty {
@@ -1059,7 +1059,7 @@ canvas.x-component-course-assessment {
 					}
 
 					&:hover {
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 					}
 
 					&::after {
@@ -1070,7 +1070,7 @@ canvas.x-component-course-assessment {
 				@include icon($mv-dropdown-arrow_hover, $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
 
 				&:hover {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					@include icon($mv-dropdown-arrow, $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
 				}
 			}
@@ -1078,17 +1078,17 @@ canvas.x-component-course-assessment {
 	}
 
 	td.page-row {
-		background-color: $panel-background;
+		background-color: var(--panel-background);
 		text-align: center;
 		height: 60px;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font-size: 1.25em;
 		cursor: pointer;
 
 		@include icon($arrow-next_hover, $position: relative, $side: after);
 
 		&:hover {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			@include icon($arrow-next, $position: relative, $side: after);
 		}
@@ -1205,9 +1205,9 @@ canvas.x-component-course-assessment {
 		display: inline-block;
 		text-decoration: none;
 		cursor: pointer;
-		background: $primary-blue;
+		background: var(--primary-blue);
 		border-radius: 3px;
-		font: italic 600 0.9em/1 $font;
+		font: italic 600 0.9em/1 var(--body-font-family);
 		color: #fff;
 		padding: 0.8em 1.5em;
 		right: 15px;
@@ -1251,17 +1251,17 @@ canvas.x-component-course-assessment {
 	}
 
 	.action-items {
-		font: normal 600 0.7em/2 $font;
+		font: normal 600 0.7em/2 var(--body-font-family);
 		text-transform: uppercase;
 		&:empty {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			&::after { content: 'No Action Items'; }
 		}
 
 		& > div {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			display: inline-block;
-			&.overdue { color: $primary-red; }
+			&.overdue { color: var(--primary-red); }
 
 			&::before {
 				content: '\00B7';
@@ -1280,8 +1280,8 @@ canvas.x-component-course-assessment {
 			top: 1em;
 			right: 1em;
 			padding: 0.8em 0;
-			font: normal 300 0.9em/1 $font;
-			color: $primary-blue;
+			font: normal 300 0.9em/1 var(--body-font-family);
+			color: var(--primary-blue);
 			cursor: pointer;
 		}
 	}
@@ -1306,7 +1306,7 @@ canvas.x-component-course-assessment {
 			margin: 15px 0 0 75px;
 
 			.name {
-				color: $secondary-grey !important;
+				color: var(--secondary-grey) !important;
 				padding-right: 0.5em;
 				overflow: hidden;
 				@include ellipsis;
@@ -1324,14 +1324,14 @@ canvas.x-component-course-assessment {
 		display: none;
 		margin: 11px 0 9px;
 		width: 10.7em;
-		font: normal 500 1em/1 $font;
+		font: normal 500 1em/1 var(--body-font-family);
 		border: 1px solid #dcdcdc;
 		& > * {
-			font: normal 500 1em/1 $font;
+			font: normal 500 1em/1 var(--body-font-family);
 			padding: 0.7em 1em;
 			margin: 0;
 			background: #fff;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			position: relative;
 		}
 
@@ -1346,7 +1346,7 @@ canvas.x-component-course-assessment {
 			line-height: 1.35em;
 
 			&:focus{
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				color: white;
 			}
 
@@ -1356,7 +1356,7 @@ canvas.x-component-course-assessment {
 				position: absolute;
 				top: 2em;
 				right: 1.5em;
-				@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
+				@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: var(--secondary-grey));
 			}
 		}
 	}
@@ -1364,11 +1364,11 @@ canvas.x-component-course-assessment {
 
 .assignment-filterbar {
 	box-shadow: inset 0 -1px 0 0 #f1f1f1;
-	background: #fbfbfb;
-	color: $secondary-grey;
+	background: var(--panel-background);
+	color: var(--secondary-grey);
 	z-index: 2;
 	position: relative;
-	font: normal 500 0.875em/3.5em $font;
+	font: normal 500 0.875em/3.5em var(--body-font-family);
 	display: flex;
 
 	&.disabled, .disabled & {
@@ -1390,7 +1390,7 @@ canvas.x-component-course-assessment {
 
 	.create-assignment {
 		flex: 0 0 125px;
-		background-color: $primary-blue;
+		background-color: var(--primary-blue);
 		color: white;
 		cursor: pointer;
 		padding-left: 50px;
@@ -1399,8 +1399,8 @@ canvas.x-component-course-assessment {
 	}
 
 	input {
-		font: normal 500 1em/2 $font;
-		color: $secondary-grey;
+		font: normal 500 1em/2 var(--body-font-family);
+		color: var(--secondary-grey);
 		background: none;
 		border: 0;
 		width: 100%;
@@ -1422,7 +1422,7 @@ canvas.x-component-course-assessment {
 		@include icon($arrow-course-dropdown-light, $top:1.5em, $left:auto, $right:1em);
 
 		&:hover {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			&::after {
 				@include sprite($arrow-course-dropdown);
 			}
@@ -1446,7 +1446,7 @@ canvas.x-component-course-assessment {
 		padding-left: 3em;
 		@include icon($rhp-search, $top:1.1em, $left:1.5em);
 		&:hover {
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		input:invalid {
@@ -1473,26 +1473,26 @@ canvas.x-component-course-assessment {
 	.x-menu-body{
 		padding: 0;
 		.x-menu-item.group-by-option{
-			font: normal 500 0.9em/3.5em $font;
+			font: normal 500 0.9em/3.5em var(--body-font-family);
 			line-height: 40px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			padding: 4px 5px 5px 2em;
-			background: #fbfbfb;
+			background: var(--panel-background);
 
 			&.x-menu-item-checked{
 				color: white !important;
-				background: $primary-blue !important;
-				box-shadow: inset 0px 0 1px 1px $border-blue,
-					inset 3px 0 0 0 $border-blue;
+				background: var(--primary-blue) !important;
+				box-shadow: inset 0px 0 1px 1px var(--border-blue),
+					inset 3px 0 0 0 var(--border-blue);
 				@include icon($arrow-course-dropdown-white, $top:1.5em, $left:auto, $right:1em);
 
 				&.x-menu-item-active {
-					background: $primary-blue !important;
+					background: var(--primary-blue) !important;
 				}
 			}
 
 			&.x-menu-item-active{
-				color: $primary-grey;
+				color: var(--primary-grey);
 				background: #f0f0f0 !important;
 			}
 		}
@@ -1507,14 +1507,14 @@ canvas.x-component-course-assessment {
 		padding: 0;
 
 		.x-menu-item.letter-grade-option{
-			font: normal 500 0.8em/1 $font;
+			font: normal 500 0.8em/1 var(--body-font-family);
 			line-height: 25px;
 			padding: 4px 5px 5px 13px;
 			background: rgba(255,255,255,1);
 
 			&.x-menu-item-checked{
 				background: #f0f0f0;
-				color: $primary-grey;
+				color: var(--primary-grey);
 
 				&::after{
 					content: '';
@@ -1524,13 +1524,13 @@ canvas.x-component-course-assessment {
 					right: 1.7em;
 					left: auto;
 					background: none;
-					@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
+					@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: var(--secondary-grey));
 				}
 			}
 
 			&.x-menu-item-active{
 				color: #fff !important;
-				background: $primary-blue;
+				background: var(--primary-blue);
 			}
 		}
 	}
@@ -1556,8 +1556,8 @@ canvas.x-component-course-assessment {
 			display: inline-block;
 			margin-left: 30px;
 			cursor: pointer;
-			color: $primary-blue;
-			font: normal 500 0.9em/1em $font;
+			color: var(--primary-blue);
+			font: normal 500 0.9em/1em var(--body-font-family);
 		}
 	}
 
@@ -1629,13 +1629,13 @@ canvas.x-component-course-assessment {
 		&.warning-red,
 		&.over-time {
 			.time{
-				background-color: $primary-red;
+				background-color: var(--primary-red);
 				color: white;
 			}
 		}
 
 		&.warning-orange .time{
-			background-color: $primary-orange;
+			background-color: var(--primary-orange);
 			color: white;
 		}
 
@@ -1691,7 +1691,7 @@ canvas.x-component-course-assessment {
 		}
 
 		&.max-time .time {
-			background-color: $secondary-green;
+			background-color: var(--secondary-green);
 		}
 
 		.time {
@@ -1701,7 +1701,7 @@ canvas.x-component-course-assessment {
 			font-weight: 300;
 			font-size: 1.2em;
 			overflow: hidden;
-			background-color: $secondary-green;
+			background-color: var(--secondary-green);
 
 			.loading-bar {
 				position: absolute;
@@ -1745,7 +1745,7 @@ canvas.x-component-course-assessment {
 		.help {
 			line-height: 3em;
 			padding: 0 1em;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font-size: 0.9em;
 			cursor: pointer;
 		}
@@ -1763,10 +1763,10 @@ canvas.x-component-course-assessment {
 				line-height: 20px;
 				height: 20px;
 				text-align: left;
-				color: $primary-red;
+				color: var(--primary-red);
 
 				&.good {
-					color: $primary-green;
+					color: var(--primary-green);
 				}
 			}
 
@@ -1776,7 +1776,7 @@ canvas.x-component-course-assessment {
 				line-height: 40px;
 				margin-top: 10px;
 				text-align: center;
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				cursor: pointer;
 				border-radius: 3px;
 				font-style: italic;
@@ -1812,8 +1812,8 @@ canvas.x-component-course-assessment {
 	&.assignment-item {
 
 		.toolbar {
-			font: normal normal 12px $font;
-			color: $primary-grey;
+			font: normal normal 12px var(--body-font-family);
+			color: var(--primary-grey);
 			height: 50px;
 			white-space: nowrap;
 
@@ -1868,7 +1868,7 @@ canvas.x-component-course-assessment {
 					font-weight: 600;
 					padding: 4px;
 					padding-left: 11px;
-					color: #fa8700;
+					color: var(--primary-orange);
 					line-height: 1.2em;
 					opacity: 0;
 					transition-property: opacity;
@@ -1879,11 +1879,11 @@ canvas.x-component-course-assessment {
 					}
 
 					&.saved {
-						color: $secondary-green;
+						color: var(--secondary-green);
 					}
 
 					&.error {
-						color: $primary-red;
+						color: var(--primary-red);
 					}
 				}
 
@@ -1893,10 +1893,10 @@ canvas.x-component-course-assessment {
 			.path.part {
 				font-weight: 600;
 				cursor: pointer;
-				color: $primary-blue;
+				color: var(--primary-blue);
 
 				&.current {
-					color: $primary-grey;
+					color: var(--primary-grey);
 				}
 
 
@@ -1919,7 +1919,7 @@ canvas.x-component-course-assessment {
 				line-height: 49px;
 				display: inline-block;
 				font-style: italic;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				margin-right: 15px;
 				vertical-align: middle;
 
@@ -2031,7 +2031,7 @@ canvas.x-component-course-assessment {
 		}
 
 		&:not(.student-reader-header) .header {
-			background: #f8f8f8;
+			background: var(--quad-grey);
 			position: relative;
 			padding: 15px 30px;
 			border-bottom: 1px solid #dddddd;
@@ -2089,7 +2089,7 @@ canvas.x-component-course-assessment {
 				padding-right: 0.5em;
 
 				.status-item{
-					font: normal 600 0.6em/1 $font;
+					font: normal 600 0.6em/1 var(--body-font-family);
 					text-transform: uppercase;
 					text-align: right;
 
@@ -2098,21 +2098,21 @@ canvas.x-component-course-assessment {
 					}
 
 					.nosubmit {
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 					}
 
 					.late {
-						color: $primary-red;
+						color: var(--primary-red);
 					}
 
 					.ontime {
-						color: $secondary-green;
+						color: var(--secondary-green);
 					}
 
                     .excused{
                         &.on{
                             display: block;
-                            color: $primary-red;
+                            color: var(--primary-red);
                         }
 
                         &.off{
@@ -2151,16 +2151,16 @@ canvas.x-component-course-assessment {
 					text-align: right;
 					width: 10em;
 					line-height: 3;
-					color: $primary-red;
+					color: var(--primary-red);
 
 					&.good{
-						color: $primary-green;
+						color: var(--primary-green);
 					}
 				}
 
 				.label {
-					color: $tertiary-grey;
-					font: normal 700 0.8em/3 $font;
+					color: var(--tertiary-grey);
+					font: normal 700 0.8em/3 var(--body-font-family);
 					text-transform: uppercase;
 				}
 
@@ -2168,14 +2168,14 @@ canvas.x-component-course-assessment {
 					overflow: hidden;
 					height: 2.859em;
 					width: 10.5em;
-					font: normal 500 1em/1 $font;
+					font: normal 500 1em/1 var(--body-font-family);
 					background: #fff;
 					& > * {
-						font: normal 500 1em/1 $font;
+						font: normal 500 1em/1 var(--body-font-family);
 						padding: 0.7em 1em;
 						margin: 0;
 						background: #fff;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 						position: relative;
 					}
 
@@ -2196,7 +2196,7 @@ canvas.x-component-course-assessment {
 							position: absolute;
 							top: 1.8em;
 							right: 1.5em;
-							@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
+							@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: var(--secondary-grey));
 						}
 					}
 				}
@@ -2216,12 +2216,12 @@ canvas.x-component-course-assessment {
 			}
 
 			.title {
-				font: normal 300 1.3em/1 $font;
-				color: $primary-grey;
+				font: normal 300 1.3em/1 var(--body-font-family);
+				color: var(--primary-grey);
 
 				&.name {
 					text-transform: uppercase;
-					font: normal bold 1.2em/1 'Open Sans Condensed', $font;
+					font: normal bold 1.2em/1 var(--header-font-family);
 					display: inline-block;
 					position: relative;
 					max-width: 100%;
@@ -2236,9 +2236,9 @@ canvas.x-component-course-assessment {
 			}
 
 			.subtitle {
-				font: normal 600 0.6em/1 $font;
+				font: normal 600 0.6em/1 var(--body-font-family);
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				margin-top: 1em;
 
 				&.actions {
@@ -2249,13 +2249,13 @@ canvas.x-component-course-assessment {
 				}
 
 				span {
-					&.link { color: $primary-blue; cursor: pointer; }
+					&.link { color: var(--primary-blue); cursor: pointer; }
 
 
 					&::before {
 						content: '\00B7';
 						margin: 0.5em;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 					}
 					&:first-of-type::before {
 						content: none;
@@ -2330,8 +2330,8 @@ canvas.x-component-course-assessment {
 		position: absolute;
 		top: 28px;
 		left: 30px;
-		font: normal 700 0.6em/1 $font;
-		color: $tertiary-grey;
+		font: normal 700 0.6em/1 var(--body-font-family);
+		color: var(--tertiary-grey);
 		text-transform: uppercase;
 		z-index: 1;
 
@@ -2349,8 +2349,8 @@ canvas.x-component-course-assessment {
 		top: 3.125em;
 		left: 30px;
 
-		font: italic normal 1em/1 $font;
-		color: $secondary-grey;
+		font: italic normal 1em/1 var(--body-font-family);
+		color: var(--secondary-grey);
 	}
 
 	.assignments-completed {
@@ -2384,13 +2384,13 @@ canvas.x-component-course-assessment {
 			font-weight: 600;
 		}
 		.late {
-			color: $primary-red;
+			color: var(--primary-red);
 		}
 		.ontime {
-			color: $primary-green;
+			color: var(--primary-green);
 		}
 		.incomplete {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
         &.feedback{
@@ -2406,7 +2406,7 @@ canvas.x-component-course-assessment {
 
                     &.on{
                         display: block;
-                        color: $primary-red;
+                        color: var(--primary-red);
                     }
                 }
             }

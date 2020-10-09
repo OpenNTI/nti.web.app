@@ -49,12 +49,12 @@
 		}
 
 		.title {
-			font: italic 300 24px $font;
+			font: italic 300 24px var(--body-font-family);
 		}
 
 		.message {
-			color: $tertiary-grey;
-			font: normal 400 14px/26px $font;
+			color: var(--tertiary-grey);
+			font: normal 400 14px/26px var(--body-font-family);
 		}
 	}
 }

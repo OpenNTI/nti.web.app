@@ -142,7 +142,7 @@
 		.active-content{
 			display: inline-block;
 			line-height: 0;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			-webkit-font-smoothing: antialiased;
 			opacity: 1;
 			left: 0;
@@ -177,7 +177,7 @@
 			&.has-switcher {
 				.title {
 					&:hover {
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 
 					&::after {
@@ -195,7 +195,7 @@
 			}
 
 			.title {
-				font: 600 1.375em/1.4em $font;
+				font: 600 1.375em/1.4em var(--body-font-family);
 				display: inline-block;
 				max-width: 100%;
 				overflow: hidden;
@@ -206,9 +206,9 @@
 
 			.label {
 				white-space: nowrap;
-				font: normal 700 11px/15px $font;
+				font: normal 700 11px/15px var(--body-font-family);
 				text-transform: uppercase;
-				color: $secondary-grey-alt;
+				color: var(--secondary-grey-alt);
 				margin-bottom: -3px;
 
 				.preview {
@@ -236,7 +236,7 @@
 
 		.active-tab {
 			height: 2px;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			bottom: 0px;
 			position: absolute;
 			opacity: 1;
@@ -271,7 +271,7 @@
 		&.active, &:hover {
 			&::before {
 				font-weight: 600;
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 		}
 	}
@@ -345,7 +345,7 @@
 		}
 
 		&.active, &:hover {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font-weight: 600;
 		}
 
@@ -460,8 +460,8 @@ body .modal ~ .simple-popover-widget {
 .simple-popover-widget {
 	position: fixed;
 	background-color: #ffffff;
-	color: $secondary-grey;
-	font: normal 14px/22px $font;
+	color: var(--secondary-grey);
+	font: normal 14px/22px var(--body-font-family);
 	padding: 15px;
 	border: 1px solid #dcdcdc;
 	border-radius: 3px;
@@ -509,7 +509,7 @@ body .modal ~ .simple-popover-widget {
 
 		&.active,
 		&.over {
-			.label { color: $primary-grey; }
+			.label { color: var(--primary-grey); }
 			.menu {
 				span {
 					background-image: url(../images/elements/menu-arrow-down-active.png);
@@ -519,22 +519,22 @@ body .modal ~ .simple-popover-widget {
 	}
 
 	.label {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font-size: 10px;
 		font-weight: 800;
 		font-style: normal;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		overflow: hidden;
 		text-transform: uppercase;
 		@include ellipse;
 	}
 	.menu {
 		max-width: 450px;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font-size: 11pt;
 		font-weight: 400;
 		font-style: normal;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		overflow: hidden;
 		@include ellipse;
 		margin-bottom: 6px;
@@ -555,7 +555,7 @@ body .modal ~ .simple-popover-widget {
 
 .x-reader-pane {
 	.x-panel-body-reader {
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 	}
 
     iframe[name$="content"] {
@@ -576,9 +576,9 @@ body .modal ~ .simple-popover-widget {
     	bottom: 4px;
     	z-index: 10;
     	background-color: white;
-    	color: $primary-grey;
+    	color: var(--primary-grey);
     	max-width: 300px;
-    	font: normal 600 1em/1.2 $font;
+    	font: normal 600 1em/1.2 var(--body-font-family);
     	padding: 3px;
     	box-shadow: 0 0 2px 0 rgba(0,0,0,0.35);
     	@include experimental(transition, all 0.5s);
@@ -605,12 +605,12 @@ body .modal ~ .simple-popover-widget {
     	}
 
     	&.saved {
-    		background-color: $primary-green;
+    		background-color: var(--primary-green);
     		color: white;
     	}
 
     	&.error {
-    		background-color: $primary-red;
+    		background-color: var(--primary-red);
     		color: white;
     	}
     }

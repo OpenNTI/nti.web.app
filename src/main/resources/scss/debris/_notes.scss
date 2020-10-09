@@ -1,11 +1,11 @@
 @mixin meta-row-window {
 	.meta {
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		font-size: 12px;
 		font-weight: 300;
 
 		.name {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			font-size: 24px;
 			cursor: pointer;
 		}
@@ -66,7 +66,7 @@
 @mixin reply-options {
 	.reply-options {
 		opacity: 0.4;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 		.reply, .share, .more {
 			display: inline-block;
@@ -145,14 +145,14 @@
 			background: #343434 !important;
 
 			.x-menu-item {
-				color: $secondary-grey !important;
+				color: var(--secondary-grey) !important;
 
 				&.edit::after{ @include sprite($edit-dark); }
 				&.flag::after{ @include sprite($flag-dark); }
 				&.delete::after{ @include sprite($trash-can-dark); }
 
 				&.x-menu-item-active {
-					color: $tertiary-grey !important;
+					color: var(--tertiary-grey) !important;
 					background: #3d3d3d !important;
 
 					&.edit::after{ @include sprite($edit-dark_hover); }
@@ -238,7 +238,7 @@
 				.title{display: none; }
 				.name{
 					font-size: 14px;
-					color: $primary-blue;
+					color: var(--primary-blue);
 					display: inline-block;
 					max-width: 40em;
 					overflow: hidden;
@@ -333,9 +333,9 @@
 			margin-left: 45px;
 			font-size: 14px;
 			line-height: default;
-			font-family: $font;
+			font-family: var(--body-font-family);
 
-			color: $primary-grey;
+			color: var(--primary-grey);
 			@include note-body;
 			@include attachment();
 
@@ -368,7 +368,7 @@
 			}
 
 			.time {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				position: absolute;
 				right: 0px;
 				top: 8px;
@@ -477,8 +477,8 @@
 				height: 55px;
 				max-width: 600px;
 				font-size: 40px;
-				color: $primary-grey;
-				font-family: 'Open Sans Condensed', $font;
+				color: var(--primary-grey);
+				font-family: var(--header-font-family);
 				word-wrap: nowrap;
 				overflow: hidden;
 				@include ellipsis;
@@ -499,7 +499,7 @@
 				}
 
 				.name{
-					color: $primary-blue;
+					color: var(--primary-blue);
 					margin-right: 5px;
 					display: inline-block;
 					max-width: 200px;
@@ -508,7 +508,7 @@
 				}
 
 				.shared-to{
-					color: $primary-blue;
+					color: var(--primary-blue);
 					name[data-profile-idx]:not([data-profile-idx=""]){
 						cursor: pointer;
 					}
@@ -541,7 +541,7 @@
 			max-height: 30em;
 
 			.see-more {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				display: inline;
 				position: relative;
 				bottom: -20px;
@@ -616,7 +616,7 @@
 			& > span.text{
 			  	position: relative;
 			  	z-index: 1;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font-size: 14px;
 				line-height: 32px;
 				white-space:normal;
@@ -636,7 +636,7 @@
 							}
 
 							.action {
-								  	background-color: #3fb34f;
+								  	background-color: var(--secondary-green);
   									width: 120px;
 
 								&.button {
@@ -663,7 +663,7 @@
 		}
 
 		.body {
-			font: 16px/24px $font;
+			font: 16px/24px var(--body-font-family);
 			margin-left: auto;
 		}
 
@@ -675,8 +675,8 @@
 
 
 	.note-footer, .note-content-container.scrollbody {
-		@include scrollbar(#ffffff, $tertiary-grey);
-		//background: #FBFBFB;
+		@include scrollbar(#ffffff, var(--tertiary-grey));
+		//background: var(--panel-background);
 	}
 
 	.note-footer {
@@ -684,7 +684,7 @@
 		height: 200px;
 		text-align: center;
 		padding: 20px;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 
 		&::after{
 			content: 'End';
@@ -704,10 +704,10 @@
 		left: 0 !important;
 		right: 0 !important;
 		position: absolute;
-		font: italic 400 0.9em/2.1em $font;
+		font: italic 400 0.9em/2.1em var(--body-font-family);
 		padding: 0.5em;
 		margin: -0.8em 0 0 0;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		background: #fff;
 		z-index: 2;
 		box-sizing: content-box;
@@ -725,8 +725,8 @@
 		left: 0 !important;
 		right: 0 !important;
 		margin: -0.8em 0 0 0;
-		background: #fbfbfb;
-		color: $secondary-grey;
+		background: var(--panel-background);
+		color: var(--secondary-grey);
 
 
 		&.collide {
@@ -820,7 +820,7 @@
 		overflow-wrap: break-word;
 		word-wrap: break-word;
 		word-break: break-word;
-		font: italic 400 0.9em/2.1em $font;
+		font: italic 400 0.9em/2.1em var(--body-font-family);
 		padding: 0.4em 0.5em;
 
 		&:not(.inline-editor):hover {

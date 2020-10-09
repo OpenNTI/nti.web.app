@@ -152,7 +152,7 @@
 			font-size: 0.625rem;
 			font-weight: 600;
 			text-transform: uppercase;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 
 			span::after {
 				content: '/';
@@ -171,16 +171,16 @@
 		}
 
 		.label {
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.page-count {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		.change {
-			border-left: 1px solid $tertiary-grey;
-			color: $primary-blue;
+			border-left: 1px solid var(--tertiary-grey);
+			color: var(--primary-blue);
 			text-decoration: underline;
 			padding-left: 0.5rem;
 			cursor: pointer;
@@ -207,7 +207,7 @@
 
 		&.overdue {
 			.due-date {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 
@@ -223,7 +223,7 @@
 
 		.question-count {
 			font-size: 0.75em;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 		.remove {
@@ -249,8 +249,8 @@
 			position: absolute;
 			top: 17px;
 			right: 25px;
-			font: normal 600 14px/20px $font;
-			color: $primary-blue;
+			font: normal 600 14px/20px var(--body-font-family);
+			color: var(--primary-blue);
 			cursor: pointer;
 			text-align: right;
 		}
@@ -259,8 +259,8 @@
 			padding: 2px 0;
 			.title {
 		    	display: inline-block;
-			    color: $secondary-grey;
-			    font: normal 500 14px/1 $font;
+			    color: var(--secondary-grey);
+			    font: normal 500 14px/1 var(--body-font-family);
 			    text-transform: capitalize;
 			    margin-bottom: 0;
 
@@ -277,7 +277,7 @@
 			    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
 			    margin: 2px 0 2px 9px;
 			    padding: 0 22px 0 10px;
-			    color: $primary-grey;
+			    color: var(--primary-grey);
 			    text-transform: capitalize;
 			    position: relative;
 			    cursor: pointer;
@@ -318,7 +318,7 @@
 		    	.options {
 		    		.option {
 		    			line-height: 36px;
-    					color: $primary-grey;
+    					color: var(--primary-grey);
 					    font-weight: 400;
 					    padding: 0 15px;
 					    text-align: left;
@@ -326,7 +326,7 @@
 					    text-transform: capitalize;
 
 					    &.selected {
-					    	color: $primary-blue;
+					    	color: var(--primary-blue);
 					    }
 		    		}
 		    	}
@@ -359,7 +359,7 @@ input[type=number]{
 
 			textarea {
 				padding: 2px;
-			    font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
+			    font: normal 300 1.6em/1.2em var(--header-font-family);
 				width: 100%;
 				height: 64px;
 				resize: none;
@@ -433,19 +433,19 @@ input[type=number]{
 
 		// Style the place holder
 		textarea {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 		::-webkit-input-placeholder {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 		:-moz-placeholder {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 		::-moz-placeholder {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 		:-ms-input-placeholder {
-		    font-family: $font;
+		    font-family: var(--body-font-family);
 		}
 
 		.group.card {
@@ -497,11 +497,11 @@ input[type=number]{
 			.field.byline input, .field.label input, .field.description textarea {
 				&:focus {
 					background: white;
-					box-shadow: 0 0 0 1px $primary-blue;
+					box-shadow: 0 0 0 1px var(--primary-blue);
 				}
 
 				&.error {
-					box-shadow: 0 0 0 1px $primary-red;
+					box-shadow: 0 0 0 1px var(--primary-red);
 				}
 			}
 
@@ -521,7 +521,7 @@ input[type=number]{
 
 			.field.label, .field.title {
 				input {
-					font: normal 600 0.9375rem/26px $font;
+					font: normal 600 0.9375rem/26px var(--body-font-family);
 				}
 			}
 
@@ -574,7 +574,7 @@ input[type=number]{
 		    line-height: 30px;
 		    font-size: 0.875em;
 		    font-weight: 600;
-		    color: #3fb3f6;
+		    color: var(--primary-blue);
 		}
 	}
 }
@@ -587,8 +587,8 @@ input[type=number]{
 
 
 	.title {
-		color: $primary-grey;
-		font: normal 300 2.25em/1.15em $font;
+		color: var(--primary-grey);
+		font: normal 300 2.25em/1.15em var(--body-font-family);
 	}
 
 	.controls {
@@ -665,8 +665,8 @@ input[type=number]{
 .new-node {
 	> .title {
 		text-align: center;
-		font: normal 600 16px/42px $font;
-		color: $primary-blue;
+		font: normal 600 16px/42px var(--body-font-family);
+		color: var(--primary-blue);
 		background-color: #e8e8e8;
 		cursor: pointer;
 	}
@@ -677,25 +677,25 @@ input[type=number]{
 		input {
 			margin: 5px 10px;
 			padding: 5px 10px;
-			font: normal 400 0.9em/1.5em $font;
-			color: $secondary-grey;
+			font: normal 400 0.9em/1.5em var(--body-font-family);
+			color: var(--secondary-grey);
 			@include experimental-value(width, calc(100% - 20px));
 
 			&.error {
-				border: 1px solid $primary-red;
+				border: 1px solid var(--primary-red);
 			}
 		}
 	}
 }
 
 .outline-items {
-	background: $quad-grey;
+	background: var(--quad-grey);
 	padding: 30px 20px;
 
 	.header {
 		> * {
 			display: inline-block;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			text-transform: uppercase;
 			font-weight: 300;
 			font-size: 12px;
@@ -715,12 +715,12 @@ input[type=number]{
 		}
 	}
 	.collection-body {
-		border: 1px solid $tertiary-grey-alt;
+		border: 1px solid var(--tertiary-grey-alt);
 		background: #ffffff;
 		border-collapse: collapse;
 
 		.outline-node-listitem {
-			border-bottom: 1px solid $tertiary-grey-alt;
+			border-bottom: 1px solid var(--tertiary-grey-alt);
 			height: 3.75em;
 			transition: max-height 0.5s;
 			position: relative;
@@ -791,7 +791,7 @@ input[type=number]{
 				top: 50%;
 				transform: translateY(-50%);
 				width: 415px;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font-size: 14px;
 				font-weight: 600;
 				cursor: pointer;
@@ -816,14 +816,14 @@ input[type=number]{
 		font-size: 0.875em;
 		margin-bottom: 1.25em;
 		padding: 0.35em;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		font-style: italic;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		border: none;
 		box-shadow: 0 0 0 1px #d8d8d8;
 
 		&.error {
-			box-shadow: 0 0 0 1px $primary-red;
+			box-shadow: 0 0 0 1px var(--primary-red);
 		}
 	}
 
@@ -910,9 +910,9 @@ input[type=number]{
 
 						> .outline-group {
 							> .outline-row {
-								border-bottom: 1px solid $tertiary-grey-alt;
+								border-bottom: 1px solid var(--tertiary-grey-alt);
 								.label {
-									color: $primary-grey;
+									color: var(--primary-grey);
 								}
 
 								&.lesson:not(.heading) {
@@ -921,7 +921,7 @@ input[type=number]{
 
 								&.selected {
 									.label {
-										color: $quad-grey;
+										color: var(--quad-grey);
 									}
 								}
 							}
@@ -945,7 +945,7 @@ input[type=number]{
 									}
 							}
 							.title {
-								font: normal 600 16px/42px $font;
+								font: normal 600 16px/42px var(--body-font-family);
 								background-color: #e2e2e2;
 							    padding-bottom: 3px;
 
@@ -964,7 +964,7 @@ input[type=number]{
 			background-color: #ffffff;
 
 			.title {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				color: #ffffff;
 
 				&:before {
@@ -1010,13 +1010,13 @@ input[type=number]{
 			background: #AFAFAF;
 			color: white;
 			border-radius: 0;
-			font: normal 700 10px/14px $font;
+			font: normal 700 10px/14px var(--body-font-family);
 			padding: 1px 2px;
 		}
 
 		.day {
 			color: #AFAFAF;
-			font: normal 600 12px/15px $font;
+			font: normal 600 12px/15px var(--body-font-family);
 			border-radius: 0;
 		}
 
@@ -1052,13 +1052,13 @@ input[type=number]{
 				padding: 9px 10px;
 				margin: 10px;
 				border-radius: 5px;
-				background: $primary-blue;
+				background: var(--primary-blue);
 				color: #ffffff;
 				font-size: 14px;
 				position: relative;
 				font-weight: 600;
 				cursor: pointer;
-				border: 1px solid $tertiary-grey-alt;
+				border: 1px solid var(--tertiary-grey-alt);
 
 				@include icon($dropdown-white, $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
@@ -1066,8 +1066,8 @@ input[type=number]{
 
 		&.published {
 			.label {
-				color: $primary-blue;
-				background: #f8f8f8;
+				color: var(--primary-blue);
+				background: var(--quad-grey);
 				@include icon($dropdown-blue, $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
 		}
@@ -1080,12 +1080,12 @@ input[type=number]{
 			padding: 0 1.5em;
 			border-radius: 3px;
 			color: white;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			cursor: pointer;
 
 			&.disabled {
-				background-color: $tertiary-grey-alt;
-				box-shadow: inset 1px 0 0 0 $border-grey;
+				background-color: var(--tertiary-grey-alt);
+				box-shadow: inset 1px 0 0 0 var(--border-grey);
 			}
 		}
 
@@ -1108,8 +1108,8 @@ input[type=number]{
 				}
 
 				.option {
-					border-bottom: 1px solid $quad-grey;
-					color: $secondary-grey;
+					border-bottom: 1px solid var(--quad-grey);
+					color: var(--secondary-grey);
 
 					.text {
 						padding: 10px 10px 10px 37px;
@@ -1133,7 +1133,7 @@ input[type=number]{
 
 					.subtext {
 						font-size: 12px;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						padding: 0 0 10px 37px;
 						display: none;
 					}
@@ -1198,7 +1198,7 @@ input[type=number]{
 						border: 1px solid rgba(150,150,150,0.3);
 						text-align: center;
 						line-height: 36px;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 
 						&.selected {
 							color: #ffffff;
@@ -1210,8 +1210,8 @@ input[type=number]{
 
 				.container {
 					> .error {
-						color: $primary-red;
-						font: italic 500 12px/17px $font;
+						color: var(--primary-red);
+						font: italic 500 12px/17px var(--body-font-family);
 						margin: 5px;
 						text-align: center;
 					}
@@ -1237,16 +1237,16 @@ input[type=number]{
 			.main {
 				position: relative;
 				display: block;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				margin-left: 40px;
 				margin-top: 10px;
 
 				.text {
 					display: inline-block;
-					border: 1px solid #d1d1d1;
+					border: 1px solid var(--tertiary-grey-alt);
 					padding: 0 10px;
 					cursor: pointer;
-					font: italic 500 12px/32px $font;
+					font: italic 500 12px/32px var(--body-font-family);
 
 					@include icon($dropdown-am-pm-icon, $side: after, $top: 14px, $left: auto, $right: -13px);
 				}
@@ -1255,15 +1255,15 @@ input[type=number]{
 					position: absolute;
 					top: 0px;
 					right: 10px;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					text-transform: uppercase;
-					font: normal 700 10px/34px $font;
+					font: normal 700 10px/34px var(--body-font-family);
 					z-index: 10;
 					cursor: pointer;
 					display: none;
 
 					&:hover {
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 					}
 				}
 
@@ -1271,7 +1271,7 @@ input[type=number]{
 					.text {
 						position: relative;
 						padding-right: 50px;
-					    color: #494949;
+					    color: var(--primary-grey);
 					    font-style: normal;
 					}
 
@@ -1326,15 +1326,15 @@ input[type=number]{
 		.x-datepicker-header {
 			background-color: #ffffff;
 			background-image: none;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			margin: 10px 0;
 
 			.x-datepicker-month {
 
 				.x-btn-inner {
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					font-size: 14px;
-					font-family: $font;
+					font-family: var(--body-font-family);
 				}
 			}
 
@@ -1356,16 +1356,16 @@ input[type=number]{
 			.x-datepicker-column-header {
 				background: none;
 				border: none;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font-weight: 500;
 				font-size: 14px;
 				text-align: center;
-				font-family: $font;
+				font-family: var(--body-font-family);
 			}
 
 			.x-datepicker-cell {
 				.x-datepicker-date {
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					padding: 3px;
 					background: none;
 					font-size: 13px;
@@ -1373,10 +1373,10 @@ input[type=number]{
 					text-align: center;
 					margin: 4px 3px;
 					width: 26px;
-					font-family: $font;
+					font-family: var(--body-font-family);
 
 					&:hover {
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 				}
 
@@ -1406,7 +1406,7 @@ input[type=number]{
 					background: none;
 					border: none;
 					.x-datepicker-date {
-						background-color: $primary-blue;
+						background-color: var(--primary-blue);
 						color: #ffffff;
 						border-radius: 90px;
 					}
@@ -1417,14 +1417,14 @@ input[type=number]{
 					background: none;
 
 					.x-datepicker-date {
-						background-color: $tertiary-grey;
-						color: #494949;
+						background-color: var(--tertiary-grey);
+						color: var(--primary-grey);
 						border-radius: 90px;
 					}
 				}
 
 				.x-datepicker-date::hover {
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 		}
@@ -1441,10 +1441,10 @@ input[type=number]{
 
 		input {
 			font-size: 13px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			&.has-error {
-				border: 1px solid $primary-red;
+				border: 1px solid var(--primary-red);
 			}
 		}
 
@@ -1455,8 +1455,8 @@ input[type=number]{
 		}
 
 		.error {
-			color: $primary-red;
-			font: italic 500 12px $font;
+			color: var(--primary-red);
+			font: italic 500 12px var(--body-font-family);
 			min-height: 12px;
 			margin-bottom: 5px;
 		}
@@ -1468,9 +1468,9 @@ input[type=number]{
 		.meridiem {
 			margin-left: 15px;
 			padding: 5px 15px 5px 5px;
-			border: 1px solid $tertiary-grey-alt;
+			border: 1px solid var(--tertiary-grey-alt);
 			position: relative;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			@include icon($dropdown-am-pm-icon, $side: after, $top: 11px, $left: auto, $right: 5px);
 		}
@@ -1540,7 +1540,7 @@ input[type=number]{
 	}
 
 	.overview-group-title {
-		font: normal 400 1.5rem/2.8rem $condensed-font;
+		font: normal 400 1.5rem/2.8rem var(--header-font-family);
 		color: white;
 	}
 
@@ -1558,8 +1558,8 @@ input[type=number]{
 			z-index: 1;
 			padding-top: 2rem;
 			background: rgba(255, 255, 255, 0.9);
-			color: $tertiary-grey;
-			font: normal 700 0.625rem/1.3 $font;
+			color: var(--tertiary-grey);
+			font: normal 700 0.625rem/1.3 var(--body-font-family);
 			text-transform: uppercase;
 			text-align: center;
 		}
@@ -1629,7 +1629,7 @@ input[type=number]{
 				display: inline-block;
 				font-size: 0.85rem;
 		    	font-weight: 600;
-		    	color: $secondary-grey;
+		    	color: var(--secondary-grey);
 		    	padding: 5px 11px 5px 22px;
 			}
 		}
@@ -1700,7 +1700,7 @@ input[type=number]{
 			line-height: 30px;
 			font-size: 0.875em;
 			font-weight: 600;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 
@@ -1710,7 +1710,7 @@ input[type=number]{
 		left: 10px; right: 10px;
 
 		.nt-button.add {
-			background: $primary-blue;
+			background: var(--primary-blue);
 			line-height: 46px;
 			font-size: 0.875em;
 			font-weight: 600;
@@ -1731,7 +1731,7 @@ input[type=number]{
 
 		.add {
 			float: right;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			text-decoration: underline;
 			cursor: pointer;
 			font-size: 0.875rem;
@@ -1782,7 +1782,7 @@ input[type=number]{
 				font-size: 0.625em;
 				font-weight: 700;
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 
 				span:not(:first-of-type)::after {
 					content: ',';
@@ -1797,7 +1797,7 @@ input[type=number]{
 .create-assignment-overview-editing, .create-video-overview-editing, .create-ltitool-overview-editing {
     float: left;
     color: white;
-    background: #3fb3f6;
+    background: var(--primary-blue);
     padding: 6.5px;
     border-radius: 3px;
 	cursor: pointer;

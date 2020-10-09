@@ -1,7 +1,7 @@
 
 @mixin post-navigation {
 	padding: 0 17px 0 30px;
-	font: normal normal 0.75em/0 $font;
+	font: normal normal 0.75em/0 var(--body-font-family);
 	overflow: hidden;
 	height: 50px;
 
@@ -21,7 +21,7 @@
 		text-transform: uppercase;
 		font-weight: 600;
 		cursor: pointer;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		max-width: 100px;
 		position: relative;
 		margin-right: 5px;
@@ -30,12 +30,12 @@
 		overflow: hidden;
 
 		&.current {
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		&::after {
 			content: ' /  ';
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font-weight: 400;
 			position: absolute;
 			right: 0;
@@ -87,11 +87,11 @@
 	height: 35px;
 	//width: 165px;
 	white-space: nowrap;
-	font: normal 600 14px/35px "Open Sans", sans-serif;
+	font: normal 600 14px/35px var(--body-font-family);
 	padding: 0 15px 0 43px;
 
 	color: #ffffff;
-	background: $primary-blue;
+	background: var(--primary-blue);
 	border-radius: 3px;
 
 	cursor: pointer;
@@ -99,7 +99,7 @@
 
 	&.disabled{
 		background-color: #E4E4E4;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		cursor: default;
 		border: none;
 	}
@@ -114,28 +114,28 @@
 		margin: 30px 0 0 0;
 		padding: 0 10px 0 10px;
 		cursor: pointer;
-		border: 0 solid $border-grey;
+		border: 0 solid var(--border-grey);
 		border-bottom-width: 1px;
 
 		.title {
-			color: $primary-grey;
-			font: normal 300 28px/40px $font;
+			color: var(--primary-grey);
+			font: normal 300 28px/40px var(--body-font-family);
 			padding-bottom: 5px;
 			@include ellipse;
 			overflow: hidden;
 		}
 		.description {
-			color: $primary-grey;
-			font: normal normal 14px/1.8em $font;
+			color: var(--primary-grey);
+			font: normal normal 14px/1.8em var(--body-font-family);
 		}
 		.meta {
 			margin: 30px 0 10px 0;
 			text-transform: uppercase;
-			font: normal 600 12px $font;
-			color: $tertiary-grey;
+			font: normal 600 12px var(--body-font-family);
+			color: var(--tertiary-grey);
 
 			.count, .name, .link, .edit {
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 
 			.edit{
@@ -151,8 +151,8 @@
 			span {
 				display: inline-block;
 				&::after{
-					color: $tertiary-grey;
-					font: normal 500 12px/20px $font;
+					color: var(--tertiary-grey);
+					font: normal 500 12px/20px var(--body-font-family);
 					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
@@ -188,11 +188,11 @@
 @mixin topic-list-item {
 
 	.topic-list-header-item {
-		background-color: #f8f8f8;
+		background-color: var(--quad-grey);
 		height: 30px !important;
 		cursor: default !important;
-		font: normal 400 0.8em/30px $font;
-		color: $secondary-grey-alt;
+		font: normal 400 0.8em/30px var(--body-font-family);
+		color: var(--secondary-grey-alt);
 		border: 0 solid #f1f1f1;
 		border-bottom-width: 1px;
 		padding-top: 0 !important;
@@ -256,16 +256,16 @@
 
 			.author {
 				width: 600px;
-				font: normal 600 0.65em/1  $font;
-				color: $primary-blue;
+				font: normal 600 0.65em/1  var(--body-font-family);
+				color: var(--primary-blue);
 				@include ellipse;
 				overflow: hidden;
 				text-transform: uppercase;
 			}
 
 			.title {
-				color: $primary-grey;
-				font: normal 400 1.25em/1.5 $font;
+				color: var(--primary-grey);
+				font: normal 400 1.25em/1.5 var(--body-font-family);
 				width: 600px;
 				@include ellipse;
 				overflow: hidden;
@@ -275,18 +275,18 @@
 
 		.meta {
 			margin: 0 0 0 90px;
-			font: normal 600 0.75em/1 $font;
-			color: $tertiary-grey;
+			font: normal 600 0.75em/1 var(--body-font-family);
+			color: var(--tertiary-grey);
 
 			.matches {
-				color: #fa8700 ;
+				color: var(--primary-orange) ;
 			}
 
 			& > span {
 				display: inline-block;
 				&::after{
-					color: $tertiary-grey;
-					font: normal 500 12px/20px $font;
+					color: var(--tertiary-grey);
+					font: normal 500 12px/20px var(--body-font-family);
 					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
@@ -360,8 +360,8 @@
 		@include like-and-favorite;
 	}
 	.title {
-		color: $primary-grey;
-		font: normal 300 28px/40px $font;
+		color: var(--primary-grey);
+		font: normal 300 28px/40px var(--body-font-family);
 		padding-bottom: 5px;
 		@include ellipse;
 		overflow: hidden;
@@ -369,16 +369,16 @@
 	}
 	.meta,
 	.foot {
-		font: normal 400 14px/1.5 $font;
-		color: $tertiary-grey;
+		font: normal 400 14px/1.5 var(--body-font-family);
+		color: var(--tertiary-grey);
 		cursor: default;
 
 		.state,
 		.comment-count {
 			cursor: pointer;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			&.only.me, &.private {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 
@@ -392,9 +392,9 @@
 		}
 
 		.link {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
-			&.on{ color: $primary-red; }
+			&.on{ color: var(--primary-red); }
 		}
 
 		.comment-count {
@@ -405,7 +405,7 @@
 		.comment-box .response > span,
 		& > span{
 			&::before{
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				font-weight: 600;
 				position: static;
 				content: '\00B7';
@@ -434,8 +434,8 @@
 				height: 20px;
 				text-transform: uppercase;
 				vertical-align: baseline;
-				color: $secondary-grey;
-				font: normal 700 10px/20px $font;
+				color: var(--secondary-grey);
+				font: normal 700 10px/20px var(--body-font-family);
 			}
 		}
 	}
@@ -443,8 +443,8 @@
 	.body {
 		@include text-content;
 		margin: 20px 0;
-		color: $primary-grey;
-		font: normal 400 14px/28px $font;
+		color: var(--primary-grey);
+		font: normal 400 14px/28px var(--body-font-family);
 
 		.video-placeholder {
 			width: 60% !important;
@@ -458,7 +458,7 @@
 		}
 
 		a {&:link,&:active,&:visited{
-			color: $primary-blue;
+			color: var(--primary-blue);
 			text-decoration: none;
 		}}
 
@@ -511,7 +511,7 @@
 			}
 
 			.footer{
-				background-color: #fbfbfb;
+				background-color: var(--panel-background);
 			}
 		}
 	}
@@ -539,7 +539,7 @@
 		}
 
 		.footer{
-			background-color: #fbfbfb;
+			background-color: var(--panel-background);
 		}
 	}
 
@@ -548,10 +548,10 @@
 		height: 46px;
 		padding-left: 15px;
 		cursor: pointer;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		font-size: 14px;
 		line-height: 46px;
-		background-color: $panel-background;
+		background-color: var(--panel-background);
 
 		&::after{
 			content: '';
@@ -598,7 +598,7 @@
 	.x-component-forum-comment{
 		padding: 25px 0 20px 20px;
 
-		background: $panel-background;
+		background: var(--panel-background);
 		border: 0 solid #f5f5f5;
 		border-top-width: 1px;
 		position: relative;
@@ -670,7 +670,7 @@
 				z-index: 1;
 				top: -1px; bottom: -1px; left: 0;
 				width: 3px;
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 			}
 		}
 
@@ -680,7 +680,7 @@
 			line-height: 2.5rem;
 			text-align: center;
 			font-size: 0.75rem;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		&[data-depth='0'].loading {
@@ -712,7 +712,7 @@
 	.topic-comment{
 		position: relative;
 		padding-left: 140px;
-		background-color: $panel-background;
+		background-color: var(--panel-background);
 		-webkit-font-smoothing: antialiased;
 
 		.like:not(.on):not(.liked) {
@@ -739,7 +739,7 @@
 					cursor: default;
 
 					.link{
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 				}
 			}
@@ -755,7 +755,7 @@
 
 				.foot{
 					.link:not(.comments){
-						color: $tertiary-grey !important;
+						color: var(--tertiary-grey) !important;
 					}
 				}
 			}
@@ -907,7 +907,7 @@
 					// width: 24em;
 
 					&::after {
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						font-weight: 600;
 						position: static;
 						content: '\00B7';
@@ -947,7 +947,7 @@
 			.title {
 				padding: 0 15px;
 				input{
-					font: normal 300 25px/40px $font;
+					font: normal 300 25px/40px var(--body-font-family);
 				}
 			}
 
@@ -974,7 +974,7 @@
 
 			.toolbar {
 				border-top: 1px solid #dcdcdc;
-				background: #f9f9f9;
+				background: var(--quad-grey);
 				padding: 0 15px;
 			}
 
@@ -982,7 +982,7 @@
 				max-height: none;
 				min-height: 0;
 				padding: 20px 15px 0;
-				font-family: $font;
+				font-family: var(--body-font-family);
 				font-size: 14px;
 				line-height: 2em;
 
@@ -1194,7 +1194,7 @@
 			}
 			.foot {
 				padding: 14px 20px;
-				background: #f9f9f9;
+				background: var(--quad-grey);
 			}
 		}
 
@@ -1204,7 +1204,7 @@
 
 			.title{
 				margin-bottom: 15px;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				cursor: default;
 				font-size: 30px;
 
@@ -1348,13 +1348,13 @@
 					.pager-container{
 						.pages{
 							.page{
-								color: $primary-blue;
+								color: var(--primary-blue);
 								display: inline-block;
 								padding-right: 20px;
 								cursor: pointer;
 
 								&.disabled, &.active{
-									color: $tertiary-grey;
+									color: var(--tertiary-grey);
 									cursor: default;
 								}
 							}
@@ -1398,7 +1398,7 @@
 #forums,
 .course-forum{
 	-webkit-font-smoothing: antialiased;
-	@include scrollbar(#ffffff, $tertiary-grey);
+	@include scrollbar(#ffffff, var(--tertiary-grey));
 
 	&.scroll-lock{
 		overflow: hidden;
@@ -1408,18 +1408,18 @@
 		background-color: white;
 		padding: 100px 20px;
 		text-align: center;
-		font: normal 300 30px $font;
-		color: $tertiary-grey;
+		font: normal 300 30px var(--body-font-family);
+		color: var(--tertiary-grey);
 
 		& > div {
 			margin: 1em;
-			color: $primary-blue;
-			font: normal 300 13px $font;
+			color: var(--primary-blue);
+			font: normal 300 13px var(--body-font-family);
 			a {
 				margin: 0 4px;
 				&,&:visited,&:link,&:active {
-					font-family: $font;
-					color: $primary-blue;
+					font-family: var(--body-font-family);
+					color: var(--primary-blue);
 					text-decoration: none;
 				}
 			}
@@ -1429,7 +1429,7 @@
 	.forum-nav{
 
 		&.topic-nav{
-			background: #fbfbfb;
+			background: var(--panel-background);
 			.x-grid-header-ct{
 				display: none;
 			}
@@ -1441,11 +1441,11 @@
 
 				.new-topic{
 					cursor: pointer;
-					color: $primary-blue;
+					color: var(--primary-blue);
 					height: 50px;
 					padding-left: 40px;
 					white-space: nowrap;
-					font: normal 600 14px/50px "Open Sans", sans-serif;
+					font: normal 600 14px/50px var(--body-font-family);
 					@include icon($comment-small-dark_hover, $top: 15px, $left: 15px);
 				}
 			}
@@ -1466,7 +1466,7 @@
 
 					.outline-row {
 						&, &:hover {
-							background: $primary-blue;
+							background: var(--primary-blue);
 							box-shadow: inset -3px 1px 0 0px #107eed;
 							border-bottom-color: #107eed;
 
@@ -1495,9 +1495,9 @@
 					}
 
 					.author {
-						font: normal 600 0.8em/1 $font;
+						font: normal 600 0.8em/1 var(--body-font-family);
 						text-transform: uppercase;
-						color: $primary-blue;
+						color: var(--primary-blue);
 						overflow: hidden;
 						@include ellipse;
 					}
@@ -1506,17 +1506,17 @@
 						min-height: 50px;
 						max-height: 5.5em;
 						overflow: hidden;
-						font: italic 400 1.2em/1.1em "Open Sans", sans-serif;
+						font: italic 400 1.2em/1.1em var(--body-font-family);
 						margin: 0 0 10px -10px;
 						padding-left: 10px;
-						color: #494949;
+						color: var(--primary-grey);
 						text-overflow: ellipsis;
 						word-wrap: break-word;
 					}
 
 					.meta {
-						font: normal 400 0.8em/1 $font;
-						color: $tertiary-grey;
+						font: normal 400 0.8em/1 var(--body-font-family);
+						color: var(--tertiary-grey);
 
 						span{
 							&::after{
@@ -1559,7 +1559,7 @@
 				}
 
 				&[data-depth='0'] {
-					font: normal 400 1.5em/2.1 "Open Sans Condensed", $font;
+					font: normal 400 1.5em/2.1 var(--header-font-family);
 					padding-top: 5px;
 
 					&:hover, &:not(.x-item-selected):hover {
@@ -1588,7 +1588,7 @@
 					background: #fafafa !important;
 					font-weight: 600;
 					box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					text-transform: uppercase;
 
 					&:hover, &:not(.x-item-selected):hover {
@@ -1598,7 +1598,7 @@
 
 				&:hover, &:not(.x-item-selected):hover {
 					box-shadow: none;
-					background-color: $quad-grey;
+					background-color: var(--quad-grey);
 				}
 			}
 
@@ -1608,8 +1608,8 @@
 
 			.outline-row {
 				background: #ffffff;
-				color: #757474;
-				font: normal 400 0.9em/2.8em "Open Sans", sans-serif;
+				color: var(--secondary-grey);
+				font: normal 400 0.9em/2.8em var(--body-font-family);
 				padding: 0 10px 0 20px;
 				cursor: pointer;
 
@@ -1621,14 +1621,14 @@
 				&.x-item-selected{
 					color: #ffffff;
 					font-weight: 600;
-					background-color: $primary-blue;
+					background-color: var(--primary-blue);
 				}
 			}
 
 			.new-forum{
 				cursor: pointer;
-				color: $secondary-grey;
-				font: normal 500 0.9em/50px $font;
+				color: var(--secondary-grey);
+				font: normal 500 0.9em/50px var(--body-font-family);
 				height: 50px;
 				padding-left: 40px;
 				@include icon($editor-add_hover, $top: 18px, $left: 10px);
@@ -1638,7 +1638,7 @@
 				line-height: 50px;
 
 				&:hover{
-					color: $primary-blue;
+					color: var(--primary-blue);
 					@include icon($editor-add, $top: 18px, $left: 10px);
 					position: absolute;
 				}
@@ -1664,7 +1664,7 @@
 			}
 
 			.header {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				cursor: pointer;
 				display: block !important;
 				background: #fff;
@@ -1696,7 +1696,7 @@
 				line-height: 49px;
 				display: inline-block;
 				font-style: italic;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				margin-right: 25px;
 				span {
 					font-weight: 600;
@@ -1731,7 +1731,7 @@
 			.topic-list-header{
 				height: 90px;
 				padding: 29px 15px;
-				background-color: #f8f8f8;
+				background-color: var(--quad-grey);
 				box-shadow: inset 0 -2px 0px 0px rgba(0,0,0,0.06);
 
 				.new-topic{
@@ -1742,7 +1742,7 @@
 				}
 
 				.delete-forum, .edit-forum {
-					color: $primary-red;
+					color: var(--primary-red);
 					float: left;
 					line-height: 35px;
 					margin-left: 10px;
@@ -1751,7 +1751,7 @@
 				}
 
 				.edit-forum {
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 
 				.controls{
@@ -1761,8 +1761,8 @@
 
 
 					.position {
-						color: $primary-grey;
-						font: italic 400 0.8em/35px $font;
+						color: var(--primary-grey);
+						font: italic 400 0.8em/35px var(--body-font-family);
   						display: inline-block;
 					    width: 120px;
 					    text-align: right;
@@ -1852,7 +1852,7 @@
 	span {
 		display: inline-block;
 		font-size: 0.875rem;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		cursor: pointer;
 
 		&:first-of-type::after {

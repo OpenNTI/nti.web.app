@@ -3,8 +3,8 @@
 .invite-form {
 	width: 500px;
 	textarea {
-		font: italic 100 22px 'Open Sans';
-		color: #757474;
+		font: italic 100 22px var(--body-font-family);
+		color: var(--secondary-grey);
 		margin: 1px 0 -5px;
 		padding: 15px;
 		resize: none;
@@ -20,7 +20,7 @@
 		border-bottom: solid 1px #d8d8d8;
 
 		a {
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 
@@ -30,9 +30,9 @@
 		.msg {
 			line-height: normal;
     		padding: 8px 0px 8px 15px;
-			font: 100 14px 'Open Sans';
+			font: 100 14px var(--body-font-family);
 			&.error {
-				background-color: #F35252;
+				background-color: var(--primary-red);
 			}
 		}
 		&.hidden {
@@ -50,7 +50,7 @@
 			padding: 6px 0 0 18px;
 			cursor: pointer;
 			color: #e1e1e1;
-			background-color: #757474;
+			background-color: var(--secondary-grey);
 			border-radius: 3px;
 			font-size: 10px;
 			text-align: center;
@@ -78,12 +78,12 @@
 
 	.field.emails {
 		overflow: hidden;
-	    background-color: #fbfbfb;
+	    background-color: var(--panel-background);
 	}
 
 	.unstyled-tokens {
     	height: 50px;
-	    background: #FBFBFB;
+	    background: var(--panel-background);
 	    overflow: hidden;
 		visibility: visible;
 		display: flex;
@@ -95,7 +95,7 @@
 		    margin: 12px 0px 11px 18px;
 		    text-overflow: ellipsis;
 		    white-space: nowrap;
-		    color: #757474;
+		    color: var(--secondary-grey);
     		flex: 1 1 auto;
 			.token {
 				border: none;
@@ -113,14 +113,14 @@
 				border: none;
 			    padding: 0;
 			    font-size: 12px;
-			    color: #757474;
+			    color: var(--secondary-grey);
 			}
 		}
 
 		.email-count {
 		    font-size: 14px;
 		    font-weight: 100;
-		    color: #3fb3f6;
+		    color: var(--primary-blue);
 		    display: block;
 		    min-width: 10px;
 		    height: 50px;
@@ -153,8 +153,8 @@
 
 			.token {
 			    background: white;
-			    font-family: 'Open Sans';
-			    color: #757474;
+			    font-family: var(--body-font-family);
+			    color: var(--secondary-grey);
 			    font-size: 14px;
 			    border: 1px solid #E2E2E2;
 			    border-radius: 4px;
@@ -187,8 +187,8 @@
 				}
 
 				&.invalid {
-					color: #F35252;
-					border-color: #F35252;
+					color: var(--primary-red);
+					border-color: var(--primary-red);
 
 					.x {
 
@@ -214,9 +214,9 @@
 			flex: 1 1 auto;
 
 			input[type="text"] {
-				background-color: #fbfbfb;
+				background-color: var(--panel-background);
 				text-transform: none;
-				font: normal 300 14px "Open Sans", sans-serif !important;
+				font: normal 300 14px var(--body-font-family) !important;
 			}
 
 			&.initial {

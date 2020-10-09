@@ -13,8 +13,8 @@
 	}
 
 	 & > .label {
-		color: $tertiary-grey;
-		font: normal 600 0.625em/1 $font;
+		color: var(--tertiary-grey);
+		font: normal 600 0.625em/1 var(--body-font-family);
 		text-transform: uppercase;
 		margin-bottom: 0.5em;
 	}
@@ -27,8 +27,8 @@
 		&::before {
 			content: attr(data-label);
 			display: block;
-			color: $tertiary-grey;
-			font: normal 600 0.625em/1 $font;
+			color: var(--tertiary-grey);
+			font: normal 600 0.625em/1 var(--body-font-family);
 			text-transform: uppercase;
 			margin-bottom: 0.5em;
 		}
@@ -96,7 +96,7 @@
 			display: inline-block;
 			vertical-align: middle;
 			width: 200px;
-			font: normal 400 0.875rem/40px $font;
+			font: normal 400 0.875rem/40px var(--body-font-family);
 			overflow: hidden;
 			@include ellipse();
 		}
@@ -135,7 +135,7 @@
 	}
 
 	li {
-		font: normal 400 0.875em/20px $font;
+		font: normal 400 0.875em/20px var(--body-font-family);
 		padding: 8px;
 
 		&.current {
@@ -148,7 +148,7 @@
 		}
 
 		&.selected {
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 }
@@ -160,13 +160,13 @@
 		border-bottom: 1px solid rgb(234, 233, 233);
 
 		&.selected {
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 
 		&.new-item {
 			cursor: pointer;
 			font-size: 0.875em;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			&:before {
 				content: "+";
@@ -182,7 +182,7 @@
 			display: inline-block;
 			vertical-align: middle;
 			width: 200px;
-			font: normal 400 0.875rem/40px $font;
+			font: normal 400 0.875rem/40px var(--body-font-family);
 			overflow: hidden;
 			@include ellipse();
 		}
@@ -204,11 +204,11 @@
 		.sub-label {
 			font-size: 0.625em;
 			text-transform: uppercase;
-			color: #757474;
+			color: var(--secondary-grey);
 		}
 
 		.save {
-			background-color: #3fb3f6;
+			background-color: var(--primary-blue);
 			color: white;
 		}
 		.back, .save {
@@ -224,7 +224,7 @@
 			line-height: 1.5rem;
 			color: white;
 			z-index: 1;
-			background-color: #f35252;
+			background-color: var(--primary-red);
 			text-align: left;
 			padding: 0 0.5rem;
 		}

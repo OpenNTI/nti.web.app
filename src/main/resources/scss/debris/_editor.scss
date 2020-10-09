@@ -98,7 +98,7 @@ span.tab{
 
 				.title {
 					display: block;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					border-bottom: none;
 					font-size: 14px;
 					font-weight: 600;
@@ -113,7 +113,7 @@ span.tab{
 				}
 				.size {
 					display: block;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					font-size: 10px;
 					font-weight: 600;
 					text-align: left;
@@ -126,7 +126,7 @@ span.tab{
 				top: 32px;
 				left: auto;
 				right: 5px;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 				font-size: 10px;
 				margin: 0 !important;
@@ -142,7 +142,7 @@ span.tab{
 
 				a {
 					text-decoration: none;
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 		}
@@ -248,11 +248,11 @@ span.tab{
 			height: 24px;
 			cursor: pointer;
 			display: inline-block;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			&:focus {
 				&::after{
-					outline: 1px dotted $primary-blue;
+					outline: 1px dotted var(--primary-blue);
 					outline-offset: 1px;
 				}
 			}
@@ -275,11 +275,11 @@ span.tab{
 				}
 				input {
 					display: block;
-					font: normal 300 25px/40px $font;
+					font: normal 300 25px/40px var(--body-font-family);
 					border: 0;
 					margin: 5px 0;
 					width: 100%;
-					color: $primary-grey;
+					color: var(--primary-grey);
 
 					&[type=text]:not([value]),
 					&[type=text][value=""]{
@@ -305,7 +305,7 @@ span.tab{
 				padding: 0px 5px;
 
 				input{
-					font: normal italic 14px/30px $font;
+					font: normal italic 14px/30px var(--body-font-family);
 					font-style: italic;
 					text-transform: none;
 				}
@@ -339,21 +339,21 @@ span.tab{
 
 			.aux+.title, .title.small{
 				input{
-					font: italic 14px/20px $font;
+					font: italic 14px/20px var(--body-font-family);
 					padding-left: 5px;
 				}
 			}
 
 
 			.content {
-				@include scrollbar(#ffffff, $tertiary-grey);
+				@include scrollbar(#ffffff, var(--tertiary-grey));
 				@include text-content;
 
 				@include experimental(transition, all 0.5s);
 				cursor: text;
 				padding: 2px 5px 0;
-				color: $secondary-grey;
-				font: 14px $font;
+				color: var(--secondary-grey);
+				font: 14px var(--body-font-family);
 				overflow:{
 					x: hidden;
 					y: auto; //scroll;
@@ -443,7 +443,7 @@ span.tab{
 				line-height: 45px;
 				font-size: 14px;
 				text-align: center;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				margin: -1px;
 				@include experimental(transition, all 0.5s);
 
@@ -483,7 +483,7 @@ span.tab{
 						left: -25%;
 						background-color: #fff;
 						box-shadow: 1px 2px 3px -1px rgba(0,0,0,.3);
-						border: 1px solid #f8f8f8;
+						border: 1px solid var(--quad-grey);
 						z-index: 16;
 						padding: 0 5px;
 						display: none;
@@ -630,9 +630,9 @@ span.tab{
 					font-weight: bold;
 					font-style: italic;
 					color: #ffffff;
-					border: 1px solid $border-blue;
+					border: 1px solid var(--border-blue);
 					padding: 0 0 0 24px;
-					background: $primary-blue;
+					background: var(--primary-blue);
 					position: relative;
 
 
@@ -686,7 +686,7 @@ span.tab{
 					pointer-events: none;
 					cursor: default;
 					border-color: #d0d0d0;
-					background: #b8b8b8;
+					background: var(--tertiary-grey);
 					color: #ffffff;
 					opacity: 0.5;
 				}
@@ -792,7 +792,7 @@ span.tab{
 			position: absolute;
 			top: 0; bottom: 0;
 			left: 0; right: 0;
-			background: $secondary-green;
+			background: var(--secondary-green);
 			opacity: 0.7;
 			z-index: 3;
 		}

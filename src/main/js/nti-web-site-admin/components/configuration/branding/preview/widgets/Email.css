@@ -17,5 +17,5 @@
 .description {
 	font-size: 0.875rem;
 	line-height: 24px;
-	color: var(--primary-grey, #757474);
+	color: var(--primary-grey);
 }

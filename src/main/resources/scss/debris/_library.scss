@@ -3,8 +3,8 @@
 	max-width: 100%;
 
 	.empty-text {
-		color: $tertiary-grey;
-		font: normal 300 2em $font;
+		color: var(--tertiary-grey);
+		font: normal 300 2em var(--body-font-family);
 		margin: 2em auto;
 		width: 530px;
 		text-align: center;
@@ -57,10 +57,10 @@
 	}
 
 	.label {
-		font: normal 300 1.5em/#{$header-height} $font;
+		font: normal 300 1.5em/#{$header-height} var(--body-font-family);
 		padding: 0 0.875em 0 0;
 		cursor: pointer;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 		&::after {
 			content: '';
@@ -83,12 +83,12 @@
 		min-width: 110px;
 		margin-top: -15px;
 		margin-left: 15px;
-		font: normal 400 0.875em/30px $font;
+		font: normal 400 0.875em/30px var(--body-font-family);
 		color: white;
 		text-align: center;
 		border-radius: 5px;
 		padding: 0 0.5em;
-		background-color: $secondary-green;
+		background-color: var(--secondary-green);
 
 		&.hidden {
 			display: none;
@@ -101,7 +101,7 @@
 			height: 0;
 			border-style: solid;
 			border-width: 5px 5px 5px 0;
-			border-color: transparent $secondary-green transparent transparent;
+			border-color: transparent var(--secondary-green) transparent transparent;
 			position: absolute;
 			left: -5px;
 			top: 50%;
@@ -149,8 +149,8 @@ li.community-grid-item {
 	.title {
 		padding: 0 10px;
 		text-transform: uppercase;
-		font: normal 700 1em/1em $condensed-font;
-		color: $primary-grey;
+		font: normal 700 1em/1em var(--header-font-family);
+		color: var(--primary-grey);
 		max-height: 4em;
 		overflow: hidden;
 		position: absolute;
@@ -194,20 +194,20 @@ li.library-grid-item {
 
 	.meta {
 		overflow: hidden;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		padding: 0 10px;
 	}
 
 	.author,.courseName, .semester {
 		text-transform: uppercase;
-		font: normal bold 0.6em/1.6em $font;
+		font: normal bold 0.6em/1.6em var(--body-font-family);
 		overflow: hidden;
 		@include ellipse();
 	}
 
 	.courseName, .semester {
 		text-transform: uppercase;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		display: inline-block;
 	}
 
@@ -216,12 +216,12 @@ li.library-grid-item {
 	}
 
 	.author {
-		color: $primary-blue;
+		color: var(--primary-blue);
 	}
 
 	.title {
-		font: normal 700 1em/1.1em "Open Sans Condensed";
-		color: $secondary-grey;
+		font: normal 700 1em/1.1em var(--header-font-family);
+		color: var(--secondary-grey);
 		max-height: 2.2em;
 		margin-bottom: 10px;
 		text-transform: uppercase;
@@ -273,7 +273,7 @@ li.library-grid-item {
 			height: 27px;
 			color: white;
 			text-transform: uppercase;
-			font: normal 600 0.625em/27px $font;
+			font: normal 600 0.625em/27px var(--body-font-family);
 			padding: 0 7px;
 			display: none;
 			display: inline-block;
@@ -283,7 +283,7 @@ li.library-grid-item {
 			}
 
 			&.completed {
-				background-color: $secondary-green;
+				background-color: var(--secondary-green);
 				border-radius: 3px;
 
 				.text {
@@ -312,7 +312,7 @@ li.library-grid-item {
 			padding: 0 7px;
 			border-radius: 3px;
 			text-transform: uppercase;
-			font: normal 600 10px/27px $font;
+			font: normal 600 10px/27px var(--body-font-family);
 			display: inline-block;
 
 			& + .badge {
@@ -326,7 +326,7 @@ li.library-grid-item {
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		background: $secondary-green;
+		background: var(--secondary-green);
 		height: 0.5rem;
 	}
 
@@ -378,10 +378,10 @@ li.library-grid-item {
 }
 
 .load-archived-button {
-	background-color: #3fb3f6;
+	background-color: var(--primary-blue);
 	color: white;
 	font-size: 16px;
-	font-family: "Open Sans", sans-serif;
+	font-family: var(--body-font-family);
 	font-weight: 500;
 	border-radius: 2px;
 	cursor: pointer;
@@ -401,7 +401,7 @@ li.library-grid-item {
 	div {
 		float: left;
 		color: white;
-		font: normal 300 1.125em/1 $font;
+		font: normal 300 1.125em/1 var(--body-font-family);
 	}
 
 	.group {
@@ -460,7 +460,7 @@ li.library-grid-item {
 					float: left;
 					background-color: rgba(255,255,255, 0.15);
 					color: rgba(255,255,255,0.8);
-					font: normal 300 1.3em/50px $font;
+					font: normal 300 1.3em/50px var(--body-font-family);
 					padding: 0 20px 0 15px;
 					letter-spacing: 1px;
 
@@ -491,11 +491,11 @@ li.library-grid-item {
 						cursor: pointer;
 						float: left;
 
-						@include accessibility-option(color, $tertiary-grey, #fff);
+						@include accessibility-option(color, var(--tertiary-grey), #fff);
 
 						margin: 11px 5px;
 						height: 28px;
-						font: normal 500 0.9em/28px $font;
+						font: normal 500 0.9em/28px var(--body-font-family);
 						padding: 0 20px;
 						border-radius: 15px;
 
@@ -516,7 +516,7 @@ li.library-grid-item {
 					overflow: hidden;
 					padding: 0 20px;
 					cursor: pointer;
-					font: normal 300 0.85em/36px $font;
+					font: normal 300 0.85em/36px var(--body-font-family);
 					border: 1px solid rgba(0,0,0, 0.7);
 					box-shadow: 0 1px 0 0 rgba(255,255,255, 0.1);
 
@@ -528,7 +528,7 @@ li.library-grid-item {
 					}
 
 					&::before {
-						background-color: #3fb34f;
+						background-color: var(--secondary-green);
 						box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.35);
 						z-index: -2;
 					}
@@ -551,8 +551,8 @@ li.library-grid-item {
 			width: 1024px !important;
 
 			.empty-text {
-				color: $tertiary-grey;
-				font: normal 300 2em $font;
+				color: var(--tertiary-grey);
+				font: normal 300 2em var(--body-font-family);
 				margin: 2em auto;
 				width: 530px;
 				text-align: center;
@@ -573,7 +573,7 @@ li.library-grid-item {
 				float: left;
 				color: rgba(255,255,255,0.8);
 				text-transform: uppercase;
-				font: normal 500 0.9em/1 $font;
+				font: normal 500 0.9em/1 var(--body-font-family);
 			}
 
 			.group {
@@ -589,10 +589,10 @@ li.library-grid-item {
 	.x-component-library-collection{
 		margin: 2em 0 2.5em;
 		.collection-name {
-			font: normal 300 1.75em/2.2em $font;
+			font: normal 300 1.75em/2.2em var(--body-font-family);
 			color: #fff;
 			.count {
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				margin-left: 0.5em;
 				display: inline-block;
 			}
@@ -636,30 +636,30 @@ li.library-grid-item {
 
 			.meta {
 				overflow: hidden;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				padding: 0 10px;
 
 				.author,.courseName {
 					text-transform: uppercase;
-					font: normal bold 0.6em/1.6em $font;
+					font: normal bold 0.6em/1.6em var(--body-font-family);
 					overflow: hidden;
 				}
 				.courseName {
 					text-transform: uppercase;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					@include ellipse();
 				}
 
 				.author {
-					color: $primary-blue;
+					color: var(--primary-blue);
 					margin-bottom: 5px;
 				}
 
 				.author:not(:empty):not(.provider-id)::before{content: 'By ';}
 
 				.title {
-					font: normal 700 1em/1.1em "Open Sans Condensed";
-					color: $secondary-grey;
+					font: normal 700 1em/1.1em var(--header-font-family);
+					color: var(--secondary-grey);
 					max-height: 2.2em;
 					margin-bottom: 10px;
 					text-transform: uppercase;
@@ -800,7 +800,7 @@ li.library-grid-item {
 			float: left;
 			top: 70px;
 			left: 50%;
-			font: normal 500 0.9em/1 $font;
+			font: normal 500 0.9em/1 var(--body-font-family);
 			color: #40ac4f;
 
 			.enrollment-text {
@@ -819,31 +819,31 @@ li.library-grid-item {
 
 		.meta {
 			overflow: hidden;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			padding: 0 10px;
 			max-height: 80px;
 
 			.author,.courseName {
 				text-transform: uppercase;
-				font: normal bold 0.6em/1.6em $font;
+				font: normal bold 0.6em/1.6em var(--body-font-family);
 				overflow: hidden;
 			}
 			.courseName {
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				@include ellipse();
 			}
 
 			.author {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				@include ellipse();
 			}
 
 			.author:not(:empty):not(.provider-id)::before{content: 'By ';}
 
 			.title {
-				font: normal 700 1em/1.1em "Open Sans Condensed";
-				color: $secondary-grey;
+				font: normal 700 1em/1.1em var(--header-font-family);
+				color: var(--secondary-grey);
 				max-height: 2.2em;
 				margin-bottom: 10px;
 				text-transform: uppercase;
@@ -870,7 +870,7 @@ li.library-grid-item {
 	div.group-by-option {
 		background-color: #646464;
 		color: rgba(255,255,255,0.8) !important;
-		font: normal 300 1.3em/50px $font;
+		font: normal 300 1.3em/50px var(--body-font-family);
 		padding: 0 20px 0 15px;
 		letter-spacing: 1px;
 
@@ -924,7 +924,7 @@ li.library-grid-item {
 
 		.name {
 			font-size: 20px !important;
-			color: #494949;
+			color: var(--primary-grey);
 		}
 	}
 }
@@ -939,8 +939,8 @@ li.library-grid-item {
 
 	.header{
 		position: relative;
-		background-color: $quad-grey;
-		font: normal 600 1em/1.2em $font;
+		background-color: var(--quad-grey);
+		font: normal 600 1em/1.2em var(--body-font-family);
 		padding: 10px 50px 10px 10px;
 		border-bottom: 1px solid #e5e5e5;
 		text-transform: uppercase;
@@ -962,32 +962,32 @@ li.library-grid-item {
 
 		.identifier {
 			font-size: 10px;
-			color: #b8b8b8;
+			color: var(--tertiary-grey);
 			font-weight: 400;
 		}
 
 		.label {
 			font-size: 0.7em;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 		.name {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 	}
 
 	.footer {
 		height: 40px;
-		background-color: $quad-grey;
+		background-color: var(--quad-grey);
 		position: relative;
 
 		.button {
 			cursor: pointer;
 			float: right;
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 			padding: 0 30px;
-			font: normal 500 0.9em/40px $font;
+			font: normal 500 0.9em/40px var(--body-font-family);
 
 			&.disabled {
 				cursor: default;
@@ -995,8 +995,8 @@ li.library-grid-item {
 			}
 
 			&.secondary {
-				background-color: $quad-grey;
-				color: $primary-grey;
+				background-color: var(--quad-grey);
+				color: var(--primary-grey);
 				font-style: italic;
 			}
 		}
@@ -1060,7 +1060,7 @@ li.library-grid-item {
 			@include ellipsis();
 
 			&.back {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				padding-left: 22px;
 				cursor: pointer;
 
@@ -1084,9 +1084,9 @@ li.library-grid-item {
 		top: 28px;
 		opacity: 0;
 		left: 0; right: 0px;
-		font: normal 500 1em/2em $font;
+		font: normal 500 1em/2em var(--body-font-family);
 		padding: 0 25px;
-		background-color: $secondary-green;
+		background-color: var(--secondary-green);
 		color: white;
 		max-height: 2em;
 		z-index: 11;
@@ -1100,7 +1100,7 @@ li.library-grid-item {
 		}
 
 		&.error {
-			background-color: $primary-red;
+			background-color: var(--primary-red);
 		}
 
 		&.link {
@@ -1130,8 +1130,8 @@ li.library-grid-item {
 	}
 
 	.empty-text {
-		color: $tertiary-grey;
-		font: normal 300 2em $font;
+		color: var(--tertiary-grey);
+		font: normal 300 2em var(--body-font-family);
 		text-align: center;
 		padding-top: 2em;
 	}
@@ -1145,7 +1145,7 @@ li.library-grid-item {
 	& > .body-container {
 		height: 90%;
 		@include experimental-value(height, calc(100% - 100px));
-		background-color: $panel-background;
+		background-color: var(--panel-background);
 		position: relative;
 		z-index: 10 !important;
 		overflow: hidden;
@@ -1165,7 +1165,7 @@ li.library-grid-item {
 			.x-component-library-collection {
 				.library-group-header {
 					& > div {
-						color: $primary-grey;
+						color: var(--primary-grey);
 					}
 				}
 			}
@@ -1181,19 +1181,19 @@ li.library-grid-item {
 				z-index: 10;
 
 				.tab {
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					cursor: pointer;
 					padding: 0 20px;
 					border-radius: 0;
 					height: 40px;
 					box-shadow: 1px 0 0 0 #e3e3e3;
-					font: normal 500 0.9em/40px $font;
+					font: normal 500 0.9em/40px var(--body-font-family);
 					text-transform: uppercase;
 					float: left;
 
 					&.active, &.active:hover{
 						color: white;
-						background-color: $primary-blue;
+						background-color: var(--primary-blue);
 						box-shadow: -1px 0 0 0 #e3e3e3,
 							1px 0 0 0 #e3e3e3;
 					}
@@ -1210,12 +1210,12 @@ li.library-grid-item {
 
 .course-setting-options {
 	padding: 20px 40px;
-	color: $primary-blue;
-	font: normal 500 1em/1.5em $font;
+	color: var(--primary-blue);
+	font: normal 500 1em/1.5em var(--body-font-family);
 
 	.enrollment {
 		font-size: 0.9em;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 		@include icon($courseinfo-circle-check-gray, $side: before, $left: -25px, $top: 2px);
 	}
@@ -1223,13 +1223,13 @@ li.library-grid-item {
 	.contact, .support, .report, .drop {
 		display: block;
 		cursor: pointer;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		font-size: 0.8em;
 		text-decoration: none;
 	}
 
 	.drop {
-		color: $primary-red;
+		color: var(--primary-red);
 	}
 }
 
@@ -1240,7 +1240,7 @@ li.library-grid-item {
 }
 
 .available-courses-tabpanel {
-	background-color: $panel-background;
+	background-color: var(--panel-background);
 	max-height: 100%;
 
 	.available-courses-tabbar {
@@ -1250,7 +1250,7 @@ li.library-grid-item {
 		box-shadow: inset 0 0 0 1px #e3e3e3;
 
 		.x-tab {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			cursor: pointer;
 			padding: 0 20px;
 			border-radius: 0;
@@ -1258,13 +1258,13 @@ li.library-grid-item {
 			box-shadow: 1px 0 0 0 #e3e3e3;
 
 			.x-tab-inner {
-				font: normal 500 0.9em/40px $font;
+				font: normal 500 0.9em/40px var(--body-font-family);
 				text-transform: uppercase;
 			}
 
 			&.x-tab-active, &.x-tab-active:hover{
 				color: white;
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				box-shadow: -1px 0 0 0 #e3e3e3,
 					1px 0 0 0 #e3e3e3;
 			}
@@ -1291,8 +1291,8 @@ li.library-grid-item {
 	max-width: 100%;
 
 	.empty-text {
-		color: $tertiary-grey;
-		font: normal 300 2em $font;
+		color: var(--tertiary-grey);
+		font: normal 300 2em var(--body-font-family);
 		margin: 2em auto;
 		width: 530px;
 		text-align: center;
@@ -1317,7 +1317,7 @@ li.library-grid-item {
 
 		.home, .title {
 			color: white;
-			font: normal 400 0.875em/2em $font;
+			font: normal 400 0.875em/2em var(--body-font-family);
 		}
 
 		.title{
@@ -1342,12 +1342,12 @@ li.library-grid-item {
 
 		.add-more-link {
 			cursor: pointer;
-			font: normal 300 0.875em/35px $font;
+			font: normal 300 0.875em/35px var(--body-font-family);
 			color: white;
 			text-align: center;
 			border-radius: 5px;
 			padding: 0 1.5em;
-			background-color: $secondary-green;
+			background-color: var(--secondary-green);
 
 			&.hidden {
 				display: none;
@@ -1379,7 +1379,7 @@ li.library-grid-item {
 
 	.error-cmp {
 		text-align: center;
-		color: $primary-red;
+		color: var(--primary-red);
 		font-size: 1.25em;
 	}
 }
@@ -1416,15 +1416,15 @@ li.library-grid-item {
 			}
 
 			.title {
-				font: normal 300 1.25em/2em $font;
+				font: normal 300 1.25em/2em var(--body-font-family);
 				color: white;
 				margin-right: 0.8em;
 			}
 
 			.add {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
-				font: normal 600 0.875em/2em $font;
+				font: normal 600 0.875em/2em var(--body-font-family);
 
 				&::before {
 					content: '+';
@@ -1434,7 +1434,7 @@ li.library-grid-item {
 
 			.see-all {
 				color: white;
-				font: normal 300 0.875em/2em $font;
+				font: normal 300 0.875em/2em var(--body-font-family);
 				cursor: pointer;
 			}
 		}

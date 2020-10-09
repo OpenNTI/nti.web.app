@@ -7,9 +7,9 @@
 
 	.redeemLabel {
 	    flex: 0 1 100%;
-		color: #494949;
+		color: var(--primary-grey);
 	    float: left;
-	    font: normal 300 1.125em/1 "Open Sans", sans-serif;
+	    font: normal 300 1.125em/1 var(--body-font-family);
 	    margin-bottom: 10px;
 	}
 
@@ -19,8 +19,8 @@
 
 
 	.error-label {
-	    color: #F35252;
-	    font: 200 14px 'Open Sans';
+	    color: var(--primary-red);
+	    font: 200 14px var(--body-font-family);
 	}
 
 	.form-container {
@@ -36,20 +36,20 @@
 			font-size: 14px;
 			margin-bottom: 1.25em;
 			padding: 0.65em;
-		    font-family: "Open Sans", sans-serif;
+		    font-family: var(--body-font-family);
 		    font-style: italic;
-		    color: #494949;
+		    color: var(--primary-grey);
 		    border: none;
 		    box-shadow: 0 0 0 1px #d8d8d8;
 		    border-radius: 2px;
 		}
 
 		.reedem {
-		    background-color: #3fb3f6;
+		    background-color: var(--primary-blue);
 		    color: white;
 		    font-size: 14px;
 		    display: inline-block;
-		    font-family: "Open Sans", sans-serif;
+		    font-family: var(--body-font-family);
 		    font-weight: 500;
 		    border-radius: 2px;
 		    cursor: pointer;
@@ -59,7 +59,7 @@
 		}
 
 		.redeem[disabled="disabled"]{
-			background-color: #b8b8b8;
+			background-color: var(--tertiary-grey);
 		    cursor: inherit;
 		}
 
@@ -70,7 +70,7 @@
 		    	pointer-events: none;
 			}
 			input[name="invitation_codes"] {
-			    box-shadow: 0 0 0 1px #F35252;
+			    box-shadow: 0 0 0 1px var(--primary-red);
 			}
 		}
 	}

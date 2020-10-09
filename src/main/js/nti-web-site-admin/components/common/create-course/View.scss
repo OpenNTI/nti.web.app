@@ -8,14 +8,14 @@
 
 		.create-item {
 			padding: 1rem 0.5rem 1rem 1.25rem;
-			border-bottom: 1px solid $border-grey-light;
+			border-bottom: 1px solid var(--border-grey-light);
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 
 			.option-icon {
 				flex: 0 0 auto;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				margin-right: 0.625rem;
 			}
 
@@ -27,14 +27,14 @@
 				font-size: 14px;
 				line-height: 19px;
 				font-weight: 600;
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 
 			.option-description {
 				font-size: 14px;
 				line-height: 19px;
 				font-weight: 300;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 		}
 	}
@@ -43,7 +43,7 @@
 .admin-create-button {
 	height: 40px;
 	width: 115px;
-	background-color: #3fb3f6;
+	background-color: var(--primary-blue);
 	border-radius: 30px;
 	color: white;
 	padding: 4px 4px 4px 7px;
@@ -55,7 +55,7 @@
 		border-radius: 12px;
 		width: 24px;
 		height: 24px;
-		color: #3fb3f6;
+		color: var(--primary-blue);
 		padding: 1px 0 0 3px;
 		margin: 4px 10px 0 3px;
 		font-size: 18px;

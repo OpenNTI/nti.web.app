@@ -5,12 +5,12 @@
 
 @mixin file-custom-icon() {
 	.icon {
-		$grey: $tertiary-grey;
+		$grey: var(--tertiary-grey);
 		$blue: #15a2e0;
 		$green: #4aaf37;
 		$orange: #f65b24;
 		$yellow: #ffaf44;
-		$red: #f35252;
+		$red: var(--primary-red);
 		$gap: 0.625rem;
 		$icon-width: 125px;
 		color: $grey;
@@ -42,7 +42,7 @@
 				text-transform: uppercase;
 				text-align: center;
 				font-weight: bold;
-				font-family: $condensed-font;
+				font-family: var(--header-font-family);
 				font-size: 1.1625rem;
 				overflow: hidden;
 				text-overflow: ellipsis;

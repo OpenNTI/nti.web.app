@@ -92,7 +92,7 @@
 			height: 40px;
 			line-height: 40px;
 			padding-left: 20px;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 
 			@include flexItem(0 0 150px);
@@ -108,14 +108,14 @@
 				max-width: 650px;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				color: $primary-grey;
-				font: normal 400 1.5em/1.5 $font;
+				color: var(--primary-grey);
+				font: normal 400 1.5em/1.5 var(--body-font-family);
 				-webkit-font-smoothing: antialiased;
 			}
 
 			.sub {
-				color: $tertiary-grey;
-				font: normal 600 0.625em/1 $font;
+				color: var(--tertiary-grey);
+				font: normal 600 0.625em/1 var(--body-font-family);
 				text-transform: uppercase;
 			}
 		}
@@ -154,15 +154,15 @@
 			}
 
 			.error {
-				background-color: $primary-red;
+				background-color: var(--primary-red);
 			}
 
 			.warning {
-				background-color: $primary-orange;
+				background-color: var(--primary-orange);
 			}
 
 			.message {
-				background-color: $secondary-green;
+				background-color: var(--secondary-green);
 			}
 		}
 	}
@@ -194,7 +194,7 @@
 		}
 
 		.save {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 
 			&:focus {
@@ -203,7 +203,7 @@
 
 			&.disabled {
 				opacity: 0.4;
-				background-color: $secondary-grey;
+				background-color: var(--secondary-grey);
 			}
 		}
 	}

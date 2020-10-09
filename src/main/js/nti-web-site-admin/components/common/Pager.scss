@@ -13,13 +13,13 @@
 		line-height: 40px;
 		text-align: center;
 		border: 1px solid #e2e2e2;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 		margin: 0 5px;
 
 		&.selected {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
-			border: 1px solid $primary-blue;
+			border: 1px solid var(--primary-blue);
 		}
 	}
 }

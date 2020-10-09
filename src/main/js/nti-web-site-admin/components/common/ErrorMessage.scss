@@ -2,7 +2,7 @@
 
 .site-admin-error-message {
 	margin-top: 0.5rem;
-	color: $primary-red;
+	color: var(--primary-red);
 	font-size: 0.875;
 	line-height: rem-calc(40px);
 }

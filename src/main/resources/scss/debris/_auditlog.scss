@@ -2,7 +2,7 @@
     padding-top: 2em;
 
     .load-more{
-        background: #3fb3f6;
+        background: var(--primary-blue);
         color: #fff;
         cursor: pointer;
         font-size: 0.875em;
@@ -22,7 +22,7 @@
 
 		.loading {
 			position: absolute;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			line-height: 24px;//height of the spinner
 			padding-left: 30px;//width of the spinner + 6px
 			top: 50%; left: 50%;
@@ -69,12 +69,12 @@
 	}
 
 	.username, .message {
-		font: normal 400 0.875em/1.36 $font;
+		font: normal 400 0.875em/1.36 var(--body-font-family);
 	}
 
 
 	.username {
-		color: $primary-blue;
+		color: var(--primary-blue);
 		margin-right: 5px;
 	}
 
@@ -83,10 +83,10 @@
 	}
 
 	.date {
-		font: normal 600 0.625em/1 "Open Sans", sans-serif;
+		font: normal 600 0.625em/1 var(--body-font-family);
 		margin-top: 0.6em;
 		text-transform: uppercase;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 	}
 }
 
@@ -97,7 +97,7 @@
 
     .change-log {
         font-weight: 600;
-        color: #757474;
+        color: var(--secondary-grey);
         margin-left: 25px;
     }
 }

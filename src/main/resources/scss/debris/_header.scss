@@ -30,17 +30,17 @@
 		.provider-bottom {
 			position: relative;
 			text-transform: uppercase;
-			font: normal bold 0.6em/1.3em $font;
-			color: $secondary-grey;
+			font: normal bold 0.6em/1.3em var(--body-font-family);
+			color: var(--secondary-grey);
 			overflow: hidden;
 			@include ellipse();
 		}
 
 		.title {
 			margin-top: -0.2em;
-			font: normal 700 1.1em/1.5 'Open Sans Condensed';
+			font: normal 700 1.1em/1.5 var(--header-font-family);
 			text-transform: uppercase;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			overflow: hidden;
 			@include ellipse();
 		}
@@ -251,7 +251,7 @@
 
 		div {
 			display: inline-block;
-			background: $secondary-grey;
+			background: var(--secondary-grey);
 			border-radius: 5px;
 			width: 5px;
 			height: 5px;

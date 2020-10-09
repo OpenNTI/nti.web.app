@@ -12,7 +12,7 @@
 		font-weight: 300;
 		padding-bottom: 0.5rem;
 		padding-top: 1rem;
-		border-bottom: solid 1px $tertiary-grey;
+		border-bottom: solid 1px var(--tertiary-grey);
 		margin-left: 5rem;
 		margin-right: 5rem;
 		padding-left: 1rem;
@@ -38,7 +38,7 @@
 		height: 2.2rem;
 
 		.save {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			text-align: center;
 			color: white;
 			width: 4rem;

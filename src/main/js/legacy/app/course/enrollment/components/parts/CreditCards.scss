@@ -21,43 +21,43 @@
 		.card-input .card-number,
 		.card-input .card-expiry,
 		.card-input .card-cvc {
-			border: 1px solid #b8b8b8;
-			box-shadow: inset 4px 0 0 0 #b8b8b8;
+			border: 1px solid var(--tertiary-grey);
+			box-shadow: inset 4px 0 0 0 var(--tertiary-grey);
 			border-left-width: 0;
 			background: white;
 			border-radius: 0;
 
 			.missing-all & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 
 		.name-input {
 			.missing-name & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 
 		.card-input .card-number {
 			.missing-number & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 
 		.card-input .card-expiry {
 			.missing-expiry & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 
 		.card-input .card-cvc {
 			.missing-cvc & {
-				border: 1px solid $primary-red;
-				box-shadow: inset 4px 0 0 0 $primary-red;
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
 		}
 	}

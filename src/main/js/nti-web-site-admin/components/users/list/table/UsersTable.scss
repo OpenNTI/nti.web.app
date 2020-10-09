@@ -33,7 +33,7 @@
 
 			.button {
 				cursor: pointer;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				border: 1px solid #e2e2e2;
 				border-radius: 4px;
 				line-height: 40px;
@@ -41,14 +41,14 @@
 				font-size: 14px;
 
 				&.rescind {
-					background-color: $primary-red;
+					background-color: var(--primary-red);
 					color: white;
 				}
 
 				&.invite-people {
-					background-color: $primary-blue;
+					background-color: var(--primary-blue);
 					color: white;
-					border-color: $primary-blue;
+					border-color: var(--primary-blue);
 				}
 
 				i {

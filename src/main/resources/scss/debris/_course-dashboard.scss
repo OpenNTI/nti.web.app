@@ -31,15 +31,15 @@
 		margin-top: 0;
 
 		.title {
-			font: normal 300  22px/30px $font;
-			color: $tertiary-grey;
+			font: normal 300  22px/30px var(--body-font-family);
+			color: var(--tertiary-grey);
 			text-align: center;
 			margin-top: 2em;
 		}
 
 		.sub {
 			text-align: center;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 
@@ -70,7 +70,7 @@
 		}
 
 		.dashboard-header {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			display: inline-block;
 			margin-bottom: 10px;
 			text-transform: uppercase;
@@ -81,7 +81,7 @@
 		}
 
 		.lesson-tile {
-			background-color: $secondary-green;
+			background-color: var(--secondary-green);
 			color: white;
 		}
 
@@ -118,16 +118,16 @@
 			}
 
 			.path {
-				font: normal 600 0.65em/1.3em $font;
+				font: normal 600 0.65em/1.3em var(--body-font-family);
 				text-transform: uppercase;
-				color: $tertiary-grey-alt;
+				color: var(--tertiary-grey-alt);
 			}
 
 			.title {
-				font: italic 300 1.5em/1.4em $font;
+				font: italic 300 1.5em/1.4em var(--body-font-family);
 				height: 4.2em;
 				max-height: 4.2em;
-				color: #f8f8f8;
+				color: var(--quad-grey);
 				margin-bottom: 0.2em;
 
 				overflow: hidden;
@@ -140,8 +140,8 @@
 			}
 
 			.bullets {
-				font: normal 600 0.75em/1.3em $font;
-				color: $tertiary-grey-alt;
+				font: normal 600 0.75em/1.3em var(--body-font-family);
+				color: var(--tertiary-grey-alt);
 			}
 
 			.footer {
@@ -169,8 +169,8 @@
 			.location {
 				background-color: white;
 				border-bottom: 1px solid #efefef;
-				font: normal 400 0.6em/1.3em $font;
-				color: $tertiary-grey;
+				font: normal 400 0.6em/1.3em var(--body-font-family);
+				color: var(--tertiary-grey);
 				text-transform: uppercase;
 				padding: 4px 15px;
 				min-height: 33px;
@@ -186,7 +186,7 @@
 
 				.current {
 					overflow: hidden;
-					color: $primary-blue;
+					color: var(--primary-blue);
 					@include ellipsis;
 				}
 			}
@@ -236,7 +236,7 @@
 						right: 0;
 						overflow: hidden;
 						padding: 0.2em 15px;
-						font: italic 300 1.1em/1.6em $font;
+						font: italic 300 1.1em/1.6em var(--body-font-family);
 
 						* {
 							display: inline;
@@ -264,7 +264,7 @@
 
 					.meta {
 						margin-left: 110px;
-						font: italic 300 1.1em/1.6em $font;
+						font: italic 300 1.1em/1.6em var(--body-font-family);
 					}
 				}
 			}
@@ -272,7 +272,7 @@
 			.list-item {
 				display: inline-block;
 				font-size: 0.75em;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 
 				&::before {
 					content: '\a0\b7\a0';
@@ -319,7 +319,7 @@
 						max-width: 215px;
 
 						.name {
-							color: $primary-grey;
+							color: var(--primary-grey);
 							font-size: 1.1em;
 							font-weight: 300;
 							margin-bottom: -7px;
@@ -343,9 +343,9 @@
 				}
 
 				.post {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					padding: 5px 15px;
-					font: normal 400 0.9em/1.2em $font;
+					font: normal 400 0.9em/1.2em var(--body-font-family);
 
 					.title {
 						font-weight: 600;
@@ -380,7 +380,7 @@
 				}
 
 				.meta {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					font-size: 0.9em;
 					overflow: hidden;
 					padding-top: 5px;
@@ -411,7 +411,7 @@
 
 				.actions {
 					.comments {
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 				}
 			}
@@ -425,7 +425,7 @@
 				padding: 0 15px;
 				font-size: 0.8em;
 				font-style: italic;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 		}
 	}

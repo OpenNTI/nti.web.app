@@ -13,7 +13,7 @@
 	padding-left: 1rem;
 	font-size: 0.875rem;
 	font-style: italic;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 }
 
 .icon {

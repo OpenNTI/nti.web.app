@@ -13,11 +13,11 @@
 
 		.progress-complete-container {
 			display: flex;
-			color: #3fb34f;
+			color: var(--secondary-green);
 			cursor: pointer;
 
 			.progress-completed {
-				background-color: #3fb34f;
+				background-color: var(--secondary-green);
 				width: 24px;
 				height: 24px;
 				border-radius: 25px;
@@ -35,11 +35,11 @@
 		}
 
 		.progress-container {
-			color: #3fb34f;
+			color: var(--secondary-green);
 			cursor: pointer;
 
 			&.none {
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 			}
 
 			svg {

@@ -3,7 +3,7 @@
 
 	[data-badge]:not([data-badge="0"])::before {
 		content: attr(data-badge);
-		background-color: $primary-red;
+		background-color: var(--primary-red);
 		font-size: 0.55em;
 		font-weight: 500;
 		color: white;
@@ -67,7 +67,7 @@
 
 		.loading {
 			position: absolute;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			line-height: 24px;//height of the spinner
 			padding-left: 30px;//width of the spinner + 6px
 			top: 50%; left: 50%;
@@ -113,7 +113,7 @@
 		cursor: pointer;
 		text-align: center;
 		line-height: 2em;
-		color: $primary-blue;
+		color: var(--primary-blue);
 	}
 }
 
@@ -147,7 +147,7 @@
 			background: none;
 
 			.load-text {
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 		}
 	}
@@ -202,8 +202,8 @@
 		.username {
 			@include flexItem(0 0 25%);
 			float: left;
-			font: normal 400 0.875em/1.36 $font;
-			color: $primary-blue;
+			font: normal 400 0.875em/1.36 var(--body-font-family);
+			color: var(--primary-blue);
 			margin-right: 5px;
 			overflow: hidden;
 			@include ellipse;
@@ -215,7 +215,7 @@
 
 		.wording {
 			display: block;
-			font: normal 600 0.875em/1.36 $font;
+			font: normal 600 0.875em/1.36 var(--body-font-family);
 
 			.title {
 				font-weight: 400;
@@ -240,7 +240,7 @@
 			background: none;
 
 			.load-text {
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 		}
 	}
@@ -269,7 +269,7 @@
 		.username {
 			display: inline;
 			margin-right: 0.5em;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			weight: 600
 		}
 
@@ -298,16 +298,16 @@
 					.inner {
 						font-weight: 700;
 						font-size: 12pt;
-						font-family: "Open Sans", sans-serif;
+						font-family: var(--body-font-family);
 					}
 				}
 			}
 		}
 
 		time {
-			font: normal 600 0.625em/1 $font;
+			font: normal 600 0.625em/1 var(--body-font-family);
 			text-transform: uppercase;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 }
@@ -315,7 +315,7 @@
 
 .notification-header {
 	h3 {
-		font: normal 300 2em/1.3em $font;
+		font: normal 300 2em/1.3em var(--body-font-family);
 		color: white;
 		margin: 40px 0 12px;
 	}

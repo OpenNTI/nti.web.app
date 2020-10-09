@@ -1,7 +1,7 @@
 
 .guide-window, .tos-window, .iframe-window, .notifications-window, .confirm-window {
 	@extend .nti-window;
-	background-color: $quad-grey;
+	background-color: var(--quad-grey);
 	box-shadow: 0 10px 40px rgba(0,0,0,0.61);
 
 	iframe{
@@ -26,7 +26,7 @@
 		}
 		.you-should {
 			font-size: 12px;
-			color: #b8b8b8;
+			color: var(--tertiary-grey);
 		}
 	}
 
@@ -82,7 +82,7 @@
 
 .iframe-window {
 	.iframe-save {
-		font: normal 500 0.9em/35px $font;
+		font: normal 500 0.9em/35px var(--body-font-family);
 	}
 }
 

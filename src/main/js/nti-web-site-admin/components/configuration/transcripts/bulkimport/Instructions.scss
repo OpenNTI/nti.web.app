@@ -10,12 +10,12 @@
 	.download-sample {
 		font-size: 0.875rem;
 		text-decoration: none;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		margin-bottom: 1rem;
 	}
 
 	.field-descriptions-heading {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		text-transform: uppercase;
 		font-size: 0.625rem;
 		font-weight: bold;
@@ -34,7 +34,7 @@
 
 				.field-requiredness {
 					font-style: italic;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 			}
 

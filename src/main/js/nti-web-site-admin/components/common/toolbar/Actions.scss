@@ -6,16 +6,16 @@
 	cursor: pointer;
 
 	&.disabled {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		cursor: default;
 
 		i {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 
 	i {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font-size: 22px;
 	}
 }

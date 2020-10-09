@@ -1,7 +1,7 @@
 .resource-not-found{
 	position: relative;
-	background-color: $quad-grey;
-	border: 1px solid $border-grey;
+	background-color: var(--quad-grey);
+	border: 1px solid var(--border-grey);
 	border-radius: 3px;
 	.body{
 		padding-top: 6px;
@@ -16,9 +16,9 @@
 				position: relative;
 				padding-right: 18px;
 			    &, a:link, a:visited, a:active {
-			   	   color: $primary-blue;
+			   	   color: var(--primary-blue);
 			   	   font-style: normal !important;
-			   	   font: 14px $font !important;
+			   	   font: 14px var(--body-font-family) !important;
 			   	   font-weight: 300 !important;
 			   	   text-decoration: none;
 			 	   &:hover {
@@ -28,8 +28,8 @@
 				}
 
 				&::after{
-					color: $tertiary-grey;
-					font: 24px $font !important;
+					color: var(--tertiary-grey);
+					font: 24px var(--body-font-family) !important;
 					font-weight: 300 !important;
 					font-style: italic !important;
 					content: ".";
@@ -50,15 +50,15 @@
 		@include icon($modal-yellow-sign,$top: 12px,$left: 20px);
 
 		.heading{
-			color: $tertiary-grey;
-			font: 24px $font !important;
+			color: var(--tertiary-grey);
+			font: 24px var(--body-font-family) !important;
 			font-weight: 300 !important;
 			font-style: italic !important;
 		}
 
 		.subtext{
-			color: $primary-grey;
-			font: 14px $font !important;
+			color: var(--primary-grey);
+			font: 14px var(--body-font-family) !important;
 			font-style: normal !important;
 		}
 	}

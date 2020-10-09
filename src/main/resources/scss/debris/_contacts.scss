@@ -54,14 +54,14 @@ $over-color: #f4f3f3;
 			.name {
 				@include ellipse();
 				overflow: hidden;
-				font: normal 600 12px/15px $font;
-				color: $primary-grey;
+				font: normal 600 12px/15px var(--body-font-family);
+				color: var(--primary-grey);
 			}
 			.status {
 				@include ellipse();
 				overflow: hidden;
-				font: italic 400 12px/20px $font;
-				color: $tertiary-grey;
+				font: italic 400 12px/20px var(--body-font-family);
+				color: var(--tertiary-grey);
 			}
 		}
 	}
@@ -176,17 +176,17 @@ $over-color: #f4f3f3;
 	&.offline{
 		cursor: default;
 		.name {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 
 	.name {
 		@include menu-label-text-treatment;
-		color: $primary-blue;
+		color: var(--primary-blue);
 		cursor: pointer;
 	}
 	.status {
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		font: { size: 8pt; weight: 500; }
 	}
 }
@@ -321,12 +321,12 @@ $over-color: #f4f3f3;
 
 			li.selection-list-item {
 				padding: 5px 5px 5px 35px;
-				color: $secondary-grey !important;
+				color: var(--secondary-grey) !important;
 				@include icon($check_box, $top: 7px, $left: 12px);
 
 				&.selection-item-over{
 					background-color: $over-color;
-					color: $secondary-grey !important;
+					color: var(--secondary-grey) !important;
 					pointer: default;
 				}
 
@@ -355,9 +355,9 @@ $over-color: #f4f3f3;
 
 				a {
 					&:active, &:visited, &:link{
-						border: 0 dotted $secondary-grey;
+						border: 0 dotted var(--secondary-grey);
 						border-bottom-width: 2px;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 						display: inline-block;
 						font-style: italic;
 						padding: 0px 2px;
@@ -475,9 +475,9 @@ $over-color: #f4f3f3;
 			height: 45px;
 			bottom: 0;
 			right: 0;
-			font: normal normal 14px/45px $font;
+			font: normal normal 14px/45px var(--body-font-family);
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			cursor: pointer;
 			@include experimental(transition, all 0.5s);
 
@@ -488,7 +488,7 @@ $over-color: #f4f3f3;
 
 			&.start {
 				width: 95px;
-				font: italic bold 14px/44px $font;
+				font: italic bold 14px/44px var(--body-font-family);
 				color: #ffffff;
 				border: 1px solid #69a92b;
 				background: #75bc30;
@@ -538,9 +538,9 @@ $over-color: #f4f3f3;
 
 		.empty-list {
 			padding: 20px 0;
-			font: italic 300 14px/28px $font;
+			font: italic 300 14px/28px var(--body-font-family);
 			text-align: center;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 
@@ -586,8 +586,8 @@ $over-color: #f4f3f3;
 			white-space: nowrap;
 
 			position: absolute !important;
-			font: italic 400 14px/40px $font;
-			color: $tertiary-grey;
+			font: italic 400 14px/40px var(--body-font-family);
+			color: var(--tertiary-grey);
 			background: #fafafa;
 			overflow: hidden;
 			width: 130px;
@@ -615,8 +615,8 @@ $over-color: #f4f3f3;
 					border: 0;
 					background: #fafafa;
 
-					font: normal 400 14px/25px $font;
-					color: $primary-grey;
+					font: normal 400 14px/25px var(--body-font-family);
+					color: var(--primary-grey);
 					height: 40px;
 					top: 0; left: 30px; right: 26px;
 					opacity: 0;
@@ -656,14 +656,14 @@ $over-color: #f4f3f3;
 
 .disabled-contacts-view{
 	padding-top: 0px;
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 
 	.disabled-message-div{
 		background-color: #f1f1f1;
 		padding: 15px;
 
 		.disabled-title{
-			color: $primary-grey;
+			color: var(--primary-grey);
 			padding-bottom: 3px;
 			font-size: 16px;
 			font-style: italic;
@@ -680,7 +680,7 @@ $over-color: #f4f3f3;
 		}
 		.resend-consent {
 			cursor: pointer;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 	}
 }
@@ -690,9 +690,9 @@ div.add-group-action{
 	padding: 0 0 30px 15px;
 	a {
 		&:active, &:visited, &:link{
-			border: 0 dotted $secondary-grey;
+			border: 0 dotted var(--secondary-grey);
 			border-bottom-width: 2px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			display: inline-block;
 			font-style: italic;
 			padding: 0px 2px;
@@ -729,9 +729,9 @@ div.contact-buttons {
 		margin-top: 16px;
 		font-weight: 600;
 		font-size: 10px;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		&:hover{
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 	}
 
@@ -774,15 +774,15 @@ div.contact-buttons {
 
     .header{
         position: relative;
-        color: $secondary-grey;
-        border-bottom: 1px solid $tertiary-grey-alt;
+        color: var(--secondary-grey);
+        border-bottom: 1px solid var(--tertiary-grey-alt);
         box-shadow: inset 0 1px 0 0 white;
         height: 60px;
-        background: $quad-grey;
+        background: var(--quad-grey);
         padding: 15px 30px;
 
         .title{
-            font: normal 300 20px/34px $font;
+            font: normal 300 20px/34px var(--body-font-family);
         }
     }
 
@@ -796,12 +796,12 @@ div.contact-buttons {
             y: auto; //scroll;
         }
 
-        font: normal 400 14px/25px $font;
+        font: normal 400 14px/25px var(--body-font-family);
 
         .contact-card{
             position: relative;
             width: 310px;
-            border-bottom: 1px solid $border-grey;
+            border-bottom: 1px solid var(--border-grey);
             margin: 0 0 0 30px;
             float: left;
 			cursor: default;
@@ -821,13 +821,13 @@ div.contact-buttons {
                 width: 170px;
                 height: 48px;
                 margin-top: 5px;
-				font: normal 400 12px/16px $font;
-				color: $secondary-grey;
+				font: normal 400 12px/16px var(--body-font-family);
+				color: var(--secondary-grey);
 
                 .name{
 					cursor: default;
-                    color: $secondary-grey;
-                    font: normal 600 14px/18px $font;
+                    color: var(--secondary-grey);
+                    font: normal 600 14px/18px var(--body-font-family);
                     text-transform: capitalize;
                 }
             }
@@ -843,20 +843,20 @@ div.contact-buttons {
                 a.button{
                     padding: 10px 25px;
                     height: 38px;
-                    color: $secondary-grey;
-                    background: $quad-grey;
+                    color: var(--secondary-grey);
+                    background: var(--quad-grey);
                     border-radius: 5px;
-                    border: 1px solid $border-grey;
+                    border: 1px solid var(--border-grey);
                     cursor: pointer;
 
                     &:hover{
-                        background: $secondary-green;
+                        background: var(--secondary-green);
                         color: #ffffff;
                         border: none;
                     }
 
                     &.remove-contact, &.selected{
-                        color: #3fb3f6;
+                        color: var(--primary-blue);
                         background: none;
                         border: none;
                     }
@@ -867,9 +867,9 @@ div.contact-buttons {
 
     > .footer{
         position: relative;
-        color: $tertiary-grey;
+        color: var(--tertiary-grey);
         height: 40px;
-        background-color: $quad-grey;
+        background-color: var(--quad-grey);
 
         &:after {
             content: '';
@@ -892,14 +892,14 @@ div.contact-buttons {
             line-height: 40px;
             font-size: 14px;
             text-align: center;
-            color: $secondary-grey;
+            color: var(--secondary-grey);
             margin: 0;
             padding: 0 1.5em;
             float: right;
 
             &.confirm{
                 color: #ffffff;
-                background: $primary-blue;
+                background: var(--primary-blue);
             }
 
             &.disabled{
@@ -941,7 +941,7 @@ div.contact-buttons {
                         right: 0;
                         width: 40px;
                         height: 214px;
-                        background-color: $primary-grey;
+                        background-color: var(--primary-grey);
                         opacity: 0.6;
 						visibility: hidden;
 
@@ -998,12 +998,12 @@ div.contact-buttons {
 					padding-top: 118px;
 					text-align: center;
 					font-style: normal !important;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					font-size: 14px;
 					margin-left: 25px;
 
 					.link{
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
                 }
 
@@ -1054,9 +1054,9 @@ div.contact-buttons {
 						color: white;
 						z-index: 3;
 						overflow: hidden;
-						font: normal 300 0.85em/36px $font;
+						font: normal 300 0.85em/36px var(--body-font-family);
 						box-shadow: 0 1px 0 0 rgba(255,255,255,0.1);
-						background: $secondary-green;
+						background: var(--secondary-green);
                     }
                 }
             }
@@ -1082,9 +1082,9 @@ div.contact-buttons {
                     padding: 10px 13px;
                     margin-bottom: 15px;
                     border-radius: 4px;
-                    border: 1px solid $tertiary-grey-alt;
+                    border: 1px solid var(--tertiary-grey-alt);
                     font-size: 1em;
-                    color: #757474;
+                    color: var(--secondary-grey);
                 }
 
                 textarea{
@@ -1121,8 +1121,8 @@ div.contact-buttons {
 			width: 153px;
 			height: 50px;
 			padding-top: 5px;
-			color: $tertiary-grey;
-			font: italic 400 14px/40px $font;
+			color: var(--tertiary-grey);
+			font: italic 400 14px/40px var(--body-font-family);
 
 			&::after{
 				content: ' ';
@@ -1198,19 +1198,19 @@ div.contact-buttons {
 			margin: 15px 0 0 160px;
 
 			[data-field],.separator{
-				color: $primary-grey;
-				font: normal 500 14px/25px $font;
+				color: var(--primary-grey);
+				font: normal 500 14px/25px var(--body-font-family);
 			}
 
-			.separator{ color: $tertiary-grey; }
+			.separator{ color: var(--tertiary-grey); }
 
 			.name {
 				display: block;
 				padding-left: 10px;
 				margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
 				margin-bottom: 5px;
-				font: italic 300 30px/40px $font;
-				color: $primary-blue;
+				font: italic 300 30px/40px var(--body-font-family);
+				color: var(--primary-blue);
 				overflow: hidden;
 				@include ellipse;
 				text-transform: none;
@@ -1223,9 +1223,9 @@ div.contact-buttons {
 			.actions {
 				margin: 0;
 				text-transform: uppercase;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				white-space: nowrap;
-				font: normal 700 10px/25px $font;
+				font: normal 700 10px/25px var(--body-font-family);
 
 				.chat,.message,.email {
 					opacity: 0.8;
@@ -1328,32 +1328,32 @@ div.contact-buttons {
 
 			span{
 				white-space: nowrap;
-				font: normal 300 26px/35px $font;
-				color: $primary-grey;
+				font: normal 300 26px/35px var(--body-font-family);
+				color: var(--primary-grey);
 			}
 
 			span.count{
 				padding-left: 0.5em;
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 			}
 		}
 
 		.show-more{
 			cursor: pointer;
 			position: relative;
-			background: #f8f8f8;
+			background: var(--quad-grey);
 			width: 140px; height: 140px;
 			float: left;
 			text-align: center;
-			color: $primary-blue;
-			font: italic 300 16px/30px $font;
+			color: var(--primary-blue);
+			font: italic 300 16px/30px var(--body-font-family);
 
 			.dots {
 				line-height: 0;
 				margin-top: 50px;
 				div {
 					display: inline-block;
-					background: $primary-blue;
+					background: var(--primary-blue);
 					border-radius: 90px;
 					width: 7px;
 					height: 7px;
@@ -1387,7 +1387,7 @@ div.contact-buttons {
 
 				&.Offline {
 					.meta {
-						&::before{ background: $tertiary-grey; }
+						&::before{ background: var(--tertiary-grey); }
 					}
 				}
 
@@ -1437,7 +1437,7 @@ div.contact-buttons {
 					}
 
 					.name{
-						font: italic 300 16px/27px $font;
+						font: italic 300 16px/27px var(--body-font-family);
 						max-width: 95px;
 						color: #ababab;
 						margin: 0;
@@ -1517,8 +1517,8 @@ div.contact-buttons {
 					left: 0; right: 0;
 					bottom: 0;
 					background: #fafafa;
-					color: $tertiary-grey;
-					font: italic 400 12px/20px $font;
+					color: var(--tertiary-grey);
+					font: italic 400 12px/20px var(--body-font-family);
 					border: 0;
 					border-top: 1px solid #f2f2f2;
 
@@ -1562,8 +1562,8 @@ div.contact-buttons {
 								border: 0;
 								background: #fafafa;
 
-								font: normal 400 14px/25px $font;
-								color: $primary-grey;
+								font: normal 400 14px/25px var(--body-font-family);
+								color: var(--primary-grey);
 								height: 40px;
 								top: 0; left: 30px; right: 26px;
 								opacity: 0;
@@ -1614,9 +1614,9 @@ div.contact-buttons {
 
 					.empty-list {
 						padding: 20px 0;
-						font: italic 300 14px/28px $font;
+						font: italic 300 14px/28px var(--body-font-family);
 						text-align: center;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 					}
 
 					@include contact-user-row;

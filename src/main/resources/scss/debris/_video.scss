@@ -43,11 +43,11 @@
 
 		 	.edit {
 			    padding: 5px 10px;
-			    color: #3fb3f6;
+			    color: var(--primary-blue);
 			    margin: 5px;
 
 				&:hover {
-				    background-color: #3fb3f6;
+				    background-color: var(--primary-blue);
 				    color: #fff;
 				    border-radius: 5px;
 				}
@@ -58,7 +58,7 @@
 	.play {
 		position: relative;
 		border-radius: 5em;
-		font: normal 400 1.1em/2.75em 'Open Sans Condensed', $font;
+		font: normal 400 1.1em/2.75em var(--header-font-family);
 		min-height: 48px;
 		min-width: 45px;
 		color: #fff;

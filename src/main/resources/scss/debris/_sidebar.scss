@@ -1,15 +1,15 @@
 .rhp-empty-list {
 	padding: 20px 0 !important;
-	font: italic 300 14px/28px $font !important;
-	color: $tertiary-grey !important;
+	font: italic 300 14px/28px var(--body-font-family) !important;
+	color: var(--tertiary-grey) !important;
 	text-align: center !important;
 }
 
 .rhp-no-contacts{
 	padding: 15px 0 0 100px;
 	height: 100px;
-	font: italic 300 14px/18px $font !important;
-	color: $tertiary-grey !important;
+	font: italic 300 14px/18px var(--body-font-family) !important;
+	color: var(--tertiary-grey) !important;
 	@include icon($add_contacts_card);
 
 	* { position: relative; z-index: 1; }
@@ -19,8 +19,8 @@
 	}
 
 	a.button {
-		color: $primary-green;
-		font: normal 400 14px/18px $font !important;
+		color: var(--primary-green);
+		font: normal 400 14px/18px var(--body-font-family) !important;
 
 		&::before {
 			content: '+ ';
@@ -113,8 +113,8 @@
 			position: absolute;
 			top: 8px;
 			right: -8px;
-			font: italic 600 10px $font;
-			color: $primary-blue;
+			font: italic 600 10px var(--body-font-family);
+			color: var(--primary-blue);
 			z-index: 10;
 			text-align: left;
 			width: 15px;
@@ -124,7 +124,7 @@
 		.badge.red {
 			position: absolute;
 			border-radius: 10em;
-			background: $primary-red;
+			background: var(--primary-red);
 			color: #fff;
 
 			top: 6px;

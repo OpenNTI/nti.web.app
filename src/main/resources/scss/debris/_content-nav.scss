@@ -4,7 +4,7 @@
 
 .x-panel-notes-and-discussion {
 	&,.x-panel-body-default{
-		background: #fbfbfb;
+		background: var(--panel-background);
 	}
 	border-left: 1px solid #ededed;
 	border-left-width: 1px !important;
@@ -21,8 +21,8 @@
 
 
 		text-transform: uppercase;
-		color: $tertiary-grey;
-		font: normal 600 12px/59px $font;
+		color: var(--tertiary-grey);
+		font: normal 600 12px/59px var(--body-font-family);
 
 		.x-tab-icon-el {
 			width: 21px;
@@ -48,7 +48,7 @@
 		}
 
 		&.x-active {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			.x-tab-icon-el {
 				&.notepad::after { @include sprite($notepad_active); }

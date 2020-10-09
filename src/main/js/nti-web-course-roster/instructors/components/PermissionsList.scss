@@ -4,7 +4,7 @@
 	.header {
 		display: flex;
 		align-items: center;
-		border-bottom: 1px solid $border-grey-light;
+		border-bottom: 1px solid var(--border-grey-light);
 		margin-bottom: 5px;
 		padding-bottom: 5px;
 
@@ -18,7 +18,7 @@
 			font-weight: 700;
 			text-transform: uppercase;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 	}
 }

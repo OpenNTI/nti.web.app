@@ -14,8 +14,8 @@
 
 		.header {
 			flex: 1 1 auto;
-			font: normal 300 2.25rem/1 $body-font-family;
-			color: $primary-grey;
+			font: normal 300 2.25rem/1 var(--body-font-family);
+			color: var(--primary-grey);
 		}
 
 		.resource-controls {

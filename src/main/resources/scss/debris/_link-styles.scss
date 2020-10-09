@@ -18,11 +18,11 @@
 
 		.edit {
 			padding: 5px 10px;
-    		color: #3fb3f6;
+    		color: var(--primary-blue);
     		margin: 5px;
 
     		&:hover {
-    			background-color: #3fb3f6;
+    			background-color: var(--primary-blue);
     			color: #fff;
     			border-radius: 5px;
     		}
@@ -35,7 +35,7 @@
 			repeat: no-repeat;
 			position: center;
 		}
-		//border-right: 1px solid #f8f8f8;
+		//border-right: 1px solid var(--quad-grey);
 		box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
 		float: left;
 		width: $thumbWidth;
@@ -47,24 +47,24 @@
 		margin-left: $thumbWidth+15px;
 
 		.title {
-			font: normal 600 15px/20px $font;
+			font: normal 600 15px/20px var(--body-font-family);
 			max-height: 40px; //line-height is 20px, max-height is 40px for two line limit.
 			overflow: hidden;
 			margin-bottom: 5px;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 		.byline {
-			font: normal 600 10px/10px $font;
+			font: normal 600 10px/10px var(--body-font-family);
 			text-transform: uppercase;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
 		.description {
-			color: $primary-grey;
-			font: normal normal 12px/1rem $font;
+			color: var(--primary-grey);
+			font: normal normal 12px/1rem var(--body-font-family);
 			margin-top: 5px;
 			max-height: 2rem; //line-height is 1rem, 2rem max-height limits this to two lines.
 		}
@@ -90,7 +90,7 @@ a[href] {
 	#NTIContent &, #profile .profile-head &{
 		@include content-link-def;
 		line-height: inherit;
-		color: $primary-blue;
+		color: var(--primary-blue);
 	}
 }
 
@@ -134,9 +134,9 @@ a[href] {
 			.launcher-button {
 				margin: 5px 0px;
 				padding: 0px 10px 0px 40px;
-				background-color: $primary-blue;
-				border: 1px solid $border-blue;
-				font: italic 500 14px/30px $font;
+				background-color: var(--primary-blue);
+				border: 1px solid var(--border-blue);
+				font: italic 500 14px/30px var(--body-font-family);
 				border-radius: 3px;
 				color: white;
 				position: relative;
@@ -168,7 +168,7 @@ a[href] {
 
 	.content-card-target-container {
 		margin: 0 5px 0 0;
-		border: 1px solid $border-grey;
+		border: 1px solid var(--border-grey);
 		border-radius: 1px;
 		box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
 		overflow: visible;
@@ -183,15 +183,15 @@ a[href] {
 
 			padding: 0 5em;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			.link {
-				color: $primary-blue;
+				color: var(--primary-blue);
 			}
 
 			.message {
-				color: $tertiary-grey;
-				font: normal 300 2em/4em "Open Sans Condensed", $font;
+				color: var(--tertiary-grey);
+				font: normal 300 2em/4em var(--header-font-family);
 			}
 		}
 
@@ -228,7 +228,7 @@ a[href] {
 				font-size: 12px;
 
 				.message {
-					font: normal 300 1.8em/2.7em "Open Sans Condensed", $font;
+					font: normal 300 1.8em/2.7em var(--header-font-family);
 				}
 			}
 		}

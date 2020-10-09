@@ -2,16 +2,16 @@
 
 .site-admin-labeled-value {
 	padding: 0.5rem;
-	color: $primary-grey;
+	color: var(--primary-grey);
 
 	& > .label {
 		text-transform: uppercase;
-		font: normal 700 0.625rem/1 $body-font-family;
+		font: normal 700 0.625rem/1 var(--body-font-family);
 	}
 
 	& > .value {
 		text-align: right;
-		font: normal 300 2rem/1.2 $body-font-family;
+		font: normal 300 2rem/1.2 var(--body-font-family);
 		padding-top: 2rem;
 	}
 }

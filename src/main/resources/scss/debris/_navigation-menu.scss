@@ -6,7 +6,7 @@
 	background: none;
 
 	.x-panel-body-navigation-menu {
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 		width: 100% !important;
 		height: 100% !important;
 		padding: 0 50px;
@@ -15,7 +15,7 @@
 					inset 2px 0 0 0 #ffffff,
 					-1px 0 3px 0 rgba(0, 0, 0, 0.2);
 
-		background: #f9f9f9 !important;
+		background: var(--quad-grey) !important;
 		border: 0px solid #99c14f;
 		border-right-width: 3px !important;*/
 
@@ -52,7 +52,7 @@
 
 .x-component-navigation-collection {
 	//&.x-menu-item{}
-	background: #f9f9f9;
+	background: var(--quad-grey);
 	border: 1px solid #d2d2d2 !important;
 	border-top-width: 0 !important;
 	border-right-width: 0 !important;
@@ -116,7 +116,7 @@
 
 		.cover {
 			background:{
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				size: cover;
 				position: center center;
 				repeat: no-repeat;
@@ -132,8 +132,8 @@
 			margin-left: 65px;
 
 			.title, .author, .price {
-				color: $primary-grey;
-				font: normal bold 12px/18px $font;
+				color: var(--primary-grey);
+				font: normal bold 12px/18px var(--body-font-family);
 				@include ellipse;
 				overflow: hidden;
 			}
@@ -147,7 +147,7 @@
 			}
 
 			.price {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				font-style: italic;
 				line-height: 30px;
 			}
@@ -155,9 +155,9 @@
 			.sample {
 				text-transform: uppercase;
 				color: #fff;
-				background: $primary-green;
+				background: var(--primary-green);
 				display: inline-block;
-				font: normal 600 10px/16px $font;
+				font: normal 600 10px/16px var(--body-font-family);
 				padding: 0 5px;
 				margin: 5px 0;
 			}

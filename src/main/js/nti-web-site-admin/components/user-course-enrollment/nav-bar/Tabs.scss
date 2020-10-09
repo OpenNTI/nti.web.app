@@ -2,20 +2,20 @@
 
 .site-admin-user-tabs {
 	li {
-		box-shadow: 0 -1px 0 0 $border-grey-light;
+		box-shadow: 0 -1px 0 0 var(--border-grey-light);
 
 		a {
 			display: block;
 			padding: 0.5rem 1rem;
 			text-decoration: none;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			&:not(.active):hover {
-				background: $panel-background;
+				background: var(--panel-background);
 			}
 
 			&.active {
-				background: $primary-blue;
+				background: var(--primary-blue);
 				color: white;
 			}
 		}

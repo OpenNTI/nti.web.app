@@ -5,7 +5,7 @@
 }
 
 .hit-fragment .hit {
-	color: #757474;
+	color: var(--secondary-grey);
 	font-weight: 700;
 	font-style: normal;
 }
@@ -13,51 +13,51 @@
 .hit-fragments {
 	cursor: pointer;
 	margin: 5px 0;
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	line-height: 25px;
-	color: #757474;
+	color: var(--secondary-grey);
 	text-align: left;
 	width: 600px;
 }
 
 .hit-path {
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	line-height: 25px;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 }
 
 .hit-title {
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 18px;
 	font-weight: 500;
 	line-height: 24px;
-	color: #3fb3f6;
+	color: var(--primary-blue);
 	cursor: pointer;
 }
 
 .search-advanced-menu-react.search-advanced-menu {
 	margin: 20px 0;
 	height: 50px;
-	background-color: #fbfbfb;
+	background-color: var(--panel-background);
 	box-shadow: inset 0 -1px 0 0 #e2e2e2;
 }
 
 .search-advanced-menu-react.search-advanced-menu > .search-option {
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 50px;
 	display: inline-block;
 	height: 50px;
-	color: #757474;
+	color: var(--secondary-grey);
 	padding: 0 15px;
 	margin-right: 0;
 
 	&.active {
-		color: #3fb3f6;
-		box-shadow: inset 0 -1px 0 0 #3fb3f6;
+		color: var(--primary-blue);
+		box-shadow: inset 0 -1px 0 0 var(--primary-blue);
 	}
 }
 
@@ -67,7 +67,7 @@
 }
 
 .show-more-button {
-	background: #3fb3f6;
+	background: var(--primary-blue);
 	color: #fff;
 	cursor: pointer;
 	font-size: 0.875em;
@@ -92,7 +92,7 @@
 	border: 1px solid #efefef;
 	display: inline-block;
 	margin-right: 10px;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 	line-height: 19px;
 	height: 40px;
 	width: 40px;
@@ -100,14 +100,14 @@
 
 	&.active {
 		color: #fff;
-		background-color: #3fb3f6;
+		background-color: var(--primary-blue);
 	}
 }
 
 .page-num {
 	height: 19px;
 	width: 8px;
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	font-weight: bold;
 	display: inline-block;
@@ -117,7 +117,7 @@
 .page-num-large {
 	height: 19px;
 	width: 16px;
-	font-family: "Open Sans";
+	font-family: var(--body-font-family);
 	font-size: 14px;
 	font-weight: bold;
 	display: inline-block;
@@ -126,7 +126,7 @@
 
 .next-results-page {
 	display: inline-block;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 	line-height: 19px;
 	height: 40px;
 	width: 40px;
@@ -135,7 +135,7 @@
 .next-results-page-button {
 	display: inline-block;
 	cursor: pointer;
-	color: #3fb3f6;
+	color: var(--primary-blue);
 	font-size: 14px;
 	font-weight: bold;
 	white-space: nowrap;
@@ -156,7 +156,7 @@
 
 .prev-results-page {
 	display: inline-block;
-	color: #b8b8b8;
+	color: var(--tertiary-grey);
 	line-height: 19px;
 	height: 40px;
 	width: 20px;

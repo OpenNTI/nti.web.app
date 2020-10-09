@@ -17,7 +17,7 @@
 		margin-left: 0.5rem;
 
 		.username {
-			color: $primary-grey;
+			color: var(--primary-grey);
 			word-break: break-word;
 		}
 	}
@@ -30,7 +30,7 @@
 		 	width: 40px;
 		 	height: 40px;
 		 	line-height: 40px;
-		 	color: $primary-blue;
+		 	color: var(--primary-blue);
 		 }
 	}
 }

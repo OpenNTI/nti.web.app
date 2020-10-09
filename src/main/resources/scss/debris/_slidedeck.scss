@@ -17,7 +17,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 	padding: 5px 16px;
 	border-radius: 3px;
 	border: 1px solid black;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 	background-image: linear-gradient(to bottom,
 						$slidedeck-exit-button-gradient-top 0%,
 						$slidedeck-exit-button-gradient-bottom 100%);
@@ -70,11 +70,11 @@ $active-text-color: rgba(255, 255, 255, 1);
 			}
 
 			.token-input-wrap span.token-input-sizer{
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 			}
 
 			input{
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 				background-color: #161616;
 			}
 		}
@@ -278,9 +278,9 @@ $active-text-color: rgba(255, 255, 255, 1);
 			padding: 15px 0 15px 45px;
 			margin-right: 150px;
 			position: relative;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: {
-				family: $font;
+				family: var(--body-font-family);
 				size: 14px;
 				weight: normal;
 			}
@@ -522,9 +522,9 @@ $active-text-color: rgba(255, 255, 255, 1);
 
 				.input {
 					cursor: text;
-					font: 600 italic 16px/36px $font;
+					font: 600 italic 16px/36px var(--body-font-family);
 					padding: 0 10px;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					background: $slidedeck-controls-background;
 					border: 1px solid #323232;
 
@@ -535,7 +535,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 					padding-right: 48px;
 					float: right;
 					color: #656565;
-					font: 600 italic 14px/38px $font;
+					font: 600 italic 14px/38px var(--body-font-family);
 					opacity: 0;
 					visibility: hidden;
 					$value: opacity 0.5s;
@@ -568,7 +568,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 				display: none;
 				color: #949494;
 				color: #3a9bd3;
-				font: 600 italic 14px/38px $font;
+				font: 600 italic 14px/38px var(--body-font-family);
 				cursor: pointer;
 			}
 
@@ -613,7 +613,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 				.meta {
 					.name {
 						color: #3a9bd3;
-						font: normal 14px $font;
+						font: normal 14px var(--body-font-family);
 					}
 					.controls {
 						.like, .favorite {
@@ -625,7 +625,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 					}
 					.shared-to {
 						color: #656565;
-						font: normal 12px/25px $font;
+						font: normal 12px/25px var(--body-font-family);
 						margin-left: 5px;
 					}
 
@@ -638,7 +638,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 
 				.body {
 					color: #949494;
-					font: normal 14px $font;
+					font: normal 14px var(--body-font-family);
 
 					a {
 						color: #3a9bd3;
@@ -648,7 +648,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 				.respond {
 					.time {
 						color: #6b6b6b;
-						font: italic 12px/25px $font;
+						font: italic 12px/25px var(--body-font-family);
 					}
 
 					@include slide-comment-editor;
@@ -685,10 +685,10 @@ $active-text-color: rgba(255, 255, 255, 1);
 
 						.title{
 							font-size: 24px;
-							color: $primary-blue;
+							color: var(--primary-blue);
 						}
 						.name{
-							color: $secondary-grey;
+							color: var(--secondary-grey);
 						}
 						.controls {
 							top: 1px;
@@ -740,7 +740,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 			top: 15px;
 			right: 85px;
 
-			font-family: $font;
+			font-family: var(--body-font-family);
 			font-size: 14px;
 			font-weight: 500;
 			@include slide-button;
@@ -762,7 +762,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 		padding-left: 108px;
 		width: 860px;
 		color: $inactive-text-color;
-		font: 14px normal $font;
+		font: 14px normal var(--body-font-family);
 
 		.control-container{
 			right: -20px !important;
@@ -915,7 +915,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 					padding: 0 5px 0 5px;
 
 					.pre-title{
-						font: 13px normal "Open Sans", sans-serif;
+						font: 13px normal var(--body-font-family);
 						margin-top: 4px;
 						width: 140px;
 						height: 20px;
@@ -925,7 +925,7 @@ $active-text-color: rgba(255, 255, 255, 1);
 					}
 
 					.title{
-						font: 13px normal "Open Sans", sans-serif;
+						font: 13px normal var(--body-font-family);
 						line-height: 20px;
 						overflow: hidden;
 						width: 140px;
@@ -1050,8 +1050,8 @@ body.media-viewer-closing {
 						min-width: 75px;
 						float: left;
 						padding: 10px 0 10px 15px;
-						font: 200 normal 44px/46px $font;
-						color: $secondary-grey;
+						font: 200 normal 44px/46px var(--body-font-family);
+						color: var(--secondary-grey);
 					}
 
 					.wrap{
@@ -1065,16 +1065,16 @@ body.media-viewer-closing {
 						}
 
 						.section-name{
-							color: $secondary-grey;
-							font: 400 normal 10px/14px $font;
+							color: var(--secondary-grey);
+							font: 400 normal 10px/14px var(--body-font-family);
 							text-transform: uppercase;
 							overflow: hidden;
 							white-space: nowrap;
 							@include ellipse;
 						}
 						.title{
-							font: 200 normal 20px/24px $font;
-							color: $tertiary-grey-alt;
+							font: 200 normal 20px/24px var(--body-font-family);
+							color: var(--tertiary-grey-alt);
 							text-transform: uppercase;
 							white-space: nowrap;
 							overflow: hidden;
@@ -1126,7 +1126,7 @@ body.media-viewer-closing {
 						float: left;
 						width: 215px;
 						height: 75px;
-						font: 600 normal 12px $font;
+						font: 600 normal 12px var(--body-font-family);
 						padding-left: 65px;
 						color: #595959;
 						text-transform: uppercase;
@@ -1212,7 +1212,7 @@ body.media-viewer-closing {
 					top: 20px;
 					left: 40px;
 
-					font-family: $font;
+					font-family: var(--body-font-family);
 					font-size: 14px;
 					font-weight: 500;
 					@include slide-button;
@@ -1241,8 +1241,8 @@ body.media-viewer-closing {
 			$indent: 75px;
 			margin: 50px 0 0 (-$indent);
 			display: block;
-			font: normal 300 24px/50px $font;
-			color: $tertiary-grey;
+			font: normal 300 24px/50px var(--body-font-family);
+			color: var(--tertiary-grey);
 			clear: both;
 			float: none;
 
@@ -1251,7 +1251,7 @@ body.media-viewer-closing {
 				padding: 0 0.5em 0 0;
 
 				&.number {
-					color: $secondary-grey;
+					color: var(--secondary-grey);
 					width: $indent;
 					text-align: right;
 				}
@@ -1278,7 +1278,7 @@ body.media-viewer-closing {
 			.meta {
 				text-transform: uppercase;
 				.title{
-					font: normal 700 14px/1 'Open Sans Condensed', $font;
+					font: normal 700 14px/1 var(--header-font-family);
 					color: #fff;
 					margin-bottom: 5px;
 				}
@@ -1287,7 +1287,7 @@ body.media-viewer-closing {
 						size: 10px;
 						weight: 600;
 					}
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					span:not(:empty)::after{
 						text-decoration: none !important;
 						position: static;
@@ -1314,13 +1314,13 @@ body.media-viewer-closing {
 				&::before {
 					content: 'viewed';
 					text-transform: uppercase;
-					font: normal 500 0.6em/24px "Open Sans",sans-serif;
+					font: normal 500 0.6em/24px var(--body-font-family);
 					position: absolute;
 					top: 5px;
 					right: 5px;
 					padding: 0px 10px 0 30px;
 					color: white;
-					background-color: $secondary-green;
+					background-color: var(--secondary-green);
 					z-index: 1;
 					border-radius: 20px;
 				}
@@ -1337,7 +1337,7 @@ body.media-viewer-closing {
 
 				.meta {
 					.title {
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 				}
 			}
@@ -1357,9 +1357,9 @@ body.media-viewer-closing {
 			text-align: center;
 
 			span {
-				font: normal 600 0.65em/1 $font;
+				font: normal 600 0.65em/1 var(--body-font-family);
 				background-color: #2a2a2a;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 				cursor: pointer;
 				z-index: 1;
 				text-transform: uppercase;
@@ -1381,7 +1381,7 @@ body.media-viewer-closing {
 		}
 
 		.body{
-			@include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
+			@include scrollbar($track:$slidedeck-controls-background, $nib:var(--secondary-grey));
 		 	@include flexItem($flex: 1 1 auto);
 			/*margin: 10px 0 0 1000px;*/
 			overflow:{
@@ -1535,7 +1535,7 @@ body.media-viewer-closing {
 
 .share-search-mask.slide-comment-header{
 	background: #343434;
-	color: $tertiary-grey;
+	color: var(--tertiary-grey);
 }
 
 .x-container-transcript, .x-panel-transcript{
@@ -1555,8 +1555,8 @@ body.media-viewer-closing {
 		.count{
 			position: absolute;
 			left: 0;
-			font: normal bold 9px/19px $font;
-			color: $primary-blue;
+			font: normal bold 9px/19px var(--body-font-family);
+			color: var(--primary-blue);
 			padding: 0 10px 0 7px;
 			margin: 0;
 			width: 20px;
@@ -1565,7 +1565,7 @@ body.media-viewer-closing {
 
 			&:hover,
 			&.active, .active {
-				background: $primary-blue;
+				background: var(--primary-blue);
 				color: #fff;
 			}
 		}
@@ -1574,7 +1574,7 @@ body.media-viewer-closing {
 	.content-video-transcript{
 		position: relative;
 		margin: 50px 20px 20px 100px;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		font-size: 14px;
 		font-weight: normal;
 		line-height: 2.2em;
@@ -1583,7 +1583,7 @@ body.media-viewer-closing {
 		.cue{
 			padding: 3px;
 			color: $inactive-text-color;
-			font: 14px normal $font;
+			font: 14px normal var(--body-font-family);
 			cursor: pointer;
 
 			&:first-child{
@@ -1629,7 +1629,7 @@ body.media-viewer-closing {
 				cursor: pointer;
 
 				&:hover {
-					color: #494949 !important;
+					color: var(--primary-grey) !important;
 					background-color: #ebf7fd;
 				}
 			}
@@ -1724,7 +1724,7 @@ body.media-viewer-closing {
 			background: #282828 !important;
 			outline: 0 !important;
 			border: 0 !important;
-			font: 600 normal 12px $font !important;
+			font: 600 normal 12px var(--body-font-family) !important;
 
 
 			&.selection-item-over,

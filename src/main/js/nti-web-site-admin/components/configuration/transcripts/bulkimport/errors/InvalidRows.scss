@@ -2,7 +2,7 @@
 
 .status-report.transcript-bulk-import-error {
 	> .heading {
-		background: $primary-red;
+		background: var(--primary-red);
 		position: relative;
 		padding-left: 4em;
 

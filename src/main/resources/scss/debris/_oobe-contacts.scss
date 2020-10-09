@@ -3,7 +3,7 @@
 	@include reset-window-border-radius(3px);
 	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3), 0 0 0 110px transparent;
 
-	background: #f8f8f8;
+	background: var(--quad-grey);
 
 
 	.error {
@@ -12,8 +12,8 @@
 		left: 0;
 		right: 0;
 		overflow: hidden;
-		background: #f35252;
-		font: normal 600 12px $font;
+		background: var(--primary-red);
+		font: normal 600 12px var(--body-font-family);
 
 		.label {
 			float: left;
@@ -58,7 +58,7 @@
 			line-height: 45px;
 			font-size: 14px;
 			text-align: center;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			margin: -1px;
 			padding: 0 1.5em;
 
@@ -71,8 +71,8 @@
 				background: #75bc30;
 
 				&.alt {
-					background: $primary-blue;
-					outline: 1px solid $border-blue;
+					background: var(--primary-blue);
+					outline: 1px solid var(--border-blue);
 				}
 
 				&.disabled {
@@ -87,7 +87,7 @@
 
 	.container-body {
 		background: #fff;
-		font: normal 400 14px/25px $font;
+		font: normal 400 14px/25px var(--body-font-family);
 		position: absolute;
 		overflow: hidden;
 		top: 0;
@@ -105,7 +105,7 @@
 		input {
 			background: #ffffff;
 			padding: 5px;
-			color: #757474;
+			color: var(--secondary-grey);
 			font-size: 18px;
 			font-weight: 300;
 			height: auto;
@@ -126,13 +126,13 @@
 			top:0; bottom: 0; left:0; right:0;
 			padding: 15% 2em;
 			text-align: center;
-			color: $secondary-grey;
-			font: normal 300 14px/18px $font;
+			color: var(--secondary-grey);
+			font: normal 300 14px/18px var(--body-font-family);
 			background: white;
 
 			h3 {
-				color: $tertiary-grey;
-				font: normal 300 2em/4em "Open Sans Condensed", $font;
+				color: var(--tertiary-grey);
+				font: normal 300 2em/4em var(--header-font-family);
 			}
 
 			div {
@@ -170,7 +170,7 @@
 
 				margin: 0;
 				padding: 1px 2px;
-				font: normal 400 12px/27px $font;
+				font: normal 400 12px/27px var(--body-font-family);
 
 				$value: background 0.5s ease, padding-top 0.4s ease;
 				@include experimental(transition, $value);

@@ -24,7 +24,7 @@
 		span {
 			display: inline-block;
 			flex: 0 0 auto;
-			color: #757474;
+			color: var(--secondary-grey);
 			font-size: 0.875rem;
 		}
 
@@ -34,7 +34,7 @@
 	}
 
 	.resources {
-		color: $primary-blue;
+		color: var(--primary-blue);
 		cursor: pointer;
 		display: flex;
 		align-items: center;
@@ -73,7 +73,7 @@
 		}
 
 		.audit-logs {
-			background: $primary-grey;
+			background: var(--primary-grey);
 			margin-right: 0.3rem;
 		}
 	}

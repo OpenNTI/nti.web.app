@@ -37,13 +37,13 @@
 			display: block;
 			font-size: 16px;
 			font-weight: 600;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.image-caption {
 			font-size: 14px;
 			font-weight: normal;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		.bar-cell {
@@ -68,7 +68,7 @@
 				line-height: 19px;
 				font-size: 12px;
 				font-weight: bold;
-				color: $tertiary-grey-alt;
+				color: var(--tertiary-grey-alt);
 				padding-left: 24px;
 				display: block;
 				margin: 10px 0 -13px 0;
@@ -82,7 +82,7 @@
 				}
 
 				&:hover {
-					color: $secondary-grey-alt;
+					color: var(--secondary-grey-alt);
 					&::after {
 						@include sprite($add-comment-19x17_hover);
 					}
@@ -94,8 +94,8 @@
 			&.slide {
 				display: none;
 				width: 54px;
-				background: $primary-blue;
-				border-color: $border-blue;
+				background: var(--primary-blue);
+				border-color: var(--border-blue);
 
 				position: absolute;
 				top: 0;
@@ -179,14 +179,14 @@
 			}
 
 			.count {
-				font: normal bold 9px/19px $font;
-				color: $primary-blue;
+				font: normal bold 9px/19px var(--body-font-family);
+				color: var(--primary-blue);
 				margin: 0 10px;
 			}
 
 			&:hover,
 			&.active {
-				background: $primary-blue;
+				background: var(--primary-blue);
 				.count {
 					color: #fff;
 				}
@@ -218,7 +218,7 @@
 }
 
 .x-component-annotation-view {
-	@include scrollbar(#fbfbfb, $tertiary-grey);
+	@include scrollbar(var(--panel-background), var(--tertiary-grey));
 	overflow: {
 		x: hidden;
 		y: auto; //scroll;
@@ -235,7 +235,7 @@
 					color: #c5eaff;
 				}
 				.snippet{color: #ffffff;}
-				background: $primary-blue;
+				background: var(--primary-blue);
 				box-shadow: inset -1px 0 0 1px #107eed,1px 0 0 0px #107eed;
 			}
 		}
@@ -247,9 +247,9 @@
 		}
 
 		.name {
-			font: normal 600 10px/15px $font;
+			font: normal 600 10px/15px var(--body-font-family);
 			text-transform: uppercase;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			overflow: hidden;
 			@include ellipse;
 		}
@@ -257,10 +257,10 @@
 			min-height: 50px;
 			max-height: 5em;
 			overflow: hidden;//because this is allowing line wrapping, we can't ellipse the text overflow.
-			font: italic 400 16px/25px $font;
+			font: italic 400 16px/25px var(--body-font-family);
 			margin: 0 0 10px -10px;
 			padding-left: 10px;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			text-overflow: ellipsis;
 			word-wrap: break-word;
 
@@ -276,8 +276,8 @@
 			@include attachment-small();
 		}
 		.footer {
-			font: normal 400 10px/15px $font;
-			color: $tertiary-grey;
+			font: normal 400 10px/15px var(--body-font-family);
+			color: var(--tertiary-grey);
 
 			span{
 				&::after{
@@ -308,7 +308,7 @@
 				box-shadow: none;
 
 				.name{
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 
 				.snippet{
@@ -316,7 +316,7 @@
 				}
 
 				.footer{
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 			}
 
@@ -337,12 +337,12 @@
 
 			.name{
 				font-weight: 700 !important;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 			}
 
 			.snippet{
 				font-weight: 600 !important;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 
 			.footer{
@@ -396,7 +396,7 @@
 	.snippet {
 		margin: 10px;
 		font-size: 8pt;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		padding: 0 0 0 25px;
 
 		.comment & {
@@ -510,7 +510,7 @@
 	&.purchasable {
 		.bookcover {
 			background: {
-				color: #f9f9f9;
+				color: var(--quad-grey);
 				size: cover;
 				position: center-center;
 				repeat: no-repeat;
@@ -533,18 +533,18 @@
 
 			.byline {
 				font-weight: 600;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 
 			.button {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 				font-weight: 600;
 			}
 		}
 
 		.no-access {
-			font: normal 500 0.9em/1 $font;
+			font: normal 500 0.9em/1 var(--body-font-family);
 			color: #FD817F;
 		}
 	}
@@ -612,7 +612,7 @@
 
 	#footnotes{
 		.redacted-text{
-			color: $tertiary_grey;
+			color: var(--tertiary-grey);
 			text-decoration: line-through;
 			display: none;
 		}
@@ -632,7 +632,7 @@
 
 		&.head{
 			position: relative;
-			border-top: 1px solid $border-grey;
+			border-top: 1px solid var(--border-grey);
 			overflow: visible;
 
 			&.redacted {
@@ -708,10 +708,10 @@
 		span.editableSpan {
 			display: inline-block;
 			position: relative;
-			border: 1px solid $border-grey;
+			border: 1px solid var(--border-grey);
 			background: white;
 			//text-transform: uppercase;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font-weight: 600;
 			margin-left: 3px;
 			padding: 4px 6px;
@@ -741,7 +741,7 @@
 				width: 25px;
 				cursor: pointer;
 				background: #ffffff;
-				box-shadow: inset 0 0 0 1px $border-grey;
+				box-shadow: inset 0 0 0 1px var(--border-grey);
 
 				&::after {
 					background: url(../images/old_sprites/spr_redaction.png) 0 0 no-repeat;
@@ -757,13 +757,13 @@
 
 				&.edit.save{
 					box-shadow: inset 0 0 0 1px #369AD3;
-					background-color: $primary-blue;
+					background-color: var(--primary-blue);
 					width:90px;
 					&::after{
 						width: auto;
 						content: 'Save Title';
 						background: none;
-						font-family: $font !important;
+						font-family: var(--body-font-family) !important;
 						font-size: 10px;
 						font-weight: 700;
 						line-height: 14px;
@@ -775,13 +775,13 @@
 				}
 
 				&:hover {
-					background-color: $primary-blue;
+					background-color: var(--primary-blue);
 					box-shadow: inset 0 0 0 1px #369AD3 !important;
 					outline: #369AD3;
 					z-index: 1;
 
 					&.delete{
-						background-color: $primary-red;
+						background-color: var(--primary-red);
 						box-shadow: inset 0 0 0 1px #D14646 !important;
 						&::after{ @include sprite($redactions-trashcan_hover); }
 					}
@@ -838,7 +838,7 @@
 			&.shared-with-me {
 				&,.math {
 					background: none;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					border-bottom: 1px solid #9fd9fa;
 				}
 
@@ -846,7 +846,7 @@
 				// &.highlight-mouse-over {
 				// 	&,.math {
 				// 		color: #ffffff;
-				// 		background-color: $primary-blue;
+				// 		background-color: var(--primary-blue);
 				// 	}
 				// }
 
@@ -860,7 +860,7 @@
 			&.highlight-mouse-over{
 				&,a {
 					// color: #ffffff;
-					// background-color: $primary-blue;
+					// background-color: var(--primary-blue);
 					.application-highlight {
 						background-color: transparent;
 					}
@@ -876,13 +876,13 @@
 					display: none;
 				}
 				background: #efefef;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				border-bottom: 0px;
 			}
 
 			&.counter {
-				color: $secondary-grey;
-				font-family: $font !important;
+				color: var(--secondary-grey);
+				font-family: var(--body-font-family) !important;
 				font-weight: bold;
 
 				background: transparent;
@@ -958,7 +958,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 
 .nt-annotation-menu {
 	$transition-duration:.1s;
-	background: $annotations-menu-bg;
+	background: var(--annotations-menu-bg);
 	border-radius:6px;
 	position: fixed !important;
 	opacity: 0.01; // so we can show the menu, compute its width, and center it. (can't get the width until it's rendered in the dom.)
@@ -978,7 +978,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 		height: 0;
 		background: none;
 		border: $arrow-size solid transparent;
-		border-top-color: $annotations-menu-bg;
+		border-top-color: var(--annotations-menu-bg);
 		left: 50%;
 		margin-left: -$arrow-size;
 		bottom: -($arrow-size * 2);

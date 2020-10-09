@@ -42,14 +42,14 @@
 		&.x-pressed {
 			.x-btn-inner {
 				color: white;
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 			}
 		}
 
 		.x-btn-inner {
 			text-transform: uppercase;
-			font: normal 600 12px/35px $font;
-			color: $secondary-grey;
+			font: normal 600 12px/35px var(--body-font-family);
+			color: var(--secondary-grey);
 			padding: 0 10px;
 		}
 	}
@@ -76,7 +76,7 @@
 			left: 155px;
 			width: 132px;
 			height: 1px;
-			background: #b8b8b8;
+			background: var(--tertiary-grey);
 			display: block;
 			overflow: hidden;
 			z-index: 1;
@@ -136,12 +136,12 @@
 			margin: 15px 0 0 100px;
 			font-size: 14px;
 			font-weight: 400;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			.name {
 				font-size: 18px;
 				font-weight: 600;
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 
 			.identities{
@@ -194,7 +194,7 @@
 						style: normal;
 						weight: normal;
 					}
-					color: $primary-grey;
+					color: var(--primary-grey);
 					padding-right: 2px;
 				}
 
@@ -216,8 +216,8 @@
 			}
 			cursor: pointer;
 			.x-btn-button {
-				background: $primary-blue;
-				border: 1px solid $border-blue;
+				background: var(--primary-blue);
+				border: 1px solid var(--border-blue);
 				padding: 12px 20px;
 
 				.x-btn-inner{
@@ -262,18 +262,18 @@
 			input {
 				&:focus {
 					outline: none;
-					box-shadow: -4px 0 0 0 $primary-blue;
+					box-shadow: -4px 0 0 0 var(--primary-blue);
 				}
 
 				&.error {
 					&, &:focus {
-						box-shadow: -4px 0 0 0 $primary-red;
+						box-shadow: -4px 0 0 0 var(--primary-red);
 					}
 				}
 				//TODO - is not working
 				&.valid {
 					&, &:focus {
-						box-shadow: -4px 0 0 0 $primary-green;
+						box-shadow: -4px 0 0 0 var(--primary-green);
 					}
 				}
 
@@ -283,12 +283,12 @@
 				}
 
 				//vertical-align: bottom;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				font-size: 14px;
 				font-weight: 500;
 				line-height: 25px;
 
-				border: 1px solid $border-grey;//#dcdcdc;
+				border: 1px solid var(--border-grey);//#dcdcdc;
 				border-left-width: 0px;
 				background: #ffffff;
 				padding: 6px 10px;
@@ -302,7 +302,7 @@
 
 				position: relative;
 				left: 4px;
-				box-shadow: -4px 0 0 0 $border-grey;
+				box-shadow: -4px 0 0 0 var(--border-grey);
 			}
 			.clear {
 				top: 10px;
@@ -330,10 +330,10 @@
 			.text {
 				display: table-cell;
 				text-align: center;
-				color: $primary-green;
+				color: var(--primary-green);
 				vertical-align: middle;
 				&.error {
-					color: $primary-red;
+					color: var(--primary-red);
 				}
 			}
 
@@ -341,12 +341,12 @@
 
 		.footer {
 			margin-top: 40px;
-			border-top: 1px solid $border-grey !important;
+			border-top: 1px solid var(--border-grey) !important;
 			overflow: hidden;
 		}
 
 		.cant-change{
-			color: $primary-grey;
+			color: var(--primary-grey);
 			font-size: 24px;
 			font-weight: 400;
 			font-style: italic;
@@ -369,18 +369,18 @@
 				cursor: default;
 			}
 
-			color: $secondary-grey;
-			font: normal normal 0.9em/2 $font;
+			color: var(--secondary-grey);
+			font: normal normal 0.9em/2 var(--body-font-family);
 		}
 
 		fieldset {
-			border: 1px solid $border-grey;
+			border: 1px solid var(--border-grey);
 			margin: 20px 0 40px;
 		}
 
 		legend {
-			color: $secondary-grey;
-			font: normal 600 0.9em $font;
+			color: var(--secondary-grey);
+			font: normal 600 0.9em var(--body-font-family);
 		}
 	}
 
@@ -410,24 +410,24 @@
 
 		.header {
 			margin: 16px 26px 5px 26px;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 
 			.title {
-				font: normal 300 19px/1 $font;
+				font: normal 300 19px/1 var(--body-font-family);
 			}
 
 			.sub{
-				font: normal 300 14px/1 $font;
+				font: normal 300 14px/1 var(--body-font-family);
 			}
 		}
 
 		.meta {
 			margin: 20px 34px;
-			color: $secondary-grey;
-			font: normal 300 18px/24px $font;
+			color: var(--secondary-grey);
+			font: normal 300 18px/24px var(--body-font-family);
 
 			.link {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				padding: 0 7px;
 				cursor: pointer;
 			}
@@ -450,23 +450,23 @@
 
 	.header {
 		margin: 10px 15px;
-		color: $secondary-grey;
-		font: normal 400 14px/1 $font;
+		color: var(--secondary-grey);
+		font: normal 400 14px/1 var(--body-font-family);
 
 		.title {
-			font: normal 300 18px/1 $font;
-			color: $primary-grey;
+			font: normal 300 18px/1 var(--body-font-family);
+			color: var(--primary-grey);
 		}
 
 		.email {
 			font-style: italic;
 			margin: 0 0 5px 0;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 		.sub {
 			font-weight: 300;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			margin-top: 15px;
 			display: inline-block;
 			margin-bottom: 5px;
@@ -474,7 +474,7 @@
 			.support {
 				.link a{
 					text-decoration: none;
-					color: $primary-blue;
+					color: var(--primary-blue);
 				}
 			}
 		}
@@ -486,17 +486,17 @@
 			.link{
 				float: left;
 				padding: 0 7px 0 9px;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
-				font: normal 300 14px/1 $font;
+				font: normal 300 14px/1 var(--body-font-family);
 				position: relative;
 
 				&.sending {
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 
 				&.error {
-					color: $primary-red;
+					color: var(--primary-red);
 					cursor: default;
 					font-style: italic;
 				}
@@ -505,7 +505,7 @@
 					content: "|";
 					position: absolute;
 					right: 0;
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 					width: 3px;
 					font-size: 14px;
 				}
@@ -524,15 +524,15 @@
 	}
 
 	.input-box {
-		border: 1px solid $tertiary-grey;
+		border: 1px solid var(--tertiary-grey);
 		padding-right: 30px;
 		background: #ffffff;
 		margin: 0 34px 0 15px;
 		position: relative;
 
 		input{
-			color: $secondary-grey;
-			font: normal 500 14px/25px $font;
+			color: var(--secondary-grey);
+			font: normal 500 14px/25px var(--body-font-family);
 			border: 0;
 			background: #ffffff;
 			padding: 6px 10px;
@@ -541,13 +541,13 @@
 			width: calc(100% - 8px);
 			position: relative;
 			left: 4px;
-			box-shadow: -4px 0 0 0 $tertiary-grey;
+			box-shadow: -4px 0 0 0 var(--tertiary-grey);
 			outline: none;
 
 			&:focus {
 				outline: none;
-				box-shadow: -4px 0 0 0 $tertiary-grey;
-				color: $secondary-grey;
+				box-shadow: -4px 0 0 0 var(--tertiary-grey);
+				color: var(--secondary-grey);
 			}
 		}
 
@@ -561,20 +561,20 @@
 		}
 
 		&.error {
-			border-color: $primary-red;
+			border-color: var(--primary-red);
 
 			input {
-				color: $primary-red;
-				box-shadow: -4px 0 0 0 $primary-red;
+				color: var(--primary-red);
+				box-shadow: -4px 0 0 0 var(--primary-red);
 			}
 		}
 	}
 
 	.error-msg {
 		visibility: hidden;
-		color: $primary-red;
+		color: var(--primary-red);
 		margin: 10px 15px;
-		font: normal 300 15px/1 $font;
+		font: normal 300 15px/1 var(--body-font-family);
 		line-height: 20px;
 		min-height: 20px;
 
@@ -583,12 +583,12 @@
 		}
 
 		&.success {
-			color: $primary-green;
+			color: var(--primary-green);
 		}
 	}
 
 	.footer{
-		background-color: #f8f8f8;
+		background-color: var(--quad-grey);
 		overflow: hidden;
 		bottom: 0;
 		left: 0;
@@ -611,15 +611,15 @@
 			float: right;
 			padding: 0 20px;
 			cursor: pointer;
-			font: normal 400 0.9em/40px $font;
+			font: normal 400 0.9em/40px var(--body-font-family);
 			text-align: center;
 			min-width: 90px;
-			color: $primary-grey;
+			color: var(--primary-grey);
 
 			&.confirm {
-				background-color: $primary-blue;
+				background-color: var(--primary-blue);
 				color: white;
-				box-shadow: inset 1px 0 0 0 $border-blue;
+				box-shadow: inset 1px 0 0 0 var(--border-blue);
 
 				&:hover {
 					opacity: 0.9;
@@ -631,8 +631,8 @@
 			}
 
 			&.disabled {
-				background-color: $tertiary-grey-alt;
-				box-shadow: inset 1px 0 0 0 $border-grey;
+				background-color: var(--tertiary-grey-alt);
+				box-shadow: inset 1px 0 0 0 var(--border-grey);
 			}
 		}
 	}
@@ -648,13 +648,13 @@
 		.text{
 			text-align: center;
 			margin-top: 30px;
-			color: $secondary-green;
+			color: var(--secondary-green);
 			position: relative;
 			padding: 48px 20px 5px 20px;
-			font: normal 300 16px/1 $font;
+			font: normal 300 16px/1 var(--body-font-family);
 
 			.title{
-				font: normal 300 21px/1 $font;
+				font: normal 300 21px/1 var(--body-font-family);
 			}
 
 			&::after{
@@ -667,10 +667,10 @@
 
 		&.pending-wrapper{
 			.text{
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 
 				.title{
-					color: $primary-red;
+					color: var(--primary-red);
 				}
 
 				&::after {
@@ -742,11 +742,11 @@
     	border-bottom: 1px solid #d9d9d9;
 
     	.msg {
-    		color: $secondary-grey;
+    		color: var(--secondary-grey);
     	}
 
     	.email {
-    		color: $primary-grey;
+    		color: var(--primary-grey);
     		padding: 5px 0;
     		font-style: italic;
     	}

@@ -26,7 +26,7 @@
 			line-height: 35px;
 			font-size: 1.125rem;
 			font-weight: 700;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			@include flexItem(1 1 auto);
 		}
 
@@ -54,7 +54,7 @@
 				font-size: 0.635em;
 				font-weight: 700;
 				text-transform: uppercase;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				line-height: 35px;
 				position: absolute;
 				top: 0; right: 40px;
@@ -65,7 +65,7 @@
 				position: absolute;
 				height: 35px;
 				width: 35px;
-				background-color: $panel-background;
+				background-color: var(--panel-background);
 				box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.3);
 				top: 0; right: 0;
 				cursor: pointer;
@@ -94,7 +94,7 @@
 
 	.empty {
 		text-align: center;
-    	color: $secondary-grey;
+    	color: var(--secondary-grey);
     	font-style: italic;
 	}
 }
@@ -124,7 +124,7 @@
 			}
 
 			&.selected {
-				box-shadow: 0 0 0 3px $primary-blue;
+				box-shadow: 0 0 0 3px var(--primary-blue);
 			}
 
 			&.filtered {
@@ -177,7 +177,7 @@
 				font-size: 0.625em;
 				font-weight: 700;
 				text-transform: uppercase;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 
 				span:not(:first-of-type) {
 					content: ',';
@@ -222,8 +222,8 @@
     				height: 100%;
 
     				.title {
-						color: $primary-grey;
-						font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
+						color: var(--primary-grey);
+						font: normal 300 1.6em/1.2em var(--header-font-family);
 						overflow: hidden;
 						height: 64px;
 						margin-bottom: 6px;
@@ -332,7 +332,7 @@
 		box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.15);
 		line-height: 40px;
 		font-size: 0.875rem;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		padding: 0 1em;
 
 		.expand, .icon, .label {
@@ -378,7 +378,7 @@
 	}
 
 	.selected {
-		background: $primary-blue;
+		background: var(--primary-blue);
 
 		.reading-item {
 			color: white;
@@ -407,7 +407,7 @@
 		line-height: 35px;
 		bottom: 46px;
 		left: 0; right: 0;
-		background-color: #f8f8f8;
+		background-color: var(--quad-grey);
 		border-top: 1px solid #d9d9d9;
 		padding: 0 10px;
 
@@ -447,7 +447,7 @@
 .assignment-item-selection, .assessment-item-selection, .survey-item-selection {
 	.selected {
 		.assignment-item, .self-assessment-item, .survey-item {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white;
 
 			&.overdue .due-date, .question-count {
@@ -470,7 +470,7 @@
 
 		&.overdue {
 			.due-date {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 
@@ -486,7 +486,7 @@
 
 		.question-count {
 			font-size: 0.75em;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 }
@@ -497,11 +497,11 @@
 
 		.title {
 			font-style: normal;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.description {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 		}
 
 		i.icon-fallback.icon-hyperlink {
@@ -523,7 +523,7 @@
 .timeline-item-selection{
 	.selection-item {
 		&.selected {
-			box-shadow: 0 0 0 3px $primary-blue;
+			box-shadow: 0 0 0 3px var(--primary-blue);
 		}
 	}
 	.overview-timeline {
@@ -559,11 +559,11 @@
 				padding: 10px 45px 10px 0;
 
 				.title {
-					font: normal 600 15px/20px $font;
+					font: normal 600 15px/20px var(--body-font-family);
 					max-height: 40px;
 					overflow: hidden;
 					margin-bottom: 5px;
-					color: $primary-grey;
+					color: var(--primary-grey);
 				}
 
 				.description {
@@ -571,8 +571,8 @@
 					max-height: 3em;
 					overflow: hidden;
 					margin-top: 5px;
-					font: normal normal 12px/1 $font;
-					color: $primary-grey;
+					font: normal normal 12px/1 var(--body-font-family);
+					color: var(--primary-grey);
 				}
 			}
 		}
@@ -583,7 +583,7 @@
 .content-package-item-selection {
 
 	.selected .content-package-item {
-		box-shadow: 0 0 0 2px $primary-blue;
+		box-shadow: 0 0 0 2px var(--primary-blue);
 	}
 
 	.filtered {
@@ -592,7 +592,7 @@
 
 	.content-package-item {
 		display: flex;
-		background-color: $panel-background-blue;
+		background-color: var(--panel-background-blue);
 		margin-bottom: 1rem;
 		box-shadow: 0 0 0 1px rgba(63, 179, 246, 0.3);
 
@@ -615,7 +615,7 @@
 		.wrap {
 			flex: 1 1 auto;
 			padding: 1rem 1.25rem;
-			color: $primary-grey;
+			color: var(--primary-grey);
 
 			.title {
 				font-size: 1rem;

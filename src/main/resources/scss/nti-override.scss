@@ -273,7 +273,7 @@ body.x-body {margin:0;}
 	}
 
 	.injected-related-items {
-		font-family: $font;
+		font-family: var(--body-font-family);
 		margin: 15px 0 0 0;
 
 		font-size: 14px;
@@ -358,7 +358,7 @@ body.x-body {margin:0;}
 		}
 
 		&.border-top {
-			border-top: 1px solid $border-grey;
+			border-top: 1px solid var(--border-grey);
 		}
 	}
 
@@ -419,7 +419,7 @@ body.x-body {margin:0;}
 	}
 
 	.page-contents {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		margin-top: 50px;
 		font-size: 14px;
 		font-weight: normal;
@@ -432,8 +432,8 @@ body.x-body {margin:0;}
 				font-size: 18px;
 				font-style: italic;
 				line-height: 1.67;
-				color: #757474;
-				border-left: 3px solid #757474;
+				color: var(--secondary-grey);
+				border-left: 3px solid var(--secondary-grey);
 				margin: 20px 0px;
 				padding: 0px 20px;
 			}
@@ -615,7 +615,7 @@ body.x-body {margin:0;}
 	}
 
 	#footnotes {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		margin-top: 2em;
 		font-size: small;
 		font-weight: normal;

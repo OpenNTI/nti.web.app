@@ -16,10 +16,10 @@
 
 		.name {
 			@include menu-label-text-treatment;
-			color: $primary-blue;
+			color: var(--primary-blue);
 		}
 		.affiliation {
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			font: { size: 12px; weight: 400; }
 			margin-left: 2px;
 		}
@@ -53,8 +53,8 @@
 			padding-left: 10px;
 			margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
 			margin-bottom: 5px;
-			font: italic 300 30px/40px $font;
-			color: $primary-blue;
+			font: italic 300 30px/40px var(--body-font-family);
+			color: var(--primary-blue);
 			overflow: hidden;
 			@include ellipse;
 			text-transform: none;
@@ -63,8 +63,8 @@
 		}
 
 		.affiliation {
-			color: $primary-grey;
-			font: normal 500 14px/25px $font;
+			color: var(--primary-grey);
+			font: normal 500 14px/25px var(--body-font-family);
 			margin-left: 2px;
 		}
 	}
@@ -103,9 +103,9 @@
 
 	.empty-list{
 		padding: 20px 0;
-		font: italic 300 14px/28px "Open Sans", sans-serif;
+		font: italic 300 14px/28px var(--body-font-family);
 		text-align: center;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 	}
 
 	.search-results {
@@ -191,7 +191,7 @@
 		overflow: visible;
 	}
 
-	background: #f8f8f8;
+	background: var(--quad-grey);
 	border: 1px solid #cecece;
 	//box-shadow: 0 2px 10px 0 rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
 	box-shadow: 0 2px 4px 1px rgba(0,0,0,0.14);
@@ -210,17 +210,17 @@
 				padding-left: 15px;
 
 				.name {
-					font: normal 300 22px/26px "Open Sans Condensed", "Open Sans", sans-serif !important;
+					font: normal 300 22px/26px var(--header-font-family) !important;
 					text-transform: none;
 					line-height: 30px !important;
 				}
 				.affiliation {
-					color:$primary-grey !important;
+					color:var(--primary-grey) !important;
 					font: { size: 12px; weight: 400; }
 					margin-left: 2px;
 				}
 				.meta-role{
-					color:$primary-grey;
+					color:var(--primary-grey);
 					font-size: 12px;
 					font-weight: 400;
 					overflow: hidden;
@@ -228,7 +228,7 @@
 					padding-right: 10px;
 				}
 				.location{
-					color:$primary-grey;
+					color:var(--primary-grey);
 					font-size: 12px;
 					font-weight: 400;
 					padding-right: 10px;
@@ -258,7 +258,7 @@
 		left: 0;
 		right: 0;
 		height: 45px;
-		background-color: #f9f9f9;
+		background-color: var(--quad-grey);
 		border: 0 solid #cecece;
 		border-top-width: 1px;
 		text-align: right;
@@ -335,7 +335,7 @@
 				display: block;
 				height: 44px;
 				line-height: 45px;
-				font: italic 500 14px/45px $font;
+				font: italic 500 14px/45px var(--body-font-family);
 				text-align: center;
 				color: #ffffff;
 				width: 105px;
@@ -352,8 +352,8 @@
 				width: 90px;
 				a.button{
 					width: 90px;
-					outline: 1px solid $border-blue;
-					background: $primary-blue;
+					outline: 1px solid var(--border-blue);
+					background: var(--primary-blue);
 				}
 				&.disabled a.button{
 					cursor: default;

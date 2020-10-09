@@ -11,8 +11,8 @@
 		position: absolute;
 		top: 14px !important;
 		left: 30px;
-		font: normal 700 0.6em/1 $font;
-		color: $tertiary-grey;
+		font: normal 700 0.6em/1 var(--body-font-family);
+		color: var(--tertiary-grey);
 		text-transform: uppercase;
 		z-index: 1;
 	}
@@ -39,7 +39,7 @@
 			margin: 0;
 
 			&[data-sub]::after {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				content: attr(data-value) "% - " attr(data-sub);
 				display: block;
 				line-height: 1em;
@@ -51,7 +51,7 @@
 
 		.total {
 			margin: 0;
-			color: $secondary-grey;
+			color: var(--secondary-grey);
 			display: block;
 			width: 100%;
 			text-align: center;

@@ -96,7 +96,7 @@
 		&.x-docked-left {
 			padding-top: 2px;
 			border-radius: 5px 0 0 5px;
-			border: 1px solid $border-grey;
+			border: 1px solid var(--border-grey);
 			border-width: 0;
 			border-right-width: 1px !important;
 		}
@@ -142,7 +142,7 @@
 		.error-box {
 			position: relative;
 			overflow: hidden;
-			background-color: $primary-red;
+			background-color: var(--primary-red);
 			font-weight: 600;
 			font-size: 12px;
 
@@ -285,7 +285,7 @@
 			}
 
 			.log-entry {
-				background: $primary-blue;
+				background: var(--primary-blue);
 				border-radius: 5px;
 				float: left;
 				overflow: visible;
@@ -336,7 +336,7 @@
 						display: none;
 					}
 					.body-text {
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 					}
 					&::before {
 						left: inherit;
@@ -427,12 +427,12 @@
 
 					input {
 						padding: 5px;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 
 						//Make it transparent
 						background-color: rgba(35,35,35,0.0);
 						height: 30px;
-						font-family: $font;
+						font-family: var(--body-font-family);
 						font-size: 14px;
 						width: 100%;
 						border: none;
@@ -460,7 +460,7 @@
 			border-bottom: none;
 		}
 		span {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 	}
 
@@ -517,21 +517,21 @@
 			left: 0;
 			text-align: right;
 			font-weight: normal;
-			color: $primary-grey;
+			color: var(--primary-grey);
 		}
 
 		.wrap {
 			margin-left: 70px;
 			.name {
 				@include menu-label-text-treatment;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				.me {
-					color: $tertiary-grey;
+					color: var(--tertiary-grey);
 				}
 			}
 
 			.body {
-				color: $primary-grey;
+				color: var(--primary-grey);
 				word-wrap: break-word;
 				word-break: break-word;
 				.body-divider {
@@ -551,7 +551,7 @@
 			.name,
 			.body,
 			.time {
-				color: $tertiary_grey;
+				color: var(--tertiary-grey);
 			}
 		}
 
@@ -575,13 +575,13 @@
 
 #chat-dock-placeholder,
 #chat-dock > .x-panel-header{
-	background-color: $panel-background;
-	box-shadow: 0 -1px #dbdbdb, inset 0 1px #fcfcfc;
+	background-color: var(--panel-background);
+	box-shadow: 0 -1px var(--border-grey), inset 0 1px #fcfcfc;
 	border-bottom: 1px solid #dfdfdf;
 	border-bottom-width: 1px !important;
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 	text-shadow: 0 1px rgba(255,255,255,0.7);
-	font: italic 700 14px/36px $font;
+	font: italic 700 14px/36px var(--body-font-family);
 	background-image: linear-gradient(to top, #d3d3d3 0%, #f3f3f3 100%);
 
 	.x-header-text-container {
@@ -601,7 +601,7 @@
 		min-width: 29px;
 		border-radius: 8px;
 		background: #299bdc;
-		font: normal 600 12px/17px $font;
+		font: normal 600 12px/17px var(--body-font-family);
 		color: #ffffff;
 		box-shadow: 0 1px rgba(255,255,255,0.3),
 				inset 0 1px rgba(0,0,0,0.15),
@@ -619,7 +619,7 @@
 #chat-dock-placeholder.notice-me,
 #chat-dock.notice-me > .x-panel-header
 {
-	background-color: #3fb3f6;
+	background-color: var(--primary-blue);
 	box-shadow: 0 -1px #d9d9d9, inset 0 1px #95ddfb;
 	border-bottom-color: #30a1f4;
 	background-image: linear-gradient(to top, #30a1f4 0%, #4ec6f8 100%);
@@ -713,7 +713,7 @@
 		min-width: 24px;
 		border-radius: 8px;
 		background: #299bdc;
-		font: normal 600 12px/17px $font;
+		font: normal 600 12px/17px var(--body-font-family);
 		color: #ffffff;
 	}
 
@@ -740,7 +740,7 @@
 		}
 
 		&:hover {
-			background: $primary-red;
+			background: var(--primary-red);
 
 			&::after{ @include sprite($rhp-close-chat_hover); }
 			&::before {display: none;}
@@ -759,15 +759,15 @@
 		height: 50px;
 
 		.status {
-			font: italic normal 12px/16px $font;
-			color: $tertiary-grey;
+			font: italic normal 12px/16px var(--body-font-family);
+			color: var(--tertiary-grey);
 		}
 
 		.names{
 			@include ellipse;
 			overflow: hidden;
-			font: normal 600 12px/16px $font;
-			color: $primary-grey;
+			font: normal 600 12px/16px var(--body-font-family);
+			color: var(--primary-grey);
 
 			&.overflown::before{
 				content: "(" attr(data-count) ")";
@@ -801,9 +801,9 @@
 #chat-history {
 	.x-panel-header{
 		background: #f1f1f1;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		text-transform: uppercase;
-		font: normal 700 10px/30px $font;
+		font: normal 700 10px/30px var(--body-font-family);
 
 		.x-header-text-container {
 			padding: 0 0 0 10px;
@@ -816,7 +816,7 @@
 			text-align: center;
 			font-size: 14px;
 			padding: 5px 0px 5px 0px;
-			color: #3fb3f6;
+			color: var(--primary-blue);
 			cursor: pointer;
 
 			&::after{
@@ -827,9 +827,9 @@
 		.no-history{
 			background-color: white;
 			padding: 5px 0px 5px 0px;
-			font: italic 300 14px/28px $font;
+			font: italic 300 14px/28px var(--body-font-family);
 			text-align: center;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 	}
@@ -935,7 +935,7 @@ body.white-shade-mask .chat-gutter-window {
   			&[data-badge]:not([data-badge="0"]) {
   				&::before {
 					content: attr(data-badge);
-					background-color: $primary-red;
+					background-color: var(--primary-red);
 					font-size: 0.55em;
 					font-weight: 500;
 					color: white;
@@ -961,7 +961,7 @@ body.white-shade-mask .chat-gutter-window {
 
   				&.Online,&.online,&.available {
 					.avatar-pic {
-	  					border: 2px solid #8eb737;
+	  					border: 2px solid var(--primary-green);
 	  				}
 
 				}
@@ -973,7 +973,7 @@ body.white-shade-mask .chat-gutter-window {
 				}
 				&.DnD,&.dnd {
 					.avatar-pic {
-						border: 2px solid #F35252;
+						border: 2px solid var(--primary-red);
 					}
 				}
   			}
@@ -1004,7 +1004,7 @@ body.white-shade-mask .chat-gutter-window {
 		width: 220px;
 
 		.header {
-			border-bottom: 1px solid $primary-grey;
+			border-bottom: 1px solid var(--primary-grey);
 			padding: 5px 10px;
 			position: relative;
 
@@ -1065,7 +1065,7 @@ body.white-shade-mask .chat-gutter-window {
 			&.active {
 				.profile-pic {
 					.avatar-pic {
-						// border: 2px solid $primary-blue;
+						// border: 2px solid var(--primary-blue);
 					}
 				}
 			}
@@ -1076,7 +1076,7 @@ body.white-shade-mask .chat-gutter-window {
 			bottom: 0;
 			left: 0;
 			right: 0;
-			border-top: 1px solid $primary-grey;
+			border-top: 1px solid var(--primary-grey);
 			padding: 0;
 
 			.show-contacts {
@@ -1126,7 +1126,7 @@ body.white-shade-mask .chat-gutter-window {
 
 	&[data-badge]:not([data-badge="0"])::before {
 		content: attr(data-badge);
-		background-color: $primary-red;
+		background-color: var(--primary-red);
 		font-size: 0.55em;
 		font-weight: 500;
 		color: white;

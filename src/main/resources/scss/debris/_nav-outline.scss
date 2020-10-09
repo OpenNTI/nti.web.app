@@ -23,7 +23,7 @@
 			x: visible;
 			y: auto; //scroll;
 		}
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 	}
 
 	.outline-group {
@@ -55,7 +55,7 @@
 	.header {
 		background: #ffffff;
 		padding: 0 3em;
-		font: normal 500 0.9em/3.5em $font;
+		font: normal 500 0.9em/3.5em var(--body-font-family);
 		color: #a1a1a1;
 		box-shadow: inset 0 -1px 0 0 #eaeaea;
 		z-index: 2;
@@ -81,7 +81,7 @@
 		&.selected, &.x-item-selected {
 			color: #ffffff;
 			font-weight: 600;
-			background: $primary-blue;
+			background: var(--primary-blue);
 			box-shadow: inset 3px 0 0 0 #107eed;
 
 			.report-icon {
@@ -101,8 +101,8 @@
 	.outline-row {
 		position: relative;
 		background: #ffffff;
-		color: $secondary-grey;
-		font: normal 400 0.9em/2.8em $font;
+		color: var(--secondary-grey);
+		font: normal 400 0.9em/2.8em var(--body-font-family);
 		padding: 0 0.35em 0 1.39em;
 		cursor: pointer;
 
@@ -118,7 +118,7 @@
 			}
 
 			&:not(.heading) {
-	  			font: normal 400 0.9rem/1.5rem $font;
+	  			font: normal 400 0.9rem/1.5rem var(--body-font-family);
 
 	  			.label {
 	  				// To compute max height, multiply min-height by 2 (2 lines)
@@ -141,7 +141,7 @@
 
 		&.disabled {
 			cursor: default;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 		}
 
 
@@ -152,8 +152,8 @@
 			cursor: default;
 			text-transform: uppercase;
 			background: #fafafa;
-			color: $tertiary-grey;
-			font: normal 400 0.6em/2 $font;
+			color: var(--tertiary-grey);
+			font: normal 400 0.6em/2 var(--body-font-family);
 			box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f2f2f2;
 			//z-index: 1;
 
@@ -175,13 +175,13 @@
 			&.lesson{
 			    padding: 0.73em 0.35em 0.73em 1em;
 				&:not(.heading){
-			    	font: normal 400 0.875rem/1.5rem "Open Sans",sans-serif;
+			    	font: normal 400 0.875rem/1.5rem var(--body-font-family);
 				}
 			}
 
 			&.disabled {
 				cursor: pointer;
-				color: $primary-grey;
+				color: var(--primary-grey);
 			}
 		}
 	}
@@ -239,21 +239,21 @@
 				font-weight: 600;
 				box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
 				margin-bottom: 0.5em;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				//.label {
 					//border-top: 1px dotted #e5e5e5;
 				//}
 			}
 
 			&.heading {
-				color: $secondary-grey;
-				font: normal 100 1.5em/2.1 "Open Sans Condensed", $font;
+				color: var(--secondary-grey);
+				font: normal 100 1.5em/2.1 var(--header-font-family);
 				text-transform: none;
 				padding: 1.25em 0.42em 0 0.84em;
 
 				&.unit{
 					padding: 1.75em 0.42em 0.5em 0.84em;
-					font: normal 100 1.5em "Open Sans Condensed", $font;
+					font: normal 100 1.5em var(--header-font-family);
 					min-height: 2.1em;
 
 					&:first-of-type {

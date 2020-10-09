@@ -24,7 +24,7 @@ body > .x-mask {
     border: none !important;
     box-shadow: none !important;
 	background: transparent;
-	color: $primary-grey;
+	color: var(--primary-grey);
 
 	&.enrollment-mask {
 		.x-mask-msg-text {
@@ -56,7 +56,7 @@ body > .x-mask {
 	.x-mask-msg-text {
 		padding: 10px 10px 10px 32px;
 		color: #555;
-		font-family: $font;
+		font-family: var(--body-font-family);
 		border: none;
 		background: none !important;
 
@@ -151,13 +151,13 @@ body > .x-mask {
 
 	h2 {
 		margin: 0;
-		font: normal 600 1.45em/1 'Open Sans Condensed', $font;
+		font: normal 600 1.45em/1 var(--header-font-family);
 		text-transform: uppercase;
 	}
 
 	p {
-		font: normal 500 1.3em/1.5 $font;
-		color: $tertiary-grey;
+		font: normal 500 1.3em/1.5 var(--body-font-family);
+		color: var(--tertiary-grey);
 		text-transform: none;
 		margin: 5px 0;
 	}
@@ -208,7 +208,7 @@ body > .x-mask {
 }
 
 .message-bar{
-	color: $secondary-grey;
+	color: var(--secondary-grey);
 	background-color: #fffbe3;
 	border-width: 0;
 	border-bottom: 3px solid #f5e28a;
@@ -231,9 +231,9 @@ body > .x-mask {
 		position: relative;
 		//top: 3px;
 		line-height: normal;
-		color: $primary-grey;
+		color: var(--primary-grey);
 		text-decoration: underline;
-		//border-bottom: 1px dotted $primary-grey;
+		//border-bottom: 1px dotted var(--primary-grey);
 	}
 
 	.remember{
@@ -294,7 +294,7 @@ body > .x-mask {
 		left: 0; right: 0;
 		background-color: rgba(245,245,245,0.96);
 		color: #555;
-		font-family: $font;
+		font-family: var(--body-font-family);
 	}
 	&::after {
 		z-index: 11;

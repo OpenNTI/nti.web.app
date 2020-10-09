@@ -1,8 +1,8 @@
 @mixin dot-separated-list{
 	span{
 		&::after{
-			color: $tertiary-grey;
-			font: normal 500 10px/20px $font;
+			color: var(--tertiary-grey);
+			font: normal 500 10px/20px var(--body-font-family);
 
 			position: static;
 			content: '\00B7';
@@ -23,7 +23,7 @@
 		border: 1px solid #dcdcdc;
 		color: #dcdcdc;
 		background: white;
-		font: italic 400 14px/37px $font;
+		font: italic 400 14px/37px var(--body-font-family);
 		padding: 0 10px;
 		.editor {
 			margin-bottom: 10px;
@@ -34,7 +34,7 @@
 .activity-view{
 	@include side-panel-view-title;
 	.activity-panel {
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 
 		.activity {
 			cursor: pointer;
@@ -44,8 +44,8 @@
 
 			margin: 0 18px 0 20px;
 			padding: 12px 0 12px 0;
-			font: italic normal 12px/20px $font;
-			color: $primary-grey;
+			font: italic normal 12px/20px var(--body-font-family);
+			color: var(--primary-grey);
 			overflow: hidden;
 
 			//&::after {
@@ -63,7 +63,7 @@
 				&::after{display: none;}
 				text-align: center;
 				font-style: italic;
-				color: $secondary-grey;
+				color: var(--secondary-grey);
 				padding: 0px;
 				margin: 0px;
 				border-top: none;
@@ -88,12 +88,12 @@
 			}
 
 			.name, .with, .verb {
-				font: normal bold 10px $font;
+				font: normal bold 10px var(--body-font-family);
 				text-transform: uppercase;
 			}
 
-			.name, .with { color: $primary-blue; }
-			.verb {color: $tertiary-grey; }
+			.name, .with { color: var(--primary-blue); }
+			.verb {color: var(--tertiary-grey); }
 		}
 
 		.center-button{
@@ -148,7 +148,7 @@
 
 			.topic-comment-container{
 				padding: 0 0 0 10px;
-				background-color: #f9f9f9;
+				background-color: var(--quad-grey);
 
 				&[data-depth='0'] {
 					padding-left: 0px;
@@ -157,7 +157,7 @@
 
 			.topic-comment{
 				padding-left: 40px;
-				background-color: #f9f9f9;
+				background-color: var(--quad-grey);
 
 				.foot {
 					padding: 5px;
@@ -166,7 +166,7 @@
 				.foot, .meta{
 					.link {
 						cursor: pointer;
-						color: $primary-blue;
+						color: var(--primary-blue);
 					}
 
 					.name {
@@ -179,9 +179,9 @@
 						overflow-x: hidden;
 						vertical-align: bottom;
 						@include ellipse;
-						color: $secondary-grey;
+						color: var(--secondary-grey);
 						&::before{
-							color: $tertiary-grey;
+							color: var(--tertiary-grey);
 							font-weight: 600;
 							position: static;
 							content: '\00B7';
@@ -247,7 +247,7 @@
 		.thought-label {
 			position: absolute;
 			color: #8fbc30;
-			font: normal bold 10px $font;
+			font: normal bold 10px var(--body-font-family);
 			text-transform: uppercase;
 			left: 20px;
 			top: 20px;
@@ -261,7 +261,7 @@
 		}
 
 		.foot, .replies, .respond {
-			background: #f9f9f9;
+			background: var(--quad-grey);
 			padding:{ left: 15px; right: 15px; }
 		}
 
@@ -301,8 +301,8 @@
 
 			.location {
 				text-transform: uppercase;
-				font: normal 600 10px/20px $font;
-				color: $tertiary-grey !important;
+				font: normal 600 10px/20px var(--body-font-family);
+				color: var(--tertiary-grey) !important;
 				height: 20px;
 				overflow: hidden;
 				@include ellipse;
@@ -317,8 +317,8 @@
 				& > .text {
 					position: relative;
 					overflow: hidden;
-					font: normal 400 14px/20px $font;
-					color: $primary-grey;
+					font: normal 400 14px/20px var(--body-font-family);
+					color: var(--primary-grey);
 					display: block;
 					height: 40px;
 					img { max-width: 50% !important; }
@@ -339,17 +339,17 @@
 					position: absolute;
 					left: 0; right: 0;
 					bottom: 0; height: 10px;
-					background-image: linear-gradient(to bottom, rgba(251, 251, 251, 0) 0%, #fbfbfb 100%);
+					background-image: linear-gradient(to bottom, rgba(251, 251, 251, 0) 0% 100%);
 				}
 			}
 		}
 
 
 		.path {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-transform: uppercase;
 			padding: 0 20px;
-			font: normal 700 10px/40px $font;
+			font: normal 700 10px/40px var(--body-font-family);
 			height: 40px;
 			overflow: hidden;
 			@include ellipse;
@@ -398,15 +398,15 @@
 			.meta {
 				margin: 20px 70px 0 80px;
 				min-height: 60px;
-				font: normal 400 12px $font;
-				color: $tertiary-grey;
+				font: normal 400 12px var(--body-font-family);
+				color: var(--tertiary-grey);
 			}
 
 			.stamp {
 				margin-top: 5px;
 				.name {
-					font: normal 600 10px/20px $font;
-					color: $primary-blue;
+					font: normal 600 10px/20px var(--body-font-family);
+					color: var(--primary-blue);
 					text-transform: uppercase;
 					cursor: pointer;
 					&::after{
@@ -419,11 +419,11 @@
 
 			.subject, .name.no-subject {
 				display: block;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				overflow: hidden;
 				padding-bottom: 3px;
 				@include ellipse;
-				font: normal 300 28px/30px "Open Sans Condensed", $font;
+				font: normal 300 28px/30px var(--header-font-family);
 				cursor: pointer;
 				&::after{
 					content: '';
@@ -452,7 +452,7 @@
 				border-radius: 90px;
 				width: 4px; height: 4px;
 				margin: 2px;
-				background: $primary-blue;
+				background: var(--primary-blue);
 			}
 
 		}
@@ -460,8 +460,8 @@
 		.body{
 			position: relative;
 			margin: 10px 0 25px 0;
-			font: normal 400 14px/19px $font;
-			color: $primary-grey;
+			font: normal 400 14px/19px var(--body-font-family);
+			color: var(--primary-grey);
 			max-height: 57px;
 			overflow: hidden;
 
@@ -474,14 +474,14 @@
 			clear: both;
 			opacity: 1;
 			padding: 15px;
-			color: $primary-blue;
+			color: var(--primary-blue);
 
 			.comments {
 				cursor: pointer;
 			}
 
 			div {
-				font: normal 600 12px/15px $font;
+				font: normal 600 12px/15px var(--body-font-family);
 				//cursor: pointer;
 				display: inline-block;
 				//opacity: 0.75;
@@ -489,7 +489,7 @@
 				margin: 0;
 				//&:hover { opacity: 1; &::after{opacity: 0.75;} }
 				&::after{
-					font: normal 600 14px/20px $font;
+					font: normal 600 14px/20px var(--body-font-family);
 					position: static;
 					content: '\00B7';
 					vertical-align: middle;
@@ -559,7 +559,7 @@
 						cursor: pointer;
 
 						&.flag.on{
-							color: $primary-red;
+							color: var(--primary-red);
 							display: block;
 						}
 				  	}
@@ -578,7 +578,7 @@
 				}
 
 				.meta {
-					font: normal 600 10px $font;
+					font: normal 600 10px var(--body-font-family);
 
 					.name {
 						max-width: 100%;
@@ -587,7 +587,7 @@
 						vertical-align: bottom;
 						@include ellipse();
 
-						color: $primary-blue;
+						color: var(--primary-blue);
 						cursor: pointer;
 						text-transform: uppercase;
 						&::after{
@@ -597,15 +597,15 @@
 					}
 
 					.time{
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						text-transform: uppercase;
 					}
 				}
 
 				.body {
-					color: $primary-grey;
+					color: var(--primary-grey);
 					margin:{ top: 5px; bottom: 5px; }
-					font: normal 500 14px/20px $font;
+					font: normal 500 14px/20px var(--body-font-family);
 					max-height: 300px;
 
 					.whiteboard-container{ cursor: pointer; }
@@ -642,7 +642,7 @@
 	}
 
 	.wrap {
-		color: $primary-grey;
+		color: var(--primary-grey);
 		float: left;
 		width: 278px;
 		max-height: 400px;
@@ -650,11 +650,11 @@
 		padding: 20px 10px 10px 0;
 
 		.name {
-			font: normal 700 1em/1.4em 'Open Sans Condensed',$font;
+			font: normal 700 1em/1.4em var(--header-font-family);
 		}
 
 		.description {
-			font: normal 500 0.9em/1.4em $font;
+			font: normal 500 0.9em/1.4em var(--body-font-family);
 			font-size: 0.9em;
 			margin: 4px 0;
 		}
@@ -664,7 +664,7 @@
 .feedback-preview {
 	.path {
 		display: inline-block;
-		font: normal 400 0.6em/40px $font;
+		font: normal 400 0.6em/40px var(--body-font-family);
 		height: 40px;
 		width: 400px;
 		padding: 0 15px 0 15px;
@@ -677,7 +677,7 @@
 		text-transform: uppercase;
 		font-weight: 600;
 		cursor: pointer;
-		color: $tertiary-grey;
+		color: var(--tertiary-grey);
 		max-width: 185px;
 		width: 50%;
 		position: relative;
@@ -688,7 +688,7 @@
 
 		&::after {
 			content: ' /  ';
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			font-weight: 400;
 			position: absolute;
 			right: 0;
@@ -728,13 +728,13 @@
 			float: left;
 
 			.name {
-				color: $primary-grey;
-				font: normal 600 1em/1.1em $font;
+				color: var(--primary-grey);
+				font: normal 600 1em/1.1em var(--body-font-family);
 			}
 
 			.turned-in {
-				color: $primary-green;
-				font: normal 600 0.7em/2em $font;
+				color: var(--primary-green);
+				font: normal 600 0.7em/2em var(--body-font-family);
 			}
 		}
 
@@ -744,7 +744,7 @@
 			}
 
 			.meta .turned-in {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 		}
 
@@ -755,7 +755,7 @@
 			height: 80px;
 			left: 0;
 			right: 0;
-			background-color: $quad-grey;
+			background-color: var(--quad-grey);
 			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
 			clip: rect(80px, auto, 300px, auto);
 			border-radius: 250em / 3em;
@@ -763,9 +763,9 @@
 	}
 
 	.show-more {
-		background-color: $panel-background;
-		color: $primary-blue;
-		font: normal 500 0.8em/20px $font;
+		background-color: var(--panel-background);
+		color: var(--primary-blue);
+		font: normal 500 0.8em/20px var(--body-font-family);
 		padding: 10px 0 0 20px;
 
 		.more-text {

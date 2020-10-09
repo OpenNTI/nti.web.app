@@ -2,7 +2,7 @@
 
 .x-component-toast-message {
 	background: rgba(255,255,255,0.95);
-	border: 4px solid $toast-border-top;
+	border: 4px solid var(--border-blue);
 	border-width: 4px 0 0 0;
 	box-shadow: 0 3px 6px 0 rgba(0,0,0,0.25);
 	padding: 10px;
@@ -29,22 +29,22 @@
 	}
 
 	.title {
-		font-family: $font;
+		font-family: var(--body-font-family);
 		font-size: 18px;
 		font-style: italic;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 	}
 
 	.message {
-		font-family: $font;
+		font-family: var(--body-font-family);
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 600;
-		color: $secondary-grey;
+		color: var(--secondary-grey);
 
 		a,span {
 			&,&:link,&:active,&:visited {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				text-decoration: none;
 				cursor: none;
 			}
@@ -64,11 +64,11 @@
 			display: inline-block;
 			white-space: nowrap;
 			text-transform: uppercase;
-			font-family: $font;
+			font-family: var(--body-font-family);
 			font-size: 12px;
 			font-style: normal;
 			font-weight: 600;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			cursor: pointer;
 
 			&:last-of-type {

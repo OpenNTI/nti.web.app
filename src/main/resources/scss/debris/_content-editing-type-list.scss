@@ -99,14 +99,14 @@
 			}
 
 			.title {
-				font: normal 600 0.625em/20px "Open Sans", sans-serif;
+				font: normal 600 0.625em/20px var(--body-font-family);
 				text-transform: uppercase;
 				text-align: center;
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
 
 			.subtitle {
-				color: #3fb3f6;
+				color: var(--primary-blue);
 				font-size: 14px;
 				text-align: center;
 				line-height: 10px;
@@ -114,7 +114,7 @@
 		}
 
 		.quote-header {
-			color: #494949;
+			color: var(--primary-grey);
 			font-size: 18px;
 			font-weight: 300;
 			padding: 1rem 0 0.75rem 0;

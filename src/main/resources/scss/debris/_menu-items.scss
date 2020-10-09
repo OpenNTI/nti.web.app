@@ -73,13 +73,13 @@ li.x-menu-item {
 
 label.x-menu-item-cmp {
 	text-transform: uppercase;
-	color: $tertiary-grey;
-	font: normal 700 0.6em/1 $font;
+	color: var(--tertiary-grey);
+	font: normal 700 0.6em/1 var(--body-font-family);
 	padding: 12px 10px 8px 15px;
 }
 
 .x-menu-item {
-	color: $secondary-grey !important;
+	color: var(--secondary-grey) !important;
 	font-size: 1em;
 	font-weight: 400;
 	background: none;
@@ -227,7 +227,7 @@ label.x-menu-item-cmp {
 .blue-menu-items {
 	&.no-checkboxes .x-menu-item-checked,
 	&:not(.no-checkboxes) .x-menu-item-active {
-		background: $primary-blue;
+		background: var(--primary-blue);
 		color: #fff !important;
 		font-weight: 600;
 	}
@@ -241,7 +241,7 @@ label.x-menu-item-cmp {
 
 .x-menu-item-cmp.search-box {
 	border-top: 1px solid #F1F1F1;
-	background: #f8f8f8;
+	background: var(--quad-grey);
 	height: 61px;
 	overflow: hidden;
 	@include icon($rhp-search,$top:21px,$left:19px);
@@ -253,8 +253,8 @@ label.x-menu-item-cmp {
 		background: #fff;
 		border: 1px solid #dcdcdc;
 
-		font: normal 400 1em/1.5 $font;
-		color: $primary-grey;
+		font: normal 400 1em/1.5 var(--body-font-family);
+		color: var(--primary-grey);
 
 		height: 40px;
 		width: 92%;//fallback...

@@ -24,7 +24,7 @@
 			font-size: 0.875em;
 			line-height: 3.5em;
 			padding-right: 0.5em;
-			color: $primary-blue;
+			color: var(--primary-blue);
 			float: right;
 			cursor: pointer;
 		}
@@ -59,12 +59,12 @@
 				color: black;
 				border-radius: 0;
 				padding-bottom: 1px;
-				font: normal 700 0.7em/1.1em $font;
+				font: normal 700 0.7em/1.1em var(--body-font-family);
 			}
 
 			div:last-child {
 				color: white;
-				font: normal 500 0.8em/1.3em $font;
+				font: normal 500 0.8em/1.3em var(--body-font-family);
 				border-radius: 0;
 			}
 		}
@@ -98,20 +98,20 @@
 
 			span {
 				font-size: 0.875em;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 			}
 		}
 
 		.date {
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			&.expired {
-				color: $primary-red;
+				color: var(--primary-red);
 			}
 			&.nosubmit {
-				color: $tertiary-grey;
+				color: var(--tertiary-grey);
 			}
-			font: normal 700 0.6em/1.2em $font;
+			font: normal 700 0.6em/1.2em var(--body-font-family);
 			text-transform: uppercase;
 
 			&.start, &.course {
@@ -124,8 +124,8 @@
 			}
 		}
 		.title {
-			color: $primary-grey;
-			font: normal 300 2.25em/1.15em $font;
+			color: var(--primary-grey);
+			font: normal 300 2.25em/1.15em var(--body-font-family);
 		}
 
 	}
@@ -133,8 +133,8 @@
 	&.overview-topic{
 		position: relative;
 		cursor: pointer;
-		color: $primary-blue;
-		font: normal 400 1em/3.15em $font;
+		color: var(--primary-blue);
+		font: normal 400 1em/3.15em var(--body-font-family);
 		border:{
 			style: solid;
 			color: #ededed;
@@ -143,7 +143,7 @@
 
 		&:hover {
 			z-index: 2;
-			color: $primary-grey;
+			color: var(--primary-grey);
 			background: #f0f0f0;
 			border-top-color: none;
 			border-bottom-color: none;
@@ -194,15 +194,15 @@
 			margin: 15px 0;
 
 			.title {
-				font: italic 500 1.125em/1.5em $font;
-				color: $primary-grey;
+				font: italic 500 1.125em/1.5em var(--body-font-family);
+				color: var(--primary-grey);
 				overflow: hidden;
 				@include ellipse;
 			}
 
 			span {
-				font: normal 0.75em/1em $font;
-				color: $tertiary-grey;
+				font: normal 0.75em/1em var(--body-font-family);
+				color: var(--tertiary-grey);
 			}
 
 			.responses:not(:empty)::before, .report:not(:empty)::before {
@@ -211,7 +211,7 @@
 			}
 
 			.report {
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 			}
 		}
@@ -226,9 +226,9 @@
 			margin-top: -20px;
 
 			&.closed {
-				background: $tertiary-grey-alt;
-				color: $secondary-grey;
-				border-color: $tertiary-grey;
+				background: var(--tertiary-grey-alt);
+				color: var(--secondary-grey);
+				border-color: var(--tertiary-grey);
 				box-shadow: none;
 				cursor: default;
 				opacity: 0.7;
@@ -266,16 +266,16 @@
 			height: 50%;
 
 			.label {
-				font: normal 600 0.6em/1.6em $font;
-				color: $secondary-grey;
+				font: normal 600 0.6em/1.6em var(--body-font-family);
+				color: var(--secondary-grey);
 				text-transform: uppercase;
 				overflow: hidden;
 				@include ellipse();
 			}
 
 			.title {
-				color: $primary-grey;
-				font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
+				color: var(--primary-grey);
+				font: normal 300 1.6em/1.2em var(--header-font-family);
 				overflow: hidden;
 				//@include ellipse();
 				height: 64px;
@@ -288,8 +288,8 @@
 			}
 
 			.comments{
-				font: normal 600 0.6em/1.6em $font;
-				color: $tertiary-grey;
+				font: normal 600 0.6em/1.6em var(--body-font-family);
+				color: var(--tertiary-grey);
 			}
 		}
 	}
@@ -311,7 +311,7 @@
 		min-height: 22rem;
 
 		a.edit {
-			color: $primary-blue;
+			color: var(--primary-blue);
 			cursor: pointer;
 		}
 	}
@@ -321,13 +321,13 @@
 	.flyout-inner {
 		background-color: rgb(15, 45, 53);
 		font-size: 10px;
-		font-family: "Open Sans", sans-serif;
+		font-family: var(--body-font-family);
 		cursor: pointer;
 		padding: 0 20px;
 
 		.require-control-option {
 			font-weight: 400;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			text-transform: uppercase;
 		}
 	}
@@ -338,7 +338,7 @@
 		background: #ffffff;
 		overflow: hidden;
 		min-height: 50px;
-		@include scrollbar(#ffffff, $tertiary-grey);
+		@include scrollbar(#ffffff, var(--tertiary-grey));
 
 		.course-overview-lesson-content {
 			label.grid {
@@ -389,7 +389,7 @@
 			.title {
 				display: inline-block;
 				vertical-align: middle;
-				color: $primary-grey;
+				color: var(--primary-grey);
 				font-size: 1.125em;
 				max-width: 515px;
 				margin-bottom: 1em;
@@ -515,13 +515,13 @@
 				&::before {
 					content: 'viewed';
 					text-transform: uppercase;
-					font: normal 500 0.6em/24px "Open Sans",sans-serif;
+					font: normal 500 0.6em/24px var(--body-font-family);
 					position: absolute;
 					top: 5px;
 					right: 5px;
 					padding: 0px 10px 0 30px;
 					color: white;
-					background-color: $secondary-green;
+					background-color: var(--secondary-green);
 					z-index: 1;
 					border-radius: 20px;
 				}
@@ -575,9 +575,9 @@
 
 					.require-control-value {
 						background: none;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						text-transform: uppercase;
-						font-family: "Open Sans", sans-serif;
+						font-family: var(--body-font-family);
 						padding: 0;
 						cursor: pointer;
 						border: none;
@@ -598,9 +598,9 @@
 
 							.menu-label.selected {
 								background: none;
-								color: $tertiary-grey;
+								color: var(--tertiary-grey);
 								text-transform: uppercase;
-								font-family: "Open Sans", sans-serif;
+								font-family: var(--body-font-family);
 								font-size: 10px;
 								padding: 0;
 								cursor: pointer;
@@ -613,13 +613,13 @@
 							ul {
 								background-color: rgb(15, 45, 53);
 								font-size: 10px;
-								font-family: "Open Sans", sans-serif;
+								font-family: var(--body-font-family);
 								cursor: pointer;
 								padding: 0 20px;
 
 								.option-label {
 									font-weight: 400;
-									color: $tertiary-grey;
+									color: var(--tertiary-grey);
 									text-transform: uppercase;
 
 									&.selected {
@@ -631,7 +631,7 @@
 											font-size: 14px;
 											position: absolute;
 											left: 8px;
-											color: $tertiary-grey;
+											color: var(--tertiary-grey);
 										}
 									}
 								}
@@ -668,7 +668,7 @@
 						cursor: pointer;
 						color: #ebebeb;
 						padding: 8px 10px;
-						font: normal 400 1.1em 'Open Sans Condensed', $font;
+						font: normal 400 1.1em var(--header-font-family);
 						min-height: 53px;
 						border:{
 							color: #0f2d35;
@@ -683,8 +683,8 @@
 						}
 
 						.comments, .viewed, .required-value {
-							font: normal 700 0.6em/1.3em $font;
-							color: $secondary-grey;
+							font: normal 700 0.6em/1.3em var(--body-font-family);
+							color: var(--secondary-grey);
 							text-transform: uppercase;
 						}
 
@@ -719,7 +719,7 @@
 
 	h2 {
 		margin: 5em 0 0 -3.05em;
-		font: normal 600 0.6em/2em $font;
+		font: normal 600 0.6em/2em var(--body-font-family);
 		color: #fff;
 		text-transform: uppercase;
 
@@ -852,14 +852,14 @@
 
 			div {
 				display: inline-block;
-				font: normal 700 0.6em/1.6em $font;
+				font: normal 700 0.6em/1.6em var(--body-font-family);
 				text-transform: uppercase;
-				color: $primary-blue;
+				color: var(--primary-blue);
 				cursor: pointer;
 
 				&::after {
-					color: $tertiary-grey;
-					font: normal 500 1.2em $font;
+					color: var(--tertiary-grey);
+					font: normal 500 1.2em var(--body-font-family);
 					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
@@ -885,7 +885,7 @@
 		padding: 0 30px 0 10px;
 
 		&.x-menu-item-checked {
-			background-color: $primary-blue;
+			background-color: var(--primary-blue);
 			color: white !important;
 
 			&::after {
@@ -893,7 +893,7 @@
 			}
 
 			&.x-menu-item-active {
-				background-color: $primary-blue !important;
+				background-color: var(--primary-blue) !important;
 			}
 		}
 	}
