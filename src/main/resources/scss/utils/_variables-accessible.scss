@@ -1,5 +1,8 @@
 
 :root body {
+	/* flip these two values for light/dark mode */
+	--accent-color-overlay: 255, 255, 255;
+	--accent-color-overlay-inverted: 0, 0, 0;
 	//colors
 	--primary-grey: #000;
 	--secondary-grey: #4c4c4c;
@@ -8,10 +11,14 @@
 	--tertiary-grey-alt: #d1d1d1;
 	--quad-grey: #f8f8f8;
 	--primary-red: #e41717;
+	--primary-red-rgb: 228, 23, 23;
 	--secondary-red: #500000;
 	--primary-orange: #fa8700;
+	--primary-orange-rgb: 250, 135, 0;
 	--primary-blue: #2a76a3;
+	--primary-blue-rgb: 42, 118, 163;
 	--primary-green: #577f02;
+	--primary-green-rgb: 87, 127, 2;
 	--secondary-green: #148524;
 	--border-blue: #39a1dd;
 	--border-grey: #dbdbdb;

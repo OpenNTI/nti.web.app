@@ -40,7 +40,7 @@
 
 				&.active {
 					.invitations-count {
-						border: 1px solid rgba(255, 255, 255, 0.38);
+						border: 1px solid rgba(var(--accent-color-overlay-inverted), 0.38);
 						color: white;
 					}
 				}

@@ -1,6 +1,5 @@
 @import '~@nti/style-common';
 
-
 .site-admin-tabs-container {
 	.site-admin-tabs-header {
 		color: var(--tertiary-grey);
@@ -18,7 +17,6 @@
 			width: 24px;
 			height: 24px;
 			margin-right: 0.5rem;
-
 			background-image: url('./assets/toc.svg');
 			background-size: cover;
 			background-repeat: no-repeat;
@@ -41,7 +39,7 @@
 				}
 
 				&.active {
-					box-shadow: inset 4px 0 0 0 #168fe7;
+					box-shadow: inset 4px 0 0 0 rgba(var(--accent-color-overlay), 0.2);
 					background: var(--primary-blue);
 					color: white;
 				}

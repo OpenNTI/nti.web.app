@@ -2911,10 +2911,10 @@
 		}
 
 		input[type="radio"]:checked ~ label {
-			background-color: rgba(63, 179, 246, 0.15);
-			color: #168FE7;
+			background-color: rgba(var(--primary-blue-rgb), 0.15);
+			color: var(--secondary-blue);
 			font-weight: 600;
-			box-shadow: inset 4px 0 0 0 #168FE7;
+			box-shadow: inset 4px 0 0 0 var(--secondary-blue);
 		}
 
 		label {
