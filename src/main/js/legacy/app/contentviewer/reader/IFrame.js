@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const {copyCustomPropertiesIntoIFrame} = require('@nti/lib-dom');
 
 const Globals = require('legacy/util/Globals');
 
@@ -279,6 +280,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				});
 			});
 		}
+
+		copyCustomPropertiesIntoIFrame(this.iframe.el.dom);
 
 		me.get().win.onerror = function () {
 			(con || console).warn('iframe error: ', JSON.stringify(arguments));
