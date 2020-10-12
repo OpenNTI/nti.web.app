@@ -259,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 					return;
 				}
 
-				courseView.handleRoute.bind(courseView, subRoute, route.precache);
+				return courseView.handleRoute(subRoute, route.precache);
 			})
 			.catch(function (err) {
 				if (me.currentRoute.indexOf('/course') !== 0) {
@@ -296,7 +296,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 					return;
 				}
 
-				bundleView.handleRoute.bind(bundleView, subRoute, route.precache);
+				return bundleView.handleRoute(subRoute, route.precache);
 			})
 			.catch(function () {
 				if (me.currentRoute.indexOf('/bundle') !== 0) {
