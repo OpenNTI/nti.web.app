@@ -10,7 +10,7 @@
 		right: 30px;
 		top: 50px;
 		width: 230px;
-		box-shadow: 0 0 1px 0 rgba(0,0,0,0.35);
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.35);
 
 		&.stick_bottom {
 			bottom: 15px;
@@ -41,6 +41,7 @@
 				.title {
 					font: normal 600 1.2em/1.2em var(--header-font-family);
 					overflow: hidden;
+
 					@include ellipsis();
 				}
 
@@ -58,6 +59,7 @@
 
 			.detail {
 				color: var(--secondary-grey);
+
 				.label {
 					font-weight: 600;
 					margin-right: 0.5em;
@@ -83,6 +85,7 @@
 
 			.coupon {
 				margin-top: 10px;
+
 				.label {
 					display: block;
 					font-size: 0.8em;
@@ -175,7 +178,7 @@
 				padding: 7px;
 				border: 2px solid var(--tertiary-grey);
 				border-radius: 13px;
-				font-weight:700;
+				font-weight: 700;
 				line-height: 1em;
 			}
 
@@ -185,6 +188,7 @@
 
 			&.enabled.number {
 				color: var(--secondary-grey);
+
 				@include icon($check_progress, $side: after, $top: 13px, $left: 11px);
 
 				&::before {
@@ -202,7 +206,7 @@
 
 			&.active {
 				background-color: white;
-				border: 0px solid #e5e5e5;
+				border: 0 solid #e5e5e5;
 				border-left-width: 1px;
 				border-right-width: 1px;
 
@@ -233,6 +237,7 @@
 
 	.body-container {
 		background-color: white;
+
 		&.error {
 			box-shadow: 0 0 0 1px var(--primary-red);
 		}
@@ -240,6 +245,7 @@
 
 	.admission-group {
 		padding-right: 280px;
+
 		.label {
 			font: normal 300 1.7em/2em var(--body-font-family);
 			color: var(--tertiary-grey);
@@ -248,11 +254,13 @@
 				color: var(--primary-red);
 			}
 		}
+
 		.error-detail {
 			background-color: rgba(var(--primary-red), 0.85);
-			border-radius:3px;
+			border-radius: 3px;
+
 			p {
-				padding:.5em 1em;
+				padding: 0.5em 1em;
 			}
 		}
 	}
@@ -274,6 +282,7 @@
 
 			.large.left {
 				width: 212px;
+
 				&.last {
 					margin-right: 0;
 				}
@@ -315,7 +324,7 @@
 				.enrollment-input input,
 				.enrollment-input textarea {
 					border-color: var(--tertiary-grey-alt);
-					opacity: 0.7
+					opacity: 0.7;
 				}
 
 				.enrollment-input.required input {
@@ -341,9 +350,8 @@
 		}
 	}
 
-
 	.admission-set.gift-recipient {
-		padding: 0px 15px 5px 15px;
+		padding: 0 15px 5px 15px;
 		background-color: #f7fdf8;
 		border: 1px solid #d6f1d9;
 		border-bottom-width: 0;
@@ -363,6 +371,7 @@
 
 			.large.left {
 				width: 212px;
+
 				&.last {
 					margin-right: 0;
 				}
@@ -389,7 +398,6 @@
 				&::before {
 					display: none;
 				}
-
 			}
 
 			input[type=checkbox]:checked + label::after {
@@ -430,24 +438,23 @@
 		}
 
 		textarea::-webkit-input-placeholder {
-		    font-weight: 300;
+			font-weight: 300;
 		}
 
 		textarea:-moz-placeholder {
-		    /* FF 4-18 */
-	    font: normal 300 1.3em/1 var(--body-font-family);
+			/* FF 4-18 */
+			font: normal 300 1.3em/1 var(--body-font-family);
 		}
 
 		textarea::-moz-placeholder {
-		    /* FF 19+ */
-		    font: normal 300 1.3em/1 var(--body-font-family);
+			/* FF 19+ */
+			font: normal 300 1.3em/1 var(--body-font-family);
 		}
 
 		textarea:-ms-input-placeholder {
-		    /* IE 10+ */
-		    font: normal 300 1em/1 var(--body-font-family);
+			/* IE 10+ */
+			font: normal 300 1em/1 var(--body-font-family);
 		}
-
 
 		textarea {
 			color: var(--secondary-grey);
@@ -493,38 +500,39 @@
 		}
 
 		.help-popover {
-				position: relative;
-				clear: both;
-				background-color: #f7fcff;
-				width: 650px;
-				top: -220px;
-				left: 15px;
-				padding: 10px;
-				border: 2px solid var(--primary-blue);
-				border-radius: 5px;
-				box-shadow: 0 0 15px 0 rgba(0,0,0,0.3);
-				font: normal 300 1em/1 var(--body-font-family);
+			position: relative;
+			clear: both;
+			background-color: #f7fcff;
+			width: 650px;
+			top: -220px;
+			left: 15px;
+			padding: 10px;
+			border: 2px solid var(--primary-blue);
+			border-radius: 5px;
+			box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3);
+			font: normal 300 1em/1 var(--body-font-family);
 
-				.title {
-					font-size: 1.3em;
-					line-height: 1.5em;
-					margin-top: 10px;
-					padding-right: 20px;
-				}
-
-				.body {
-					line-height: 28px;
-					font-size: 0.9em;
-					font-weight: 400;
-				}
-
-				.close {
-					cursor: pointer;
-					top: 10px;
-					right: 20px;
-					@include icon($message_box_close, $position: absolute);
-				}
+			.title {
+				font-size: 1.3em;
+				line-height: 1.5em;
+				margin-top: 10px;
+				padding-right: 20px;
 			}
+
+			.body {
+				line-height: 28px;
+				font-size: 0.9em;
+				font-weight: 400;
+			}
+
+			.close {
+				cursor: pointer;
+				top: 10px;
+				right: 20px;
+
+				@include icon($message_box_close, $position: absolute);
+			}
+		}
 
 		.enrollment-input-container {
 			position: relative;
@@ -618,7 +626,6 @@
 		}
 
 		.enrollment-checkbox-group {
-
 			.yes {
 				position: relative;
 			}
@@ -628,7 +635,9 @@
 				overflow: hidden;
 				font-size: 1.1em;
 				width: 98%;
+
 				@include experimental-value(width, calc(100% - 20px));
+
 				position: absolute;
 				bottom: 1px;
 
@@ -648,6 +657,7 @@
 
 				&.disabled {
 					cursor: default;
+
 					.enrollment-input {
 						cursor: default;
 						color: var(--tertiary-grey);
@@ -660,7 +670,7 @@
 							input[type=checkbox]:checked + label {
 								@include icon($checkbox-14, $top: 13px, $left: 18px);
 
-								&::before{
+								&::before {
 									display: none;
 								}
 							}
@@ -671,7 +681,6 @@
 						}
 					}
 				}
-
 			}
 		}
 
@@ -679,8 +688,7 @@
 			position: relative;
 			overflow: hidden;
 			height: auto;
-
-			box-shadow: 0 0 0px 1px var(--primary-red);
+			box-shadow: 0 0 0 1px var(--primary-red);
 		}
 
 		.enrollment-input {
@@ -715,7 +723,7 @@
 				width: 95px;
 			}
 
-			&.full{
+			&.full {
 				width: 675px;
 			}
 
@@ -751,8 +759,10 @@
 					&.disabled::after {
 						content: '';
 						position: absolute;
-						top: 0; bottom: 0;
-						left: 0; right: 0;
+						top: 0;
+						bottom: 0;
+						left: 0;
+						right: 0;
 						background-color: #efefef;
 						opacity: 0.5;
 					}
@@ -764,7 +774,7 @@
 					font-weight: 500;
 					line-height: 25px;
 					border: 1px solid var(--tertiary-grey);
-					background: #ffffff;
+					background: #fff;
 					padding: 6px 10px;
 				}
 
@@ -793,6 +803,7 @@
 					padding: 10px 15px 10px 45px;
 					display: block;
 					cursor: pointer;
+
 					@include icon($radio-button-16, $top: 12px, $left: 18px);
 
 					&.input {
@@ -809,7 +820,7 @@
 						width: 4px;
 						background-color: var(--primary-blue);
 						top: 0;
-						left: 0px;
+						left: 0;
 						bottom: 0;
 					}
 				}
@@ -833,10 +844,11 @@
 						background-color: var(--quad-grey);
 					}
 				}
+
 				label {
 					.help {
-						margin-bottom:1em;
-						padding-left:0;
+						margin-bottom: 1em;
+						padding-left: 0;
 					}
 				}
 			}
@@ -898,7 +910,7 @@
 						width: 4px;
 						background-color: var(--primary-blue);
 						top: 0;
-						left: 0px;
+						left: 0;
 						bottom: 0;
 					}
 				}
@@ -921,6 +933,7 @@
 					position: relative;
 					height: 40px;//because IE sucks.
 				}
+
 				input:focus {
 					border-color: var(--primary-blue);
 					box-shadow: -1px 0 0 0 var(--primary-blue);
@@ -939,7 +952,7 @@
 				}
 			}
 
-			&.text, &.select{
+			&.text, &.select {
 				input {
 					box-shadow: none;
 					border-radius: 0;
@@ -947,7 +960,7 @@
 					font-weight: 500;
 					line-height: 25px;
 					border: 1px solid var(--tertiary-grey);
-					background: #ffffff;
+					background: #fff;
 					padding: 6px 30px 6px 10px;
 					margin: 0;
 					min-height: 39px;
@@ -1005,6 +1018,7 @@
 				&.left {
 					float: left;
 					margin-right: 8px;
+
 					&.last {
 						margin-right: 0;
 					}
@@ -1041,7 +1055,6 @@
 	}
 
 	.enrollment-description {
-
 		&.nested {
 			padding: 20px;
 			background-color: var(--quad-grey);
@@ -1231,12 +1244,11 @@
 		}
 
 		.card {
-			&:before {
+			&::before {
 				content: '**** **** **** ';
 			}
 		}
 	}
-
 }
 
 .enrollment-gift-confirmation {
@@ -1319,6 +1331,7 @@
 
 	.things-to-do {
 		margin-bottom: 30px;
+
 		.prompt {
 			margin-bottom: 30px;
 			line-height: 1.5em;
@@ -1363,7 +1376,7 @@
 		font-size: 0.9em;
 	}
 
-	.support{
+	.support {
 		line-height: 40px;
 		margin-top: 1em;
 
@@ -1441,7 +1454,7 @@
 				width: 4px;
 				background-color: var(--primary-blue);
 				top: 0;
-				left: 0px;
+				left: 0;
 				bottom: 0;
 			}
 		}
@@ -1523,12 +1536,12 @@
 				margin-right: 0.5em;
 
 				&::after {
-					content: ':'
+					content: ':';
 				}
 			}
 
 			&.card .last-four::before {
-				content: '**** **** **** '
+				content: '**** **** **** ';
 			}
 
 			.city {
