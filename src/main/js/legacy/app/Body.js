@@ -254,7 +254,13 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		ntiid = decodeFromURI(ntiid);
 
 		return courseView.setActiveCourse(ntiid, course)
-			.then(courseView.handleRoute.bind(courseView, subRoute, route.precache))
+			.then(() => {
+				if (me.currentRoute.indexOf('/course') !== 0) {
+					return;
+				}
+
+				courseView.handleRoute.bind(courseView, subRoute, route.precache);
+			})
 			.catch(function (err) {
 				if (me.currentRoute.indexOf('/course') !== 0) {
 					return;
@@ -285,8 +291,18 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		ntiid = decodeFromURI(ntiid);
 
 		return bundleView.setActiveBundle(ntiid, bundle)
-			.then(bundleView.handleRoute.bind(bundleView, subRoute, route.precache))
+			.then(() => {
+				if (me.currentRoute.indexOf('/bundle') !== 0) {
+					return;
+				}
+
+				bundleView.handleRoute.bind(bundleView, subRoute, route.precache);
+			})
 			.catch(function () {
+				if (me.currentRoute.indexOf('/bundle') !== 0) {
+					return;
+				}
+
 				me.replaceRoute('', '/library');
 			});
 	},
