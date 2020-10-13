@@ -1,8 +1,10 @@
 const Ext = require('@nti/extjs');
+const {Launch} = require('@nti/web-reports');
 
 const {getString} = require('legacy/util/Localization');
 
 require('../contentviewer/overlay/Panel');
+require('../../overrides/ReactHarness');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader', {
@@ -48,7 +50,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 	},
 
 
-	updateSurvey: function (survey, fromSubmit, results) {
+	async updateSurvey (survey, fromSubmit, results) {
+		const surveyInterface = await survey.getInterfaceInstance();
+
 		var items = [],
 			reportLink = survey.getReportLink();
 
@@ -68,15 +72,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 
 		if (reportLink) {
 			items.push({
-				xtype: 'box',
-				cls: 'survey-report',
-				autoEl: {html: 'View Report'},
-				listeners: {
-					click: {
-						element: 'el',
-						fn: this.showReports.bind(this, reportLink)
-					}
-				}
+				xtype: 'react',
+				component: Launch.Link,
+				context: surveyInterface,
+				children: 'View Results'
 			});
 		}
 
