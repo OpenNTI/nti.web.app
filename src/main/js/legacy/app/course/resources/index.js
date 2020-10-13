@@ -5,6 +5,7 @@ const {getService} = require('@nti/web-client');
 const Resources = require('nti-web-course-resources');
 const SearchStateStore = require('legacy/app/search/StateStore');
 const ContentActions = require('legacy/app/content/Actions');
+const AssessmentActions = require('legacy/app/course/assessment/Actions');
 
 require('legacy/overrides/ReactHarness');
 require('legacy/mixins/Router');
@@ -30,7 +31,13 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 			xtype: 'react',
 			component: Resources,
 			gotoResource: (id) => this.gotoReading(id),
-			createResource: () => this.createReading()
+			createResource: (type) => {
+				if (type === 'readings') {
+					this.createReading();
+				} else if (type === 'surveys') {
+					this.createSurvey();
+				}
+			}
 		});
 
 		this.initRouter();
@@ -41,6 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 
 		this.SearchStore = SearchStateStore.getInstance();
 		this.ContentActions = ContentActions.create();
+		this.AssessmentActions = AssessmentActions.create();
 
 		this.initSearchHandler(this.SearchStore);
 	},
@@ -81,6 +89,24 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 			.then((pack) => {
 				this.gotoReading(pack);
 				this.setTitle('Untitled Reading');
+			})
+			.always(() => {
+				if (this.el) {
+					this.el.unmask();
+				}
+			});
+	},
+
+
+	createSurvey () {
+		if (this.el) {
+			this.el.mask('Loading...');
+		}
+
+		this.AssessmentActions.createSurveyIn(this.currentBundle)
+			.then((survey) => {
+				this.gotoReading(survey);
+				this.setTitle('Untitled Survey');
 			})
 			.always(() => {
 				if (this.el) {

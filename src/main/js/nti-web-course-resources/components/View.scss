@@ -13,13 +13,40 @@
 		}
 
 		.header {
-			flex: 1 1 auto;
-			font: normal 300 2.25rem/1 var(--body-font-family);
+			flex: 0 0 auto;
 			color: var(--primary-grey);
+			display: inline-flex;
+			flex-direction: row;
+			align-items: center;
+
+			span {
+				font: normal 300 2.25rem/1 var(--body-font-family);
+			}
+
+			i {
+				font-size: 1.5rem;
+				transition: transform 0.2s;
+			}
+
+			&.flyout-open i {
+				transform: rotate(180deg);
+			}
+		}
+
+		.spacer {
+			flex: 1 1 auto;
 		}
 
 		.resource-controls {
 			flex: 0 0 auto;
 		}
+	}
+}
+
+.course-resource-types {
+	.header-option {
+		display: block;
+		padding: 0.5rem 1rem;
+		font: normal 300 1.25rem/1 var(--body-font-family);
 	}
 }
