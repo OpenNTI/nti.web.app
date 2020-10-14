@@ -57,9 +57,10 @@ export default class Readings extends React.Component {
 	}
 
 	render () {
-		const { course, items } = this.props;
+		const { course, items:itemsProp } = this.props;
 
 		const loading = !course;
+		const items = itemsProp.filter(x => this.filter(x.title));
 
 		const columns = [
 			{
