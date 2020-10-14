@@ -74,8 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 			items.push({
 				xtype: 'react',
 				component: Launch.Link,
-				context: surveyInterface,
-				children: 'View Results'
+				context: surveyInterface
 			});
 		}
 
