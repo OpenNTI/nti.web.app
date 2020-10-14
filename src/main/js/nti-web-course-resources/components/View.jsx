@@ -33,6 +33,8 @@ class CourseResources extends React.Component {
 		activeType: READINGS
 	}
 
+	flyout = React.createRef()
+
 	state = {
 		active: 'readings'
 	}
@@ -54,8 +56,10 @@ class CourseResources extends React.Component {
 		}
 	}
 
-	selectReadings = () => this.setState({active: 'readings'})
-	selectSurveys = () => this.setState({active: 'surveys'})
+	closeFlyout = () => this.flyout.current?.dismiss()
+
+	selectReadings = () => this.setState({active: 'readings'}, this.closeFlyout)
+	selectSurveys = () => this.setState({active: 'surveys'}, this.closeFlyout)
 
 
 	render () {
@@ -72,7 +76,7 @@ class CourseResources extends React.Component {
 		return (
 			<div className="course-resources">
 				<div className="course-resources-header">
-					<Flyout.Triggered trigger={headerTrigger} horizontalAlign={Flyout.ALIGNMENTS.LEFT_OR_RIGHT} >
+					<Flyout.Triggered ref={this.flyout} trigger={headerTrigger} horizontalAlign={Flyout.ALIGNMENTS.LEFT_OR_RIGHT} >
 						<div className="course-resource-types">
 							<Button plain className="header-option" onClick={this.selectReadings}>
 								{t('readings')}
