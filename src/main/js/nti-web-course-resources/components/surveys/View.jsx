@@ -1,8 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {scoped} from '@nti/lib-locale';
 import {Hooks, Loading, Errors} from '@nti/web-commons';
+import {searchable, contextual} from '@nti/web-search';
 
 import Table from '../table';
+
+const t = scoped('nti-course-resources.surveys.View', {
+	surveys: 'Surveys'
+});
 
 const {useResolver} = Hooks;
 const {isPending, isResolved, isErrored} = useResolver;
@@ -12,7 +18,7 @@ SurveyResources.propTypes = {
 		getAllSurveys: PropTypes.func
 	})
 };
-export default function SurveyResources ({course, ...otherProps}) {
+function SurveyResources ({course, ...otherProps}) {
 	const resolver = useResolver(async () => {
 		const batch = await course?.getAllSurveys();
 
@@ -32,3 +38,5 @@ export default function SurveyResources ({course, ...otherProps}) {
 		</Loading.Placeholder>
 	);
 }
+
+export default searchable()(contextual(t('surveys'))(SurveyResources));

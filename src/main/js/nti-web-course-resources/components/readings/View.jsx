@@ -2,6 +2,7 @@ import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
+import {searchable, contextual} from '@nti/web-search';
 import {Table, EmptyState, Loading} from '@nti/web-commons';
 
 import ListItem from './ListItem';
@@ -12,7 +13,8 @@ const DEFAULT_TEXT = {
 	lastModified: 'Last Modified',
 	loading: 'Loading',
 	emptyHeader: 'This folder is empty.',
-	emptyMessage: 'Click the button above to create a new reading.'
+	emptyMessage: 'Click the button above to create a new reading.',
+	readings: 'Readings'
 };
 
 const t = scoped('nti-course-resources.readings.View', DEFAULT_TEXT);
@@ -42,7 +44,10 @@ function getReadings (course) {
 	return (ContentPackages || []).filter(x => x.isRenderable);
 }
 
-export default class Readings extends React.Component {
+export default
+@searchable()
+@contextual(t('readings'))
+class Readings extends React.Component {
 	static propTypes = {
 		course: PropTypes.object,
 		gotoResource: PropTypes.func,

@@ -2,7 +2,6 @@ import './View.scss';
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
 import PropTypes from 'prop-types';
-import {searchable, contextual} from '@nti/web-search';
 import {Flyout, Icons, Button} from '@nti/web-commons';
 
 import Controls from './Controls';
@@ -11,14 +10,12 @@ import Surveys from './surveys';
 
 const DEFAULT_STRINGS = {
 	'readings': 'Readings',
-	'surveys': 'Surveys'
+	'surveys': 'Surveys',
 };
 
 const t = scoped('nti-course-resources.View', DEFAULT_STRINGS);
 
 export default
-@searchable()
-@contextual(t('readings'))
 class CourseResources extends React.Component {
 	static READINGS = READINGS
 
