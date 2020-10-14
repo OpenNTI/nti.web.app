@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const { Stream } = require('@nti/web-content');
+const { Stream } = require('@nti/web-profiles');
 const { getService } = require('@nti/web-client');
 
 const User = require('legacy/model/User');
