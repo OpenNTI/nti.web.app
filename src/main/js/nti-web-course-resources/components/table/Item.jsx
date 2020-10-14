@@ -26,6 +26,16 @@ export default class ReadingListItem extends React.Component {
 		}
 	}
 
+	isPublished () {
+		const {reading} = this.props;
+
+		if (typeof reading.isPublished === 'function') {
+			return reading.isPublished();
+		}
+
+		return reading.isPublished;
+	}
+
 	render () {
 		const {reading} = this.props;
 
@@ -40,7 +50,7 @@ export default class ReadingListItem extends React.Component {
 
 
 	renderMeta = (reading) => {
-		const {icon, title, isPublished} = reading;
+		const {icon, title} = reading;
 		const canEdit = reading.hasLink('edit');
 		const iconFallback = (iconUrl) => iconUrl || '/app/resources/images/file-icons/generic.png';
 
@@ -49,7 +59,7 @@ export default class ReadingListItem extends React.Component {
 				<div className="icon" style={{backgroundImage: `url(${iconFallback(icon)})`}} />
 				<div className="wrap">
 					<div className="title">{title}</div>
-					<div className="published-inline">{t(isPublished ? 'published' : 'draft')}</div>
+					<div className="published-inline">{t(this.isPublished() ? 'published' : 'draft')}</div>
 				</div>
 				{canEdit && (<div className="edit" onClick={this.gotoResource}><span>{t('edit')}</span></div>)}
 			</div>
@@ -58,11 +68,9 @@ export default class ReadingListItem extends React.Component {
 
 
 	renderPublish = (reading) => {
-		const {isPublished} = reading;
-
 		return (
 			<div className="published" role="cell">
-				{t(isPublished ? 'published' : 'draft')}
+				{t(this.isPublished() ? 'published' : 'draft')}
 			</div>
 		);
 	}
