@@ -192,6 +192,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 				});
 		};
 
+		breadcrumb = breadcrumb || [
+			{label: 'Resources', handleRoute: () => this.gotoResources?.()}
+		];
+
 		return Promise.all([
 			page.getInterfaceInstance(),
 			this.currentBundle.getInterfaceInstance()
