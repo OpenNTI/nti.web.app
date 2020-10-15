@@ -6,6 +6,7 @@
 
 	&.nti-reading-discussion-editor-body-scroll {
 		position: fixed !important;
+		z-index: 900 !important;
 	}
 
 	&:not(.nti-reading-discussion-editor-body-scroll) {
