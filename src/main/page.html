@@ -25,32 +25,33 @@
 	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css" href="/vendor/mathquill-0.9.4/mathquill.css">
 	<link rel="stylesheet" id="main-stylesheet" type="text/css" href="/resources/css/legacy.css">
 	<style type="text/css">
-		#loading-mask {
-			position: absolute;
-			position: fixed;
-			left: 0;right: 0;
-			top: 0; bottom: 0;
-			z-index: 9999999;
-			background-color: white;
-		}
+	#loading-mask {
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		z-index: 9999999;
+		background-color: white;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
 
-		#loading {
-			position: absolute;
-			left: 50%;
-			top: 50%;
-		}
+	#loading {
+		backface-visibility: hidden;
+		transform: translate3d(0, 0, 0);
+	}
 
-		#loading div{
-			width: 117px; height: 42px;
-			margin: -50% 0 0 -50%;
-			z-index: 99999993;
-			background: white url(/app/resources/images/elements/folding_logo.gif) no-repeat center center;
-		}
+	#loading::after {
+		content: url(/app/resources/images/loading.gif);
+	}
 	</style>
 </head>
 <body>
 	<link rel="stylesheet" id="site-stylesheet" type="text/css" href="/site-assets/webapp/site.css">
-	<div id="loading-mask"><div id="loading" title="Loading..."><div></div></div></div>
+	<div id="loading-mask"><div id="loading" title="Loading..."></div></div>
 	<svg height="0" id="svg-image-blur"><filter id="blur-effect"><feGaussianBlur stdDeviation="8"></feGaussianBlur></filter></svg>
 	<!--html:server-values-->
 	<script type="text/javascript">
