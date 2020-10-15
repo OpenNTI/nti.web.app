@@ -33,7 +33,7 @@ function SurveyResources ({course, ...otherProps}) {
 		<Loading.Placeholder loading={loading} fallback={(<Loading.Spinner.Large />)}>
 			{error && (<Errors.Message error={error} />)}
 			{surveys && (
-				<Table items={surveys} {...otherProps} />
+				<Table items={surveys} course={course} {...otherProps} surveys />
 			)}
 		</Loading.Placeholder>
 	);

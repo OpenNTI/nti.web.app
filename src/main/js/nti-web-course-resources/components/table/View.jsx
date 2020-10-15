@@ -12,7 +12,8 @@ const DEFAULT_TEXT = {
 	lastModified: 'Last Modified',
 	loading: 'Loading',
 	emptyHeader: 'This folder is empty.',
-	emptyMessage: 'Click the button above to create a new reading.'
+	emptyMessage: 'Click the button above to create a new reading.',
+	emptyMessageSurvey: 'Click the button above to create a new survey.'
 };
 
 const t = scoped('nti-course-resources.readings.View', DEFAULT_TEXT);
@@ -41,7 +42,8 @@ export default class Readings extends React.Component {
 		course: PropTypes.object,
 		items: PropTypes.array,
 		gotoResource: PropTypes.func,
-		searchTerm: PropTypes.string
+		searchTerm: PropTypes.string,
+		surveys: PropTypes.bool
 	}
 
 	renderItem = (item, cols) => {
@@ -57,7 +59,7 @@ export default class Readings extends React.Component {
 	}
 
 	render () {
-		const { course, items:itemsProp } = this.props;
+		const { course, items:itemsProp, surveys } = this.props;
 
 		const loading = !course;
 		const items = itemsProp.filter(x => this.filter(x.title));
@@ -100,7 +102,12 @@ export default class Readings extends React.Component {
 						(<Table.ListTable classes={tableClasses} items={items} columns={columns} renderItem={this.renderItem}	/>) :
 						loading ?
 							(<Loading.Mask message={t('loading')} />) :
-							(<EmptyState header={t('emptyHeader')} subHeader={t('emptyMessage')}/>)
+							(
+								<EmptyState
+									header={t('emptyHeader')}
+									subHeader={surveys ? t('emptyMessageSurvey') : t('emptyMessage')}
+								/>
+							)
 				}
 			</div>
 		);
