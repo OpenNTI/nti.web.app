@@ -139,7 +139,7 @@
 		height: $header-height;
 		line-height: 0;
 
-		.active-content{
+		.active-content {
 			display: inline-block;
 			line-height: 0;
 			color: var(--primary-grey);
@@ -168,6 +168,7 @@
 
 				.title {
 					white-space: normal;
+
 					&::after {
 						transform: rotate(180deg);
 					}
@@ -203,7 +204,6 @@
 				@include ellipse();
 			}
 
-
 			.label {
 				white-space: nowrap;
 				font: normal 700 11px/15px var(--body-font-family);
@@ -213,14 +213,15 @@
 
 				.preview {
 					padding-left: 10px;
-					color: #FFA500;
+					color: var(--secondary-orange);
 				}
 			}
 
 			.dropdown {
 				position: absolute;
 				top: 100%;
-				left: 0; right: 0;
+				left: 0;
+				right: 0;
 				z-index: 2;
 				background: white;
 				max-height: 0;
@@ -231,13 +232,13 @@
 		}
 
 		.quick-links {
-			padding: 5px
+			padding: 5px;
 		}
 
 		.active-tab {
 			height: 2px;
 			background-color: var(--primary-blue);
-			bottom: 0px;
+			bottom: 0;
 			position: absolute;
 			opacity: 1;
 			transition: width 0.5s, left 0.5s, opacity 0.5s 0.5s;
@@ -276,8 +277,6 @@
 		}
 	}
 
-
-
 	&.has-more {
 		.show-more {
 			display: block;
@@ -290,13 +289,11 @@
 		}
 	}
 
-
 	&.show-dropdown {
 		li.tab.dropdown {
 			display: inline-block;
 		}
 	}
-
 
 	ul.tabs {
 		list-style: none;
@@ -334,7 +331,7 @@
 			right: -130px;
 			width: 150px;
 			text-align: center;
-			border: 0px solid rgba(0, 0, 0, 0.2);
+			border: 0 solid rgba(0, 0, 0, 0.2);
 			border-right-width: 1px;
 			border-left-width: 1px;
 			display: none;
@@ -451,15 +448,13 @@
 	// }
 }
 
-
-
 body .modal ~ .simple-popover-widget {
 	z-index: 1100;
 }
 
 .simple-popover-widget {
 	position: fixed;
-	background-color: #ffffff;
+	background-color: #fff;
 	color: var(--secondary-grey);
 	font: normal 14px/22px var(--body-font-family);
 	padding: 15px;
@@ -475,26 +470,26 @@ body .modal ~ .simple-popover-widget {
 		}
 	}
 
-	&.top::after{
+	&.top::after {
 		content: url(../images/elements/bubble-tip-top.png);
 		position: absolute;
 		top: -15px;
 		left: 160px;
 	}
 
-	&.bottom::after{
+	&.bottom::after {
 		content: url(../images/elements/bubble-tip.png);
 		position: absolute;
 		bottom: -20px;
 		left: 160px;
 	}
 
-	&.right::after{
+	&.right::after {
 		right: 26px;
 		left: auto;
 	}
 
-	&.left::after{
+	&.left::after {
 		left: 26px;
 		right: auto;
 	}
@@ -510,6 +505,7 @@ body .modal ~ .simple-popover-widget {
 		&.active,
 		&.over {
 			.label { color: var(--primary-grey); }
+
 			.menu {
 				span {
 					background-image: url(../images/elements/menu-arrow-down-active.png);
@@ -526,8 +522,10 @@ body .modal ~ .simple-popover-widget {
 		font-family: var(--body-font-family);
 		overflow: hidden;
 		text-transform: uppercase;
+
 		@include ellipse;
 	}
+
 	.menu {
 		max-width: 450px;
 		color: var(--primary-grey);
@@ -536,8 +534,11 @@ body .modal ~ .simple-popover-widget {
 		font-style: normal;
 		font-family: var(--body-font-family);
 		overflow: hidden;
+
 		@include ellipse;
+
 		margin-bottom: 6px;
+
 		span {
 			padding-right: 15px !important;
 			background: url(../images/elements/menu-arrow-down-default.png) no-repeat 100% 50%;
@@ -545,75 +546,77 @@ body .modal ~ .simple-popover-widget {
 			.x-ie10 &,
 			.x-ie & {
 				display: block;
+
 				@include ellipse;
+
 				overflow: hidden;
 			}
 		}
 	}
 }
 
-
 .x-reader-pane {
 	.x-panel-body-reader {
 		@include scrollbar(#ffffff, var(--tertiary-grey));
 	}
 
-    iframe[name$="content"] {
+	iframe[name$="content"] {
 		margin: 0;
 		width: 100%;
 
-		.detected-scrollbars &{
+		.detected-scrollbars & {
 			margin-right: 10px;
 		}
 
-        &.clickthrough {
-            pointer-events: none;
-        }
-    }
+		&.clickthrough {
+			pointer-events: none;
+		}
+	}
 
-    .reader-toast {
-    	position: fixed;
-    	bottom: 4px;
-    	z-index: 10;
-    	background-color: white;
-    	color: var(--primary-grey);
-    	max-width: 300px;
-    	font: normal 600 1em/1.2 var(--body-font-family);
-    	padding: 3px;
-    	box-shadow: 0 0 2px 0 rgba(0,0,0,0.35);
-    	@include experimental(transition, all 0.5s);
+	.reader-toast {
+		position: fixed;
+		bottom: 4px;
+		z-index: 10;
+		background-color: white;
+		color: var(--primary-grey);
+		max-width: 300px;
+		font: normal 600 1em/1.2 var(--body-font-family);
+		padding: 3px;
+		box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.35);
 
-    	@include animate('fadeInUp');
+		@include experimental(transition, all 0.5s);
+		@include animate('fadeInUp');
 
-    	&.saving {
-    		padding-left: 30px;
-    		line-height: 24px;
+		&.saving {
+			padding-left: 30px;
+			line-height: 24px;
 
-    		&::before {
-    			@include loadingSpinner($top: 3px, $left: 3px);
-    		}
-    	}
+			&::before {
+				@include loadingSpinner($top: 3px, $left: 3px);
+			}
+		}
 
-    	&.saved, &.error {
-    		padding-left: 3px;
-    		line-height: 24px;
-    		@include animate('fadeOutDown', $delay: 2s);
+		&.saved, &.error {
+			padding-left: 3px;
+			line-height: 24px;
 
-    		&::before {
-    			display: none;
-    		}
-    	}
+			@include animate('fadeOutDown', $delay: 2s);
 
-    	&.saved {
-    		background-color: var(--primary-green);
-    		color: white;
-    	}
+			&::before {
+				display: none;
+			}
+		}
 
-    	&.error {
-    		background-color: var(--primary-red);
-    		color: white;
-    	}
-    }
+		&.saved {
+			background-color: var(--primary-green);
+			color: white;
+		}
+
+		&.error {
+			background-color: var(--primary-red);
+			color: white;
+		}
+	}
 }
 
 .component-overlay {
@@ -624,7 +627,7 @@ body .modal ~ .simple-popover-widget {
 	}
 
 	.content-embeded-widget-frame {
-		box-shadow: 0 0 4px 0 rgba(0,0,0,0.17);
+		box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.17);
 	}
 
 	.content-embeded-widget {
@@ -644,60 +647,62 @@ body .modal ~ .simple-popover-widget {
 			padding: 0;
 
 			//iOS sucks... these two rules are needed for the iframe to be responsive.
-			width: 1px; min-width: 100%;
+			width: 1px;
+			min-width: 100%;
 		}
 
 		.splash {
 			position: absolute;
-			top: 0; left: 0;
-			right: 0; bottom: 0;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
 			cursor: pointer;
 			background: {
 				position: center;
 				repeat: no-repeat;
 				size: cover;
-				color: rgba(0,0,0,0.17);
+				color: rgba(0, 0, 0, 0.17);
 			}
 		}
 	}
 }
 
 div.no-content-splash {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
 	bottom: 0;
 	z-index: 99;
 	background-color: white;
 
-    &.initial{
-        .x-component-resource-not-found{
-            visibility: hidden;
-        }
-    }
+	&.initial {
+		.x-component-resource-not-found {
+			visibility: hidden;
+		}
+	}
 
-    .x-component-resource-not-found{
-        margin: 50px auto;
-        width: 75%;
-    }
+	.x-component-resource-not-found {
+		margin: 50px auto;
+		width: 75%;
+	}
 }
 
 .searchHit-overlay {
-  	position: absolute;
-  	right: 0;
-  	top: 0;
-  	width: 100%;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 100%;
 
-  	.searchHit-entry {
+	.searchHit-entry {
 		position: absolute;
-		background-color: #FCFF13;
+		background-color: #fcff13;
 		z-index: 100;
-		box-shadow: 0 0 0 2px #FCFF13,1px 1px 2px 2px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 0 0 2px #fcff13, 1px 1px 2px 2px rgba(0, 0, 0, 0.2);
 		opacity: 0.5;
-  	}
+	}
 }
-
 
 .component-overlay {
 	position: absolute;
@@ -711,15 +716,16 @@ div.no-content-splash {
 		z-index: 3;
 		position: absolute;
 		width: 98%;
+
 		@include experimental-value(width, calc(100% - 5px));
 	}
 }
 
 #bundle-notebook {
-    padding-top: 20px;
+	padding-top: 20px;
 }
 
-.content-page-widgets{
+.content-page-widgets {
 	position: absolute;
 	top: 0;
 	right: 10px;
@@ -737,6 +743,7 @@ div.no-content-splash {
 	.meta {
 		position: relative;
 		overflow: hidden;
+
 		@include like-and-favorite;
 	}
 }

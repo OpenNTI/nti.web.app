@@ -18,7 +18,7 @@
 }
 
 .x-component-library-collection {
-	  margin: 2em 0 2.5em;
+	margin: 2em 0 2.5em;
 }
 
 .library-navigation {
@@ -72,7 +72,6 @@
 
 			@include sprite($arrow-course-dropdown);
 		}
-
 	}
 
 	.available {
@@ -108,8 +107,6 @@
 			margin-top: -5px;
 		}
 	}
-
-
 }
 
 ul.library-grid {
@@ -136,7 +133,8 @@ li.community-grid-item {
 
 	.avatar-container {
 		position: absolute;
-		top: 0;	bottom: 0;
+		top: 0;
+		bottom: 0;
 		left: 0;
 		width: 70px;
 	}
@@ -155,6 +153,7 @@ li.community-grid-item {
 		overflow: hidden;
 		position: absolute;
 		top: 50%;
+
 		@include experimental(transform, translateY(-50%));
 	}
 }
@@ -183,6 +182,7 @@ li.library-grid-item {
 		img {
 			display: block;
 			height: 100%;
+
 			@include experimental(transform, scale(1,1));
 			@include experimental(transition, all 0.5s);
 		}
@@ -202,6 +202,7 @@ li.library-grid-item {
 		text-transform: uppercase;
 		font: normal bold 0.6em/1.6em var(--body-font-family);
 		overflow: hidden;
+
 		@include ellipse();
 	}
 
@@ -238,9 +239,10 @@ li.library-grid-item {
 		right: 10px;
 		width: 27px;
 		height: 27px;
-		background: rgba(0,0,0,0.6);
+		background: rgba(0, 0, 0, 0.6);
 		border-radius: 5px;
 		opacity: 0;
+
 		@include icon($library-gear, $side: after, $top: 50%, $left: 50%, $position: absolute);
 
 		&::after {
@@ -251,7 +253,8 @@ li.library-grid-item {
 
 	.archived {
 		position: absolute;
-		top: 85px; left: 50%;
+		top: 85px;
+		left: 50%;
 		margin: -25px 0 0 -75px;
 		height: 50px;
 		width: 150px;
@@ -307,7 +310,7 @@ li.library-grid-item {
 		}
 
 		.preview {
-			background-color: #FFA500;
+			background-color: var(--secondary-orange);
 			color: #fff;
 			padding: 0 7px;
 			border-radius: 3px;
@@ -321,7 +324,6 @@ li.library-grid-item {
 		}
 	}
 
-
 	.progress {
 		position: absolute;
 		bottom: 0;
@@ -330,10 +332,10 @@ li.library-grid-item {
 		height: 0.5rem;
 	}
 
-
 	&.allow-zoom:hover {
 		.cover img {
 			@include experimental(transform, scale(1.05,1.05));
+
 			opacity: 0.7;
 		}
 
@@ -394,7 +396,7 @@ li.library-grid-item {
 	}
 }
 
-.library-group-header{
+.library-group-header {
 	height: 20px;
 	margin-bottom: 10px;
 
@@ -406,13 +408,12 @@ li.library-grid-item {
 
 	.group {
 		margin-left: 0.5em;
-		color: rgba(255,255,255, 0.30);
+		color: rgba(255, 255, 255, 0.3);
 	}
 }
 
 //TODO: Clean up unused styles here
 #library {
-
 	margin-top: -105px;
 
 	.page {
@@ -421,13 +422,12 @@ li.library-grid-item {
 		// 	x: hidden;
 		// 	y: auto; //scroll;
 		// }
-//		margin-left: -5px;
-//		padding-left: 5px;
+		//		margin-left: -5px;
+		//		padding-left: 5px;
 	}
 
 	.library-panel {
 		overflow-y: auto;
-
 
 		.library-navigation {
 			width: 1024px !important;
@@ -454,12 +454,12 @@ li.library-grid-item {
 				border-radius: 3px;
 				background-color: #505050;
 				background-image: linear-gradient(to bottom, #505050 0%, #474747 100%);
-				box-shadow: 0 1px 3px 0 rgba(0,0,0,0.35), inset 0 1px 0 0 rgba(255,255,255,0.1);
+				box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 
 				.dropdown {
 					float: left;
-					background-color: rgba(255,255,255, 0.15);
-					color: rgba(255,255,255,0.8);
+					background-color: rgba(255, 255, 255, 0.15);
+					color: rgba(255, 255, 255, 0.8);
 					font: normal 300 1.3em/50px var(--body-font-family);
 					padding: 0 20px 0 15px;
 					letter-spacing: 1px;
@@ -478,6 +478,7 @@ li.library-grid-item {
 							font-weight: 300;
 							width: 0.5em;
 							height: 0.5em;
+
 							@include experimental(transform, rotate(-90deg));
 						}
 					}
@@ -500,7 +501,8 @@ li.library-grid-item {
 						border-radius: 15px;
 
 						&.over, &.selected {
-							background-color: rgba(255,255,255, 0.15);
+							background-color: rgba(255, 255, 255, 0.15);
+
 							@include accessibility-option(color, rgba(255,255,255,0.8), #fff);
 						}
 					}
@@ -517,21 +519,24 @@ li.library-grid-item {
 					padding: 0 20px;
 					cursor: pointer;
 					font: normal 300 0.85em/36px var(--body-font-family);
-					border: 1px solid rgba(0,0,0, 0.7);
-					box-shadow: 0 1px 0 0 rgba(255,255,255, 0.1);
+					border: 1px solid rgba(0, 0, 0, 0.7);
+					box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
 
 					&::before, &::after {
 						content: '';
 						position: absolute;
-						top: 0; left: 0;
-						right: 0; bottom: 0;
+						top: 0;
+						left: 0;
+						right: 0;
+						bottom: 0;
 					}
 
 					&::before {
 						background-color: var(--secondary-green);
-						box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.35);
+						box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
 						z-index: -2;
 					}
+
 					&::after {
 						z-index: -1;
 						opacity: 0.3;
@@ -565,32 +570,33 @@ li.library-grid-item {
 			}
 		}
 
-		.library-group-header{
+		.library-group-header {
 			height: 20px;
 			margin-bottom: 10px;
 
 			div {
 				float: left;
-				color: rgba(255,255,255,0.8);
+				color: rgba(255, 255, 255, 0.8);
 				text-transform: uppercase;
 				font: normal 500 0.9em/1 var(--body-font-family);
 			}
 
 			.group {
 				margin-left: 0.5em;
-				color: rgba(255,255,255, 0.30);
+				color: rgba(255, 255, 255, 0.3);
 			}
 		}
 	}
 
 	@include grid-def($gridSpacing: 6px);
 
-
-	.x-component-library-collection{
+	.x-component-library-collection {
 		margin: 2em 0 2.5em;
+
 		.collection-name {
 			font: normal 300 1.75em/2.2em var(--body-font-family);
 			color: #fff;
+
 			.count {
 				color: var(--secondary-grey);
 				margin-left: 0.5em;
@@ -602,7 +608,7 @@ li.library-grid-item {
 			width: 100%;
 		}
 
-		.grid .grid-item {background: none;}
+		.grid .grid-item { background: none; }
 
 		.grid-item.item {
 			background: white !important;
@@ -621,10 +627,10 @@ li.library-grid-item {
 				margin: 5px;
 				overflow: hidden;
 
-
 				img {
 					display: block;
 					height: 100%;
+
 					@include experimental(transform, scale(1,1));
 					@include experimental(transition, all 0.5s);
 				}
@@ -644,9 +650,11 @@ li.library-grid-item {
 					font: normal bold 0.6em/1.6em var(--body-font-family);
 					overflow: hidden;
 				}
+
 				.courseName {
 					text-transform: uppercase;
 					color: var(--tertiary-grey);
+
 					@include ellipse();
 				}
 
@@ -655,7 +663,7 @@ li.library-grid-item {
 					margin-bottom: 5px;
 				}
 
-				.author:not(:empty):not(.provider-id)::before{content: 'By ';}
+				.author:not(:empty):not(.provider-id)::before { content: 'By '; }
 
 				.title {
 					font: normal 700 1em/1.1em var(--header-font-family);
@@ -666,7 +674,7 @@ li.library-grid-item {
 					overflow: hidden;
 				}
 
-				.description{
+				.description {
 					overflow: hidden;
 					display: none;
 				}
@@ -677,17 +685,19 @@ li.library-grid-item {
 				right: 10px;
 				width: 30px;
 				height: 30px;
-				background: rgba(0,0,0,0.6);
+				background: rgba(0, 0, 0, 0.6);
 				border-radius: 5px;
 				opacity: 0;
+
 				@include icon($rhp-contact-flyout-settings, $top: 7px, $left: 7px, $position: absolute);
 			}
 		}
 
 		&.allow-zoom {
 			.grid-item.item:hover {
-				.cover img{
+				.cover img {
 					@include experimental(transform, scale(1.05,1.05));
+
 					opacity: 0.7;
 				}
 
@@ -716,7 +726,7 @@ li.library-grid-item {
 		}
 
 		&.purchasables {
-			.history{
+			.history {
 				border-top: 1px solid #e6e6e6;
 				clear: both;
 				text-align: center;
@@ -737,6 +747,7 @@ li.library-grid-item {
 
 .available-catalog, .purchasables {
 	padding: 20px 34px;
+
 	.collection-name {
 		display: none;
 	}
@@ -754,8 +765,10 @@ li.library-grid-item {
 
 			&::before {
 				position: absolute;
-				top: 0; left: 0;
-				bottom: 0; right: 0;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
 				background-color: black;
 				opacity: 0.5;
 				z-index: 1;
@@ -764,6 +777,7 @@ li.library-grid-item {
 
 			&::after {
 				z-index: 2;
+
 				@include loadingSpinner($top: 113px, $left: 103px);
 			}
 		}
@@ -774,19 +788,19 @@ li.library-grid-item {
 			margin: 5px;
 			overflow: hidden;
 
-
 			img {
 				display: block;
 				height: 100%;
+
 				@include experimental(transform, scale(1,1));
 				@include experimental(transition, all 0.5s);
 			}
 		}
 
-
 		&:hover {
 			.cover img {
 				@include experimental(transform, scale(1.05,1.05));
+
 				opacity: 0.7;
 			}
 		}
@@ -828,18 +842,21 @@ li.library-grid-item {
 				font: normal bold 0.6em/1.6em var(--body-font-family);
 				overflow: hidden;
 			}
+
 			.courseName {
 				text-transform: uppercase;
 				color: var(--tertiary-grey);
+
 				@include ellipse();
 			}
 
 			.author {
 				color: var(--primary-blue);
+
 				@include ellipse();
 			}
 
-			.author:not(:empty):not(.provider-id)::before{content: 'By ';}
+			.author:not(:empty):not(.provider-id)::before { content: 'By '; }
 
 			.title {
 				font: normal 700 1em/1.1em var(--header-font-family);
@@ -852,7 +869,7 @@ li.library-grid-item {
 				padding: 0;
 			}
 
-			.description{
+			.description {
 				overflow: hidden;
 				display: none;
 			}
@@ -861,7 +878,6 @@ li.library-grid-item {
 }
 
 .library-view-menu {
-
 	.x-menu-body {
 		border: none;
 		padding: 0;
@@ -869,13 +885,13 @@ li.library-grid-item {
 
 	div.group-by-option {
 		background-color: #646464;
-		color: rgba(255,255,255,0.8) !important;
+		color: rgba(255, 255, 255, 0.8) !important;
 		font: normal 300 1.3em/50px var(--body-font-family);
 		padding: 0 20px 0 15px;
 		letter-spacing: 1px;
 
 		&.x-menu-item-active {
-			background-color: rgba(255,255,255,0.8) !important;
+			background-color: rgba(255, 255, 255, 0.8) !important;
 			color: #646464 !important;
 		}
 
@@ -891,6 +907,7 @@ li.library-grid-item {
 			width: 0.5em;
 			height: 0.5em;
 			background: none;
+
 			@include experimental(transform, rotate(-90deg));
 		}
 	}
@@ -905,6 +922,7 @@ li.library-grid-item {
 
 .available-courses {
 	overflow: visible;
+
 	.x-mask, .x-mask-msg {
 		@include animate($name: fadeIn, $duration: 1s);
 
@@ -930,14 +948,14 @@ li.library-grid-item {
 }
 
 .course-settings-window, .available-courses, .available-books {
-	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
 	background-color: white;
 
 	// &.object-window {
 	// 	top: 110px !important;
 	// }
 
-	.header{
+	.header {
 		position: relative;
 		background-color: var(--quad-grey);
 		font: normal 600 1em/1.2em var(--body-font-family);
@@ -949,10 +967,12 @@ li.library-grid-item {
 		.close {
 			cursor: pointer;
 			position: absolute;
-			top: 15px; right: 15px;
+			top: 15px;
+			right: 15px;
 			left: auto;
 			width: 24px;
 			height: 24px;
+
 			@include icon($note-window-x, $top: 0, $right: 0, $position: absolute);
 
 			&:hover {
@@ -1038,8 +1058,8 @@ li.library-grid-item {
 			height: 10px;
 			left: 0;
 			right: 0;
-			background-color: rgba(0,0,0,0.35);
-			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			background-color: rgba(0, 0, 0, 0.35);
+			box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
 			clip: rect(10px, auto, 20px, auto);
 			border-radius: 335em / 2em;
 		}
@@ -1051,12 +1071,14 @@ li.library-grid-item {
 		height: 60px;
 		padding-top: 15px;
 		padding-left: 15px;
+
 		.name {
 			line-height: 1.5em;
 			font-weight: 300;
 			font-size: 1.5em;
 			text-transform: none;
 			overflow: hidden;
+
 			@include ellipsis();
 
 			&.back {
@@ -1072,8 +1094,10 @@ li.library-grid-item {
 	&::after {
 		content: '';
 		position: fixed;
-		top: 0; bottom: 0;
-		right: 0; left: 0;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
 		background-color: black;
 		opacity: 0.5;
 		z-index: -1;
@@ -1083,15 +1107,16 @@ li.library-grid-item {
 		position: absolute;
 		top: 28px;
 		opacity: 0;
-		left: 0; right: 0px;
+		left: 0;
+		right: 0;
 		font: normal 500 1em/2em var(--body-font-family);
 		padding: 0 25px;
 		background-color: var(--secondary-green);
 		color: white;
 		max-height: 2em;
 		z-index: 11;
-		@include experimental(transition, all 0.5s);
 
+		@include experimental(transition, all 0.5s);
 
 		&.show {
 			opacity: 1;
@@ -1111,7 +1136,6 @@ li.library-grid-item {
 			text-align: center;
 		}
 
-
 		.close-msg {
 			right: 15px;
 			top: 11px;
@@ -1120,6 +1144,7 @@ li.library-grid-item {
 			cursor: pointer;
 
 			@include icon($light-x, $position: absolute, $top: 2px, $left: 1px);
+
 			&:target,
 			&:hover {
 				&::after {
@@ -1139,12 +1164,15 @@ li.library-grid-item {
 	.footer {
 		position: absolute;
 		bottom: 0;
-		left: 0; right: 0;
+		left: 0;
+		right: 0;
 	}
 
 	& > .body-container {
 		height: 90%;
+
 		@include experimental-value(height, calc(100% - 100px));
+
 		background-color: var(--panel-background);
 		position: relative;
 		z-index: 10 !important;
@@ -1159,6 +1187,7 @@ li.library-grid-item {
 				height: 100%;
 				max-height: 95%;
 				margin-top: 40px;
+
 				@include experimental-value(max-height, calc(100% - 40px));
 			}
 
@@ -1191,10 +1220,11 @@ li.library-grid-item {
 					text-transform: uppercase;
 					float: left;
 
-					&.active, &.active:hover{
+					&.active, &.active:hover {
 						color: white;
 						background-color: var(--primary-blue);
-						box-shadow: -1px 0 0 0 #e3e3e3,
+						box-shadow:
+							-1px 0 0 0 #e3e3e3,
 							1px 0 0 0 #e3e3e3;
 					}
 
@@ -1262,10 +1292,11 @@ li.library-grid-item {
 				text-transform: uppercase;
 			}
 
-			&.x-tab-active, &.x-tab-active:hover{
+			&.x-tab-active, &.x-tab-active:hover {
 				color: white;
 				background-color: var(--primary-blue);
-				box-shadow: -1px 0 0 0 #e3e3e3,
+				box-shadow:
+					-1px 0 0 0 #e3e3e3,
 					1px 0 0 0 #e3e3e3;
 			}
 
@@ -1279,11 +1310,10 @@ li.library-grid-item {
 	.x-panel-body {
 		overflow-y: auto;
 		max-height: 95%;
+
 		@include experimental-value(max-height, calc(100% - 40px));
 	}
-
 }
-
 
 .library-page {
 	position: relative;
@@ -1306,6 +1336,7 @@ li.library-grid-item {
 
 	& > .title-container {
 		@include flexContainer();
+
 		align-items: baseline;
 		padding-bottom: 10px;
 		margin-bottom: 40px;
@@ -1320,7 +1351,7 @@ li.library-grid-item {
 			font: normal 400 0.875em/2em var(--body-font-family);
 		}
 
-		.title{
+		.title {
 			opacity: 0.5;
 
 			&::before {
@@ -1330,7 +1361,6 @@ li.library-grid-item {
 				font-weight: 300;
 			}
 		}
-
 
 		.home {
 			cursor: pointer;
@@ -1355,11 +1385,12 @@ li.library-grid-item {
 		}
 	}
 
-
 	.loading-mask {
 		position: absolute;
-		top: 0; bottom: 0;
-		right: 0; left: 0;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
 		background: rgba(52, 52, 52, 0.5);
 		z-index: 5;
 		min-height: 50px;
@@ -1384,7 +1415,6 @@ li.library-grid-item {
 	}
 }
 
-
 .library-homepage {
 	.library-group-header { display: none; }
 
@@ -1401,6 +1431,7 @@ li.library-grid-item {
 
 		& > .header {
 			@include flexContainer();
+
 			align-items: baseline;
 
 			.title, .add, .see-all {
