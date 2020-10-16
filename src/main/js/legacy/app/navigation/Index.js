@@ -296,7 +296,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		this.brandingCmp = ReactHarness.create({
 			component: Theme.Asset,
 			name: DefaultAsset,
-			className: cx('navigation-branding-asset')
+			className: cx('navigation-branding-asset'),
+			cacheBust: true
 		});
 
 		this.identityCmp = IdentityIndex.create({
