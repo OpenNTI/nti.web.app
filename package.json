@@ -57,7 +57,7 @@
     "@nti/web-discussions": "NextThought/nti.web.discussions",
     "@nti/web-integrations": "NextThought/nti.web.integrations",
     "@nti/web-library": "NextThought/nti.web.library",
-    "@nti/web-login": "latest",
+    "@nti/web-login": "^2020.9.0-alpha.0",
     "@nti/web-modeled-content": "NextThought/nti.web.modeled-content",
     "@nti/web-payments": "NextThought/nti.web.payments",
     "@nti/web-profiles": "NextThought/nti.web.profiles",

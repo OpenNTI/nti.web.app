@@ -1,4 +1,5 @@
 @import "~@nti/style-common";
+
 .admin-create-options {
 	.flyout-inner {
 		padding: 0;
@@ -48,6 +49,8 @@
 	color: white;
 	padding: 4px 4px 4px 7px;
 	display: flex;
+	flex-direction: row;
+	align-items: center;
 	cursor: pointer;
 
 	.add-container {
@@ -56,12 +59,13 @@
 		width: 24px;
 		height: 24px;
 		color: var(--primary-blue);
-		padding: 1px 0 0 3px;
-		margin: 4px 10px 0 3px;
+		padding: 0 0 0 1px;
+		margin: 0 10px 0 3px;
 		font-size: 18px;
-	}
-
-	.create-label {
-		margin-top: 4px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
 	}
 }
