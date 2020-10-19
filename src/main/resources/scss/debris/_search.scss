@@ -283,7 +283,7 @@
 				border-left: none;
 				background-color: #595959;
 
-				@include icon($search-white-16x16, $side: after, $position: absolute, $top: 10px, $left: 10px);
+				@include icon($search-white-16x16, $side: after, $position: absolute, $top: 9px, $left: 9px);
 			}
 		}
 
@@ -319,7 +319,7 @@
 			background-color: white;
 			border-left: 1px solid #e7e7e7;
 
-			@include icon($search, $side: after, $position: absolute, $top: 10px, $left: 10px);
+			@include icon($search, $side: after, $position: absolute, $top: 9px, $left: 9px);
 
 			&::after {
 				opacity: 0.7;
