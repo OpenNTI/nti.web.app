@@ -58,11 +58,11 @@
 			padding: 20px 15px;
 		}
 
-		&.outline-editor{
+		&.outline-editor {
 			input[name="title"] {
-			    width: 100%;
-			    font-size: 1em;
-			    padding: .5em;
+				width: 100%;
+				font-size: 1em;
+				padding: 0.5em;
 			}
 		}
 
@@ -76,9 +76,9 @@
 
 				.group.card {
 					padding: 0;
-					border: 1px solid #E2E2E2;
+					border: 1px solid #e2e2e2;
 					background-color: #fcfcfc;
-					box-shadow: 0 1px 4px 0 rgba(0,0,0,0.13);
+					box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.13);
 					border-radius: 5px;
 
 					.meta {
@@ -188,8 +188,6 @@
 	}
 
 	form {
-
-
 		.group.card {
 			border-top: none;
 		}
@@ -231,7 +229,9 @@
 			position: absolute;
 			top: 10px;
 			right: 10px;
-			width: 16px; height: 16px;
+			width: 16px;
+			height: 16px;
+
 			@include icon($message_box_close, $top: 3px, $left: 3px, $position: absolute);
 		}
 	}
@@ -257,91 +257,91 @@
 
 		&.visibility {
 			padding: 2px 0;
+
 			.title {
-		    	display: inline-block;
-			    color: var(--secondary-grey);
-			    font: normal 500 14px/1 var(--body-font-family);
-			    text-transform: capitalize;
-			    margin-bottom: 0;
+				display: inline-block;
+				color: var(--secondary-grey);
+				font: normal 500 14px/1 var(--body-font-family);
+				text-transform: capitalize;
+				margin-bottom: 0;
+			}
 
-		    }
+			.scope {
+				display: inline-block;
+				line-height: 34px;
+				min-width: 54px;
+				min-height: 34px;
+				text-align: left;
+				vertical-align: middle;
+				background: white;
+				box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+				margin: 2px 0 2px 9px;
+				padding: 0 22px 0 10px;
+				color: var(--primary-grey);
+				text-transform: capitalize;
+				position: relative;
+				cursor: pointer;
 
-		    .scope {
-		    	display: inline-block;
-		    	line-height: 34px;
-		    	min-width: 54px;
-		    	min-height: 34px;
-		    	text-align: left;
-		    	vertical-align: middle;
-			    background: white;
-			    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
-			    margin: 2px 0 2px 9px;
-			    padding: 0 22px 0 10px;
-			    color: var(--primary-grey);
-			    text-transform: capitalize;
-			    position: relative;
-			    cursor: pointer;
+				&::after {
+					content: '';
+					position: absolute;
+					pointer-events: none;
+					top: 50%;
+					right: 10px;
+					width: 0;
+					height: 0;
+					margin-top: -2px;
+					border-style: solid;
+					border-width: 0 4px 5px 4px;
+					border-color: transparent transparent #bfbfbf transparent;
+					transform: rotate(180deg);
+				}
 
-			    &::after {
-			    	content: '';
-				    position: absolute;
-				    pointer-events: none;
-				    top: 50%;
-				    right: 10px;
-				    width: 0;
-				    height: 0;
-				    margin-top: -2px;
-				    border-style: solid;
-				    border-width: 0 4px 5px 4px;
-				    border-color: transparent transparent #bfbfbf transparent;
-				    transform: rotate(180deg);
-			    }
+				&:active, &.open {
+					transform: none;
+				}
+			}
 
-			    &:active, &.open {
-			    	transform: none;
-			    }
-		    }
+			.menu-container {
+				position: absolute;
+				top: 58px;
+				right: -1px;
+				width: 97px;
+				background-color: white;
+				border: 1px solid #eae9e9;
+				display: none;
 
-		    .menu-container{
-		    	position: absolute;
-		    	top: 58px;
-		    	right: -1px;
-    			width: 97px;
-			    background-color: white;
-			    border: 1px solid #eae9e9;
-			    display: none;
+				&.open {
+					display: block;
+				}
 
-			    &.open {
-			    	display: block;
-			    }
+				.options {
+					.option {
+						line-height: 36px;
+						color: var(--primary-grey);
+						font-weight: 400;
+						padding: 0 15px;
+						text-align: left;
+						border-bottom: 1px solid #eae9e9;
+						text-transform: capitalize;
 
-		    	.options {
-		    		.option {
-		    			line-height: 36px;
-    					color: var(--primary-grey);
-					    font-weight: 400;
-					    padding: 0 15px;
-					    text-align: left;
-					    border-bottom: 1px solid #eae9e9;
-					    text-transform: capitalize;
-
-					    &.selected {
-					    	color: var(--primary-blue);
-					    }
-		    		}
-		    	}
-		    }
+						&.selected {
+							color: var(--primary-blue);
+						}
+					}
+				}
+			}
 		}
 	}
 }
 
-input[type=number]{
+input[type=number] {
 	&::-webkit-inner-spin-button,
 	&::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 		-moz-appearance: none;
-    	appearance: none;
-  		margin: 0;
+		appearance: none;
+		margin: 0;
 	}
 }
 
@@ -354,16 +354,16 @@ input[type=number]{
 		}
 
 		.meta {
-			background: #f5f5f5;
+			background: var(--panel-background-alt);
 			padding: 3px;
 
 			textarea {
 				padding: 2px;
-			    font: normal 300 1.6em/1.2em var(--header-font-family);
+				font: normal 300 1.6em/1.2em var(--header-font-family);
 				width: 100%;
 				height: 64px;
 				resize: none;
-			    box-shadow: 0 0 0 1px #d8d8d8;
+				box-shadow: 0 0 0 1px #d8d8d8;
 			}
 		}
 	}
@@ -418,7 +418,6 @@ input[type=number]{
 		}
 	}
 
-
 	&.url {
 		.field.href {
 			background: white;
@@ -426,32 +425,35 @@ input[type=number]{
 		}
 	}
 
-
-
 	form:not(.search-component) {
 		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
 
 		// Style the place holder
 		textarea {
-		    font-family: var(--body-font-family);
+			font-family: var(--body-font-family);
 		}
+
 		::-webkit-input-placeholder {
-		    font-family: var(--body-font-family);
+			font-family: var(--body-font-family);
 		}
+
 		:-moz-placeholder {
-		    font-family: var(--body-font-family);
+			font-family: var(--body-font-family);
 		}
+
 		::-moz-placeholder {
-		    font-family: var(--body-font-family);
+			font-family: var(--body-font-family);
 		}
+
 		:-ms-input-placeholder {
-		    font-family: var(--body-font-family);
+			font-family: var(--body-font-family);
 		}
 
 		.group.card {
 			background: white;
 			padding: 15px;
 			border-top: 1px solid #d8d8d8;
+
 			@include flexContainer();
 			@include experimental(flex-wrap, wrap);
 
@@ -463,8 +465,10 @@ input[type=number]{
 				&::after {
 					content: '';
 					position: absolute;
-					top: 0; bottom: 0;
-					left: 0; right: 0;
+					top: 0;
+					bottom: 0;
+					left: 0;
+					right: 0;
 					background: rgba(230, 230, 230, 0.6);
 					z-index: 3;
 				}
@@ -472,21 +476,24 @@ input[type=number]{
 
 			.field.icon {
 				@include flexItem(0 0 auto);
-				padding-left: 1px;
 
-				box-shadow: inset 1px 0 0 0 #d8d8d8,
-								0 1px 0 0 #d8d8d8,
-								0 -1px 0 0 #d8d8d8;
+				padding-left: 1px;
+				box-shadow:
+					inset 1px 0 0 0 #d8d8d8,
+					0 1px 0 0 #d8d8d8,
+					0 -1px 0 0 #d8d8d8;
 			}
 
 			.meta {
 				@include flexItem(1 1 auto);
+
 				padding: 10px 11px;
 				background-color: #f5fbff;
-				box-shadow: inset -1px 0 0 0 #d8d8d8,
-								inset 1px 0 0 0 #d8d8d8,
-								0 1px 0 0 #d8d8d8,
-								0 -1px 0 0 #d8d8d8;
+				box-shadow:
+					inset -1px 0 0 0 #d8d8d8,
+					inset 1px 0 0 0 #d8d8d8,
+					0 1px 0 0 #d8d8d8,
+					0 -1px 0 0 #d8d8d8;
 			}
 
 			.save-progress {
@@ -565,26 +572,25 @@ input[type=number]{
 	}
 
 	.outline-overview-footer {
-	    text-align: center;
-	    height: 55px;
-	    padding: 15px;
+		text-align: center;
+		height: 55px;
+		padding: 15px;
 
 		.add.nt-button {
-		    display: inline-block;
-		    line-height: 30px;
-		    font-size: 0.875em;
-		    font-weight: 600;
-		    color: var(--primary-blue);
+			display: inline-block;
+			line-height: 30px;
+			font-size: 0.875em;
+			font-weight: 600;
+			color: var(--primary-blue);
 		}
 	}
 }
 
 .outline-node-preview {
-	padding: 1.0em 2rem;
+	padding: 1em 2rem;
 	position: relative;
-	box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 	z-index: 2;
-
 
 	.title {
 		color: var(--primary-grey);
@@ -627,11 +633,11 @@ input[type=number]{
 	}
 }
 
-
 .overview-editing-controls {
 	.control {
 		display: inline-block;
-		width: 20px; height: 20px;
+		width: 20px;
+		height: 20px;
 		text-indent: 100%;
 		white-space: nowrap;
 		overflow: hidden;
@@ -679,6 +685,7 @@ input[type=number]{
 			padding: 5px 10px;
 			font: normal 400 0.9em/1.5em var(--body-font-family);
 			color: var(--secondary-grey);
+
 			@include experimental-value(width, calc(100% - 20px));
 
 			&.error {
@@ -714,9 +721,10 @@ input[type=number]{
 			width: 415px;
 		}
 	}
+
 	.collection-body {
 		border: 1px solid var(--tertiary-grey-alt);
-		background: #ffffff;
+		background: #fff;
 		border-collapse: collapse;
 
 		.outline-node-listitem {
@@ -762,7 +770,7 @@ input[type=number]{
 					position: relative;
 					margin-top: 0;
 
-					&::before{
+					&::before {
 						left: 21px;
 						top: 9px;
 					}
@@ -782,7 +790,7 @@ input[type=number]{
 				width: 230px;
 				position: absolute;
 				right: 10px;
-				top: 0px;
+				top: 0;
 			}
 
 			.title {
@@ -795,21 +803,19 @@ input[type=number]{
 				font-size: 14px;
 				font-weight: 600;
 				cursor: pointer;
-				@include limit-lines($lines: 3, $line-height: 1.40);
+
+				@include limit-lines($lines: 3, $line-height: 1.4);
 			}
 		}
 	}
 }
 
-
 .overviewgroup-editor {
-
 	text-align: left;
 	border: 1px solid #ededed;
 	padding: 0.7em;
-	background: #FFFFFF;
-    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
-
+	background: #fff;
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 
 	.title {
 		width: 100%;
@@ -833,7 +839,7 @@ input[type=number]{
 		padding: 0;
 		margin-top: 0.5em;
 		margin-bottom: 2em;
-	    max-width: 240px;
+		max-width: 240px;
 
 		li.color {
 			display: inline-block;
@@ -844,23 +850,23 @@ input[type=number]{
 
 			&:last-child,
 			&:nth-child(8) {
-			    margin-right: 0px;
+				margin-right: 0;
 			}
 
 			&.selected {
 				opacity: 0.7;
 				position: relative;
 
-				&:after {
-						content: '';
-						display: block;
-						position: absolute;
-						top: -4px;
-						left: -4px;
-						right: -4px;
-						bottom: -4px;
-						box-shadow: 0 0 0 1px #979797;
-						border-radius: 4px;
+				&::after {
+					content: '';
+					display: block;
+					position: absolute;
+					top: -4px;
+					left: -4px;
+					right: -4px;
+					bottom: -4px;
+					box-shadow: 0 0 0 1px #979797;
+					border-radius: 4px;
 				}
 			}
 		}
@@ -876,7 +882,7 @@ input[type=number]{
 				transition: max-height 0.15s ease-out;
 				max-height: 76px;
 
-				&.dragging{
+				&.dragging {
 					overflow: hidden;
 					max-height: 0;
 					opacity: 0;
@@ -885,7 +891,7 @@ input[type=number]{
 		}
 
 		.outline-header {
-			background: #ffffff;
+			background: #fff;
 			box-shadow: none;
 		}
 
@@ -893,7 +899,6 @@ input[type=number]{
 			bottom: 47px;
 
 			.body {
-
 				.outline-group.dragging {
 					border-bottom: none;
 					overflow: hidden;
@@ -905,12 +910,13 @@ input[type=number]{
 
 					> .items {
 						padding: 5px;
-						padding-bottom: 0px;
+						padding-bottom: 0;
 						background-color: #e2e2e2;
 
 						> .outline-group {
 							> .outline-row {
 								border-bottom: 1px solid var(--tertiary-grey-alt);
+
 								.label {
 									color: var(--primary-grey);
 								}
@@ -930,27 +936,29 @@ input[type=number]{
 
 					.new-node {
 						&.lesson {
-							background-color: #E2E2E2;
-						    padding-left: 5px;
-    						padding-right: 5px;
+							background-color: #e2e2e2;
+							padding-left: 5px;
+							padding-right: 5px;
 
 							.inline-editor {
-								    background: #FFFFFF;
-									.field {
-										.input {
-										    margin: 5px 5px;
-											padding: 5px 8px;
-										    width: calc(100% - 10px);
-										}
+								background: #fff;
+
+								.field {
+									.input {
+										margin: 5px 5px;
+										padding: 5px 8px;
+										width: calc(100% - 10px);
 									}
+								}
 							}
+
 							.title {
 								font: normal 600 16px/42px var(--body-font-family);
 								background-color: #e2e2e2;
-							    padding-bottom: 3px;
+								padding-bottom: 3px;
 
-								&:before {
-								    content: '+';
+								&::before {
+									content: '+';
 								}
 							}
 						}
@@ -961,13 +969,13 @@ input[type=number]{
 
 		> .new-node {
 			flex: 0 0 auto;
-			background-color: #ffffff;
+			background-color: #fff;
 
 			.title {
 				background-color: var(--primary-blue);
-				color: #ffffff;
+				color: #fff;
 
-				&:before {
+				&::before {
 					content: '+';
 				}
 			}
@@ -998,16 +1006,16 @@ input[type=number]{
 		min-width: 31px;
 		min-height: 31px;
 		position: absolute;
-		left: 0px;
+		left: 0;
 		top: 7px;
 		text-transform: uppercase;
 		border-radius: 4px;
-		box-shadow: 0 0 0 1px #AFAFAF, inset 0 0 0 1px #AFAFAF;
+		box-shadow: 0 0 0 1px #afafaf, inset 0 0 0 1px #afafaf;
 		text-align: center;
 		padding: 0;
 
 		.month {
-			background: #AFAFAF;
+			background: #afafaf;
 			color: white;
 			border-radius: 0;
 			font: normal 700 10px/14px var(--body-font-family);
@@ -1015,14 +1023,14 @@ input[type=number]{
 		}
 
 		.day {
-			color: #AFAFAF;
+			color: #afafaf;
 			font: normal 600 12px/15px var(--body-font-family);
 			border-radius: 0;
 		}
 
 		&.empty {
 			.month {
-				background: #AFAFAF;
+				background: #afafaf;
 				height: 12px;
 			}
 
@@ -1032,7 +1040,6 @@ input[type=number]{
 		}
 	}
 }
-
 
 .outline-editing-controls, .outline-node-preview, .outline-node-listitem {
 	.button {
@@ -1053,7 +1060,7 @@ input[type=number]{
 				margin: 10px;
 				border-radius: 5px;
 				background: var(--primary-blue);
-				color: #ffffff;
+				color: #fff;
 				font-size: 14px;
 				position: relative;
 				font-weight: 600;
@@ -1068,6 +1075,7 @@ input[type=number]{
 			.label {
 				color: var(--primary-blue);
 				background: var(--quad-grey);
+
 				@include icon($dropdown-blue, $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
 		}
@@ -1096,9 +1104,9 @@ input[type=number]{
 			z-index: 2;
 
 			.editing-publishing-menu, .editing-available-date-menu {
-				background-color: #ffffff;
+				background-color: #fff;
 				width: 355px;
-				box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
+				box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 				position: fixed;
 
 				.container {
@@ -1123,6 +1131,7 @@ input[type=number]{
 						.text {
 							position: relative;
 							padding-bottom: 0;
+
 							@include icon($radio-filled, $side: after, $top: 12px, $left: 10px);
 						}
 
@@ -1137,7 +1146,6 @@ input[type=number]{
 						padding: 0 0 10px 37px;
 						display: none;
 					}
-
 
 					&:last-of-type {
 						border-bottom: none;
@@ -1186,24 +1194,25 @@ input[type=number]{
 
 				.toggle {
 					@include experimental-value(display, flex);
+
 					flex-direction: row;
 					border-radius: 3px;
 					overflow: hidden;
 
 					.part {
 						@include experimental(flex, 1 1 auto);
-						background: #ffffff;
-						background-image: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%);
 
-						border: 1px solid rgba(150,150,150,0.3);
+						background: #fff;
+						background-image: linear-gradient(to bottom, #fff 0%, #f2f2f2 100%);
+						border: 1px solid rgba(150, 150, 150, 0.3);
 						text-align: center;
 						line-height: 36px;
 						color: var(--secondary-grey);
 
 						&.selected {
-							color: #ffffff;
-							background: #A0A0A0;
-							box-shadow: inset 0 2px 5px 0 rgba(0,0,0,0.4);
+							color: #fff;
+							background: #a0a0a0;
+							box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.4);
 						}
 					}
 				}
@@ -1253,7 +1262,7 @@ input[type=number]{
 
 				.clear {
 					position: absolute;
-					top: 0px;
+					top: 0;
 					right: 10px;
 					color: var(--tertiary-grey);
 					text-transform: uppercase;
@@ -1271,8 +1280,8 @@ input[type=number]{
 					.text {
 						position: relative;
 						padding-right: 50px;
-					    color: var(--primary-grey);
-					    font-style: normal;
+						color: var(--primary-grey);
+						font-style: normal;
 					}
 
 					.clear {
@@ -1292,8 +1301,6 @@ input[type=number]{
 				}
 			}
 
-
-
 			.menu-container {
 				margin-top: 10px;
 
@@ -1306,7 +1313,6 @@ input[type=number]{
 					left: 10px;
 					right: auto;
 				}
-
 
 				.calendar-menu {
 					margin-top: 6px;
@@ -1324,13 +1330,12 @@ input[type=number]{
 		margin: 10px 0;
 
 		.x-datepicker-header {
-			background-color: #ffffff;
+			background-color: #fff;
 			background-image: none;
 			color: var(--secondary-grey);
 			margin: 10px 0;
 
 			.x-datepicker-month {
-
 				.x-btn-inner {
 					color: var(--secondary-grey);
 					font-size: 14px;
@@ -1397,6 +1402,7 @@ input[type=number]{
 				&.x-datepicker-disabled {
 					background: none;
 					border: none;
+
 					.x-datepicker-date {
 						opacity: 0.25;
 					}
@@ -1405,15 +1411,16 @@ input[type=number]{
 				&.x-datepicker-selected:not(.x-datepicker-disabled) {
 					background: none;
 					border: none;
+
 					.x-datepicker-date {
 						background-color: var(--primary-blue);
-						color: #ffffff;
+						color: #fff;
 						border-radius: 90px;
 					}
 				}
 
 				&.x-datepicker-today {
-					border:none;
+					border: none;
 					background: none;
 
 					.x-datepicker-date {
@@ -1477,7 +1484,6 @@ input[type=number]{
 	}
 }
 
-
 .course-overview.course-overview-editing {
 	padding: 15px 10px 60px;
 	background-color: #fafafa;
@@ -1487,7 +1493,7 @@ input[type=number]{
 		padding-bottom: 80px;
 
 		.course-overview-footer {
-			bottom: 35px
+			bottom: 35px;
 		}
 	}
 
@@ -1520,8 +1526,10 @@ input[type=number]{
 
 		.overview-group-title {
 			@include flexItem(1 1 auto);
+
 			padding-right: 5px;
 			overflow: hidden;
+
 			@include ellipse;
 		}
 
@@ -1536,6 +1544,7 @@ input[type=number]{
 
 	.overview-group-body {
 		padding: 13px 12px;
+
 		@include containFloats();
 	}
 
@@ -1553,8 +1562,10 @@ input[type=number]{
 
 		.unavaiable-overview-item-mask {
 			position: absolute;
-			top: 40px; bottom: 1px;
-			left: 1px; right: 1px;
+			top: 40px;
+			bottom: 1px;
+			left: 1px;
+			right: 1px;
 			z-index: 1;
 			padding-top: 2rem;
 			background: rgba(255, 255, 255, 0.9);
@@ -1594,7 +1605,6 @@ input[type=number]{
 			margin-bottom: 0;
 		}
 
-
 		&.discussion {
 			width: 230px;
 			margin: 5px 5px 5px 0;
@@ -1628,14 +1638,15 @@ input[type=number]{
 			.visibility {
 				display: inline-block;
 				font-size: 0.85rem;
-		    	font-weight: 600;
-		    	color: var(--secondary-grey);
-		    	padding: 5px 11px 5px 22px;
+				font-weight: 600;
+				color: var(--secondary-grey);
+				padding: 5px 11px 5px 22px;
 			}
 		}
 
 		.body {
 			padding: 12px 10px;
+
 			@include containFloats();
 
 			& > .overview-video {
@@ -1707,7 +1718,8 @@ input[type=number]{
 	.course-overview-footer {
 		position: absolute;
 		bottom: 15px;
-		left: 10px; right: 10px;
+		left: 10px;
+		right: 10px;
 
 		.nt-button.add {
 			background: var(--primary-blue);
@@ -1719,7 +1731,6 @@ input[type=number]{
 		}
 	}
 }
-
 
 .video-items {
 	.video-items-header {
@@ -1759,7 +1770,9 @@ input[type=number]{
 			top: 10px;
 			right: 10px;
 			cursor: pointer;
-			width: 16px; height: 16px;
+			width: 16px;
+			height: 16px;
+
 			@include icon($message_box_close, $top: 3px, $left: 3px, $position: absolute);
 		}
 
@@ -1793,12 +1806,11 @@ input[type=number]{
 	}
 }
 
-
 .create-assignment-overview-editing, .create-video-overview-editing, .create-ltitool-overview-editing {
-    float: left;
-    color: white;
-    background: var(--primary-blue);
-    padding: 6.5px;
-    border-radius: 3px;
+	float: left;
+	color: white;
+	background: var(--primary-blue);
+	padding: 6.5px;
+	border-radius: 3px;
 	cursor: pointer;
 }

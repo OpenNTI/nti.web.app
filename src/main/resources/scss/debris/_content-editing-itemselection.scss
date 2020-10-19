@@ -1,5 +1,4 @@
 .item-selection {
-
 	&.has-search-term {
 		.search {
 			.has-search {
@@ -12,13 +11,12 @@
 				}
 			}
 		}
-
-
 	}
 
 	.search {
 		padding: 0 10px;
 		margin-bottom: 20px;
+
 		@include flexContainer();
 
 		.has-search {
@@ -27,6 +25,7 @@
 			font-size: 1.125rem;
 			font-weight: 700;
 			color: var(--secondary-grey);
+
 			@include flexItem(1 1 auto);
 		}
 
@@ -36,8 +35,8 @@
 			border-radius: 3px;
 			overflow: hidden;
 			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
-			@include flexItem(0 0 auto);
 
+			@include flexItem(0 0 auto);
 
 			input {
 				line-height: 35px;
@@ -57,7 +56,8 @@
 				color: var(--primary-blue);
 				line-height: 35px;
 				position: absolute;
-				top: 0; right: 40px;
+				top: 0;
+				right: 40px;
 				cursor: pointer;
 			}
 
@@ -67,7 +67,8 @@
 				width: 35px;
 				background-color: var(--panel-background);
 				box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.3);
-				top: 0; right: 0;
+				top: 0;
+				right: 0;
 				cursor: pointer;
 
 				@include icon($rhp-search, $top: 8px, $left: 9px, $position: absolute);
@@ -84,8 +85,6 @@
 		label {
 			padding-left: 24px;
 		}
-
-
 	}
 
 	.items {
@@ -94,15 +93,14 @@
 
 	.empty {
 		text-align: center;
-    	color: var(--secondary-grey);
-    	font-style: italic;
+		color: var(--secondary-grey);
+		font-style: italic;
 	}
 }
 
 .video-item-selection, .discussion-item-selection {
 	.items {
 		overflow: hidden;
-
 
 		.selection-item {
 			position: relative;
@@ -168,7 +166,9 @@
 				font-size: 0.75em;
 				margin: 8px 8px 15px;
 				height: 3rem;
+
 				@include limit-lines($lines: 3, $line-height: 1);
+
 				max-height: 3rem;
 			}
 
@@ -201,7 +201,7 @@
 	}
 }
 
-.discussion-item-selection{
+.discussion-item-selection {
 	.items {
 		.selection-item {
 			width: auto;
@@ -213,15 +213,15 @@
 				width: 200px;
 				height: 220px;
 				cursor: pointer;
-    			background: #f5f5f5;
-    			position: relative;
-    			margin: 0;
-    			box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+				background: var(--panel-background-alt);
+				position: relative;
+				margin: 0;
+				box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
 
-    			.discussion-item {
-    				height: 100%;
+				.discussion-item {
+					height: 100%;
 
-    				.title {
+					.title {
 						color: var(--primary-grey);
 						font: normal 300 1.6em/1.2em var(--header-font-family);
 						overflow: hidden;
@@ -229,11 +229,11 @@
 						margin-bottom: 6px;
 						word-break: break-word;
 
-						.ellipsis{
+						.ellipsis {
 							margin-left: 5px;
 						}
 					}
-    			}
+				}
 			}
 		}
 	}
@@ -400,13 +400,13 @@
 		}
 	}
 
-
 	.reading-selection-breadcrumb {
 		display: none;
 		position: absolute;
 		line-height: 35px;
 		bottom: 46px;
-		left: 0; right: 0;
+		left: 0;
+		right: 0;
 		background-color: var(--quad-grey);
 		border-top: 1px solid #d9d9d9;
 		padding: 0 10px;
@@ -432,17 +432,18 @@
 
 			&.file {
 				padding-left: 18px;
+
 				@include icon($file-icon, $side: before, $top: 9px, $left: 0);
 			}
 
 			&.folder {
 				padding-left: 22px;
+
 				@include icon($library-folder, $side: before, $top: 11px, $left: 0);
 			}
 		}
 	}
 }
-
 
 .assignment-item-selection, .assessment-item-selection, .survey-item-selection {
 	.selected {
@@ -520,12 +521,13 @@
 	}
 }
 
-.timeline-item-selection{
+.timeline-item-selection {
 	.selection-item {
 		&.selected {
 			box-shadow: 0 0 0 3px var(--primary-blue);
 		}
 	}
+
 	.overview-timeline {
 		.timeline-item {
 			display: block;
@@ -547,7 +549,7 @@
 				background-size: cover;
 				background-repeat: no-repeat;
 				background-position: center;
-				box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
+				box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.35);
 				float: left;
 				cursor: pointer;
 			}
@@ -579,9 +581,7 @@
 	}
 }
 
-
 .content-package-item-selection {
-
 	.selected .content-package-item {
 		box-shadow: 0 0 0 2px var(--primary-blue);
 	}
@@ -619,7 +619,7 @@
 
 			.title {
 				font-size: 1rem;
-				font-weight: 600
+				font-weight: 600;
 			}
 
 			.description {

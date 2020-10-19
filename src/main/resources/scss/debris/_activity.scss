@@ -1,9 +1,8 @@
-@mixin dot-separated-list{
-	span{
-		&::after{
+@mixin dot-separated-list {
+	span {
+		&::after {
 			color: var(--tertiary-grey);
 			font: normal 500 10px/20px var(--body-font-family);
-
 			position: static;
 			content: '\00B7';
 			vertical-align: middle;
@@ -11,6 +10,7 @@
 			padding: 0 0.5em;
 			background: none;
 		}
+
 		&:last-of-type::after {
 			content: '';
 			display: none;
@@ -25,14 +25,16 @@
 		background: white;
 		font: italic 400 14px/37px var(--body-font-family);
 		padding: 0 10px;
+
 		.editor {
 			margin-bottom: 10px;
 		}
 	}
 }
 
-.activity-view{
+.activity-view {
 	@include side-panel-view-title;
+
 	.activity-panel {
 		@include scrollbar(#ffffff, var(--tertiary-grey));
 
@@ -40,8 +42,6 @@
 			cursor: pointer;
 			position: relative;
 			border-top: 1px solid #eaeaea;
-
-
 			margin: 0 18px 0 20px;
 			padding: 12px 0 12px 0;
 			font: italic normal 12px/20px var(--body-font-family);
@@ -55,23 +55,25 @@
 			//	left: 0;
 			//}
 
-			&.deleted{
+			&.deleted {
 				cursor: default;
 			}
 
-			&.nothing{
-				&::after{display: none;}
+			&.nothing {
+				&::after { display: none; }
+
 				text-align: center;
 				font-style: italic;
 				color: var(--secondary-grey);
-				padding: 0px;
-				margin: 0px;
+				padding: 0;
+				margin: 0;
 				border-top: none;
 				box-shadow: none;
 			}
 
-			&.loading{
+			&.loading {
 				padding-left: 30px;
+
 				&::after {
 					@include loadingSpinner($top:12px,$left:0);
 				}
@@ -82,7 +84,7 @@
 			//	&::after{ @include sprite($activity-comment); }
 			//}
 			//&.highlight::after { @include sprite($activity-highlight); }
-			&.note,&.personalblogentry, &.communityheadlinetopic{
+			&.note,&.personalblogentry, &.communityheadlinetopic {
 				//&::after{ @include sprite($activity-note); }
 				font-style: italic;
 			}
@@ -93,14 +95,14 @@
 			}
 
 			.name, .with { color: var(--primary-blue); }
-			.verb {color: var(--tertiary-grey); }
+			.verb { color: var(--tertiary-grey); }
 		}
 
-		.center-button{
+		.center-button {
 			text-align: center;
 		}
 
-		.more-button{
+		.more-button {
 			margin-bottom: 15px;
 			margin-left: auto;
 			margin-right: auto;
@@ -113,6 +115,7 @@
 
 		//add some space between the divider and the next activity
 		@include divider;
+
 		.divider + .activity {
 			border-top: none;
 			box-shadow: none;
@@ -120,12 +123,9 @@
 	}
 }
 
-
-
-
-.activity-popout{
+.activity-popout {
 	background-color: #fff;
-	box-shadow: 0 2px 4px 1px rgba(0,0,0,.14), inset 0 2px rgba(255,255,255,.5);
+	box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.14), inset 0 2px rgba(255, 255, 255, 0.5);
 	border: solid 1px #cecece;
 	outline: 0;
 
@@ -133,9 +133,7 @@
 		overflow: hidden;
 	}
 
-
 	.activity-preview {
-
 		.x-component-forum-comment-thread {
 			font-size: 0.9em;
 
@@ -146,16 +144,16 @@
 				}
 			}
 
-			.topic-comment-container{
+			.topic-comment-container {
 				padding: 0 0 0 10px;
 				background-color: var(--quad-grey);
 
 				&[data-depth='0'] {
-					padding-left: 0px;
+					padding-left: 0;
 				}
 			}
 
-			.topic-comment{
+			.topic-comment {
 				padding-left: 40px;
 				background-color: var(--quad-grey);
 
@@ -163,7 +161,7 @@
 					padding: 5px;
 				}
 
-				.foot, .meta{
+				.foot, .meta {
 					.link {
 						cursor: pointer;
 						color: var(--primary-blue);
@@ -173,14 +171,17 @@
 						padding-bottom: 0;
 					}
 
-					& > span{
+					& > span {
 						display: inline-block;
 						max-width: 50%;
 						overflow-x: hidden;
 						vertical-align: bottom;
+
 						@include ellipse;
+
 						color: var(--secondary-grey);
-						&::before{
+
+						&::before {
 							color: var(--tertiary-grey);
 							font-weight: 600;
 							position: static;
@@ -202,45 +203,43 @@
 					}
 				}
 
-				.commentAvatar{
+				.commentAvatar {
 					left: 65px;
 				}
 
-				&[data-depth='4']{
+				&[data-depth='4'] {
 					padding-left: 30px;
 
-					.commentAvatar{
+					.commentAvatar {
 						left: 55px;
 					}
 				}
 
-				&[data-depth='3']{
+				&[data-depth='3'] {
 					padding-left: 20px;
 
-					.commentAvatar{
+					.commentAvatar {
 						left: 45px;
 					}
 				}
 
-				&[data-depth='2']{
+				&[data-depth='2'] {
 					padding-left: 10px;
-					.commentAvatar{
+
+					.commentAvatar {
 						left: 35px;
 					}
 				}
 
-				&[data-depth='1'], &[data-depth='0']{
-
-					border: 0 solid #f5f5f5;
+				&[data-depth='1'], &[data-depth='0'] {
+					border: 0 solid var(--panel-background-alt);
 					border-top-width: 1px;
-					padding-left: 0px;
+					padding-left: 0;
 
-					.commentAvatar{
+					.commentAvatar {
 						left: 25px;
 					}
 				}
-
-
 			}
 		}
 
@@ -254,29 +253,32 @@
 
 			& + .item {
 				padding-top: 30px;
-				.controls { margin:{top:-31px;}}
+				.controls { margin: { top:-31px; } }
 				.avatar { display: none; }
-				.meta { margin:{ left: 0; top: 35px; } }
+				.meta { margin: { left: 0; top: 35px; } }
 			}
 		}
 
 		.foot, .replies, .respond {
 			background: var(--quad-grey);
-			padding:{ left: 15px; right: 15px; }
+			padding: { left: 15px; right: 15px; }
 		}
 
 		.replies + .respond {
 			border-top: 1px solid #e7e7e7;
 			box-shadow: inset 0 1px 0 0 white;
 			padding: 10px;
+
 			@include editor-with-borders;
+
 			.editor .main {
-				.content{
+				.content {
 					min-height: 0;
 					max-height: auto;
 					height: 100px;
 				}
-				.error-tip[data-error-tip]::before{
+
+				.error-tip[data-error-tip]::before {
 					top: 32px !important;
 				}
 			}
@@ -288,13 +290,12 @@
 
 		&.editor-active ~ .respond {
 			.reply-options { display: none; }
-			.editor .action.share {display: none !important;}
+			.editor .action.share { display: none !important; }
 		}
-
 
 		.path,
 		.content-callout {
-			padding: 16px 36px 0px 16px;
+			padding: 16px 36px 0 16px;
 			border-bottom-width: 0;
 			cursor: pointer;
 			border-color: #eaeaea;
@@ -305,10 +306,11 @@
 				color: var(--tertiary-grey) !important;
 				height: 20px;
 				overflow: hidden;
+
 				@include ellipse;
 			}
 
-			.context{
+			.context {
 				overflow: hidden;
 				position: relative;
 				cursor: pointer;
@@ -326,10 +328,10 @@
 					p { margin: 0; }
 				}
 
-				&.video-context{
+				&.video-context {
 					height: 135px;
 
-					& > .text{
+					& > .text {
 						height: 120px;
 					}
 				}
@@ -337,13 +339,14 @@
 				&::after {
 					content: ' ';
 					position: absolute;
-					left: 0; right: 0;
-					bottom: 0; height: 10px;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					height: 10px;
 					background-image: linear-gradient(to bottom, rgba(251, 251, 251, 0) 0% 100%);
 				}
 			}
 		}
-
 
 		.path {
 			color: var(--tertiary-grey);
@@ -352,20 +355,21 @@
 			font: normal 700 10px/40px var(--body-font-family);
 			height: 40px;
 			overflow: hidden;
+
 			@include ellipse;
 
 			&:empty { display: none; }
 
 			span.path-part {
-				&::after{
+				&::after {
 					content: ' / ';
 				}
-				&:last-of-type::after{
+
+				&:last-of-type::after {
 					content: '';
 				}
 			}
 		}
-
 
 		.item {
 			position: relative;
@@ -373,13 +377,13 @@
 			border: 0;
 			border-top: 1px solid #f0f0f0;
 			border-bottom: 1px solid #ececec;
-			box-shadow: 0 1px 4px 0px rgba(30, 30, 30, 0.05);
+			box-shadow: 0 1px 4px 0 rgba(30, 30, 30, 0.05);
 			padding: 0 20px 0;
 
 			@include like-and-favorite;
 
 			& > * { margin-top: 20px; }
-			.controls {margin: 0 -20px 0 0;}
+			.controls { margin: 0 -20px 0 0; }
 
 			.avatar {
 				float: left;
@@ -387,7 +391,7 @@
 				height: 60px;
 				border-radius: 5px;
 				cursor: pointer;
-				background:{
+				background: {
 					color: transparent;
 					position: center;
 					repeat: no-repeat;
@@ -404,17 +408,18 @@
 
 			.stamp {
 				margin-top: 5px;
+
 				.name {
 					font: normal 600 10px/20px var(--body-font-family);
 					color: var(--primary-blue);
 					text-transform: uppercase;
 					cursor: pointer;
-					&::after{
-						content:' ';
+
+					&::after {
+						content: ' ';
 						padding-right: 0.3em;
 					}
 				}
-
 			}
 
 			.subject, .name.no-subject {
@@ -422,27 +427,29 @@
 				color: var(--primary-grey);
 				overflow: hidden;
 				padding-bottom: 3px;
+
 				@include ellipse;
+
 				font: normal 300 28px/30px var(--header-font-family);
 				cursor: pointer;
-				&::after{
+
+				&::after {
 					content: '';
 					display: none;
 				}
-				.whiteboard-container{display: none !important;}
+				.whiteboard-container { display: none !important; }
 			}
 
 			.subject:empty,
-			.subject.no-subject{
+			.subject.no-subject {
 				display: none;
 			}
-
 		}
-
 
 		a.more {
 			position: absolute;
-			left: 20px; bottom: 4px;
+			left: 20px;
+			bottom: 4px;
 			text-decoration: none;
 			display: block;
 			background: white;
@@ -450,14 +457,14 @@
 			div {
 				display: inline-block;
 				border-radius: 90px;
-				width: 4px; height: 4px;
+				width: 4px;
+				height: 4px;
 				margin: 2px;
 				background: var(--primary-blue);
 			}
-
 		}
 
-		.body{
+		.body {
 			position: relative;
 			margin: 10px 0 25px 0;
 			font: normal 400 14px/19px var(--body-font-family);
@@ -465,10 +472,10 @@
 			max-height: 57px;
 			overflow: hidden;
 
-			.whiteboard-container{ cursor: default; }
+			.whiteboard-container { cursor: default; }
+
 			@include text-pre-wrap;
 		}
-
 
 		.foot {
 			clear: both;
@@ -488,7 +495,7 @@
 				padding: 0 0 0 0.5em;
 				margin: 0;
 				//&:hover { opacity: 1; &::after{opacity: 0.75;} }
-				&::after{
+				&::after {
 					font: normal 600 14px/20px var(--body-font-family);
 					position: static;
 					content: '\00B7';
@@ -498,11 +505,13 @@
 					padding: 0 0 0 0.5em;
 					background: none;
 				}
+
 				&:last-of-type::after {
 					content: '';
 					display: none;
 				}
-				&.last::after{
+
+				&.last::after {
 					content: '';
 					display: none;
 				}
@@ -523,18 +532,21 @@
 					position: absolute;
 					top: -5px;
 					right: 0;
+
 					@include like-and-favorite;
-					.like:not(.on):not(.liked){
+
+					.like:not(.on):not(.liked) {
 						display: none;
 					}
 				}
 
 				.avatar {
 					float: left;
-					width: 35px; height: 35px;
+					width: 35px;
+					height: 35px;
 					border-radius: 3px;
 					cursor: pointer;
-					background:{
+					background: {
 						color: transparent;
 						position: center;
 						repeat: no-repeat;
@@ -548,32 +560,33 @@
 				}
 
 				.foot {
-					display:block;
+					display: block;
 					height: 20px;
 					padding: 0;
 					font-size: 0.8em;
+
 					@include dot-separated-list;
 
-					.link{
+					.link {
 						display: none;
 						cursor: pointer;
 
-						&.flag.on{
+						&.flag.on {
 							color: var(--primary-red);
 							display: block;
 						}
-				  	}
+					}
 				}
 
-				&:hover{
-					.foot{
-						.link{
+				&:hover {
+					.foot {
+						.link {
 							display: inline-block;
 						}
 					}
 
-					.controls .like{
-						display: block !important;;
+					.controls .like {
+						display: block !important;
 					}
 				}
 
@@ -585,18 +598,20 @@
 						display: inline-block;
 						overflow: hidden;
 						vertical-align: bottom;
+
 						@include ellipse();
 
 						color: var(--primary-blue);
 						cursor: pointer;
 						text-transform: uppercase;
-						&::after{
-							content:' ';
+
+						&::after {
+							content: ' ';
 							padding-right: 0.3em;
 						}
 					}
 
-					.time{
+					.time {
 						color: var(--tertiary-grey);
 						text-transform: uppercase;
 					}
@@ -604,14 +619,15 @@
 
 				.body {
 					color: var(--primary-grey);
-					margin:{ top: 5px; bottom: 5px; }
+					margin: { top: 5px; bottom: 5px; }
+
 					font: normal 500 14px/20px var(--body-font-family);
 					max-height: 300px;
 
-					.whiteboard-container{ cursor: pointer; }
+					.whiteboard-container { cursor: pointer; }
 				}
 
-				a.more{
+				a.more {
 					position: relative;
 					left: 52px;
 					cursor: pointer;
@@ -619,8 +635,8 @@
 					width: 100px;
 				}
 
-				&.deleted-reply{
-					.controls{
+				&.deleted-reply {
+					.controls {
 						display: none;
 					}
 				}
@@ -668,7 +684,7 @@
 		height: 40px;
 		width: 400px;
 		padding: 0 15px 0 15px;
-		border-bottom: 1px solid #EDEDED;
+		border-bottom: 1px solid #ededed;
 	}
 
 	.path .part {
@@ -683,7 +699,9 @@
 		position: relative;
 		margin-right: 5px;
 		padding-right: 8px;
+
 		@include ellipse;
+
 		overflow: hidden;
 
 		&::after {
@@ -756,7 +774,7 @@
 			left: 0;
 			right: 0;
 			background-color: var(--quad-grey);
-			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
 			clip: rect(80px, auto, 300px, auto);
 			border-radius: 250em / 3em;
 		}
