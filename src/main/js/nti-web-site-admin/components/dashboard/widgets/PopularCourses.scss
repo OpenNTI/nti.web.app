@@ -31,10 +31,11 @@
 				border: solid 1px #e5e5e5;
 				width: 34px;
 				height: 30px;
-				padding-left: 10px;
-				padding-top: 4px;
 				color: #888;
 				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 
 				&.disabled {
 					color: #ccc;
