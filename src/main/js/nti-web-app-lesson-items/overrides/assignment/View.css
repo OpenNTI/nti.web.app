@@ -19,10 +19,6 @@
 	display: none;
 }
 
-.assignment-view :global(.timed-placeholder .nti-alert .alert-container ) {
-	display: none;
-}
-
 .assignment-view :global(.assignment-reader.out-side-submission-buffer .x-panel-assessment.question::before) {
 	content: '';
 	position: absolute;
