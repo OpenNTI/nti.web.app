@@ -141,9 +141,7 @@
 				}
 			}
 
-			.not-in-contacts {
-
-			}
+			// .not-in-contacts {}
 
 			&.my-contact {
 				.add {
@@ -350,8 +348,8 @@
 				cursor: pointer;
 				display: block;
 				height: 44px;
-				line-height: 45px;
 				font: italic 500 14px/45px var(--body-font-family);
+				line-height: 45px;
 				text-align: center;
 				color: #fff;
 				width: 105px;
