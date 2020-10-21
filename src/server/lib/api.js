@@ -31,7 +31,7 @@ exports = module.exports = {
 	},
 
 	postMessageQueryParams (req, res, next) {
-		const parts = new URL(req.url, global.location.origin);
+		const parts = new URL(req.url, 'x:/');
 		const pathParts = parts.pathname.split('/');
 
 		res.render('post-message', {
