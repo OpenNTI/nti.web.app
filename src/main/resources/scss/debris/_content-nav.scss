@@ -3,23 +3,22 @@
 }
 
 .x-panel-notes-and-discussion {
-	&,.x-panel-body-default{
+	&,.x-panel-body-default {
 		background: var(--panel-background);
 	}
+
 	border-left: 1px solid #ededed;
 	border-left-width: 1px !important;
 }
 
 .nti-notes-and-discussion-tabbar,
-.content-toolbar:not(.student-reader-header)  {
+.content-toolbar:not(.student-reader-header) {
 	border-bottom: 1px solid #ededed;
 	border-bottom-width: 1px !important;
 }
 
-.nti-notes-and-discussion-tabbar{
+.nti-notes-and-discussion-tabbar {
 	.x-tab {
-
-
 		text-transform: uppercase;
 		color: var(--tertiary-grey);
 		font: normal 600 12px/59px var(--body-font-family);
@@ -27,7 +26,6 @@
 		.x-tab-icon-el {
 			width: 21px;
 			height: 20px;
-
 			top: 20px;
 			left: 15px;
 
@@ -37,6 +35,7 @@
 
 			&.discuss {
 				top: 22px;
+
 				@include icon($discussions,$position:absolute);
 			}
 		}

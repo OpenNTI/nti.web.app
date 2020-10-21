@@ -15,6 +15,7 @@ const Slidedeck = require('legacy/model/Slidedeck');
 const Video = require('legacy/model/Video');
 const LTIExternalToolAsset = require('legacy/model/LTIExternalToolAsset');
 const WebinarAsset = require('legacy/model/WebinarAsset');
+
 const {ROUTE_BUILDERS} = require('./components/Constants');
 
 require('legacy/mixins/FillScreen');

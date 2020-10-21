@@ -68,7 +68,7 @@
 
 						.action {
 							position: absolute;
-							top: 0px;
+							top: 0;
 							right: 10px;
 							left: auto;
 							bottom: auto;
@@ -81,15 +81,14 @@
 								background-color: white;
 								font-weight: 400;
 								font-size: 0.775em;
-
-								padding: 0px 25px 0px 10px;
+								padding: 0 25px 0 10px;
 								position: relative;
 								text-align: right;
 
 								.toggle {
 									color: var(--secondary-grey);
 
-									input[type=checkbox]+label {
+									input[type=checkbox] + label {
 										min-height: 38px;
 										line-height: 38px;
 										padding-right: 7px;
@@ -108,7 +107,7 @@
 
 								&.picker {
 									.arrow {
-										padding-right: 0px;
+										padding-right: 0;
 
 										&::after {
 											position: relative;
@@ -119,7 +118,7 @@
 									}
 								}
 
-								.reply-scope{
+								.reply-scope {
 									&.disabled {
 										opacity: 0.5;
 										cursor: default;
@@ -129,21 +128,22 @@
 
 							.cc-instructors {
 								float: right;
-								padding-right: 15px; 
+								padding-right: 15px;
 							}
 						}
 
 						&.receiver {
 							.field {
 								top: 10px;
- 							    color: var(--primary-blue);
-    							text-transform: capitalize;
-    							width: 350px;
-    							position: relative;
- 								@include ellipsis;
+								color: var(--primary-blue);
+								text-transform: capitalize;
+								width: 350px;
+								position: relative;
 
-    							&.group {
-    								&.arrow {
+								@include ellipsis;
+
+								&.group {
+									&.arrow {
 										&::after {
 											display: inline-block;
 											position: relative;
@@ -154,7 +154,7 @@
 											top: 8px;
 										}
 									}
-    							}
+								}
 							}
 						}
 					}
@@ -162,14 +162,15 @@
 
 				.title {
 					input {
-					    font: normal 300 18px/30px var(--body-font-family);
-					    padding-left: 0;
+						font: normal 300 18px/30px var(--body-font-family);
+						padding-left: 0;
 					}
 				}
 			}
 
 			.footer {
 				overflow: hidden;
+
 				.save {
 					width: 140px;
 				}
@@ -179,12 +180,12 @@
 
 					.toggle {
 						color: var(--secondary-grey);
-					    padding-right: 10px;
-					    font-weight: 400;
-					    font-size: 0.875em;
-					    line-height: 40px;
+						padding-right: 10px;
+						font-weight: 400;
+						font-size: 0.875em;
+						line-height: 40px;
 
-					    input[type=checkbox] + label {
+						input[type=checkbox] + label {
 							padding: 1px 15px 1px 20px;
 
 							&::after {
@@ -196,7 +197,7 @@
 									left: 0;
 								}
 							}
-					    }
+						}
 					}
 				}
 			}

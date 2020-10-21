@@ -15,7 +15,7 @@ html,
 body {
 	//reset base font settings
 	line-height: normal;
-	font:{
+	font: {
 		variant: normal;
 		weight: normal;
 		style: normal;
@@ -32,9 +32,8 @@ input::-ms-clear { display: none; }
 ::-webkit-input-placeholder { @include placeholder-style(); }
 ::-moz-placeholder { @include placeholder-style(); }
 input:-moz-placeholder { @include placeholder-style(); }
-:-ms-input-placeholder{ @include placeholder-style(); }
-input:-ms-input-placeholder{ @include placeholder-style(); }
-
+:-ms-input-placeholder { @include placeholder-style(); }
+input:-ms-input-placeholder { @include placeholder-style(); }
 
 .ellipsis {
 	margin: 0 10px;
@@ -44,7 +43,8 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 	div {
 		display: inline-block;
 		border-radius: 90px;
-		width: 4px; height: 4px;
+		width: 4px;
+		height: 4px;
 		margin: 2px;
 		background: var(--primary-blue);
 	}
@@ -54,18 +54,16 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
 	-webkit-transform: translate3d(0, 0, 1px);
-	transform: translate3d(0,0,1px);
+	transform: translate3d(0, 0, 1px);
 	-webkit-perspective: 1000px;
 	perspective: 1000px;
 }
 
-.scroll-lock{
+.scroll-lock {
 	overflow: hidden !important;
 }
 
-
-
-.empty-state{
+.empty-state {
 	text-align: center;
 	font: normal 300 2em var(--body-font-family);
 	color: var(--tertiary-grey);
@@ -76,12 +74,12 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 		color: var(--primary-blue);
 	}
 
-	.sub{
+	.sub {
 		font-size: 0.5em;
 	}
 
-	&.no-assignments{
-	  margin-bottom: 2em;
+	&.no-assignments {
+		margin-bottom: 2em;
 	}
 }
 

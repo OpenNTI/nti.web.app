@@ -8,7 +8,6 @@ import Card from '../../common/Card';
 import {ERROR, LOADING, MODIFIED, CAN_EDIT_EMAIL_ASSET, CAN_RESET} from './constants';
 import Controls from './Controls';
 import Preview from './preview';
-import Reset from './Reset';
 import {Library, Assets, Site} from './sections/';
 import style from './View.css';
 import Store from './Store';

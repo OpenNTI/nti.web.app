@@ -1,5 +1,4 @@
 
-
 @mixin contact-card {
 	overflow: hidden;
 	padding: 5px 8px 3px 20px;
@@ -16,16 +15,18 @@
 
 		.name {
 			@include menu-label-text-treatment;
+
 			color: var(--primary-blue);
 		}
+
 		.affiliation {
 			color: var(--secondary-grey);
 			font: { size: 12px; weight: 400; }
+
 			margin-left: 2px;
 		}
 	}
 }
-
 
 @mixin contact-card-large {
 	position: relative;
@@ -56,9 +57,11 @@
 			font: italic 300 30px/40px var(--body-font-family);
 			color: var(--primary-blue);
 			overflow: hidden;
+
 			@include ellipse;
+
 			text-transform: none;
-			display:block;
+			display: block;
 			max-width: 400px;
 		}
 
@@ -70,10 +73,8 @@
 	}
 }
 
-
-
 .contact-search {
-	box-shadow: 0 1px 1px -1px rgba(0,0,0,0.2);
+	box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.2);
 
 	&.x-box-layout-ct {
 		&, & > .x-box-inner {
@@ -81,27 +82,27 @@
 		}
 	}
 
-	background: #ffffff;
+	background: #fff;
 
 	.search-field {
-		background: #ffffff;
+		background: #fff;
 		border: 0 solid #ededed;
 		border-width: 1px 0;
-		box-shadow: 0 1px 1px -1px rgba(0,0,0,0.2);
+		box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.2);
 		padding: 10px;
 
-		&::after{
+		&::after {
 			content: ' ';
 			position: absolute;
 			width: 158px;
 			height: 1px;
-			background: #ffffff;
+			background: #fff;
 			top: -1px;
 			right: 0;
 		}
 	}
 
-	.empty-list{
+	.empty-list {
 		padding: 20px 0;
 		font: italic 300 14px/28px var(--body-font-family);
 		text-align: center;
@@ -109,7 +110,7 @@
 	}
 
 	.search-results {
-		box-shadow: inset 0 0 0 -1px #ffffff;
+		box-shadow: inset 0 0 0 -1px #fff;
 		//border: 1px solid #cacaca;
 
 		.x-item-selected,
@@ -132,7 +133,9 @@
 				margin-top: 7px;
 				float: right;
 				cursor: pointer;
+
 				@include sprite($add-contact);
+
 				&:hover {
 					@include sprite($add-contact_active);
 				}
@@ -145,21 +148,22 @@
 			&.my-contact {
 				.add {
 					margin-top: 5px;
+
 					@include sprite($options);
-					&:hover{
+
+					&:hover {
 						@include sprite($options_active);
 					}
 				}
+
 				.text-wrap {
 					margin-right: 36px;
 				}
 			}
 		}
-
 	}
 
-
-	&.large{
+	&.large {
 		.search-field {
 			border-width: 1px;
 		}
@@ -167,6 +171,7 @@
 		.search-results {
 			.item {
 				@include contact-card-large;
+
 				img.add {
 					margin-top: 7px;
 				}
@@ -175,6 +180,7 @@
 					img.add {
 						margin-top: 5px;
 					}
+
 					.text-wrap {
 						margin-right: 36px;
 					}
@@ -184,9 +190,9 @@
 	}
 }
 
-
 .contact-popout {
 	position: fixed !important;
+
 	&.x-layer {
 		overflow: visible;
 	}
@@ -194,15 +200,15 @@
 	background: var(--quad-grey);
 	border: 1px solid #cecece;
 	//box-shadow: 0 2px 10px 0 rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
-	box-shadow: 0 2px 4px 1px rgba(0,0,0,0.14);
+	box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.14);
 
 	.person-card, .header {
-
-		.contact-card{
+		.contact-card {
 			@include contact-card;
+
 			margin: 0 0 0 0;
 			padding: 0;
-			background-color: #ffffff;
+			background-color: #fff;
 			border-bottom: 1px solid #e6e6e6;
 
 			.text-wrap {
@@ -214,45 +220,51 @@
 					text-transform: none;
 					line-height: 30px !important;
 				}
+
 				.affiliation {
-					color:var(--primary-grey) !important;
+					color: var(--primary-grey) !important;
 					font: { size: 12px; weight: 400; }
+
 					margin-left: 2px;
 				}
-				.meta-role{
-					color:var(--primary-grey);
+
+				.meta-role {
+					color: var(--primary-grey);
 					font-size: 12px;
 					font-weight: 400;
 					overflow: hidden;
+
 					@include ellipse;
+
 					padding-right: 10px;
 				}
-				.location{
-					color:var(--primary-grey);
+
+				.location {
+					color: var(--primary-grey);
 					font-size: 12px;
 					font-weight: 400;
 					padding-right: 10px;
 				}
-
 			}
 
 			img {
-				width: 100px; height: 100px;
+				width: 100px;
+				height: 100px;
 				margin: 0;
 				padding: 0;
 			}
 		}
 
-		.person-card-body ul{
+		.person-card-body ul {
 			max-height: 300px;
-			overflow:{
+			overflow: {
 				x: hidden;
 				y: auto; //scroll;
 			}
 		}
 	}
 
-	.footer{
+	.footer {
 		position: relative;
 		bottom: 0;
 		left: 0;
@@ -275,48 +287,52 @@
 			box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.14);
 		}
 
-		.left{
+		.left {
 			position: relative;
 			margin-right: 105px;
 			display: block;
 			text-align: left;
 
-			.control{
+			.control {
 				position: relative;
 				width: 50px;
 				height: 44px;
 				display: inline-block;
 				border-right: 1px solid #e6e6e6;
 
-				&::after{
+				&::after {
 					content: '';
 					position: absolute;
-					left: 17px; top: 13px;
+					left: 17px;
+					top: 13px;
 					outline: 0;
 				}
 
-				&.lists{
-					&::after{
-						left:15px;
+				&.lists {
+					&::after {
+						left: 15px;
+
 						@include sprite($rhp-contact-flyout-lists);
 					}
 
-					&:hover{
+					&:hover {
 						background-color: #fff;
-						&::after{
+
+						&::after {
 							@include sprite($rhp-contact-flyout-lists_hover);
 						}
 					}
 				}
 
-				&.options{
-					&::after{
+				&.options {
+					&::after {
 						@include sprite($rhp-contact-flyout-settings);
 					}
 
-					&:hover{
+					&:hover {
 						background-color: #fff;
-						&::after{
+
+						&::after {
 							@include sprite($rhp-contact-flyout-settings_hover);
 						}
 					}
@@ -324,7 +340,7 @@
 			}
 		}
 
-		.right{
+		.right {
 			position: relative;
 			width: 105px;
 			float: right;
@@ -337,36 +353,37 @@
 				line-height: 45px;
 				font: italic 500 14px/45px var(--body-font-family);
 				text-align: center;
-				color: #ffffff;
+				color: #fff;
 				width: 105px;
 			}
 
-			&.add-contact{
-				a.button{
+			&.add-contact {
+				a.button {
 					outline: 1px solid #69a92b;
 					background: #75bc30;
 				}
 			}
 
-			&.chat{
+			&.chat {
 				width: 90px;
-				a.button{
+
+				a.button {
 					width: 90px;
 					outline: 1px solid var(--border-blue);
 					background: var(--primary-blue);
 				}
-				&.disabled a.button{
+
+				&.disabled a.button {
 					cursor: default;
 					outline: 1px solid #d0d0d0;
-					background: rgba(184,184,184,0.5);
-					color: rgba(255,255,255,0.7);
+					background: rgba(184, 184, 184, 0.5);
+					color: rgba(255, 255, 255, 0.7);
 				}
 			}
 		}
 	}
 
-
-	.add-button.x-container{
+	.add-button.x-container {
 		border-top: 1px solid #e6e6e6;
 		box-shadow: inset 0 1px 0 0 #fdfdfd;
 		padding: 12px;
@@ -375,15 +392,15 @@
 		.x-btn-primary-large,
 		.x-btn-secondary-large,
 		.x-btn-caution-large,
-		.x-btn-tertiary-large{
+		.x-btn-tertiary-large {
 			margin: 0;
-			.x-btn-inner{
+
+			.x-btn-inner {
 				font-style: italic;
 			}
 		}
 	}
 }
-
 
 .user-search-suggestion {
 	position: relative;
@@ -398,11 +415,13 @@
 		float: left;
 		margin: 5px;
 	}
+
 	span {
 		display: block;
 		margin-left: 40px;
 		font-weight: bold;
 		overflow: hidden;
+
 		@include ellipse;
 	}
 }

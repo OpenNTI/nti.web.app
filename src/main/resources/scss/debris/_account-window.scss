@@ -1,7 +1,7 @@
 
-
 .account-window {
 	@extend .nti-window;
+
 	border: 1px solid #c2c2c2;
 
 	.x-window-body {
@@ -15,15 +15,16 @@
 		position: absolute;
 		top: 10px;
 		right: 10px;
+
 		@include sprite($window-control-close);
 
-		&:hover{
+		&:hover {
 			opacity: 1;
 		}
 	}
 
 	.button-wrapper {
-		 border-bottom: 1px solid #ebebeb !important;
+		border-bottom: 1px solid #ebebeb !important;
 	}
 
 	.x-btn-account-small {
@@ -56,7 +57,8 @@
 
 	.picture-editor {
 		border-radius: 0 0 5px 5px;
-		background: #ffffff;
+		background: #fff;
+
 		.footer {
 			border-top: 1px solid #e7e7e7;
 		}
@@ -97,7 +99,7 @@
 			position: absolute;
 			top: 0;
 			left: 0;
-			filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+			filter: progid:dximagetransform.microsoft.alpha(opacity=0);
 			opacity: 0;
 			font-size: 200px;
 			cursor: pointer;
@@ -113,7 +115,7 @@
 
 	.identity {
 		border-radius: 5px 5px 0 0;
-		background: #ffffff;
+		background: #fff;
 		border-bottom: 1px solid #ebebeb !important;
 		position: relative;
 		overflow: hidden;
@@ -144,8 +146,9 @@
 				color: var(--primary-grey);
 			}
 
-			.identities{
+			.identities {
 				overflow: hidden;
+
 				@include ellipse;
 			}
 
@@ -154,14 +157,19 @@
 				display: inline-block;
 				position: relative;
 				overflow: hidden;
+
 				@include ellipse;
+
 				padding-left: 20px;
 
-				&:empty{ display: none; }
-				&::after{
+				&:empty { display: none; }
+
+				&::after {
 					content: ' ';
 					position: absolute;
-					top: 3px; left: 0;
+					top: 3px;
+					left: 0;
+
 					@include sprite($account-username);
 				}
 			}
@@ -174,6 +182,7 @@
 
 				&::after {
 					top: 4px;
+
 					@include sprite($account-email);
 				}
 			}
@@ -183,23 +192,26 @@
 	.footer {
 		.x-btn-flat-medium {
 			cursor: pointer;
+
 			.x-btn-button {
 				background: none;
 				border: none;
 				padding: 12px 20px;
 
-				.x-btn-inner{
+				.x-btn-inner {
 					font: {
 						size: 14px;
 						style: normal;
 						weight: normal;
 					}
+
 					color: var(--primary-grey);
 					padding-right: 2px;
 				}
 
 				.rotate {
 					@include sprite($rotate);
+
 					left: 0;
 					top: 13px;
 				}
@@ -211,26 +223,28 @@
 				float: right;
 			}
 
-			&, .x-btn-button{
+			&, .x-btn-button {
 				border-radius: 0 0 3px 0;
 			}
+
 			cursor: pointer;
+
 			.x-btn-button {
 				background: var(--primary-blue);
 				border: 1px solid var(--border-blue);
 				padding: 12px 20px;
 
-				.x-btn-inner{
+				.x-btn-inner {
 					font: {
 						size: 14px;
 						style: italic;
 						weight: 700;
 					}
-					color: #ffffff;
+
+					color: #fff;
 					padding-right: 2px;
 				}
 			}
-
 
 			&.x-btn-disabled {
 				.x-btn-button {
@@ -238,9 +252,10 @@
 
 					cursor: default;
 					border-color: #d0d0d0;
-					background: rgba(184,184,184,0.5);
+					background: rgba(184, 184, 184, 0.5);
+
 					.x-btn-inner {
-						color: rgba(255,255,255,0.7);
+						color: rgba(255, 255, 255, 0.7);
 					}
 				}
 			}
@@ -255,9 +270,8 @@
 		}
 
 		.password-box, .x-container {
-
 			margin: 5px 0;
-			&, input { font-size: 14px;}
+			&, input { font-size: 14px; }
 
 			input {
 				&:focus {
@@ -287,14 +301,14 @@
 				font-size: 14px;
 				font-weight: 500;
 				line-height: 25px;
-
 				border: 1px solid var(--border-grey);//#dcdcdc;
-				border-left-width: 0px;
-				background: #ffffff;
+				border-left-width: 0;
+				background: #fff;
 				padding: 6px 10px;
 				margin: 0;
 				min-height: 39px;
 				width: calc(100% - 4px);
+
 				.x-opera &,
 				.x-safari5 & {
 					width: 90%;
@@ -304,18 +318,20 @@
 				left: 4px;
 				box-shadow: -4px 0 0 0 var(--border-grey);
 			}
+
 			.clear {
 				top: 10px;
 				right: 5px;
-
 				cursor: pointer;
 				position: absolute;
 				display: none;
+
 				@include sprite($clear_line);
 			}
 
 			.placeholder {
 				@include placeholder-style();
+
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -327,16 +343,17 @@
 		.message-box {
 			margin: 0 10px 0 35px;
 			display: table;
+
 			.text {
 				display: table-cell;
 				text-align: center;
 				color: var(--primary-green);
 				vertical-align: middle;
+
 				&.error {
 					color: var(--primary-red);
 				}
 			}
-
 		}
 
 		.footer {
@@ -345,13 +362,13 @@
 			overflow: hidden;
 		}
 
-		.cant-change{
+		.cant-change {
 			color: var(--primary-grey);
 			font-size: 24px;
 			font-weight: 400;
 			font-style: italic;
 
-			.subtext{
+			.subtext {
 				font-size: 14px;
 				font-style: normal;
 				font-weight: 300;
@@ -359,8 +376,7 @@
 		}
 	}
 
-
-	.account-preferences{
+	.account-preferences {
 		padding: 1px 20px;
 
 		.nti-checkbox {
@@ -383,11 +399,11 @@
 			font: normal 600 0.9em var(--body-font-family);
 		}
 	}
-
 }
 
 .email-verification-window {
 	@extend .nti-window;
+
 	outline: 0;
 	border-radius: 0;
 	min-height: 204px;
@@ -397,7 +413,7 @@
 		height: 160px;
 		background-color: #fcfcfc;
 		border: 1px solid rgb(206, 206, 206);
-		box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
+		box-shadow: rgba(0, 0, 0, 0.137255) 0 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0 2px inset;
 	}
 
 	.email-verify-wrapper {
@@ -416,7 +432,7 @@
 				font: normal 300 19px/1 var(--body-font-family);
 			}
 
-			.sub{
+			.sub {
 				font: normal 300 14px/1 var(--body-font-family);
 			}
 		}
@@ -435,12 +451,13 @@
 			.info {
 				width: 40px;
 				height: 30px;
+
 				@include icon($info_active, $top: 3px, $left: 0);
 			}
 		}
 	}
 
-	background-color: rgba(1,1,1,0); // Make it clear.
+	background-color: rgba(1, 1, 1, 0); // Make it clear.
 	border: none;
 	box-shadow: none;
 }
@@ -472,18 +489,18 @@
 			margin-bottom: 5px;
 
 			.support {
-				.link a{
+				.link a {
 					text-decoration: none;
 					color: var(--primary-blue);
 				}
 			}
 		}
 
-		.buttons{
+		.buttons {
 			display: inline-block;
 			margin: 0;
 
-			.link{
+			.link {
 				float: left;
 				padding: 0 7px 0 9px;
 				color: var(--primary-blue);
@@ -501,7 +518,7 @@
 					font-style: italic;
 				}
 
-				&::after{
+				&::after {
 					content: "|";
 					position: absolute;
 					right: 0;
@@ -526,15 +543,15 @@
 	.input-box {
 		border: 1px solid var(--tertiary-grey);
 		padding-right: 30px;
-		background: #ffffff;
+		background: #fff;
 		margin: 0 34px 0 15px;
 		position: relative;
 
-		input{
+		input {
 			color: var(--secondary-grey);
 			font: normal 500 14px/25px var(--body-font-family);
 			border: 0;
-			background: #ffffff;
+			background: #fff;
 			padding: 6px 10px;
 			margin: 0;
 			min-height: 39px;
@@ -557,6 +574,7 @@
 			cursor: pointer;
 			position: absolute;
 			display: none;
+
 			@include sprite($clear_line);
 		}
 
@@ -587,7 +605,7 @@
 		}
 	}
 
-	.footer{
+	.footer {
 		background-color: var(--quad-grey);
 		overflow: hidden;
 		bottom: 0;
@@ -602,7 +620,7 @@
 			left: 0;
 			right: 0;
 			background-color: #f0f0f0;
-			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
 			clip: rect(300px, auto, 310px, auto);
 			border-radius: 350em / 4em;
 		}
@@ -645,7 +663,7 @@
 		bottom: 40px;
 		background: #fff;
 
-		.text{
+		.text {
 			text-align: center;
 			margin-top: 30px;
 			color: var(--secondary-green);
@@ -653,23 +671,25 @@
 			padding: 48px 20px 5px 20px;
 			font: normal 300 16px/1 var(--body-font-family);
 
-			.title{
+			.title {
 				font: normal 300 21px/1 var(--body-font-family);
 			}
 
-			&::after{
+			&::after {
 				content: ' ';
 				position: absolute;
-				top: 3px; left: 45%;
+				top: 3px;
+				left: 45%;
+
 				@include sprite($assignment_ontime);
 			}
 		}
 
-		&.pending-wrapper{
-			.text{
+		&.pending-wrapper {
+			.text {
 				color: var(--secondary-grey);
 
-				.title{
+				.title {
 					color: var(--primary-red);
 				}
 
@@ -680,11 +700,12 @@
 		}
 	}
 
-	&.has-time-error{
+	&.has-time-error {
 		.card {
 			min-height: 270px;
 		}
 	}
+
 	perspective: 800;
 
 	.card {
@@ -705,7 +726,7 @@
 			z-index: 2;
 			background-color: #fcfcfc;
 			border: 1px solid rgb(206, 206, 206);
-			box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
+			box-shadow: rgba(0, 0, 0, 0.137255) 0 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0 2px inset;
 			backface-visibility: hidden;
 
 			&.front {
@@ -738,31 +759,30 @@
 
 	.badge-lock {
 		padding: 20px;
-    	background: white;
-    	border-bottom: 1px solid #d9d9d9;
+		background: white;
+		border-bottom: 1px solid #d9d9d9;
 
-    	.msg {
-    		color: var(--secondary-grey);
-    	}
+		.msg {
+			color: var(--secondary-grey);
+		}
 
-    	.email {
-    		color: var(--primary-grey);
-    		padding: 5px 0;
-    		font-style: italic;
-    	}
+		.email {
+			color: var(--primary-grey);
+			padding: 5px 0;
+			font-style: italic;
+		}
 	}
 }
 
-
 .registration-prompt {
 	width: calc(100vw - 150px);
-    height: calc(100vh - 145px);
-    max-width: 775px;
-    overflow: hidden;
+	height: calc(100vh - 145px);
+	max-width: 775px;
+	overflow: hidden;
 
 	iframe {
 		border: none;
 		width: 100%;
-		height:100%;
+		height: 100%;
 	}
 }

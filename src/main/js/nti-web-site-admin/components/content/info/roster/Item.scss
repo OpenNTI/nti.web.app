@@ -5,7 +5,6 @@
 	align-items: center;
 	padding: rem-calc(10px);
 
-
 	.user-avatar {
 		width: 60px;
 		height: 60px;
@@ -26,11 +25,11 @@
 		flex: 0 0 auto;
 		margin-left: 1rem;
 
-		 .nti-course-enrollment-admin-prompt-trigger {
-		 	width: 40px;
-		 	height: 40px;
-		 	line-height: 40px;
-		 	color: var(--primary-blue);
-		 }
+		.nti-course-enrollment-admin-prompt-trigger {
+			width: 40px;
+			height: 40px;
+			line-height: 40px;
+			color: var(--primary-blue);
+		}
 	}
 }

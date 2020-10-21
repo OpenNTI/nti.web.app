@@ -9,14 +9,13 @@
 }
 
 @mixin icon-font() {
-	font-family: 'icomoon';
+	font-family: 'icomoon', serif;
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
 	text-transform: none;
 	line-height: 1;
-
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -45,11 +44,12 @@
 	filter: url(#blur-effect);//moz
 	filter: blur(add = 0, direction = 0, strength = 10);//IE
 	body:not(.x-safari) {
+		filter: blur(8px);
 		-webkit-filter: blur(8px);
 	}
 }
 
-@mixin loadingSpinner($top:8px, $left: 10px){
+@mixin loadingSpinner($top:8px, $left: 10px) {
 	display: block;
 	content: ' ';
 	background: {
@@ -58,6 +58,7 @@
 		position: center center;
 		repeat: no-repeat;
 	}
+
 	width: 24px;
 	height: 24px;
 	position: absolute;
@@ -73,11 +74,12 @@
 		display: inline-block;
 		overflow: hidden;
 		vertical-align: bottom;
+
 		@include animate($name: loadingellipse, $duration: 0.75s, $delay: $animation-delay, $function: linear, $iteration:infinite);
 	}
 }
 
-@mixin presence-style{
+@mixin presence-style {
 	width: 7px;
 	height: 7px;
 	border-radius: 90px;
@@ -86,17 +88,19 @@
 	&.Online,&.online,&.available {
 		background: var(--primary-green);
 	}
-	&.idle {}
-	&.away{
+	// &.idle {}
+
+	&.away {
 		background: #ebcd25;
 	}
+
 	&.DnD,&.dnd {
 		background: var(--primary-red);
 	}
 }
 
-@mixin presence-style-sudo($x:0,$y:0, $xSide:'left', $ySide:'top', $side:'after'){
-	&::#{$side}{
+@mixin presence-style-sudo($x:0,$y:0, $xSide:'left', $ySide:'top', $side:'after') {
+	&::#{$side} {
 		width: 7px;
 		height: 7px;
 		border-radius: 90px;
@@ -109,40 +113,42 @@
 	}
 
 	&.Online,&.available {
-		&::#{$side}{
+		&::#{$side} {
 			background: var(--primary-green);
 		}
 	}
-	&.idle {}
-	&.away{
-		&::#{$side}{
+	// &.idle {}
+
+	&.away {
+		&::#{$side} {
 			background: #ebcd25;
 		}
 	}
+
 	&.DnD,&.dnd {
-		&::#{$side}{
+		&::#{$side} {
 			background: var(--primary-red);
 		}
 	}
 }
 
-@mixin accessibility-option($style, $non-accessible, $accessible){
+@mixin accessibility-option($style, $non-accessible, $accessible) {
 	@if $accessibility_mode {
 		#{$style}: $accessible;
-	} @else {
+	}
+
+	@else {
 		#{$style}: $non-accessible;
 	}
 }
 
-
 @mixin icon($name,
-			$top: 0,
-			$left: 0,
-			$right: auto,
-			$side: 'after',
-			$position:relative
-		)
-{
+$top: 0,
+$left: 0,
+$right: auto,
+$side: 'after',
+$position:relative
+) {
 	@if $position != none {
 		position: $position;
 	}
@@ -153,21 +159,22 @@
 		top: $top;
 		left: $left;
 		right: $right;
+
 		@include sprite($name);
 
 		@if $position != none {
 			position: absolute;
-		} @else {
+		}
+
+		@else {
 			display: inline-block;
 			position: relative;
 			margin-right: 0.5em;
 		}
 	}
-
 }
 
-
-@mixin ellipse{
+@mixin ellipse {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
@@ -193,11 +200,9 @@
 	user-select: none;
 }
 
-
 @mixin allow-select {
 	user-select: text;
 }
-
 
 @mixin text-content {
 	&, * {
@@ -211,18 +216,19 @@
 		@include text-pre-wrap;
 	}
 
-	p{
-		margin:0;
+	p {
+		margin: 0;
+
 		&:empty::before {
 			content: ' ';
 		}
 	}
 
-	em, em strong{
+	em, em strong {
 		font-style: italic !important;
 	}
 
-	strong, strong em{
+	strong, strong em {
 		font-weight: bold !important;
 	}
 
@@ -238,44 +244,49 @@
 		cursor: pointer;
 	}
 
-	.whiteboard-wrapper{
+	.whiteboard-wrapper {
 		display: inline-block;
 		position: relative;
 		overflow: hidden;
 		cursor: pointer;
-		padding: 0px;
+		padding: 0;
 		margin: 5px 2px;
 		border: 1px solid var(--tertiary-grey-alt);
-		box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
+		box-shadow: 2px 3px 1px 0 rgba(0, 0, 0, 0.13);
 
 		&:hover {
-			.fill {display: block;}
+			.fill { display: block; }
 		}
 
 		.fill {
 			display: none;
-			position:absolute;
-			top: 0; left: 0; right: 0; bottom: 0;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
 			box-shadow: inset 0 0 0 3px white;
 			background: rgba(63, 179, 246, 0.05);
 		}
-		.centerer{
-			position:absolute;
+
+		.centerer {
+			position: absolute;
 			top: 50%;
 			left: 50%;
+
 			&, * {
 				word-break: normal;
 				word-wrap: normal;
 				white-space: nowrap;
 			}
 
-			.edit{
+			.edit {
 				font: normal 600 11px/15px var(--body-font-family) !important;
 				position: relative;
 				top: -15px;
 				left: -50%;
-				color: #ffffff;
-				background: rgba(0,0,0,0.6);
+				color: #fff;
+				background: rgba(0, 0, 0, 0.6);
 				padding: 5px 15px 5px 30px;
 				border-radius: 90px;
 
@@ -284,12 +295,12 @@
 					position: absolute;
 					top: 5px;
 					left: 12px;
+
 					@include sprite($image-edit-14);
 				}
 			}
 		}
 	}
-
 }
 
 @mixin highlight-colors($onParentSelector: true, $selector:'', $nibselector:null) {
@@ -299,13 +310,14 @@
 		('green',var(--highlight-colors-green-menu),var(--highlight-colors-green-hover)),
 		('blue',var(--highlight-colors-blue-menu),var(--highlight-colors-blue-hover))
 	);
-	@each $item in $highlight-colors {
-		$name: nth($item,1);
-		$menu_color: nth($item,2);
-		$hover_color: nth($item,3);
-		$highlight_color: rgba($hover_color,.65);
 
-		$prefix: if($onParentSelector,'&','');
+	@each $item in $highlight-colors {
+		$name: nth($item, 1);
+		$menu_color: nth($item, 2);
+		$hover_color: nth($item, 3);
+		$highlight_color: rgba($hover_color, 0.65);
+
+		$prefix: if($onParentSelector, '&', '');
 
 		$withColor: "#{$prefix}.#{$name} #{$selector}";
 		$withOutColor: "#{$prefix} #{$selector}";
@@ -316,12 +328,14 @@
 			// color: $menu_color;
 			background-color: $highlight_color;
 			transition: all 0.2s;
+
 			&.highlight-mouse-over {
-				background-color:$hover_color;
+				background-color: $hover_color;
 				transition: all 0.2s;
-				box-shadow: 0 0 4px rgba(0,0,0,.4);
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
 			}
-			@if($nibselector) {
+
+			@if ($nibselector) {
 				#{$nibselector} {
 					border-top-color: $highlight_color;
 				}
@@ -336,87 +350,82 @@
 	//@include experimental(perspective, 1000);
 }
 
-@mixin fixIEScrollbarGulf(){
+@mixin fixIEScrollbarGulf() {
 	.x-ie & { margin-right: -15px !important; }
 }
 
-@mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5),$margin:0){
+@mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5),$margin:0) {
 	.detected-scrollbars &::-webkit-scrollbar,
 	.detected-scrollbars &::-webkit-scrollbar-track {
-		width: 8px; height: 8px;
+		width: 8px;
+		height: 8px;
 		background: $track;
 		z-index: 0;
 		margin: $margin;
 	}
+
 	.detected-scrollbars &::-webkit-scrollbar-thumb {
 		background: $nib;
 		border: 1px solid $track;
 		border-radius: 10px;
-
 	}
 
-	scrollbar-face-color: rgba($nib,1);
-	scrollbar-highlight-color: rgba($nib,1);
-	scrollbar-3dlight-color: rgba($nib,1);
-	scrollbar-darkshadow-color: rgba($nib,1);
-	scrollbar-shadow-color: rgba($nib,1);
-	scrollbar-arrow-color: rgba($nib,1);
+	scrollbar-face-color: rgba($nib, 1);
+	scrollbar-highlight-color: rgba($nib, 1);
+	// scrollbar-3dlight-color: rgba($nib, 1);
+	scrollbar-darkshadow-color: rgba($nib, 1);
+	scrollbar-shadow-color: rgba($nib, 1);
+	scrollbar-arrow-color: rgba($nib, 1);
 
 	@if $track == transparent {
 		$track: #fff;
 	}
+
 	scrollbar-track-color: $track;
 }
 
-
-@mixin fade-mask(){
+@mixin fade-mask() {
 	position: absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
-
-	background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 78%, #ffffff 100%);
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 78%, #fff 100%);
 }
 
-
-@mixin placeholder-style(){
+@mixin placeholder-style() {
 	font-style: italic !important;
 	color: var(--tertiary-grey);
 }
 
-
-@mixin clearfix_left($dist:0px) {
+@mixin clearfix_left($dist:0) {
 	clear: both;
 	padding-left: $dist !important;
 }
 
-
-@mixin bottom-etch( $dark: #ebebeb, $light: var(--quad-grey) ){
-	box-shadow: inset 0px -1px 0px 0px $dark;
+@mixin bottom-etch( $dark: #ebebeb, $light: var(--quad-grey) ) {
+	box-shadow: inset 0 -1px 0 0 $dark;
 	border: 1px solid $light;
 	border-width: 0;
 	border-bottom-width: 1px;
 }
 
-
-@mixin top-etch( $dark: #ebebeb, $light: var(--quad-grey) ){
-	box-shadow: inset 0px 1px 0px 0px $light;
+@mixin top-etch( $dark: #ebebeb, $light: var(--quad-grey) ) {
+	box-shadow: inset 0 1px 0 0 $light;
 	border-top: 1px solid $dark !important;
 }
 
-
-@mixin side-panel-view-title{
+@mixin side-panel-view-title {
 	.view-title {
 		color: var(--tertiary-grey);
-		font:{size: 30px; style: italic; weight: 300;}
+		font: { size: 30px; style: italic; weight: 300; }
+
 		padding: 20px 18px 15px;
 	}
 }
 
-
 @mixin text-box-style {
-	background: #ffffff;
+	background: #fff;
 	padding: 5px;
 	color: var(--secondary-grey);
 	height: 30px;
@@ -433,6 +442,7 @@
 
 	&.error {
 		@include experimental(transition, $value);
+
 		border-color: red;
 		background-color: #ffc0c0;
 	}
@@ -443,22 +453,21 @@
 	}
 }
 
-
 @mixin divider {
 	.divider {
 		position: relative;
 		color: var(--secondary-grey);
-		background-color: #F1F1F1;
+		background-color: #f1f1f1;
 		font: {
 			size: 10px;
 			weight: bold;
 		}
+
 		text-transform: uppercase;
 		line-height: 29px;
 		padding-left: 22px;
 	}
 }
-
 
 @mixin like-and-favorite {
 	.favorite, .like {
@@ -466,7 +475,7 @@
 		float: right;
 	}
 
-	.like{
+	.like {
 		color: var(--primary-blue);
 		margin: 8px;
 		padding: 0 0 0 20px;
@@ -479,26 +488,31 @@
 		font-size: 10px;
 		font-style: italic;
 		font-weight: 600;
+
 		@include icon($like,$top:1px, $left:3px);
-		&:hover, &.on{
-			&:after{
+
+		&:hover, &.on {
+			&::after {
 				@include sprite($like_active);
 			}
 		}
 	}
-	.favorite{
+
+	.favorite {
 		margin: -1px 10px 0 0;
 		width: 18px;
 		height: 24px;
+
 		@include icon($bookmark,$left: 3px);
+
 		&:hover, &.on {
-			&:after{
+			&::after {
 				@include sprite($bookmark_active);
 			}
 		}
 	}
 
-	.favorite-spacer{
+	.favorite-spacer {
 		float: right;
 		margin: -1px 10px 0 0;
 		width: 18px;
@@ -506,16 +520,15 @@
 	}
 }
 
-
 @mixin menu-label-text-treatment {
 	color: var(--secondary-grey);
 	font-size: 10px;
 	font-weight: 600;
 	overflow: hidden;
 	text-transform: uppercase;
+
 	@include ellipse;
 }
-
 
 @mixin system-link-def {
 	color: var(--secondary-grey);
@@ -523,8 +536,7 @@
 	cursor: pointer;
 }
 
-
-@mixin content-link-def{
+@mixin content-link-def {
 	color: var(--secondary-grey);
 
 	@include accessibility-option(text-decoration, none, underline);
@@ -533,9 +545,9 @@
 	line-height: 1.5em;
 }
 
-
 @mixin text-pre-wrap {
 	@include experimental-value(white-space, pre-wrap);
+
 	word-wrap: break-word;      // IE
 	word-break: break-word;     // WEBKIT
 }
@@ -550,7 +562,7 @@
 	p {
 		margin: 0;
 
-		&:empty::before{
+		&:empty::before {
 			content: ' ';
 		}
 	}
@@ -563,7 +575,7 @@
 		font-style: italic !important;
 	}
 
-	.body-divider .whiteboard-thumbnail{
+	.body-divider .whiteboard-thumbnail {
 		width: 240px !important;
 		clear: both;
 	}
@@ -587,15 +599,18 @@
 		padding: 0 12px 0 25px;
 		margin-left: 20px;
 		margin-top: 4px;
-		border: 1px solid #D0D0D0;
+		border: 1px solid #d0d0d0;
 		border-radius: 4px;
-		opacity: .75;
+		opacity: 0.75;
 		position: relative;
+
 		&:hover {
-				opacity: 1;
+			opacity: 1;
 		}
-		&::after{
+
+		&::after {
 			@include sprite($add-contact);
+
 			position: absolute;
 			content: ' ';
 			top: 5px;
@@ -605,20 +620,24 @@
 }
 
 @mixin data-view {
-	background: #ffffff;
+	background: #fff;
 	font: 11px Arial, Helvetica, sans-serif;
+
 	.item-wrap {
 		float: left;
 		margin: 4px;
 		margin-right: 0;
 		padding: 5px;
 		overflow: hidden;
+
 		@include ellipse;
 
 		span {
 			display: block;
 			overflow: hidden;
+
 			@include ellipse;
+
 			text-align: center;
 			width: 86px; // for ie to ensure that the text is centered
 		}
@@ -628,7 +647,7 @@
 			padding: 3px;
 			padding-bottom: 0;
 
-			img{
+			img {
 				height: 80px;
 				width: 80px;
 			}
@@ -640,23 +659,22 @@
 		}
 	}
 
-	.x-item-over{
-		border:1px solid #dddddd;
+	.x-item-over {
+		border: 1px solid #ddd;
 		background: #efefef $data-view-over-bg repeat-x left top;
 		padding: 4px;
 	}
 
-	.x-item-selected{
+	.x-item-selected {
 		background: #eff5fb $data-view-selected-bg repeat-x right bottom;
-		border:1px solid #99bbe8;
+		border: 1px solid #99bbe8;
 		padding: 4px;
 
 		.item { background: transparent; }
 	}
 }
 
-
-@mixin arrow($pointFrom:bottom,$width:7px,$height:4px,$color:var(--primary-grey)){
+@mixin arrow($pointFrom:bottom,$width:7px,$height:4px,$color:var(--primary-grey)) {
 	//In Internet Explorer, The"border-style: dashed" will never be
 	// rendered unless "(width * 5) >= border-width" is true.
 	// Since "width" is set to "0", the "dashed-border" remains
@@ -669,7 +687,6 @@
 	display: inline-block;
 	// Use font-size to control the size of the arrow.
 	font-size: $width;
-
 	height: 0;
 	line-height: 0;
 	width: 0;
@@ -678,11 +695,11 @@
 	border-#{$pointFrom}-color: $color;
 }
 
-@mixin grayscale{
+@mixin grayscale {
 	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); // Firefox 10+
 	filter: gray; // IE6-9
 	-webkit-filter: grayscale(100%); // Chrome 19+ & Safari 6+
-	-webkit-transition: all .6s ease; // Fade to color for Chrome and Safari
+	-webkit-transition: all 0.6s ease; // Fade to color for Chrome and Safari
 	-webkit-backface-visibility: hidden; // Fix for transition flickering
 
 	&:hover {
@@ -691,7 +708,6 @@
 	}
 }
 
-
 .x-component-nti-tool-action {
 	margin: 0 0 0 20px;
 	white-space: nowrap;
@@ -699,21 +715,24 @@
 	cursor: pointer;
 	&.disabled { cursor: default; }
 
-	&:first-of-type{ margin: 0; }
+	&:first-of-type { margin: 0; }
 
 	.icon {
 		float: left;
 		position: relative;
 		width: 25px;
 		height: 20px;
-		&::after{
+
+		&::after {
 			content: '';
-			left: 0; top: 1px;
+			left: 0;
+			top: 1px;
 			position: absolute;
 			overflow: hidden;
 		}
 	}
-	.label{
+
+	.label {
 		margin-left: 25px;
 		white-space: nowrap;
 		font: normal bold 10px/20px var(--body-font-family);
@@ -722,8 +741,8 @@
 	}
 
 	&:hover,&.over {
-		&:not(.disabled){
-			.label{ color: var(--secondary-grey); }
+		&:not(.disabled) {
+			.label { color: var(--secondary-grey); }
 		}
 	}
 }
@@ -738,10 +757,10 @@
 
 @mixin flex($values) {
 	-webkit-box-flex: $values;
-	-moz-box-flex:  $values;
-	-webkit-flex:  $values;
-	-ms-flex:  $values;
-	flex:  $values;
+	-moz-box-flex: $values;
+	-webkit-flex: $values;
+	-ms-flex: $values;
+	flex: $values;
 }
 
 @mixin order($val) {

@@ -28,6 +28,7 @@
 
 		&::before {
 			@include loadingSpinner();
+
 			position: static;
 			display: inline-block;
 			vertical-align: middle;
@@ -35,6 +36,6 @@
 	}
 }
 
-[draggable='true']{
+[draggable='true'] {
 	max-height: 90000px;
 }

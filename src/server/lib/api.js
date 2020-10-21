@@ -1,6 +1,5 @@
 /*eslint strict:0, import/no-commonjs:0, import/order:0*/
 'use strict';
-const urlParser = require('url');
 const path = require('path');
 // const logger = require('./logger');
 
@@ -32,7 +31,7 @@ exports = module.exports = {
 	},
 
 	postMessageQueryParams (req, res, next) {
-		const parts = urlParser.parse(req.url);
+		const parts = new URL(req.url, global.location.origin);
 		const pathParts = parts.pathname.split('/');
 
 		res.render('post-message', {

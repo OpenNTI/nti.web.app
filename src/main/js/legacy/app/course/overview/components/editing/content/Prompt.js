@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const classnames = require('classnames/bind');
 
 const OutlinenodeChildCreation = require('../outline/outlinenode/ChildCreation');
 
@@ -21,12 +20,10 @@ const styles = require('./Prompt.css');
 
 require('../outline/Prompt');
 
-const cx = classnames.bind(styles);
-
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
 	extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
 	alias: 'widget.overview-editing-content-editor',
-	cls: cx('overview-editing-content-editor-prompt'),
+	cls: styles['overview-editing-content-editor-prompt'],
 
 	statics: {
 

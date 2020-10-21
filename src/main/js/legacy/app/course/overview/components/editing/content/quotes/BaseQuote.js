@@ -1,8 +1,6 @@
 const Ext = require('@nti/extjs');
-const classnames = require('classnames/bind');
 
 const styles = require('./Quote.css');
-const cx = classnames.bind(styles);
 const QUOTE_COMPLETED = 'inapp-quote-done';
 
 module.exports = exports = Ext.define(
@@ -47,7 +45,7 @@ module.exports = exports = Ext.define(
 
 			this.itemEditorCmp = this.add({
 				xtype: 'box',
-				cls: cx('quote-iframe'),
+				cls: styles['quote-iframe'],
 				autoEl: {
 					tag: 'iframe',
 					src: `${this.hubspotPageUrl}?firstname=${firstName}${email ? `&email=${email}` : ''}&client_site_name=${clientSite}`

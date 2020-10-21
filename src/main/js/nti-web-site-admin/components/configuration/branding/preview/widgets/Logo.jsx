@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames/bind';
+import classnames from 'classnames';
 import {Theme} from '@nti/web-commons';
 
 import Avatar from '../../sections/library/preview/Avatar';
@@ -7,13 +7,11 @@ import NotificationsIcon from '../../sections/library/preview/NotificationsIcon'
 
 import styles from './Logo.css';
 
-const cx = classnames.bind(styles);
+const cx = x => styles[x];
 
-const globalTheme = Theme.getGlobalTheme();
-
-export default function Logo (props) {
+export default function Logo ({className, ...props}) {
 	return (
-		<div className={cx('root')} {...props}>
+		<div className={classnames(cx('root'), className)} {...props}>
 			<Theme.Asset name="assets.logo" className={cx('logo')} />
 			<div className={cx('course-info')}>
 				<div className={cx('course-label')}>NTI-1001</div>

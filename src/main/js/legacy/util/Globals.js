@@ -1,5 +1,6 @@
 /*global ActiveXObject*/
 /*eslint no-control-regex:0*/
+// eslint-disable-next-line no-restricted-modules
 const Url = require('url');
 
 const Ext = require('@nti/extjs');

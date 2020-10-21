@@ -1,5 +1,4 @@
 @mixin image-bar {
-
 	.wrapper {
 		position: relative !important;
 		line-height: 0;
@@ -10,11 +9,23 @@
 	a {
 		pointer-events: all;
 		text-decoration: none;
-		&.disabled { &, &:hover { display:none; opacity: 0.5; cursor: default; pointer-events: none; } }
+
+		&.disabled {
+			&, &:hover {
+				display: none;
+				opacity: 0.5;
+				cursor: default;
+				pointer-events: none;
+			}
+		}
+
 		&.zoom, &.unzoom {
 			display: block;
 			position: absolute;
-			top: 0; left: 0; right: 0; bottom: 0;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
 			z-index: 2;
 		}
 	}
@@ -53,6 +64,7 @@
 
 		a.bar-cell {
 			border-left: 1px solid #dadada;
+
 			& ~ .bar-cell {
 				margin-right: 45px;
 			}
@@ -77,45 +89,44 @@
 					content: ' ';
 					overflow: hidden;
 					position: absolute;
-					top: 0; left: 3px;
+					top: 0;
+					left: 3px;
+
 					@include sprite($add-comment-19x17);
 				}
 
 				&:hover {
 					color: var(--secondary-grey-alt);
+
 					&::after {
 						@include sprite($add-comment-19x17_hover);
 					}
 				}
 			}
 
-
-
 			&.slide {
 				display: none;
 				width: 54px;
 				background: var(--primary-blue);
 				border-color: var(--border-blue);
-
 				position: absolute;
 				top: 0;
 				right: 0;
 				bottom: 0;
 
-				&::after{
+				&::after {
 					content: ' ';
 					overflow: hidden;
 					position: absolute;
 					top: 44%;
 					top: calc(50% - 9px);
-
 					left: 17px;
 
 					@include sprite($presentation-view);
 				}
 
 				&:hover {
-					&::after{
+					&::after {
 						@include sprite($presentation-view);
 					}
 				}
@@ -124,16 +135,14 @@
 	}
 }
 
-
 @mixin highlight-tip {
 	position: relative;
 	top: 0;
-
 	vertical-align: baseline;
-//vertical-align: initial;
+	//vertical-align: initial;
 	display: inline-block;
 	width: 5px;
-	width: 0px;
+	width: 0;
 	overflow: hidden;
 	//line-height: 23px;
 	//height: 24px;
@@ -141,19 +150,17 @@
 	padding: 0 0 0 4px;
 }
 
-
 .annotation-gutter {
 	position: absolute;
 	top: 0;
 	right: 0;
 	width: 60px;
-
 	overflow: visible;
 	z-index: 4;
 
 	&.debug {
 		bottom: 0;
-		background: rgba(255,0,0,0.3);
+		background: rgba(255, 0, 0, 0.3);
 	}
 
 	.column {
@@ -187,6 +194,7 @@
 			&:hover,
 			&.active {
 				background: var(--primary-blue);
+
 				.count {
 					color: #fff;
 				}
@@ -196,7 +204,7 @@
 }
 
 @media screen and (max-device-width: 768px) { // iPad
-	.annotation-gutter{
+	.annotation-gutter {
 		width: 25px;
 		right: 35px;
 
@@ -206,14 +214,17 @@
 	}
 }
 
-.x-panel-notes-and-discussion .x-panel-body-notes-and-discussion{
+.x-panel-notes-and-discussion .x-panel-body-notes-and-discussion {
 	position: absolute !important;
 	top: 60px;
 	bottom: 0;
 	height: auto !important;
 
 	& > .x-component {
-		position: absolute; top: 0; bottom: 0; height: auto !important;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		height: auto !important;
 	}
 }
 
@@ -223,24 +234,26 @@
 		x: hidden;
 		y: auto; //scroll;
 	}
+
 	.row {
 		cursor: pointer;
 		margin: 0 1px;
 		padding: 10px 15px;
 		border-bottom: 1px solid #ededed;
 
-		&.x-item-selected{
-			&, &.over{
-				.name,.footer{
+		&.x-item-selected {
+			&, &.over {
+				.name,.footer {
 					color: #c5eaff;
 				}
-				.snippet{color: #ffffff;}
+				.snippet { color: #fff; }
+
 				background: var(--primary-blue);
-				box-shadow: inset -1px 0 0 1px #107eed,1px 0 0 0px #107eed;
+				box-shadow: inset -1px 0 0 1px #107eed, 1px 0 0 0 #107eed;
 			}
 		}
 
-		&.over{
+		&.over {
 			background: #fff;
 			border-bottom-color: #cfcfcf;
 			box-shadow: 0 -1px 0 0 #cfcfcf;
@@ -251,8 +264,10 @@
 			text-transform: uppercase;
 			color: var(--primary-blue);
 			overflow: hidden;
+
 			@include ellipse;
 		}
+
 		.snippet {
 			min-height: 50px;
 			max-height: 5em;
@@ -265,8 +280,8 @@
 			word-wrap: break-word;
 
 			.body-divider .whiteboard-container {
-				.whiteboard-wrapper .overlay{bottom: 0;}
-				.toolbar {display: none;}
+				.whiteboard-wrapper .overlay { bottom: 0; }
+				.toolbar { display: none; }
 			}
 
 			p {
@@ -275,18 +290,20 @@
 
 			@include attachment-small();
 		}
+
 		.footer {
 			font: normal 400 10px/15px var(--body-font-family);
 			color: var(--tertiary-grey);
 
-			span{
-				&::after{
+			span {
+				&::after {
 					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
 					padding: 0 0.5em;
 					background: none;
 				}
+
 				&:last-of-type::after {
 					content: '';
 					display: none;
@@ -295,57 +312,58 @@
 		}
 	}
 
-	&.dark{
+	&.dark {
 		background-color: #292929;
 		box-shadow: -1px 0 0 0 #191919;
 
-		.row{
+		.row {
 			border-bottom-color: #222;
 
-			&.over:not(.x-item-selected){
+			&.over:not(.x-item-selected) {
 				background-color: #343434;
 				border-bottom-color: #222;
 				box-shadow: none;
 
-				.name{
+				.name {
 					color: var(--tertiary-grey);
 				}
 
-				.snippet{
+				.snippet {
 					color: #fff;
 				}
 
-				.footer{
+				.footer {
 					color: var(--tertiary-grey);
 				}
 			}
 
-			&.x-item-selected{
+			&.x-item-selected {
 				box-shadow: none;
-				.name{
-					color: #E2F3FE;
+
+				.name {
+					color: #e2f3fe;
 				}
 
-				.snippet{
+				.snippet {
 					color: #fff;
 				}
 
-				.footer{
-					color: #E2F3FE;
+				.footer {
+					color: #e2f3fe;
 				}
 			}
 
-			.name{
+			.name {
 				font-weight: 700 !important;
 				color: var(--secondary-grey);
 			}
 
-			.snippet{
+			.snippet {
 				font-weight: 600 !important;
 				color: var(--tertiary-grey);
 			}
 
-			.footer{
+			.footer {
 				font-weight: 700 !important;
 				color: #bababa;
 			}
@@ -353,9 +371,7 @@
 	}
 }
 
-
 .share-with-data {
-
 	.title {
 		font-size: 32px;
 		font-weight: normal;
@@ -375,10 +391,11 @@
 				width: auto;
 
 				.initials {
-				  border-radius: 4px;
+					border-radius: 4px;
 				}
-				.avatar-pic{
-				  border-radius: 4px;
+
+				.avatar-pic {
+					border-radius: 4px;
 				}
 			}
 		}
@@ -389,7 +406,9 @@
 		font-size: 14px;
 		display: inline-block;
 		overflow: hidden;
+
 		@include ellipse;
+
 		max-width: 80%;
 	}
 
@@ -402,27 +421,27 @@
 		.comment & {
 			@include icon($activity-comment, $left: 2px);
 		}
+
 		.highlight & {
 			@include icon($activity-highlight, $left: 3px);
 		}
+
 		.note & {
 			@include icon($activity-note, $left: 6px);
 		}
 	}
 }
 
-
 .x-dd-drag-proxy {
-
-	.x-dd-drop-icon{
+	.x-dd-drop-icon {
 		display: none;
 		opacity: 0.3;
 	}
 
-	&.x-dd-drop-ok {
-		//ok state
-		//.x-dd-drag-ghost {opacity: 1;}
-	}
+	// &.x-dd-drop-ok {
+	// ok state
+	// .x-dd-drag-ghost {opacity: 1;}
+	// }
 
 	.x-dd-drag-ghost {
 		padding: 0;
@@ -438,9 +457,9 @@
 	}
 }
 
-
 .body-divider {
 	@include no-select;
+
 	position: relative;
 	overflow: hidden;
 	text-align: left;
@@ -448,24 +467,21 @@
 	//padding: 5px;
 }
 
-
 .x-component-zoom {
-	img {width: 100%;}
+	img { width: 100%; }
+
 	@include image-bar;
-
 }
-
 
 // Styles below are intended to target things inside the content iframe
 
-
-.note-window .main-view .context [itemprop~="nti-data-markupenabled"] {}
+// .note-window .main-view .context [itemprop~="nti-data-markupenabled"] {}
 
 .x-component-image-zoom-view {
 	overflow: visible;
 	border: 1px solid #bcbcbc;
 	border-radius: 1px;
-	box-shadow: 0 10px 40px 0 rgba(0,0,0,0.45);
+	box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.45);
 	background: #fafafa;
 	position: fixed !important;
 	margin-top: 35px;//account for the close button
@@ -478,6 +494,7 @@
 		position: absolute;
 
 		@include sprite($close_popup);
+
 		cursor: pointer;
 		border-radius: 90px;
 	}
@@ -491,7 +508,7 @@
 }
 
 .note-window .note.main-view .context {
-	[itemprop~="nti-data-markupenabled"],[itemprop~="nti-slide-video"]{
+	[itemprop~="nti-data-markupenabled"],[itemprop~="nti-slide-video"] {
 		&:hover {
 			a.zoom {
 				display: none !important;
@@ -515,6 +532,7 @@
 				position: center-center;
 				repeat: no-repeat;
 			}
+
 			box-shadow: -1px 1px 3px 0 rgba(0, 0, 0, 0.35);
 			border-radius: 1px;
 			float: left;
@@ -545,14 +563,13 @@
 
 		.no-access {
 			font: normal 500 0.9em/1 var(--body-font-family);
-			color: #FD817F;
+			color: #fd817f;
 		}
 	}
 }
 
 .note-window .main-view .context,
 #NTIContent {
-
 	.figure {
 		[itemprop*="nti-data-markup"]:not(.no-details) {
 			max-width: 100%;
@@ -570,8 +587,9 @@
 	}
 
 	[itemprop*="nti-data-markup"]:not(.no-details),
-	[itemprop~="nti-slide-video"]{
+	[itemprop~="nti-slide-video"] {
 		@include hardware-accelerate();
+
 		display: inline-block;
 		//overflow: hidden;
 		position: relative;
@@ -585,6 +603,7 @@
 			box-shadow: inset 0 0 0 10px white;
 			background: rgba(63, 179, 246, 0.05);
 			display: none;
+
 			@include animate($name: fadeZoomIn, $duration: 0.5s, $delay: 0s);
 		}
 
@@ -599,10 +618,10 @@
 		.bar a.slide { display: block; }
 	}
 
-	object[type$=slidevideo] .bar a.mark {display: none;}
+	object[type$=slidevideo] .bar a.mark { display: none; }
 
 	//Sometimes footnotes are redacted, this will hide the actual footnote when that is the case
-	li.footnote{
+	li.footnote {
 		&.redacted {
 			span, a {
 				display: none;
@@ -610,19 +629,19 @@
 		}
 	}
 
-	#footnotes{
-		.redacted-text{
+	#footnotes {
+		.redacted-text {
 			color: var(--tertiary-grey);
 			text-decoration: line-through;
 			display: none;
 		}
+
 		li.footnote.redacted {
-			.redacted-text{
+			.redacted-text {
 				display: inline;
 			}
 		}
 	}
-
 
 	.block-redaction {
 		display: block;
@@ -630,29 +649,31 @@
 		width: 100%;
 		margin: 25px 0;
 
-		&.head{
+		&.head {
 			position: relative;
 			border-top: 1px solid var(--border-grey);
 			overflow: visible;
 
 			&.redacted {
 				border-color: white;
+
 				&::after {
 					position: absolute;
 					content: '';
 					background: url(../images/elements/div_block_redaction.png) 0 0 repeat-x;
-					top: -6px; left: 0;
+					top: -6px;
+					left: 0;
 					width: 100%;
 					height: 11px;
 				}
 			}
 		}
 
-		&.redacted .redactionAction{
-			.controls{
+		&.redacted .redactionAction {
+			.controls {
 				display: none;
 			}
-			span.editableSpan{ border-right-width: 1px; }
+			span.editableSpan { border-right-width: 1px; }
 		}
 	}
 
@@ -661,9 +682,10 @@
 			span.editableSpan {
 				cursor: text;
 			}
+
 			.controls {
 				span {
-					&.share,&.delete{
+					&.share,&.delete {
 						display: none;
 					}
 				}
@@ -672,7 +694,6 @@
 	}
 
 	.redactionAction {
-
 		&.block {
 			position: absolute;
 			top: -12px;
@@ -681,29 +702,27 @@
 		}
 
 		&.searchHitInside {
-			span.editableSpan{
+			span.editableSpan {
 				background-color: #fcff13;
 			}
 		}
 
 		font-size: 10px;
 		line-height: 14px;
-
 		vertical-align: top;//fix alignment in firefox
+		vertical-align: middle;
 		margin: 0 2px 0 2px;
 		overflow: hidden;
-		vertical-align: middle;
 		display: inline-block;
 
 		* {
 			vertical-align: middle;
 		}
 
-		&.redacted{
-			.controls{display: none;}
-			span.editableSpan{ border-right-width: 1px; }
+		&.redacted {
+			.controls { display: none; }
+			span.editableSpan { border-right-width: 1px; }
 		}
-
 
 		span.editableSpan {
 			display: inline-block;
@@ -718,7 +737,9 @@
 			//font-style: italic;
 			height: 24px;
 			overflow: hidden;
+
 			@include ellipse;
+
 			max-width: 600px;
 			cursor: pointer;
 
@@ -740,7 +761,7 @@
 				height: 24px;
 				width: 25px;
 				cursor: pointer;
-				background: #ffffff;
+				background: #fff;
 				box-shadow: inset 0 0 0 1px var(--border-grey);
 
 				&::after {
@@ -749,17 +770,17 @@
 					width: 16px;
 					height: 16px;
 					position: absolute;
-
 				}
-				&.edit{ @include icon($redactions-edit,$top: 6px, $left: 6px); }
-				&.share{ @include icon($redactions-share,$top: 6px, $left: 6px); }
-				&.delete{ @include icon($redactions-trashcan,$top: 5px, $left: 7px); }
+				&.edit { @include icon($redactions-edit,$top: 6px, $left: 6px); }
+				&.share { @include icon($redactions-share,$top: 6px, $left: 6px); }
+				&.delete { @include icon($redactions-trashcan,$top: 5px, $left: 7px); }
 
-				&.edit.save{
-					box-shadow: inset 0 0 0 1px #369AD3;
+				&.edit.save {
+					box-shadow: inset 0 0 0 1px #369ad3;
 					background-color: var(--primary-blue);
-					width:90px;
-					&::after{
+					width: 90px;
+
+					&::after {
 						width: auto;
 						content: 'Save Title';
 						background: none;
@@ -776,18 +797,17 @@
 
 				&:hover {
 					background-color: var(--primary-blue);
-					box-shadow: inset 0 0 0 1px #369AD3 !important;
-					outline: #369AD3;
+					box-shadow: inset 0 0 0 1px #369ad3 !important;
+					outline: #369ad3;
 					z-index: 1;
 
-					&.delete{
+					&.delete {
 						background-color: var(--primary-red);
-						box-shadow: inset 0 0 0 1px #D14646 !important;
-						&::after{ @include sprite($redactions-trashcan_hover); }
+						box-shadow: inset 0 0 0 1px #d14646 !important;
+						&::after { @include sprite($redactions-trashcan_hover); }
 					}
-					&.edit::after{ @include sprite($redactions-edit_hover); }
-					&.share::after{ @include sprite($redactions-share_hover); }
-
+					&.edit::after { @include sprite($redactions-edit_hover); }
+					&.share::after { @include sprite($redactions-share_hover); }
 				}
 			}
 		}
@@ -808,13 +828,13 @@
 	}
 
 	.application-highlight {
-		&.suppressed {
-			//do nothing special when range is suppressed.
-		}
+		// &.suppressed {
+		// do nothing special when range is suppressed.
+		// }
 
 		& + li.part,
 		& + li.exercise {
-			&::before, &::after { z-index: 1; color: #076da7 }
+			&::before, &::after { z-index: 1; color: #076da7; }
 		}
 		// &.highlight-mouse-over {
 		// 	& + li.part, & + li.exercise {
@@ -823,7 +843,6 @@
 		// }
 
 		&.plain {
-
 			&, * {
 				position: relative;
 				z-index: 1;
@@ -842,7 +861,6 @@
 					border-bottom: 1px solid #9fd9fa;
 				}
 
-
 				// &.highlight-mouse-over {
 				// 	&,.math {
 				// 		color: #ffffff;
@@ -857,7 +875,7 @@
 				}
 			}
 
-			&.highlight-mouse-over{
+			&.highlight-mouse-over {
 				&,a {
 					// color: #ffffff;
 					// background-color: var(--primary-blue);
@@ -875,16 +893,16 @@
 				&.redacted {
 					display: none;
 				}
+
 				background: #efefef;
 				color: var(--secondary-grey);
-				border-bottom: 0px;
+				border-bottom: 0;
 			}
 
 			&.counter {
 				color: var(--secondary-grey);
 				font-family: var(--body-font-family) !important;
 				font-weight: bold;
-
 				background: transparent;
 
 				@include highlight-tip;
@@ -897,9 +915,8 @@
 					width: 30px;
 					background-image: url(../images/counter_tip_default.png);
 
-
-					&.highlight-mouse-over{
-						color: #ffffff;
+					&.highlight-mouse-over {
+						color: #fff;
 						background-image: url(../images/counter_tip_hover.png);
 					}
 
@@ -908,6 +925,7 @@
 						text-align: center;
 						margin-left: 5px;
 						overflow: hidden;
+
 						@include ellipse;
 					}
 				}
@@ -917,32 +935,30 @@
 }
 
 #NTIContent {
-
 	[itemprop~="nti-data-markupenabled"],
-	[itemprop~="nti-slide-video"]{
-		&[itemprop~="nti-data-resizeable"]{
+	[itemprop~="nti-slide-video"] {
+		&[itemprop~="nti-data-resizeable"] {
 			.bar .image-title {
 				overflow: hidden;
+
 				@include ellipse;
 			}
 		}
 	}
 
-	[itemprop~="nti-data-resizeable"]{
-		img{
+	[itemprop~="nti-data-resizeable"] {
+		img {
 			max-width: 100%;
 			height: auto !important;
 		}
 	}
 }
 
-div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
-
+div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 
 #NTIContent ol.parts > li.part::before {
 	z-index: 2;
 }
-
 
 #annotation-container {
 	&, .highlight-canvas {
@@ -957,9 +973,10 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 }
 
 .nt-annotation-menu {
-	$transition-duration:.1s;
+	$transition-duration:0.1s;
+
 	background: var(--annotations-menu-bg);
-	border-radius:6px;
+	border-radius: 6px;
 	position: fixed !important;
 	opacity: 0.01; // so we can show the menu, compute its width, and center it. (can't get the width until it's rendered in the dom.)
 	&.visible {
@@ -971,7 +988,8 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 
 	// the pointer/arrow
 	&::after {
-		$arrow-size:.5em;
+		$arrow-size:0.5em;
+
 		content: '';
 		position: absolute;
 		width: 0;
@@ -988,100 +1006,110 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 
 	.x-panel-body-nt-annotation {
 		background: none;
-		border:none;
-		padding:0;
+		border: none;
+		padding: 0;
 	}
+
 	.x-menu-item {
-	  	&.icon {
-		}
+		// &.icon {}
+
 		&.add-note {
 			@include icon($comment_white, $left: 2px, $top: 3px);
-			text-indent:-100em;
-		}
-		&.define {
-			@include icon($search-white,$top:8px,$left:5px);
-			text-indent:-100em;
+
+			text-indent: -100em;
 		}
 
-		&:after {
-			opacity:.75;
+		&.define {
+			@include icon($search-white,$top:8px,$left:5px);
+
+			text-indent: -100em;
+		}
+
+		&::after {
+			opacity: 0.75;
 			transition: opacity $transition-duration 0;
 		}
 
-		&:hover:after {
-			opacity:1.0;
+		&:hover::after {
+			opacity: 1;
 			transition: opacity $transition-duration 0;
 		}
 	}
 
 	.x-menu-item-active {
-		background:none !important;
+		background: none !important;
 	}
 
 	.x-component {
-		&:before { // divider line between items
+		&::before { // divider line between items
 			content: "";
-			border-right: 2px solid rgba(128,128,128,0.2);
+			border-right: 2px solid rgba(128, 128, 128, 0.2);
 			position: absolute;
 			height: 75%;
 			top: 5px;
 			right: 0;
 		}
+
 		&:last-child {
-			padding-right:1.5em;
-			&:before {
-				content:none; // no divider following the last item.
+			padding-right: 1.5em;
+
+			&::before {
+				content: none; // no divider following the last item.
 			}
 		}
 	}
 
 	.nt-highlight-picker {
-		background:none;
-		height:auto;
-		width:auto;
-		padding-left:.5em;
-		padding-right:.5em;
+		background: none;
+		height: auto;
+		width: auto;
+		padding-left: 0.5em;
+		padding-right: 0.5em;
 		white-space: nowrap;
 
-		&.x-component:last-child{
-			padding-right:.5em;
+		&.x-component:last-child {
+			padding-right: 0.5em;
 		}
 
 		a {
 			span { // the color swatches
 				$swatchSize:1.25em;
-				display:inline-block;
-				width:$swatchSize;
-				height:$swatchSize;
-				border:2px solid transparent;
-				border-radius:$swatchSize/2;
-				margin:.5em .2em;
-				position:relative;
-				transform: scale(1,1); // so the transform will animate on mouseout.
+
+				display: inline-block;
+				width: $swatchSize;
+				height: $swatchSize;
+				border: 2px solid transparent;
+				border-radius: $swatchSize/2;
+				margin: 0.5em 0.2em;
+				position: relative;
+				transform: scale(1, 1); // so the transform will animate on mouseout.
 				transition: all $transition-duration 0;
+
 				&::after {
-					content:'';
-					position:absolute;
-					top:0;
-					left:0;
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
 					background: url('../images/icons/rhp-status-checkmark.png') center no-repeat transparent;
-					width:100%;
-					height:100%;
-					opacity:0;
+					width: 100%;
+					height: 100%;
+					opacity: 0;
 					transition: opacity $transition-duration 0; // fade out the checkmark
 				}
 			}
 		}
 
 		a:hover, a.x-color-picker-selected {
-			background:none;
-			border:none;
+			background: none;
+			border: none;
+
 			span {
-				border-color:white;
+				border-color: white;
 				transition: all $transition-duration 0;
-				transform: scale(1.2,1.2);
+				transform: scale(1.2, 1.2);
+
 				&::after {
-					opacity: 1.0;
+					opacity: 1;
 					transition: opacity $transition-duration 0; // fade up the checkmark
 				}
 			}

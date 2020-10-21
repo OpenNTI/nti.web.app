@@ -1,14 +1,14 @@
 
 .guide-window, .tos-window, .iframe-window, .notifications-window, .confirm-window {
 	@extend .nti-window;
-	background-color: var(--quad-grey);
-	box-shadow: 0 10px 40px rgba(0,0,0,0.61);
 
-	iframe{
-		&.help-iframe{
+	background-color: var(--quad-grey);
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.61);
+
+	iframe {
+		&.help-iframe {
 			//top: 0 !important;
 			width: 100%;
-
 		}
 		//height: 100%;
 		// removed top and height attrs, unnecessary if layout is fit or vbox
@@ -17,6 +17,7 @@
 	.tos-header { //tos
 		margin: 8px 24px;
 		width: 675px !important;
+
 		h3 {
 			font-size: 16px;
 			font-weight: bold;
@@ -24,28 +25,32 @@
 			margin: 0;
 			padding: 0;
 		}
+
 		.you-should {
 			font-size: 12px;
 			color: var(--tertiary-grey);
 		}
 	}
 
-	.nti-window-header{
+	.nti-window-header {
 		display: none;
 	}
-	.nti-window-footer{
+
+	.nti-window-footer {
 		background-color: #f3f3f3;
 		padding: 10px;
 
-		.x-btn-primary-large{
-			&.dismiss{
+		.x-btn-primary-large {
+			&.dismiss {
 				padding: 8px 30px;
 			}
 		}
-		.x-disabled{ //tos
+
+		.x-disabled { //tos
 			opacity: 0.5 !important;
 		}
-		.yes-checkbox{ //tos
+
+		.yes-checkbox { //tos
 			margin-top: 6px;
 			float: left;
 		}
@@ -76,7 +81,8 @@
 	.nti-window-footer {
 		position: absolute;
 		bottom: 0;
-		left: 0; right: 0;
+		left: 0;
+		right: 0;
 	}
 }
 
@@ -105,6 +111,7 @@
 	.x-container-footer {
 		position: absolute;
 		bottom: 0;
-		left: 0; right: 0;
+		left: 0;
+		right: 0;
 	}
 }

@@ -14,29 +14,30 @@
 		position: absolute;
 		top: 0;
 		right: 0;
+
 		@include like-and-favorite;
 
 		.edit {
 			padding: 5px 10px;
-    		color: var(--primary-blue);
-    		margin: 5px;
+			color: var(--primary-blue);
+			margin: 5px;
 
-    		&:hover {
-    			background-color: var(--primary-blue);
-    			color: #fff;
-    			border-radius: 5px;
-    		}
+			&:hover {
+				background-color: var(--primary-blue);
+				color: #fff;
+				border-radius: 5px;
+			}
 		}
 	}
 
 	.thumbnail {
-		background:{
+		background: {
 			size: cover;
 			repeat: no-repeat;
 			position: center;
 		}
 		//border-right: 1px solid var(--quad-grey);
-		box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
+		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.35);
 		float: left;
 		width: $thumbWidth;
 		height: 100px;
@@ -53,15 +54,16 @@
 			margin-bottom: 5px;
 			color: var(--primary-grey);
 		}
+
 		.byline {
 			font: normal 600 10px/10px var(--body-font-family);
 			text-transform: uppercase;
 			color: var(--primary-blue);
-
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
+
 		.description {
 			color: var(--primary-grey);
 			font: normal normal 12px/1rem var(--body-font-family);
@@ -82,21 +84,21 @@
 }
 
 a[href] {
-    &.internal-link {
+	&.internal-link {
 		@include content-link-def;
 		&:active, &:hover, &:visited { @include content-link-def; }
 	}
 
-	#NTIContent &, #profile .profile-head &{
+	#NTIContent &, #profile .profile-head & {
 		@include content-link-def;
+
 		line-height: inherit;
 		color: var(--primary-blue);
 	}
 }
 
-
-.content-card{
-	&, .note-window .note.main-view &{
+.content-card {
+	&, .note-window .note.main-view & {
 		@include content-card-def;
 	}
 
@@ -119,7 +121,7 @@ a[href] {
 }
 
 .content-launcher {
-	&, .note-window .note.main-view &{
+	&, .note-window .note.main-view & {
 		@include content-card-def;
 
 		$thumbWidth: 150px;
@@ -131,9 +133,10 @@ a[href] {
 
 		.meta {
 			margin-left: $thumbWidth+15px;
+
 			.launcher-button {
-				margin: 5px 0px;
-				padding: 0px 10px 0px 40px;
+				margin: 5px 0;
+				padding: 0 10px 0 40px;
 				background-color: var(--primary-blue);
 				border: 1px solid var(--border-blue);
 				font: italic 500 14px/30px var(--body-font-family);
@@ -147,25 +150,24 @@ a[href] {
 					position: absolute;
 					top: 6px;
 					left: 10px;
+
 					@include sprite($presentation-view);
 				}
 
-				&.video-transcript-button{
+				&.video-transcript-button {
 					margin-left: 40px;
 					padding-left: 10px;
 
-					&::after{
+					&::after {
 						content: none;
 					}
 				}
 			}
 		}
-
 	}
 }
 
 .component-overlay, .content-editor {
-
 	.content-card-target-container {
 		margin: 0 5px 0 0;
 		border: 1px solid var(--border-grey);
@@ -176,10 +178,12 @@ a[href] {
 		.no-support {
 			display: block;
 			position: absolute;
-			top: 50%; left:0; right:0;
+			top: 50%;
+			left: 0;
+			right: 0;
 			transform: translateY(-50%);
 
-			&, a, div a { &, &:link, &:hover, &:visited{ text-decoration: none; } }
+			&, a, div a { &, &:link, &:hover, &:visited { text-decoration: none; } }
 
 			padding: 0 5em;
 			text-align: center;
@@ -199,16 +203,18 @@ a[href] {
 		//	z-index: -2;
 		//}
 
-		.back-button{
+		.back-button {
 			cursor: pointer;
 			position: absolute;
 			top: 20px;
 			left: -25px;
 			width: 25px;
 			height: 25px;
-			&::after{
+
+			&::after {
 				position: absolute;
-				top: 0; left: 0;
+				top: 0;
+				left: 0;
 				content: '';
 
 				@include sprite($profile_back_arrow);
@@ -223,7 +229,7 @@ a[href] {
 			.no-support {
 				position: relative;
 				top: 50%;
-  				transform: translateY(-50%);
+				transform: translateY(-50%);
 				background-color: #fff;
 				font-size: 12px;
 
@@ -244,7 +250,6 @@ a[href] {
 	}
 }
 
-
 .link {
 	&.arrow {
 		position: relative;
@@ -258,7 +263,7 @@ a[href] {
 			position: absolute;
 			width: 0.5em;
 			height: 0.5em;
-			top: 0em;
+			top: 0;
 			right: -0.9em;
 			transform: rotate(-90deg);
 		}

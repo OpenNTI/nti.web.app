@@ -7,7 +7,8 @@
 
 .preview {
 	flex: 1 1 auto;
-	/*Not Ideal, but the easiest solution since the previews have overflowing parts*/
+
+	/* Not Ideal, but the easiest solution since the previews have overflowing parts */
 	max-width: 394px;
 }
 

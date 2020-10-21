@@ -58,8 +58,10 @@ span.not-set-label {
 
 .clear {
 	position: absolute;
-	top: -15px; bottom: auto;
-	left: auto; right: -15px;
+	top: -15px;
+	bottom: auto;
+	left: auto;
+	right: -15px;
 	padding: 0.625rem;
 	cursor: pointer;
 }

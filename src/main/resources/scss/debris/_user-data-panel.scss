@@ -1,12 +1,11 @@
 
-
 @mixin chat-history-item {
 	margin: 15px;
 	padding-left: 30px;
 	position: relative;
 	overflow: hidden;
 
-	&::after{
+	&::after {
 		position: absolute;
 		top: 5px;
 		left: 5px;
@@ -18,6 +17,7 @@
 
 	.occupants {
 		@include menu-label-text-treatment;
+
 		color: var(--primary-blue);
 		line-height: 20px;
 	}
@@ -34,20 +34,23 @@
 	.history {
 		&.chat {
 			@include chat-history-item;
+
 			background: var(--panel-background);
 			border: 1px solid #eaeaea;
 			border-radius: 6px;
 			padding: 10px 20px 10px 30px;
 			margin-left: 0;
+
 			&::after {
 				top: 13px;
 				left: 10px;
 			}
 
-			.occupants{
+			.occupants {
 				font-weight: 700;
 				font-size: 9px;
 			}
+
 			.time {
 				font-weight: 700;
 				font-size: 9px;
@@ -59,10 +62,9 @@
 
 .user-data-panel {
 	@include scrollbar(#ffffff, var(--tertiary-grey));
-
 	@include divider;
 
-	overflow:{
+	overflow: {
 		y: auto; //scroll;
 		x: hidden;
 	}
@@ -71,17 +73,16 @@
 		padding-top: 12px;
 	}
 
-	.divider + .post, .divider + .comment{
+	.divider + .post, .divider + .comment {
 		box-shadow: none !important;
 		border-top: none !important;
 	}
 
-	div.history:first-of-type{ margin-top: 10px; }
+	div.history:first-of-type { margin-top: 10px; }
 
-	.divider + div.history:first-of-type{ margin-top: 0; }
+	.divider + div.history:first-of-type { margin-top: 0; }
 
-	.history{
-
+	.history {
 		&:first-of-type:not(.notification) {
 			padding-top: 10px;
 		}
@@ -93,12 +94,12 @@
 			color: var(--tertiary-grey);
 
 			.verb {
-				&::before{
-					content: ' '
+				&::before {
+					content: ' ';
 				}
 
-				&::after{
-					content: ' '
+				&::after {
+					content: ' ';
 				}
 			}
 
@@ -113,7 +114,7 @@
 					font-style: italic;
 				}
 
-				&.quote::before, &.quote::after{
+				&.quote::before, &.quote::after {
 					content: '"';//"
 				}
 			}
@@ -124,33 +125,36 @@
 		}
 
 		&:not(.notification) {
-			&.chat{
+			&.chat {
 				@include chat-history-item;
+
 				.time {
-						.date { display: none; }
+					.date { display: none; }
 				}
 			}
 
 			&.note,
 			&.post,
 			&.highlight,
-			&.favorite{
+			&.favorite {
 				margin: 0 20px;
 
-				.path,.location, .tags, .title{
+				.path,.location, .tags, .title {
 					color: var(--tertiary-grey);
 					font-family: var(--body-font-family);
 				}
 
-				.path, .title{
+				.path, .title {
 					font-size: 10px;
 					font-weight: 600;
 					text-transform: uppercase;
+
 					@include ellipse;
+
 					overflow: hidden;
 				}
 
-				.location, .text, .tags{
+				.location, .text, .tags {
 					font-size: 14px;
 					font-weight: 500;
 					font-style: italic;
@@ -165,7 +169,6 @@
 					font-weight: normal;
 					color: var(--primary-grey);
 					word-wrap: break-word;
-
 					position: relative;
 
 					.whiteboard-container {
@@ -178,32 +181,33 @@
 						content: ' ';
 						overflow: hidden;
 						position: absolute;
-						top: 0; left: 15px;
+						top: 0;
+						left: 15px;
+
 						@include sprite($ldquo);
 					}
 
-					&::after{
+					&::after {
 						content: ' ';
 						display: inline-block;
 						margin-left: 5px;
+
 						@include sprite($rdquo);
 					}
 				}
 			}
 
-			&.post{
+			&.post {
 				cursor: pointer;
 				position: relative;
 				border-top: 1px solid #eaeaea;
-				box-shadow: inset 0 1px 0 0 #ffffff;
-
-
+				box-shadow: inset 0 1px 0 0 #fff;
 				padding: 12px 0 12px 0;
 				font-size: 12px;
 				color: var(--secondary-grey);
 				overflow: hidden;
 
-				.author{
+				.author {
 					font-style: normal;
 					font-size: 10px;
 					font-weight: bold;
@@ -211,7 +215,7 @@
 					text-transform: uppercase;
 				}
 
-				.title, .tags{
+				.title, .tags {
 					font-size: 12px;
 				}
 			}
@@ -250,31 +254,30 @@
 				}
 			}
 
-			&.highlight{
+			&.highlight {
 				.body {
 					span {
 						color: #136ea5;
 						background: #e1f2fc;
 						line-height: 25px;
-						padding: .25em;
+						padding: 0.25em;
 					}
 
 					background: none;
-					&::before, &::after{
+
+					&::before, &::after {
 						display: none;
 					}
 				}
 			}
-
 		}
 
-		&.nothing{
+		&.nothing {
 			color: var(--tertiary-grey);
 			text-align: center;
 			font-family: var(--body-font-family);
 			font-size: 10px;
 			font-weight: 600;
 		}
-
 	}
 }

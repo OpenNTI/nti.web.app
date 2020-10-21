@@ -1,5 +1,4 @@
 .image-cropping-prompt {
-
 	.image-cropping-editor {
 		padding: 25px;
 		background-color: #ededed;
@@ -36,7 +35,7 @@
 		.rotate {
 			cursor: pointer;
 			display: inline-block;
-			background-color: rgba(0,0,0,0.4);
+			background-color: rgba(0, 0, 0, 0.4);
 			color: white;
 			line-height: 40px;
 			padding: 0 19px 0 40px;
@@ -47,7 +46,7 @@
 			@include icon($rotate-white, $side: after, $top: 50%, $left: 20px);
 
 			&::after {
-				margin-top: -7px
+				margin-top: -7px;
 			}
 		}
 	}

@@ -1,21 +1,21 @@
 
+@mixin reset-window-border-radius($radius) {
+	&,iframe,.x-window-body { border-radius: $radius; }
 
-@mixin reset-window-border-radius($radius){
-	&,iframe,.x-window-body{ border-radius: $radius; }
 	.nti-window-header {
 		&,.header-body {
 			border-radius: $radius $radius 0 0;
-			.controls {border-radius: 0 $radius 0 0;}
+			.controls { border-radius: 0 $radius 0 0; }
 		}
 	}
 	.nti-window-footer { border-radius: 0 0 $radius $radius; }
 }
 
-
 .nti-window {
 	@include reset-window-border-radius(5px);
+
 	background-color: #fcfcfc;
-	box-shadow: 3px 3px 3px 0 rgba(0,0,0,0.1);
+	box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.1);
 	border: 1px solid var(--border-grey);
 	overflow: hidden;
 	position: fixed !important;
@@ -34,14 +34,16 @@
 	.nti-window-header {
 		cursor: move;
 		background: transparent;
-		border-bottom: 1px solid #ffffff;
-		box-shadow: inset 0px -1px 0px 0px #F6F5F5;
+		border-bottom: 1px solid #fff;
+		box-shadow: inset 0 -1px 0 0 #f6f5f5;
 
 		.header-body {
 			position: relative;
 			overflow: hidden;
+
 			span {
 				@include menu-label-text-treatment;
+
 				padding: 8px 10px;
 				//float: left;
 				display: block;
@@ -63,32 +65,38 @@
 				height: 100%;
 				float: right;
 				padding: 0;
+
 				&.has-tools {
 					padding-left: 11px;
 					position: relative;
-					&::after{
+
+					&::after {
 						content: ' ';
 						position: absolute;
 						overflow: hidden;
-						top: 4px; left: 0;
+						top: 4px;
+						left: 0;
+
 						@include sprite($window-control-divider);
 					}
 				}
 
 				img.tool {
-					&:hover{ opacity: 1; }
+					&:hover { opacity: 1; }
+
 					opacity: 0.5;
 					margin: 8px 11px 8px 0;
 					float: right;
 					cursor: pointer;
 
-
 					&.close {
 						@include sprite($window-control-close);
 					}
+
 					&.minimize {
 						@include sprite($window-control-minimize);
 					}
+
 					&.popout {
 						@include sprite($window-control-maximize);
 					}
@@ -98,9 +106,9 @@
 	}
 
 	.nti-window-footer {
-		background: #ffffff;
+		background: #fff;
 		border-color: #e7e7e7;
-		border-width: 0px;
+		border-width: 0;
 		border-top-width: 1px !important;
 		padding: 10px;
 	}
@@ -116,7 +124,6 @@
 			padding: 3px;
 		}
 	}
-
 
 	.buttons {
 		margin: 10px;
@@ -149,7 +156,7 @@
 		padding-top: 30px;
 	}
 
-	&.closable .close{
+	&.closable .close {
 		display: block;
 	}
 
@@ -215,7 +222,7 @@
 			left: 0;
 			right: 0;
 			background-color: #f0f0f0;
-			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
 			clip: rect(300px, auto, 310px, auto);
 			border-radius: 350em / 4em;
 		}
@@ -262,13 +269,12 @@
 
 				&:hover {
 					background-color: white;
-					box-shadow: inset 0 0 1px 0 rgba(0,0,0,0.5);
+					box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.5);
 				}
 
 				&.declinde, &.caution {
 					color: var(--primary-red);
 				}
-
 			}
 
 			&.accept {
@@ -278,21 +284,23 @@
 			&.decline, &.caution {
 				background-color: var(--primary-red);
 			}
-
 		}
 	}
 
 	&.error .message-container {
-	 	@include icon($modal-red-sign, $left: 10px);
+		@include icon($modal-red-sign, $left: 10px);
 	}
 
 	&::after {
 		content: '';
 		position: fixed;
-		top: 0; bottom: 0;
-		left: 0; right: 0;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		background-color: rgba(0, 0, 0, 0);
 		z-index: -1;
+
 		@include experimental(transition, all 0.35s 0 ease-out);
 	}
 }
@@ -303,10 +311,10 @@
 	}
 }
 
-.iframe-window, .confirm-window{
+.iframe-window, .confirm-window {
 	position: fixed !important;
 
-	.iframe{
+	.iframe {
 		width: auto;
 
 		&.confirm {
@@ -327,17 +335,16 @@
 	}
 }
 
-
 .badge-window {
 	.badge-preview {
 		min-height: 170px;
 
-		.img{
+		.img {
 			width: 128px;
 			height: 128px;
 		}
 
-		.wrap{
+		.wrap {
 			width: 631px;
 			min-height: 148px;
 			font-size: 1.1em;
@@ -363,6 +370,7 @@
 			text-decoration: none;
 			color: var(--primary-blue);
 			overflow: hidden;
+
 			@include ellipse;
 		}
 
@@ -390,7 +398,7 @@
 			left: 0;
 			right: 0;
 			height: 8px;
-			box-shadow: 0 3px 8px -3px rgba(0,0,0,0.25);
+			box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
 		}
 
 		.btn {
@@ -433,7 +441,7 @@
 		overflow-y: auto;
 	}
 
-	div.nti-window-header{
+	div.nti-window-header {
 		background-color: #fffefe;
 		display: block;
 
@@ -448,7 +456,6 @@
 }
 
 .object-window {
-
 	overflow-y: hidden;
 
 	.window-loading {
@@ -470,34 +477,35 @@
 				@include loadingSpinner($top: 0, $left: 0);
 			}
 		}
-
 	}
 
-	.window-header{
+	.window-header {
 		position: relative;
 		height: 44px;
 		border-bottom: 1px solid #ededed;
 		font-size: 0.75em;
 
-		.title{
+		.title {
 			color: var(--primary-grey);
 			margin-left: 15px;
 			line-height: 44px;
 			max-width: 675px;
 			overflow: hidden;
 			white-space: nowrap;
+
 			@include ellipse;
 		}
 
-		.close{
+		.close {
 			@include icon($note-window-x, $side: after, $position: absolute);
+
 			top: 10px;
 			right: 10px;
 			cursor: pointer;
 			width: 24px;
 			height: 24px;
 
-			&:hover{
+			&:hover {
 				@include icon($note-window-x_hover, $side: after, $position: absolute);
 			}
 		}
@@ -522,6 +530,7 @@
 				top: 13px;
 				width: 24px;
 				height: 24px;
+
 				@include sprite($note-window-x);
 
 				&:hover {
@@ -536,6 +545,7 @@
 			font-weight: 300;
 			font-size: 1.5em;
 			text-transform: none;
+
 			@include ellipse();
 		}
 	}
@@ -561,10 +571,12 @@
 	&::after {
 		content: '';
 		position: fixed;
-		top: 0; bottom: 0;
-		left: 0; right: 0;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		z-index: -1;
-		background-color: rgba(0,0,0,0.5);
+		background-color: rgba(0, 0, 0, 0.5);
 	}
 }
 

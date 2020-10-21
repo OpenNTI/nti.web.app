@@ -1,21 +1,23 @@
 
-
 .account-view {
 	color: var(--secondary-grey);
-	font: {size: 16px; style: normal; weight: 4;}
+	font: { size: 16px; style: normal; weight: 4; }
+
 	line-height: 25px;
+
 	@include side-panel-view-title;
 
 	.view-title { margin-bottom: 10px; }
-	
+
 	.item {
 		display: block;
 		min-height: 25px;
 		margin-left: 20px;
 
-		&.x-item-disabled { opacity: 0.5; cursor: default; &:hover{color:var(--secondary-grey);}}
+		&.x-item-disabled { opacity: 0.5; cursor: default; &:hover { color: var(--secondary-grey); } }
 		.x-mask { display: none; }
 	}
+
 	a.item {
 		cursor: pointer;
 
@@ -26,7 +28,6 @@
 			margin-bottom: 50px;
 		}
 	}
-
 
 	.notifications {
 		min-height: 50px;
@@ -46,6 +47,7 @@
 			text-decoration: none;
 			color: #747474;
 			margin-left: 18px;
+
 			&:hover {
 				color: var(--primary-blue);
 			}
@@ -54,6 +56,7 @@
 		.notification-item {
 			line-height: normal;
 			&:hover{ }
+
 			cursor: pointer;
 			margin: 15px 0 15px 3px;
 			padding: 0 0 0 12px !important;
@@ -74,22 +77,27 @@
 				font-weight: 800;
 				color: var(--primary-blue);
 				text-transform: uppercase;
+
 				@include ellipse;
+
 				overflow: hidden;
 			}
+
 			.message {
 				color: #adadad;
 				line-height: normal;
 				font-size: 11px;
 				font-weight: 300;
+
 				@include ellipse;
+
 				overflow: hidden;
 			}
 		}
 	}
 }
 
-.account-form-username .x-panel-body-account{
+.account-form-username .x-panel-body-account {
 	font-size: 20px;
 	padding: 0 0 1em 0;
 }

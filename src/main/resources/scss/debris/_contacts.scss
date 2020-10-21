@@ -1,7 +1,7 @@
 $over-color: #f4f3f3;
 
-@mixin contact-user-row{
-	.contact-row{
+@mixin contact-user-row {
+	.contact-row {
 		height: 50px;
 		position: relative;
 		cursor: pointer;
@@ -13,7 +13,8 @@ $over-color: #f4f3f3;
 
 		.avatar {
 			position: absolute;
-			top: 0; left: 0;
+			top: 0;
+			left: 0;
 			width: 50px;
 			height: 50px;
 			background: {
@@ -25,13 +26,17 @@ $over-color: #f4f3f3;
 
 		.presence {
 			position: absolute;
-			top: 23px; right: 15px;
+			top: 23px;
+			right: 15px;
+
 			@include presence-style;
 		}
 
 		.nib {
 			display: none;
+
 			@include icon($add-contact);
+
 			cursor: pointer;
 			position: absolute;
 			right: 8px;
@@ -43,6 +48,7 @@ $over-color: #f4f3f3;
 
 		&.not-contact {
 			.presence { display: none; }
+
 			.nib {
 				display: block;
 			}
@@ -51,14 +57,18 @@ $over-color: #f4f3f3;
 		.wrap {
 			margin: 0 30px 0 60px;
 			padding-top: 10px;
+
 			.name {
 				@include ellipse();
+
 				overflow: hidden;
 				font: normal 600 12px/15px var(--body-font-family);
 				color: var(--primary-grey);
 			}
+
 			.status {
 				@include ellipse();
+
 				overflow: hidden;
 				font: italic 400 12px/20px var(--body-font-family);
 				color: var(--tertiary-grey);
@@ -67,18 +77,19 @@ $over-color: #f4f3f3;
 	}
 }
 
-
 .contact-card {
 	margin: 7px 0 0 10px;
 	overflow: hidden;
 	cursor: pointer;
 
 	.x-menu-list-ct &,
-	.selection-nt &{
+	.selection-nt & {
 		margin-left: 0;
+
 		img {
 			&.nib {
 				@include sprite($add);
+
 				margin-top: 10px;
 				border: none !important;
 				float: right;
@@ -88,18 +99,18 @@ $over-color: #f4f3f3;
 
 	&.x-menu-item-over,
 	&.selection-item-over,
-	.selection-item-over &
-		{
-		img.nib{
+	.selection-item-over & {
+		img.nib {
 			opacity: 0.5;
 			display: block;
+
 			&:active {
 				opacity: 1;
 			}
 		}
 	}
 
-	div.avatar, img{
+	div.avatar, img {
 		float: left;
 		width: 32px;
 		height: 32px;
@@ -108,6 +119,7 @@ $over-color: #f4f3f3;
 
 		&.nib {
 			@include sprite($options);
+
 			display: none;
 			margin-top: 7px;
 			border: none !important;
@@ -121,6 +133,7 @@ $over-color: #f4f3f3;
 		&.group {
 			background: url(../images/old_sprites/spr_groups_dark.png) 0 0 no-repeat;
 		}
+
 		&.group {
 			background-position: -32px 0;
 		}
@@ -132,8 +145,8 @@ $over-color: #f4f3f3;
 
 		&.public,
 		&.group,
-		&.list{
-			&::after{
+		&.list {
+			&::after {
 				content: ' ';
 				top: 0;
 				left: 0;
@@ -141,40 +154,40 @@ $over-color: #f4f3f3;
 			}
 		}
 
-		&.public::after{
+		&.public::after {
 			@include sprite($dark-globe-26x26);
 		}
 
-		&.group::after{
+		&.group::after {
 			@include sprite($dark-groups-32x22);
 		}
 
-		&.list::after{
+		&.list::after {
 			@include sprite($dark-lists-31x21);
 		}
 	}
 
 	&.card-over {
-
 		border-radius: 1px;
 		box-shadow: 0 0 0 4px #f1f1f1;
 		background-color: #f1f1f1;
 
-		img.nib{
+		img.nib {
 			display: block;
+
 			&:active,&:hover {
 				@include sprite($options_active);
 			}
 		}
 	}
 
-
 	.card-body {
 		margin-left: 44px;
 	}
 
-	&.offline{
+	&.offline {
 		cursor: default;
+
 		.name {
 			color: var(--tertiary-grey);
 		}
@@ -182,76 +195,81 @@ $over-color: #f4f3f3;
 
 	.name {
 		@include menu-label-text-treatment;
+
 		color: var(--primary-blue);
 		cursor: pointer;
 	}
+
 	.status {
 		color: var(--tertiary-grey);
 		font: { size: 8pt; weight: 500; }
 	}
 }
 
-
-.person-options-menu{
-
-	.x-menu-item{
-		&.x-menu-item-unchecked{
-			&::after{
+.person-options-menu {
+	.x-menu-item {
+		&.x-menu-item-unchecked {
+			&::after {
 				content: '';
 				position: absolute;
 				left: 10px;
 				top: 9px;
 				outline: 0;
+
 				@include sprite($checkbox-14);
 			}
 		}
 
-		&.label{
+		&.label {
 			position: relative;
 			margin-top: 10px;
 			background: none !important;
 			padding: 9px 5px 5px 32px !important;
 
-			&::after{
+			&::after {
 				content: '';
 				position: absolute;
-				left: 10px; top: 6px;
+				left: 10px;
+				top: 6px;
 				outline: 0;
+
 				@include sprite($rhp-contact-flyout-settings);
 			}
 		}
 
-		&.no-checkbox{
+		&.no-checkbox {
 			background: none !important;
-			&::after{
+
+			&::after {
 				background: none !important;
 			}
 		}
-
 	}
 
-	.close{
+	.close {
 		position: absolute;
 		cursor: pointer;
-		top: 0px;
-		right: 0px;
+		top: 0;
+		right: 0;
 		width: 20px;
 		height: 20px;
-		&::after{
+
+		&::after {
 			cursor: pointer;
 			position: absolute;
-			top: 10px; right: 10px;
+			top: 10px;
+			right: 10px;
 			content: '';
+
 			@include sprite($rhp-close-lists);
 		}
 	}
 }
 
+.contact-popout .group-selection-list, .x-menu .group-selection-list {
+	background: #fff;
 
-.contact-popout .group-selection-list, .x-menu .group-selection-list{
-	background: #ffffff;
-
-	.toolbar{
+	.toolbar {
 		position: absolute;
 		top: 0;
 		width: 350px;
@@ -259,7 +277,7 @@ $over-color: #f4f3f3;
 		left: 0;
 		background-color: white;
 
-		.title{
+		.title {
 			position: relative;
 			display: inline-block;
 			cursor: pointer;
@@ -269,12 +287,13 @@ $over-color: #f4f3f3;
 			text-transform: uppercase;
 			padding: 13px 0 0 35px;
 
-			&::after{
+			&::after {
 				content: '';
 				position: absolute;
 				left: 7px;
 				top: 12px;
 				outline: 0;
+
 				@include sprite($rhp-contact-flyout-lists);
 			}
 		}
@@ -289,10 +308,10 @@ $over-color: #f4f3f3;
 			top: 0;
 			right: 5px;
 
-
-			&::after{
+			&::after {
 				position: absolute;
-				top: 7px; left: 14px;
+				top: 7px;
+				left: 14px;
 				content: '';
 
 				@include sprite($rhp-close-lists);
@@ -301,7 +320,7 @@ $over-color: #f4f3f3;
 	}
 
 	.selection-list-ct {
-		&::before{
+		&::before {
 			content: '';
 			display: block;
 			height: 2px;
@@ -309,10 +328,11 @@ $over-color: #f4f3f3;
 		}
 
 		background: none;
+
 		ul {
 			//padding-bottom: 10px;
 
-			&.disallowSelection{
+			&.disallowSelection {
 				li.selection-list-item {
 					background: none !important;
 					padding: 5px;
@@ -322,45 +342,46 @@ $over-color: #f4f3f3;
 			li.selection-list-item {
 				padding: 5px 5px 5px 35px;
 				color: var(--secondary-grey) !important;
+
 				@include icon($check_box, $top: 7px, $left: 12px);
 
-				&.selection-item-over{
+				&.selection-item-over {
 					background-color: $over-color;
 					color: var(--secondary-grey) !important;
 					pointer: default;
 				}
 
-
 				&.selection-selected {
 					@include icon($check_mark_a, $top: 10px, $left: 15px);
+
 					&:active::after {
 						@include sprite($check_mark_b);
 					}
 				}
 
-
 				&.add-group-action {
 					background: none;
-					&::after {content: none;}
+					&::after { content: none; }
 
 					.input-wrap {
 						left: -5px;
 					}
 				}
 
-				.name{
+				.name {
 					overflow: hidden;
+
 					@include ellipse;
 				}
 
 				a {
-					&:active, &:visited, &:link{
+					&:active, &:visited, &:link {
 						border: 0 dotted var(--secondary-grey);
 						border-bottom-width: 2px;
 						color: var(--secondary-grey);
 						display: inline-block;
 						font-style: italic;
-						padding: 0px 2px;
+						padding: 0 2px;
 						text-decoration: none;
 					}
 				}
@@ -371,11 +392,14 @@ $over-color: #f4f3f3;
 					height: auto;
 
 					$value: text-shadow 0.5s, color 0.5s;
+
 					transition: $value;
 
 					&.error {
 						transition: $value;
+
 						@include animate(shake);
+
 						color: red;
 						text-shadow: 2px 2px 2px #ffc0c0;
 					}
@@ -383,12 +407,15 @@ $over-color: #f4f3f3;
 
 				img.delete-group {
 					display: none;
+
 					@include sprite($remove);
+
 					margin-top: 3px;
 					border: none !important;
 					float: right;
 					cursor: pointer;
 					opacity: 0.5;
+
 					&:active {
 						opacity: 1;
 					}
@@ -402,72 +429,78 @@ $over-color: #f4f3f3;
 	}
 }
 
-
-.group-chat-initiator{
+.group-chat-initiator {
 	background: #fafafa;
 	overflow: hidden;
 	position: absolute;
-	bottom: 0; top: 0;
-	left: 0; right: 0;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
 	background: #fafafa;
 
-	div[id$=list]{
+	div[id$=list] {
 		position: absolute;
-		bottom: 125px; top: 0;
-		left: 0; right: 0;
+		bottom: 125px;
+		top: 0;
+		left: 0;
+		right: 0;
 		overflow: {
 			x: hidden;
 			y: auto; //scroll;
 		}
 
-		.contact-row{
+		.contact-row {
 			.presence { display: none; }
 
 			.nib {
 				display: block;
-				top: 10px; right: 10px;
+				top: 10px;
+				right: 10px;
 				width: 20px;
 				height: 20px;
-				&::after{ @include sprite($checkbox-light-unchecked);}
+				&::after { @include sprite($checkbox-light-unchecked); }
 				&:hover::after { @include sprite($checkbox-light-unchecked_hover); }
 			}
 
 			&.checked {
 				.nib {
-					&::after{ @include sprite($checkbox-light-checked);}
+					&::after { @include sprite($checkbox-light-checked); }
 					&:hover::after { @include sprite($checkbox-light-checked_hover); }
 				}
 			}
 		}
 	}
 
-	div[id$=tokens], div[id$=buttons]{
+	div[id$=tokens], div[id$=buttons] {
 		border-top: 1px solid #dcdcdc;
 	}
 
-	div[id$=tokens]{
+	div[id$=tokens] {
 		background: #fff;
 		position: absolute;
 		overflow: {
 			x:hidden;
 			y: auto; //scroll;
 		}
+
 		bottom: 45px;
-		left: 0; right: 0;
+		left: 0;
+		right: 0;
 		min-height: 80px;
 		max-height: 180px;
-
 
 		.tokens {
 			margin-right: 0 !important;
 		}
 	}
 
-	div[id$=buttons]{
+	div[id$=buttons] {
 		position: absolute;
 		overflow: hidden;
 		bottom: 0;
-		left: 0; right: 0;
+		left: 0;
+		right: 0;
 		height: 45px;
 
 		div {
@@ -479,6 +512,7 @@ $over-color: #f4f3f3;
 			text-align: center;
 			color: var(--secondary-grey);
 			cursor: pointer;
+
 			@include experimental(transition, all 0.5s);
 
 			&.cancel {
@@ -489,35 +523,36 @@ $over-color: #f4f3f3;
 			&.start {
 				width: 95px;
 				font: italic bold 14px/44px var(--body-font-family);
-				color: #ffffff;
+				color: #fff;
 				border: 1px solid #69a92b;
 				background: #75bc30;
 
-				&.disabled{
+				&.disabled {
 					cursor: default;
 					border: 1px solid #d0d0d0;
-					background: rgba(184,184,184,0.5);
-					color: rgba(255,255,255,0.7);
+					background: rgba(184, 184, 184, 0.5);
+					color: rgba(255, 255, 255, 0.7);
 				}
 			}
 		}
 	}
-
-
 }
-
 
 .contacts-view {
 	position: relative;
 	overflow: hidden;
-	box-shadow: inset -1px 0 0 0 #fff,
-				inset 1px 0 0 0 #fff;
+	box-shadow:
+		inset -1px 0 0 0 #fff,
+		inset 1px 0 0 0 #fff;
 
 	&.offline {
 		.contact-row::after {
 			content: '';
 			position: absolute;
-			top: 0; left: 0; bottom: 0; right: 0;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
 			background: rgba(255, 255, 255, 0.5);
 		}
 	}
@@ -526,9 +561,12 @@ $over-color: #f4f3f3;
 
 	.contact-search,
 	.contact-list,
-	.contact-search-group-chat{
+	.contact-search-group-chat {
 		position: absolute;
-		top: 0; left: 0; right: 0; bottom: 40px;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 40px;
 		z-index: 0;
 
 		overflow: {
@@ -551,28 +589,31 @@ $over-color: #f4f3f3;
 
 	&.searching {
 		.contact-search {
-			display:block;
+			display: block;
 		}
 	}
 
 	.button-row {
 		position: absolute;
-		bottom: 0; left: 0; right: 0;
-
+		bottom: 0;
+		left: 0;
+		right: 0;
 		height: 40px;
 		width: 100%;
 		cursor: pointer;
 
 		&.search {
-			.search{
+			.search {
 				width: 220px !important;
-				background-color: #ffffff;
-				input{
-					background: #ffffff;
+				background-color: #fff;
+
+				input {
+					background: #fff;
 					visibility: visible;
 					opacity: 1;
 				}
 			}
+
 			.group-chat {
 				width: 40px !important;
 			}
@@ -580,11 +621,11 @@ $over-color: #f4f3f3;
 
 		& > div {
 			@include experimental(transition, all 0.5s);
+
 			border: 1px solid #ebebeb;
 			border-bottom-width: 0;
 			padding-left: 40px;
 			white-space: nowrap;
-
 			position: absolute !important;
 			font: italic 400 14px/40px var(--body-font-family);
 			color: var(--tertiary-grey);
@@ -594,7 +635,7 @@ $over-color: #f4f3f3;
 			top: 0;
 
 			&:hover {
-				background-color: #ffffff;
+				background-color: #fff;
 			}
 
 			&:last-of-type {
@@ -605,29 +646,33 @@ $over-color: #f4f3f3;
 				left: 0;
 				border-left-width: 0;
 				padding-left: 35px;
+
 				@include icon($rhp-search,$top:11px,$left:9px);
-				&::after{ opacity: 0.6; }
+				&::after { opacity: 0.6; }
 
 				input {
 					@include experimental(transition, opacity 0.5s);
+
 					visibility: hidden;
 					position: absolute;
 					border: 0;
 					background: #fafafa;
-
 					font: normal 400 14px/25px var(--body-font-family);
 					color: var(--primary-grey);
 					height: 40px;
-					top: 0; left: 30px; right: 26px;
+					top: 0;
+					left: 30px;
+					right: 26px;
 					opacity: 0;
 				}
+
 				.clear {
 					@include icon($clear_line);
+
 					position: absolute;
 					top: 14px;
 					right: 10px;
 					left: auto;
-
 					margin: 0;
 					width: 16px;
 					height: 16px;
@@ -638,14 +683,16 @@ $over-color: #f4f3f3;
 
 			&.group-chat {
 				right: 0;
+
 				@include icon($rhp-group-chat,$top:11px,$left:7px);
+
 				&:hover::after {
 					@include sprite($rhp-group-chat_hover);
 				}
 			}
 		}
 
-		&.no-group-chat{
+		&.no-group-chat {
 			&.search .search,
 			.search { width: 260px !important; }
 			.group-chat { display: none; }
@@ -653,23 +700,24 @@ $over-color: #f4f3f3;
 	}
 }
 
-
-.disabled-contacts-view{
-	padding-top: 0px;
+.disabled-contacts-view {
+	padding-top: 0;
 	color: var(--secondary-grey);
 
-	.disabled-message-div{
+	.disabled-message-div {
 		background-color: #f1f1f1;
 		padding: 15px;
 
-		.disabled-title{
+		.disabled-title {
 			color: var(--primary-grey);
 			padding-bottom: 3px;
 			font-size: 16px;
 			font-style: italic;
+
 			&:active,&.active {
 				background-position: -56px 0;
-				&:hover{
+
+				&:hover {
 					background-position: -84px 0;
 				}
 			}
@@ -678,6 +726,7 @@ $over-color: #f4f3f3;
 				background-position: -28px 0;
 			}
 		}
+
 		.resend-consent {
 			cursor: pointer;
 			color: var(--primary-blue);
@@ -685,17 +734,17 @@ $over-color: #f4f3f3;
 	}
 }
 
-
-div.add-group-action{
+div.add-group-action {
 	padding: 0 0 30px 15px;
+
 	a {
-		&:active, &:visited, &:link{
+		&:active, &:visited, &:link {
 			border: 0 dotted var(--secondary-grey);
 			border-bottom-width: 2px;
 			color: var(--secondary-grey);
 			display: inline-block;
 			font-style: italic;
-			padding: 0px 2px;
+			padding: 0 2px;
 			text-decoration: none;
 		}
 	}
@@ -705,22 +754,24 @@ div.add-group-action{
 		background: transparent;
 
 		$value: text-shadow 0.5s, color 0.5s;
+
 		@include experimental(transition, $value);
 
 		&.error {
 			@include experimental(transition, $value);
 			@include animate(shake);
+
 			color: red;
 			text-shadow: 2px 2px 2px #ffc0c0;
 		}
 	}
 }
 
-
 div.contact-buttons {
 	background: #fff;
 	text-transform: uppercase;
-	div.contact-button{
+
+	div.contact-button {
 		cursor: pointer;
 		display: inline-block;
 		position: relative;
@@ -730,14 +781,16 @@ div.contact-buttons {
 		font-weight: 600;
 		font-size: 10px;
 		color: var(--tertiary-grey);
-		&:hover{
+
+		&:hover {
 			color: var(--secondary-grey);
 		}
 	}
 
 	div.join-group {
 		@include icon($add-contact-14x14);
-		&:hover::after{
+
+		&:hover::after {
 			@include sprite($add-contact-14x14_hover);
 		}
 	}
@@ -746,11 +799,13 @@ div.contact-buttons {
 		&::after {
 			content: ' ';
 			position: absolute;
-			top: 1px; left: 0;
+			top: 1px;
+			left: 0;
 
 			@include sprite($create-group-14x10);
 		}
-		&:hover::after{
+
+		&:hover::after {
 			@include sprite($create-group-14x10_hover);
 		}
 	}
@@ -759,241 +814,243 @@ div.contact-buttons {
 		&::after {
 			content: ' ';
 			position: absolute;
-			top: 1px; left: 0;
+			top: 1px;
+			left: 0;
+
 			@include sprite($create-list);
 		}
-		&:hover::after{
+
+		&:hover::after {
 			@include sprite($create-list_hover);
 		}
 	}
 }
 
-.suggest-window, .profile-create-window{
-    box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
-    background-color: white;
+.suggest-window, .profile-create-window {
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
+	background-color: white;
 
-    .header{
-        position: relative;
-        color: var(--secondary-grey);
-        border-bottom: 1px solid var(--tertiary-grey-alt);
-        box-shadow: inset 0 1px 0 0 white;
-        height: 60px;
-        background: var(--quad-grey);
-        padding: 15px 30px;
+	.header {
+		position: relative;
+		color: var(--secondary-grey);
+		border-bottom: 1px solid var(--tertiary-grey-alt);
+		box-shadow: inset 0 1px 0 0 white;
+		height: 60px;
+		background: var(--quad-grey);
+		padding: 15px 30px;
 
-        .title{
-            font: normal 300 20px/34px var(--body-font-family);
-        }
-    }
+		.title {
+			font: normal 300 20px/34px var(--body-font-family);
+		}
+	}
 
-    .container-body {
-        background: #fff;
-        min-height: 300px;
-        max-height: 400px;
-        padding: 0;
-        overflow: {
-            x: hidden;
-            y: auto; //scroll;
-        }
+	.container-body {
+		background: #fff;
+		min-height: 300px;
+		max-height: 400px;
+		padding: 0;
+		overflow: {
+			x: hidden;
+			y: auto; //scroll;
+		}
 
-        font: normal 400 14px/25px var(--body-font-family);
+		font: normal 400 14px/25px var(--body-font-family);
 
-        .contact-card{
-            position: relative;
-            width: 310px;
-            border-bottom: 1px solid var(--border-grey);
-            margin: 0 0 0 30px;
-            float: left;
+		.contact-card {
+			position: relative;
+			width: 310px;
+			border-bottom: 1px solid var(--border-grey);
+			margin: 0 0 0 30px;
+			float: left;
 			cursor: default;
 			padding: 3px 0 5px 0;
 
-
-            .avatar{
+			.avatar {
 				cursor: default;
-                width: 48px;
-                height: 48px;
-                border-radius: 5px;
-                margin: 5px 5px 5px 0;
-            }
+				width: 48px;
+				height: 48px;
+				border-radius: 5px;
+				margin: 5px 5px 5px 0;
+			}
 
-            .meta{
-                margin-left: 60px;
-                width: 170px;
-                height: 48px;
-                margin-top: 5px;
+			.meta {
+				margin-left: 60px;
+				width: 170px;
+				height: 48px;
+				margin-top: 5px;
 				font: normal 400 12px/16px var(--body-font-family);
 				color: var(--secondary-grey);
 
-                .name{
+				.name {
 					cursor: default;
-                    color: var(--secondary-grey);
-                    font: normal 600 14px/18px var(--body-font-family);
-                    text-transform: capitalize;
-                }
-            }
+					color: var(--secondary-grey);
+					font: normal 600 14px/18px var(--body-font-family);
+					text-transform: capitalize;
+				}
+			}
 
-            .add-to-contacts{
-                position: absolute;
-                top: 17px;
-                right: 0;
-                text-transform: capitalize;
-                font-size: 12px;
+			.add-to-contacts {
+				position: absolute;
+				top: 17px;
+				right: 0;
+				text-transform: capitalize;
+				font-size: 12px;
 				cursor: pointer;
 
-                a.button{
-                    padding: 10px 25px;
-                    height: 38px;
-                    color: var(--secondary-grey);
-                    background: var(--quad-grey);
-                    border-radius: 5px;
-                    border: 1px solid var(--border-grey);
-                    cursor: pointer;
+				a.button {
+					padding: 10px 25px;
+					height: 38px;
+					color: var(--secondary-grey);
+					background: var(--quad-grey);
+					border-radius: 5px;
+					border: 1px solid var(--border-grey);
+					cursor: pointer;
 
-                    &:hover{
-                        background: var(--secondary-green);
-                        color: #ffffff;
-                        border: none;
-                    }
+					&:hover {
+						background: var(--secondary-green);
+						color: #fff;
+						border: none;
+					}
 
-                    &.remove-contact, &.selected{
-                        color: var(--primary-blue);
-                        background: none;
-                        border: none;
-                    }
-                }
-            }
-        }
-    }
+					&.remove-contact, &.selected {
+						color: var(--primary-blue);
+						background: none;
+						border: none;
+					}
+				}
+			}
+		}
+	}
 
-    > .footer{
-        position: relative;
-        color: var(--tertiary-grey);
-        height: 40px;
-        background-color: var(--quad-grey);
+	> .footer {
+		position: relative;
+		color: var(--tertiary-grey);
+		height: 40px;
+		background-color: var(--quad-grey);
 
-        &:after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            height: 10px;
-            left: 0;
-            right: 0;
-            background-color: rgba(0,0,0,0.35);
-            box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
-            clip: rect(10px, auto, 20px, auto);
-            border-radius: 335em / 2em;
-        }
+		&::after {
+			content: '';
+			position: absolute;
+			top: -10px;
+			height: 10px;
+			left: 0;
+			right: 0;
+			background-color: rgba(0, 0, 0, 0.35);
+			box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
+			clip: rect(10px, auto, 20px, auto);
+			border-radius: 335em / 2em;
+		}
 
+		a.button {
+			cursor: pointer;
+			display: inline-block;
+			height: 40px;
+			line-height: 40px;
+			font-size: 14px;
+			text-align: center;
+			color: var(--secondary-grey);
+			margin: 0;
+			padding: 0 1.5em;
+			float: right;
 
-        a.button {
-            cursor: pointer;
-            display: inline-block;
-            height: 40px;
-            line-height: 40px;
-            font-size: 14px;
-            text-align: center;
-            color: var(--secondary-grey);
-            margin: 0;
-            padding: 0 1.5em;
-            float: right;
+			&.confirm {
+				color: #fff;
+				background: var(--primary-blue);
+			}
 
-            &.confirm{
-                color: #ffffff;
-                background: var(--primary-blue);
-            }
-
-            &.disabled{
-                cursor: default;
-                border: 1px solid #d0d0d0;
-                background: rgba(184,184,184,0.5);
-                color: rgba(255,255,255,0.7);
-            }
-        }
-    }
+			&.disabled {
+				cursor: default;
+				border: 1px solid #d0d0d0;
+				background: rgba(184, 184, 184, 0.5);
+				color: rgba(255, 255, 255, 0.7);
+			}
+		}
+	}
 }
 
-.profile-create-window{
-    .picture-editor-container{
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 300px;
-        height: 340px;
-        padding: 20px;
+.profile-create-window {
+	.picture-editor-container {
+		position: absolute;
+		top: 60px;
+		left: 0;
+		width: 300px;
+		height: 340px;
+		padding: 20px;
 
-        .picture-editor{
-            .picture-container {
+		.picture-editor {
+			.picture-container {
 				height: 240px;
 
-                .picture{
-                    width: 214px;
-                    margin: 0 auto;
-                    position: relative;
+				.picture {
+					width: 214px;
+					margin: 0 auto;
+					position: relative;
 					z-index: 6;
 
-                    img{
-                        width: 214px;
-                    }
+					img {
+						width: 214px;
+					}
 
-                    .actions{
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                        width: 40px;
-                        height: 214px;
-                        background-color: var(--primary-grey);
-                        opacity: 0.6;
+					.actions {
+						position: absolute;
+						top: 0;
+						right: 0;
+						width: 40px;
+						height: 214px;
+						background-color: var(--primary-grey);
+						opacity: 0.6;
 						visibility: hidden;
 
-                        .link{
-                            background-color: black;
-                            border-radius: 5px;
-                            width: 30px;
-                            height: 30px;
-                            margin-top: 10px;
-                            cursor: pointer;
-                            position: relative;
-                            margin-left: 5px;
+						.link {
+							background-color: black;
+							border-radius: 5px;
+							width: 30px;
+							height: 30px;
+							margin-top: 10px;
+							cursor: pointer;
+							position: relative;
+							margin-left: 5px;
 
-                            &::after{
-                                content: '';
-                                overflow: hidden;
-                                position: absolute;
-                                top: 6px;
-                                left: auto;
-                                right: 6px;
-                                height: 15px;
-                                width: 15px;
-                            }
+							&::after {
+								content: '';
+								overflow: hidden;
+								position: absolute;
+								top: 6px;
+								left: auto;
+								right: 6px;
+								height: 15px;
+								width: 15px;
+							}
 
-                            &.upload{
+							&.upload {
 								cursor: pointer;
+
 								@include icon($edit-15-white, $left:auto, $top: 7px, $right: 6px);
-                            }
-                        }
+							}
+						}
 
-                        .file-input{
-                            position: absolute;
-                            top: 10px;
-                            left: 5px;
-                            height: 30px;
-                            width: 30px;
-                            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-                            opacity: 0;
-                            display: block;
-                        }
-                    }
+						.file-input {
+							position: absolute;
+							top: 10px;
+							left: 5px;
+							height: 30px;
+							width: 30px;
+							filter: progid:dximagetransform.microsoft.alpha(opacity=0);
+							opacity: 0;
+							display: block;
+						}
+					}
 
-                    &:hover{
-                        .actions{
-                            visibility: visible;
-                        }
-                    }
-                }
+					&:hover {
+						.actions {
+							visibility: visible;
+						}
+					}
+				}
 
-                .placeholder{
-                    width: 214px;
-                    height: 214px;
+				.placeholder {
+					width: 214px;
+					height: 214px;
 					background: url('../images/backdrops/add-photo.png') 0 0 no-repeat;
 					padding-top: 118px;
 					text-align: center;
@@ -1002,107 +1059,108 @@ div.contact-buttons {
 					font-size: 14px;
 					margin-left: 25px;
 
-					.link{
+					.link {
 						color: var(--primary-blue);
 					}
-                }
+				}
 
-                .file-input {
-                    display: block;
-                    position: absolute;
-                    top: 20px;
-                    left: 40px;
-                    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-                    opacity: 0;
-                    cursor: pointer;
-                    width: 220px;
-                    height: 220px;
-                    z-index: 4;
-                }
+				.file-input {
+					display: block;
+					position: absolute;
+					top: 20px;
+					left: 40px;
+					filter: progid:dximagetransform.microsoft.alpha(opacity=0);
+					opacity: 0;
+					cursor: pointer;
+					width: 220px;
+					height: 220px;
+					z-index: 4;
+				}
 
-                canvas {
+				canvas {
 					position: absolute;
 					top: 20px;
 					left: 40px;
 					width: 220px;
 					height: 220px;
 					z-index: 2;
-                }
-            }
+				}
+			}
 
-
-            .footer{
+			.footer {
 				height: 40px;
-                .button{
+
+				.button {
 					position: relative;
 					margin: 0 12px;
 					cursor: pointer;
 					padding: 10px 20px;
 
-					&.rotate{
-						&::after{
+					&.rotate {
+						&::after {
 							content: '';
 							position: absolute;
 							top: 0;
 							left: 0;
+
 							@include sprite($rotate);
 						}
 					}
 
-                    &.confirm{
+					&.confirm {
 						border-radius: 5px;
 						color: white;
 						z-index: 3;
 						overflow: hidden;
 						font: normal 300 0.85em/36px var(--body-font-family);
-						box-shadow: 0 1px 0 0 rgba(255,255,255,0.1);
+						box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
 						background: var(--secondary-green);
-                    }
-                }
-            }
-        }
-    }
+					}
+				}
+			}
+		}
+	}
 
-    .container-body{
-        position: relative;
-        max-height: none;
-        margin-left: 300px;
-        height: inherit;
+	.container-body {
+		position: relative;
+		max-height: none;
+		margin-left: 300px;
+		height: inherit;
 
-        .fold{
-             margin-top: 20px;
-            .field{
+		.fold {
+			margin-top: 20px;
 
-                .label{
-                    display: none;
-                }
+			.field {
+				.label {
+					display: none;
+				}
 
-                input, textarea{
-                    width: 87%;
-                    padding: 10px 13px;
-                    margin-bottom: 15px;
-                    border-radius: 4px;
-                    border: 1px solid var(--tertiary-grey-alt);
-                    font-size: 1em;
-                    color: var(--secondary-grey);
-                }
+				input, textarea {
+					width: 87%;
+					padding: 10px 13px;
+					margin-bottom: 15px;
+					border-radius: 4px;
+					border: 1px solid var(--tertiary-grey-alt);
+					font-size: 1em;
+					color: var(--secondary-grey);
+				}
 
-                textarea{
-                    height: 100px;
-                }
+				textarea {
+					height: 100px;
+				}
 
-				&.locked{
+				&.locked {
 					@include icon($lock, $left:auto, $top: 13px, $right: 67px);
-					&::after{
+
+					&::after {
 						position: absolute;
 						display: block;
 						content: '';
-
 					}
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 }
 
 #contacts {
@@ -1117,14 +1175,15 @@ div.contact-buttons {
 		.search {
 			position: absolute;
 			cursor: pointer;
-			top: 0; right: 0;
+			top: 0;
+			right: 0;
 			width: 153px;
 			height: 50px;
 			padding-top: 5px;
 			color: var(--tertiary-grey);
 			font: italic 400 14px/40px var(--body-font-family);
 
-			&::after{
+			&::after {
 				content: ' ';
 				position: absolute;
 				top: 17px;
@@ -1133,20 +1192,20 @@ div.contact-buttons {
 				@include sprite($search);
 			}
 
-			&::before{
-				border: 0px solid #ededed;
+			&::before {
+				border: 0 solid #ededed;
 				border-bottom-width: 0;
 				content: ' ';
 				position: absolute;
-				top: 10px; left: -7px;
+				top: 10px;
+				left: -7px;
 				right: 0;
 				bottom: 9px;
-
 			}
 
 			&:active,
 			&.active {
-				&::before{
+				&::before {
 					border: 1px solid #ededed;
 				}
 			}
@@ -1163,7 +1222,7 @@ div.contact-buttons {
 		}
 	}
 
-	.contact-card{
+	.contact-card {
 		position: relative;
 		overflow: hidden;
 		min-height: 150px;
@@ -1181,13 +1240,14 @@ div.contact-buttons {
 			box-shadow: 0 0 3.5px 0.5px rgba(30, 30, 30, 1);
 		}
 
-		.nib{
+		.nib {
 			top: 40%;
 			right: 20px;
 			float: none;
 			display: none;
 
 			@include icon($options_active,$top: auto, $left: auto);
+
 			position: absolute;
 			margin-top: 10px;
 			width: 20px;
@@ -1197,12 +1257,12 @@ div.contact-buttons {
 		.meta {
 			margin: 15px 0 0 160px;
 
-			[data-field],.separator{
+			[data-field],.separator {
 				color: var(--primary-grey);
 				font: normal 500 14px/25px var(--body-font-family);
 			}
 
-			.separator{ color: var(--tertiary-grey); }
+			.separator { color: var(--tertiary-grey); }
 
 			.name {
 				display: block;
@@ -1212,7 +1272,9 @@ div.contact-buttons {
 				font: italic 300 30px/40px var(--body-font-family);
 				color: var(--primary-blue);
 				overflow: hidden;
+
 				@include ellipse;
+
 				text-transform: none;
 				max-width: 400px;
 			}
@@ -1238,27 +1300,31 @@ div.contact-buttons {
 						opacity: 1;
 					}
 
-					&::after{
+					&::after {
 						content: ' ';
 						position: absolute;
-						top: 4px; left: 0;
+						top: 4px;
+						left: 0;
 					}
 				}
 
-				.chat{
-					padding-left:25px;
+				.chat {
+					padding-left: 25px;
+
 					&::after {
 						@include sprite($activity-chat);
 					}
 				}
+
 				.email::after {
 					@include sprite($account-email);
 				}
+
 				.message::after {
 					left: 2px;
+
 					@include sprite($activity-comment);
 				}
-
 			}
 		}
 
@@ -1269,11 +1335,11 @@ div.contact-buttons {
 			}
 		}
 
-		&:hover, &.active{
-			.nib{
+		&:hover, &.active {
+			.nib {
 				display: block;
 			}
-		};
+		}
 	}
 
 	.contact-grouping {
@@ -1282,41 +1348,45 @@ div.contact-buttons {
 		overflow: hidden;
 
 		&:hover .x-component-nti-tool-action:not(.disabled) {
-			.icon.options::after{ @include sprite($options-menu-card_hover); }
+			.icon.options::after { @include sprite($options-menu-card_hover); }
 		}
 
-
-		.x-component-nti-tool-action{
+		.x-component-nti-tool-action {
 			margin: 0 0 0 20px;
+
 			.icon {
-				&.options::after{
+				&.options::after {
 					@include sprite($options-menu);
 				}
 			}
+
 			&:hover,&.over {
-				&:not(.disabled){
+				&:not(.disabled) {
 					.icon {
-						&.options::after{ @include sprite($options-menu_hover); }
+						&.options::after { @include sprite($options-menu_hover); }
 					}
 				}
 			}
 		}
 
-		.grouping-header{
+		.grouping-header {
 			margin: 10px 0;
 			white-space: nowrap;
 
-			.tools{
+			.tools {
 				margin-top: 3px;
 				float: right;
-				.nti-tool-action{
+
+				.nti-tool-action {
 					display: inline-block;
 				}
 			}
 
-			.name{
+			.name {
 				overflow: hidden;
+
 				@include ellipse;
+
 				max-width: 600px;
 				display: inline-block;
 				vertical-align: bottom;
@@ -1326,23 +1396,24 @@ div.contact-buttons {
 				}
 			}
 
-			span{
+			span {
 				white-space: nowrap;
 				font: normal 300 26px/35px var(--body-font-family);
 				color: var(--primary-grey);
 			}
 
-			span.count{
+			span.count {
 				padding-left: 0.5em;
 				color: var(--tertiary-grey);
 			}
 		}
 
-		.show-more{
+		.show-more {
 			cursor: pointer;
 			position: relative;
 			background: var(--quad-grey);
-			width: 140px; height: 140px;
+			width: 140px;
+			height: 140px;
 			float: left;
 			text-align: center;
 			color: var(--primary-blue);
@@ -1351,6 +1422,7 @@ div.contact-buttons {
 			.dots {
 				line-height: 0;
 				margin-top: 50px;
+
 				div {
 					display: inline-block;
 					background: var(--primary-blue);
@@ -1363,57 +1435,57 @@ div.contact-buttons {
 			}
 		}
 
-
 		.contact-card-container {
 			float: left;
 			width: 140px;
 			height: 140px;
 			border: none;
-			margin:0;
+			margin: 0;
 			padding: 0;
 
 			.contact-card {
 				width: 140px;
 				height: 140px;
 				min-height: 0;
-				margin:0;
+				margin: 0;
 				padding: 0;
 
-				.avatar{
+				.avatar {
 					position: static;
-					top: initial; left: initial;
+					top: initial;
+					left: initial;
 					box-shadow: none;
 				}
 
 				&.Offline {
 					.meta {
-						&::before{ background: var(--tertiary-grey); }
+						&::before { background: var(--tertiary-grey); }
 					}
 				}
 
 				&.idle {
-					.meta::before{ background: #ebcd25; }
+					.meta::before { background: #ebcd25; }
 				}
 
-				.nib{
+				.nib {
 					bottom: 8px;
 					right: 5px;
 
 					@include icon($share-options-gear_hover);
-					position: absolute;
 
+					position: absolute;
 					width: 13px;
 					height: 13px;
 					top: auto;
 					opacity: 0.4;
 
-					&:hover{
+					&:hover {
 						opacity: 0.8;
-					};
+					}
 				}
 
 				.meta {
-					&::before{
+					&::before {
 						content: ' ';
 						background: #2db651;
 						border-radius: 90px;
@@ -1427,16 +1499,18 @@ div.contact-buttons {
 					}
 
 					position: absolute;
-					bottom: 0; left: 0; right: 0;
-					background: rgba(38,38,38,0.94);
+					bottom: 0;
+					left: 0;
+					right: 0;
+					background: rgba(38, 38, 38, 0.94);
 					margin: 0;
 					height: 28px;
 
-					[data-field]:not(.name),.separator,.composite-line{
+					[data-field]:not(.name),.separator,.composite-line {
 						display: none;
 					}
 
-					.name{
+					.name {
 						font: italic 300 16px/27px var(--body-font-family);
 						max-width: 95px;
 						color: #ababab;
@@ -1460,13 +1534,13 @@ div.contact-buttons {
 							padding-right: 0;
 							width: 0;
 							overflow: hidden;
-							&::after{
+
+							&::after {
 								top: 5px;
 								left: 2px;
 							}
 						}
 					}
-
 				}
 
 				&.not-contact {
@@ -1478,7 +1552,6 @@ div.contact-buttons {
 			}
 		}
 	}
-
 
 	.contact-sub-view {
 		.empty {
@@ -1496,16 +1569,16 @@ div.contact-buttons {
 			margin-top: 5px;
 		}
 
-		.nav-outline{
+		.nav-outline {
 			margin-top: 20px;
 
-			&.contact{
+			&.contact {
 				padding: 0;
 			}
+
 			&.list, &.group, &.contact {
 				.outline-list {
 					margin-bottom: 40px;
-
 				}
 
 				.buttons {
@@ -1514,7 +1587,8 @@ div.contact-buttons {
 					overflow: hidden;
 					top: auto;
 					height: 40px;
-					left: 0; right: 0;
+					left: 0;
+					right: 0;
 					bottom: 0;
 					background: #fafafa;
 					color: var(--tertiary-grey);
@@ -1522,60 +1596,67 @@ div.contact-buttons {
 					border: 0;
 					border-top: 1px solid #f2f2f2;
 
-					.contact-button{
+					.contact-button {
 						cursor: pointer;
 						line-height: 40px;
 						display: inline-block;
-						margin: 0; padding: 0 0 0 30px;
+						margin: 0;
+						padding: 0 0 0 30px;
 						width: 50%;
 
 						& ~ .contact-button {
 							box-shadow: -1px 0 0 0 #f2f2f2;
 						}
+
 						&.join {
 							@include icon($reply, $top: 13px, $left: 7px);
+
 							&::after {
 								opacity: 0.6;
 							}
 						}
+
 						&.create, &.suggest {
 							@include icon($editor-add, $top: 14px, $left: 10px);
 						}
 
-						&.search{
+						&.search {
 							width: 100%;
 							left: 0;
 							border-left-width: 0;
 							padding-left: 35px;
-							@include icon($rhp-search,$top:11px,$left:9px);
-							&::after{ opacity: 0.6; }
 
-                            &.half{
-                                width: 50%;
-                                float: left;
-                            }
+							@include icon($rhp-search,$top:11px,$left:9px);
+							&::after { opacity: 0.6; }
+
+							&.half {
+								width: 50%;
+								float: left;
+							}
 
 							input {
 								@include experimental(transition, opacity 0.5s);
+
 								visibility: hidden;
 								position: absolute;
 								border: 0;
 								background: #fafafa;
-
 								font: normal 400 14px/25px var(--body-font-family);
 								color: var(--primary-grey);
 								height: 40px;
-								top: 0; left: 30px; right: 26px;
+								top: 0;
+								left: 30px;
+								right: 26px;
 								opacity: 0;
 							}
 
 							.clear {
 								@include icon($clear_line);
+
 								position: absolute;
 								top: 14px;
 								right: 10px;
 								left: auto;
-
 								margin: 0;
 								width: 16px;
 								height: 16px;
@@ -1583,10 +1664,11 @@ div.contact-buttons {
 								border-width: 0;
 							}
 
-							&.active{
-								background-color: #ffffff;
-								input{
-									background: #ffffff;
+							&.active {
+								background-color: #fff;
+
+								input {
+									background: #fff;
 									visibility: visible;
 									opacity: 1;
 								}
@@ -1597,13 +1679,16 @@ div.contact-buttons {
 
 				&.searching {
 					.contact-search {
-						display:block;
+						display: block;
 					}
 				}
 
-				.contact-search{
+				.contact-search {
 					position: absolute;
-					top: 50px; left: 0; right: 0; bottom: 40px;
+					top: 50px;
+					left: 0;
+					right: 0;
+					bottom: 40px;
 					z-index: 10;
 					display: none;
 
@@ -1620,8 +1705,9 @@ div.contact-buttons {
 					}
 
 					@include contact-user-row;
-					.contact-row{
-						&.contact{
+
+					.contact-row {
+						&.contact {
 							padding: 10px 0 0 0;
 						}
 					}

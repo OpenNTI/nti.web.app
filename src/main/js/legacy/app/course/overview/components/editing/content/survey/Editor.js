@@ -4,7 +4,7 @@ const {encodeForURI} = require('@nti/lib-ntiids');
 
 const SurveyRef = require('legacy/model/SurveyRef');
 const NavigationActions = require('legacy/app/navigation/Actions');
-const Type = 'application/vnd.nextthought.nasurvey';
+// const Type = 'application/vnd.nextthought.nasurvey';
 
 require('../questionset/types/Assignment');
 require('./SurveySelection');

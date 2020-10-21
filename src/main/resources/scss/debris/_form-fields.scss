@@ -1,18 +1,17 @@
 
-
 .nt-combobox {
 	.x-form-trigger-wrap {
 		border-collapse: separate;
 		padding: 0 15px 0 0;
 		border-radius: 5px;
 		border: 1px solid #a0a0a0;
-		box-shadow: inset 1px 1px 0 0 #cccccc;
-		background: #ffffff;
+		box-shadow: inset 1px 1px 0 0 #ccc;
+		background: #fff;
 		position: relative;
-
 	}
 
-	.x-trigger-cell {width: 0 !important; display: inline;}
+	.x-trigger-cell { width: 0 !important; display: inline; }
+
 	.x-form-trigger {
 		position: absolute;
 		right: 6px;
@@ -23,7 +22,7 @@
 		background: url(../images/elements/search-nib.png) 0 0 no-repeat;
 	}
 
-	.x-form-field.x-form-text{
+	.x-form-field.x-form-text {
 		padding: 13px 0 13px 10px;
 		border: none;
 		border-radius: 5px;
@@ -32,9 +31,7 @@
 		font-size: 13px;
 		font-weight: 600;
 	}
-
 }
-
 
 .input-wrap,
 .textbox-base {
@@ -42,11 +39,13 @@
 
 	input {
 		@include text-box-style();
+
 		padding-right: 20px;
 	}
 
 	.placeholder {
 		@include placeholder-style();
+
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -59,6 +58,7 @@
 		display: none;
 		right: 4px;
 		top: 7px;
+
 		@include sprite($clear_line);
 	}
 }
@@ -68,6 +68,7 @@
 		display: block;
 		top: 5px;
 		right: 54px;
+
 		.x-opera &,
 		.x-safari5 & {
 			right: 60px;
@@ -76,13 +77,15 @@
 
 	input {
 		width: calc(100% - 50px);
+
 		.x-opera &,
 		.x-safari5 & {
 			width: 77%;
 		}
+
 		line-height: 20px;
 		padding: 2px 25px 2px 5px;
-		height: 26px !important;;
+		height: 26px !important;
 		border: 1px solid var(--tertiary-grey);
 		border-right-width: 0;
 		border-radius: 1px 0 0 1px;
@@ -103,38 +106,34 @@
 		color: #fff;
 
 		&.save-button-disabled {
-			background-color: #E4E4E4;
+			background-color: #e4e4e4;
 			color: var(--tertiary-grey);
 			cursor: default;
-			border: 1px solid #E4E4E4;
+			border: 1px solid #e4e4e4;
 		}
 	}
 }
-
 
 .error-tip {
 	position: relative;
 	overflow: visible !important;
 
-	&[data-error-tip]{
+	&[data-error-tip] {
 		&::before {
 			display: block;
-
 			position: absolute;
-			top: -16px; left: 5px;
+			top: -16px;
+			left: 5px;
 			z-index: 999;
-
 			content: attr(data-error-tip);
 			color: var(--quad-grey);
 			background: var(--primary-red);
 			border: 1px solid var(--secondary-red);
-			box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.1);
-
+			box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.1);
 			padding: 1px 5px 1px 3px;
 			font-size: 11px;
 			font-style: italic;
 			font-weight: 500;
-
 			text-align: left;
 			text-shadow: 0 1px 0 var(--primary-red);
 			text-transform: uppercase;
@@ -146,23 +145,21 @@
 			//content: url(../images/tooltip_pointer.png);
 			display: block;
 			position: absolute;
-
 			top: 7px;
 			left: 10px;
 			z-index: 9999;
 		}
-
 
 		&.error-on-bottom {
 			&::before {
 				top: auto;
 				bottom: -16px;
 			}
+
 			&::after {
 				//TODO: put a triangle tip here thats flipped
 			}
 		}
-
 	}
 }
 
@@ -228,7 +225,6 @@
 	}
 }
 
-
 span.nti-checkbox {
 	display: inline-block;
 	position: relative;
@@ -242,6 +238,7 @@ span.nti-checkbox {
 	}
 
 	&::after { margin-top: -7px; }
+
 	@include icon($checkbox-14, $top:50%, $left:0);
 
 	&:not(.checked):hover::after {
@@ -252,7 +249,6 @@ span.nti-checkbox {
 		@include sprite($checkbox-14_active);
 	}
 }
-
 
 span.nti-radiobutton {
 	display: inline-block;
@@ -267,6 +263,7 @@ span.nti-radiobutton {
 	}
 
 	&::after { margin-top: -7px; }
+
 	@include icon($radio-button-16, $top:50%, $left:0);
 
 	&:not(.checked):hover::after {
@@ -278,10 +275,8 @@ span.nti-radiobutton {
 	}
 }
 
-
 .searchcombobox {
 	position: relative;
-
 
 	input {
 		font-size: 14px;
@@ -322,7 +317,6 @@ span.nti-radiobutton {
 	}
 
 	.options {
-
 		position: fixed;
 		top: 100%;
 		background-color: white;
@@ -347,7 +341,7 @@ span.nti-radiobutton {
 				}
 
 				&.active, &:hover {
-					background-color: #efefef
+					background-color: #efefef;
 				}
 			}
 		}
@@ -372,7 +366,9 @@ span.nti-radiobutton {
 
 		&::after {
 			content: '';
+
 			@include arrow($pointFrom: top, $color: var(--tertiary-grey));
+
 			position: absolute;
 			top: 50%;
 			margin-top: -2px;
@@ -407,8 +403,10 @@ form.common-form {
 
 		&::before {
 			position: absolute;
-			top: 0; bottom: 0;
-			left: 0; right: 0;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
 		}
 	}
 }
@@ -432,8 +430,9 @@ form.common-form {
 		height: 100%;
 		box-shadow: none;
 		border: 1px solid var(--tertiary-grey);
-		background: #ffffff;
+		background: #fff;
 	}
+
 	input.date-field-input {
 		border-left-width: 0;
 	}
@@ -469,6 +468,7 @@ form.common-form {
 
 		.input-container {
 			display: inline-block;
+
 			.no-file {
 				display: none;
 			}
@@ -489,6 +489,7 @@ form.common-form {
 			font-weight: 700;
 			max-width: 300px;
 			overflow: hidden;
+
 			@include ellipse();
 		}
 
@@ -612,8 +613,10 @@ form.common-form {
 		&::before {
 			content: '';
 			position: absolute;
-			top: 0; bottom: 0;
-			left: 0; right: 0;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
 			z-index: 2;
 			background: rgba(0, 0, 0, 0.3);
 		}
@@ -621,14 +624,17 @@ form.common-form {
 
 	.preview {
 		position: absolute;
-		top: 0; bottom: 0;
-		left: 0; right: 0;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		z-index: 1;
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
 
 		@include file-custom-icon();
+
 		.icon {
 			position: relative;
 			height: 100%;
@@ -638,8 +644,10 @@ form.common-form {
 
 	input[type=file] {
 		position: absolute;
-		top: 0; bottom: 0;
-		left: 0; right: 0;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		z-index: 3;
 		opacity: 0;
 		width: 100%;
@@ -650,7 +658,8 @@ form.common-form {
 		position: absolute;
 		cursor: pointer;
 		bottom: 0;
-		left: 0; right: 0;
+		left: 0;
+		right: 0;
 		z-index: 4;
 		line-height: 2.1em;
 		padding-top: 0.1em;
@@ -665,13 +674,13 @@ form.common-form {
 			content: '';
 			position: absolute;
 			top: 1px;
-			left: 1px; right: 1px;
+			left: 1px;
+			right: 1px;
 			height: 1px;
 			background-color: rgba(255, 255, 255, 0.5);
 		}
 	}
 }
-
 
 .url-field {
 	@include flexContainer();
@@ -703,6 +712,7 @@ form.common-form {
 
 	input[type=text] {
 		@include flexItem(1 1 auto);
+
 		line-height: 35px;
 		font-size: 1em;
 		box-shadow: inset 0 0 0 1px #d8d8d8;
@@ -712,6 +722,7 @@ form.common-form {
 
 	a {
 		@include flexItem(0 0 auto);
+
 		pointer-events: none;
 		width: 93px;
 		color: var(--primary-grey);
@@ -722,9 +733,10 @@ form.common-form {
 		text-align: center;
 		text-decoration: none;
 		box-shadow: inset -1px 0 0 #d8d8d8, inset 0 1px 0 #d8d8d8, inset 0 -1px 0 #d8d8d8;
+
 		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f2f2f2+100 */
-		background: #ffffff;
-		background-image: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%);
+		background: #fff;
+		background-image: linear-gradient(to bottom, #fff 0%, #f2f2f2 100%);
 
 		@include icon($preview-gray, $side: after, $top: 50%, $left: auto, $right: 1em);
 
@@ -735,17 +747,17 @@ form.common-form {
 
 	&.loading a {
 		position: relative;
-		color: rgba(0,0,0,0);
+		color: rgba(0, 0, 0, 0);
 		text-indent: -500px;
 		pointer-events: none;
 
 		&::after {
 			margin: 0;
+
 			@include loadingSpinner($top: 6px, $left: 34px);
 		}
 	}
 }
-
 
 .save-progress {
 	.progress-bar {
@@ -771,9 +783,7 @@ form.common-form {
 	}
 }
 
-
 .date-time-field {
-
 	&.disabled {
 		opacity: 0.5;
 		pointer-events: none;
@@ -790,7 +800,6 @@ form.common-form {
 		box-shadow: 0 0 0 1px var(--tertiary-grey);
 		height: 37px;
 
-
 		&:focus {
 			box-shadow: inset 0 0 1px 0 var(--primary-blue), 0 0 0 1px var(--primary-blue);
 			position: relative;
@@ -798,8 +807,8 @@ form.common-form {
 		}
 
 		&[type=number] {
-			-moz-appearance:textfield;
-			appearance:textfield;
+			-moz-appearance: textfield;
+			appearance: textfield;
 
 			&::-webkit-outer-spin-button,
 			&::-webkit-inner-spin-button {
@@ -811,6 +820,7 @@ form.common-form {
 
 	.date .container, .time .container {
 		@include flexContainer();
+
 		-webkit-justify-content: space-between;
 		-ms-flex-pack: justify;
 		justify-content: space-between;
@@ -823,7 +833,6 @@ form.common-form {
 	.time .container {
 		max-width: 165px;
 	}
-
 
 	.select-current-date {
 		display: inline-block;
@@ -845,7 +854,7 @@ form.common-form {
 		border-radius: 0;
 		line-height: 25px;
 		padding: 6px;
-		background: #ffffff;
+		background: #fff;
 		height: 37px;
 
 		&.error {
@@ -889,18 +898,21 @@ form.common-form {
 
 	.hour-input {
 		@include flexItem(0 0 40px);
+
 		width: 40px;
 		max-width: 40px;
 	}
 
 	.seperator {
 		@include flexItem(0 0 6px);
+
 		line-height: 40px;
 		text-align: center;
 	}
 
 	.minute-input {
 		@include flexItem(0 0 40px);
+
 		width: 40px;
 		max-width: 40px;
 	}

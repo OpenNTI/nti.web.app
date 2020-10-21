@@ -10,23 +10,23 @@
 		right: 10px;
 		position: absolute;
 
-
 		@include sprite($note-window-x);
+
 		cursor: pointer;
 
 		&:hover {
 			@include sprite($note-window-x_hover);
 		}
-
 	}
 
 	.content {
 		padding: 25px 30px;
 		height: 100%;
 
-		&.loading{
+		&.loading {
 			&::after {
 				@include loadingSpinner($top:50%,$left:50%);
+
 				margin-top: -12px;
 				margin-left: -12px;
 			}
@@ -35,7 +35,6 @@
 		.page-contents {
 			display: -ms-flexbox;
 			-ms-box-orient: vertical;
-
 			display: flex;
 			flex-wrap: nowrap;
 			flex-direction: column;

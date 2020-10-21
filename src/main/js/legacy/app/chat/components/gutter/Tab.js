@@ -1,22 +1,21 @@
 const Ext = require('@nti/extjs');
-const classnames = require('classnames/bind');
+const cx = require('classnames');
 
 const ChatActions = require('legacy/app/chat/Actions');
 const ChatStateStore = require('legacy/app/chat/StateStore');
 const NavigationStateStore = require('legacy/app/navigation/StateStore');
 
-const Styles = require('./Tab.css');
-const cx = classnames.bind(Styles);
+const styles = require('./Tab.css');
 
-const lightCls = cx('light');
-const darkCls = cx('dark');
+const lightCls = styles.light;
+const darkCls = styles.dark;
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Tab', {
 	extend: 'Ext.Component',
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: cx('chat-notifications-icon', 'icon'), role: 'button', tabindex: '0', 'aria-label': 'Chat Notifications'}
+		{cls: cx('chat-notifications-icon', styles.icon), role: 'button', tabindex: '0', 'aria-label': 'Chat Notifications'}
 	]),
 
 	setTheme (theme) {

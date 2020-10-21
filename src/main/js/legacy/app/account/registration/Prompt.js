@@ -1,5 +1,3 @@
-const Url = require('url');
-
 const Ext = require('@nti/extjs');
 
 const PromptStateStore = require('legacy/app/prompt/StateStore');
@@ -30,7 +28,7 @@ let registerPrompt = module.exports = exports = Ext.define('NextThought.app.acco
 		this.callParent(arguments);
 
 		let src = this.Prompt.data.link;
-		this.postMessageSourceId = Url.resolve(window.location.href, src);
+		this.postMessageSourceId = new URL(src, window.location.href).toString();
 
 
 		this.Prompt.Header.disableClose();

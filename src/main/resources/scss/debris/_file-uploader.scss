@@ -1,11 +1,10 @@
 
-
 .file-upload-manager {
-	.x-panel-body-default{
+	.x-panel-body-default {
 		background-color: transparent;
 	}
 
-	.upload-icon{
+	.upload-icon {
 		@include sprite($upload);
 	}
 }

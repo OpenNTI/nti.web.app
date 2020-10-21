@@ -6,6 +6,7 @@
 	position: fixed !important;
 	max-height: calc(100vh - 40px);
 }
+
 .component-overlay .x-panel-image-roll,
 .component-overlay .x-panel-video-roll {
 	padding: 0;
@@ -28,13 +29,13 @@
 				line-height: 0;
 				overflow: hidden;
 				cursor: pointer;
-				padding: 0px;
+				padding: 0;
 				margin: 15px 10px;
 				border: 1px solid var(--tertiary-grey-alt);
-				box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
+				box-shadow: 2px 3px 1px 0 rgba(0, 0, 0, 0.13);
 
 				&.x-item-selected {
-					img.item{
+					img.item {
 						box-shadow: inset 0 0 0 5px var(--primary-blue);
 					}
 				}
@@ -56,7 +57,7 @@
 		.fade-outs {
 			overflow: visible;
 
-			* {position: absolute; bottom: 0; width: 20px; height: 109px; z-index: 2;}
+			* { position: absolute; bottom: 0; width: 20px; height: 109px; z-index: 2; }
 
 			.left {
 				background-image: linear-gradient(to right, #fafafa 0%, rgba(250, 250, 250, 0) 80%, rgba(250, 250, 250, 0) 100%);
@@ -74,12 +75,13 @@
 .component-overlay .x-panel-image-roll,
 .component-overlay .x-panel-video-roll,
 .x-panel-video.videos {
-
 	.close {
 		top: -26px;//22 + 4
 		right: -26px;//22 + 4
 		position: absolute;
+
 		@include sprite($close_popup);
+
 		cursor: pointer;
 		border-radius: 90px;
 	}
@@ -90,7 +92,7 @@
 		padding: 10px 15px;
 		position: relative;
 		white-space: nowrap;
-		overflow:{
+		overflow: {
 			x: auto; //scroll;
 			y: hidden;
 		}
@@ -104,9 +106,11 @@
 
 			&.x-item-selected::after {
 				position: absolute;
-				top: 25px; left: 25px;
+				top: 25px;
+				left: 25px;
 				content: ' ';
 				z-index: 1;
+
 				@include sprite($now_playing);
 			}
 
@@ -135,7 +139,8 @@
 		.left, .right {
 			cursor: pointer;
 			position: absolute;
-			top: 0; bottom: 114px;
+			top: 0;
+			bottom: 114px;
 			width: 30px;
 			background-color: rgba(0, 0, 0, 0.5);
 			opacity: 0.7;
@@ -161,6 +166,7 @@
 				border-color: transparent white transparent transparent;
 			}
 		}
+
 		.right {
 			right: 0;
 
@@ -193,13 +199,13 @@
 	.carousel {
 		position: absolute;
 		bottom: 0;
-		left: 0; right: 0;
+		left: 0;
+		right: 0;
 	}
 }
 
-
-.component-overlay .x-panel-image-roll{
+.component-overlay .x-panel-image-roll {
 	.carousel {
-		.item-wrap.x-item-selected::after{display: none;}
+		.item-wrap.x-item-selected::after { display: none; }
 	}
 }

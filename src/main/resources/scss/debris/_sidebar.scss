@@ -5,11 +5,12 @@
 	text-align: center !important;
 }
 
-.rhp-no-contacts{
+.rhp-no-contacts {
 	padding: 15px 0 0 100px;
 	height: 100px;
 	font: italic 300 14px/18px var(--body-font-family) !important;
 	color: var(--tertiary-grey) !important;
+
 	@include icon($add_contacts_card);
 
 	* { position: relative; z-index: 1; }
@@ -31,13 +32,14 @@
 	}
 }
 
-
-
-.x-panel-sidebar{
+.x-panel-sidebar {
 	&::before {
 		content: '';
 		position: absolute;
-		top: 57px; bottom: 0; left: 0; right: 0;
+		top: 57px;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		box-shadow: 0 2px 2px rgba(0, 0, 0, 0.45);
 	}
 
@@ -50,15 +52,15 @@
 
 	&.undocked {
 		border-radius: 5px 5px 0 0;
-		.x-panel-body-sidebar{
+
+		.x-panel-body-sidebar {
 			border-radius: 5px 5px 0 0;
 		}
 	}
 
-
-	.x-panel-body-sidebar{
+	.x-panel-body-sidebar {
 		background: #fafafa;
-		background: rgba(250,250,250,0.97);
+		background: rgba(250, 250, 250, 0.97);
 	}
 
 	.x-mask-msg {
@@ -68,32 +70,29 @@
 	}
 }
 
-
 .sidebar-tab-bar-sidebar {
 	.x-panel-sidebar.down & {
 		background: #f3f3f3;
 		box-shadow: inset 0 -1px 0 0 #f7f7f7;
 	}
+
 	background: #ebebec;
 	padding: 0 0 0 10px;
-	border: 1px solid #dddddd;
+	border: 1px solid #ddd;
 	border-left-width: 0;
 	border-right-width: 0;
 	border-bottom-width: 1px !important;
 
-
 	&::after {
-	    content: '';
-	    display: block;
-	    position: absolute;
-
-	    bottom: -1px;
-	    left: 0;
-	    right: 0;
-	    height: 10px;
-	    overflow: hidden;
-
-	    box-shadow: 0 3px 3px -3px rgba(0,0,0,0.2);
+		content: '';
+		display: block;
+		position: absolute;
+		bottom: -1px;
+		left: 0;
+		right: 0;
+		height: 10px;
+		overflow: hidden;
+		box-shadow: 0 3px 3px -3px rgba(0, 0, 0, 0.2);
 	}
 
 	.x-tab {
@@ -120,13 +119,11 @@
 			width: 15px;
 		}
 
-
 		.badge.red {
 			position: absolute;
 			border-radius: 10em;
 			background: var(--primary-red);
 			color: #fff;
-
 			top: 6px;
 			right: auto;
 			left: 55%;
@@ -136,9 +133,9 @@
 			padding: 0.3em 0.5em;
 			border: 2px solid #ebebec;
 			width: auto;
-			text-indent: 0em;
+			text-indent: 0;
 
-			&:empty {display: none;}
+			&:empty { display: none; }
 		}
 
 		.x-tab-button {
@@ -156,18 +153,37 @@
 	span.x-tab-icon-el {
 		top: 18px;
 
-		&.contacts { left: 7px; @include sprite($rhp-contacts); }
-		&.activity { left: 9px; @include sprite($rhp-activity); }
-		&.inbox { left: 14px; top: 16px; @include sprite($rhp-notification); }
+		&.contacts {
+			left: 7px;
 
-		&.history { left: 10px; @include sprite($rhp-history); }
+			@include sprite($rhp-contacts);
+		}
+
+		&.activity {
+			left: 9px;
+
+			@include sprite($rhp-activity);
+		}
+
+		&.inbox {
+			left: 14px;
+			top: 16px;
+
+			@include sprite($rhp-notification);
+		}
+
+		&.history {
+			left: 10px;
+
+			@include sprite($rhp-history);
+		}
 	}
 
-
-	.x-tab-top-active{
+	.x-tab-top-active {
 		background: none;
-		button span.x-tab-inner{ color: #b1b1b1; }
-		span.x-tab-icon-el{
+		button span.x-tab-inner { color: #b1b1b1; }
+
+		span.x-tab-icon-el {
 			&.contacts { @include sprite($rhp-contacts_active); }
 			&.activity { @include sprite($rhp-activity_active); }
 			&.inbox { @include sprite($rhp-notification_active); }

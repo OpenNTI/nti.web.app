@@ -1,33 +1,36 @@
-.resource-not-found{
+.resource-not-found {
 	position: relative;
 	background-color: var(--quad-grey);
 	border: 1px solid var(--border-grey);
 	border-radius: 3px;
-	.body{
+
+	.body {
 		padding-top: 6px;
 		padding-left: 90px;
 
-		.actions{
+		.actions {
 			padding-top: 8px;
 			padding-bottom: 8px;
 			position: relative;
 
-			a{
+			a {
 				position: relative;
 				padding-right: 18px;
-			    &, a:link, a:visited, a:active {
-			   	   color: var(--primary-blue);
-			   	   font-style: normal !important;
-			   	   font: 14px var(--body-font-family) !important;
-			   	   font-weight: 300 !important;
-			   	   text-decoration: none;
-			 	   &:hover {
-			   	      text-decoration: underline;
-			   		  cursor: pointer;
-			   	   }
+
+				&, a:link, a:visited, a:active {
+					color: var(--primary-blue);
+					font-style: normal !important;
+					font: 14px var(--body-font-family) !important;
+					font-weight: 300 !important;
+					text-decoration: none;
+
+					&:hover {
+						text-decoration: underline;
+						cursor: pointer;
+					}
 				}
 
-				&::after{
+				&::after {
 					color: var(--tertiary-grey);
 					font: 24px var(--body-font-family) !important;
 					font-weight: 300 !important;
@@ -38,29 +41,25 @@
 					right: 5px;
 				}
 
-				&:last-child::after{
+				&:last-child::after {
 					content: " ";
 				}
 			}
-
-
-
 		}
 
 		@include icon($modal-yellow-sign,$top: 12px,$left: 20px);
 
-		.heading{
+		.heading {
 			color: var(--tertiary-grey);
 			font: 24px var(--body-font-family) !important;
 			font-weight: 300 !important;
 			font-style: italic !important;
 		}
 
-		.subtext{
+		.subtext {
 			color: var(--primary-grey);
 			font: 14px var(--body-font-family) !important;
 			font-style: normal !important;
 		}
 	}
-
 }

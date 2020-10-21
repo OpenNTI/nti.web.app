@@ -1,5 +1,4 @@
 const queryString = require('querystring');
-const url = require('url');
 
 const Ext = require('@nti/extjs');
 const { Scorm } = require('@nti/web-course');
@@ -75,9 +74,9 @@ module.exports = exports = Ext.define('NextThought.app.course.scorm-content.Inde
 		}
 
 		const {history, location} = global;
-		const updatedRoute = url.parse(location.href);
+		const updatedRoute = new URL(location.href);
 		updatedRoute.search = Object.keys(queryParams).length === 0 ? '' : queryString.stringify(queryParams);
-		history.replaceState(history.state, '', updatedRoute.format());
+		history.replaceState(history.state, '', updatedRoute.toString());
 
 
 		if (this.scormContent) {

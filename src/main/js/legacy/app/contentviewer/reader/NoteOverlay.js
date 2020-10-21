@@ -6,7 +6,6 @@ const LineUtils = require('legacy/util/Line');
 const {getString} = require('legacy/util/Localization');
 const SharingUtils = require('legacy/util/Sharing');
 
-const WBUtils = require('../../whiteboard/Utils');
 const UserdataActions = require('../../userdata/Actions');
 const DiscussionEditor = require('../components/editor/DiscussionEditor');
 

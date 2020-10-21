@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const classnames = require('classnames/bind');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const {wait} = require('@nti/lib-commons');
 const {Store, Input} = require('@nti/web-search');
@@ -8,16 +7,15 @@ const {default:Search} = require('nti-web-components-search');
 
 const SearchActions = require('./Actions');
 const SearchStateStore = require('./StateStore');
-const Styles = require('./SearchBar.css');
+const styles = require('./SearchBar.css');
 
 require('legacy/overrides/ReactHarness');
 require('./components/AdvancedOptions');
 
 const SearchStore = Store.getGlobal();
-const cx = classnames.bind(Styles);
 
-const darkCls = cx('dark');
-const lightCls = cx('light');
+const darkCls = styles.dark;
+const lightCls = styles.light;
 
 module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 	extend: 'Ext.Component',

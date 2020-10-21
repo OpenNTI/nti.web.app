@@ -1,13 +1,12 @@
 
-
-.x-component-tokens{
+.x-component-tokens {
 	position: relative;
 	overflow: hidden;
-
 	font: normal 400 12px/30px var(--body-font-family);
 
 	.x-gecko & {
 		padding-top: 1px;
+
 		& > * {
 			float: left;
 		}
@@ -34,40 +33,49 @@
 		color: var(--secondary-grey);
 		vertical-align: middle;
 
-		&.person, &.public, &.group, &.list{
-			&::after{
+		&.person, &.public, &.group, &.list {
+			&::after {
 				content: '';
 				position: absolute;
-				top: 3px; left:6px;
+				top: 3px;
+				left: 6px;
 				vertical-align: middle;
 			}
 		}
 
-		&.person { &::after{display: none;}}
+		&.person { &::after { display: none; } }
+
 		&.public {
 			padding-left: 22px !important;
-			&::after{
+
+			&::after {
 				@include sprite($light-globe-13x13);
 			}
 		}
+
 		&.group {
 			padding-left: 22px !important;
 
-			&::after{
-				top: 5px; left: 5px;
+			&::after {
+				top: 5px;
+				left: 5px;
+
 				@include sprite($light-groups-12x9);
 			}
 		}
+
 		&.list {
 			padding-left: 22px !important;
 
-			&::after{
-				top: 5px; left: 5px;
+			&::after {
+				top: 5px;
+				left: 5px;
+
 				@include sprite($lists-white_hover);
 			}
 		}
 
-		.value,.x{
+		.value,.x {
 			position: relative;
 			display: inline-block;
 			vertical-align: middle;
@@ -83,7 +91,6 @@
 			color: #fff;
 			border-color: var(--border-blue);
 			background: var(--primary-blue);
-
 			padding: 0 7px 0 10px;
 			margin-right: -9px;
 			position: relative;
@@ -93,39 +100,44 @@
 				display: inline-block;
 			}
 		}
-		.x{
+
+		.x {
 			position: relative;
 			width: 15px;
 			height: 18px;
 			display: none;
 
-			&::after{
+			&::after {
 				content: '';
 				display: block;
 				position: absolute;
 
 				@include sprite($light-x_hover);
-				top: 6px; left: 6px;
+
+				top: 6px;
+				left: 6px;
 				cursor: pointer;
 			}
 		}
 	}
 
-	.token-input-wrap{
+	.token-input-wrap {
 		vertical-align: middle;
 		position: relative;
 		overflow: hidden;
 		display: inline-block;
 
-		input{
+		input {
 			padding: 0;
 			padding-left: -3px;
 			text-indent: 3px;
 			font: normal 700 10px/20px var(--body-font-family) !important;
 			position: absolute;
 			background: #fff;
-			top: 0; left: 0;
-			bottom: 0; right: 0;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
 			margin: 0;
 			border: 0;
 			width: 100%;
@@ -138,24 +150,26 @@
 				width: 100%;
 			}
 
-			.x-gecko &{
+			.x-gecko & {
 				width: 100%;
 				height: 30px;
 			}
 
 			text-transform: uppercase;
 
-			&.empty{
+			&.empty {
 				text-transform: none;
 				//font-style: italic;
 			}
 		}
+
 		.placeholder {
 			position: absolute;
-			top: 0; left: 0;
+			top: 0;
+			left: 0;
 		}
 
-		span.token-input-sizer{
+		span.token-input-sizer {
 			display: inline-block;
 			font: normal 700 10px/30px var(--body-font-family);
 			visibility: hidden;
@@ -167,9 +181,9 @@
 		}
 	}
 
-	&.user-token-field{
-		&.readOnly{
-			.control.publish{
+	&.user-token-field {
+		&.readOnly {
+			.control.publish {
 				cursor: default;
 			}
 
@@ -186,36 +200,37 @@
 			}
 		}
 
-		.control.disabled{
+		.control.disabled {
 			cursor: default;
-			opacity: .3;
+			opacity: 0.3;
 		}
 
-		.tokens{
+		.tokens {
 			position: relative;
 			padding-left: 3px;
 
-			.token + .inputArea{
+			.token + .inputArea {
 				.plus {
 					margin-left: 5px;
 				}
 			}
 
-			.inputArea{
+			.inputArea {
 				white-space: nowrap;
 				display: inline-block;
 				position: relative;
 
-				.plus{
+				.plus {
 					position: relative;
 					display: inline-block;
 					margin: 0 2px 0 0;
 					width: 8px;
 
-					&::after{
+					&::after {
 						content: '';
 						position: absolute;
-						left: 0; top: -7px;
+						left: 0;
+						top: -7px;
 						outline: 0;
 
 						@include sprite($ico_plus);
@@ -234,18 +249,19 @@
 					&.hidden {
 						display: none;
 					}
-
 				}
 
-				.token-input-wrap{
+				.token-input-wrap {
 					position: relative;
+
 					input {
 						font: italic normal 14px/20px var(--body-font-family) !important;
 						text-transform: none;
 						background: transparent;
 						//padding: 5px 0;
 					}
-					.token-input-sizer{
+
+					.token-input-sizer {
 						position: relative;
 						font: italic normal 14px/30px var(--body-font-family) !important;
 						margin-left: 10px;
@@ -255,11 +271,11 @@
 				}
 			}
 
-			.x-gecko &{
+			.x-gecko & {
 				float: none !important;
 			}
 
-			.token{
+			.token {
 				font: normal 700 10px/18px var(--body-font-family);
 				text-transform: none;
 				color: #fff;
@@ -268,13 +284,13 @@
 				position: relative;
 				z-index: 2;
 
-				&:hover{
+				&:hover {
 					z-index: 10;
 				}
 			}
 		}
 
-		.control.publish{
+		.control.publish {
 			position: relative;
 			float: right;
 			width: 85px;
@@ -282,37 +298,39 @@
 			cursor: pointer;
 			z-index: 10;
 
-			&::after{
+			&::after {
 				content: '';
 				position: absolute;
-				left: 0; top: 5px;
+				left: 0;
+				top: 5px;
 				outline: 0;
+
 				@include sprite($btn_toggle_private);
 			}
 
-			&.on::after{
+			&.on::after {
 				@include sprite($btn_toggle_public);
 			}
 		}
 
-		&.readOnly{
-			.tokens{
-				.token{
-					&:hover{
+		&.readOnly {
+			.tokens {
+				.token {
+					&:hover {
 						padding: 0 10px 0 10px;
 						margin: 3px 3px 3px 0;
-						.x{ display: none;}
+						.x { display: none; }
 					}
 				}
 
-				.plus{
+				.plus {
 					display: none;
 				}
-				.token-input-wrap{
+
+				.token-input-wrap {
 					display: none;
 				}
 			}
-
 		}
 	}
 }

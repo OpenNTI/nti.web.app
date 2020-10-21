@@ -1,5 +1,4 @@
 
-
 .random-gravatar-picker {
 	white-space: normal !important;
 	margin-bottom: 14px;
@@ -15,7 +14,7 @@
 		border: 1px solid var(--tertiary-grey);
 		vertical-align: top;
 
-		img{
+		img {
 			height: 100%;
 			width: 100%;
 		}
@@ -29,7 +28,7 @@
 			width: 52px;
 
 			&::before,
-			&::after{
+			&::after {
 				content: ' ';
 				position: absolute;
 				z-index: 1999;
@@ -43,13 +42,14 @@
 
 	&.mini {
 		padding: 10px 0 0 10px !important;
+
 		.item-wrap {
 			margin: 4px 10px 4px 0;
 			width: 32px;
 			height: 32px;
 			box-shadow: none;
 
-			&.x-item-selected{
+			&.x-item-selected {
 				margin: 0 6px 0 -4px;
 				height: 40px;
 				width: 40px;

@@ -1,14 +1,11 @@
 $accessibility_mode: false;
 
-
 @import
 	"base/fonts",
 	"utils/variables",
 	"utils/animate",
 	"layout/main-layout";
-
 @import "nti-override.css";
-
 @import
 	"debris/reader",
 
@@ -53,7 +50,6 @@ $accessibility_mode: false;
 	"debris/video",
 	"debris/context",
 	"debris/nti-select",
-
 
 	"debris/contact-search",
 	"debris/contacts",

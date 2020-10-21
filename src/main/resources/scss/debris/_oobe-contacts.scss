@@ -1,10 +1,10 @@
 .contacts-oobe-window {
 	@extend .nti-window;
+
 	@include reset-window-border-radius(3px);
+
 	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3), 0 0 0 110px transparent;
-
 	background: var(--quad-grey);
-
 
 	.error {
 		position: absolute;
@@ -34,7 +34,6 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-
 		border: 0 solid #dcdcdc;
 		border-top-width: 1px;
 		text-align: right;
@@ -66,7 +65,7 @@
 				line-height: 44px;
 				font-weight: 500;
 				font-style: italic;
-				color: #ffffff;
+				color: #fff;
 				outline: 1px solid #69a92b;
 				background: #75bc30;
 
@@ -82,7 +81,6 @@
 				}
 			}
 		}
-
 	}
 
 	.container-body {
@@ -100,10 +98,11 @@
 		margin: 14px 24px 0 24px;
 		padding: 0 24px 5px;
 		border-bottom: 1px solid #ccc;
+
 		@include icon($search,$top:11px, $left:5px);
 
 		input {
-			background: #ffffff;
+			background: #fff;
 			padding: 5px;
 			color: var(--secondary-grey);
 			font-size: 18px;
@@ -118,12 +117,17 @@
 	.oobe-contact-results {
 		position: absolute;
 		left: 24px;
-		right: 24px; bottom: 20px; height: 420px;
+		right: 24px;
+		bottom: 20px;
+		height: 420px;
 		margin-right: -20px; //scrollbar buffer
 
 		.empty {
 			position: absolute;
-			top:0; bottom: 0; left:0; right:0;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
 			padding: 15% 2em;
 			text-align: center;
 			color: var(--secondary-grey);
@@ -142,6 +146,7 @@
 
 		.item {
 			$size: 140px;
+
 			float: left;
 			width: $size;
 			height: $size;
@@ -161,18 +166,21 @@
 
 			.name {
 				position: absolute;
-				bottom: 0; left: 0; right: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
 				background: rgba(38, 38, 38, 0.94);
 				color: #ababab;
 				overflow: hidden;
-				@include ellipse();
 
+				@include ellipse();
 
 				margin: 0;
 				padding: 1px 2px;
 				font: normal 400 12px/27px var(--body-font-family);
 
 				$value: background 0.5s ease, padding-top 0.4s ease;
+
 				@include experimental(transition, $value);
 			}
 
@@ -180,7 +188,7 @@
 				@include icon($add_contact_check,$top:41px,$left:41px);
 
 				.name {
-					background: rgba(63,179,79,0.85);
+					background: rgba(63, 179, 79, 0.85);
 					padding-top: 112px;
 					text-align: center;
 					color: #fff;

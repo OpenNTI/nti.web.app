@@ -25,7 +25,6 @@
 			text-transform: uppercase;
 
 			.tool {
-
 				&.link {
 					color: var(--primary-blue);
 					cursor: pointer;
@@ -46,15 +45,13 @@
 	}
 }
 
-
 .x-container.nti-header {
 	position: relative;
-	width: 769px; height: 200px;
+	width: 769px;
+	height: 200px;
 	background: var(--panel-background);
-	box-shadow: 0 1px 0 0 #e0e0e0, 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 0 0 #e0e0e0, 0 0 5px 0 rgba(0, 0, 0, 0.2);
 	line-height: 0;
 	z-index: 2;
-	clip: rect(0,auto,215px,0);
-
-
+	clip: rect(0, auto, 215px, 0);
 }

@@ -2,6 +2,7 @@
 
 .invite-form {
 	width: 500px;
+
 	textarea {
 		font: italic 100 22px var(--body-font-family);
 		color: var(--secondary-grey);
@@ -28,13 +29,15 @@
 		color: white;
 
 		.msg {
-			line-height: normal;
-    		padding: 8px 0px 8px 15px;
 			font: 100 14px var(--body-font-family);
+			line-height: normal;
+			padding: 8px 0 8px 15px;
+
 			&.error {
 				background-color: var(--primary-red);
 			}
 		}
+
 		&.hidden {
 			display: none;
 		}
@@ -54,6 +57,7 @@
 			border-radius: 3px;
 			font-size: 10px;
 			text-align: center;
+
 			input[type="file"] {
 				opacity: 0;
 				width: 64px;
@@ -63,7 +67,8 @@
 				left: 0;
 				top: 0;
 			}
-			&:before {
+
+			&::before {
 				content: '';
 				background-image: url("/app/resources/images/icons/email.png");
 				background-repeat: no-repeat;
@@ -78,25 +83,26 @@
 
 	.field.emails {
 		overflow: hidden;
-	    background-color: var(--panel-background);
+		background-color: var(--panel-background);
 	}
 
 	.unstyled-tokens {
-    	height: 50px;
-	    background: var(--panel-background);
-	    overflow: hidden;
+		height: 50px;
+		background: var(--panel-background);
+		overflow: hidden;
 		visibility: visible;
 		display: flex;
 		align-items: stretch;
 
 		.token-wrap {
-		    max-height: 29px;
-		    overflow: hidden;
-		    margin: 12px 0px 11px 18px;
-		    text-overflow: ellipsis;
-		    white-space: nowrap;
-		    color: var(--secondary-grey);
-    		flex: 1 1 auto;
+			max-height: 29px;
+			overflow: hidden;
+			margin: 12px 0 11px 18px;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			color: var(--secondary-grey);
+			flex: 1 1 auto;
+
 			.token {
 				border: none;
 				background: none;
@@ -105,29 +111,30 @@
 				padding-right: 4px;
 				font-size: 12px;
 
-				&:not(:last-child):after {
+				&:not(:last-child)::after {
 					content: ',';
 				}
 			}
+
 			.emptyState {
 				border: none;
-			    padding: 0;
-			    font-size: 12px;
-			    color: var(--secondary-grey);
+				padding: 0;
+				font-size: 12px;
+				color: var(--secondary-grey);
 			}
 		}
 
 		.email-count {
-		    font-size: 14px;
-		    font-weight: 100;
-		    color: var(--primary-blue);
-		    display: block;
-		    min-width: 10px;
-		    height: 50px;
-		    line-height: 50px;
-		    padding-left: 10px;
-		    padding-right: 15px;
-		    flex: 0 0 auto;
+			font-size: 14px;
+			font-weight: 100;
+			color: var(--primary-blue);
+			display: block;
+			min-width: 10px;
+			height: 50px;
+			line-height: 50px;
+			padding-left: 10px;
+			padding-right: 15px;
+			flex: 0 0 auto;
 		}
 
 		&.hidden {
@@ -138,7 +145,7 @@
 	}
 
 	.email-token-field.x-component-tokens {
-    	margin: 7px 10px 6px 15px;
+		margin: 7px 10px 6px 15px;
 
 		&.hidden {
 			display: none;
@@ -152,22 +159,23 @@
 			flex-wrap: wrap;
 
 			.token {
-			    background: white;
-			    font-family: var(--body-font-family);
-			    color: var(--secondary-grey);
-			    font-size: 14px;
-			    border: 1px solid #E2E2E2;
-			    border-radius: 4px;
-			    padding: 3px 5px 7px 10px;
-			    text-transform: none;
-			    margin-right: 3px;
-			    flex: 0 0 auto;
-			    max-width: 100%;
+				background: white;
+				font-family: var(--body-font-family);
+				color: var(--secondary-grey);
+				font-size: 14px;
+				border: 1px solid #e2e2e2;
+				border-radius: 4px;
+				padding: 3px 5px 7px 10px;
+				text-transform: none;
+				margin-right: 3px;
+				flex: 0 0 auto;
+				max-width: 100%;
 
 				&:hover {
 					position: relative;
 					z-index: 2;
 				}
+
 				.x {
 					display: inline-block;
 
@@ -191,17 +199,15 @@
 					border-color: var(--primary-red);
 
 					.x {
-
 						&::after {
 							background-image: url("/app/resources/images/icons/red-x-8.png");
 						}
 					}
-
 				}
 			}
 
 			.token-input-wrap {
-				margin: 3px 0px 3px 0px;
+				margin: 3px 0 3px 0;
 			}
 		}
 
@@ -220,10 +226,8 @@
 			}
 
 			&.initial {
-			    min-width: 134px;
+				min-width: 134px;
 			}
 		}
 	}
-
-
 }

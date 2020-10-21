@@ -3,24 +3,23 @@
 	@include side-panel-view-title;
 }
 
-.activity-view{
+.activity-view {
 	margin-bottom: 40px;
 
-	.filters-container{
+	.filters-container {
 		position: absolute;
 		bottom: 0;
 		right: 0;
 		left: 0;
 
-		.activity-filters{
-			.tabs{
+		.activity-filters {
+			.tabs {
 				position: relative;
 				overflow: hidden;
 				height: 40px !important;
 
-				.tab{
-				
-					&.from{
+				.tab {
+					&.from {
 						@include icon($arrow-course-dropdown, $top: 16px, $left: 195px, $side:'after');
 
 						width: 218px;
@@ -31,10 +30,9 @@
 						padding-left: 30px;
 						float: left;
 						border-right: 1px solid var(--tertiary-grey-alt);
-
 					}
 
-					&.types{
+					&.types {
 						@include icon($rhp-contact-flyout-settings_hover, $top: 10px, $left: 12px, $side:'after');
 
 						width: 42px;
@@ -46,35 +44,35 @@
 					border-top: 1px solid var(--tertiary-grey-alt);
 					cursor: pointer;
 
-					&::after{
+					&::after {
 						opacity: 0.5;
 					}
-					&.selected{
+
+					&.selected {
 						background-color: white;
 						color: black;
 
-						&:after{
+						&::after {
 							opacity: 1;
 						}
 					}
-
 				}
-			}			
-
+			}
 		}
 	}
 }
 
 .x-menu.from-menu,
-.x-menu.types-menu{
+.x-menu.types-menu {
 	box-shadow: none !important;
 
-	
-	.x-header-text-container{
+
+	.x-header-text-container {
 		background-color: white;
 		border-top: 1px solid gainsboro !important;
 		padding-top: 6px;
-		.x-header-text{							
+
+		.x-header-text {
 			color: var(--tertiary-grey);
 			font: normal 600 10px/20px var(--body-font-family);
 			margin: 10px 0 0 15px;
@@ -82,9 +80,7 @@
 		}
 	}
 
-	.x-menu-body{
+	.x-menu-body {
 		border: none !important;
 	}
-
-	
 }

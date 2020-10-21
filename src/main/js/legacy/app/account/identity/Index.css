@@ -6,7 +6,6 @@
 	background-color: var(--nav-background-color, #313131);
 }
 
-
 :global(.media-toolbar) .identity:global(.x-component.identity) :global(.profile-pic .presence) {
 	background-color: #313131;
 }

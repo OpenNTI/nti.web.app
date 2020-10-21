@@ -1,4 +1,4 @@
-@mixin tabbar($ui, $font, $border-widths){
+@mixin tabbar($ui, $font, $border-widths) {
 	.nti-#{$ui}-tabbar {
 		border: 0 solid var(--border-grey);
 		border-width: $border-widths !important;
@@ -19,34 +19,32 @@
 				padding: 0 6px;
 			}
 
-			.x-tab-wrap{padding: 0;}
+			.x-tab-wrap { padding: 0; }
 
 			&.x-tab-active {
 				box-shadow: inset 0 -4px 0 0 #85b746;
+
 				.x-tab-inner {
 					color: #85b746;
 				}
 			}
 
-			& + .x-tab-#{$ui}-tab{
+			& + .x-tab-#{$ui}-tab {
 				margin-left: 30px;
 			}
 		}
-
 	}
 }
 
 @include tabbar(contacts,normal 600 14px/50px var(--body-font-family), 0 0 1px);
 @include tabbar(profile, italic 500 18px/50px var(--body-font-family), 1px 0 1px);
 
-
 .nti-content-tabbar {
 	border-top: 1px solid #f1f1f1 !important;
 
-	.nti-body-content-tabbar{
-
+	.nti-body-content-tabbar {
 		.x-tab-content-tab {
-			background: #ffffff;
+			background: #fff;
 			border: 1px solid #f1f1f1;
 			border-right-width: 0 !important;
 			border-top-width: 0 !important;
@@ -56,7 +54,8 @@
 			&:last-of-type {
 				border-right-width: 1px !important;
 			}
-			.x-tab-wrap {padding: 0 15px;}
+			.x-tab-wrap { padding: 0 15px; }
+
 			.x-tab-inner {
 				color: var(--secondary-grey);
 				font: 12px/32px var(--body-font-family) !important;
@@ -64,54 +63,51 @@
 			}
 
 			&.x-tab-active {
-				background: #ffffff;
+				background: #fff;
+
 				.x-tab-inner {
 					color: #85b746;
 					font-weight: 600 !important;
 				}
 			}
-
 		}
 	}
 }
-
 
 .nti-secondary-tabbar {
 	.x-tab {
 		margin: 0 0 20px 0;
 		height: 31px;
-
 		border: 1px solid #cfcfcf;
 		border-right-width: 0 !important;
 		border-left-width: 0 !important;
-
-
 		background: #ebebeb;
-
-		background-image: linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0.65) 100%);
-		box-shadow: 0 1px 0 0 #ffffff, inset 0 2px 0 0 rgba(255,255,255,0.4);
+		background-image: linear-gradient(to bottom, #fff 0%, rgba(255, 255, 255, 0.65) 100%);
+		box-shadow: 0 1px 0 0 #fff, inset 0 2px 0 0 rgba(255, 255, 255, 0.4);
 
 		&.x-tab-top-active {
 			$experimental-support-for-svg: true;
-			background-image: linear-gradient(to bottom, #6dae1d 0%, #8fd03f 100%);
 
-			box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
+			background-image: linear-gradient(to bottom, #6dae1d 0%, #8fd03f 100%);
+			box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);
 
 			.x-tab-inner {
-				color: #ffffff;
+				color: #fff;
 			}
 		}
 
-
-		.x-tab-wrap {padding: 0;}
+		.x-tab-wrap { padding: 0; }
 
 		.x-tab-button {
-			.x-ie & {&,&:active {
-				left: 0;
-				top: 0;
-				overflow-x: hidden;
-				overflow-y: hidden;
-			}}
+			.x-ie & {
+				&,&:active {
+					left: 0;
+					top: 0;
+					overflow-x: hidden;
+					overflow-y: hidden;
+				}
+			}
+
 			overflow: hidden;
 		}
 
@@ -131,6 +127,7 @@
 		&:first-of-type {
 			border-left-width: 1px !important;
 			border-radius: 5px 0 0 5px;
+
 			.x-tab-inner {
 				text-align: right;
 				padding-left: 20px;
@@ -140,6 +137,7 @@
 		&:last-of-type {
 			border-right-width: 1px !important;
 			border-radius: 0 5px 5px 0;
+
 			.x-tab-inner {
 				text-align: left;
 				padding-right: 20px;
@@ -148,16 +146,15 @@
 	}
 }
 
-
 .x-panel-body-secondary-tabpanel {
-	.x-panel-body-default{
+	.x-panel-body-default {
 		background: transparent;
 	}
 }
 
-.x-body{
-	&.x-ios{
-		.nti-profile-tabbar{
+.x-body {
+	&.x-ios {
+		.nti-profile-tabbar {
 			pointer-events: none;
 		}
 	}

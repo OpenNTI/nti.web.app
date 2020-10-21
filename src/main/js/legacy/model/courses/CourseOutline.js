@@ -1,5 +1,3 @@
-const Url = require('url');
-
 const Ext = require('@nti/extjs');
 
 const ContentUtils = require('legacy/util/Content');
@@ -138,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 
 	getAdminOutlineContents: function (doNotCache) {
 		var link = this.getLink('contents'),
-			parts = Url.parse(link),
+			parts = new URL(link, global.location.origin),
 			query = Ext.Object.fromQueryString(parts.search);
 
 		if(!link) {
@@ -148,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		delete query['omit_unpublished'];
 
 		parts.search = '?' + Ext.Object.toQueryString(query);
-		link = Url.format(parts);
+		link = parts.toString();
 
 		return this.__loadContents(link, 'AdminLoadContents', doNotCache, 'AdminOutlineContents');
 	},

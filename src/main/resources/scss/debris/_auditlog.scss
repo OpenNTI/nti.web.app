@@ -1,21 +1,21 @@
 .audit-log {
-    padding-top: 2em;
+	padding-top: 2em;
 
-    .load-more{
-        background: var(--primary-blue);
-        color: #fff;
-        cursor: pointer;
-        font-size: 0.875em;
-        font-weight: 600;
-        line-height: 1em;
-        text-transform: uppercase;
-        padding: 18px;
-        height: auto;
-        text-align: center;
-    }
+	.load-more {
+		background: var(--primary-blue);
+		color: #fff;
+		cursor: pointer;
+		font-size: 0.875em;
+		font-weight: 600;
+		line-height: 1em;
+		text-transform: uppercase;
+		padding: 18px;
+		height: auto;
+		text-align: center;
+	}
 
-    .loading-container {
-    	height: 75px;
+	.loading-container {
+		height: 75px;
 		line-height: 75px;
 		text-align: center;
 		position: relative;
@@ -25,7 +25,8 @@
 			color: var(--primary-grey);
 			line-height: 24px;//height of the spinner
 			padding-left: 30px;//width of the spinner + 6px
-			top: 50%; left: 50%;
+			top: 50%;
+			left: 50%;
 			margin-top: -12px;
 			margin-left: -51px;
 
@@ -38,22 +39,23 @@
 
 .auditlog-item {
 	.content {
-	    background: white;
-	    overflow: hidden;
-	    max-width: 775px;
-	    margin-bottom: 10px;
-	    padding: 15px 14px;
-	    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
+		background: white;
+		overflow: hidden;
+		max-width: 775px;
+		margin-bottom: 10px;
+		padding: 15px 14px;
+		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 
-	    @include flexContainer();
+		@include flexContainer();
 	}
 
 	.avatar-wrapper {
 		width: 40px;
 		height: 40px;
 		margin-right: 14px;
+
 		@include flexItem(0 0 auto);
-		
+
 		.avatar-container {
 			width: 40px;
 			height: 40px;
@@ -72,14 +74,13 @@
 		font: normal 400 0.875em/1.36 var(--body-font-family);
 	}
 
-
 	.username {
 		color: var(--primary-blue);
 		margin-right: 5px;
 	}
 
 	.message {
-	    color: grey;
+		color: grey;
 	}
 
 	.date {
@@ -91,30 +92,29 @@
 }
 
 .audit-log-header {
-    padding-bottom: 1rem;
+	padding-bottom: 1rem;
 
-    @include icon($change-log, $top: 2px);
+	@include icon($change-log, $top: 2px);
 
-    .change-log {
-        font-weight: 600;
-        color: var(--secondary-grey);
-        margin-left: 25px;
-    }
+	.change-log {
+		font-weight: 600;
+		color: var(--secondary-grey);
+		margin-left: 25px;
+	}
 }
 
 .audit-log-prompt {
-    .audit-log {
-        padding: 1em;
-        width: 807px;//1em + 775px + 1em
-    }
+	.audit-log {
+		padding: 1em;
+		width: 807px;//1em + 775px + 1em
+	}
 }
 
-
 .course-overview .editing-controls .buttons .button.auditLog {
-    background-color: rgba(0,0,0,0.6);
-    margin-right: 10px;
-    color: white;
-    padding-left: 40px;
-    
-    @include icon($change-white, $top: 11px, $left: 15px);
+	background-color: rgba(0, 0, 0, 0.6);
+	margin-right: 10px;
+	color: white;
+	padding-left: 40px;
+
+	@include icon($change-white, $top: 11px, $left: 15px);
 }

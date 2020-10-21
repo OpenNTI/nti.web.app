@@ -11,13 +11,14 @@
 
 	@include reset-window-border-radius(3px);
 
-	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3),
-	0 0 0 110px transparent;
-
+	box-shadow:
+		0 0 50px 5px rgba(0, 0, 0, 0.3),
+		0 0 0 110px transparent;
 	background-color: var(--quad-grey);
 
 	.account-header-view {
 		margin: 24px 0;
+
 		.avatar {
 			position: relative;
 			box-shadow: 0 0 0 1px #e5e5e5;
@@ -36,7 +37,7 @@
 				width: 100%;
 			}
 
-			&:after {
+			&::after {
 				content: ' ';
 				position: absolute;
 				z-index: 1999;
@@ -45,9 +46,9 @@
 
 				@include sprite($green_check);
 			}
-
 		}
-		.text{
+
+		.text {
 			&.full-width {
 				margin-left: 34px;
 				margin-right: 34px;
@@ -62,22 +63,23 @@
 				font-size: 20px;
 				font-style: italic;
 			}
+
 			.detail {
 				font-size: 14px;
 			}
 		}
 	}
 
-	.coppa-form{
+	.coppa-form {
 		margin: 0 10px 20px 100px;
 
-		.legend{
+		.legend {
 			font: normal 400 14px/22px var(--body-font-family);
 			margin-bottom: 5px;
 		}
-		.fields{
 
-			.birthdate input{
+		.fields {
+			.birthdate input {
 				border-left-width: 0 !important;
 			}
 
@@ -85,31 +87,34 @@
 				white-space: nowrap;
 			}
 
-			input, .selectbox{
+			input, .selectbox {
 				vertical-align: bottom;
 				color: var(--secondary-grey);
 				font: italic 500 14px/25px var(--body-font-family);
 				border: 1px solid #dcdcdc;
-				background: #ffffff;
+				background: #fff;
 				padding: 6px 10px;
 				margin: 0;
 				min-height: 39px;
 
-				&[size='3']{
+				&[size='3'] {
 					width: 75px;
 				}
-				&[size='2']{
+
+				&[size='2'] {
 					width: 60px;
 				}
-				&[size='4']{
+
+				&[size='4'] {
 					width: 137px;
 				}
-				&[size='5']{
+
+				&[size='5'] {
 					width: 285px;
 				}
 			}
 
-			.selectbox{
+			.selectbox {
 				cursor: pointer;
 				display: inline-block;
 				width: 150px;
@@ -118,17 +123,18 @@
 				box-shadow: inset 5px 0 0 0 #a0a0a0;
 				position: relative;
 
-				&::after{
+				&::after {
 					content: '';
 					position: absolute;
-					top: 15px; right: 15px;
+					top: 15px;
+					right: 15px;
 
 					@include sprite($collapse);
 				}
 			}
 
-			& > div{
-				span, .validation-message{
+			& > div {
+				span, .validation-message {
 					padding-left: 20px;
 					display: inline-block;
 					vertical-align: top;
@@ -137,21 +143,24 @@
 					font-style: italic;
 					color: var(--secondary-grey);
 
-					&.long{
+					&.long {
 						width: 260px;
 						padding-top: 0;
 					}
 				}
 
-				&.invalid{
-					span, .validation-message{ color: var(--primary-red); }
-					input[data-required=true], .selectbox{
+				&.invalid {
+					span, .validation-message { color: var(--primary-red); }
+
+					input[data-required=true], .selectbox {
 						box-shadow: inset 5px 0 0 0 var(--primary-red) !important;
 					}
 				}
-				&.valid{
-					span, .validation-message{ color: var(--primary-green); }
-					input[data-required=true], .selectbox{
+
+				&.valid {
+					span, .validation-message { color: var(--primary-green); }
+
+					input[data-required=true], .selectbox {
 						box-shadow: inset 5px 0 0 0 var(--primary-green) !important;
 					}
 				}
@@ -167,26 +176,26 @@
 			padding: 0 20px;
 			margin-left: 5px;
 			white-space: nowrap;
-			color: #ffffff;
+			color: #fff;
 			background: #37b2f9;
 			border: 1px solid #31a0e0;
 			font-size: 14px;
 			font-style: italic;
 			font-weight: bold;
 
-			&.submitted{
+			&.submitted {
 				background: none;
 				border: none;
 				color: var(--primary-green);
 			}
 
-			&.disabled{
+			&.disabled {
 				background: var(--tertiary-grey);
 				border: 1px solid var(--tertiary-grey);
 			}
 		}
 
-		.account-info{
+		.account-info {
 			margin-top: 15px;
 
 			.submit {
@@ -201,7 +210,7 @@
 					bottom: 0;
 					height: auto;
 					line-height: 3em;
-					color: #ffffff;
+					color: #fff;
 					outline: 1px solid #69a92b;
 					border: none;
 					background: #75bc30;
@@ -226,6 +235,7 @@
 							content: '';
 							top: 16px;
 							left: 15px;
+
 							@include sprite($checkbox-14);
 						}
 
@@ -243,18 +253,20 @@
 					}
 				}
 			}
-			.fields{
-				& > div{
-					&.hidden{ display: none; }
 
-					input{
-						&[data-required=true]{
+			.fields {
+				& > div {
+					&.hidden { display: none; }
+
+					input {
+						&[data-required=true] {
 							display: inline-block;
 							margin-bottom: 10px;
 							border-left-width: 0;
 							box-shadow: inset 5px 0 0 0 #a0a0a0;
 						}
-						&[name=last]{
+
+						&[name=last] {
 							margin-bottom: 10px;
 							margin-left: 10px;
 						}
@@ -297,15 +309,15 @@
 			position: relative;
 		}
 
-		.hidden {display: none;}
+		.hidden { display: none; }
 
-		textarea.input-box.error{
+		textarea.input-box.error {
 			box-shadow: -4px 0 0 0 var(--primary-red);
 		}
 
 		.input-box, .combo-box {
 			margin: 5px 0;
-			&, input, .x-form-item { font-size: 14px;}
+			&, input, .x-form-item { font-size: 14px; }
 
 			.x-form-cb-label-after {
 				margin-left: 10px;
@@ -319,32 +331,32 @@
 
 			border: 1px solid var(--border-grey);//#dcdcdc;
 			padding-right: 30px;
-			background: #ffffff;
+			background: #fff;
 
 			.clear {
 				top: 10px;
 				right: 15px;
-
 				cursor: pointer;
 				position: absolute;
 				display: none;
+
 				@include sprite($clear_line);
 			}
 
 			.placeholder {
 				@include placeholder-style;
+
 				position: absolute;
 				top: 0;
 				left: 0;
 				font-weight: 500;
 				line-height: 25px;
 				padding: 7px 14px;
-
 			}
 		}
 
-		textarea.input-box, .input-box input, textarea.combo-box, .combo-box input{
-			&::-ms-clear{
+		textarea.input-box, .input-box input, textarea.combo-box, .combo-box input {
+			&::-ms-clear {
 				display: none;
 			}
 
@@ -361,19 +373,20 @@
 			//vertical-align: bottom;
 			color: var(--secondary-grey);
 			font: normal 500 14px/25px var(--body-font-family);
-
 			border: 0;
-
-			background: #ffffff;
+			background: #fff;
 			padding: 6px 10px;
 			margin: 0;
 			min-height: 39px;
+
 			@include experimental-value(width, calc(100% - 8px));
+
 			.x-opera &,
 			.x-safari5 & {
 				width: 291px;
 				&[placeholder$="Name"] { width: 145px; }
 			}
+
 			position: relative;
 			left: 4px;
 			box-shadow: -4px 0 0 0 var(--border-grey);
@@ -409,7 +422,7 @@
 				height: 70px;
 				padding: 20px 0 0 3px;
 
-				&::after{
+				&::after {
 					content: ':';
 				}
 			}
@@ -423,15 +436,16 @@
 
 		.submit {
 			@include top-etch($dark: #e2e2e2, $light: #fafafa);
+
 			background-color: #f3f3f3;
 			padding: 15px 10px;
 			overflow: hidden;
 
-			.privacyLink, .policy-link{
+			.privacyLink, .policy-link {
 				text-decoration: none;
 				color: var(--primary-blue);
 				font-size: 12px;
-				top:5px !important;
+				top: 5px !important;
 				cursor: pointer;
 				padding-left: 10px;
 			}
@@ -449,27 +463,29 @@
 			margin-left: 34px;
 			margin-right: 34px;
 		}
-		textarea,
 
+		textarea,
 		.input-box {
 			input {
 				outline: none;
 				box-shadow: -4px 0 0 0 var(--border-grey);
-				&:focus{
+
+				&:focus {
 					box-shadow: -4px 0 0 0 var(--border-grey);
 				}
 			}
 		}
 
-		textarea.input-box{
+		textarea.input-box {
 			resize: none;
 			width: 402px;
 			height: 134px;
 			outline: none;
 			box-shadow: -4px 0 0 0 var(--border-grey);
 			border: solid 1px var(--border-grey);
-			border-left: 0px;
-			&:focus{
+			border-left: 0;
+
+			&:focus {
 				box-shadow: -4px 0 0 0 var(--border-grey);
 			}
 		}
@@ -477,17 +493,16 @@
 
 	.contact-main-view,
 	.forumcreation-main-view,
-	.embedvideo-main-view{
-		.input-box{
+	.embedvideo-main-view {
+		.input-box {
 			width: 99%;
 		}
 	}
-
 }
 
-.forumcreation-main-view{
-	.submit{
-		.sharing-checkbox{
+.forumcreation-main-view {
+	.submit {
+		.sharing-checkbox {
 			position: absolute;
 			top: 8px !important;
 			left: 5px !important;
@@ -495,9 +510,9 @@
 	}
 }
 
-.x-menu{
-	&.month-picker-list{
-		.x-menu-item{
+.x-menu {
+	&.month-picker-list {
+		.x-menu-item {
 			border-bottom-width: 0 !important;
 		}
 	}
@@ -505,8 +520,7 @@
 
 .codecreation-window,
 .createlist-window,
-.coderetrieval-window{
-
+.coderetrieval-window {
 	.close {
 		opacity: 0.5;
 		cursor: pointer;
@@ -516,21 +530,22 @@
 
 		@include sprite($window-control-close);
 
-		&:hover{
+		&:hover {
 			opacity: 1;
 		}
 	}
 
 	.codecreation-main-view,
 	.coderetrieval-main-view,
-	.createlist-main-view{
+	.createlist-main-view {
 		.input-box.group-name {
-			.x-mask{
+			.x-mask {
 				background-color: white;
 				opacity: 0;
 			}
-			&.x-masked{
-				.clear{
+
+			&.x-masked {
+				.clear {
 					display: none !important;
 				}
 			}
@@ -538,25 +553,26 @@
 			input {
 				box-shadow: -4px 0 0 0 var(--primary-green);
 			}
-			input.empty{
+
+			input.empty {
 				box-shadow: -4px 0 0 0 var(--border-grey);
 			}
 		}
 
-		.group-code{
+		.group-code {
 			background-color: var(--quad-grey);
 
-			input{
+			input {
 				cursor: text;
 			}
 
-			input, input:focus{
+			input, input:focus {
 				background-color: var(--quad-grey);
 				box-shadow: -4px 0 0 0 var(--primary-green);
 			}
 		}
 
-		.label{
+		.label {
 			text-transform: uppercase;
 			font-weight: 700;
 			font-size: 10px;
@@ -566,7 +582,7 @@
 		}
 
 		.error-box {
-			margin-top: 0px;
+			margin-top: 0;
 			font-weight: 600;
 			font-size: 14px;
 
@@ -576,6 +592,5 @@
 				padding: 20px 10px 20px 10px;
 			}
 		}
-
 	}
 }

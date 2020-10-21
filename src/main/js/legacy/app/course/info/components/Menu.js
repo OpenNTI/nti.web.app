@@ -2,7 +2,6 @@ const Ext = require('@nti/extjs');
 const {scoped} = require('@nti/lib-locale');
 
 const CoursesStateStore = require('legacy/app/library/courses/StateStore');
-const {getString} = require('legacy/util/Localization');
 
 const DEFAULT_TEXT = {
 	instructor: {

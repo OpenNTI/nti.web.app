@@ -8,6 +8,11 @@
 			padding-top: 7px;
 			padding-bottom: 7px;
 			height: 2.4rem;
+
+			.missing-name & {
+				border: 1px solid var(--primary-red);
+				box-shadow: inset 4px 0 0 0 var(--primary-red);
+			}
 		}
 
 		.card-input .card-number,
@@ -28,13 +33,6 @@
 			border-radius: 0;
 
 			.missing-all & {
-				border: 1px solid var(--primary-red);
-				box-shadow: inset 4px 0 0 0 var(--primary-red);
-			}
-		}
-
-		.name-input {
-			.missing-name & {
 				border: 1px solid var(--primary-red);
 				box-shadow: inset 4px 0 0 0 var(--primary-red);
 			}
@@ -61,5 +59,4 @@
 			}
 		}
 	}
-
 }

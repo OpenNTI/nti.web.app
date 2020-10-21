@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const classnames = require('classnames/bind');
 
 const WindowsActions = require('legacy/app/windows/Actions');
 const DndOrderingContainer = require('legacy/mixins/dnd/OrderingContainer');
@@ -18,8 +17,7 @@ const VideoListItem = require('../video/ListItem');
 const VideorollListItem = require('../videoroll/ListItem');
 const WebinarListItem = require('../webinar/ListItem');
 
-const Styles = require('./ListItem.css');
-const cx = classnames.bind(Styles);
+const styles = require('./ListItem.css');
 
 require('legacy/common/components/BoundCollection');
 require('legacy/mixins/dnd/OrderingItem');
@@ -40,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	transitionStates: true,
-	cls: `overview-section overview-section-editing ${cx('overview-group')}`,
+	cls: `overview-section overview-section-editing ${styles['overview-group']}`,
 	bodyCls: 'overview-group-body',
 
 	initComponent: function () {

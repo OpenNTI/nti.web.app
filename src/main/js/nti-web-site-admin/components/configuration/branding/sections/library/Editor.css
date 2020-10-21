@@ -1,7 +1,9 @@
 .editor-bar {
 	position: absolute;
-	top: auto; bottom: 0;
-	left: 0; right: -2rem;
+	top: auto;
+	bottom: 0;
+	left: 0;
+	right: -2rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -17,7 +19,6 @@
 	align-items: flex-start;
 	justify-content: space-between;
 }
-
 
 .input:not(:last-of-type) {
 	margin-right: 1rem;

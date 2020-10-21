@@ -1,6 +1,6 @@
 @import "./card";
 
-span.tab{
+span.tab {
 	white-space: nowrap;
 	display: inline-block;
 	width: 4em;
@@ -11,7 +11,7 @@ span.tab{
 	$selector: '.attachment-part';
 
 	#{$selector} {
-		box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
 		cursor: pointer;
 		margin: 3px 0;
 		display: block;
@@ -72,6 +72,7 @@ span.tab{
 						display: none;
 					}
 				}
+
 				&:not(.fallback) {
 					label {
 						display: none;
@@ -91,8 +92,8 @@ span.tab{
 
 			.text {
 				position: relative;
-    			overflow: hidden;
-    			text-overflow: ellipsis;
+				overflow: hidden;
+				text-overflow: ellipsis;
 				display: block;
 				padding: 12px 0;
 
@@ -109,8 +110,9 @@ span.tab{
 					padding: 0;
 					text-align: left;
 					overflow: hidden;
-    				text-overflow: ellipsis;
+					text-overflow: ellipsis;
 				}
+
 				.size {
 					display: block;
 					color: var(--tertiary-grey);
@@ -192,6 +194,7 @@ span.tab{
 
 		.meta {
 			@include experimental-value(width, calc(100% - 48px));
+
 			float: left;
 
 			.text {
@@ -218,14 +221,15 @@ span.tab{
 
 	#{$selector} {
 		@include hardware-accelerate();
+
 		position: relative;//default
 
 		&.active {
-			display:  block;
+			display: block;
 		}
 
-		&.x-repaint{
-			background: #ffffff;
+		&.x-repaint {
+			background: #fff;
 			visibility: hidden;
 			display: initial !important;
 		}
@@ -251,7 +255,7 @@ span.tab{
 			color: var(--secondary-grey);
 
 			&:focus {
-				&::after{
+				&::after {
 					outline: 1px dotted var(--primary-blue);
 					outline-offset: 1px;
 				}
@@ -265,14 +269,17 @@ span.tab{
 
 			.title {
 				@include experimental(transition, all 0.5s);
+
 				position: relative;
 				border: 0 solid #f2f2f2;
 				border-bottom-width: 1px;
+
 				.placeholder {
 					position: absolute;
 					top: 3px;
 					left: 15px;
 				}
+
 				input {
 					display: block;
 					font: normal 300 25px/40px var(--body-font-family);
@@ -282,7 +289,7 @@ span.tab{
 					color: var(--primary-grey);
 
 					&[type=text]:not([value]),
-					&[type=text][value=""]{
+					&[type=text][value=""] {
 						font-style: italic;
 
 						&:focus {
@@ -290,9 +297,9 @@ span.tab{
 						}
 					}
 
-					/*.x-ie10 &, .x-ie &{
+					/* .x-ie10 &, .x-ie &{
 						height: 33px !important;
-					}*/
+					} */
 				}
 			}
 
@@ -302,85 +309,91 @@ span.tab{
 				position: relative;
 				border: 0 solid #f2f2f2;
 				border-bottom-width: 1px;
-				padding: 0px 5px;
+				padding: 0 5px;
 
-				input{
+				input {
 					font: normal italic 14px/30px var(--body-font-family);
 					font-style: italic;
 					text-transform: none;
 				}
 
-				.tags{
+				.tags {
 					margin: 0 105px 0 0;
 				}
-				.action{
+
+				.action {
 					float: right;
-					&.publish{
+
+					&.publish {
 						width: 82px;
 						height: 30px;
 						position: relative;
 
-						&::after{
+						&::after {
 							content: '';
 							position: absolute;
-							left: 0; top: 5px;
+							left: 0;
+							top: 5px;
 							outline: 0;
+
 							@include sprite($btn_toggle_private);
 						}
 
-						&.on::after{
+						&.on::after {
 							@include sprite($btn_toggle_public);
 						}
 					}
 				}
-
-
 			}
 
-			.aux+.title, .title.small{
-				input{
+			.aux + .title, .title.small {
+				input {
 					font: italic 14px/20px var(--body-font-family);
 					padding-left: 5px;
 				}
 			}
 
-
 			.content {
 				@include scrollbar(#ffffff, var(--tertiary-grey));
 				@include text-content;
-
 				@include experimental(transition, all 0.5s);
+
 				cursor: text;
 				padding: 2px 5px 0;
 				color: var(--secondary-grey);
 				font: 14px var(--body-font-family);
-				overflow:{
+				overflow: {
 					x: hidden;
 					y: auto; //scroll;
 				}
+
 				min-height: 50px;
 				max-height: 200px;
 				outline: 0;
 				position: relative;
 
-				&.show-placeholder[data-placeholder]::after{
+				&.show-placeholder[data-placeholder]::after {
 					display: block;
 					position: absolute;
 					content: attr(data-placeholder);
+
 					@include placeholder-style();
+
 					top: 2px;
 					left: 5px;
 				}
 
-				.video-thumbnail, .unknown{
+				.video-thumbnail, .unknown {
 					height: 75px;
 					width: 55px;
 					cursor: pointer;
+
 					@include icon($filetype-video, $top:20px, $left:10px);
 				}
 
-				.unknown{
+				.unknown {
 					cursor: default;
+
 					@include icon($filetype-unknown, $top:20px, $left:10px);
 				}
 
@@ -414,15 +427,17 @@ span.tab{
 
 		.footer {
 			@include experimental(transition, all 0.5s);
+
 			position: absolute;
 			bottom: 0;
-			left: 0; right: 0;
+			left: 0;
+			right: 0;
 			height: 45px;
 			white-space: nowrap;
 			background-color: #efefef;
 			border-top: 1px solid #dcdcdc;
 
-			&::after{
+			&::after {
 				content: '';
 				position: absolute;
 				top: -8px;
@@ -433,8 +448,8 @@ span.tab{
 				border-radius: 90px;
 			}
 
-			.left .action {float: left;}
-			.right .action {float: right;}
+			.left .action { float: left; }
+			.right .action { float: right; }
 
 			.action {
 				position: relative;
@@ -445,28 +460,28 @@ span.tab{
 				text-align: center;
 				color: var(--secondary-grey);
 				margin: -1px;
+
 				@include experimental(transition, all 0.5s);
 
-
-				&.text-controls, &.object-controls{
+				&.text-controls, &.object-controls {
 					width: 34px;
 					height: 34px;
 					margin: 6px 0 0 5px;
 					border-radius: 3px;
 
-					&::after{
+					&::after {
 						content: '';
 						position: absolute;
-						top: 9px; left: 5px;
+						top: 9px;
+						left: 5px;
 						outline: none;
-
 					}
 
-					&.selected{
+					&.selected {
 						box-shadow: inset 0 0 0 1px #dcdcdc;
-						background-color: #ffffff;
+						background-color: #fff;
 
-						.popover{
+						.popover {
 							display: block;
 						}
 					}
@@ -477,29 +492,29 @@ span.tab{
 						left: 50%;
 					}
 
-					.popover{
+					.popover {
 						position: relative;
 						height: 34px;
 						left: -25%;
 						background-color: #fff;
-						box-shadow: 1px 2px 3px -1px rgba(0,0,0,.3);
+						box-shadow: 1px 2px 3px -1px rgba(0, 0, 0, 0.3);
 						border: 1px solid var(--quad-grey);
 						z-index: 16;
 						padding: 0 5px;
 						display: none;
 						white-space: nowrap;
 
-						&::after{
+						&::after {
 							content: '';
 							position: absolute;
-							top:32px;
+							top: 32px;
 							left: 16%;//safar5
 							left: calc(25% - 6px);
 
 							@include sprite($font_style_pointer);
 						}
 
-						.control{
+						.control {
 							width: 20px;
 							height: 32px;
 							line-height: 32px;
@@ -511,59 +526,65 @@ span.tab{
 								margin-top: 4px;
 								height: 28px;
 
-								&:last-of-type{ margin-right: 0; }
+								&:last-of-type { margin-right: 0; }
 
-								&::after{
+								&::after {
 									content: '';
 									position: absolute;
-									top: 5px; left: 2px;
+									top: 5px;
+									left: 2px;
 								}
 							}
 
 							&.bold {
-								&::after{ @include sprite($bold); }
-								&.selected::after{ @include sprite($bold_active); }
+								&::after { @include sprite($bold); }
+								&.selected::after { @include sprite($bold_active); }
 							}
+
 							&.italic {
-								&::after{ @include sprite($italic); }
-								&.selected::after{ @include sprite($italic_active); }
+								&::after { @include sprite($italic); }
+								&.selected::after { @include sprite($italic_active); }
 							}
+
 							&.underline {
-								&::after{ @include sprite($underline); }
-								&.selected::after{ @include sprite($underline_active); }
+								&::after { @include sprite($underline); }
+								&.selected::after { @include sprite($underline_active); }
 							}
 
 							&.whiteboard {
 								@include icon($editor-insert-image, $top:10px);
-								&:hover::after{
+
+								&:hover::after {
 									@include sprite($editor-insert-image_hover);
 								}
 							}
 
 							&.video {
 								@include icon($editor-insert-video, $top:9px);
-								&:hover::after{
+
+								&:hover::after {
 									@include sprite($editor-insert-video_hover);
 								}
 							}
 
 							&.upload {
 								@include icon($editor-upload-file, $top:8px);
-								&:hover::after{
+
+								&:hover::after {
 									@include sprite($editor-upload-file-hover);
 								}
 							}
 
-
-							&.whiteboard, &.video, &.upload{
+							&.whiteboard, &.video, &.upload {
 								margin-right: 10px;
-								&::after{
+
+								&::after {
 									top: 6px;
 								}
 							}
 
-							&.video{
-								&::after{
+							&.video {
+								&::after {
 									top: 5px;
 								}
 							}
@@ -595,8 +616,9 @@ span.tab{
 					&::after {
 						@include sprite($font_styles_default);
 					}
+
 					&.selected {
-						&::after{ @include sprite($font_styles_active); }
+						&::after { @include sprite($font_styles_active); }
 					}
 
 					&::before {
@@ -611,10 +633,11 @@ span.tab{
 					}
 				}
 
-				&.object-controls{
+				&.object-controls {
 					@include icon($editor-attach, $top:10px, $left:10px);
-					&.selected{
-						&::after{
+
+					&.selected {
+						&::after {
 							@include sprite($editor-attach_hover);
 						}
 					}
@@ -629,46 +652,45 @@ span.tab{
 					line-height: 44px;
 					font-weight: bold;
 					font-style: italic;
-					color: #ffffff;
+					color: #fff;
 					border: 1px solid var(--border-blue);
 					padding: 0 0 0 24px;
 					background: var(--primary-blue);
 					position: relative;
 
-
 					&::after {
 						content: ' ';
 						overflow: hidden;
 						position: absolute;
-						top: 8px; left: 15px;
+						top: 8px;
+						left: 15px;
 
 						@include sprite($comment_white);
+
 						outline: 0;
 					}
 
-					&.disabled{
+					&.disabled {
 						cursor: default;
 						border: 1px solid #d0d0d0;
-						background: rgba(184,184,184,0.5);
-						color: rgba(255,255,255,0.7);
+						background: rgba(184, 184, 184, 0.5);
+						color: rgba(255, 255, 255, 0.7);
 						margin: -1px;
 					}
-
 				}
 			}
 
-			&.x-repaint{
-				background: #ffffff;
+			&.x-repaint {
+				background: #fff;
 				visibility: hidden;
 			}
 		}
-
 
 		&.disabled {
 			.main {
 				opacity: 0.6;
 
-				.toolbar{
+				.toolbar {
 					visibility: hidden;
 					opacity: 0;
 					pointer-events: none;
@@ -676,18 +698,20 @@ span.tab{
 
 				.content { }
 			}
-			.action{
-				&.whiteboard{
+
+			.action {
+				&.whiteboard {
 					opacity: 0;
 					visibility: hidden;
 					pointer-events: none;
 				}
+
 				&.save {
 					pointer-events: none;
 					cursor: default;
 					border-color: #d0d0d0;
 					background: var(--tertiary-grey);
-					color: #ffffff;
+					color: #fff;
 					opacity: 0.5;
 				}
 			}
@@ -695,14 +719,13 @@ span.tab{
 	}
 }
 
-
 @include editor();
 
 .x-component-editor {
 	@include editor(true);
 
-	&.in-gutter{
-		background: #ffffff;
+	&.in-gutter {
+		background: #fff;
 		border: 1px solid #cfcfcf;//#ededed
 		position: fixed !important;
 
@@ -711,20 +734,23 @@ span.tab{
 
 			.aux {
 				padding: 0;
+
 				.x-component-tokens.user-token-field {
 					overflow: visible;
-					.control.publish{
+
+					.control.publish {
 						left: 10px;
 						margin-left: -10px;
 					}
-					.tokens{
+
+					.tokens {
 						padding-left: 0;
 					}
 				}
 			}
 
-			.aux+.title,
-			.title.small{
+			.aux + .title,
+			.title.small {
 				input { padding-left: 0; }
 			}
 
@@ -734,7 +760,8 @@ span.tab{
 				}
 
 				padding: 2px 0 0;
-				&.show-placeholder[data-placeholder]::after{
+
+				&.show-placeholder[data-placeholder]::after {
 					left: 0;
 				}
 			}
@@ -753,18 +780,20 @@ span.tab{
 		position: static !important;
 
 		.x-menu-item.x-item-selected {
-		    border-radius: 0;
-		    border-width: 0;
-		    border-style: none;
-		    background: #efefef !important;
-		    color: #3c3c3c !important;
+			border-radius: 0;
+			border-width: 0;
+			border-style: none;
+			background: #efefef !important;
+			color: #3c3c3c !important;
 		}
 	}
 
 	.share-search-mask {
 		position: absolute !important;
-		top: 0 !important; bottom: 0 !important;
-		left: 0 !important; right: 0 !important;
+		top: 0 !important;
+		bottom: 0 !important;
+		left: 0 !important;
+		right: 0 !important;
 		background: white;
 		text-align: center;
 	}
@@ -790,8 +819,10 @@ span.tab{
 		.avatar-container::before {
 			content: '';
 			position: absolute;
-			top: 0; bottom: 0;
-			left: 0; right: 0;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
 			background: var(--secondary-green);
 			opacity: 0.7;
 			z-index: 3;
@@ -799,20 +830,21 @@ span.tab{
 	}
 }
 
-
-.share-search{
+.share-search {
 	position: fixed !important;
 	background-color: white;
 
-	.contact-card{
-		.avatar-container{
+	.contact-card {
+		.avatar-container {
 			display: none;
 		}
-		&.person{
-			.avatar.icon{
+
+		&.person {
+			.avatar.icon {
 				display: none;
 			}
-			.avatar-container{
+
+			.avatar-container {
 				display: block;
 			}
 		}

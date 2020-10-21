@@ -1,5 +1,5 @@
 //@mixin grid-def($useParent:false, $gridSpacing: 10px){
-@mixin grid-def($gridSpacing: 10px){
+@mixin grid-def($gridSpacing: 10px) {
 	$selector: '.grid';
 
 	//@if $useParent == true {
@@ -17,12 +17,12 @@
 		}
 
 		.grid-item {
-			box-shadow: 0 0 3px rgba(0,0,0,0.5);
+			box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 			position: relative;
 			float: left;
 			margin: 0 $gridSpacing $gridSpacing 0;
 			//to see WIP cells.
-			background: rgba(255,0,0,0.6);
+			background: rgba(255, 0, 0, 0.6);
 
 			@for $i from 1 through 8 {
 				$s: (128px * $i) - $gridSpacing;
@@ -31,8 +31,9 @@
 
 				&.col-#{$i} { width: $s; }
 
-				&.allow-flex.col-#{$i}{
+				&.allow-flex.col-#{$i} {
 					max-width: $m;
+
 					@include experimental-value(width, calc(#{(12.5% * $i)} - #{$gridSpacing}));
 				}
 
@@ -44,10 +45,7 @@
 
 @include grid-def();
 
-
-
 //Grid components (tables)
-
 
 .x-grid-header-ct {
 	background: none !important;
@@ -62,6 +60,7 @@
 		style: solid;
 		width: 1px !important;
 	}
+
 	text-shadow: none;
 	color: var(--tertiary-grey);
 	font: normal 700 0.6em/3 var(--body-font-family);
@@ -91,12 +90,15 @@
 	&.x-column-header-sort-ASC {
 		.x-column-header-text::after {
 			vertical-align: text-top;
+
 			@include arrow($width: 8px, $height: 5px);
 		}
 	}
+
 	&.x-column-header-sort-DESC {
 		.x-column-header-text::after {
 			vertical-align: text-bottom;
+
 			@include arrow($pointFrom: top, $width: 8px, $height: 5px);
 		}
 	}
@@ -118,6 +120,7 @@
 	.disclaimer-header {
 		display: inline-block;
 		padding-right: 12px;
+
 		@include icon($info, $left: auto, $right: -6px, $top: 7px);
 	}
 }
@@ -131,7 +134,7 @@
 			x: hidden;
 		}
 
-		.x-grid-table{
+		.x-grid-table {
 			position: relative !important;
 		}
 	}
@@ -146,7 +149,6 @@
 				border-color: var(--tertiary-grey);
 			}
 		}
-
 	}
 
 	.x-grid-td {
@@ -162,6 +164,7 @@
 				top-width: 0 !important;
 				bottom-width: 0 !important;
 			}
+
 			background: none;
 			background-color: initial !important;
 		}
@@ -194,7 +197,6 @@
 		font: normal 300 0.85em/3 var(--body-font-family);
 		color: var(--secondary-grey);
 
-
 		&.x-grid-cell-selected {
 			background-color: inherit !important;
 		}
@@ -204,18 +206,20 @@
 			color: var(--primary-grey);
 			font-weight: 600;
 		}
+
 		&.x-grid-cell-first {
 			color: var(--primary-blue);
 			cursor: pointer;
 		}
 
-		.right-aligned{
+		.right-aligned {
 			text-align: right;
 		}
 
 		.check {
 			text-indent: -100px;
 			overflow: hidden;
+
 			@include icon($check_gray, $top: 1em, $left: 1.6em);
 		}
 
@@ -223,33 +227,34 @@
 			cursor: pointer;
 			width: 40px;
 			height: 40px;
+
 			@include icon($more-options, $top: 15px, $left: 9px);
 		}
 
-		&.feedback{
+		&.feedback {
 			padding-left: 10px;
 
 			.x-grid-cell-inner {
 				line-height: 30px;
 
-				.grade-excused{
-					&.off{
+				.grade-excused {
+					&.off {
 						display: none;
 					}
 
-					&.on{
+					&.on {
 						display: block;
 						color: var(--primary-red);
 					}
 				}
 			}
-
 		}
 
 		.disclosure {
 			cursor: pointer;
 			width: 40px;
 			height: 40px;
+
 			@include icon($options-menu, $top: 6px, $left: 5.5px);
 
 			&:target,
@@ -268,15 +273,15 @@
 			}
 		}
 
-
 		div.padded-cell,
-		&.padded-cell .x-grid-cell-inner{
+		&.padded-cell .x-grid-cell-inner {
 			margin-left: 30px;
 		}
 
 		&.text {
 			cursor: text;
 			overflow: visible;
+
 			.x-grid-cell-inner {
 				overflow: visible;
 			}
@@ -296,15 +301,16 @@
 			input {
 				font: normal normal 1em/1 var(--body-font-family);
 				width: 45%;
-				padding: 0.7em 0.3em 0.7em 1.0em;
+				padding: 0.7em 0.3em 0.7em 1em;
 				margin-left: -0.3em;
+
 				&:hover,
 				&:focus {
 					border-color: var(--tertiary-grey);
 				}
 			}
 
-			.grade-excused{
+			.grade-excused {
 				color: var(--primary-red);
 				padding-left: 5px;
 				width: 45%;
@@ -319,25 +325,30 @@
 				float: left;
 				display: inline-block;
 				line-height: 0;
-				width: 60px; height: 60px;
+				width: 60px;
+				height: 60px;
 				background: {
 					size: cover;
 					position: center center;
 					repeat: no-repeat;
 				}
 			}
+
 			.name {
 				margin-left: 75px;
 				line-height: 60px;
 				max-width: 100%;
 				overflow: hidden;
+
 				@include ellipse;
+
 				color: var(--primary-grey);
 
-				.accent-name{
+				.accent-name {
 					font-weight: normal;
 					padding-right: 0.5em;
 					overflow: hidden;
+
 					@include ellipse;
 				}
 			}
@@ -360,11 +371,10 @@
 	}
 }
 
-
 //Grid Views:
 .x-grid {
-	.x-grid-cell-editor{
-		input{
+	.x-grid-cell-editor {
+		input {
 			font: normal 300 0.8em/1 var(--body-font-family);
 			height: 40px !important;
 			border: 1px solid #dcdcdc;
@@ -372,7 +382,7 @@
 		}
 	}
 
-	&.fixed-table{
+	&.fixed-table {
 		table {
 			table-layout: fixed !important;
 		}

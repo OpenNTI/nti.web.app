@@ -44,7 +44,6 @@
 
 .feature {
 	flex: 1 1 auto;
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -105,5 +104,5 @@
 }
 
 .button.dark {
-	color: rgba(0, 0, 0,  0.8);
+	color: rgba(0, 0, 0, 0.8);
 }

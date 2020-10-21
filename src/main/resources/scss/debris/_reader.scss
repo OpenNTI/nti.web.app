@@ -2,15 +2,14 @@
 	.navigation-placeholder {
 		float: right;
 		margin: 0;
-		width:  258px;
+		width: 258px;
 	}
 
 	.navigation-view.floating {
 		bottom: 0;
 	}
 
-
-	.center{
+	.center {
 		float: left;
 		width: 766px;
 		background-color: white;
@@ -21,7 +20,7 @@
 		.x-reader-pane {
 			max-height: 100%;
 			overflow-y: auto;
-			clear:both;
+			clear: both;
 			margin-top: 61px;
 		}
 	}

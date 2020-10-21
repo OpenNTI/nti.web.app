@@ -3,80 +3,79 @@
 	margin: 2em 0 2.5em;
 	display: flex;
 	flex-direction: row;
-    flex-wrap: wrap;
+	flex-wrap: wrap;
 
 	.redeemLabel {
-	    flex: 0 1 100%;
+		flex: 0 1 100%;
 		color: var(--primary-grey);
-	    float: left;
-	    font: normal 300 1.125em/1 var(--body-font-family);
-	    margin-bottom: 10px;
+		float: left;
+		font: normal 300 1.125em/1 var(--body-font-family);
+		margin-bottom: 10px;
 	}
 
 	.common-form {
 		display: flex;
 	}
 
-
 	.error-label {
-	    color: var(--primary-red);
-	    font: 200 14px var(--body-font-family);
+		color: var(--primary-red);
+		font: 200 14px var(--body-font-family);
 	}
 
 	.form-container {
-	    width: 100%;
+		width: 100%;
 		height: 40px;
-		
+
 		.invitation_codes {
-		   width: 22%;
+			width: 22%;
 		}
 
 		input[name="invitation_codes"] {
-		    width: 100%;
+			width: 100%;
 			font-size: 14px;
 			margin-bottom: 1.25em;
 			padding: 0.65em;
-		    font-family: var(--body-font-family);
-		    font-style: italic;
-		    color: var(--primary-grey);
-		    border: none;
-		    box-shadow: 0 0 0 1px #d8d8d8;
-		    border-radius: 2px;
+			font-family: var(--body-font-family);
+			font-style: italic;
+			color: var(--primary-grey);
+			border: none;
+			box-shadow: 0 0 0 1px #d8d8d8;
+			border-radius: 2px;
 		}
 
 		.reedem {
-		    background-color: var(--primary-blue);
-		    color: white;
-		    font-size: 14px;
-		    display: inline-block;
-		    font-family: var(--body-font-family);
-		    font-weight: 500;
-		    border-radius: 2px;
-		    cursor: pointer;
-		    margin-left: 8px;
-		    height: 39px;
-		    width: 90px;
+			background-color: var(--primary-blue);
+			color: white;
+			font-size: 14px;
+			display: inline-block;
+			font-family: var(--body-font-family);
+			font-weight: 500;
+			border-radius: 2px;
+			cursor: pointer;
+			margin-left: 8px;
+			height: 39px;
+			width: 90px;
 		}
 
-		.redeem[disabled="disabled"]{
+		.redeem[disabled="disabled"] {
 			background-color: var(--tertiary-grey);
-		    cursor: inherit;
+			cursor: inherit;
 		}
 
 		&.error {
 			.reedem {
-		    	background-color: grey;
-		    	opacity: 0.65;
-		    	pointer-events: none;
+				background-color: grey;
+				opacity: 0.65;
+				pointer-events: none;
 			}
+
 			input[name="invitation_codes"] {
-			    box-shadow: 0 0 0 1px var(--primary-red);
+				box-shadow: 0 0 0 1px var(--primary-red);
 			}
 		}
 	}
 
 	.redeem-controls {
 		margin-left: 5px;
-
 	}
 }

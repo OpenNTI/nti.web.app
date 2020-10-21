@@ -5,7 +5,6 @@ import {Theme, Loading, Errors} from '@nti/web-commons';
 
 import Card from '../../common/Card';
 import Controls from '../branding/Controls';
-import Reset from '../branding/Reset';
 
 import Store from './Store';
 import Styles from './View.css';
@@ -37,7 +36,7 @@ function AdvancedLogin ({error, loading, modified, theme, save, cancel}) {
 		if (e) {
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 		}
 
 		setPreview(true);

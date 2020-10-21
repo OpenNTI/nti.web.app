@@ -68,7 +68,6 @@
 			font-size: 0.75rem;
 			font-weight: bold;
 			color: var(--secondary-grey);
-
 		}
 
 		& .clear-file {
@@ -84,7 +83,6 @@
 			margin-top: 12px;
 		}
 	}
-
 
 	& .asset-wrapper {
 		max-width: 100%;

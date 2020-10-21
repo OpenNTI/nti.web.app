@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	addPreview: function () {},
 	addParentSelection: function (record, parentRecord, rootRecord, onChange) {},
 
-	addHeaderCmp() {},
+	addHeaderCmp () {},
 
 	addFormCmp: function () {
 		var values = this.getDefaultValues();

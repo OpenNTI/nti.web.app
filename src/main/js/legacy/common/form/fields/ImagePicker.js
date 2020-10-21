@@ -1,5 +1,3 @@
-const path = require('path');
-
 const Ext = require('@nti/extjs');
 
 const PromptActions = require('legacy/app/prompt/Actions');

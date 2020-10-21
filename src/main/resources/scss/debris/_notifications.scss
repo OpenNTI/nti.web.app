@@ -70,7 +70,8 @@
 			color: var(--primary-grey);
 			line-height: 24px;//height of the spinner
 			padding-left: 30px;//width of the spinner + 6px
-			top: 50%; left: 50%;
+			top: 50%;
+			left: 50%;
 			margin-top: -12px;
 			margin-left: -51px;
 
@@ -90,7 +91,7 @@
 	width: 300px;
 	background-color: white;
 	overflow: visible;
-	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3);
+	box-shadow: 3px 3px 3px -3px rgba(0, 0, 0, 0.3);
 	z-index: 201;
 
 	html.msg-bar-open & {
@@ -99,14 +100,14 @@
 
 	&::before {
 		content: "";
-	    position: absolute;
-	    width: 15px;
-	    height: 15px;
-	    right: 73px;
-	    transform: rotate(45deg);
-	    background: white;
-	    border: 1px solid #dcdcdc;
-	    top: -8px;
+		position: absolute;
+		width: 15px;
+		height: 15px;
+		right: 73px;
+		transform: rotate(45deg);
+		background: white;
+		border: 1px solid #dcdcdc;
+		top: -8px;
 	}
 
 	.show-all {
@@ -119,19 +120,22 @@
 
 .notification-stream {
 	@include flexContainer();
+
 	-webkit-align-content: stretch;
-    -ms-flex-line-pack: stretch;
-    align-content: stretch;
+	-ms-flex-line-pack: stretch;
+	align-content: stretch;
 
 	.sidebar {
 		background: #424242;
 		box-shadow: 1px 0 0 0 #5e5e5e;
 		min-height: calc(100vh - 72px);
+
 		@include flexItem(1 1 25%);
 	}
 
 	.groups {
 		padding: 0 36px;
+
 		@include flexItem(2 2 100%);
 	}
 
@@ -192,20 +196,24 @@
 		max-width: 775px;
 		margin-bottom: 10px;
 		padding: 15px 14px;
+
 		@include flexContainer();
 
 		.icon-wrapper {
 			@include flexItem(0 0 auto);
+
 			margin-right: 14px;
 		}
 
 		.username {
 			@include flexItem(0 0 25%);
+
 			float: left;
 			font: normal 400 0.875em/1.36 var(--body-font-family);
 			color: var(--primary-blue);
 			margin-right: 5px;
 			overflow: hidden;
+
 			@include ellipse;
 		}
 
@@ -253,7 +261,7 @@
 		padding: 10px 10px 10px 60px;
 		position: relative;
 		min-height: 60px;//40 + 10 + 10
-		box-shadow: inset 0 -1px 0 0px #f0f0f0 !important;
+		box-shadow: inset 0 -1px 0 0 #f0f0f0 !important;
 		line-height: 1;
 
 		.icon-wrapper {
@@ -270,7 +278,7 @@
 			display: inline;
 			margin-right: 0.5em;
 			color: var(--primary-blue);
-			weight: 600
+			weight: 600;
 		}
 
 		time {
@@ -311,7 +319,6 @@
 		}
 	}
 }
-
 
 .notification-header {
 	h3 {

@@ -1,5 +1,3 @@
-const url = require('url');
-
 const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
@@ -13,11 +11,9 @@ require('./routing/Object');
 
 function setObjHash (route, obj) {
 	const id = encodeForURI(obj.get('NTIID'));
-	const parts = url.parse(route.path);
+	const [path] = route.path.split('#');
 
-	parts.hash = id;
-
-	route.path = url.format(parts);
+	route.path = [path, id].join('#');
 
 	return route;
 }

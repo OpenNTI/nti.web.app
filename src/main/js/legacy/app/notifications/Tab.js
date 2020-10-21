@@ -1,17 +1,16 @@
+const cx = require('classnames');
 const Ext = require('@nti/extjs');
-const classnames = require('classnames/bind');
 
-const Styles = require('./Tab.css');
 const NotificationsStateStore = require('./StateStore');
+const styles = require('./Tab.css');
 
 require('./components/TabView');
 
-const cx = classnames.bind(Styles);
 
-const lightCls = cx('light');
-const darkCls = cx('dark');
-const knockOut = cx('knockout');
-const noKnockOut = cx('no-knockout');
+const lightCls = styles.light;
+const darkCls = styles.dark;
+const knockOut = styles.knockout;
+const noKnockOut = styles['no-knockout'];
 
 module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 	extend: 'Ext.Component',
@@ -21,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: cx('notifications-icon', 'icon'), role: 'button', tabindex: '0', 'aria-label': 'Notifications'}
+		{cls: cx('notifications-icon', styles.icon), role: 'button', tabindex: '0', 'aria-label': 'Notifications'}
 	]),
 
 	setTheme (theme, knockout) {

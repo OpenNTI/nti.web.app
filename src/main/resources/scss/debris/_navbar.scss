@@ -46,6 +46,7 @@
 
 	.nav-container {
 		@include flexItem(1 1 100px);
+
 		transition: opacity 0.5s, width 0.5s;
 		position: relative;
 		left: 0;
@@ -62,11 +63,13 @@
 
 	.search-container {
 		@include flexItem(1 1 auto);
+
 		position: relative;
 
 		.search-field-wrap {
 			position: absolute;
-			top: 0; bottom: 0;
+			top: 0;
+			bottom: 0;
 			right: 0;
 			width: 100%;
 			transition: width 0.5s;
@@ -110,11 +113,11 @@
 	.icons {
 		@include flexItem(0 0 auto);
 		@include flexContainer();
+
 		justify-content: flex-end;
 		-webkit-box-pack: end;
 		-webkit-justify-content: flex-end;
-        -ms-flex-pack: end;
-
+		-ms-flex-pack: end;
 
 		& > div {
 			@include flexItem(0 0 auto);
@@ -122,6 +125,7 @@
 
 		.chat-notification-container {
 			display: none;
+
 			@media #{$hide-chat-break-point} {
 				display: block;
 			}
@@ -161,7 +165,8 @@
 		opacity: 0;
 		left: 0;
 		display: none;
-		@include flexBasis(0px);
+
+		@include flexBasis(0);
 		@include flexItem(0 1 100px);
 	}
 
@@ -187,6 +192,7 @@
 .main-navigation.has-nav {
 	.search-container {
 		@include flexBasis(150px);
+
 		max-width: 200px;
 
 		.search-field-wrap {
@@ -199,6 +205,7 @@
 
 		&.collapsed {
 			@include flexItem(0 0 50px);
+
 			.search-field-wrap {
 				.search-field {
 					width: 50px;
@@ -221,6 +228,7 @@
 			display: block;
 			top: 10px;
 			left: 15px;
+
 			@include icon($warning-icon-red, $side: after, $position: absolute);
 
 			& + .msg {
@@ -234,9 +242,9 @@
 		font-size: 14px;
 		line-height: 40px;
 		margin-right: 10px;
-    	vertical-align: top;
-    	font-weight: 500;
-    	margin: 0 10px 0 20px;
+		vertical-align: top;
+		font-weight: 500;
+		margin: 0 10px 0 20px;
 	}
 
 	.buttons {
@@ -251,7 +259,7 @@
 			cursor: pointer;
 			position: relative;
 
-			&::after{
+			&::after {
 				content: "|";
 				position: absolute;
 				right: 0;
@@ -261,26 +269,27 @@
 			}
 
 			&:last-of-type {
-					&::after {
-						content: none;
-					}
+				&::after {
+					content: none;
 				}
+			}
 
-				&:first-of-type {
-					padding-left: 0;
-				}
+			&:first-of-type {
+				padding-left: 0;
+			}
 		}
 	}
 
-	.close{
+	.close {
 		@include icon($note-window-x, $side: after, $position: absolute);
+
 		top: 10px;
 		right: 10px;
 		cursor: pointer;
 		width: 24px;
 		height: 24px;
 
-		&:hover{
+		&:hover {
 			@include icon($note-window-x_hover, $side: after, $position: absolute);
 		}
 	}

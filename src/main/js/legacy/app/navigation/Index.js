@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const classname = require('classnames/bind');
 const {wait} = require('@nti/lib-commons');
 const {Theme} = require('@nti/web-commons');
 
@@ -11,13 +10,12 @@ const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
 
 const NavigationStateStore = require('./StateStore');
-const Styles = require('./Index.css');
+const styles = require('./Index.css');
 
 
 require('legacy/mixins/State');
 require('../chat/Index');
 
-const cx = classname.bind(Styles);
 const DefaultAsset = 'assets.logo';
 
 
@@ -29,11 +27,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		State: 'NextThought.mixins.State'
 	},
 
-	cls: `main-navigation ${cx('navbar')}`,
+	cls: `main-navigation ${styles.navbar}`,
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'back-container', cn: [
-			{cls: cx('branding-container'), tabindex: '0', 'aria-label': 'Home', tag: 'a'},
+			{cls: 'branding-container', tabindex: '0', 'aria-label': 'Home', tag: 'a'},
 			{cls: 'back', tabindex: '0', 'aria-label': 'Back', tag: 'a', cn: [
 				{ cls: 'icon-remove' }
 			]}
@@ -296,7 +294,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		this.brandingCmp = ReactHarness.create({
 			component: Theme.Asset,
 			name: DefaultAsset,
-			className: cx('navigation-branding-asset'),
+			className: styles['navigation-branding-asset'],
 			cacheBust: true
 		});
 
@@ -426,7 +424,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	/**
 	 * Override this method in the state mixin so it doesn't
 	 * write the state to local storage. We only want this state
-	 * to persist in memory, not across refreshs.
+	 * to persist in memory, not across refreshes.
 	 * @param {Object} state the state to apply
 	 * @returns {void}
 	 */

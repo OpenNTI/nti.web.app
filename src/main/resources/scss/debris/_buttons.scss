@@ -1,5 +1,4 @@
 
-
 $skins: nt,primary,secondary,caution;
 $sizes: small,medium,large;
 
@@ -9,25 +8,25 @@ $button-borders:
 	#a8a8a8,
 	#a8a8a8;
 
-$button-shadows: #a4c8f5,#cce49c,#ffffff,#ffb3b3;
-$button-start-colors: #6D91EB,#a4ce50,#e4e4e4,#ff7979;
-$button-end-colors: #384EA9,#87b133,#c8c8c8,#eb4a4a;
+$button-shadows: #a4c8f5,#cce49c,#fff,#ffb3b3;
+$button-start-colors: #6d91eb,#a4ce50,#e4e4e4,#ff7979;
+$button-end-colors: #384ea9,#87b133,#c8c8c8,#eb4a4a;
 
-$button-text-colors: #ffffff,#ffffff,#707070,#ffffff;
-$button-text-shadows: #12236a,#688b23,#ffffff,#B93533;
+$button-text-colors: #fff,#fff,#707070,#fff;
+$button-text-shadows: #12236a,#688b23,#fff,#b93533;
 $button-text-weights: 500,500,600,500;
 
 @each $skin in $skins {
 	$experimental-support-for-svg: true;
-	$x: index($skins,$skin);
+	$x: index($skins, $skin);
 
-	$border: nth($button-borders,$x);
-	$shadow: nth($button-shadows,$x);
-	$startColor: nth($button-start-colors,$x);
-	$endColor: nth($button-end-colors,$x);
-	$color: nth($button-text-colors,$x);
-	$text-shadow: nth($button-text-shadows,$x);
-	$font-weight: nth($button-text-weights,$x);
+	$border: nth($button-borders, $x);
+	$shadow: nth($button-shadows, $x);
+	$startColor: nth($button-start-colors, $x);
+	$endColor: nth($button-end-colors, $x);
+	$color: nth($button-text-colors, $x);
+	$text-shadow: nth($button-text-shadows, $x);
+	$font-weight: nth($button-text-weights, $x);
 
 	$direction: -1px;
 
@@ -36,7 +35,7 @@ $button-text-weights: 500,500,600,500;
 	}
 
 	@each $size in $sizes {
-		$i: index($sizes,$size)  - 1;
+		$i: index($sizes, $size)  - 1;
 
 		@each $type in icon, noicon {
 			.x-btn-#{$skin}-#{$size}-#{$type} {
@@ -56,31 +55,32 @@ $button-text-weights: 500,500,600,500;
 		}
 
 		.x-btn-#{$skin}-#{$size} {
-			margin-left:10px;
+			margin-left: 10px;
 			border: 1px $border solid;
 			border-radius: 4px;
-			box-shadow: inset 0px 1px 1px $shadow;
+			box-shadow: inset 0 1px 1px $shadow;
 			padding: (4px*$i) 10px+(5px*$i);
-
 			background-image: linear-gradient(to bottom, $startColor 0%, $endColor 100%);
 
 			&.x-over {}
-			&.x-disabled{
+
+			&.x-disabled {
 				box-shadow: none;
 				background: #e4e4e4;
 				border-color: #e4e4e4;
 				cursor: default;
 				//color: #adadad;
 
-				.x-btn-inner{
+				.x-btn-inner {
 					box-shadow: none;
 					text-shadow: none;
 					font-weight: lighter;
 					color: var(--secondary-grey);
 				}
 			}
+
 			&.x-pressed {
-				box-shadow: inset 0px -1px 1px $shadow;
+				box-shadow: inset 0 -1px 1px $shadow;
 				background-image: linear-gradient(to bottom, $endColor 0%, $startColor 100%);
 			}
 
@@ -97,17 +97,19 @@ $button-text-weights: 500,500,600,500;
 .x-btn-flat-large,
 .x-btn-flat-medium {
 	cursor: pointer;
+
 	a {
 		background: none;
 		border: none;
 		padding: 12px 20px;
 
-		.x-btn-inner{
+		.x-btn-inner {
 			font: {
 				size: 14px;
 				style: normal;
 				weight: normal;
 			}
+
 			color: var(--primary-grey);
 			padding-right: 2px;
 		}
@@ -117,6 +119,7 @@ $button-text-weights: 500,500,600,500;
 .x-btn-blue-large,
 .x-btn-blue-medium {
 	cursor: pointer;
+
 	.x-btn-button {
 		padding: 8px 20px;
 		letter-spacing: 0.1em;
@@ -126,14 +129,15 @@ $button-text-weights: 500,500,600,500;
 		cursor: pointer;
 		z-index: 10;
 
-		.x-btn-inner{
+		.x-btn-inner {
 			font: {
 				size: 14px;
 				style: italic;
 				weight: 600;
 				family: var(--body-font-family);
 			}
-			color: #ffffff;
+
+			color: #fff;
 			padding-right: 2px;
 		}
 	}
@@ -195,14 +199,13 @@ $button-text-weights: 500,500,600,500;
 		display: inline-block;
 		cursor: pointer;
 		background-color: white;
-		background-image: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);
+		background-image: linear-gradient(to bottom, #fff 0%, #f2f2f2 100%);
 		color: var(--secondary-grey);
 		border-radius: 3px;
 		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
 		text-align: center;
 		line-height: 40px;
 		padding: 0 1rem;
-
 	}
 
 	&.synclock {
