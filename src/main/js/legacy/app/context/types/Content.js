@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 
 const LibraryActions = require('legacy/app/library/Actions');
+const ContentActions = require('legacy/app/contentviewer/Actions');
 const MediaviewerDeckOverlayedPanel = require('legacy/app/mediaviewer/content/deck/OverlayedPanel');
 const MediaviewerOverlayedPanel = require('legacy/app/mediaviewer/content/OverlayedPanel');
 const PartsSlide = require('legacy/app/mediaviewer/components/reader/parts/Slide');
@@ -10,6 +11,7 @@ const ImageOverlayedPanel = require('legacy/app/image/OverlayedPanel');
 const RollOverlayedPanel = require('legacy/app/video/roll/OverlayedPanel');
 const PageInfo = require('legacy/model/PageInfo');
 const Slide = require('legacy/model/Slide');
+const Survey = require('legacy/model/assessment/Survey');
 const Globals = require('legacy/util/Globals');
 const RangeUtils = require('legacy/util/Ranges');
 const OverlayedPanel = require('legacy/common/components/cards/OverlayedPanel');
@@ -32,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		type: 'content',
 
 		canHandle: function (obj) {
-			return obj instanceof PageInfo;
+			return obj instanceof PageInfo || obj instanceof Survey;
 		}
 	},
 
@@ -40,6 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		this.callParent(arguments);
 
 		this.LibraryActions = LibraryActions.create();
+		this.ContentActions = ContentActions.create();
 
 		this.container = config.container;
 		this.range = config.range;
@@ -48,7 +51,29 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		this.maxWidth = config.maxWidth || 574;
 	},
 
-	parse: function (pageInfo, contextKind) {
+	parse (obj, contextKind) {
+		if (obj instanceof Survey) {
+			return this.parseSurvey(obj, contextKind);
+		}
+
+		return this.parsePageInfo(obj, contextKind);
+	},
+
+	async parseSurvey (obj, contextKind) {
+		const container = await Service.getObject(obj.get('ContainerId'));
+		const fakePage = await this.ContentActions.getSurveyPageInfo(obj, container);
+
+		const content = fakePage.get('content') || '';
+		const xml = (new DOMParser()).parseFromString(`<!DOCTYPE html><html>${content.trim()}</html>`, 'text/html');
+
+		if (xml.querySelector('parsererror')) {
+			return Promise.resolve('');
+		}
+
+		return this.__parseNode(xml, '', contextKind);
+	},
+
+	parsePageInfo: function (pageInfo, contextKind) {
 		var me = this,
 			link = pageInfo.getLink('content'),
 			contentPackage = pageInfo.get('ContentPackageNTIID');
