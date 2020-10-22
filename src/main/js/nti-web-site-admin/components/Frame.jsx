@@ -19,11 +19,11 @@ const tabs = [
 	{ id: 'configuration', label: t('configuration')}
 ];
 
-SiteAdminFame.propTypes = {
+SiteAdminFrame.propTypes = {
 	workspace: PropTypes.object,
 	children: PropTypes.node
 };
-export default function SiteAdminFame ({workspace, children}) {
+export default function SiteAdminFrame ({workspace, children}) {
 	return (
 		<>
 			<Navigation.Tabs content={workspace} tabs={tabs}/>
