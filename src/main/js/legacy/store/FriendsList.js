@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const Logger = require('@nti/util-logger');
+const Logger = require('@nti/util-logger').default;
 require('legacy/model/FriendsList');
 
 const logger = Logger.get('store:FriendsList');
