@@ -59,7 +59,7 @@
     "@nti/web-library": "NextThought/nti.web.library",
     "@nti/web-login": "^2020.9.0-alpha.0",
     "@nti/web-modeled-content": "NextThought/nti.web.modeled-content",
-    "@nti/web-notifications": "NextThought/nti.web.notifications",
+    "@nti/web-notifications": "NextThought/nti.web.notifications#feature/tab",
     "@nti/web-payments": "NextThought/nti.web.payments",
     "@nti/web-profiles": "NextThought/nti.web.profiles",
     "@nti/web-reports": "NextThought/nti.web.reports",
