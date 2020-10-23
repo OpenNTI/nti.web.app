@@ -5,7 +5,7 @@ const {Theme} = require('@nti/web-commons');
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
 const IdentityIndex = require('../account/identity/Index');
-const NotificationsTab = require('../notifications/Tab');
+const { NotificationsTab } = require('@nti/web-notifications');
 const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
 
@@ -204,7 +204,6 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			}
 		}
 
-		this.setTheme(config.theme);
 		this.resizeNavCmp();
 	},
 
@@ -304,11 +303,16 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this)
 		});
 
-		this.notificationCmp = NotificationsTab.create({
-			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
-			setMenuClosed: this.setState.bind(this, {}),
-			pushRootRoute: this.pushRoute.bind(this),
-			navigateToObject: this.gotoObject.bind(this)
+		// this.notificationCmp = NotificationsTab.create({
+		// 	setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
+		// 	setMenuClosed: this.setState.bind(this, {}),
+		// 	pushRootRoute: this.pushRoute.bind(this),
+		// 	navigateToObject: this.gotoObject.bind(this)
+		// });
+
+		this.notificationCmp = ReactHarness.create({
+			component: NotificationsTab,
+			addHistory: true,
 		});
 
 		this.searchCmp = SearchBar.create({

@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 	initComponent: function () {
 		this.callParent();
 
-		this.add({xtype: 'navigation-message-bar', id: 'message-bar'});
+		// this.add({xtype: 'navigation-message-bar', id: 'message-bar'});
 		this.add({xtype: 'main-navigation', id: 'nav'});
 		this.body = this.add({xtype: 'main-views', id: 'view'});
 		this.add({xtype: 'windows-view', id: 'window'});
