@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 		function clean (text) {
 			d.innerHTML = text;
-			return d.textContent;
+			return Ext.util.Format.htmlEncode(d.textContent);
 		}
 
 		choices.forEach(function (choice, idx) {

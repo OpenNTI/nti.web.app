@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 		function clean (text) {
 			d.innerHTML = text;
-			return d.textContent;
+			return Ext.util.Format.htmlEncode(d.textContent);
 		}
 
 		rowLabels.forEach(function (value, valueIndex) {
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 		function clean (text) {
 			d.innerHTML = text;
-			return d.textContent;
+			return Ext.util.Format.htmlEncode(d.textContent);
 		}
 
 		rowLabels.forEach(function (value, valueIndex) {
