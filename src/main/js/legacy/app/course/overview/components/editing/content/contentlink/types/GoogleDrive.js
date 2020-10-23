@@ -80,8 +80,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				this.addDocumentData(docs[0]);
 				picker.setProps({value: docs[0]});
 			},
-			onError: () => {
+			onError: (e) => {
 				alert('Unable to get Drive document');
+				console.error('Error getting drive document: ', e);
 			}
 		});
 
