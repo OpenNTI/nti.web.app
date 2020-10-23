@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const { isNTIID, encodeForURI, decodeFromURI } = require('@nti/lib-ntiids');
+const {reportError} = require('@nti/web-client');
 
 const DynamicFriendsList = require('legacy/model/DynamicFriendsList');
 const ContentBundle = require('legacy/model/ContentBundle');
@@ -262,6 +263,11 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 				return courseView.handleRoute(subRoute, route.precache);
 			})
 			.catch(function (err) {
+				reportError({
+					error: err,
+					context: {component: 'Course Setup'}
+				});
+
 				if (me.currentRoute.indexOf('/course') !== 0) {
 					return;
 				}
