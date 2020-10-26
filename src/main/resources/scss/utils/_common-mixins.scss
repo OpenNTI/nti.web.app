@@ -303,6 +303,46 @@ $position:relative
 	}
 }
 
+@mixin highlight-colors($onParentSelector: true, $selector:'', $nibselector:null) {
+	$highlight-colors: (
+		// (name, menu color, hover, regular color)
+		('yellow',var(--highlight-colors-yellow-menu),var(--highlight-colors-yellow-hover),var(--highlight-colors-yellow)),
+		('green',var(--highlight-colors-green-menu),var(--highlight-colors-green-hover),var(--highlight-colors-green)),
+		('blue',var(--highlight-colors-blue-menu),var(--highlight-colors-blue-hover),var(--highlight-colors-blue))
+	);
+
+	@each $item in $highlight-colors {
+		$name: nth($item, 1);
+		$menu_color: nth($item, 2);
+		$hover_color: nth($item, 3);
+		$highlight_color: nth($item, 4);
+
+		$prefix: if($onParentSelector, '&', '');
+
+		$withColor: "#{$prefix}.#{$name} #{$selector}";
+		$withOutColor: "#{$prefix} #{$selector}";
+
+		$computedSelector: if($name=='blue', $withOutColor, $withColor);
+
+		#{$computedSelector} {
+			background-color: $highlight_color;
+			transition: all 0.2s;
+
+			&.highlight-mouse-over {
+				background-color: $hover_color;
+				transition: all 0.2s;
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+			}
+
+			@if ($nibselector) {
+				#{$nibselector} {
+					border-top-color: $highlight_color;
+				}
+			}
+		}
+	}
+}
+
 @mixin hardware-accelerate() {
 	//@include experimental(transform, translate3d(0, 0, 0));
 	//@include experimental(backface-visibility, hidden);
