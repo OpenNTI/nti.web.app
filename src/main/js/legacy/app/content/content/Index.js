@@ -22,21 +22,18 @@ require('legacy/app/contentviewer/StateStore');
 
 require('legacy/overrides/ReactHarness');
 
-function SurveyEditorPage (props) {
+const SurveyEditorPage = React.forwardRef(function SurveyEditorPage (props, ref) {
+	React.useImperativeHandle(ref, () => ({}));
 	return React.createElement(
 		Page,
 		{},
-		[
-			React.createElement(
-				Page.Content,
-				{card: false},
-				[
-					React.createElement(Survey.Editor, props)
-				]
-			)
-		]
+		React.createElement(
+			Page.Content,
+			{card: false},
+			React.createElement(Survey.Editor, props)
+		)
 	);
-}
+});
 
 module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	extend: 'Ext.container.Container',
