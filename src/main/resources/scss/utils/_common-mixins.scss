@@ -305,17 +305,17 @@ $position:relative
 
 @mixin highlight-colors($onParentSelector: true, $selector:'', $nibselector:null) {
 	$highlight-colors: (
-		// (name, menu color, hover)
-		('yellow',var(--highlight-colors-yellow-menu),var(--highlight-colors-yellow-hover)),
-		('green',var(--highlight-colors-green-menu),var(--highlight-colors-green-hover)),
-		('blue',var(--highlight-colors-blue-menu),var(--highlight-colors-blue-hover))
+		// (name, menu color, hover, regular color)
+		('yellow',var(--highlight-colors-yellow-menu),var(--highlight-colors-yellow-hover),var(--highlight-colors-yellow)),
+		('green',var(--highlight-colors-green-menu),var(--highlight-colors-green-hover),var(--highlight-colors-green)),
+		('blue',var(--highlight-colors-blue-menu),var(--highlight-colors-blue-hover),var(--highlight-colors-blue))
 	);
 
 	@each $item in $highlight-colors {
 		$name: nth($item, 1);
 		$menu_color: nth($item, 2);
 		$hover_color: nth($item, 3);
-		$highlight_color: rgba($hover_color, 0.65);
+		$highlight_color: nth($item, 4);
 
 		$prefix: if($onParentSelector, '&', '');
 
@@ -325,7 +325,6 @@ $position:relative
 		$computedSelector: if($name=='blue', $withOutColor, $withColor);
 
 		#{$computedSelector} {
-			// color: $menu_color;
 			background-color: $highlight_color;
 			transition: all 0.2s;
 
