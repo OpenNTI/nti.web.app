@@ -843,6 +843,9 @@
 		// }
 
 		&.plain {
+			transition: all 0.2s;
+			background-color: var(--highlight-colors-blue);
+
 			&, * {
 				position: relative;
 				z-index: 1;
@@ -852,7 +855,21 @@
 			background-color: #e1f4fe;
 			overflow: hidden;
 
-			@include highlight-colors();
+			&.yellow {
+				background-color: var(--highlight-colors-yellow);
+
+				&.highlight-mouse-over {
+					background-color: var(--highlight-colors-yellow-hover);
+				}
+			}
+
+			&.green {
+				background-color: var(--highlight-colors-green);
+
+				&.highlight-mouse-over {
+					background-color: var(--highlight-colors-green-hover);
+				}
+			}
 
 			&.shared-with-me {
 				&,.math {
@@ -876,6 +893,10 @@
 			}
 
 			&.highlight-mouse-over {
+				background-color: var(--highlight-colors-blue-hover);
+				transition: all 0.2s;
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+
 				&,a {
 					// color: #ffffff;
 					// background-color: var(--primary-blue);
