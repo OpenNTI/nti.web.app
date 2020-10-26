@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		this.onInvalidDrop = config.onInvalidDrop;
 		this.onInvalidOver = config.onInvalidOver;
 		this.onDragStart = config.onDragStart;
-		this.onDragStop = config.onDragStop;
+		this.onDragEnd = config.onDragEnd;
 
 		this.handlers = {
 			dragEnter: this.__dragEnter.bind(this),
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 
 		this.mon(this.DnDStore, {
 			'drag-start': this.__onDragStart.bind(this),
-			'drag-stop': this.__onDragStop.bind(this)
+			'drag-end': this.__onDragEnd.bind(this)
 		});
 	},
 
@@ -150,14 +150,14 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}
 	},
 
-	__onDragStop: function () {
+	__onDragEnd: function () {
 		delete this.dthCache;
 		if (this.scrollingParent) {
 			this.scrollingParent.unscrollWhenDragNearEdges();
 		}
 
-		if (this.onDragStop) {
-			this.onDragStop();
+		if (this.onDragEnd) {
+			this.onDragEnd();
 		}
 	},
 

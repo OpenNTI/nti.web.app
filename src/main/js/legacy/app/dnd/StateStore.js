@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.StateStore', {
 	removeActiveDragItem: function (activeItem) {
 		if (this.activeDragItem === activeItem) {
 			delete this.activeItem;
-			this.fireEvent('drag-stop');
+			this.fireEvent('drag-end');
 		}
 	},
 
