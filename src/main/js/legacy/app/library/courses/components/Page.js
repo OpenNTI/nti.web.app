@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		aVal = aVal && aVal.get('ProviderUniqueID');
 		bVal = bVal && bVal.get('ProviderUniqueID');
 
-		const strComp = naturalSort({caseSensitive: false});
+		const strComp = naturalSort();
 
 		return strComp(aVal, bVal);
 	}
