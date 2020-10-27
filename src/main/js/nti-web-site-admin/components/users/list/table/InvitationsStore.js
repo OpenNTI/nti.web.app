@@ -92,6 +92,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 		}));
 
 		batches.forEach(batch => this.sendInvites(batch));
+		this.set('selectedUsers', []);
 
 	}
 

@@ -1,23 +1,11 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {Prompt} from '@nti/web-commons';
+
+import ResendButton from '../ResendButton';
 
 export default function Resend ({item, store}) {
-	const onClick = useCallback(() => {
-		Prompt.areYouSure(
-			`Do you want to re-send the pending invitation for ${item.receiver}?`,
-			'Re-send Invitation?',
-			{
-				iconClass: 'alert',
-				confirmButtonClass: 'alert',
-				confirmButtonLabel: 'Yes',
-				cancelButtonLabel: 'No'
-			}
-		).then(() => store.resend(item));
-	}, [item, store]);
-
-	return (
-		<div onClick={onClick}>Resend</div>
+	return store.getSelectedCount() ? null : (
+		<ResendButton items={[item]} store={store} />
 	);
 }
 
@@ -26,6 +14,6 @@ Resend.propTypes = {
 		receiver: PropTypes.string.isRequired,
 	}).isRequired,
 	store: PropTypes.shape({
-		resend: PropTypes.func.isRequired,
+		getSelectedCount: PropTypes.func.isRequired,
 	}).isRequired,
 };

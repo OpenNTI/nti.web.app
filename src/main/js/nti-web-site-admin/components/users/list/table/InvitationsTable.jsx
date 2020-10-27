@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Table, Loading, Prompt} from '@nti/web-commons';
+import {Button, Table, Loading, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {searchable, contextual} from '@nti/web-search';
 
@@ -11,11 +11,13 @@ import SearchInfo from '../../../common/SearchInfo';
 import {Select, InviteDate, InviteName, Rescind, Resend} from './columns';
 import Store from './InvitationsStore';
 import EmptyState from './EmptyState';
+import ResendButton from './ResendButton';
 
 const t = scoped('nti-web-site-admin.users.list.table.InvitationsTable', {
 	learners: 'Invitations',
 	selected: '%(numSelected)s Selected',
 	rescind: 'Cancel Invitation',
+	resend: 'Re-send Invitations',
 	emptyMessage: 'There are no outstanding invitations',
 	invitePeople: 'Invite People'
 });
@@ -56,8 +58,8 @@ class InvitationsTable extends React.Component {
 		Select,
 		InviteName,
 		InviteDate,
-		Rescind,
 		Resend,
+		Rescind,
 	]
 
 	state = {
@@ -89,6 +91,7 @@ class InvitationsTable extends React.Component {
 
 	renderControls () {
 		const {canSendInvitations} = this.state;
+		const {store} = this.props;
 
 		if(!canSendInvitations) {
 			return null;
@@ -99,8 +102,17 @@ class InvitationsTable extends React.Component {
 
 		return (
 			<div className="controls">
-				{numSelected > 0 && <div className="button rescind" onClick={this.onRescind}><i className="icon-reset"/>{t('rescind')}</div>}
-				{numSelected <= 0 && <div className="button invite-people" onClick={this.launchInvite}><i className="icon-addfriend"/>{t('invitePeople')}</div>}
+				{numSelected > 0
+					? (
+						<>
+							<ResendButton items={selectedUsers} store={store} />
+							<Button rounded className="button rescind" onClick={this.onRescind}><i className="icon-reset"/>{t('rescind')}</Button>
+						</>
+					)
+					: (
+						<div className="button invite-people" onClick={this.launchInvite}><i className="icon-addfriend"/>{t('invitePeople')}</div>
+					)
+				}
 			</div>
 		);
 	}

@@ -39,13 +39,15 @@
 				line-height: 40px;
 				padding: 0 17px;
 				font-size: 14px;
+				margin-left: 0.5rem;
 
 				&.rescind {
 					background-color: var(--primary-red);
 					color: white;
+					border-color: var(--primary-red);
 				}
 
-				&.invite-people {
+				&.invite-people, &.resend {
 					background-color: var(--primary-blue);
 					color: white;
 					border-color: var(--primary-blue);
