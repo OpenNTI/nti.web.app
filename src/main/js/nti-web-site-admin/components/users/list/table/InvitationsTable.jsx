@@ -8,7 +8,7 @@ import InvitePeople from '../InvitePeople';
 import Pager from '../../../common/Pager';
 import SearchInfo from '../../../common/SearchInfo';
 
-import {Select, InviteDate, InviteName, Rescind} from './columns';
+import {Select, InviteDate, InviteName, Rescind, Resend} from './columns';
 import Store from './InvitationsStore';
 import EmptyState from './EmptyState';
 
@@ -56,7 +56,8 @@ class InvitationsTable extends React.Component {
 		Select,
 		InviteName,
 		InviteDate,
-		Rescind
+		Rescind,
+		Resend,
 	]
 
 	state = {
