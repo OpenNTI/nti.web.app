@@ -51,6 +51,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="checkbox-component"
             >
               <input
+                checked={false}
                 onChange={[Function]}
                 type="checkbox"
               />
@@ -616,6 +617,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="checkbox-component"
             >
               <input
+                checked={false}
                 onChange={[Function]}
                 type="checkbox"
               />
