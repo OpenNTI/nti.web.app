@@ -15,7 +15,7 @@ export default {
 		const selected = this.get('selectedUsers');
 		const items = this.get('items');
 
-		return selected && selected.length === items.length;
+		return !!(selected && selected.length === items.length);
 	},
 
 	onSelect (user) {
