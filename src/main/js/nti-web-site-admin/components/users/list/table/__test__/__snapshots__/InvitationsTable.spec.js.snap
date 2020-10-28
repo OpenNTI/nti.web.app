@@ -84,6 +84,16 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             </div>
           </th>
           <th
+            className=""
+          >
+            <div
+              className=""
+              onClick={[Function]}
+            >
+              <span />
+            </div>
+          </th>
+          <th
             className="rescind-col"
           >
             <div
@@ -167,6 +177,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -248,6 +269,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -331,6 +363,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -413,6 +456,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -494,6 +548,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -584,6 +649,16 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
             </div>
           </th>
           <th
+            className=""
+          >
+            <div
+              className=""
+              onClick={[Function]}
+            >
+              <span />
+            </div>
+          </th>
+          <th
             className="rescind-col"
           >
             <div
@@ -667,6 +742,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -748,6 +834,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -831,6 +928,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -912,6 +1020,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -995,6 +1114,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -1076,6 +1206,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -1159,6 +1300,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -1240,6 +1392,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -1323,6 +1486,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -1404,6 +1578,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -1487,6 +1672,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -1568,6 +1764,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -1651,6 +1858,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -1732,6 +1950,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -1815,6 +2044,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -1896,6 +2136,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -1979,6 +2230,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -2060,6 +2322,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -2143,6 +2416,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -2224,6 +2508,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -2307,6 +2602,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -2388,6 +2694,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"
@@ -2471,6 +2788,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -2553,6 +2881,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               </time>
             </div>
           </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
+          </td>
           <td
             className="rescind-col"
           >
@@ -2634,6 +2973,17 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
                 October 30, 2017
               </time>
             </div>
+          </td>
+          <td>
+            <a
+              className="nti-button button resend button primary rounded"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              tabIndex="0"
+            >
+              Re-send
+            </a>
           </td>
           <td
             className="rescind-col"

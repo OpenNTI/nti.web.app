@@ -7,6 +7,11 @@ import Selectable from './Selectable';
 
 const PAGE_SIZE = 20;
 
+const INVITATION_TYPES = {
+	ADMIN: Models.invitations.SiteAdminInvitation.MimeType,
+	LEARNER: Models.invitations.SiteInvitation.MimeType
+};
+
 export default
 @mixin(Selectable, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
 class UserInvitationsStore extends Stores.BoundStore {
@@ -63,11 +68,42 @@ class UserInvitationsStore extends Stores.BoundStore {
 		}
 	}
 
+	async resend (invitations) {
+		const isAdmin = invite => invite?.MimeType === INVITATION_TYPES.ADMIN;
+		const arr = Array.isArray(invitations) ? invitations : [invitations];
+
+		const groupBy = (getKey) => (acc, item) => {
+			const key = getKey(item);
+			return {
+				...acc,
+				[key]: [...(acc[key] || []), item]
+			};
+		};
+
+		// group invitations with the same mime type and message
+		const keyFactory = ({MimeType, message}) => `${MimeType}${message}`;
+		const grouped = arr.reduce(groupBy(keyFactory), {});
+
+		// options for this.sendInvites for each mime/message group
+		const batches = Object.values(grouped).map( invites => ({
+			emails: invites.map(({receiver}) => receiver),
+			message: invites[0].message,
+			isAdmin: isAdmin(invites[0])
+		}));
+
+		batches.forEach(batch => this.sendInvites(batch));
+		this.set('selectedUsers', []);
+
+	}
+
 	async sendInvites ({ emails, message, file, isAdmin }) {
 		const service = await getService();
 
 		this.set('loading', true);
 		this.set('inviteError', null);
+		const MimeType = isAdmin
+			? INVITATION_TYPES.ADMIN
+			: INVITATION_TYPES.LEARNER;
 
 		try {
 			let payload;
@@ -79,13 +115,13 @@ class UserInvitationsStore extends Stores.BoundStore {
 					payload.append('message', message);
 				}
 
-				payload.append('MimeType', isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType);
+				payload.append('MimeType', MimeType);
 				payload.append('source', file);
 			} else {
 				payload = {
-					invitations: emails.map(x => { return { 'receiver': x }; }),
+					invitations: emails.map(receiver => ({ receiver })),
 					message,
-					MimeType: isAdmin ? Models.invitations.SiteAdminInvitation.MimeType : Models.invitations.SiteInvitation.MimeType
+					MimeType
 				};
 			}
 
