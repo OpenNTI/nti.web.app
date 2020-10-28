@@ -16,6 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 	inputTpl: Ext.DomHelper.markup({
 		tag: 'input',
 		type: 'text',
+		spellcheck: 'true',
 		placeholder: '{{{NextThought.view.assessment.input.FreeResponse.answer}}}',
 		tabIndex: '{tabIndex}',
 		cls: 'answer-field tabable'
