@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.assignment.get('title'),
-			canEdit: this.assignment.canEdit()
+			canEdit: this.assignment.isModifiable
 		});
 	},
 
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			cls.push('completed');
 		}
 
-		if (this.assignment.canEdit()) {
+		if (this.assignment.isModifiable) {
 			cls.push('editable');
 		}
 
