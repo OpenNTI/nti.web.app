@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 const {wait} = require('@nti/lib-commons');
 const {getHistory} = require('@nti/web-routing');
+const {default: Logger} = require('@nti/util-logger');
 
 const {getString} = require('legacy/util/Localization');
 const B64 = require('legacy/util/Base64');
@@ -21,6 +22,7 @@ const NavigationActions = require('legacy/app/navigation/Actions');
 
 require('legacy/app/Index');
 
+const logger = Logger.get('app');
 const routeHistory = getHistory();
 
 module.exports = exports = Ext.define('NextThought.controller.Application', {
@@ -188,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 			path = '/id/';
 			id = lazy.ParseUtils.parseNtiFragment(fragment);
 		} else {
-			console.error('Fragement route we dont know how to handle.', fragment);
+			logger.error('Fragement route we dont know how to handle.', fragment);
 		}
 
 		if (id) {
@@ -236,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 
 	sendGAEvent () {
 		if (!global.ga) {
-			console.warn('Router requires ga to be available in global scope. Aborting attempt to send google analytics navigation event');
+			logger.debug('Router requires ga to be available in global scope. Aborting attempt to send google analytics navigation event');
 			return;
 		}
 		global.ga('set', 'page', global.location.href.replace(global.location.origin, ''));
@@ -394,7 +396,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		}
 
 		function stopNav () {
-			console.warn('NAVIGATION STOPPED:', title, route);
+			logger.warn('NAVIGATION STOPPED:', title, route);
 		}
 
 		if (allow instanceof Promise) {

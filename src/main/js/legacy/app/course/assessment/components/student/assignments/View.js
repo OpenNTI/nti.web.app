@@ -2,11 +2,13 @@ const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 const {wait} = require('@nti/lib-commons');
 const {scoped} = require('@nti/lib-locale');
+const {default: Logger} = require('@nti/util-logger');
 
-const {guidGenerator} = require('legacy/util/Globals');
+const {guidGenerator, naturalSortComparator} = require('legacy/util/Globals');
 const {getString} = require('legacy/util/Localization');
-const {naturalSortComparator} = require('legacy/util/Globals');
 const PathActions = require('legacy/app/navigation/path/Actions');
+
+const logger = Logger.get('course-assessment-assignments');
 
 const t = scoped('nti-web-app.course.assessment.components.student.assignments.View', {
 	available: 'This assignment will be available on %(date)s',
@@ -225,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 				//	//if we filtered out any assignments, add a link to see older ones
 				//	if (count > store.getCount()) {
-				//		console.log('Some assignments were filtered');
+				//		logger.log('Some assignments were filtered');
 				//		//this item has to be the first thing added if its going to be
 				//		cmp.add({
 				//			xtype: 'box',
@@ -523,7 +525,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.clearAssignmentsData();
 
 		if (!assignments) {
-			console.error('No assignments??');
+			logger.error('No assignments??');
 			return Promise.reject('No data');
 		}
 
@@ -551,7 +553,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			outlineInterface.onceBuilt()
 		]).then(finish)
 			.catch(function (reason) {
-				console.error('Failed to get course outline!', reason);
+				logger.error('Failed to get course outline!', reason);
 			});
 	},
 
@@ -569,7 +571,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 			if (outlineNodes.length > 1) {
 				//TODO: figure out how to show an entry in every lesson group
-				console.warn('Assignment is in more than one outline node, just taking the last.');
+				logger.debug('Assignment is in more than one outline node, just taking the last.');
 			}
 
 			if (!outlineNodes.length) {
@@ -715,7 +717,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (assignment) {
 			this.navigateToObject(assignment);
 		} else {
-			console.error('No Assignment to navigate to');
+			logger.error('No Assignment to navigate to');
 		}
 	},
 
