@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {scoped} from '@nti/lib-locale';
-import {Prompt, Button, Hooks, Loading} from '@nti/web-commons';
+import {Prompt, Button, Hooks} from '@nti/web-commons';
 
 import Store from '../Store';
 
@@ -11,7 +11,7 @@ import Iframe from './Iframe';
 
 
 const {useResolver} = Hooks;
-const {isPending, isErrored, isResolved} = useResolver;
+const {isResolved} = useResolver;
 
 const cx = classnames.bind(Styles);
 const t = scoped('web-site-admin.components.advanced.transcripts.certificate-styling.preview.Dialog', {
@@ -27,18 +27,12 @@ export default function CertificatePreviewModal ({onSave, onCancel}) {
 
 	const resolver = useResolver(() => getPreviewBlob(), [getPreviewBlob]);
 
-	const loading = isPending(resolver);
-	const error = isErrored(resolver) ? resolver : null;
 	const blob = isResolved(resolver) ? resolver : null;
-
-	const [objectURL, setObjectURL] = React.useState(null);
 
 	React.useEffect(() => {
 		if (!blob) { return; }
 
 		const url = URL.createObjectURL(blob);
-
-		setObjectURL(url);
 
 		return () => URL.revokeObjectURL(url);
 	}, [blob]);
