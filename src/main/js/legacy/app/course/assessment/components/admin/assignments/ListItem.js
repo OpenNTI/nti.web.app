@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			cls.push('late');
 		}
 
-		if (this.assignment.isModifiable) {
+		if (this.assignment.canEdit()) {
 			cls.push('editable');
 		}
 

@@ -585,7 +585,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 			return {
 				id: id,
-				canEdit: assignment.isModifiable,
+				canEdit: assignment.canEdit(),
 				containerId: assignment.get('containerId'),
 				lesson: node ? node.getId() : t('otherAssignments'),
 				isDuplicate: !!actualId,
