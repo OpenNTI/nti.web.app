@@ -1,6 +1,7 @@
 const Ext = require('@nti/extjs');
 const DetectZoom = require('detect-zoom');
 const Commons = require('@nti/web-commons');
+const {isFlag} = require('@nti/web-client');
 
 const DiscussionOverrides = require('nti-web-discussion-overrides');
 const {IEAlert} = require('nti-web-react-components');
@@ -49,7 +50,9 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 	initComponent: function () {
 		this.callParent();
 
-		// this.add({xtype: 'navigation-message-bar', id: 'message-bar'});
+		if (!isFlag('new-notifications')) {
+			this.add({xtype: 'navigation-message-bar', id: 'message-bar'});
+		}
 		this.add({xtype: 'main-navigation', id: 'nav'});
 		this.body = this.add({xtype: 'main-views', id: 'view'});
 		this.add({xtype: 'windows-view', id: 'window'});
