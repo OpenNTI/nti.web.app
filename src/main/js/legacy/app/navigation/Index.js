@@ -6,10 +6,10 @@ const { isFlag } = require('@nti/web-client');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
+const NotificationsTab = require('../notifications/Tab');
 const IdentityIndex = require('../account/identity/Index');
 const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
-const NotificationsTab = require('../notifications/Tab');
 
 const NavigationStateStore = require('./StateStore');
 const styles = require('./Index.css');
