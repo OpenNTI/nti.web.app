@@ -10,6 +10,7 @@ const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
 
 const NavigationStateStore = require('./StateStore');
+const styles = require('./Index.css');
 
 // eslint-disable-next-line import/order
 const { ReactNotificationsTab } = require('@nti/web-notifications');
