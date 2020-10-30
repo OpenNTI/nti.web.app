@@ -1,19 +1,20 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {Theme} = require('@nti/web-commons');
-const { ReactNotificationsTab } = require('@nti/web-notifications');
-const { isFlag } = require('@nti/web-client');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
-const NotificationsTab = require('../notifications/Tab');
 const IdentityIndex = require('../account/identity/Index');
+const NotificationsTab = require('../notifications/Tab');
 const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
 
 const NavigationStateStore = require('./StateStore');
-const styles = require('./Index.css');
 
+// eslint-disable-next-line import/order
+const { ReactNotificationsTab } = require('@nti/web-notifications');
+// eslint-disable-next-line import/order
+const { isFlag } = require('@nti/web-client');
 
 require('legacy/mixins/State');
 require('../chat/Index');
