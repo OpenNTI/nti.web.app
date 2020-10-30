@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			}
 		}
 
-		this.setTheme(config.theme);
+		this.setTheme(config.theme, config.themeScope);
 		this.resizeNavCmp();
 	},
 
@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 	},
 
 
-	setTheme (theme = {}) {
+	setTheme (theme = {}, themeScope) {
 		const el = this.el && this.el.dom;
 
 		if (!el) { return; }
@@ -268,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		this.identityCmp.setTheme(theme.identity, knockout);
 		this.searchCmp.setTheme(theme.search);
 		this.chatCmp.setTheme(theme.icon);
-		this.notificationCmp.setTheme(theme.icon, knockout);
+		this.notificationCmp.setThemeScope(themeScope);
 
 	},
 

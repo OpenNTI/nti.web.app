@@ -4,7 +4,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService, reportError} = require('@nti/web-client');
-const { Error: ErrorCmp } = require('@nti/web-commons');
+const { Error: ErrorCmp, Theme } = require('@nti/web-commons');
 const {encodeForURI} = require ('@nti/lib-ntiids');
 const {getHistory, LinkTo} = require('@nti/web-routing');
 
@@ -95,12 +95,14 @@ const Bridge = createReactClass({
 		setRouteViewTitle: PropTypes.func,
 		getRouteFor: PropTypes.func,
 		addHistory: PropTypes.bool,
-		addRouteTo: PropTypes.bool
+		addRouteTo: PropTypes.bool,
+		themeScope: PropTypes.string
 	},
 
 	getInitialState () {
 		return {
-			baseroute: this.props.baseroute
+			baseroute: this.props.baseroute,
+			themeScope: this.props.themeScope,
 		};
 	},
 
@@ -165,6 +167,11 @@ const Bridge = createReactClass({
 	},
 
 
+	setThemeScope (themeScope) {
+		this.setState({themeScope});
+	},
+
+
 	componentDidCatch (error, info) {
 		this.setState({ error, info, hasError: true });
 		reportError({
@@ -179,7 +186,18 @@ const Bridge = createReactClass({
 			return React.createElement(ErrorCmp, this.state, 'Something went wrong.');
 		}
 
-		return React.Children.only(this.props.children);
+		const {themeScope} = this.state;
+		const content = React.Children.only(this.props.children);
+
+		if (!themeScope) {
+			return content;
+		}
+
+		return (
+			<Theme.Scope scope={themeScope}>
+				{content}
+			</Theme.Scope>
+		);
 	}
 });
 
@@ -318,7 +336,8 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 					ref: x => this.bridgeInstance = x,
 					getRouteFor: (...args) => this.getHarnessRouteFor(...args),
 					addHistory: config.addHistory,
-					addRouteTo: config.addRouteTo
+					addRouteTo: config.addRouteTo,
+					themeScope: this.themeScope
 				},
 				//The ref will be called on mount with the instance of the component.
 				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
@@ -364,6 +383,9 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 		this.bridgeInstance.setBaseRoute(baseroute);
 	},
 
+	setThemeScope (themeScope) {
+		this.bridgeInstance.setThemeScope(themeScope);
+	},
 
 	/**
 	 * @private This is NOT the primary way to communicate with the React component. Use setProps()
