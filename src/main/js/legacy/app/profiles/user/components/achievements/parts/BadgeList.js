@@ -46,8 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					'data-qtip': '{preferenceTooltip}',
 					html: 'Display My Badges Publicly',
 					tabIndex: 0,
-					role: 'button',
-					'aria-role': 'button'
+					role: 'button'
 				}
 			]}
 		]}

@@ -233,7 +233,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 	isUI: function isUI(n){
 		return n && n.nodeType === 1
-			? n.hasAttribute('aria-role') || /^object|img$/i.test(n.tagName) || isUI(n.parentNode)
+			? n.hasAttribute('role') || /^object|img$/i.test(n.tagName) || isUI(n.parentNode)
 			: false;
 	},
 

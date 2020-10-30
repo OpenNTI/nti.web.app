@@ -15,7 +15,6 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				html: 'Enable High Contrast Mode.',
 				tabIndex: 0,
 				role: 'button',
-				'aria-role': 'button',
 				'data-preference-path': 'WebApp',
 				'data-preference-key': 'useHighContrast'
 			}
@@ -29,7 +28,6 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				html: 'Send me email notifications about activity I may have missed.',
 				tabIndex: 0,
 				role: 'button',
-				'aria-role': 'button',
 				'data-preference-path': 'PushNotifications/Email',
 				'data-preference-key': 'email_a_summary_of_interesting_changes'
 			},
@@ -39,7 +37,6 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				html: 'Send me email notifications when someone @mentions me.',
 				tabIndex: 0,
 				role: 'button',
-				'aria-role': 'button',
 				'data-preference-path': 'PushNotifications/Email',
 				'data-preference-key': 'notify_on_mention'
 			},
@@ -49,7 +46,6 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				html: 'Send me email notifications when I am replied to.',
 				tabIndex: 0,
 				role: 'button',
-				'aria-role': 'button',
 				'data-preference-path': 'PushNotifications/Email',
 				'data-preference-key': 'immediate_threadable_reply'
 			}
@@ -64,7 +60,6 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				html: 'Make badges earned for completing a course public.',
 				tabIndex: 0,
 				role: 'button',
-				'aria-role': 'button',
 				'data-preference-path': 'Badges/Course',
 				'data-preference-key': 'show_course_badges'
 			}
