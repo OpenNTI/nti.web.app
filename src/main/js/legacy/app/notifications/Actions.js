@@ -9,6 +9,8 @@ const UserdataStateStore = require('../userdata/StateStore');
 
 const NotificationsStateStore = require('./StateStore');
 
+const { emitIncoming } = require('@nti/web-notifications');
+
 require('legacy/common/Actions');
 require('legacy/model/Change');
 
@@ -62,6 +64,9 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 	},
 
 	incomingChange: function (change) {
+
+		emitIncoming(change);
+
 		var me = this;
 
 		this.NotificationsStore.getStore().then(function (store) {

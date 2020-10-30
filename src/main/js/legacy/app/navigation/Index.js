@@ -1,6 +1,9 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {Theme} = require('@nti/web-commons');
+const { ReactNotificationsTab } = require('@nti/web-notifications');
+const { isFlag } = require('@nti/web-client');
+const cx = require('classnames');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
@@ -11,6 +14,7 @@ const GutterTab = require('../chat/components/gutter/Tab');
 
 const NavigationStateStore = require('./StateStore');
 const styles = require('./Index.css');
+
 
 
 require('legacy/mixins/State');
@@ -40,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		{cls: 'search-container collapsed'},
 		{cls: 'icons', cn: [
 			{cls: 'chat-notification-container'},
-			{cls: 'notification-container'},
+			{cls: cx('notification-container', {'hide-badge': isFlag('new-notifications')})},
 			{cls: 'identity-container'}
 		]}
 	]),
@@ -304,12 +308,22 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this)
 		});
 
-		this.notificationCmp = NotificationsTab.create({
-			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
-			setMenuClosed: this.setState.bind(this, {}),
-			pushRootRoute: this.pushRoute.bind(this),
-			navigateToObject: this.gotoObject.bind(this)
-		});
+		if (!isFlag('new-notifications')) {
+			this.notificationCmp = NotificationsTab.create({
+				setMenuOpen: this.setState.bind(this, {
+					active: 'notificationCmp',
+				}),
+				setMenuClosed: this.setState.bind(this, {}),
+				pushRootRoute: this.pushRoute.bind(this),
+				navigateToObject: this.gotoObject.bind(this),
+			});
+		} else {
+			this.notificationCmp = ReactHarness.create({
+				component: ReactNotificationsTab,
+				addHistory: true,
+				baseroute: '/app',
+			});
+		}
 
 		this.searchCmp = SearchBar.create({
 			setMenuOpen: this.setState.bind(this, {active: 'searchCmp'}),
