@@ -186,10 +186,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 
 		if (config && config.darkStyle) {
 			this.addCls('dark-nav');
-			this.notificationCmp.setProps({ dark: true });
 		} else {
 			this.removeCls('dark-nav');
-			this.notificationCmp.setProps({ dark: false });
 		}
 
 		if (config && config.noRouteOnSearch) {
