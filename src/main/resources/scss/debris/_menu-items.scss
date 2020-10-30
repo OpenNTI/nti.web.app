@@ -84,6 +84,8 @@ label.x-menu-item-cmp {
 	margin: 0 !important;
 	cursor: pointer;
 	overflow: hidden;
+	display: flex;
+	align-items: center;
 
 	@include ellipse;
 
