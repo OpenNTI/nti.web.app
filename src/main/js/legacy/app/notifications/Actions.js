@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { emitIncoming } = require('@nti/web-notifications');
 
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
@@ -9,7 +10,6 @@ const UserdataStateStore = require('../userdata/StateStore');
 
 const NotificationsStateStore = require('./StateStore');
 
-const { emitIncoming } = require('@nti/web-notifications');
 
 require('legacy/common/Actions');
 require('legacy/model/Change');
