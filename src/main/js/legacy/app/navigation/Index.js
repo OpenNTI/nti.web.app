@@ -1,13 +1,15 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {Theme} = require('@nti/web-commons');
+const { ReactNotificationsTab } = require('@nti/web-notifications');
+const { isFlag } = require('@nti/web-client');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
 const IdentityIndex = require('../account/identity/Index');
-const { NotificationsTab } = require('@nti/web-notifications');
 const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
+const NotificationsTab = require("../notifications/Tab");
 
 const NavigationStateStore = require('./StateStore');
 const styles = require('./Index.css');
@@ -204,6 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			}
 		}
 
+		this.setTheme(config.theme);
 		this.resizeNavCmp();
 	},
 
@@ -303,18 +306,22 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this)
 		});
 
-		// this.notificationCmp = NotificationsTab.create({
-		// 	setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
-		// 	setMenuClosed: this.setState.bind(this, {}),
-		// 	pushRootRoute: this.pushRoute.bind(this),
-		// 	navigateToObject: this.gotoObject.bind(this)
-		// });
-
-		this.notificationCmp = ReactHarness.create({
-			component: NotificationsTab,
-			addHistory: true,
-			baseroute: '/app',
-		});
+		if (!isFlag('new-notifications')) {
+			this.notificationCmp = NotificationsTab.create({
+				setMenuOpen: this.setState.bind(this, {
+					active: 'notificationCmp',
+				}),
+				setMenuClosed: this.setState.bind(this, {}),
+				pushRootRoute: this.pushRoute.bind(this),
+				navigateToObject: this.gotoObject.bind(this),
+			});
+		} else {
+			this.notificationCmp = ReactHarness.create({
+				component: ReactNotificationsTab,
+				addHistory: true,
+				baseroute: '/app',
+			});
+		}
 
 		this.searchCmp = SearchBar.create({
 			setMenuOpen: this.setState.bind(this, {active: 'searchCmp'}),
