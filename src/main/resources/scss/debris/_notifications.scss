@@ -24,6 +24,12 @@
 	}
 }
 
+.hide-badge {
+	[data-badge]::before {
+		content: none !important;
+	}
+}
+
 .notifications-icon {
 	width: 50px;
 	cursor: pointer;

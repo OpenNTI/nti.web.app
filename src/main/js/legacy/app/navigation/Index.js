@@ -3,6 +3,7 @@ const {wait} = require('@nti/lib-commons');
 const {Theme} = require('@nti/web-commons');
 const { ReactNotificationsTab } = require('@nti/web-notifications');
 const { isFlag } = require('@nti/web-client');
+const cx = require('classnames');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
@@ -13,6 +14,7 @@ const GutterTab = require('../chat/components/gutter/Tab');
 
 const NavigationStateStore = require('./StateStore');
 const styles = require('./Index.css');
+
 
 
 require('legacy/mixins/State');
@@ -42,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		{cls: 'search-container collapsed'},
 		{cls: 'icons', cn: [
 			{cls: 'chat-notification-container'},
-			{cls: isFlag('new-notifications') ? '' : 'notification-container'},
+			{cls: cx('notification-container', {'hide-badge': isFlag('new-notifications')})},
 			{cls: 'identity-container'}
 		]}
 	]),
@@ -53,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		backEl: '.back-container .back',
 		navContainerEl: '.nav-container',
 		identityEl: '.identity-container',
-		notificationEl: isFlag('new-notifications') ? '' : '.notification-container',
+		notificationEl: '.notification-container',
 		searchEl: '.search-container',
 		chatNotifyEl: '.chat-notification-container'
 	},
