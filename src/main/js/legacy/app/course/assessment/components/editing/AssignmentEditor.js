@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 * and we need to make sure they are always in sync.
 	 * @return {Null} No Return
 	 */
-	updateAssignment () {
+	async updateAssignment () {
 		const assignment = this.assignment;
 
 		// NOTE: since we want to make sure that the outline that a particular assignment belongs to
@@ -93,8 +93,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 		else {
 			if (this.findAssignment) {
-				this.findAssignment(this.assignmentId, true)
-					.then(a => this.assignment.syncWith(a));
+				try {
+					const a = await this.findAssignment(this.assignmentId, true);
+					this.assignment.syncWith(a);
+				} catch { /*Not Found*/ }
 			} else if (assignment && assignment.isModel && !assignment.isDeleted) {
 				assignment.updateFromServer();
 			}
