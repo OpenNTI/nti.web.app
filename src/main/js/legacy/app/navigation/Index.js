@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {Theme} = require('@nti/web-commons');
-const { ReactNotificationsTab } = require('@nti/web-notifications');
+const { NotificationsTab: ReactNotificationsTab } = require('@nti/web-notifications');
 const { isFlag } = require('@nti/web-client');
 const cx = require('classnames');
 
@@ -272,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		this.identityCmp.setTheme(theme.identity, knockout);
 		this.searchCmp.setTheme(theme.search);
 		this.chatCmp.setTheme(theme.icon);
-		this.notificationCmp.setTheme(theme.icon, knockout);
+		this.notificationCmp.setTheme?.(theme.icon, knockout);
 
 	},
 
