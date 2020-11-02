@@ -49,7 +49,8 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		this.NavigationActions.updateNavBar({
 			noLibraryLink: false,
 			darkStyle: dark,
-			theme: LibraryTheme.scope('navigation')
+			theme: LibraryTheme.scope('navigation'),
+			themeScope: 'library.navigation'
 		});
 
 		if(this.deactivateTimeout) {
