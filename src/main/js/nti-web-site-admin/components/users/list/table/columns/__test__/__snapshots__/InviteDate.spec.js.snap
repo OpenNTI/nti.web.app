@@ -4,12 +4,9 @@ exports[`Site admin user table invite date column test Test date is many days ag
 <div
   className="cell"
 >
-  <time
-    className="nti-text value"
-    dateTime="2017-10-31T00:00:00+00:00"
-  >
-    October 31, 2017
-  </time>
+  <span>
+    Today
+  </span>
 </div>
 `;
 
@@ -17,9 +14,11 @@ exports[`Site admin user table invite date column test Test date is now 1`] = `
 <div
   className="cell"
 >
-  <span>
-    Today
-  </span>
+  <time
+    dateTime="2020-11-03T20:50:39+00:00"
+  >
+    November 3, 2020
+  </time>
 </div>
 `;
 
@@ -27,6 +26,9 @@ exports[`Site admin user table invite date column test Test date is yesterday 1`
 <div
   className="cell"
 >
+  <span>
+    Today
+  </span>
   <span>
     Yesterday
   </span>

@@ -1,0 +1,15 @@
+
+.select-column {
+	width: 70px;
+}
+
+.row-selected {
+	&, & ~ td {
+		background-color: rgba(63, 179, 246, 0.05);
+	}
+}
+
+.cell {
+	composes: veridically-center from './column.css';
+	align-items: center;
+}

@@ -1,11 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Site admin user table join date column test Test date is many days ago 1`] = `
-<div
-  className="cell"
->
+<div>
   <time
-    className="nti-text value"
+    className="nti-text"
     dateTime="2017-10-31T00:00:00+00:00"
   >
     Oct 31, 2017

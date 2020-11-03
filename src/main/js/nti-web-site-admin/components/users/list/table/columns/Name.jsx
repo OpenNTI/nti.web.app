@@ -1,10 +1,10 @@
-import './Name.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {DisplayName, Avatar} from  '@nti/web-commons';
 import {LinkTo} from '@nti/web-routing';
-import cx from 'classnames';
+
+import styles from './Name.css';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.Name', {
 	headerTitle: 'Type',
@@ -17,7 +17,7 @@ export default class Name extends React.Component {
 		store: PropTypes.object.isRequired
 	}
 
-	static cssClassName = 'name-col';
+	static cssClassName = styles.nameColumn;
 
 	static Name = () => t('title')
 
@@ -31,11 +31,11 @@ export default class Name extends React.Component {
 
 		return (
 			<LinkTo.Object object={item} context={context} exact>
-				<div className={cx('cell')}>
+				<div className={styles.cell}>
 					<Avatar entity={item}/>
-					<div className="user-info">
-						<DisplayName entity={item}/>
-						<div className="email">{item.email}</div>
+					<div className={styles.userInfo}>
+						<DisplayName className={styles.username} entity={item}/>
+						<div className={styles.email}>{item.email}</div>
 					</div>
 				</div>
 			</LinkTo.Object>

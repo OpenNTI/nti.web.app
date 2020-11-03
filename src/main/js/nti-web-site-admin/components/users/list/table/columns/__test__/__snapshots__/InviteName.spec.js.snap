@@ -4,17 +4,11 @@ exports[`Site admin user table invite name column test Test admin invitation 1`]
 <div
   className="cell"
 >
-  <div
-    className="user-info"
-  >
-    <div
-      className="invite-email"
-    >
+  <div>
+    <div>
       adminUser1
     </div>
-    <div
-      className="invite-type"
-    >
+    <div>
       Administrator
     </div>
   </div>
@@ -25,17 +19,11 @@ exports[`Site admin user table invite name column test Test learner invitation 1
 <div
   className="cell"
 >
-  <div
-    className="user-info"
-  >
-    <div
-      className="invite-email"
-    >
+  <div>
+    <div>
       learnerUser1
     </div>
-    <div
-      className="invite-type"
-    >
+    <div>
       Learner
     </div>
   </div>

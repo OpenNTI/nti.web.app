@@ -1,9 +1,9 @@
-import './LastSeen.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {DateTime} from '@nti/web-commons';
-import cx from 'classnames';
+
+import styles from './LastSeen.css';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.LastSeen', {
 	never: 'Never',
@@ -18,7 +18,7 @@ export default class LastSeen extends React.Component {
 		item: PropTypes.object.isRequired
 	}
 
-	static cssClassName = 'lastseen-col';
+	static cssClassName = styles.lastSeenColumn;
 
 	static Name = () => t('title')
 
@@ -41,6 +41,6 @@ export default class LastSeen extends React.Component {
 			}
 		}
 
-		return <div className={cx('cell')}>{label}</div>;
+		return <div className={styles.cell}>{label}</div>;
 	}
 }

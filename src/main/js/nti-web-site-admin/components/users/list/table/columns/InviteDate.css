@@ -1,0 +1,5 @@
+.cell {
+	composes: veridically-center from './column.css';
+	font-size: 14px;
+	color: var(--secondary-grey);
+}

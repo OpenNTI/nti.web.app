@@ -1,9 +1,10 @@
-import './Select.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Checkbox} from  '@nti/web-commons';
 import {Connectors} from '@nti/lib-store';
 import cx from 'classnames';
+
+import styles from './Select.css';
 
 @Connectors.Any.connect({
 	isAllSelected: 'isAllSelected',
@@ -22,6 +23,7 @@ class SelectHeader extends React.Component {
 
 		return (
 			<Checkbox
+				className={styles.headerCheckbox}
 				checked={isAllSelected()}
 				onChange={(e) => {
 					if(e.target.checked) {
@@ -54,7 +56,7 @@ class Select extends React.Component {
 
 	static HeaderComponent = SelectHeader
 
-	static cssClassName = 'select-col';
+	static cssClassName = styles.selectColumn;
 
 	onSelectChanged = (e) => {
 		const {item, onSelect, onDeselect} = this.props;
@@ -73,8 +75,8 @@ class Select extends React.Component {
 		const isItemSelected = isSelected(item);
 
 		return (
-			<td className={cx('select-col', {'row-selected': isItemSelected})}>
-				<div className={cx('cell')}>
+			<td className={cx(styles.selectColumn, {[styles.rowSelected]: isItemSelected})}>
+				<div className={styles.cell}>
 					<Checkbox checked={isItemSelected} onChange={this.onSelectChanged}/>
 				</div>
 			</td>

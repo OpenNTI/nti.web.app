@@ -1,0 +1,25 @@
+.invite-name-column {
+	width: 400px;
+}
+
+.cell {
+	composes: cell from './Name.css';
+}
+
+.user-info {
+	composes: user-info from './Name.css';
+	max-width: calc(100% - 100px);
+}
+
+.invite-email {
+	font-size: 14px;
+	color: var(--primary-grey);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.invite-type {
+	color: var(--secondary-grey);
+	font-size: 14px;
+}

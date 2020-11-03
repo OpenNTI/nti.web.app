@@ -20,7 +20,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
       <thead>
         <tr>
           <th
-            className="select-col"
+            className=""
           >
             <label
               className="checkbox-component"
@@ -36,7 +36,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
             </label>
           </th>
           <th
-            className="name-col nti-table-simple-header"
+            className="nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -48,7 +48,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
             </div>
           </th>
           <th
-            className="joindate-col nti-table-simple-header"
+            className="nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -60,7 +60,7 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
             </div>
           </th>
           <th
-            className="lastseen-col nti-table-simple-header"
+            className="nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -76,11 +76,9 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
       <tbody>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -95,58 +93,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Day ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -161,58 +141,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -227,58 +189,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               3 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -293,58 +237,40 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               4 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -359,47 +285,31 @@ exports[`Site admin user admin list (with 5 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               5 Days ago
             </div>
           </td>
@@ -430,7 +340,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
       <thead>
         <tr>
           <th
-            className="select-col"
+            className=""
           >
             <label
               className="checkbox-component"
@@ -446,7 +356,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
             </label>
           </th>
           <th
-            className="name-col nti-table-simple-header"
+            className="nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -458,7 +368,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
             </div>
           </th>
           <th
-            className="joindate-col nti-table-simple-header"
+            className="nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -470,7 +380,7 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
             </div>
           </th>
           <th
-            className="lastseen-col nti-table-simple-header"
+            className="nti-table-simple-header"
           >
             <div
               className="sortable"
@@ -486,11 +396,9 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
       <tbody>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -505,58 +413,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Day ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -571,58 +461,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -637,58 +509,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               3 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -703,58 +557,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               4 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -769,58 +605,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               5 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -835,58 +653,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               6 Days ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -901,58 +701,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Week ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -967,58 +749,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Week ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1033,58 +797,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Week ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1099,58 +845,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Week ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1165,58 +893,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Week ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1231,58 +941,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Week ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1297,58 +989,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               1 Week ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1363,58 +1037,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1429,58 +1085,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1495,58 +1133,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1561,58 +1181,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1627,58 +1229,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1693,58 +1277,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1759,58 +1325,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               2 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1825,58 +1373,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               3 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1891,58 +1421,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               3 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -1957,58 +1469,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               3 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -2023,58 +1517,40 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               3 Weeks ago
             </div>
           </td>
         </tr>
         <tr>
           <td
-            className="select-col"
+            className=""
           >
-            <div
-              className="cell"
-            >
+            <div>
               <label
                 className="checkbox-component"
               >
@@ -2089,47 +1565,31 @@ exports[`Site admin user admin list (with 25 items) Basic render test 1`] = `
               </label>
             </div>
           </td>
-          <td
-            className="name-col"
-          >
+          <td>
             <div
               className="nti-link-to-path"
               exact={true}
               to="#"
             >
-              <div
-                className="cell"
-              >
-                <div
-                  className="user-info"
-                >
-                  <div
-                    className="email"
-                  />
+              <div>
+                <div>
+                  <div />
                 </div>
               </div>
             </div>
           </td>
-          <td
-            className="joindate-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               <time
-                className="nti-text value"
+                className="nti-text"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
               </time>
             </div>
           </td>
-          <td
-            className="lastseen-col"
-          >
-            <div
-              className="cell"
-            >
+          <td>
+            <div>
               3 Weeks ago
             </div>
           </td>

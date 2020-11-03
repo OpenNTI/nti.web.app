@@ -6,15 +6,9 @@ exports[`Site admin user table name column test Test for admins 1`] = `
   exact={true}
   to="#"
 >
-  <div
-    className="cell"
-  >
-    <div
-      className="user-info"
-    >
-      <div
-        className="email"
-      >
+  <div>
+    <div>
+      <div>
         user@blah.com
       </div>
     </div>
@@ -28,15 +22,9 @@ exports[`Site admin user table name column test Test for learners 1`] = `
   exact={true}
   to="#"
 >
-  <div
-    className="cell"
-  >
-    <div
-      className="user-info"
-    >
-      <div
-        className="email"
-      >
+  <div>
+    <div>
+      <div>
         user@blah.com
       </div>
     </div>

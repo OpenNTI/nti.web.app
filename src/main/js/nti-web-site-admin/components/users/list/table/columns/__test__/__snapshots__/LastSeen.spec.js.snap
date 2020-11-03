@@ -1,25 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Site admin user table last seen column test Test date is 100 seconds ago 1`] = `
-<div
-  className="cell"
->
+<div>
   1 Minute ago
 </div>
 `;
 
 exports[`Site admin user table last seen column test Test date is null 1`] = `
-<div
-  className="cell"
->
+<div>
   Never
 </div>
 `;
 
 exports[`Site admin user table last seen column test Test date is within past 60 seconds 1`] = `
-<div
-  className="cell"
->
+<div>
   Now
 </div>
 `;

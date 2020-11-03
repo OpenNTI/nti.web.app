@@ -1,9 +1,10 @@
-import './InviteDate.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {DateTime} from '@nti/web-commons';
 import cx from 'classnames';
+
+import styles from './InviteDate.css';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.columns.InviteDate', {
 	headerTitle: 'Invite Date',
@@ -17,7 +18,7 @@ export default class InviteDate extends React.Component {
 		item: PropTypes.object.isRequired
 	}
 
-	static cssClassName = 'invitedate-col';
+	static cssClassName = 'invite-date-column';
 
 	static Name = () => t('title')
 
@@ -33,9 +34,9 @@ export default class InviteDate extends React.Component {
 		const isYesterday = DateTime.isToday(newDate);
 
 		return (
-			<div className={cx('cell')}>
-				{!isToday && !isYesterday && <DateTime className="value" date={item.getCreatedTime()} format="LL" />}
-				{isToday && <span>{t('today')}</span>}
+			<div className={cx('cell', styles.cell)}>
+				{isToday && !isYesterday && <DateTime className={styles.value} date={item.getCreatedTime()} format="LL" />}
+				{!isToday && <span>{t('today')}</span>}
 				{isYesterday && <span>{t('yesterday')}</span>}
 			</div>
 		);

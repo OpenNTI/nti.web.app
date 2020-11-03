@@ -1,0 +1,9 @@
+.join-date-column {
+	color: var(--secondary-grey);
+	font-size: 14px;
+	width: 7rem;
+}
+
+.cell {
+	composes: veridically-center from './column.css';
+}
