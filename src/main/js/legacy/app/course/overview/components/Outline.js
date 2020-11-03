@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'nav-outline course scrollable',
 
 	items: [
-		{xtype: 'container', cls: 'outline-header-container', items: []},
+		{xtype: 'container', cls: 'outline-header-container', headerContainer: true, layout: 'none', items: []},
 		{xtype: 'container', cls: 'outline-list', layout: 'none', items: [
 			{xtype: 'container', cls: 'body', bodyContainer: true, layout: 'none', items: []}
 		]}
@@ -47,10 +47,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.headerContainer = this.items.items[0]; // how to really get this?
-		this.outlineHeader = this.headerContainer.add({xtype: 'overview-outline-header'});
-		this.headerCmp = this.down('overview-outline-header');
-
 		var body = this.getBodyContainer();
 
 		this.mon(body.el, 'scroll', this.onScroll.bind(this));
@@ -64,22 +60,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onBeforeRouteActivate () {
-		if (this.progressHeader) {
-			this.progressHeader.onBeforeRouteActivate();
+		if (this.outlineHeader) {
+			this.outlineHeader.onBeforeRouteActivate();
 		}
 	},
 
 
 	onRouteActivate () {
-		if (this.progressHeader) {
-			this.progressHeader.onRouteActivate();
+		if (this.outlineHeader) {
+			this.outlineHeader.onRouteActivate();
 		}
 	},
 
 
 	onRouteDeactivate () {
-		if (this.progressHeader) {
-			this.progressHeader.onRouteDeactivate();
+		if (this.outlineHeader) {
+			this.outlineHeader.onRouteDeactivate();
 		}
 	},
 
@@ -96,6 +92,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		} else {
 			selected.classList.remove('out-of-view');
 		}
+	},
+
+	getHeaderContainer () {
+		return this.down('[headerContainer]');
 	},
 
 	getBodyContainer: function () {
@@ -123,39 +123,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setOutline(this.activeBundle, outline);
 	},
 
-	showHeader: function (showProgress, course) {
-		if(showProgress) {
-			if(this.progressHeader) {
-				// if already showing progress header, just update
-				this.progressHeader.updateCourse(course, this.isEditing);
-			}
-			else {
-				// otherwise, add a new progress header since one doesn't exist
-				this.progressHeader = this.headerContainer.add({xtype: 'overview-outline-progress-header', course});
-			}
+	showHeader: function (bundle, outline) {
+		const headerContainer = this.getHeaderContainer();
 
-			if(this.outlineHeader) {
-				// remove outline header if one exists
-				this.headerContainer.remove(this.outlineHeader, true);
-				delete this.outlineHeader;
-			}
-		}
-		else {
-			if(this.progressHeader) {
-				// remove progress header if one exists
-				this.headerContainer.remove(this.progressHeader, true);
-				delete this.progressHeader;
-			}
+		this.outlineHeader = this.outlineHeader || headerContainer.add({xtype: 'overview-outline-header'});
 
-			if(!this.outlineHeader) {
-				// add outline header if one does not already exist
-				this.outlineHeader = this.headerContainer.add({xtype: 'overview-outline-header'});
-			}
-		}
-	},
-
-	showProgressHeader: function (bundle) {
-		this.showHeader(true, bundle);
+		this.outlineHeader.setOutline(bundle, outline);
 	},
 
 
@@ -174,21 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		var me = this;
-
-		if(bundle.get('CompletionPolicy')) {
-			bundle.getInterfaceInstance().then(bundleModel => {
-				bundle.get('CompletionPolicy').on('requiredValueChanged', () => {
-					this.showProgressHeader(bundleModel);
-				});
-
-				this.showProgressHeader(bundleModel);
-			});
-		}
-		else {
-			// no CompletionPolicy, show normal header
-			me.showHeader(false);
-		}
+		this.showHeader(bundle, outline);
 
 		//If we have an outline, its the same outline as what we are setting, and the contents haven't changed
 		if (this.outline && this.outline.getId() === outline.getId() && this.outlineContentsHash === outline.get('ContentsHash') && this.outlineWasEditing === this.isEditing) {
