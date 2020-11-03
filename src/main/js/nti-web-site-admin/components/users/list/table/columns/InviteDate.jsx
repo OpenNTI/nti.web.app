@@ -35,8 +35,8 @@ export default class InviteDate extends React.Component {
 
 		return (
 			<div className={cx('cell', styles.cell)}>
-				{isToday && !isYesterday && <DateTime className={styles.value} date={item.getCreatedTime()} format="LL" />}
-				{!isToday && <span>{t('today')}</span>}
+				{!isToday && !isYesterday && <DateTime className={styles.value} date={item.getCreatedTime()} format="LL" />}
+				{isToday && <span>{t('today')}</span>}
 				{isYesterday && <span>{t('yesterday')}</span>}
 			</div>
 		);
