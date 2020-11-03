@@ -1,7 +1,11 @@
 const Ext = require('@nti/extjs');
 const {Overview} = require('@nti/web-course');
 
+const {MODAL_ROUTE_BUILDERS} = require('../Constants');
+
 require('legacy/overrides/ReactHarness');
+
+const getOutlineNode = (x) => x.parent('isOutlineNode');
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.outline.Header', {
 	extend: 'Ext.container.Container',
@@ -24,8 +28,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				component: Overview.Outline.Header,
 				course,
 				active: !this.wasDeactivated,
-				addHistory: true,
-				getRouteFor: (obj, context) => {}
+				getRouteFor: (obj, context) => {
+					const outlineNode = getOutlineNode(obj);
+
+					if (!outlineNode) { return null; }
+
+					const builder = MODAL_ROUTE_BUILDERS[obj.MimeType] || MODAL_ROUTE_BUILDERS['default'];
+
+					return builder ? builder(course, outlineNode, obj, context) : null;
+				}
 			});
 		}
 	},
