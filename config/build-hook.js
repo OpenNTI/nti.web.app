@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const isCI = require('is-ci');
 const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 const paths = require('@nti/app-scripts/config/paths');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
+const checkRequiredFiles = require('@nti/app-scripts/tasks/utils/check-required-files');
 
 const CSS = path.resolve(paths.assetsRoot, 'resources/css');
 const SCSS = path.resolve(paths.assetsRoot, 'resources/scss');
