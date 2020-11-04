@@ -1,7 +1,7 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {Theme} = require('@nti/web-commons');
-const { NotificationsTab: ReactNotificationsTab } = require('@nti/web-notifications');
+const { NotificationsView } = require('@nti/web-notifications');
 const { isFlag } = require('@nti/web-client');
 const cx = require('classnames');
 
@@ -319,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			});
 		} else {
 			this.notificationCmp = ReactHarness.create({
-				component: ReactNotificationsTab,
+				component: NotificationsView,
 				addHistory: true,
 				baseroute: '/app',
 			});
