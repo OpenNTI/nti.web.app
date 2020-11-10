@@ -84,7 +84,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		if (this.assignmentHistory) {
 			if (this.assignmentHistory instanceof Promise) {
-				this.assignmentHistory.then(this.applyHistoryContainer.bind(this));
+				this.assignmentHistory.then(this.applyHistoryContainer.bind(this))
+					.catch(e => e && console.error(e.stack || e.message || e));
 			} else {
 				this.applyHistoryContainer(this.assignmentHistory);
 			}
