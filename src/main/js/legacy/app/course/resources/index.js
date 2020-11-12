@@ -52,6 +52,18 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 		this.initSearchHandler(this.SearchStore);
 	},
 
+	onRouteActivate () {
+		clearTimeout(this.deactivateTimeout);
+	},
+
+	onRouteDeactivate () {
+		this.deactivateTimeout = setTimeout(() => {
+			this.resources.setProps({
+				course: null
+			});
+		}, 500);
+	},
+
 
 	bundleChanged (bundle) {
 		this.currentBundle = bundle;
