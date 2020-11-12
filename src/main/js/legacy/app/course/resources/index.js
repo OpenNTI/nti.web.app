@@ -1,6 +1,5 @@
 require('./index.scss');
 const Ext = require('@nti/extjs');
-const {getService} = require('@nti/web-client');
 
 const Resources = require('nti-web-course-resources');
 const SearchStateStore = require('legacy/app/search/StateStore');
@@ -60,10 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.course.resources.Index', 
 
 
 	getCourse () {
-		return getService()
-			.then((service) => {
-				return service.getObject(this.currentBundle.getId());
-			});
+		return this.currentBundle.getInterfaceInstance();
 	},
 
 
