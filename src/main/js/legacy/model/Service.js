@@ -209,7 +209,8 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return [
 			{name: 'yellow', color: 'EDE619'},
 			{name: 'green', color: '4CE67F'},
-			{name: 'blue', color: '3FB3F6'}
+			{name: 'blue', color: '3FB3F6'},
+			{name: 'blackout', color: '000000'},
 		];
 	},
 

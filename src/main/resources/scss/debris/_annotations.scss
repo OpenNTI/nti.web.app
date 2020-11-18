@@ -1078,7 +1078,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 				display: inline-block;
 				width: $swatchSize;
 				height: $swatchSize;
-				border: 2px solid transparent;
+				border: 2px solid rgba(255, 255, 255, 0.1);
 				border-radius: $swatchSize/2;
 				margin: 0.5em 0.2em;
 				position: relative;
@@ -1096,6 +1096,10 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 					opacity: 0;
 					transition: opacity $transition-duration 0; // fade out the checkmark
 				}
+			}
+
+			&.color-000000 span::after {
+				filter: invert(1);
 			}
 		}
 

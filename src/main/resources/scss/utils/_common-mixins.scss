@@ -311,17 +311,16 @@ $position:relative
 		('blue',var(--highlight-colors-blue-menu),var(--highlight-colors-blue-hover),var(--highlight-colors-blue))
 	);
 
+	$prefix: if($onParentSelector, '&', '');
+	$withOutColor: "#{$prefix} #{$selector}";
+
 	@each $item in $highlight-colors {
 		$name: nth($item, 1);
 		$menu_color: nth($item, 2);
 		$hover_color: nth($item, 3);
 		$highlight_color: nth($item, 4);
 
-		$prefix: if($onParentSelector, '&', '');
-
 		$withColor: "#{$prefix}.#{$name} #{$selector}";
-		$withOutColor: "#{$prefix} #{$selector}";
-
 		$computedSelector: if($name=='blue', $withOutColor, $withColor);
 
 		#{$computedSelector} {
@@ -330,13 +329,32 @@ $position:relative
 
 			&.highlight-mouse-over {
 				background-color: $hover_color;
-				transition: all 0.2s;
 				box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
 			}
 
 			@if ($nibselector) {
 				#{$nibselector} {
 					border-top-color: $highlight_color;
+				}
+			}
+		}
+	}
+
+	#{"#{$prefix}.blackout.blackout #{$selector}"} {
+		&,&::selection {
+			background: var(--primary-grey);
+			color: transparent;
+			transition: none;
+			box-shadow: none !important;
+
+			&.highlight-mouse-over {
+				background: inherit;
+				box-shadow: none !important;
+
+				@if ($nibselector) {
+					#{$nibselector} {
+						border-top-color: var(--primary-grey);
+					}
 				}
 			}
 		}
