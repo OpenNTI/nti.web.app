@@ -163,13 +163,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -242,13 +242,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -321,13 +321,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -400,13 +400,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -479,13 +479,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -659,13 +659,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -738,13 +738,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -817,13 +817,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -896,13 +896,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -975,13 +975,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1054,13 +1054,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1133,13 +1133,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1212,13 +1212,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1291,13 +1291,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1370,13 +1370,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1449,13 +1449,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1528,13 +1528,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1607,13 +1607,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1686,13 +1686,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1765,13 +1765,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1844,13 +1844,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -1923,13 +1923,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2002,13 +2002,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2081,13 +2081,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2160,13 +2160,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2239,13 +2239,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2318,13 +2318,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2397,13 +2397,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2476,13 +2476,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
@@ -2555,13 +2555,13 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               <time
                 dateTime="2017-10-30T00:00:00+00:00"
               >
-                October 30, 2017
+                Oct 30, 2017
               </time>
             </div>
           </td>
           <td>
             <a
-              className="nti-button button resend button primary rounded"
+              className="nti-button button resend plain"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
