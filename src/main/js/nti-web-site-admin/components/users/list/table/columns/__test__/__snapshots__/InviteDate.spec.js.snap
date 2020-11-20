@@ -7,7 +7,7 @@ exports[`Site admin user table invite date column test Test date is many days ag
   <time
     dateTime="2017-10-31T00:00:00+00:00"
   >
-    October 31, 2017
+    Oct 31, 2017
   </time>
 </div>
 `;
