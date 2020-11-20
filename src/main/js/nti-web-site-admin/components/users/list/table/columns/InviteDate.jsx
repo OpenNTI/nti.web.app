@@ -13,6 +13,8 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.InviteD
 	yesterday: 'Yesterday'
 });
 
+const Format = 'MMM D, YYYY';
+
 export default class InviteDate extends React.Component {
 	static propTypes = {
 		item: PropTypes.object.isRequired
@@ -35,7 +37,7 @@ export default class InviteDate extends React.Component {
 
 		return (
 			<div className={cx('cell', styles.cell)}>
-				{!isToday && !isYesterday && <DateTime className={styles.value} date={item.getCreatedTime()} format="LL" />}
+				{!isToday && !isYesterday && <DateTime className={styles.value} date={item.getCreatedTime()} format={Format} />}
 				{isToday && <span>{t('today')}</span>}
 				{isYesterday && <span>{t('yesterday')}</span>}
 			</div>

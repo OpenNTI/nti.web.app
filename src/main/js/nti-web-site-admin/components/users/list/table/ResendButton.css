@@ -1,0 +1,9 @@
+.resend-button {
+	color: var(--primary-blue);
+	display: block;
+	cursor: pointer;
+	line-height: 60px;
+	font-size: 14px;
+	text-align: center;
+	margin-left: 1rem;
+}

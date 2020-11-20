@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import {Button, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
+
+import Styles from './ResendButton.css';
 
 const t = scoped('nti-web-site-admin.components.users.list.table.Resend', {
 	resend: 'Re-send',
@@ -26,7 +29,7 @@ export default function ResendButton ({items, store}) {
 	}, [items, store]);
 
 	return (
-		<Button className="button resend" rounded onClick={onClick}>{t('resend')}</Button>
+		<Button className={cx('button', 'resend', Styles.resendButton)} plain onClick={onClick}>{t('resend')}</Button>
 	);
 }
 
