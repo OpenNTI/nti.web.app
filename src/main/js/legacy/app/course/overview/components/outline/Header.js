@@ -16,11 +16,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	async setOutline (bundle, outline) {
 		const course = await bundle.getInterfaceInstance();
+		const getRouteFor = (obj, context) => {
+			const outlineNode = getOutlineNode(obj);
+
+			if (!outlineNode) { return null; }
+
+			const builder = MODAL_ROUTE_BUILDERS[obj.MimeType] || MODAL_ROUTE_BUILDERS['default'];
+
+			return builder ? builder(course, outlineNode, obj, context) : null;
+		};
 
 		if (this.outlineHeader) {
 			this.outlineHeader.setProps({
 				course,
-				active: !this.wasDeactivated
+				active: !this.wasDeactivated,
+				getRouteFor
 			});
 		} else {
 			this.outlineHeader = this.add({
@@ -28,15 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				component: Overview.Outline.Header,
 				course,
 				active: !this.wasDeactivated,
-				getRouteFor: (obj, context) => {
-					const outlineNode = getOutlineNode(obj);
-
-					if (!outlineNode) { return null; }
-
-					const builder = MODAL_ROUTE_BUILDERS[obj.MimeType] || MODAL_ROUTE_BUILDERS['default'];
-
-					return builder ? builder(course, outlineNode, obj, context) : null;
-				}
+				getRouteFor
 			});
 		}
 	},
