@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{cls: 'assignment-item {cls}', cn: [
-			{cls: 'title', html: '{title}'},
+			{cls: 'title', html: '{title:htmlEncode}'},
 			{cls: 'due-date', html: '{status}'}
 		]}
 	)),

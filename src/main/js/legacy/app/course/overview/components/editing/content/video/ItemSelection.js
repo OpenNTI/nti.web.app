@@ -18,10 +18,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		{tag: 'label', cls: 'video-item', cn: [
 			{tag: 'input', type: 'checkbox'},
 			{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
-			{cls: 'title', html: '{title}'},
+			{cls: 'title', html: '{title:htmlEncode}'},
 			{cls: 'providers', cn: [
 				{tag: 'tpl', 'for': 'providers', cn: [
-					{tag: 'span', cls: 'provider', html: '{label}'}
+					{tag: 'span', cls: 'provider', html: '{label:htmlEncode}'}
 				]}
 			]}
 		]},

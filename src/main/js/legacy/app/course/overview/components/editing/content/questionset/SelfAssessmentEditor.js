@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this,
 			questionCount = item.getQuestionCount(),
 			parts = [
-				{cls: 'title', html: item.get('title')},
+				{cls: 'title', html: Ext.util.Format.htmlEncode(item.get('title'))},
 				{cls: 'question-count', html: Ext.util.Format.plural(questionCount, 'Question')}
 			];
 

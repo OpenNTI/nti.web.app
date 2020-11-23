@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			now = new Date(),
 			dueDate = item.getDueDate(),
 			parts = [
-				{cls: 'title', html: item.get('title')},
+				{cls: 'title', html: Ext.util.Format.htmlEncode(item.get('title'))},
 				{cls: 'due-date', html: Ext.Date.format(dueDate, 'l, F j, g:i a T')}
 			];
 

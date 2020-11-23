@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	cls: 'overview-group-title',
 
-	renderTpl: '{title}',
+	renderTpl: '{title:htmlEncode}',
 
 
 	beforeRender: function () {

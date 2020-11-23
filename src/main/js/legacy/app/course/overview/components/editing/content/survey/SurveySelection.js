@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{cls: 'survey-item', cn: [
-			{cls: 'title', html: '{title}'},
+			{cls: 'title', html: '{title:htmlEncode}'},
 			{cls: 'question-count', html: '{questionCount}'}
 		]}
 	)),

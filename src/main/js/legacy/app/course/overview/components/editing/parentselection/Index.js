@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{tag: 'tpl', 'if': 'color', cn: [
 				{cls: 'color', style: {background: '#{color}'}}
 			]},
-			{cls: 'label', html: '{label}'}
+			{cls: 'label', html: '{label:htmlEncode}'}
 		]
 	})),
 

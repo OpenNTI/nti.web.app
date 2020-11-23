@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		{cls: 'content-package-item {[!values.isNativeAuthored || (values.isPublished && values.isRendered) ? "published" : "unpublished"]}', cn: [
 			{cls: 'icon', style: {backgroundImage: 'url({icon})'}},
 			{cls: 'wrap', cn: [
-				{cls: 'title', html: '{title}'},
+				{cls: 'title', html: '{title:htmlEncode}'},
 				{cls: 'description', html: '{description}'}
 			]}
 		]}
