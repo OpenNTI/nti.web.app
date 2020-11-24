@@ -343,11 +343,11 @@ $position:relative
 	#{"#{$prefix}.blackout.blackout #{$selector}"} {
 		&,&::selection {
 			background: var(--primary-grey);
-			color: transparent;
+			color: rgba(0, 0, 0, 0) !important;
 			transition: none;
 			box-shadow: none !important;
 
-			img,a {
+			img,a,a:link, a[href],* {
 				visibility: hidden;
 			}
 
