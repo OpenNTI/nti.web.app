@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{cls: 'icon', style: {backgroundImage: 'url({icon})'}},
 			{cls: 'wrap', cn: [
 				{cls: 'title', html: '{title:htmlEncode}'},
-				{cls: 'description', html: '{description}'}
+				{cls: 'description', html: '{description:htmlEncode}'}
 			]}
 		]}
 	)),
