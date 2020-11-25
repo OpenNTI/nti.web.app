@@ -8,14 +8,8 @@ html {
 	}
 }
 
-//Workarond ExtJS legacy z-index-happy bull$#!+ >.<
-body > .modal .modal-mask,
-body > .global-toast-root > * {
-	z-index: 1000;
-
-	&.nti-lightbox-dialog {
-		z-index: 1003;
-	}
+.global-toast-root > * {
+	z-index: 1; // so the toasts are over the chat bar
 }
 
 body > .fly-wrapper > .flyout {

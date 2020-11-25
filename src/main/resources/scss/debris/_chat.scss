@@ -919,7 +919,7 @@ body.white-shade-mask .chat-gutter-window {
 	top: 90px;
 	bottom: 60px;
 	right: 15px;
-	z-index: 200;
+	// z-index: 200;
 	width: 60px;
 	background-color: rgba(35, 35, 35, 0.7);
 	border-radius: 5px;
@@ -935,7 +935,7 @@ body.white-shade-mask .chat-gutter-window {
 	}
 
 	.nti-course-content-open & {
-		z-index: 1001;
+		z-index: 1;//001;
 	}
 
 	@media only screen and (max-width: 1420px) {
