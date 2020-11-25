@@ -452,7 +452,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			show = 'onMenuShow';
 
 		function showOrHide (name) {
-			me[name][state.active === name ? show : hide]();
+			me[name][state.active === name ? show : hide]?.();
 		}
 
 		showOrHide('identityCmp');
