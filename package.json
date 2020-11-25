@@ -1,6 +1,6 @@
 {
   "name": "@nti/web-app",
-  "version": "2020.12.2",
+  "version": "2020.12.3",
   "description": "NextThought web application",
   "author": "nextthought",
   "license": "UNLICENSED",
@@ -26,9 +26,6 @@
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
-  "bundledDependencies": [
-    "@nti/util-logger"
-  ],
   "dependencies": {},
   "devDependencies": {
     "@nti/app-scripts": "^2.28.8",
@@ -86,5 +83,8 @@
     "react-dom": "^16.4.2",
     "react-test-renderer": "^16.2.0",
     "xregexp": "4.2.0"
-  }
+  },
+  "bundleDependencies": [
+    "@nti/util-logger"
+  ]
 }
