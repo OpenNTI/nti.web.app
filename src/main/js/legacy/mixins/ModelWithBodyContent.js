@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const Logger = require('@nti/util-logger').default;
 
 require('legacy/app/video/VideoPlayer');
 
@@ -8,6 +9,7 @@ const FilePicker = require('legacy/common/form/fields/FilePicker');
 const RelatedWork = require('legacy/model/RelatedWork');
 const Globals = require('legacy/util/Globals');
 
+const logger = Logger.get('nextthought:extjs:mixins:ModelWithBodyContent');
 
 const ModelWithBodyContent =
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent', {
@@ -29,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 					text.push(part.replace(/\s*(class)=".*?"\s*/ig, ' ')
 						.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;'));
 				} else {
-					console.warn('Non simple part');
+					logger.warn('Non simple part');
 				}
 			}
 
@@ -317,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 						}, me, config);
 				}
 				else {
-					console.error('Not rendering part we don\'t understand', o);
+					console.debug('Not rendering part we don\'t understand', o);
 					render(i - 1);
 				}
 			}

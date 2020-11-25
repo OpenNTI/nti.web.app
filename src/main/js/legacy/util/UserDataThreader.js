@@ -1,7 +1,10 @@
 const Ext = require('@nti/extjs');
+const Logger = require('@nti/util-logger').default;
 
 const AnnotationUtils = require('./Annotations');
 
+
+const logger = Logger.get('nextthought:extjs:util:UserDataThreader');
 
 module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 
@@ -62,8 +65,7 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 
 	buildItemTree: function (rawList, tree) {
 		var me = this, threadables = {}, list;
-		//	console.group("Build Tree");
-		//console.log('Using list of objects', rawList);
+		//logger.debug('Using list of objects', rawList);
 
 		//Flatten an preexisting relationships of list into the array ignoring
 		//duplicates.  A hash could speed this up
@@ -85,9 +87,9 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 
 		list = Ext.Object.getValues(threadables);
 
-		//	console.log('Flattened list is ', list);
+		//	logger.debug('Flattened list is ', list);
 
-		console.log('Flattened rawList of size ', rawList.length, 'to flattened list of size', list.length);
+		logger.debug('Flattened rawList of size ', rawList.length, 'to flattened list of size', list.length);
 
 		Ext.each(list, function clearRefs (r) {
 			if (!r.placeholder) {
@@ -113,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 					p = (tree[parent] = getID(parent));
 				}
 				if (!p) {
-					//console.log('Generating placeholder for id:',parent, '  child:',oid);
+					//logger.log('Generating placeholder for id:',parent, '  child:',oid);
 					p = (tree[parent] = AnnotationUtils.replyToPlaceHolder(g));
 					buildTree(p);
 				}
@@ -141,8 +143,6 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 			}
 			return r;
 		}
-
-	//	console.groupEnd("Build Tree");
 	},
 
 	prune: function (/*tree*/) {

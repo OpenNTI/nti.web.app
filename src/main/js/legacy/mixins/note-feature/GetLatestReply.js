@@ -1,5 +1,8 @@
 const Ext = require('@nti/extjs');
+const Logger = require('@nti/util-logger').default;
 
+
+const logger = Logger.get('nextthought:extjs:mixins:note-feature:GetLatestReply');
 
 module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
 	//Mixin assumptions: Mixed into a Container, with a property "record" that has implemented "loadReplies"
@@ -27,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatest
 				items = (items[0].children || []).slice();
 			}
 			else if (items.length !== 0) {
-				console.warn('There was an unexpected result from the reply store.');
+				logger.debug('There was an unexpected result from the reply store.', items);
 			}
 			me.record.children = items;
 
