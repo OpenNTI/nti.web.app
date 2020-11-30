@@ -12,10 +12,10 @@ html {
 	z-index: 1; // so the toasts are over the chat bar
 }
 
-body > .fly-wrapper > .flyout {
-	//If the trigger has an effective z-index, it will set the flyout's z-index to
-	//it's effective z plus one... this is for default (no-effective z) of flyouts in ExtJS land.
-	z-index: 151; //main-navigation's z-index is 150.
+//Workaround ExtJS legacy z-index-happy bull$#!+ >.<
+body > .modal .modal-mask,
+body > .modal .modal-mask.nti-lightbox-dialog {
+	z-index: 175;
 }
 
 body.full-screen-video {
