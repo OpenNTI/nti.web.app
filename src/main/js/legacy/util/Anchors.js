@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const XRegExp = require('xregexp');
+const {default: Logger} = require('@nti/util-logger');
 
 const rangy = require('legacy/util/rangy');
 const Globals = require('legacy/util/Globals');
@@ -12,6 +13,8 @@ require('legacy/model/anchorables/DomContentPointer');
 const lazy = require('legacy/util/lazy-require')
 	.get('RangeUtils', () => require('./Ranges'))
 	.get('AnnotationUtils', () => require('./Annotations'));
+
+const logger = Logger.get('nextthought:extjs:util:Anchors');
 
 module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	containerSelectors: ['object[type$=naquestion][data-ntiid]', 'object[type$=ntivideo][data-ntiid]'],
@@ -97,10 +100,10 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			var searchWithin, ancestorNode, virginNode;
 
 			if (!containerId) {
-				console.warn('No container id provided will assume root without validating container');
+				logger.warn('No container id provided will assume root without validating container');
 			}
 			if (!me.supportedContentRange(desc)) {
-				console.warn('nothing to parse?');
+				logger.warn('nothing to parse?');
 				return;
 			}
 
@@ -127,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				}
 			}
 			catch (e) {
-				console.error('Error resolving locator for desc', desc, Globals.getError(e));
+				logger.error('Error resolving locator for desc', desc, Globals.getError(e));
 			}
 		}
 
@@ -139,20 +142,20 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				cacheLocatorForDescription(desc, docElement, cleanRoot, containerId, docElementContainerId);
 			}
 			catch (e) {
-				console.error('Unable to generate locator for desc', Globals.getError(e));
+				logger.error('Unable to generate locator for desc', Globals.getError(e));
 				Globals.getError(e);
 			}
 		});
 
-		console[locatorsFound === contentRangeDescriptions.length ?
-			'log' : 'warn']('Preresolved ' + locatorsFound + '/' + contentRangeDescriptions.length + ' range descriptions');
+		logger[locatorsFound === contentRangeDescriptions.length ?
+			'debug' : 'warn']('Preresolved ' + locatorsFound + '/' + contentRangeDescriptions.length + ' range descriptions');
 	},
 
 	toDomRange: function (contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
 		var ancestorNode, resultRange, searchWithin, locator;
 
 		if (!this.supportedContentRange(contentRangeDescription)) {
-			console.warn('nothing to parse?');
+			logger.warn('nothing to parse?');
 			return null;
 		}
 
@@ -161,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		try {
 
 			if (!containerId) {
-				console.log('No container id provided will use root without validating container ids');
+				logger.debug('No container id provided will use root without validating container ids');
 			}
 
 			//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
@@ -201,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			return resultRange;
 		}
 		catch (e) {
-			console.warn('Unable to generate range for description', Globals.getError(e));
+			logger.warn('Unable to generate range for description', Globals.getError(e));
 			Globals.getError(e);
 		}
 		return null;
@@ -260,7 +263,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			docElement = (cleanRoot && cleanRoot.ownerDocument) || doc, locator;
 
 		if (!this.supportedContentRange(contentRangeDescription)) {
-			console.warn('nothing to parse?');
+			logger.warn('nothing to parse?');
 			return null;
 		}
 
@@ -269,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		try {
 
 			if (!containerId) {
-				console.log('No container id provided will use root without validating container ids');
+				logger.debug('No container id provided will use root without validating container ids');
 			}
 
 			//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
@@ -308,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			return resultRange;
 		}
 		catch (e) {
-			console.warn('Unable to generate range for description', Globals.getError(e));
+			logger.warn('Unable to generate range for description', Globals.getError(e));
 		}
 		return null;
 	},
@@ -320,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('Unable to find container ' + containerId + ' in provided docElement');
 		}
 
-		//console.debug('Given an empty content range description, returning a range wrapping the container', searchWithin);
+		//logger.debug('Given an empty content range description, returning a range wrapping the container', searchWithin);
 		resultRange = docElement.createRange();
 		resultRange.selectNode(searchWithin);
 		return resultRange;
@@ -329,7 +332,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	cachedLocatorEnsuringDocument: function (contentRangeDescription, document) {
 		var loc = contentRangeDescription.locator();
 		if (loc && loc.doc !== document) {
-			console.debug('Dumping locator because its from a different doc');
+			logger.debug('Dumping locator because its from a different doc');
 			contentRangeDescription.attachLocator(null);
 			loc = null;
 		}
@@ -363,7 +366,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			metaNtiidTag = head.querySelectorAll('meta[name="NTIID"]');
 			if (metaNtiidTag && metaNtiidTag.length > 0) {
 				if (metaNtiidTag.length > 1) {
-					console.error('Encountered more than one NTIID meta tag. Using first, expect problems', metaNtiidTag);
+					logger.error('Encountered more than one NTIID meta tag. Using first, expect problems', metaNtiidTag);
 				}
 				metaNtiidTag = metaNtiidTag[0];
 			}
@@ -380,14 +383,14 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	/* tested */
 	createRangeDescriptionFromRange: function (range, docElement) {
 		if (!range) {
-			console.log('Returning empty ContentRangeDescription for null range');
+			logger.debug('Returning empty ContentRangeDescription for null range');
 			return {description: ContentRangeDescription.create({})};
 		}
 
 		this.cleanRangeFromBadStartAndEndContainers(range);
 		range = this.makeRangeAnchorable(range, docElement);
 		if (!range || range.collapsed) {
-			console.error('Anchorable range for provided range could not be found', range);
+			logger.error('Anchorable range for provided range could not be found', range);
 			Ext.Error.raise('Anchorable range for range could not be found');
 		}
 		var pureRange = this.purifyRange(range, docElement),
@@ -396,7 +399,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			result = {};
 
 		if (!pureRange || pureRange.collapsed) {
-			console.error('Unable to purify anchorable range', range, pureRange);
+			logger.error('Unable to purify anchorable range', range, pureRange);
 			Ext.Error.raise('Unable to purify anchorable range for ContentRangeDescription generation');
 		}
 
@@ -421,7 +424,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				ancestor: ancestorAnchor
 			});
 		} catch (e) {
-			console.warn('There was an error generating the description, hopefully the container will do.', Globals.getError(e));
+			logger.warn('There was an error generating the description, hopefully the container will do.', Globals.getError(e));
 		}
 		return result;
 	},
@@ -463,7 +466,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		if (potentials.length > 1) {
 			//TODO what do we actually do here?
-			console.warn('Found several matches for container. Will return first. Bad content?', containerId, potentials);
+			logger.debug('Found several matches for container. Will return first. Bad content?', containerId, potentials);
 		}
 		result = Ext.fly(potentials[0]);
 
@@ -473,7 +476,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		});
 
 		if (!isContainerNode) {
-			console.warn('Found container we think is an invalid container node', result);
+			logger.debug('Found container we think is an invalid container node', result);
 		}
 
 		return result.dom;
@@ -553,7 +556,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			});
 		}
 
-		console.error('Not sure what to do with this node', node, role);
+		logger.error('Not sure what to do with this node', node, role);
 		Ext.Error.raise('Unable to translate node to pointer');
 	},
 
@@ -706,7 +709,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			contextOffset = textContent.length - contextOffset;
 		}
 
-		//console.log('Created Context, TEXT', "'"+textContent+"'", 'CONTEXT', contextText, 'OFFSET', contextOffset);
+		//logger.debug('Created Context, TEXT', "'"+textContent+"'", 'CONTEXT', contextText, 'OFFSET', contextOffset);
 
 		return TextContext.create({
 			contextText: contextText,
@@ -747,7 +750,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		loc = this.cachedLocatorEnsuringDocument(rangeDesc, docElement);
 		if (loc) {
-			//console.debug('Using cached locator info');
+			//logger.debug('Using cached locator info');
 			return loc;
 		}
 
@@ -756,26 +759,26 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			!startResult.hasOwnProperty('confidence') ||
 			startResult.confidence === 0) {
 			if (this.isDebug) {
-				console.warn('No possible start found for', rangeDesc, startResult);
+				logger.warn('No possible start found for', rangeDesc, startResult);
 			}
 			return null;
 		}
 
 		if (startResult.confidence < confidenceCutoff) {
 			if (this.isDebug) {
-				console.warn('No start found with an acceptable confidence.', startResult, rangeDesc);
+				logger.warn('No start found with an acceptable confidence.', startResult, rangeDesc);
 			}
 			return null;
 		}
 
 		if (startResult.confidence < 1.0) {
 			if (this.isDebug) {
-				console.log('Matched start with confidence of', startResult.confidence, startResult, rangeDesc);
+				logger.debug('Matched start with confidence of', startResult.confidence, startResult, rangeDesc);
 			}
 		}
 		else {
 			if (this.isDebug) {
-				console.log('Found an exact match for start', startResult, rangeDesc);
+				logger.debug('Found an exact match for start', startResult, rangeDesc);
 			}
 		}
 
@@ -784,26 +787,26 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			!endResult.hasOwnProperty('confidence') ||
 			endResult.confidence === 0) {
 			if (this.isDebug) {
-				console.warn('No possible end found for', rangeDesc, endResult);
+				logger.warn('No possible end found for', rangeDesc, endResult);
 			}
 			return null;
 		}
 
 		if (endResult.confidence < confidenceCutoff) {
 			if (this.isDebug) {
-				console.warn('No end found with an acceptable confidence.', endResult, rangeDesc);
+				logger.warn('No end found with an acceptable confidence.', endResult, rangeDesc);
 			}
 			return null;
 		}
 
 		if (endResult.confidence < 1.0) {
 			if (this.isDebug) {
-				console.log('Matched end with confidence of', endResult.confidence, endResult, rangeDesc);
+				logger.debug('Matched end with confidence of', endResult.confidence, endResult, rangeDesc);
 			}
 		}
 		else {
 			if (this.isDebug) {
-				console.log('Found an exact match for end', endResult, rangeDesc);
+				logger.debug('Found an exact match for end', endResult, rangeDesc);
 			}
 		}
 
@@ -834,7 +837,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			liveEndResult = this.convertStaticResultToLiveDomContainerAndOffset(endResult, docElement),
 			range;
 
-		//		console.log('liveStartResult', liveStartResult, 'liveEndResult', liveEndResult);
+		//		logger.debug('liveStartResult', liveStartResult, 'liveEndResult', liveEndResult);
 		if (!liveStartResult || !liveEndResult) {
 			return null;
 		}
@@ -875,7 +878,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		if (theId.indexOf('tag:nextthought.com') === 0) {
 			parts = theId.split(',');
 			if (parts.length < 2) {
-				console.warn('Encountered an ntiid looking id that doesn\'t split by comma');
+				logger.warn('Encountered an ntiid looking id that doesn\'t split by comma');
 			}
 			else {
 				//Note this may not technically be an exact match, but the potentials loop below should weed out any issues
@@ -894,7 +897,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 					r = {confidence: 1, node: p};
 				}
 				else if (this.isDebug) {
-					console.warn('Potential match doesn\'t match pointer', p, pointer);
+					logger.warn('Potential match doesn\'t match pointer', p, pointer);
 				}
 
 				if (r) {
@@ -986,7 +989,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				//Always keep the primary.	It should never be empty, but just in case
 				if (i === 0) {
 					if (Ext.isEmpty(c.contextText.trim())) {
-						console.error('Found a primary context with empty contextText.	Where did that come from?', pointer);
+						logger.error('Found a primary context with empty contextText.	Where did that come from?', pointer);
 					}
 					return true;
 				}
@@ -1041,7 +1044,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				//Instead of doing that maybe instead of not trying to partial match we just take a
 				//deduciton from the overal confidence.
 				if (this.isDebug) {
-					console.info('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer, possibleNodes, ancestorNode);
+					logger.info('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer, possibleNodes, ancestorNode);
 				}
 				return {confidence: 0};
 			}
@@ -1056,7 +1059,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				result = {confidence: 0};
 			}
 			if (this.isDebug) {
-				console.log('Searching for best ' + pointer.getRole() + ' match in ', possibleNodes);
+				logger.debug('Searching for best ' + pointer.getRole() + ' match in ', possibleNodes);
 			}
 			for (let i = 0; i < possibleNodes.length; i++) {
 				if (possibleNodes[i].confidence > result.confidence) {
@@ -1139,12 +1142,12 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 
 		if (pointer.nonEmptyContexts === undefined) {
-			console.error('nonEmptyContexts not set. This should only happen when testing');
+			logger.error('nonEmptyContexts not set. This should only happen when testing');
 			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function (c, i) {
 				//Always keep the primary.	It should never be empty, but just in case
 				if (i === 0) {
 					if (Ext.isEmpty(c.contextText.trim())) {
-						console.error('Found a primary context with empty contextText.	Where did that come from?', pointer);
+						logger.error('Found a primary context with empty contextText.	Where did that come from?', pointer);
 					}
 					return true;
 				}
@@ -1640,7 +1643,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 			}
 			else {
-				console.warn('skipping node while looking for tag', temp);
+				logger.warn('skipping node while looking for tag', temp);
 			}
 
 			//advance:
@@ -1724,14 +1727,14 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		while (parts.length > 1) {
 
 			if (container.nodeType === Node.TEXT_NODE) {
-				console.error('Expected a non text node.  Expect errors', container);
+				logger.error('Expected a non text node.  Expect errors', container);
 			}
 
 			kids = container.childNodes;
 			part = parseInt(parts.pop(), 10);
 
 			if (part >= kids.length) {
-				console.error('Invalid xpath ' + staticResult.xpath + ' from node', referenceNode);
+				logger.error('Invalid xpath ' + staticResult.xpath + ' from node', referenceNode);
 				return null;
 			}
 
@@ -1795,7 +1798,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			//If the container isn't a text node, the offset is the ith child
 			if (child.nodeType !== Node.TEXT_NODE) {
 				result = {container: this.ithChildAccountingForSyntheticNodes(child, offset, null)};
-				//console.log('Returning result from child is not textnode branch', result);
+				//logger.debug('Returning result from child is not textnode branch', result);
 				return result;
 			}
 
@@ -1816,7 +1819,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				i++;
 			}
 
-			console.error('Can`t find offset in joined textNodes');
+			logger.error('Can`t find offset in joined textNodes');
 			return null;
 
 		}
@@ -1835,7 +1838,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			Ext.fly(node).is('span.redactionAction') ||
 			Ext.fly(node).is('span.blockRedactionAction')) {
 			//ignore children:
-			//console.log('ignoring children of', node, 'when finding non synthetic kids');
+			//logger.debug('ignoring children of', node, 'when finding non synthetic kids');
 			return [];
 		}
 
@@ -1865,7 +1868,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 
 		if (isBlankTextNode(startContainer)) {
-			console.log('found a range with a starting node that is nothing but whitespace');
+			logger.debug('found a range with a starting node that is nothing but whitespace');
 			index = Ext.Array.indexOf(txtNodes, startContainer);
 			for (i = index; i < txtNodes.length; i++) {
 				if (!isBlankTextNode(txtNodes[i])) {
@@ -1876,7 +1879,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 
 		if (isBlankTextNode(endContainer)) {
-			console.log('found a range with a end node that is nothing but whitespace');
+			logger.debug('found a range with a end node that is nothing but whitespace');
 			index = Ext.Array.indexOf(txtNodes, endContainer);
 			for (i = index; i >= 0; i--) {
 				if (!isBlankTextNode(txtNodes[i])) {
@@ -1953,7 +1956,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			sel.setSingleRange(r);
 		}
 		catch (e) {
-			console.error(e.stack || e.message || e);
+			logger.error(e.stack || e.message || e);
 		}
 	}
 

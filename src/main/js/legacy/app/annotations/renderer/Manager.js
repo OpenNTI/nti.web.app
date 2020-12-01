@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {default: Logger} = require('@nti/util-logger');
 
 const Anchors = require('legacy/util/Anchors');
 const Globals = require('legacy/util/Globals');
@@ -8,6 +9,7 @@ require('legacy/util/Line');
 
 const {guidGenerator} = Globals;
 
+const logger = Logger.get('nextthought:extjs:app:annotations:renderer:Manager');
 
 module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Manager', {
 	events: new Ext.util.Observable(),
@@ -68,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 	registerGutter: function (el, reader) {
 		//TODO all this junk about prefixes should go away once we aren't using a singleton here...
 		if (this.gutter) {
-			console.warn('replacing exisiting gutter?', this.gutter);
+			logger.warn('replacing exisiting gutter?', this.gutter);
 		}
 		this.gutter = el;
 
@@ -132,11 +134,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 	},
 
 	getBucket: function (line) {
-		//console.debug('prefix:'+prefix, line);
+		//logger.debug('prefix:'+prefix, line);
 		if (line < 0) {
 			//bad line, don't render:
 			if (this.isDebug) {
-				console.error('Annotation cannot be rendered in gutter');
+				logger.error('Annotation cannot be rendered in gutter');
 			}
 			return null;
 		}
@@ -212,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 			cloned, descs = [], cids = [], doc = null, selectedEl;
 
 		if (me.rendering) {
-			console.warn('Render called while rendering...');
+			logger.warn('Render called while rendering...');
 			me.events.on('finish', Ext.bind(me.render, me, arguments), me, {single: true});
 			return;
 		}
@@ -221,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 			return;
 		}
 		if (!me.gutter) {
-			console.error('no gutter');
+			logger.error('no gutter');
 			me.events.fireEvent('rendering');
 			me.events.fireEvent('finish', 0);
 			return;
@@ -235,10 +237,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 
 		me.rendering = true;
 		me.events.fireEvent('rendering');
-		console.log('Rendering annotations');
-		if (console.time) {
-			console.time('Annotation render loop');
-		}
+		logger.debug('Rendering annotations');
+		// if (console.time) {
+		// 	console.time('Annotation render loop');
+		// }
 		Ext.suspendLayouts();
 
 		me.registry = Ext.Array.unique(me.registry);
@@ -289,19 +291,19 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 					}
 				}
 				catch (e) {
-					console.error(o.$className, Globals.getError(e));
+					logger.error(o.$className, Globals.getError(e));
 				}
 			});
-			console[renderedCount === cloned.length ? 'log' : 'warn']('Rendered ' + renderedCount + '/' + cloned.length + ' annotations');
+			logger[renderedCount === cloned.length ? 'debug' : 'warn']('Rendered ' + renderedCount + '/' + cloned.length + ' annotations');
 			me.layoutBuckets();
 		}
 
 		me.rendering = false;
 		Ext.resumeLayouts(true);
 		me.events.fireEvent('finish', renderedCount);
-		if (console.timeEnd) {
-			console.timeEnd('Annotation render loop');
-		}
+		// if (console.timeEnd) {
+		// 	console.timeEnd('Annotation render loop');
+		// }
 		if (this.selectedLine) {
 			selectedEl = this.gutter.down('[data-line=' + this.selectedLine + ']');
 			if (selectedEl) {
