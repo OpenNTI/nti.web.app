@@ -14,9 +14,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})' }},
 		{ cls: 'meta', cn: [
-			{ cls: 'title', html: '{title}' },
+			{ cls: 'title', html: '{title:htmlEncode}' },
 			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
-			{ cls: 'description', html: '{description}' }
+			{ cls: 'description', html: '{description:htmlEncode}' }
 		]}
 	]),
 

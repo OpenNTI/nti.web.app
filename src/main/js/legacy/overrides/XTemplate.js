@@ -16,7 +16,7 @@ Ext.override(Ext.XTemplateCompiler, {
 
 	myReplacementFn: (function () {
 		//cache the regex and function so its not creating them on the fly each time
-		var escapRe = /(\{|\})/gm;
+		var escapeRe = /(\{|\})/gm;
 
 		function escapeFn (n, c) { return '&#' + c.charCodeAt(0) + ';'; }
 
@@ -24,8 +24,8 @@ Ext.override(Ext.XTemplateCompiler, {
 			var def = {},
 				s = translate.isMissing(key) ? getString(key, def) : translate(key);
 			//Its written like this to prevent executing throwaway work.
-			// Only calculate the escaped key if the default token is returend.
-			return s !== def ? s : m.replace(escapRe, escapeFn);
+			// Only calculate the escaped key if the default token is returned.
+			return s !== def ? s.replace(/\{([^}]+)\}/g, '{$1:htmlEncode}') : m.replace(escapeRe, escapeFn);
 		};
 	}()),
 

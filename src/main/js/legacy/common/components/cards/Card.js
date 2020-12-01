@@ -30,9 +30,9 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 		//			{ cls: 'like' }
 		//		]},
 		{ cls: 'meta', cn: [
-			{ cls: 'title', html: '{title}' },
+			{ cls: 'title', html: '{title:htmlEncode}' },
 			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
-			{ cls: 'description', html: '{description}' }
+			{ cls: 'description', html: '{description:htmlEncode}' }
 		]}
 	]),
 

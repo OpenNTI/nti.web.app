@@ -212,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 		let contents = [];
 
 		if (title) {
-			contents.push({ cls: 'chapter title', html: title });
+			contents.push({ cls: 'chapter title', html: Ext.util.Format.htmlEncode(title) });
 		}
 
 		if (description) {
