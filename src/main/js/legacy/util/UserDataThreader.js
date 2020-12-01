@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const Logger = require('@nti/util-logger').default;
+const {default: Logger} = require('@nti/util-logger');
 
 const AnnotationUtils = require('./Annotations');
 
