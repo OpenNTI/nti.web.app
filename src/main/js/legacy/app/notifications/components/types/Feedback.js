@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 	itemCls: 'feedback',
-	wording: 'posted feedback on {assignment}',
+	wording: 'posted feedback on {assignment:htmlEncode}',
 
 	fillInWording: function () {
 		var me = this,
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 		Service.getObject(assignmentId)
 			.then(function (assignment) {
-				var wording = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
+				var wording = me.wording.replace('{assignment:htmlEncode}', me.titleTpl.apply({name: assignment.get('title')}));
 
 				if (me.wordingEl && me.wordingEl.dom) {
 					me.wordingEl.dom.innerHTML = wording;

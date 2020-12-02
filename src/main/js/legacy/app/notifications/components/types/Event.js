@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 			this.updatedWording.replace('{name}', title);
 
 		if (this.wordingEl && this.wordingEl.dom) {
-			this.wordingEl.dom.innerHTML = wording;
+			this.wordingEl.dom.innerHTML = Ext.util.Format.htmlEncode(wording);
 		}
 	}
 });

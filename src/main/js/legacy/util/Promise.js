@@ -85,6 +85,12 @@ global.Deferred = Promise.Deferred = (function () {
 }());
 
 
+global.Deferred.reject = (reason) => ({
+	then: (...args) => Promise.reject(reason).then(...args),
+	catch: (...args) => Promise.reject(reason).catch(...args),
+	finally: (...args) => Promise.reject(reason).finally(...args),
+});
+
 /**
  * Given an array of values, step through one at a time and fulfill with
  *	1.) The value its self if its not a function

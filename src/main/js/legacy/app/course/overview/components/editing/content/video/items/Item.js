@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			{cls: 'close'}
 		]},
 		{cls: 'meta', cn: [
-			{cls: 'title', html: '{title}'},
+			{cls: 'title', html: '{title:htmlEncode}'},
 			{cls: 'providers', cn: [
 				{tag: 'tpl', 'for': 'providers', cn: [
 					{tag: 'span', html: '{label}'}

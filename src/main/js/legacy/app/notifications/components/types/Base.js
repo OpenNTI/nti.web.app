@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 	cls: 'item-container',
 
-	titleTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'title', html: '{name}'}).compile(),
+	titleTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'title', html: '{name:htmlEncode}'}).compile(),
 
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'item notification {hidden:boolStr("x-hidden")} {previewCls} {itemCls}',

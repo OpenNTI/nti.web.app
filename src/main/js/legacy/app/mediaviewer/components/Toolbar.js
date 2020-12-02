@@ -91,8 +91,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 		description = me.video && me.video.get('description');
 
 		me.onceRendered.then(function () {
-			me.titleEl.update(title);
-			me.sectionNameEl.update(description);
+			me.titleEl.update(Ext.util.Format.htmlEncode(title));
+			me.sectionNameEl.update(Ext.util.Format.htmlEncode(description));
 
 			if (me.noTranscript) {
 				me.pickerEl.removeCls('hasTranscript');

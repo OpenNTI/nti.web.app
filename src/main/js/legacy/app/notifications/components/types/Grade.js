@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 	itemCls: 'grade',
-	wording: 'graded {assignment}',
+	wording: 'graded {assignment:htmlEncode}',
 
 	fillInData: function () {
 		var creator = this.record.get('Creator');
@@ -80,8 +80,8 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		return Service.getObject(assignmentId)
 			.then(function (assignment) {
 				if (me.wordingEl && me.wordingEl.dom) {
-					me.wordingEl.dom.innerHTML = t('label', {assignment: assignment.get('title')});
-					// me.wordingEl.dom.innerHTML = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
+					me.wordingEl.dom.innerHTML = t('label', {assignment: Ext.util.Format.htmlEncode(assignment.get('title'))});
+					// me.wordingEl.dom.innerHTML = me.wording.replace('{assignment:htmlEncode}', me.titleTpl.apply({name: assignment.get('title')}));
 				}
 			});
 	}

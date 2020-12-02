@@ -15,13 +15,13 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		]
 	},
 
-	wording: 'created a discussion {title}',
+	wording: 'created a discussion {title:htmlEncode}',
 
 
 	fillInWording: function () {
 		var wording = this.wording;
 
-		wording = wording.replace('{title}', this.titleTpl.apply({name: this.record.get('title')}));
+		wording = wording.replace('{title:htmlEncode}', this.titleTpl.apply({name: this.record.get('title')}));
 
 		if (this.wordingEl && this.wordingEl.dom) {
 			this.wordingEl.dom.innerHTML = wording;

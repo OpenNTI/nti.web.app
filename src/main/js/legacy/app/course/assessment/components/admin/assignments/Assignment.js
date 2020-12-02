@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					cn: [
 						{ tag: 'span', cls: 'path part root', html: '{{{nti-web-app.course.assessment.components.admin.assignments.Assignment.root}}}'},
 						' / ',
-						{ tag: 'span', cls: 'path part current', html: '{pathBranch}'}
+						{ tag: 'span', cls: 'path part current', html: '{pathBranch:htmlEncode}'}
 					]
 				}
 			]

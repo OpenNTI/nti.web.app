@@ -11,5 +11,5 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		mimeType: 'application/vnd.nextthought.forums.personalblogentry'
 	},
 
-	wording: 'created a thought {title}'
+	wording: 'created a thought {title:htmlEncode}'
 });

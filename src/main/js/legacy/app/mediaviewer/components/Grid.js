@@ -1,4 +1,4 @@
-
+/* global Deferred */
 const Ext = require('@nti/extjs');
 const { encodeForURI } = require('@nti/lib-ntiids');
 
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 			{ cls: 'item video {progress}', cn: [
 				{ cls: 'thumbnail', style: { backgroundImage: 'url({[this.thumb(values.sources)]})'} },
 				{ cls: 'meta', cn: [
-					{ cls: 'title', html: '{title}' },
+					{ cls: 'title', html: '{title:htmlEncode}' },
 					{ cls: 'info', cn: [
 						//							{ tag: 'span', html: '{duration}'},
 						//							{ tag: 'span', html: '{comments:plural("Comment")}'}
@@ -133,7 +133,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	},
 
 	setContent: function (source, bundle) {
-		var me = this;
 		if (!this.rendered) {
 			this.setContentLastArgs = [...arguments];
 
@@ -148,43 +147,37 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 			return;
 		}
 
-		me.source = source;
-		if (me.currentBundle !== bundle) {
-			me.__bundleChanged(bundle);
+		this.source = source;
+		if (this.currentBundle !== bundle) {
+			this.__bundleChanged(bundle);
 		}
 		else {
-			ContentUtils.getLineage(source.get('NTIID'), bundle)
-				.then(function (lineages) {
-					var lineage = lineages[0];
-					ContentUtils.getLocation(lineage.last(), bundle)
-						.then(function (location) {
-							me.setLocationInfo(location);
-						});
-				});
+			this.__resolveLocationInfo(source.get('NTIID'), bundle);
 
 			// Since the bundle didn't change but the current video changed,
 			// firing store-set will trigger setting next and previous video
-			me.fireEvent('store-set', me.store);
+			this.fireEvent('store-set', this.store);
 
-			me.__scrollSelectedIntoView();
+			this.__scrollSelectedIntoView();
 		}
 	},
 
-	__bundleChanged: function (bundle) {
-		var me = this;
+	__bundleChanged (bundle) {
+		this.currentBundle = bundle;
+		this.buildVideoStore(bundle);
+		this.__resolveLocationInfo(this.source.get('NTIID'), bundle);
+	},
 
-		me.currentBundle = bundle;
 
-		me.buildVideoStore(bundle);
-
-		ContentUtils.getLineage(me.source.get('NTIID'), bundle)
-			.then(function (lineages) {
-				var lineage = lineages[0];
-				ContentUtils.getLocation(lineage.last(), bundle)
-					.then(function (location) {
-						me.setLocationInfo(location);
-					});
-			});
+	async __resolveLocationInfo (ntiid, bundle) {
+		const [lineage] = await ContentUtils.getLineage(ntiid, bundle);
+		if (lineage) {
+			const location = await ContentUtils.getLocation(lineage.last(), bundle);
+			this.setLocationInfo(location);
+		}
+		else {
+			console.warn('no lineage for id: ', ntiid);
+		}
 	},
 
 
@@ -202,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 
 
 	__getCurrentProgress: function () {
-		return this._currentProgress || Promise.reject();
+		return this._currentProgress || Deferred.reject();
 	},
 
 
@@ -255,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	 */
 	getVideosForBundle: function (bundle) {
 		if (!bundle.getMediaByOutline || !bundle.getNavigationStore) {
-			return Promise.reject();
+			return Deferred.reject();
 		}
 
 		if (this.__getVideosPromise) {

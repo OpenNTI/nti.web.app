@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header-container', cn: [
 			{cls: 'assignment', cn: [
-				{cls: 'title', html: '{assignmentTitle}'},
+				{cls: 'title', html: '{assignmentTitle:htmlEncode}'},
 				{cls: 'extras meta', cn: [
 					{tag: 'span', cls: 'link raw', html: '{{{nti-web-app.course.assessment.components.admin.ListHeader.viewAssignment}}}'},
 					{tag: 'span', cls: 'link edit', html: '{{{nti-web-app.course.assessment.components.admin.ListHeader.editAssignment}}}'}
@@ -399,8 +399,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 	updateLabelsForAssignment: function (assignment) {
-		this.assignmentTitleEl.update(assignment.get('title'));
-		this.assignmentTitleEl.dom.setAttribute('data-qtip', assignment.get('title'));
+		this.assignmentTitleEl.update(Ext.util.Format.htmlEncode(assignment.get('title')));
+		this.assignmentTitleEl.dom.setAttribute('data-qtip', Ext.util.Format.htmlEncode(assignment.get('title')));
 
 		this.assignmentDueEl.update(AssignmentStatus.getStatusHTML({
 			isDraft: !assignment.get('availableBeginning') && !assignment.get('PublicationState'),

@@ -322,22 +322,17 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	getLocationInfo: function () {
-		var me = this;
+	async getLocationInfo () {
 		const bundle = this.ownerCt && this.ownerCt.currentBundle;
+		const [lineage] = await ContentUtils.getLineage(this.video.get('NTIID'), bundle);
 
-		return new Promise(function (fulfill, reject) {
-			ContentUtils.getLineage(me.video.get('NTIID'), bundle)
-				.then(function (lineages) {
-					var lineage = lineages[0];
-					ContentUtils.getLocation(lineage.last(), bundle)
-						.then(function (location) {
-							me.setLocationInfo(location);
-							fulfill(location);
-						});
-				})
-				.catch(reject);
-		});
+		if (lineage) {
+			const location = await ContentUtils.getLocation(lineage.last(), bundle);
+
+			this.setLocationInfo(location);
+
+			return location;
+		}
 	},
 
 	videoNavigation: function (video) {
@@ -350,7 +345,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			route = section && encodeForURI(section) + '/video/' + encodeForURI(ntiid);
 
 		if (!video.raw || !ntiid) {
-			console.log('Dont know how to handle the navigation');
+			console.log('Don\'t know how to handle the navigation');
 			return;
 		}
 

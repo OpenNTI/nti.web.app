@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				flex: 1,
 				renderer: function (v, col, rec) {
 					return Ext.DomHelper.markup({
-						html: rec.get('item').get('title')
+						html: Ext.util.Format.htmlEncode(rec.get('item').get('title'))
 					});
 				},
 				doSort: function (state) {
