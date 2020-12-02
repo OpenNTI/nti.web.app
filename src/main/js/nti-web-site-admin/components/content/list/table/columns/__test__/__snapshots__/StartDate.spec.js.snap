@@ -5,7 +5,7 @@ exports[`Site admin content table start date column test Test date is many days 
   className="cell"
 >
   <time
-    className="nti-text value"
+    className="ntiText value"
     dateTime="2017-10-31T00:00:00+00:00"
   >
     Oct 31, 2017

@@ -146,7 +146,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -161,7 +161,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -180,7 +180,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -194,7 +194,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -257,7 +257,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -272,7 +272,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -291,7 +291,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -305,7 +305,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -368,7 +368,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -383,7 +383,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -402,7 +402,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -416,7 +416,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -479,7 +479,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -494,7 +494,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -513,7 +513,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -527,7 +527,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -590,7 +590,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -605,7 +605,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -624,7 +624,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -638,7 +638,7 @@ exports[`Site admin content course list (with 5 items) Basic render test 1`] = `
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -807,7 +807,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -822,7 +822,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -841,7 +841,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -855,7 +855,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -918,7 +918,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -933,7 +933,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -952,7 +952,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -966,7 +966,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1029,7 +1029,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1044,7 +1044,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1063,7 +1063,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1077,7 +1077,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1140,7 +1140,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1155,7 +1155,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1174,7 +1174,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1188,7 +1188,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1251,7 +1251,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1266,7 +1266,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1285,7 +1285,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1299,7 +1299,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1362,7 +1362,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1377,7 +1377,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1396,7 +1396,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1410,7 +1410,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1473,7 +1473,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1488,7 +1488,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1507,7 +1507,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1521,7 +1521,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1584,7 +1584,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1599,7 +1599,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1618,7 +1618,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1632,7 +1632,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1695,7 +1695,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1710,7 +1710,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1729,7 +1729,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1743,7 +1743,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1806,7 +1806,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1821,7 +1821,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1840,7 +1840,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1854,7 +1854,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -1917,7 +1917,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -1932,7 +1932,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -1951,7 +1951,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1965,7 +1965,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2028,7 +2028,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2043,7 +2043,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2062,7 +2062,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2076,7 +2076,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2139,7 +2139,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2154,7 +2154,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2173,7 +2173,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2187,7 +2187,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2250,7 +2250,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2265,7 +2265,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2284,7 +2284,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2298,7 +2298,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2361,7 +2361,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2376,7 +2376,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2395,7 +2395,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2409,7 +2409,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2472,7 +2472,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2487,7 +2487,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2506,7 +2506,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2520,7 +2520,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2583,7 +2583,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2598,7 +2598,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2617,7 +2617,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2631,7 +2631,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2694,7 +2694,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2709,7 +2709,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2728,7 +2728,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2742,7 +2742,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2805,7 +2805,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2820,7 +2820,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2839,7 +2839,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2853,7 +2853,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -2916,7 +2916,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -2931,7 +2931,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -2950,7 +2950,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2964,7 +2964,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -3027,7 +3027,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -3042,7 +3042,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -3061,7 +3061,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -3075,7 +3075,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -3138,7 +3138,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -3153,7 +3153,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -3172,7 +3172,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -3186,7 +3186,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -3249,7 +3249,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -3264,7 +3264,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -3283,7 +3283,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -3297,7 +3297,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -3360,7 +3360,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -3375,7 +3375,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -3394,7 +3394,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -3408,7 +3408,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
@@ -3471,7 +3471,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Starts:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-10-30T00:00:00+00:00"
                         >
                           Oct 30, 2017
@@ -3486,7 +3486,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
                           Ends:
                         </span>
                         <time
-                          className="nti-text value"
+                          className="ntiText value"
                           dateTime="2017-11-25T00:00:00+00:00"
                         >
                           Nov 25, 2017
@@ -3505,7 +3505,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -3519,7 +3519,7 @@ exports[`Site admin content course list (with 25 items) Basic render test 1`] = 
               className="cell"
             >
               <time
-                className="nti-text value"
+                className="ntiText value"
                 dateTime="2017-11-25T00:00:00+00:00"
               >
                 Nov 25, 2017
