@@ -50,14 +50,15 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 	initComponent: function () {
 		this.callParent();
 
-		if (!isFlag('new-notifications')) {
-			this.add({xtype: 'navigation-message-bar', id: 'message-bar'});
-		}
-		this.add({xtype: 'main-navigation', id: 'nav'});
 		this.body = this.add({xtype: 'main-views', id: 'view'});
+		this.add({xtype: 'main-navigation', id: 'nav'});
 		this.add({xtype: 'windows-view', id: 'window'});
 		this.add({xtype: 'prompt-view', id: 'prompt'});
 		this.add({xtype: 'chats-view', id: 'chat-window', navigateToObject: (obj) => this.body.attemptToNavigateToObject(obj)});
+
+		if (!isFlag('new-notifications')) {
+			this.add({xtype: 'navigation-message-bar', id: 'message-bar'});
+		}
 
 		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
