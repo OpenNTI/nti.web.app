@@ -18,6 +18,7 @@ body > .x-mask {
 	right: 0 !important;
 	bottom: 0 !important;
 	background-color: rgba(0, 0, 0, 0.3);
+	z-index: 9998;
 }
 
 .nt-mask-msg,
