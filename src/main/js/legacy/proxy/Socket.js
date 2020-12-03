@@ -104,15 +104,13 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	/*
 	 * Attempts to create a socket connection to the dataserver for this user.
 	 */
-	setup: function () {
+	setup () {
 		if (!window.io) {//if no io, then call ensure to wait until io is available
 			this.ensureSocketAvailable();
 			return;
 		}
 
-		var me = this,
-			socket = io.connect(Globals.getURL(), {'reconnection delay': $AppConfig.socketReconnectDelay || 2000}),
-			k;
+		const socket = io.connect(Globals.getURL(), {'reconnection delay': $AppConfig.socketReconnectDelay || 2000});
 
 		if (this.isDebug && !socket.emit.chained) {
 			socket.emit = Ext.Function.createSequence(
@@ -122,9 +120,9 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 			socket.emit.chained = true;
 
 			socket.onPacket = Ext.Function.createSequence(
-				function () {
-					var o = JSON.stringify(arguments);
-					if ((me.isDebug && me.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}') {
+				(...args) => {
+					var o = JSON.stringify(args);
+					if ((this.isDebug && this.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}') {
 						console.debug('socket.onPacket: args:' + o);
 					}
 				},
@@ -133,10 +131,10 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 
 			if (io.Transport.prototype.onHeartbeat) {
 				io.Transport.prototype.onHeartbeat = Ext.Function.createSequence(
-					function () {
-						me.lastHeartbeat = new Date();
-						if (me.isDebug && me.isVerbose) {
-							console.debug('Recieved heartbeat from server', me.lastHeartbeat);
+					() => {
+						this.lastHeartbeat = new Date();
+						if (this.isDebug && this.isVerbose) {
+							console.debug('Recieved heartbeat from server', this.lastHeartbeat);
 						}
 					},
 					io.Transport.prototype.onHeartbeat
@@ -144,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 			}
 		}
 
-		for (k in this.control) {
+		for (const k in this.control) {
 			if (this.control.hasOwnProperty(k)) {
 				if (this.isDebug) {
 					console.debug('Attaching handler for ', k);
@@ -167,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	emit: function () {
+	emit: function (eventName, data, callback) {
 		if (this.socket) {
 			try {
 				this.socket.emit.apply(this.socket, arguments);
@@ -175,8 +173,12 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 				console.error('No Socket?', e.stack || e.message || e);
 			}
 		}
-		else if (this.isDebug) {
-			console.debug('dropping emit, socket is down');
+		else {
+			if (this.isDebug) {
+				console.debug('dropping emit, socket is down');
+			}
+
+			callback?.call();
 		}
 	},
 
