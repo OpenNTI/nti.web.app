@@ -10,10 +10,10 @@
 		}
 
 		& > .toolbar {
-			height: 100%;
+			// height: 100%;
+			// bottom: 0;
 			position: absolute;
 			top: 0;
-			bottom: 0;
 			left: 0;
 			right: 0;
 
@@ -29,9 +29,13 @@
 						height: 100%;
 
 						& > div.sticky {
-							z-index: 152;
+							z-index: 1;
 							background: white;
 							border-top: solid 1px #ededed;
+
+							.window-open & {
+								z-index: unset;
+							}
 
 							& > .content-toolbar {
 								height: 59px;
@@ -674,7 +678,6 @@ div.no-content-splash {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 99;
 	background-color: white;
 
 	&.initial {
@@ -698,7 +701,6 @@ div.no-content-splash {
 	.searchHit-entry {
 		position: absolute;
 		background-color: #fcff13;
-		z-index: 100;
 		box-shadow: 0 0 0 2px #fcff13, 1px 1px 2px 2px rgba(0, 0, 0, 0.2);
 		opacity: 0.5;
 	}
@@ -713,7 +715,6 @@ div.no-content-splash {
 	right: 60px;
 
 	& > .x-panel {
-		z-index: 3;
 		position: absolute;
 		width: 98%;
 
@@ -729,7 +730,6 @@ div.no-content-splash {
 	position: absolute;
 	top: 0;
 	right: 10px;
-	z-index: 10;
 	//prevent note controls from being visible behind.
 	background: white;
 	overflow: hidden;

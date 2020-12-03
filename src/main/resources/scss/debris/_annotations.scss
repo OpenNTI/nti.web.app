@@ -26,7 +26,6 @@
 			left: 0;
 			right: 0;
 			bottom: 0;
-			z-index: 2;
 		}
 	}
 
@@ -34,7 +33,6 @@
 		cursor: default;
 		display: block;
 		position: relative;
-		z-index: 3;
 		width: 100%;
 		border-top: 1px solid #dadada;
 		padding: 0 14px 20px 14px;
@@ -156,7 +154,6 @@
 	right: 0;
 	width: 60px;
 	overflow: visible;
-	z-index: 4;
 
 	&.debug {
 		bottom: 0;
@@ -698,7 +695,6 @@
 			position: absolute;
 			top: -12px;
 			left: -20px;
-			z-index: 5;
 		}
 
 		&.searchHitInside {
@@ -845,7 +841,6 @@
 		&.plain {
 			&, * {
 				position: relative;
-				z-index: 1;
 			}
 
 			// color: #076da7;
@@ -963,12 +958,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 #annotation-container {
 	&, .highlight-canvas {
 		position: absolute;
-		z-index: 1;
 		pointer-events: none;
-
-		.x-ie9 & {
-			z-index: 0;
-		}
 	}
 }
 
