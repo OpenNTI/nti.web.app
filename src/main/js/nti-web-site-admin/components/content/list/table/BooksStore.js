@@ -26,6 +26,8 @@ class UserListStore extends Stores.BoundStore {
 	}
 
 	async load () {
+		if (this.isBufferingSearch) { return; }
+
 		this.set('loading', true);
 
 		if(this.searchTerm && this.searchTerm.length < 3) {

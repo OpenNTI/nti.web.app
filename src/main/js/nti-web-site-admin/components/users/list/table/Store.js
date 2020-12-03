@@ -155,13 +155,15 @@ class UserListStore extends Stores.BoundStore {
 	}
 
 	applySearchTerm (term) {
-		this.set({
+		this.setImmediate({
 			searchTerm: term,
 			pageNumber: 0
 		});
 	}
 
 	async load () {
+		if (this.isBufferingSearch) { return; }
+
 		this.set('loading', true);
 
 		if(this.searchTerm && this.searchTerm.length < 3) {
