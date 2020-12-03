@@ -10,16 +10,6 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
     <div
       className="site-admin-tabs-container"
     >
-      <div
-        className="site-admin-tabs-header"
-      >
-        <span
-          className="site-admin-tabs-toc-icon"
-        />
-        <span>
-          People
-        </span>
-      </div>
       <ul
         className="unadorned-list site-admin-tabs"
       >
@@ -43,14 +33,9 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
         <li>
           <div
             className="nti-link-to-path"
-            to="./invitations"
+            to="./deactivated"
           >
-            Invitations
-            <div
-              className="invitations-count"
-            >
-              5
-            </div>
+            Deactivated
           </div>
         </li>
       </ul>
@@ -68,6 +53,27 @@ exports[`Site admin user list nav bar (with invite link) Basic render test 1`] =
       />
       Invite People
     </div>
+    <div
+      className="site-admin-tabs-container"
+    >
+      <ul
+        className="unadorned-list site-admin-tabs"
+      >
+        <li>
+          <div
+            className="nti-link-to-path"
+            to="./invitations"
+          >
+            Invitations
+            <div
+              className="invitations-count"
+            >
+              5
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 `;
@@ -82,16 +88,6 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
     <div
       className="site-admin-tabs-container"
     >
-      <div
-        className="site-admin-tabs-header"
-      >
-        <span
-          className="site-admin-tabs-toc-icon"
-        />
-        <span>
-          People
-        </span>
-      </div>
       <ul
         className="unadorned-list site-admin-tabs"
       >
@@ -115,6 +111,26 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
         <li>
           <div
             className="nti-link-to-path"
+            to="./deactivated"
+          >
+            Deactivated
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div
+    className="site-admin-card"
+  >
+    <div
+      className="site-admin-tabs-container"
+    >
+      <ul
+        className="unadorned-list site-admin-tabs"
+      >
+        <li>
+          <div
+            className="nti-link-to-path"
             to="./invitations"
           >
             Invitations
@@ -128,8 +144,5 @@ exports[`Site admin user list nav bar (without invite link) Basic render test 1`
       </ul>
     </div>
   </div>
-  <div
-    className="site-admin-card"
-  />
 </div>
 `;

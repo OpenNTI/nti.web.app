@@ -8,6 +8,25 @@ import Selectable from './Selectable';
 const PAGE_SIZE = 20;
 const ACCESS_FORBIDDEN = 'Access forbidden';
 
+const canDeactivateUsers = (service) => Boolean(service.Items.filter(w => w.hasLink('BatchDeactivate'))[0]);
+const canActivateUsers = (service) => Boolean(service.Items.filter(w => w.hasLink('BatchReactivate'))[0]);
+
+async function bulkActivation (users, rel) {
+	const service = await getService();
+	const workspace = service.Items.filter(x => x.hasLink(rel))[0];
+
+	//utilizing the fact that usermodels are instance tracked
+	//so by parsing the response the existing users should get updated
+
+	await workspace.postToLink(
+		rel,
+		{
+			usernames: users.map(u => u.Username)
+		},
+		true
+	);
+}
+
 export default
 @mixin(Selectable, Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
 class UserListStore extends Stores.BoundStore {
@@ -74,6 +93,37 @@ class UserListStore extends Stores.BoundStore {
 		}
 		else {
 			return service.post(siteAdminsLink, { users: users.join(',') });
+		}
+	}
+
+	async deactivateUsers (users) {
+		this.set('loading', true);
+
+		try {
+			await bulkActivation(users, 'BatchDeactivate');
+
+			this.load();
+		} catch (e) {
+			this.set({
+				error: e.Message || e,
+				loading: false
+			});
+		}
+
+	}
+
+	async activateUsers (users) {
+		this.set('loading', true);
+
+		try {
+			await bulkActivation(users, 'BatchReactivate');
+
+			this.load();
+		} catch (e) {
+			this.set({
+				error: e.Message || e,
+				loading: false
+			});
 		}
 	}
 
@@ -153,8 +203,13 @@ class UserListStore extends Stores.BoundStore {
 
 			params.batchSize = PAGE_SIZE;
 
-			if(this.filter === 'learners') {
+			if (this.filter === 'learners') {
 				params.filterAdmins = 'true';
+				params.deactivated = 'false';
+			} else if (this.filter === 'admin') {
+				params.deactivated = 'false';
+			} else if (this.filter === 'deactivated') {
+				params.deactivated = 'true';
 			}
 
 			if(this.searchTerm) {
@@ -169,6 +224,8 @@ class UserListStore extends Stores.BoundStore {
 			}
 
 			this.set({
+				canDeactivateUsers: canDeactivateUsers(service),
+				canActivateUsers: canActivateUsers(service),
 				selectedUsers: [],
 				sortOn,
 				sortDirection,

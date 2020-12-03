@@ -13,6 +13,7 @@
 
 	.header {
 		position: relative;
+		margin-bottom: 10px;
 
 		.title {
 			font-size: 32px;
@@ -40,6 +41,10 @@
 				padding: 0 17px;
 				font-size: 14px;
 				margin-left: 0.5rem;
+
+				&.activate-button.deactivating {
+					color: var(--primary-red);
+				}
 
 				&.rescind {
 					background-color: var(--primary-red);

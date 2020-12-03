@@ -15,6 +15,7 @@ import SeatLimit from './SeatLimit';
 const DEFAULT_TEXT = {
 	learners: 'Learners',
 	admins: 'Admins',
+	deactivated: 'Deactivated',
 	invitations: 'Invitations',
 	invitePeople: 'Invite People',
 	people: 'People'
@@ -57,17 +58,14 @@ class UserListNavBar extends React.Component {
 		return (
 			<div className="site-admin-user-list-nav-bar">
 				<Card>
-					<Tabs header={t('people')}>
+					<SeatLimit />
+					<Tabs>
 						<LinkTo.Path to="./" activeClassName="active" exact>{t('learners')}</LinkTo.Path>
 						<LinkTo.Path to="./admins" activeClassName="active">{t('admins')}</LinkTo.Path>
-						<LinkTo.Path to="./invitations" activeClassName="active">
-							{t('invitations')}
-							{hasCount && <div className="invitations-count">{total || 0}</div>}
-						</LinkTo.Path>
+						<LinkTo.Path to="./deactivated" activeClassName="active">{t('deactivated')}</LinkTo.Path>
 					</Tabs>
 				</Card>
 				<Card>
-					<SeatLimit />
 					{canSendInvitations && (
 						<div className="invite" onClick={() => {
 							store.showInviteDialog();
@@ -75,6 +73,12 @@ class UserListNavBar extends React.Component {
 							<i className="icon-addfriend"/>{t('invitePeople')}
 						</div>
 					)}
+					<Tabs>
+						<LinkTo.Path to="./invitations" activeClassName="active">
+							{t('invitations')}
+							{hasCount && <div className="invitations-count">{total || 0}</div>}
+						</LinkTo.Path>
+					</Tabs>
 				</Card>
 				{showInviteDialog && (
 					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>

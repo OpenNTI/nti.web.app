@@ -11,6 +11,7 @@ import SearchInfo from '../../../common/SearchInfo';
 import {Name, JoinDate, LastSeen, Select} from './columns';
 import ChangeRole from './ChangeRole';
 import EmptyState from './EmptyState';
+import Activation from './controls/Activation';
 
 const t = scoped('nti-web-site-admin.users.list.table.UsersTable', {
 	learners: 'Active Learners',
@@ -47,7 +48,8 @@ class UsersTable extends React.Component {
 		emptyMessage: PropTypes.string,
 		currentSearchTerm: PropTypes.string,
 		setSort: PropTypes.func,
-		store: PropTypes.object.isRequired
+		store: PropTypes.object.isRequired,
+		noRoleChange: PropTypes.bool
 	}
 
 	items = []
@@ -81,9 +83,14 @@ class UsersTable extends React.Component {
 	}
 
 	renderControls () {
+		const {noRoleChange} = this.props;
+
 		return (
 			<div className="controls">
-				<div className="button change-role" onClick={this.showChangeRolesDialog}>{t('changeRole')}</div>
+				<Activation />
+				{!noRoleChange && (
+					<div className="button change-role" onClick={this.showChangeRolesDialog}>{t('changeRole')}</div>
+				)}
 			</div>
 		);
 	}

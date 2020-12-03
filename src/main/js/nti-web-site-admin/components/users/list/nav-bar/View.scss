@@ -51,9 +51,10 @@
 	.invite {
 		color: var(--primary-blue);
 		font-size: 14px;
-		margin: 0 20px;
+		padding: 0 1.25rem;
 		line-height: 60px;
 		cursor: pointer;
+		border-bottom: 1px solid var(--border-grey-light);
 
 		i {
 			margin-right: 0.5rem;
