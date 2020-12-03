@@ -246,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 				resolveService.then(function () {
 					if (tosLink) {
-						Service.overrideServiceLink('termsOfService', tosLink);
+						this.service.overrideServiceLink('termsOfService', tosLink);
 					}
 				});
 
@@ -274,45 +274,53 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		return w;
 	},
 
-	resolveService: function () {
-		var me = this,
-			unauthed = {401: true, 403: true};
+	async resolveService () {
+		const unauthorized = {401: true, 403: true};
 
-		return getService()
-			.then(doc => JSON.stringify(doc))
-			.then(function (doc) {
-				doc = ModelService.create(Globals.parseJSON(doc));
+		try {
+			const service = await getService();
+			const raw = JSON.stringify(service);
+			const doc = ModelService.create(Globals.parseJSON(raw));
 
-				if (!me.findResolveSelfWorkspace(doc)) {
-					console.error('Could not locate ResolveSelf link in:', doc);
-					Ext.Error.raise('bad service doc');
+			if (!this.findResolveSelfWorkspace(doc)) {
+				console.error('Could not locate ResolveSelf link in:', doc);
+				Ext.Error.raise('bad service doc');
+			}
+
+			this.service = $AppConfig.service = doc;
+			// TODO: work through all the global references of Service to obtain the service doc from this action/store.
+			Object.defineProperty(window, 'Service', {
+				get () {
+					// console.trace('Stop referencing Service from global.');
+					return doc;
 				}
+			});
+			this.store.setService(doc);
 
-				//TODO: figure out how to get this off of window...
-				window.Service = $AppConfig.service = doc;
-				me.store.setService(doc);
+			if (Ext.isEmpty($AppConfig.userObject)) {
+				return this.attemptLoginCallback(doc);
+			}
+		} catch(reason) {
+			if (unauthorized[reason.status]) {
+				//Just let this fall through and reject. we can't
+				//logout because we never logged in, when we reject
+				//the failure handle gets called and we send the user to the
+				//login page. -cutz
+				//me.handleLogout();
+			} else {
+				console.error('Could not resolve service document.\n', reason.stack || reason.message || reason);
 
-				if (Ext.isEmpty($AppConfig.userObject)) {
-					return me.attemptLoginCallback(doc);
-				}
-			})
-			.catch(function (r) {
-				if (unauthed[r.status]) {
-					//Just let this fall through and reject. we can't
-					//logout because we never logged in, when we reject
-					//the failure handle gets called and we send the user to the
-					//login page. -cutz
-					//me.handleLogout();
-				} else {
+				return new Promise((_, reject) => {
 					alert({
 						title: getString('Apologies'),
-						msg: getString('Cannot load page.')
+						msg: getString('Cannot load page.'),
+						fn: () => reject(reason)
 					});
-				}
+				});
+			}
 
-				console.log('Could not resolve service document\nrequest:', null, '\n\nresponse:', r, '\n\n');
-				return Promise.reject(r);
-			});
+			throw reason;
+		}
 	},
 
 	attemptLoginCallback: function (service) {
