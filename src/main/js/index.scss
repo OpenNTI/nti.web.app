@@ -8,10 +8,6 @@ html {
 	}
 }
 
-.global-toast-root > * {
-	z-index: 1; // so the toasts are over the chat bar
-}
-
 //Workaround ExtJS legacy z-index-happy bull$#!+ >.<
 body > .modal .modal-mask,
 body > .modal .modal-mask.nti-lightbox-dialog {
