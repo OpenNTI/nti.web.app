@@ -89,6 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 
 		this.addOpenCls();
 		this.addStackClasses();
+		Ext.getBody().appendChild(this.el);
 	},
 
 	closePrompt: function (index) {
