@@ -13,7 +13,7 @@ exports[`Site admin user course enrollment overview last activity widget Basic r
     className="value"
   >
     <time
-      className="ntiText date"
+      className="date ntiText"
       dateTime="2017-10-30T00:00:00+00:00"
     >
       Oct 30, 2017 12:00 AM

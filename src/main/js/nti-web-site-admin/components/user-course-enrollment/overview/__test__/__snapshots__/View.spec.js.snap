@@ -22,7 +22,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
           className="value"
         >
           <time
-            className="ntiText date"
+            className="date ntiText"
             dateTime="2017-10-20T00:00:00+00:00"
           >
             October 20, 2017
@@ -45,7 +45,7 @@ exports[`Site admin user course enrollment overview view Basic render test 1`] =
           className="value"
         >
           <time
-            className="ntiText date"
+            className="date ntiText"
             dateTime="2017-10-30T00:00:00+00:00"
           >
             Oct 30, 2017 12:00 AM

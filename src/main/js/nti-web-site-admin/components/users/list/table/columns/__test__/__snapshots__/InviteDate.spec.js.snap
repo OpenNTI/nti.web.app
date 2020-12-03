@@ -5,6 +5,7 @@ exports[`Site admin user table invite date column test Test date is many days ag
   className="cell"
 >
   <time
+    className="ntiText"
     dateTime="2017-10-31T00:00:00+00:00"
   >
     Oct 31, 2017

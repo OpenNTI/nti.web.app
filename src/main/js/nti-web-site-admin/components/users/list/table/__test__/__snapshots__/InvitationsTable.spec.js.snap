@@ -161,6 +161,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -240,6 +241,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -319,6 +321,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -398,6 +401,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -477,6 +481,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -657,6 +662,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -736,6 +742,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -815,6 +822,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -894,6 +902,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -973,6 +982,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1052,6 +1062,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1131,6 +1142,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1210,6 +1222,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1289,6 +1302,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1368,6 +1382,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1447,6 +1462,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1526,6 +1542,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1605,6 +1622,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1684,6 +1702,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1763,6 +1782,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1842,6 +1862,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -1921,6 +1942,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2000,6 +2022,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2079,6 +2102,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2158,6 +2182,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2237,6 +2262,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2316,6 +2342,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2395,6 +2422,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2474,6 +2502,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
@@ -2553,6 +2582,7 @@ exports[`Site admin user invitations list (with no items) Site admin user invita
               className="cell"
             >
               <time
+                className="ntiText"
                 dateTime="2017-10-30T00:00:00+00:00"
               >
                 Oct 30, 2017
