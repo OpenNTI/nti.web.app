@@ -3,14 +3,19 @@
 const path = require('path');
 const fs = require('fs-extra');
 const isCI = require('is-ci');
+const glob = require('glob');
 const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 const paths = require('@nti/app-scripts/config/paths');
 const checkRequiredFiles = require('@nti/app-scripts/tasks/utils/check-required-files');
+
+const spriteInfo = require('../.spritesmith');
 
 const CSS = path.resolve(paths.assetsRoot, 'resources/css');
 const SCSS = path.resolve(paths.assetsRoot, 'resources/scss');
 
 const SPRITE_VARS = path.resolve(paths.assetsRoot, 'resources/scss/utils/_icons.scss');
+const SPRITE_SRC_MOD = getLatest(glob.sync(spriteInfo.src));
+const SPRITE_MOD = getLatest(spriteInfo.destImage);
 const CSSMOD = getLatest(CSS);
 const SCSSMOD = getLatest(SCSS);
 
@@ -28,43 +33,44 @@ if (!checkRequiredFiles([SCSS])) {
 	process.exit(1);
 }
 
-fs.removeSync(CSS);
-fs.removeSync(SPRITE_VARS);
-fs.removeSync(path.resolve(paths.assetsRoot, 'resources/images/sprite.png'));
+if (SPRITE_SRC_MOD > SPRITE_MOD && !(isCI || process.env.NODE_ENV === 'production')) {
+	fs.removeSync(SPRITE_VARS);
+	fs.removeSync(path.resolve(paths.assetsRoot, 'resources/images/sprite.png'));
+	call('spritesmith');
+	// mark(spriteInfo.destImage, SPRITE_SRC_MOD).catch(e => {console.log(e);});
+}
 
-//@spritesmith
-call('spritesmith');
-// @node-sass $(SRC)main/resources/scss -o $(SRC)main/resources/css
+fs.removeSync(CSS);
 call('sass', f`accessibility`);
 call('sass', f`legacy`);
 call('sass', f`nti-override`);
-// @postcss --use autoprefixer -r $(SRC)main/resources/css/*.css
 call('postcss', ['--verbose', '--use', 'autoprefixer', '-r', CSS + '/**/*.css']);
 
 mark(CSS, SCSSMOD).catch(e => {console.log(e);});
 
-function getLatest (dir, latest = 0) {
+function getLatest (input) {
+	const max = (x, y) => x > y ? x : y;
 	try {
-
-		for (let file of fs.readdirSync(dir)) {
-			const fullpath = path.join(dir, file);
-			if (fullpath === SPRITE_VARS) {continue;}
-			const s = fs.statSync(fullpath);
-
-			if (s.isDirectory()) {
-				latest = getLatest(fullpath, latest);
-			}
-
-			else if (s.mtime > latest) {
-				latest = s.mtime;
-			}
+		let latest = 0;
+		if (Array.isArray(input)) {
+			return input.reduce((x, y) => max(x, getLatest(y)), latest);
 		}
 
+		if (input === SPRITE_VARS) {return latest;}
+		const s = fs.statSync(input);
+
+		if (!s.isDirectory()) {
+			return max(latest, s.mtime);
+		}
+
+		for (let file of fs.readdirSync(input)) {
+			latest = max(latest, getLatest(path.join(input, file)));
+		}
+
+		return latest;
 	} catch (e) {
 		return -1;
 	}
-
-	return latest;
 }
 
 
@@ -72,15 +78,15 @@ async function mark (dir, time) {
 	const pending = [];
 
 	for (let file of await fs.readdir(dir)) {
-		const fullpath = path.join(dir, file);
-		const s = await fs.stat(fullpath);
+		const fullPath = path.join(dir, file);
+		const s = await fs.stat(fullPath);
 
 		if (s.isDirectory()) {
-			pending.push(mark(fullpath, time));
+			pending.push(mark(fullPath, time));
 			continue;
 		}
 
-		pending.push(fs.utimes(fullpath, time, time));
+		pending.push(fs.utimes(fullPath, time, time));
 	}
 
 	await Promise.all(pending);
