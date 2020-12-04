@@ -30,7 +30,7 @@ export default class Name extends React.Component {
 		const context = `site-admin.${type}-list-item`;
 
 		return (
-			<LinkTo.Object object={item} context={context} exact>
+			<LinkTo.Object object={item} context={context}>
 				<div className={styles.cell}>
 					<Avatar entity={item}/>
 					<div className={styles.userInfo}>

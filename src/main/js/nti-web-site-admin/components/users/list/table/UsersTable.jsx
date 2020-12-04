@@ -48,7 +48,7 @@ class UsersTable extends React.Component {
 		emptyMessage: PropTypes.string,
 		currentSearchTerm: PropTypes.string,
 		setSort: PropTypes.func,
-		store: PropTypes.object.isRequired,
+		store: PropTypes.object,
 		noRoleChange: PropTypes.bool
 	}
 
