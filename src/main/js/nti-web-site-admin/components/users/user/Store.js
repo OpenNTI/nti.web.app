@@ -53,7 +53,7 @@ export default class UserStore extends Stores.SimpleStore {
 
 
 	unloadUser (user) {
-		if (user !== this.user.getID()) { return; }
+		if (this.user && user !== this.user.getID()) { return; }
 
 		this.set('user', null);
 		this.onChange('user');
