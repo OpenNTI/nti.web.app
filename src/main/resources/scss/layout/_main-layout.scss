@@ -118,7 +118,6 @@ body.white-shade-mask .body-shade-mask {
 	left: 0;
 	right: 0;
 	height: $header-height;
-	z-index: 152;
 	background-color: rgba(255, 255, 255, 0.97);
 	backface-visibility: hidden;
 
@@ -169,10 +168,6 @@ body.white-shade-mask .body-shade-mask {
 	background-color: rgba(0, 0, 0, 0.5);
 	overflow: auto;
 	display: none;
-
-	.nti-course-content-open & {
-		z-index: 1010;
-	}
 }
 
 body.media-viewer-open .window-container {
@@ -242,25 +237,11 @@ body.media-viewer-open .window-container {
 	}
 }
 
-.inline-dialog {
-	.wrapper {
-		z-index: 151;
-	}
-}
-
 html.nti-course-content-open .nti-control-bar-mount {
 	&.assignment-control-bar-container,
 	&.content-control-bar-container {
 		z-index: 1000 !important;
 	}
-}
-
-.nti-control-bar-mount {
-	z-index: 151 !important;
-}
-
-.nti-control-bar {
-	z-index: 151;
 }
 
 .main-body {
