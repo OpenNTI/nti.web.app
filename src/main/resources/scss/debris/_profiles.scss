@@ -675,14 +675,16 @@
 				border-right-width: 0;
 				display: none;
 
-				@include icon($mail, $top: 11px, $left: 13px); }
+				@include icon($mail, $top: 11px, $left: 13px);
+			}
 
 			.chat {
 				width: 50px;
 				height: 40px;
 				//border-radius: 0 5px 5px 0;
 				// border-left-width: 0;
-				@include icon($chat-32, $top: 9px, $left: 9px); }
+				@include icon($chat-32, $top: 9px, $left: 9px);
+			}
 
 			.add-contact {
 				width: 140px;
@@ -690,7 +692,8 @@
 				color: white;
 				padding-left: 50px;
 
-				@include icon($ico_profile_add_contact, $top: 12px, $left: 25px); }
+				@include icon($ico_profile_add_contact, $top: 12px, $left: 25px);
+			}
 		}
 
 		$head: $avatar + $control;
