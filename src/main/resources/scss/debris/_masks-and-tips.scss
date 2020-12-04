@@ -11,6 +11,11 @@
 	}
 }
 
+.x-masked-relative > .x-mask {
+	// ExtJS sets this to 100... we need it natural order.
+	z-index: unset !important;
+}
+
 body > .x-mask {
 	position: fixed;
 	top: 0 !important;
