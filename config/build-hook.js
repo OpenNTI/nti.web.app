@@ -33,7 +33,7 @@ if (!checkRequiredFiles([SCSS])) {
 	process.exit(1);
 }
 
-if (SPRITE_SRC_MOD > SPRITE_MOD && !(isCI || process.env.NODE_ENV === 'production')) {
+if (SPRITE_SRC_MOD > SPRITE_MOD || (isCI || process.env.NODE_ENV === 'production')) {
 	fs.removeSync(SPRITE_VARS);
 	fs.removeSync(path.resolve(paths.assetsRoot, 'resources/images/sprite.png'));
 	call('spritesmith');
