@@ -11,13 +11,13 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 
 	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'if': 'root', cn: [
-			{tag: 'span', html: '{root}'}
+			{tag: 'span', html: '{root:htmlEncode}'}
 		]},
 		{tag: 'tpl', 'if': 'extra', cn: [
 			{tag: 'span', html: '...'}
 		]},
 		{tag: 'tpl', 'if': 'leaf', cn: [
-			{tag: 'span', html: '{leaf}'}
+			{tag: 'span', html: '{leaf:htmlEncode}'}
 		]}
 	])),
 
