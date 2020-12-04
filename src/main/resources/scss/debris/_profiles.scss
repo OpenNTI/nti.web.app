@@ -11,14 +11,6 @@
 		background-position: center center;
 		background-repeat: no-repeat;
 	}
-
-	.fallback {
-		z-index: 1;
-	}
-
-	.profile {
-		z-index: 2;
-	}
 }
 
 .user-background-container {
@@ -1019,7 +1011,6 @@
 		margin: 0;
 		padding: 0;
 		border-bottom-width: 0;
-		z-index: 1;
 
 		&.note {
 			padding: 0;
@@ -1126,12 +1117,11 @@
 				}
 			}
 
-			&::before {
+			& + div::before {
 				content: '';
 				position: absolute;
-				bottom: -1px;
+				top: -11px;
 				left: 90px;
-				z-index: 20;
 
 				@include sprite($up-border-arrow);
 			}
@@ -1292,7 +1282,6 @@
 			//position: absolute;
 			background: white;
 			position: relative;
-			z-index: 2;
 			border: 1px solid #eaeaea;
 			border-top-color: #f0f0f0;
 			border-bottom-color: #ececec;
