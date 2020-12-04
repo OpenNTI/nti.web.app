@@ -3,7 +3,6 @@
 exports[`Site admin user table name column test Test for admins 1`] = `
 <div
   className="nti-link-to-path"
-  exact={true}
   to="#"
 >
   <div>
@@ -19,7 +18,6 @@ exports[`Site admin user table name column test Test for admins 1`] = `
 exports[`Site admin user table name column test Test for learners 1`] = `
 <div
   className="nti-link-to-path"
-  exact={true}
   to="#"
 >
   <div>
