@@ -56,6 +56,6 @@ export default class UserStore extends Stores.SimpleStore {
 		if (this.user && user !== this.user.getID()) { return; }
 
 		this.set('user', null);
-		this.onChange('user');
+		this.emitChange('user');
 	}
 }
