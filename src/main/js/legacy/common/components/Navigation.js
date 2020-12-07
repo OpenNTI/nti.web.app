@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'content-container', cn: [
 			{cls: 'content', cn: [
-				{cls: 'active-content', cn: [
+				{cls: 'active-content', 'data-test-id': 'content-context-switcher', cn: [
 					{cls: 'label'},
 					{cls: 'title', 'aria-label': 'recent courses'}
 				]},
