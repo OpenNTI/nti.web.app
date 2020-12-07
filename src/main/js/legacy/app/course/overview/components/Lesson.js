@@ -228,7 +228,7 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 				layout: Overview.Lesson.List,
 				baseroute: '/',
 				getRouteFor: this.getRouteFor.bind(this),
-				doNotPlayVideosInline: true
+				inlinePlayback: false
 			});
 
 
