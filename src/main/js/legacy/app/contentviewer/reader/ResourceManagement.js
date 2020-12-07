@@ -411,7 +411,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 			if (Ext.fly(target).is('iframe') || !Ext.Array.contains(p, 'nti-data-markupenabled')) {
 				Ext.fly(el.querySelector('.wrapper a')).remove();
 			}
-			el.querySelector('.wrapper').appendChild(target);
+			el.querySelector('.wrapper').prepend(target);
 
 
 			let imgWidth = (parseInt(getStyle(target).width || get(target, 'width'), 10) || Ext.fly(target).getWidth());
