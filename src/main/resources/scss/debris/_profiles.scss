@@ -2510,7 +2510,6 @@
 		@include icon($admin_badge, $top: auto, $left: auto, $side: after);
 
 		&::after {
-			z-index: 10;
 			bottom: 0;
 			right: 0;
 		}
