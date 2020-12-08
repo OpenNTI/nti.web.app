@@ -1,7 +1,4 @@
-const {join} = require('path');
-
 const Ext = require('@nti/extjs');
-const {encodeForURI} = require('@nti/lib-ntiids');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const NTIFormat = require('legacy/util/Format');
