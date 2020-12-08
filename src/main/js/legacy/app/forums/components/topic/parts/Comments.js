@@ -905,7 +905,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 	scrollCommentIntoView: function (comment) {
 		var node = this.getNode(comment),
-			win = this.up('windows-view');
+			win = Ext.getCmp('window');
 
 		node = Ext.get(node);
 

@@ -116,6 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 
 		document.body.addEventListener('keydown', this.onKeyPress);
 		this.WindowStore.addOpenCls(cmp.isWindow);
+		Ext.getBody().appendChild(this.el);
 	},
 
 	onKeyPress: function (e) {

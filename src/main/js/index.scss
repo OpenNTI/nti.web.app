@@ -8,12 +8,6 @@ html {
 	}
 }
 
-//Workaround ExtJS legacy z-index-happy bull$#!+ >.<
-body > .modal .modal-mask,
-body > .modal .modal-mask.nti-lightbox-dialog {
-	z-index: 175;
-}
-
 body.full-screen-video {
 	.main-viewport {
 		visibility: hidden;
