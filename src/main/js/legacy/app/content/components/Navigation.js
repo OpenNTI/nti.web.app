@@ -74,11 +74,9 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 
 		if (isPreview) {
 			data.preview = 'in preview';
-			if (catalogEntry.StartDate) {
+			if (catalogEntry.getStartDate) {
 				data.preview += getString('NextThought.view.content.Navigation.startsOn')
-					+ Ext.Date.format(
-						catalogEntry.StartDate && new Date(catalogEntry.StartDate),
-						'l, F j');
+					+ Ext.Date.format(catalogEntry.getStartDate(), 'l, F j');
 			}
 			this.previewTagTpl.append(this.labelEl, {'preview': data.preview});
 		}
