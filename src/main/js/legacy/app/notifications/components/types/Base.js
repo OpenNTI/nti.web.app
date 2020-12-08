@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 				.then(data => {
 					this.record[Symbol.for('path')] = data;
 
-					this.navigationToItem(this.record);
+					this.navigateToItem(this.record);
 				})
 				.catch(() => {
 					this.navigateToItem(this.record);
