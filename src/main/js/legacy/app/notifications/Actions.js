@@ -64,8 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 	},
 
 	incomingChange: function (change) {
-
-		emitIncoming(change);
+		emitIncoming(change.raw);
 
 		var me = this;
 
