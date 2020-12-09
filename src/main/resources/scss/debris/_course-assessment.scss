@@ -1631,7 +1631,9 @@ canvas.x-component-course-assessment {
 .assignment-reader, .course-assessment-header {
 	.component-overlay {
 		& > .x-panel {
-			z-index: 1;
+			.x-docked {
+				z-index: unset;
+			}
 		}
 	}
 
