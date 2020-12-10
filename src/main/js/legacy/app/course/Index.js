@@ -145,13 +145,13 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.addObjectHandler(DiscussionAssignment.mimeType, this.getAssignmentRoute.bind(this));
 		this.addObjectHandler('application/vnd.nextthought.courses.courseoutlinecontentnode', this.getLessonRoute.bind(this));
 
-		this.addObjectHandler([
-			Topic.mimeType,
-			HeadlineTopic.mimeType,
-			DFLHeadlineTopic.mimeType,
-			ContentHeadlineTopic.mimeType,
-			CommunityHeadlineTopic.mimeType
-		], this.getTopicRoute.bind(this));
+		// this.addObjectHandler([
+		// 	Topic.mimeType,
+		// 	HeadlineTopic.mimeType,
+		// 	DFLHeadlineTopic.mimeType,
+		// 	ContentHeadlineTopic.mimeType,
+		// 	CommunityHeadlineTopic.mimeType
+		// ], this.getTopicRoute.bind(this));
 
 		this.addDefaultRoute('/lessons');
 
