@@ -1003,16 +1003,18 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 	.x-menu-item {
 		// &.icon {}
 
+		&.add-note, &.define {
+			overflow: hidden;
+			display: block;
+			text-indent: -100em;
+		}
+
 		&.add-note {
 			@include icon($comment_white, $left: 2px, $top: 3px);
-
-			text-indent: -100em;
 		}
 
 		&.define {
 			@include icon($search-white,$top:8px,$left:5px);
-
-			text-indent: -100em;
 		}
 
 		&::after {
