@@ -16,9 +16,9 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		{cls: 'context-image related-context content-card', cn: [
 			{cls: 'thumbnail'},
 			{cls: 'meta', cn: [
-				{cls: 'title', html: '{title}'},
-				{cls: 'byline hidden', html: 'by {author}'},
-				{cls: 'description', html: '{description}'}
+				{cls: 'title', html: '{title:htmlEncode}'},
+				{cls: 'byline hidden', html: 'by {author:htmlEncode}'},
+				{cls: 'description', html: '{description:htmlEncode}'}
 			]}
 		]},
 		{cls: 'see-more hidden', html: 'Read More'}
