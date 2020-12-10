@@ -2,7 +2,7 @@ const Ext = require('@nti/extjs');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const NTIFormat = require('legacy/util/Format');
-const NavActions = require('legacy/app/navigation/Actions');
+// const NavActions = require('legacy/app/navigation/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Base', {
@@ -70,8 +70,9 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 
 	onClicked: function () {
-		const target = this.record.get('Item') || this.record;
-		NavActions.navigateToHref(target.getId());
+		this.navigateToItem(this.record);
+		// const target = this.record.get('Item') || this.record;
+		// NavActions.navigateToHref(target.getId());
 	},
 
 
