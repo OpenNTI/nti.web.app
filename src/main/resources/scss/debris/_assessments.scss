@@ -987,6 +987,10 @@ body.dragging * {
 		.choice {
 			@extend .assessment-content;
 
+			body.dragging & {
+				z-index: 1;
+			}
+
 			cursor: pointer;
 			position: relative;
 			color: var(--primary-grey);
