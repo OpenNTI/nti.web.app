@@ -64,8 +64,6 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 	},
 
 	incomingChange: function (change) {
-		emitIncoming(change.raw);
-
 		var me = this;
 
 		this.NotificationsStore.getStore().then(function (store) {
@@ -81,6 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 				}
 
 				if (change.get('ChangeType') !== 'Modified' || change.get('IsNewlyMentioned')) {
+					emitIncoming(change.raw);
 					me.NotificationsStore.addRecord(change);
 				}
 			}
