@@ -26,6 +26,7 @@ exports = Ext.define('NextThought.model.User', {
 	isProfile: true,
 
 	fields: [
+		{ name: 'Deactivated', type: 'boolean' },
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'NotificationCount', type: 'int' },
 		{ name: 'Username', type: 'string' },

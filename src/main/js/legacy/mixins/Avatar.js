@@ -106,33 +106,39 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		});
 	},
 
-	initAvatar: function () {
-		var me = this;
-
+	initAvatar: async function () {
 		//Give the field converters a chance to run
-		wait()
-			.then(function () {
-				return Promise.all([
-					me.__getAvatar(),
-					me.__getInitials(),
-					me.__getBGColor()
-				]);
-			}).then(function (results) {
-				me.set({
-					avatarURL: results[0],
-					avatarInitials: results[1],
-					avatarBGColor: results[2]
-				});
+		await wait();
 
-				// Fire a changed event. This will help update the avatarURL with the correct one,
-				// when it's been temporary set to a unresolved or initials avatar while we verify if it's a valid URL.
-				// Since this promise fulfills asynchronously, the view that requested
-				// it could be rendered when it fulfills within the next even loop.
-				me.fireEvent('avatarChanged', me);
+		if (this.get('Deactivated')) {
+			return;
+		}
 
-				me.avatarIsResolved = true;
-				me.fireEvent('avatarResolved', me);
-			});
+		const [
+			avatarURL,
+			avatarInitials,
+			avatarBGColor
+		] = await Promise.all([
+			this.__getAvatar(),
+			this.__getInitials(),
+			this.__getBGColor()
+		]);
+
+		this.set({
+			avatarURL,
+			avatarInitials,
+			avatarBGColor,
+		});
+
+		// Fire a changed event. This will help update the avatarURL with the correct one,
+		// when it's been temporary set to a unresolved or initials avatar while we verify if it's a valid URL.
+		// Since this promise fulfills asynchronously, the view that requested
+		// it could be rendered when it fulfills within the next even loop.
+		this.fireEvent('avatarChanged', this);
+
+		this.avatarIsResolved = true;
+		this.fireEvent('avatarResolved', this);
+
 	},
 
 
