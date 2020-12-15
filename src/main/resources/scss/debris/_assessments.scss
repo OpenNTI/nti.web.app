@@ -858,6 +858,10 @@ body.dragging * {
 		background: #fff;
 		border: 1px solid var(--tertiary-grey);
 
+		body.dragging & .dropzone {
+			z-index: 1;
+		}
+
 		.inputbox {
 			color: var(--primary-grey);
 			min-height: 38px;
@@ -986,10 +990,6 @@ body.dragging * {
 
 		.choice {
 			@extend .assessment-content;
-
-			body.dragging & {
-				z-index: 1;
-			}
 
 			cursor: pointer;
 			position: relative;
