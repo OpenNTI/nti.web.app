@@ -630,7 +630,7 @@ canvas.x-component-course-assessment {
 			.status time.completed { display: block; }
 			.status time.due { display: none; }
 
-			&:not(.failed)::after {
+			&:not(.failed):not(.no-completion)::after {
 				@include sprite($check_green);
 			}
 

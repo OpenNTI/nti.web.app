@@ -39,9 +39,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		const completed = attempt && attempt.get('completed');
 
 		this.assignment.getInterfaceInstance()
-			.then((assignment) => {
-				if (assignment.CompletedItem && !assignment.CompletedItem.Success) {
+			.then(assignment => {
+				if (assignment.CompletedItem?.Success === false) {
 					this.addCls('failed');
+				}
+				if (!assignment.CompletedItem && completed) {
+					this.addCls('no-completion');
 				}
 			});
 
