@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 					]}
 				});
 
-				this.player = this.add({
+				this.player = this.insert(0,{
 					width: size.width,
 					xtype: 'content-video-player',
 					data: data,
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	afterRender: function () {
 		try {
 			this.callParent(arguments);
-	
+
 			this.el.setStyle({
 				left: this.size.left + 'px',
 				width: this.size.parentWidth + 'px'
@@ -235,18 +235,17 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	},
 
 	fillVideo: function (index) {
-		var me = this,
-			id = me.data['attribute-data-ntiid'],
+		var id = this.data['attribute-data-ntiid'],
 			source = index[id].sources[0],
 			poster = source.poster,
 			label = index[id].title;
 
 		if (poster) {
-			me.setBackground(poster, label);
+			this.setBackground(poster, label);
 		} else {
 			VideoPosters.resolveForSource(source)
-				.then(function (imgs) {
-					me.setBackground(imgs.poster, label);
+				.then(imgs => {
+					this.setBackground(imgs.poster, label);
 				});
 		}
 	},
@@ -258,13 +257,13 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		}
 
 		try {
-			this.down('box').getEl().setStyle({
+			this.curtain.getEl().setStyle({
 				backgroundSize: 'contain',
 				backgroundColor: 'black',
 				backgroundPosition: 'center center'
 			});
 
-			this.down('box').getEl().down('.error').update(error);
+			this.curtain.getEl().down('.error').update(error);
 		}
 		catch (e) {
 			logger.error('Unable to set error. %o', error);
@@ -279,7 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.down('content-video-player').getEl().setStyle({cursor: 'pointer'});
 
-		this.down('box').getEl().setStyle({
+		this.curtain.getEl().setStyle({
 			backgroundImage: 'url(' + src + ')',
 			backgroundSize: 'contain',
 			backgroundColor: 'black',
@@ -290,7 +289,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			this.addCls('no-poster');
 		}
 
-		this.down('box').getEl().down('.label').update(label);
+		this.curtain.getEl().down('.label').update(Ext.util.Format.htmlEncode(label));
 
 		this.mon(this.el, 'click', this.play.bind(this));
 	},
