@@ -7,6 +7,7 @@ const {getService, reportError} = require('@nti/web-client');
 const { Error: ErrorCmp, Theme } = require('@nti/web-commons');
 const {encodeForURI} = require ('@nti/lib-ntiids');
 const {getHistory, LinkTo} = require('@nti/web-routing');
+const { Models } = require('@nti/lib-interfaces');
 
 const AccountActions = require('legacy/app/account/Actions');
 const AnalyticsUtil = require('legacy/util/Analytics');
@@ -55,6 +56,10 @@ function getRouteFor (obj, context) {
 		}
 
 		return `/app/user/${User.getUsernameForURL(obj.Username)}`;
+	}
+
+	if (obj instanceof Models.courses.Grade) {
+		return `/app/id/${encodeForURI(obj.NTIID)}`;
 	}
 
 	if (obj.CatalogEntry) {
