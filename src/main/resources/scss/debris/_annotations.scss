@@ -847,8 +847,6 @@
 			background-color: #e1f4fe;
 			overflow: hidden;
 
-			@include highlight-colors();
-
 			&.shared-with-me {
 				&,.math {
 					background: none;
@@ -1111,4 +1109,8 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 			}
 		}
 	}
+}
+
+.application-highlight {
+	@include highlight-colors();
 }

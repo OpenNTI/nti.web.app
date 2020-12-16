@@ -347,8 +347,9 @@ $position:relative
 			transition: none;
 			box-shadow: none !important;
 
-			img,a,a:link, a[href],* {
+			img, a, a:link, a[href], * {
 				visibility: hidden;
+				color: rgba(0, 0, 0, 0);
 			}
 
 			&.highlight-mouse-over {
