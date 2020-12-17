@@ -1,13 +1,32 @@
+:root {
+	--navigation-top: calc(var(--nt-app-top-offset, 0) + 20px);
+	--navigation-bottom-gap: 10px;
+
+	.control-bar-open {
+		--navigation-bottom-gap: 65px;
+	}
+}
+
 .navigation-panel {
 	overflow: hidden;
 	height: auto;
+	display: flex;
+	flex-direction: row;
+	padding-top: 20px;
 
-	.navigation-view.floating {
-		position: fixed;
-		top: 90px;
-		bottom: 20px;
-		height: auto !important;
-		transition: left 0.5s, right 0.5s;
+	.navigation-view {
+		flex: 0 0 auto;
+		width: 255px;
+		max-width: 255px;
+
+		&.floating {
+			--navigation-height: calc(100vh - var(--navigation-top, 0) - var(--navigation-bottom-gap, 0));
+
+			position: fixed;
+			top: var(--navigation-top);
+			height: var(--navigation-height) !important;
+			max-height: var(--navigation-height) !important;
+		}
 	}
 
 	&.course-overview {
@@ -17,31 +36,9 @@
 		}
 	}
 
-	html.msg-bar-open & {
-		.navigation-view.floating {
-			top: 130px; // $header-height + $msg-bar-height + 20
-		}
-	}
-
-	body.control-bar-open & {
-		.navigation-view.floating {
-			bottom: 65px;
-		}
-	}
-
-	//Override these, since the placeholder is not suppose to be visible
-	.navigation-placeholder {
-		background: none !important;
-		box-shadow: none !important;
-		border: none !important;
-		width: 255px;
-		float: left;
-		margin-right: 5px;
-	}
-
 	.body-view {
-		float: right;
+		flex: 0 0 auto;
 		width: 764px;
-		padding-top: 20px;
+		margin-left: 260px;
 	}
 }

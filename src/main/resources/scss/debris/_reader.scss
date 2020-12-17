@@ -1,27 +1,34 @@
 .reader-container.navigation-panel {
-	.navigation-placeholder {
-		float: right;
+	flex-direction: row-reverse;
+
+	.navigation-view {
 		margin: 0;
 		width: 258px;
-	}
-
-	.navigation-view.floating {
-		bottom: 0;
+		max-width: 258px;
+		// height: auto;
 	}
 
 	.center {
-		float: left;
 		width: 766px;
 		background-color: white;
 		font-size: 0.75em;
 		height: 100%;
 		padding-top: 0;
+		margin-right: 258px;
 
 		.x-reader-pane {
 			max-height: 100%;
 			overflow-y: auto;
 			clear: both;
 			margin-top: 61px;
+		}
+	}
+
+	&.content-only {
+		padding-top: 0;
+
+		.center {
+			margin-right: 0;
 		}
 	}
 

@@ -186,17 +186,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	maybeAddControlbarForPageInfo () {},
 
 
-	alignTimer: function () {
-		if (!this.rendered) {
-			return;
-		}
-
-		var rect = this.el.dom.getBoundingClientRect();
-
-		this.timeContainerEl.setStyle({
-			left: rect.left + rect.width + 'px'
-		});
-	},
+	alignTimer: function () {},
 
 	helpClicked: function () {
 		this.AccountActions.showContactUs();

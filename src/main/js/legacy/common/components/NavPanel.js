@@ -31,7 +31,6 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 
 		this.add([
 			this.navigation,
-			{xtype: 'box', cls: 'navigation-placeholder navigation-view'},
 			this.body
 		]);
 
@@ -66,15 +65,6 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 
 
 	alignNavigation: function () {
-		if (!this.rendered) { return; }
-
-		var placeholder = this.el.down('.navigation-placeholder'),
-			rect = placeholder && placeholder.dom && placeholder.dom.getBoundingClientRect();
-
-		this.navigation.el.setStyle({
-			width: rect.width + 'px',
-			left: rect.left + 'px'
-		});
 	},
 
 
