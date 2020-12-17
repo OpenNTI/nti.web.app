@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const {default: Logger} = require('@nti/util-logger');
 
 const IdCache = require('legacy/cache/IdCache');
 const UserRepository = require('legacy/cache/UserRepository');
@@ -15,7 +16,7 @@ require('legacy/common/Actions');
 require('legacy/model/MessageInfo');
 
 const {isMe} = Globals;
-
+const logger = Logger.get('nextthought:extjs:app:chat:Actions');
 
 module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -69,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	onSessionReady: function () {
-		console.log('Chat onSessionReady');
+		logger.debug('Chat onSessionReady');
 		this.onNewSocketConnection();
 	},
 
@@ -100,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	onNewSocketConnection: function () {
 		var me = this;
-		console.log('created a new connection');
+		logger.debug('created a new connection');
 		$AppConfig.Preferences.getPreference('ChatPresence/Active')
 			.then(function (value) {
 				if (value) {
@@ -187,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				// TODO: Check if this comment below is still valid
 				//because we are using this callback for both the button and window close callback.	 There are 2 signatures,
 				//we ignore one so we dont try to exit a room twice.
-				console.log('Declined invitation..: ', arguments);
+				logger.info('Declined invitation..: ', arguments);
 				if (w && !w.isDestroyed) {
 					me.leaveRoom(roomInfo);
 					w.close();
@@ -227,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 					fulfill(obj);
 				})
 				.catch( function () {
-					console.debug('Could not resolve roomInfo for: ', roomInfoId);
+					logger.debug('Could not resolve roomInfo for: ', roomInfoId);
 					reject();
 				});
 		});
@@ -299,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			if (me.availableForChat) {
 				fn.apply(me, arguments);
 			}else if (me.debug) {
-				console.log('Dropped ' + eventName + ' handling');
+				logger.info('Dropped ' + eventName + ' handling');
 			}
 		};
 	},
@@ -310,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			me = this;
 
 		if (!room || Ext.isEmpty(val, false)) {
-			console.error('Cannot send message, room', room, 'values', val);
+			logger.error('Cannot send message, room', room, 'values', val);
 			return;
 		}
 		this.clearErrorForRoom(room);
@@ -352,7 +353,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		username = username && Ext.isString(username) ? username : $AppConfig.username;
 		oldStatus = room.getRoomState(username || $AppConfig.username);
 		if (oldStatus !== newStatus) {
-			console.log('transitioning room state for: ', $AppConfig.username, ' from ', oldStatus, ' to ', newStatus);
+			logger.info('transitioning room state for: ', $AppConfig.username, ' from ', oldStatus, ' to ', newStatus);
 			this.postMessage(room, {'state': newStatus}, null, channel, null, Ext.emptyFn);
 		}
 	},
@@ -436,7 +437,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		room = room || win.roomInfo;
 		if (room) {
 			room.setRoomState(sender, state);
-			// console.log('Update chat state: set to ', state, ' for ', sender);
+			// logger.info('Update chat state: set to ', state, ' for ', sender);
 			win.updateChatState(sender, state, room, isGroupChat);
 		}
 	},
@@ -466,7 +467,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 	getRoomInfoFromComponent: function (c) {
 		if (!c) {
-			console.error('Cannot get RoomInfo from an undefined component.');
+			logger.error('Cannot get RoomInfo from an undefined component.');
 			return null;
 		}
 
@@ -477,7 +478,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		var o = c.up('[roomInfo]');
 
 		if (!o) {
-			console.error('The component', c, 'has no parent component with a roomInfo');
+			logger.error('The component', c, 'has no parent component with a roomInfo');
 			return null;
 		}
 
@@ -489,7 +490,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 		if (!msg) {
 			//TODO what to do here, pop up something generic.
-			console.error('No message object tied to error.	 Dropping error', errorObject);
+			logger.error('No message object tied to error.	 Dropping error', errorObject);
 			return;
 		}
 
@@ -503,7 +504,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			view.showError(errorObject);
 		}
 		else {
-			console.warn('Error sending chat message but no chat view to show it in', msg, errorObject);
+			logger.warn('Error sending chat message but no chat view to show it in', msg, errorObject);
 		}
 	},
 
@@ -519,7 +520,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			view.clearError();
 		}
 		else {
-			console.error('Unable to clear error for messages window', arguments);
+			logger.error('Unable to clear error for messages window', arguments);
 		}
 	},
 
@@ -544,7 +545,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			toast;
 
 		if (newRoomInfo && newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
-			console.log('Transient moderation change encountered, ignoring', newRoomInfo);
+			logger.info('Transient moderation change encountered, ignoring', newRoomInfo);
 			return null;
 		}
 
@@ -627,11 +628,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		this.ChatStore.removeSessionObject(room.getOccupantsKey());
 
 		if (this.isModerator(room)) {
-			console.log('leaving room but I\'m a moderator, relinquish control');
+			logger.info('leaving room but I\'m a moderator, relinquish control');
 			socket.emit('chat_makeModerated', room.getId(), false,
 				function () {
 					//unmoderate called, now exit
-					console.log('unmoderated, now exiting room');
+					logger.info('unmoderated, now exiting room');
 					socket.emit('chat_exitRoom', room.getId());
 				}
 			);
@@ -663,7 +664,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 				me.addMessagesForTranscript(win, historyItems);
 			})
 			.catch(function () {
-				console.warn('Failed to load one of the chat transcripts: ', arguments);
+				logger.warn('Failed to load one of the chat transcripts: ', arguments);
 			});
 	},
 

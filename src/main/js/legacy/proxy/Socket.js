@@ -1,11 +1,14 @@
 /*globals io*/
 const Ext = require('@nti/extjs');
+const {default: Logger} = require('@nti/util-logger');
 
 const Globals = require('legacy/util/Globals');
 
 if (!global.$AppConfig) {
 	global.$AppConfig = {};
 }
+
+const logger = Logger.get('nextthought:extjs:proxy:Socket');
 
 global.Socket =
 module.exports = exports = Ext.define('NextThought.proxy.Socket', {
@@ -69,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 				handler.apply(this, arguments);
 			}
 			catch (e) {
-				console.error('Caught an uncaught exception when taking action on', name, Globals.getError(e));
+				logger.error('Caught an uncaught exception when taking action on', name, Globals.getError(e));
 			}
 		};
 	},
@@ -83,14 +86,14 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 
 				if (this.socket) {
 					if (this.isDebug) {
-						console.debug('registering handler for ', k);
+						logger.debug('registering handler for ', k);
 					}
 					//this handles sequencing appropriately
 					this.socket.on(k, newControl[k]);
 				}
 				else{
 					if (this.isDebug) {
-						console.debug('chaining handler for ', k, ' because socket not ready');
+						logger.debug('chaining handler for ', k, ' because socket not ready');
 					}
 					//No socket yet so track it (sequencing if necessary) for addition later
 					x = this.control[k];
@@ -115,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		if (this.isDebug && !socket.emit.chained) {
 			socket.emit = Ext.Function.createSequence(
 				socket.emit,
-				function () {console.debug('socket.emit:', arguments);}
+				function () {logger.debug('socket.emit:', arguments);}
 			);
 			socket.emit.chained = true;
 
@@ -123,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 				(...args) => {
 					var o = JSON.stringify(args);
 					if ((this.isDebug && this.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}') {
-						console.debug('socket.onPacket: args:' + o);
+						logger.debug('socket.onPacket: args:' + o);
 					}
 				},
 				socket.onPacket
@@ -134,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 					() => {
 						this.lastHeartbeat = new Date();
 						if (this.isDebug && this.isVerbose) {
-							console.debug('Recieved heartbeat from server', this.lastHeartbeat);
+							logger.debug('Recieved heartbeat from server', this.lastHeartbeat);
 						}
 					},
 					io.Transport.prototype.onHeartbeat
@@ -145,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		for (const k in this.control) {
 			if (this.control.hasOwnProperty(k)) {
 				if (this.isDebug) {
-					console.debug('Attaching handler for ', k);
+					logger.debug('Attaching handler for ', k);
 				}
 				socket.on(k, this.control[k]);
 			}
@@ -170,12 +173,12 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 			try {
 				this.socket.emit.apply(this.socket, arguments);
 			} catch (e) {
-				console.error('No Socket?', e.stack || e.message || e);
+				logger.error('No Socket?', e.stack || e.message || e);
 			}
 		}
 		else {
 			if (this.isDebug) {
-				console.debug('dropping emit, socket is down');
+				logger.debug('dropping emit, socket is down');
 			}
 
 			callback?.call();
@@ -196,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 			}
 		}
 		catch (e) {
-			console.error('Could not tear down socket... it may not have existed', e.stack || e.message || e);
+			logger.error('Could not tear down socket... it may not have existed', e.stack || e.message || e);
 		}
 	},
 
@@ -205,13 +208,13 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		//TODO if we get called during handshake thats it, the socket is kaput.
 		//Attempt to reconnect with an exponential backoff.
 		if (this.isDebug) {
-			console.error('ERROR: socket error' + JSON.stringify(arguments));
+			logger.error('ERROR: socket error' + JSON.stringify(arguments));
 		}
 	},
 
 	onKill: function () {
 		if (this.isDebug) {
-			console.debug('server kill');
+			logger.debug('server kill');
 		}
 		Ext.defer(this.tearDownSocket, 1, this);//new "thread"
 	},
@@ -220,29 +223,29 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		var ds = this.disconnectStats;
 		ds.count++;
 		if (this.isDebug) {
-			console.debug('Socket Disconnect ' + JSON.stringify(arguments) + ' count ' + ds.count);
+			logger.debug('Socket Disconnect ' + JSON.stringify(arguments) + ' count ' + ds.count);
 		}
 	},
 
 	onReconnecting: function () {
 		if(this.isDebug) {
-			console.log('reconnecting', arguments);
+			logger.info('reconnecting', arguments);
 		}
 	},
 
 	onReconnect: function () {
 		if(this.isDebug) {
-			console.log('reconnect', arguments);
+			logger.info('reconnect', arguments);
 		}
 	},
 
 	onReconnectFailed: function () {
-		console.error('reconnect failed', arguments);
+		logger.error('reconnect failed', arguments);
 	},
 
 	onConnecting: function (transportName) {
 		if (this.isDebug) {
-			console.log('Connecting with transport', transportName);
+			logger.info('Connecting with transport', transportName);
 		}
 	},
 
@@ -250,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		var socket = this.socket.socket;
 
 		if (this.sid !== socket.sessionid) {
-			console.log('New Socket Session Id: ' + socket.sessionid);
+			logger.debug('New Socket Session Id: ', socket.sessionid);
 			if (this.sid) {
 				this.fireEvent('socket-new-sessionid', this.sid);
 			}
@@ -258,16 +261,16 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 			this.sid = socket.sessionid;
 
 		}else {
-			console.log('Same Socket Session Id: ' + this.sid);
+			logger.info('Same Socket Session Id: ' + this.sid);
 		}
 
 		if (this.isDebug) {
-			console.log('Connected with transport', socket.transport.name);
+			logger.info('Connected with transport', socket.transport.name);
 		}
 	},
 
 	onConnectFailed: function () {
-		console.error('Socket connection failed', arguments);
+		logger.error('Socket connection failed', arguments);
 	}
 
 }).create();
