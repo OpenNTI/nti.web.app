@@ -23,6 +23,10 @@ const AVATAR_COLORS = [
 	'#F4511E',
 ];
 
+function getFieldValue (value, name) {
+	return (value && value.get && value.get(name)) || (value && value[name]);
+}
+
 const NTIFormat =
 module.exports = exports = Ext.define('NextThought.util.Format', {
 
@@ -49,23 +53,23 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 
 
 	avatarURL: function (value) {
-		return (value && value.get && value.get('avatarURL')) ||
-				(value && value.avatarURL) ||
-				User.BLANK_AVATAR;
+		const getField = getFieldValue.bind(null, value);
+		const deactivated = getField('Deactivated') || (!value);
+		return (!deactivated && getField('avatarURL')) || User.BLANK_AVATAR;
 	},
 
 
 	avatar: function (value, cls) {
+		const getField = getFieldValue.bind(null, value);
 		var avatar = getField('avatarURL'),
 			bgColor = getField('avatarBGColor'),
 			initials = getField('avatarInitials'),
+			deactivated = getField('Deactivated'),
 			className = getField('Class'),
 			defaultAvatar = className && className !== 'User' ? FriendsList.BLANK_AVATAR : User.BLANK_AVATAR,
 			clsList = [cls || 'avatar', 'avatar-container'], cn = [];
 
-		function getField (name) {
-			return (value && value.get && value.get(name)) || (value && value[name]);
-		}
+
 
 		function getURL (link) {
 			return 'url(' + link + ')';
@@ -85,54 +89,13 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 		var colorIndex = colorClass && colorClass.substring(colorClass.lastIndexOf('-') + 1);
 		var colorToUse = colorIndex ? AVATAR_COLORS[parseInt(colorIndex, 10)] : '#' + bgColor;
 
-		if (avatar) {
+		if (!deactivated && avatar) {
 			cn.push({cls: 'profile avatar-pic', style: {backgroundImage: getURL(avatar)}});
-		} else if (initials) {
+		} else if (!deactivated && initials) {
 			cn.push({cls: 'fallback avatar-pic initials', style: {'background-color': colorToUse}, cn: {cls: 'inner', html: initials}});
 		} else {
 			cn.push({cls: 'fallback avatar-pic', style: {backgroundImage: getURL(defaultAvatar)}});
 		}
-
-		return Ext.DomHelper.markup({cls: clsList, cn: cn});
-	},
-
-
-	xavatar: function (value, cls) {
-		var avatar = (value && value.get && value.get('avatarURL')) || (value && value.avatarURL),
-			username = (value && value.get && value.get('Username')) || (value && value.Username),
-			clazz = (value && value.get && value.get('Class')) || (value && value.Class),
-			defaultAvatar = clazz !== 'User' ? FriendsList.BLANK_AVATAR : User.BLANK_AVATAR,
-			clsList = [cls || 'avatar', 'avatar-container'],
-			initials,
-			cn = [], color, idx;
-
-		function get (link) {
-			return 'url(' + link + ')';
-		}
-
-
-		if (clazz) {
-			clsList.push(clazz);
-		}
-
-		if (value && Ext.isFunction(value.getAvatarInitials)) {
-			initials = value.getAvatarInitials();
-		}
-		else if (value) {
-			initials = User.getAvatarInitials(value);
-		}
-
-		clsList = clsList.join(' ');
-		if (initials) {
-			idx = User.getUsernameHash(username);
-			idx = (idx < 0 ? idx * -1 : idx) % NTIFormat.DEFAULT_AVATAR_BG_COLORS.length;
-			color = NTIFormat.DEFAULT_AVATAR_BG_COLORS[idx];
-			cn[0] = {cls: 'fallback avatar-pic initials', style: {'background-color': '#' + color}, cn: {cls: 'inner', html: initials}};
-		} else {
-			cn[0] = {cls: 'fallback avatar-pic', style: {backgroundImage: get(defaultAvatar)}};
-		}
-
-		cn[1] = {cls: 'profile avatar-pic', style: {backgroundImage: get(avatar)}};
 
 		return Ext.DomHelper.markup({cls: clsList, cn: cn});
 	},
