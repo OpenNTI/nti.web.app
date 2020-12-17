@@ -822,109 +822,6 @@
 			}
 		}
 	}
-
-	.application-highlight {
-		// &.suppressed {
-		// do nothing special when range is suppressed.
-		// }
-
-		& + li.part,
-		& + li.exercise {
-			&::before, &::after { z-index: 1; color: #076da7; }
-		}
-		// &.highlight-mouse-over {
-		// 	& + li.part, & + li.exercise {
-		// 		&::before, &::after { color: #ffffff; }
-		// 	}
-		// }
-
-		&.plain {
-			&, * {
-				position: relative;
-			}
-
-			// color: #076da7;
-			background-color: #e1f4fe;
-			overflow: hidden;
-
-			&.shared-with-me {
-				&,.math {
-					background: none;
-					color: var(--primary-grey);
-					border-bottom: 1px solid #9fd9fa;
-				}
-
-				// &.highlight-mouse-over {
-				// 	&,.math {
-				// 		color: #ffffff;
-				// 		background-color: var(--primary-blue);
-				// 	}
-				// }
-
-				.application-highlight.shared-with-me {
-					&,.math {
-						border-bottom: none;
-					}
-				}
-			}
-
-			&.highlight-mouse-over {
-				&,a {
-					// color: #ffffff;
-					// background-color: var(--primary-blue);
-					.application-highlight {
-						background-color: transparent;
-					}
-				}
-
-				&.counter {
-					background: transparent;
-				}
-			}
-
-			&.redaction {
-				&.redacted {
-					display: none;
-				}
-
-				background: #efefef;
-				color: var(--secondary-grey);
-				border-bottom: 0;
-			}
-
-			&.counter {
-				color: var(--secondary-grey);
-				font-family: var(--body-font-family) !important;
-				font-weight: bold;
-				background: transparent;
-
-				@include highlight-tip;
-
-				//this is adding a space between letters when the highlight ends in a word
-				padding-left: 0;
-
-				&.with-count {
-					overflow: hidden;
-					width: 30px;
-					background-image: url(../images/counter_tip_default.png);
-
-					&.highlight-mouse-over {
-						color: #fff;
-						background-image: url(../images/counter_tip_hover.png);
-					}
-
-					span {
-						display: block;
-						text-align: center;
-						margin-left: 5px;
-						overflow: hidden;
-
-						@include ellipse;
-					}
-				}
-			}
-		}
-	}
 }
 
 #NTIContent {
@@ -1112,5 +1009,106 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7; }
 }
 
 .application-highlight {
+	// &.suppressed {
+	// do nothing special when range is suppressed.
+	// }
+
+	& + li.part,
+	& + li.exercise {
+		&::before, &::after { z-index: 1; color: #076da7; }
+	}
+	// &.highlight-mouse-over {
+	// 	& + li.part, & + li.exercise {
+	// 		&::before, &::after { color: #ffffff; }
+	// 	}
+	// }
+
+	&.plain {
+		&, * {
+			position: relative;
+		}
+
+		// color: #076da7;
+		background-color: #e1f4fe;
+		overflow: hidden;
+
+		&.shared-with-me {
+			&,.math {
+				background: none;
+				color: var(--primary-grey);
+				border-bottom: 1px solid #9fd9fa;
+			}
+
+			// &.highlight-mouse-over {
+			// 	&,.math {
+			// 		color: #ffffff;
+			// 		background-color: var(--primary-blue);
+			// 	}
+			// }
+
+			.application-highlight.shared-with-me {
+				&,.math {
+					border-bottom: none;
+				}
+			}
+		}
+
+		&.highlight-mouse-over {
+			&,a {
+				// color: #ffffff;
+				// background-color: var(--primary-blue);
+				.application-highlight {
+					background-color: transparent;
+				}
+			}
+
+			&.counter {
+				background: transparent;
+			}
+		}
+
+		&.redaction {
+			&.redacted {
+				display: none;
+			}
+
+			background: #efefef;
+			color: var(--secondary-grey);
+			border-bottom: 0;
+		}
+
+		&.counter {
+			color: var(--secondary-grey);
+			font-family: var(--body-font-family) !important;
+			font-weight: bold;
+			background: transparent;
+
+			@include highlight-tip;
+
+			//this is adding a space between letters when the highlight ends in a word
+			padding-left: 0;
+
+			&.with-count {
+				overflow: hidden;
+				width: 30px;
+				background-image: url(../images/counter_tip_default.png);
+
+				&.highlight-mouse-over {
+					color: #fff;
+					background-image: url(../images/counter_tip_hover.png);
+				}
+
+				span {
+					display: block;
+					text-align: center;
+					margin-left: 5px;
+					overflow: hidden;
+
+					@include ellipse;
+				}
+			}
+		}
+	}
+
 	@include highlight-colors();
 }
