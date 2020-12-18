@@ -858,8 +858,11 @@ body.dragging * {
 		background: #fff;
 		border: 1px solid var(--tertiary-grey);
 
-		body.dragging & .dropzone {
-			z-index: 1;
+		body.dragging & {
+			& .choice.target,
+			& .dropzone {
+				z-index: 1;
+			}
 		}
 
 		.inputbox {
