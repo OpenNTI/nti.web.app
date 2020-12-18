@@ -172,8 +172,8 @@ const Bridge = createReactClass({
 	},
 
 
-	setThemeScope (themeScope) {
-		this.setState({themeScope});
+	setTheme (theme, scope) {
+		this.setState({theme, themeScope: scope});
 	},
 
 
@@ -191,7 +191,7 @@ const Bridge = createReactClass({
 			return React.createElement(ErrorCmp, this.state, 'Something went wrong.');
 		}
 
-		const {themeScope} = this.state;
+		const {themeScope, theme} = this.state;
 		const content = React.Children.only(this.props.children);
 
 		if (!themeScope) {
@@ -199,9 +199,11 @@ const Bridge = createReactClass({
 		}
 
 		return (
-			<Theme.Scope scope={themeScope}>
-				{content}
-			</Theme.Scope>
+			<Theme.Apply theme={theme}>
+				<Theme.Scope scope={themeScope}>
+					{content}
+				</Theme.Scope>
+			</Theme.Apply>
 		);
 	}
 });
@@ -388,8 +390,8 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 		this.bridgeInstance.setBaseRoute(baseroute);
 	},
 
-	setThemeScope (themeScope) {
-		this.bridgeInstance.setThemeScope(themeScope);
+	setTheme (theme, scope) {
+		this.bridgeInstance.setTheme(theme,scope);
 	},
 
 	/**

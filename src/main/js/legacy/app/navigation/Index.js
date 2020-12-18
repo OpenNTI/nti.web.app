@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			el.style.removeProperty('--nav-background-color');
 		}
 
-		const knockout = theme.badges ? theme.badges.knockout : null;
+		const knockout = theme.badges?.knockout || null;
 
 		if (theme.branding) {
 			this.brandingCmp.setProps({
@@ -272,8 +272,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		this.identityCmp.setTheme(theme.identity, knockout);
 		this.searchCmp.setTheme(theme.search);
 		this.chatCmp.setTheme(theme.icon);
-		this.notificationCmp.setThemeScope?.(themeScope);
-
+		this.notificationCmp?.setTheme(theme, themeScope);
 	},
 
 
