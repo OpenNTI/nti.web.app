@@ -60,7 +60,7 @@ export default function CertificateStylingPill () {
 
 	const [editCustom, setEditCustom] = React.useState(false);
 
-	const hideLogo = Theme.useTheme()?.getRoot()?.surpressCertificateLogo;
+	const hideLogo = Theme.useTheme()?.getRoot()?.suppressCertificateLogo;
 	const background = Theme.useThemeProperty('certificates.sidebar.backgroundColor');
 	const color = (background == null || background.isColor) ? background : Color.fromCSS(background);
 	const onColorChange = (newColor) => setBrandProp('certificate_brand_color', newColor.hex.toString());
