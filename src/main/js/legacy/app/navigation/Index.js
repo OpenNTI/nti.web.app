@@ -272,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		this.identityCmp.setTheme(theme.identity, knockout);
 		this.searchCmp.setTheme(theme.search);
 		this.chatCmp.setTheme(theme.icon);
-		this.notificationCmp?.setTheme(theme, themeScope);
+		this.notificationCmp?.setThemeScope(themeScope);
 	},
 
 
