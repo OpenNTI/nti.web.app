@@ -1,6 +1,7 @@
 /* eslint-env jest */
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render, fireEvent } from '@testing-library/react';
+import {wait} from '@nti/lib-commons';
 
 import Fragments from '../Fragments';
 
@@ -18,7 +19,6 @@ const fakeHit = {
 	TargetMimeType: 'application/vnd.nextthought.note'
 };
 const fakeFragments = [{fragIndex: 1, text: '<hit>test</hit>'},{fragIndex: 2, text: '<hit>Testing</hit>'}];
-const navigateToSearchHit = jest.fn();
 
 const mockService = () => ({
 	getObject: (o) => Promise.resolve(o)
@@ -46,23 +46,23 @@ describe('<Fragments />', () => {
 	beforeEach(onBefore);
 	afterEach(onAfter);
 
-	test ('should render a `.hit-fragments`', () => {
-		const wrapper = shallow(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} />);
-		expect(wrapper.find('.hit-fragments').length).toBe(1);
+	test ('should render a `.hit-fragments`', async () => {
+		const {container, findAllByRole} = render(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={jest.fn()} />);
+		expect((await findAllByRole('mark')).length).toBe(2);
+		expect(container.querySelectorAll('.hit-fragments').length).toBe(1);
 	});
 
-	test ('should render at least one `.hit-fragment`', () => {
-		const wrapper = shallow(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} />);
-		expect(wrapper.find('.hit-fragment').length).toBe(2);
+	test ('should render at least one `.hit-fragment`', async () => {
+		const {container} = render(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={jest.fn()} />);
+		expect(container.querySelectorAll('.hit-fragment').length).toBe(2);
 	});
 
-	test ('simulates click events on fragments', () => {
-		const wrapper = shallow(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} />);
+	test ('simulates click events on fragments', async () => {
+		const navigateToSearchHit = jest.fn();
+		const {container} = render(<Fragments fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} />);
 		// Clicks fragment with key value of 1
-		wrapper.find('.hit-fragment').at(1).simulate('click');
-
-		setTimeout(function () {
-			expect(navigateToSearchHit).toHaveBeenCalled();
-		},500);
+		fireEvent.click(container.querySelector('.hit-fragment'));
+		await wait();
+		expect(navigateToSearchHit).toHaveBeenCalled();
 	});
 });

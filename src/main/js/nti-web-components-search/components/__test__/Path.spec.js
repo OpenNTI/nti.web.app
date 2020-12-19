@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from '@testing-library/react';
 
 import Path from '../Path';
 
@@ -10,13 +10,18 @@ const fakePathObject = [{label: 'Human Physiology', ntiid: 'tag:nextthought.com,
 describe('<Path />', () => {
 
 	test ('should render a `.hit-path`', () => {
-		const wrapper = shallow(<Path pathObject={fakePathObject}/>);
-		expect(wrapper.find('.hit-path').length).toBe(1);
+		const {container} = render(<Path pathObject={fakePathObject}/>);
+		expect(container.querySelectorAll('.hit-path').length).toBe(1);
 	});
 
-	test ('should render at least one span tag', () => {
-		const wrapper = shallow(<Path pathObject={fakePathObject}/>);
-		const hitPath = wrapper.find('.hit-path');
-		expect(hitPath.contains(<span key="0">Human Physiology</span>)).toBe(true);
+	test ('should render at least one span tag', async () => {
+		const {findAllByText} = render(<Path pathObject={fakePathObject}/>);
+		expect(await findAllByText('Human Physiology')).toMatchInlineSnapshot(`
+		Array [
+		  <span>
+		    Human Physiology
+		  </span>,
+		]
+		`);
 	});
 });

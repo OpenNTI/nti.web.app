@@ -79,8 +79,8 @@ class SearchResults extends React.Component {
 			.then(results => {
 				this.setState({loaded: true, hits: results});
 
-				if(!this.props.showLoading && this.props.onResultsLoaded) {
-					this.props.onResultsLoaded();
+				if(!this.props.showLoading) {
+					this.props.onResultsLoaded?.();
 				}
 			});
 	}

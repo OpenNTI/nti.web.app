@@ -1,10 +1,9 @@
 /* eslint-env jest */
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render, fireEvent } from '@testing-library/react';
+import { wait } from '@nti/lib-commons';
 
 import Hit from '../Hit';
-import Fragments from '../Fragments';
-import Path from '../Path';
 
 const fakeHit = {
 	Class: 'Hit',
@@ -51,31 +50,31 @@ describe('<Hit />', () => {
 	afterEach(onAfter);
 
 	test ('should render at least one <Fragments /> components', () => {
-		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
-		expect(wrapper.find(Fragments).length).toBe(1);
+		const {container} = render(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
+		expect(container.querySelectorAll('.hit-fragments').length).toBe(1);
 	});
 
 	test ('should render one <Path /> component', () => {
-		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
-		expect(wrapper.find(Path).length).toBe(1);
+		const {container} = render(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
+		expect(container.querySelectorAll('.hit-path').length).toBe(1);
 	});
 
 	test ('should render a `.search-result-react`', () => {
-		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
-		expect(wrapper.find('.search-result-react').length).toBe(1);
+		const {container} = render(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
+		expect(container.querySelectorAll('.search-result-react').length).toBe(1);
 	});
 
 	test ('should render a `.hit-title`', () => {
-		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
-		expect(wrapper.find('.hit-title').length).toBe(1);
+		const {container} = render(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
+		expect(container.querySelectorAll('.hit-title').length).toBe(1);
 	});
 
-	test ('simulates clicks on title', () => {
-		const wrapper = shallow(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
-		wrapper.find('.hit-title').simulate('click');
+	test ('simulates clicks on title', async () => {
+		const {container} = render(<Hit fragments={fakeFragments} hit={fakeHit} navigateToSearchHit={navigateToSearchHit} path={fakePath} title="Testing"/>);
 
-		setTimeout(function () {
-			expect(navigateToSearchHit).toHaveBeenCalled();
-		},500);
+		fireEvent.click(container.querySelector('.hit-title'));
+
+		await wait();
+		expect(navigateToSearchHit).toHaveBeenCalled();
 	});
 });

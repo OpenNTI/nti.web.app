@@ -1,51 +1,44 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import {
 	resolveNavigateToSearchHit
 } from '../resolvers';
 
-export default class Fragments extends React.Component {
-	static propTypes = {
-		fragments: PropTypes.arrayOf(PropTypes.object),
-		hit: PropTypes.object.isRequired,
-		navigateToSearchHit: PropTypes.func
-	}
+const createFragment = (fragment) => ({__html: fragment});
+const createAnotherFragment = (fragment) => ({__html: ' ... ' + fragment});
 
-	render () {
-		const {fragments = [], hit, navigateToSearchHit} = this.props;
+Fragments.propTypes = {
+	fragments: PropTypes.arrayOf(PropTypes.object),
+	hit: PropTypes.object.isRequired,
+	navigateToSearchHit: PropTypes.func
+};
+export default function Fragments ({fragments = [], hit, navigateToSearchHit}) {
 
-		function createFragment (fragment) {
-			return {__html: fragment};
-		}
+	const navigateToFragment = useCallback(async (fragment) => {
+		const {obj, fragIndex, containerId} = await resolveNavigateToSearchHit(hit, fragment);
+		return navigateToSearchHit(obj, hit, fragIndex, containerId);
+	}, [hit]);
 
-		function createAnotherFragment (fragment) {
-			return {__html: ' ... ' + fragment};
-		}
-
-		function navigateToFragment (fragment) {
-			resolveNavigateToSearchHit(hit, fragment)
-				.then(({obj, fragIndex, containerId}) => {
-					return navigateToSearchHit(obj, hit, fragIndex, containerId);
-				});
-		}
-
-		return (
-			<div className="hit-fragments">
-				{
-					fragments.map((fragment, index) => {
-						function navigate () {
-							navigateToFragment(fragment);
-						}
-						if(index === 0) {
-							return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createFragment(fragment.text)} onClick={navigate} />;
-						} else {
-							return <div className="hit-fragment" key={index} dangerouslySetInnerHTML={createAnotherFragment(fragment.text)} onClick={navigate} />;
-						}
-					})
-				}
-			</div>
-		);
-	}
-
+	return (
+		<div className="hit-fragments">
+			{
+				fragments.map((fragment, index) => {
+					return (
+						<div
+							className="hit-fragment"
+							role="mark"
+							key={index}
+							onClick={() => navigateToFragment(fragment)}
+							dangerouslySetInnerHTML={
+								index === 0
+									? createFragment(fragment.text)
+									: createAnotherFragment(fragment.text)}
+						/>
+					);
+				})
+			}
+		</div>
+	);
 }
+

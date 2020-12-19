@@ -11,12 +11,12 @@ Pager.propTypes = {
 };
 
 export default function Pager ({pagesToShow, currentPage, showNext, loadPage, showMoreButton}) {
-	let pages = [];
+	const pages = [];
 	// The max amount of pages to show in the pager
 	const maxPagesToShow = 12;
 	let pageToStart = currentPage - maxPagesToShow + 1;
 
-	if(pageToStart <= 0) {
+	if(pageToStart <= 0 || isNaN(pageToStart)) {
 		pageToStart = 1;
 	}
 
@@ -56,25 +56,31 @@ export default function Pager ({pagesToShow, currentPage, showNext, loadPage, sh
 
 	return (
 		<ul className="pagination-container">
-			{currentPage > maxPagesToShow &&
-				<li className="prev-results-page" onClick={showPrev}><i className="icon-chevron-left" /></li>
-			}
+			{currentPage > maxPagesToShow && (
+				<li className="prev-results-page" onClick={showPrev}>
+					<i className="icon-chevron-left" />
+				</li>
+			)}
 			{
-				pages.map((page, index) => {
+				pages.map(({className, pageNum}, index) => {
 					function goToPage () {
-						loadPage(page.pageNum);
+						loadPage(pageNum);
 					}
 
-					if(page.pageNum < 10) {
-						return <li className={page.className} key={index} onClick={goToPage}><a className="page-num">{page.pageNum}</a></li>;
-					} else {
-						return <li className={page.className} key={index} onClick={goToPage}><a className="page-num-large">{page.pageNum}</a></li>;
-					}
+					return (
+						<li className={className} key={index} onClick={goToPage}>
+							<a className={pageNum < 10 ? 'page-num' : 'page-num-large'}>{pageNum}</a>
+						</li>
+					);
 				})
 			}
-			{showMoreButton &&
-				<li className="next-results-page" onClick={showNext}><a className="next-results-page-button"><span>More Results</span><i className="icon-chevron-right" /></a></li>
-			}
+			{showMoreButton && (
+				<li className="next-results-page" onClick={showNext}>
+					<a className="next-results-page-button">
+						<span>More Results</span><i className="icon-chevron-right" />
+					</a>
+				</li>
+			)}
 		</ul>
 	);
 }
