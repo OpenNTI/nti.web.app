@@ -7,11 +7,11 @@ import Styles from './Styles.css';
 const cx = classnames.bind(Styles);
 
 export default function CertificatePreviewSidebar () {
-	const hideLogo = Theme.useTheme()?.getRoot()?.surpressCertificateLogo;
+	const hideLogo = Theme.useTheme()?.getRoot()?.suppressCertificateLogo;
 	const backgroundColor = Theme.useThemeProperty('sidebar.backgroundColor');
 
 	const styles = {};
-	
+
 	if (backgroundColor) {
 		styles.backgroundColor = backgroundColor;
 	}
@@ -26,4 +26,4 @@ export default function CertificatePreviewSidebar () {
 			)}
 		</div>
 	);
-} 
+}
