@@ -935,7 +935,15 @@ body.white-shade-mask .chat-gutter-window {
 	}
 
 	.nti-course-content-open & {
-		z-index: 1;//001;
+		// When the course content window is open, we still want the chat bar to be intractable.
+		// The only way to do this in the current system (without route-specific views) is
+		// to *sigh* apply a z-index that is higher than the mask... which all masks have a
+		// static index of 1. All indexes of the same value sort in the order they occur in the
+		// dom. This is the PRIMARY way we need to be layering and ordering things. The ONLY
+		// reason we are using z-index here, is because this is rendered once and placed at a
+		// static location in the dom. Once the entire app is rendered by React, and each route
+		// renders exactly what it needs, the z-index should not be required.
+		z-index: 2;
 	}
 
 	@media only screen and (max-width: 1420px) {
