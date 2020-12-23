@@ -23,6 +23,15 @@ html.x-viewport {
 		}
 	}
 
+	.prompt-layer,
+	.window-container {
+		// Dialogs from @nti/web-commons need to have a z-index:1,
+		// so we need to match. so that our dom-order can put us
+		// on top. We depend on dom-order... do not litter the styles
+		// with z-index values. We are trying to get rid of them.
+		z-index: 1;
+	}
+
 	&.msg-bar-open {
 		--msg-bar-height: #{$msg-bar-height};
 		--nt-app-top-offset: calc(#{$msg-bar-height} + #{$header-height});
