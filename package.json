@@ -29,7 +29,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@nti/app-scripts": "^2.28.8",
+    "@nti/app-scripts": "^2.31.8",
     "@nti/extjs": "4.2.0",
     "@nti/lib-commons": "NextThought/nti.lib.commons",
     "@nti/lib-decorators": "NextThought/nti.lib.decorators",
@@ -81,29 +81,5 @@
   },
   "bundleDependencies": [
     "@nti/util-logger"
-  ],
-  "peerDependencies": {
-    "classnames": "*",
-    "react": "*",
-    "react-dom": "*",
-    "react-test-renderer": "*",
-    "prop-types": "*"
-  },
-  "peerDependenciesMeta": {
-    "classnames": {
-      "optional": true
-    },
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    },
-    "react-test-renderer": {
-      "optional": true
-    },
-    "prop-types": {
-      "optional": true
-    }
-  }
+  ]
 }
