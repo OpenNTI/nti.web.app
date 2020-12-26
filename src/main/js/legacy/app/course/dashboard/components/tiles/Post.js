@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const format = require('date-fns/format');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const SharingUtils = require('legacy/util/Sharing');
@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	getCreatedTime: function () {
 		var created = this.record.get('CreatedTime');
 
-		return moment(created).format('MMM Do h:mm A');
+		return format(created, 'MMM do h:mm a');
 	},
 
 	//this should be the same for all sub instances

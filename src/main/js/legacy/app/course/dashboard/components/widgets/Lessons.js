@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const isAfter = require('date-fns/isAfter');
+const isBefore = require('date-fns/isBefore');
+const isSame = require('date-fns/isSameSecond');
 
 const TilesLesson = require('../tiles/Lesson');
 
@@ -22,16 +24,14 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 
 		getTiles: function (course, startDate, endDate) {
-			var start = moment(startDate);
-			var end = moment(endDate),
-				getWeight = this.getWeight.bind(this);
+			var getWeight = this.getWeight.bind(this);
 
 			function isAfterStart (date) {
-				return start.isBefore(date) || start.isSame(date);
+				return isBefore(date, startDate) || isSame(date, startDate);
 			}
 
 			function isBeforeEnd (date) {
-				return end.isAfter(date) || end.isSame(date);
+				return isAfter(date, endDate) || isSame(date, endDate);
 			}
 
 			function getCmpConfig (record, innerWeight) {

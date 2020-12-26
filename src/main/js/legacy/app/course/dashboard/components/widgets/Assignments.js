@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const isAfter = require('date-fns/isAfter');
+const isBefore = require('date-fns/isBefore');
 
 const TilesAssignment = require('../tiles/Assignment');
 
@@ -28,9 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 
 		getTiles: function (course, startDate, endDate, isNow) {
-			var start = moment(startDate),
-				end = moment(endDate),
-				maxNotDue = 5,
+			var maxNotDue = 5,
 				getWeight = this.getWeight.bind(this);
 
 			function getCmpConfig (assignment, assignments) {
@@ -66,11 +65,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 						if (isNow) {
 							//if the assignment starts before the end of the week
 							//and the assignment hasn't ended before the start of the week
-							if (end.isAfter(assignmentStart) && start.isBefore(assignmentEnd)) {
+							if (isAfter(assignmentStart, endDate) && isBefore(assignmentEnd, startDate)) {
 								assignments.push(getCmpConfig(assignment, assignmentCollection));
 							}
 							//else if the assignment has ended this week
-						} else if (end.isAfter(assignmentEnd) && start.isBefore(assignmentEnd)) {
+						} else if (isAfter(assignmentEnd, endDate) && isBefore(assignmentEnd, startDate)) {
 							assignments.push(getCmpConfig(assignment, assignmentCollection));
 						}
 					});
@@ -96,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 
 		getUpcomingTiles: function (course, date) {
-			var now = moment(date), load,
+			var load,
 				upcomingCutoff = this.UPCOMING_DAYS_CUTOFF;
 
 			console.log(upcomingCutoff);
@@ -109,13 +108,13 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 					items = items || [];
 
 					notPastDue = items.filter(function (item) {
-						var due = item.get('availableEnding'),
-							start = item.get('availableBeginning');
+						var due = item.get('availableEnding');
+						// var start = item.get('availableBeginning');
 
-						console.log(start);
+						// console.log(start);
 
 						//if we don't have due date or due is before now
-						return due ? now.isAfter(due) : false;
+						return due ? isAfter(due, date) : false;
 					});
 
 					notPastDue.sort(function (a, b) {

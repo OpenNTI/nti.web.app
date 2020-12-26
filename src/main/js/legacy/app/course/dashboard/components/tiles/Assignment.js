@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const {format, isSameDay, isSameMonth, isSameYear, isBefore} = require('date-fns');
 
 const ContentUtils = require('legacy/util/Content');
 
@@ -69,10 +69,6 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	getFooter: function () {
 		var due = this.record.getDueDate();
 
-		if (due) {
-			due = moment(due);
-		}
-
 		return this.getHistory()
 			.then(function (history) {
 				var submission = history && history.get('Submission'),
@@ -94,11 +90,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 				if (!due) { return ''; }
 
-				if (due.isSame(now, 'day') && due.isSame(now, 'month') && due.isSame(now, 'year')) {
+				if (isSameDay(now, due) && isSameMonth(now, due) && isSameYear(now, due)) {
 					return 'Due Today';
 				}
 
-				return 'Due ' + due.format('dddd, MMMM D');
+				return 'Due ' + format(due, 'eeee, MMMM d');
 			});
 	},
 
@@ -106,9 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	setLate: function () {
 		var due = this.record.getDueDate();
 
-		due = moment(due);
-
-		if (due.isBefore(new Date())) {
+		if (isBefore(new Date(), due)) {
 			this.addCls('late');
 		}
 	}

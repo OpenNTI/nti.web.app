@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
 const {wait} = require('@nti/lib-commons');
-
+const isSame = require('date-fns/isSameSecond');
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker', {
 	extend: 'Ext.Component',
@@ -113,13 +112,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 
 	highlightDate: function (picker, cell) {
-		var m = this.selectedDate && moment(this.selectedDate), me = this;
-
-		if (this.selectedDate && m.isSame(picker.value)) {
+		if (this.selectedDate && isSame(picker.value, this.selectedDate)) {
 			wait()
-				.then(function () {
+				.then(() => {
 					if (cell) {
-						cell.className += ' ' + me.clickedCls;
+						cell.className += ' ' + this.clickedCls;
 					}
 				});
 		}

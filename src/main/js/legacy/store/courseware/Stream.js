@@ -1,5 +1,8 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const startOfISOWeek = require('date-fns/startOfISOWeek');
+const endOfISOWeek = require('date-fns/endOfISOWeek');
+const isAfter = require('date-fns/isAfter');
+const isSame = require('date-fns/isSameSecond');
 
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
@@ -36,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		this.WEEK_RANGES = [];
 
 		this.url = config.url;
-		this.latestBinDate = moment.utc().endOf('isoWeek').toDate().getTime();
+		this.latestBinDate = endOfISOWeek(new Date()).getTime();
 		this.params.Oldest = (config.startDate || new Date(0)).getTime() / 1000;//the server is expecting seconds
 
 		this.__loadNextBatch();
@@ -85,8 +88,8 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 			key = this.WEEK_RANGES.length;
 
 			this.WEEK_RANGES.push({
-				start: moment.utc(bins[i].OldestTimestamp * 1000).startOf('isoWeek'), //timestamps are in seconds
-				end: moment.utc(bins[i].MostRecentTimestamp * 1000),
+				start: startOfISOWeek(new Date(bins[i].OldestTimestamp * 1000)), //timestamps are in seconds
+				end: new Date(bins[i].MostRecentTimestamp * 1000),
 				key: key
 			});
 
@@ -110,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		for (i = 0; i < ranges.length; i++) {
 			range = ranges[i];
 
-			if (range.start.isSame(date.startOf('isoWeek'))) {
+			if (isSame(startOfISOWeek(date), range.start)) {
 				return this.WEEK_MAP[range.key];
 			}
 		}
@@ -126,8 +129,9 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 			return Promise.resolve(cached);
 		}
 
+		const latest = new Date(me.latestBinDate);
 		//if we've haven't loaded that week, but we have loaded
-		if (date.isAfter(me.latestBinDate) || date.isSame(me.latestBinDate) || me.noMoreBins) {
+		if (isAfter(latest, date) || isSame(latest, date) || me.noMoreBins) {
 			return Promise.resolve(me.EMPTY_BIN);
 		}
 
@@ -142,8 +146,6 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 
 
 	getWeek: function (date) {
-		date = moment.utc(date);
-
 		return this.__getOrLoadBin(date)
 			.then(function (bin) {
 				return bin.Items;

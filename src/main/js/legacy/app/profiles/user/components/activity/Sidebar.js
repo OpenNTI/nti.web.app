@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const subDays = require('date-fns/subDays');
 
 const {isFeature} = require('legacy/util/Globals');
 
@@ -30,9 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	getFilters () {
-		function batchAfterGenerator (value, type) {
-			let m = value && moment().subtract(value, type);
-			let date = m && m.toDate();
+		function batchAfterGenerator (value) {
+			let date = value && subDays(new Date(), value);
 
 			if (date) {
 				date = Math.floor(date.getTime() / 1000);
@@ -100,22 +99,22 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					{
 						displayText: 'Past Week',
 						stateValue: 'pastweek',
-						value: batchAfterGenerator(7, 'days')
+						value: batchAfterGenerator(7)
 					},
 					{
 						displayText: 'Past Month',
 						stateValue: 'pastmonth',
-						value: batchAfterGenerator(30, 'days')
+						value: batchAfterGenerator(30)
 					},
 					{
 						displayText: 'Past 3 Months',
 						stateValue: 'pastthreemonths',
-						value: batchAfterGenerator(90, 'days')
+						value: batchAfterGenerator(90)
 					},
 					{
 						displayText: 'Past Year',
 						stateValue: 'pastyear',
-						value: batchAfterGenerator(360, 'days')
+						value: batchAfterGenerator(360)
 					}
 				]
 			},

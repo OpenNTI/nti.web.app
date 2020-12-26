@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const format = require('date-fns/format');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	fillInCreated: function () {
 		var created = this.record.get('CreatedTime');
 
-		this.createdEl.update(moment(created).format('MMM Do h:mm A'));
+		this.createdEl.update(format(created, 'MMM do h:mm a'));
 	},
 
 	fillInBody: function () {
