@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Base', {
 	statics: {
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			if (!time) { return 0; }
 
 			scale = scale || ((x) => x);
-			time = moment(time).toDate().getTime();
+			time = time.getTime();
 
 			var now = (new Date()).getTime();
 

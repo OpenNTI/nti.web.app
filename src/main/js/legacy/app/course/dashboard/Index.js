@@ -1,5 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const isBefore = require('date-fns/isBefore');
 
 const {getString} = require('legacy/util/Localization');
 const TimeUtils = require('legacy/util/Time');
@@ -368,7 +369,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 			'not-empty': '__notEmptyContainer'
 		});
 
-		if (!week.start.isBefore(this.startDate)) {
+		if (!isBefore(this.startDate, week.start)) {
 			this.weekToLoad = week.getPrevious();
 		} else {
 			this.weekToLoad = null;

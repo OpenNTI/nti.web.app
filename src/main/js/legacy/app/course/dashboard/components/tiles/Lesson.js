@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const format = require('date-fns/format');
 
 require('./Item');
 
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	getFooter: function () {
 		var start = this.record.get('startDate');
 
-		return moment(start).format('dddd, MMMM D');
+		return format(start, 'eeee, MMMM d');
 	},
 
 

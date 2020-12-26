@@ -1,6 +1,9 @@
 const Ext = require('@nti/extjs');
 const {DateTime} = require('@nti/web-commons');
-const moment = require('moment');
+const startOfISOWeek = require('date-fns/startOfISOWeek');
+const endOfISOWeek = require('date-fns/endOfISOWeek');
+const addWeeks = require('date-fns/addWeeks');
+const subWeeks = require('date-fns/subWeeks');
 
 global.TimeUtils =
 module.exports = exports = Ext.define('NextThought.util.Time', {
@@ -255,15 +258,14 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 * @param  {Date|String} date argument to pass to the moment constructor, falsy means today
 	 * @return {Object}		 utility for stepping through the weeks
 	 */
-	getWeek: function (date) {
-		var m = date ? moment(date) : moment();
+	getWeek: function (date = new Date()) {
 
 		return {
-			day: m,
-			start: moment(m).startOf('isoWeek'),
-			end: moment(m).endOf('isoWeek'),
-			getNext: this.getWeek.bind(this, moment(m).add(1, 'weeks')),
-			getPrevious: this.getWeek.bind(this, moment(m).subtract(1, 'weeks'))
+			day: date,
+			start: startOfISOWeek(date),
+			end: endOfISOWeek(date),
+			getNext: this.getWeek.bind(this, addWeeks(date, 1)),
+			getPrevious: this.getWeek.bind(this, subWeeks(date, 1))
 		};
 	}
 }).create();

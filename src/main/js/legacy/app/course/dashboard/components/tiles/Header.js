@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const moment = require('moment');
+const {isSameMonth, format} = require('date-fns');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Header', {
@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 	cls: 'dashboard-header',
 
-	DATE_FORMAT: 'MMMM D',
+	DATE_FORMAT: 'MMMM d',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', cn: [
@@ -41,20 +41,17 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			return;
 		}
 
-		var start = moment(week.start),
-			end = moment(week.end);
-
-		if (start.isSame(end, 'month')) {
-			this.startEl.update(this.formatDate(start));
-			this.endEl.update(end.format('D'));
+		if (isSameMonth(week.end, week.start)) {
+			this.startEl.update(this.formatDate(week.start));
+			this.endEl.update(format(week.end, 'd'));
 		} else {
-			this.startEl.update(this.formatDate(start));
-			this.endEl.update(this.formatDate(end));
+			this.startEl.update(this.formatDate(week.start));
+			this.endEl.update(this.formatDate(week.end));
 		}
 	},
 
 	formatDate: function (date) {
-		return moment(date).format(this.DATE_FORMAT);
+		return format(date, this.DATE_FORMAT);
 	},
 
 
