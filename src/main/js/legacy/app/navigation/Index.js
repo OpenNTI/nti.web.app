@@ -8,7 +8,6 @@ const cx = require('classnames');
 const ReactHarness = require('legacy/overrides/ReactHarness');
 
 const IdentityIndex = require('../account/identity/Index');
-const NotificationsTab = require('../notifications/Tab');
 const SearchBar = require('../search/SearchBar');
 const GutterTab = require('../chat/components/gutter/Tab');
 
@@ -307,22 +306,12 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this)
 		});
 
-		if (!isFlag('new-notifications')) {
-			this.notificationCmp = NotificationsTab.create({
-				setMenuOpen: this.setState.bind(this, {
-					active: 'notificationCmp',
-				}),
-				setMenuClosed: this.setState.bind(this, {}),
-				pushRootRoute: this.pushRoute.bind(this),
-				navigateToObject: this.gotoObject.bind(this),
-			});
-		} else {
-			this.notificationCmp = ReactHarness.create({
-				component: NotificationsView,
-				addHistory: true,
-				baseroute: '/app',
-			});
-		}
+
+		this.notificationCmp = ReactHarness.create({
+			component: NotificationsView,
+			addHistory: true,
+			baseroute: '/app',
+		});
 
 		this.searchCmp = SearchBar.create({
 			setMenuOpen: this.setState.bind(this, {active: 'searchCmp'}),
