@@ -365,7 +365,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 	unmount () {
-		console.debug('Unmounting React Component');
+		// console.debug('Unmounting React Component');
 
 		if(this.el) {
 			ReactDOM.unmountComponentAtNode(Ext.getDom(this.el));

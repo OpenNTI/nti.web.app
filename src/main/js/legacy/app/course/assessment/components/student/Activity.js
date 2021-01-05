@@ -138,10 +138,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		if (c === deactivatedCmp) {
-			console.debug('Clear badge');
+			// console.debug('Clear badge');
 			this.clearBadge();
-		} else {
-			console.debug('Not clearing badge ' + (c && c.id));
+		// } else {
+			// console.debug('Not clearing badge ' + (c?.id));
 		}
 	},
 
