@@ -44,7 +44,7 @@ const applyBranding = (siteBrand = {}) => {
 	if (link) {
 		const {favicon} = theme.assets || {};
 		const {href, cacheBust} = favicon;
-		
+
 		link.href = cacheBust ? `${href}?v=${cacheBust}` : href;
 	}
 };
@@ -61,7 +61,7 @@ Ext.application({
 	],
 
 	launch () {
-		console.debug('launching');
+		// console.debug('launching');
 
 		applyBranding($AppConfig.branding);
 
