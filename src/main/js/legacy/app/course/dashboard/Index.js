@@ -1,6 +1,6 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
-const isBefore = require('date-fns/isBefore');
+const {isBefore} = require('date-fns');
 
 const {getString} = require('legacy/util/Localization');
 const TimeUtils = require('legacy/util/Time');

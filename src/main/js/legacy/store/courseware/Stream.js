@@ -1,8 +1,10 @@
 const Ext = require('@nti/extjs');
-const startOfISOWeek = require('date-fns/startOfISOWeek');
-const endOfISOWeek = require('date-fns/endOfISOWeek');
-const isAfter = require('date-fns/isAfter');
-const isSame = require('date-fns/isSameSecond');
+const {
+	startOfISOWeek,
+	endOfISOWeek,
+	isAfter,
+	isSameSecond: isSame,
+} = require('date-fns');
 
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));

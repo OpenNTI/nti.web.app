@@ -1,9 +1,11 @@
 const Ext = require('@nti/extjs');
 const {DateTime} = require('@nti/web-commons');
-const startOfISOWeek = require('date-fns/startOfISOWeek');
-const endOfISOWeek = require('date-fns/endOfISOWeek');
-const addWeeks = require('date-fns/addWeeks');
-const subWeeks = require('date-fns/subWeeks');
+const {
+	addWeeks,
+	endOfISOWeek,
+	startOfISOWeek,
+	subWeeks,
+} = require('date-fns');
 
 global.TimeUtils =
 module.exports = exports = Ext.define('NextThought.util.Time', {

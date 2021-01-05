@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const format = require('date-fns/format');
+const {format} = require('date-fns');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const SharingUtils = require('legacy/util/Sharing');

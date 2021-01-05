@@ -1,7 +1,5 @@
 const Ext = require('@nti/extjs');
-const isAfter = require('date-fns/isAfter');
-const isBefore = require('date-fns/isBefore');
-const isSame = require('date-fns/isSameSecond');
+const {isAfter,isBefore,isSameSecond: isSame} = require('date-fns');
 
 const TilesLesson = require('../tiles/Lesson');
 

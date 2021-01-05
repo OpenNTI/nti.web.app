@@ -1,6 +1,5 @@
 const Ext = require('@nti/extjs');
-const isAfter = require('date-fns/isAfter');
-const isBefore = require('date-fns/isBefore');
+const {isAfter,isBefore} = require('date-fns');
 
 const TilesAssignment = require('../tiles/Assignment');
 

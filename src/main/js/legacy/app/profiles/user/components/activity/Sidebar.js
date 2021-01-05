@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const subDays = require('date-fns/subDays');
+const {subDays} = require('date-fns');
 
 const {isFeature} = require('legacy/util/Globals');
 

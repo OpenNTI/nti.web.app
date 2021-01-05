@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const format = require('date-fns/format');
+const {format} = require('date-fns');
 
 require('./Item');
 
