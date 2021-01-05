@@ -504,7 +504,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 			//schedual cleanup.
 			wait(60000).then(function () {
-				console.debug('Cleanup...');
+				// console.debug('Cleanup...');
 				for (let i = names.length - 1; i >= 0; i--) {
 					delete active[names[i]];
 				}
@@ -537,7 +537,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	},
 
 	foregroundRequest: function () {
-		console.log('Requesting in foreground');
+		// console.log('Requesting in foreground');
 		return Service.request.apply(Service, arguments)
 			.then(function (txt) { return Ext.decode(txt, true); });
 	},
