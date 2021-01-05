@@ -73,7 +73,7 @@ export default class AssignmentSidebarInstructions extends React.Component {
 
 	renderUnavailable (assignmentModel) {
 		const available = assignmentModel.get('availableBeginning');
-		const date = DateTime.format(available, 'dddd, MMMM D [at] h:mmA z');
+		const date = DateTime.format(available, DateTime.WEEKDAY_MONTH_NAME_DAY_AT_TIME_WITH_ZONE);
 
 		return this.renderState(t('unavailable.header'), t('unavailable.message', {date}));
 	}

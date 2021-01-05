@@ -17,7 +17,7 @@ export default function CertificateInlinePreviewContent () {
 	const brandName = Theme.useTheme()?.getRoot?.()?.brandName;// 'brandName' in theme, 'brand_name' in SiteBrand
 
 	const label = Theme.useThemeProperty('label');
-	const date = DateTime.format(Date.now(), 'MMMM D, YYYY');
+	const date = DateTime.format(Date.now());
 
 	return (
 		<div className={cx('content')}>

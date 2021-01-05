@@ -30,15 +30,15 @@ export default class RecentSessions extends React.Component {
 		const today = new Date();
 		const itemDate = new Date(item.SessionStartTime * 1000);
 
-		let dayLabel = DateTime.format(itemDate, 'dddd');
+		let dayLabel = DateTime.format(itemDate, DateTime.WEEKDAY);
 
-		if(DateTime.format(today, 'L') === DateTime.format(itemDate, 'L')) {
+		if(DateTime.format(today, DateTime.DATE) === DateTime.format(itemDate, DateTime.DATE)) {
 			dayLabel = t('today');
 		}
 
 		return (
 			<div key={item.SessionStartTime} className="item">
-				<div className="time">{DateTime.format(itemDate, 'lll')}</div>
+				<div className="time">{DateTime.format(itemDate, DateTime.MONTH_ABBR_DAY_YEAR_TIME)}</div>
 				<div className="day">{dayLabel}</div>
 			</div>
 		);

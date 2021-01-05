@@ -1,6 +1,7 @@
 import './LastLogin.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {DateTime} from '@nti/web-commons';
 
 import DateValue from '../../../common/DateValue';
 
@@ -16,6 +17,6 @@ export default class LastLogin extends React.Component {
 
 		const date = historicalSessions && historicalSessions.length > 0 && new Date(historicalSessions[0].SessionStartTime * 1000);
 
-		return (<DateValue loading={loading} date={date} label="Last Login" format="lll" />);
+		return (<DateValue loading={loading} date={date} label="Last Login" format={DateTime.MONTH_ABBR_DAY_YEAR_TIME} />);
 	}
 }

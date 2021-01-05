@@ -23,7 +23,7 @@ export default class EndDate extends React.Component {
 		const {item} = this.props;
 		return (
 			<div className="cell">
-				<DateTime className="value" date={item.getEndDate()} format="ll" />
+				<DateTime className="value" date={item.getEndDate()} format={DateTime.MONTH_ABBR_DAY_YEAR} />
 			</div>
 		);
 	}

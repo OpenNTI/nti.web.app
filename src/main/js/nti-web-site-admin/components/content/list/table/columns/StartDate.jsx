@@ -23,7 +23,7 @@ export default class StartDate extends React.Component {
 		const {item} = this.props;
 		return (
 			<div className="cell">
-				<DateTime className="value" date={item.getStartDate()} format="ll" />
+				<DateTime className="value" date={item.getStartDate()} format={DateTime.MONTH_ABBR_DAY_YEAR} />
 			</div>
 		);
 	}

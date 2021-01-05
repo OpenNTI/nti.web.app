@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		let fields = attributes.map(attr => {
 			if(externalValues[attr]) {
 				if (attr.substr(0,9) === 'Available') {
-					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${DateTime.format(Parsing.parseDate(externalValues[attr]), 'MMMM D LT')}"`;
+					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${DateTime.format(Parsing.parseDate(externalValues[attr]), DateTime.MONTH_DAY_TIME)}"`;
 				} else if (typeof externalValues[attr] !== 'object') {
 					return `${me.FIELDS[attr.toLowerCase()] || attr} to "${externalValues[attr]}"`;
 				}

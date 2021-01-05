@@ -74,7 +74,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        12 am
+        12 AM
       </div>
     </div>
     <div
@@ -139,7 +139,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        2 am
+        2 AM
       </div>
     </div>
     <div
@@ -204,7 +204,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        4 am
+        4 AM
       </div>
     </div>
     <div
@@ -269,7 +269,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        6 am
+        6 AM
       </div>
     </div>
     <div
@@ -334,7 +334,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        8 am
+        8 AM
       </div>
     </div>
     <div
@@ -399,7 +399,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        10 am
+        10 AM
       </div>
     </div>
     <div
@@ -464,7 +464,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        12 pm
+        12 PM
       </div>
     </div>
     <div
@@ -529,7 +529,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        2 pm
+        2 PM
       </div>
     </div>
     <div
@@ -594,7 +594,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        4 pm
+        4 PM
       </div>
     </div>
     <div
@@ -659,7 +659,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        6 pm
+        6 PM
       </div>
     </div>
     <div
@@ -724,7 +724,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        8 pm
+        8 PM
       </div>
     </div>
     <div
@@ -789,7 +789,7 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
       <div
         className="time-label"
       >
-        10 pm
+        10 PM
       </div>
     </div>
     <div
@@ -845,9 +845,9 @@ exports[`Site admin dashboard widget active times Basic render test 1`] = `
     >
       Monday
       , 
-      6 pm
+      6 PM
        – 
-      8 pm
+      8 PM
     </div>
   </div>
 </div>

@@ -23,7 +23,7 @@ export default class CreatedTime extends React.Component {
 		const {item} = this.props;
 		return (
 			<div className="cell">
-				<DateTime className="value" date={item.getCreatedTime()} format="ll" />
+				<DateTime className="value" date={item.getCreatedTime()} format={DateTime.MONTH_ABBR_DAY_YEAR} />
 			</div>
 		);
 	}

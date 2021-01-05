@@ -24,7 +24,7 @@ export default class JoinDate extends React.Component {
 		const {item} = this.props;
 		return (
 			<div className={styles.cell}>
-				<DateTime date={item.getCreatedTime()} format="ll" />
+				<DateTime date={item.getCreatedTime()} format={DateTime.MONTH_ABBR_DAY_YEAR} />
 			</div>
 		);
 	}

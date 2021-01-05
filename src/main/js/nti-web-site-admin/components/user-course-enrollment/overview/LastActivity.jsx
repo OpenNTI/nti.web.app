@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {DateTime} from '@nti/web-commons';
 
 import DateValue from '../../common/DateValue';
 
@@ -17,6 +18,6 @@ export default class LastActivity extends React.Component {
 	render () {
 		const {enrollment} = this.props;
 
-		return <DateValue date={enrollment.getLastSeenTime()} format="lll" label="Last Active"/>;
+		return <DateValue date={enrollment.getLastSeenTime()} format={DateTime.MONTH_ABBR_DAY_YEAR_TIME} label="Last Active"/>;
 	}
 }

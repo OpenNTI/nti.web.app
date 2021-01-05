@@ -153,7 +153,7 @@ export default class View extends React.Component {
 
 	renderLockTime () {
 		if(this.state.isLocked && this.state.lastLocked) {
-			const formattedDate = DateTime.format(this.state.lastLocked, 'LLLL');
+			const formattedDate = DateTime.format(this.state.lastLocked, DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME);
 
 			return (
 				<div>
@@ -199,7 +199,7 @@ export default class View extends React.Component {
 	}
 
 	renderFooter () {
-		const formattedDate = DateTime.format(this.state.lastSyncedDate, 'LLLL');
+		const formattedDate = DateTime.format(this.state.lastSyncedDate, DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME);
 
 		return (
 			<div className="footer">

@@ -13,7 +13,7 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.InviteD
 	yesterday: 'Yesterday'
 });
 
-const Format = 'MMM D, YYYY';
+const Format = DateTime.MONTH_ABBR_DAY_YEAR;
 
 export default class InviteDate extends React.Component {
 	static propTypes = {

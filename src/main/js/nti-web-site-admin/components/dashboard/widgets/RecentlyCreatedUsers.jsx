@@ -103,7 +103,7 @@ export default class RecentlyCreatedUsers extends React.Component {
 					return {
 						entity: x,
 						name: x.alias,
-						description: 'Created ' + DateTime.format(new Date(x.getCreatedTime()), 'LLLL')
+						description: 'Created ' + DateTime.format(new Date(x.getCreatedTime()), DateTime.WEEKDAY_MONTH_NAME_DAY_YEAR_TIME)
 					};
 				})
 			});

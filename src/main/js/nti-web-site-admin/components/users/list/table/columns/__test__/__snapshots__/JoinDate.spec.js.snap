@@ -4,7 +4,7 @@ exports[`Site admin user table join date column test Test date is many days ago 
 <div>
   <time
     className="ntiText"
-    dateTime="2017-10-31T00:00:00+00:00"
+    dateTime="2017-10-31T00:00:00Z"
   >
     Oct 31, 2017
   </time>
