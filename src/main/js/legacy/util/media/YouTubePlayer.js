@@ -317,7 +317,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 	var me = this;
 
 	function onReady () {
-		console.debug('YouTube API Ready');
+		// console.debug('YouTube API Ready');
 		me.apiReady = true;
 	}
 
