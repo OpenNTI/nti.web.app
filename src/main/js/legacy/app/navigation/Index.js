@@ -2,8 +2,6 @@ const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {Theme} = require('@nti/web-commons');
 const { NotificationsView } = require('@nti/web-notifications');
-const { isFlag } = require('@nti/web-client');
-const cx = require('classnames');
 
 const ReactHarness = require('legacy/overrides/ReactHarness');
 

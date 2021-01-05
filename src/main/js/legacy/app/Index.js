@@ -1,7 +1,6 @@
 const Ext = require('@nti/extjs');
 const DetectZoom = require('detect-zoom');
 const Commons = require('@nti/web-commons');
-const {isFlag} = require('@nti/web-client');
 
 const DiscussionOverrides = require('nti-web-discussion-overrides');
 const {IEAlert} = require('nti-web-react-components');
