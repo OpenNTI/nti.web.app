@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 					//Correct the problem
 					$AppConfig.userObject = u;*/
 					if (this.isDebug) {
-						console.log('Asked to precache an appuser that isnt the current $AppConfig.userObject. Dropping');
+						console.log('Asked to precache an app user that isn\'t the current $AppConfig.userObject. Dropping');
 					}
 					return;
 				}
@@ -277,8 +277,8 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 							maybeFinish(name, User.getUnresolved(name));
 						},
 						success: function (u) {
-							//Note we recache the user here no matter what
-							//if we requestsd it we cache the new values
+							//Note we re-cache the user here no matter what
+							//if we requested it we cache the new values
 							maybeFinish(name, me.cacheUser(u, true));
 						}
 					}, cacheBust);
@@ -291,8 +291,8 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			if (toResolve.length > 0 && canBulkResolve) {
 				me.bulkResolve(toResolve)
 					.then(function (users) {
-						//Note we recache the user here no matter what
-						//if we requestsd it we cache the new values
+						//Note we re-cache the user here no matter what
+						//if we requested it we cache the new values
 						users.forEach(function (u) { maybeFinish(u.getId(), me.cacheUser(u, true)); });
 						if (l > 0) {
 							l = 0;
@@ -315,7 +315,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 	//<editor-fold desc="Bulk Request">
 	/**
-	 * Perform a bulk resolve. (and gather as many concurent resolves as posible w/o delaying too long)
+	 * Perform a bulk resolve. (and gather as many concurrent resolves as passible w/o delaying too long)
 	 * @param {String[]} names
 	 * @return {Promise}
 	 */
@@ -382,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 					}
 
 					if (fulfillment.length !== names.length) {
-						console.warn('Length missmatch! Assuming this is due to communities in the list.', names, fulfillment, v);
+						console.warn('Length mismatch! Assuming this is due to communities in the list.', names, fulfillment, v);
 					}
 					fulfill(fulfillment);
 				}
@@ -471,7 +471,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			active = me.pendingResolve,
 			requestQue = me.queuedBulkRequests, p;
 
-		function recieve (json) {
+		function receive (json) {
 			var u = [];
 
 			json = (json || {}).Items || {};
@@ -502,7 +502,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			store.resumeEvents();
 
 
-			//schedual cleanup.
+			//schedule cleanup.
 			wait(60000).then(function () {
 				// console.debug('Cleanup...');
 				for (let i = names.length - 1; i >= 0; i--) {
@@ -523,7 +523,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 						jsonData: {usernames: names}
 					});
 				})
-				.always(recieve)
+				.always(receive)
 				.then(fulfill);
 		}
 
@@ -551,7 +551,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		a = w.active = w.active || a;
 
 		p = new Deferred();//required to be a Deferred, since our worker communication
-		// is "evented", we cannot pass a callback. Though, I'm sure we can reorganize
+		// is "event-ed", we cannot pass a callback. Though, I'm sure we can reorganize
 		// this logic to make it more 'proper'
 
 		if (a.hasOwnProperty(p.id)) {
@@ -575,7 +575,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		a = w.active = w.active || {};
 		p = a[data.id];
 		if (!p) {
-			Ext.Error.raise('Bad Message, requet finished, but nothing was listening.');
+			Ext.Error.raise('Bad Message, request finished, but nothing was listening.');
 		}
 
 		delete a[data.id];
@@ -688,7 +688,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 	presenceChanged: function (username, presence) {
 		var u = this.getStore().getById(username), newPresence;
-		if (this.debug) {console.log('User repository recieved a presence change for ', username, arguments);}
+		if (this.debug) {console.log('User repository received a presence change for ', username, arguments);}
 		newPresence = (presence && presence.isPresenceInfo) ?
 			presence :
 			PresenceInfo.createFromPresenceString(presence, username);
@@ -798,7 +798,7 @@ function worker () {
 try {
 	const code = worker.toString();
 
-	if (Ext.isIE11p) { throw new Error( 'Webworkers are broken in IE11' ); }
+	if (Ext.isIE11p) { throw new Error( 'Web workers are broken in IE11' ); }
 
 	if (/PhantomJS/i.test(navigator.userAgent)) {
 		throw new Error('Skip Worker in Unit Tests');
