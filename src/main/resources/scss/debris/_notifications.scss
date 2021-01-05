@@ -1,33 +1,5 @@
 .notification-container {
 	position: relative;
-
-	[data-badge]:not([data-badge="0"])::before {
-		content: attr(data-badge);
-		background-color: var(--primary-red);
-		font-size: 0.55em;
-		font-weight: 500;
-		color: white;
-		padding: 0.3em 0.5em;
-		border: 2px solid white;
-		position: absolute;
-		top: 13px;
-		left: 25px;
-		border-radius: 10em;
-		z-index: 2;
-		text-indent: 0;
-		line-height: 1em;
-		width: auto;
-
-		.main-navigation.dark-nav & {
-			border: 2px solid #313131;
-		}
-	}
-}
-
-.hide-badge {
-	[data-badge]::before {
-		content: none !important;
-	}
 }
 
 .notifications-icon {

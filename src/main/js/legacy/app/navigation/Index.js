@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		{cls: 'search-container collapsed'},
 		{cls: 'icons', cn: [
 			{cls: 'chat-notification-container'},
-			{cls: cx('notification-container', {'hide-badge': isFlag('new-notifications')})},
+			{cls: 'notification-container'},
 			{cls: 'identity-container'}
 		]}
 	]),

@@ -54,10 +54,6 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		this.add({xtype: 'main-navigation', id: 'nav'});
 		this.add({xtype: 'chats-view', id: 'chat-window', navigateToObject: (obj) => this.body.attemptToNavigateToObject(obj)});
 
-		if (!isFlag('new-notifications')) {
-			this.add({xtype: 'navigation-message-bar', id: 'message-bar'});
-		}
-
 		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
 
