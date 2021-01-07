@@ -153,8 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		this.callParent(arguments);
 
 		var me = this,
-			playerType = this.getViewerType(),
-			mainNav = Ext.getCmp('nav');
+			playerType = this.getViewerType();
 
 		this.addCls(['showing', 'ready']);
 
