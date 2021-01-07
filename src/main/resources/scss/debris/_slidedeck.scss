@@ -1917,9 +1917,14 @@ body.media-viewer-open {
 		right: 0;
 	}
 
-	.media-toolbar .notifications-icon {
+	.media-toolbar .media-viewer-notifications-icon {
 		position: absolute;
 		top: 0;
 		right: 75px;
+		opacity: 0.3;
+
+		&:hover {
+			opacity: 0.5;
+		}
 	}
 }

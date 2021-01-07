@@ -1,10 +1,11 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
+const { NotificationsView } = require('@nti/web-notifications');
 
 const LibraryActions = require('legacy/app/library/Actions');
 const GutterTab = require('legacy/app/chat/components/gutter/Tab');
-const NotificationsTab = require('legacy/app/notifications/Tab');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
+const ReactHarness = require('legacy/overrides/ReactHarness');
 
 require('legacy/mixins/State');
 require('legacy/model/transcript/TranscriptItem');
@@ -179,14 +180,16 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			renderTo: this.toolbar.getEl()
 		});
 
-		this.notificationCmp = NotificationsTab.create({
-			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
-			setMenuClosed: this.setState.bind(this, {}),
-			pushRootRoute: mainNav && mainNav.pushRoute.bind(mainNav),
-			navigateToObject: mainNav && mainNav.gotoObject.bind(mainNav),
+		this.notificationCmp = ReactHarness.create({
+			component: NotificationsView,
+			addHistory: true,
+			baseroute: '/app',
+			cls: 'media-viewer-notifications-icon',
 			renderTo: this.toolbar.getEl(),
 			floatParent: this.toolbar
 		});
+
+		this.notificationCmp.setThemeScope('mediaviewer.navigation');
 
 		this.identityCmp = Ext.widget({
 			xtype: 'identity',
@@ -200,6 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		this.on('destroy', 'destroy', this.toolbar);
 		this.on('destroy', 'destroy', this.gridView);
 		this.on('destroy', 'destroy', this.identityCmp);
+		this.on('destroy', 'destroy', this.notifictionCmp);
 
 		if (this.parentContainer && this.parentContainer.exitViewer) {
 			this.on('exit-viewer', this.parentContainer.exitViewer.bind(this.parentContainer));
