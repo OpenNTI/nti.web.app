@@ -32,6 +32,17 @@ const BOOK_MIME_TYPES = {
 const GROUP_MIME_TYPE = 'application/vnd.nextthought.dynamicfriendslist';
 const COMMUNITY_MIME_TYPE = 'application/vnd.nextthought.community';
 
+function lazyReject (reason) {
+	return {
+		catch (f) {
+			return Promise.resolve(f?.(reason));
+		},
+		then (a, b) {
+			return Promise.resolve(b?.(reason) ?? Promise.reject(reason));
+		}
+	};
+}
+
 function getRouteFor (obj, context) {
 	if (!obj) {
 		return null;
@@ -374,12 +385,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 
 
 	beforeDestroy () {
-		//why change this?
-		this.onceRendered = Promise.reject('Destroyed');
-
-		//fake out Chrome. Stop it form warning about "unhandled rejection" without swallowing the rejection.
-		this.onceRendered.catch(()=>{});
-
+		this.onceRendered = lazyReject(new Error('Destroyed'));
 		this.unmount();
 	},
 
