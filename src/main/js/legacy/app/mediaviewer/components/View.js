@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		this.on('destroy', 'destroy', this.toolbar);
 		this.on('destroy', 'destroy', this.gridView);
 		this.on('destroy', 'destroy', this.identityCmp);
-		this.on('destroy', 'destroy', this.notifictionCmp);
+		this.on('destroy', 'destroy', this.notificationCmp);
 
 		if (this.parentContainer && this.parentContainer.exitViewer) {
 			this.on('exit-viewer', this.parentContainer.exitViewer.bind(this.parentContainer));
