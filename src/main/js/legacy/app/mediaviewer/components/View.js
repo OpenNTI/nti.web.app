@@ -296,9 +296,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 	},
 
 	cleanup: function () {
+		Ext.EventManager.removeResizeListener(this.adjustOnResize, this);
 		Ext.getBody().removeCls('media-viewer-closing');
 		this.removeClsFromBody();
-		Ext.EventManager.removeResizeListener(this.adjustOnResize, this);
 	},
 
 	startAtSpecificTime: function (startAt) {
