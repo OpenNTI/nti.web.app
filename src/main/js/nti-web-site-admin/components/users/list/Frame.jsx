@@ -5,8 +5,9 @@ import {LinkTo} from '@nti/web-routing';// eslint-disable-line
 import {Layouts, FixedElement} from '@nti/web-commons';
 
 import NavBar from './nav-bar';
+import Store from './SharedStore';
 
-export default class SiteAdminUserListFrame extends React.Component {
+class SiteAdminUserListFrame extends React.Component {
 	static propTypes = {
 		children: PropTypes.node
 	}
@@ -33,3 +34,5 @@ export default class SiteAdminUserListFrame extends React.Component {
 		);
 	}
 }
+
+export default Store.compose(SiteAdminUserListFrame);

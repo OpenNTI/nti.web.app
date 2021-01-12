@@ -3,6 +3,8 @@ import {getService} from '@nti/web-client';
 import {URL} from '@nti/lib-commons';
 import {mixin} from '@nti/lib-decorators';
 
+import SharedStore from '../SharedStore';
+
 import Selectable from './Selectable';
 
 const PAGE_SIZE = 20;
@@ -25,6 +27,7 @@ async function bulkActivation (users, rel) {
 		},
 		true
 	);
+	SharedStore.markDirty();
 }
 
 export default

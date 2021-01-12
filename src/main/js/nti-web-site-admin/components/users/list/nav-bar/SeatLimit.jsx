@@ -1,8 +1,9 @@
 import './SeatLimit.scss';
 import React from 'react';
 import {scoped} from '@nti/lib-locale';
-import {getService} from '@nti/web-client';
 import {Loading} from '@nti/web-commons';
+
+import Store from '../SharedStore';
 
 const t = scoped('nti-site-admin.users.list.navbar.SeatLimit', {
 	used: {
@@ -15,68 +16,35 @@ const t = scoped('nti-site-admin.users.list.navbar.SeatLimit', {
 	}
 });
 
-const REL = 'SeatLimit';
 
-export default class SiteSeatLimit extends React.Component {
-	state = {}
+export default function SiteSeatLimit () {
+	const {SeatLimits} = Store.useValue();
 
-	async componentDidMount () {
-		this.setState({
-			loading: true
-		});
+	const loading = SeatLimits == null;
+	const hide = SeatLimits === false;
+	const {maxSeats, usedSeats} = SeatLimits || {};
 
-		try {
-			const service = await getService();
-			const workspace = service.getWorkspace('Global');
+	if (hide) { return null; }
 
-			if (!workspace || !workspace.hasLink(REL)) { throw new Error('No Seat Limit'); }
+	return (
+		<div className="site-seat-limit">
+			{loading ? (
+				<Loading.Spinner />
+			) : (
+				<div className="seats">
+					{usedSeats != null && (
+						<div className="active">
+							{t('used', {count: usedSeats})}
+						</div>
+					)}
+					{maxSeats != null && (
+						<div className="limit">
+							{t('max', {count: maxSeats})}
+						</div>
+					)}
+				</div>
+			)}
+		</div>
+	);
 
-			const resp = await workspace.fetchLink(REL);
-
-			this.setState({
-				loading: false,
-				maxSeats: resp['max_seats'],
-				usedSeats: resp['used_seats']
-			});
-		} catch (e) {
-			this.setState({
-				loading: false,
-				hide: true
-			});
-		}
-	}
-
-
-	render () {
-		const {hide, loading} = this.state;
-
-		if (hide) { return null; }
-
-		return (
-			<div className="site-seat-limit">
-				{loading && (<Loading.Spinner />)}
-				{!loading && this.renderSeats()}
-			</div>
-		);
-	}
-
-
-	renderSeats () {
-		const {maxSeats, usedSeats} = this.state;
-
-		return (
-			<div className="seats">
-				{usedSeats != null && (
-					<div className="active">
-						{t('used', {count: usedSeats})}
-					</div>
-				)}
-				{maxSeats != null && (
-					<div className="limit">
-						{t('max', {count: maxSeats})}
-					</div>
-				)}
-			</div>
-		);
-	}
 }
