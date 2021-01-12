@@ -20,8 +20,8 @@ const t = scoped('nti-site-admin.users.list.navbar.SeatLimit', {
 export default function SiteSeatLimit () {
 	const {SeatLimits} = Store.useValue();
 
-	const loading = SeatLimits == null;
-	const hide = SeatLimits === false;
+	const loading = SeatLimits === null;
+	const hide = !loading && !SeatLimits;
 	const {maxSeats, usedSeats} = SeatLimits || {};
 
 	if (hide) { return null; }
