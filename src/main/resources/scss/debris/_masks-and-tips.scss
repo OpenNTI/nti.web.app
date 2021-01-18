@@ -12,8 +12,8 @@
 }
 
 .x-masked-relative > .x-mask {
-	// ExtJS sets this to 100... we need it natural order.
-	z-index: unset !important;
+	// ExtJS sets this to 100... we need it natural order (at 1, because extjs makes this impossible to be pure, web-commons has adopted 1 as the standard value over unset.)
+	z-index: 1 !important;
 }
 
 body > .x-mask {

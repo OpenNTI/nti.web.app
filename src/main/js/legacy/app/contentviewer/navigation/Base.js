@@ -15,6 +15,14 @@ require('./TableOfContents');
 
 const HASH_REGEX = /#/;
 
+const style = css`
+	.fixed-header {
+		/* uuugggghhhh... I hate z-index */
+		z-index: 1;
+		position: relative;
+	}
+`;
+
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	extend: 'Ext.Component',
@@ -117,6 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	afterRender: function () {
 		const addToolbar = (pageSource) => {
 			this.toolbarCmp = ReactHarness.create({
+				cls: style.fixedHeader,
 				component: StickyToolbar,
 				path: this.path,
 				pageSource: pageSource,
