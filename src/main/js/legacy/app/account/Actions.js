@@ -123,12 +123,11 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 			title: title,
 			closeAction: 'destroy',
 			width: 695,
-			height: 640,
+			height: 600,
 			layout: 'none',
 			modal: true,
 			items: {
 				xtype: 'component',
-				cls: 'padded',
 				autoEl: {
 					tag: 'iframe',
 					src: link,
@@ -138,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
-					style: 'overflow-x: hidden; overflow-y:auto; height: 600px; width: 680px;'
+					style: 'overflow-x: hidden; overflow-y:auto; height: calc(600px - 35px); width: 100%;'
 				}
 			}
 		});
