@@ -139,7 +139,7 @@ Ext.application({
 			return;
 		}
 
-		//Uncomment to supress cross domain flash socket message
+		//Uncomment to suppress cross domain flash socket message
 		//window.WEB_SOCKET_SUPPRESS_CROSS_DOMAIN_SWF_ERROR = true;
 		loadScript(getURL('/socket.io/static/socket.io.js'));
 
