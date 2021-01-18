@@ -2361,6 +2361,10 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.x-panel-nti .x-docked {
+	z-index: unset;
+}
+
 .nti-header {
 
 	.grade { float: left; box-shadow: 1px 0 0 0 #eaeaea, 2px 0 0 0 #fff; }
@@ -2376,7 +2380,6 @@ canvas.x-component-course-assessment {
 		font: normal 700 0.6em/1 var(--body-font-family);
 		color: var(--tertiary-grey);
 		text-transform: uppercase;
-		z-index: 1;
 
 		.disclaimer {
 			margin-left: 0.5em;
