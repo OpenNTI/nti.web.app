@@ -338,7 +338,6 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 	},
 
 	onDestroy: function () {
-		//debugger;
 		if (this.groupsListMenu.el) {
 			this.groupsListMenu.el.remove();
 		}
