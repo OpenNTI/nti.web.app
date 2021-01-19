@@ -132,6 +132,10 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 					NTIID: doc.getAttribute('ntiid'),
 					isCourse: doc.getAttribute('isCourse') === 'true'
 				});
+			}).catch(e => {
+				if (e) {
+					throw e;
+				}
 			});
 
 
