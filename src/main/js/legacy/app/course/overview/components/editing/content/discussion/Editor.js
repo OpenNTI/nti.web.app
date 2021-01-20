@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (length === 0) {
 			this.disableSave();
 		} else {
-			if(selectedTopics[0].get && selectedTopics[0].get('ID')) {
+			if(selectedTopics[0].get?.('ID')) {
 				this.record = selectedTopics[0];
 			}
 			else {
@@ -84,17 +84,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	showEditor: function () {
+	showEditor: async function () {
 		if (this.record) {
 			this.showDiscussionEditor();
 		} else {
-			const me = this;
-
 			this.selectionCmp = this.add({
 				xtype: 'react',
 				component: Forums.DiscussionSelectionEditor,
-				bundle: this.bundle,
-				onDiscussionTopicSelect: (selectedTopics) => { me.onDiscussionTopicSelect(selectedTopics); }
+				bundle: await this.bundle,//.getInterfaceInstance(),
+				onDiscussionTopicSelect: (selectedTopics) => { this.onDiscussionTopicSelect(selectedTopics); }
 			});
 		}
 	},
