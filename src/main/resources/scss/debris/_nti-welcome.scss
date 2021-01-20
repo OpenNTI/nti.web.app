@@ -1,5 +1,9 @@
 
-.guide-window, .tos-window, .iframe-window, .notifications-window, .confirm-window {
+.guide-window,
+.tos-window,
+.iframe-window,
+.notifications-window,
+.confirm-window {
 	@extend .nti-window;
 
 	background-color: var(--quad-grey);
@@ -65,24 +69,17 @@
 .tos-window {
 	max-height: 100vh;
 
-	.x-window-item {
-		height: 100%;
-	}
-
-	.x-window-body {
-		padding-bottom: 55px;
-		height: 100% !important;
+	&, .x-window-item:not(.nti-window-header) {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		flex: 1 1 100%;
+		height: inherit;
 	}
 
 	iframe.help-iframe {
-		height: 100% !important;
-	}
-
-	.nti-window-footer {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		flex: 1 1 100%;
+		height: unset !important;
 	}
 }
 
