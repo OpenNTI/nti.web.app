@@ -19,6 +19,19 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		{name: 'searchTerm', type: 'string', persist: false, defaultValue: ''}
 	],
 
+	constructor () {
+		this.callParent(arguments);
+
+		Object.defineProperties(this, {
+			icon: {
+				get: () => this.get('icon'),
+			},
+			title: {
+				get: () => this.get('displayTitle') || this.get('title'),
+			},
+		});
+	},
+
 	getContentsStoreId: function (prefix, suffix) {
 		prefix = prefix || '';
 		suffix = suffix || '';
