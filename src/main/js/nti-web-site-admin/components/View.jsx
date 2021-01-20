@@ -1,6 +1,6 @@
 import './View.scss';
 // import React from 'react';
-import {Router, Route} from '@nti/web-routing';// eslint-disable-line
+import {Router, Route} from '@nti/web-routing';
 
 import Frame from './Frame';
 import Configuration from './configuration';

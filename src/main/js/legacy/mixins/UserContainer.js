@@ -363,7 +363,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		Ext.Msg.show({
 			msg: msg,
 			//We need to bitwise OR these two, so stop the lint.
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
 			title: 'Are you sure?',

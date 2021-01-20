@@ -479,7 +479,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {
 		Ext.Msg.show({
 			msg: me.destroyWarningMessage(),
 			//We need to bitwise OR these two, so stop the lint.
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},

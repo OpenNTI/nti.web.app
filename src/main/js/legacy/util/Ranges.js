@@ -368,7 +368,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 		walker = doc.createTreeWalker(
 			range.commonAncestorContainer,
 			//Tell ESLint to ignore bitwise opperations
-			NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, //eslint-disable-line no-bitwise
+			NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
 			null, false);
 
 		//NOTE IE also blows up if you call nextNode() on a newly initialized treewalker whose root is a text node.

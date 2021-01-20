@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 		Ext.Msg.show({
 			msg: 'All your current progress\nwill be lost.',
 			//We need to bitwise OR these two, so stop the lint.
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: Ext.Msg.WARNING,
 			fn: function (str) {

@@ -1,4 +1,4 @@
-import {Router, Route} from '@nti/web-routing';// eslint-disable-line
+import {Router, Route} from '@nti/web-routing';
 
 import CoursesTable from './table/CoursesTable';
 import BooksTable from './table/BooksTable';

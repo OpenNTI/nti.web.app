@@ -1,4 +1,4 @@
-import {Router, Route} from '@nti/web-routing';// eslint-disable-line
+import {Router, Route} from '@nti/web-routing';
 
 import Overview from './overview';
 import Reports from './reports';

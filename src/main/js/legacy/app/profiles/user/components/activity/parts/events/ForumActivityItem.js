@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		Ext.Msg.show({
 			msg: 'Deleting this topic will permanently remove it and any comments.',
 			//We need to bitwise OR these two, so stop the lint.
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
@@ -648,7 +648,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		Ext.Msg.show({
 			msg: 'Deleting this comment will permanently remove it.',
 			//We need to bitwise OR these two, so stop the lint.
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},

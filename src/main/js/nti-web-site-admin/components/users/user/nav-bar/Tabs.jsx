@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
-import {LinkTo} from '@nti/web-routing';// eslint-disable-line
+import {LinkTo} from '@nti/web-routing';
 
 import {getString} from 'legacy/util/Localization';
 

@@ -381,7 +381,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 					msg: getString('NextThought.view.annotations.note.Main.editor-warning-msg'),
 					scope: me,
 					//We need to bitwise OR these two, so stop the lint.
-					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
+					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 					icon: 'warning-red',
 					title: getString('NextThought.view.annotations.note.Main.editor-warning-title'),
 					buttonText: {ok: 'caution:' + getString('NextThought.view.annotations.note.Main.ok')},

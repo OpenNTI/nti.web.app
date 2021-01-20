@@ -298,7 +298,6 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 		code.push(
 			//This should be rewritten to create an array at the top of the file instead
 			//Tof using the "Magic" ExtJS class namespace object...
-			//eslint-disable-next-line no-undef
 			'VideoSupports = ' + Ext.encode(SupportedVideoTypes) + ';',
 			'var inject = ' + this.playerCode.inject.toString() + ';',
 			'window.addEventListener("load",inject,false);');

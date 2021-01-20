@@ -1,5 +1,5 @@
 import './View.scss';
-import {Router, Route} from '@nti/web-routing';// eslint-disable-line
+import {Router, Route} from '@nti/web-routing';
 
 import Transcripts from './transcripts';
 import Integrations from './integrations';

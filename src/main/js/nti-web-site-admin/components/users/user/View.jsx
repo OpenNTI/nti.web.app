@@ -1,4 +1,4 @@
-import {Router, Route} from '@nti/web-routing';// eslint-disable-line
+import {Router, Route} from '@nti/web-routing';
 import {encodeForURI} from '@nti/lib-ntiids';
 
 import UserCourseEnrollment from '../../user-course-enrollment';

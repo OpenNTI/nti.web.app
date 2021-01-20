@@ -629,7 +629,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		Ext.Msg.show({
 			msg: getString('NextThought.view.forums.topic.parts.Comments.deletewarning'),
 			//We need to bitwise OR these two, so stop the lint.
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: this,
 			icon: 'warning-red',
 			buttonText: {'ok': getString('NextThought.view.forums.topic.parts.Comments.deletebutton')},
