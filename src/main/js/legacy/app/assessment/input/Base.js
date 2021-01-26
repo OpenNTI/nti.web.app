@@ -190,7 +190,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			this.syncElementHeight();
 		},this, {single: true});
 
-		this.reset();
+		wait()
+			.then(() => this.reset());
 
 		wait()
 			.then(this.disableSubmission.bind(this, true));
@@ -325,7 +326,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			a = this.solutionAnswerBox,
 			b = this.showSolutionBtn,
 			e = this.solutionExplanationBox,
-			sol, shown = this.inputBox && !this.inputBox.isVisible(),
+			sol, shown = !this.hidingInputBox,
 			answer = this.el.down('.answer');
 
 		function removeObjects (dom) {
@@ -681,6 +682,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		this.showSolutionBtn.update(this.hintActive ? this.showHintLabel : this.showSolutionLabel);
 		this.solutionBox.hide();
 		this.inputBox.show();
+		this.hidingInputBox = false;
 		this.updateLayout();
 		if (this.canHaveAnswerHistory()) { this.historyMenuEl.show(); }
 
@@ -700,6 +702,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 
 		this.showSolutionBtn.update(this.hintActive ? this.hideHintLabel : this.hideSolutionLabel);
 		this.inputBox.hide();
+		this.hidingInputBox = true;
 		this.solutionBox.show();
 		this.updateLayout();
 		if (this.canHaveAnswerHistory()) { this.historyMenuEl.hide(); }
