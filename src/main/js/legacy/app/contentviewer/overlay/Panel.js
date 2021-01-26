@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 
 	maybeScrollIntoView: Ext.Function.createBuffered(function () {
 		try {
-			var offset = this.getHeight(),
+			var offset = this.getQuickHeight(),
 				reader = this.reader;
 
 			if (reader.scrollToSelector && this.is(reader.scrollToSelector)) {
@@ -195,10 +195,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 		this.callParent(arguments);
 	},
 
+	getQuickHeight () {
+		return this.el?.dom?.offsetHeight ?? 0;
+	},
+
 	syncElementHeight: function () {
 		if (!this.rendered) {return;}
 		try {
-			var h = this.getHeight();
+			var h = this.getQuickHeight();
 			if (this.contentElement) {
 				Ext.fly(this.contentElement).setHeight(h);
 			}
