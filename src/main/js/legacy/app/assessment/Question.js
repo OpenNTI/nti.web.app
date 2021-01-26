@@ -287,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 			this.syncElementHeight();
 		}, this, {single: true});
 		this.getTargetEl().addCls('indexed-content');
-		this.syncTop();
+		requestAnimationFrame(() => this.syncTop());
 	},
 
 	markCorrect: function (noMark) {
