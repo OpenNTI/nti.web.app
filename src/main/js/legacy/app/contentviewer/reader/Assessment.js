@@ -51,7 +51,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			questionIndex: index
 		}));
 
-		if (contentElement) {
+		if (contentElement?.setAttribute) {
+			contentElement.setAttribute('data-used', 'true');
+		} else if (contentElement) {
 			Ext.fly(contentElement).set({
 				'data-used': true
 			});
@@ -77,7 +79,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			questionIndex: questionIndex
 		}));
 
-		if (contentElement) {
+		if (contentElement?.setAttribute) {
+			contentElement.setAttribute('data-used', 'true');
+		} else if (contentElement) {
 			Ext.fly(contentElement).set({
 				'data-used': true
 			});
