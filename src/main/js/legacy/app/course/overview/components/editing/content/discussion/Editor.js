@@ -57,20 +57,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (length === 0) {
 			this.disableSave();
 		} else {
-			if(selectedTopics[0].get?.('ID')) {
-				this.record = selectedTopics[0];
-			}
-			else {
-				this.record = new CommunityHeadlineTopic(selectedTopics[0]);
 
-				// need to alter the record a bit just to fit what the generic
-				// Editor expects (for example, Editor relies on the 'edit' link
-				// to determine Delete button presence.  new records shouldn't
-				// have that)
-				this.record.set('ID', this.record.getId());
-				this.record.hasLink = (prop) => false;
-				this.record.getLink = (prop) => null;
-			}
+			this.record = new CommunityHeadlineTopic(selectedTopics[0].toJSON());
+
+			// need to alter the record a bit just to fit what the generic
+			// Editor expects (for example, Editor relies on the 'edit' link
+			// to determine Delete button presence.  new records shouldn't
+			// have that)
+			this.record.set('ID', this.record.getId());
+			this.record.hasLink = (prop) => false;
+			this.record.getLink = (prop) => null;
 
 			this.enableSave();
 		}
@@ -91,8 +87,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.selectionCmp = this.add({
 				xtype: 'react',
 				component: Forums.DiscussionSelectionEditor,
-				bundle: await this.bundle,//.getInterfaceInstance(),
-				onDiscussionTopicSelect: (selectedTopics) => { this.onDiscussionTopicSelect(selectedTopics); }
+				course: await this.bundle.getInterfaceInstance(),
+				onSelect: (selectedTopics) => { this.onDiscussionTopicSelect(selectedTopics); }
 			});
 		}
 	},
