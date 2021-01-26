@@ -293,22 +293,25 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	},
 
 
-	showAchievements (route, subRoute) {
+	showAchievements () {
 		this.updateHeader();
 		this.stopCleanup();
 
-		let cmp = this.getActive('user-profile-achievements');
+		const baseroute = this.getBaseRoute();
+		let cmp = this.getActive('[isAchievements]');
 
 		this.setContextualTitle('Achievements');
 
 		if (!cmp) {
 			cmp = this.setActive({
-				xtype: 'user-profile-achievements'
+				xtype: 'react',
+				isAchievements: true,
+				component: User.Achievements,
+				entity: this.interfaceEntity,
+				addHistory: true,
+				baseroute
 			});
 		}
-
-		return cmp.userChanged(this.activeEntity, this.isMe)
-			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
 
