@@ -6,6 +6,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssignmentPa
 	extend: 'NextThought.model.Base',
 
 	fields: [
+		{ name: 'IsSummary', type: 'bool'},
 		{ name: 'auto_grade', type: 'bool' },
 		{ name: 'content', type: 'string' },
 		{ name: 'QuestionSetId', type: 'string'},

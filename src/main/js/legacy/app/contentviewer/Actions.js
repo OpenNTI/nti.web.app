@@ -227,8 +227,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 
 	getContentsForRegularAssignment (assignment, bundle) {
 		return this.getContentsForAssignment(assignment, bundle).then(
-			contents => {
-				let parts = assignment && assignment.get('parts');
+			async (contents) => {
+				const parts = await Promise.all(
+					(assignment?.get('parts') ?? [])
+						.map((part) => {
+							if (part.get('IsSummary')) {
+								return Service.getObject(part.getId());
+							}
+
+							return part;
+						})
+				);
+
 				let part = parts && parts[0];
 				let questionSet = part && part.get('question_set');
 				let questions = questionSet && questionSet.get('questions');
