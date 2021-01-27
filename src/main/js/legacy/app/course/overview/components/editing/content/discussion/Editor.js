@@ -1,5 +1,7 @@
 const Ext = require('@nti/extjs');
 const {Community} = require('@nti/web-profiles');
+const {isFlag} = require('@nti/web-client');
+const {Forums} = require('@nti/web-discussions');
 
 const DiscussionRef = require('legacy/model/DiscussionRef');
 const Discussion = require('legacy/model/Discussion');
@@ -14,6 +16,25 @@ const Types = [
 	'application/vnd.nextthought.forums.headlinetopic',
 	'application/vnd.nextthought.forums.communityheadlinetopic'
 ];
+
+function unwrapSelection (topic) {
+	if(!topic || topic.get?.('ID')) {
+		return topic;
+	}
+
+
+	const record = new CommunityHeadlineTopic(topic.toJSON?.() ?? topic);
+
+	// need to alter the record a bit just to fit what the generic
+	// Editor expects (for example, Editor relies on the 'edit' link
+	// to determine Delete button presence.  new records shouldn't
+	// have that)
+	record.set('ID', record.getId());
+	record.hasLink = (prop) => false;
+	record.getLink = (prop) => null;
+
+	return record;
+}
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
@@ -51,24 +72,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	addFormCmp: function () {},
 
-	onDiscussionTopicSelect: function (selectedTopics) {
-		var length = selectedTopics.length;
-
-		if (length === 0) {
-			this.disableSave();
-		} else {
-
-			this.record = new CommunityHeadlineTopic(selectedTopics[0].toJSON());
-
-			// need to alter the record a bit just to fit what the generic
-			// Editor expects (for example, Editor relies on the 'edit' link
-			// to determine Delete button presence.  new records shouldn't
-			// have that)
-			this.record.set('ID', this.record.getId());
-			this.record.hasLink = (prop) => false;
-			this.record.getLink = (prop) => null;
-
+	onDiscussionTopicSelect (selectedTopics) {
+		this.record = unwrapSelection(...selectedTopics);
+		if (this.record) {
 			this.enableSave();
+		} else {
+			this.disableSave();
 		}
 	},
 
@@ -84,11 +93,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.record) {
 			this.showDiscussionEditor();
 		} else {
+			const {bundle} = this;
+			const complex = async () => (await bundle.fetchLink('CourseDiscussions').catch(() => {})).Total > 0;
+			const onSelect = (selectedTopics) => this.onDiscussionTopicSelect(selectedTopics);
+
 			this.selectionCmp = this.add({
 				xtype: 'react',
-				component: Community.DiscussionPicker,
-				course: await this.bundle.getInterfaceInstance(),
-				onSelect: (selectedTopics) => { this.onDiscussionTopicSelect(selectedTopics); }
+				...(!isFlag('channel-picker') || await complex() ? {
+					bundle,
+					component: Forums.DiscussionSelectionEditor,
+					onDiscussionTopicSelect: onSelect,
+				} : {
+					component: Community.DiscussionPicker,
+					course: await bundle.getInterfaceInstance(),
+					onSelect
+				})
 			});
 		}
 	},
