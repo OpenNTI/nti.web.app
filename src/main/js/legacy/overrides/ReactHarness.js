@@ -4,7 +4,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const createReactClass = require('create-react-class');
 const {getService, reportError} = require('@nti/web-client');
-const { Error: ErrorCmp, Theme } = require('@nti/web-commons');
+const { Error: ErrorCmp, Theme, Utils } = require('@nti/web-commons');
 const {encodeForURI} = require ('@nti/lib-ntiids');
 const {getHistory, LinkTo} = require('@nti/web-routing');
 const { Models } = require('@nti/lib-interfaces');
@@ -355,10 +355,16 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 					addRouteTo: config.addRouteTo,
 					themeScope: this.themeScope
 				},
-				//The ref will be called on mount with the instance of the component.
-				//The ref will be called on unmount with null.  React will reuse the Component's instance while its
-				//mounted. Calling doRender is the primary way to update the component with new props.
-				React.createElement(component, {...props, ref: x => this.componentInstance = x})
+				// The ref will be called on mount with the instance of the component.
+				// The ref will be called on unmount with null.
+				// React will reuse the Component's instance while its mounted.
+				// Calling doRender is the primary way to update the component with new props.
+				React.createElement(component, {
+					...props,
+					...(Utils.maybeSupportsRefs(component) ? {
+						ref: x => this.componentInstance = x
+					} : {})
+				})
 			),
 			Ext.getDom(this.el)
 		);
