@@ -181,7 +181,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					},
 
 					markColumn: function (c) {
-						console.log('Marking...');
 						var cls = 'sortedOn',
 							el = this.getEl();
 						if (el) {
