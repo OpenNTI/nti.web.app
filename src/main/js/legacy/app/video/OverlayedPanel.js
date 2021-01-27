@@ -257,13 +257,13 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		}
 
 		try {
-			this.curtain.getEl().setStyle({
+			this.down('box').getEl().setStyle({
 				backgroundSize: 'contain',
 				backgroundColor: 'black',
 				backgroundPosition: 'center center'
 			});
 
-			this.curtain.getEl().down('.error').update(error);
+			this.down('box').getEl().down('.error').update(error);
 		}
 		catch (e) {
 			logger.error('Unable to set error. %o', error);
