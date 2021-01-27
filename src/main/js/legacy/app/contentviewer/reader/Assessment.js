@@ -29,7 +29,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 	constructor: function (config) {
 		Ext.apply(this, config);
-		this.reader.on('set-content', 'injectAssessments', this);
+		this.reader.on('set-content', (...args) => {
+			Ext.batchLayouts(() => {
+				this.injectAssessments(...args);
+			});
+		});
 	},
 
 	makeAssessmentPoll: function (p, set, index) {
