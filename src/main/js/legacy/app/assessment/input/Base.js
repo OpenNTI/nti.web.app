@@ -326,7 +326,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			a = this.solutionAnswerBox,
 			b = this.showSolutionBtn,
 			e = this.solutionExplanationBox,
-			sol, shown = !this.hidingInputBox,
+			sol, shown = this.hidingInputBox,
 			answer = this.el.down('.answer');
 
 		function removeObjects (dom) {
