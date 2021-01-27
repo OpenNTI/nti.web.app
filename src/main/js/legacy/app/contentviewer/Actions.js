@@ -232,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 					(assignment?.get('parts') ?? [])
 						.map((part) => {
 							if (part.get('IsSummary')) {
-								return Service.getObject(part.getId());
+								return part.fetchFromServer();
 							}
 
 							return part;
