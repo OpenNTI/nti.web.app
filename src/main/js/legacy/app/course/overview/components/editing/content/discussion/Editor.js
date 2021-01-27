@@ -1,5 +1,5 @@
 const Ext = require('@nti/extjs');
-const {Forums} = require('@nti/web-discussions');
+const {Community} = require('@nti/web-profiles');
 
 const DiscussionRef = require('legacy/model/DiscussionRef');
 const Discussion = require('legacy/model/Discussion');
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		} else {
 			this.selectionCmp = this.add({
 				xtype: 'react',
-				component: Forums.DiscussionSelectionEditor,
+				component: Community.DiscussionPicker,
 				course: await this.bundle.getInterfaceInstance(),
 				onSelect: (selectedTopics) => { this.onDiscussionTopicSelect(selectedTopics); }
 			});
