@@ -190,8 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			this.syncElementHeight();
 		},this, {single: true});
 
-		wait()
-			.then(() => this.reset());
+		this.reset();
 
 		wait()
 			.then(this.disableSubmission.bind(this, true));
