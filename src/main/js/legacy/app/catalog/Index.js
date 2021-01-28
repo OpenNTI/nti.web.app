@@ -275,6 +275,8 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 
 				this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
 				this.availableWin.show();
+
+				this.availableWin.el.setStyle({'z-index': 1});
 			})
 			.catch(() => {
 				alert('Unable to find course.');
