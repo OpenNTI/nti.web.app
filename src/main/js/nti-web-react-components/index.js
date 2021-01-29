@@ -1,1 +1,1 @@
-export IEAlert from './IEAlert';
+export { default as IEAlert } from './IEAlert';

@@ -1,8 +1,8 @@
-export JoinDate from './JoinDate';
-export LastSeen from './LastSeen';
-export Name from './Name';
-export Select from './Select';
-export InviteDate from './InviteDate';
-export InviteName from './InviteName';
-export Rescind from './Rescind';
-export Resend from './Resend';
+export { default as JoinDate } from './JoinDate';
+export { default as LastSeen } from './LastSeen';
+export { default as Name } from './Name';
+export { default as Select } from './Select';
+export { default as InviteDate } from './InviteDate';
+export { default as InviteName } from './InviteName';
+export { default as Rescind } from './Rescind';
+export { default as Resend } from './Resend';

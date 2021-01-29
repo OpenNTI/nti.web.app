@@ -1,1 +1,1 @@
-export SiteBrand from './SiteBrand';
+export { default as SiteBrand } from './SiteBrand';

@@ -1,6 +1,6 @@
-export AssetEditorLauncher from './AssetEditorLauncher';
-export AssetInput from './AssetInput';
-export AssetPreview from './AssetPreview';
-export Property from './Property';
-export Text from './Text';
-export TextInput from './TextInput';
+export { default as AssetEditorLauncher } from './AssetEditorLauncher';
+export { default as AssetInput } from './AssetInput';
+export { default as AssetPreview } from './AssetPreview';
+export { default as Property } from './Property';
+export { default as Text } from './Text';
+export { default as TextInput } from './TextInput';

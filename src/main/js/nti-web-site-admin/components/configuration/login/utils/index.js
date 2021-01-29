@@ -1,1 +1,1 @@
-export readFile from './read-file';
+export { default as readFile } from './read-file';
