@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * That behavior may eventually change, in which case this will need to be adjusted too.
 	 *
 	 * @param  {Event} e  Browser click event
-	 * @return {Promise}   returns a promise that fulfills after the record is published.
+	 * @returns {Promise}   returns a promise that fulfills after the record is published.
 	 */
 	onSave: function (e) {
 		var values = this.editor.getValue(),
@@ -153,12 +153,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.isSaving = true;
 
-		return parent.appendContent(values)
+		return parent.appendContent({...values, 'auto_publish': !!this.autoPublish})
 			.then((rec) => {
-				if (this.autoPublish) {
-					this.EditingActions.publish(rec);
-				}
-
 				this.editor.el.unmask();
 				this.addLessonEl.show();
 				this.hideEditor();
