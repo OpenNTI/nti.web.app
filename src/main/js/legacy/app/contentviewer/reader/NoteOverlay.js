@@ -595,6 +595,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 	},
 
 	trackLineAtEvent: function (e) {
+		if (this.disabled) {return;}
 		var o = this.data,
 			offsets = this.getAnnotationOffsets(),
 			y = e.getY() - offsets.top, lineInfo,
