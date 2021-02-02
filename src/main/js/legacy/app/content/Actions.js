@@ -455,9 +455,9 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	 * Get a lib interfaces content package from a bundle
 	 *
 	 * @param  {Object} bundleModel bundle to look in
-	 * @param  {String} root        the id of the content package to look for
-	 * @param  {String} contentPackageNTIID the id of the contentPackage
-	 * @return {Promise}            fulfills with the content package
+	 * @param  {string} root        the id of the content package to look for
+	 * @param  {string} contentPackageNTIID the id of the contentPackage
+	 * @returns {Promise}            fulfills with the content package
 	 */
 	async getContentPackage (bundleModel, root, contentPackageNTIID) {
 		const bundle = await bundleModel.getInterfaceInstance();
@@ -470,7 +470,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	 *
 	 * @param  {Object}   bundle   			content bundle used to create content package
 	 * @param  {Object}   defaultPackage	(optional) default values used when creating new package
-	 * @return	{Promise}					promise created after package creation
+	 * @returns	{Promise}					promise created after package creation
 	 */
 	createReading: function (bundle, defaultPackage) {
 		const link = bundle.getLink('Library');

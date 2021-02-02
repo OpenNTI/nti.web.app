@@ -109,8 +109,8 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	/**
 	 *
 	 * @param {Node} el -
-	 * @param {Number} [bufferZone] -
-	 * @return {*} -
+	 * @param {number} [bufferZone] -
+	 * @returns {*} -
 	 */
 	isOnScreenRelativeTo: function (el, bufferZone) {
 		var myRect = Ext.getDom(this).getBoundingClientRect(),

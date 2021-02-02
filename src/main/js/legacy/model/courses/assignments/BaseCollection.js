@@ -219,8 +219,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 
 	/**
 	 * Search both the assignments and non-assignments for an item with an id
-	 * @param  {String} id the id to search for
-	 * @return {Object}	   the item if there is one
+	 * @param  {string} id the id to search for
+	 * @returns {Object}	   the item if there is one
 	 */
 	findItem: function (id) {
 		var assignment = this.getItem(id),
@@ -296,7 +296,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 	/**
 	 * Get the no submit assignment that has a title of Final Grade if there is one
 	 * TODO: figure out where there is a link to this to compare instead
-	 * @return {Assignment} the final grade assignment or null if there isn't one
+	 * @returns {Assignment} the final grade assignment or null if there isn't one
 	 */
 	getFinalGradeAssignment: function () {
 		if (this.__finalGrade !== undefined) { return this.__finalGrade; }

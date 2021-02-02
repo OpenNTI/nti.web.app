@@ -127,11 +127,11 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Should the given ntiid, url, and targetMimeType be opened in the app
 	 * or in another window.
-	 * @param  {String} ntiid		   the ntiid of the thing
+	 * @param  {string} ntiid		   the ntiid of the thing
 	 * @param  {Srring} url			   the url to the thing
-	 * @param  {String} basePath		the pathname the app is hosted at.
-	 * @param  {String} targetMimeType the mimeType of the thing to open
-	 * @return {Boolean}			   if we can show this in the app
+	 * @param  {string} basePath		the pathname the app is hosted at.
+	 * @param  {string} targetMimeType the mimeType of the thing to open
+	 * @returns {boolean}			   if we can show this in the app
 	 */
 	shouldOpenInApp: function (ntiid, url, basePath, targetMimeType) {
 		const isTargetAnNTIID = isNTIID(url);
@@ -151,8 +151,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 	/**
 	 * Search the navigator for a  mimeType
-	 * @param  {String} type mimeType to search for
-	 * @return {MimeType}	 the mimeType if we find it or null
+	 * @param  {string} type mimeType to search for
+	 * @returns {MimeType}	 the mimeType if we find it or null
 	 */
 	getNavigatorMimeType: function (type) {
 		let mimeType;
@@ -171,8 +171,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 	/**
 	 * Search the navigator for a plugin
-	 * @param  {String} name name of the plugin
-	 * @return {Plugin}		 the plugin if we find it or null
+	 * @param  {string} name name of the plugin
+	 * @returns {Plugin}		 the plugin if we find it or null
 	 */
 	getNavigatorPlugin: function (name) {
 		for (let key of Object.keys(navigator.plugins)) {
@@ -188,8 +188,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Attempt to create an active x object
 	 *
-	 * @param  {String} name name of the application providing the object
-	 * @return {Object}		 the active x object or null if we couldn't create one
+	 * @param  {string} name name of the application providing the object
+	 * @returns {Object}		 the active x object or null if we couldn't create one
 	 */
 	getActiveXObject: function (name) {
 		try {
@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 *
 	 * Adapted from: http://stackoverflow.com/questions/21485521/detecting-adobe-reader-in-ie11-with-javascript
 	 *
-	 * @return {Boolean} true if it can, false it it can't
+	 * @returns {boolean} true if it can, false it it can't
 	 */
 	hasPDFSupport: function () {
 		var support = false;
@@ -306,11 +306,11 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Loads a script into the dom
 	 *
-	 * @param {String} url --
+	 * @param {string} url --
 	 * @param {Function} [onLoad] --
 	 * @param {Function} [onError] --
 	 * @param {Object} [scope] --
-	 * @param {Boolean} [bustCache] --
+	 * @param {boolean} [bustCache] --
 	 * @returns {Script} the script element
 	 */
 	loadScript: function (url, onLoad, onError, scope, bustCache) {
@@ -432,7 +432,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 			/**
 			 * Check all the style sheets of the link to see if the it has rules
-			 * @return {Boolean} true if one matches false otherwise
+			 * @returns {boolean} true if one matches false otherwise
 			 */
 			function checkIfLoaded () {
 				return link.style;
@@ -456,7 +456,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Load a stylesheet file (.css) into the DOM.
 	 *
-	 * @param {String} url --
+	 * @param {string} url --
 	 * @param {Function} [onLoad] --
 	 * @param {Function} [onFail] --
 	 * @param {Object} [scope] Context object to execute the onLoad/onFail callbacks
@@ -651,10 +651,10 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Returns a sorter function for the Array/Ext.Array sort method.
 	 *
-	 * @param {String} key - name of the field to compare.
-	 * @param {String} [dir] - Direction "ASC" or "DESC" defaults to "DESC"
+	 * @param {string} key - name of the field to compare.
+	 * @param {string} [dir] - Direction "ASC" or "DESC" defaults to "DESC"
 	 * @param {Function} [g] - Getter function, where the value in the array is passed, and the getter returns the comparable.
-	 * @param {Boolean} [natural] - Sort strings naturally (1 2...10 vs 1 10 2 20 ...etc)
+	 * @param {boolean} [natural] - Sort strings naturally (1 2...10 vs 1 10 2 20 ...etc)
 	 * @returns {Function} A comparator function
 	 */
 	SortModelsBy: function (key, dir, g, natural) {

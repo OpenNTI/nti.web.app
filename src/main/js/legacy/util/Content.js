@@ -134,8 +134,8 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	/**
 	 * Detect whether or not a uri is pointing out of the site
-	 * @param  {String}	 r uri to check
-	 * @return {Boolean}   true if its outside of the side
+	 * @param  {string}	 r uri to check
+	 * @returns {boolean}   true if its outside of the side
 	 */
 	isExternalUri: function (r) {
 		const anchor = document.createElement('a');
@@ -151,9 +151,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 *
 	 * Returns an array of nodes for each toc in the bundle
 	 *
-	 * @param  {String} ntiid			  ntiid to resolve
+	 * @param  {string} ntiid			  ntiid to resolve
 	 * @param  {Bundle|XML} bundleOrTocOrNTIID the bundle to get the tocs from or the toc itself
-	 * @return {Promise}					fulfills with the nodes
+	 * @returns {Promise}					fulfills with the nodes
 	 */
 	getNodes: function (ntiid, bundleOrTocOrNTIID) {
 		var result, me = this;
@@ -217,9 +217,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * Return the an array of arrays of ids of the paths from the ntiid to the root
 	 * for all the tocs in the bundle
 	 *
-	 * @param  {String} ntiid	   ntiid to start at
+	 * @param  {string} ntiid	   ntiid to start at
 	 * @param  {Bundle|XML} bundleOrToc context to look under
-	 * @return {Promise}			 fulfills with the paths for all the tocs that have one
+	 * @returns {Promise}			 fulfills with the paths for all the tocs that have one
 	 */
 	getLineage: function (ntiid, bundleOrToc) {
 		ntiid = this.getNTIIDFromThing(ntiid);
@@ -240,10 +240,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * Return the an array of arrays of labels of the paths from the ntiid to the root
 	 * for all the tocs in the bundle
 	 *
-	 * @param  {String} ntiid	   ntiid to start at
-	 * @param  {Boolean} showBundleAsRoot --
+	 * @param  {string} ntiid	   ntiid to start at
+	 * @param  {boolean} showBundleAsRoot --
 	 * @param  {Bundle|XML} bundleOrToc context to look under
-	 * @return {Promise}			 fulfills with the paths for all the tocs that have one
+	 * @returns {Promise}			 fulfills with the paths for all the tocs that have one
 	 */
 	getLineageLabels: function (ntiid, showBundleAsRoot, bundleOrToc) {
 		ntiid = this.getNTIIDFromThing(ntiid);
@@ -285,9 +285,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	/**
 	 * Get the location info for a ntiid within the context of the bundle or toc
 	 *
-	 * @param  {String} ntiid	   ntiid to look for
+	 * @param  {string} ntiid	   ntiid to look for
 	 * @param  {Bundle|Toc} bundleOrToc context to look in
-	 * @return {Promise}			 fulfills with location info
+	 * @returns {Promise}			 fulfills with location info
 	 */
 	getLocation: function (ntiid, bundleOrToc) {
 		ntiid = this.getNTIIDFromThing(ntiid);
@@ -585,9 +585,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * TODO: I'm not sure if we should even be using this, but the current way of getting the breadcrumb
 	 * for a reading is relying on it so keep it around for now
 	 *
-	 * @param  {String} ntiid	   nttid to look for the containing page
+	 * @param  {string} ntiid	   nttid to look for the containing page
 	 * @param  {Bundle|XML} bundleOrToc TOC to look in
-	 * @return {Promise}			 fulfills with the page id
+	 * @returns {Promise}			 fulfills with the page id
 	 */
 	getPageID: function (ntiid, bundleOrToc) {
 		var me = this;
@@ -794,9 +794,9 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	},
 
 	/**
-	 * @param  {String|Node} html content to get the snippet from
+	 * @param  {string|Node} html content to get the snippet from
 	 * @param  {int} max max...
-	 * @return {String} html
+	 * @returns {string} html
 	 */
 	getHTMLSnippet: function (html, max) {
 		var i = /[^.?!]+[.?!]?/,

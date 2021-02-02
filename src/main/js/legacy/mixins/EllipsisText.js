@@ -100,8 +100,8 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 	 * NOTE: the box should have a max-height property set on it.
 	 *
 	 * @param {Node} node - HTML element that we would like to ellipsis or expand into multiple lines
-	 * @param {String} measure - the box that we should use as reference. Defaults to self node.
-	 * @param {Boolean} noEllipse -
+	 * @param {string} measure - the box that we should use as reference. Defaults to self node.
+	 * @param {boolean} noEllipse -
 	 * @returns {void}
 	 */
 	truncateText: function (node, measure, noEllipse) {

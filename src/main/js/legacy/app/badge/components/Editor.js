@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 	/**
 	 * Lock the badge
 	 *
-	 * @return {Promise} the promise to lock the badge.
+	 * @returns {Promise} the promise to lock the badge.
 	 */
 	onSave: function () {
 		var record = this.badge;

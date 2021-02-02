@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 	/**
 	 * If the assignment has parts or not
-	 * @return {Boolean} False if there are parts
+	 * @returns {boolean} False if there are parts
 	 */
 	isEmpty: function () {
 		return Ext.isEmpty(this.get('parts'));

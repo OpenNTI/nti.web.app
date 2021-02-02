@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.	 Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param {Function} success The success callback called if the provided coupone is valid
 	 * @param {Function} failure The failure callback called if we are unable to validate the coupon for any reason
-	 * @return {void}
+	 * @returns {void}
 	 */
 	priceEnrollmentPurchase: function (sender, desc, success, failure) {
 		desc = desc || {};
@@ -515,9 +515,9 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * Submit a redeem token for a purchasable
 	 * @param  {Ext.Component} sender	   the component sending the request
 	 * @param  {NextThought.model.store.Purchasable} purchasable the purchasable the token is for
-	 * @param  {String} token		the redeem token
-	 * @param  {Boolean} allowVendorUpdates subscribe the user to updates from the vendor
-	 * @param {String} ntiid ntiid of the thing you are redeeming
+	 * @param  {string} token		the redeem token
+	 * @param  {boolean} allowVendorUpdates subscribe the user to updates from the vendor
+	 * @param {string} ntiid ntiid of the thing you are redeeming
 	 * @param  {Function} success	success callback
 	 * @param  {Function} failure	failure callback
 	 * @returns {void}

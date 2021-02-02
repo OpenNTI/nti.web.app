@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.EnrollmentOptio
 
 	/**
 	 * For now, a course is droppable when we have an explicit open enrollment. Otherwise, it's not.
-	 * @return {Boolean} whether it's droppable or not.
+	 * @returns {boolean} whether it's droppable or not.
 	 */
 	isDroppable: function () {
 		var items = this.get('Items') || {};

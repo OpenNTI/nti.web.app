@@ -153,8 +153,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	 * the active object to set the background from
 	 *
 	 * @param {Object} obj the thins to set active
-	 * @param {Boolean} masked - masked, nor not
-	 * @param {Boolean} whiteMask - wtf... I guess make it a white mask?
+	 * @param {boolean} masked - masked, nor not
+	 * @param {boolean} whiteMask - wtf... I guess make it a white mask?
 	 * @returns {void}
 	 */
 	setActiveContent: function (obj, masked, whiteMask) {

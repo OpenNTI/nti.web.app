@@ -20,8 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * @param  {Node} courseNode	the course node from the TOC
 		 * @param  {Date} startDate		the start of the range to get tiles for (inclusive)
 		 * @param  {Date} endDate		the end of the range to get tiles for (inclusive)
-		 * @param  {Boolean} isNow		if we are getting tiles for the current week
-		 * @return {Promise}			Promise that will fulfill with an array of tiles to add
+		 * @param  {boolean} isNow		if we are getting tiles for the current week
+		 * @returns {Promise}			Promise that will fulfill with an array of tiles to add
 		 */
 		getTiles: function (courseNode, startDate, endDate, isNow) {
 			return Promise.resolve([]);
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 *
 		 * @param  {CourseInstance} course the course instance model
 		 * @param  {Date} now the date to pick deadlines from
-		 * @return {Promise} Promise that fills with array of tiles to add
+		 * @returns {Promise} Promise that fills with array of tiles to add
 		 */
 		getUpcomingTiles: function (course, now) {
 			return Promise.resolve([]);
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		/**
 		 * Return the weight of a tile for a record
 		 * @param  {Model} record	the record to get the weight for
-		 * @return {Number}			weight of the tile
+		 * @returns {number}			weight of the tile
 		 */
 		getWeight: function (record) {
 			return this.__BASE_WEIGHT + record.get('Last Modified');
@@ -51,8 +51,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		/**
 		 * Return a number between [0,1] to help put newer items nearer the top
 		 * @param  {Date} time the time from the record
-		 * @param {Number} scale -
-		 * @return {Number} the time modifier to add to the weight
+		 * @param {number} scale -
+		 * @returns {number} the time modifier to add to the weight
 		 */
 		getTimeWeight: function (time, scale) {
 			if (!time) { return 0; }

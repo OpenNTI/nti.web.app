@@ -304,9 +304,9 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 	 * to nest the transition between states.
 	 *
 	 * @param  {Object} record		 the record to get the comp for
-	 * @param  {String} transition	 a transition cls to apply to the record
+	 * @param  {string} transition	 a transition cls to apply to the record
 	 * @param  {Object} initialState an earlier version of the record
-	 * @return {Object}				 the cmp for the record
+	 * @returns {Object}				 the cmp for the record
 	 */
 	getCmpForRecord: function (record, transition, initialState) {
 

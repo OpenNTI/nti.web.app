@@ -2157,7 +2157,7 @@ const AbstractEditor = Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	/**
-	 * @returns {object} Returns the value of the editor.
+	 * @returns {Object} Returns the value of the editor.
 	 */
 	getValue: function () {
 		return {

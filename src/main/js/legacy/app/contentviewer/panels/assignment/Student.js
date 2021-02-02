@@ -43,8 +43,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	/**
 	 * Get the toolbar and reader config with the correct assignment
 	 *
-	 * @param {Boolean} newAttempt load the previous attempt or start a new one
-	 * @return {[Array]} [toolbarConfig, readerConfig]
+	 * @param {boolean} newAttempt load the previous attempt or start a new one
+	 * @returns {[Array]} [toolbarConfig, readerConfig]
 	 */
 	getToolbarAndReaderConfig (newAttempt) {
 		const assignment = this.assignment;

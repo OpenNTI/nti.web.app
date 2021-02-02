@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	 * and returns an array of the courses ordered by their priority, excluding
 	 * courses that have zero or lower priority
 	 * @param  {Function} fn takes a bundle instance and wrapper and returns a number
-	 * @return {Promise}	 fulfills with an array of bundles in order
+	 * @returns {Promise}	 fulfills with an array of bundles in order
 	 */
 	findBundleByPriority: function (fn) {
 		return this.CourseActions.findCourseByPriority(fn)

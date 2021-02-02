@@ -467,7 +467,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	/**
 	 * Whether or not all the validation has been met
 	 *
-	 * @return {Boolean} validity
+	 * @returns {boolean} validity
 	 */
 	isValid: function () {
 		var form = this.formEl.dom;
@@ -742,7 +742,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 * use the appropriate submission mechanism. If we have file changes, submit a form data.
 	 * Otherwise, submit a json object. For the json object, only pass the values that actually changed.
 	 *
-	 * @param {String} url Link
+	 * @param {string} url Link
 	 * @returns {Promise} Fulfilled with the submission results, or rejected with an error.
 	 */
 	submitTo: function (url) {

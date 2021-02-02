@@ -17,8 +17,8 @@ Object.assign(Promise, {
 	 * will return a promise that fulfills with its first arg after
 	 * at least the duration given has passed.
 	 *
-	 * @param  {Number} minWait the min time to wait
-	 * @return {Function} see description
+	 * @param  {number} minWait the min time to wait
+	 * @returns {Function} see description
 	 */
 	minWait (minWait) {
 		const start = new Date();
@@ -99,7 +99,7 @@ global.Deferred.reject = (reason) => ({
  * if it returns a promise that fails, repeat with the next item
  *
  * @param  {Array} values An Array of values or functions that return value or a Promise.
- * @return {Promise}	  fulfills with the first successful value in the array or rejects if none are.
+ * @returns {Promise}	  fulfills with the first successful value in the array or rejects if none are.
  */
 Promise.first = Promise.first || function (values) {
 	if (!Array.isArray(values) || !values.length) {

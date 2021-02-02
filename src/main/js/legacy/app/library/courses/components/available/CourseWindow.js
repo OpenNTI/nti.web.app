@@ -354,11 +354,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	/**
 	 * show the message bar across the top of the window
 	 * @param  {string}	 msg  the message to display
-	 * @param  {Boolean} isError  whether or not we are showing an error
-	 * @param  {Number} timeout	 timeout...
-	 * @param  {String} msgid  id of the message element
-	 * @param  {Boolean} cursor  -
-	 * @return {Promise} fulfill if there is a click handler on click, and reject on close
+	 * @param  {boolean} isError  whether or not we are showing an error
+	 * @param  {number} timeout	 timeout...
+	 * @param  {string} msgid  id of the message element
+	 * @param  {boolean} cursor  -
+	 * @returns {Promise} fulfill if there is a click handler on click, and reject on close
 	 */
 	showMsg: function (msg, isError, timeout, msgid, cursor) {
 		var me = this;

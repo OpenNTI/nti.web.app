@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	 *	}
 	 * }
 	 *
-	 * @return {Object} Map of the results
+	 * @returns {Object} Map of the results
 	 */
 	getResults: function () {
 		var oldResults = this.resultPart.Results,
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	 * See the comments in NextThought.app.assessment.results.parts.MultiChoice
 	 * for more explanation of why its structured this way.
 	 *
-	 * @return {Array} the rows to show in the bar chart.
+	 * @returns {Array} the rows to show in the bar chart.
 	 */
 	getAxis: function () {
 		var resultParts = this.getResults(),

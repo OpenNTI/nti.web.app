@@ -179,12 +179,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	/**
 	 *
 	 * @param {Matrix} m - the current matrix
-	 * @param {Number} x - the mouse's X cordinate on the canvas
-	 * @param {Number} y - the mouse's Y cordinate on the canvas
-	 * @param {Number} dx - the mouse's change in X (magnitude)
-	 * @param {Number} dy - the mouse's change in Y (magnitude)
-	 * @param {Number} sx - 0 or 1 to indicate if the nib can move in that direction
-	 * @param {Number} sy - 0 or 1 to indicate if the nib can move in that direction
+	 * @param {number} x - the mouse's X cordinate on the canvas
+	 * @param {number} y - the mouse's Y cordinate on the canvas
+	 * @param {number} dx - the mouse's change in X (magnitude)
+	 * @param {number} dy - the mouse's change in Y (magnitude)
+	 * @param {number} sx - 0 or 1 to indicate if the nib can move in that direction
+	 * @param {number} sy - 0 or 1 to indicate if the nib can move in that direction
 	 * @returns {transform} Transform matrix.
 	 */
 	nibUpdate: function (m, x,y, dx,dy, sx,sy) {
@@ -229,9 +229,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	 * We look only at the change in y value (corrected for any current rotation)
 	 * and adjust the size soley based on that while ensuring we maintain the ratio
 	 *
-	 * @param {String} nib - selected nib/grabber
-	 * @param {Number} dx - the mouse's change in X (magnitude)
-	 * @param {Number} dy - the mouse's change in Y (magnitude)
+	 * @param {string} nib - selected nib/grabber
+	 * @param {number} dx - the mouse's change in X (magnitude)
+	 * @param {number} dy - the mouse's change in Y (magnitude)
 	 * @returns {void}
 	 */
 	scaleWithConstraint: function (nib,dx,dy) {
@@ -433,10 +433,10 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 
 	/**
 	 *
-	 * @param {Number} x - Integer or Array of [X,Y] in canvas coordinate space
-	 * @param {Number} [y] - Integer in canvas coordinate space
+	 * @param {number} x - Integer or Array of [X,Y] in canvas coordinate space
+	 * @param {number} [y] - Integer in canvas coordinate space
 	 *
-	 * @return {Boolean} truthy, with the name of the nib if true, false if not within a nib.
+	 * @returns {boolean} truthy, with the name of the nib if true, false if not within a nib.
 	 */
 	isPointInNib: function (x,y) {
 		var n, nib, nibs = this.nibData, d, dx, dy;
@@ -468,10 +468,10 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 
 	/**
 	 *
-	 * @param {Number} x - unit coordinate space
-	 * @param {Number} y - unit coordinate space
+	 * @param {number} x - unit coordinate space
+	 * @param {number} y - unit coordinate space
 	 *
-	 * @return {Boolean} -
+	 * @returns {boolean} -
 	 */
 	isPointInShape: function (x,y) {
 		if (!this.bbox) {
@@ -505,11 +505,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	/**
 	 *	Globals which should be set before calling this function:
 	 *
-	 *	@param {Number} x - point to be tested
-	 *	@param {Number} y - point to be tested
+	 *	@param {number} x - point to be tested
+	 *	@param {number} y - point to be tested
 	 *	@param {Array} points - two dimentional array with horizontal & vertical coordinates of corners in their own arrays
 	 *
-	 *	@return {Boolean} true if the point x,y is inside the polygon, or false if it is not.	 If the point is
+	 *	@returns {boolean} true if the point x,y is inside the polygon, or false if it is not.	 If the point is
 	 *	exactly on the edge of the polygon, then the function may return true or false.
 	 */
 	pointInPolygon: function (x,y, points) {

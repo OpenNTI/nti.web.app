@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {Object} newValues	the new values to update the record with
 	 * @param  {Object} newPosition the parent and position of the new position
 	 * @param  {Object} root		the moving root of both parents
-	 * @return {Promise}			fulfills when both operations are done
+	 * @returns {Promise}			fulfills when both operations are done
 	 */
 	__removeAndAdd: function (oldRecord, oldPosition, newValues, newPosition, root) {
 		var oldParent = oldPosition.parent,

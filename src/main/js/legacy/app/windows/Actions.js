@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 	 * TODO: unify this with the building of the url in Body.js
 	 *
 	 * @param  {Model} obj model to get url for
-	 * @return {String}		the url
+	 * @returns {string}		the url
 	 */
 	getRouteForObject: function (obj) {
 		var id = obj.getId(),

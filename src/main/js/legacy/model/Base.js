@@ -64,8 +64,8 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		 * ALWAYS set the href before using. NEVER rely on its previous value. Think of this the same way you would the return value of Ext.fly().
 		 * As in temporary!	 Assume once your 'atomic' like action is finished, the value is useless. Reaquire.
 		 *
-		 * @param {String} ref an URI
-		 * @return {Location} Returns a instance of the Location interface.
+		 * @param {string} ref an URI
+		 * @returns {Location} Returns a instance of the Location interface.
 		 */
 		getLocationInterfaceAt: function (ref) {
 			var a = this['__SHARED_LOCATION_INTERFACE'];
@@ -284,7 +284,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 * Given another instance of the same class, update this values.
 	 *
 	 * @param  {Model} record the instance to update with
-	 * @param {Boolean} silent do not fire the update event
+	 * @param {boolean} silent do not fire the update event
 	 * @param {Object} refreshInterfaceRaw raw data to update the interface with
 	 * @returns {void}
 	 */
@@ -325,8 +325,8 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	/**
 	 * Given a response from the server, update my values
 	 *
-	 * @param  {[String, Object]} response server response
-	 * @param {Boolean} silent do not fire the update event
+	 * @param  {[string, Object]} response server response
+	 * @param {boolean} silent do not fire the update event
 	 * @returns {void}
 	 */
 	syncWithResponse: function (response, silent) {
@@ -351,7 +351,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	/**
 	 * Get the link to request updated values from on the server
 	 *
-	 * @return {String} the link
+	 * @returns {string} the link
 	 */
 	getLinkForUpdate: function () {
 		return this.get('href');
@@ -400,7 +400,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 * If we are unable to find a href or the update fails, just return
 	 * the record with the same values.
 	 *
-	 * @return {Promise} fulfills with the record after it is updated
+	 * @returns {Promise} fulfills with the record after it is updated
 	 */
 	updateFromServer: function () {
 		return this.fetchFromServer()
@@ -514,7 +514,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	/**
 	 * Caller should wrap in beginEdit() and endEdit()
 	 * @param {Ext.data.Model} recordSrc the source record to copy
-	 * @param {...String} fields A vararg list of fields
+	 * @param {...string} fields A vararg list of fields
 	 * @returns {void}
 	 */
 	copyFields: function (recordSrc, fields) {
@@ -827,12 +827,12 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	/**
 	 * Save a specific field off this model, optionally set a value and save it if value is sent.
 	 *
-	 * @param {String} fieldName - name of the field that we want to save
+	 * @param {string} fieldName - name of the field that we want to save
 	 * @param {*} [value] - if undefined the field from the model will be saved.  If not undefined the field
 	 *					will be set on the model prior to saving
 	 * @param {Function} successCallback called on success
 	 * @param {Function} failCallback called on failure
-	 * @param {String} [optionalLinkName] = provide if you want a specific link other than the edit link
+	 * @param {string} [optionalLinkName] = provide if you want a specific link other than the edit link
 	 * @returns {void}
 	 */
 	saveField: function (fieldName, value, successCallback, failCallback, optionalLinkName) {
@@ -901,7 +901,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 	/**
 	 * Calls the href and fills in the values missing.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	resolve: function () {
 		console.error('still called?');

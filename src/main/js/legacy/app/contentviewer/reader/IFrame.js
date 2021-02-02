@@ -773,7 +773,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	/**
 	 * Makes pointer events go through the iframe so that all the
 	 * interactions can be handled manually.
-	 * @param {Boolean} should -
+	 * @param {boolean} should -
 	 * @returns {void}
 	 */
 	setClickthrough: function (should) {
@@ -795,9 +795,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	},
 
 	/**
-	 * @param {Number} x relative to the window's top left corner
-	 * @param {Number} y relative to the window's top left corner
-	 * @returns {Element|Boolean} -
+	 * @param {number} x relative to the window's top left corner
+	 * @param {number} y relative to the window's top left corner
+	 * @returns {Element|boolean} -
 	 */
 	elementAt: function (x, y) {
 		var reader = this.reader,
@@ -863,10 +863,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 	/**
 	 * Positions relative to the window
-	 * @param {Number} x1 -
-	 * @param {Number} y1 -
-	 * @param {Number} x2 -
-	 * @param {Number} y2 -
+	 * @param {number} x1 -
+	 * @param {number} y1 -
+	 * @param {number} x2 -
+	 * @param {number} y2 -
 	 * @returns {Range} -
 	 */
 	makeRangeFrom: function (x1, y1, x2, y2) {

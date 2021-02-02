@@ -590,9 +590,9 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	 * user while its still resolving, the record will not have a 'raw' property and it will have 'placeholder' set true
 	 * in the 'data' property.
 	 *
-	 * @param {String} username username
+	 * @param {string} username username
 	 * @param {Object} callbacks callbacks
-	 * @param {Boolean} cacheBust cacheBust
+	 * @param {boolean} cacheBust cacheBust
 	 * @returns {User} null most cases.
 	 */
 	makeRequest: function (username, callbacks, cacheBust) {

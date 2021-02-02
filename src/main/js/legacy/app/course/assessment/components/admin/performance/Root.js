@@ -248,8 +248,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 * otherwise load the store to that student
 	 *
 	 * @param  {Object} state	state to restore
-	 * @param  {String} student id of the student to restore to
-	 * @return {Promise}		 fulfills once the store is loaded with the student
+	 * @param  {string} student id of the student to restore to
+	 * @returns {Promise}		 fulfills once the store is loaded with the student
 	 */
 	restoreStudent: function (state, student) {
 		this.refresh();

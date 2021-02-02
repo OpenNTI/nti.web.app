@@ -55,9 +55,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 
 	/**
 	 * Enable or disable submission accordingly, if we aren't silent save the progress
-	 * @param  {Boolean} enable is the editor has something in it
-	 * @param  {Boolean} silent if we are setting the value, don't save the progress
-	 * @param  {Boolean} forceSubmissionCheck if we want to force checking submission status, thus skipping the early return
+	 * @param  {boolean} enable is the editor has something in it
+	 * @param  {boolean} silent if we are setting the value, don't save the progress
+	 * @param  {boolean} forceSubmissionCheck if we want to force checking submission status, thus skipping the early return
 	 * @returns {void}
 	 */
 	updateState: function (enable, silent, forceSubmissionCheck) {

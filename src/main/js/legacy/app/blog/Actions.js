@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	 *
 	 * @param {NextThought.model.forums.PersonalBlogEntry} blogEntry the blogEntry to update
 	 * @param {Object} sharingInfo who to share with
-	 * @return {Promise} Fulfill after updating the sharing and publish states
+	 * @returns {Promise} Fulfill after updating the sharing and publish states
 	 */
 	handleShareAndPublishState: function (blogEntry, sharingInfo) {
 		if (!blogEntry) {

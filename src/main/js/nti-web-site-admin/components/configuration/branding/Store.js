@@ -33,10 +33,10 @@ export default class ThemeEditorStore extends Stores.SimpleStore {
 
 	/**
 	 * Sets a site asset for previewing
-	 * @param {String} type - One of: 'email', 'favicon', 'full_logo', 'icon', 'logo'
+	 * @param {string} type - One of: 'email', 'favicon', 'full_logo', 'icon', 'logo'
 	 * @param {Object} item - An object representing the asset
-	 * @param {String} item.source - Source image in 'data:image/png;base64' format
-	 * @param {String} item.filename - The filename to associate with the image
+	 * @param {string} item.source - Source image in 'data:image/png;base64' format
+	 * @param {string} item.filename - The filename to associate with the image
 	 * @returns {undefined}
 	 */
 	setAsset = (type, item) => {

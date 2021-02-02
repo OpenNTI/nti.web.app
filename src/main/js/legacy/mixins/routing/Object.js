@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * precache:Object //A map of keys to objects that is passed to the routes handler
 	 *					//so it doesn't have to redo all the work to get the objects
 	 *
-	 * @param {String|Array} mimeTypes MimeType or list of MimeTypes to use the handler for
+	 * @param {string|Array} mimeTypes MimeType or list of MimeTypes to use the handler for
 	 * @param {Function} handler   function to handle mime types
 	 * @returns {void}
 	 */
@@ -54,8 +54,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
 	/**
 	 * Given an object return the mime type
-	 * @param  {Object|String} object --
-	 * @returns {String}		  object's mime type
+	 * @param  {Object|string} object --
+	 * @returns {string}		  object's mime type
 	 */
 	__getMimeType: function (object) {
 		if (typeof object === 'string') {
@@ -67,8 +67,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
 	/**
 	 * Given an object (or mime type) return a Promise that is the return value of the handler
-	 * @param  {Object|String} objectOrMimeType thing to handle
-	 * @return {Promise}				  fulfills with handler's return
+	 * @param  {Object|string} objectOrMimeType thing to handle
+	 * @returns {Promise}				  fulfills with handler's return
 	 */
 	handleObject: function (objectOrMimeType) {
 		var object = typeof objectOrMimeType === 'string' ? null : objectOrMimeType,
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * @override
 	 * @param {Array} path array of objects to navigate to, top down
 	 * @param {Object} root the object that would be set as my root for the path
-	 * @return {Object} the route route to navigate to
+	 * @returns {Object} the route route to navigate to
 	 */
 	getRouteForPath: function (path, root) {
 		return {

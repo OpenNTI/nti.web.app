@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		 * Takes a grade object and returns a display value
 		 * It looks for value, letter, correctness, and grade
 		 * @param  {Object} values grade values to get the display for
-		 * @return {String}		   [escription]
+		 * @returns {string}		   [escription]
 		 */
 		getDisplay: function (values) {
 			if (values.DisplayableGrade) { return values.DisplayableGrade; }
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	 *
 	 * @param  {string} value the value of the grade
 	 * @param  {char} letter the letter value of the grade
-	 * @return {Boolean}		if they are the same values
+	 * @returns {boolean}		if they are the same values
 	 */
 	valueEquals: function (value, letter) {
 		var vals = this.getValues();
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 
 	/**
 	 * Looks at the value for the grade and parses it into a value and letter value
-	 * @return {Object} an object with value and letter for keys
+	 * @returns {Object} an object with value and letter for keys
 	 */
 	getValues: function () {
 		if (this.isPredicted()) {
@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	 *
 	 * @param  {string} value the value of the grade
 	 * @param  {char} letter the letter value of the grade
-	 * @return {Promise}	 fulfills with the assignment history item that was created
+	 * @returns {Promise}	 fulfills with the assignment history item that was created
 	 */
 	createNewGrade: function (value, letter) {
 		var me = this,
@@ -336,7 +336,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	/**
 	 * Check if the value is empty, need to handle
 	 * "# L", "# -", " L", " " -", "#", and ""
-	 * @return {Boolean} -
+	 * @returns {boolean} -
 	 */
 	isEmpty: function () {
 		var val = this.get('value') || '';

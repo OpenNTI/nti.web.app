@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 *
 	 * @param  {Object} obj	  the thing to navigate to
 	 * @param  {Object} monitors key val map of events to functions
-	 * @return {void}
+	 * @returns {void}
 	 */
 	attemptToNavigateToObject: function (obj, monitors) {
 		var me = this,
@@ -240,14 +240,14 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	/**
 	 * Return the current context
 	 * @override
-	 * @return {Object|String} An object or string describing the current context
+	 * @returns {Object|string} An object or string describing the current context
 	 */
 	getContext: function () {},
 
 
 	/**
 	 * Returns an array of the current context the view is in
-	 * @return {[type]} [description]
+	 * @returns {[type]} [description]
 	 */
 	getCurrentContext: function () {
 		var me = this,
@@ -296,7 +296,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	/**
 	 * Return the active cmp for this route
 	 * @override
-	 * @return {Object} the active cmp
+	 * @returns {Object} the active cmp
 	 */
 	getActiveItem: function () {
 		var layout = this.getLayout && this.getLayout(),
@@ -310,7 +310,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * Whether or not we need to stop route change before we go any further
 	 * can return a boolean or a promise if we need to confirm with the user first
 	 * @override
-	 * @return {Boolean|Promise} if we can navigate
+	 * @returns {boolean|Promise} if we can navigate
 	 */
 	allowNavigation: function () {
 		var activeItem = this.getActiveItem();
@@ -325,7 +325,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * stop the route from changing
 	 *
 	 * @param {string} route the route that is activating
-	 * @return {void}
+	 * @returns {void}
 	 */
 	beforeRouteChange: function (route) {
 		var activeItem = this.getActiveItem();

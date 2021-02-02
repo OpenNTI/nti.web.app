@@ -37,9 +37,9 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 
 	/**
 	 *
-	 * @param {String} string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
+	 * @param {string} string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
 	 * @param {number} [alpha] If supplied, the float will override or add alpha to this color.
-	 * @return {Object} Color components
+	 * @returns {Object} Color components
 	 */
 	parse: function (string, alpha) {
 		var me = this,
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	/**
 	 * http://ridiculousfish.com/blog/posts/colors.html
 	 * @param {number} idx --
-	 * @return {number} --
+	 * @returns {number} --
 	 */
 	hue: function (idx) {
 		/*
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 
 	/**
 	 * @param {number} idx - either the known index (a number) or a username with which to look up the index for
-	 * @return {Color} --
+	 * @returns {Color} --
 	 */
 	getColor: function (idx) {
 		if (typeof idx === 'string') {
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	/**
 	 * Return a unique hex value for the index
 	 * @param  {number} idx the index
-	 * @return {String}	 the hex code
+	 * @returns {string}	 the hex code
 	 */
 	getColorHex: function (idx) {
 		return this.rgbaToHex(this.toRGBA((this.getColor(idx))));

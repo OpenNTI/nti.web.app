@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * handle editing or creating.
 		 *
 		 * @override
-		 * @return {[String]} list of mimeTypes
+		 * @returns {[string]} list of mimeTypes
 		 */
 		getHandledMimeTypes: function () { return []; },
 
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * }
 		 *
 		 * @override
-		 * @return {[Object]} the types this editor handles
+		 * @returns {[Object]} the types this editor handles
 		 */
 		getTypes: function () {},
 
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 *
 		 * @override
 		 * @param  {Object} record the record to edit
-		 * @return {Object}			Null or the Class for the editor
+		 * @returns {Object}			Null or the Class for the editor
 		 */
 		getEditorForRecord: function (record) {
 			if (this.handlesMimeType(record.mimeType)) {
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * So we know what types we can switch between
 		 *
 		 * @param  {Object} group the editor group
-		 * @return {void}
+		 * @returns {void}
 		 */
 		attachToGroup: function (group) {
 			this.editorGroup = group;

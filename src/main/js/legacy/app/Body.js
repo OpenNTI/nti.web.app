@@ -489,7 +489,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 	 * Create and append a div to the body with a class of body-shade-mask
 	 * to add come contrast
 	 *
-	 * @return {Element} the element created and added
+	 * @returns {Element} the element created and added
 	 */
 	__createMaskDiv: function () {
 		var div = document.createElement('div');

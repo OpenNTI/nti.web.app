@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 	 *							Leave empty, in case of a note will be presented in a note window
 	 *							'card': to be rendered as a card, @see notes in activity.
 	 *							'list': to be rendered as a list object, @see notes in profiles.]
-	 * @return {[Promise]}		[Promise that resolves with dom element for the context]
+	 * @returns {[Promise]}		[Promise that resolves with dom element for the context]
 	 */
 	load: function (type) {
 		var url = Service.getObjectURL(this.container);

@@ -406,8 +406,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 	/**
 	 * Return all courses in the same catalog family
-	 * @param  {String} familyId id of the catalog family to search for
-	 * @return {Course} list of courses in the same catalog family
+	 * @param  {string} familyId id of the catalog family to search for
+	 * @returns {Course} list of courses in the same catalog family
 	 */
 	findForCatalogFamily: function (familyId) {
 		return this.findCoursesBy(function (course) {

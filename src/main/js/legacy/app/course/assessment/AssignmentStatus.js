@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		 *	duration: Number [optional] //if the assignment is timed and completed how long they took
 		 *
 		 * @param  {Object} data the above fields for the assignment
-		 * @return {String}		 [description]
+		 * @returns {string}		 [description]
 		 */
 		getStatusHTML: function (data) {
 			var renderData = this.getRenderData(data);
@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		/**
 		 * If there are any actions for a history item
 		 * @param  {UsersCourseAssignmentHistoryItem}  containerRecord history item to check
-		 * @return {Boolean}		if there are actions
+		 * @returns {boolean}		if there are actions
 		 */
 		hasActions: function (containerRecord) {
 			const record = (containerRecord && containerRecord.getMostRecentHistoryItem) ? containerRecord.getMostRecentHistoryItem() : containerRecord;
@@ -237,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		 * @param  {UsersCourseAssignmentHistoryItem} containerRecord the history item we are getting actions for
 		 * @param {Function} onReset -
 		 * @param {Function} onExcused -
-		 * @return {Ext.Menu} a menu component
+		 * @returns {Ext.Menu} a menu component
 		 */
 		getActionsMenu: function (containerRecord, onReset = () => {}, onExcused = () => {}) {
 			var menu = Ext.widget('menu', {

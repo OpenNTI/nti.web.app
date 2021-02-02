@@ -213,8 +213,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	 * @param {Node} n - the node you want to scroll to
 	 * @param {boolean} onlyIfNotVisible - pass true here if you want this function to decide if it should scroll or not,
 	 *							 based on its visibility on screen
-	 * @param {Number} bottomThreshold - if you want to scroll if the target is close to the bottom, specify a threshold.
-	 * @param {Number} verticalOffset -
+	 * @param {number} bottomThreshold - if you want to scroll if the target is close to the bottom, specify a threshold.
+	 * @param {number} verticalOffset -
 	 * @returns {void}
 	 */
 	toNode: function (n, onlyIfNotVisible, bottomThreshold, verticalOffset) {

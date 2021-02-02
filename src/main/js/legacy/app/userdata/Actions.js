@@ -319,9 +319,9 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	* references books external to their content package this will break.
 	*
 	*
-	* @param {String} ntiid id
+	* @param {string} ntiid id
 	* @param {Object} bundle Bundle instance
-	* @return {Object} An object encasuplating the prefences for the given ntiid.  Sharing related preferences are found beneath
+	* @returns {Object} An object encasuplating the prefences for the given ntiid.  Sharing related preferences are found beneath
 	* the 'sharing' key
 	*/
 	getPreferences: function (ntiid, bundle) {
@@ -900,8 +900,8 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 	/**
 	 * @param {Object} record - Note Record to edit
-	 * @param {String|Array} body - update body
-	 * @param {String} title - updated title
+	 * @param {string|Array} body - update body
+	 * @param {string} title - updated title
 	 * @returns {Promise} -
 	 *
 	 * TODO: Combine this together with the saveNewNote Code.
@@ -991,10 +991,10 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	 * Save the sharing prefs as the default for the container in this context
 	 * where context is a bundle.
 	 *
-	 * @param  {String} container NTIID for the container
+	 * @param  {string} container NTIID for the container
 	 * @param  {Object} prefs entities and public toggle
 	 * @param  {Bundle} context	  the bundle to make this the default sharing prefs for
-	 * @return {Promsie} A promise that fulfills with...
+	 * @returns {Promsie} A promise that fulfills with...
 	 */
 	saveSharingPrefs: function (container, prefs, context) {
 		var me = this;

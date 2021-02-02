@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
 
 	/**
-	 * @param {String|String[]|Object|Object[]} items items
+	 * @param {string|string[]|Object|Object[]} items items
 	 * @param {Object} [supplemental] Properties to add to the parsed items (such as flags)
 	 * @returns {Object[]} Parsed models.
 	 */
@@ -120,8 +120,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * Parses an id and returns an object containing the split portions
 	 * See http://excelsior.nextthought.com/server-docs/ntiid-structure/
 
-	 * @param {String} id id
-	 * @return {Object} an object containing the components of the id
+	 * @param {string} id id
+	 * @returns {Object} an object containing the components of the id
 	 */
 	parseNTIID: function (id) {
 		var parts = (typeof id !== 'string' ? (id || '').toString() : id).split(':'),
@@ -211,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	/**
 	 * CSS escape ids
 	 * @param {string} id id
-	 * @return {string} CSS-friendly string to use in a selector
+	 * @returns {string} CSS-friendly string to use in a selector
 	 */
 	escapeId: function (id) {
 		return id.replace(/:/g, '\\3a ') //no colons
@@ -221,8 +221,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 	/**
 	 * Returns the prefix of the content ntiid we think this ntiid would reside beneath
-	 * @param {String} id id
-	 * @return {String} see description
+	 * @param {string} id id
+	 * @returns {string} see description
 	 */
 	ntiidPrefix: function (id) {
 		var ntiid = this.parseNTIID(id);

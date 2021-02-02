@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 	 *
 	 * @param {Object} o The object or array to apply to.
 	 * @param {Object} cfg The values to apply to the object in the first arg.
-	 * @return {*} -
+	 * @returns {*} -
 	 */
 	applyRecursively: function applyRecursively (o, cfg) {
 		if (!o) {return o;}

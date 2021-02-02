@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 	/**
 	 * Set the bread crumb to show the active item note that data-index is 1 based
-	 * @param {Number} index the item to activate
+	 * @param {number} index the item to activate
 	 * @returns {void}
 	 */
 	setActiveTab: function (index) {
@@ -275,8 +275,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	/**
 	 * Starting at index step through the steps and activate the first one that is not completed
 	 * or stop on the last one
-	 * @param  {Number} index the step to start looking from
-	 * @param {Boolean} recursive if we are called again to activate the next step
+	 * @param  {number} index the step to start looking from
+	 * @param {boolean} recursive if we are called again to activate the next step
 	 * @returns {void}
 	 */
 	activateStep: function (index, recursive) {

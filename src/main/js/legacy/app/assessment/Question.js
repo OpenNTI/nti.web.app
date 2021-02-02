@@ -131,8 +131,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 	 * it to be marked correct or incorrect
 	 * @param {QuestionSetSubmission} questionSetSubmission the users last values they had
 	 * @param {Object} eopts -
-	 * @param {Boolean} reapplying -
-	 * @return {void}
+	 * @param {boolean} reapplying -
+	 * @returns {void}
 	 */
 	updateWithProgress: function (questionSetSubmission, eopts, reapplying) {
 		if (!questionSetSubmission) { return; }

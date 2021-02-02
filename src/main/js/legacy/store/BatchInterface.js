@@ -16,9 +16,9 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 	 * @memberOf NextThought.store.BatchInterface#
 	 *
 	 * @param {Object} config - values to set up the batch interface with
-	 * @param {String} config.url - the url of the batch
+	 * @param {string} config.url - the url of the batch
 	 * @param {Object} config.params - the params to send
-	 * @return {void}
+	 * @returns {void}
 	 */
 	constructor: function (config) {
 		this.callParent(arguments);
@@ -50,9 +50,9 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 	 *
 	 * @memberOf NextThought.store.BatchInterface#
 	 *
-	 * @param  {String} url - url of the batch
-	 * @param  {String} params - params to send back
-	 * @return {Promise} - fulfills with the response from the server
+	 * @param  {string} url - url of the batch
+	 * @param  {string} params - params to send back
+	 * @returns {Promise} - fulfills with the response from the server
 	 */
 	__loadBatch: function (url, params) {
 		if (!url) {

@@ -23,10 +23,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		 *
 		 * http://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
 		 *
-		 * @param  {Number} bytes	 the size to convert
-		 * @param  {Number} decimals how many decimals
-		 * @param {String} unit force the result to be in a certain unit
-		 * @return {String}			 human readable version
+		 * @param  {number} bytes	 the size to convert
+		 * @param  {number} decimals how many decimals
+		 * @param {string} unit force the result to be in a certain unit
+		 * @returns {string}			 human readable version
 		 */
 		getHumanReadableFileSize: function (bytes, decimals, unit) {
 			if (!bytes) {

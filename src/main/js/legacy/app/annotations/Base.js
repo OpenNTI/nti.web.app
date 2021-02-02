@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 
 	/**
 	 * Query inside the reader frame
-	 * @param {String} selector css selector
+	 * @param {string} selector css selector
 	 * @returns {Node[]} matching elements
 	 */
 	query: function (selector) {

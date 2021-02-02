@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		 * DON'T USE UNLESS YOU ARE 100% SURE
 		 *
 		 * @param  {Array} parts the body content
-		 * @return {String}		  compiled content
+		 * @returns {string}		  compiled content
 		 */
 		unsafeSyncCompileBodyContent: function (parts) {
 			var i, text = [], part;

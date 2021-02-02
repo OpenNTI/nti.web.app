@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.model.PageInfo', {
 	 * If the user has more than one section of the course the assessmentItems might
 	 * not be the correct one, so pull them off of the bundle and update our assessmentItems
 	 * @param  {Object} bundle the bundle to sync to
-	 * @return {Promise}		fulfills when its done
+	 * @returns {Promise}		fulfills when its done
 	 */
 	syncWithBundle: function (bundle) {
 		var me = this;

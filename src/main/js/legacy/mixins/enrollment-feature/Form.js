@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 
 	/**
 	 * Fire an event to show an error on the window
-	 * @param  {Object|String} json the message to alert
+	 * @param  {Object|string} json the message to alert
 	 * @returns {void}
 	 */
 	showError: function (json) {

@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	 * See http://stackoverflow.com/a/7128902
 	 *
 	 * @param {Array} tiles list of cmp configs to set top and left on
-	 * @return {Array}			the list with top and left set on them
+	 * @returns {Array}			the list with top and left set on them
 	 */
 	fitTiles: function (tiles) {
 		//if we don't have any tiles there's no need to do anything

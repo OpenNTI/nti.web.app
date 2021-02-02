@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * Given a record determine what key should be used to locate it
 	 * can be overridden
 	 * @param  {ModelInstance|JSON} record the record to look up or data for a record
-	 * @return {String}		   key
+	 * @returns {string}		   key
 	 */
 	getKeyForRecord: function (record) {
 		var key;
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * Given a record return the url used to get it
 	 * can be overridden
 	 * @param  {ModelInstance|JSON} record record to get url for or data for a record
-	 * @return {String}		   the url
+	 * @returns {string}		   the url
 	 */
 	getHrefForRecord: function (record) {
 		var href;
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 	/**
 	 * Set the values of the record from the server to the shared instance
-	 * @param {String} key key for the record
+	 * @param {string} key key for the record
 	 * @param {ModelInstance} record the record to sync from
 	 * @returns {void}
 	 */
@@ -133,9 +133,9 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * 2.) If its not already cached add it and return the cached record
 	 *
 	 * @param {ModelInstance} record record to get
-	 * @param {Boolean} sync true to request the record from the server
-	 * @param {Boolean} forceUpdate update the shared instance's data with the data from the record
-	 * @return {ModelInstance}		  shared instance of that record
+	 * @param {boolean} sync true to request the record from the server
+	 * @param {boolean} forceUpdate update the shared instance's data with the data from the record
+	 * @returns {ModelInstance}		  shared instance of that record
 	 */
 	getRecord: function (record, sync, forceUpdate) {
 		var key = this.getKeyForRecord(record),
@@ -172,8 +172,8 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 	/**
 	 * Given a key find the record in the cache if it exists
-	 * @param  {String} key key for the record
-	 * @return {ModelInstance}	   the cached record
+	 * @param  {string} key key for the record
+	 * @returns {ModelInstance}	   the cached record
 	 */
 	findRecord: function (key) {
 		return this.__getRecordForKey(key);

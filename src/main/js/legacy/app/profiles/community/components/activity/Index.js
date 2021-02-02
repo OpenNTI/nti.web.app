@@ -286,7 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	 * to see if its changed by the time we've loaded. If it has don't do anything so we can avoid getting tiles from
 	 * the wrong batch
 	 *
-	 * @param  {Number} page the page number to load
+	 * @param  {number} page the page number to load
 	 * @returns {void}
 	 */
 	loadPage: function (page) {

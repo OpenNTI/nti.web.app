@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 	 * NOTE: the data from the event will only be available in the same
 	 * event pump as the handler
 	 *
-	 * @param {String} key the key to look in the data transfer for
+	 * @param {string} key the key to look in the data transfer for
 	 * @param {Object} handler  the methods
 	 * @returns {void}
 	 */

@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 	 * Return a promise that fulfills when then cmp is ready
 	 * for the search results to be applied
 	 * @override
-	 * @return {Promise} -
+	 * @returns {Promise} -
 	 */
 	onceReadyForSearch: function () {
 		return Promise.resolve();
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 	 * Return the NTIID of the thing to look for
 	 * search results in
 	 * @override
-	 * @return {String} NTIID
+	 * @returns {string} NTIID
 	 */
 	getContainerIdForSearch: function () {},
 

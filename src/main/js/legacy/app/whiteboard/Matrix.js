@@ -80,8 +80,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	/**
 	 *
-	 * @param {Boolean} [averaged]-
-	 * @returns {Number} scale
+	 * @param {boolean} [averaged]-
+	 * @returns {number} scale
 	 */
 	getScale: function (averaged) {
 		var m = this.m,
@@ -110,9 +110,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	/**
 	 *
-	 * @param {Number} px -
-	 * @param {Number} [py] -
-	 * @returns {Number[]} -
+	 * @param {number} px -
+	 * @param {number} [py] -
+	 * @returns {number[]} -
 	 */
 	transformPoint: function (px, py) {
 		if (Ext.isArray(px)) {

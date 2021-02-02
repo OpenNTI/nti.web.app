@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	 * the Items field.
 	 *
 	 * @param  {Object} content the values to append
-	 * @return {Promise} -
+	 * @returns {Promise} -
 	 */
 	appendContent: function (content) {
 		var link = this.getContentsLink();
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	/**
 	 * Append the values form a form component
 	 * @param  {NextThought.common.form.Form} form the form component
-	 * @return {Promise} -
+	 * @returns {Promise} -
 	 */
 	appendForm: function (form) {
 		var link = this.getContentsLink();
@@ -311,9 +311,9 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	/**
 	 * Move a record from a given container to the end of my ordered contents
 	 * @param  {Object} record	  record to move
-	 * @param  {Object|String} oldParent the current parent
+	 * @param  {Object|string} oldParent the current parent
 	 * @param  {Object} root	  the root of me and the oldParent
-	 * @return {Promise} -
+	 * @returns {Promise} -
 	 */
 	appendFromContainer: function (record, oldParent, root) {
 		var move;
@@ -335,12 +335,12 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	/**
 	 * Move a record from a given container to the given index in my ordered contents
 	 *
-	 * @param  {Object|String} record	 record or ntiid of record
-	 * @param  {Number} index	  the position to move it to
-	 * @param {Number} oldIndex the old position
-	 * @param  {Object|String} oldParent old parent or ntiid
+	 * @param  {Object|string} record	 record or ntiid of record
+	 * @param  {number} index	  the position to move it to
+	 * @param {number} oldIndex the old position
+	 * @param  {Object|string} oldParent old parent or ntiid
 	 * @param  {Object} root	  the root of me and the oldParent
-	 * @return {Promise} -
+	 * @returns {Promise} -
 	 */
 	moveToFromContainer: function (record, index, oldIndex, oldParent, root) {
 		if (index === undefined) {

@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	 *
 	 * If no key is provided or we are unable to find one nothing will be added to the data transfer
 	 *
-	 * @param {String|Mixed} key   the key to store the value on (typically a mimetype), or the object to store
+	 * @param {string|Mixed} key   the key to store the value on (typically a mimetype), or the object to store
 	 * @param {Mixed} value the value to store
 	 * @returns {void}
 	 */
@@ -98,8 +98,8 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	 *
 	 * If the data is there, but we are not allowed to access it return true
 	 *
-	 * @param  {String} key the key to look for
-	 * @return {String}		the value on data transfer for that key
+	 * @param  {string} key the key to look for
+	 * @returns {string}		the value on data transfer for that key
 	 */
 	getData: function (key) {
 		var data;

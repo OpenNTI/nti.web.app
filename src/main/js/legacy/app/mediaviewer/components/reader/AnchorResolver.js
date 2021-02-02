@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	 * @param  {[TranscriptTimeRange]} description [the range of a given userdata]
 	 * @param  {[Ext.Store]} cueStore	[store of cue]
 	 * @param {NextThought.model.Video} video video model
-	 * @return {[HTMLElement]}			 [html element containing the described time range]
+	 * @returns {[HTMLElement]}			 [html element containing the described time range]
 	 */
 	getDomElementForTranscriptTimeRange: function (description, cueStore, video) {
 		if (!description || description.isEmpty) {

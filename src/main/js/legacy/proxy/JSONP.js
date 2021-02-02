@@ -85,9 +85,9 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	/**
 	 *
 	 * @param {Object} options Object with keys:
-	 * @param {String} [options.jsonpUrl] -
-	 * @param {String} options.url -
-	 * @param {String} [options.expectedContentType] -
+	 * @param {string} [options.jsonpUrl] -
+	 * @param {string} options.url -
+	 * @param {string} [options.expectedContentType] -
 	 * @param {Function} [options.success] -
 	 * @param {Function} [options.failure] -
 	 * @param {Object} [options.scope] -

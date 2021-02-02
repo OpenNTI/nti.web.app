@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	/**
 	 * Load the admin and enrolled courses, set the link for all courses so it can be loaded when needed
 	 * @param  {Service} s the service doc to get the links from
-	 * @return {Promise}   fulfills when all the courses have been loaded
+	 * @returns {Promise}   fulfills when all the courses have been loaded
 	 */
 	loadCourses: function () {
 		var store = this.CourseStore;
@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	/**
 	 * Iterate the items and call __precacheEntry on those that have it
 	 * @param  {Array} items items to iterate
-	 * @return {Promise}	   fulfills when all of the items precaches have finished
+	 * @returns {Promise}	   fulfills when all of the items precaches have finished
 	 */
 	__precacheItems: function (items) {
 		var precache;

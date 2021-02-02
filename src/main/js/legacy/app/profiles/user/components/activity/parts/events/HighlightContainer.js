@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	 * Attempts to add the record to this container.  If the date is a match it adds it. Otherwise it skips it.
 	 *
 	 * @param {NextThought.model.Highlight} record -
-	 * @return {Boolean} True if it was added, false otherwise.
+	 * @returns {boolean} True if it was added, false otherwise.
 	 */
 	collate: function (record) {
 		var d = record.get('CreatedTime'),

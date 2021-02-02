@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 	 * @param  {string} str the term to search for
 	 * @param  {boolean} partial Set true to match the entire word not just the substring.
 	 * @param  {boolean} wholeWordOnly add \b to the end
-	 * @return {RegExp} the regex that matches str
+	 * @returns {RegExp} the regex that matches str
 	 */
 	getRegExCache: function (str, partial, wholeWordOnly) {
 		var re = this._regexcache[str];

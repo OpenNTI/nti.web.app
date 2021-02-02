@@ -27,9 +27,9 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 	/**
 	 * This is the main exported function in this utility.
 	 *
-	 * @param {Number} y - y coordinate
+	 * @param {number} y - y coordinate
 	 * @param {Document} [doc] - document to search
-	 * @return {Object|null} - An object with a rect & range, or null.
+	 * @returns {Object|null} - An object with a rect & range, or null.
 	 */
 	findLine: function (y, doc) {
 		y = Math.round(y);

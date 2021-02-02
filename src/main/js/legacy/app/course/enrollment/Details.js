@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 	/**
 	 * Restore to an enrollment option
-	 * @param  {String} type   name of the enrollment option
+	 * @param  {string} type   name of the enrollment option
 	 * @param  {Array} config  array of configs for the option to parse
 	 * @returns {void}
 	 */
@@ -330,7 +330,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	/**
 	 * Given a base enrollment option, fetch all the data
 	 * @param  {Object} option option to load
-	 * @return {Promise}	   fulfills when its loaded
+	 * @returns {Promise}	   fulfills when its loaded
 	 */
 	__addEnrollmentBase: function (option) {
 		var me = this, loading;
@@ -352,7 +352,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	/**
 	 * Given an enrollment option, fetch all the data for the option given
 	 * @param  {Object} option the enrollment details
-	 * @return {Promise}		 resolved if the option is available, reject if not;
+	 * @returns {Promise}		 resolved if the option is available, reject if not;
 	 */
 	__addEnrollmentOption: function (option) {
 		var me = this, loading;
@@ -374,7 +374,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * Takes the enrollment details for the course and build the
 	 * data necessary to make the enrollment card
 	 * @param  {Object} details enrollment details
-	 * @return {Promise}		 fulfills when its done, a rejection is not expected
+	 * @returns {Promise}		 fulfills when its done, a rejection is not expected
 	 */
 	__onDetailsLoaded: function (details) {
 		var loading,
@@ -556,7 +556,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * Updates the enrollment card to match the options available
 	 * to the user for this course
 	 *
-	 * @param {Boolean} updateFromStore update the course from the available courses store
+	 * @param {boolean} updateFromStore update the course from the available courses store
 	 * @returns {void}
 	 */
 	updateEnrollmentCard: function (updateFromStore) {
@@ -744,9 +744,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	/**
 	 * takes the prices and returns the string we should show to the user
 	 *
-	 * @param  {Number} base  the price of the base option
-	 * @param  {Number} addOn the price of the addon
-	 * @return {String}		  what we should show the user
+	 * @param  {number} base  the price of the base option
+	 * @param  {number} addOn the price of the addon
+	 * @returns {string}		  what we should show the user
 	 */
 	getPriceString: function (base, addOn) {
 		var price;
@@ -831,7 +831,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	/**
 	 * Handles a click on the enrollment card and calls the appropriate handler
 	 * @param  {Event} e the click event
-	 * @return {Boolean}   if the event was stopped
+	 * @returns {boolean}   if the event was stopped
 	 */
 	handleEnrollmentClick: function (e) {
 		if (this.useReactEnrollment) { return; }
@@ -913,7 +913,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * Handles anchors with hrefs that we are looking for
 	 * @param  {Ext.element} link the anchor that was clicked
 	 * @param  {Event} e	the click event
-	 * @return {Boolean}	  whether or not the event should be stopped
+	 * @returns {boolean}	  whether or not the event should be stopped
 	 */
 	linkClicked: function (link, e) {
 		var href = link.getAttribute('href'), r = true,

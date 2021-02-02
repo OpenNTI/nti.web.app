@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * Given an object, built the link to get its path, call it, and fulfill with the path
 	 *
 	 * @param  {Object} obj object to get the link for
-	 * @return {Promise}	fulfills with the path
+	 * @returns {Promise}	fulfills with the path
 	 */
 	__doRequestForNoLink: function (obj) {
 		//try the container id since its more liable to be cached
@@ -95,9 +95,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	/**
 	 * Given a link return the path it returns
 	 *
-	 * @param  {String} link - url
+	 * @param  {string} link - url
 	 * @param  {Object} bundle (optional) -- needed in multipackage content
-	 * @return {Promise}	  fulfills with the path
+	 * @returns {Promise}	  fulfills with the path
 	 */
 	__doRequestForLink: function (link, bundle) {
 		const inflight = this.PathStore.getFromCache(link);
@@ -176,9 +176,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * if the object has a LibraryPath link on it use it, otherwise
 	 * attempt to build a link using the Service doc
 	 *
-	 * @param  {Object|String} obj the object to get the path to
+	 * @param  {Object|string} obj the object to get the path to
 	 * @param {Object} bundle - course
-	 * @return {Promise}	fulfills with the path to the object
+	 * @returns {Promise}	fulfills with the path to the object
 	 */
 	getPathToObject: function (obj, bundle) {
 		var link = obj.getLink && obj.getLink('LibraryPath'),
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * Given a path return the root bundle in it
 	 *
 	 * @param {Array} path the path to get the bundle out of
-	 * @return {Object} the root bundle in the path
+	 * @returns {Object} the root bundle in the path
 	 */
 	getRootBundleFromPath (path) {
 		for (let part of path) {

@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	/**
 	 * Given a base enrollment option, fetch all the data
 	 * @param  {Object} option option to load
-	 * @return {Promise}	   fulfills when its loaded
+	 * @returns {Promise}	   fulfills when its loaded
 	 */
 	__addEnrollmentBase: function (option) {
 		var me = this, loading;
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	/**
 	 * Given an enrollment option, fetch all the data for the option given
 	 * @param  {Object} option the enrollment details
-	 * @return {Promise}		 resolved if the option is available, reject if not;
+	 * @returns {Promise}		 resolved if the option is available, reject if not;
 	 */
 	__addEnrollmentOption: function (option) {
 		var me = this, loading;
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	 * Takes the enrollment details for the course and build the
 	 * data necessary to make the enrollment card
 	 * @param  {Object} details enrollment details
-	 * @return {Promise}		 fulfills when its done, a rejection is not expected
+	 * @returns {Promise}		 fulfills when its done, a rejection is not expected
 	 */
 	__onDetailsLoaded: function (details) {
 		var loading,

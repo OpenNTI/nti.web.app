@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 		 * Either returns or create an instance, so that every thing that uses the
 		 * state store is using the same instance.
 		 *
-		 * @return {Object} an instance of this state store
+		 * @returns {Object} an instance of this state store
 		 */
 		getInstance: function () {
 			if (!this.__instance) {
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 	/**
 	 * A wrapper so we don't have to repeat this everywhere
 	 * make sure setLoaded is called at some point if you use this
-	 * @return {Promise} fulfills once setLoaded has been called
+	 * @returns {Promise} fulfills once setLoaded has been called
 	 */
 	onceLoaded: function () {
 		if (this.hasLoaded()) {

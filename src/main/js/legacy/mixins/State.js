@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 
 	/**
 	 * Return the current state
-	 * @return {Object} the current state
+	 * @returns {Object} the current state
 	 */
 	getCurrentState: function () {
 		// let actions = this.__getStateActions();

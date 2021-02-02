@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {}
 	 *
 	 * @param {Function} callback -
 	 * @param {*} [initialValue] -
-	 * @return {*} -
+	 * @returns {*} -
 	 */
 	function reduce (callback, initialValue) {
 		// Strict is blacklisted in the 'legacy' folder because ExtJS breaks in strict mode...

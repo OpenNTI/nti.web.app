@@ -271,8 +271,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	 * 1.)	Fufill with false if they cancel the dialog
 	 * 2.)	Rejects if the request was unsuccessful
 	 * 3.)	Fulfills with true if the request was successful
-	 * @param  {Boolean} isMine Which message to show in the confirmation
-	 * @return {Promise}		 fulfills is it was successful
+	 * @param  {boolean} isMine Which message to show in the confirmation
+	 * @returns {Promise}		 fulfills is it was successful
 	 */
 	resetAssignment: function (isMine) {
 		let record = this;
@@ -594,10 +594,10 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 	/**
 	 * Given a value and letter for a grade, either create one or update an existing one
-	 * @param  {String} value  value of the grade
+	 * @param  {string} value  value of the grade
 	 * @param  {Char} letter letter of the grade
 	 * @param  {function} callback Called with response of setGrade
-	 * @return {Promise}	 fulfills when the grade has been saved
+	 * @returns {Promise}	 fulfills when the grade has been saved
 	 */
 	saveGrade: function (value, letter, callback) {
 		const oldGrade = this.get('Grade');

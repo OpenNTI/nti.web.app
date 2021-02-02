@@ -614,7 +614,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
  * given that content editors shouldn't have access to the GradeBook.
  *
  * @param {Course} bundle the course instance.
- * @return {Boolean} whether or not this is a content editor
+ * @returns {boolean} whether or not this is a content editor
  */
 function isContentEditor (bundle) {
 	return !(bundle && bundle.get('GradeBook'));

@@ -309,8 +309,8 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 	/**
 	 *
-	 * @param {String} mimeType MimeType
-	 * @param {String} [title] Title
+	 * @param {string} mimeType MimeType
+	 * @param {string} [title] Title
 	 * @returns {Object} The collection
 	 */
 	getCollectionFor: function (mimeType, title) {

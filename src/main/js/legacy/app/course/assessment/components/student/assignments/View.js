@@ -510,8 +510,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 *
 	 * @param {AssignmentCollection} assignments	the assignment collection
 	 * @param {Bundle} instance	   the bundle we are in
-	 * @param {Boolean} silent to trigger early termination
-	 * @param {Boolean} doNotCache on whether we should load a fresh copy of assignments
+	 * @param {boolean} silent to trigger early termination
+	 * @param {boolean} doNotCache on whether we should load a fresh copy of assignments
 	 * @returns {Promise} -
 	 */
 	setAssignmentsData: function (assignments, instance, silent, doNotCache) {

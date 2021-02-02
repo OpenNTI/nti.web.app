@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 	},
 
 	/**
-	 * @param {String|Object} key -
+	 * @param {string|Object} key -
 	 * @param {Object} [panel] -
 	 * @returns {Panel} ?
 	 */

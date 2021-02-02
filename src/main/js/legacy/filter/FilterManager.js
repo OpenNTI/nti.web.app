@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 	 *
 	 * All union/intersection/include/exclude data will be dropped.
 	 *
-	 * @param {String} [scope] - id of the filter menu this filter is associated to.
+	 * @param {string} [scope] - id of the filter menu this filter is associated to.
 	 * @returns {Object} -
 	 */
 	getServerListParams: function (scope) {

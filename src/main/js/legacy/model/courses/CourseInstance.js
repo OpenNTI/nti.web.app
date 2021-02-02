@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
 	/**
-	 * @return {CatalogFamily} Get the catalog family for this course
+	 * @returns {CatalogFamily} Get the catalog family for this course
 	 */
 	getCatalogFamily: function () {
 		return this.__courseCatalogEntry.getCatalogFamily();
@@ -528,7 +528,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	/**
 	 * Check is this instance is in the same family as another
 	 * @param  {CourseInstance} instance the instance to compare against
-	 * @return {Boolean}		if they are in the same family
+	 * @returns {boolean}		if they are in the same family
 	 */
 	inSameFamily: function (instance) {
 		var catalog = this.getCourseCatalogEntry();
@@ -577,7 +577,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	/**
 	 * Return the a promise that fulfills with the background image of the bundle
 	 *
-	 * @return {Promise} fulfills with url
+	 * @returns {Promise} fulfills with url
 	 */
 	getBackgroundImage: function () {
 		return this.__getPresentationResourcesBacking()
@@ -645,7 +645,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 * Because of how the ParsingUtils work, and since the CourseInstance is a property
 	 * on the enrollment instance the enrollment instance should be in the course instance's stores
 	 *
-	 * @return {Promise} fulfills with the enrollment instance
+	 * @returns {Promise} fulfills with the enrollment instance
 	 */
 	getWrapper: function () {
 		var me = this;
@@ -758,7 +758,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 * Return an outline store based on the first toc,
 	 * cache these results for now.
 	 * TODO: don't keep these cached for the lifetime of the app
-	 * @return {[type]} [description]
+	 * @returns {[type]} [description]
 	 */
 	__getTocOutline: function () {
 		if (!this.tocOutline) {
@@ -798,7 +798,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	/**
 	 * Get the AssignmentHistory link off of the enrolled instance or this
-	 * @return {String} link to the assignment history
+	 * @returns {string} link to the assignment history
 	 */
 	__getAssignmentHistoryLink: function () {
 		var me = this;
@@ -811,10 +811,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	/**
 	 * get the link, and cache the results
-	 * @param  {String} link rel of the link to get
-	 * @param  {Boolean} force -
-	 * @param  {Number} timeout -
-	 * @return {Promise} the request for the link
+	 * @param  {string} link rel of the link to get
+	 * @param  {boolean} force -
+	 * @param  {number} timeout -
+	 * @returns {Promise} the request for the link
 	 */
 	__getList: function (link, force, timeout) {
 		var promiseName = '__get' + link + 'Promise';
@@ -892,7 +892,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	/**
 	 * Return an assignment collection for this course
-	 * @return {AssignmentCollection} the assignment collection
+	 * @returns {AssignmentCollection} the assignment collection
 	 */
 	getAssignments: function () {
 		if (this.__getAssignmentsPromise) { return this.__getAssignmentsPromise; }
@@ -1182,7 +1182,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	*
 	* @param  {Array} section Array of forums in this section
 	* @param  {Array} parent  Array of forums in the parent if there are any
-	* @return {Object}		  The binned forums
+	* @returns {Object}		  The binned forums
 	*/
 	__binDiscussions: function (section, parent) {
 		var bin = {
@@ -1247,7 +1247,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 *	}
 	 *
 	 * @param  {Object} bin binned forums
-	 * @return {Object}		a forum list of the above type
+	 * @returns {Object}		a forum list of the above type
 	 */
 	__binToForumList: function (bin) {
 		var section = this.get('Discussions'),
@@ -1358,8 +1358,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	/**
 	 * Sends requests for the contents link of the discussions and parent discussions if they are there
-	 * @param {String} prop -
-	 * @return {Promise} Fulfills or rejects with the response of the request
+	 * @param {string} prop -
+	 * @returns {Promise} Fulfills or rejects with the response of the request
 	 */
 	getDiscussionContents: function (prop) {
 		var board = this.get(prop),
@@ -1467,7 +1467,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	/**
 	 * A helper to parse the object in AnnouncementForums or ParentAnnouncementForums
 	 * @param  {Object} items []
-	 * @return {[type]}		  [description]
+	 * @returns {[type]}		  [description]
 	 */
 	__getAnnouncementsForums: function (items) {
 		var keys = Object.keys(items) || [],
@@ -1493,7 +1493,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 *		ForCredit: Forum
 	 *	}
 	 *}
-	 * @return {Array} a flattened list of the forums
+	 * @returns {Array} a flattened list of the forums
 	 */
 	getMySectionAnnouncements: function () {
 		var announcements = this.get('AnnouncementForums');
@@ -1507,7 +1507,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 	/**
 	 * Same as getMySectionAnnouncements just for my parent section
-	 * @return {Array} a flattened list of the forums
+	 * @returns {Array} a flattened list of the forums
 	 */
 	getParentAnnouncements: function () {
 		var announcements = this.get('ParentAnnouncementForums');

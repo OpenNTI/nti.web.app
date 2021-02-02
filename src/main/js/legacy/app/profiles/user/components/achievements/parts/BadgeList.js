@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	/**
 	 * Set the number of columns the list can fill
-	 * @param {Number} width the number of columns
+	 * @param {number} width the number of columns
 	 * @returns {void}
 	 */
 	setColumns: function (width) {

@@ -244,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	/**
 	 * Get list of videos for a course with section titles.
 	 * @param {Object} bundle [description]
-	 * @return {Promise} [description]
+	 * @returns {Promise} [description]
 	 */
 	getVideosForBundle: function (bundle) {
 		if (!bundle.getMediaByOutline || !bundle.getNavigationStore) {

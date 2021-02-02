@@ -181,8 +181,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 
 	/**
 	 * Whether or not this catalog entry is in a given family id
-	 * @param  {String}	 id FamilyId
-	 * @return {Boolean}	if it is in the family
+	 * @param  {string}	 id FamilyId
+	 * @returns {boolean}	if it is in the family
 	 */
 	isInFamily: function (id) {
 		var catalogFamilies = this.get('CatalogFamilies');
@@ -308,7 +308,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 	 * Compare a given catalog entry to this one to see if they
 	 * are in the same family
 	 * @param  {CourseCatalogEntry} catalog entry to compare
-	 * @return {Boolean}			whether or not they are in the same family
+	 * @returns {boolean}			whether or not they are in the same family
 	 */
 	inSameFamily: function (catalog) {
 		var families = this.get('CatalogFamilies');

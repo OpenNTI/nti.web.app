@@ -75,9 +75,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 	/**
 	 * Get the HistoryItem for an assignment, doesn't make sense for an instructor so reject
-	 * @param  {String} assignment NTIID of the assignment
-	 * @param  {Boolean} useCache -
-	 * @return {Promse}			   fulfills with the history item
+	 * @param  {string} assignment NTIID of the assignment
+	 * @param  {boolean} useCache -
+	 * @returns {Promse}			   fulfills with the history item
 	 */
 	getHistoryItem: function (assignment, useCache) {
 		return Promise.reject();
@@ -87,8 +87,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	 * Get the HistoryItemSummaries for an assignment
 	 * returns a store that can be paged, filtered, and searched through
 	 *
-	 * @param  {String} assignment NTIID of the assignment
-	 * @return {Store}			  store proxied to load the summaries
+	 * @param  {string} assignment NTIID of the assignment
+	 * @returns {Store}			  store proxied to load the summaries
 	 */
 	getAssignmentHistory: function (assignment) {
 		return AssignmentHistoryItems.create({
@@ -105,9 +105,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 	 * Get the HistoryItemSummaries for a user
 	 * returns a store that can be pages, filtered, and searched though
 	 *
-	 * @param {String} historyLink link to the assignment histories for a user
-	 * @param {String} [studentId] [description]
-	 * @return {Store}		store proxied to load the summaries
+	 * @param {string} historyLink link to the assignment histories for a user
+	 * @param {string} [studentId] [description]
+	 * @returns {Store}		store proxied to load the summaries
 	 */
 	getStudentHistory: function (historyLink, studentId) {
 		return StudentHistoryItems.create({
@@ -123,8 +123,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 	/**
 	 * Returns the gradebook entry for an assignment
-	 * @param  {String} assignment NTIID of the assignment
-	 * @return {Promise}		   fulfills with the gradebook entry
+	 * @param  {string} assignment NTIID of the assignment
+	 * @returns {Promise}		   fulfills with the gradebook entry
 	 */
 	getGradeBookEntry: function (assignment) {
 		return Promise.resolve();
@@ -132,9 +132,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 	/**
 	 * Returns the grade for a user on an assignment
-	 * @param  {String} assignment NTIID of the assignment
-	 * @param  {String} user	   Username of the user
-	 * @return {Promise}			fulfills with the grade
+	 * @param  {string} assignment NTIID of the assignment
+	 * @param  {string} user	   Username of the user
+	 * @returns {Promise}			fulfills with the grade
 	 */
 	getGradeFor: function (assignment, user) {
 		user = this.__getIdOf(user);
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 
 	/**
 	 * Returns a store with summaries for all the users
-	 * @return {Store}		pageable, sortable, searchable list of user summaries
+	 * @returns {Store}		pageable, sortable, searchable list of user summaries
 	 */
 	getGradeSummaries: function () {
 		var gradeBook = this.get('GradeBook');

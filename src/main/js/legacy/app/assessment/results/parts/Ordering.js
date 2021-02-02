@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 	/**
 	 * See Comment in NextThought.app.assessment.results.parts.Matching
-	 * @return {Object} Map of results
+	 * @returns {Object} Map of results
 	 */
 	getResults: function () {
 		return this.resultPart.Results;

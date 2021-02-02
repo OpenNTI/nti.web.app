@@ -14,11 +14,11 @@ var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
 	 *
 	 * @param {Function} [fn] The default behavior if there is no delegate or if the delegate does not return
 	 *						{@link #PREVENT_DEFAULT}
-	 * @param {Boolean} [applyAll] If more than one delegate offer an implementation, use them all. (Obviously the
+	 * @param {boolean} [applyAll] If more than one delegate offer an implementation, use them all. (Obviously the
 	 *						return value will be meaningless, so don't use this for functions that need to return
 	 *						something)
 	 *
-	 * @return {Function} The delegated function.
+	 * @returns {Function} The delegated function.
 	 */
 	getDelegated: function (fn,applyAll) {
 		fn = fn || function () {};

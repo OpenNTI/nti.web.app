@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	 * Update the presence of a user, if it is the current user and they went offline
 	 * in another session, give them a chance to come back online.
 	 *
-	 * @param {String} username		  id of the user the presence if for
+	 * @param {string} username		  id of the user the presence if for
 	 * @param {PresenceInfo} presence		the presence
 	 * @param {Function} changePresence what to call if they do set themselves online
 	 * @returns {void}
@@ -203,9 +203,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	 *2) if no roomId is sent, then look for a room with the same constituants, that room must not be a group/class.
 	 *
 	 * @param {Array} users list of users
-	 * @param {String} roomId roomid
+	 * @param {string} roomId roomid
 	 * @param {Object} options options
-	 * @return {NextThought.model.RoomInfo} RoomInfo
+	 * @returns {NextThought.model.RoomInfo} RoomInfo
 	 */
 	existingRoom: function (users, roomId) {
 		var allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.get('Username'))),
@@ -232,8 +232,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 
 	/**
 	 *
-	 * @param {String} [key] Optional sub-key
-	 * @return {*} object
+	 * @param {string} [key] Optional sub-key
+	 * @returns {*} object
 	 */
 	getSessionObject: function (key) {
 		var o = TemporaryStorage.get(this.STATE_KEY) || {};
@@ -246,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	/**
 	 *
 	 * @param {Object} o Value to put into session storage.
-	 * @param {String} [key] Optional key. If present, `o` is assumed to be the new value at the `key` instead of
+	 * @param {string} [key] Optional key. If present, `o` is assumed to be the new value at the `key` instead of
 	 *				the whole session object.
 	 * @returns {void}
 	 */

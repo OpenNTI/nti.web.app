@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {Array} items		the parents to choose from
 	 * @param  {Component} editor		the editor to create a new parent
 	 * @param  {Object} parentRecord the parent record of the parents
-	 * @return {Component}				the menu component
+	 * @returns {Component}				the menu component
 	 */
 	buildMenu: function (items, editor, parentRecord) {
 		var menu = new ParentselectionMenu({

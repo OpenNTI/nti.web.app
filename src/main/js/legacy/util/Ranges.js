@@ -327,7 +327,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 * a size but no display, so it looks like a bunch of emopty space in the note window.
 	 *
 	 * @param {Node} dom - the dom you want cleaned, make sure it's a clone or you will delete stuff from the dom it belongs to.
-	 * @return {Node} Dom Node.
+	 * @returns {Node} Dom Node.
 	 */
 	clearNonContextualGarbage: function (dom) {
 		Ext.each(this.nonContextWorthySelectors, function (sel) {
@@ -402,8 +402,8 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 * @param {NextThought.model.anchorables.ContentRangeDescription} applicableRange The range.
 	 * @param {Document} doc the current document.
 	 * @param {Node} cleanRoot clean copy of the document.
-	 * @param {String} containerId The container id.
-	 * @return {Node} Context Node
+	 * @param {string} containerId The container id.
+	 * @returns {Node} Context Node
 	 */
 	getContextAroundRange: function (applicableRange, doc/*, cleanRoot, containerId*/) {
 		var utils = applicableRange.isTimeRange ? AnchorResolver : Anchors,
@@ -419,7 +419,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	/**
 	 *
 	 * @param {Node} n A dom node.
-	 * @return {Node} A dom node.
+	 * @returns {Node} A dom node.
 	 */
 	fixUpCopiedContext: function (n) {
 		var node = Ext.get(n);

@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * Get a list of all the editors in this group
 		 *
 		 * @override
-		 * @return {[Editors]} the editors
+		 * @returns {[Editors]} the editors
 		 */
 		getSubEditors: function () {},
 
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * Return a combined list of the mimetypes handled by the
 		 * editors in the group
 		 *
-		 * @return {[String]} the mimeTypes
+		 * @returns {[string]} the mimeTypes
 		 */
 		getHandledMimeTypes: function () {
 			var editors = this.getEditors() || [],
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * editors in the group
 		 *
 		 * @see look in NextThought.app.course.overview.components.editing.Editor for an example of a type
-		 * @return {[Objects]} combined types
+		 * @returns {[Objects]} combined types
 		 */
 		getTypes: function () {
 			var editors = this.getEditors() || [];
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		/**
 		 * Return the editor in this group that can handle a record
 		 * @param {Object} record the record to find the editor for
-		 * @return {Editor} the Class to instantiate to edit the record
+		 * @returns {Editor} the Class to instantiate to edit the record
 		 */
 		getEditorForRecord: function (record) {
 			var editors = this.getEditors() || [],
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		/**
 		 * Return the type switcher to handle switching between the items in the group
-		 * @return {Object} component to handle switching types
+		 * @returns {Object} component to handle switching types
 		 */
 		getTypeSwitcher: function () {}
 	}

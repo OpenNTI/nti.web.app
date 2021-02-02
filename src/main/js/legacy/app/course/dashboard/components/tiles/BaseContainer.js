@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		/**
 		 * returns Promise the fulfills with a config with a width and height
 		 * @param	{Model} record the record we are building the tile for
-		 * @return	{Object} the config to build this tile
+		 * @returns	{Object} the config to build this tile
 		 */
 		getTileConfig: function (/*record*/) {
 			return Promise.resolve({

@@ -253,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	/**
 	 * Set the current option and update the input
 	 * @param  {Node} el the li to select
-	 * @param  {Boolean} silent don't fire an event
+	 * @param  {boolean} silent don't fire an event
 	 * @returns {void}
 	 */
 	selectOption: function (el, silent) {

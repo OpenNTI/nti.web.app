@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 * Also make sure you keep the background record (one belonging to the assignmentCollection)
 	 * is updated. They could differ but they are both the same assignment
 	 * and we need to make sure they are always in sync.
-	 * @return {Null} No Return
+	 * @returns {Null} No Return
 	 */
 	async updateAssignment () {
 		const assignment = this.assignment;

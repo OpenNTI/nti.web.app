@@ -18,23 +18,23 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 	 * @memberOf NextThought.app.stream.util.StreamSource#
 	 *
 	 * @param {Object} config values to set up the stream source with
-	 * @param {String} config.batch which batch to start on
-	 * @param {String} config.batchParam the value to key the batch on
-	 * @param {String} config.batchAfter which batch to start on after a value
-	 * @param {String} config.batchAfterParam the value to key the batchAfter on
+	 * @param {string} config.batch which batch to start on
+	 * @param {string} config.batchParam the value to key the batch on
+	 * @param {string} config.batchAfter which batch to start on after a value
+	 * @param {string} config.batchAfterParam the value to key the batchAfter on
 	 * @param {Array} config.filters filters to apply to the batch
-	 * @param {String} config.filterParam the value to key the filters on
-	 * @param {Number} config.pageSize the size of the batch
-	 * @param {String} config.sizeParam the value to key the size on
-	 * @param {String|Object} config.sort the field to sort the items on, or an object
-	 * @param {String} config.sort.on the field to sort the items on
-	 * @param {String} config.sort.order the order to sort on
-	 * @param {String} config.sortParam the value to key the sort on
-	 * @param {String} config.sortOrder the order to sort on
+	 * @param {string} config.filterParam the value to key the filters on
+	 * @param {number} config.pageSize the size of the batch
+	 * @param {string} config.sizeParam the value to key the size on
+	 * @param {string|Object} config.sort the field to sort the items on, or an object
+	 * @param {string} config.sort.on the field to sort the items on
+	 * @param {string} config.sort.order the order to sort on
+	 * @param {string} config.sortParam the value to key the sort on
+	 * @param {string} config.sortOrder the order to sort on
 	 * @param {Strin} config.sortOrderParam the value to key the sort order on
-	 * @param {String} config.context an ntiid to filter to items contained in it
-	 * @param {String} config.contextParam the value to key the context on
-	 * @return {void}
+	 * @param {string} config.context an ntiid to filter to items contained in it
+	 * @param {string} config.contextParam the value to key the context on
+	 * @returns {void}
 	 */
 	constructor: function (config) {
 		this.callParent(arguments);
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 	 * Build the params to send back with the request
 	 *
 	 * @memberOf  NextThought.app.stream.util.StreamSource#
-	 * @return {Object} params
+	 * @returns {Object} params
 	 */
 	getParams: function () {
 		var params,

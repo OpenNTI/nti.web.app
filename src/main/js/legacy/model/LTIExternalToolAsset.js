@@ -99,8 +99,8 @@ module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', 
 	/**
 	 *
 	 * Get or generate the icon data for a related work.
-	 * @param {String} root - the base root.
-	 * @return {Object}	- The icon data object will have the following fields:
+	 * @param {string} root - the base root.
+	 * @returns {Object}	- The icon data object will have the following fields:
 	 * - url: The url for the icon. This field is required.
 	 * - extension: the extension of a file. Required for the case where we have to generate the icon.
 	 * - iconCls: extra cls that we may add to an icon.
@@ -127,8 +127,8 @@ module.exports = exports = Ext.define('NextThought.model.LTIExternalToolAsset', 
 
 	/**
 	 * Resolve the icon to the content package if we don't have one set
-	 * @param {String} root - the base root.
-	 * @return {Promise}        fulfills with the a object that has url, extension, and icon cls
+	 * @param {string} root - the base root.
+	 * @returns {Promise}        fulfills with the a object that has url, extension, and icon cls
 	 */
 	resolveIcon (root) {
 

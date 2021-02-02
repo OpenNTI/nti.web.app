@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Preview'
 	 * Maps the records 'reply/comment/post' counts to a single value.
 	 *
 	 * @param {Ext.data.Model} record -
-	 * @return {Number} -
+	 * @returns {number} -
 	 */
 	getCommentCount: function (record) {
 		throw new Error('Do not use the base class directly. Subclass and implement this');
@@ -208,7 +208,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Preview'
 	 * Place to derive fields that should be put into the template.
 	 *
 	 * @param {Ext.data.Model} record -
-	 * @return {Object} Object
+	 * @returns {Object} Object
 	 */
 	getDerivedData: function (record) {
 		return {

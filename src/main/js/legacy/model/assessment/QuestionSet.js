@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet'
 	 * @param {Function} save	saves the progress and returns a promise
 	 * @param {Function} before called before progress is saved
 	 * @param {Function} after	called after progress is saved
-	 * @param {Boolean} doNotSave if true do not actually save the progress
+	 * @param {boolean} doNotSave if true do not actually save the progress
 	 * @returns {void}
 	 */
 	addSaveProgressHandler: function (save, before, after, doNotSave) {

@@ -10,7 +10,7 @@ const Ext = require('@nti/extjs');
 module.exports = exports = Ext.define('NextThought.mixins.dnd.DataTransferSource', {
 	/**
 	 * Stringify the value of getDataForTransfer
-	 * @return {String} value for the data transfer
+	 * @returns {string} value for the data transfer
 	 */
 	getDataTransferValue: function () {
 		if (!this.getDataForTransfer) {

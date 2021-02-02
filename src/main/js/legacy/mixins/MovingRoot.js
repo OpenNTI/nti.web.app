@@ -22,10 +22,10 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 
 	/**
 	 * Append a record from one parent to another
-	 * @param  {Object|String} record		  the record to move
-	 * @param  {Object|String} originalParent the current parent of the record
-	 * @param  {Object|String} newParent	  the desired parent of the record
-	 * @return {Promise} fulills with the record that was appended,
+	 * @param  {Object|string} record		  the record to move
+	 * @param  {Object|string} originalParent the current parent of the record
+	 * @param  {Object|string} newParent	  the desired parent of the record
+	 * @returns {Promise} fulills with the record that was appended,
 	 */
 	doAppendRecordFrom: function (record, originalParent, newParent) {
 		var index = newParent.getItemsCount ? newParent.getItemsCount() : Infinity;
@@ -36,12 +36,12 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	/**
 	 * Move a record from one parent to another at an index
 	 *
-	 * @param  {Object|String} record  the record to move
-	 * @param  {Number} index		   the index to move to
-	 * @param  {Number} oldIndex	   the old index
-	 * @param  {Object|String} newParent	  the desired parent
-	 * @param  {Object|String} originalParent the current parent
-	 * @return {Promise} fulfills with the record that was moved
+	 * @param  {Object|string} record  the record to move
+	 * @param  {number} index		   the index to move to
+	 * @param  {number} oldIndex	   the old index
+	 * @param  {Object|string} newParent	  the desired parent
+	 * @param  {Object|string} originalParent the current parent
+	 * @returns {Promise} fulfills with the record that was moved
 	 */
 	doMoveRecordFrom: function (record, index, oldIndex, newParent, originalParent) {
 		var link = this.getMoveLink(),
@@ -82,8 +82,8 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param {Object} record the record to move
 	 * @param {Object} newParent the record to move it to
 	 * @param {Object} originalParent the record its moving from
-	 * @param  {String} response the response from the server
-	 * @return {Object} the record that was moved
+	 * @param  {string} response the response from the server
+	 * @returns {Object} the record that was moved
 	 */
 	__onMoveOperation: function (record, newParent, originalParent, response) {
 		var updatedNewParent, updatedOriginalParent, updatedRecord,

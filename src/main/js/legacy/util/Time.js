@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 * Takes two dates and returns true if they are on the same day
 	 * @param  {Date}  a date to compare
 	 * @param  {Date}  b the other date to compare
-	 * @return {Boolean}   if they are on the same day
+	 * @returns {boolean}   if they are on the same day
 	 */
 	isSameDay: function (a, b) {
 		//clone the dates so we don't affect what we were passed
@@ -175,11 +175,11 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 *
 	 * ex. 2 weeks, 2 days, and 2 hours
 	 *
-	 * @param  {Number} millis		   millis to convert
-	 * @param  {Number} numberOfUnits  How many units (weeks, days, hours, etc.) to include
-	 * @param  {Boolean} doNotPluralize whether or not to pluralize the units
+	 * @param  {number} millis		   millis to convert
+	 * @param  {number} numberOfUnits  How many units (weeks, days, hours, etc.) to include
+	 * @param  {boolean} doNotPluralize whether or not to pluralize the units
 	 * @param  {Object} overrides Strings to use instead of the defaults
-	 * @return {String}				   the parsed string
+	 * @returns {string}				   the parsed string
 	 */
 	getNaturalDuration: function (millis, numberOfUnits, doNotPluralize, overrides) {
 		var units = [], lastItem, s,
@@ -257,8 +257,8 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 * getNext: calls this function with a week from the date given
 	 * getPrevious: calls this function with a week before the date given
 	 *
-	 * @param  {Date|String} date argument to pass to the moment constructor, falsy means today
-	 * @return {Object}		 utility for stepping through the weeks
+	 * @param  {Date|string} date argument to pass to the moment constructor, falsy means today
+	 * @returns {Object}		 utility for stepping through the weeks
 	 */
 	getWeek: function (date = new Date()) {
 
@@ -327,8 +327,8 @@ exports._timer = function () {
 
 	/**
 	 * Start the count down/up and update on the interval
-	 * @param  {Number} i how often to update
-	 * @return {Object}			 this so calls can be chained
+	 * @param  {number} i how often to update
+	 * @returns {Object}			 this so calls can be chained
 	 */
 	this.start = function (i) {
 		interval = i || 'seconds'; //default to a second
@@ -358,9 +358,9 @@ exports._timer = function () {
 
 	/**
 	 * Set a count down from t to f
-	 * @param  {Date|Number} t date or milliseconds to stop at
-	 * @param  {Date|Number} f date or milliseconds to start at
-	 * @return {Object}	  this so calls can be chained
+	 * @param  {Date|number} t date or milliseconds to stop at
+	 * @param  {Date|number} f date or milliseconds to start at
+	 * @returns {Object}	  this so calls can be chained
 	 */
 	this.countDown = function (t, f) {
 		from = getTimeStamp(f);
@@ -378,9 +378,9 @@ exports._timer = function () {
 
 	/**
 	 * Set a count up from t to f
-	 * @param  {Date|Number} t date or milliseconds to stop at
-	 * @param  {Date|Number} f date or milliseconds to start at
-	 * @return {Object}	  this so calls can be chained
+	 * @param  {Date|number} t date or milliseconds to stop at
+	 * @param  {Date|number} f date or milliseconds to start at
+	 * @returns {Object}	  this so calls can be chained
 	 */
 	this.countUp = function (t, f) {
 		from = getTimeStamp(f);
@@ -409,7 +409,7 @@ exports._timer = function () {
 	 *	}
 	 *
 	 * @param  {Function} fn callback to be called
-	 * @return {Object}		 return this so calls can be chained
+	 * @returns {Object}		 return this so calls can be chained
 	*/
 	this.tick = function (fn) {
 		var time = from;
@@ -432,7 +432,7 @@ exports._timer = function () {
 
 	/**
 	 * Clear the interval, make sure this gets called. Otherwise we will have an interval hanging around
-	 * @return {Object} return this so calls can be chained
+	 * @returns {Object} return this so calls can be chained
 	 */
 	this.stop = function () {
 		clearInterval(timerInterval);
@@ -444,7 +444,7 @@ exports._timer = function () {
 	/**
 	 * A callback to be called when the timer reaches the destination
 	 * @param  {Function} fn [description]
-	 * @return {Object}		 return this so calls can be chained
+	 * @returns {Object}		 return this so calls can be chained
 	 */
 	this.alarm = function (fn) {
 		alarmFn = fn;

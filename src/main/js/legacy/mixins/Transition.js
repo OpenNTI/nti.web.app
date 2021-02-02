@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 	 * Get the name of the event to listen to for when the transition ends
 	 *
 	 * @param {Node} el --
-	 * @return {String} event name
+	 * @returns {string} event name
 	 */
 	__getTransitionEndEventName: function (el) {
 		var i,

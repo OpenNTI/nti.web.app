@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 	 * You cannot stop the main callback from being called.
 	 *
 	 * @param {Object} bread Configuration for {@link NextThought.view.toast.Window}
-	 * @return {Object} Toast component instance
+	 * @returns {Object} Toast component instance
 	 */
 	makeToast: function (bread) {
 		var size = Ext.dom.Element.getViewSize(),

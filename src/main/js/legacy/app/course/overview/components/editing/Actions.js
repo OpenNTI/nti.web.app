@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {Object} newPosition		 the parent and index the record is moving to
 	 * @param  {Object} root		   the root of both parents
 	 * @param {Object} visibilityCmp the cmp used to control visibility
-	 * @return {Promise}			   fulfill when successful, reject when fail
+	 * @returns {Promise}			   fulfill when successful, reject when fail
 	 */
 	saveEditorForm: function (form, record, originalPosition, newPosition, root, visibilityCmp) {
 		var me = this;
@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 *
 	 * @param  {CourseOutlineNode} record		A record with a publish link.
 	 * @param  {TimeStamp} date Optional date to publish a date on
-	 * @return {Promise}  fulfills when successfully published, reject when it failed.
+	 * @returns {Promise}  fulfills when successfully published, reject when it failed.
 	 */
 	publishOnDate: function (record, date) {
 		var link = record && record.getLink('publish');
@@ -281,7 +281,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * Handle un-publishing a record (i.e. CourseOutlineNode, CourseOutlineContentNode)
 	 *
 	 * @param  {CourseOutlineNode} record		A record with a publish link.
-	 * @return {Promise}  fulfills when successfully published, reject when it failed.
+	 * @returns {Promise}  fulfills when successfully published, reject when it failed.
 	 */
 	unpublish: function (record) {
 		var link = record && record.getLink('unpublish');

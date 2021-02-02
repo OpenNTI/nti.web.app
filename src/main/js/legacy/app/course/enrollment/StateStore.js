@@ -76,10 +76,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	 * that have to be completed to enroll in that course.
 	 *
 	 * @param  {CourseCatalogEntry} course the course we are building the steps for
-	 * @param {String} enrollmentType the type of enrollment
-	 * @param {String} type a subtype of the enrollment gift, or redeem
+	 * @param {string} enrollmentType the type of enrollment
+	 * @param {string} type a subtype of the enrollment gift, or redeem
 	 * @param {Array} config array of strings for the option to parse into the correct state
-	 * @return {Array}		  an array of steps
+	 * @returns {Array}		  an array of steps
 	 */
 	getEnrollmentSteps: function (course, enrollmentType, type, config) {
 		return this.getOption(enrollmentType).buildEnrollmentSteps(course, type, config);
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	 * Returns the details about the different enrollment options
 	 *
 	 * @param  {CourseCatalogEntry} course		   The course we are getting the options for
-	 * @return {Promise}				fulfills with information needed to show the enrollment options
+	 * @returns {Promise}				fulfills with information needed to show the enrollment options
 	 */
 	getEnrollmentDetails: function (course) {
 		var p, catalogData = {

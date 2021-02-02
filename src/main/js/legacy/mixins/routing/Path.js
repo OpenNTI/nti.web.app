@@ -50,9 +50,9 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * handler should return its part of the current url
 	 * the handler can return a promise
 	 *
-	 * @param {String} route   the path to add the handler to
+	 * @param {string} route   the path to add the handler to
 	 * @param {Function} handler the handler
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addRoute: function (route, handler) {
 		route = this.trimRoute(route);
@@ -142,8 +142,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 *
 	 * handler should return its part of the url, or a string to use as the route
 	 * the handler can return a promise
-	 * @param {Function|String} handler default route to apply or function to call
-	 * @return {void}
+	 * @param {Function|string} handler default route to apply or function to call
+	 * @returns {void}
 	 */
 	addDefaultRoute: function (handler) {
 		if (typeof handler === 'string') {
@@ -199,9 +199,9 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Given a route call a handler if we have one for it
-	 * @param  {String} path the route to handle
+	 * @param  {string} path the route to handle
 	 * @param {Object} precache a map of keys to precached objects
-	 * @return {Promise} fulfills with the return value of the handler
+	 * @returns {Promise} fulfills with the return value of the handler
 	 */
 	handleRoute (path, precache) {
 		this.beforeRoute();
@@ -316,9 +316,9 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Given a route call a handler if we have one for it
-	 * @param  {String} path the route to handle
+	 * @param  {string} path the route to handle
 	 * @param {Object} precache a map of keys to precached objects
-	 * @return {Promise} fulfills with the return value of the handler
+	 * @returns {Promise} fulfills with the return value of the handler
 	 */
 	xhandleRoute: function (path, precache) {
 		path = this.trimRoute(path);
@@ -523,13 +523,13 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	/**
 	 * Return a title to put in the history.pushState title for this route
 	 * @override
-	 * @return {String} a title to describe the state of this route
+	 * @returns {string} a title to describe the state of this route
 	 */
 	getRouteTitle: function () { return ''; },
 
 	/**
 	 * Return objects to apply to the cache to speed up handling a route
-	 * @return {Object} items to merge into the precache
+	 * @returns {Object} items to merge into the precache
 	 */
 	getRoutePrecache: function () { return {}; },
 
@@ -553,10 +553,10 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	/**
 	 * Merge a title and sub route into mine
 	 *
-	 * @param  {String} title title of the route
-	 * @param  {String} subRoute path of the route
+	 * @param  {string} title title of the route
+	 * @param  {string} subRoute path of the route
 	 * @param {Object} precache pre resolved objects
-	 * @return {Object}			  map of the values
+	 * @returns {Object}			  map of the values
 	 */
 	__mergeChildRoute: function (title, subRoute, precache) {
 		var myTitle = this.getRouteTitle(),
@@ -602,10 +602,10 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the child's route with mine and push it
-	 * @param  {String} title	 title of the route
-	 * @param  {String} subRoute the childs route
+	 * @param  {string} title	 title of the route
+	 * @param  {string} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	__pushChildRoute: function (title, subRoute, precache) {
 		this.__doRoute('pushRoute', title, subRoute, precache);
@@ -614,10 +614,10 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the childs route with mine and replace it
-	 * @param  {String} title	 title of the route
-	 * @param  {String} subRoute the childs route
+	 * @param  {string} title	 title of the route
+	 * @param  {string} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	__replaceChildRoute: function (title, subRoute, precache) {
 		this.__doRoute('replaceRoute', title, subRoute, precache);
@@ -646,12 +646,12 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the childs route with mine and push it
-	 * @param {String} cmp key of the cmp
+	 * @param {string} cmp key of the cmp
 	 * @param {Object} obj state object
-	 * @param  {String} title	 title of the route
-	 * @param  {String} subRoute the childs route
+	 * @param  {string} title	 title of the route
+	 * @param  {string} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	__pushChildState: function (cmp, obj, title, subRoute, precache) {
 		var key = this.__getStateForCmp(cmp);
@@ -662,12 +662,12 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the childs route with mine and replace it
-	 * @param {String} cmp the key of the cmp
+	 * @param {string} cmp the key of the cmp
 	 * @param {Object} obj state object
-	 * @param  {String} title	 title of the route
-	 * @param  {String} subRoute the childs route
+	 * @param  {string} title	 title of the route
+	 * @param  {string} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	__replaceChildState: function (cmp, obj, title, subRoute, precache) {
 		var key = this.__getStateForCmp(cmp);
@@ -678,8 +678,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge my title in to the childs and set it
-	 * @param {String} title title to set on the document
-	 * @return {void}
+	 * @param {string} title title to set on the document
+	 * @returns {void}
 	 */
 	__setChildTitle: function (title) {
 		var myTitle = this.getRouteTitle();
@@ -695,18 +695,18 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Set the title of the document
-	 * @param {String} title title to set on the document
-	 * @return {void}
+	 * @param {string} title title to set on the document
+	 * @returns {void}
 	 */
 	setTitle: function (/*title*/) {},
 
 	/**
 	 * Push a current route
 	 * @override
-	 * @param  {String} title the title to set on the document
-	 * @param  {String} route	the route to set
+	 * @param  {string} title the title to set on the document
+	 * @param  {string} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	pushRoute: function (/*title, route, precache*/) {},
 
@@ -714,10 +714,10 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	/**
 	 * Replace the current route
 	 * @override
-	 * @param  {String} title the title to set on the document
-	 * @param  {String} route	the route to replace with
+	 * @param  {string} title the title to set on the document
+	 * @param  {string} route	the route to replace with
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	replaceRoute: function (/*title, route, precache*/) {},
 
@@ -725,8 +725,8 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	/**
 	 * Skips all the route building and sets it on the root
 	 * @override
-	 * @param  {String} title the title to set on the document
-	 * @param  {String} route	the route to set
+	 * @param  {string} title the title to set on the document
+	 * @param  {string} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
 	pushRootRoute: function (/*title, route, precache*/) {},
@@ -735,10 +735,10 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	/**
 	 * Skips all the route building and sets it on the root
 	 * @override
-	 * @param  {String} title the title to set on the document
-	 * @param  {String} route	the route to set
+	 * @param  {string} title the title to set on the document
+	 * @param  {string} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	replaceRootRoute: function (/*title, route, precache*/) {},
 
@@ -746,20 +746,20 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	/**
 	 * Push a state object to the history
 	 * @param  {Object} obj		 state object to push
-	 * @param  {String} title	 title of the state
-	 * @param  {String} route	 route for the state
+	 * @param  {string} title	 title of the state
+	 * @param  {string} route	 route for the state
 	 * @param  {Object} precache a map of keys to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	pushRouteState: function (/*obj, title, route, precache*/) {},
 
 	/**
 	 * Push a state object to the history
 	 * @param  {Object} obj		 state object to push
-	 * @param  {String} title	 title of the state
-	 * @param  {String} route	 route for the state
+	 * @param  {string} title	 title of the state
+	 * @param  {string} route	 route for the state
 	 * @param  {Object} precache a map of keys to prevent resolving them more than once
-	 * @return {void}
+	 * @returns {void}
 	 */
 	replaceRouteState: function (/*obj, title, route, precache*/) {},
 
@@ -768,7 +768,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Whether or not we need to stop route change before we go any further
 	 * can return a boolean or a promise if we need to confirm with the user first
 	 * @override
-	 * @return {Boolean|Promise} if we can navigate
+	 * @returns {boolean|Promise} if we can navigate
 	 */
 	allowNavigation: function () { return true; }
 });

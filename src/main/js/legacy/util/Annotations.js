@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 	/**
 	 * From a reply, build its absent parent
 	 * @param {NextThought.model.Note} note note
-	 * @return {NextThought.model.Note} placeholder
+	 * @returns {NextThought.model.Note} placeholder
 	 */
 	replyToPlaceHolder: function (note) {
 		var holder = new lazy.Note(),

@@ -303,7 +303,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 	/**
 	 * Get the timestamp in seconds.
-	 * @return {Number} Timestamp in seconds.
+	 * @returns {number} Timestamp in seconds.
 	 */
 	getValue: function () {
 		if (!this.selectedDate) { return null; }
@@ -315,7 +315,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 	/**
 	 * Display text for the selected date.
-	 * @return {[type]} [description]
+	 * @returns {[type]} [description]
 	 */
 	getDisplayValue: function () {
 		var p = this.datepicker,
@@ -453,7 +453,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 
 	/**
 	 * Get the timestamp value time.
-	 * @return {Number} timestamp in milliseconds.
+	 * @returns {number} timestamp in milliseconds.
 	 */
 	getMilliseconds: function () {
 		if (this.TimePicker) {

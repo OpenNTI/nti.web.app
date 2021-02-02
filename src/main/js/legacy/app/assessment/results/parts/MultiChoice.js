@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	 * Since there may be no results for a choice, doing this will ensure we have
 	 * rows for every choice.
 	 *
-	 * @return {Array} Rows to pass to the bar chart
+	 * @returns {Array} Rows to pass to the bar chart
 	 */
 	getAxis: function () {
 		var resultParts = this.resultPart.Results,

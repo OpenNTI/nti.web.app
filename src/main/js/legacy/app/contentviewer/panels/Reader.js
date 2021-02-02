@@ -360,8 +360,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Read
 	/**
 	 * Return true if the reader should allow itself to be close
 	 * false should attempt to stop the navigation if it can
-	 * @param {Boolean} forced forced?
-	 * @return {Promise} fulfills once it can navigate, or rejects if it needs to stop
+	 * @param {boolean} forced forced?
+	 * @returns {Promise} fulfills once it can navigate, or rejects if it needs to stop
 	 */
 	allowNavigation: function (forced) {
 		var reader = this.getReaderContent();

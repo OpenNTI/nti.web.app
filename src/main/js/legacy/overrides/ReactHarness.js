@@ -286,9 +286,9 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	/**
 	 * The primary way to update a component's props. DO NOT externally call setState() unless you
 	 * KNOW what you are doing!
-	 * @param {object} props - The props for the given component.
+	 * @param {Object} props - The props for the given component.
 	 * @param {boolean} skipIfUnchanged - Don't re-render if props haven't changed. (Shallow comparison)
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setProps (props, skipIfUnchanged) {
 
@@ -330,7 +330,7 @@ module.exports = exports = Ext.define('NextThought.ReactHarness', {
 	 * @private
 	 *
 	 * Executes ReactDOM.render with the current props. If the component is already mounted, it will reuse and update.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	doRender () {
 		//Only check to see if Ext has rendered the component's <div> React will control everything under it.

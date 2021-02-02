@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	/**
 	 * builds the url for the asset and returns a promise that fulfills if the img loads or rejects if it fails.
 	 * @param  {string} name asset name to load
-	 * @return {Promise} whether or not the asset exists
+	 * @returns {Promise} whether or not the asset exists
 	 */
 	getImgAsset: function (name) {
 		var assetPath = this.ASSET_MAP[name] || {name: ('missing-' + name + '-asset.png')},
@@ -120,9 +120,9 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	 * Keep track of which assets we have checked existed, so we don't do
 	 * it more than once
 	 *
-	 * @param  {String} key	  field to store the value on
-	 * @param  {String} asset the name of the asset (defaults to the key arg)
-	 * @return {Promise}	  fulfills once the asset has been found to exist or not
+	 * @param  {string} key	  field to store the value on
+	 * @param  {string} asset the name of the asset (defaults to the key arg)
+	 * @returns {Promise}	  fulfills once the asset has been found to exist or not
 	 */
 	__ensureAsset: function (key, asset) {
 		var existing = null,
@@ -145,9 +145,9 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 
 	/**
 	 * Return the url for the asset if the asset exists
-	 * @param  {String} key	  field to store the value on
-	 * @param  {String} asset the name of the asset (defaults to key arg)
-	 * @return {Promise}	  fulfills with the url to the asset if it exists
+	 * @param  {string} key	  field to store the value on
+	 * @param  {string} asset the name of the asset (defaults to key arg)
+	 * @returns {Promise}	  fulfills with the url to the asset if it exists
 	 */
 	getAsset: function (key, asset) {
 		return this.__ensureAsset(key, asset);

@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ComponentReferencin
 	 * Registers one or more {@link #refs references}.
 	 *
 	 * @param {Object/Object[]} refs -
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addRef: function (refs) {
 		this.ref(refs);
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ComponentReferencin
 	 * Returns `true` if a {@link #refs reference} is registered.
 	 *
 	 * @param {any} ref -
-	 * @return {Boolean} -
+	 * @returns {boolean} -
 	 */
 	hasRef: function (ref) {
 		var references = this.references;

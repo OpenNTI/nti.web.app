@@ -624,12 +624,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 
 	/**
 	 *
-	 * @param {String} type - the type
+	 * @param {string} type - the type
 	 * @param {Ext.data.Model} record - annotation record (highlight, note, redaction, etc)
 	 * @param {Range} [browserRange] - optional, if we already have a range from the browser, that can be used instead of resolving it
 	 *						   from the record
 	 * @param {Function} [onCreated] - Function
-	 * @return {Boolean} success/failure
+	 * @returns {boolean} success/failure
 	 */
 	createAnnotationWidget: function (type, record, browserRange, onCreated) {
 		var oid = record.getId(),

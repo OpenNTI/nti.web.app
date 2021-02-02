@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 	 *
 	 * @param {Array} newFriends - users
 	 * @param {boolean} [noUpdatedEvent] @private
-	 * @return {boolean} true if something changed
+	 * @returns {boolean} true if something changed
 	 */
 	maybeFireContactsAdded: function (newFriends, noUpdatedEvent) {
 		var contactsWithDups, newContacts = [];
@@ -315,8 +315,8 @@ module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 
 	/**
 	 *
-	 * @param {Boolean} [leaveDuplicates] @private
-	 * @return {Array} names
+	 * @param {boolean} [leaveDuplicates] @private
+	 * @returns {Array} names
 	 */
 	getContacts: function (leaveDuplicates) {
 		var names = [];
