@@ -34,6 +34,7 @@ const getUsername = (data) => t('label', data);
 
 UserEmailUpdate.propTypes = {
 	user: PropTypes.shape({
+		email: PropTypes.string,
 		hasLink: PropTypes.func,
 		putToLink: PropTypes.func
 	})

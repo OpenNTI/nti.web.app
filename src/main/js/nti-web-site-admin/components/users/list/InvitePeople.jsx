@@ -24,7 +24,7 @@ const t = scoped('nti-web-site-admin.componentsusers.list.InvitePeople', DEFAULT
 const errorRenderers = [
 	{
 		handles: (error) => error.code === 'InvalidSiteInvitationData' && error.InvalidEmails && error.InvalidEmails.length > 0,
-		render: (error) => { /* eslint-disable-line react/display-name */
+		render: (error) => {
 			const {InvalidEmails} = error;
 
 			return (
