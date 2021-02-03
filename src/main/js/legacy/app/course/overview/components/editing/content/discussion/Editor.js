@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	showEditor: async function () {
+	async showEditor () {
 		if (this.record) {
 			this.showDiscussionEditor();
 		} else {
@@ -113,14 +113,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	maybeEnableBack: function (text) {
+	maybeEnableBack (text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
 
-	showDiscussionEditor: function () {
+	showDiscussionEditor () {
 		if (this.discussionEditorCmp) {
 			this.discussionEditorCmp.destroy();
 			delete this.discussionEditorCmp;
@@ -149,23 +149,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onSave: function () {
-		var me = this;
-		if (!me.discussionEditorCmp) {
-			me.showDiscussionEditor();
-			return Promise.reject(me.SWITCHED);
+	async onSave () {
+		if (!this.discussionEditorCmp) {
+			this.showDiscussionEditor();
+			throw this.SWITCHED;
 		}
 
-		me.disableSubmission();
-		return me.discussionEditorCmp.onSave()
-			.catch(function (reason) {
-				me.enableSubmission();
-				return Promise.reject(reason);
-			});
+		this.disableSubmission();
+		try {
+			await this.discussionEditorCmp.onSave();
+		} catch(e) {
+			this.enableSubmission();
+			throw e;
+		}
 	},
 
 
-	onSaveFailure: function (reason) {
+	onSaveFailure (reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);
