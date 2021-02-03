@@ -242,6 +242,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		}
 	},
 
+	getQuickHeight () {
+		return this.getHeight();
+	},
+
 	getHeight: function () {
 		let items = this.items && this.items.items || [],
 			height = 0;
