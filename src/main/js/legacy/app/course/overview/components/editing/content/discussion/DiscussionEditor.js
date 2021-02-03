@@ -14,8 +14,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-discussion-editor',
 	cls: 'content-editor discussion-link',
 
-	getFormSchema: function () {
-		var schema = [
+	getFormSchema () {
+		return [
 			{name: 'MimeType', type: 'hidden'},
 			{name: 'target', type: 'hidden'},
 			{type: 'group', name: 'card', inputs: [
@@ -43,21 +43,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{type: 'saveprogress'}
 			]}
 		];
-
-		return schema;
 	},
 
-	getDefaultValues: function () {
-		if (this.record) {
-			var data = this.record.isModel && this.record.getData();
-
-			data = Ext.apply(data, {
+	getDefaultValues () {
+		const data = this.record?.getData?.();
+		if (data) {
+			return Ext.apply(data, {
 				'icon': this.getThumbnailURL(),
 				'target': this.record.get('Target-NTIID') || this.record.get('ID') || this.record.getId(),
 				'MimeType': DiscussionRef.mimeType
 			});
-
-			return data;
 		}
 
 		return {
@@ -65,34 +60,25 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	afterRender: function () {
+	afterRender () {
 		this.callParent(arguments);
 
-		let form = this.getForm(),
-			url = this.getThumbnailURL();
-		if (Ext.isEmpty(url) && form && form.setPlaceholder) {
+		const form = this.getForm();
+		const url = this.getThumbnailURL();
+		if (Ext.isEmpty(url) && form?.setPlaceholder) {
 			form.setPlaceholder('icon', DiscussionRef.defaultIcon);
 		}
 	},
 
-	isDiscussionRef: function (record) {
-		if (record && record.get('MimeType') === DiscussionRef.mimeType) {
-			return true;
-		}
-
-		return false;
+	isDiscussionRef (record) {
+		return record?.get('MimeType') === DiscussionRef.mimeType;
 	},
 
-	getFormMethod: function () {
-		var isDiscussionRef = this.isDiscussionRef(this.record);
-		if (isDiscussionRef) {
-			return 'PUT';
-		}
-
-		return 'POST';
+	getFormMethod () {
+		return (this.isDiscussionRef(this.record)) ? 'PUT' : 'POST';
 	},
 
-	getThumbnailURL: function () {
+	getThumbnailURL () {
 		var iconURL = this.record && this.record.get('icon');
 		if (iconURL) {
 			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
@@ -106,23 +92,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return '';
 	},
 
-	onSave: function () {
-		var me = this,
-			parentSelection = me.parentSelection,
-			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
-			currentPosition = parentSelection && parentSelection.getCurrentPosition(),
-			isDiscussionRef = this.isDiscussionRef(this.record),
-			rec = isDiscussionRef ? this.record : null;
+	async onSave () {
+		const {parentSelection} = this;
+		const originalPosition = parentSelection?.getOriginalPosition();
+		const currentPosition = parentSelection?.getCurrentPosition();
+		const isDiscussionRef = this.isDiscussionRef(this.record);
+		const rec = isDiscussionRef ? this.record : null;
 
-		me.clearErrors();
-		me.disableSubmission();
+		this.clearErrors();
+		this.disableSubmission();
 
-		return me.EditingActions.saveEditorForm(me.formCmp, rec, originalPosition, currentPosition, me.rootRecord)
-			.then(() => {})
-			.catch(function (reason) {
-				me.enableSubmission();
-
-				return Promise.reject(reason);
-			});
+		try {
+			await this.EditingActions.saveEditorForm(
+				this.formCmp,
+				rec,
+				originalPosition,
+				currentPosition,
+				this.rootRecord
+			);
+		} catch (er) {
+			this.enableSubmission();
+			throw er;
+		}
 	}
 });
