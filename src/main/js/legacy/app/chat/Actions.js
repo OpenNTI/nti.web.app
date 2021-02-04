@@ -112,6 +112,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			});
 	},
 
+	createChatRoom (users, options) {
+		return new Promise((fulfill) => {
+			this.ChatStore.on({
+				single: true,
+				'show-window': (roomInfo) => fulfill(roomInfo)
+			});
+
+			this.startChat(users, options);
+		});
+	},
+
 	startChat: function (users, options) {
 		var ri, m, me = this,
 			socket = this.ChatStore.getSocket();
