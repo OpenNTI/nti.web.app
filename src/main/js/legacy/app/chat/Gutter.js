@@ -1,6 +1,9 @@
 const Ext = require('@nti/extjs');
 const {wait} = require('@nti/lib-commons');
 const {DateIcon} = require('@nti/web-calendar');
+const { NewChatStore } = require('@nti/web-profiles');
+const { ChatSidebar } = require('@nti/web-profiles');
+const {getAppUsername, isFlag} = require('@nti/web-client');
 
 const UserRepository = require('legacy/cache/UserRepository');
 const User = require('legacy/model/User');
@@ -18,29 +21,42 @@ const ChatActions = require('./Actions');
 require('./components/gutter/GutterEntry');
 require('./components/gutter/List');
 
+let options = {
+	items: [],
+	layout: 'none',
+};
+
+const newChat = isFlag('new-chat');
+
+if (!newChat) {
+	options = {
+		renderTpl: Ext.DomHelper.markup([
+			{cls: 'presence-gutter-entry show-calendar', 'data-qtip': 'Show Calendar'},
+			{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
+			{cls: 'presence-gutter-entry other-contacts', 'data-qtip': 'Expand Contacts', 'data-badge': '0', cn: [
+				{cls: 'profile-pic'}
+			]},
+			{cls: 'presence-gutter-entry show-contacts', 'data-qtip': 'Show Contacts'}
+		]),
+
+		getTargetEl: function () { return this.body; },
+		childEls: ['body'],
+
+		renderSelectors: {
+			contactsButtonEl: '.show-contacts',
+			otherContactsEl: '.other-contacts',
+			showCalendarEl: '.show-calendar'
+		},
+
+	};
+}
 
 module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-gutter-window',
 	cls: 'chat-gutter-window',
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'presence-gutter-entry show-calendar', 'data-qtip': 'Show Calendar'},
-		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
-		{cls: 'presence-gutter-entry other-contacts', 'data-qtip': 'Expand Contacts', 'data-badge': '0', cn: [
-			{cls: 'profile-pic'}
-		]},
-		{cls: 'presence-gutter-entry show-contacts', 'data-qtip': 'Show Contacts'}
-	]),
-
-	getTargetEl: function () { return this.body; },
-	childEls: ['body'],
-
-	renderSelectors: {
-		contactsButtonEl: '.show-contacts',
-		otherContactsEl: '.other-contacts',
-		showCalendarEl: '.show-calendar'
-	},
+	...options,
 
 	ENTRY_BOTTOM_OFFSET: 100,
 
@@ -62,6 +78,16 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		});
 		this.otherContacts = [];
 		this.collapsedMessageCount = 0;
+
+		if (newChat) {
+			this.newGutter = this.add({
+				xtype: 'react',
+				component: ChatSidebar,
+				addHistory: true,
+				baseroute: '/app',
+				navigation: false,
+			});
+		}
 	},
 
 	buildStore: function () {
@@ -96,20 +122,22 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	afterRender: function () {
 		var me = this;
 		this.callParent(arguments);
-		this.mon(this.contactsButtonEl, 'click', this.goToContacts.bind(this));
-		this.mon(this.otherContactsEl, 'click', this.showAllOnlineContacts.bind(this));
-		this.mon(this.showCalendarEl, 'click', this.showCalendar.bind(this));
-		this.maybeUpdateOtherButton();
-		Ext.EventManager.onWindowResize(Ext.bind(this.onResize, this));
+		if (!newChat) {
+			this.mon(this.contactsButtonEl, 'click', this.goToContacts.bind(this));
+			this.mon(this.otherContactsEl, 'click', this.showAllOnlineContacts.bind(this));
+			this.mon(this.showCalendarEl, 'click', this.showCalendar.bind(this));
+			this.maybeUpdateOtherButton();
+			Ext.EventManager.onWindowResize(Ext.bind(this.onResize, this));
 
-		if(Service.getCollection('Calendars')) {
-			this.dateIcon = Ext.widget('react', {
-				renderTo: this.showCalendarEl,
-				component: DateIcon
-			});
-		}
-		else {
-			this.showCalendarEl.hide();
+			if(Service.getCollection('Calendars')) {
+				this.dateIcon = Ext.widget('react', {
+					renderTo: this.showCalendarEl,
+					component: DateIcon
+				});
+			}
+			else {
+				this.showCalendarEl.hide();
+			}
 		}
 
 		this.on('show', function () {
@@ -174,24 +202,31 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	updateList: function (store, users) {
-		this.removeAll(true);
-		this.otherContacts = [];
-		this.collapsedMessageCount = 0;
+		if (!newChat) {
+			this.removeAll(true);
+			this.otherContacts = [];
+			this.collapsedMessageCount = 0;
+		}
 		this.addContacts(store, users);
 	},
 
 	updatePresence: function (username, presence) {
-		var user = this.findEntryForUser(username),
-			nodeIndex;
+		if (!newChat) {
+			var user = this.findEntryForUser(username),
+				nodeIndex;
 
-		if(user) {
-			user.setStatus(presence);
-		}
-		if (this.gutterList && this.gutterList.isVisible()) {
-			nodeIndex = this.store.find('Username', username, 0, false, false, true);
-			if (nodeIndex > -1) {
-				this.gutterList.refreshNode(nodeIndex);
+			if(user) {
+				user.setStatus(presence);
 			}
+			if (this.gutterList && this.gutterList.isVisible()) {
+				nodeIndex = this.store.find('Username', username, 0, false, false, true);
+				if (nodeIndex > -1) {
+					this.gutterList.refreshNode(nodeIndex);
+				}
+			}
+		} else {
+			if (username === getAppUsername()) {return;}
+			NewChatStore.updatePresence(username, presence.getName());
 		}
 	},
 
@@ -229,30 +264,36 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		if (entry) {
 			this.remove(entry);
+			newChat && NewChatStore.removeContact(user.get('Username'));
 		}
 	},
 
-	addContacts: function (store, users) {
-		var me = this;
-		users.forEach(function (user) {
-			var username = user.get('Username');
-			if (!username || me.findEntryForUser(username)) {
-				return true;
-			}
+	addContacts: async function (store, users) {
+		if (!newChat) {
+			var me = this;
+			users.forEach(function (user) {
+				var username = user.get('Username');
+				if (!username || me.findEntryForUser(username)) {
+					return true;
+				}
 
-			if(me.haveRoomForNewEntry()) {
-				me.add({
-					xtype: 'chat-gutter-entry',
-					user: user,
-					openChatWindow: me.openChatWindow.bind(me)
-				});
-			}
-			else {
-				me.otherContacts.push(user);
-			}
-		});
+				if(me.haveRoomForNewEntry()) {
+					me.add({
+						xtype: 'chat-gutter-entry',
+						user: user,
+						openChatWindow: me.openChatWindow.bind(me)
+					});
+				}
+				else {
+					me.otherContacts.push(user);
+				}
+			});
 
-		me.maybeUpdateOtherButton();
+			me.maybeUpdateOtherButton();
+		} else {
+			const contacts = await Promise.all(users.map((user) => user.getInterfaceInstance()));
+			NewChatStore.addContacts(contacts);
+		}
 	},
 
 	haveRoomForNewEntry: function (u) {
@@ -297,11 +338,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 
 		if (this.activeUser) {
 			this.deselectActiveUser(this.activeUser);
+			newChat && NewChatStore.deselectUser();
 		}
 
 		if (entry) {
 			entry.addCls('active');
 			this.activeUser = user;
+			newChat && NewChatStore.selectUser(user.get('Username'));
 		}
 	},
 
@@ -313,6 +356,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 		if (entry && entry.hasCls('active')) {
 			entry.removeCls('active');
 			this.activeUser = null;
+			newChat && NewChatStore.deselectUser();
 		}
 	},
 
@@ -454,6 +498,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 			sender = msg.isModel ? msg.get('Creator') : msg.Creator;
 
 		entry = this.findEntryForUser(sender);
+		newChat && NewChatStore.handleWindowNotify(sender);
 		if (entry) {
 			entry.handleWindowNotify(win, msg);
 		}
