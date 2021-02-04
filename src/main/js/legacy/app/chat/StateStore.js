@@ -355,10 +355,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 	removeAllRoomInfosFromSession: function () {
-		var chats = this.getSessionObject(),
-			o = chats['roomIdsAccepted'];
-
-		this.setSessionObject(this.STATE_KEY, o);
+		this.setSessionObject({}, 'roomIdsAccepted');
 	},
 
 	updateRoomInfo: function (ri) {
