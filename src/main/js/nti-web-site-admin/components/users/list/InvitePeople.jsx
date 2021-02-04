@@ -1,6 +1,5 @@
 import './InvitePeople.scss';
 import React from 'react';
-import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 import {DialogButtons, TokenEditor, SelectBox, Panels, Input, Loading, List} from '@nti/web-commons';
 import {validate as isEmail} from 'email-validator';
@@ -19,7 +18,7 @@ const DEFAULT_TEXT = {
 	}
 };
 
-const t = scoped('nti-web-site-admin.componentsusers.list.InvitePeople', DEFAULT_TEXT);
+const t = scoped('nti-web-site-admin.components.users.list.InvitePeople', DEFAULT_TEXT);
 
 const errorRenderers = [
 	{
@@ -49,18 +48,7 @@ const errorRenderers = [
 	}
 ];
 
-
-export default
-@Connectors.Any.connect(['inviteError', 'hideInviteDialog', 'sendLearnerInvites', 'sendAdminInvites', 'clearInviteError'])
 class InvitePeople extends React.Component {
-	static propTypes = {
-		loading: PropTypes.bool,
-		hideInviteDialog: PropTypes.func.isRequired,
-		sendLearnerInvites: PropTypes.func.isRequired,
-		sendAdminInvites: PropTypes.func.isRequired,
-		clearInviteError: PropTypes.func.isRequired,
-		inviteError: PropTypes.object
-	}
 
 	state = {
 		role: 'learner',
@@ -224,3 +212,14 @@ class InvitePeople extends React.Component {
 		);
 	}
 }
+
+
+export default Connectors.Any.connect([
+	'inviteError',
+	'hideInviteDialog',
+	'sendLearnerInvites',
+	'sendAdminInvites',
+	'clearInviteError'
+])(
+	InvitePeople
+);
