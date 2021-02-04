@@ -59,7 +59,7 @@
     "@nti/web-modeled-content": "NextThought/nti.web.modeled-content",
     "@nti/web-notifications": "NextThought/nti.web.notifications",
     "@nti/web-payments": "NextThought/nti.web.payments",
-    "@nti/web-profiles": "NextThought/nti.web.profiles",
+    "@nti/web-profiles": "NextThought/nti.web.profiles#social",
     "@nti/web-reports": "NextThought/nti.web.reports",
     "@nti/web-routing": "NextThought/nti.web.routing",
     "@nti/web-search": "NextThought/nti.web.search",
