@@ -13,7 +13,7 @@ const styles = css`
 WebappChatWindow.propTypes = {
 	visible: PropTypes.bool.isRequired,
 	entity: PropTypes.string.isRequired,
-	expanded: PropTypes.bool.isRequired,
+	expanded: PropTypes.bool,
 
 	onClose: PropTypes.func,
 };
