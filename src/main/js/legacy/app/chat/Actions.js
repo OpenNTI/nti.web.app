@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 		return new Promise((fulfill) => {
 			this.ChatStore.on({
 				single: true,
-				'show-window': (roomInfo) => fulfill(roomInfo)
+				'show-window': fulfill
 			});
 
 			this.startChat(users, options);
