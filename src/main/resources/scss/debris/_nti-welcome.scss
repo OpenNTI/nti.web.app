@@ -80,6 +80,7 @@
 	iframe.help-iframe {
 		flex: 1 1 100%;
 		height: unset !important;
+		max-height: calc(100vh - 115px);
 	}
 }
 
