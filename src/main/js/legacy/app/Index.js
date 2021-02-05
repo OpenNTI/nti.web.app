@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 const DetectZoom = require('detect-zoom');
 const Commons = require('@nti/web-commons');
 
+const ChatOverrides = require('nti-web-chat-overrides');
 const DiscussionOverrides = require('nti-web-discussion-overrides');
 const {IEAlert} = require('nti-web-react-components');
 
@@ -15,6 +16,7 @@ require('./chat/Index');
 require('./prompt/Index');
 require('../layout/container/None');
 
+ChatOverrides.setupOverrides();
 DiscussionOverrides.setupOverrides();
 
 Commons.Layouts.Responsive.setWebappContext();

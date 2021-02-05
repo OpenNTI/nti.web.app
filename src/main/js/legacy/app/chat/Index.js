@@ -1,4 +1,5 @@
 const Ext = require('@nti/extjs');
+const { NewChatStore } = require('@nti/web-profiles');
 
 const NavigationStateStore = require('legacy/app/navigation/StateStore');
 const GroupsStateStore = require('legacy/app/groups/StateStore');
@@ -172,6 +173,15 @@ const ChatIndex = module.exports = exports = Ext.define('NextThought.app.chat.In
 		if (active) {
 			this.ChatStore.fireEvent('gutter-deactive');
 			this.removeCls('show-gutter');
+			// hide open windows
+			var me = this;
+			Ext.each(this.ChatStore.getAllChatWindows(), function (win) {
+				if (me.gutterWin && me.gutterWin.adjustToExpandedChat && win.isVisible()) {
+					win.hide();
+				}
+			});
+			// deselect user
+			NewChatStore.deselectUser();
 		} else {
 			this.ChatStore.fireEvent('gutter-active');
 			this.addCls('show-gutter');
