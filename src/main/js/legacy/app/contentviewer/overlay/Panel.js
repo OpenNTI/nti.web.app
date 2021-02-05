@@ -1,14 +1,12 @@
 const Ext = require('@nti/extjs');
 
-const DomUtils = require('legacy/util/Dom');
-
 require('legacy/util/Anchors');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.overlayed-panel',
-	OBJECT_QUERY: 'object[type*=naquestion],object[type*=napoll]',
+	ROOT_OBJECT_QUERY: 'object[type*=naquestion]:not(object object),object[type*=napoll]:not(object object)',
 	placementHolderTpl: Ext.DomHelper.createTemplate({type: 'application/vnd.nextthought.placeholder'}),
 
 	inheritableStatics: {
@@ -41,13 +39,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 	},
 
 	initComponent: function () {
-		var d, el, insert = 'insertBefore', ix = 0;
+		let el, insert = 'insertBefore', ix = 0;
 		if (!this.contentElement) {
 			try {
 				this.insertedElement = true;
-				d = this.reader.getDocumentElement().querySelectorAll(this.OBJECT_QUERY);
-
-				d = DomUtils.filterNodeList(d, 'isRootObject');
+				const d = this.reader.getDocumentElement().querySelectorAll(this.ROOT_OBJECT_QUERY);
 
 				//TODO: ensure its a 'type=application/vnd.nextthought.*'
 				if (this.appendPlaceholder) {
