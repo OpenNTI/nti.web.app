@@ -321,12 +321,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 	},
 
 	updateSolutionButton: function () {
-		var p = this.part,
-			a = this.solutionAnswerBox,
-			b = this.showSolutionBtn,
-			e = this.solutionExplanationBox,
-			sol, shown = this.hidingInputBox,
-			answer = this.el.down('.answer');
+		const {
+			part: p,
+			solutionAnswerBox: a,
+			showSolutionBtn: b,
+			solutionExplanationBox: e,
+			hidingInputBox: shown
+		} = this;
+		const answer = this.el.down('.answer');
 
 		function removeObjects (dom) {
 			// Don't waste cycles on dom parsing/stringifying if we don't have to.
@@ -360,7 +362,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 		//if we are submitted or if we are in an assignment and have solutions
 		else if (this.submitted || (this.questionSet && this.questionSet.isAssignment && p.hasSolutions())) {
 			answer.show();
-			sol = this.getSolutionContent(p);
+			let sol = this.getSolutionContent(p);
 			if (!Ext.isString(sol)) {
 				sol += '';
 			}
