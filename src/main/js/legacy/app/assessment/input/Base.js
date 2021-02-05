@@ -329,7 +329,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Base', {
 			answer = this.el.down('.answer');
 
 		function removeObjects (dom) {
-			var el = document.createElement('div');
+			if (!dom || !dom.includes('object')) { // don't waste cycles on dom parsing/stringifying if we don't have to
+				return dom;
+			}
+
+			const el = document.createElement('div');
 
 			el.id = 'tempdom';
 			el.innerHTML = dom;
