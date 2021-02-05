@@ -30,6 +30,8 @@ const newChat = isFlag('new-chat');
 
 if (!newChat) {
 	options = {
+		cls: 'chat-gutter-window',
+
 		renderTpl: Ext.DomHelper.markup([
 			{cls: 'presence-gutter-entry show-calendar', 'data-qtip': 'Show Calendar'},
 			{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
@@ -54,7 +56,6 @@ if (!newChat) {
 module.exports = exports = Ext.define('NextThought.app.chat.Gutter', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-gutter-window',
-	cls: 'chat-gutter-window',
 
 	...options,
 
