@@ -124,16 +124,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 
 	getContentElement: function (tagName, attribute, value) {
 		try {
-			var doc = this.reader.getDocumentElement(),
-				tags = doc.getElementsByTagName(tagName),
-				i = tags.length - 1,
-				vRe = new RegExp('^' + RegExp.escape(value) + '$', 'ig');
-
-			for (i; i >= 0; i--) {
-				if (vRe.test(tags[i].getAttribute(attribute))) {
-					return tags[i];
-				}
-			}
+			const query = `${tagName}[${RegExp.escape(attribute)}='${value}']`;
+			return this.reader.getDocumentElement().querySelector(query);
 		}
 		catch (er) {
 			console.error(er.message);
