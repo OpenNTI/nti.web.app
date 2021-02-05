@@ -336,7 +336,6 @@
 }
 
 input[type=number] {
-	&::-webkit-inner-spin-button,
 	&::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 		-moz-appearance: none;
@@ -1428,10 +1427,6 @@ input[type=number] {
 						border-radius: 90px;
 					}
 				}
-
-				.x-datepicker-date::hover {
-					color: var(--primary-blue);
-				}
 			}
 		}
 
@@ -1749,7 +1744,6 @@ input[type=number] {
 	}
 
 	.video-items-item {
-		overflow: hidden;
 		background-color: white;
 		margin-bottom: 10px;
 		position: relative;

@@ -348,7 +348,9 @@ $over-color: #f4f3f3;
 				&.selection-item-over {
 					background-color: $over-color;
 					color: var(--secondary-grey) !important;
-					pointer: default;
+					cursor: default;
+
+					img.delete-group { display: block !important; }
 				}
 
 				&.selection-selected {
@@ -420,17 +422,12 @@ $over-color: #f4f3f3;
 						opacity: 1;
 					}
 				}
-
-				&.selection-item-over {
-					img.delete-group { display: block !important; }
-				}
 			}
 		}
 	}
 }
 
 .group-chat-initiator {
-	background: #fafafa;
 	overflow: hidden;
 	position: absolute;
 	bottom: 0;
@@ -1217,8 +1214,8 @@ div.contact-buttons {
 		border-top-width: 1px;
 		&:first-of-type { border-top-width: 0; }
 
-		.contact-card{
-
+		.contact-card {
+			//
 		}
 	}
 

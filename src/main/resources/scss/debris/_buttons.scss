@@ -62,7 +62,9 @@ $button-text-weights: 500,500,600,500;
 			padding: (4px*$i) 10px+(5px*$i);
 			background-image: linear-gradient(to bottom, $startColor 0%, $endColor 100%);
 
-			&.x-over {}
+			&.x-over {
+				//
+			}
 
 			&.x-disabled {
 				box-shadow: none;

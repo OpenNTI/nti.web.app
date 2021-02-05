@@ -624,6 +624,21 @@ body .modal ~ .simple-popover-widget {
 }
 
 .component-overlay {
+	position: absolute;
+	overflow: visible;
+	height: 0;
+	left: 30px;
+	top: 0;
+	right: 60px;
+
+
+	& > .x-panel {
+		position: absolute;
+		width: 98%;
+
+		@include experimental-value(width, calc(100% - 5px));
+	}
+
 	.videos {
 		iframe {
 			margin: 0 auto;
@@ -706,21 +721,6 @@ div.no-content-splash {
 	}
 }
 
-.component-overlay {
-	position: absolute;
-	overflow: visible;
-	height: 0;
-	left: 30px;
-	top: 0;
-	right: 60px;
-
-	& > .x-panel {
-		position: absolute;
-		width: 98%;
-
-		@include experimental-value(width, calc(100% - 5px));
-	}
-}
 
 #bundle-notebook {
 	padding-top: 20px;

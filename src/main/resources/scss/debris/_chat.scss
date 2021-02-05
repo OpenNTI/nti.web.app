@@ -614,8 +614,6 @@
 	}
 }
 
-#chat-dock-placeholder { cursor: pointer; }
-
 #chat-dock-placeholder,
 #chat-dock > .x-panel-header {
 	background-color: var(--panel-background);
@@ -656,6 +654,8 @@
 }
 
 #chat-dock-placeholder {
+	cursor: pointer;
+
 	.x-header-text-container {
 		@include icon($rhp-arrow-closed-dark, $top: 14px, $left:8px);
 	}
@@ -1028,7 +1028,10 @@ body.white-shade-mask .chat-gutter-window {
 						border: 2px solid var(--primary-green);
 					}
 				}
-				&.idle {}
+
+				&.idle {
+					//
+				}
 
 				&.away {
 					.avatar-pic {

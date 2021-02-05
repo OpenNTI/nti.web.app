@@ -1022,6 +1022,25 @@
 		}
 
 		.path {
+			color: var(--tertiary-grey);
+			text-transform: uppercase;
+			padding: 0 20px;
+			font: normal 700 10px/40px var(--body-font-family);
+			min-height: 40px;
+			overflow: hidden;
+
+			@include ellipse;
+
+			span.path-part {
+				&::after {
+					content: ' / ';
+				}
+
+				&:last-of-type::after {
+					content: '';
+				}
+			}
+
 			span:not(:first-of-type)::before {
 				content: '/';
 				margin: 0 0.5em;
@@ -1243,27 +1262,6 @@
 					bottom: 0;
 					height: 10px;
 					background-image: linear-gradient(to bottom, rgba(251, 251, 251, 0) 0% 100%);
-				}
-			}
-		}
-
-		.path {
-			color: var(--tertiary-grey);
-			text-transform: uppercase;
-			padding: 0 20px;
-			font: normal 700 10px/40px var(--body-font-family);
-			min-height: 40px;
-			overflow: hidden;
-
-			@include ellipse;
-
-			span.path-part {
-				&::after {
-					content: ' / ';
-				}
-
-				&:last-of-type::after {
-					content: '';
 				}
 			}
 		}
@@ -2143,18 +2141,6 @@
 		}
 	}
 
-	&.editing {
-		.empty-text {
-			display: none;
-		}
-
-		.groupset {
-			.entry-container {
-				overflow: visible;
-			}
-		}
-	}
-
 	&.read-only {
 		.fieldset {
 			.empty-text {
@@ -2461,8 +2447,14 @@
 	}
 
 	&.editing {
+		.empty-text {
+			display: none;
+		}
+
 		.groupset {
 			.entry-container {
+				overflow: visible;
+
 				.remove-entry {
 					display: block;
 

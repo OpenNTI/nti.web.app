@@ -2,7 +2,7 @@
 
 @mixin animate($name: fadeIn, $duration: 1s, $delay: 0.2s, $function: ease, $mode: both, $iteration:null) {
 	@if $iteration==null {
-
+		//
 	}
 
 	@else {
