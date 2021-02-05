@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 const { NewChatStore } = require('@nti/web-profiles');
 const NavigationStateStore = require('internal/legacy/app/navigation/StateStore');
 const GroupsStateStore = require('internal/legacy/app/groups/StateStore');
+const { isFlag } = require('@nti/web-client');
 
 const ChatStateStore = require('./StateStore');
 const ChatActions = require('./Actions');
@@ -185,11 +186,14 @@ const ChatIndex = (module.exports = exports = Ext.define(
 		},
 
 		toggleGutter: function () {
-			var active = this.hasCls('show-gutter');
+			const newChat = isFlag('new-chat');
 
-			if (active) {
+			const isVisible = newChat
+				? this.isVisible()
+				: this.hasCls('show-gutter');
+
+			if (isVisible) {
 				this.ChatStore.fireEvent('gutter-deactive');
-				this.removeCls('show-gutter');
 				// hide open windows
 				var me = this;
 				Ext.each(this.ChatStore.getAllChatWindows(), function (win) {
@@ -201,11 +205,12 @@ const ChatIndex = (module.exports = exports = Ext.define(
 						win.hide();
 					}
 				});
+				newChat ? this.hide() : this.removeCls('show-gutter');
 				// deselect user
 				NewChatStore.deselectUser();
 			} else {
 				this.ChatStore.fireEvent('gutter-active');
-				this.addCls('show-gutter');
+				newChat ? this.show() : this.addCls('show-gutter');
 			}
 		},
 

@@ -12,7 +12,6 @@ const styles = stylesheet`
 `;
 
 WebappChatWindow.propTypes = {
-	visible: PropTypes.bool.isRequired,
 	entity: PropTypes.string.isRequired,
 	expanded: PropTypes.bool,
 
