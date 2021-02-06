@@ -20,13 +20,11 @@ module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {
 				{tag: 'h3', html: 'We recently updated our Terms of Service and Privacy Policy.'},
 				{tag: 'span', cls: 'you-should', html: 'Please take a moment to read them carefully.'}
 			]},
-			cls: 'tos-header',
-			flex: 0
+			cls: 'tos-header'
 		},
 		{
 			xtype: 'component',
 			cls: 'help-iframe',
-			flex: 1,
 			autoEl: {
 				tag: 'iframe',
 				src: '{url}',
