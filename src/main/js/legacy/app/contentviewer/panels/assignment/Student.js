@@ -6,6 +6,7 @@ const {isMe} = require('legacy/util/Globals');
 require('../../navigation/assignment/Student');
 require('../../components/assignment/TimedPlaceholder');
 require('../../components/assignment/NotStartedPlaceholder');
+require('../../components/assignment/SubmittedMaskPlaceholder');
 require('../Reader');
 
 const t = scoped('nti-web-app.contentviewer.panels.assignment.Student', {
@@ -85,6 +86,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			}
 
 			return [baseToolbarConfig, baseReaderConfig];
+		}
+
+		if (assignment.hasSubmission() && (assignment.get('parts') ?? []).length === 0) {
+			return [
+				baseToolbarConfig,
+				{
+					xtype: 'assignment-submitted-masked-placeholder',
+					assignment,
+					flex: 1,
+					isMaskedAssignment: true
+				}
+			];
 		}
 
 		//the assignment is started, or submitted. Show the latest attempt
@@ -338,6 +351,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	showAssignment: function (config) {
 		const header = this.getToolbar();
 		const reader = this.getReaderContent();
+		const mask = this.down('[isMaskedAssignment]');
+
+		if (mask) {
+			this.showMaskedAssignment(config);
+			return;
+		}
 
 		if (!reader) {
 			this.mon(this, 'reader-set', () => this.showAssignment(config), this, {single: true});
@@ -415,6 +434,37 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 				return reader.setPageInfo(me.pageInfoOverride || me.pageInfo, me.bundle, me.fragment);
 			})
 			.always(done.bind(this));
+	},
+
+	showMaskedAssignment (config) {
+		const header = this.getToolbar();
+		const assignment = this.assignmentOverride || this.assignment;
+		const maybeSetActiveHistoryItem = (h ,container) => {
+			if (this.setActiveHistoryItem) {
+				this.setActiveHistoryItem(h, container, assignment);
+			}
+		};
+
+		this.getAssignmentHistory(config)
+			.then((h) => {
+				if (!h) {
+					maybeSetActiveHistoryItem(null, null);
+					return [null, null];
+				}
+
+				return h.resolveFullContainer()
+					.then(container => ([h, container]));
+			})
+			.catch(e => ([null, null]))
+			.then(([h, container]) => {
+				maybeSetActiveHistoryItem(h, container);
+				header.setHistory(h, container);
+
+				this.monitorAssignment(assignment);
+				this.addClassesForAssignment(assignment);
+			})
+			.always(() => this.beginViewedAnalytics());
+
 	},
 
 	updateHistory: function (h, container) {
