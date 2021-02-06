@@ -237,17 +237,22 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 						result = pendingAssessment.get('parts')[0],
 						itemLink = pendingAssessment.getLink('AssignmentHistoryItem');
 
-					assignment.setHistoryLink(itemLink);
+					assignment.fetchFromServer()
+						.then(() => {
+							assignment.fireEvent('refresh');
+							assignment.setHistoryLink(itemLink);
 
-					assignment.getInterfaceInstance()
-						.then(a => Events.emit(Events.ASSIGNMENT_SUBMITTED, a));
+							assignment.getInterfaceInstance()
+								.then(a => Events.emit(Events.ASSIGNMENT_SUBMITTED, a));
 
-					fulfill({
-						result: result,
-						itemLink: itemLink,
-						assignmentId: assignmentId,
-						isPracticeSubmission
-					});
+
+							fulfill({
+								result: result,
+								itemLink: itemLink,
+								assignmentId: assignmentId,
+								isPracticeSubmission
+							});
+						});
 				},
 				failure: function (rec, resp) {
 					console.error('FAIL', arguments);
