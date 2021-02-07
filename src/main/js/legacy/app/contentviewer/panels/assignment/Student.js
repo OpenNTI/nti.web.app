@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 						this.hasTimedPlaceholder = false;
 					}
 
-					if (assignment.hasSubmission() && (attemptAssignment.get('parts') ?? []).length === 0) {
+					if (assignment.hasSubmission() && attemptAssignment.get('HideAfterSubmission')) {
 						return [
 							baseToolbarConfig,
 							{

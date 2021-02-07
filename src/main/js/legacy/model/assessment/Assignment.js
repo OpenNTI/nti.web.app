@@ -55,6 +55,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'version', type: 'string'},
 		{ name: 'total_points', type: 'string'},
 		{ name: 'submission_buffer', type: 'int'},
+		{ name: 'HideAfterSubmission', type: 'boolean'},
 		// Timed assignment variables
 		{ name: 'IsTimedAssignment', type: 'bool'},
 		{ name: 'MaximumTimeAllowed', type: 'int'}, //this is in seconds
