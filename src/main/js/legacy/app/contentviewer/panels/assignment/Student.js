@@ -88,18 +88,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			return [baseToolbarConfig, baseReaderConfig];
 		}
 
-		if (assignment.hasSubmission() && (assignment.get('parts') ?? []).length === 0) {
-			return [
-				baseToolbarConfig,
-				{
-					xtype: 'assignment-submitted-masked-placeholder',
-					assignment,
-					flex: 1,
-					isMaskedAssignment: true
-				}
-			];
-		}
-
 		//the assignment is started, or submitted. Show the latest attempt
 		if (!newAttempt && (assignment.isStarted() || assignment.hasSubmission())) {
 			return assignment.getLatestAttempt()
@@ -111,6 +99,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 					if (!attemptAssignment.isTime) {
 						this.hasTimedPlaceholder = false;
+					}
+
+					if (assignment.hasSubmission() && (attemptAssignment.get('parts') ?? []).length === 0) {
+						return [
+							baseToolbarConfig,
+							{
+								xtype: 'assignment-submitted-masked-placeholder',
+								assignment,
+								flex: 1,
+								isMaskedAssignment: true
+							}
+						];
+
 					}
 
 					this.assignmentOverride = attemptAssignment;
