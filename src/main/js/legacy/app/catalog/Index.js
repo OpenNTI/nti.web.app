@@ -201,7 +201,7 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	},
 
 
-	maybeShowCatalogEntry (route, category) {
+	async maybeShowCatalogEntry (route, category) {
 		const {path} = route;
 		const matches = path && path.match(CATALOG_ENTRY_ROUTE);
 
@@ -211,45 +211,55 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 				delete this.availableWin;
 			}
 
-			return Promise.resolve();
+			return;
 		}
 
 		const [param, ...parts] = matches[2].split('/');
 		const rest = parts.join('/');
 
 
-		return this.loadCatalogEntry(param, rest)
-			.then((catalogEntry) => {
-				this.availableWin = Ext.widget('library-available-courses-window', {
-					isSingle: true,
-					doClose: () => {
-						this.pushRoute('', category || '/');
-					}
+		this.__loadTask = this.__loadTask || {};
+
+		if (this.__loadTask[param]) {
+			return;
+		}
+
+		this.__loadTask[param] = this.loadCatalogEntry(param, rest).catch(() => { alert('Unable to find course.'); });
+
+		const catalogEntry = await this.__loadTask[param];
+
+		delete this.__loadTask[param];
+
+		if (!catalogEntry) {return;}
+
+		this.availableWin = Ext.widget('library-available-courses-window', {
+			isSingle: true,
+			doClose: () => {
+				this.pushRoute('', category || '/');
+			}
+		});
+
+		this.availableWin.pushRoute = (title, pushedRoute) => {
+			const pushedParts = pushedRoute.split('/');
+			const pushedRest = pushedParts.splice(1).join('/');
+
+			const allowNavRequest = this.availableWin.allowNavigation();
+
+			if(allowNavRequest && allowNavRequest.then) {
+				allowNavRequest.then(() => {
+					this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
 				});
+			}
+			else if(allowNavRequest) {
+				this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
+			}
+		};
 
-				this.availableWin.pushRoute = (title, pushedRoute) => {
-					const pushedParts = pushedRoute.split('/');
-					const pushedRest = pushedParts.splice(1).join('/');
+		this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
+		this.availableWin.show();
 
-					const allowNavRequest = this.availableWin.allowNavigation();
+		this.availableWin.el.setStyle({'z-index': 1});
 
-					if(allowNavRequest && allowNavRequest.then) {
-						allowNavRequest.then(() => {
-							this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
-						});
-					}
-					else if(allowNavRequest) {
-						this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${pushedRest}`, {course: catalogEntry});
-					}
-				};
 
-				this.availableWin.handleRoute(`${encodeForURI(catalogEntry.getId())}/${rest}`, {course: catalogEntry});
-				this.availableWin.show();
-
-				this.availableWin.el.setStyle({'z-index': 1});
-			})
-			.catch(() => {
-				alert('Unable to find course.');
-			});
 	}
 });
