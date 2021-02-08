@@ -277,6 +277,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			return Promise.resolve(null);
 		}
 
+		if (config?.historyItem) {
+			return Promise.resolve(config.historyItem);
+		}
+
 		return this.assignment.getLatestAttempt()
 			.then(attempt => {
 				if (attempt) {
@@ -296,29 +300,30 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	},
 
 
+	updateAssignment (override) {
+		const regenerate = this.pageInfo && this.pageInfo.regenerate ?
+			this.pageInfo.regenerate(override) :
+			Promise.resolve(this.pageInfo);
+
+		return regenerate
+			.then((pageInfo) => {
+				this.pageInfo = pageInfo;
+
+				return this.showReader()
+					.then(() => this.showReader())
+					.then(() => this.maybeShowAllowedTime());
+			})
+			.catch(() => {});//swallow any errors
+	},
+
+
 	monitorAssignment (assignment) {
 		Ext.destroy(this.assignmentMonitors);
 
-		const updateAssignment = (override) => {
-			const regenerate = this.pageInfo && this.pageInfo.regenerate ?
-				this.pageInfo.regenerate(assignment) :
-				Promise.resolve(this.pageInfo);
-
-			regenerate
-				.then((pageInfo) => {
-					this.pageInfo = pageInfo;
-
-					this.showReader()
-						.then(() => {
-							this.showReader();
-							this.maybeShowAllowedTime();
-						});
-				});
-		};
 
 		this.assignmentMonitors = assignment.on({
 			destroyable: true,
-			'refresh': updateAssignment,
+			'refresh': this.updateAssignment,
 			'deleted': () => {
 				this.bundle.getAssignments()
 					.then((assignments) => {
@@ -394,7 +399,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			me.showAllowedTime();
 		}
 
-		this.getAssignmentHistory(config)
+		return this.getAssignmentHistory(config)
 			.then(function (h) {
 				if (!h) {
 					maybeSetActiveHistoryItem(null, null);
@@ -478,14 +483,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		attempt.getAssignment()
 			.then((assignment) => {
 				this.assignmentOverride = assignment;
-				if (this.setActiveHistoryItem) {
-					this.setActiveHistoryItem(h, container, assignment);
-				}
+				return assignment;
+			})
+			.then((assignment) => {
+				return this.pageInfo && this.pageInfo.regenerate ?
+					this.pageInfo.regenerate(assignment) :
+					Promise.resolve(this.pageInfo);
+			})
+			.then((assignment) => (this.showAssignment({historyItem: h}), assignment))
+			.then((assignment) => {
+				this.setActiveHistoryItem?.(h, container, assignment);
+
+				assessment.updateAssignmentHistoryItem(h);
+				header.setHistory(h, container);
 			});
-
-
-		assessment.updateAssignmentHistoryItem(h);
-		header.setHistory(h, container);
 	},
 
 	getAnalyticData: function () {
