@@ -31,9 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.DateMenu', {
 
 	addResult: function (assessment) {
 		//check if there is already a menu item for this assessment
-		var alreadyExists = this.items.find(function (item) {
-			return item.assessment === assessment;
-		});
+		var alreadyExists = this.items.findBy(item => item.assessment === assessment);
 
 		//if not create one
 		if (alreadyExists) {

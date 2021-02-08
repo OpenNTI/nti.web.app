@@ -76,6 +76,12 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 
 	state = {}
 
+	componentWillUnmount () {
+		this.setupAssignment =
+		this.setState = () => null;
+		this.tearDownAssignment();
+	}
+
 
 	setupAssignment = (renderTo) => {
 		this.tearDownAssignment();

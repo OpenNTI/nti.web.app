@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		};
 
 		returnConfig.updateMessage = (newMsgCfg) => {
-			this.toolbarCmp.setProps({message: newMsgCfg});
+			this.toolbarCmp?.setProps({message: newMsgCfg});
 		};
 
 		return returnConfig;

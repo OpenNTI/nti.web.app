@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 			var course = instance.getLink('CourseInstance'),
 				href = nomnom(course);
 
-			console.log('nomnom? "%s" === "%s"', href, link);
+			// console.log('nomnom? "%s" === "%s"', href, link);
 			return href === link;
 		};
 	},
@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		const link = this.getLink('Commence');
 
 		if (!link) {
-			console.error('No Commence Link.');
+			// console.error('No Commence Link.');
 			return Promise.reject();
 		}
 
@@ -304,7 +304,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		const link = current && current.getLink('TimeRemaining');
 
 		const fail = () => {
-			console.error('Unable to get time remaining... Returning Zero');
+			// console.error('Unable to get time remaining... Returning Zero');
 			return Promise.resolve(0);
 		};
 

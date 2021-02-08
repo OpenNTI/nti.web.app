@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 			if (Ext.isArray(v)) {
 				result = lazy.ParseUtils.parseItems(v);
 				if (this.limit !== undefined && result.length > this.limit) {
-					console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
+					// console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
 					result = result.slice(0, this.limit);
 					result.forEach(function (a) {
 						if (a) {
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 						keys[key] = values.length;
 						values.push(v[key]);
 						if (this.limit !== undefined && values.length > this.limit) {
-							console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
+							// console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
 							values.pop();
 							delete keys[key];
 							break;

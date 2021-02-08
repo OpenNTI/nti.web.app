@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 
 		delete this.allowResettingAssignment;
-		console.log('New status is active');
+		// console.log('New status is active');
 		this.state = 'active';
 
 		if (!isAssignment) {
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			this.show();
 		}
 
-		console.log('New status is submitted');
+		// console.log('New status is submitted');
 		this.state = 'submitted';
 		this.submitted = true;
 		this.resetBtn.hide();
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		if (this.isReady()) {
 			return;
 		}
-		console.log('New status is ready');
+		// console.log('New status is ready');
 		delete this.state;
 		delete this.submitted;
 		if (this.shouldAllowInstructorSubmit()) {
@@ -389,11 +389,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 				if (q.fireEvent('beforereset')) {
 					q.fireEvent('reset', keepAnswers);
 					me.saveProgress({});
-					console.log('fired reset');
+					// console.log('fired reset');
 					return Promise.resolve();
 				}
 
-				console.log('reset aborted');
+				// console.log('reset aborted');
 				return Promise.reject();
 			} finally {
 				delete me.resetting;
@@ -604,7 +604,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 
 		if (!questionSet.fireEvent('beforesubmit', questionSet, submission)) {
-			console.log('submit aborted');
+			// console.log('submit aborted');
 			return;
 		}
 
