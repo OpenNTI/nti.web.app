@@ -3,7 +3,6 @@ const CatalogView = require('@nti/web-catalog');
 const {getService} = require('@nti/web-client');
 const { encodeForURI, isNTIID } = require('@nti/lib-ntiids');
 
-const Globals = require('legacy/util/Globals');
 const NavigationActions = require('legacy/app/navigation/Actions');
 const ComponentsNavigation = require('legacy/common/components/Navigation');
 const lazy = require('legacy/util/lazy-require')
@@ -23,18 +22,6 @@ const CATEGORY_NAME = /\/([^/]*)\/?/;
 
 const URI_PART = /^uri/;
 
-function getPathname (a) {
-	const pathname = a.pathname;
-
-	if (pathname.charAt(0) !== '/') {
-		const href = a.toString();
-		const parts = Globals.getURLParts(href);
-
-		return parts.pathname;
-	}
-
-	return pathname;
-}
 
 module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 	extend: 'Ext.container.Container',
@@ -57,12 +44,6 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		this.addDefaultRoute(this.showCatalog.bind(this));
 
 		this.NavigationActions = NavigationActions.create();
-	},
-
-	afterRender () {
-		this.callParent(arguments);
-
-		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
 
@@ -89,17 +70,6 @@ module.exports = exports = Ext.define('NextThought.app.catalog.Index', {
 		}
 	},
 
-
-	onClick (e) {
-		const a = e.getTarget('a[href]');
-		const path = a && getPathname(a);
-		const route = path && path.replace(/^\/?app\/?/, '');
-
-		if (route) {
-			this.pushRootRoute('', route, {});
-			e.stopEvent();
-		}
-	},
 
 	showCatalog (route) {
 		const baseroute = this.getBaseRoute();
