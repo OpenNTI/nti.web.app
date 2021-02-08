@@ -7,25 +7,22 @@ import Timed from './sidebar-parts/Timed';
 import Instructions from './sidebar-parts/Instructions';
 
 
-export default class AssignmentSidebar extends React.Component {
-	static propTypes = {
-		assignmentModel: PropTypes.object,
-		activeHistoryItemModel: PropTypes.object
-	}
+AssignmentSidebar.propTypes = {
+	assignmentModel: PropTypes.object,
+	activeHistoryItemModel: PropTypes.object
+};
 
-	render () {
-		const {assignmentModel, activeHistoryItemModel} = this.props;
-
-		if (!assignmentModel) { return null; }
-
-		const timed = assignmentModel.isTimed;
-		const available = assignmentModel.isAvailable();
-
-		return (
-			<Sidebar>
-				{!activeHistoryItemModel && available && timed && (<Timed {...this.props} />)}
-				<Instructions {...this.props} />
-			</Sidebar>
-		);
-	}
+export default function AssignmentSidebar (props) {
+	const {assignmentModel, activeHistoryItemModel} = props;
+	return !assignmentModel ? null : (
+		<Sidebar>
+			{!activeHistoryItemModel
+				&& assignmentModel?.isAvailable?.()
+				&& assignmentModel?.isTimed
+				&& (
+					<Timed {...props} />
+				)}
+			<Instructions {...props} />
+		</Sidebar>
+	);
 }

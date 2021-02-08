@@ -35,7 +35,12 @@ const t = scoped('NTIWebAppLessonItems.overrides.assignment.sidebar-parts.Instru
 
 export default class AssignmentSidebarInstructions extends React.Component {
 	static propTypes = {
-		assignmentModel: PropTypes.object,
+		assignmentModel: PropTypes.shape({
+			isAvailable: PropTypes.func,
+			isNoSubmit: PropTypes.func,
+			getQuestionCount: PropTypes.func,
+			isOutsideSubmissionBuffer: PropTypes.func
+		}),
 		activeHistoryItemModel: PropTypes.object
 	}
 
@@ -48,12 +53,20 @@ export default class AssignmentSidebarInstructions extends React.Component {
 	render () {
 		const {assignmentModel, activeHistoryItemModel} = this.props;
 
-		if (!assignmentModel) { return null; }
+		if (!assignmentModel?.isAvailable) {
+			if (assignmentModel) {
+				// eslint-disable-next-line no-console
+				console.error('Why isn\'t this an assignment model??? %o', assignmentModel);
+			}
+			return null;
+		}
 
-		const available = assignmentModel && assignmentModel.isAvailable();
-		const noSubmit = assignmentModel && assignmentModel.isNoSubmit();
-		const noQuestions = assignmentModel && (assignmentModel.isNoSubmit() || !assignmentModel.getQuestionCount());
-		const outsideBuffer = assignmentModel && assignmentModel.isOutsideSubmissionBuffer();
+
+
+		const available = assignmentModel.isAvailable();
+		const noSubmit = assignmentModel.isNoSubmit();
+		const noQuestions = (assignmentModel.isNoSubmit() || !assignmentModel.getQuestionCount());
+		const outsideBuffer = assignmentModel.isOutsideSubmissionBuffer();
 		const submitted = !!activeHistoryItemModel;
 
 		return (
