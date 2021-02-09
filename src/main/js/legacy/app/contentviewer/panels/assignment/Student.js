@@ -474,29 +474,32 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	},
 
 	updateHistory: function (h, container) {
-		var header = this.getToolbar(),
-			readerContent = this.getReaderContent(),
-			assessment = readerContent.getAssessment();
-
 		const attempt = h.get('MetadataAttemptItem');
 
 		attempt.getAssignment()
 			.then((assignment) => {
 				this.assignmentOverride = assignment;
-				return assignment;
+
+				if (assignment.get('HideAfterSubmission')) {
+					this.getToolbarAndReaderConfig()
+						.then((config) => this.applyReaderConfigs(config))
+						.then(() => this.showMaskedAssignment({historyItem: h}));
+				}
+
+				if (this.setActiveHistoryItem) {
+					this.setActiveHistoryItem(h, container, assignment);
+				}
 			})
-			.then((assignment) => {
-				return this.pageInfo && this.pageInfo.regenerate ?
-					this.pageInfo.regenerate(assignment) :
-					Promise.resolve(this.pageInfo);
-			})
-			.then((assignment) => (this.showAssignment({historyItem: h}), assignment))
-			.then((assignment) => {
-				this.setActiveHistoryItem?.(h, container, assignment);
+			.then(() => {
+				var header = this.getToolbar(),
+					readerContent = this.getReaderContent(),
+					assessment = readerContent.getAssessment();
 
 				assessment.updateAssignmentHistoryItem(h);
 				header.setHistory(h, container);
 			});
+
+
 	},
 
 	getAnalyticData: function () {
