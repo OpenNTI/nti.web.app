@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {LinkTo} from '@nti/web-routing';
 import {Loading, Layouts} from '@nti/web-commons';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {decodeFromURI} from '@nti/lib-ntiids';
 
@@ -16,8 +17,6 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.courses.info.Frame', DEFAULT_TEXT);
 
-export default
-@Store.connect({course: 'course', loading: 'loading'})
 class SiteAdminCourseView extends React.Component {
 	static deriveStoreKeyFromProps (props) {
 		return props.courseID;
@@ -106,3 +105,7 @@ class SiteAdminCourseView extends React.Component {
 		);
 	}
 }
+
+export default decorate(SiteAdminCourseView, [
+	Store.connect({course: 'course', loading: 'loading'})
+]);

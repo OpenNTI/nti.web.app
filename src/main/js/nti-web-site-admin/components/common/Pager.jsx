@@ -2,12 +2,9 @@ import './Pager.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import {decorate} from '@nti/lib-commons';
 import {Connectors} from '@nti/lib-store';
 
-export default
-@Connectors.Any.connect({
-	loadPage: 'loadPage'
-})
 class Pager extends React.Component {
 	static propTypes = {
 		loadPage: PropTypes.func.isRequired,
@@ -55,3 +52,10 @@ class Pager extends React.Component {
 		);
 	}
 }
+
+
+export default decorate(Pager, [
+	Connectors.Any.connect({
+		loadPage: 'loadPage'
+	})
+]);

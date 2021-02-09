@@ -1,11 +1,10 @@
 import {getService} from '@nti/web-client';
 import {Stores, Mixins} from '@nti/lib-store';
 import {mixin} from '@nti/lib-decorators';
+import {decorate} from '@nti/lib-commons';
 
 const PAGE_SIZE = 20;
 
-export default
-@mixin(Mixins.BatchPaging, Mixins.Searchable)
 class BookRosterStore extends Stores.BoundStore {
 	constructor () {
 		super();
@@ -67,3 +66,7 @@ class BookRosterStore extends Stores.BoundStore {
 		this.emitChange('items', 'loading');
 	}
 }
+
+export default decorate(BookRosterStore, [
+	mixin(Mixins.BatchPaging, Mixins.Searchable),
+]);

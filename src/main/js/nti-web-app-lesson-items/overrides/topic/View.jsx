@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import {Loading, Layouts} from '@nti/web-commons';
-import {rawContent} from '@nti/lib-commons';
+import {decorate, rawContent} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 
 import TopicViewer from 'legacy/app/forums/components/topic/Window';
@@ -34,9 +34,7 @@ const handles = (obj) => {
 	return item && MIME_TYPES[item.MimeType];
 };
 
-export default
-@Registry.register(handles)
-@Store.connect(['loading', 'error', 'topicModel', 'topicRef', 'activeUsers'])
+
 class NTIWebAppLessonItemsTopic extends React.Component {
 	static deriveBindingFromProps (props) {
 		const {location = {}} = props;
@@ -163,3 +161,8 @@ class NTIWebAppLessonItemsTopic extends React.Component {
 		);
 	}
 }
+
+export default decorate(NTIWebAppLessonItemsTopic, [
+	Registry.register(handles),
+	Store.connect(['loading', 'error', 'topicModel', 'topicRef', 'activeUsers']),
+]);

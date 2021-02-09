@@ -1,6 +1,7 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
 import {Prompt} from '@nti/web-commons';
@@ -23,12 +24,6 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.list.navbar.View', DEFAULT_TEXT);
 
-export default
-@Store.connect({
-	loading: 'loading',
-	total: 'total',
-	showInviteDialog: 'showInviteDialog'
-})
 class UserListNavBar extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
@@ -89,3 +84,12 @@ class UserListNavBar extends React.Component {
 		);
 	}
 }
+
+
+export default decorate(UserListNavBar, [
+	Store.connect({
+		loading: 'loading',
+		total: 'total',
+		showInviteDialog: 'showInviteDialog'
+	})
+]);

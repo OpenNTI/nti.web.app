@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {Prompt} from '@nti/web-commons';
 import {Connectors} from '@nti/lib-store';
@@ -10,11 +11,7 @@ const t = scoped('nti-web-site-admin.components.users.list.table.columns.Rescind
 	rescind: 'Cancel'
 });
 
-export default
-@Connectors.Any.connect({
-	getSelectedCount: 'getSelectedCount',
-	rescind: 'rescind'
-})
+
 class Rescind extends React.Component {
 	static propTypes = {
 		item: PropTypes.object.isRequired,
@@ -42,3 +39,10 @@ class Rescind extends React.Component {
 		);
 	}
 }
+
+export default decorate(Rescind, [
+	Connectors.Any.connect({
+		getSelectedCount: 'getSelectedCount',
+		rescind: 'rescind'
+	})
+]);

@@ -2,6 +2,7 @@ import './UsersTable.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Table, Loading, Prompt} from '@nti/web-commons';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {Connectors} from '@nti/lib-store';
 
@@ -20,19 +21,6 @@ const t = scoped('nti-web-site-admin.users.list.table.UsersTable', {
 	emptyMessage: 'There are no active learners'
 });
 
-export default
-@Connectors.Any.connect({
-	loading: 'loading',
-	items: 'items',
-	error: 'error',
-	sortOn: 'sortOn',
-	sortDirection: 'sortDirection',
-	selectedUsers: 'selectedUsers',
-	pageNumber: 'pageNumber',
-	numPages: 'numPages',
-	currentSearchTerm: 'currentSearchTerm',
-	setSort: 'setSort'
-})
 class UsersTable extends React.Component {
 	static propTypes = {
 		items: PropTypes.array,
@@ -141,3 +129,18 @@ class UsersTable extends React.Component {
 		);
 	}
 }
+
+export default decorate(UsersTable, [
+	Connectors.Any.connect({
+		loading: 'loading',
+		items: 'items',
+		error: 'error',
+		sortOn: 'sortOn',
+		sortDirection: 'sortDirection',
+		selectedUsers: 'selectedUsers',
+		pageNumber: 'pageNumber',
+		numPages: 'numPages',
+		currentSearchTerm: 'currentSearchTerm',
+		setSort: 'setSort'
+	})
+]);

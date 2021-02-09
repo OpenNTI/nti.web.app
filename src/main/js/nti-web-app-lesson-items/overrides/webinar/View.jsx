@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {Layouts} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
@@ -24,8 +25,6 @@ const handles = (obj) => {
 	return item && MIME_TYPES[item.MimeType];
 };
 
-export default
-@TypeRegistry.register(handles)
 class NTIWebLessonItemsWebinar extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
@@ -37,7 +36,7 @@ class NTIWebLessonItemsWebinar extends React.Component {
 	render () {
 		const {course, location} = this.props;
 		const {item} = location || {};
-		
+
 		return (
 			<div>
 				<Aside component={Sidebar} course={course} item={item} />
@@ -49,3 +48,7 @@ class NTIWebLessonItemsWebinar extends React.Component {
 		);
 	}
 }
+
+export default decorate(NTIWebLessonItemsWebinar, [
+	TypeRegistry.register(handles)
+]);

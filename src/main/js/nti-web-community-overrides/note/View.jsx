@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {getScrollParent} from '@nti/lib-dom';
 import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
@@ -22,9 +23,6 @@ const t = scoped('nti-web-community-overrides.note.View', {
 	deletedChannel: 'Deleted Item'
 });
 
-export default
-@Registry.register(handles)
-@Decorators.addClassToRoot('community-content-open')
 class NTIWebCommunityNote extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -173,3 +171,9 @@ class NTIWebCommunityNote extends React.Component {
 		);
 	}
 }
+
+
+export default decorate(NTIWebCommunityNote, [
+	Registry.register(handles),
+	Decorators.addClassToRoot('community-content-open'),
+]);

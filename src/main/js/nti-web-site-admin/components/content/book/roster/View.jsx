@@ -2,6 +2,7 @@ import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {List, Loading} from '@nti/web-commons';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
 import {searchable} from '@nti/web-search';
@@ -19,15 +20,6 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.courses.course.info.Roster', DEFAULT_TEXT);
 
-export default
-@searchable()
-@BookRosterStore.connect({
-	loading: 'loading',
-	items: 'items',
-	error: 'error',
-	numPages: 'numPages',
-	pageNumber: 'pageNumber'
-})
 class SiteAdminBookRoster extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
@@ -79,3 +71,14 @@ class SiteAdminBookRoster extends React.Component {
 	}
 
 }
+
+export default decorate(SiteAdminBookRoster, [
+	searchable(),
+	BookRosterStore.connect({
+		loading: 'loading',
+		items: 'items',
+		error: 'error',
+		numPages: 'numPages',
+		pageNumber: 'pageNumber'
+	})
+]);

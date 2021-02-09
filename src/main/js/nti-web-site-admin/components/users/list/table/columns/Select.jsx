@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Checkbox} from  '@nti/web-commons';
+import {decorate} from '@nti/lib-commons';
 import {Connectors} from '@nti/lib-store';
 import cx from 'classnames';
 
 import styles from './Select.css';
 
-@Connectors.Any.connect({
-	isAllSelected: 'isAllSelected',
-	selectAll: 'selectAll',
-	deselectAll: 'deselectAll'
-})
-class SelectHeader extends React.Component {
+class SelectHeaderBase extends React.Component {
 	static propTypes = {
 		isAllSelected: PropTypes.func,
 		selectAll: PropTypes.func,
@@ -38,12 +34,15 @@ class SelectHeader extends React.Component {
 	}
 }
 
-export default
-@Connectors.Any.connect({
-	onSelect: 'onSelect',
-	onDeselect: 'onDeselect',
-	isSelected: 'isSelected'
-})
+const SelectHeader = decorate(SelectHeaderBase, [
+	Connectors.Any.connect({
+		isAllSelected: 'isAllSelected',
+		selectAll: 'selectAll',
+		deselectAll: 'deselectAll'
+	})
+]);
+
+
 class Select extends React.Component {
 	static propTypes = {
 		item: PropTypes.object.isRequired,
@@ -83,3 +82,11 @@ class Select extends React.Component {
 		);
 	}
 }
+
+export default decorate(Select, [
+	Connectors.Any.connect({
+		onSelect: 'onSelect',
+		onDeselect: 'onDeselect',
+		isSelected: 'isSelected'
+	})
+]);

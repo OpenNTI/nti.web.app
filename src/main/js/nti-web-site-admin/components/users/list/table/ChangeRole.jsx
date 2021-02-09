@@ -1,6 +1,7 @@
 import './ChangeRole.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {DialogButtons, Avatar, Panels} from '@nti/web-commons';
 import {Connectors} from '@nti/lib-store';
@@ -24,11 +25,6 @@ const DEFAULT_TEXT = {
 const t = scoped('nti-web-site-admin.componentsusers.list.table.ChangeRole', DEFAULT_TEXT);
 
 
-export default
-@Connectors.Any.connect({
-	addAdmin: 'addAdmin',
-	removeAdmin: 'removeAdmin'
-})
 class ChangeRole extends React.Component {
 	static propTypes = {
 		addAdmin: PropTypes.func.isRequired,
@@ -125,3 +121,11 @@ class ChangeRole extends React.Component {
 		);
 	}
 }
+
+
+export default decorate(ChangeRole, [
+	Connectors.Any.connect({
+		addAdmin: 'addAdmin',
+		removeAdmin: 'removeAdmin'
+	})
+]);

@@ -1,6 +1,7 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {searchable, contextual} from '@nti/web-search';
 import {Table, EmptyState, Loading} from '@nti/web-commons';
@@ -44,9 +45,6 @@ function getReadings (course) {
 	return (ContentPackages || []).filter(x => x.isRenderable);
 }
 
-export default
-@searchable()
-@contextual(t('readings'))
 class Readings extends React.Component {
 	static propTypes = {
 		course: PropTypes.object,
@@ -116,3 +114,8 @@ class Readings extends React.Component {
 		);
 	}
 }
+
+export default decorate(Readings, [
+	searchable(),
+	contextual(t('readings')),
+]);

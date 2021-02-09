@@ -1,9 +1,7 @@
 /* eslint-disable camelcase */
 import {Models, registerModel} from '@nti/lib-interfaces';
 
-export default
-@registerModel
-class SiteBrand extends Models.Base {
+export default class SiteBrand extends Models.Base {
 	static MimeType = Models.COMMON_PREFIX + 'sitebrand'
 
 	static Fields = {
@@ -18,3 +16,5 @@ class SiteBrand extends Models.Base {
 		UneditableEmailImage: { type: 'boolean'}
 	}
 }
+
+registerModel(SiteBrand);

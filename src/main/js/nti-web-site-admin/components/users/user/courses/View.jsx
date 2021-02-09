@@ -2,6 +2,7 @@ import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {List, Loading, Button} from '@nti/web-commons';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
 import {EnrollmentListItem, Enrollment} from '@nti/web-course';
@@ -24,8 +25,6 @@ const propMap = {
 	error: 'error'
 };
 
-export default
-@Store.connect(propMap)
 class SiteAdminUserCourses extends React.Component {
 	static propTypes = {
 		user: PropTypes.object,
@@ -130,3 +129,8 @@ class SiteAdminUserCourses extends React.Component {
 		return <div className="empty-state">{t('noCourses')}</div>;
 	}
 }
+
+
+export default decorate(SiteAdminUserCourses, [
+	Store.connect(propMap)
+]);

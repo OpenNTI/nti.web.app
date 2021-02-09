@@ -2,6 +2,7 @@ import './Frame.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {LinkTo} from '@nti/web-routing';
+import {decorate} from '@nti/lib-commons';
 import {Loading, Layouts} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 
@@ -14,8 +15,6 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.user.Frame', DEFAULT_TEXT);
 
-export default
-@Store.connect({user: 'user', loading: 'loading', hasBooks: 'hasBooks', hasCourses: 'hasCourses'})
 class SiteAdminUserView extends React.Component {
 	static propTypes = {
 		userID: PropTypes.string,
@@ -105,3 +104,8 @@ class SiteAdminUserView extends React.Component {
 		);
 	}
 }
+
+
+export default decorate(SiteAdminUserView, [
+	Store.connect({user: 'user', loading: 'loading', hasBooks: 'hasBooks', hasCourses: 'hasCourses'})
+]);

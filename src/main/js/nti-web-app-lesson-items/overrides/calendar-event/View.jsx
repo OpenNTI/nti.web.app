@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Event} from '@nti/web-calendar';
+import {decorate} from '@nti/lib-commons';
 import {Layouts} from '@nti/web-commons';
 import classnames from 'classnames/bind';
 
@@ -23,8 +24,6 @@ const handles = (obj) => {
 	return item && MIME_TYPES[item.MimeType];
 };
 
-export default
-@TypeRegistry.register(handles)
 class CourseContentViewerRendererCalendarEvent extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
@@ -47,3 +46,7 @@ class CourseContentViewerRendererCalendarEvent extends React.Component {
 		);
 	}
 }
+
+export default decorate(CourseContentViewerRendererCalendarEvent, [
+	TypeRegistry.register(handles)
+]);

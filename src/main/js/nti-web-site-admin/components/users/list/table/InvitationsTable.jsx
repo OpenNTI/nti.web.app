@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Table, Loading, Prompt} from '@nti/web-commons';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {searchable, contextual} from '@nti/web-search';
 
@@ -22,21 +23,6 @@ const t = scoped('nti-web-site-admin.users.list.table.InvitationsTable', {
 	invitePeople: 'Invite People'
 });
 
-export default
-@searchable()
-@contextual(t('learners'))
-@Store.connect({
-	loading: 'loading',
-	items: 'items',
-	error: 'error',
-	sortOn: 'sortOn',
-	sortDirection: 'sortDirection',
-	selectedUsers: 'selectedUsers',
-	pageNumber: 'pageNumber',
-	numPages: 'numPages',
-	currentSearchTerm: 'currentSearchTerm',
-	showInviteDialog: 'showInviteDialog'
-})
 class InvitationsTable extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
@@ -161,3 +147,20 @@ class InvitationsTable extends React.Component {
 		);
 	}
 }
+
+export default decorate(InvitationsTable, [
+	searchable(),
+	contextual(t('learners')),
+	Store.connect({
+		loading: 'loading',
+		items: 'items',
+		error: 'error',
+		sortOn: 'sortOn',
+		sortDirection: 'sortDirection',
+		selectedUsers: 'selectedUsers',
+		pageNumber: 'pageNumber',
+		numPages: 'numPages',
+		currentSearchTerm: 'currentSearchTerm',
+		showInviteDialog: 'showInviteDialog'
+	}),
+]);

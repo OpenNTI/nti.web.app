@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {Table, Loading} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {searchable, contextual} from '@nti/web-search';
@@ -16,19 +17,6 @@ const t = scoped('nti-web-site-admin.content.list.table.BooksTable', {
 	emptyMessage: 'There are no books'
 });
 
-export default
-@searchable()
-@contextual(t('title'))
-@Store.connect({
-	loading: 'loading',
-	items: 'items',
-	error: 'error',
-	sortOn: 'sortOn',
-	sortDirection: 'sortDirection',
-	pageNumber: 'pageNumber',
-	numPages: 'numPages',
-	currentSearchTerm: 'currentSearchTerm'
-})
 class BooksTable extends React.Component {
 	static propTypes = {
 		store: PropTypes.object.isRequired,
@@ -101,3 +89,18 @@ class BooksTable extends React.Component {
 		);
 	}
 }
+
+export default decorate(BooksTable, [
+	searchable(),
+	contextual(t('title')),
+	Store.connect({
+		loading: 'loading',
+		items: 'items',
+		error: 'error',
+		sortOn: 'sortOn',
+		sortDirection: 'sortDirection',
+		pageNumber: 'pageNumber',
+		numPages: 'numPages',
+		currentSearchTerm: 'currentSearchTerm'
+	})
+]);

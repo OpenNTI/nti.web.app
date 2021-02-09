@@ -1,7 +1,7 @@
 /*globals createStoryJS*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import {rawContent} from '@nti/lib-commons';
+import {decorate, rawContent} from '@nti/lib-commons';
 
 import AnalyticsUtil from 'legacy/util/Analytics';
 
@@ -22,8 +22,6 @@ const PLACEHOLDER_TPL = (item) => {
 	return `<div id="${item.getID()}-placeholder-element" ${DATA_ATTR}></div>`;
 };
 
-export default
-@Registry.register(handles)
 class NTIWebAppLessonItemsTimeline extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
@@ -97,3 +95,8 @@ class NTIWebAppLessonItemsTimeline extends React.Component {
 		);
 	}
 }
+
+
+export default decorate(NTIWebAppLessonItemsTimeline, [
+	Registry.register(handles)
+]);

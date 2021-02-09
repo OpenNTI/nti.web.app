@@ -2,6 +2,7 @@ import {Stores, Mixins} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
 import {Models} from '@nti/lib-interfaces';
 import {mixin} from '@nti/lib-decorators';
+import {decorate} from '@nti/lib-commons';
 
 import Selectable from './Selectable';
 
@@ -12,8 +13,6 @@ const INVITATION_TYPES = {
 	LEARNER: Models.invitations.SiteInvitation.MimeType
 };
 
-export default
-@mixin(Selectable, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
 class UserInvitationsStore extends Stores.BoundStore {
 	static Singleton = true;
 
@@ -250,3 +249,7 @@ class UserInvitationsStore extends Stores.BoundStore {
 		}
 	}
 }
+
+export default decorate(UserInvitationsStore, [
+	mixin(Selectable, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable)
+]);

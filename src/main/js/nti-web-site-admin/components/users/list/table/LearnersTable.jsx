@@ -1,4 +1,5 @@
 import React from 'react';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {searchable, contextual} from '@nti/web-search';
 
@@ -10,10 +11,6 @@ const t = scoped('nti-web-site-admin.users.list.table.LearnersTable', {
 	emptyMessage: 'There are no current learners'
 });
 
-export default
-@searchable()
-@contextual(t('learners'))
-@Store.connect({})
 class LearnersTable extends React.Component {
 	static deriveStateKeyFromProps = () => 'LearnersTable';
 	static deriveFilterFromProps = () => 'learners';
@@ -22,3 +19,10 @@ class LearnersTable extends React.Component {
 		return <UsersTable filter="learners" title={t('learners')} emptyMessage={t('emptyMessage')}/>;
 	}
 }
+
+
+export default decorate(LearnersTable, [
+	searchable(),
+	contextual(t('learners')),
+	Store.connect({}),
+]);

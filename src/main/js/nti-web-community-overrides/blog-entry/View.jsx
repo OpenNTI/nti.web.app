@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {Layouts, Loading, Prompt, Decorators} from '@nti/web-commons';
 import {LinkTo, Prompt as RoutePrompt} from '@nti/web-routing';
@@ -23,9 +24,6 @@ const t = scoped('nti-web-community-overrides.topic.View', {
 const handles = (obj) => obj && obj.isBlogEntry;
 const {Uncontrolled} = Layouts;
 
-export default
-@Registry.register(handles)
-@Decorators.addClassToRoot('community-content-open')
 class NTIWebCommunityTopic extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -65,7 +63,7 @@ class NTIWebCommunityTopic extends React.Component {
 
 		try {
 			const commentModel = await Service.getObject(comment);//eslint-disable-line
-				
+
 			if (this.selectingComment !== comment) { return; }
 			if (this.topicCmp) {
 				this.topicCmp.selectComment(commentModel);
@@ -161,3 +159,8 @@ class NTIWebCommunityTopic extends React.Component {
 		);
 	}
 }
+
+export default decorate(NTIWebCommunityTopic, [
+	Registry.register(handles),
+	Decorators.addClassToRoot('community-content-open')
+]);

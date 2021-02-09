@@ -1,6 +1,6 @@
 import {Stores, Mixins} from '@nti/lib-store';
 import {getService} from '@nti/web-client';
-import {URL} from '@nti/lib-commons';
+import {decorate, URL} from '@nti/lib-commons';
 import {mixin} from '@nti/lib-decorators';
 
 import SharedStore from '../SharedStore';
@@ -30,8 +30,6 @@ async function bulkActivation (users, rel) {
 	SharedStore.markDirty();
 }
 
-export default
-@mixin(Selectable, Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
 class UserListStore extends Stores.BoundStore {
 
 	StatefulProperties = ['sortProperty', 'sortDirection', 'pageNumber']
@@ -249,3 +247,7 @@ class UserListStore extends Stores.BoundStore {
 		}
 	}
 }
+
+export default decorate(UserListStore, [
+	mixin(Selectable, Mixins.Stateful, Mixins.BatchPaging, Mixins.Searchable, Mixins.Sortable, Mixins.Filterable)
+]);

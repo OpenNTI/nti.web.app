@@ -2,6 +2,7 @@ import './Frame.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {LinkTo} from '@nti/web-routing';
+import {decorate} from '@nti/lib-commons';
 import {Loading, Layouts} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 
@@ -15,8 +16,6 @@ const DEFAULT_TEXT = {
 
 const t = scoped('nti-site-admin.users.user.user-course-enrollment.Frame', DEFAULT_TEXT);
 
-export default
-@Store.connect({enrollment: 'enrollment', loading: 'loading', course: 'course'})
 class SiteAdminUserCourseEnrollmentView extends React.Component {
 	static propTypes = {
 		enrollmentID: PropTypes.string,
@@ -100,3 +99,7 @@ class SiteAdminUserCourseEnrollmentView extends React.Component {
 		);
 	}
 }
+
+export default decorate(SiteAdminUserCourseEnrollmentView, [
+	Store.connect({enrollment: 'enrollment', loading: 'loading', course: 'course'})
+]);

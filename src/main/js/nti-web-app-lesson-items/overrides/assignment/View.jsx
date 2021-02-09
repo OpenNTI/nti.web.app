@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+import {decorate} from '@nti/lib-commons';
 import {Loading, Layouts} from '@nti/web-commons';
 import {Prompt as RoutePrompt} from '@nti/web-routing';
 
@@ -30,20 +31,6 @@ const handles = (obj) => {
 	return item && MIME_TYPES[item.MimeType];
 };
 
-export default
-@Registry.register(handles)
-@Store.connect([
-	'loading',
-	'error',
-
-	'courseModel',
-	'assignmentsModel',
-	'assignmentModel',
-	'historyModel',
-	'student',
-
-	'updateHistoryItem'
-])
 class NTIWebAppLessonItemsAssignment extends React.Component {
 	static deriveBindingFromProps (props) {
 		const {location = {}} = props;
@@ -214,3 +201,19 @@ class NTIWebAppLessonItemsAssignment extends React.Component {
 		);
 	}
 }
+
+export default decorate(NTIWebAppLessonItemsAssignment, [
+	Registry.register(handles),
+	Store.connect([
+		'loading',
+		'error',
+
+		'courseModel',
+		'assignmentsModel',
+		'assignmentModel',
+		'historyModel',
+		'student',
+
+		'updateHistoryItem'
+	])
+]);

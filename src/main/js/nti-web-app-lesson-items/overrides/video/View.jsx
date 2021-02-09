@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
+import {decorate} from '@nti/lib-commons';
 import {TranscriptedVideo} from '@nti/web-content';
 import {Router} from '@nti/web-routing';
 import {Layouts} from '@nti/web-commons';
@@ -30,8 +31,6 @@ const handles = (obj) => {
 	return item && MIME_TYPES[item.MimeType];
 };
 
-export default
-@Registry.register(handles)
 class NTIWebLessonItemsVideo extends React.Component {
 	static propTypes = {
 		location: PropTypes.shape({
@@ -248,3 +247,7 @@ class NTIWebLessonItemsVideo extends React.Component {
 		);
 	}
 }
+
+export default decorate(NTIWebLessonItemsVideo, [
+	Registry.register(handles)
+]);

@@ -2,6 +2,7 @@ import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {List, Loading} from '@nti/web-commons';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 import {LinkTo} from '@nti/web-routing';
 
@@ -17,14 +18,6 @@ const DEFAULT_TEXT = {
 };
 const t = scoped('nti-site-admin.users.user.Transcript', DEFAULT_TEXT);
 
-const propMap = {
-	items: 'items',
-	loading: 'loading',
-	error: 'error'
-};
-
-export default
-@Store.connect(propMap)
 class SiteAdminUserBooks extends React.Component {
 	static propTypes = {
 		user: PropTypes.object,
@@ -103,3 +96,8 @@ class SiteAdminUserBooks extends React.Component {
 		return <div className="empty-state">{t('noBooks')}</div>;
 	}
 }
+
+
+export default decorate(SiteAdminUserBooks, [
+	Store.connect({items: 'items', loading: 'loading', error: 'error'})
+]);

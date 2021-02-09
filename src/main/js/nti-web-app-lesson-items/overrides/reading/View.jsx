@@ -4,6 +4,7 @@ import classnames from 'classnames/bind';
 import {Loading, Layouts, EmptyState} from '@nti/web-commons';
 import {Notes} from '@nti/web-discussions';
 import {LinkTo, Router, Prompt as RoutePrompt} from '@nti/web-routing';
+import {decorate} from '@nti/lib-commons';
 import {scoped} from '@nti/lib-locale';
 
 import ContentViewer from 'legacy/app/contentviewer/Index';
@@ -53,23 +54,7 @@ function alreadyPointingToContent (contentViewer, page) {
 	);
 }
 
-export default
-@Registry.register(handles)
-@Store.connect([
-	'loading',
-	'error',
 
-	'notFound',
-
-	'page',
-	'contentPackage',
-	'rootId',
-	'bundle',
-
-	'activeObject',
-	'setNotes',
-	'notes'
-])
 class NTIWebAppLessonItemsReading extends React.Component {
 	static deriveBindingFromProps (props) {
 		const {location = {}} = props;
@@ -286,3 +271,22 @@ class NTIWebAppLessonItemsReading extends React.Component {
 		return (<EmptyState header={t('notFound')} />);
 	}
 }
+
+export default decorate(NTIWebAppLessonItemsReading, [
+	Registry.register(handles),
+	Store.connect([
+		'loading',
+		'error',
+
+		'notFound',
+
+		'page',
+		'contentPackage',
+		'rootId',
+		'bundle',
+
+		'activeObject',
+		'setNotes',
+		'notes'
+	])
+]);
