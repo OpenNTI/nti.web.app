@@ -2,6 +2,7 @@ const Ext = require('@nti/extjs');
 
 const NavigationActions = require('legacy/app/navigation/Actions');
 
+const NotificationActions = require('./Actions');
 const NotificationsStateStore = require('./StateStore');
 
 require('legacy/mixins/Router');
@@ -27,6 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 		this.initRouter();
 
 		this.NavActions = NavigationActions.create();
+		this.NotableActions = NotificationActions.create();
 		this.NotableStore = NotificationsStateStore.getInstance();
 
 		this.addRoute('/', this.showNotifications.bind(this));
@@ -40,6 +42,9 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 	},
 
 	onActivate: function () {
+		if (!this.NotableActions.loaded) {
+			this.NotableActions.load();
+		}
 		if (this.stream) {
 			this.stream.onActivate();
 		}

@@ -16,7 +16,6 @@ const StoreActions = require('legacy/app/store/Actions');
 const ChatActions = require('legacy/app/chat/Actions');
 const GroupActions = require('legacy/app/groups/Actions');
 const ContextStore = require('legacy/app/context/StateStore');
-const NotificationActions = require('legacy/app/notifications/Actions');
 const StateActions = require('legacy/common/state/Actions');
 const NavigationActions = require('legacy/app/navigation/Actions');
 
@@ -65,7 +64,6 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		me.ChatActions = ChatActions.create();
 		me.GroupActions = GroupActions.create();
 		me.ContextStore = ContextStore.getInstance();
-		me.NotificationActions = NotificationActions.create();
 		me.NavigationActions = NavigationActions.create();
 
 		// window.addEventListener('popstate', function (e) {
