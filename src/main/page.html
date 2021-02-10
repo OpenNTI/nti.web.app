@@ -6,10 +6,30 @@
 		<meta http-equiv="refresh" content="0;url=/login/">
 	</noscript>
 	<script>
-		if (/android|blackberry|iphone|ipod|mobile|webos/i.test(navigator.userAgent) ){
-			var legacyHashRegex = /^\#\!/;
-			var legacyHash = location.hash && legacyHashRegex.test(location.hash) ? location.hash.replace(legacyHashRegex, '') : '';
-			var fragment = location.hash && !legacyHash ? location.hash.replace(/^#/, '') : '';
+		const firstNonNull = (value, key) => value != null ? value : navigator[key];
+		const MaxTouchPoints = (
+			typeof navigator !== 'undefined'
+				? (['msMaxTouchPoints', 'maxTouchPoints'].reduce(firstNonNull, null))
+				: null
+		);
+
+		const hasMaxTouchPoints = MaxTouchPoints != null;
+
+		const isTouchDevice = (
+			'ontouchstart' in window // everyone else
+			|| 'onmsgesturechange' in window //IE10
+			&& (!hasMaxTouchPoints || MaxTouchPoints > 0)
+		);
+
+		const shouldRedirectToMobile = () => {
+			return (/android|blackberry|iphone|ipod|mobile|webos/i.test(navigator.userAgent))
+				|| (isTouchDevice && /Mac OS X/i.test(navigator.userAgent)); // Safari on iPad reports OS X on iOS 13+
+		}
+
+		if(shouldRedirectToMobile()) {
+			const legacyHashRegex = /^\#\!/;
+			const legacyHash = location.hash && legacyHashRegex.test(location.hash) ? location.hash.replace(legacyHashRegex, '') : '';
+			const fragment = location.hash && !legacyHash ? location.hash.replace(/^#/, '') : '';
 
 			location.replace('/mobile/' + ('?p=' + location.pathname) + (legacyHash ? ('&q=' + legacyHash) : '') + (fragment ? ('&f=' + fragment) : ''));
 		}
