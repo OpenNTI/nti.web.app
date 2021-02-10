@@ -22,9 +22,9 @@
 			}
 
 			if(shouldRedirectToMobile()) {
-				const legacyHashRegex = /^\#\!/;
-				const legacyHash = location.hash && legacyHashRegex.test(location.hash) ? location.hash.replace(legacyHashRegex, '') : '';
-				const fragment = location.hash && !legacyHash ? location.hash.replace(/^#/, '') : '';
+				var legacyHashRegex = /^\#\!/;
+				var legacyHash = location.hash && legacyHashRegex.test(location.hash) ? location.hash.replace(legacyHashRegex, '') : '';
+				var fragment = location.hash && !legacyHash ? location.hash.replace(/^#/, '') : '';
 
 				location.replace('/mobile/' + ('?p=' + location.pathname) + (legacyHash ? ('&q=' + legacyHash) : '') + (fragment ? ('&f=' + fragment) : ''));
 			}
