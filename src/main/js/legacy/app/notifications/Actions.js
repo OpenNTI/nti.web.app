@@ -4,9 +4,8 @@ const { emitIncoming } = require('@nti/web-notifications');
 const Globals = require('legacy/util/Globals');
 const lazy = require('legacy/util/lazy-require')
 	.get('ParseUtils', ()=> require('legacy/util/Parsing'));
-const LoginStateStore = require('legacy/login/StateStore');
 
-const UserdataStateStore = require('../userdata/StateStore');
+const UserDataStateStore = require('../userdata/StateStore');
 
 const NotificationsStateStore = require('./StateStore');
 
@@ -22,45 +21,42 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 		this.callParent(arguments);
 
 		this.NotificationsStore = NotificationsStateStore.getInstance();
-		const store = this.LoginStore = LoginStateStore.getInstance();
-		this.UserDataStore = UserdataStateStore.getInstance();
+		this.UserDataStore = UserDataStateStore.getInstance();
 
 		this.mon(this.UserDataStore, 'incomingChange', this.incomingChange, this);
-
-		if (window.Service && !store.loading && !store.hasFinishedLoad) {
-			this.doLogin();
-		} else {
-			this.mon(this.LoginStore, 'login-ready', this.doLogin.bind(this));
-		}
 	},
 
-	doLogin: function () {
-		var store = this.NotificationsStore;
+	async load () {
+		try {
+			var store = this.NotificationsStore;
 
-		Service.getPageInfo(Globals.CONTENT_ROOT)
-			.then(function (pageInfo) {
-				var url = pageInfo.getLink(Globals.MESSAGE_INBOX),
-					lastViewed = new Date(0);
+			const pageInfo = await Service.getPageInfo(Globals.CONTENT_ROOT);
 
-				if (!url) {
-					console.error('No Notifications url');
-					url = 'bad-notifications-url';
-				}
+			var url = pageInfo.getLink(Globals.MESSAGE_INBOX),
+				lastViewed = new Date(0);
 
-				Service.request(url + '/lastViewed')
-					.then(function (_lastViewed) {
-						//we get this back in seconds so convert it to millis
-						lastViewed = new Date(parseFloat(_lastViewed) * 1000);
-					})
-					.catch(function () {
-						console.warn('Could not resolve notifications lastViewed');
-					})
-					.always(function () {
-						store.buildStore(url, lastViewed);
-					});
-			}, function () {
-				console.error('Could not setup notifications!');
-			});
+			if (!url) {
+				console.error('No Notifications url');
+				url = 'bad-notifications-url';
+			}
+
+			try {
+				lastViewed = new Date(parseFloat(
+					//we get this back in seconds so convert it to millis
+					await Service.request(url + '/lastViewed')) * 1000
+				);
+			}
+			catch (e) {
+				console.warn('Could not resolve notifications lastViewed');
+			}
+			finally {
+				store.buildStore(url, lastViewed);
+				this.loaded = true;
+			}
+		}
+		catch {
+			console.error('Could not setup notifications!');
+		}
 	},
 
 	incomingChange: function (change) {
