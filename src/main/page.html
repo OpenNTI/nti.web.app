@@ -6,33 +6,29 @@
 		<meta http-equiv="refresh" content="0;url=/login/">
 	</noscript>
 	<script>
-		const firstNonNull = (value, key) => value != null ? value : navigator[key];
-		const MaxTouchPoints = (
-			typeof navigator !== 'undefined'
-				? (['msMaxTouchPoints', 'maxTouchPoints'].reduce(firstNonNull, null))
-				: null
-		);
+		(function maybeRedirectToMobile() {
+			function firstNonNull (value, key) {
+				return value != null ? value : navigator[key];
+			}
 
-		const hasMaxTouchPoints = MaxTouchPoints != null;
+			var MaxTouchPoints = (navigator ||{})['maxTouchPoints'];
+			var hasMaxTouchPoints = MaxTouchPoints != null;
 
-		const isTouchDevice = (
-			'ontouchstart' in window // everyone else
-			|| 'onmsgesturechange' in window //IE10
-			&& (!hasMaxTouchPoints || MaxTouchPoints > 0)
-		);
+			var isTouchDevice = 'ontouchstart' in window && (!hasMaxTouchPoints || MaxTouchPoints > 0);
 
-		const shouldRedirectToMobile = () => {
-			return (/android|blackberry|iphone|ipod|mobile|webos/i.test(navigator.userAgent))
-				|| (isTouchDevice && /Mac OS X/i.test(navigator.userAgent)); // Safari on iPad reports OS X on iOS 13+
-		}
+			function shouldRedirectToMobile () {
+				return (/android|blackberry|iphone|ipod|mobile|webos/i.test(navigator.userAgent))
+					|| (isTouchDevice && /Mac OS X/i.test(navigator.userAgent)); // Safari on iPad reports OS X on iOS 13+
+			}
 
-		if(shouldRedirectToMobile()) {
-			const legacyHashRegex = /^\#\!/;
-			const legacyHash = location.hash && legacyHashRegex.test(location.hash) ? location.hash.replace(legacyHashRegex, '') : '';
-			const fragment = location.hash && !legacyHash ? location.hash.replace(/^#/, '') : '';
+			if(shouldRedirectToMobile()) {
+				const legacyHashRegex = /^\#\!/;
+				const legacyHash = location.hash && legacyHashRegex.test(location.hash) ? location.hash.replace(legacyHashRegex, '') : '';
+				const fragment = location.hash && !legacyHash ? location.hash.replace(/^#/, '') : '';
 
-			location.replace('/mobile/' + ('?p=' + location.pathname) + (legacyHash ? ('&q=' + legacyHash) : '') + (fragment ? ('&f=' + fragment) : ''));
-		}
+				location.replace('/mobile/' + ('?p=' + location.pathname) + (legacyHash ? ('&q=' + legacyHash) : '') + (fragment ? ('&f=' + fragment) : ''));
+			}
+		})();
 	</script>
 	<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
