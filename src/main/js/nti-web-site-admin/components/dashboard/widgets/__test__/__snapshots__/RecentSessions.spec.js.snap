@@ -25,7 +25,7 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -74,7 +74,7 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -120,7 +120,7 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -169,7 +169,7 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -215,7 +215,7 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -288,7 +288,7 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -337,7 +337,7 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -383,7 +383,7 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -432,7 +432,7 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -478,7 +478,7 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -527,7 +527,7 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"

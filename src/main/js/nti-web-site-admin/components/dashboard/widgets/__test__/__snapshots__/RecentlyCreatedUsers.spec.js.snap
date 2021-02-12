@@ -25,7 +25,7 @@ exports[`Site admin dashboard widget recently created users (3 users total) Basi
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -51,7 +51,7 @@ exports[`Site admin dashboard widget recently created users (3 users total) Basi
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -77,7 +77,7 @@ exports[`Site admin dashboard widget recently created users (3 users total) Basi
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -127,7 +127,7 @@ exports[`Site admin dashboard widget recently created users (5 users total) Basi
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -153,7 +153,7 @@ exports[`Site admin dashboard widget recently created users (5 users total) Basi
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -179,7 +179,7 @@ exports[`Site admin dashboard widget recently created users (5 users total) Basi
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"
@@ -205,7 +205,7 @@ exports[`Site admin dashboard widget recently created users (5 users total) Basi
         <img
           alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src="unresolved-user-avatar.png"
         />
         <div
           className="info"

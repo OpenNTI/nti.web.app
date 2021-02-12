@@ -33,7 +33,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-7 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -57,7 +57,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-8 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -81,7 +81,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-9 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -105,7 +105,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-10 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -129,7 +129,7 @@ exports[`Site admin user book roster test (5 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-11 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -168,7 +168,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-7 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -192,7 +192,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-8 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -216,7 +216,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-9 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -240,7 +240,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-10 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -264,7 +264,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-11 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -288,7 +288,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-0 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -312,7 +312,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-1 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -336,7 +336,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-2 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -360,7 +360,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-3 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -384,7 +384,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-1 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -408,7 +408,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-2 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -432,7 +432,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-3 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -456,7 +456,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-4 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -480,7 +480,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-5 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -504,7 +504,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-6 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -528,7 +528,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-7 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -552,7 +552,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-8 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -576,7 +576,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-9 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -600,7 +600,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-10 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -624,7 +624,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-8 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -648,7 +648,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-9 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -672,7 +672,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-10 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -696,7 +696,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-11 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -720,7 +720,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-0 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
@@ -744,7 +744,7 @@ exports[`Site admin user book roster test (25 items) Basic render test 1`] = `
             <img
               alt="Avatar for undefined"
               className="avatar avatar-color-1 user-avatar"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              src="someAvatarURL"
             />
             <div
               className="info"
