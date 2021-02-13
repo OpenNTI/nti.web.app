@@ -1,8 +1,16 @@
 import './InvitePeople.scss';
 import React from 'react';
-import {scoped} from '@nti/lib-locale';
-import {DialogButtons, TokenEditor, SelectBox, Panels, Input, Loading, List} from '@nti/web-commons';
-import {validate as isEmail} from 'email-validator';
+import { scoped } from '@nti/lib-locale';
+import {
+	DialogButtons,
+	TokenEditor,
+	Select,
+	Panels,
+	Input,
+	Loading,
+	List,
+} from '@nti/web-commons';
+import { validate as isEmail } from 'email-validator';
 import { Connectors } from '@nti/lib-store';
 
 const DEFAULT_TEXT = {
@@ -13,107 +21,112 @@ const DEFAULT_TEXT = {
 	invalidEmails: {
 		message: {
 			one: 'There is an invalid email: ',
-			other: 'There are invalid emails: '
-		}
-	}
+			other: 'There are invalid emails: ',
+		},
+	},
 };
 
-const t = scoped('nti-web-site-admin.components.users.list.InvitePeople', DEFAULT_TEXT);
+const t = scoped(
+	'nti-web-site-admin.components.users.list.InvitePeople',
+	DEFAULT_TEXT
+);
 
 const errorRenderers = [
 	{
-		handles: (error) => error.code === 'InvalidSiteInvitationData' && error.InvalidEmails && error.InvalidEmails.length > 0,
-		render: (error) => {
-			const {InvalidEmails} = error;
+		handles: error =>
+			error.code === 'InvalidSiteInvitationData' &&
+			error.InvalidEmails &&
+			error.InvalidEmails.length > 0,
+		render: error => {
+			const { InvalidEmails } = error;
 
 			return (
 				<>
-					<span>{t('invalidEmails.message', {count: InvalidEmails.length})}</span>
+					<span>
+						{t('invalidEmails.message', {
+							count: InvalidEmails.length,
+						})}
+					</span>
 					<List.LimitedInline limit={2}>
 						{InvalidEmails.map((email, key) => {
-							return (
-								<span key={key}>
-									{email}
-								</span>
-							);
+							return <span key={key}>{email}</span>;
 						})}
 					</List.LimitedInline>
 				</>
 			);
-		}
+		},
 	},
 	{
 		handles: () => true,
-		render: error => error.Message || error.message
-	}
+		render: error => error.Message || error.message,
+	},
 ];
 
 class InvitePeople extends React.Component {
-
 	state = {
 		role: 'learner',
-		file: null
-	}
+		file: null,
+	};
 
 	onCancel = () => {
 		this.props.hideInviteDialog();
-	}
+	};
 
 	onSave = async () => {
-		const {sendAdminInvites, sendLearnerInvites} = this.props;
-		const {role, message, emails, file} = this.state;
+		const { sendAdminInvites, sendLearnerInvites } = this.props;
+		const { role, message, emails, file } = this.state;
 
-		if(role === 'learner') {
+		if (role === 'learner') {
 			sendLearnerInvites(emails, message, file);
 		} else {
 			sendAdminInvites(emails, message, file);
 		}
-	}
+	};
 
-	onToChange = (emails) => {
+	onToChange = emails => {
 		this.setState({ emails });
-	}
+	};
 
-	onMessageChange = (message) => {
+	onMessageChange = message => {
 		this.setState({ message });
-	}
+	};
 
-	onRoleChange = (role) => {
-		this.setState({ role });
-	}
-
-	validator = (value) => {
+	validator = value => {
 		let errors = [];
 
-		if(!value || !isEmail(value)) {
+		if (!value || !isEmail(value)) {
 			errors.push('Invalid email address');
 		}
 
 		return errors;
+	};
+
+	renderFileUpload() {
+		return (
+			<Input.File
+				label={t('importFile')}
+				accept=".csv"
+				onFileChange={file => this.setState({ file })}
+			/>
+		);
 	}
 
-	renderFileUpload () {
-		return <Input.File label={t('importFile')} accept=".csv" onFileChange={file => this.setState({ file })} />;
-	}
-
-
-	renderError () {
-		const {inviteError} = this.props;
-		const renderer = errorRenderers.find(option => option.handles(inviteError));
+	renderError() {
+		const { inviteError } = this.props;
+		const renderer = errorRenderers.find(option =>
+			option.handles(inviteError)
+		);
 
 		if (!renderer) {
 			throw new Error('Unknown error type');
 		}
 
 		return (
-			<div className="invite-error">
-				{renderer.render(inviteError)}
-			</div>
+			<div className="invite-error">{renderer.render(inviteError)}</div>
 		);
 	}
 
-
-	renderToField () {
+	renderToField() {
 		const { clearInviteError } = this.props;
 		const { emails, file } = this.state;
 		const noEmails = !emails || emails.length === 0;
@@ -124,7 +137,11 @@ class InvitePeople extends React.Component {
 					<TokenEditor
 						value={emails}
 						onChange={this.onToChange}
-						placeholder={emails && emails.length > 0 ? 'Add more email addresses' : 'Enter an email address'}
+						placeholder={
+							emails && emails.length > 0
+								? 'Add more email addresses'
+								: 'Enter an email address'
+						}
 						validator={this.validator}
 						maxTokenLength={64}
 					/>
@@ -133,7 +150,14 @@ class InvitePeople extends React.Component {
 					<div className="file-pill-wrap">
 						<div className="file-pill">
 							{file.name}
-							<i className="icon-bold-x small" onClick={() => this.setState({ file: null }, () => { clearInviteError(); })} />
+							<i
+								className="icon-bold-x small"
+								onClick={() =>
+									this.setState({ file: null }, () => {
+										clearInviteError();
+									})
+								}
+							/>
 						</div>
 					</div>
 				)}
@@ -142,84 +166,93 @@ class InvitePeople extends React.Component {
 		);
 	}
 
-	renderRoleField () {
+	maybeSubmit = e => {
+		if (
+			!this.canSend() ||
+			e.key !== 'Enter' ||
+			(!e.ctrlKey && !e.metaKey)
+		) {
+			return;
+		}
+
+		this.onSave();
+	};
+
+	canSend() {
+		const {
+			props: { loading },
+			state: { file, emails },
+		} = this;
+		return (!loading && file) || emails?.length > 0;
+	}
+
+	render() {
 		const { role } = this.state;
-
-		const OPTIONS = [
-			{ label: 'Learner', value: 'learner' },
-			{ label: 'Administrator', value: 'admin' }
-		];
-
-		return (
-			<div className="invite-people-role-field">
-				<div className="label">{t('role')}</div>
-				<SelectBox options={OPTIONS} onChange={this.onRoleChange} value={role}/>
-			</div>
-		);
-	}
-
-	renderMessageField () {
-		return (
-			<div className="invite-people-message-field">
-				<Input.TextArea value={this.state.message} onChange={this.onMessageChange} placeholder="Write a personal message..."/>
-			</div>
-		);
-	}
-
-	renderContents () {
-		const { loading } = this.props;
-
-		if (loading) { return <Loading.Mask />; }
-
-		return (
-			<>
-				{this.renderToField()}
-				{this.renderRoleField()}
-				{this.renderMessageField()}
-			</>
-		);
-	}
-
-	render () {
-		const { emails, file } = this.state;
 		const { loading, inviteError } = this.props;
 
 		const buttons = [
 			{
 				label: 'Cancel',
 				className: 'cancel',
-				onClick: loading ? () => {} : this.onCancel
+				onClick: loading ? () => {} : this.onCancel,
 			},
 			{
 				label: 'Send',
 				className: 'save',
-				disabled: loading || (!file && (!emails || emails.length === 0)),
-				onClick: loading ? () => {} : this.onSave
-			}
+				disabled: !this.canSend(),
+				onClick: loading ? () => {} : this.onSave,
+			},
 		];
 
 		return (
 			<div className="site-admin-invite-people-dialog">
 				<div className="title">
-					<Panels.TitleBar title={t('title')} iconAction={loading ? () => {} : this.onCancel} />
+					<Panels.TitleBar
+						title={t('title')}
+						iconAction={loading ? () => {} : this.onCancel}
+					/>
 				</div>
 				{inviteError && this.renderError()}
 				<div className="contents">
-					{this.renderContents()}
+					{loading ? (
+						<Loading.Mask />
+					) : (
+						<>
+							{this.renderToField()}
+							<div className="invite-people-role-field">
+								<div className="label">{t('role')}</div>
+								<Select
+									onChange={e =>
+										this.setState({ role: e.target.value })
+									}
+									value={role}
+									className="invite-select"
+								>
+									<option value="learner">Learner</option>
+									<option value="admin">Administrator</option>
+								</Select>
+							</div>
+							<div className="invite-people-message-field">
+								<Input.TextArea
+									value={this.state.message}
+									onChange={this.onMessageChange}
+									placeholder="Write a personal message..."
+									onKeyDown={this.maybeSubmit}
+								/>
+							</div>
+						</>
+					)}
 				</div>
-				<DialogButtons buttons={buttons}/>
+				<DialogButtons buttons={buttons} />
 			</div>
 		);
 	}
 }
-
 
 export default Connectors.Any.connect([
 	'inviteError',
 	'hideInviteDialog',
 	'sendLearnerInvites',
 	'sendAdminInvites',
-	'clearInviteError'
-])(
-	InvitePeople
-);
+	'clearInviteError',
+])(InvitePeople);

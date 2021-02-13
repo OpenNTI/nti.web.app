@@ -23,8 +23,12 @@
 		min-height: 411px;
 		overflow-y: auto;
 
+		.nti-select-native-wrapper:focus-within,
+		.button:focus-within {
+			outline: 1px solid var(--secondary-blue) !important;
+		}
+
 		.label {
-			margin-top: 0.75rem;
 			margin-left: 1.25rem;
 			font-size: 14px;
 			color: var(--tertiary-grey);
@@ -33,6 +37,7 @@
 
 		.invite-people-to-field {
 			display: flex;
+			align-items: baseline;
 			border-bottom: solid 1px #ddd;
 			border-top: solid 1px #ddd;
 
@@ -53,7 +58,6 @@
 			.nti-file-input {
 				span.button.file-picker {
 					line-height: rem-calc(30px);
-					margin-top: rem-calc(5px);
 				}
 			}
 
@@ -85,38 +89,17 @@
 
 		.invite-people-role-field {
 			display: flex;
+			align-items: baseline;
 			border-bottom: solid 1px #ddd;
 
-			.select-box {
-				.option-label {
-					font-size: 14px;
-				}
+			.nti-select-native-wrapper {
+				border: none;
+				box-shadow: none;
+				line-height: 2;
+				min-width: 15%;
 
-				.menu-label {
-					line-height: 2.75rem;
-					font-size: 14px;
-					font-weight: 400;
-
-					&::after {
-						font-size: 0.65rem;
-					}
-				}
-
-				ul {
-					padding-left: 0;
-					padding-right: 10px;
-					font-weight: 400;
-
-					li {
-						line-height: 1.5rem;
-					}
-				}
-
-				&.open {
-					.menu-label.selected {
-						background: white;
-						color: var(--primary-grey);
-					}
+				.icon-chevron-down {
+					right: 5px;
 				}
 			}
 		}
