@@ -99,17 +99,17 @@ exports[`Site admin user table change role test Test admin list 1`] = `
     className="dialog-buttons"
   >
     <button
-      className="button cancel secondary"
-      role="button"
-    >
-      Cancel
-    </button>
-    <button
       className="button save primary"
       onClick={[Function]}
       role="button"
     >
       Save
+    </button>
+    <button
+      className="button cancel secondary"
+      role="button"
+    >
+      Cancel
     </button>
   </div>
 </div>
@@ -214,17 +214,17 @@ exports[`Site admin user table change role test Test learner list 1`] = `
     className="dialog-buttons"
   >
     <button
-      className="button cancel secondary"
-      role="button"
-    >
-      Cancel
-    </button>
-    <button
       className="button save primary"
       onClick={[Function]}
       role="button"
     >
       Save
+    </button>
+    <button
+      className="button cancel secondary"
+      role="button"
+    >
+      Cancel
     </button>
   </div>
 </div>

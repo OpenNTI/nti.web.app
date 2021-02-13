@@ -98,19 +98,34 @@ exports[`Site admin user table invite dialog test General Snapshot 1`] = `
         Role
       </div>
       <div
-        className="select-box"
-        tabIndex="-1"
+        className="nti-select-native-wrapper"
       >
-        <div
-          className="menu-label selected"
-          onClick={[Function]}
+        <span
+          className="icon-chevron-down small"
+          role="presentation"
+        />
+        <span
+          className="nti-select-value"
+          role="presentation"
         >
-          <span
-            className="option-label"
+          Learner
+        </span>
+        <select
+          className="nti-select-native invite-select"
+          onChange={[Function]}
+          value="learner"
+        >
+          <option
+            value="learner"
           >
             Learner
-          </span>
-        </div>
+          </option>
+          <option
+            value="admin"
+          >
+            Administrator
+          </option>
+        </select>
       </div>
     </div>
     <div
@@ -122,6 +137,7 @@ exports[`Site admin user table invite dialog test General Snapshot 1`] = `
         <textarea
           className="textarea textarea-text"
           onChange={[Function]}
+          onKeyDown={[Function]}
           placeholder="Write a personal message..."
           type="text"
           value=""
@@ -133,18 +149,18 @@ exports[`Site admin user table invite dialog test General Snapshot 1`] = `
     className="dialog-buttons"
   >
     <button
-      className="button cancel secondary"
-      onClick={[Function]}
-      role="button"
-    >
-      Cancel
-    </button>
-    <button
       className="button save disabled primary"
       onClick={null}
       role="button"
     >
       Send
+    </button>
+    <button
+      className="button cancel secondary"
+      onClick={[Function]}
+      role="button"
+    >
+      Cancel
     </button>
   </div>
 </div>
