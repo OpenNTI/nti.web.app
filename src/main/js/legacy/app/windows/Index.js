@@ -98,7 +98,13 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 			doNavigate: this.doNavigate.bind(this, monitors && monitors.beforeNavigate),
 			setFullScreen: this.setFullScreen.bind(this),
 			monitors: monitors,
-			scrollingParent: this.el
+			scrollingParent: this.el,
+			ignoreEvent: (e) => {
+				this.ignoredEvents = this.ignoredEvents = new Set([e]);
+				setTimeout(() => {
+					this.ignoredEvents.delete(e);
+				}, 100);
+			}
 		});
 
 		if (cmp.Router) {
@@ -130,6 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 	},
 
 	onClick: function (e) {
+		if (this.ignoredEvents?.has(e)) { return; }
 		if (e.getTarget('.window-content')) { return; }
 		this.closeAllWindows();
 	},

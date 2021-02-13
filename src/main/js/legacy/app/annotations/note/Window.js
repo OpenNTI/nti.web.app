@@ -57,6 +57,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		}
 	},
 
+
+	afterRender () {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', (e) => this.ignoreEvent(e));
+	},
+
 	async loadNote (record) {
 		try {
 			const note = await getRootNote(record);
