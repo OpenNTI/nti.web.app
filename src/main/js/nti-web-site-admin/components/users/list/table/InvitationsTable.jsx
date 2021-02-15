@@ -139,7 +139,7 @@ class InvitationsTable extends React.Component {
 					</div>
 				)}
 				{showInviteDialog && (
-					<Prompt.Dialog onBeforeDismiss={this.hideChangeRolesDialog}>
+					<Prompt.Dialog onBeforeDismiss={() => store.hideInviteDialog()}>
 						<InvitePeople store={store} loading={loading}/>
 					</Prompt.Dialog>
 				)}
