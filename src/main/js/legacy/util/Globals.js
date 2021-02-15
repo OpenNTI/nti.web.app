@@ -249,9 +249,10 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			return function (e) {
 				var t = e.getTarget(),
 					key = e.getKey(),
-					notInput = (!t || (!(/input|textarea/i).test(t.tagName) && !t.getAttribute('contenteditable')));
+					notInput = (!t || (!(/input|textarea/i).test(t.tagName) && !t.getAttribute('contenteditable'))),
+					notDialog = !e.getTarget('dialog');
 
-				if (notInput && (key === e.ESC || key === e.BACKSPACE)) {
+				if (notDialog && notInput && (key === e.ESC || key === e.BACKSPACE)) {
 					console.log('blocking key for: ', t);
 					e.stopEvent();
 					return false;
