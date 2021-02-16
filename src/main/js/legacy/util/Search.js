@@ -1,5 +1,4 @@
 const Ext = require('@nti/extjs');
-const XRegExp = require('xregexp');
 
 module.exports = exports = Ext.define('NextThought.util.Search', {
 	ignoredWordsRe: /\b(a|an|and|are|as|at|be|but|by|for|if|in|into|is|it|no|not|of|on|or|the|to|was)\b/gi,
@@ -66,17 +65,9 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 
 	contentRegexFromSearchTerm: function (term, isPhrase) {
 		if (isPhrase) {
-			term = XRegExp.replace(
-				term,
-				new XRegExp('\\p{^L}+([^\\]]|$)', 'g'),
-				'\\p{^L}+$1'
-			);
+			term = term.replace(/\P{L}+([^\]]|$)/gu, '\\P{L}+$1');
 		} else {
-			term = XRegExp.replace(
-				term,
-				new XRegExp('\\p{P}+', 'g'),
-				'\\p{P}+'
-			);
+			term = term.replace(/\p{P}+/gu, '\\p{P}+');
 		}
 		return term;
 
@@ -163,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 				},
 				this
 			);
-			combinedRegex = new XRegExp(escapedParts.join('|'), 'ig');
+			combinedRegex = new RegExp(escapedParts.join('|'), 'uig');
 		}
 
 		return combinedRegex;
@@ -203,6 +194,6 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 			this
 		);
 
-		return new XRegExp(escapedParts.join('|'), 'ig');
+		return new RegExp(escapedParts.join('|'), 'uig');
 	},
 }).create();

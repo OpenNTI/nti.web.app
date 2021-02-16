@@ -2396,9 +2396,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			 * \u201D = fancy right double quote
 			 */
 
-			r.expand('word', {
-				wordRegex: XRegExp("[\\p{L}\\d]+('[\\p{L}\\d]+)*", 'gi'),
-			});
+			r.expand('word', { wordRegex: /[\p{L}\d]+('[\p{L}\d]+)*/giu });
 
 			this.expandRangeToIncludeMath(r);
 			sel.setSingleRange(r);
