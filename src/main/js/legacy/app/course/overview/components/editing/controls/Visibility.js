@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	getValue: function () {
-		return {visibility: this.selected};
+		return {visibility: this.selected || null};
 	},
 
 

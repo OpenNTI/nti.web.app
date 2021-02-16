@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent(arguments);
 
 
-		this.defaultValue = this.defaultValue || (this.record && this.record.get('visibility'));
+		this.defaultValue = this.defaultValue || (this.record && this.record.get('visibility')) || null;
 	},
 
 
@@ -89,6 +89,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return this.visibilityCmp.getValue();
 		}
 
-		return {visibility: this.defaultValue};
+		return {visibility: this.defaultValue || null};
 	}
 });
