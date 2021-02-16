@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		//If nothing changed don't put the same value
-		if (record && values.visibility === record.get('visibility') || (values.visibility == null && !record.get('visibility')) ) {
+		if (record && (values.visibility === record.get('visibility') || (values.visibility == null && !record.get('visibility'))) ) {
 			return Promise.resolve();
 		}
 
