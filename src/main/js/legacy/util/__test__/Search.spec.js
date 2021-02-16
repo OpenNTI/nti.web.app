@@ -1,7 +1,6 @@
 /* globals spyOn */
 /* eslint-env jest */
 const Ext = require('@nti/extjs');
-const XRegExp = require('xregexp');
 
 const Hit = require('legacy/model/Hit');
 
@@ -14,7 +13,7 @@ describe('Search utils', () => {
 			const term = "Court's";
 			const re = SearchUtils.contentRegexFromSearchTerm(term);
 
-			expect(new XRegExp(re).test(content)).toBeTruthy();
+			expect(new RegExp(re, 'ui').test(content)).toBeTruthy();
 		});
 
 		test("Non-phrase doesn't span space", () => {
@@ -22,7 +21,7 @@ describe('Search utils', () => {
 			const term = 'sandwhich';
 			const re = SearchUtils.contentRegexFromSearchTerm(term);
 
-			expect(new XRegExp(re).test(content)).toBeFalsy();
+			expect(new RegExp(re, 'ui').test(content)).toBeFalsy();
 		});
 
 		test('Phrase search ignores punctuation', () => {
@@ -30,7 +29,7 @@ describe('Search utils', () => {
 			const term = "were did Court's belong?";
 			const re = SearchUtils.contentRegexFromSearchTerm(term, true);
 
-			expect(new XRegExp(re).test(content)).toBeTruthy();
+			expect(new RegExp(re, 'ui').test(content)).toBeTruthy();
 		});
 
 		test('Allows phrase search to span ?', () => {
@@ -38,7 +37,7 @@ describe('Search utils', () => {
 			const term = 'beef chicken';
 			const re = SearchUtils.contentRegexFromSearchTerm(term, true);
 
-			expect(new XRegExp(re).test(content)).toBeTruthy();
+			expect(new RegExp(re, 'ui').test(content)).toBeTruthy();
 		});
 
 		test('checks a long phrase search', () => {
@@ -48,7 +47,7 @@ describe('Search utils', () => {
 				"to shareholders how to apply what little I'd learned about management to the business of the company how to maintain editorial quality while exercising financial";
 			const re = SearchUtils.contentRegexFromSearchTerm(term, true);
 
-			expect(new XRegExp(re).test(content)).toBeTruthy();
+			expect(new RegExp(re, 'ui').test(content)).toBeTruthy();
 		});
 
 		test('Survives punctuation that are regex special chars', () => {
@@ -56,7 +55,7 @@ describe('Search utils', () => {
 				'of basketball have developed for casual play. Competitive basketball is primarily an indoor sport played';
 			const re = SearchUtils.contentRegexFromSearchTerm(content, true);
 
-			expect(new XRegExp(re).test(content)).toBeTruthy();
+			expect(new RegExp(re, 'ui').test(content)).toBeTruthy();
 		});
 	});
 
