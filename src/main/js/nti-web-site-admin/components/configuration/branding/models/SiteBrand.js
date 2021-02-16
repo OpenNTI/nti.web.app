@@ -1,9 +1,10 @@
 /* eslint-disable camelcase */
-import {Models, registerModel} from '@nti/lib-interfaces';
+import { Models, registerModel } from '@nti/lib-interfaces';
 
 export default class SiteBrand extends Models.Base {
-	static MimeType = Models.COMMON_PREFIX + 'sitebrand'
+	static MimeType = Models.COMMON_PREFIX + 'sitebrand';
 
+	// prettier-ignore
 	static Fields = {
 		...Models.Base.Fields,
 		assets:      { type: 'object' },
