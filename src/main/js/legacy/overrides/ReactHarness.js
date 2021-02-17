@@ -190,10 +190,7 @@ const Bridge = createReactClass({
 
 	componentDidCatch (error, info) {
 		this.setState({ error, info, hasError: true });
-		reportError({
-			error,
-			params: {info}
-		});
+		reportError(error);
 	},
 
 

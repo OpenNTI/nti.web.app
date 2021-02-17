@@ -263,10 +263,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 				return courseView.handleRoute(subRoute, route.precache);
 			})
 			.catch(function (err) {
-				reportError({
-					error: err,
-					context: {component: 'Course Setup'}
-				});
+				reportError(err);
 
 				if (me.currentRoute.indexOf('/course') !== 0) {
 					return;
