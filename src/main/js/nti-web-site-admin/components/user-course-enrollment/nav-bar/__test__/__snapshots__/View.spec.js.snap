@@ -12,6 +12,7 @@ exports[`Site admin user course enrollment nav bar test Basic render test 1`] = 
     >
       <img
         className="enrollment-course-image"
+        onError={[Function]}
         src="contentpackage-landing-232x170.png?t=0"
       />
       <div

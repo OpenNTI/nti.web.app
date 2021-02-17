@@ -39,6 +39,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src=""
             />
             <div
@@ -81,6 +82,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src=""
             />
             <div
@@ -123,6 +125,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src=""
             />
             <div
@@ -165,6 +168,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src=""
             />
             <div
@@ -207,6 +211,7 @@ exports[`Site admin user course list test (5 courses) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src=""
             />
             <div

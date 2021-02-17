@@ -60,6 +60,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -103,6 +104,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -146,6 +148,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -189,6 +192,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -232,6 +236,7 @@ exports[`Site admin content book list (with 5 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -327,6 +332,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -370,6 +376,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -413,6 +420,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -456,6 +464,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -499,6 +508,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -542,6 +552,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -585,6 +596,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -628,6 +640,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -671,6 +684,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -714,6 +728,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -757,6 +772,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -800,6 +816,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -843,6 +860,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -886,6 +904,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -929,6 +948,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -972,6 +992,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1015,6 +1036,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1058,6 +1080,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1101,6 +1124,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1144,6 +1168,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1187,6 +1212,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1230,6 +1256,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1273,6 +1300,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1316,6 +1344,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div
@@ -1359,6 +1388,7 @@ exports[`Site admin content book list (with 25 items) Basic render test 1`] = `
               >
                 <img
                   className="book-icon"
+                  onError={[Function]}
                   src="contentpackage-landing-232x170.png?t=0"
                 />
                 <div

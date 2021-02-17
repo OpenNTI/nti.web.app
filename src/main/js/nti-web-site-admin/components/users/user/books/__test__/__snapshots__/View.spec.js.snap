@@ -20,6 +20,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src="contentpackage-landing-232x170.png?t=0"
             />
             <div
@@ -49,6 +50,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src="contentpackage-landing-232x170.png?t=0"
             />
             <div
@@ -78,6 +80,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src="contentpackage-landing-232x170.png?t=0"
             />
             <div
@@ -107,6 +110,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src="contentpackage-landing-232x170.png?t=0"
             />
             <div
@@ -136,6 +140,7 @@ exports[`Site admin user book list test (5 books) Basic render test 1`] = `
           >
             <img
               className="course-enrollment-icon"
+              onError={[Function]}
               src="contentpackage-landing-232x170.png?t=0"
             />
             <div
