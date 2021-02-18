@@ -1,13 +1,14 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .nti-web-credit-card-override {
 	max-width: 406px;
 
 	.nti-credit-card-form {
 		.name-input {
-			padding-top: 7px;
-			padding-bottom: 7px;
-			height: 2.4rem;
+			input {
+				background: none;
+				border: none;
+			}
 
 			.missing-name & {
 				border: 1px solid var(--primary-red);
