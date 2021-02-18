@@ -121,30 +121,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	updateRecordVisibility: function (record, visibilityCmp) {
-		var link = record && record.getLink('edit'),
-			values = visibilityCmp && visibilityCmp.getValue();
+	updateRecordVisibility: async function (record, visibilityCmp) {
+		var link = record?.getLink('edit'),
+			values = visibilityCmp?.getValue();
 
 		if (!link) {
-			return Promise.reject('No Edit Link');
+			throw new Error('No Edit Link');
 		}
 
 		if (!values || Object.keys(values) === 0) {
-			return Promise.resolve();
+			return record;
 		}
 
 		//If nothing changed don't put the same value
 		if (record && (values.visibility === record.get('visibility') || (values.visibility == null && !record.get('visibility'))) ) {
-			return Promise.resolve();
+			return record;
 		}
 
-		return Service.put(link, values)
-			.then(function (response) {
-				var rec = lazy.ParseUtils.parseItems(response)[0];
-
-				record.syncWith(rec);
-				return record;
-			});
+		const response = await Service.put(link, values);
+		
+		const rec = lazy.ParseUtils.parseItems(response)[0];
+		record.syncWith(rec);
+		return record;
 	},
 
 
