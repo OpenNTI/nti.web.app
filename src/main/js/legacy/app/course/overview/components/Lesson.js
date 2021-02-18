@@ -240,8 +240,6 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 					record.getId() === this.activeRecord.getId()
 				) {
 					return;
-				} else {
-					this.currentOverview.destroy();
 				}
 			}
 
@@ -249,16 +247,20 @@ const Lesson = Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 			const course = await this.bundle.getInterfaceInstance();
 
-			this.currentOverview = this.add({
-				xtype: 'react',
-				component: Overview.Lesson,
-				className: 'course-overview-lesson-content',
-				course: course,
-				layout: Overview.Lesson.List,
-				baseroute: '/',
-				getRouteFor: this.getRouteFor.bind(this),
-				inlinePlayback: false,
-			});
+			if (!this.currentOverview) {
+				this.currentOverview = this.add({
+					xtype: 'react',
+					component: Overview.Lesson,
+					className: 'course-overview-lesson-content',
+					course: course,
+					layout: Overview.Lesson.List,
+					baseroute: '/',
+					getRouteFor: this.getRouteFor.bind(this),
+					inlinePlayback: false,
+				});
+			} else {
+				this.currentOverview.setProps({ course });
+			}
 
 			let outline = await course.getOutline({ force: doNotCache });
 			let node = outline.getNode(record.get('ContentNTIID'));
