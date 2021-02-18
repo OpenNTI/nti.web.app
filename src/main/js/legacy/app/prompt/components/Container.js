@@ -173,9 +173,13 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 	},
 
 
-	doSave: function () {
-		this.__validate()
-			.then(this.__save.bind(this));
+	doSave: async function () {
+		try {
+			await this.__validate();
+			return this.__save();
+		} catch {
+			// validation errors (handled before this point, but we still have a dangling rejected promise)
+		}
 	},
 
 

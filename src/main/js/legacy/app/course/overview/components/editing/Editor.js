@@ -170,11 +170,11 @@ module.exports = exports = Ext.define(
 			return this.FORM_SCHEMA;
 		},
 
-		__getSchemaFromParent: function () {
+		__getSchemaFromParent: async function () {
 			let mimeTypes = this.self.getHandledMimeTypes() || [];
 
-			if (!this.parentRecord || !this.parentRecord.getLink('schema')) {
-				return Promise.reject();
+			if (!this.parentRecord?.getLink('schema')) {
+				throw new Error('No schema');
 			}
 
 			return this.EditingActions.getSchema(this.parentRecord).then(
@@ -521,7 +521,9 @@ module.exports = exports = Ext.define(
 				return acc;
 			}, me.activeErrors || []);
 
-			return errors.length > 0 ? Promise.reject() : Promise.resolve();
+			if (errors.length > 0) {
+				throw new Error('There were errors. See active errors.');
+			}
 		},
 
 		onSaveFailure: function (reason) {
@@ -567,7 +569,7 @@ module.exports = exports = Ext.define(
 			).catch(function (reason) {
 				me.enableSubmission();
 
-				return Promise.reject(reason);
+				throw reason;
 			});
 		},
 
