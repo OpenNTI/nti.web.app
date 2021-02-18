@@ -985,35 +985,32 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 
-		const checkNext = (onFound, notFound) => {
+		const checkNext = async () => {
 			const current = toCheck.pop();
-			const id = current && current.get('NTIID');
+			const id = current?.get('NTIID');
 
 			if (!current) {
-				return notFound();
+				return null;
 			}
 
 			if (id === ntiid) {
-				return onFound(current);
+				return current;
 			}
 
-			this.__resolveTocFor(bundle, id)
-				.then((toc) => {
-					if (findReading(toc)) {
-						onFound(current);
-					} else {
-						checkNext(onFound, notFound);
-					}
-				})
-				.catch(() => {
-					checkNext(onFound, notFound);
-				});
+			try {
+				const toc = await this.__resolveTocFor(bundle, id);
+			
+				if (findReading(toc)) {
+					return current;
+				}
+			
+			} catch {
+				//move on
+			}
+			return checkNext();
 		};
 
 
-		return new Promise((fulfill, reject) => {
-			checkNext(fulfill, reject);
-		})
-			.catch(() => null);
+		return checkNext();
 	}
 }).create();
