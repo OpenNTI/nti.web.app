@@ -23,7 +23,6 @@ exports[`Site admin dashboard widget recently created users (3 users total) Basi
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -49,7 +48,6 @@ exports[`Site admin dashboard widget recently created users (3 users total) Basi
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -75,7 +73,6 @@ exports[`Site admin dashboard widget recently created users (3 users total) Basi
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -125,7 +122,6 @@ exports[`Site admin dashboard widget recently created users (5 users total) Basi
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -151,7 +147,6 @@ exports[`Site admin dashboard widget recently created users (5 users total) Basi
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -177,7 +172,6 @@ exports[`Site admin dashboard widget recently created users (5 users total) Basi
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -203,7 +197,6 @@ exports[`Site admin dashboard widget recently created users (5 users total) Basi
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />

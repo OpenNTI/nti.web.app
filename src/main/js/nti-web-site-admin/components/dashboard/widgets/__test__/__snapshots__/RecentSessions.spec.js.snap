@@ -23,7 +23,6 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -72,7 +71,6 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -118,7 +116,6 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -167,7 +164,6 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -213,7 +209,6 @@ exports[`Site admin dashboard widget recent sessions (5 sessions) Basic render t
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -286,7 +281,6 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -335,7 +329,6 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -381,7 +374,6 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -430,7 +422,6 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -476,7 +467,6 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
@@ -525,7 +515,6 @@ exports[`Site admin dashboard widget recent sessions (10 sessions) Basic render 
         className="item"
       >
         <img
-          alt="Avatar for undefined"
           className="avatar avatar-color-6 item-image"
           src="unresolved-user-avatar.png"
         />
