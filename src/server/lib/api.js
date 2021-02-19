@@ -4,19 +4,27 @@ const path = require('path');
 // const logger = require('./logger');
 
 const HANDLERS = {
-	postMessageQueryParams: /^\/post-query-params/i
+	postMessageQueryParams: /^\/post-query-params/i,
 };
 
-exports = module.exports = {
-	register (express, config) {
-		this.basepath = config.basepath;
+const arr = x => (Array.isArray(x) ? x : [x]);
 
-		express.set('views', path.resolve(__dirname, '../templates'));
+exports = module.exports = {
+	register(express, config) {
+		this.basepath = config.basepath;
+		this.express = express;
+
+		express.set('views', [
+			...arr(express.get('views')),
+			path.resolve(__dirname, '../templates'),
+		]);
 
 		express.use((req, res, next) => {
 			let url = req.url;
 
-			if (!url) { return next(); }
+			if (!url) {
+				return next();
+			}
 
 			for (let handlerName of Object.keys(HANDLERS)) {
 				let test = HANDLERS[handlerName];
@@ -30,15 +38,15 @@ exports = module.exports = {
 		});
 	},
 
-	postMessageQueryParams (req, res, next) {
+	postMessageQueryParams(req, res, next) {
 		const parts = new URL(req.url, 'x:/');
 		const pathParts = parts.pathname.split('/');
 
 		res.render('post-message', {
 			DATA: JSON.stringify({
 				key: pathParts[pathParts.length - 1],
-				params: req.query
-			})
+				params: req.query,
+			}),
 		});
-	}
+	},
 };
