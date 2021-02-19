@@ -44,8 +44,11 @@
 		cursor: pointer;
 
 		/* checkerboard when no brand color is specified */
-		background-image:
-			linear-gradient(45deg, var(--checkerboard) 25%, transparent 25%),
+		background-image: linear-gradient(
+				45deg,
+				var(--checkerboard) 25%,
+				transparent 25%
+			),
 			linear-gradient(-45deg, var(--checkerboard) 25%, transparent 25%),
 			linear-gradient(45deg, transparent 75%, var(--checkerboard) 75%),
 			linear-gradient(-45deg, transparent 75%, var(--checkerboard) 75%);
@@ -76,7 +79,7 @@
 			padding: 2px;
 			cursor: pointer;
 			position: relative;
-			z-index: 2;
+			z-index: 1;
 		}
 
 		&:empty ~ .change-file {
