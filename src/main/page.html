@@ -1,100 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title>Loading...</title>
-	<noscript>
-		<meta http-equiv="refresh" content="0;url=/login/">
-	</noscript>
-	<script>
-		if (/android|blackberry|iphone|ipod|mobile|webos/i.test(navigator.userAgent) ){
-			var legacyHashRegex = /^\#\!/;
-			var legacyHash = location.hash && legacyHashRegex.test(location.hash) ? location.hash.replace(legacyHashRegex, '') : '';
-			var fragment = location.hash && !legacyHash ? location.hash.replace(/^#/, '') : '';
+	<head>
+		<title>Loading...</title>
+		<noscript>
+			<meta http-equiv="refresh" content="0;url=/login/" />
+		</noscript>
+		<script>
+			if (
+				/android|blackberry|iphone|ipod|mobile|webos/i.test(
+					navigator.userAgent
+				)
+			) {
+				var legacyHashRegex = /^\#\!/;
+				var legacyHash =
+					location.hash && legacyHashRegex.test(location.hash)
+						? location.hash.replace(legacyHashRegex, '')
+						: '';
+				var fragment =
+					location.hash && !legacyHash
+						? location.hash.replace(/^#/, '')
+						: '';
 
-			location.replace('/mobile/' + ('?p=' + location.pathname) + (legacyHash ? ('&q=' + legacyHash) : '') + (fragment ? ('&f=' + fragment) : ''));
-		}
-	</script>
-	<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-	<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+				location.replace(
+					'/mobile/' +
+						('?p=' + location.pathname) +
+						(legacyHash ? '&q=' + legacyHash : '') +
+						(fragment ? '&f=' + fragment : '')
+				);
+			}
+		</script>
+		<meta
+			http-equiv="Content-Type"
+			content="Type=text/html; charset=utf-8"
+		/>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
+		/>
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-	<link rel="icon" id="favicon" href="<[cfg:favicon]>" />
+		<link rel="icon" id="favicon" href="<[cfg:favicon]>" />
 
-	<!-- x-itunes -->
-	<link rel="stylesheet" id="ext-base" type="text/css" href="/vendor/ext-4.2/resources/css/ext-all.css">
-	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css" href="/vendor/mathquill-0.9.4/mathquill.css">
-	<link rel="stylesheet" id="main-stylesheet" type="text/css" href="/resources/css/legacy.css">
-	<link rel="stylesheet" id="site-stylesheet" type="text/css" href="/site-assets/webapp/site.css">
-	<style type="text/css">
-	#loading-mask {
-		position: fixed;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		z-index: 9999999;
-		background-color: white;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	#loading {
-		backface-visibility: hidden;
-		transform: translate3d(0, 0, 0);
-	}
-
-	#loading::after {
-		content: url(/site-assets/shared/loading.gif);
-	}
-	</style>
-</head>
-<body>
-	<div id="loading-mask"><div id="loading" title="Loading..."></div></div>
-	<svg height="0" id="svg-image-blur"><filter id="blur-effect"><feGaussianBlur stdDeviation="8"></feGaussianBlur></filter></svg>
-	<!--html:server-values-->
-	<script type="text/javascript">
-		window.onerror = function(msg,url,line){
-			if((window.NextThought || {}).isInitialized){
-				return;
+		<!-- x-itunes -->
+		<link
+			rel="stylesheet"
+			id="ext-base"
+			type="text/css"
+			href="/vendor/ext-4.2/resources/css/ext-all.css"
+		/>
+		<link
+			rel="stylesheet"
+			id="mathquill-stylesheet"
+			type="text/css"
+			href="/vendor/mathquill-0.9.4/mathquill.css"
+		/>
+		<link
+			rel="stylesheet"
+			id="main-stylesheet"
+			type="text/css"
+			href="/resources/css/legacy.css"
+		/>
+		<link
+			rel="stylesheet"
+			id="site-stylesheet"
+			type="text/css"
+			href="/site-assets/webapp/site.css"
+		/>
+		<style type="text/css">
+			#loading-mask {
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				z-index: 9999999;
+				background-color: white;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
 			}
 
-			//strange, spec says we get a file url, ff seems to have given a stacktrace of sorts
-			var urls = url.split(/([\r\n]+)|(\s*-\>\s*)/);
-			//did it come from us?
-			var basePrefix = new RegExp("^" + location.protocol + '//' + location.host, "i");
-			if (basePrefix.test(urls[0]) && !/\/login\/$/.test(urls[0])) {
-				window.location.replace('/unsupported?error='+encodeURIComponent(msg));
+			#loading {
+				backface-visibility: hidden;
+				transform: translate3d(0, 0, 0);
 			}
-		};
 
-		// if (!new RegExp(<%= JSON.stringify(SUPPORTED_AGENTS) %>).test(navigator.userAgent)) {
-		// 	location.replace('/unsupported');
-		// }
+			#loading::after {
+				content: url(/site-assets/shared/loading.gif);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="loading-mask"><div id="loading" title="Loading..."></div></div>
+		<svg height="0" id="svg-image-blur">
+			<filter id="blur-effect">
+				<feGaussianBlur stdDeviation="8"></feGaussianBlur>
+			</filter>
+		</svg>
+		<!--html:server-values-->
+		<script type="text/javascript">
+			window.onerror = function (msg, url, line) {
+				if ((window.NextThought || {}).isInitialized) {
+					return;
+				}
 
-		//frame buster
-		//use weak comparison on purpose.
-		if( top != window ){
-			top.location.href = location.href;
-			//If the frame busting code is blocked, tell them embedding is not supported.
-			location.replace('resources/iframe.html');
-		}
+				//strange, spec says we get a file url, ff seems to have given a stacktrace of sorts
+				var urls = url.split(/([\r\n]+)|(\s*-\>\s*)/);
+				//did it come from us?
+				var basePrefix = new RegExp(
+					'^' + location.protocol + '//' + location.host,
+					'i'
+				);
+				if (basePrefix.test(urls[0]) && !/\/login\/$/.test(urls[0])) {
+					window.location.replace(
+						'/unsupported?error=' + encodeURIComponent(msg)
+					);
+				}
+			};
 
-		window.NTIStrings = {};
-	</script>
+			// if (!new RegExp(<%= JSON.stringify(SUPPORTED_AGENTS) %>).test(navigator.userAgent)) {
+			// 	location.replace('/unsupported');
+			// }
 
-	<!--TODO: use external lib api -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-	<script> try { jQuery.noConflict(); } catch (e) {} </script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/1.3.2/jquery.payment.min.js"></script>
-	<script src="/vendor/mathquill-0.9.4/mathquill.min.js"></script>
-	<script src="/vendor/ext-4.2/ext-all.js"></script>
-	<script src="https://backpack.openbadges.org/issuer.js"></script>
-	<script src="/resources/lib/timeline/js/storyjs-embed.js"></script>
-	<!--TODO-END: use external lib api -->
+			//frame buster
+			//use weak comparison on purpose.
+			if (top != window) {
+				top.location.href = location.href;
+				//If the frame busting code is blocked, tell them embedding is not supported.
+				location.replace('resources/iframe.html');
+			}
 
-	<script src="/resources/strings/strings.js"></script>
-	<script src="/site-assets/webapp/strings.js"></script>
-</body>
+			window.NTIStrings = {};
+		</script>
+
+		<!--TODO: use external lib api -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script>
+			try {
+				jQuery.noConflict();
+			} catch (e) {}
+		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/1.3.2/jquery.payment.min.js"></script>
+		<script src="/vendor/mathquill-0.9.4/mathquill.min.js"></script>
+		<script src="/vendor/ext-4.2/ext-all.js"></script>
+		<script src="https://backpack.openbadges.org/issuer.js"></script>
+		<script src="/resources/lib/timeline/js/storyjs-embed.js"></script>
+		<!--TODO-END: use external lib api -->
+
+		<script src="/resources/strings/strings.js"></script>
+		<script src="/site-assets/webapp/strings.js"></script>
+	</body>
 </html>
