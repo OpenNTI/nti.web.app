@@ -4,7 +4,7 @@ import { Layouts } from '@nti/web-commons';
 
 import ChatActions from '../legacy/app/chat/Actions';
 
-const styles = css`
+const styles = stylesheet`
 	.expanded-mode {
 		right: 240px !important;
 	}
@@ -18,7 +18,7 @@ WebappChatWindow.propTypes = {
 	onClose: PropTypes.func,
 };
 
-export default function WebappChatWindow ({ onClose, entity, expanded }) {
+export default function WebappChatWindow({ onClose, entity, expanded }) {
 	const windowRef = React.useRef(null);
 
 	const onUnmount = () => {
@@ -32,7 +32,9 @@ export default function WebappChatWindow ({ onClose, entity, expanded }) {
 
 		const win = actions.openChatWindow(roomInfo);
 
-		expanded ? win.addCls(styles.expandedMode) : win.removeCls(styles.expandedMode);
+		expanded
+			? win.addCls(styles.expandedMode)
+			: win.removeCls(styles.expandedMode);
 
 		win.on({
 			single: true,
