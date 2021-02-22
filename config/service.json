@@ -45,7 +45,7 @@
 			"show-create-ltitool-button": true
 		},
 		"login": "/login/",
-		"unsupported": "/login/unsupported.html",
+		"unsupported": "./unsupported",
 
 		"corsSalt": "localhost",
 

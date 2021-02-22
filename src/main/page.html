@@ -114,13 +114,13 @@
 				);
 				if (basePrefix.test(urls[0]) && !/\/login\/$/.test(urls[0])) {
 					window.location.replace(
-						'/unsupported?error=' + encodeURIComponent(msg)
+						'./unsupported?error=' + encodeURIComponent(msg)
 					);
 				}
 			};
 
 			// if (!new RegExp(<%= JSON.stringify(SUPPORTED_AGENTS) %>).test(navigator.userAgent)) {
-			// 	location.replace('/unsupported');
+			// 	location.replace('./unsupported');
 			// }
 
 			//frame buster
