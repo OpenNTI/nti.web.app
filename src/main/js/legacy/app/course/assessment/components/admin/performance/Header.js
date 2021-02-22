@@ -87,7 +87,7 @@ module.exports = exports = Ext.define(
 		openEmail() {},
 
 		setupCourseEmail: function (emailLink) {
-			var emailEl = this.el.down('.email');
+			const emailEl = this.el?.down('.email');
 			this.emailLink = emailLink;
 
 			if (emailEl) {
