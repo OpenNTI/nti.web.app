@@ -367,38 +367,29 @@ const fakeHits = [
 	},
 ];
 
-const mockService = () => ({
-	getObject: o => Promise.resolve(o),
-});
-
 const onBefore = () => {
-	jest.useFakeTimers();
 	global.$AppConfig = {
-		...(global.$AppConfig || {}),
-		nodeService: mockService(),
+		nodeService: {
+			getObject: async o => o,
+		},
 		nodeInterface: {
-			getServiceDocument: () =>
-				Promise.resolve(global.$AppConfig.nodeService),
+			getServiceDocument: async () => global.$AppConfig.nodeService,
 		},
 	};
 };
 
 const onAfter = () => {
 	//un-mock getService()
-	const { $AppConfig } = global;
-	delete $AppConfig.nodeInterface;
-	delete $AppConfig.nodeService;
-	jest.useRealTimers();
+	delete global.$AppConfig;
 };
 
 describe('<SearchResults />', () => {
-	beforeEach(onBefore);
-	afterEach(onAfter);
+	beforeAll(onBefore);
+	afterAll(onAfter);
 
 	test('should render ten <Hit /> components', async () => {
 		const { container } = render(<SearchResults hits={fakeHits} />);
 		await waitFor(() => {
-			jest.runAllTimers();
 			expect(
 				container.querySelectorAll('.search-result-react').length
 			).toBe(10);
@@ -410,7 +401,6 @@ describe('<SearchResults />', () => {
 			<SearchResults hits={fakeHits} numPages={2} />
 		);
 		await waitFor(() => {
-			jest.runAllTimers();
 			expect(
 				container.querySelectorAll('.pagination-container').length
 			).toBe(1);
@@ -420,7 +410,6 @@ describe('<SearchResults />', () => {
 	test('should render a `.search-results`', async () => {
 		const { container } = render(<SearchResults hits={fakeHits} />);
 		await waitFor(() => {
-			jest.runAllTimers();
 			expect(container.querySelectorAll('.search-results').length).toBe(
 				1
 			);
