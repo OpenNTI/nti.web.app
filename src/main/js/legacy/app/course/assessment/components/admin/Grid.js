@@ -643,7 +643,7 @@ module.exports = exports = Ext.define(
 			this.onceRendered.then(function () {
 				me.el.removeCls('fixed-table');
 				wait(100).then(function () {
-					me.el.addCls('fixed-table');
+					me.el?.addCls('fixed-table');
 				});
 			});
 		},
