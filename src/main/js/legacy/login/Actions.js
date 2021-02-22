@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		});
 	},
 
-	async __onLoginFailure(reason) {
+	__onLoginFailure(reason) {
 		let url = $AppConfig.login;
 		const o = {};
 
@@ -176,19 +176,20 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 		url = Ext.String.urlAppend(url, Ext.Object.toQueryString(o));
 		locationHref.replace(url);
-
-		throw new Error(reason);
 	},
 
 	/**
 	 * Get the user, and set up the service object
 	 * @returns {Promise} fulfills is successfully logged in
 	 */
-	login() {
-		return this.__attemptLogin().then(
-			this.__onLoginSuccess.bind(this),
-			this.__onLoginFailure.bind(this)
-		);
+	async login() {
+		try {
+			await this.__attemptLogin();
+			await this.__onLoginSuccess();
+		} catch (e) {
+			// Send to login
+			this.__onLoginFailure(e);
+		}
 	},
 
 	async __attemptLogin() {
